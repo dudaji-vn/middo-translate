@@ -1,6 +1,6 @@
 import { TranslateEditor } from '@/components/translate-editor';
 import { TranslateResult } from '@/components/translate-result';
-import { DEFAULT_LANGUAGES_CODE } from '@/constants/default-language';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { getSupportLanguages, translateText } from '@/services/languages';
 interface HomeProps {
 	searchParams: {
