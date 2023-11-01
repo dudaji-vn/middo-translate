@@ -15,10 +15,13 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
           'border border-primary hover:border-secondary bg-background hover:bg-secondary text-primary hover:text-background active:bg-transparent active:text-shading active:border-shading',
-        secondary:
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        secondary: 'bg-secondary text-primary hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
+      },
+      shape: {
+        circle: 'rounded-full',
+        default: '',
       },
       size: {
         default: 'px-8 py-4 text-base leading-tight',
