@@ -1,4 +1,4 @@
-import { translate } from '@/configs/cloud-translate';
+import { translate } from '@/lib/cloud-translate';
 
 export async function GET(request: Request) {
 	const { searchParams } = new URL(request.url);
