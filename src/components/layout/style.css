@@ -1,0 +1,89 @@
+.bodyContainer {
+  color: #333;
+  padding-bottom: 40px;
+  height: 100%;
+}
+.pageNavigationBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+}
+.pageTitle {
+  color: hsl(var(--primary));
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.backButton {
+  position: absolute;
+  left: 20px;
+  padding: 10px;
+  border-radius: 999px;
+}
+.languageSwitcherWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.countryCircleIcon {
+  width: 20px;
+  height: 20px;
+}
+.uploaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  border: dashed 1px hsl(var(--primary));
+  border-radius: 20px;
+  margin: 20px 0px 40px;
+}
+.uploaderButtonWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+.uploaderButton {
+  padding: 16px;
+  display: block;
+  background-color: hsl(var(--lighter));
+  border-radius: 99px;
+}
+.buttonWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.smallButton {
+  width: fit-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 8px;
+  color: hsl(var(--background));
+  background-color: hsl(var(--success));
+  border-radius: 99px;
+  box-shadow: 0px 2px 4px 0px rgba(22, 22, 22, 0.1);
+  border: solid 2px hsl(var(--success));
+  font-weight: 600;
+}
+.smallButton:hover {
+  background-color: hsl(var(--background));
+  color: hsl(var(--success));
+}
+.smallButton:active {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    ),
+    #50c878;
+  border: solid 2px hsl(150, 43%, 33%);
+  color: hsl(var(--background));
+}

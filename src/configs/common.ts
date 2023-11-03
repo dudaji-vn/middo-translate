@@ -1,0 +1,1 @@
+export const TEXT_THRESHOLD_ADJUST = 100;

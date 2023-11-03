@@ -19,6 +19,7 @@
     "lucide-react": "^0.290.0",
     "next": "14.0.1",
     "react": "^18",
+    "react-circle-flags": "^0.0.19",
     "react-dom": "^18",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
