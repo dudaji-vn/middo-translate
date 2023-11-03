@@ -6,10 +6,11 @@ import { cn } from '@/utils/cn';
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   isError?: boolean;
+  leftElement?: React.ReactNode;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, isError, type, ...props }, ref) => {
+  ({ className, leftElement, isError, type, ...props }, ref) => {
     return (
       <div className="relative">
         <input
@@ -25,6 +26,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {isError && (
           <div className="absolute right-5 top-1/2 flex -translate-y-1/2 items-center text-error">
             <AlertCircleOutline className="h-5 w-5" />
+          </div>
+        )}
+        {leftElement && (
+          <div className="absolute right-5 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
+            {leftElement}
           </div>
         )}
       </div>
