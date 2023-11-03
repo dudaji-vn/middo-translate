@@ -1,58 +1,77 @@
-import { TranslateEditor } from '@/components/translate-editor';
-import { TranslateResult } from '@/components/translate-result';
+import {
+  TranslateEditor,
+  TranslateMiddle,
+  TranslateResult,
+} from '@/components/translate-editor';
+
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { getSupportLanguages, translateText } from '@/services/languages';
+import { LanguagesControlBar } from '@/components/languages-control-bar';
+import { translateText } from '@/services/languages';
+
 interface HomeProps {
-	searchParams: {
-		query?: string;
-		sourceLanguage?: string;
-		targetLanguage?: string;
-	};
+  searchParams: {
+    query?: string;
+    source?: string;
+    target?: string;
+    edit?: string;
+    mquery?: string;
+  };
 }
 
 export default async function Home(props: HomeProps) {
-	const sourceText = props.searchParams.query || '';
-	const sourceLanguage =
-		props.searchParams.sourceLanguage || DEFAULT_LANGUAGES_CODE.VN;
-	const targetLanguage =
-		props.searchParams.targetLanguage || DEFAULT_LANGUAGES_CODE.KR;
-	const targetResult = await translateText(
-		sourceText,
-		sourceLanguage,
-		targetLanguage,
-	);
-	const sourceEnglishResult = await translateText(
-		sourceText,
-		sourceLanguage,
-		DEFAULT_LANGUAGES_CODE.EN,
-	);
-	const targetEnglishResult = await translateText(
-		targetResult,
-		targetLanguage,
-		DEFAULT_LANGUAGES_CODE.EN,
-	);
-	const supportLanguages = await getSupportLanguages();
-	return (
-		<main className="flex min-h-screen flex-col items-center p-24">
-			<div className="max-h-24 overflow-scroll mb-10">
-				{supportLanguages.map((language) => (
-					<div
-						key={language.code}
-						className="flex flex-col items-center justify-center"
-					>
-						<h1 className="text-2xl">{language.name}</h1>
-						<p className="text-2xl">{language.code}</p>
-					</div>
-				))}
-			</div>
-			<TranslateEditor />
-			<div>
-				<span>{sourceEnglishResult}</span>
-			</div>
-			<TranslateResult
-				result={targetResult}
-				resultEnglish={targetEnglishResult}
-			/>
-		</main>
-	);
+  const isEdit = props.searchParams.edit === 'true';
+  const sourceText = props.searchParams.query || '';
+  const middleText = props.searchParams.mquery || '';
+
+  const sourceLanguage = props.searchParams.source;
+  const targetLanguage = props.searchParams.target;
+  const targetResult = middleText
+    ? await translateText(middleText, DEFAULT_LANGUAGES_CODE.EN, targetLanguage)
+    : await translateText(sourceText, sourceLanguage, targetLanguage);
+  const sourceEnglishResult = middleText
+    ? middleText
+    : await translateText(
+        sourceText,
+        sourceLanguage,
+        DEFAULT_LANGUAGES_CODE.EN,
+      );
+  const targetEnglishResult = middleText
+    ? middleText
+    : await translateText(
+        targetResult,
+        targetLanguage,
+        DEFAULT_LANGUAGES_CODE.EN,
+      );
+
+  const sourceTranslateResult = middleText
+    ? await translateText(middleText, DEFAULT_LANGUAGES_CODE.EN, sourceLanguage)
+    : '';
+
+  return (
+    <main className="flex h-full w-full flex-col gap-5 px-5">
+      <LanguagesControlBar source={sourceLanguage} target={targetLanguage} />
+      <TranslateEditor
+        disabled={isEdit}
+        languageCode={sourceLanguage}
+        sourceTranslateResult={sourceTranslateResult}
+        className={sourceText ? '' : 'min-h-[40vh]'}
+      />
+      {sourceEnglishResult &&
+        targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+        sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
+          <TranslateMiddle
+            result={sourceEnglishResult}
+            targetResult={targetEnglishResult}
+          />
+        )}
+      {targetResult && (
+        <TranslateResult
+          result={targetResult}
+          resultEnglish={middleText ? '' : targetEnglishResult}
+          status="error"
+          languageCode={targetLanguage}
+        />
+      )}
+    </main>
+  );
 }
