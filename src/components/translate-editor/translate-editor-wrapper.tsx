@@ -30,9 +30,9 @@ export const TranslateEditorWrapper = ({
     <div
       className={cn(
         'translateTextWrapper relative transition-all',
-
         type,
         status,
+        className,
       )}
     >
       <div className="detectLanguageWrapper">

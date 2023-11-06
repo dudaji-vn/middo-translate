@@ -76,15 +76,16 @@ export const TranslateEditor = ({
       type={disabled ? 'result' : 'default'}
       className={className}
     >
-      <button
-        onClick={() => {
-          setValue('');
-        }}
-        className="btn-icon absolute right-3 top-3"
-      >
-        <CloseCircleOutline className="h-6 w-6 opacity-60" />
-      </button>
-
+      {value && (
+        <button
+          onClick={() => {
+            setValue('');
+          }}
+          className="btn-icon absolute right-3 top-3"
+        >
+          <CloseCircleOutline className="h-6 w-6 opacity-60" />
+        </button>
+      )}
       <textarea
         rows={1}
         onFocus={() => setIsFocus(true)}
@@ -94,7 +95,7 @@ export const TranslateEditor = ({
         value={value}
         onChange={handleChange}
         className={cn('inputTranslate transition-all', textStyles)}
-        placeholder="hello"
+        placeholder="Input your text here"
       />
     </TranslateEditorWrapper>
   );
