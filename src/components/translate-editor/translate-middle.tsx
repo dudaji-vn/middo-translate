@@ -80,6 +80,17 @@ export const TranslateMiddle = ({
     setAcceptList(getAcceptDiffResult());
   }, []);
 
+  useEffect(() => {
+    const translateResultTextEl = document.querySelector('.bottomResultText');
+    if (isError) {
+      translateResultTextEl?.classList.add('error');
+      translateResultTextEl?.classList.remove('correct');
+    } else {
+      translateResultTextEl?.classList.remove('error');
+      translateResultTextEl?.classList.add('correct');
+    }
+  }, [isError]);
+
   return (
     <TranslateEditorWrapper
       prefixLanguage="Middle language"

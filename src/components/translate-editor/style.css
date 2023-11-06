@@ -42,12 +42,13 @@
 .translateResultText {
   margin-top: 12px;
 }
-.translateResultText.correct {
+.bottomResultText.correct {
   color: hsl(var(--success));
 }
-.translateResultText.error {
+.bottomResultText.error {
   color: hsl(var(--error));
 }
+
 @media screen and (min-width: 1024px) {
   .translateTextWrapper {
     width: 30%;
