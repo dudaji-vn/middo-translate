@@ -35,7 +35,7 @@ export const TranslateMiddle = ({
 
   const isError = useMemo(() => {
     if (!acceptList[result]) return false;
-    return result !== targetResult;
+    return result.toLocaleLowerCase() !== targetResult.toLocaleLowerCase();
   }, [acceptList, result, targetResult]);
 
   const handleClickEdit = () => {
