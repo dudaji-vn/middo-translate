@@ -1,7 +1,7 @@
 import { Button, IconButton } from '@/components/button';
 
 import { Menu } from '@easy-eva-icons/react';
-import { PUBLIC_APP_NAME } from '@/configs/env';
+import { PUBLIC_APP_NAME } from '@/configs/env.public';
 import React from 'react';
 
 type Props = {};

@@ -1,6 +1,6 @@
 import './globals.css';
 
-import { PUBLIC_APP_DESCRIPTION, PUBLIC_APP_NAME } from '@/configs/env';
+import { PUBLIC_APP_DESCRIPTION, PUBLIC_APP_NAME } from '@/configs/env.public';
 
 import { AppProvider } from '@/providers/app';
 import { MainLayout } from '@/components/layout/main-layout';
