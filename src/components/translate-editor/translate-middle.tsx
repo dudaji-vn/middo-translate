@@ -28,7 +28,9 @@ export const TranslateMiddle = ({
   const [value, setValue] = useState('');
   const { searchParams, setParams } = useSetParams();
   const { textAreaRef } = useTextAreaResize(value);
-  const textStyles = useAdjustTextStyle(value);
+  const inputTextStyles = useAdjustTextStyle(value);
+  const textStyles = useAdjustTextStyle(result);
+
   const [acceptList, setAcceptList] = useState<Record<string, string>>({});
 
   const isEdit = searchParams.get('edit') === 'true';
@@ -110,7 +112,7 @@ export const TranslateMiddle = ({
           onChange={(e) => {
             setValue(e.target.value);
           }}
-          className={cn('inputTranslate  bg-transparent', textStyles)}
+          className={cn('inputTranslate  bg-transparent', inputTextStyles)}
           placeholder="hello"
         />
       )}

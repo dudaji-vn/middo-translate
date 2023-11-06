@@ -18,6 +18,7 @@ export interface TranslateEditorProps {
   languageCode?: string;
   disabled?: boolean;
   sourceTranslateResult?: string;
+  isDetect?: boolean;
 }
 
 export const TranslateEditor = ({
@@ -25,6 +26,7 @@ export const TranslateEditor = ({
   languageCode = 'auto',
   disabled = false,
   sourceTranslateResult,
+  isDetect = false,
 }: TranslateEditorProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const searchParams = useSearchParams();
@@ -41,9 +43,13 @@ export const TranslateEditor = ({
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams);
-    if (!isFocus || value === sourceTranslateResult) {
+    if (
+      !isFocus ||
+      (debouncedValue && debouncedValue === sourceTranslateResult)
+    ) {
       return;
     }
+
     if (debouncedValue) {
       params.set('query', debouncedValue);
       params.delete('edit');
@@ -72,6 +78,7 @@ export const TranslateEditor = ({
 
   return (
     <TranslateEditorWrapper
+      isDetect={isDetect}
       languageCode={languageCode}
       type={disabled ? 'result' : 'default'}
       className={className}

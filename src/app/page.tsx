@@ -3,10 +3,10 @@ import {
   TranslateMiddle,
   TranslateResult,
 } from '@/components/translate-editor';
+import { detectLanguage, translateText } from '@/services/languages';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { LanguagesControlBar } from '@/components/languages-control-bar';
-import { translateText } from '@/services/languages';
 
 interface HomeProps {
   searchParams: {
@@ -23,7 +23,10 @@ export default async function Home(props: HomeProps) {
   const sourceText = props.searchParams.query || '';
   const middleText = props.searchParams.mquery || '';
 
-  const sourceLanguage = props.searchParams.source;
+  const sourceLanguage =
+    props.searchParams.source === 'auto'
+      ? await detectLanguage(sourceText)
+      : props.searchParams.source;
   const targetLanguage = props.searchParams.target;
   const targetResult = middleText
     ? await translateText(middleText, DEFAULT_LANGUAGES_CODE.EN, targetLanguage)
@@ -52,6 +55,7 @@ export default async function Home(props: HomeProps) {
       <LanguagesControlBar source={sourceLanguage} target={targetLanguage} />
       <TranslateEditor
         disabled={isEdit}
+        isDetect={props.searchParams.source === 'auto'}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}
         className={sourceText ? '' : 'min-h-[60vh]'}
