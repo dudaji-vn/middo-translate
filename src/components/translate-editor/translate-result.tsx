@@ -8,17 +8,20 @@ export interface TranslateResultProps {
   resultEnglish: string;
 }
 
-export const TranslateResult = (props: TranslateResultProps) => {
-  const textStyle = useAdjustTextStyle(props.result);
+export const TranslateResult = ({
+  result,
+  status = 'correct',
+  languageCode,
+  resultEnglish,
+}: TranslateResultProps) => {
+  const textStyle = useAdjustTextStyle(result);
   return (
-    <TranslateEditorWrapper type="result" languageCode={props.languageCode}>
-      <div className={`translatedText ${textStyle} break-words`}>
-        {props.result}
-      </div>
+    <TranslateEditorWrapper type="result" languageCode={languageCode}>
+      <div className={`translatedText ${textStyle} break-words`}>{result}</div>
       <div
-        className={`translateResultText break-words first-letter:uppercase ${props.status}`}
+        className={`translateResultText bottomResultText break-words first-letter:uppercase`}
       >
-        {props.resultEnglish}
+        {resultEnglish}
       </div>
     </TranslateEditorWrapper>
   );

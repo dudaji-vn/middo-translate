@@ -54,7 +54,7 @@ export default async function Home(props: HomeProps) {
         disabled={isEdit}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}
-        className={sourceText ? '' : 'min-h-[40vh]'}
+        className={sourceText ? '' : 'min-h-[60vh]'}
       />
       {sourceEnglishResult &&
         targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
