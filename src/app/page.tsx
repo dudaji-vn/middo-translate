@@ -9,6 +9,7 @@ import { detectLanguage, translateText } from '@/services/languages';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { LanguagesControlBar } from '@/components/languages-control-bar';
+import { TranslateBar } from '@/components/translate-bar';
 
 interface HomeProps {
   searchParams: {
@@ -18,6 +19,7 @@ interface HomeProps {
     edit?: string;
     mquery?: string;
     detect?: string;
+    listening?: string;
   };
 }
 
@@ -60,9 +62,8 @@ export default async function Home(props: HomeProps) {
     : '';
 
   return (
-    <main className="flex h-full w-full flex-col px-5">
+    <main className="flex h-full w-full flex-col gap-5 px-5">
       <LanguagesControlBar
-        className="mb-5"
         source={sourceLanguage}
         target={targetLanguage}
         detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
@@ -72,7 +73,7 @@ export default async function Home(props: HomeProps) {
         isDetect={props.searchParams.source === 'auto'}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}
-        className={sourceText || sourceTranslateResult ? '' : 'min-h-[60vh]'}
+        className={sourceText || sourceTranslateResult ? '' : 'min-h-[40vh]'}
       >
         {sourceEnglishResult &&
           !isEdit &&
@@ -87,12 +88,10 @@ export default async function Home(props: HomeProps) {
       </TranslateEditor>
 
       {!isEdit && sourceEnglishResult && targetEnglishResult ? (
-        <div className="my-8">
-          <CompareBar
-            text={sourceEnglishResult}
-            textCompare={targetEnglishResult}
-          />
-        </div>
+        <CompareBar
+          text={sourceEnglishResult}
+          textCompare={targetEnglishResult}
+        />
       ) : (
         <div className="my-2.5"></div>
       )}
@@ -109,6 +108,11 @@ export default async function Home(props: HomeProps) {
               />
             )}
         </TranslateResult>
+      )}
+      {((!sourceText && !middleText) || props.searchParams.listening) && (
+        <div className="bottom-24 mx-auto ">
+          <TranslateBar />
+        </div>
       )}
     </main>
   );

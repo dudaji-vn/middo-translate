@@ -1,0 +1,26 @@
+.toolWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  background-color: hsl(var(--background));
+  width: fit-content;
+  padding: 12px;
+  border-radius: 99px;
+  box-shadow: 0px 10px 24px 0px rgba(22, 22, 22, 0.1);
+}
+.circleButton {
+  padding: 10px;
+  background-color: hsl(var(--lighter));
+  border-radius: 99px;
+}
+.circleButton:hover {
+  background-color: hsl(var(--secondary));
+}
+.circleButton.big {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

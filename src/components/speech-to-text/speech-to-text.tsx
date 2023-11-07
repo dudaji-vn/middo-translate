@@ -6,6 +6,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 
 import { forwardRef } from 'react';
+import { useSetParams } from '@/hooks/use-set-params';
 
 export interface SpeechToTextProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -19,9 +20,18 @@ export const SpeechToText = forwardRef<HTMLDivElement, SpeechToTextProps>(
       browserSupportsSpeechRecognition,
     } = useSpeechRecognition();
 
+    const { setParam } = useSetParams();
+
     // if (!browserSupportsSpeechRecognition) {
     //   return <div>Hello</div>;
     // }
+
+    useEffect(() => {
+      if (transcript) {
+        setParam('query', transcript);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [transcript]);
 
     return (
       <div ref={ref} {...props}>

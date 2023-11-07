@@ -39,7 +39,7 @@
 }
 .translateTextWrapper.result {
   box-shadow: var(--shadow-1);
-  background-color: hsl(var(--background-lighter));
+  background-color: #fafafa;
   border: none;
 }
 .translateResultText {
