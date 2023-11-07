@@ -22,7 +22,7 @@ export interface CompareBarProps extends React.HTMLAttributes<HTMLDivElement> {
 export const CompareBar = forwardRef<HTMLDivElement, CompareBarProps>(
   ({ text, textCompare, ...props }, ref) => {
     const [acceptList, setAcceptList] = useState<Record<string, string>>({});
-    const { searchParams, setParams } = useSetParams();
+    const { setParams } = useSetParams();
     const isMatch = useMemo(() => {
       if (acceptList[text]) return true;
       return text.toLocaleLowerCase() === textCompare.toLocaleLowerCase();
