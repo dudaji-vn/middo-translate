@@ -28,7 +28,9 @@ export default async function Home(props: HomeProps) {
 
   const sourceLanguage =
     props.searchParams.source === 'auto'
-      ? await detectLanguage(sourceText)
+      ? props.searchParams.detect && middleText
+        ? props.searchParams.detect
+        : await detectLanguage(sourceText)
       : props.searchParams.source;
   const targetLanguage = props.searchParams.target;
   const targetResult = middleText
@@ -50,7 +52,11 @@ export default async function Home(props: HomeProps) {
       );
 
   const sourceTranslateResult = middleText
-    ? await translateText(middleText, DEFAULT_LANGUAGES_CODE.EN, sourceLanguage)
+    ? await translateText(
+        middleText,
+        DEFAULT_LANGUAGES_CODE.EN,
+        props.searchParams.detect ? props.searchParams.detect : sourceLanguage,
+      )
     : '';
 
   return (
@@ -80,7 +86,7 @@ export default async function Home(props: HomeProps) {
         {isEdit && <TranslateMiddleEditor defaultText={sourceEnglishResult} />}
       </TranslateEditor>
 
-      {!isEdit ? (
+      {!isEdit && sourceEnglishResult && targetEnglishResult ? (
         <div className="my-8">
           <CompareBar
             text={sourceEnglishResult}

@@ -74,33 +74,32 @@ export const LanguagesControlBar = forwardRef<
   };
 
   useEffect(() => {
+    const newParams = [];
+    if (!searchParams.get('source')) {
+      newParams.push({
+        key: 'source',
+        value: 'auto',
+      });
+    }
     if (!searchParams.get('target')) {
-      setParams([
-        {
-          key: 'target',
-          value: DEFAULT_LANGUAGES_CODE.EN,
-        },
-      ]);
+      newParams.push({
+        key: 'target',
+        value: DEFAULT_LANGUAGES_CODE.EN,
+      });
     }
 
-    if (!searchParams.get('source')) {
-      setParams([
-        {
-          key: 'source',
-          value: 'auto',
-        },
-      ]);
+    if (props.detect) {
+      newParams.push({
+        key: 'detect',
+        value: props.detect,
+      });
+    }
+
+    if (newParams.length > 0) {
+      setParams(newParams);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-  // useEffect(() => {
-  //   if (props.detect) {
-  //     setParam('detect', props.detect);
-  //   } else {
-  //     removeParam('detect');
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [props.detect]);
+  }, [searchParams, props.detect]);
 
   return (
     <div
