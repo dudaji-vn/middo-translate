@@ -8,6 +8,7 @@ import { BackLayout } from '../layout/back-layout';
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { ListLanguages } from '../list-languages';
+import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import { useSetParams } from '@/hooks/use-set-params';
 
@@ -15,6 +16,7 @@ export interface LanguagesControlBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   source?: string;
   target?: string;
+  detect?: string;
 }
 
 export const LanguagesControlBar = forwardRef<
@@ -24,7 +26,7 @@ export const LanguagesControlBar = forwardRef<
   const [currentSelect, setCurrentSelect] = useState<
     'source' | 'target' | 'none'
   >('none');
-  const { searchParams, setParams } = useSetParams();
+  const { searchParams, setParams, setParam, removeParam } = useSetParams();
   const source = getCountryCode(searchParams.get('source'), true);
   const target = getCountryCode(
     searchParams.get('target') || DEFAULT_LANGUAGES_CODE.EN,
@@ -91,9 +93,21 @@ export const LanguagesControlBar = forwardRef<
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+  // useEffect(() => {
+  //   if (props.detect) {
+  //     setParam('detect', props.detect);
+  //   } else {
+  //     removeParam('detect');
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [props.detect]);
 
   return (
-    <div ref={ref} {...props} className="flex w-full justify-center gap-5">
+    <div
+      ref={ref}
+      {...props}
+      className={cn('gap-5" flex w-full justify-center', props.className)}
+    >
       <Select>
         <SelectTrigger
           onClick={() => {
