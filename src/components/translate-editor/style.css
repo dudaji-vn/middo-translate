@@ -3,6 +3,8 @@
   border-radius: 20px;
   padding: 20px;
   background-color: hsl(var(--background));
+  position: relative;
+  z-index: 1;
 }
 .detectLanguageWrapper {
   display: flex;
@@ -36,7 +38,8 @@
   background-color: hsl(var(--error), 0.4);
 }
 .translateTextWrapper.result {
-  background-color: hsl(var(--background-darker));
+  box-shadow: var(--shadow-1);
+  background-color: hsl(var(--background-lighter));
   border: none;
 }
 .translateResultText {
