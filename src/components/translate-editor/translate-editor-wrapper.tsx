@@ -16,6 +16,8 @@ export interface TranslateEditorWrapperProps {
   type?: 'default' | 'middle' | 'result';
   status?: 'default' | 'correct' | 'error';
   isDetect?: boolean;
+  topElement?: React.ReactNode;
+  bottomElement?: React.ReactNode;
 }
 
 export const TranslateEditorWrapper = ({
@@ -26,6 +28,8 @@ export const TranslateEditorWrapper = ({
   type = 'default',
   status = 'default',
   isDetect = false,
+  topElement,
+  bottomElement,
 }: TranslateEditorWrapperProps) => {
   const language = getLanguageByCode(languageCode);
   return (
@@ -37,6 +41,7 @@ export const TranslateEditorWrapper = ({
         className,
       )}
     >
+      {topElement && <div className="mb-4">{topElement}</div>}
       <div className="detectLanguageWrapper">
         {language && !isDetect ? (
           <CircleFlag
@@ -59,6 +64,7 @@ export const TranslateEditorWrapper = ({
         </div>
       </div>
       {children}
+      {bottomElement && <div className="mt-2">{bottomElement}</div>}
     </div>
   );
 };
