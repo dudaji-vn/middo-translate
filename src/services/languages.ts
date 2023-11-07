@@ -1,3 +1,8 @@
+import {
+  DEFAULT_LANGUAGES_CODE,
+  supportedLanguages,
+} from '@/configs/default-language';
+
 import { APP_URL } from '@/configs/env.private';
 import { Country } from '@/types/country';
 
@@ -22,5 +27,7 @@ export async function detectLanguage(text: string) {
 
   const response = await fetch(`${APP_URL}/api/languages/detect?query=${text}`);
   const json = await response.json();
-  return json.data.language as string;
+  const language = json.data.language as string;
+  const isSupported = supportedLanguages.some((lang) => lang.code === language);
+  return isSupported ? language : DEFAULT_LANGUAGES_CODE.EN;
 }

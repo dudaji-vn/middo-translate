@@ -8,8 +8,6 @@ import {
 
 import { v2 } from '@google-cloud/translate';
 
-console.log('GOOGLE_CLOUD_TYPE', GOOGLE_CLOUD_PRIVATE_KEY);
-
 export const translate = new v2.Translate({
   credentials: {
     type: GOOGLE_CLOUD_TYPE,
