@@ -19,14 +19,16 @@ export interface TranslateEditorProps {
   disabled?: boolean;
   sourceTranslateResult?: string;
   isDetect?: boolean;
+  children?: React.ReactNode;
 }
 
 export const TranslateEditor = ({
-  className,
+  sourceTranslateResult,
   languageCode = 'auto',
   disabled = false,
-  sourceTranslateResult,
   isDetect = false,
+  className,
+  children,
 }: TranslateEditorProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const searchParams = useSearchParams();
@@ -42,13 +44,13 @@ export const TranslateEditor = ({
   };
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
     if (
       !isFocus ||
       (debouncedValue && debouncedValue === sourceTranslateResult)
     ) {
       return;
     }
+    const params = new URLSearchParams(searchParams);
 
     if (debouncedValue) {
       params.set('query', debouncedValue);
@@ -75,19 +77,25 @@ export const TranslateEditor = ({
       setValue(sourceTranslateResult);
     }
   }, [sourceTranslateResult, text]);
-
+  const handleClear = () => {
+    setValue('');
+    const params = new URLSearchParams(searchParams);
+    params.delete('query');
+    params.delete('edit');
+    params.delete('mquery');
+    replace(`${pathname}?${params.toString()}`);
+  };
   return (
     <TranslateEditorWrapper
+      bottomElement={children}
       isDetect={isDetect}
       languageCode={languageCode}
       type={disabled ? 'result' : 'default'}
       className={className}
     >
-      {value && (
+      {value && !disabled && (
         <button
-          onClick={() => {
-            setValue('');
-          }}
+          onClick={handleClear}
           className="btn-icon absolute right-3 top-3"
         >
           <CloseCircleOutline className="h-6 w-6 opacity-60" />
@@ -101,7 +109,10 @@ export const TranslateEditor = ({
         ref={textAreaRef}
         value={value}
         onChange={handleChange}
-        className={cn('inputTranslate transition-all', textStyles)}
+        className={cn(
+          'inputTranslate bg-transparent transition-all',
+          textStyles,
+        )}
         placeholder="Input your text here"
       />
     </TranslateEditorWrapper>
