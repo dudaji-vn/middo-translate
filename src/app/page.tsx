@@ -1,6 +1,8 @@
 import {
+  CompareBar,
   TranslateEditor,
   TranslateMiddle,
+  TranslateMiddleEditor,
   TranslateResult,
 } from '@/components/translate-editor';
 import { detectLanguage, translateText } from '@/services/languages';
@@ -15,6 +17,7 @@ interface HomeProps {
     target?: string;
     edit?: string;
     mquery?: string;
+    detect?: string;
   };
 }
 
@@ -51,30 +54,55 @@ export default async function Home(props: HomeProps) {
     : '';
 
   return (
-    <main className="flex h-full w-full flex-col gap-5 px-5">
-      <LanguagesControlBar source={sourceLanguage} target={targetLanguage} />
+    <main className="flex h-full w-full flex-col px-5">
+      <LanguagesControlBar
+        className="mb-5"
+        source={sourceLanguage}
+        target={targetLanguage}
+        detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
+      />
       <TranslateEditor
         disabled={isEdit}
         isDetect={props.searchParams.source === 'auto'}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}
-        className={sourceText ? '' : 'min-h-[60vh]'}
-      />
-      {sourceEnglishResult &&
-        targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
-        sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
-          <TranslateMiddle
-            result={sourceEnglishResult}
-            targetResult={targetEnglishResult}
+        className={sourceText || sourceTranslateResult ? '' : 'min-h-[60vh]'}
+      >
+        {sourceEnglishResult &&
+          !isEdit &&
+          targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+          sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
+            <TranslateMiddle
+              text={sourceEnglishResult}
+              textCompare={targetEnglishResult}
+            />
+          )}
+        {isEdit && <TranslateMiddleEditor defaultText={sourceEnglishResult} />}
+      </TranslateEditor>
+
+      {!isEdit ? (
+        <div className="my-8">
+          <CompareBar
+            text={sourceEnglishResult}
+            textCompare={targetEnglishResult}
           />
-        )}
+        </div>
+      ) : (
+        <div className="my-2.5"></div>
+      )}
+
       {targetResult && (
-        <TranslateResult
-          result={targetResult}
-          resultEnglish={middleText ? '' : targetEnglishResult}
-          status="error"
-          languageCode={targetLanguage}
-        />
+        <TranslateResult result={targetResult} languageCode={targetLanguage}>
+          {sourceEnglishResult &&
+            targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+            sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
+              <TranslateMiddle
+                trianglePosition="bottom"
+                text={targetEnglishResult}
+                textCompare={sourceEnglishResult}
+              />
+            )}
+        </TranslateResult>
       )}
     </main>
   );
