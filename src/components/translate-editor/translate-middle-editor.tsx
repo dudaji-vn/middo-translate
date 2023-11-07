@@ -30,7 +30,7 @@ export const TranslateMiddleEditor = ({
         value: '',
       },
     ];
-    if (value && value !== defaultText) {
+    if (value) {
       newParams.push({
         key: 'mquery',
         value,
