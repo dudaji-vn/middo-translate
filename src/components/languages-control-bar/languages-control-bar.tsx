@@ -8,6 +8,7 @@ import { BackLayout } from '../layout/back-layout';
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { ListLanguages } from '../list-languages';
+import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import { useSetParams } from '@/hooks/use-set-params';
 
@@ -15,6 +16,7 @@ export interface LanguagesControlBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   source?: string;
   target?: string;
+  detect?: string;
 }
 
 export const LanguagesControlBar = forwardRef<
@@ -24,7 +26,7 @@ export const LanguagesControlBar = forwardRef<
   const [currentSelect, setCurrentSelect] = useState<
     'source' | 'target' | 'none'
   >('none');
-  const { searchParams, setParams } = useSetParams();
+  const { searchParams, setParams, setParam, removeParam } = useSetParams();
   const source = getCountryCode(searchParams.get('source'), true);
   const target = getCountryCode(
     searchParams.get('target') || DEFAULT_LANGUAGES_CODE.EN,
@@ -72,28 +74,39 @@ export const LanguagesControlBar = forwardRef<
   };
 
   useEffect(() => {
+    const newParams = [];
+    if (!searchParams.get('source')) {
+      newParams.push({
+        key: 'source',
+        value: 'auto',
+      });
+    }
     if (!searchParams.get('target')) {
-      setParams([
-        {
-          key: 'target',
-          value: DEFAULT_LANGUAGES_CODE.EN,
-        },
-      ]);
+      newParams.push({
+        key: 'target',
+        value: DEFAULT_LANGUAGES_CODE.EN,
+      });
     }
 
-    if (!searchParams.get('source')) {
-      setParams([
-        {
-          key: 'source',
-          value: 'auto',
-        },
-      ]);
+    if (props.detect) {
+      newParams.push({
+        key: 'detect',
+        value: props.detect,
+      });
+    }
+
+    if (newParams.length > 0) {
+      setParams(newParams);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, props.detect]);
 
   return (
-    <div ref={ref} {...props} className="flex w-full justify-center gap-5">
+    <div
+      ref={ref}
+      {...props}
+      className={cn('gap-5" flex w-full justify-center', props.className)}
+    >
       <Select>
         <SelectTrigger
           onClick={() => {
