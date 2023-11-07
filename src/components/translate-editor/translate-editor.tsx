@@ -8,7 +8,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CloseCircleOutline } from '@easy-eva-icons/react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
-import { detectLanguage } from '@/services/languages';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useDebounce } from 'usehooks-ts';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
@@ -56,13 +55,6 @@ export const TranslateEditor = ({
       params.set('query', debouncedValue);
       params.delete('edit');
       params.delete('mquery');
-      if (!languageCode || languageCode === 'auto') {
-        detectLanguage(debouncedValue).then((res) => {
-          params.set('source', res);
-
-          replace(`${pathname}?${params.toString()}`);
-        });
-      }
     } else {
       params.delete('query');
     }
