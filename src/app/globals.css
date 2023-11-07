@@ -6,6 +6,7 @@
   :root {
     --background: 0 0% 100%;
     --background-darker: 0, 0%, 95%;
+    --background-lighter: 0, 0%, 99%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -24,7 +25,7 @@
 
     --shading: 224, 73%, 23%;
 
-    --success: 155, 100%, 50%;
+    --success: 140, 52%, 55%;
 
     --stroke: 0, 0%, 80%;
 
@@ -86,6 +87,9 @@
   * {
     @apply border-border;
   }
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
   body {
     @apply bg-background text-foreground;
   }
@@ -108,5 +112,9 @@
   p,
   span {
     @apply text-base text-text;
+  }
+
+  .btn-icon {
+    @apply rounded-full p-2.5 active:bg-stroke md:bg-background-darker;
   }
 }

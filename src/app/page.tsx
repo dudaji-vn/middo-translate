@@ -1,59 +1,115 @@
-import { getSupportLanguages, translateText } from '@/services/languages';
+import {
+  CompareBar,
+  TranslateEditor,
+  TranslateMiddle,
+  TranslateMiddleEditor,
+  TranslateResult,
+} from '@/components/translate-editor';
+import { detectLanguage, translateText } from '@/services/languages';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { TranslateEditor } from '@/components/translate-editor';
-import { TranslateResult } from '@/components/translate-result';
+import { LanguagesControlBar } from '@/components/languages-control-bar';
+
 interface HomeProps {
   searchParams: {
     query?: string;
-    sourceLanguage?: string;
-    targetLanguage?: string;
+    source?: string;
+    target?: string;
+    edit?: string;
+    mquery?: string;
+    detect?: string;
   };
 }
 
 export default async function Home(props: HomeProps) {
-  // const sourceText = props.searchParams.query || '';
-  // const sourceLanguage =
-  // 	props.searchParams.sourceLanguage || DEFAULT_LANGUAGES_CODE.VN;
-  // const targetLanguage =
-  // 	props.searchParams.targetLanguage || DEFAULT_LANGUAGES_CODE.KR;
-  // const targetResult = await translateText(
-  // 	sourceText,
-  // 	sourceLanguage,
-  // 	targetLanguage,
-  // );
-  // const sourceEnglishResult = await translateText(
-  // 	sourceText,
-  // 	sourceLanguage,
-  // 	DEFAULT_LANGUAGES_CODE.EN,
-  // );
-  // const targetEnglishResult = await translateText(
-  // 	targetResult,
-  // 	targetLanguage,
-  // 	DEFAULT_LANGUAGES_CODE.EN,
-  // );
-  // const supportLanguages = await getSupportLanguages();
+  const isEdit = props.searchParams.edit === 'true';
+  const sourceText = props.searchParams.query || '';
+  const middleText = props.searchParams.mquery || '';
+
+  const sourceLanguage =
+    props.searchParams.source === 'auto'
+      ? props.searchParams.detect && middleText
+        ? props.searchParams.detect
+        : await detectLanguage(sourceText)
+      : props.searchParams.source;
+  const targetLanguage = props.searchParams.target;
+  const targetResult = middleText
+    ? await translateText(middleText, DEFAULT_LANGUAGES_CODE.EN, targetLanguage)
+    : await translateText(sourceText, sourceLanguage, targetLanguage);
+  const sourceEnglishResult = middleText
+    ? middleText
+    : await translateText(
+        sourceText,
+        sourceLanguage,
+        DEFAULT_LANGUAGES_CODE.EN,
+      );
+  const targetEnglishResult = middleText
+    ? middleText
+    : await translateText(
+        targetResult,
+        targetLanguage,
+        DEFAULT_LANGUAGES_CODE.EN,
+      );
+
+  const sourceTranslateResult = middleText
+    ? await translateText(
+        middleText,
+        DEFAULT_LANGUAGES_CODE.EN,
+        props.searchParams.detect ? props.searchParams.detect : sourceLanguage,
+      )
+    : '';
+
   return (
-    <main className="flex min-h-screen flex-col items-center p-24">
-      {/* <div className="max-h-24 overflow-scroll mb-10">
-				{supportLanguages.map((language) => (
-					<div
-						key={language.code}
-						className="flex flex-col items-center justify-center"
-					>
-						<h1 className="text-2xl">{language.name}</h1>
-						<p className="text-2xl">{language.code}</p>
-					</div>
-				))}
-			</div>
-			<TranslateEditor />
-			<div>
-				<span>{sourceEnglishResult}</span>
-			</div>
-			<TranslateResult
-				result={targetResult}
-				resultEnglish={targetEnglishResult}
-			/> */}
+    <main className="flex h-full w-full flex-col px-5">
+      <LanguagesControlBar
+        className="mb-5"
+        source={sourceLanguage}
+        target={targetLanguage}
+        detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
+      />
+      <TranslateEditor
+        disabled={isEdit}
+        isDetect={props.searchParams.source === 'auto'}
+        languageCode={sourceLanguage}
+        sourceTranslateResult={sourceTranslateResult}
+        className={sourceText || sourceTranslateResult ? '' : 'min-h-[60vh]'}
+      >
+        {sourceEnglishResult &&
+          !isEdit &&
+          targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+          sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
+            <TranslateMiddle
+              text={sourceEnglishResult}
+              textCompare={targetEnglishResult}
+            />
+          )}
+        {isEdit && <TranslateMiddleEditor defaultText={sourceEnglishResult} />}
+      </TranslateEditor>
+
+      {!isEdit && sourceEnglishResult && targetEnglishResult ? (
+        <div className="my-8">
+          <CompareBar
+            text={sourceEnglishResult}
+            textCompare={targetEnglishResult}
+          />
+        </div>
+      ) : (
+        <div className="my-2.5"></div>
+      )}
+
+      {targetResult && (
+        <TranslateResult result={targetResult} languageCode={targetLanguage}>
+          {sourceEnglishResult &&
+            targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+            sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
+              <TranslateMiddle
+                trianglePosition="bottom"
+                text={targetEnglishResult}
+                textCompare={sourceEnglishResult}
+              />
+            )}
+        </TranslateResult>
+      )}
     </main>
   );
 }

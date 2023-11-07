@@ -1,0 +1,59 @@
+.translateTextWrapper {
+  border: solid 1px hsl(var(--primary));
+  border-radius: 20px;
+  padding: 20px;
+  background-color: hsl(var(--background));
+  position: relative;
+  z-index: 1;
+}
+.detectLanguageWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.inputTranslate {
+  width: 100%;
+  resize: none;
+}
+.inputTranslate:focus-visible {
+  outline: none;
+}
+.inputTranslate::placeholder {
+  opacity: 0.3;
+}
+.translateTextWrapper.middle {
+  border: none;
+  background-color: hsl(var(--background-darker));
+}
+.translatedText {
+  font-size: 22px;
+  font-weight: 500;
+}
+.translateTextWrapper.middle.correct {
+  background-color: hsl(var(--success), 0.4);
+}
+.translateTextWrapper.middle.error {
+  background-color: hsl(var(--error), 0.4);
+}
+.translateTextWrapper.result {
+  box-shadow: var(--shadow-1);
+  background-color: hsl(var(--background-lighter));
+  border: none;
+}
+.translateResultText {
+  margin-top: 12px;
+}
+.bottomResultText.correct {
+  color: hsl(var(--success));
+}
+.bottomResultText.error {
+  color: hsl(var(--error));
+}
+
+@media screen and (min-width: 1024px) {
+  .translateTextWrapper {
+    width: 30%;
+  }
+}

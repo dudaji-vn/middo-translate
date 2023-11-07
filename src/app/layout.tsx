@@ -1,9 +1,9 @@
 import './globals.css';
 
-import { PUBLIC_APP_DESCRIPTION, PUBLIC_APP_NAME } from '@/configs/env';
+import { PUBLIC_APP_DESCRIPTION, PUBLIC_APP_NAME } from '@/configs/env.public';
 
 import { AppProvider } from '@/providers/app';
-import { Header } from '@/components/layout/header';
+import { MainLayout } from '@/components/layout/main-layout';
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 
@@ -23,8 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={montserrat.className}>
         <AppProvider>
-          <Header />
-          {children}
+          <MainLayout>{children}</MainLayout>
         </AppProvider>
       </body>
     </html>
