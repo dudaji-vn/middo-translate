@@ -40,7 +40,7 @@ export const TranslateMiddle = ({
     <div className="relative flex break-all rounded-[8px] bg-background-darker p-2.5">
       <CircleFlag
         className="countryCircleIcon mr-2"
-        countryCode={'us'}
+        countryCode={'uk'}
         height="35"
       />
       <p>{highlightedText}</p>
