@@ -43,6 +43,13 @@ export const TranslateEditor = ({
   };
 
   useEffect(() => {
+    if (text !== value) {
+      setValue(text);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [text]);
+
+  useEffect(() => {
     if (
       !isFocus ||
       (debouncedValue && debouncedValue === sourceTranslateResult)

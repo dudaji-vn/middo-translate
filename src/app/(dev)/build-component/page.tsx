@@ -1,3 +1,5 @@
+import { SpeechToText } from '@/components/speech-to-text';
+
 interface BuildComponent {
   searchParams: {
     query?: string;
@@ -7,5 +9,9 @@ interface BuildComponent {
 }
 
 export default async function BuildComponent(props: BuildComponent) {
-  return <div>Build Component</div>;
+  return (
+    <div>
+      <SpeechToText />
+    </div>
+  );
 }
