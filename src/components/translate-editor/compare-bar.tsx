@@ -43,26 +43,24 @@ export const CompareBar = forwardRef<HTMLDivElement, CompareBarProps>(
       setAcceptList(getAcceptDiffResult());
     }, []);
 
+    if (isMatch) return null;
+
     return (
       <div ref={ref} {...props} className="relative">
-        {isMatch ? (
-          <></>
-        ) : (
-          <div className="flex justify-between">
-            <button onClick={handleAccept} className="smallButton ">
-              <CheckmarkCircle2Outline className="h-7 w-7 " />
-              <div className="buttonText">It&apos;s OK</div>
-            </button>
+        <div className="flex justify-between">
+          <button onClick={handleAccept} className="smallButton ">
+            <CheckmarkCircle2Outline className="h-7 w-7 " />
+            <div className="buttonText">It&apos;s OK</div>
+          </button>
 
-            <button
-              onClick={handleClickEdit}
-              className="smallButton !border-none !bg-primary !text-white"
-            >
-              <Edit2Outline className="h-7 w-7 " />
-              <div className="buttonText">Edit</div>
-            </button>
-          </div>
-        )}
+          <button
+            onClick={handleClickEdit}
+            className="smallButton !border-none !bg-primary !text-white"
+          >
+            <Edit2Outline className="h-7 w-7 " />
+            <div className="buttonText">Edit</div>
+          </button>
+        </div>
       </div>
     );
   },

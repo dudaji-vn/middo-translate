@@ -19,6 +19,7 @@ export interface TranslateEditorProps {
   sourceTranslateResult?: string;
   isDetect?: boolean;
   children?: React.ReactNode;
+  isListening?: boolean;
 }
 
 export const TranslateEditor = ({
@@ -26,6 +27,7 @@ export const TranslateEditor = ({
   languageCode = 'auto',
   disabled = false,
   isDetect = false,
+  isListening = false,
   className,
   children,
 }: TranslateEditorProps) => {
@@ -82,6 +84,7 @@ export const TranslateEditor = ({
     params.delete('query');
     params.delete('edit');
     params.delete('mquery');
+    params.delete('listening');
     replace(`${pathname}?${params.toString()}`);
   };
   return (
@@ -109,10 +112,10 @@ export const TranslateEditor = ({
         value={value}
         onChange={handleChange}
         className={cn(
-          'inputTranslate bg-transparent transition-all',
+          'inputTranslate translate-editor h-full bg-transparent transition-all',
           textStyles,
         )}
-        placeholder="Input your text here"
+        placeholder={isListening ? 'Please speak' : 'Input your text here'}
       />
     </TranslateEditorWrapper>
   );

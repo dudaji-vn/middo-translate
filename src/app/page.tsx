@@ -73,6 +73,7 @@ export default async function Home(props: HomeProps) {
       <TranslateEditor
         isListening={isListening}
         disabled={isEdit}
+        isListening={isListening}
         isDetect={props.searchParams.source === 'auto'}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}
