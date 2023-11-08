@@ -10,7 +10,7 @@ export const Header = (props: Props) => {
   return (
     <div className="flex items-center justify-between p-5">
       <Logo />
-      <IconButton variant="secondary">
+      <IconButton variant="secondary" shape="default">
         <Menu />
       </IconButton>
     </div>
