@@ -9,7 +9,7 @@ import { detectLanguage, translateText } from '@/services/languages';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { LanguagesControlBar } from '@/components/languages-control-bar';
-import { TranslateBar } from '@/components/translate-bar';
+import { TranslateOptionBar } from '@/components/translate-option-bar';
 
 interface HomeProps {
   searchParams: {
@@ -92,9 +92,8 @@ export default async function Home(props: HomeProps) {
           text={sourceEnglishResult}
           textCompare={targetEnglishResult}
         />
-      ) : (
-        <div className="my-2.5"></div>
-      )}
+      ) : // <div className="my-2.5"></div>
+      null}
 
       {targetResult && (
         <TranslateResult result={targetResult} languageCode={targetLanguage}>
@@ -109,11 +108,10 @@ export default async function Home(props: HomeProps) {
             )}
         </TranslateResult>
       )}
-      {((!sourceText && !middleText) || props.searchParams.listening) && (
-        <div className="bottom-24 mx-auto ">
-          <TranslateBar />
-        </div>
-      )}
+
+      <div className="mx-auto mt-5">
+        <TranslateOptionBar sourceLang={sourceLanguage} />
+      </div>
     </main>
   );
 }

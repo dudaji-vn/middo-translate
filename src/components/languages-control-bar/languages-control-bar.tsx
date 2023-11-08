@@ -105,7 +105,7 @@ export const LanguagesControlBar = forwardRef<
     <div
       ref={ref}
       {...props}
-      className={cn('gap-5" flex w-full justify-center', props.className)}
+      className={cn('flex w-full justify-center gap-5', props.className)}
     >
       <Select>
         <SelectTrigger
