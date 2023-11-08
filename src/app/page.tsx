@@ -27,6 +27,7 @@ export default async function Home(props: HomeProps) {
   const isEdit = props.searchParams.edit === 'true';
   const sourceText = props.searchParams.query || '';
   const middleText = props.searchParams.mquery || '';
+  const isListening = props.searchParams.listening === 'true';
 
   const sourceLanguage =
     props.searchParams.source === 'auto'
@@ -70,6 +71,7 @@ export default async function Home(props: HomeProps) {
       />
       <TranslateEditor
         disabled={isEdit}
+        isListening={isListening}
         isDetect={props.searchParams.source === 'auto'}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}

@@ -23,7 +23,9 @@ export const TranslateOptionBar = forwardRef<
   TranslateOptionBarProps
 >(({ sourceLang, ...props }, ref) => {
   const { transcript, listening } = useSpeechRecognition();
-  const { setParam, removeParam } = useSetParams();
+  const { setParam, removeParam, searchParams } = useSetParams();
+
+  const isListening = searchParams.get('listening') === 'true';
 
   const { toast } = useToast();
   useEffect(() => {
@@ -38,8 +40,8 @@ export const TranslateOptionBar = forwardRef<
   const handleStartListening = () => {
     if (!ableListen) {
       toast({
-        title: 'Can not listen',
-        description: 'Please choose a language to listen',
+        // title: 'Can not listen',
+        description: 'Select a specific language to enable voice input',
         variant: 'destructive',
       });
       return;
@@ -49,6 +51,26 @@ export const TranslateOptionBar = forwardRef<
       continuous: true,
     });
   };
+
+  const handleStopListening = () => {
+    SpeechRecognition.stopListening();
+  };
+
+  useEffect(() => {
+    if (listening) {
+      setParam('listening', 'true');
+    } else {
+      removeParam('listening');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listening]);
+
+  useEffect(() => {
+    if (!isListening) {
+      handleStopListening();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isListening]);
 
   return (
     <div
@@ -68,9 +90,12 @@ export const TranslateOptionBar = forwardRef<
       ) : (
         <button
           onClick={handleStartListening}
-          className={cn('circleButton big', !ableListen && '!opacity-30')}
+          className={cn(
+            'circleButton big  transition-all',
+            !ableListen && '!opacity-30',
+          )}
         >
-          <MicOutline className="h-7 w-7 text-primary" />
+          <MicOutline className="h-7 w-7 " />
         </button>
       )}
     </div>
