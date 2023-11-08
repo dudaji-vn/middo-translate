@@ -13,6 +13,7 @@
   padding: 10px;
   background-color: hsl(var(--lighter));
   border-radius: 99px;
+  color: hsl(var(--primary));
 }
 .circleButton:hover {
   background-color: hsl(var(--secondary));
@@ -23,4 +24,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.circleButton:active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--background));
 }
