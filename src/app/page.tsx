@@ -7,6 +7,7 @@ import {
 } from '@/components/translate-editor';
 import { detectLanguage, translateText } from '@/services/languages';
 
+import { CaptureProvider } from '@/components/capture';
 import { CompareProvider } from '@/components/compare';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { LanguagesControlBar } from '@/components/languages-control-bar';
@@ -64,68 +65,80 @@ export default async function Home(props: HomeProps) {
     : '';
 
   return (
-    <main className="flex h-full w-full flex-col gap-5 px-5">
+    <main className="flex h-full w-full flex-col">
       <CompareProvider
         text={sourceEnglishResult}
         textCompare={targetEnglishResult}
       >
         <LanguagesControlBar
+          className="px-5"
           source={sourceLanguage}
           target={targetLanguage}
           detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
         />
-        <TranslateEditor
-          isListening={isListening}
-          disabled={isEdit}
-          isDetect={props.searchParams.source === 'auto'}
-          languageCode={sourceLanguage}
-          sourceTranslateResult={sourceTranslateResult}
-          className={sourceText || sourceTranslateResult ? '' : 'min-h-[40vh]'}
-        >
-          {sourceEnglishResult &&
-            !isEdit &&
-            targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
-            sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
-              <TranslateMiddle
-                text={sourceEnglishResult}
-                textCompare={targetEnglishResult}
-              />
-            )}
-          {isEdit && (
-            <TranslateMiddleEditor defaultText={sourceEnglishResult} />
-          )}
-        </TranslateEditor>
-
-        {targetResult && (
-          <TranslateResult result={targetResult} languageCode={targetLanguage}>
-            {sourceEnglishResult &&
-              targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
-              sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
-                <TranslateMiddle
-                  isEdit={isEdit}
-                  trianglePosition="bottom"
-                  type="accept"
-                  text={targetEnglishResult}
-                  textCompare={sourceEnglishResult}
+        <CaptureProvider
+          footer={
+            <div className="mx-auto mt-5 flex items-center gap-8">
+              {!isListening && (
+                <TextCopy
+                  sourceText={sourceText}
+                  targetText={targetResult}
+                  sourceEnglishText={sourceEnglishResult}
+                  targetEnglishText={targetEnglishResult}
+                  sourceLanguage={sourceLanguage as string}
+                  targetLanguage={targetLanguage as string}
                 />
               )}
-          </TranslateResult>
-        )}
+              <TranslateOptionBar sourceLang={sourceLanguage} />
+              {!isListening && <ImgCopy />}
+            </div>
+          }
+        >
+          <div className="flex h-full w-full flex-col gap-5 p-5">
+            <TranslateEditor
+              isListening={isListening}
+              disabled={isEdit}
+              isDetect={props.searchParams.source === 'auto'}
+              languageCode={sourceLanguage}
+              sourceTranslateResult={sourceTranslateResult}
+              className={
+                sourceText || sourceTranslateResult ? '' : 'min-h-[40vh]'
+              }
+            >
+              {sourceEnglishResult &&
+                !isEdit &&
+                targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+                sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
+                  <TranslateMiddle
+                    text={sourceEnglishResult}
+                    textCompare={targetEnglishResult}
+                  />
+                )}
+              {isEdit && (
+                <TranslateMiddleEditor defaultText={sourceEnglishResult} />
+              )}
+            </TranslateEditor>
 
-        <div className="mx-auto mt-5 flex items-center gap-8">
-          {!isListening && (
-            <TextCopy
-              sourceText={sourceText}
-              targetText={targetResult}
-              sourceEnglishText={sourceEnglishResult}
-              targetEnglishText={targetEnglishResult}
-              sourceLanguage={sourceLanguage as string}
-              targetLanguage={targetLanguage as string}
-            />
-          )}
-          <TranslateOptionBar sourceLang={sourceLanguage} />
-          {!isListening && <ImgCopy />}
-        </div>
+            {targetResult && (
+              <TranslateResult
+                result={targetResult}
+                languageCode={targetLanguage}
+              >
+                {sourceEnglishResult &&
+                  targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+                  sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
+                    <TranslateMiddle
+                      isEdit={isEdit}
+                      trianglePosition="bottom"
+                      type="accept"
+                      text={targetEnglishResult}
+                      textCompare={sourceEnglishResult}
+                    />
+                  )}
+              </TranslateResult>
+            )}
+          </div>
+        </CaptureProvider>
       </CompareProvider>
     </main>
   );
