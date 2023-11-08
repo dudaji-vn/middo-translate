@@ -27,10 +27,7 @@
   border: none;
   background-color: hsl(var(--background-darker));
 }
-.translatedText {
-  font-size: 22px;
-  font-weight: 500;
-}
+
 .translateTextWrapper.middle.correct {
   background-color: hsl(var(--success), 0.4);
 }

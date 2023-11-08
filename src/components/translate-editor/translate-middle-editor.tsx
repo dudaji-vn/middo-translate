@@ -2,7 +2,8 @@
 
 import './style.css';
 
-import { CheckmarkCircle2Outline } from '@easy-eva-icons/react';
+import { AcceptButton } from './accept-button';
+import { CloseCircleOutline } from '@easy-eva-icons/react';
 import { cn } from '@/utils/cn';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useState } from 'react';
@@ -39,8 +40,17 @@ export const TranslateMiddleEditor = ({
     setParams(newParams);
   };
 
+  const handleCancel = () => {
+    setParams([
+      {
+        key: 'edit',
+        value: 'false',
+      },
+    ]);
+  };
+
   return (
-    <div className="translateTextWrapper">
+    <div className="translateTextWrapper relative">
       <textarea
         value={value}
         ref={textAreaRef}
@@ -50,11 +60,15 @@ export const TranslateMiddleEditor = ({
         className={cn('inputTranslate  bg-transparent')}
         placeholder="hello"
       />
-
-      <button onClick={handleDone} className="smallButton ml-auto">
-        <CheckmarkCircle2Outline className="h-7 w-7 " />
-        <div className="buttonText">Done</div>
+      <button
+        onClick={handleCancel}
+        className="btn-icon absolute right-3 top-3"
+      >
+        <CloseCircleOutline className="h-6 w-6 opacity-60" />
       </button>
+      <div className="ml-auto flex">
+        <AcceptButton onClick={handleDone} />
+      </div>
     </div>
   );
 };

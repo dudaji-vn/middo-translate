@@ -55,9 +55,7 @@ export const TranslateEditorWrapper = ({
         <div className="opacity-40">
           {prefixLanguage && <span>{prefixLanguage} - </span>}
           {language?.name ? (
-            <span>
-              {isDetect ? `Detect language: ${language.name}` : language.name}
-            </span>
+            <span>{isDetect ? `Detect: ${language.name}` : language.name}</span>
           ) : (
             <span>Detect language</span>
           )}
