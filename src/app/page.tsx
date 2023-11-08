@@ -73,7 +73,6 @@ export default async function Home(props: HomeProps) {
       <TranslateEditor
         isListening={isListening}
         disabled={isEdit}
-        isListening={isListening}
         isDetect={props.searchParams.source === 'auto'}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}
@@ -114,16 +113,18 @@ export default async function Home(props: HomeProps) {
       )}
 
       <div className="mx-auto mt-5 flex items-center gap-5">
-        <TextCopy
-          sourceText={sourceText}
-          targetText={targetResult}
-          sourceEnglishText={sourceEnglishResult}
-          targetEnglishText={targetEnglishResult}
-          sourceLanguage={sourceLanguage as string}
-          targetLanguage={targetLanguage as string}
-        />
+        {!isListening && (
+          <TextCopy
+            sourceText={sourceText}
+            targetText={targetResult}
+            sourceEnglishText={sourceEnglishResult}
+            targetEnglishText={targetEnglishResult}
+            sourceLanguage={sourceLanguage as string}
+            targetLanguage={targetLanguage as string}
+          />
+        )}
         <TranslateOptionBar sourceLang={sourceLanguage} />
-        <ImgCopy />
+        {!isListening && <ImgCopy />}
       </div>
     </main>
   );
