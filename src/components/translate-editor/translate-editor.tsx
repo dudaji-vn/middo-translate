@@ -2,6 +2,7 @@
 
 import './style.css';
 
+import { Button, IconButton } from '../button';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
@@ -90,12 +91,13 @@ export const TranslateEditor = ({
       className={className}
     >
       {value && !disabled && (
-        <button
+        <IconButton
           onClick={handleClear}
+          variant="ghost"
           className="btn-icon absolute right-3 top-3"
         >
           <CloseCircleOutline className="h-6 w-6 opacity-60" />
-        </button>
+        </IconButton>
       )}
       <textarea
         rows={1}

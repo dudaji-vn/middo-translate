@@ -42,10 +42,14 @@ module.exports = {
         },
         success: {
           DEFAULT: 'hsl(var(--success))',
+          lighter: 'hsl(var(--success-lighter))',
+          darker: 'hsl(var(--success-darker))',
           2: '#51c878',
         },
         error: {
           DEFAULT: 'hsl(var(--error))',
+          lighter: 'hsl(var(--error-lighter))',
+          darker: 'hsl(var(--error-darker))',
           2: '#ff4c4c',
         },
 

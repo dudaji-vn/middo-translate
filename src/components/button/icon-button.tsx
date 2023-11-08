@@ -6,19 +6,19 @@ import { cva } from 'class-variance-authority';
 
 export type IconButtonProps = Omit<ButtonProps, 'endIcon' | 'startIcon'>;
 
-const IconButtonVariants = cva('p-0', {
+const iconButtonVariants = cva('p-0 flex items-center justify-center', {
   variants: {
     size: {
-      sm: 'w-9',
-      md: 'w-10',
-      lg: 'w-12',
+      sm: 'w-11 h-11',
+      md: 'w-12 h-12',
+      lg: 'w-[60px] h-[60px]',
     },
   },
   defaultVariants: {
     size: 'md',
   },
 });
-const IconVariants = cva('inline-block', {
+const iconVariants = cva('inline-block', {
   variants: {
     size: {
       sm: 'w-5 h-5',
@@ -37,7 +37,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       <Button
         className={cn(
           buttonVariants({ variant, size, className, shape }),
-          IconButtonVariants(),
+          iconButtonVariants({ size }),
         )}
         ref={ref}
         {...props}
@@ -45,7 +45,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         {Children.map(children, (child) => {
           if (isValidElement(child)) {
             return cloneElement(child, {
-              className: cn(IconVariants(), child.props.className),
+              className: cn(iconVariants({ size }), child.props.className),
             } as React.HTMLProps<HTMLElement>);
           }
           return child;

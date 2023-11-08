@@ -51,7 +51,7 @@ export const TranslateMiddle = ({
   );
 
   return (
-    <div className="relative rounded-[8px] bg-background-darker p-2.5">
+    <div className="relative rounded-[8px] bg-background-darker p-3">
       <div className="flex">
         <CircleFlag
           className="countryCircleIcon mr-2"
@@ -61,7 +61,7 @@ export const TranslateMiddle = ({
         <p className="break-all">{highlightedText}</p>
       </div>
       {!isMatch && !isEdit && (
-        <div className="flex justify-end">
+        <div className="mt-2 flex justify-end">
           {type === 'edit' ? (
             <EditButton onClick={editUnMatch} />
           ) : (

@@ -1,4 +1,5 @@
 import { CheckmarkCircle2Outline } from '@easy-eva-icons/react';
+import { IconButton } from '../button';
 import { forwardRef } from 'react';
 
 export interface AcceptButtonProps
@@ -7,13 +8,9 @@ export interface AcceptButtonProps
 export const AcceptButton = forwardRef<HTMLButtonElement, AcceptButtonProps>(
   (props, ref) => {
     return (
-      <button
-        ref={ref}
-        {...props}
-        className="circleButton ml-auto !bg-success !text-white shadow-1"
-      >
-        <CheckmarkCircle2Outline className="h-5 w-5" />
-      </button>
+      <IconButton ref={ref} {...props} variant="success">
+        <CheckmarkCircle2Outline />
+      </IconButton>
     );
   },
 );

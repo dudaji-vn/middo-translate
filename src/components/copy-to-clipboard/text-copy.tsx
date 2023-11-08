@@ -2,6 +2,7 @@
 
 import { Copy, CopyOutline } from '@easy-eva-icons/react';
 
+import { IconButton } from '../button';
 import { forwardRef } from 'react';
 import { getCountryCode } from '@/utils/language-fn';
 import { useToast } from '../toast';
@@ -40,12 +41,9 @@ ${getFlagEmoji(getCountryCode(targetLanguage) as string)} ${targetText}`;
     };
     return (
       <div ref={ref} {...props}>
-        <button
-          onClick={handleCopy}
-          className="circleButton big !bg-transparent active:!bg-lighter"
-        >
+        <IconButton onClick={handleCopy} variant="ghostPrimary">
           <CopyOutline className="h-7 w-7" />
-        </button>
+        </IconButton>
       </div>
     );
   },
