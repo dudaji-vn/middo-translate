@@ -4,6 +4,7 @@ import './style.css';
 
 import { AcceptButton } from './accept-button';
 import { CloseCircleOutline } from '@easy-eva-icons/react';
+import { IconButton } from '../button';
 import { cn } from '@/utils/cn';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useState } from 'react';
@@ -60,13 +61,14 @@ export const TranslateMiddleEditor = ({
         className={cn('inputTranslate  bg-transparent')}
         placeholder="hello"
       />
-      <button
+      <IconButton
         onClick={handleCancel}
+        variant="ghost"
         className="btn-icon absolute right-3 top-3"
       >
-        <CloseCircleOutline className="h-6 w-6 opacity-60" />
-      </button>
-      <div className="ml-auto flex">
+        <CloseCircleOutline />
+      </IconButton>
+      <div className="flex justify-end">
         <AcceptButton onClick={handleDone} />
       </div>
     </div>

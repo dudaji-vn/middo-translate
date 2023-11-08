@@ -26,10 +26,14 @@
     --shading: 224, 73%, 23%;
 
     --success: 140, 52%, 55%;
+    --success-lighter: 140, 52%, 82%;
+    --success-darker: 140, 52%, 28%;
 
     --stroke: 0, 0%, 80%;
 
     --error: 0, 100%, 50%;
+    --error-lighter: 0, 100%, 80%;
+    --error-darker: 0, 100%, 20%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;

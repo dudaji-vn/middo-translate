@@ -112,7 +112,7 @@ export default async function Home(props: HomeProps) {
           </TranslateResult>
         )}
 
-        <div className="mx-auto mt-5 flex items-center gap-5">
+        <div className="mx-auto mt-5 flex items-center gap-8">
           {!isListening && (
             <TextCopy
               sourceText={sourceText}
