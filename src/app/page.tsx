@@ -5,6 +5,7 @@ import {
   TranslateMiddleEditor,
   TranslateResult,
 } from '@/components/translate-editor';
+import { ImgCopy, TextCopy } from '@/components/copy-to-clipboard';
 import { detectLanguage, translateText } from '@/services/languages';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
@@ -70,8 +71,8 @@ export default async function Home(props: HomeProps) {
         detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
       />
       <TranslateEditor
-        disabled={isEdit}
         isListening={isListening}
+        disabled={isEdit}
         isDetect={props.searchParams.source === 'auto'}
         languageCode={sourceLanguage}
         sourceTranslateResult={sourceTranslateResult}
@@ -111,8 +112,19 @@ export default async function Home(props: HomeProps) {
         </TranslateResult>
       )}
 
-      <div className="mx-auto mt-5">
+      <div className="mx-auto mt-5 flex items-center gap-5">
+        {!isListening && (
+          <TextCopy
+            sourceText={sourceText}
+            targetText={targetResult}
+            sourceEnglishText={sourceEnglishResult}
+            targetEnglishText={targetEnglishResult}
+            sourceLanguage={sourceLanguage as string}
+            targetLanguage={targetLanguage as string}
+          />
+        )}
         <TranslateOptionBar sourceLang={sourceLanguage} />
+        {!isListening && <ImgCopy />}
       </div>
     </main>
   );
