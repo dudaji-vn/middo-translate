@@ -43,6 +43,7 @@ export const TranslateMiddle = ({
 
   const highlightedText = (
     <Highlighter
+      className="block break-words"
       highlightClassName="text-error underline bg-transparent"
       searchWords={diffWords}
       autoEscape={true}
@@ -58,7 +59,7 @@ export const TranslateMiddle = ({
           countryCode={'uk'}
           height="35"
         />
-        <p className="break-all">{highlightedText}</p>
+        <div className="flex-1 overflow-hidden">{highlightedText}</div>
       </div>
       {!isMatch && !isEdit && (
         <div className="mt-2 flex justify-end">
