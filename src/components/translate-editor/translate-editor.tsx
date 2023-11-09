@@ -2,16 +2,17 @@
 
 import './style.css';
 
-import { Button, IconButton } from '../button';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { CloseCircleOutline } from '@easy-eva-icons/react';
+import { IconButton } from '../button';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useDebounce } from 'usehooks-ts';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
+import { useTranslateStore } from '@/stores/translate';
 
 export interface TranslateEditorProps {
   className?: string;
@@ -20,7 +21,6 @@ export interface TranslateEditorProps {
   sourceTranslateResult?: string;
   isDetect?: boolean;
   children?: React.ReactNode;
-  isListening?: boolean;
 }
 
 export const TranslateEditor = ({
@@ -28,14 +28,13 @@ export const TranslateEditor = ({
   languageCode = 'auto',
   disabled = false,
   isDetect = false,
-  isListening = false,
   className,
   children,
 }: TranslateEditorProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const text = searchParams.get('query') || '';
-  const [value, setValue] = useState<string>(text);
+  const { value, setValue, isListening } = useTranslateStore();
   const textStyles = useAdjustTextStyle(value);
   const debouncedValue = useDebounce<string>(value, 300);
   const pathname = usePathname();
@@ -47,7 +46,7 @@ export const TranslateEditor = ({
 
   useEffect(() => {
     if (
-      !isFocus ||
+      (!isFocus && !isListening) ||
       (debouncedValue && debouncedValue === sourceTranslateResult)
     ) {
       return;
@@ -63,7 +62,7 @@ export const TranslateEditor = ({
     }
     replace(`${pathname}?${params.toString()}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedValue, isFocus]);
+  }, [debouncedValue, isFocus, isListening]);
 
   const { textAreaRef } = useTextAreaResize(value);
 
@@ -71,6 +70,7 @@ export const TranslateEditor = ({
     if (sourceTranslateResult && !text) {
       setValue(sourceTranslateResult);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sourceTranslateResult, text]);
 
   const handleClear = () => {

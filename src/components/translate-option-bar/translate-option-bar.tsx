@@ -11,8 +11,8 @@ import { IconButton } from '../button';
 import { MicOutline } from '@easy-eva-icons/react';
 import { cn } from '@/utils/cn';
 import { supportedVoiceMap } from '@/configs/default-language';
-import { useSetParams } from '@/hooks/use-set-params';
 import { useToast } from '../toast';
+import { useTranslateStore } from '@/stores/translate';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,25 +23,30 @@ export const TranslateOptionBar = forwardRef<
   HTMLDivElement,
   TranslateOptionBarProps
 >(({ sourceLang, ...props }, ref) => {
-  const { transcript, listening } = useSpeechRecognition();
-  const { setParam, removeParam, searchParams } = useSetParams();
-
-  const isListening = searchParams.get('listening') === 'true';
+  const { listening, interimTranscript } = useSpeechRecognition();
+  const { setValue, isListening, setIsListening } = useTranslateStore(
+    (state) => {
+      return {
+        setValue: state.setValue,
+        isListening: state.isListening,
+        setIsListening: state.setIsListening,
+      };
+    },
+  );
 
   const { toast } = useToast();
   useEffect(() => {
-    if (transcript) {
-      setParam('query', transcript);
+    if (interimTranscript) {
+      setValue(interimTranscript);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [transcript]);
+  }, [interimTranscript]);
 
   const ableListen = sourceLang && sourceLang !== 'auto';
 
   const handleStartListening = () => {
     if (!ableListen) {
       toast({
-        // title: 'Can not listen',
         description: 'Select a specific language to enable voice input',
         variant: 'destructive',
       });
@@ -50,6 +55,7 @@ export const TranslateOptionBar = forwardRef<
     SpeechRecognition.startListening({
       language: supportedVoiceMap[sourceLang as keyof typeof supportedVoiceMap],
       continuous: true,
+      interimResults: true,
     });
   };
 
@@ -59,9 +65,9 @@ export const TranslateOptionBar = forwardRef<
 
   useEffect(() => {
     if (listening) {
-      setParam('listening', 'true');
+      setIsListening(true);
     } else {
-      removeParam('listening');
+      setIsListening(false);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listening]);

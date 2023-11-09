@@ -21,7 +21,6 @@ interface HomeProps {
     edit?: string;
     mquery?: string;
     detect?: string;
-    listening?: string;
   };
 }
 
@@ -29,7 +28,6 @@ export default async function Home(props: HomeProps) {
   const isEdit = props.searchParams.edit === 'true';
   const sourceText = props.searchParams.query || '';
   const middleText = props.searchParams.mquery || '';
-  const isListening = props.searchParams.listening === 'true';
 
   const sourceLanguage =
     props.searchParams.source === 'auto'
@@ -79,7 +77,6 @@ export default async function Home(props: HomeProps) {
         <CaptureProvider>
           <CaptureZone className="flex h-full w-full flex-col gap-5 p-5">
             <TranslateEditor
-              isListening={isListening}
               disabled={isEdit}
               isDetect={props.searchParams.source === 'auto'}
               languageCode={sourceLanguage}
@@ -121,19 +118,19 @@ export default async function Home(props: HomeProps) {
               </TranslateResult>
             )}
           </CaptureZone>
-          <div className="mx-auto mt-5 flex items-center gap-8">
-            {!isListening && (
-              <TextCopy
-                sourceText={sourceText || sourceTranslateResult}
-                targetText={targetResult}
-                sourceEnglishText={sourceEnglishResult}
-                targetEnglishText={targetEnglishResult}
-                sourceLanguage={sourceLanguage as string}
-                targetLanguage={targetLanguage as string}
-              />
-            )}
+
+          <div className="mx-auto mt-5 flex items-center gap-5">
+            <TextCopy
+              sourceText={sourceText}
+              targetText={targetResult}
+              sourceEnglishText={sourceEnglishResult}
+              targetEnglishText={targetEnglishResult}
+              sourceLanguage={sourceLanguage as string}
+              targetLanguage={targetLanguage as string}
+            />
+
             <TranslateOptionBar sourceLang={sourceLanguage} />
-            {!isListening && <ImgCopy />}
+            <ImgCopy />
           </div>
         </CaptureProvider>
       </CompareProvider>
