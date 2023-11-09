@@ -4,10 +4,14 @@
   align-items: center;
   gap: 40px;
   background-color: hsl(var(--background));
-  width: fit-content;
   padding: 12px;
   border-radius: 99px;
   box-shadow: 0px 10px 24px 0px rgba(22, 22, 22, 0.1);
+  width: 84px;
+  transition: width 0.3s cubic-bezier(0.5, 0, 0.5, 1);
+}
+.toolWrapper.animate {
+  width: 284px;
 }
 .circleButton {
   padding: 10px;
@@ -29,4 +33,9 @@
 .circleButton:active {
   background-color: hsl(var(--primary));
   color: hsl(var(--background));
+}
+
+.scroll {
+  position: absolute;
+  z-index: -1;
 }

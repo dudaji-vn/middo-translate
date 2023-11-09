@@ -14,6 +14,7 @@ import { cn } from '@/utils/cn';
 import { supportedVoiceMap } from '@/configs/default-language';
 import { useToast } from '../toast';
 import { useTranslateStore } from '@/stores/translate';
+import { useWaveForm } from '@/hooks/use-wave-form';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,6 +26,7 @@ export const TranslateOptionBar = forwardRef<
   TranslateOptionBarProps
 >(({ sourceLang, ...props }, ref) => {
   const { listening, interimTranscript } = useSpeechRecognition();
+  const { handleRecordClick } = useWaveForm();
   const { setValue, isListening, setIsListening, isFocused } =
     useTranslateStore((state) => {
       return {
@@ -52,6 +54,7 @@ export const TranslateOptionBar = forwardRef<
       });
       return;
     }
+    handleRecordClick();
     setValue('');
     SpeechRecognition.startListening({
       language: supportedVoiceMap[sourceLang as keyof typeof supportedVoiceMap],
@@ -61,6 +64,7 @@ export const TranslateOptionBar = forwardRef<
   };
 
   const handleStopListening = () => {
+    handleRecordClick();
     SpeechRecognition.stopListening();
   };
 
@@ -81,36 +85,47 @@ export const TranslateOptionBar = forwardRef<
   }, [isListening]);
 
   return (
-    <div
-      ref={ref}
-      {...props}
-      className={cn(
-        'toolWrapper transition-all',
-        listening && '!w-[284px]',
-        isFocused && '!hidden md:!block',
-      )}
-    >
-      {listening ? (
-        <IconButton
-          size="lg"
-          variant="secondary"
-          onClick={() => {
-            SpeechRecognition.stopListening();
-          }}
+    <div className="relative">
+      <div
+        ref={ref}
+        {...props}
+        className={cn(
+          'toolWrapper relative',
+          listening ? 'animate' : '',
+          isFocused && '!hidden md:!block',
+        )}
+      >
+        <div
+          className={cn(
+            'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
+            listening ? '' : 'hidden',
+          )}
         >
-          <Rectangle />
-        </IconButton>
-      ) : (
-        <IconButton
-          shape="circle"
-          onClick={handleStartListening}
-          size="lg"
-          variant="secondary"
-          className={cn(!ableListen && '!opacity-30')}
-        >
-          <MicOutline className="h-7 w-7 " />
-        </IconButton>
-      )}
+          <div id="mic" className=" w-[228px] "></div>
+        </div>
+        {listening ? (
+          <IconButton
+            size="lg"
+            variant="secondary"
+            className="relative"
+            onClick={() => {
+              SpeechRecognition.stopListening();
+            }}
+          >
+            <Rectangle />
+          </IconButton>
+        ) : (
+          <IconButton
+            shape="circle"
+            onClick={handleStartListening}
+            size="lg"
+            variant="secondary"
+            className={cn('z-50', !ableListen && '!opacity-30')}
+          >
+            <MicOutline className="h-7 w-7 " />
+          </IconButton>
+        )}
+      </div>
     </div>
   );
 });
