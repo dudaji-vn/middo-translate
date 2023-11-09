@@ -1,7 +1,6 @@
 'use client';
 
-import { Copy, CopyOutline } from '@easy-eva-icons/react';
-
+import { CopyOutline } from '@easy-eva-icons/react';
 import { IconButton } from '../button';
 import { forwardRef } from 'react';
 import { getCountryCode } from '@/utils/language-fn';
@@ -31,11 +30,14 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
   ) => {
     const { toast } = useToast();
     const handleCopy = () => {
-      const textFormat = `${getFlagEmoji(
+      const firstLine = `${getFlagEmoji(
         getCountryCode(sourceLanguage) as string,
-      )} ${sourceText}
-${getFlagEmoji('gb')} ${targetEnglishText}
-${getFlagEmoji(getCountryCode(targetLanguage) as string)} ${targetText}`;
+      )} ${sourceText}`;
+      const secondLine = `${getFlagEmoji('gb')} ${targetEnglishText}`;
+      const thirdLine = `${getFlagEmoji(
+        getCountryCode(targetLanguage) as string,
+      )} ${targetText}`;
+      const textFormat = `${firstLine}\n${secondLine}\n${thirdLine}`;
       navigator.clipboard.writeText(textFormat);
       toast({ title: 'Copied!' });
     };
