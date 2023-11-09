@@ -36,7 +36,7 @@ export const TranslateEditorWrapper = ({
   return (
     <div
       className={cn(
-        'translateTextWrapper relative transition-all',
+        'translateTextWrapper relative gap-y-2 transition-all',
         type,
         status,
         className,
