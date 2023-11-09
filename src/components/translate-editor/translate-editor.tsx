@@ -2,7 +2,7 @@
 
 import './style.css';
 
-import { ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { CloseCircleOutline } from '@easy-eva-icons/react';
@@ -13,7 +13,6 @@ import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useDebounce } from 'usehooks-ts';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
-import { useToast } from '../toast';
 import { useTranslateStore } from '@/stores/translate';
 
 export interface TranslateEditorProps {
@@ -35,13 +34,20 @@ export const TranslateEditor = ({
 }: TranslateEditorProps) => {
   const searchParams = useSearchParams();
   const text = searchParams.get('query') || '';
-  const { value, setValue, isListening, isFocused, setIsFocused } =
-    useTranslateStore();
+  const {
+    value,
+    setValue,
+    isListening,
+    isFocused,
+    setIsFocused,
+    setIsListening,
+    isLoading,
+    setIsLoading,
+  } = useTranslateStore();
   const textStyles = useAdjustTextStyle(value);
   const debouncedValue = useDebounce<string>(value, 300);
   const pathname = usePathname();
   const { replace } = useRouter();
-  const { toast } = useToast();
 
   const isKeyboardOpen = useDetectKeyboardOpen();
 
@@ -86,6 +92,12 @@ export const TranslateEditor = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isKeyboardOpen]);
 
+  useEffect(() => {
+    setValue(text);
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleClear = () => {
     setValue('');
     const params = new URLSearchParams(searchParams);
@@ -115,14 +127,17 @@ export const TranslateEditor = ({
       )}
       <textarea
         rows={1}
-        onFocus={() => setIsFocused(true)}
+        onFocus={() => {
+          setIsFocused(true);
+          setIsListening(false);
+        }}
         onBlur={() => setIsFocused(false)}
         disabled={disabled}
         ref={textAreaRef}
         value={value}
         onChange={handleChange}
         className={cn(
-          'inputTranslate translate-editor h-full bg-transparent transition-all',
+          'inputTranslate translate-editor h-full min-h-[48px] bg-transparent transition-all',
           textStyles,
         )}
         placeholder={isListening ? 'Please speak' : 'Input your text here'}

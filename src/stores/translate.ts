@@ -7,6 +7,8 @@ export type TranslateState = {
   setIsListening: (isListening: boolean) => void;
   isFocused: boolean;
   setIsFocused: (isFocused: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 export const useTranslateStore = create<TranslateState>()((set) => ({
@@ -16,4 +18,6 @@ export const useTranslateStore = create<TranslateState>()((set) => ({
   setIsListening: (isListening) => set({ isListening }),
   isFocused: false,
   setIsFocused: (isFocused) => set({ isFocused }),
+  isLoading: true,
+  setIsLoading: (isLoading) => set({ isLoading }),
 }));
