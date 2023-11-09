@@ -4,7 +4,9 @@ import { CopyOutline } from '@easy-eva-icons/react';
 import { IconButton } from '../button';
 import { forwardRef } from 'react';
 import { getCountryCode } from '@/utils/language-fn';
+import { useCompare } from '../compare';
 import { useToast } from '../toast';
+import { useTranslateStore } from '@/stores/translate';
 
 export interface TextCopyProps extends React.HTMLAttributes<HTMLDivElement> {
   sourceText: string;
@@ -29,6 +31,8 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
     ref,
   ) => {
     const { toast } = useToast();
+    const { isEnglishTranslate } = useTranslateStore();
+    const { isMatch } = useCompare();
     const handleCopy = () => {
       const firstLine = `${getFlagEmoji(
         getCountryCode(sourceLanguage) as string,
@@ -39,11 +43,18 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
       )} ${targetText}`;
       const textFormat = `${firstLine}\n${secondLine}\n${thirdLine}`;
       navigator.clipboard.writeText(textFormat);
-      toast({ title: 'Copied!' });
+      toast({ description: 'Text copied!' });
     };
+
+    if (!sourceText) return null;
+
     return (
       <div ref={ref} {...props}>
-        <IconButton onClick={handleCopy} variant="ghostPrimary">
+        <IconButton
+          disabled={!isMatch || isEnglishTranslate}
+          onClick={handleCopy}
+          variant="ghostPrimary"
+        >
           <CopyOutline className="h-7 w-7" />
         </IconButton>
       </div>

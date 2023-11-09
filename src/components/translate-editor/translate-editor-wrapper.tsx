@@ -31,7 +31,6 @@ export const TranslateEditorWrapper = ({
   topElement,
   bottomElement,
 }: TranslateEditorWrapperProps) => {
-  console.log('languageCode', languageCode);
   const language = getLanguageByCode(languageCode);
   return (
     <div

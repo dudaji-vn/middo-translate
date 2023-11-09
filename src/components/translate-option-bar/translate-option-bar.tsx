@@ -49,7 +49,6 @@ export const TranslateOptionBar = forwardRef<
     if (!ableListen) {
       toast({
         description: 'Select a specific language to enable voice input',
-        variant: 'destructive',
       });
       return;
     }

@@ -10,6 +10,7 @@ import { detectLanguage, translateText } from '@/services/languages';
 
 import { CompareProvider } from '@/components/compare';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { DetectTranslateWay } from '@/components/detect-translate-way';
 import { LanguagesControlBar } from '@/components/languages-control-bar';
 import { PageLoading } from '@/components/page-loading';
 import { TranslateOptionBar } from '@/components/translate-option-bar';
@@ -120,22 +121,26 @@ export default async function Home(props: HomeProps) {
                 </TranslateResult>
               )}
             </CaptureZone>
+            <div className="mt-5 flex items-center justify-center gap-8">
+              <TextCopy
+                sourceText={sourceText || sourceTranslateResult}
+                targetText={targetResult}
+                sourceEnglishText={sourceEnglishResult}
+                targetEnglishText={targetEnglishResult}
+                sourceLanguage={sourceLanguage as string}
+                targetLanguage={targetLanguage as string}
+              />
+
+              <TranslateOptionBar sourceLang={sourceLanguage} />
+              {(sourceText || sourceTranslateResult) && <ImgCopy />}
+            </div>
           </CaptureProvider>
         </CompareProvider>
-        <div className="mt-5 flex items-center justify-center gap-5">
-          <TextCopy
-            sourceText={sourceText}
-            targetText={targetResult}
-            sourceEnglishText={sourceEnglishResult}
-            targetEnglishText={targetEnglishResult}
-            sourceLanguage={sourceLanguage as string}
-            targetLanguage={targetLanguage as string}
-          />
-
-          <TranslateOptionBar sourceLang={sourceLanguage} />
-          <ImgCopy />
-        </div>
       </PageLoading>
+      <DetectTranslateWay
+        sourceLanguage={sourceLanguage}
+        targetLanguage={targetLanguage}
+      />
     </main>
   );
 }

@@ -9,6 +9,8 @@ export type TranslateState = {
   setIsFocused: (isFocused: boolean) => void;
   isLoading: boolean;
   setIsLoading: (isLoading: boolean) => void;
+  isEnglishTranslate: boolean;
+  setIsEnglishTranslate: (isEnglishTranslate: boolean) => void;
 };
 
 export const useTranslateStore = create<TranslateState>()((set) => ({
@@ -20,4 +22,6 @@ export const useTranslateStore = create<TranslateState>()((set) => ({
   setIsFocused: (isFocused) => set({ isFocused }),
   isLoading: true,
   setIsLoading: (isLoading) => set({ isLoading }),
+  isEnglishTranslate: true,
+  setIsEnglishTranslate: (isEnglishTranslate) => set({ isEnglishTranslate }),
 }));
