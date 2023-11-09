@@ -11,6 +11,7 @@ import { cn } from '@/utils/cn';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useDebounce } from 'usehooks-ts';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
+import { useTranslateStore } from '@/stores/translate';
 
 export interface TranslateEditorProps {
   className?: string;
@@ -19,7 +20,6 @@ export interface TranslateEditorProps {
   sourceTranslateResult?: string;
   isDetect?: boolean;
   children?: React.ReactNode;
-  isListening?: boolean;
 }
 
 export const TranslateEditor = ({
@@ -27,14 +27,13 @@ export const TranslateEditor = ({
   languageCode = 'auto',
   disabled = false,
   isDetect = false,
-  isListening = false,
   className,
   children,
 }: TranslateEditorProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const text = searchParams.get('query') || '';
-  const [value, setValue] = useState<string>(text);
+  const { value, setValue, isListening } = useTranslateStore();
   const textStyles = useAdjustTextStyle(value);
   const debouncedValue = useDebounce<string>(value, 300);
   const pathname = usePathname();
@@ -70,6 +69,7 @@ export const TranslateEditor = ({
     if (sourceTranslateResult && !text) {
       setValue(sourceTranslateResult);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sourceTranslateResult, text]);
 
   const handleClear = () => {

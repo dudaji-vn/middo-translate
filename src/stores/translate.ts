@@ -1,15 +1,15 @@
-import { createStore } from 'zustand';
+import { create } from 'zustand';
 
-export type TranslateStore = {
-	sourceLanguage: string;
-	targetLanguage: string;
-	setSourceLanguage: (language: string) => void;
-	setTargetLanguage: (language: string) => void;
+export type TranslateState = {
+  value: string;
+  setValue: (value: string) => void;
+  isListening: boolean;
+  setIsListening: (isListening: boolean) => void;
 };
 
-export const translateStore = createStore<TranslateStore>((set) => ({
-	sourceLanguage: 'en',
-	targetLanguage: 'en',
-	setSourceLanguage: (language: string) => set({ sourceLanguage: language }),
-	setTargetLanguage: (language: string) => set({ targetLanguage: language }),
+export const useTranslateStore = create<TranslateState>()((set) => ({
+  value: '',
+  isListening: false,
+  setValue: (value) => set({ value }),
+  setIsListening: (isListening) => set({ isListening }),
 }));
