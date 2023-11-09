@@ -9,6 +9,7 @@ import { forwardRef, useEffect } from 'react';
 
 import { IconButton } from '../button';
 import { MicOutline } from '@easy-eva-icons/react';
+import { Rectangle } from '../icons';
 import { cn } from '@/utils/cn';
 import { supportedVoiceMap } from '@/configs/default-language';
 import { useToast } from '../toast';
@@ -92,11 +93,13 @@ export const TranslateOptionBar = forwardRef<
     >
       {listening ? (
         <IconButton
+          size="lg"
+          variant="secondary"
           onClick={() => {
             SpeechRecognition.stopListening();
           }}
         >
-          <div className="h-6 w-6 rounded-[4px] bg-primary"></div>
+          <Rectangle />
         </IconButton>
       ) : (
         <IconButton
