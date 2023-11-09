@@ -43,11 +43,12 @@ export const TranslateMiddle = ({
 
   const highlightedText = (
     <Highlighter
-      className="block break-words"
+      className={cn('block break-words')}
       highlightClassName="text-error underline bg-transparent"
       searchWords={diffWords}
       autoEscape={true}
       textToHighlight={text}
+      unhighlightClassName={cn('', isMatch ? 'text-success' : '')}
     />
   );
 
