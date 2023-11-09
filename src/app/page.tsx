@@ -14,6 +14,7 @@ import { DetectTranslateWay } from '@/components/detect-translate-way';
 import { LanguagesControlBar } from '@/components/languages-control-bar';
 import { PageLoading } from '@/components/page-loading';
 import { TranslateOptionBar } from '@/components/translate-option-bar';
+import { cn } from '@/utils/cn';
 
 interface HomeProps {
   searchParams: {
@@ -84,9 +85,10 @@ export default async function Home(props: HomeProps) {
                 isDetect={props.searchParams.source === 'auto'}
                 languageCode={sourceLanguage}
                 sourceTranslateResult={sourceTranslateResult}
-                className={
-                  sourceText || sourceTranslateResult ? '' : 'min-h-[320px]'
-                }
+                className={cn(
+                  'flex flex-col',
+                  sourceText || sourceTranslateResult ? '' : 'min-h-[320px]',
+                )}
               >
                 {sourceEnglishResult &&
                   !isEdit &&

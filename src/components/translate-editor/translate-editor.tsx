@@ -137,7 +137,7 @@ export const TranslateEditor = ({
         value={value}
         onChange={handleChange}
         className={cn(
-          'inputTranslate translate-editor h-full min-h-[48px] bg-transparent',
+          'inputTranslate translate-editor h-full flex-1  bg-transparent',
           textStyles,
         )}
         placeholder={isListening ? 'Please speak' : 'Input your text here'}
