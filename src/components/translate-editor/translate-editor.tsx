@@ -2,11 +2,11 @@
 
 import './style.css';
 
-import { Button, IconButton } from '../button';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { CloseCircleOutline } from '@easy-eva-icons/react';
+import { IconButton } from '../button';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
@@ -46,7 +46,7 @@ export const TranslateEditor = ({
 
   useEffect(() => {
     if (
-      !isFocus ||
+      (!isFocus && !isListening) ||
       (debouncedValue && debouncedValue === sourceTranslateResult)
     ) {
       return;
@@ -62,7 +62,7 @@ export const TranslateEditor = ({
     }
     replace(`${pathname}?${params.toString()}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedValue, isFocus]);
+  }, [debouncedValue, isFocus, isListening]);
 
   const { textAreaRef } = useTextAreaResize(value);
 
