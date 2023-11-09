@@ -17,6 +17,7 @@
     "@radix-ui/react-toast": "^1.1.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "copy-image-clipboard": "^2.1.2",
     "html-to-image": "^1.11.11",
     "i": "^0.3.7",
     "lucide-react": "^0.290.0",

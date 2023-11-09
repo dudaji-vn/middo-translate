@@ -7,8 +7,11 @@ import {
   useContext,
   useRef,
 } from 'react';
+import { toBlob, toJpeg } from 'html-to-image';
 
-import { toJpeg } from 'html-to-image';
+import { async } from 'regenerator-runtime';
+import { copyBlobToClipboard } from 'copy-image-clipboard';
+import { useToast } from '../toast';
 
 type CaptureContext = {
   captureRef?: React.RefObject<HTMLDivElement>;
@@ -25,22 +28,23 @@ export const useCapture = () => {
 interface CaptureProviderProps extends PropsWithChildren {}
 export const CaptureProvider = ({ children }: CaptureProviderProps) => {
   const refCapture = useRef<HTMLDivElement>(null);
+  const { toast } = useToast();
   const onButtonClick = useCallback(() => {
     if (refCapture.current === null) {
       return;
     }
-
-    toJpeg(refCapture.current, { cacheBust: true, backgroundColor: '#fff' })
-      .then((dataUrl) => {
-        const link = document.createElement('a');
-        link.download = 'my-image-name.jpeg';
-        link.href = dataUrl;
-        link.click();
+    toBlob(refCapture.current, { cacheBust: true, backgroundColor: '#fff' })
+      .then(async (blob) => {
+        copyBlobToClipboard(blob as Blob);
+        toast({
+          description: 'Image copied!',
+        });
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [refCapture]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <CaptureContext.Provider

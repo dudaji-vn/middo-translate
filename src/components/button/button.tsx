@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
 import { Icon } from './icon';
 
 const buttonVariants = cva(
-  'inline-flex items-center w-fit whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 rounded-full text-base justify-center',
+  'inline-flex items-center w-fit whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-30 rounded-full text-base justify-center ',
   {
     variants: {
       variant: {
@@ -24,7 +24,7 @@ const buttonVariants = cva(
         ghost:
           'bg-transparent text-text md:hover:bg-background-darker active:!bg-stroke',
         ghostPrimary:
-          'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary',
+          'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary disabled:!bg-transparent',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       shape: {
