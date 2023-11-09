@@ -4752,6 +4752,11 @@ use-debounce@^9.0.4:
   resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-9.0.4.tgz#51d25d856fbdfeb537553972ce3943b897f1ac85"
   integrity sha512-6X8H/mikbrt0XE8e+JXRtZ8yYVvKkdYRfmIhWZYsP8rcNs9hk3APV8Ua2mFkKRLcJKVdnX2/Vwrmg2GWKUQEaQ==
 
+use-detect-keyboard-open@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/use-detect-keyboard-open/-/use-detect-keyboard-open-0.4.0.tgz#a1d2cc6521abfabac558c19ff45ed975b7893a1c"
+  integrity sha512-g26dzEDF9qh1VSwYT7ILOdzS0v9xPo5IF3R804HksW+NAOiNd2P2KYrmTfd/5ApfYixlrX2P7+PlsEgAx/lZ6w==
+
 use-sidecar@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/use-sidecar/-/use-sidecar-1.1.2.tgz#2f43126ba2d7d7e117aa5855e5d8f0276dfe73c2"

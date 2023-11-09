@@ -82,7 +82,7 @@ export default async function Home(props: HomeProps) {
               languageCode={sourceLanguage}
               sourceTranslateResult={sourceTranslateResult}
               className={
-                sourceText || sourceTranslateResult ? '' : 'min-h-[40vh]'
+                sourceText || sourceTranslateResult ? '' : 'min-h-[320px]'
               }
             >
               {sourceEnglishResult &&
@@ -119,7 +119,7 @@ export default async function Home(props: HomeProps) {
             )}
           </CaptureZone>
 
-          <div className="mx-auto mt-5 flex items-center gap-5">
+          <div className="absolute bottom-24 left-1/2 z-10 mt-5 flex -translate-x-1/2 items-center gap-5">
             <TextCopy
               sourceText={sourceText}
               targetText={targetResult}
