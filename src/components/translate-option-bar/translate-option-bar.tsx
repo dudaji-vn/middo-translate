@@ -24,15 +24,15 @@ export const TranslateOptionBar = forwardRef<
   TranslateOptionBarProps
 >(({ sourceLang, ...props }, ref) => {
   const { listening, interimTranscript } = useSpeechRecognition();
-  const { setValue, isListening, setIsListening } = useTranslateStore(
-    (state) => {
+  const { setValue, isListening, setIsListening, isFocused } =
+    useTranslateStore((state) => {
       return {
         setValue: state.setValue,
         isListening: state.isListening,
         setIsListening: state.setIsListening,
+        isFocused: state.isFocused,
       };
-    },
-  );
+    });
 
   const { toast } = useToast();
   useEffect(() => {
@@ -52,6 +52,7 @@ export const TranslateOptionBar = forwardRef<
       });
       return;
     }
+    setValue('');
     SpeechRecognition.startListening({
       language: supportedVoiceMap[sourceLang as keyof typeof supportedVoiceMap],
       continuous: true,
@@ -83,7 +84,11 @@ export const TranslateOptionBar = forwardRef<
     <div
       ref={ref}
       {...props}
-      className={cn('toolWrapper transition-all', listening && '!w-[284px] ')}
+      className={cn(
+        'toolWrapper transition-all',
+        listening && '!w-[284px]',
+        isFocused && '!hidden md:!block',
+      )}
     >
       {listening ? (
         <IconButton

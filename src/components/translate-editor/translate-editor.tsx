@@ -11,6 +11,7 @@ import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useDebounce } from 'usehooks-ts';
+import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTranslateStore } from '@/stores/translate';
 
@@ -31,14 +32,24 @@ export const TranslateEditor = ({
   className,
   children,
 }: TranslateEditorProps) => {
-  const [isFocus, setIsFocus] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const text = searchParams.get('query') || '';
-  const { value, setValue, isListening } = useTranslateStore();
+  const {
+    value,
+    setValue,
+    isListening,
+    isFocused,
+    setIsFocused,
+    setIsListening,
+    isLoading,
+    setIsLoading,
+  } = useTranslateStore();
   const textStyles = useAdjustTextStyle(value);
   const debouncedValue = useDebounce<string>(value, 300);
   const pathname = usePathname();
   const { replace } = useRouter();
+
+  const isKeyboardOpen = useDetectKeyboardOpen();
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value);
@@ -46,7 +57,7 @@ export const TranslateEditor = ({
 
   useEffect(() => {
     if (
-      (!isFocus && !isListening) ||
+      (!isFocused && !isListening) ||
       (debouncedValue && debouncedValue === sourceTranslateResult)
     ) {
       return;
@@ -62,7 +73,7 @@ export const TranslateEditor = ({
     }
     replace(`${pathname}?${params.toString()}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedValue, isFocus, isListening]);
+  }, [debouncedValue, isFocused, isListening]);
 
   const { textAreaRef } = useTextAreaResize(value);
 
@@ -73,6 +84,20 @@ export const TranslateEditor = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sourceTranslateResult, text]);
 
+  useEffect(() => {
+    if (!isKeyboardOpen) {
+      setIsFocused(false);
+      textAreaRef.current?.blur();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isKeyboardOpen]);
+
+  useEffect(() => {
+    setValue(text);
+    setIsLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleClear = () => {
     setValue('');
     const params = new URLSearchParams(searchParams);
@@ -82,6 +107,7 @@ export const TranslateEditor = ({
     params.delete('listening');
     replace(`${pathname}?${params.toString()}`);
   };
+
   return (
     <TranslateEditorWrapper
       bottomElement={children}
@@ -101,14 +127,17 @@ export const TranslateEditor = ({
       )}
       <textarea
         rows={1}
-        onFocus={() => setIsFocus(true)}
-        onBlur={() => setIsFocus(false)}
+        onFocus={() => {
+          setIsFocused(true);
+          setIsListening(false);
+        }}
+        onBlur={() => setIsFocused(false)}
         disabled={disabled}
         ref={textAreaRef}
         value={value}
         onChange={handleChange}
         className={cn(
-          'inputTranslate translate-editor h-full bg-transparent transition-all',
+          'inputTranslate translate-editor h-full min-h-[48px] bg-transparent transition-all',
           textStyles,
         )}
         placeholder={isListening ? 'Please speak' : 'Input your text here'}
