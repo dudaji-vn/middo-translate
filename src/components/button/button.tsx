@@ -10,29 +10,36 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary text-background hover:bg-transparent border border-transparent hover:border-primary hover:text-primary disabled:bg-lighter active:bg-primary active:text-shading',
+          'bg-primary text-background md:hover:bg-secondary border-transparent disabled:bg-lighter active:!bg-shading',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
           'border border-primary hover:border-secondary bg-background hover:bg-secondary text-primary hover:text-background active:bg-transparent active:text-shading active:border-shading',
-        secondary: 'bg-lighter text-primary hover:bg-secondary/80',
-        ghost: 'hover:bg-accent hover:text-accent-foreground',
+        secondary:
+          'bg-lighter text-primary  md:hover:bg-secondary active:!bg-primary active:text-background',
+        success:
+          'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
+        error:
+          'bg-error md:hover:bg-error-lighter text-background active:!bg-error-darker',
+        ghost:
+          'bg-transparent text-text md:hover:bg-background-darker active:!bg-stroke',
+        ghostPrimary:
+          'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       shape: {
         circle: 'rounded-full',
-        default: '',
+        default: 'rounded-xl',
       },
       size: {
-        default: 'px-8 py-4 text-base leading-tight',
-        sm: 'h-9 rounded-md px-3',
-        lg: 'h-11 rounded-md px-8',
-        icon: 'h-10 w-10',
+        md: 'px-8 py-4 text-base leading-tight',
+        sm: 'h-9 px-3',
+        lg: 'h-11  px-8',
       },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default',
+      size: 'md',
     },
   },
 );

@@ -7,6 +7,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { forwardRef, useEffect } from 'react';
 
+import { IconButton } from '../button';
 import { MicOutline } from '@easy-eva-icons/react';
 import { cn } from '@/utils/cn';
 import { supportedVoiceMap } from '@/configs/default-language';
@@ -85,24 +86,23 @@ export const TranslateOptionBar = forwardRef<
       className={cn('toolWrapper transition-all', listening && '!w-[284px] ')}
     >
       {listening ? (
-        <button
+        <IconButton
           onClick={() => {
             SpeechRecognition.stopListening();
           }}
-          className="circleButton big"
         >
           <div className="h-6 w-6 rounded-[4px] bg-primary"></div>
-        </button>
+        </IconButton>
       ) : (
-        <button
+        <IconButton
+          shape="circle"
           onClick={handleStartListening}
-          className={cn(
-            'circleButton big  transition-all',
-            !ableListen && '!opacity-30',
-          )}
+          size="lg"
+          variant="secondary"
+          className={cn(!ableListen && '!opacity-30')}
         >
           <MicOutline className="h-7 w-7 " />
-        </button>
+        </IconButton>
       )}
     </div>
   );
