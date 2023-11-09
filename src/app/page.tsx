@@ -1,3 +1,4 @@
+import { CaptureProvider, CaptureZone } from '@/components/capture';
 import { ImgCopy, TextCopy } from '@/components/copy-to-clipboard';
 import {
   TranslateEditor,
@@ -7,7 +8,6 @@ import {
 } from '@/components/translate-editor';
 import { detectLanguage, translateText } from '@/services/languages';
 
-import { CaptureProvider } from '@/components/capture';
 import { CompareProvider } from '@/components/compare';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { LanguagesControlBar } from '@/components/languages-control-bar';
@@ -76,25 +76,8 @@ export default async function Home(props: HomeProps) {
           target={targetLanguage}
           detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
         />
-        <CaptureProvider
-          footer={
-            <div className="mx-auto mt-5 flex items-center gap-8">
-              {!isListening && (
-                <TextCopy
-                  sourceText={sourceText}
-                  targetText={targetResult}
-                  sourceEnglishText={sourceEnglishResult}
-                  targetEnglishText={targetEnglishResult}
-                  sourceLanguage={sourceLanguage as string}
-                  targetLanguage={targetLanguage as string}
-                />
-              )}
-              <TranslateOptionBar sourceLang={sourceLanguage} />
-              {!isListening && <ImgCopy />}
-            </div>
-          }
-        >
-          <div className="flex h-full w-full flex-col gap-5 p-5">
+        <CaptureProvider>
+          <CaptureZone className="flex h-full w-full flex-col gap-5 p-5">
             <TranslateEditor
               isListening={isListening}
               disabled={isEdit}
@@ -137,6 +120,20 @@ export default async function Home(props: HomeProps) {
                   )}
               </TranslateResult>
             )}
+          </CaptureZone>
+          <div className="mx-auto mt-5 flex items-center gap-8">
+            {!isListening && (
+              <TextCopy
+                sourceText={sourceText || sourceTranslateResult}
+                targetText={targetResult}
+                sourceEnglishText={sourceEnglishResult}
+                targetEnglishText={targetEnglishResult}
+                sourceLanguage={sourceLanguage as string}
+                targetLanguage={targetLanguage as string}
+              />
+            )}
+            <TranslateOptionBar sourceLang={sourceLanguage} />
+            {!isListening && <ImgCopy />}
           </div>
         </CaptureProvider>
       </CompareProvider>

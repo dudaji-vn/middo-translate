@@ -11,6 +11,7 @@ import {
 import { toJpeg } from 'html-to-image';
 
 type CaptureContext = {
+  captureRef?: React.RefObject<HTMLDivElement>;
   onCapture: () => void;
 };
 
@@ -21,10 +22,8 @@ export const CaptureContext = createContext<CaptureContext>({
 export const useCapture = () => {
   return useContext(CaptureContext);
 };
-interface CaptureProviderProps extends PropsWithChildren {
-  footer?: React.ReactNode;
-}
-export const CaptureProvider = ({ children, footer }: CaptureProviderProps) => {
+interface CaptureProviderProps extends PropsWithChildren {}
+export const CaptureProvider = ({ children }: CaptureProviderProps) => {
   const refCapture = useRef<HTMLDivElement>(null);
   const onButtonClick = useCallback(() => {
     if (refCapture.current === null) {
@@ -47,10 +46,10 @@ export const CaptureProvider = ({ children, footer }: CaptureProviderProps) => {
     <CaptureContext.Provider
       value={{
         onCapture: onButtonClick,
+        captureRef: refCapture,
       }}
     >
-      <div ref={refCapture}>{children}</div>
-      {footer}
+      {children}
     </CaptureContext.Provider>
   );
 };
