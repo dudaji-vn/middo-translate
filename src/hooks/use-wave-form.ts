@@ -32,6 +32,7 @@ export const useWaveForm = () => {
         devices.forEach((device) => {
           if (device.deviceId === 'default') {
             setDevice(device);
+            return;
           }
         });
       });
@@ -40,23 +41,21 @@ export const useWaveForm = () => {
     initWaveSurfer();
   }, []);
 
-  const handleRecordClick = () => {
-    const { current: wavesurfer } = wavesurferRef;
+  const startWaveSurfer = () => {
     const { current: recordPlugin } = recordPluginRef;
-
-    if (isRecording) {
-      if (recordPlugin) {
-        recordPlugin.stopRecording();
-        setIsRecording(false);
-      }
-      return;
-    }
-
     const deviceId = device?.deviceId;
     if (recordPlugin && deviceId) {
       recordPlugin.startRecording({ deviceId }).then(() => {
         setIsRecording(true);
       });
+    }
+  };
+
+  const stopWaveSurfer = () => {
+    const { current: recordPlugin } = recordPluginRef;
+    if (recordPlugin) {
+      recordPlugin.stopRecording();
+      setIsRecording(false);
     }
   };
 
@@ -71,7 +70,8 @@ export const useWaveForm = () => {
   }, []);
 
   return {
-    handleRecordClick,
+    startWaveSurfer,
+    stopWaveSurfer,
     isRecording,
     micSelectRef,
     wavesurferRef,

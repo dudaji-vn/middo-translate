@@ -24,7 +24,6 @@
     "next": "14.0.1",
     "npm": "^10.2.2",
     "react": "^18",
-    "react-audio-analyser": "^1.0.0",
     "react-circle-flags": "^0.0.19",
     "react-dom": "^18",
     "react-highlight-words": "^0.20.0",
