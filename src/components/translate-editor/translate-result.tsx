@@ -54,18 +54,25 @@ export const TranslateResult = ({
 
   return (
     <TranslateEditorWrapper
-      className={cn('md:flex-1', !!result ? 'block' : 'hidden md:block')}
+      className={cn(
+        'flex flex-col md:flex-1',
+        !!result ? 'flex' : 'hidden md:flex',
+      )}
       type="result"
       topElement={isMobile && children}
       bottomElement={!isMobile && children}
       languageCode={languageCode}
     >
       <div className={`translatedText ${textStyle} break-words`}>{result}</div>
-      <div className="absolute bottom-5 right-5 flex ">
-        <IconButton onClick={speak} variant="ghostPrimary">
+      <div className="mt-auto flex justify-end">
+        <IconButton disabled={!result} onClick={speak} variant="ghostPrimary">
           <VolumeUpOutline />
         </IconButton>
-        <IconButton onClick={handleCopy} variant="ghostPrimary">
+        <IconButton
+          disabled={!result}
+          onClick={handleCopy}
+          variant="ghostPrimary"
+        >
           <CopyOutline />
         </IconButton>
       </div>
