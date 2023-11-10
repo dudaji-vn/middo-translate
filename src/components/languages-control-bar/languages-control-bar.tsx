@@ -3,13 +3,14 @@
 import { Globe2Outline, Swap } from '@easy-eva-icons/react';
 import { Select, SelectTrigger } from '@/components/select';
 import { forwardRef, useEffect, useState } from 'react';
+import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
 import { BackLayout } from '../layout/back-layout';
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { ListLanguages } from '../list-languages';
 import { cn } from '@/utils/cn';
-import { getCountryCode } from '@/utils/language-fn';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useSetParams } from '@/hooks/use-set-params';
 
 export interface LanguagesControlBarProps
@@ -23,6 +24,7 @@ export const LanguagesControlBar = forwardRef<
   HTMLDivElement,
   LanguagesControlBarProps
 >((props, ref) => {
+  const isMobile = useIsMobile();
   const [currentSelect, setCurrentSelect] = useState<
     'source' | 'target' | 'none'
   >('none');
@@ -107,44 +109,50 @@ export const LanguagesControlBar = forwardRef<
       {...props}
       className={cn('flex w-full justify-center gap-5', props.className)}
     >
-      <Select>
-        <SelectTrigger
-          onClick={() => {
-            setCurrentSelect('source');
-          }}
-        >
-          {source && source !== 'auto' ? (
-            <CircleFlag
-              countryCode={source}
-              height={20}
-              width={20}
-              className="mr-2.5"
-            />
-          ) : (
-            <Globe2Outline className="mr-2.5 h-5 w-5 text-primary" />
-          )}
-        </SelectTrigger>
-      </Select>
+      <div className="flex flex-1 justify-end">
+        <Select>
+          <SelectTrigger
+            className="gap-2.5"
+            onClick={() => {
+              setCurrentSelect('source');
+            }}
+          >
+            {source && source !== 'auto' ? (
+              <>
+                <CircleFlag countryCode={source} height={20} width={20} />
+              </>
+            ) : (
+              <>
+                <Globe2Outline className="h-5 w-5 text-primary" />
+                <>{!isMobile && 'Detect language'}</>
+              </>
+            )}
+            {!isMobile &&
+              getLanguageByCode(searchParams.get('source') as string)?.name}
+          </SelectTrigger>
+        </Select>
+      </div>
       <button
         onClick={handleSwap}
         className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full p-2.5 transition-all duration-200 active:bg-stroke md:hover:bg-background-darker"
       >
         <Swap />
       </button>
-      <Select>
-        <SelectTrigger
-          onClick={() => {
-            setCurrentSelect('target');
-          }}
-        >
-          <CircleFlag
-            countryCode={target as string}
-            height={20}
-            width={20}
-            className="mr-2.5"
-          />
-        </SelectTrigger>
-      </Select>
+      <div className="flex flex-1 justify-start">
+        <Select>
+          <SelectTrigger
+            className="gap-2.5"
+            onClick={() => {
+              setCurrentSelect('target');
+            }}
+          >
+            <CircleFlag countryCode={target as string} height={20} width={20} />
+            {!isMobile &&
+              getLanguageByCode(searchParams.get('target') as string)?.name}
+          </SelectTrigger>
+        </Select>
+      </div>
+
       {currentSelect !== 'none' && (
         <div className="fixed left-0 z-10 h-full w-full bg-background">
           <BackLayout

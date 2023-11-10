@@ -36,7 +36,7 @@
 }
 .translateTextWrapper.result {
   box-shadow: var(--shadow-1);
-  background-color: #fafafa;
+  background-color: #fcfcfc;
   border: none;
 }
 .translateResultText {
@@ -47,10 +47,4 @@
 }
 .bottomResultText.error {
   color: hsl(var(--error));
-}
-
-@media screen and (min-width: 1024px) {
-  .translateTextWrapper {
-    width: 30%;
-  }
 }

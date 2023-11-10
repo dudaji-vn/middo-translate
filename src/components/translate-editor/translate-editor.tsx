@@ -63,7 +63,7 @@ export const TranslateEditor = ({
       return;
     }
     const params = new URLSearchParams(searchParams);
-
+    if (!params.get('source')) return;
     if (debouncedValue) {
       params.set('query', debouncedValue);
       params.delete('edit');
@@ -104,7 +104,6 @@ export const TranslateEditor = ({
     params.delete('query');
     params.delete('edit');
     params.delete('mquery');
-    params.delete('listening');
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -137,8 +136,9 @@ export const TranslateEditor = ({
         value={value}
         onChange={handleChange}
         className={cn(
-          'inputTranslate translate-editor h-full flex-1  bg-transparent',
+          'inputTranslate translate-editor h-full   bg-transparent',
           textStyles,
+          !value && 'flex-1',
         )}
         placeholder={isListening ? 'Please speak' : 'Input your text here'}
       />

@@ -65,8 +65,16 @@ export default async function Home(props: HomeProps) {
       )
     : '';
 
+  const isEnglishTranslate =
+    targetLanguage === DEFAULT_LANGUAGES_CODE.EN ||
+    sourceLanguage === DEFAULT_LANGUAGES_CODE.EN;
+
+  const isShowMiddleSource = sourceEnglishResult && !isEnglishTranslate;
+
+  const isShowMiddleTarget = targetEnglishResult && !isEnglishTranslate;
+
   return (
-    <main className="relative flex h-full w-full flex-col">
+    <main className="relative flex h-full w-full flex-col justify-center">
       <PageLoading title="Loading">
         <CompareProvider
           text={sourceEnglishResult}
@@ -79,49 +87,44 @@ export default async function Home(props: HomeProps) {
             detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
           />
           <CaptureProvider>
-            <CaptureZone className="flex h-full w-full flex-col gap-5 p-5">
+            <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-5 md:flex-row md:justify-evenly md:gap-[88px]">
               <TranslateEditor
                 disabled={isEdit}
                 isDetect={props.searchParams.source === 'auto'}
                 languageCode={sourceLanguage}
                 sourceTranslateResult={sourceTranslateResult}
                 className={cn(
-                  'flex flex-col',
+                  'flex flex-col md:flex-1',
                   sourceText || sourceTranslateResult ? '' : 'min-h-[320px]',
                 )}
               >
-                {sourceEnglishResult &&
-                  !isEdit &&
-                  targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
-                  sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
-                    <TranslateMiddle
-                      text={sourceEnglishResult}
-                      textCompare={targetEnglishResult}
-                    />
-                  )}
-                {isEdit && (
+                {isEdit ? (
                   <TranslateMiddleEditor defaultText={sourceEnglishResult} />
+                ) : (
+                  <>
+                    {isShowMiddleSource && (
+                      <TranslateMiddle
+                        text={sourceEnglishResult}
+                        textCompare={targetEnglishResult}
+                      />
+                    )}
+                  </>
                 )}
               </TranslateEditor>
 
-              {targetResult && (
-                <TranslateResult
-                  result={targetResult}
-                  languageCode={targetLanguage}
-                >
-                  {sourceEnglishResult &&
-                    targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
-                    sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN && (
-                      <TranslateMiddle
-                        isEdit={isEdit}
-                        trianglePosition="bottom"
-                        type="accept"
-                        text={targetEnglishResult}
-                        textCompare={sourceEnglishResult}
-                      />
-                    )}
-                </TranslateResult>
-              )}
+              <TranslateResult
+                result={targetResult}
+                languageCode={targetLanguage}
+              >
+                {isShowMiddleTarget ? (
+                  <TranslateMiddle
+                    isEdit={isEdit}
+                    type="accept"
+                    text={targetEnglishResult}
+                    textCompare={sourceEnglishResult}
+                  />
+                ) : null}
+              </TranslateResult>
             </CaptureZone>
             <div className="mt-5 flex items-center justify-center gap-8">
               <TextCopy

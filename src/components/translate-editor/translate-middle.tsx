@@ -6,7 +6,6 @@ import { AcceptButton } from './accept-button';
 import { CircleFlag } from 'react-circle-flags';
 import { EditButton } from './edit-button';
 import Highlighter from 'react-highlight-words';
-import { Triangle } from '../icons';
 import { cn } from '@/utils/cn';
 import { useCompare } from '../compare';
 import { useMemo } from 'react';
@@ -14,7 +13,7 @@ import { useMemo } from 'react';
 export interface TranslateMiddleProps {
   text: string;
   textCompare: string;
-  trianglePosition?: 'top' | 'bottom';
+
   children?: React.ReactNode;
   type?: 'edit' | 'accept';
   isEdit?: boolean;
@@ -22,7 +21,7 @@ export interface TranslateMiddleProps {
 
 export const TranslateMiddle = ({
   text,
-  trianglePosition = 'top',
+
   textCompare,
   type = 'edit',
   isEdit = false,
@@ -71,15 +70,6 @@ export const TranslateMiddle = ({
           )}
         </div>
       )}
-      <Triangle
-        position={trianglePosition}
-        className={cn(
-          'absolute left-3 ',
-          trianglePosition === 'bottom'
-            ? 'bottom-0 translate-y-full'
-            : 'top-0 -translate-y-full',
-        )}
-      />
     </div>
   );
 };

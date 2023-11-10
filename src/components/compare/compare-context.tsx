@@ -45,8 +45,6 @@ export const CompareProvider = ({
   const isMatch = useMemo(() => {
     if (!text || !textCompare) return true;
     if (acceptList[text]) return true;
-    console.log('text', text);
-    console.log('textCompare', textCompare);
     return text.toLocaleLowerCase() === textCompare.toLocaleLowerCase();
   }, [acceptList, text, textCompare]);
   const handleAccept = () => {
