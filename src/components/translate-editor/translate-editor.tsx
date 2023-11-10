@@ -2,7 +2,7 @@
 
 import './style.css';
 
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { CloseCircleOutline } from '@easy-eva-icons/react';
@@ -41,7 +41,6 @@ export const TranslateEditor = ({
     isFocused,
     setIsFocused,
     setIsListening,
-    isLoading,
     setIsLoading,
   } = useTranslateStore();
   const textStyles = useAdjustTextStyle(value);
@@ -54,10 +53,11 @@ export const TranslateEditor = ({
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(event.target.value);
   };
-
   useEffect(() => {
-    if (
-      (!isFocused && !isListening) ||
+    if (isListening) {
+      return;
+    } else if (
+      (!isFocused && isListening) ||
       (debouncedValue && debouncedValue === sourceTranslateResult)
     ) {
       return;
