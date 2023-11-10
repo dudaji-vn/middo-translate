@@ -2,8 +2,12 @@
 
 import './style.css';
 
+import {
+  CheckmarkCircle2Outline,
+  CloseCircleOutline,
+} from '@easy-eva-icons/react';
+
 import { AcceptButton } from './accept-button';
-import { CloseCircleOutline } from '@easy-eva-icons/react';
 import { IconButton } from '../button';
 import { cn } from '@/utils/cn';
 import { useSetParams } from '@/hooks/use-set-params';
@@ -69,7 +73,9 @@ export const TranslateMiddleEditor = ({
         <CloseCircleOutline />
       </IconButton>
       <div className="flex justify-end">
-        <AcceptButton onClick={handleDone} />
+        <IconButton disabled={!value} onClick={handleDone} variant="success">
+          <CheckmarkCircle2Outline />
+        </IconButton>
       </div>
     </div>
   );

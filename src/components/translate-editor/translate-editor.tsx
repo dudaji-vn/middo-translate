@@ -63,7 +63,7 @@ export const TranslateEditor = ({
       return;
     }
     const params = new URLSearchParams(searchParams);
-
+    if (!params.get('source')) return;
     if (debouncedValue) {
       params.set('query', debouncedValue);
       params.delete('edit');

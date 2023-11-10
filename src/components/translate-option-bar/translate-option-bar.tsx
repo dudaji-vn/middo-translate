@@ -15,6 +15,7 @@ import { supportedVoiceMap } from '@/configs/default-language';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useToast } from '@/components/toast';
 import { useTranslateStore } from '@/stores/translate';
+import { useWindowSize } from 'usehooks-ts';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,10 +26,11 @@ export const TranslateOptionBar = forwardRef<
   HTMLDivElement,
   TranslateOptionBarProps
 >(({ sourceLang, ...props }, ref) => {
+  const { width } = useWindowSize();
+  const isMobile = width < 768;
+  const { toast } = useToast();
   const { listening, interimTranscript, finalTranscript } =
-    useSpeechRecognition({
-      clearTranscriptOnListen: true,
-    });
+    useSpeechRecognition();
   const { setParam, removeParam } = useSetParams();
   const { setValue, isListening, setIsListening, isFocused } =
     useTranslateStore((state) => {
@@ -40,15 +42,12 @@ export const TranslateOptionBar = forwardRef<
       };
     });
 
-  const { toast } = useToast();
   useEffect(() => {
     if (interimTranscript) {
-      if (finalTranscript) {
-        setValue(finalTranscript);
-      } else setValue(interimTranscript);
+      setValue(interimTranscript);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interimTranscript, finalTranscript]);
+  }, [interimTranscript]);
 
   const ableListen = sourceLang && sourceLang !== 'auto';
 
@@ -61,18 +60,20 @@ export const TranslateOptionBar = forwardRef<
     }
     setValue('');
     removeParam('query');
+    setIsListening(true);
     SpeechRecognition.startListening({
       language: supportedVoiceMap[sourceLang as keyof typeof supportedVoiceMap],
-      // continuous: true,
-
+      continuous: !isMobile,
       interimResults: true,
     });
-    setIsListening(true);
   };
 
   const handleStopListening = () => {
     setIsListening(false);
-    setParam('query', finalTranscript);
+    if (interimTranscript) {
+      setParam('query', interimTranscript);
+      setValue(interimTranscript);
+    }
     setTimeout(() => {
       SpeechRecognition.stopListening();
     }, 500);
@@ -86,12 +87,14 @@ export const TranslateOptionBar = forwardRef<
   }, [isListening]);
 
   useEffect(() => {
-    if (!listening) {
-      setIsListening(false);
-      setParam('query', interimTranscript);
-    }
+    if (!isMobile) return;
+    if (listening) return;
+    if (!finalTranscript) return;
+    setIsListening(false);
+    setParam('query', finalTranscript);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listening]);
+  }, [finalTranscript, listening, isMobile]);
 
   return (
     <div className="relative">

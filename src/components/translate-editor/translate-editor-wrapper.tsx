@@ -6,6 +6,7 @@ import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
 import { CircleFlag } from 'react-circle-flags';
 import { Globe2Outline } from '@easy-eva-icons/react';
+import { Triangle } from '../icons';
 import { cn } from '@/utils/cn';
 
 export interface TranslateEditorWrapperProps {
@@ -35,13 +36,21 @@ export const TranslateEditorWrapper = ({
   return (
     <div
       className={cn(
-        'translateTextWrapper relative gap-y-2 transition-all',
+        'translateTextWrapper relative transition-all md:min-h-[320px]',
         type,
         status,
         className,
       )}
     >
-      {topElement && <div className="mb-4">{topElement}</div>}
+      {!!topElement && (
+        <div className="relative mb-4">
+          <Triangle
+            position="bottom"
+            className="absolute bottom-0 left-3 translate-y-full"
+          />
+          {topElement}
+        </div>
+      )}
       <div className="detectLanguageWrapper">
         {language && !isDetect ? (
           <CircleFlag
@@ -64,7 +73,15 @@ export const TranslateEditorWrapper = ({
         </div>
       </div>
       {children}
-      {bottomElement && <div className="mt-2">{bottomElement}</div>}
+      {!!bottomElement && (
+        <div className="relative mt-4">
+          <Triangle
+            position="top"
+            className="absolute left-3 top-0 -translate-y-full"
+          />
+          {bottomElement}
+        </div>
+      )}
     </div>
   );
 };
