@@ -53,7 +53,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
 
     return (
       <div ref={ref} {...props} className="flex h-full flex-col pb-5">
-        <div className="p-5 pt-0">
+        <div className="px-5 py-5 pt-0 md:mx-auto md:w-[480px] ">
           <Input
             ref={searchRef}
             value={search}
@@ -71,25 +71,25 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             }
           />
         </div>
-        <div className="flex-1 overflow-y-auto">
+        <div className="mb-16 flex-1 columns-1 gap-0 overflow-y-auto px-[5vw] md:columns-3">
           {search === '' ? (
             <>
               {allowDetect && (
-                <Section>
-                  <Item
-                    selected={selectedCode === 'auto'}
-                    rightElement={<Globe2Outline className="mr-2 h-5 w-5" />}
-                    language={{
-                      code: 'auto',
-                      name: 'Language detect',
-                    }}
-                    onClick={onSelected.bind(null, 'auto')}
-                  />
-                </Section>
+                <Item
+                  selected={selectedCode === 'auto'}
+                  rightElement={<Globe2Outline className="mr-2 h-5 w-5" />}
+                  language={{
+                    code: 'auto',
+                    name: 'Language detect',
+                  }}
+                  onClick={onSelected.bind(null, 'auto')}
+                />
               )}
 
+              <Title>Recently used</Title>
+
               {recentlyUsed.length > 0 && (
-                <Section title="Recently used">
+                <>
                   {recentlyUsed.map((code) => {
                     const language = supportedLanguages.find(
                       (item) => item.code === code,
@@ -108,31 +108,28 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                       )
                     );
                   })}
-                </Section>
+                </>
               )}
-              <Section title="All languages">
-                {supportedLanguages.map((language) => (
-                  <Item
-                    onClick={handleSelected.bind(null, language.code)}
-                    selected={language.code === selectedCode}
-                    key={language.code}
-                    language={language}
-                  />
-                ))}
-              </Section>
+              <Title>All languages</Title>
+              {supportedLanguages.map((language) => (
+                <Item
+                  onClick={handleSelected.bind(null, language.code)}
+                  selected={language.code === selectedCode}
+                  key={language.code}
+                  language={language}
+                />
+              ))}
             </>
           ) : (
             <>
-              <Section>
-                {filterLanguages.map((language) => (
-                  <Item
-                    onClick={handleSelected.bind(null, language.code)}
-                    selected={language.code === selectedCode}
-                    key={language.code}
-                    language={language}
-                  />
-                ))}
-              </Section>
+              {filterLanguages.map((language) => (
+                <Item
+                  onClick={handleSelected.bind(null, language.code)}
+                  selected={language.code === selectedCode}
+                  key={language.code}
+                  language={language}
+                />
+              ))}
             </>
           )}
         </div>
@@ -141,6 +138,10 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
   },
 );
 ListLanguages.displayName = 'ListLanguages';
+
+const Title = ({ children }: { children: React.ReactNode }) => {
+  return <p className="mb-3 mt-6 pl-5 text-secondary">{children}</p>;
+};
 
 const Item = ({
   language,
@@ -181,7 +182,7 @@ const Section = ({
 }) => {
   return (
     <div className="mb-8">
-      {title && <p className="mb-3 pl-5 text-secondary">{title}</p>}
+      {title && <p className="mb-3 pl-[5vw] text-secondary">{title}</p>}
       <div>{children}</div>
     </div>
   );
