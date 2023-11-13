@@ -85,6 +85,7 @@ export default async function Home(props: HomeProps) {
             source={sourceLanguage}
             target={targetLanguage}
             detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
+            targetResult={targetResult}
           />
           <CaptureProvider>
             <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-5 md:flex-row md:justify-evenly md:gap-[88px]">

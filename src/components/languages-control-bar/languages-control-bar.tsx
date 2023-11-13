@@ -12,12 +12,14 @@ import { ListLanguages } from '../list-languages';
 import { cn } from '@/utils/cn';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useSetParams } from '@/hooks/use-set-params';
+import { useTranslateStore } from '@/stores/translate';
 
 export interface LanguagesControlBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   source?: string;
   target?: string;
   detect?: string;
+  targetResult?: string;
 }
 
 export const LanguagesControlBar = forwardRef<
@@ -28,7 +30,8 @@ export const LanguagesControlBar = forwardRef<
   const [currentSelect, setCurrentSelect] = useState<
     'source' | 'target' | 'none'
   >('none');
-  const { searchParams, setParams, setParam, removeParam } = useSetParams();
+  const { searchParams, setParams } = useSetParams();
+  const { setValue } = useTranslateStore();
   const source = getCountryCode(searchParams.get('source'), true);
   const target = getCountryCode(
     searchParams.get('target') || DEFAULT_LANGUAGES_CODE.EN,
@@ -36,7 +39,7 @@ export const LanguagesControlBar = forwardRef<
 
   const handleSwap = () => {
     if (!props.source || !props.target) return;
-    setParams([
+    const newParams = [
       {
         key: 'source',
         value: props.target,
@@ -45,7 +48,15 @@ export const LanguagesControlBar = forwardRef<
         key: 'target',
         value: props.source,
       },
-    ]);
+    ];
+    if (props.targetResult) {
+      setValue(props.targetResult);
+      newParams.push({
+        key: 'query',
+        value: props.targetResult,
+      });
+    }
+    setParams(newParams);
   };
 
   const handleSelect = (code: string) => {
