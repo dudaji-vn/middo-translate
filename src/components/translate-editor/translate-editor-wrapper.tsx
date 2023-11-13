@@ -19,6 +19,7 @@ export interface TranslateEditorWrapperProps {
   isDetect?: boolean;
   topElement?: React.ReactNode;
   bottomElement?: React.ReactNode;
+  footerElement?: React.ReactNode;
 }
 
 export const TranslateEditorWrapper = ({
@@ -31,6 +32,7 @@ export const TranslateEditorWrapper = ({
   isDetect = false,
   topElement,
   bottomElement,
+  footerElement,
 }: TranslateEditorWrapperProps) => {
   const language = getLanguageByCode(languageCode);
   return (
@@ -81,6 +83,9 @@ export const TranslateEditorWrapper = ({
           />
           {bottomElement}
         </div>
+      )}
+      {!!footerElement && (
+        <div className="bottom-0 left-0 mt-auto w-full">{footerElement}</div>
       )}
     </div>
   );
