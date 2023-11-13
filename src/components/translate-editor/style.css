@@ -48,3 +48,7 @@
 .bottomResultText.error {
   color: hsl(var(--error));
 }
+
+.break-word-mt {
+  word-break: break-word;
+}

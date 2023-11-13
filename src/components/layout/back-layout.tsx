@@ -17,7 +17,11 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
     const pathName = usePathname();
     const router = useRouter();
     return (
-      <div ref={ref} {...props} className="bodyContainer flex flex-col">
+      <div
+        ref={ref}
+        {...props}
+        className="bodyContainer mx-auto flex flex-col justify-center"
+      >
         <div className="pageNavigationBar">
           <button
             onClick={
@@ -33,7 +37,7 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
           </button>
           <p className="pageTitle">{title}</p>
         </div>
-        <div className="flex-1 overflow-hidden">{props.children}</div>
+        <div className="flex-1 overflow-hidden px-[5vw]">{props.children}</div>
       </div>
     );
   },

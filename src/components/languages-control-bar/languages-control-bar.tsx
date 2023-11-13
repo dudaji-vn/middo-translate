@@ -154,7 +154,7 @@ export const LanguagesControlBar = forwardRef<
       </div>
 
       {currentSelect !== 'none' && (
-        <div className="fixed left-0 z-10 h-full w-full bg-background">
+        <div className="fixed left-0 z-20 h-full w-full bg-background">
           <BackLayout
             title="Select language"
             onBack={() => {

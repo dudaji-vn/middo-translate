@@ -7,10 +7,12 @@ import {
   useContext,
   useRef,
 } from 'react';
-import { toBlob, toJpeg } from 'html-to-image';
+import {
+  canCopyImagesToClipboard,
+  copyBlobToClipboard,
+} from 'copy-image-clipboard';
 
-import { async } from 'regenerator-runtime';
-import { copyBlobToClipboard } from 'copy-image-clipboard';
+import { toBlob } from 'html-to-image';
 import { useToast } from '../toast';
 
 type CaptureContext = {

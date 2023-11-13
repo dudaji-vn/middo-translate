@@ -6,11 +6,10 @@ import { IconButton } from '../button';
 import React from 'react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
-import { supportedVoiceMap } from '@/configs/default-language';
-import { textToSpeech } from '@/services/voices';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
-import { useToast } from '../toast';
-import { useWindowSize } from 'usehooks-ts';
+import { useIsMobile } from '@/hooks/use-is-mobile';
+import { useTextCopy } from '@/hooks/use-text-copy';
+import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 
 export interface TranslateResultProps {
   result: string;
@@ -24,33 +23,10 @@ export const TranslateResult = ({
   languageCode,
   children,
 }: TranslateResultProps) => {
+  const { copy } = useTextCopy(result);
   const textStyle = useAdjustTextStyle(result);
-  const { width } = useWindowSize();
-  const { toast } = useToast();
-
-  const isMobile = width < 768;
-
-  const playAudio = async (bufferData: number[]) => {
-    const audioArrayBuffer = new Uint8Array(bufferData).buffer;
-    const audioCtx = new window.AudioContext();
-    const audioData = await audioCtx.decodeAudioData(audioArrayBuffer);
-    const source = audioCtx.createBufferSource();
-    source.buffer = audioData;
-    source.connect(audioCtx.destination);
-    source.start();
-  };
-  const speak = async () => {
-    const bufferData = await textToSpeech(
-      result,
-      supportedVoiceMap[languageCode as keyof typeof supportedVoiceMap],
-    );
-    playAudio(bufferData);
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(result);
-    toast({ description: 'Text copied!' });
-  };
+  const { speak } = useTextToSpeech(languageCode, result);
+  const isMobile = useIsMobile();
 
   return (
     <TranslateEditorWrapper
@@ -62,19 +38,30 @@ export const TranslateResult = ({
       topElement={isMobile && children}
       bottomElement={!isMobile && children}
       languageCode={languageCode}
+      footerElement={
+        <div className="bottom-3 right-3 mt-3 flex justify-end">
+          <IconButton
+            disabled={!result}
+            onClick={() => speak()}
+            variant="ghostPrimary"
+          >
+            <VolumeUpOutline />
+          </IconButton>
+          <IconButton
+            disabled={!result}
+            onClick={() => copy()}
+            variant="ghostPrimary"
+          >
+            <CopyOutline />
+          </IconButton>
+        </div>
+      }
     >
-      <div className={`translatedText ${textStyle} break-words`}>{result}</div>
-      <div className="mt-auto flex justify-end">
-        <IconButton disabled={!result} onClick={speak} variant="ghostPrimary">
-          <VolumeUpOutline />
-        </IconButton>
-        <IconButton
-          disabled={!result}
-          onClick={handleCopy}
-          variant="ghostPrimary"
-        >
-          <CopyOutline />
-        </IconButton>
+      <div
+        style={{ wordBreak: 'break-word' }}
+        className={`translatedText ${textStyle}`}
+      >
+        {result}
       </div>
     </TranslateEditorWrapper>
   );
