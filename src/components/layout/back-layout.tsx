@@ -37,7 +37,7 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
           </button>
           <p className="pageTitle">{title}</p>
         </div>
-        <div className="flex-1 overflow-hidden">{props.children}</div>
+        <div className="flex-1 overflow-hidden px-[5vw]">{props.children}</div>
       </div>
     );
   },
