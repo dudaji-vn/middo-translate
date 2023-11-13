@@ -2,6 +2,7 @@
 
 import { CopyOutline } from '@easy-eva-icons/react';
 import { IconButton } from '../button';
+import { MultipleCopyIcon } from '../icons';
 import { forwardRef } from 'react';
 import { getCountryCode } from '@/utils/language-fn';
 import { useCompare } from '../compare';
@@ -55,7 +56,7 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
           onClick={handleCopy}
           variant="ghostPrimary"
         >
-          <CopyOutline className="h-7 w-7" />
+          <MultipleCopyIcon className="h-7 w-7" />
         </IconButton>
       </div>
     );

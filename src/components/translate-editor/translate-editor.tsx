@@ -3,9 +3,13 @@
 import './style.css';
 
 import { ChangeEvent, useEffect } from 'react';
+import {
+  CloseCircleOutline,
+  CopyOutline,
+  VolumeUpOutline,
+} from '@easy-eva-icons/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-import { CloseCircleOutline } from '@easy-eva-icons/react';
 import { IconButton } from '../button';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
@@ -13,6 +17,8 @@ import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useDebounce } from 'usehooks-ts';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
+import { useTextCopy } from '@/hooks/use-text-copy';
+import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 import { useTranslateStore } from '@/stores/translate';
 
 export interface TranslateEditorProps {
@@ -47,6 +53,9 @@ export const TranslateEditor = ({
   const debouncedValue = useDebounce<string>(value, 300);
   const pathname = usePathname();
   const { replace } = useRouter();
+
+  const { copy } = useTextCopy(value);
+  const { speak } = useTextToSpeech(languageCode, value);
 
   const isKeyboardOpen = useDetectKeyboardOpen();
 
@@ -114,6 +123,28 @@ export const TranslateEditor = ({
       languageCode={languageCode}
       type={disabled ? 'result' : 'default'}
       className={className}
+      footerElement={
+        <div className="bottom-3 right-3 mt-3 flex justify-end">
+          <IconButton
+            onClick={() => {
+              speak();
+            }}
+            disabled={!value}
+            variant="ghostPrimary"
+          >
+            <VolumeUpOutline />
+          </IconButton>
+          <IconButton
+            disabled={!value}
+            onClick={() => {
+              copy(value);
+            }}
+            variant="ghostPrimary"
+          >
+            <CopyOutline />
+          </IconButton>
+        </div>
+      }
     >
       {value && !disabled && (
         <IconButton

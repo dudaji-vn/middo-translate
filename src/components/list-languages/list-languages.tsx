@@ -71,7 +71,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             }
           />
         </div>
-        <div className="mb-16 flex-1 columns-1 gap-0 overflow-y-auto px-[5vw] md:columns-3">
+        <div className="mb-8 flex-1 columns-1 gap-0 overflow-y-auto md:columns-3">
           {search === '' ? (
             <>
               {allowDetect && (
