@@ -17,7 +17,11 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
     const pathName = usePathname();
     const router = useRouter();
     return (
-      <div ref={ref} {...props} className="bodyContainer flex flex-col">
+      <div
+        ref={ref}
+        {...props}
+        className="bodyContainer mx-auto flex flex-col justify-center"
+      >
         <div className="pageNavigationBar">
           <button
             onClick={

@@ -116,21 +116,24 @@ export const TranslateOptionBar = forwardRef<
           <div id="mic" className=" w-[228px] " />
         </div>
         {listening ? (
-          <IconButton
-            size="lg"
-            variant="secondary"
-            className="relative"
-            onClick={handleStopListening}
-          >
-            <Rectangle />
-          </IconButton>
+          <>
+            <IconButton
+              size="lg"
+              variant="secondary"
+              className="relative shrink-0"
+              onClick={handleStopListening}
+            >
+              <Rectangle />
+            </IconButton>
+            <span>Listening</span>
+          </>
         ) : (
           <IconButton
             shape="circle"
             onClick={handleStartListening}
             size="lg"
             variant="secondary"
-            className={cn('z-50', !ableListen && '!opacity-30')}
+            className={cn('z-10', !ableListen && '!opacity-30')}
           >
             <MicOutline className="h-7 w-7" />
           </IconButton>
