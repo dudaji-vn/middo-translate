@@ -5,12 +5,12 @@ import { cn } from '@/utils/cn';
 import { Icon } from './icon';
 
 const buttonVariants = cva(
-  'inline-flex items-center w-fit whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-30 rounded-full text-base justify-center ',
+  'inline-flex items-center w-fit whitespace-nowrap font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none rounded-full text-base justify-center ',
   {
     variants: {
       variant: {
         default:
-          'bg-primary text-background md:hover:bg-secondary border-transparent disabled:bg-lighter active:!bg-shading',
+          'bg-primary text-background disabled:border-none md:hover:bg-secondary border-transparent disabled:bg-lighter active:!bg-shading',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
@@ -22,7 +22,7 @@ const buttonVariants = cva(
         error:
           'bg-error md:hover:bg-error-lighter text-background active:!bg-error-darker',
         ghost:
-          'bg-transparent text-text md:hover:bg-background-darker active:!bg-stroke',
+          'bg-transparent text-text md:hover:bg-background-darker active:!bg-stroke disabled:!bg-transparent',
         ghostPrimary:
           'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary disabled:!bg-transparent',
         link: 'text-primary underline-offset-4 hover:underline',
@@ -32,7 +32,8 @@ const buttonVariants = cva(
         default: 'rounded-xl',
       },
       size: {
-        md: 'px-8 py-4 text-base leading-tight',
+        xs: 'h-6 px-0 text-xs leading-4',
+        md: 'px-8 py-4 text-base',
         sm: 'h-9 px-3',
         lg: 'h-11  px-8',
       },
