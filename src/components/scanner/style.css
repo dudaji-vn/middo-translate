@@ -1,0 +1,4 @@
+.scanner div:first-child {
+  border: 60px solid rgba(0, 0, 0, 0.6) !important;
+  box-shadow: rgb(61, 135, 237) 0px 0px 0px 5px inset !important;
+}

@@ -1,0 +1,319 @@
+.myContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.wrapper {
+  padding: 20px 5vw 40px;
+}
+
+.columnWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.rightColumn {
+  display: none;
+}
+
+/* .introImg {
+    width: 260px;
+} */
+
+.introTxt {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.introTxt h2 {
+  color: hsl(var(--primary));
+  margin-bottom: 12px;
+}
+
+.joinSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.enterCode {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 2px 2px 20px;
+  border-radius: 99px;
+  border: solid 1px #ccc;
+}
+
+.enterCode input {
+  width: 100%;
+  flex: 1;
+}
+
+.enterCode input:focus-visible {
+  outline: none;
+}
+
+.iconNoBGbutton {
+  width: 44px !important;
+  height: 44px !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 99px;
+}
+
+.iconNoBGbutton img {
+  width: 24px;
+  height: 24px;
+}
+
+.iconNoBGbutton:active {
+  background-color: hsl(var(--stroke));
+}
+
+.fillButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: hsl(var(--background));
+  background-color: hsl(var(--primary));
+  border-radius: 99px;
+  border: solid 1px hsl(var(--primary));
+  padding: 12px 32px;
+  font-weight: 600;
+}
+
+.fillButton:active {
+  color: hsl(var(--shading)) !important;
+  background-color: hsl(var(--primary)) !important;
+}
+
+.lineWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0;
+}
+
+.strokeButton {
+  padding: 12px 32px;
+  border-radius: 99px;
+  background-color: hsl(var(--background));
+  color: hsl(var(--primary));
+  border: solid 2px hsl(var(--primary));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.strokeButton:active {
+  color: hsl(var(--shading)) !important;
+  background-color: hsl(var(--background)) !important;
+  border-color: hsl(var(--primary)) !important;
+}
+
+@media screen and (min-width: 1024px) {
+  .wrapper {
+    padding-top: 100px;
+    max-width: 1440px;
+  }
+
+  .columnWrapper {
+    flex-direction: row-reverse;
+    gap: 100px;
+    align-items: flex-start;
+  }
+
+  .rightColumn {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .leftColumn {
+    width: 40%;
+  }
+
+  .enterCode {
+    min-height: 50px;
+    padding-right: 20px;
+  }
+
+  .iconNoBGbutton {
+    display: none;
+  }
+
+  .fillButton:hover {
+    background-color: hsl(var(--background));
+    color: hsl(var(--primary));
+  }
+
+  .fillButton.create {
+    min-width: 320px;
+  }
+
+  .strokeButton:hover {
+    background-color: hsl(var(--secondary));
+    border-color: hsl(var(--secondary));
+  }
+}
+
+.conversationForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.CPtitle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+}
+.CPtitle h4 {
+  color: hsl(var(--primary));
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.formField {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+.formField.checkBox {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.label {
+  font-weight: 500;
+  opacity: 0.6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.formField input {
+  padding: 12px 20px;
+  border: solid 1px hsl(var(--stroke));
+  border-radius: 99px;
+}
+
+.formField input:focus-visible {
+  outline: none;
+}
+
+.formField select {
+  padding: 12px 20px;
+  border: solid 1px hsl(var(--stroke));
+  border-radius: 99px;
+}
+
+.formField select:focus-visible {
+  outline: none;
+}
+
+.chipsWrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.chip {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 25px;
+  background-color: hsl(var(--background-darker));
+  border: solid 1px hsl(var(--background-darker));
+  border-radius: 99px;
+}
+
+.chip.active {
+  background-color: hsl(var(--background)) !important;
+  border-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary)) !important;
+  box-shadow: var(--shadow-1);
+}
+
+.buttonContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: 32px;
+}
+
+.buttonContainer a {
+  text-align: center;
+}
+
+.buttonContainer a:active {
+  color: hsl(var(--shading)) !important;
+}
+
+@media screen and (min-width: 1024px) {
+  .chip:hover {
+    border-color: hsl(var(--primary));
+  }
+
+  .buttonContainer {
+    align-items: center;
+  }
+}
+
+.languageCounter {
+  /* position: absolute;
+    top: 0;
+    right: 0; */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-weight: 500;
+  padding: 8px 20px;
+  background-color: hsl(var(--lighter));
+  border-radius: 99px;
+}
+
+.selectedCount {
+  font-weight: 600;
+  color: hsl(var(--primary));
+}
+
+.defaultCount {
+  opacity: 0.6;
+}

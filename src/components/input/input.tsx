@@ -29,7 +29,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </div>
         )}
         {leftElement && (
-          <div className="absolute right-5 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
+          <div className="absolute right-1 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
             {leftElement}
           </div>
         )}
