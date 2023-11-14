@@ -2,6 +2,7 @@ import {
   ACCEPT_DIFF_RESULT,
   LS_LANG_RECENTLY_USED,
   MAX_LANG_RECENTLY_USED,
+  OC_INFO,
 } from '@/configs/store-key';
 
 export const getAcceptDiffResult = () => {
@@ -35,4 +36,27 @@ export const addRecentlyUsed = (lang: string) => {
   }
   localStorage.setItem(LS_LANG_RECENTLY_USED, JSON.stringify(newRecentlyUsed));
   return newRecentlyUsed;
+};
+
+export const setOnlineConversionInfo = (info: any) => {
+  const oldInfo = getOnlineConversionInfo();
+  localStorage.setItem(
+    OC_INFO,
+    JSON.stringify({
+      ...oldInfo,
+      ...info,
+    }),
+  );
+};
+
+export const getOnlineConversionInfo = () => {
+  const info = localStorage.getItem(OC_INFO);
+  if (info) {
+    return JSON.parse(info);
+  }
+  return null;
+};
+
+export const removeOnlineConversionInfo = () => {
+  localStorage.removeItem(OC_INFO);
 };
