@@ -25,7 +25,7 @@ export interface LanguagesControlBarProps
 export const LanguagesControlBar = forwardRef<
   HTMLDivElement,
   LanguagesControlBarProps
->((props, ref) => {
+>(({targetResult, source:_source, target:_target, detect, ...props}, ref) => {
   const isMobile = useIsMobile();
   const [currentSelect, setCurrentSelect] = useState<
     'source' | 'target' | 'none'
@@ -38,22 +38,22 @@ export const LanguagesControlBar = forwardRef<
   );
 
   const handleSwap = () => {
-    if (!props.source || !props.target) return;
+    if (!source || !target) return;
     const newParams = [
       {
         key: 'source',
-        value: props.target,
+        value: target,
       },
       {
         key: 'target',
-        value: props.source,
+        value: source,
       },
     ];
-    if (props.targetResult) {
-      setValue(props.targetResult);
+    if (targetResult) {
+      setValue(targetResult);
       newParams.push({
         key: 'query',
-        value: props.targetResult,
+        value: targetResult,
       });
     }
     setParams(newParams);
@@ -101,10 +101,10 @@ export const LanguagesControlBar = forwardRef<
       });
     }
 
-    if (props.detect) {
+    if (detect) {
       newParams.push({
         key: 'detect',
-        value: props.detect,
+        value: detect,
       });
     }
 
@@ -112,7 +112,7 @@ export const LanguagesControlBar = forwardRef<
       setParams(newParams);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, props.detect]);
+  }, [searchParams, detect]);
 
   return (
     <div
