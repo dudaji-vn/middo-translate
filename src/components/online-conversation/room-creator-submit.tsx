@@ -11,7 +11,6 @@ import { Button } from '../button';
 import Link from 'next/link';
 import { LoadingBase } from '../loading-base';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { SvgSpinnersGooeyBalls2 } from '../icons';
 import { createConversation } from '@/services/conversation';
 import { generateUniqueUppercaseString } from '@/utils/gen-unique-uppercase-string';
 import { useRoomCreator } from './room-creator-context';
@@ -53,7 +52,7 @@ export const RoomCreatorSubmit = forwardRef<
       const code = generateUniqueUppercaseString(4);
       const user: Participant = {
         language: selectedNativeLanguage,
-        socketId: '',
+        socketId: '132',
         username: userName,
       };
       const room: Room = {

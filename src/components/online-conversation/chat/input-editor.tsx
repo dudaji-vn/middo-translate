@@ -8,6 +8,8 @@ import {
 
 import { CircleFlag } from 'react-circle-flags';
 import { IconButton } from '@/components/button';
+import { getCountryCode } from '@/utils/language-fn';
+import { useChat } from './chat-context';
 import { useState } from 'react';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 
@@ -17,6 +19,8 @@ export const InputEditor = (props: InputEditorProps) => {
   const [text, setText] = useState('');
   const { textAreaRef } = useTextAreaResize(text, 24);
   const [isFocused, setIsFocused] = useState(false);
+  const { user, room } = useChat();
+  console.log(user);
   return (
     <div className="chatInputWrapper">
       <div className="chatInput translated">
@@ -40,7 +44,7 @@ export const InputEditor = (props: InputEditorProps) => {
         <div className="inputMess ">
           <CircleFlag
             className="inline-block"
-            countryCode={'vn'}
+            countryCode={getCountryCode(user.language) || 'gb'}
             height={20}
             width={20}
           />
