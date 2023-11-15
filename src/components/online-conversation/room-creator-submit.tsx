@@ -12,9 +12,11 @@ import Link from 'next/link';
 import { LoadingBase } from '../loading-base';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { createConversation } from '@/services/conversation';
+import { createParticipant } from '@/utils/conversation';
 import { generateUniqueUppercaseString } from '@/utils/gen-unique-uppercase-string';
 import { useRoomCreator } from './room-creator-context';
 import { useRouter } from 'next/navigation';
+import { useSessionStore } from '@/stores/session';
 import { useToast } from '../toast';
 
 export interface RoomCreatorSubmitProps
@@ -28,12 +30,13 @@ export const RoomCreatorSubmit = forwardRef<
     isValid,
     selectedLanguages,
     selectedNativeLanguage,
-    userName,
+    username,
     hasRememberedInfo,
   } = useRoomCreator();
   const [isCreating, setIsCreating] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
   const router = useRouter();
+  const { sessionId } = useSessionStore();
   const { toast } = useToast();
   const handleSubmit = async () => {
     setIsCreating(true);
@@ -41,7 +44,7 @@ export const RoomCreatorSubmit = forwardRef<
       const data = {
         selectedLanguages,
         selectedNativeLanguage,
-        userName,
+        username,
       };
       if (isRemember) {
         setOnlineConversionInfo(data);
@@ -50,11 +53,11 @@ export const RoomCreatorSubmit = forwardRef<
       }
 
       const code = generateUniqueUppercaseString(4);
-      const user: Participant = {
+      const user = createParticipant({
         language: selectedNativeLanguage,
-        socketId: '132',
-        username: userName,
-      };
+        socketId: sessionId,
+        username: username,
+      });
       const room: Room = {
         code,
         languages: selectedLanguages,

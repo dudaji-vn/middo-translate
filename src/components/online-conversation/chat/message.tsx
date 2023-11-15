@@ -1,7 +1,6 @@
-import { forwardRef, useMemo } from 'react';
-
 import { Message as MessageType } from '@/types/room';
 import { cn } from '@/utils/cn';
+import { forwardRef } from 'react';
 import moment from 'moment';
 
 export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -27,22 +26,7 @@ export const GroupMessage = ({
   messages: MessageType[];
   isMe?: boolean;
 }) => {
-  const { firstLetter, randomColor } = useMemo(() => {
-    const colors = [
-      'bg-[#d47500]',
-      'bg-[#05aa55]',
-      'bg-[#e3pc01]',
-      'bg-[#01a0d3]',
-      'bg-[#b281b3]',
-      'bg-[#dc2929]',
-      'bg-primary',
-    ];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    return {
-      firstLetter: messages[0].sender.username[0],
-      randomColor,
-    };
-  }, [messages]);
+  const sender = messages[0].sender;
 
   if (messages[0].isSystem)
     return (
@@ -59,12 +43,12 @@ export const GroupMessage = ({
     <div className={cn('flex w-full items-end gap-3', isMe && 'justify-end')}>
       {!isMe && (
         <div
+          style={{ backgroundColor: sender.color }}
           className={cn(
             'flex h-6 w-6 items-center justify-center rounded-full text-background',
-            randomColor,
           )}
         >
-          {firstLetter}
+          {sender.username[0]}
         </div>
       )}
       <div className="flex flex-col gap-2">

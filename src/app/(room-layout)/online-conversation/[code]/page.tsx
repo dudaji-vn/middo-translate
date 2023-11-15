@@ -9,8 +9,9 @@ import {
 
 import { ChatProvider } from '@/components/online-conversation/chat/chat-context';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { getConversation } from '@/services/conversation';
+import { getConversationWithUserSocketId } from '@/services/conversation';
 import { redirect } from 'next/navigation';
+import { useSessionStore } from '@/stores/session';
 
 interface HomeProps {
   params: {
@@ -19,9 +20,14 @@ interface HomeProps {
 }
 
 export default async function Home({ params }: HomeProps) {
-  const room = await getConversation(params.code);
-  console.log(room);
-  if (!room) redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
+  const sessionId = useSessionStore.getState().sessionId;
+
+  if (!sessionId)
+    redirect(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + params.code);
+
+  const room = await getConversationWithUserSocketId(params.code, sessionId);
+
+  if (!room) redirect(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + params.code);
 
   return (
     <ChatProvider room={room}>

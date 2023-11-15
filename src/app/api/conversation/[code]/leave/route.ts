@@ -13,11 +13,11 @@ export async function PATCH(
   const user: Participant = await request.json();
   const newRoom = await Room.findOneAndUpdate(
     { code },
-    { $push: { participants: user } },
+    { $pull: { participants: { socketId: user.socketId } } },
     { new: true },
   );
   const message: Message = {
-    content: `${user.username} has joined the conversation`,
+    content: `${user.username} has leaved the conversation`,
     sender: {
       username: 'system',
       socketId: 'system',

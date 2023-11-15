@@ -11,9 +11,11 @@ import Link from 'next/link';
 import { LoadingBase } from '@/components/loading-base';
 import { Participant } from '@/types/room';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { createParticipant } from '@/utils/conversation';
 import { joinConversation } from '@/services/conversation';
 import { useRoomJoiner } from '@/components/online-conversation/join/room-joiner-context';
 import { useRouter } from 'next/navigation';
+import { useSessionStore } from '@/stores/session';
 import { useToast } from '../../toast';
 
 export interface RoomJoinerSubmitProps
@@ -23,24 +25,25 @@ export const RoomJoinerSubmit = forwardRef<
   HTMLDivElement,
   RoomJoinerSubmitProps
 >((props, ref) => {
-  const { isValid, selectedNativeLanguage, userName, room, hasRememberedInfo } =
+  const { isValid, selectedNativeLanguage, username, room, hasRememberedInfo } =
     useRoomJoiner();
   const [isCreating, setIsCreating] = useState(false);
   const [isRemember, setIsRemember] = useState(hasRememberedInfo);
   const router = useRouter();
+  const { sessionId } = useSessionStore();
   const { toast } = useToast();
   const handleSubmit = async () => {
     setIsCreating(true);
     try {
-      const user: Participant = {
-        socketId: '',
+      const user = createParticipant({
+        username,
         language: selectedNativeLanguage,
-        username: userName,
-      };
+        socketId: sessionId,
+      });
 
       if (isRemember) {
         setOnlineConversionInfo({
-          userName,
+          username,
           selectedNativeLanguage,
         });
       } else {

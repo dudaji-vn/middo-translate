@@ -8,7 +8,9 @@ import {
 
 import { CircleFlag } from 'react-circle-flags';
 import { IconButton } from '@/components/button';
+import { Message } from '@/types/room';
 import { getCountryCode } from '@/utils/language-fn';
+import { sendMessage } from '@/services/conversation';
 import { useChat } from './chat-context';
 import { useState } from 'react';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
@@ -20,18 +22,54 @@ export const InputEditor = (props: InputEditorProps) => {
   const { textAreaRef } = useTextAreaResize(text, 24);
   const [isFocused, setIsFocused] = useState(false);
   const { user, room } = useChat();
-  console.log(user);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleSendMessage = async () => {
+    const newMessage: Message = {
+      sender: user,
+      content: text,
+      translatedContent: '',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      isSystem: false,
+    };
+
+    const data = await sendMessage(newMessage, room.code);
+    console.log(data);
+    setText('');
+  };
+
+  const targetLanguage = room.languages.find(
+    (language) => language !== user.language,
+  );
+
   return (
     <div className="chatInputWrapper">
       <div className="chatInput translated">
         <div className="inputMess">
-          <img src="/Vn.png" alt="" />
+          <CircleFlag
+            className="inline-block"
+            countryCode={getCountryCode(targetLanguage) || 'gb'}
+            height={20}
+            width={20}
+          />
           어떻게 지내세요
         </div>
       </div>
       <div className="chatInput middle">
         <div className="inputMess">
-          <img src="/Vn.png" alt="" />
+          <CircleFlag
+            className="inline-block"
+            countryCode={'gb'}
+            height={20}
+            width={20}
+          />
           How are you
         </div>
         <div className="inputChatButtonWrapper">
@@ -49,6 +87,7 @@ export const InputEditor = (props: InputEditorProps) => {
             width={20}
           />
           <textarea
+            onKeyDown={handleKeyDown}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             ref={textAreaRef}
@@ -63,7 +102,11 @@ export const InputEditor = (props: InputEditorProps) => {
               <MicOutline className="opacity-60" />
             </IconButton>
           )}
-          <IconButton variant="ghostPrimary" className="self-end">
+          <IconButton
+            onClick={handleSendMessage}
+            variant="ghostPrimary"
+            className="self-end"
+          >
             <PaperPlaneOutline />
           </IconButton>
         </div>

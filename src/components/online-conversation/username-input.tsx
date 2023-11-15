@@ -7,11 +7,11 @@ export interface UsernameInputProps
 
 export const UsernameInput = forwardRef<HTMLDivElement, UsernameInputProps>(
   (props, ref) => {
-    const { setUserName, userName } = useRoomCreator();
+    const { setUserName, username } = useRoomCreator();
     return (
       <div ref={ref} {...props} className="w-full">
         <input
-          value={userName}
+          value={username}
           onChange={(e) => setUserName(e.target.value)}
           className="w-full"
           type="text"

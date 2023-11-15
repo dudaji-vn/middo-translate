@@ -1,60 +1,14 @@
 'use client';
 
-import { forwardRef, useMemo } from 'react';
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 
 import { GroupMessage } from './message';
 import { Message as MessageType } from '@/types/room';
+import { pusherClient } from '@/lib/pusher';
+import { useChat } from './chat-context';
+import { useSessionStore } from '@/stores/session';
 
 export interface BoxChatProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-const messages: MessageType[] = [
-  {
-    sender: {
-      username: 'system',
-      socketId: '',
-      language: '',
-    },
-    content: 'Jay joined the room',
-    isSystem: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    sender: {
-      username: 'Jay',
-      socketId: '123',
-      language: 'vi',
-    },
-    content: 'Xin chào!!!!!!!',
-    translatedContent: '안녕하세요!!!!!!!', // ko
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    sender: {
-      username: 'system',
-      socketId: '',
-      language: '',
-    },
-    content: 'Sun joined the room',
-    isSystem: true,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  {
-    sender: {
-      username: 'Sun',
-      socketId: '132',
-      language: 'ko',
-    },
-    content: '안녕하세요!!!!!!!',
-    translatedContent: 'Xin chào!!!!!!!', // vi
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
-
-const myId = '132';
 
 type GroupMessage = {
   messages: MessageType[];
@@ -63,7 +17,12 @@ type GroupMessage = {
 
 export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
   (props, ref) => {
+    const { sessionId } = useSessionStore();
+    const [messages, setMessages] = useState<MessageType[]>([]);
+
+    const refScroll = useRef<HTMLDivElement>(null);
     const groupMessages = useMemo(() => {
+      if (messages.length === 0) return [];
       const groupMessages: GroupMessage[] = [];
       let currentGroupMessage: GroupMessage = {
         messages: [],
@@ -71,7 +30,7 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
       messages.forEach((message) => {
         if (currentGroupMessage.messages.length === 0) {
           currentGroupMessage.messages.push(message);
-          currentGroupMessage.isMe = message.sender.socketId === myId;
+          currentGroupMessage.isMe = message.sender.socketId === sessionId;
           return;
         }
 
@@ -85,17 +44,45 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
         groupMessages.push(currentGroupMessage);
         currentGroupMessage = {
           messages: [message],
-          isMe: message.sender.socketId === myId,
+          isMe: message.sender.socketId === sessionId,
         };
       });
 
       groupMessages.push(currentGroupMessage);
 
       return groupMessages;
-    }, []);
+    }, [messages, sessionId]);
+
+    const { room, user } = useChat();
+
+    useEffect(() => {
+      pusherClient
+        .subscribe(room.code)
+        .bind('message', (message: MessageType) => {
+          setMessages((messages) => [...messages, message]);
+        });
+      return () => {
+        pusherClient.unsubscribe(room.code);
+      };
+    }, [room.code, user]);
+
+    useEffect(() => {
+      if (refScroll?.current) {
+        refScroll.current.scrollTo({
+          top: refScroll.current.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
+    }, [groupMessages, ref]);
+
+    useEffect(() => {
+      return () => {
+        console.log('leave');
+      };
+    }, [room.code]);
 
     return (
-      <div className="chatFrame flex-1 overflow-y-scroll">
+      <div ref={refScroll} className="chatFrame flex-1 gap-5 overflow-y-scroll">
         {groupMessages.map((groupMessage, index) => (
           <GroupMessage key={index} {...groupMessage} />
         ))}

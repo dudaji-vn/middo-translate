@@ -1,10 +1,18 @@
 'use client';
 
 import { Participant, Room } from '@/types/room';
-import { PropsWithChildren, createContext, useContext } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { redirect, useRouter } from 'next/navigation';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useRouter } from 'next/navigation';
+import { getConversation } from '@/services/conversation';
+import { useSessionStore } from '@/stores/session';
 
 type ChatContext = {
   room: Room;
@@ -22,17 +30,20 @@ export const useChat = () => {
 interface ChatProviderProps extends PropsWithChildren {
   room: Room;
 }
-const socketId = '132';
-export const ChatProvider = ({ children, room }: ChatProviderProps) => {
+
+export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
+  const [room, setRoom] = useState<Room>(_room);
   const router = useRouter();
-  console.log(room);
-  const user = room.participants.find((user) => user.socketId === socketId);
-  if (!user) {
-    setTimeout(() => {
-      router.push(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + room.code);
-    }, 1000);
-    return <div></div>;
-  }
+  const { sessionId } = useSessionStore();
+  const user = room.participants.find((user) => user.socketId === sessionId)!;
+
+  // if (!user) {
+  //   setTimeout(() => {
+  //     redirect(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + room.code);
+  //   }, 1000);
+  //   return null;
+  // }
+
   return (
     <ChatContext.Provider
       value={{

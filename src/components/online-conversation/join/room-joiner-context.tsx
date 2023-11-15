@@ -11,10 +11,11 @@ import {
 
 import { Room } from '@/types/room';
 import { getOnlineConversionInfo } from '@/utils/local-storage';
+import { useSessionStore } from '@/stores/session';
 
 type RoomJoinerContext = {
-  userName: string;
-  setUserName: (userName: string) => void;
+  username: string;
+  setUserName: (username: string) => void;
   selectedNativeLanguage: string;
   setSelectedNativeLanguage: (language: string) => void;
   isValid: boolean;
@@ -24,7 +25,7 @@ type RoomJoinerContext = {
 
 export const RoomJoinerContext = createContext<RoomJoinerContext>({
   isValid: false,
-  userName: '',
+  username: '',
   setUserName: () => {},
   selectedNativeLanguage: '',
   setSelectedNativeLanguage: () => {},
@@ -42,22 +43,25 @@ export const RoomJoinerProvider = ({
   children,
   room,
 }: RoomJoinerProviderProps) => {
-  const [userName, setUserName] = useState<string>('');
+  const [username, setUserName] = useState<string>('');
   const [hasRememberedInfo, setHasRememberedInfo] = useState<boolean>(false);
   const [selectedNativeLanguage, setSelectedNativeLanguage] =
     useState<string>('');
+  const { sessionId } = useSessionStore();
+
+  console.log(sessionId);
 
   const isValid = useMemo(() => {
-    return !!userName && !!selectedNativeLanguage;
-  }, [userName, selectedNativeLanguage]);
+    return !!username && !!selectedNativeLanguage;
+  }, [username, selectedNativeLanguage]);
 
   useEffect(() => {
     const data = getOnlineConversionInfo();
 
     if (data) {
       setHasRememberedInfo(true);
-      const { userName, selectedNativeLanguage } = data;
-      setUserName(userName);
+      const { username, selectedNativeLanguage } = data;
+      setUserName(username);
       setSelectedNativeLanguage(selectedNativeLanguage);
     } else {
       setHasRememberedInfo(false);
@@ -68,7 +72,7 @@ export const RoomJoinerProvider = ({
     <RoomJoinerContext.Provider
       value={{
         isValid,
-        userName,
+        username,
         setUserName,
         selectedNativeLanguage,
         setSelectedNativeLanguage,
