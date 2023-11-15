@@ -128,7 +128,7 @@
 
 @media screen and (min-width: 1024px) {
   .wrapper {
-    padding-top: 100px;
+    padding-top: 40px;
     max-width: 1440px;
   }
 
@@ -167,9 +167,5 @@
   .strokeButton:hover {
     background-color: hsl(var(--secondary));
     border-color: hsl(var(--secondary));
-  }
-
-  .strokeButton {
-    /* min-width: 320px; */
   }
 }

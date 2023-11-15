@@ -6,7 +6,6 @@ import {
 } from '@/configs/env.public';
 
 import { AppProvider } from '@/providers/app';
-import { MainLayout } from '@/components/layout/main-layout';
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
 
@@ -25,9 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <AppProvider>
-          <MainLayout>{children}</MainLayout>
-        </AppProvider>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );

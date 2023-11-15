@@ -125,53 +125,6 @@
   border-color: hsl(var(--primary)) !important;
 }
 
-@media screen and (min-width: 1024px) {
-  .wrapper {
-    padding-top: 100px;
-    max-width: 1440px;
-  }
-
-  .columnWrapper {
-    flex-direction: row-reverse;
-    gap: 100px;
-    align-items: flex-start;
-  }
-
-  .rightColumn {
-    width: 60%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .leftColumn {
-    width: 40%;
-  }
-
-  .enterCode {
-    min-height: 50px;
-    padding-right: 20px;
-  }
-
-  .iconNoBGbutton {
-    display: none;
-  }
-
-  .fillButton:hover {
-    background-color: hsl(var(--background));
-    color: hsl(var(--primary));
-  }
-
-  .fillButton.create {
-    min-width: 320px;
-  }
-
-  .strokeButton:hover {
-    background-color: hsl(var(--secondary));
-    border-color: hsl(var(--secondary));
-  }
-}
-
 .conversationForm {
   width: 100%;
   display: flex;
