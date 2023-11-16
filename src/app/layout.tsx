@@ -6,9 +6,10 @@ import {
 } from '@/configs/env.public';
 
 import { AppProvider } from '@/providers/app';
-import { MainLayout } from '@/components/layout/main-layout';
+import { InitializeSessionStore } from '@/stores/initial-session';
 import type { Metadata } from 'next';
 import { Montserrat } from 'next/font/google';
+import { useSessionStore } from '@/stores/session';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -22,13 +23,19 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const sessionId = generateSessionId();
+  useSessionStore.setState({ sessionId });
   return (
     <html lang="en">
       <body className={montserrat.className}>
-        <AppProvider>
-          <MainLayout>{children}</MainLayout>
-        </AppProvider>
+        <InitializeSessionStore sessionId={sessionId} />
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   );
 }
+
+const generateSessionId = () => {
+  const sessionId = Math.random().toString(36).substring(2, 15);
+  return sessionId;
+};

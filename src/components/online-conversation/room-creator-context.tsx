@@ -14,8 +14,8 @@ import { getOnlineConversionInfo } from '@/utils/local-storage';
 type RoomCreatorContext = {
   selectedLanguages: string[];
   setSelectedLanguages: (languages: string[]) => void;
-  userName: string;
-  setUserName: (userName: string) => void;
+  username: string;
+  setUserName: (username: string) => void;
   selectedNativeLanguage: string;
   setSelectedNativeLanguage: (language: string) => void;
   isValid: boolean;
@@ -26,7 +26,7 @@ export const RoomCreatorContext = createContext<RoomCreatorContext>({
   selectedLanguages: [],
   setSelectedLanguages: () => {},
   isValid: false,
-  userName: '',
+  username: '',
   setUserName: () => {},
   selectedNativeLanguage: '',
   setSelectedNativeLanguage: () => {},
@@ -40,25 +40,25 @@ interface RoomCreatorProviderProps extends PropsWithChildren {}
 export const RoomCreatorProvider = ({ children }: RoomCreatorProviderProps) => {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [hasRememberedInfo, setHasRememberedInfo] = useState<boolean>(false);
-  const [userName, setUserName] = useState<string>('');
+  const [username, setUserName] = useState<string>('');
   const [selectedNativeLanguage, setSelectedNativeLanguage] =
     useState<string>('');
 
   const isValid = useMemo(() => {
     return (
       selectedLanguages.length > 1 &&
-      !!userName &&
+      !!username &&
       !!selectedNativeLanguage &&
       selectedLanguages.includes(selectedNativeLanguage)
     );
-  }, [selectedLanguages, userName, selectedNativeLanguage]);
+  }, [selectedLanguages, username, selectedNativeLanguage]);
 
   useEffect(() => {
     const data = getOnlineConversionInfo();
     if (data) {
       setHasRememberedInfo(true);
-      const { userName, selectedLanguages, selectedNativeLanguage } = data;
-      setUserName(userName);
+      const { username, selectedLanguages, selectedNativeLanguage } = data;
+      setUserName(username);
       setSelectedLanguages(selectedLanguages || []);
       setSelectedNativeLanguage(selectedNativeLanguage || '');
     } else {
@@ -72,7 +72,7 @@ export const RoomCreatorProvider = ({ children }: RoomCreatorProviderProps) => {
         selectedLanguages,
         isValid,
         setSelectedLanguages,
-        userName,
+        username,
         setUserName,
         selectedNativeLanguage,
         setSelectedNativeLanguage,
