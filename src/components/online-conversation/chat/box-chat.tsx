@@ -13,12 +13,14 @@ export interface BoxChatProps extends React.HTMLAttributes<HTMLDivElement> {}
 type GroupMessage = {
   messages: MessageType[];
   isMe?: boolean;
+  useTranslate?: boolean;
 };
 
 export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
   (props, ref) => {
     const { sessionId } = useSessionStore();
     const [messages, setMessages] = useState<MessageType[]>([]);
+    const { room, user } = useChat();
 
     const refScroll = useRef<HTMLDivElement>(null);
     const groupMessages = useMemo(() => {
@@ -31,6 +33,8 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
         if (currentGroupMessage.messages.length === 0) {
           currentGroupMessage.messages.push(message);
           currentGroupMessage.isMe = message.sender.socketId === sessionId;
+          currentGroupMessage.useTranslate =
+            message.sender.language !== user.language;
           return;
         }
 
@@ -45,24 +49,22 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
         currentGroupMessage = {
           messages: [message],
           isMe: message.sender.socketId === sessionId,
+          useTranslate: message.sender.language !== user.language,
         };
       });
 
       groupMessages.push(currentGroupMessage);
 
       return groupMessages;
-    }, [messages, sessionId]);
-
-    const { room, user } = useChat();
+    }, [messages, sessionId, user?.language]);
 
     useEffect(() => {
-      pusherClient
-        .subscribe(room.code)
-        .bind('message', (message: MessageType) => {
-          setMessages((messages) => [...messages, message]);
-        });
+      const channel = pusherClient.subscribe(room.code);
+      channel.bind('message', (message: MessageType) => {
+        setMessages((messages) => [...messages, message]);
+      });
       return () => {
-        pusherClient.unsubscribe(room.code);
+        channel.unbind('message');
       };
     }, [room.code, user]);
 
@@ -74,12 +76,6 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
         });
       }
     }, [groupMessages, ref]);
-
-    useEffect(() => {
-      return () => {
-        console.log('leave');
-      };
-    }, [room.code]);
 
     return (
       <div ref={refScroll} className="chatFrame flex-1 gap-5 overflow-y-scroll">

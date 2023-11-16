@@ -1,5 +1,9 @@
 import React from 'react';
-export const useTextAreaResize = (text: string, defaultHeight?: number) => {
+export const useTextAreaResize = (
+  text: string,
+  defaultHeight?: number,
+  refresh?: any,
+) => {
   const textAreaRef = React.useRef<HTMLTextAreaElement>(null);
   const resizeTextArea = () => {
     if (!textAreaRef.current) return;
@@ -8,7 +12,7 @@ export const useTextAreaResize = (text: string, defaultHeight?: number) => {
       : 'auto';
     textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
   };
-  React.useEffect(resizeTextArea, [defaultHeight, text]);
+  React.useEffect(resizeTextArea, [defaultHeight, text, refresh]);
 
   return {
     textAreaRef,

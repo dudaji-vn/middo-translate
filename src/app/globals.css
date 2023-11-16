@@ -121,4 +121,7 @@
   .btn-icon {
     @apply rounded-full p-2.5 active:bg-stroke md:bg-background-darker;
   }
+  .break-word-mt {
+    word-break: break-word;
+  }
 }

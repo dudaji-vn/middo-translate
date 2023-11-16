@@ -6,14 +6,17 @@ import moment from 'moment';
 export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
   isMe?: boolean;
   message: MessageType;
+  useTranslate?: boolean;
 }
 
 export const Message = forwardRef<HTMLDivElement, MessageProps>(
-  ({ isMe, message, ...props }, ref) => {
+  ({ isMe, message, useTranslate = false, ...props }, ref) => {
     return (
       <div className={isMe ? 'receiver' : 'sender'}>
         <div className="cMessageWrapper">
-          <div className="cMessage">{message.content}</div>
+          <div className="cMessage">
+            {useTranslate ? message.translatedContent : message.content}
+          </div>
         </div>
       </div>
     );
@@ -22,9 +25,11 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
 export const GroupMessage = ({
   messages,
   isMe = false,
+  useTranslate = false,
 }: {
   messages: MessageType[];
   isMe?: boolean;
+  useTranslate?: boolean;
 }) => {
   const sender = messages[0].sender;
 
@@ -39,6 +44,7 @@ export const GroupMessage = ({
       </>
     );
 
+  const bg = `bg-[${sender.color}]`;
   return (
     <div className={cn('flex w-full items-end gap-3', isMe && 'justify-end')}>
       {!isMe && (
@@ -46,6 +52,7 @@ export const GroupMessage = ({
           style={{ backgroundColor: sender.color }}
           className={cn(
             'flex h-6 w-6 items-center justify-center rounded-full text-background',
+            bg,
           )}
         >
           {sender.username[0]}
@@ -54,7 +61,12 @@ export const GroupMessage = ({
       <div className="flex flex-col gap-2">
         {!isMe && <div>{messages[0].sender.username}</div>}
         {messages.map((message, index) => (
-          <Message message={message} key={index} isMe={isMe} />
+          <Message
+            useTranslate={useTranslate}
+            message={message}
+            key={index}
+            isMe={isMe}
+          />
         ))}
         <div
           className={cn('text-xs font-light', isMe ? 'ml-auto pr-3' : 'pl-3')}

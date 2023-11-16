@@ -8,10 +8,15 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { redirect, useRouter } from 'next/navigation';
+import {
+  getConversationWithUserSocketId,
+  leaveConversation,
+} from '@/services/conversation';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { getConversation } from '@/services/conversation';
+import { Router } from 'next/router';
+import { pusherClient } from '@/lib/pusher';
+import { useRouter } from 'next/navigation';
 import { useSessionStore } from '@/stores/session';
 
 type ChatContext = {
@@ -28,27 +33,52 @@ export const useChat = () => {
   return useContext(ChatContext);
 };
 interface ChatProviderProps extends PropsWithChildren {
-  room: Room;
+  roomCode: string;
 }
 
-export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
-  const [room, setRoom] = useState<Room>(_room);
+export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
+  const [room, setRoom] = useState<Room | null>(null);
+
   const router = useRouter();
   const { sessionId } = useSessionStore();
-  const user = room.participants.find((user) => user.socketId === sessionId)!;
+  useEffect(() => {
+    getConversationWithUserSocketId(roomCode, sessionId).then((room) => {
+      if (!room) {
+        router.push(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + roomCode);
+        return;
+      }
+      setRoom((prev) => ({ ...prev, ...room }));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roomCode, sessionId]);
 
-  // if (!user) {
-  //   setTimeout(() => {
-  //     redirect(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + room.code);
-  //   }, 1000);
-  //   return null;
-  // }
+  const user = room?.participants.find((user) => user.socketId === sessionId)!;
 
+  useEffect(() => {
+    if (!room?.code) return;
+    const channel = pusherClient.subscribe(room.code);
+    return () => {
+      channel.unsubscribe();
+    };
+  }, [room?.code]);
+
+  useEffect(() => {
+    if (!room?.code || !user?.socketId) return;
+
+    return () => {
+      leaveConversation(room.code, user);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [room?.code, user?.socketId]);
+
+  if (!room) {
+    return null;
+  }
   return (
     <ChatContext.Provider
       value={{
-        room,
         user,
+        room,
       }}
     >
       {children}

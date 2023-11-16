@@ -11,7 +11,6 @@ import {
 
 import { Room } from '@/types/room';
 import { getOnlineConversionInfo } from '@/utils/local-storage';
-import { useSessionStore } from '@/stores/session';
 
 type RoomJoinerContext = {
   username: string;
@@ -47,9 +46,6 @@ export const RoomJoinerProvider = ({
   const [hasRememberedInfo, setHasRememberedInfo] = useState<boolean>(false);
   const [selectedNativeLanguage, setSelectedNativeLanguage] =
     useState<string>('');
-  const { sessionId } = useSessionStore();
-
-  console.log(sessionId);
 
   const isValid = useMemo(() => {
     return !!username && !!selectedNativeLanguage;
@@ -57,7 +53,6 @@ export const RoomJoinerProvider = ({
 
   useEffect(() => {
     const data = getOnlineConversionInfo();
-
     if (data) {
       setHasRememberedInfo(true);
       const { username, selectedNativeLanguage } = data;

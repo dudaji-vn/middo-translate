@@ -33,6 +33,7 @@ export async function joinConversation(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(user),
+      cache: 'no-cache',
     },
   );
   const json = await response.json();
