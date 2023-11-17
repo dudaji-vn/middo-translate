@@ -11,6 +11,8 @@ export type TranslateState = {
   setIsLoading: (isLoading: boolean) => void;
   isEnglishTranslate: boolean;
   setIsEnglishTranslate: (isEnglishTranslate: boolean) => void;
+  textStyle: string;
+  setTextStyle: (textStyle: string) => void;
 };
 
 export const useTranslateStore = create<TranslateState>()((set) => ({
@@ -24,4 +26,6 @@ export const useTranslateStore = create<TranslateState>()((set) => ({
   setIsLoading: (isLoading) => set({ isLoading }),
   isEnglishTranslate: true,
   setIsEnglishTranslate: (isEnglishTranslate) => set({ isEnglishTranslate }),
+  textStyle: '',
+  setTextStyle: (textStyle) => set({ textStyle }),
 }));
