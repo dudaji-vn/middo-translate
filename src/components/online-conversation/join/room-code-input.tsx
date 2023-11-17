@@ -30,6 +30,7 @@ export const RoomCodeInput = forwardRef<HTMLDivElement, RoomCodeInputProps>(
         toast({
           description: 'Room not found!',
         });
+        setIsJoining(false);
       }
     };
     const onNewScanResult = (decodedText: string) => {
