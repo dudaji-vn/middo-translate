@@ -47,6 +47,8 @@ export const InputEditor = (props: InputEditorProps) => {
     targetLanguage: targetLanguage || 'en',
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [typingTimeoutId, setTypingTimeoutId] = useState<NodeJS.Timeout>();
   const [isFocused, setIsFocused] = useState(false);
   const { textAreaRef } = useTextAreaResize(text, 24);
   const { textAreaRef: middleTextAreaRef } = useTextAreaResize(
@@ -59,6 +61,7 @@ export const InputEditor = (props: InputEditorProps) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleSendMessage();
+      setIsTyping(false);
     }
   };
 
@@ -100,20 +103,46 @@ export const InputEditor = (props: InputEditorProps) => {
 
   const isSendAble = useMemo(() => {
     if (!text) return false;
+    if (isTyping) return false;
     if (isLoading) return false;
     if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN && !englishText)
       return false;
     if (sourceLanguage === DEFAULT_LANGUAGES_CODE.EN && !translatedText)
       return false;
+    if (
+      sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+      targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+      !translatedText
+    ) {
+      return false;
+    }
     return true;
   }, [
     text,
+    isTyping,
     isLoading,
     targetLanguage,
     englishText,
     sourceLanguage,
     translatedText,
   ]);
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value);
+    setMiddleText('');
+    if (!isTyping) {
+      setIsTyping(true);
+    }
+
+    if (typingTimeoutId) {
+      clearTimeout(typingTimeoutId);
+    }
+
+    setTypingTimeoutId(
+      setTimeout(() => {
+        setIsTyping(false);
+      }, 1000),
+    );
+  };
 
   useEffect(() => {
     setIsTranslatePopupOpen(isSendAble);
@@ -214,10 +243,7 @@ export const InputEditor = (props: InputEditorProps) => {
             ref={textAreaRef}
             className="max-h-[48px] w-full resize-none appearance-none border-none bg-transparent !text-base focus:border-transparent focus:outline-none focus:ring-0 md:max-h-[96px]"
             value={text}
-            onChange={(e) => {
-              setText(e.target.value);
-              setMiddleText('');
-            }}
+            onChange={handleTextChange}
           />
         </div>
         <div className="inputChatButtonWrapper h-full items-end">
