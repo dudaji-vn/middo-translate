@@ -63,6 +63,11 @@ export const RoomJoinerProvider = ({
     }
   }, []);
 
+  useEffect(() => {
+    if (room.languages.includes(selectedNativeLanguage)) return;
+    setSelectedNativeLanguage('');
+  }, [room.languages, selectedNativeLanguage]);
+
   return (
     <RoomJoinerContext.Provider
       value={{

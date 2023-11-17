@@ -40,7 +40,14 @@ export const SelectNativeLanguage = forwardRef<
         >
           <SelectValue placeholder="Select your native language" />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent
+          ref={(ref) => {
+            if (!ref) return;
+            ref.ontouchstart = (e) => {
+              e.preventDefault();
+            };
+          }}
+        >
           {languages.map((language) => (
             <SelectItem key={language!.code} value={language!.code}>
               {language!.name}

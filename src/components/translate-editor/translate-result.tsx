@@ -10,6 +10,7 @@ import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
+import { useTranslateStore } from '@/stores/translate';
 
 export interface TranslateResultProps {
   result: string;
@@ -24,7 +25,8 @@ export const TranslateResult = ({
   children,
 }: TranslateResultProps) => {
   const { copy } = useTextCopy(result);
-  const textStyle = useAdjustTextStyle(result);
+  const { textStyle } = useTranslateStore();
+
   const { speak } = useTextToSpeech(languageCode, result);
   const isMobile = useIsMobile();
 

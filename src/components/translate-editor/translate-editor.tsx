@@ -48,8 +48,14 @@ export const TranslateEditor = ({
     setIsFocused,
     setIsListening,
     setIsLoading,
+    setTextStyle,
   } = useTranslateStore();
   const textStyles = useAdjustTextStyle(value);
+
+  useEffect(() => {
+    setTextStyle(textStyles);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [textStyles]);
   const debouncedValue = useDebounce<string>(value, 300);
   const pathname = usePathname();
   const { replace } = useRouter();
