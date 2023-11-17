@@ -4,7 +4,7 @@ import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 
 import { GroupMessage } from './message';
 import { Message as MessageType } from '@/types/room';
-import { pusherClient } from '@/lib/pusher';
+import { pusherClient } from '@/lib/pusher-client';
 import { useChat } from './chat-context';
 import { useSessionStore } from '@/stores/session';
 
