@@ -21,7 +21,7 @@ export const SideChat = (props: SideChatProps) => {
       )}
       <div
         className={cn(
-          'flex h-full min-w-[30vw] flex-col gap-3 overflow-y-auto bg-background-darker',
+          'flex h-full min-w-[30vw] flex-col gap-3 overflow-y-auto border-l bg-background-darker',
           isMobile
             ? 'fixed bottom-0 right-0 top-0 w-[80vw] transition-all duration-300'
             : '',
