@@ -24,7 +24,7 @@ const buttonVariants = cva(
         ghost:
           'bg-transparent text-text md:hover:bg-background-darker active:!bg-stroke disabled:!bg-transparent',
         ghostPrimary:
-          'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary disabled:!bg-transparent',
+          'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary disabled:!bg-transparent disabled:!opacity-30',
         link: 'text-primary underline-offset-4 hover:underline',
       },
       shape: {

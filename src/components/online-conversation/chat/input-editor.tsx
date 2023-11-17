@@ -7,6 +7,7 @@ import {
   MicOutline,
   PaperPlaneOutline,
 } from '@easy-eva-icons/react';
+import { useMemo, useState } from 'react';
 
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
@@ -17,7 +18,6 @@ import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import { sendMessage } from '@/services/conversation';
 import { useChat } from './chat-context';
-import { useState } from 'react';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTranslate } from '@/hooks/use-translate';
 
@@ -79,6 +79,7 @@ export const InputEditor = (props: InputEditorProps) => {
       await sendMessage(newMessage, room.code);
       setMiddleText('');
       setText('');
+      handleStopListening();
     }
   };
 
@@ -97,6 +98,23 @@ export const InputEditor = (props: InputEditorProps) => {
     setMiddleText('');
   };
 
+  const isSendAble = useMemo(() => {
+    if (!text) return false;
+    if (isLoading) return false;
+    if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN && !englishText)
+      return false;
+    if (sourceLanguage === DEFAULT_LANGUAGES_CODE.EN && !translatedText)
+      return false;
+    return true;
+  }, [
+    text,
+    isLoading,
+    targetLanguage,
+    englishText,
+    sourceLanguage,
+    translatedText,
+  ]);
+
   return (
     <div className="chatInputWrapper">
       {translatedText && (
@@ -108,7 +126,7 @@ export const InputEditor = (props: InputEditorProps) => {
               height={20}
               width={20}
             />
-            <div className="break-word-mt max-h-[96px] overflow-y-auto">
+            <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
               {translatedText}
             </div>
           </div>
@@ -128,7 +146,7 @@ export const InputEditor = (props: InputEditorProps) => {
             />
             <textarea
               ref={middleTextAreaRef}
-              className="max-h-[96px] w-full  resize-none appearance-none border-none bg-transparent !text-base focus:border-transparent focus:outline-none focus:ring-0"
+              className="max-h-[48px] w-full resize-none  appearance-none border-none bg-transparent !text-base focus:border-transparent focus:outline-none focus:ring-0 md:max-h-[96px]"
               value={middleText}
               onChange={(e) => setMiddleText(e.target.value)}
             />
@@ -162,7 +180,7 @@ export const InputEditor = (props: InputEditorProps) => {
                   width={20}
                 />
 
-                <div className="break-word-mt max-h-[96px] overflow-y-auto">
+                <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
                   {englishText}
                 </div>
               </div>
@@ -190,7 +208,7 @@ export const InputEditor = (props: InputEditorProps) => {
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             ref={textAreaRef}
-            className="max-h-[96px] w-full resize-none appearance-none border-none bg-transparent !text-base focus:border-transparent focus:outline-none focus:ring-0"
+            className="max-h-[48px] w-full resize-none appearance-none border-none bg-transparent !text-base focus:border-transparent focus:outline-none focus:ring-0 md:max-h-[96px]"
             value={text}
             onChange={(e) => {
               setText(e.target.value);
@@ -206,12 +224,15 @@ export const InputEditor = (props: InputEditorProps) => {
               className="self-end"
             >
               <MicOutline
-                className={cn('opacity-60', listening && 'text-primary')}
+                className={cn(
+                  'opacity-60',
+                  listening && 'text-primary opacity-100',
+                )}
               />
             </IconButton>
           )}
           <IconButton
-            disabled={!text}
+            disabled={!isSendAble}
             onClick={handleSendMessage}
             variant="ghostPrimary"
             className="self-end"
