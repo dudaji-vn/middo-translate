@@ -51,6 +51,10 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
       };
     }, []);
 
+    useEffect(() => {
+      if (searchRef.current) searchRef.current?.focus();
+    }, []);
+
     return (
       <div ref={ref} {...props} className="flex h-full flex-col pb-5">
         <div className="px-5 py-5 pt-0 md:mx-auto md:w-[480px] ">
@@ -86,10 +90,9 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                 />
               )}
 
-              <Title>Recently used</Title>
-
               {recentlyUsed.length > 0 && (
                 <>
+                  <Title>Recently used</Title>
                   {recentlyUsed.map((code) => {
                     const language = supportedLanguages.find(
                       (item) => item.code === code,
