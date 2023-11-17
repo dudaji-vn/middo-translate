@@ -19,6 +19,7 @@ export const RoomCodeInput = forwardRef<HTMLDivElement, RoomCodeInputProps>(
     const [code, setCode] = useState<string>('');
     const [isJoining, setIsJoining] = useState<boolean>(false);
     const [showScanner, setShowScanner] = useState<boolean>(false);
+    const [isScanned, setIsScanned] = useState<boolean>(false);
     const { toast } = useToast();
     const router = useRouter();
     const handleJoin = async () => {
@@ -34,10 +35,16 @@ export const RoomCodeInput = forwardRef<HTMLDivElement, RoomCodeInputProps>(
       }
     };
     const onNewScanResult = (decodedText: string) => {
+      if (isScanned) return;
       const isValidCodeUrl = decodedText.includes(
         ROUTE_NAMES.ONLINE_CONVERSATION_JOIN,
       );
       if (isValidCodeUrl) {
+        setIsScanned(true);
+        toast({
+          description: 'Scanned!',
+        });
+
         router.push(decodedText);
       } else {
         toast({

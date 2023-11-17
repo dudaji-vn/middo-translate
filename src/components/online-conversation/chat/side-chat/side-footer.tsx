@@ -16,7 +16,7 @@ export const SideChatFooter = ({ roomCode, user }: SideChatFooterProps) => {
     router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
   };
   return (
-    <div className="">
+    <div className="pb-10">
       <button
         onClick={handleLeaveRoom}
         className="w-full bg-background py-4 text-center font-medium text-error"

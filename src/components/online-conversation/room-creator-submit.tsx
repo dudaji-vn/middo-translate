@@ -61,6 +61,7 @@ export const RoomCreatorSubmit = forwardRef<
       const room: Room = {
         code,
         languages: selectedLanguages,
+        hostSocketId: sessionId,
         participants: [user],
       };
       const newRoom = await createConversation(room);
@@ -82,7 +83,7 @@ export const RoomCreatorSubmit = forwardRef<
   }, [hasRememberedInfo]);
   return (
     <>
-      <div className="formField checkBox -mt-5 mb-5">
+      <div className="formField checkBox -mt-5">
         <input
           checked={isRemember}
           onChange={(e) => setIsRemember(e.target.checked)}

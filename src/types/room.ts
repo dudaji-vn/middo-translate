@@ -1,5 +1,6 @@
 export type Room = {
   code: string;
+  hostSocketId: string;
   languages: string[];
   participants: Participant[];
   messages?: Message[];

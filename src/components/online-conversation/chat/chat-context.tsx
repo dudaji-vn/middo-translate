@@ -24,6 +24,8 @@ type ChatContext = {
   showSideChat: boolean;
   openSideChat: () => void;
   closeSideChat: () => void;
+  isTranslatePopupOpen: boolean;
+  setIsTranslatePopupOpen: (isOpen: boolean) => void;
 };
 
 export const ChatContext = createContext<ChatContext>({
@@ -32,6 +34,8 @@ export const ChatContext = createContext<ChatContext>({
   showSideChat: true,
   openSideChat: () => {},
   closeSideChat: () => {},
+  isTranslatePopupOpen: false,
+  setIsTranslatePopupOpen: () => {},
 });
 
 export const useChat = () => {
@@ -44,6 +48,7 @@ interface ChatProviderProps extends PropsWithChildren {
 export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
   const [room, setRoom] = useState<Room | null>(null);
   const [showSideChat, setShowSideChat] = useState(true);
+  const [isTranslatePopupOpen, setIsTranslatePopupOpen] = useState(false);
 
   const openSideChat = () => {
     setShowSideChat(true);
@@ -111,6 +116,8 @@ export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
         showSideChat,
         openSideChat,
         closeSideChat,
+        isTranslatePopupOpen,
+        setIsTranslatePopupOpen,
       }}
     >
       {children}

@@ -11,6 +11,10 @@ const roomSchema = new mongoose.Schema({
       required: true,
     },
   ],
+  hostSocketId: {
+    type: String,
+    required: true,
+  },
   participants: [
     {
       socketId: {

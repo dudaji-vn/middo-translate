@@ -71,7 +71,7 @@ export const RoomJoinerSubmit = forwardRef<
 
   return (
     <>
-      <div className="formField checkBox -mt-5 mb-5">
+      <div className="formField checkBox -mt-5">
         <input
           checked={isRemember}
           onChange={(e) => setIsRemember(e.target.checked)}
@@ -84,7 +84,7 @@ export const RoomJoinerSubmit = forwardRef<
       <div className="buttonContainer">
         <Button
           disabled={!isValid || isCreating}
-          className="fillButton create"
+          className="fillButton create w-full"
           onClick={handleSubmit}
         >
           Enter room

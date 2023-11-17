@@ -22,8 +22,6 @@ const MAX_LANGUAGES = 2;
 export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
   (props, ref) => {
     const { selectedLanguages, setSelectedLanguages } = useRoomCreator();
-    const [selectedLanguagesNotDefault, setSelectedLanguagesNotDefault] =
-      useState<string[]>([]);
 
     const [isShowSearch, setIsShowSearch] = useState(false);
     const [search, setSearch] = useState('');
@@ -47,6 +45,10 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
       setSearch('');
       searchRef.current?.focus();
     };
+
+    const selectedLanguagesNotDefault = selectedLanguages.filter(
+      (lang) => !Object.values(DEFAULT_LANGUAGES_CODE).includes(lang),
+    );
     return (
       <div ref={ref} {...props}>
         <div className="formField">
@@ -88,20 +90,14 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                   {filterLanguages.map((lang) => {
                     const isSelected = selectedLanguages.includes(lang.code);
                     return (
-                      <div
+                      <button
                         key={lang.code}
                         onClick={() => {
                           setIsShowSearch(false);
                           setSearch('');
-                          const isDefault = Object.values(
-                            DEFAULT_LANGUAGES_CODE,
-                          ).includes(lang.code);
-                          if (!isDefault)
-                            setSelectedLanguagesNotDefault([
-                              ...selectedLanguagesNotDefault,
-                              lang.code,
-                            ]);
-                          if (!isSelected) handleSelect(lang.code);
+                          if (!isSelected) {
+                            handleSelect(lang.code);
+                          }
                         }}
                         className={cn('chip', isSelected && 'active')}
                       >
@@ -112,7 +108,7 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                           width={20}
                         />
                         <span className="chipName">{lang.name}</span>
-                      </div>
+                      </button>
                     );
                   })}
                   {filterLanguages.length === 0 && (
@@ -131,7 +127,7 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                 ],
               )!;
               return (
-                <div
+                <button
                   key={lang.code}
                   onClick={() => handleSelect(lang.code)}
                   className={cn(
@@ -146,18 +142,18 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                     width={20}
                   />
                   <span className="chipName">{lang.name}</span>
-                </div>
+                </button>
               );
             })}
             {selectedLanguagesNotDefault.map((code) => {
               const lang = getLanguageByCode(code || 'en')!;
               const isSelected = selectedLanguages.includes(lang.code);
               return (
-                <div
+                <button
                   key={lang.code}
                   onClick={() => {
                     setIsShowSearch(false);
-                    if (!isSelected) handleSelect(lang.code);
+                    handleSelect(lang.code);
                   }}
                   className={cn('chip', isSelected && 'active')}
                 >
@@ -168,7 +164,7 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                     width={20}
                   />
                   <span className="chipName">{lang.name}</span>
-                </div>
+                </button>
               );
             })}
           </div>

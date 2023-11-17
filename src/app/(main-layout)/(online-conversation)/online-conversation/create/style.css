@@ -17,6 +17,10 @@
   gap: 20px;
 }
 
+.rightColumn {
+  width: 60%;
+}
+
 @media screen and (max-width: 768px) {
   .rightColumn {
     display: none !important;
@@ -247,6 +251,14 @@
 
   .buttonContainer {
     align-items: center;
+  }
+  .buttonContainer button {
+    min-width: 320px;
+  }
+  .columnWrapper {
+    flex-direction: row-reverse;
+    gap: 100px;
+    align-items: flex-start;
   }
 }
 

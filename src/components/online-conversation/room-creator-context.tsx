@@ -66,6 +66,11 @@ export const RoomCreatorProvider = ({ children }: RoomCreatorProviderProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (selectedLanguages.includes(selectedNativeLanguage)) return;
+    setSelectedNativeLanguage(selectedLanguages[0] || '');
+  }, [selectedLanguages, selectedNativeLanguage]);
+
   return (
     <RoomCreatorContext.Provider
       value={{
