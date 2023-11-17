@@ -70,7 +70,7 @@ export const TranslateMiddleEditor = ({
         variant="ghost"
         className="btn-icon absolute right-3 top-3"
       >
-        <CloseCircleOutline />
+        <CloseCircleOutline className="opacity-60" />
       </IconButton>
       <div className="flex justify-end">
         <IconButton disabled={!value} onClick={handleDone} variant="success">

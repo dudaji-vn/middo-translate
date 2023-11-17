@@ -61,15 +61,13 @@ export const TranslateMiddle = ({
         />
         <div className="flex-1 overflow-hidden">{highlightedText}</div>
       </div>
-      {!isMatch && !isEdit && (
-        <div className="mt-2 flex justify-end">
-          {type === 'edit' ? (
-            <EditButton onClick={editUnMatch} />
-          ) : (
-            <AcceptButton onClick={acceptUnMatch} />
-          )}
-        </div>
-      )}
+      <div className="mt-2 flex justify-end">
+        {type === 'edit' ? (
+          <EditButton onClick={editUnMatch} />
+        ) : (
+          <>{!isMatch && !isEdit && <AcceptButton onClick={acceptUnMatch} />}</>
+        )}
+      </div>
     </div>
   );
 };

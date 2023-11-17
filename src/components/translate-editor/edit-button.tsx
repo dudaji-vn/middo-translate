@@ -8,8 +8,8 @@ export interface EditButtonProps
 export const EditButton = forwardRef<HTMLButtonElement, EditButtonProps>(
   (props, ref) => {
     return (
-      <IconButton ref={ref} {...props}>
-        <Edit2Outline />
+      <IconButton variant="ghost" ref={ref} {...props}>
+        <Edit2Outline opacity={0.6} />
       </IconButton>
     );
   },
