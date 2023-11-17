@@ -14,6 +14,11 @@ export async function getSupportLanguages() {
 export async function translateText(text: string, from?: string, to?: string) {
   if (!text || !from || !to || from === 'auto' || to === 'auto') return '';
 
+  // if not in supported languages, return text
+  const isFromSupported = supportedLanguages.some((lang) => lang.code === from);
+  const isToSupported = supportedLanguages.some((lang) => lang.code === to);
+  if (!isFromSupported || !isToSupported) return text;
+
   if (from === to) return text;
 
   const response = await fetch(
