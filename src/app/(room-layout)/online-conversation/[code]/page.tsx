@@ -20,9 +20,9 @@ export default async function RoomConversation({
 }: RoomConversationProps) {
   return (
     <ChatProvider roomCode={params.code}>
-      <div className="chatScreenWrapper">
+      <div className="chatScreenWrapper h-screen overflow-hidden">
         <Header />
-        <div className="chatElementWrapper">
+        <div className="chatElementWrapper flex-1 overflow-hidden">
           <div className="chat">
             <BoxChat />
             <InputEditor />
