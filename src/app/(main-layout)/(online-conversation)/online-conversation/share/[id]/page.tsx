@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import QRCode from 'react-qr-code';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { ShareZone } from '@/components/share-zone';
 import { getConversation } from '@/services/conversation';
 
 interface SharingProps {
@@ -42,11 +43,13 @@ export default async function Sharing({ params }: SharingProps) {
             />
           </div>
           <div className="circleButtonWrapper">
-            <CopyZone text={'Join my conversation at: ' + link}>
+            {/* <CopyZone text={'Join my conversation at: ' + link}> */}
+            <ShareZone text={link}>
               <IconButton variant="secondary">
                 <Share />
               </IconButton>
-            </CopyZone>
+            </ShareZone>
+            {/* </CopyZone> */}
             Share through link
           </div>
           <div className="buttonContainer">
