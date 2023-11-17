@@ -14,19 +14,24 @@ import {
 } from '@/services/conversation';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { Router } from 'next/router';
-import { pusherClient } from '@/lib/pusher';
+import { pusherClient } from '@/lib/pusher-client';
 import { useRouter } from 'next/navigation';
 import { useSessionStore } from '@/stores/session';
 
 type ChatContext = {
   room: Room;
   user: Participant;
+  showSideChat: boolean;
+  openSideChat: () => void;
+  closeSideChat: () => void;
 };
 
 export const ChatContext = createContext<ChatContext>({
   room: {} as Room,
   user: {} as Participant,
+  showSideChat: true,
+  openSideChat: () => {},
+  closeSideChat: () => {},
 });
 
 export const useChat = () => {
@@ -38,6 +43,15 @@ interface ChatProviderProps extends PropsWithChildren {
 
 export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
   const [room, setRoom] = useState<Room | null>(null);
+  const [showSideChat, setShowSideChat] = useState(true);
+
+  const openSideChat = () => {
+    setShowSideChat(true);
+  };
+
+  const closeSideChat = () => {
+    setShowSideChat(false);
+  };
 
   const router = useRouter();
   const { sessionId } = useSessionStore();
@@ -79,6 +93,9 @@ export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
       value={{
         user,
         room,
+        showSideChat,
+        openSideChat,
+        closeSideChat,
       }}
     >
       {children}
