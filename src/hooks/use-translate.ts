@@ -3,6 +3,7 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { useEffect, useState } from 'react';
 
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { translateText } from '@/services/languages';
 import { useDebounce } from 'usehooks-ts';
 
@@ -18,6 +19,8 @@ export const useTranslate = ({
   const [englishText, setEnglishText] = useState('');
   const [translatedEnglishText, setTranslatedEnglishText] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [middleText, setMiddleText] = useState('');
 
   const debounceValue = useDebounce(text, 500);
@@ -26,14 +29,38 @@ export const useTranslate = ({
     if (middleText) return;
     if (debounceValue) {
       const translate = async () => {
+        setIsLoading(true);
+        if (sourceLanguage === DEFAULT_LANGUAGES_CODE.EN) {
+          const result = await translateText(
+            debounceValue,
+            sourceLanguage,
+            targetLanguage,
+          );
+          setTranslatedText(result);
+          setIsLoading(false);
+
+          return;
+        }
+
+        if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN) {
+          const result = await translateText(
+            debounceValue,
+            sourceLanguage,
+            targetLanguage,
+          );
+          setEnglishText(result);
+          setIsLoading(false);
+
+          return;
+        }
         const englishText = await translateText(
           debounceValue,
           sourceLanguage,
-          'en',
+          DEFAULT_LANGUAGES_CODE.EN,
         );
         const translatedFromEnglish = await translateText(
           englishText,
-          'en',
+          DEFAULT_LANGUAGES_CODE.EN,
           targetLanguage,
         );
         setEnglishText(englishText);
@@ -51,6 +78,7 @@ export const useTranslate = ({
         // ]);
         // setEnglishText(sourceEnglish);
         // setTranslatedEnglishText(targetEnglish);
+        setIsLoading(false);
       };
       translate();
     } else {
@@ -114,5 +142,6 @@ export const useTranslate = ({
     listening,
     interimTranscript,
     handleStopListening,
+    isLoading,
   };
 };

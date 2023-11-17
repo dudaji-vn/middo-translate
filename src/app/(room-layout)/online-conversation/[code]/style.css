@@ -13,11 +13,11 @@
   justify-content: space-between;
   align-items: center;
   color: hsl(var(--background));
-  height: 7vh;
+  height: 9vh;
 }
 
 .chat {
-  height: 93vh;
+  height: 91vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

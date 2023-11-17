@@ -9,8 +9,10 @@ import {
 } from '@easy-eva-icons/react';
 
 import { CircleFlag } from 'react-circle-flags';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { IconButton } from '@/components/button';
 import { Message } from '@/types/room';
+import { SvgSpinners270RingWithBg } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import { sendMessage } from '@/services/conversation';
@@ -39,6 +41,7 @@ export const InputEditor = (props: InputEditorProps) => {
     handleStartListening,
     handleStopListening,
     listening,
+    isLoading,
   } = useTranslate({
     sourceLanguage,
     targetLanguage: targetLanguage || 'en',
@@ -60,19 +63,23 @@ export const InputEditor = (props: InputEditorProps) => {
   };
 
   const handleSendMessage = async () => {
-    if (!text || !translatedText) return;
-    const newMessage: Message = {
-      sender: user,
-      content: text,
-      translatedContent: translatedText,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      isSystem: false,
-    };
+    if (englishText || translatedText) {
+      const newMessage: Message = {
+        sender: user,
+        content: text,
+        translatedContent:
+          targetLanguage === DEFAULT_LANGUAGES_CODE.EN
+            ? englishText
+            : translatedText,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        isSystem: false,
+      };
 
-    await sendMessage(newMessage, room.code);
-    setMiddleText('');
-    setText('');
+      await sendMessage(newMessage, room.code);
+      setMiddleText('');
+      setText('');
+    }
   };
 
   const handleSubmitEdit = () => {
@@ -209,7 +216,11 @@ export const InputEditor = (props: InputEditorProps) => {
             variant="ghostPrimary"
             className="self-end"
           >
-            <PaperPlaneOutline />
+            {isLoading ? (
+              <SvgSpinners270RingWithBg className="text-primary" />
+            ) : (
+              <PaperPlaneOutline />
+            )}
           </IconButton>
         </div>
       </div>
