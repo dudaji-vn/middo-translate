@@ -25,162 +25,171 @@ export interface LanguagesControlBarProps
 export const LanguagesControlBar = forwardRef<
   HTMLDivElement,
   LanguagesControlBarProps
->(({targetResult, source:_source, target:_target, detect, ...props}, ref) => {
-  const isMobile = useIsMobile();
-  const [currentSelect, setCurrentSelect] = useState<
-    'source' | 'target' | 'none'
-  >('none');
-  const { searchParams, setParams } = useSetParams();
-  const { setValue } = useTranslateStore();
-  const source = getCountryCode(searchParams.get('source'), true);
-  const target = getCountryCode(
-    searchParams.get('target') || DEFAULT_LANGUAGES_CODE.EN,
-  );
+>(
+  (
+    { targetResult, source: _source, target: _target, detect, ...props },
+    ref,
+  ) => {
+    const isMobile = useIsMobile();
+    const [currentSelect, setCurrentSelect] = useState<
+      'source' | 'target' | 'none'
+    >('none');
+    const { searchParams, setParams } = useSetParams();
+    const { setValue } = useTranslateStore();
+    const source = getCountryCode(searchParams.get('source'), true);
+    const target = getCountryCode(
+      searchParams.get('target') || DEFAULT_LANGUAGES_CODE.EN,
+    );
 
-  const handleSwap = () => {
-    if (!source || !target) return;
-    const newParams = [
-      {
-        key: 'source',
-        value: target,
-      },
-      {
-        key: 'target',
-        value: source,
-      },
-    ];
-    if (targetResult) {
-      setValue(targetResult);
-      newParams.push({
-        key: 'query',
-        value: targetResult,
-      });
-    }
-    setParams(newParams);
-  };
+    const handleSwap = () => {
+      if (!_source || !_target) return;
+      const newParams = [
+        {
+          key: 'source',
+          value: _target,
+        },
+        {
+          key: 'target',
+          value: _source,
+        },
+      ];
+      if (targetResult) {
+        setValue(targetResult);
+        newParams.push({
+          key: 'query',
+          value: targetResult,
+        });
+      }
+      setParams(newParams);
+    };
 
-  const handleSelect = (code: string) => {
-    setCurrentSelect('none');
-    if (currentSelect === 'source') {
-      if (code === searchParams.get('target')) {
+    const handleSelect = (code: string) => {
+      setCurrentSelect('none');
+      if (currentSelect === 'source') {
+        if (code === searchParams.get('target')) {
+          handleSwap();
+          return;
+        }
+        setParams([
+          {
+            key: 'source',
+            value: code,
+          },
+        ]);
+        return;
+      }
+      if (code === searchParams.get('source')) {
         handleSwap();
         return;
       }
       setParams([
         {
-          key: 'source',
+          key: 'target',
           value: code,
         },
       ]);
-      return;
-    }
-    if (code === searchParams.get('source')) {
-      handleSwap();
-      return;
-    }
-    setParams([
-      {
-        key: 'target',
-        value: code,
-      },
-    ]);
-  };
+    };
 
-  useEffect(() => {
-    const newParams = [];
-    if (!searchParams.get('source')) {
-      newParams.push({
-        key: 'source',
-        value: 'auto',
-      });
-    }
-    if (!searchParams.get('target')) {
-      newParams.push({
-        key: 'target',
-        value: DEFAULT_LANGUAGES_CODE.EN,
-      });
-    }
+    useEffect(() => {
+      const newParams = [];
+      if (!searchParams.get('source')) {
+        newParams.push({
+          key: 'source',
+          value: 'auto',
+        });
+      }
+      if (!searchParams.get('target')) {
+        newParams.push({
+          key: 'target',
+          value: DEFAULT_LANGUAGES_CODE.EN,
+        });
+      }
 
-    if (detect) {
-      newParams.push({
-        key: 'detect',
-        value: detect,
-      });
-    }
+      if (detect) {
+        newParams.push({
+          key: 'detect',
+          value: detect,
+        });
+      }
 
-    if (newParams.length > 0) {
-      setParams(newParams);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, detect]);
+      if (newParams.length > 0) {
+        setParams(newParams);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchParams, detect]);
 
-  return (
-    <div
-      ref={ref}
-      {...props}
-      className={cn('flex w-full justify-center gap-5', props.className)}
-    >
-      <div className="flex flex-1 justify-end">
-        <Select>
-          <SelectTrigger
-            className="gap-2.5"
-            onClick={() => {
-              setCurrentSelect('source');
-            }}
-          >
-            {source && source !== 'auto' ? (
-              <>
-                <CircleFlag countryCode={source} height={20} width={20} />
-              </>
-            ) : (
-              <>
-                <Globe2Outline className="h-5 w-5 text-primary" />
-                <>{!isMobile && 'Detect language'}</>
-              </>
-            )}
-            {!isMobile &&
-              getLanguageByCode(searchParams.get('source') as string)?.name}
-          </SelectTrigger>
-        </Select>
-      </div>
-      <button
-        onClick={handleSwap}
-        className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full p-2.5 transition-all duration-200 active:bg-stroke md:hover:bg-background-darker"
+    return (
+      <div
+        ref={ref}
+        {...props}
+        className={cn('flex w-full justify-center gap-5', props.className)}
       >
-        <Swap />
-      </button>
-      <div className="flex flex-1 justify-start">
-        <Select>
-          <SelectTrigger
-            className="gap-2.5"
-            onClick={() => {
-              setCurrentSelect('target');
-            }}
-          >
-            <CircleFlag countryCode={target as string} height={20} width={20} />
-            {!isMobile &&
-              getLanguageByCode(searchParams.get('target') as string)?.name}
-          </SelectTrigger>
-        </Select>
-      </div>
-
-      {currentSelect !== 'none' && (
-        <div className="fixed left-0 z-20 h-full w-full bg-background">
-          <BackLayout
-            title="Select language"
-            onBack={() => {
-              setCurrentSelect('none');
-            }}
-          >
-            <ListLanguages
-              allowDetect={currentSelect === 'source'}
-              onSelected={handleSelect}
-              selectedCode={searchParams.get(currentSelect) as string}
-            />
-          </BackLayout>
+        <div className="flex flex-1 justify-end">
+          <Select>
+            <SelectTrigger
+              className="gap-2.5"
+              onClick={() => {
+                setCurrentSelect('source');
+              }}
+            >
+              {source && source !== 'auto' ? (
+                <>
+                  <CircleFlag countryCode={source} height={20} width={20} />
+                </>
+              ) : (
+                <>
+                  <Globe2Outline className="h-5 w-5 text-primary" />
+                  <>{!isMobile && 'Detect language'}</>
+                </>
+              )}
+              {!isMobile &&
+                getLanguageByCode(searchParams.get('source') as string)?.name}
+            </SelectTrigger>
+          </Select>
         </div>
-      )}
-    </div>
-  );
-});
+        <button
+          onClick={handleSwap}
+          className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full p-2.5 transition-all duration-200 active:bg-stroke md:hover:bg-background-darker"
+        >
+          <Swap />
+        </button>
+        <div className="flex flex-1 justify-start">
+          <Select>
+            <SelectTrigger
+              className="gap-2.5"
+              onClick={() => {
+                setCurrentSelect('target');
+              }}
+            >
+              <CircleFlag
+                countryCode={target as string}
+                height={20}
+                width={20}
+              />
+              {!isMobile &&
+                getLanguageByCode(searchParams.get('target') as string)?.name}
+            </SelectTrigger>
+          </Select>
+        </div>
+
+        {currentSelect !== 'none' && (
+          <div className="fixed left-0 z-20 h-full w-full bg-background">
+            <BackLayout
+              title="Select language"
+              onBack={() => {
+                setCurrentSelect('none');
+              }}
+            >
+              <ListLanguages
+                allowDetect={currentSelect === 'source'}
+                onSelected={handleSelect}
+                selectedCode={searchParams.get(currentSelect) as string}
+              />
+            </BackLayout>
+          </div>
+        )}
+      </div>
+    );
+  },
+);
 LanguagesControlBar.displayName = 'LanguagesControlBar';
