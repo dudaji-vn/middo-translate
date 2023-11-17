@@ -55,7 +55,7 @@ export const TranslateMiddleEditor = ({
   };
 
   return (
-    <div className="translateTextWrapper relative">
+    <div className="translateTextWrapper relative flex items-stretch gap-3">
       <textarea
         value={value}
         ref={textAreaRef}
@@ -65,17 +65,19 @@ export const TranslateMiddleEditor = ({
         className={cn('inputTranslate  bg-transparent')}
         placeholder="hello"
       />
-      <IconButton
-        onClick={handleCancel}
-        variant="ghost"
-        className="btn-icon absolute right-3 top-3"
-      >
-        <CloseCircleOutline className="opacity-60" />
-      </IconButton>
-      <div className="flex justify-end">
-        <IconButton disabled={!value} onClick={handleDone} variant="success">
-          <CheckmarkCircle2Outline />
+      <div className="flex flex-col justify-between">
+        <IconButton
+          onClick={handleCancel}
+          variant="ghost"
+          className="btn-icon -mt-3"
+        >
+          <CloseCircleOutline className="opacity-60" />
         </IconButton>
+        <div className="">
+          <IconButton disabled={!value} onClick={handleDone} variant="success">
+            <CheckmarkCircle2Outline />
+          </IconButton>
+        </div>
       </div>
     </div>
   );

@@ -41,7 +41,10 @@ export const LanguagesControlBar = forwardRef<
       searchParams.get('target') || DEFAULT_LANGUAGES_CODE.EN,
     );
 
+    const [canClick, setCanClick] = useState(true);
+
     const handleSwap = () => {
+      if (!canClick) return;
       if (!_source || !_target) return;
       const newParams = [
         {
@@ -54,7 +57,11 @@ export const LanguagesControlBar = forwardRef<
         },
       ];
       if (targetResult) {
-        setValue(targetResult);
+        setCanClick(false);
+        setTimeout(() => {
+          setValue(targetResult);
+          setCanClick(true);
+        }, 500);
         newParams.push({
           key: 'query',
           value: targetResult,
