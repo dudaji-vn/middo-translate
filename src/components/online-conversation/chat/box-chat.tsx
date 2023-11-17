@@ -20,7 +20,7 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
   (props, ref) => {
     const { sessionId } = useSessionStore();
     const [messages, setMessages] = useState<MessageType[]>([]);
-    const { room, user } = useChat();
+    const { room, user, isTranslatePopupOpen } = useChat();
 
     const refScroll = useRef<HTMLDivElement>(null);
     const groupMessages = useMemo(() => {
@@ -72,13 +72,14 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
       if (refScroll?.current) {
         refScroll.current.scrollTo({
           top: refScroll.current.scrollHeight,
-          behavior: 'smooth',
+          // behavior: isTranslatePopupOpen ? 'instant' : 'smooth',
+          behavior: 'instant',
         });
       }
-    }, [groupMessages, ref]);
+    }, [groupMessages, ref, isTranslatePopupOpen]);
 
     return (
-      <div ref={refScroll} className="chatFrame flex-1 gap-5 overflow-y-scroll">
+      <div ref={refScroll} className="chatFrame flex-1 gap-5 overflow-y-auto">
         {groupMessages.map((groupMessage, index) => (
           <GroupMessage key={index} {...groupMessage} />
         ))}

@@ -7,7 +7,7 @@ import {
   MicOutline,
   PaperPlaneOutline,
 } from '@easy-eva-icons/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
@@ -24,7 +24,7 @@ import { useTranslate } from '@/hooks/use-translate';
 export interface InputEditorProps {}
 
 export const InputEditor = (props: InputEditorProps) => {
-  const { room, user } = useChat();
+  const { room, user, setIsTranslatePopupOpen } = useChat();
   const sourceLanguage = user.language;
   const targetLanguage = room.languages.find(
     (language) => language !== user.language,
@@ -114,6 +114,10 @@ export const InputEditor = (props: InputEditorProps) => {
     sourceLanguage,
     translatedText,
   ]);
+
+  useEffect(() => {
+    setIsTranslatePopupOpen(isSendAble);
+  }, [isSendAble]);
 
   return (
     <div className="chatInputWrapper">
