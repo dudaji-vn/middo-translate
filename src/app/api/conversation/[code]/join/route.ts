@@ -2,7 +2,7 @@ import { Message, Participant } from '@/types/room';
 
 import Room from '@/database/models/room';
 import { connect } from '@/database/connect';
-import { pusherServer } from '@/lib/pusher';
+import { pusherServer } from '@/lib/pusher-server';
 
 export async function PATCH(
   request: Request,
@@ -29,6 +29,7 @@ export async function PATCH(
     isSystem: true,
   };
   pusherServer.trigger(code, 'message', message);
+  pusherServer.trigger(code, 'member_join', user);
   return Response.json({
     data: newRoom,
   });
