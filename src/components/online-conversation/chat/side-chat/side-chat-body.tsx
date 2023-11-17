@@ -27,11 +27,9 @@ export const SideChatBody = ({ room }: SideChatBodyProps) => {
     };
   }, [room.code]);
 
-  console.log('members', members);
-
   return (
     <div className="bg-background">
-      <MemberList hostSocketId="dszwk6tl5z" members={members} />
+      <MemberList hostSocketId={room.hostSocketId} members={members} />
     </div>
   );
 };
