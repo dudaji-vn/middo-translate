@@ -43,7 +43,6 @@ export const LanguagesControlBar = forwardRef<
 
     const handleSwap = () => {
       if (!_source || !_target) return;
-      console.log(_source, _target);
       const newParams = [
         {
           key: 'source',

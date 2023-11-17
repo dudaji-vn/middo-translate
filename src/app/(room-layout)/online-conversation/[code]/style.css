@@ -13,11 +13,10 @@
   justify-content: space-between;
   align-items: center;
   color: hsl(var(--background));
-  height: 9vh;
+  height: 60px;
 }
 
 .chat {
-  height: 91vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -197,7 +196,6 @@
 
 @media screen and (min-width: 1024px) {
   .chatNavigation {
-    height: 7vh;
   }
 
   .moreChatButton {

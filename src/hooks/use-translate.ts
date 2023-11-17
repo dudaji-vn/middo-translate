@@ -94,6 +94,7 @@ export const useTranslate = ({
       translateText(text, 'en', targetLanguage),
     ]);
     setText(sourceResult);
+    if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN) return;
     setTranslatedText(targetResult);
   };
 
@@ -104,8 +105,7 @@ export const useTranslate = ({
     }
   };
 
-  const { listening, interimTranscript, finalTranscript } =
-    useSpeechRecognition();
+  const { listening, interimTranscript } = useSpeechRecognition();
 
   const handleStartListening = () => {
     setText('');
