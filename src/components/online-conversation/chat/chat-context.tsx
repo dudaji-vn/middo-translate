@@ -85,9 +85,24 @@ export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room?.code, user?.socketId]);
 
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      // We execute the same script as before
+      let vh = window.innerHeight * 0.01;
+      const element = document.getElementsByClassName('chatScreenWrapper')[0];
+      if (!element) return;
+      element.setAttribute('style', `height: calc(${vh}px * 100)`);
+      // document.documentElement.style.setProperty('--vh', `${vh}px`);
+    });
+    return () => {
+      window.removeEventListener('resize', () => {});
+    };
+  }, []);
+
   if (!room) {
     return null;
   }
+
   return (
     <ChatContext.Provider
       value={{
