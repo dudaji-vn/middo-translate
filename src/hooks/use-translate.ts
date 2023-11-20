@@ -10,9 +10,11 @@ import { useDebounce } from 'usehooks-ts';
 export const useTranslate = ({
   sourceLanguage,
   targetLanguage,
+  listenMode = 'continuous',
 }: {
   sourceLanguage: string;
   targetLanguage: string;
+  listenMode?: 'continuous' | 'manual';
 }) => {
   const [text, setText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
@@ -111,7 +113,7 @@ export const useTranslate = ({
     setText('');
     SpeechRecognition.startListening({
       language: sourceLanguage,
-      continuous: true,
+      continuous: listenMode === 'continuous',
       interimResults: true,
     });
   };
