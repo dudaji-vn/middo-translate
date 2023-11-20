@@ -72,7 +72,8 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                       setIsOpened(true);
                     }}
                     onMouseLeave={() => {
-                      if (isMobile) return setIsOpened(false);
+                      if (isMobile) return;
+                      setIsOpened(false);
                     }}
                     onClick={() => {
                       if (!isMobile) return;
