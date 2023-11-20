@@ -18,6 +18,7 @@ import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import { sendMessage } from '@/services/conversation';
 import { useChat } from './chat-context';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTranslate } from '@/hooks/use-translate';
 
@@ -25,6 +26,7 @@ export interface InputEditorProps {}
 
 export const InputEditor = (props: InputEditorProps) => {
   const { room, user, setIsTranslatePopupOpen } = useChat();
+  const isMobile = useIsMobile();
   const sourceLanguage = user.language;
   const targetLanguage = room.languages.find(
     (language) => language !== user.language,
@@ -45,6 +47,7 @@ export const InputEditor = (props: InputEditorProps) => {
   } = useTranslate({
     sourceLanguage,
     targetLanguage: targetLanguage || 'en',
+    listenMode: 'continuous',
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -146,6 +149,7 @@ export const InputEditor = (props: InputEditorProps) => {
 
   useEffect(() => {
     setIsTranslatePopupOpen(isSendAble);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSendAble]);
 
   return (
@@ -261,18 +265,20 @@ export const InputEditor = (props: InputEditorProps) => {
               />
             </IconButton>
           )}
-          <IconButton
-            disabled={!isSendAble}
-            onClick={handleSendMessage}
-            variant="ghostPrimary"
-            className="self-end"
-          >
-            {isLoading ? (
-              <SvgSpinners270RingWithBg className="text-primary" />
-            ) : (
-              <PaperPlaneOutline />
-            )}
-          </IconButton>
+          {!listening && (
+            <IconButton
+              disabled={!isSendAble}
+              onClick={handleSendMessage}
+              variant="ghostPrimary"
+              className="self-end"
+            >
+              {isLoading ? (
+                <SvgSpinners270RingWithBg className="text-primary" />
+              ) : (
+                <PaperPlaneOutline />
+              )}
+            </IconButton>
+          )}
         </div>
       </div>
     </div>

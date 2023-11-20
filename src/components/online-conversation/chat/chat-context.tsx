@@ -97,7 +97,6 @@ export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
       const element = document.getElementsByClassName('chatScreenWrapper')[0];
       if (!element) return;
       element.setAttribute('style', `height: calc(${vh}px * 100)`);
-      // document.documentElement.style.setProperty('--vh', `${vh}px`);
     });
     return () => {
       window.removeEventListener('resize', () => {});
