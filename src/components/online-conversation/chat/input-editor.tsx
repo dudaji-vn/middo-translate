@@ -47,7 +47,7 @@ export const InputEditor = (props: InputEditorProps) => {
   } = useTranslate({
     sourceLanguage,
     targetLanguage: targetLanguage || 'en',
-    listenMode: isMobile ? 'manual' : 'continuous',
+    listenMode: 'continuous',
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -265,18 +265,20 @@ export const InputEditor = (props: InputEditorProps) => {
               />
             </IconButton>
           )}
-          <IconButton
-            disabled={!isSendAble}
-            onClick={handleSendMessage}
-            variant="ghostPrimary"
-            className="self-end"
-          >
-            {isLoading ? (
-              <SvgSpinners270RingWithBg className="text-primary" />
-            ) : (
-              <PaperPlaneOutline />
-            )}
-          </IconButton>
+          {!listening && (
+            <IconButton
+              disabled={!isSendAble}
+              onClick={handleSendMessage}
+              variant="ghostPrimary"
+              className="self-end"
+            >
+              {isLoading ? (
+                <SvgSpinners270RingWithBg className="text-primary" />
+              ) : (
+                <PaperPlaneOutline />
+              )}
+            </IconButton>
+          )}
         </div>
       </div>
     </div>

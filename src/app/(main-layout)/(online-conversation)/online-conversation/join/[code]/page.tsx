@@ -6,8 +6,8 @@ import {
   SelectNativeLanguage,
   UsernameInput,
 } from '@/components/online-conversation/join';
-import { ROUTE_NAMES } from '@/configs/route-name';
 
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { getConversation } from '@/services/conversation';
 import { redirect } from 'next/navigation';
 
@@ -20,7 +20,7 @@ interface CreateProps {
 export default async function Create(props: CreateProps) {
   const room = await getConversation(props.params.code);
   if (!room) {
-    redirect(ROUTE_NAMES.ONLINE_CONVERSATION)
+    redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
   }
   return (
     <RoomJoinerProvider room={room}>
@@ -34,7 +34,7 @@ export default async function Create(props: CreateProps) {
               <div className="conversationForm">
                 <FormTitle>Join conversation</FormTitle>
                 <div className="formSection mb-0">
-                  <FormField label="     ">
+                  <FormField label="Name">
                     <UsernameInput />
                   </FormField>
                   <FormField label="Language">

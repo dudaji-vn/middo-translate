@@ -1,10 +1,15 @@
 'use client';
 
-import { CloseCircleOutline, Search } from '@easy-eva-icons/react';
+import {
+  AlertCircleOutline,
+  CloseCircleOutline,
+  Search,
+} from '@easy-eva-icons/react';
 import {
   DEFAULT_LANGUAGES_CODE,
   supportedLanguages,
 } from '@/configs/default-language';
+import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import React, { forwardRef, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
@@ -12,6 +17,7 @@ import { CircleFlag } from 'react-circle-flags';
 import { IconButton } from '../button';
 import { Input } from '../input';
 import { cn } from '@/utils/cn';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useRoomCreator } from './room-creator-context';
 
 export interface SelectLanguagesProps
@@ -22,6 +28,8 @@ const MAX_LANGUAGES = 2;
 export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
   (props, ref) => {
     const { selectedLanguages, setSelectedLanguages } = useRoomCreator();
+    const [isOpened, setIsOpened] = useState(false);
+    const isMobile = useIsMobile();
 
     const [isShowSearch, setIsShowSearch] = useState(false);
     const [search, setSearch] = useState('');
@@ -53,14 +61,41 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
       <div ref={ref} {...props}>
         <div className="formField">
           <label className="label">
-            Room&apos;s language
+            <span>
+              Room&apos;s languages{' '}
+              <Popover open={isOpened}>
+                <PopoverTrigger asChild>
+                  <button
+                    className="px-2"
+                    onMouseEnter={() => {
+                      if (isMobile) return;
+                      setIsOpened(true);
+                    }}
+                    onMouseLeave={() => {
+                      if (isMobile) return setIsOpened(false);
+                    }}
+                    onClick={() => {
+                      if (!isMobile) return;
+                      setIsOpened(!isOpened);
+                    }}
+                  >
+                    <AlertCircleOutline className="inline-block h-5 w-5 text-primary" />
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-fit p-3">
+                  <span className="font-light">
+                    Choose {MAX_LANGUAGES} languages for your room.
+                  </span>
+                </PopoverContent>
+              </Popover>
+            </span>
             <div className="languageCounter">
               <div className="selectedCount">{selectedLanguages.length}</div>
               <div className="defaultCount">/{MAX_LANGUAGES}</div>
             </div>
           </label>
 
-          <div className="relative">
+          <div className="relative mt-2">
             <Input
               ref={searchRef}
               onFocus={() => setIsShowSearch(true)}
