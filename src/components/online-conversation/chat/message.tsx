@@ -1,4 +1,5 @@
 import { Message as MessageType } from '@/types/room';
+import { TriangleSmall } from '@/components/icons/triangle-small';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 import moment from 'moment';
@@ -7,15 +8,31 @@ export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
   isMe?: boolean;
   message: MessageType;
   useTranslate?: boolean;
+  isShowFull?: boolean;
 }
 
 export const Message = forwardRef<HTMLDivElement, MessageProps>(
-  ({ isMe, message, useTranslate = false, ...props }, ref) => {
+  (
+    { isMe, message, useTranslate = false, isShowFull = false, ...props },
+    ref,
+  ) => {
     return (
       <div className={isMe ? 'receiver' : 'sender'}>
         <div className="cMessageWrapper">
           <div className="cMessage">
             {useTranslate ? message.translatedContent : message.content}
+            {isShowFull && message.englishContent && (
+              <div className="relative mt-2">
+                <TriangleSmall
+                  fill="white"
+                  position="top"
+                  className="absolute left-2 top-0 -translate-y-full"
+                />
+                <div className="mt-2 rounded-lg bg-background p-1 px-2 text-sm font-light italic">
+                  {message.englishContent}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -26,10 +43,12 @@ export const GroupMessage = ({
   messages,
   isMe = false,
   useTranslate = false,
+  isShowFull = false,
 }: {
   messages: MessageType[];
   isMe?: boolean;
   useTranslate?: boolean;
+  isShowFull?: boolean;
 }) => {
   const sender = messages[0].sender;
 
@@ -59,9 +78,14 @@ export const GroupMessage = ({
         </div>
       )}
       <div className="flex flex-col gap-2">
-        {!isMe && <div>{messages[0].sender.username}</div>}
+        {!isMe && (
+          <div className="text-sm font-light">
+            {messages[0].sender.username}
+          </div>
+        )}
         {messages.map((message, index) => (
           <Message
+            isShowFull={isShowFull}
             useTranslate={useTranslate}
             message={message}
             key={index}
