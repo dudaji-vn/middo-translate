@@ -24,6 +24,8 @@ type ChatContext = {
   closeSideChat: () => void;
   isTranslatePopupOpen: boolean;
   setIsTranslatePopupOpen: (isOpen: boolean) => void;
+  isShowFull: boolean;
+  setIsShowFull: (isShowFull: boolean) => void;
 };
 
 export const ChatContext = createContext<ChatContext>({
@@ -34,6 +36,8 @@ export const ChatContext = createContext<ChatContext>({
   closeSideChat: () => {},
   isTranslatePopupOpen: false,
   setIsTranslatePopupOpen: () => {},
+  isShowFull: false,
+  setIsShowFull: () => {},
 });
 
 export const useChat = () => {
@@ -47,6 +51,8 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
   const roomCode = _room.code;
   const [room, setRoom] = useState<Room>(_room);
   const user = room.participants.find((user) => user.socketId === socket.id);
+
+  const [isShowFull, setIsShowFull] = useState(false);
 
   const { info } = useConversationStore();
   const [showSideChat, setShowSideChat] = useState(true);
@@ -75,7 +81,6 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
 
     socket.emit(socketConfig.events.room.join, joinPayload);
     socket.on(socketConfig.events.room.join, (room: Room) => {
-      console.log('room', room);
       setRoom(room);
     });
 
@@ -113,6 +118,8 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
         closeSideChat,
         isTranslatePopupOpen,
         setIsTranslatePopupOpen,
+        isShowFull,
+        setIsShowFull,
       }}
     >
       {children}

@@ -5,6 +5,7 @@ import { IconButton } from '@/components/button';
 import { SideChatBody } from './side-chat-body';
 import { SideChatFooter } from './side-footer';
 import { SideChatHeader } from './side-chat-header';
+import { Switch } from '@/components/switch';
 import { cn } from '@/utils/cn';
 import { useChat } from '../chat-context';
 import { useIsMobile } from '@/hooks/use-is-mobile';
@@ -12,7 +13,8 @@ import { useIsMobile } from '@/hooks/use-is-mobile';
 export interface SideChatProps {}
 
 export const SideChat = (props: SideChatProps) => {
-  const { room, user, closeSideChat, showSideChat } = useChat();
+  const { room, user, closeSideChat, showSideChat, setIsShowFull, isShowFull } =
+    useChat();
   const isMobile = useIsMobile();
   return (
     <>
@@ -39,6 +41,10 @@ export const SideChat = (props: SideChatProps) => {
           </div>
         )}
         <SideChatHeader code={room.code} />
+        <div className="flex items-center justify-between bg-background p-5">
+          <span>Show middle translate</span>{' '}
+          <Switch checked={isShowFull} onCheckedChange={setIsShowFull} />
+        </div>
         <SideChatBody room={room} />
         <SideChatFooter roomCode={room.code} user={user} />
       </div>
