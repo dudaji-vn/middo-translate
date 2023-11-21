@@ -8,15 +8,13 @@ import {
   useEffect,
   useState,
 } from 'react';
-import {
-  getConversationWithUserSocketId,
-  leaveConversation,
-} from '@/services/conversation';
 
+import { JoinRoomPayload } from '@/types/socket';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { pusherClient } from '@/lib/pusher-client';
+import socket from '@/lib/socket-io';
+import { socketConfig } from '@/configs/socket';
+import { useConversationStore } from '@/stores/conversation';
 import { useRouter } from 'next/navigation';
-import { useSessionStore } from '@/stores/session';
 
 type ChatContext = {
   room: Room;
@@ -42,11 +40,15 @@ export const useChat = () => {
   return useContext(ChatContext);
 };
 interface ChatProviderProps extends PropsWithChildren {
-  roomCode: string;
+  room: Room;
 }
 
-export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
-  const [room, setRoom] = useState<Room | null>(null);
+export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
+  const roomCode = _room.code;
+  const [room, setRoom] = useState<Room>(_room);
+  const user = room.participants.find((user) => user.socketId === socket.id);
+
+  const { info } = useConversationStore();
   const [showSideChat, setShowSideChat] = useState(true);
   const [isTranslatePopupOpen, setIsTranslatePopupOpen] = useState(false);
 
@@ -59,36 +61,29 @@ export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
   };
 
   const router = useRouter();
-  const { sessionId } = useSessionStore();
+
   useEffect(() => {
-    getConversationWithUserSocketId(roomCode, sessionId).then((room) => {
-      if (!room) {
-        router.push(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + roomCode);
-        return;
-      }
-      setRoom((prev) => ({ ...prev, ...room }));
+    if (!info) {
+      router.push(ROUTE_NAMES.ONLINE_CONVERSATION_JOIN + '/' + roomCode);
+      return;
+    }
+
+    const joinPayload: JoinRoomPayload = {
+      roomCode,
+      info,
+    };
+
+    socket.emit(socketConfig.events.room.join, joinPayload);
+    socket.on(socketConfig.events.room.join, (room: Room) => {
+      setRoom(room);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roomCode, sessionId]);
-
-  const user = room?.participants.find((user) => user.socketId === sessionId)!;
-
-  useEffect(() => {
-    if (!room?.code) return;
-    const channel = pusherClient.subscribe(room.code);
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [room?.code]);
-
-  useEffect(() => {
-    if (!room?.code || !user?.socketId) return;
 
     return () => {
-      leaveConversation(room.code, user);
+      socket.off(socketConfig.events.room.join);
+      socket.emit(socketConfig.events.room.leave, roomCode);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [room?.code, user?.socketId]);
+  }, [info, roomCode]);
 
   useEffect(() => {
     window.addEventListener('resize', () => {
@@ -103,7 +98,7 @@ export const ChatProvider = ({ children, roomCode }: ChatProviderProps) => {
     };
   }, []);
 
-  if (!room) {
+  if (!room || !user) {
     return null;
   }
 

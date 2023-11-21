@@ -13,12 +13,13 @@ import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { IconButton } from '@/components/button';
 import { Message } from '@/types/room';
+import { SendMessagePayload } from '@/types/socket';
 import { SvgSpinners270RingWithBg } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
-import { sendMessage } from '@/services/conversation';
+import socket from '@/lib/socket-io';
+import { socketConfig } from '@/configs/socket';
 import { useChat } from './chat-context';
-import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTranslate } from '@/hooks/use-translate';
 
@@ -26,7 +27,6 @@ export interface InputEditorProps {}
 
 export const InputEditor = (props: InputEditorProps) => {
   const { room, user, setIsTranslatePopupOpen } = useChat();
-  const isMobile = useIsMobile();
   const sourceLanguage = user.language;
   const targetLanguage = room.languages.find(
     (language) => language !== user.language,
@@ -82,7 +82,13 @@ export const InputEditor = (props: InputEditorProps) => {
         isSystem: false,
       };
 
-      await sendMessage(newMessage, room.code);
+      const sendMessagePayload: SendMessagePayload = {
+        roomCode: room.code,
+        message: newMessage,
+      };
+
+      socket.emit(socketConfig.events.message.new, sendMessagePayload);
+
       setMiddleText('');
       setText('');
       handleStopListening();
