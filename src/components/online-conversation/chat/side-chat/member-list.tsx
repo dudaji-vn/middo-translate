@@ -5,12 +5,12 @@ import { useState } from 'react';
 
 export interface MemberListProps {
   members: Participant[];
-  hostSocketId?: string;
+  host: Participant;
 }
 
 const MAX_SHOW_COUNT = 2;
 
-export const MemberList = ({ members, hostSocketId }: MemberListProps) => {
+export const MemberList = ({ members, host }: MemberListProps) => {
   const [isShowAll, setIsShowAll] = useState(false);
   const [showCount, setShowCount] = useState(MAX_SHOW_COUNT);
   const isShowAllMembers = members.length <= MAX_SHOW_COUNT || isShowAll;
@@ -23,7 +23,7 @@ export const MemberList = ({ members, hostSocketId }: MemberListProps) => {
     >
       {showMembers.map((member) => (
         <MemberItem
-          isHost={member.socketId === hostSocketId}
+          isHost={member.socketId === host.socketId}
           key={member.socketId}
           user={member}
         />

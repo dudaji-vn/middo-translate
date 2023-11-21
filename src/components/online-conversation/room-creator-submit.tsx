@@ -62,7 +62,7 @@ export const RoomCreatorSubmit = forwardRef<
       const room: Room = {
         code,
         languages: selectedLanguages,
-        hostSocketId: socket.id,
+        host: user,
         participants: [user],
       };
       const newRoom = await createConversation(room);

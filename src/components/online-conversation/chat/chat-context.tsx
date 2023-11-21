@@ -75,6 +75,7 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
 
     socket.emit(socketConfig.events.room.join, joinPayload);
     socket.on(socketConfig.events.room.join, (room: Room) => {
+      console.log('room', room);
       setRoom(room);
     });
 
@@ -99,7 +100,7 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
   }, []);
 
   if (!room || !user) {
-    return null;
+    return <div>hello</div>;
   }
 
   return (
