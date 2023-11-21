@@ -20,6 +20,7 @@ import { getCountryCode } from '@/utils/language-fn';
 import socket from '@/lib/socket-io';
 import { socketConfig } from '@/configs/socket';
 import { useChat } from './chat-context';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTranslate } from '@/hooks/use-translate';
 
@@ -27,6 +28,7 @@ export interface InputEditorProps {}
 
 export const InputEditor = (props: InputEditorProps) => {
   const { room, user, setIsTranslatePopupOpen } = useChat();
+  const isMobile = useIsMobile();
   const sourceLanguage = user.language;
   const targetLanguage = room.languages.find(
     (language) => language !== user.language,
@@ -61,14 +63,41 @@ export const InputEditor = (props: InputEditorProps) => {
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !isMobile) {
       e.preventDefault();
       handleSendMessage();
       setIsTyping(false);
     }
   };
 
+  const isSendAble = useMemo(() => {
+    if (!text) return false;
+    if (isTyping) return false;
+    if (isLoading) return false;
+    if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN && !englishText)
+      return false;
+    if (sourceLanguage === DEFAULT_LANGUAGES_CODE.EN && !translatedText)
+      return false;
+    if (
+      sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+      targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
+      !translatedText
+    ) {
+      return false;
+    }
+    return true;
+  }, [
+    text,
+    isTyping,
+    isLoading,
+    targetLanguage,
+    englishText,
+    sourceLanguage,
+    translatedText,
+  ]);
+
   const handleSendMessage = async () => {
+    if (!isSendAble) return;
     if (englishText || translatedText) {
       const newMessage: Message = {
         sender: user,
@@ -77,6 +106,8 @@ export const InputEditor = (props: InputEditorProps) => {
           targetLanguage === DEFAULT_LANGUAGES_CODE.EN
             ? englishText
             : translatedText,
+        englishContent:
+          targetLanguage === DEFAULT_LANGUAGES_CODE.EN ? '' : englishText,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         isSystem: false,
@@ -110,31 +141,6 @@ export const InputEditor = (props: InputEditorProps) => {
     setMiddleText('');
   };
 
-  const isSendAble = useMemo(() => {
-    if (!text) return false;
-    if (isTyping) return false;
-    if (isLoading) return false;
-    if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN && !englishText)
-      return false;
-    if (sourceLanguage === DEFAULT_LANGUAGES_CODE.EN && !translatedText)
-      return false;
-    if (
-      sourceLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
-      targetLanguage !== DEFAULT_LANGUAGES_CODE.EN &&
-      !translatedText
-    ) {
-      return false;
-    }
-    return true;
-  }, [
-    text,
-    isTyping,
-    isLoading,
-    targetLanguage,
-    englishText,
-    sourceLanguage,
-    translatedText,
-  ]);
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setText(e.target.value);
     setMiddleText('');
@@ -157,6 +163,14 @@ export const InputEditor = (props: InputEditorProps) => {
     setIsTranslatePopupOpen(isSendAble);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSendAble]);
+
+  useEffect(() => {
+    if (textAreaRef.current)
+      textAreaRef.current.scrollTo({
+        top: textAreaRef.current.scrollHeight,
+        behavior: 'instant',
+      });
+  }, [textAreaRef, text]);
 
   return (
     <div className="chatInputWrapper">
@@ -271,7 +285,7 @@ export const InputEditor = (props: InputEditorProps) => {
               />
             </IconButton>
           )}
-          {!listening && (
+          {
             <IconButton
               disabled={!isSendAble}
               onClick={handleSendMessage}
@@ -284,7 +298,7 @@ export const InputEditor = (props: InputEditorProps) => {
                 <PaperPlaneOutline />
               )}
             </IconButton>
-          )}
+          }
         </div>
       </div>
     </div>
