@@ -12,9 +12,9 @@ export default async function Create(props: CreateProps) {
   return (
     <RoomCreatorProvider>
       <div className="myContainer">
-        <div className="wrapper">
+        <div className="wrapper create">
           <div className="columnWrapper">
-            <div className="rightColumn">
+            <div className="rightColumn create">
               <img className="introImg" src="/conversation_intro.png" alt="" />
             </div>
             <div className="leftColumn">
@@ -24,10 +24,10 @@ export default async function Create(props: CreateProps) {
                   <SelectLanguages />
                 </div>
                 <div className="formSection mb-0">
-                  <FormField label="Name">
+                  <FormField label="Your name">
                     <UsernameInput />
                   </FormField>
-                  <FormField label="Language">
+                  <FormField label="Your language">
                     <SelectNativeLanguage />
                   </FormField>
                 </div>

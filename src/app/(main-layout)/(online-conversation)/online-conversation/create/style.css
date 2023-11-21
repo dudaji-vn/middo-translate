@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.wrapper {
+.wrapper.create {
   padding: 20px 5vw 40px;
 }
 
@@ -17,18 +17,16 @@
   gap: 20px;
 }
 
-.rightColumn {
-  width: 60%;
+.rightColumn.create {
+  flex-shrink: 0;
+  width: 50%;
 }
 
 @media screen and (max-width: 768px) {
-  .rightColumn {
+  .rightColumn.create {
     display: none !important;
   }
 }
-/* .introImg {
-    width: 260px;
-} */
 
 .introTxt {
   text-align: center;
@@ -221,10 +219,13 @@
 }
 
 .chip.active {
-  background-color: hsl(var(--background)) !important;
+  background-color: hsl(var(--lighter), 60%) !important;
   border-color: hsl(var(--primary)) !important;
   color: hsl(var(--primary)) !important;
   box-shadow: var(--shadow-1);
+}
+.chip.active span {
+  color: hsl(var(--primary)) !important;
 }
 
 .buttonContainer {
@@ -245,6 +246,10 @@
 }
 
 @media screen and (min-width: 1024px) {
+  .wrapper.create {
+    padding: 40px 5vw 40px;
+  }
+
   .chip:hover {
     border-color: hsl(var(--primary));
   }
