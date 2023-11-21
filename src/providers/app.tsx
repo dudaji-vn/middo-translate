@@ -11,9 +11,9 @@ type Props = {};
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
   return (
     <>
+      <Toaster />
       <SocketProvider />
       {props.children}
-      <Toaster />
     </>
   );
 };

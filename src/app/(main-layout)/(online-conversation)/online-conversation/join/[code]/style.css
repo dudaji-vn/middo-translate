@@ -5,7 +5,7 @@
   align-items: center;
 }
 
-.wrapper {
+.wrapper.join {
   padding: 20px 5vw 40px;
   width: 100%;
 }
@@ -18,7 +18,7 @@
   gap: 20px;
 }
 
-.rightColumn {
+.rightColumn.join {
   display: none;
 }
 
@@ -126,8 +126,8 @@
 }
 
 @media screen and (min-width: 1024px) {
-  .wrapper {
-    padding-top: 100px;
+  .wrapper.join {
+    padding-top: 40px;
     max-width: 1440px;
   }
 
@@ -137,8 +137,8 @@
     align-items: flex-start;
   }
 
-  .rightColumn {
-    width: 60%;
+  .rightColumn.join {
+    width: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -241,33 +241,6 @@
 
 .formField select:focus-visible {
   outline: none;
-}
-
-.chipsWrapper {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.chip {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 25px;
-  background-color: hsl(var(--background-darker));
-  border: solid 1px hsl(var(--background-darker));
-  border-radius: 99px;
-}
-
-.chip.active {
-  background-color: hsl(var(--background)) !important;
-  border-color: hsl(var(--primary)) !important;
-  color: hsl(var(--primary)) !important;
-  box-shadow: var(--shadow-1);
 }
 
 .buttonContainer {

@@ -5,21 +5,26 @@ import {
   CloseCircleOutline,
   Search,
 } from '@easy-eva-icons/react';
-import {
-  DEFAULT_LANGUAGES_CODE,
-  supportedLanguages,
-} from '@/configs/default-language';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
 import { CircleFlag } from 'react-circle-flags';
 import { IconButton } from '../button';
 import { Input } from '../input';
 import { cn } from '@/utils/cn';
+import { supportedLanguages } from '@/configs/default-language';
 import { useIsMobile } from '@/hooks/use-is-mobile';
+import { useOnClickOutside } from 'usehooks-ts';
 import { useRoomCreator } from './room-creator-context';
 
+export const DEFAULT_LANGUAGES_CODE = {
+  VN: 'vi',
+  KR: 'ko',
+  JP: 'ja',
+  CN: 'zh-CN',
+  ES: 'es',
+};
 export interface SelectLanguagesProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -32,8 +37,7 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
     const isMobile = useIsMobile();
 
     const [isShowSearch, setIsShowSearch] = useState(false);
-    const [search, setSearch] = useState('');
-    const searchRef = React.useRef<any>(null);
+
     const handleSelect = (code: string) => {
       if (selectedLanguages.includes(code)) {
         setSelectedLanguages(selectedLanguages.filter((lang) => lang !== code));
@@ -44,25 +48,17 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
         setSelectedLanguages(newSelectedLanguages);
       }
     };
-    const filterLanguages = supportedLanguages.filter((language) => {
-      if (search === '') return true;
-      return language.name.toLowerCase().includes(search.toLowerCase());
-    });
-
-    const handleClear = () => {
-      setSearch('');
-      searchRef.current?.focus();
-    };
 
     const selectedLanguagesNotDefault = selectedLanguages.filter(
       (lang) => !Object.values(DEFAULT_LANGUAGES_CODE).includes(lang),
     );
+
     return (
       <div ref={ref} {...props}>
         <div className="formField">
           <label className="label">
             <span>
-              Room&apos;s languages{' '}
+              Choose room&apos;s languages{' '}
               <Popover open={isOpened}>
                 <PopoverTrigger asChild>
                   <button
@@ -96,64 +92,13 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
             </div>
           </label>
 
-          <div className="relative mt-2">
-            <Input
-              ref={searchRef}
-              onFocus={() => setIsShowSearch(true)}
-              // onBlur={() => setIsShowSearch(false)}
-
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search"
-              leftElement={
-                search === '' ? (
-                  <IconButton disabled variant="ghost" size="xs">
-                    <Search className="h-5 w-5" />
-                  </IconButton>
-                ) : (
-                  <IconButton variant="ghost" size="xs">
-                    <CloseCircleOutline
-                      className="opacity-60"
-                      onClick={handleClear}
-                    />
-                  </IconButton>
-                )
-              }
+          {isShowSearch && (
+            <SearchPanel
+              handleSelect={handleSelect}
+              selectedLanguages={selectedLanguages}
+              setIsShowSearch={setIsShowSearch}
             />
-            {search && isShowSearch && (
-              <div className="absolute -bottom-2 z-10  w-full translate-y-full rounded-[20px]  bg-background p-3 shadow-2">
-                <div className="chipsWrapper !mt-0">
-                  {filterLanguages.map((lang) => {
-                    const isSelected = selectedLanguages.includes(lang.code);
-                    return (
-                      <button
-                        key={lang.code}
-                        onClick={() => {
-                          setIsShowSearch(false);
-                          setSearch('');
-                          if (!isSelected) {
-                            handleSelect(lang.code);
-                          }
-                        }}
-                        className={cn('chip', isSelected && 'active')}
-                      >
-                        <CircleFlag
-                          className="inline-block"
-                          countryCode={getCountryCode(lang.code) || 'gb'}
-                          height={20}
-                          width={20}
-                        />
-                        <span className="chipName">{lang.name}</span>
-                      </button>
-                    );
-                  })}
-                  {filterLanguages.length === 0 && (
-                    <div className="ml-2 text-center">No results</div>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
+          )}
 
           <div className="chipsWrapper">
             {Object.keys(DEFAULT_LANGUAGES_CODE).map((key) => {
@@ -203,6 +148,16 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                 </button>
               );
             })}
+            <IconButton
+              variant="secondary"
+              size="sm"
+              className="shadow-1"
+              onClick={() => {
+                setIsShowSearch(true);
+              }}
+            >
+              <Search className="h-5 w-5" />
+            </IconButton>
           </div>
         </div>
       </div>
@@ -210,3 +165,111 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
   },
 );
 SelectLanguages.displayName = 'SelectLanguages';
+
+const SearchPanel = ({
+  selectedLanguages,
+  setIsShowSearch,
+  handleSelect,
+  onOutsideClick,
+}: {
+  setIsShowSearch: (isShowSearch: boolean) => void;
+  selectedLanguages: string[];
+  handleSelect: (code: string) => void;
+  onOutsideClick?: () => void;
+}) => {
+  const parentRef = React.useRef<any>(null);
+  const searchRef = React.useRef<any>(null);
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    if (searchRef.current) {
+      searchRef.current?.focus();
+    }
+  }, [searchRef]);
+
+  const filterLanguages = supportedLanguages.filter((language) => {
+    if (search === '') return true;
+    return language.name.toLowerCase().includes(search.toLowerCase());
+  });
+
+  const handleClear = () => {
+    setSearch('');
+    searchRef.current?.focus();
+  };
+  useOnClickOutside(
+    parentRef,
+    onOutsideClick || (() => setIsShowSearch(false)),
+  );
+
+  return (
+    <div className="relative">
+      <div
+        ref={parentRef}
+        className={cn(
+          'absolute -bottom-2 z-10 flex max-h-[50vh] w-full translate-y-full flex-col rounded-[20px]  bg-background p-3 shadow-2',
+          !search && 'min-h-[32vh]',
+        )}
+      >
+        <Input
+          ref={searchRef}
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search"
+          leftElement={
+            search === '' ? (
+              <IconButton disabled variant="ghost" size="xs">
+                <Search className="h-5 w-5 opacity-60" />
+              </IconButton>
+            ) : (
+              <IconButton variant="ghost" size="xs">
+                <CloseCircleOutline
+                  className="opacity-60"
+                  onClick={handleClear}
+                />
+              </IconButton>
+            )
+          }
+        />
+        {search && (
+          <div className="chipsWrapper  !mt-3 mb-3 h-full flex-1 overflow-y-auto">
+            {filterLanguages.map((lang) => {
+              const isSelected = selectedLanguages.includes(lang.code);
+              return (
+                <button
+                  key={lang.code}
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    if (!isSelected) {
+                      handleSelect(lang.code);
+                    }
+                  }}
+                  className={cn('chip', isSelected && 'active')}
+                >
+                  <CircleFlag
+                    className="inline-block"
+                    countryCode={getCountryCode(lang.code) || 'gb'}
+                    height={20}
+                    width={20}
+                  />
+                  <span className="chipName">{lang.name}</span>
+                </button>
+              );
+            })}
+            {filterLanguages.length === 0 && (
+              <div className="ml-2 text-center">No results</div>
+            )}
+          </div>
+        )}
+        <button
+          onClick={() => setIsShowSearch(false)}
+          className="hover: group mt-auto rounded-xl  bg-[#fafafa] py-2"
+        >
+          <span className="text-primary group-hover:font-medium group-active:text-shading">
+            Close
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+};

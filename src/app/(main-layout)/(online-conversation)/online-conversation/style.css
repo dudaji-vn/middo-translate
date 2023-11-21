@@ -24,7 +24,6 @@
 }
 
 .introImg {
-  /* width: 260px; */
   width: 70%;
 }
 
@@ -140,11 +139,12 @@
   }
 
   .rightColumn {
-    width: 60%;
+    flex-shrink: 0;
+    width: 50%;
   }
 
   .introImg {
-    width: 90%;
+    width: 100%;
   }
 
   .leftColumn {

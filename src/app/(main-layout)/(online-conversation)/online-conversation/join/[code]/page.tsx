@@ -11,23 +11,25 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { getConversation } from '@/services/conversation';
 import { redirect } from 'next/navigation';
 
-interface CreateProps {
+interface JoinProps {
   params: {
     code: string;
   };
 }
 
-export default async function Create(props: CreateProps) {
+export const dynamic = 'force-dynamic';
+export default async function Join(props: JoinProps) {
   const room = await getConversation(props.params.code);
+  console.log(room);
   if (!room) {
     redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
   }
   return (
     <RoomJoinerProvider room={room}>
       <div className="myContainer">
-        <div className="wrapper">
+        <div className="wrapper join">
           <div className="columnWrapper">
-            <div className="rightColumn">
+            <div className="rightColumn join">
               <img className="introImg" src="/conversation_intro.png" alt="" />
             </div>
             <div className="leftColumn">

@@ -83,7 +83,7 @@
 }
 
 .receiver .cMessage {
-  background-color: hsl(var(--lighter));
+  background-color: hsl(var(--lighter), 60%);
 }
 
 .chatInputWrapper {

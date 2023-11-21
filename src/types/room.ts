@@ -17,6 +17,7 @@ export type Message = {
   sender: Participant;
   content: string;
   translatedContent?: string;
+  englishContent?: string;
   createdAt: string;
   updatedAt: string;
   isSystem?: boolean;

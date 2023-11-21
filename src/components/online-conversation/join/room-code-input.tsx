@@ -7,6 +7,7 @@ import { LoadingBase } from '@/components/loading-base';
 import { QRCodeIcon } from '@/components/icons';
 import { QrScanner } from '@/components/scanner';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { ScannerStatus } from '@/components/scanner/scanner';
 import { getConversation } from '@/services/conversation';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/toast';
@@ -20,6 +21,8 @@ export const RoomCodeInput = forwardRef<HTMLDivElement, RoomCodeInputProps>(
     const [isJoining, setIsJoining] = useState<boolean>(false);
     const [showScanner, setShowScanner] = useState<boolean>(false);
     const [isScanned, setIsScanned] = useState<boolean>(false);
+    const [scannerStatus, setScannerStatus] =
+      useState<ScannerStatus>('scanning');
     const { toast } = useToast();
     const router = useRouter();
     const handleJoin = async () => {
@@ -41,12 +44,14 @@ export const RoomCodeInput = forwardRef<HTMLDivElement, RoomCodeInputProps>(
       );
       if (isValidCodeUrl) {
         setIsScanned(true);
+        setScannerStatus('success');
         toast({
           description: 'Scanned!',
         });
 
         router.push(decodedText);
       } else {
+        setScannerStatus('error');
         toast({
           description: 'Invalid code!',
         });
@@ -82,6 +87,7 @@ export const RoomCodeInput = forwardRef<HTMLDivElement, RoomCodeInputProps>(
         {isJoining && <LoadingBase loadingText="Joining room..." />}
         {showScanner && (
           <QrScanner
+            status={scannerStatus}
             onCancel={() => setShowScanner(false)}
             onDecode={onNewScanResult}
           />

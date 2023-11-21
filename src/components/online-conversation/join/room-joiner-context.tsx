@@ -56,6 +56,7 @@ export const RoomJoinerProvider = ({
     if (data) {
       setHasRememberedInfo(true);
       const { username, selectedNativeLanguage } = data;
+      console.log(selectedNativeLanguage);
       setUserName(username);
       setSelectedNativeLanguage(selectedNativeLanguage);
     } else {
@@ -64,6 +65,7 @@ export const RoomJoinerProvider = ({
   }, []);
 
   useEffect(() => {
+    if (selectedNativeLanguage === '') return;
     if (room.languages.includes(selectedNativeLanguage)) return;
     setSelectedNativeLanguage('');
   }, [room.languages, selectedNativeLanguage]);

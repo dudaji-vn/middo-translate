@@ -3,17 +3,30 @@ import './style.css';
 import { Close } from '@easy-eva-icons/react';
 import { IconButton } from '../button';
 import QrReader from 'react-qr-reader';
+import { cn } from '@/utils/cn';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
 
+export type ScannerStatus = 'scanning' | 'success' | 'error';
 interface QrScannerProps {
   onDecode: (data: string) => void;
   onCancel?: () => void;
+  status?: ScannerStatus;
 }
 
-export const QrScanner: React.FC<QrScannerProps> = ({ onDecode, onCancel }) => {
+export const QrScanner: React.FC<QrScannerProps> = ({
+  onDecode,
+  onCancel,
+  status,
+}) => {
   useDisableScrollWhenMount();
   return (
-    <div className="scanner fixed left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-background pb-10">
+    <div
+      className={cn(
+        'scanner fixed left-0 top-0 flex h-full w-full flex-col items-center justify-center bg-background pb-10',
+        status === 'success' && 'success',
+        status === 'error' && 'error',
+      )}
+    >
       <QrReader
         facingMode={'environment'}
         delay={500}

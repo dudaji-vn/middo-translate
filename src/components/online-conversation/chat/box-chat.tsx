@@ -19,7 +19,7 @@ type GroupMessage = {
 export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
   (props, ref) => {
     const [messages, setMessages] = useState<MessageType[]>([]);
-    const { room, user, isTranslatePopupOpen } = useChat();
+    const { room, user, isTranslatePopupOpen, isShowFull } = useChat();
 
     const refScroll = useRef<HTMLDivElement>(null);
     const groupMessages = useMemo(() => {
@@ -80,7 +80,7 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
     return (
       <div ref={refScroll} className="chatFrame flex-1 gap-5 overflow-y-auto">
         {groupMessages.map((groupMessage, index) => (
-          <GroupMessage key={index} {...groupMessage} />
+          <GroupMessage isShowFull={isShowFull} key={index} {...groupMessage} />
         ))}
       </div>
     );
