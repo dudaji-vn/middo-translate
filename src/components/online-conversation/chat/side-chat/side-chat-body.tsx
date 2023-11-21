@@ -23,7 +23,7 @@ export const SideChatBody = ({ room }: SideChatBodyProps) => {
 
   return (
     <div className="bg-background">
-      <MemberList hostSocketId={room.hostSocketId} members={members} />
+      <MemberList host={room.host} members={members} />
     </div>
   );
 };

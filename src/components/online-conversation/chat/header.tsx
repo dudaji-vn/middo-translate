@@ -10,7 +10,7 @@ export interface HeaderProps {}
 
 export const Header = (props: HeaderProps) => {
   const { openSideChat, closeSideChat, room } = useChat();
-  const host = room.participants.find((p) => p.socketId === room.hostSocketId);
+  const host = room.host;
 
   const isMobile = useIsMobile();
   useEffect(() => {
@@ -23,7 +23,7 @@ export const Header = (props: HeaderProps) => {
   }, [isMobile]);
   return (
     <div className="chatNavigation">
-      <div>{host?.username.split(' ')[0]} &apos;room</div>
+      <div>{host?.username}&apos;s room</div>
       {isMobile && (
         <IconButton
           onClick={() => {
