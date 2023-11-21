@@ -67,6 +67,7 @@ export const RoomCreatorProvider = ({ children }: RoomCreatorProviderProps) => {
   }, []);
 
   useEffect(() => {
+    if (selectedNativeLanguage === '') return;
     if (selectedLanguages.includes(selectedNativeLanguage)) return;
     setSelectedNativeLanguage('');
   }, [selectedLanguages, selectedNativeLanguage]);
