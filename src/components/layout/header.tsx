@@ -1,8 +1,13 @@
 'use client';
 
+import {
+  Menu,
+  MessageCircle,
+  MessageCircleOutline,
+} from '@easy-eva-icons/react';
+
 import { IconButton } from '@/components/button';
 import Link from 'next/link';
-import { Menu } from '@easy-eva-icons/react';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
 type Props = {};
@@ -15,7 +20,7 @@ export const Header = (props: Props) => {
       </Link>
       <Link href="/online-conversation">
         <IconButton variant="secondary" shape="default">
-          <Menu />
+          <MessageCircleOutline />
         </IconButton>
       </Link>
     </div>
