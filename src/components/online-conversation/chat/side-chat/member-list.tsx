@@ -11,10 +11,23 @@ export interface MemberListProps {
 const MAX_SHOW_COUNT = 2;
 
 export const MemberList = ({ members, host }: MemberListProps) => {
+  let membersHostFirst: Participant[] = [];
+
+  members.forEach((member) => {
+    if (member.socketId === host.socketId) {
+      membersHostFirst.unshift(member);
+    } else {
+      membersHostFirst.push(member);
+    }
+  });
+
   const [isShowAll, setIsShowAll] = useState(false);
   const [showCount, setShowCount] = useState(MAX_SHOW_COUNT);
-  const isShowAllMembers = members.length <= MAX_SHOW_COUNT || isShowAll;
-  const showMembers = isShowAllMembers ? members : members.slice(0, showCount);
+  const isShowAllMembers =
+    membersHostFirst.length <= MAX_SHOW_COUNT || isShowAll;
+  const showMembers = isShowAllMembers
+    ? membersHostFirst
+    : membersHostFirst.slice(0, showCount);
   return (
     <Section
       titleClassName="opacity-60"
