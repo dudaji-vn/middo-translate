@@ -7,9 +7,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../select';
+import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
+import { CircleFlag } from 'react-circle-flags';
 import { forwardRef } from 'react';
-import { getLanguageByCode } from '@/utils/language-fn';
 import { useRoomCreator } from './room-creator-context';
 
 export interface SelectNativeLanguageProps
@@ -50,6 +51,12 @@ export const SelectNativeLanguage = forwardRef<
         >
           {languages.map((language) => (
             <SelectItem key={language!.code} value={language!.code}>
+              <CircleFlag
+                className="mr-2 inline-block"
+                countryCode={getCountryCode(language!.code) || 'gb'}
+                height={20}
+                width={20}
+              />
               {language!.name}
             </SelectItem>
           ))}
