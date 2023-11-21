@@ -2,7 +2,8 @@ import { Participant, Room } from '@/types/room';
 import { useEffect, useState } from 'react';
 
 import { MemberList } from './member-list';
-import { pusherClient } from '@/lib/pusher-client';
+import socket from '@/lib/socket-io';
+import { socketConfig } from '@/configs/socket';
 
 export interface SideChatBodyProps {
   room: Room;
@@ -11,21 +12,14 @@ export interface SideChatBodyProps {
 export const SideChatBody = ({ room }: SideChatBodyProps) => {
   const [members, setMembers] = useState<Participant[]>(room.participants);
   useEffect(() => {
-    const channel = pusherClient.subscribe(room.code);
-    channel.bind('member_join', (member: Participant) => {
-      setMembers((prev) => [...prev, member]);
+    socket.on(socketConfig.events.room.participant.update, (participants) => {
+      setMembers(participants);
     });
 
-    channel.bind('member_leave', (member: Participant) => {
-      setMembers((prev) =>
-        prev.filter((user) => user.socketId !== member.socketId),
-      );
-    });
     return () => {
-      channel.unbind('member_join');
-      channel.unbind('member_leave');
+      socket.off(socketConfig.events.room.participant.update);
     };
-  }, [room.code]);
+  }, []);
 
   return (
     <div className="bg-background">

@@ -8,6 +8,7 @@ import {
 } from '@/components/online-conversation/chat';
 
 import { ChatProvider } from '@/components/online-conversation/chat/chat-context';
+import { getConversation } from '@/services/conversation';
 
 interface RoomConversationProps {
   params: {
@@ -18,8 +19,12 @@ interface RoomConversationProps {
 export default async function RoomConversation({
   params,
 }: RoomConversationProps) {
+  const room = await getConversation(params.code);
+  if (!room) {
+    return <>hello</>;
+  }
   return (
-    <ChatProvider roomCode={params.code}>
+    <ChatProvider room={room}>
       <div className="chatScreenWrapper h-screen overflow-hidden">
         <Header />
         <div className="chatElementWrapper flex-1 overflow-hidden">

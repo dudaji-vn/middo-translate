@@ -9,10 +9,10 @@ import {
 import { Button } from '../../button';
 import Link from 'next/link';
 import { LoadingBase } from '@/components/loading-base';
-import { Participant } from '@/types/room';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { createParticipant } from '@/utils/conversation';
-import { joinConversation } from '@/services/conversation';
+import socket from '@/lib/socket-io';
+import { useConversationStore } from '@/stores/conversation';
 import { useRoomJoiner } from '@/components/online-conversation/join/room-joiner-context';
 import { useRouter } from 'next/navigation';
 import { useSessionStore } from '@/stores/session';
@@ -25,6 +25,7 @@ export const RoomJoinerSubmit = forwardRef<
   HTMLDivElement,
   RoomJoinerSubmitProps
 >((props, ref) => {
+  const { setInfo } = useConversationStore();
   const { isValid, selectedNativeLanguage, username, room, hasRememberedInfo } =
     useRoomJoiner();
   const [isCreating, setIsCreating] = useState(false);
@@ -49,11 +50,14 @@ export const RoomJoinerSubmit = forwardRef<
       } else {
         removeOnlineConversionInfo();
       }
-
-      const newRoom = await joinConversation(room.code, user);
-      router.push(ROUTE_NAMES.ONLINE_CONVERSATION + '/' + newRoom.code);
+      setInfo({
+        color: user.color,
+        language: user.language,
+        username: user.username,
+        socketId: socket.id,
+      });
+      router.push(ROUTE_NAMES.ONLINE_CONVERSATION + '/' + room.code);
     } catch (error) {
-      console.log(error);
       toast({
         description: 'Something went wrong',
       });

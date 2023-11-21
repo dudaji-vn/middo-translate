@@ -2,7 +2,6 @@
 
 import { Participant } from '@/types/room';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { leaveConversation } from '@/services/conversation';
 import { useRouter } from 'next/navigation';
 
 export interface SideChatFooterProps {

@@ -1,6 +1,5 @@
 'use client';
 
-import { Participant, Room } from '@/types/room';
 import { forwardRef, useEffect, useState } from 'react';
 import {
   removeOnlineConversionInfo,
@@ -11,12 +10,14 @@ import { Button } from '../button';
 import Link from 'next/link';
 import { LoadingBase } from '../loading-base';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { Room } from '@/types/room';
 import { createConversation } from '@/services/conversation';
 import { createParticipant } from '@/utils/conversation';
 import { generateUniqueUppercaseString } from '@/utils/gen-unique-uppercase-string';
+import socket from '@/lib/socket-io';
+import { useConversationStore } from '@/stores/conversation';
 import { useRoomCreator } from './room-creator-context';
 import { useRouter } from 'next/navigation';
-import { useSessionStore } from '@/stores/session';
 import { useToast } from '../toast';
 
 export interface RoomCreatorSubmitProps
@@ -35,8 +36,8 @@ export const RoomCreatorSubmit = forwardRef<
   } = useRoomCreator();
   const [isCreating, setIsCreating] = useState(false);
   const [isRemember, setIsRemember] = useState(false);
+  const { setInfo } = useConversationStore();
   const router = useRouter();
-  const { sessionId } = useSessionStore();
   const { toast } = useToast();
   const handleSubmit = async () => {
     setIsCreating(true);
@@ -55,16 +56,17 @@ export const RoomCreatorSubmit = forwardRef<
       const code = generateUniqueUppercaseString(4);
       const user = createParticipant({
         language: selectedNativeLanguage,
-        socketId: sessionId,
+        socketId: socket.id,
         username: username,
       });
       const room: Room = {
         code,
         languages: selectedLanguages,
-        hostSocketId: sessionId,
+        hostSocketId: socket.id,
         participants: [user],
       };
       const newRoom = await createConversation(room);
+      setInfo(user);
       router.push(ROUTE_NAMES.ONLINE_CONVERSATION_SHARE + '/' + newRoom.code);
     } catch (error) {
       console.log(error);
@@ -72,7 +74,6 @@ export const RoomCreatorSubmit = forwardRef<
         description: 'Something went wrong',
       });
     }
-    // setIsCreating(false);
   };
   useEffect(() => {
     if (hasRememberedInfo) {

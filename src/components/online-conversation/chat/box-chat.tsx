@@ -1,12 +1,12 @@
 'use client';
 
+import { Message, Message as MessageType } from '@/types/room';
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 
 import { GroupMessage } from './message';
-import { Message as MessageType } from '@/types/room';
-import { pusherClient } from '@/lib/pusher-client';
+import socket from '@/lib/socket-io';
+import { socketConfig } from '@/configs/socket';
 import { useChat } from './chat-context';
-import { useSessionStore } from '@/stores/session';
 
 export interface BoxChatProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -18,7 +18,6 @@ type GroupMessage = {
 
 export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
   (props, ref) => {
-    const { sessionId } = useSessionStore();
     const [messages, setMessages] = useState<MessageType[]>([]);
     const { room, user, isTranslatePopupOpen } = useChat();
 
@@ -32,7 +31,7 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
       messages.forEach((message) => {
         if (currentGroupMessage.messages.length === 0) {
           currentGroupMessage.messages.push(message);
-          currentGroupMessage.isMe = message.sender.socketId === sessionId;
+          currentGroupMessage.isMe = message.sender.socketId === socket.id;
           currentGroupMessage.useTranslate =
             message.sender.language !== user.language;
           return;
@@ -48,7 +47,7 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
         groupMessages.push(currentGroupMessage);
         currentGroupMessage = {
           messages: [message],
-          isMe: message.sender.socketId === sessionId,
+          isMe: message.sender.socketId === socket.id,
           useTranslate: message.sender.language !== user.language,
         };
       });
@@ -56,23 +55,23 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
       groupMessages.push(currentGroupMessage);
 
       return groupMessages;
-    }, [messages, sessionId, user?.language]);
+    }, [messages, user.language]);
 
     useEffect(() => {
-      const channel = pusherClient.subscribe(room.code);
-      channel.bind('message', (message: MessageType) => {
+      socket.on(socketConfig.events.message.new, (message: Message) => {
+        console.log(message);
         setMessages((messages) => [...messages, message]);
       });
+
       return () => {
-        channel.unbind('message');
+        socket.off(socketConfig.events.message.new);
       };
-    }, [room.code, user]);
+    }, []);
 
     useEffect(() => {
       if (refScroll?.current) {
         refScroll.current.scrollTo({
           top: refScroll.current.scrollHeight,
-          // behavior: isTranslatePopupOpen ? 'instant' : 'smooth',
           behavior: 'instant',
         });
       }
