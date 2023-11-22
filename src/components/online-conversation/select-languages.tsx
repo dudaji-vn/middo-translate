@@ -79,7 +79,16 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                     <AlertCircleOutline className="inline-block h-5 w-5 text-primary" />
                   </button>
                 </PopoverTrigger>
-                <PopoverContent className="w-fit p-3">
+                <PopoverContent
+                  onInteractOutside={
+                    isMobile
+                      ? () => {
+                          setIsOpened(false);
+                        }
+                      : undefined
+                  }
+                  className="w-fit p-3"
+                >
                   <span className="font-light">
                     Choose {MAX_LANGUAGES} languages for your room.
                   </span>
