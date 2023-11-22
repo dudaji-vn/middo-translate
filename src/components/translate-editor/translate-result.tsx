@@ -6,7 +6,6 @@ import { IconButton } from '../button';
 import React from 'react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
-import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
@@ -29,7 +28,7 @@ export const TranslateResult = ({
 
   const { speak } = useTextToSpeech(languageCode, result);
   const isMobile = useIsMobile();
-
+  const array = result.split('\n');
   return (
     <TranslateEditorWrapper
       className={cn(
@@ -60,10 +59,15 @@ export const TranslateResult = ({
       }
     >
       <div
-        style={{ wordBreak: 'break-word' }}
         className={`translatedText ${textStyle}`}
+        style={{ wordBreak: 'break-word' }}
       >
-        {result}
+        {array.map((item, index) => (
+          <span className={`translatedText ${textStyle}`} key={index}>
+            {item}
+            <br />
+          </span>
+        ))}
       </div>
     </TranslateEditorWrapper>
   );
