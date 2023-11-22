@@ -1,4 +1,5 @@
 import { Message as MessageType } from '@/types/room';
+import { Text } from '@/components/text';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
@@ -20,7 +21,11 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
       <div className={isMe ? 'receiver' : 'sender'}>
         <div className="cMessageWrapper">
           <div className="cMessage">
-            {useTranslate ? message.translatedContent : message.content}
+            <Text
+              value={
+                useTranslate ? message.translatedContent || '' : message.content
+              }
+            />
             {isShowFull && message.englishContent && (
               <div className="relative mt-2">
                 <TriangleSmall
@@ -28,8 +33,11 @@ export const Message = forwardRef<HTMLDivElement, MessageProps>(
                   position="top"
                   className="absolute left-2 top-0 -translate-y-full"
                 />
-                <div className="mt-2 rounded-lg bg-background p-1 px-2 text-sm font-light italic">
-                  {message.englishContent}
+                <div className="mt-2 rounded-lg bg-background p-1 px-2">
+                  <Text
+                    value={message.englishContent}
+                    className="text-sm font-light italic"
+                  />
                 </div>
               </div>
             )}
