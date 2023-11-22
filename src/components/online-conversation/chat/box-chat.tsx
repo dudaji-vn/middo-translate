@@ -1,11 +1,11 @@
 'use client';
 
-import { Message, Message as MessageType } from '@/types/room';
-import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
+import { forwardRef, useEffect, useMemo, useRef } from 'react';
 
 import { GroupMessage } from './message';
+import { Message as MessageType } from '@/types/room';
 import socket from '@/lib/socket-io';
-import { socketConfig } from '@/configs/socket';
+import { useBoxChat } from './box-chat-context';
 import { useChat } from './chat-context';
 
 export interface BoxChatProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -18,8 +18,8 @@ type GroupMessage = {
 
 export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
   (props, ref) => {
-    const [messages, setMessages] = useState<MessageType[]>([]);
-    const { room, user, isTranslatePopupOpen, isShowFull } = useChat();
+    const { user, isTranslatePopupOpen, isShowFull } = useChat();
+    const { messages } = useBoxChat();
 
     const refScroll = useRef<HTMLDivElement>(null);
     const groupMessages = useMemo(() => {
@@ -58,17 +58,6 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
     }, [messages, user.language]);
 
     useEffect(() => {
-      socket.on(socketConfig.events.message.new, (message: Message) => {
-        console.log(message);
-        setMessages((messages) => [...messages, message]);
-      });
-
-      return () => {
-        socket.off(socketConfig.events.message.new);
-      };
-    }, []);
-
-    useEffect(() => {
       if (refScroll?.current) {
         refScroll.current.scrollTo({
           top: refScroll.current.scrollHeight,
@@ -80,7 +69,12 @@ export const BoxChat = forwardRef<HTMLDivElement, BoxChatProps>(
     return (
       <div ref={refScroll} className="chatFrame flex-1 gap-5 overflow-y-auto">
         {groupMessages.map((groupMessage, index) => (
-          <GroupMessage isShowFull={isShowFull} key={index} {...groupMessage} />
+          <GroupMessage
+            isLast={index === groupMessages.length - 1}
+            isShowFull={isShowFull}
+            key={index}
+            {...groupMessage}
+          />
         ))}
       </div>
     );

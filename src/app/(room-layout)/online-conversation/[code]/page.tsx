@@ -7,6 +7,7 @@ import {
   SideChat,
 } from '@/components/online-conversation/chat';
 
+import { BoxChatProvider } from '@/components/online-conversation/chat/box-chat-context';
 import { ChatProvider } from '@/components/online-conversation/chat/chat-context';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
@@ -43,11 +44,13 @@ export default async function RoomConversation({
       <ChatProvider room={room}>
         <Header />
         <div className="chatElementWrapper flex-1 overflow-hidden">
-          <div className="chat">
-            <BoxChat />
-            <InputEditor />
-          </div>
-          <SideChat />
+          <BoxChatProvider>
+            <div className="chat">
+              <BoxChat />
+              <InputEditor />
+            </div>
+            <SideChat />
+          </BoxChatProvider>
         </div>
       </ChatProvider>
     </div>

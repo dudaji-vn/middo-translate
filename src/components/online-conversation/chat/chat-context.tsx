@@ -11,6 +11,7 @@ import {
 
 import { JoinRoomPayload } from '@/types/socket';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { genChatLogFile } from '@/utils/gen-chat-log-file';
 import socket from '@/lib/socket-io';
 import { socketConfig } from '@/configs/socket';
 import { useConversationStore } from '@/stores/conversation';
@@ -105,7 +106,7 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
   }, []);
 
   if (!room || !user) {
-    return <div>hello</div>;
+    return null;
   }
 
   return (
