@@ -17,6 +17,7 @@ export const SideChat = (props: SideChatProps) => {
   const { room, user, closeSideChat, showSideChat, setIsShowFull, isShowFull } =
     useChat();
   const isMobile = useIsMobile();
+
   return (
     <>
       {showSideChat && isMobile && (
@@ -41,7 +42,7 @@ export const SideChat = (props: SideChatProps) => {
             </IconButton>
           </div>
         )}
-        <SideChatHeader code={room.code} />
+        <SideChatHeader room={room} code={room.code} />
         {user.language !== DEFAULT_LANGUAGES_CODE.EN && (
           <div
             className={cn(
@@ -52,6 +53,7 @@ export const SideChat = (props: SideChatProps) => {
             <Switch checked={isShowFull} onCheckedChange={setIsShowFull} />
           </div>
         )}
+
         <SideChatBody room={room} />
         <SideChatFooter roomCode={room.code} user={user} />
       </div>

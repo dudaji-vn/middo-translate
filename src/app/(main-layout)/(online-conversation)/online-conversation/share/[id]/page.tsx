@@ -20,6 +20,9 @@ interface SharingProps {
 export default async function Sharing({ params }: SharingProps) {
   const link = `${NEXT_PUBLIC_URL}${ROUTE_NAMES.ONLINE_CONVERSATION_JOIN}/${params.id}`;
   const room = await getConversation(params.id);
+  if (!room) {
+    return <div>Room not found</div>;
+  }
   return (
     <div className="myContainer">
       <div className="wrapper">
@@ -43,16 +46,14 @@ export default async function Sharing({ params }: SharingProps) {
             />
           </div>
           <div className="circleButtonWrapper">
-            {/* <CopyZone text={'Join my conversation at: ' + link}> */}
             <ShareZone text={link}>
               <IconButton variant="secondary">
                 <Share />
               </IconButton>
             </ShareZone>
-            {/* </CopyZone> */}
             Share through link
           </div>
-          <div className="buttonContainer">
+          <div className="buttonContainer md:!flex-row">
             <Link
               href={`${ROUTE_NAMES.ONLINE_CONVERSATION}/${params.id}`}
               className="fillButton md:w-[320px]"
