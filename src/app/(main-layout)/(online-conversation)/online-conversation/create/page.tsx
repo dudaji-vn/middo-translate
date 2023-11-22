@@ -10,14 +10,14 @@ interface CreateProps {}
 
 export default async function Create(props: CreateProps) {
   return (
-    <RoomCreatorProvider>
-      <div className="myContainer">
-        <div className="wrapper create">
-          <div className="columnWrapper">
-            <div className="rightColumn create">
-              <img className="introImg" src="/conversation_intro.png" alt="" />
-            </div>
-            <div className="leftColumn">
+    <div className="myContainer">
+      <div className="wrapper create">
+        <div className="columnWrapper">
+          <div className="rightColumn create">
+            <img className="introImg" src="/conversation_intro.png" alt="" />
+          </div>
+          <div className="leftColumn">
+            <RoomCreatorProvider>
               <div className="conversationForm">
                 <FormTitle>Create conversation</FormTitle>
                 <div className="formSection">
@@ -33,11 +33,11 @@ export default async function Create(props: CreateProps) {
                 </div>
                 <RoomCreatorSubmit />
               </div>
-            </div>
+            </RoomCreatorProvider>
           </div>
         </div>
       </div>
-    </RoomCreatorProvider>
+    </div>
   );
 }
 
