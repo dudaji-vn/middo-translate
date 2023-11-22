@@ -15,6 +15,8 @@ import { IconButton } from '@/components/button';
 import { Message } from '@/types/room';
 import { SendMessagePayload } from '@/types/socket';
 import { SvgSpinners270RingWithBg } from '@/components/icons';
+import { Text } from '@/components/text';
+import { Value } from '@radix-ui/react-select';
 import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import socket from '@/lib/socket-io';
@@ -63,6 +65,8 @@ export const InputEditor = (props: InputEditorProps) => {
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // allow if shift + enter
+    if (e.key === 'Enter' && e.shiftKey) return;
     if (e.key === 'Enter' && !isMobile) {
       e.preventDefault();
       handleSendMessage();
@@ -95,6 +99,8 @@ export const InputEditor = (props: InputEditorProps) => {
     sourceLanguage,
     translatedText,
   ]);
+
+  console.log(text);
 
   const handleSendMessage = async () => {
     if (!isSendAble) return;
@@ -184,7 +190,7 @@ export const InputEditor = (props: InputEditorProps) => {
               width={20}
             />
             <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
-              {translatedText}
+              <Text value={translatedText} />
             </div>
           </div>
           <IconButton disabled variant="ghost" className="self-end opacity-0">
@@ -238,7 +244,7 @@ export const InputEditor = (props: InputEditorProps) => {
                 />
 
                 <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
-                  {englishText}
+                  <Text value={englishText} />
                 </div>
               </div>
               <div className="inputChatButtonWrapper h-full !items-end">
