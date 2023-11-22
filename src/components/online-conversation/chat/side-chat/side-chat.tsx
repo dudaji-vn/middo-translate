@@ -42,19 +42,16 @@ export const SideChat = (props: SideChatProps) => {
           </div>
         )}
         <SideChatHeader code={room.code} />
-        <div
-          className={cn(
-            'flex items-center justify-between bg-background p-5',
-            user.language === DEFAULT_LANGUAGES_CODE.EN && 'opacity-30',
-          )}
-        >
-          <span>Show middle translate</span>{' '}
-          <Switch
-            disabled={user.language === DEFAULT_LANGUAGES_CODE.EN}
-            checked={isShowFull}
-            onCheckedChange={setIsShowFull}
-          />
-        </div>
+        {user.language !== DEFAULT_LANGUAGES_CODE.EN && (
+          <div
+            className={cn(
+              'flex items-center justify-between bg-background p-5',
+            )}
+          >
+            <span>Show middle translate</span>{' '}
+            <Switch checked={isShowFull} onCheckedChange={setIsShowFull} />
+          </div>
+        )}
         <SideChatBody room={room} />
         <SideChatFooter roomCode={room.code} user={user} />
       </div>
