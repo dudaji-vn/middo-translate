@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowForward } from '@easy-eva-icons/react';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { IconButton } from '@/components/button';
 import { SideChatBody } from './side-chat-body';
 import { SideChatFooter } from './side-footer';
@@ -41,9 +42,18 @@ export const SideChat = (props: SideChatProps) => {
           </div>
         )}
         <SideChatHeader code={room.code} />
-        <div className="flex items-center justify-between bg-background p-5">
+        <div
+          className={cn(
+            'flex items-center justify-between bg-background p-5',
+            user.language === DEFAULT_LANGUAGES_CODE.EN && 'opacity-30',
+          )}
+        >
           <span>Show middle translate</span>{' '}
-          <Switch checked={isShowFull} onCheckedChange={setIsShowFull} />
+          <Switch
+            disabled={user.language === DEFAULT_LANGUAGES_CODE.EN}
+            checked={isShowFull}
+            onCheckedChange={setIsShowFull}
+          />
         </div>
         <SideChatBody room={room} />
         <SideChatFooter roomCode={room.code} user={user} />
