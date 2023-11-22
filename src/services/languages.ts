@@ -13,7 +13,6 @@ export async function getSupportLanguages() {
 }
 export async function translateText(text: string, from?: string, to?: string) {
   if (!text || !from || !to || from === 'auto' || to === 'auto') return '';
-
   // if not in supported languages, return text
   const isFromSupported = supportedLanguages.some((lang) => lang.code === from);
   const isToSupported = supportedLanguages.some((lang) => lang.code === to);
@@ -21,11 +20,15 @@ export async function translateText(text: string, from?: string, to?: string) {
 
   if (from === to) return text;
 
+  const textEncoded = encodeURIComponent(text);
+
   const response = await fetch(
-    `${NEXT_PUBLIC_URL}/api/languages/translate?query=${text}&from=${from}&to=${to}`,
+    `${NEXT_PUBLIC_URL}/api/languages/translate?query=${textEncoded}&from=${from}&to=${to}`,
   );
+
   const json = await response.json();
-  return json.data as string;
+
+  return json.data;
 }
 
 export async function detectLanguage(text: string) {
