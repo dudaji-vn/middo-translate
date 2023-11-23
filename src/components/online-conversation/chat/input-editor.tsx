@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { IconButton } from '@/components/button';
-import { Message } from '@/types/room';
+import { Participant } from '@/types/room';
 import { SendMessagePayload } from '@/types/socket';
 import { SvgSpinners270RingWithBg } from '@/components/icons';
 import { Text } from '@/components/text';
@@ -28,7 +28,7 @@ import { useTranslate } from '@/hooks/use-translate';
 export interface InputEditorProps {}
 
 export const InputEditor = (props: InputEditorProps) => {
-  const { room, user, setIsTranslatePopupOpen } = useChat();
+  const { room, user, setIsTranslatePopupOpen, isQuickSend } = useChat();
   const isMobile = useIsMobile();
   const sourceLanguage = user.language;
   const targetLanguage = room.languages.find(
@@ -48,10 +48,12 @@ export const InputEditor = (props: InputEditorProps) => {
     handleStopListening,
     listening,
     isLoading,
+    translate,
   } = useTranslate({
     sourceLanguage,
     targetLanguage: targetLanguage || 'en',
     listenMode: 'continuous',
+    translateOnType: !isQuickSend,
   });
   const [isEditing, setIsEditing] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
@@ -65,7 +67,6 @@ export const InputEditor = (props: InputEditorProps) => {
   );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // allow if shift + enter
     if (e.key === 'Enter' && e.shiftKey) return;
     if (e.key === 'Enter' && !isMobile) {
       e.preventDefault();
@@ -76,8 +77,9 @@ export const InputEditor = (props: InputEditorProps) => {
 
   const isSendAble = useMemo(() => {
     if (!text) return false;
-    if (isTyping) return false;
     if (isLoading) return false;
+    if (isQuickSend) return true;
+    if (isTyping) return false;
     if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN && !englishText)
       return false;
     if (sourceLanguage === DEFAULT_LANGUAGES_CODE.EN && !translatedText)
@@ -91,6 +93,7 @@ export const InputEditor = (props: InputEditorProps) => {
     }
     return true;
   }, [
+    isQuickSend,
     text,
     isTyping,
     isLoading,
@@ -102,19 +105,34 @@ export const InputEditor = (props: InputEditorProps) => {
 
   const handleSendMessage = async () => {
     if (!isSendAble) return;
-    if (englishText || translatedText) {
-      const newMessage: Message = {
-        sender: user,
-        content: text,
-        translatedContent:
-          targetLanguage === DEFAULT_LANGUAGES_CODE.EN
-            ? englishText
-            : translatedText,
-        englishContent: englishText || text,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        isSystem: false,
+
+    if (isQuickSend) {
+      const { englishText, originalText, translatedText } =
+        await translate(text);
+      const newMessage = createMessage({
+        user,
+        text: originalText,
+        targetLanguage: targetLanguage || 'en',
+        englishText,
+        translatedText,
+      });
+      const sendMessagePayload: SendMessagePayload = {
+        roomCode: room.code,
+        message: newMessage,
       };
+      socket.emit(socketConfig.events.message.new, sendMessagePayload);
+      handleStopListening();
+      reset();
+      return;
+    }
+    if (englishText || translatedText) {
+      const newMessage = createMessage({
+        user,
+        text,
+        targetLanguage: targetLanguage || 'en',
+        englishText,
+        translatedText,
+      });
 
       const sendMessagePayload: SendMessagePayload = {
         roomCode: room.code,
@@ -176,79 +194,87 @@ export const InputEditor = (props: InputEditorProps) => {
 
   return (
     <div className="chatInputWrapper">
-      {translatedText && (
-        <div className="chatInput middle">
-          <div className="inputMess">
-            <CircleFlag
-              className="inline-block"
-              countryCode={getCountryCode(targetLanguage) || 'gb'}
-              height={20}
-              width={20}
-            />
-            <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
-              <Text value={translatedText} />
-            </div>
-          </div>
-          <IconButton disabled variant="ghost" className="self-end opacity-0">
-            <Edit2Outline className="opacity-60" />
-          </IconButton>
-        </div>
-      )}
-      {isEditing ? (
-        <div className="chatInput !items-start">
-          <div className="inputMess ">
-            <CircleFlag
-              className="inline-block"
-              countryCode={'gb'}
-              height={20}
-              width={20}
-            />
-            <textarea
-              ref={middleTextAreaRef}
-              className="max-h-[48px] w-full resize-none  appearance-none border-none bg-transparent !text-base focus:border-transparent focus:outline-none focus:ring-0 md:max-h-[96px]"
-              value={middleText}
-              onChange={(e) => setMiddleText(e.target.value)}
-            />
-          </div>
-          <div className="inputChatButtonWrapper h-full !flex-col !justify-between">
-            <IconButton
-              onClick={handleCancelEdit}
-              variant="ghost"
-              className="self-end"
-            >
-              <CloseCircle className="opacity-60" />
-            </IconButton>
-            <IconButton
-              onClick={handleSubmitEdit}
-              variant="success"
-              className="self-end"
-            >
-              <CheckmarkCircle2 />
-            </IconButton>
-          </div>
-        </div>
-      ) : (
+      {!isQuickSend && (
         <>
-          {englishText && (
+          {translatedText && (
             <div className="chatInput middle">
               <div className="inputMess">
+                <CircleFlag
+                  className="inline-block"
+                  countryCode={getCountryCode(targetLanguage) || 'gb'}
+                  height={20}
+                  width={20}
+                />
+                <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
+                  <Text value={translatedText} />
+                </div>
+              </div>
+              <IconButton
+                disabled
+                variant="ghost"
+                className="self-end opacity-0"
+              >
+                <Edit2Outline className="opacity-60" />
+              </IconButton>
+            </div>
+          )}
+          {isEditing ? (
+            <div className="chatInput !items-start">
+              <div className="inputMess ">
                 <CircleFlag
                   className="inline-block"
                   countryCode={'gb'}
                   height={20}
                   width={20}
                 />
-
-                <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
-                  <Text value={englishText} />
-                </div>
+                <textarea
+                  ref={middleTextAreaRef}
+                  className="max-h-[48px] w-full resize-none  appearance-none border-none bg-transparent !text-base focus:border-transparent focus:outline-none focus:ring-0 md:max-h-[96px]"
+                  value={middleText}
+                  onChange={(e) => setMiddleText(e.target.value)}
+                />
               </div>
-              <div className="inputChatButtonWrapper h-full !items-end">
-                <IconButton onClick={handleEdit} variant="ghost">
-                  <Edit2Outline className="opacity-60" />
+              <div className="inputChatButtonWrapper h-full !flex-col !justify-between">
+                <IconButton
+                  onClick={handleCancelEdit}
+                  variant="ghost"
+                  className="self-end"
+                >
+                  <CloseCircle className="opacity-60" />
+                </IconButton>
+                <IconButton
+                  onClick={handleSubmitEdit}
+                  variant="success"
+                  className="self-end"
+                >
+                  <CheckmarkCircle2 />
                 </IconButton>
               </div>
             </div>
+          ) : (
+            <>
+              {englishText && (
+                <div className="chatInput middle">
+                  <div className="inputMess">
+                    <CircleFlag
+                      className="inline-block"
+                      countryCode={'gb'}
+                      height={20}
+                      width={20}
+                    />
+
+                    <div className="break-word-mt max-h-[48px] overflow-y-auto md:max-h-[96px]">
+                      <Text value={englishText} />
+                    </div>
+                  </div>
+                  <div className="inputChatButtonWrapper h-full !items-end">
+                    <IconButton onClick={handleEdit} variant="ghost">
+                      <Edit2Outline className="opacity-60" />
+                    </IconButton>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </>
       )}
@@ -305,4 +331,31 @@ export const InputEditor = (props: InputEditorProps) => {
       </div>
     </div>
   );
+};
+
+const createMessage = ({
+  user,
+  text,
+  targetLanguage,
+  englishText,
+  translatedText,
+}: {
+  user: Participant;
+  text: string;
+  targetLanguage: string;
+  englishText: string;
+  translatedText: string;
+}) => {
+  return {
+    sender: user,
+    content: text,
+    translatedContent:
+      targetLanguage === DEFAULT_LANGUAGES_CODE.EN
+        ? englishText
+        : translatedText,
+    englishContent: englishText || text,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    isSystem: false,
+  };
 };

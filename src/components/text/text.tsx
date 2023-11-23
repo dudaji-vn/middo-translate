@@ -10,7 +10,7 @@ export const Text = forwardRef<HTMLDivElement, TextProps>(
       <>
         {arrayNewLine.map((item, index) => {
           return (
-            <span {...props} key={index}>
+            <span className={props.className} key={index}>
               {item}
               <br />
             </span>

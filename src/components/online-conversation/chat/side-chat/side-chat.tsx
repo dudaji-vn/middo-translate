@@ -11,6 +11,7 @@ import { SideChatFooter } from './side-footer';
 import { SideChatHeader } from './side-chat-header';
 import { Switch } from '@/components/switch';
 import { cn } from '@/utils/cn';
+import { setRoomSetting } from '@/utils/local-storage';
 import socket from '@/lib/socket-io';
 import { socketConfig } from '@/configs/socket';
 import { useChat } from '../chat-context';
@@ -19,8 +20,16 @@ import { useIsMobile } from '@/hooks/use-is-mobile';
 export interface SideChatProps {}
 
 export const SideChat = (props: SideChatProps) => {
-  const { room, user, closeSideChat, showSideChat, setIsShowFull, isShowFull } =
-    useChat();
+  const {
+    room,
+    user,
+    closeSideChat,
+    showSideChat,
+    setIsShowFull,
+    isShowFull,
+    isQuickSend,
+    setIsQuickSend,
+  } = useChat();
   const isMobile = useIsMobile();
 
   const [members, setMembers] = useState<Participant[]>(room.participants);
@@ -59,16 +68,39 @@ export const SideChat = (props: SideChatProps) => {
           </div>
         )}
         <SideChatHeader room={{ ...room, participants: members }} />
-        {user.language !== DEFAULT_LANGUAGES_CODE.EN && (
+        <div>
+          {user.language !== DEFAULT_LANGUAGES_CODE.EN && (
+            <div
+              className={cn(
+                'flex items-center justify-between bg-background p-5',
+              )}
+            >
+              <span>Show English translate</span>{' '}
+              <Switch
+                checked={isShowFull}
+                onCheckedChange={(checked) => {
+                  setRoomSetting({ isShowFull: checked });
+                  setIsShowFull(checked);
+                }}
+              />
+            </div>
+          )}
+
           <div
             className={cn(
               'flex items-center justify-between bg-background p-5',
             )}
           >
-            <span>Show English translate</span>{' '}
-            <Switch checked={isShowFull} onCheckedChange={setIsShowFull} />
+            <span>Quick send</span>
+            <Switch
+              checked={isQuickSend}
+              onCheckedChange={(checked) => {
+                setRoomSetting({ isQuickSend: checked });
+                setIsQuickSend(checked);
+              }}
+            />
           </div>
-        )}
+        </div>
 
         <div className="bg-background">
           <MemberList host={room.host} members={members} />

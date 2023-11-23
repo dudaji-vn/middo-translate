@@ -11,10 +11,12 @@ export const useTranslate = ({
   sourceLanguage,
   targetLanguage,
   listenMode = 'continuous',
+  translateOnType = true,
 }: {
   sourceLanguage: string;
   targetLanguage: string;
   listenMode?: 'continuous' | 'manual';
+  translateOnType?: boolean;
 }) => {
   const [text, setText] = useState('');
   const [translatedText, setTranslatedText] = useState('');
@@ -28,6 +30,7 @@ export const useTranslate = ({
   const debounceValue = useDebounce(text, 500);
 
   useEffect(() => {
+    if (!translateOnType) return;
     if (middleText) return;
     if (debounceValue) {
       const translate = async () => {
@@ -88,7 +91,13 @@ export const useTranslate = ({
       setEnglishText('');
       setTranslatedEnglishText('');
     }
-  }, [debounceValue, middleText, sourceLanguage, targetLanguage]);
+  }, [
+    debounceValue,
+    middleText,
+    sourceLanguage,
+    targetLanguage,
+    translateOnType,
+  ]);
 
   const middleTranslate = async (text: string) => {
     const [sourceResult, targetResult] = await Promise.all([
@@ -135,6 +144,37 @@ export const useTranslate = ({
     setTranslatedEnglishText('');
   };
 
+  const translate = async (text: string) => {
+    setIsLoading(true);
+    let translatedText = '';
+    let englishText = '';
+    if (sourceLanguage === DEFAULT_LANGUAGES_CODE.EN) {
+      englishText = text;
+    } else {
+      englishText = await translateText(
+        text,
+        sourceLanguage,
+        DEFAULT_LANGUAGES_CODE.EN,
+      );
+    }
+
+    if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN) {
+      translatedText = englishText;
+    } else {
+      translatedText = await translateText(
+        text,
+        sourceLanguage,
+        targetLanguage,
+      );
+    }
+    setIsLoading(false);
+    return {
+      originalText: text,
+      englishText: englishText,
+      translatedText: translatedText,
+    };
+  };
+
   return {
     text,
     setText,
@@ -153,5 +193,6 @@ export const useTranslate = ({
     handleStopListening,
     isLoading,
     reset,
+    translate,
   };
 };

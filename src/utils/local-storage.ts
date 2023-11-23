@@ -60,3 +60,22 @@ export const getOnlineConversionInfo = () => {
 export const removeOnlineConversionInfo = () => {
   localStorage.removeItem(OC_INFO);
 };
+
+export const getRoomSetting = () => {
+  const roomSetting = localStorage.getItem('ROOM_SETTING');
+  if (roomSetting) {
+    return JSON.parse(roomSetting);
+  }
+  return {};
+};
+
+export const setRoomSetting = (setting: any) => {
+  const oldSetting = getRoomSetting();
+  localStorage.setItem(
+    'ROOM_SETTING',
+    JSON.stringify({
+      ...oldSetting,
+      ...setting,
+    }),
+  );
+};
