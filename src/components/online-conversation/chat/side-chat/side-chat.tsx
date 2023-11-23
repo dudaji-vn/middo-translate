@@ -85,6 +85,9 @@ export const SideChat = (props: SideChatProps) => {
               />
             </div>
           )}
+          <div className="bg-background px-5">
+            <div className="border-t"></div>
+          </div>
 
           <div
             className={cn(
