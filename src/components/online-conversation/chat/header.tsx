@@ -1,7 +1,12 @@
 'use client';
 
+import {
+  MessageCircleOutline,
+  MoreVerticalOutline,
+} from '@easy-eva-icons/react';
+
 import { IconButton } from '@/components/button';
-import { MoreVerticalOutline } from '@easy-eva-icons/react';
+import { Logo } from '@/components/icons';
 import { useChat } from './chat-context';
 import { useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-is-mobile';
@@ -23,7 +28,12 @@ export const Header = (props: HeaderProps) => {
   }, [isMobile]);
   return (
     <div className="chatNavigation">
-      <div>{host?.username}&apos;s room</div>
+      <div className="flex items-center gap-2">
+        <div>
+          <Logo width={28} />
+        </div>
+        <div>{host?.username}&apos;s room</div>
+      </div>
       {isMobile && (
         <IconButton
           onClick={() => {
