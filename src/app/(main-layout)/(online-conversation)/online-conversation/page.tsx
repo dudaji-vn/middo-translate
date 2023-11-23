@@ -40,7 +40,7 @@ export default async function Home(props: HomeProps) {
                 href={ROUTE_NAMES.ONLINE_CONVERSATION_CREATE}
                 className="fillButton !py-4 md:!py-3"
               >
-                <Plus className="mr-2 h-5 w-5 text-background" /> Create room
+                <Plus className="mr-2 h-5 w-5" /> Create room
               </Link>
             </div>
           </div>

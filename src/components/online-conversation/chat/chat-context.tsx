@@ -11,7 +11,7 @@ import {
 
 import { JoinRoomPayload } from '@/types/socket';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { genChatLogFile } from '@/utils/gen-chat-log-file';
+import { getRoomSetting } from '@/utils/local-storage';
 import socket from '@/lib/socket-io';
 import { socketConfig } from '@/configs/socket';
 import { useConversationStore } from '@/stores/conversation';
@@ -27,6 +27,8 @@ type ChatContext = {
   setIsTranslatePopupOpen: (isOpen: boolean) => void;
   isShowFull: boolean;
   setIsShowFull: (isShowFull: boolean) => void;
+  isQuickSend: boolean;
+  setIsQuickSend: (isQuickSend: boolean) => void;
 };
 
 export const ChatContext = createContext<ChatContext>({
@@ -39,6 +41,8 @@ export const ChatContext = createContext<ChatContext>({
   setIsTranslatePopupOpen: () => {},
   isShowFull: false,
   setIsShowFull: () => {},
+  isQuickSend: false,
+  setIsQuickSend: () => {},
 });
 
 export const useChat = () => {
@@ -54,6 +58,8 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
   const user = room.participants.find((user) => user.socketId === socket.id);
 
   const [isShowFull, setIsShowFull] = useState(false);
+
+  const [isQuickSend, setIsQuickSend] = useState(false);
 
   const { info } = useConversationStore();
   const [showSideChat, setShowSideChat] = useState(true);
@@ -94,7 +100,6 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
 
   useEffect(() => {
     window.addEventListener('resize', () => {
-      // We execute the same script as before
       let vh = window.innerHeight * 0.01;
       const element = document.getElementsByClassName('chatScreenWrapper')[0];
       if (!element) return;
@@ -103,6 +108,12 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
     return () => {
       window.removeEventListener('resize', () => {});
     };
+  }, []);
+
+  useEffect(() => {
+    const { isShowFull, isQuickSend } = getRoomSetting();
+    setIsShowFull(isShowFull || false);
+    setIsQuickSend(isQuickSend || false);
   }, []);
 
   if (!room || !user) {
@@ -121,6 +132,8 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
         setIsTranslatePopupOpen,
         isShowFull,
         setIsShowFull,
+        isQuickSend,
+        setIsQuickSend,
       }}
     >
       {children}
