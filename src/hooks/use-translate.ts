@@ -128,6 +128,13 @@ export const useTranslate = ({
     }
   }, [interimTranscript]);
 
+  const reset = () => {
+    setText('');
+    setTranslatedText('');
+    setEnglishText('');
+    setTranslatedEnglishText('');
+  };
+
   return {
     text,
     setText,
@@ -145,5 +152,6 @@ export const useTranslate = ({
     interimTranscript,
     handleStopListening,
     isLoading,
+    reset,
   };
 };
