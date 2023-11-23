@@ -16,6 +16,9 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: NEXT_PUBLIC_NAME,
   description: NEXT_PUBLIC_DESCRIPTION,
+  openGraph: {
+    images: ['/opengraph-image.png'],
+  },
 };
 
 export default function RootLayout({
