@@ -100,8 +100,6 @@ export const InputEditor = (props: InputEditorProps) => {
     translatedText,
   ]);
 
-  console.log(text);
-
   const handleSendMessage = async () => {
     if (!isSendAble) return;
     if (englishText || translatedText) {
@@ -112,8 +110,7 @@ export const InputEditor = (props: InputEditorProps) => {
           targetLanguage === DEFAULT_LANGUAGES_CODE.EN
             ? englishText
             : translatedText,
-        englishContent:
-          targetLanguage === DEFAULT_LANGUAGES_CODE.EN ? '' : englishText,
+        englishContent: englishText || text,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         isSystem: false,
