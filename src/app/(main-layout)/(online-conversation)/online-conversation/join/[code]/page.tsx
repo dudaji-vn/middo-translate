@@ -7,6 +7,7 @@ import {
   UsernameInput,
 } from '@/components/online-conversation/join';
 
+import Image from 'next/image';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { getConversation } from '@/services/conversation';
 import { redirect } from 'next/navigation';
@@ -30,7 +31,14 @@ export default async function Join(props: JoinProps) {
         <div className="wrapper join">
           <div className="columnWrapper">
             <div className="rightColumn join">
-              <img className="introImg" src="/conversation_intro.png" alt="" />
+              <div className="introImg">
+                <Image
+                  src="/conversation_intro.png"
+                  width={1000}
+                  height={1000}
+                  alt=""
+                />
+              </div>
             </div>
             <div className="leftColumn">
               <div className="conversationForm">

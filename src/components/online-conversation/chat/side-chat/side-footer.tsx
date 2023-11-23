@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Participant } from '@/types/room';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter } from 'next/navigation';
@@ -25,7 +26,9 @@ export const SideChatFooter = ({ roomCode, user }: SideChatFooterProps) => {
       <div className="mt-10 flex items-center justify-center">
         <div className="">
           <p className="mb-2 font-light ">Power by</p>
-          <img src="/logo.png" alt="qr-code" width={150} />
+          <div className="w-[150px]">
+            <Image src="/logo.png" alt="logo" width={500} height={500} />
+          </div>
         </div>
       </div>
     </div>
