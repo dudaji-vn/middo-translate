@@ -10,7 +10,6 @@ import { useBoxChat } from '../box-chat-context';
 import { useTextCopy } from '@/hooks/use-text-copy';
 
 export interface SideChatHeaderProps {
-  code: string;
   room: Room;
 }
 

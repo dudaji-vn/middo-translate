@@ -16,7 +16,7 @@ export const genChatLogFile = ({
 
   let userIndexBySocketId: { [key: string]: number } = {};
   room.participants.forEach((member, index) => {
-    membersText += `${index + 1}.${member.username} - ${member.language} ${
+    membersText += `${index + 1}. ${member.username} - ${member.language} ${
       room.host.socketId === member.socketId ? '- host' : ''
     }\n`;
     userIndexBySocketId[member.socketId] = index + 1;
@@ -28,11 +28,11 @@ export const genChatLogFile = ({
     messagesText += ` - ${message.sender.username}(${
       userIndexBySocketId[message.sender.socketId]
     })${message.sender.socketId === socket.id && '(you)'}:\n`;
-    messagesText += `   + original: ${message.content}\n`;
+    messagesText += `   + Original: ${message.content}\n`;
     if (message.translatedContent)
-      messagesText += `   + translated: ${message.translatedContent}\n`;
+      messagesText += `   + Translated: ${message.translatedContent}\n`;
     if (message.englishContent)
-      messagesText += `   + english: ${message.englishContent}\n`;
+      messagesText += `   + English: ${message.englishContent}\n`;
     messagesText += `   + time: ${moment(message.createdAt).format('LT')}\n${
       index === messages.length - 1 ? '' : '\n'
     }`;

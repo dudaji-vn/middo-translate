@@ -16,7 +16,6 @@ import { Message } from '@/types/room';
 import { SendMessagePayload } from '@/types/socket';
 import { SvgSpinners270RingWithBg } from '@/components/icons';
 import { Text } from '@/components/text';
-import { Value } from '@radix-ui/react-select';
 import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import socket from '@/lib/socket-io';
@@ -37,6 +36,7 @@ export const InputEditor = (props: InputEditorProps) => {
   );
 
   const {
+    reset,
     text,
     setText,
     translatedText,
@@ -100,8 +100,6 @@ export const InputEditor = (props: InputEditorProps) => {
     translatedText,
   ]);
 
-  console.log(text);
-
   const handleSendMessage = async () => {
     if (!isSendAble) return;
     if (englishText || translatedText) {
@@ -112,8 +110,7 @@ export const InputEditor = (props: InputEditorProps) => {
           targetLanguage === DEFAULT_LANGUAGES_CODE.EN
             ? englishText
             : translatedText,
-        englishContent:
-          targetLanguage === DEFAULT_LANGUAGES_CODE.EN ? '' : englishText,
+        englishContent: englishText || text,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         isSystem: false,
@@ -126,9 +123,8 @@ export const InputEditor = (props: InputEditorProps) => {
 
       socket.emit(socketConfig.events.message.new, sendMessagePayload);
 
-      setMiddleText('');
-      setText('');
       handleStopListening();
+      reset();
     }
   };
 

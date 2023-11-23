@@ -1,13 +1,18 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { ArrowForward } from '@easy-eva-icons/react';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { IconButton } from '@/components/button';
-import { SideChatBody } from './side-chat-body';
+import { MemberList } from './member-list';
+import { Participant } from '@/types/room';
 import { SideChatFooter } from './side-footer';
 import { SideChatHeader } from './side-chat-header';
 import { Switch } from '@/components/switch';
 import { cn } from '@/utils/cn';
+import socket from '@/lib/socket-io';
+import { socketConfig } from '@/configs/socket';
 import { useChat } from '../chat-context';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 
@@ -17,6 +22,17 @@ export const SideChat = (props: SideChatProps) => {
   const { room, user, closeSideChat, showSideChat, setIsShowFull, isShowFull } =
     useChat();
   const isMobile = useIsMobile();
+
+  const [members, setMembers] = useState<Participant[]>(room.participants);
+  useEffect(() => {
+    socket.on(socketConfig.events.room.participant.update, (participants) => {
+      setMembers(participants);
+    });
+
+    return () => {
+      socket.off(socketConfig.events.room.participant.update);
+    };
+  }, []);
 
   return (
     <>
@@ -42,19 +58,21 @@ export const SideChat = (props: SideChatProps) => {
             </IconButton>
           </div>
         )}
-        <SideChatHeader room={room} code={room.code} />
+        <SideChatHeader room={{ ...room, participants: members }} />
         {user.language !== DEFAULT_LANGUAGES_CODE.EN && (
           <div
             className={cn(
               'flex items-center justify-between bg-background p-5',
             )}
           >
-            <span>Show middle translate</span>{' '}
+            <span>Show English translate</span>{' '}
             <Switch checked={isShowFull} onCheckedChange={setIsShowFull} />
           </div>
         )}
 
-        <SideChatBody room={room} />
+        <div className="bg-background">
+          <MemberList host={room.host} members={members} />
+        </div>
         <SideChatFooter roomCode={room.code} user={user} />
       </div>
     </>
