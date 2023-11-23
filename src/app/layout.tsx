@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: NEXT_PUBLIC_NAME,
   description: NEXT_PUBLIC_DESCRIPTION,
   openGraph: {
-    images: ['/opengraph-image.png'],
+    images: ['https://i.postimg.cc/8c3sTD9v/fadshjsdkfhasdjk.png'],
   },
 };
 
