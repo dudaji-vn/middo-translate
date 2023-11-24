@@ -3,6 +3,7 @@ import './globals.css';
 import {
   NEXT_PUBLIC_DESCRIPTION,
   NEXT_PUBLIC_NAME,
+  NEXT_PUBLIC_URL,
 } from '@/configs/env.public';
 
 import { AppProvider } from '@/providers/app';
@@ -14,11 +15,12 @@ import { useSessionStore } from '@/stores/session';
 const montserrat = Montserrat({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(NEXT_PUBLIC_URL),
   title: NEXT_PUBLIC_NAME,
   description: NEXT_PUBLIC_DESCRIPTION,
   keywords: 'middo, middo translate, tranlaste, english, vietnamese, korean',
   openGraph: {
-    images: ['https://i.postimg.cc/8c3sTD9v/fadshjsdkfhasdjk.png'],
+    images: ['/opengraph-image.png'],
     title: NEXT_PUBLIC_NAME,
     description: NEXT_PUBLIC_DESCRIPTION,
   },
