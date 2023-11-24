@@ -16,8 +16,11 @@ const montserrat = Montserrat({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: NEXT_PUBLIC_NAME,
   description: NEXT_PUBLIC_DESCRIPTION,
+  keywords: 'middo, middo translate, tranlaste, english, vietnamese, korean',
   openGraph: {
     images: ['https://i.postimg.cc/8c3sTD9v/fadshjsdkfhasdjk.png'],
+    title: NEXT_PUBLIC_NAME,
+    description: NEXT_PUBLIC_DESCRIPTION,
   },
 };
 
