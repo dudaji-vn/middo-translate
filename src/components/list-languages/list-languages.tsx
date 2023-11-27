@@ -9,8 +9,8 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 
 import { Country } from '@/types/country';
 import { Input } from '../input';
+import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
-import { supportedLanguages } from '@/configs/default-language';
 
 export interface ListLanguagesProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -32,7 +32,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
       setRecentlyUsed(newRecentlyUsed);
       onSelected(code);
     };
-    const filterLanguages = supportedLanguages.filter((language) => {
+    const filterLanguages = SUPPORTED_LANGUAGES.filter((language) => {
       if (search === '') return true;
       return language.name.toLowerCase().includes(search.toLowerCase());
     });
@@ -94,7 +94,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                 <>
                   <Title>Recently used</Title>
                   {recentlyUsed.map((code) => {
-                    const language = supportedLanguages.find(
+                    const language = SUPPORTED_LANGUAGES.find(
                       (item) => item.code === code,
                     );
                     return (
@@ -114,7 +114,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                 </>
               )}
               <Title>All languages</Title>
-              {supportedLanguages.map((language) => (
+              {SUPPORTED_LANGUAGES.map((language) => (
                 <Item
                   onClick={handleSelected.bind(null, language.code)}
                   selected={language.code === selectedCode}

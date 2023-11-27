@@ -7,8 +7,8 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 
 import { Country } from '@/types/country';
 import { Input } from '../input';
+import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
-import { supportedLanguages } from '@/configs/default-language';
 
 export interface ListLanguagesProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,7 +25,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
     const handleSelected = (code: string) => {
       onSelected(code);
     };
-    const filterLanguages = supportedLanguages.filter((language) => {
+    const filterLanguages = SUPPORTED_LANGUAGES.filter((language) => {
       if (search === '') return true;
       return language.name.toLowerCase().includes(search.toLowerCase());
     });
@@ -75,7 +75,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
         <div className="mb-8 flex-1 columns-1 gap-0 overflow-y-auto md:columns-3">
           {search === '' ? (
             <>
-              {supportedLanguages.map((language) => (
+              {SUPPORTED_LANGUAGES.map((language) => (
                 <Item
                   onClick={handleSelected.bind(null, language.code)}
                   selected={selectedLanguages?.includes(language.code)}

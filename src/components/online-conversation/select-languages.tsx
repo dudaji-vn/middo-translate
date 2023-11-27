@@ -12,8 +12,8 @@ import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 import { CircleFlag } from 'react-circle-flags';
 import { IconButton } from '../button';
 import { Input } from '../input';
+import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
-import { supportedLanguages } from '@/configs/default-language';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useOnClickOutside } from 'usehooks-ts';
 import { useRoomCreator } from './room-creator-context';
@@ -196,7 +196,7 @@ const SearchPanel = ({
     }
   }, [searchRef]);
 
-  const filterLanguages = supportedLanguages.filter((language) => {
+  const filterLanguages = SUPPORTED_LANGUAGES.filter((language) => {
     if (search === '') return true;
     return language.name.toLowerCase().includes(search.toLowerCase());
   });
