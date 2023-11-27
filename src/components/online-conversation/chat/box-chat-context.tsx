@@ -9,8 +9,8 @@ import {
   useState,
 } from 'react';
 
+import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
-import { socketConfig } from '@/configs/socket';
 
 type BoxChatContext = {
   messages: Message[];
@@ -29,12 +29,12 @@ export const BoxChatProvider = ({ children }: BoxChatProviderProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
-    socket.on(socketConfig.events.message.new, (message: Message) => {
+    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.NEW, (message: Message) => {
       setMessages((messages) => [...messages, message]);
     });
 
     return () => {
-      socket.off(socketConfig.events.message.new);
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
     };
   }, []);
 

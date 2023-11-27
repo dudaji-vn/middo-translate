@@ -1,21 +1,21 @@
-export const socketConfig = {
-  events: {
-    message: {
-      new: 'message.new',
-      send: 'message.send',
+export const SOCKET_CONFIG = {
+  EVENTS: {
+    MESSAGE: {
+      NEW: 'message.new',
+      SEND: 'message.send',
     },
-    room: {
-      join: 'room.join',
-      leave: 'room.leave',
-      participant: {
-        update: 'room.participant.update',
-        leave: 'room.participant.leave',
+    ROOM: {
+      JOIN: 'room.join',
+      LEAVE: 'room.leave',
+      PARTICIPANT: {
+        UPDATE: 'room.participant.update',
+        LEAVE: 'room.participant.leave',
       },
     },
-    chat: {
-      join: 'chat.join',
-      newJoin: 'chat.newJoin',
-      leave: 'chat.leave',
+    CHAT: {
+      JOIN: 'chat.join',
+      NEW_JOIN: 'chat.newJoin',
+      LEAVE: 'chat.leave',
     },
   },
 };

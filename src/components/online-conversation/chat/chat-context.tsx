@@ -11,9 +11,9 @@ import {
 
 import { JoinRoomPayload } from '@/types/socket';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { SOCKET_CONFIG } from '@/configs/socket';
 import { getRoomSetting } from '@/utils/local-storage';
 import socket from '@/lib/socket-io';
-import { socketConfig } from '@/configs/socket';
 import { useConversationStore } from '@/stores/conversation';
 import { useRouter } from 'next/navigation';
 
@@ -86,14 +86,14 @@ export const ChatProvider = ({ children, room: _room }: ChatProviderProps) => {
       info,
     };
 
-    socket.emit(socketConfig.events.room.join, joinPayload);
-    socket.on(socketConfig.events.room.join, (room: Room) => {
+    socket.emit(SOCKET_CONFIG.EVENTS.ROOM.JOIN, joinPayload);
+    socket.on(SOCKET_CONFIG.EVENTS.ROOM.JOIN, (room: Room) => {
       setRoom(room);
     });
 
     return () => {
-      socket.off(socketConfig.events.room.join);
-      socket.emit(socketConfig.events.room.leave, roomCode);
+      socket.off(SOCKET_CONFIG.EVENTS.ROOM.JOIN);
+      socket.emit(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, roomCode);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [info, roomCode]);

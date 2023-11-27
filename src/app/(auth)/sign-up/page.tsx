@@ -1,5 +1,5 @@
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
-import { SignUpForm } from '@/components/sign-up-form';
+import { SignUpForm } from '@/features/auth/components';
 
 interface SignUpPageProps {}
 
