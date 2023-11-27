@@ -4,7 +4,7 @@ export const DEFAULT_LANGUAGES_CODE = {
   KR: 'ko',
 };
 
-export const languageCodesMap = {
+export const LANGUAGE_CODES_MAP = {
   af: 'ZA',
   sq: 'AL',
   am: 'ET',
@@ -63,7 +63,7 @@ export const languageCodesMap = {
   cy: 'GB-WLS',
 };
 
-export const supportedLanguages = [
+export const SUPPORTED_LANGUAGES = [
   { code: 'af', name: 'Afrikaans' },
   { code: 'sq', name: 'Albanian' },
   { code: 'am', name: 'Amharic' },

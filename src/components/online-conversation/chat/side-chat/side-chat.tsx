@@ -7,13 +7,13 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { IconButton } from '@/components/button';
 import { MemberList } from './member-list';
 import { Participant } from '@/types/room';
+import { SOCKET_CONFIG } from '@/configs/socket';
 import { SideChatFooter } from './side-footer';
 import { SideChatHeader } from './side-chat-header';
 import { Switch } from '@/components/switch';
 import { cn } from '@/utils/cn';
 import { setRoomSetting } from '@/utils/local-storage';
 import socket from '@/lib/socket-io';
-import { socketConfig } from '@/configs/socket';
 import { useChat } from '../chat-context';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 
@@ -34,12 +34,12 @@ export const SideChat = (props: SideChatProps) => {
 
   const [members, setMembers] = useState<Participant[]>(room.participants);
   useEffect(() => {
-    socket.on(socketConfig.events.room.participant.update, (participants) => {
+    socket.on(SOCKET_CONFIG.EVENTS.ROOM.PARTICIPANT.UPDATE, (participants) => {
       setMembers(participants);
     });
 
     return () => {
-      socket.off(socketConfig.events.room.participant.update);
+      socket.off(SOCKET_CONFIG.EVENTS.ROOM.PARTICIPANT.UPDATE);
     };
   }, []);
 

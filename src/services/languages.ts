@@ -1,6 +1,6 @@
 import {
   DEFAULT_LANGUAGES_CODE,
-  supportedLanguages,
+  SUPPORTED_LANGUAGES,
 } from '@/configs/default-language';
 
 import { Country } from '@/types/country';
@@ -14,8 +14,10 @@ export async function getSupportLanguages() {
 export async function translateText(text: string, from?: string, to?: string) {
   if (!text || !from || !to || from === 'auto' || to === 'auto') return '';
   // if not in supported languages, return text
-  const isFromSupported = supportedLanguages.some((lang) => lang.code === from);
-  const isToSupported = supportedLanguages.some((lang) => lang.code === to);
+  const isFromSupported = SUPPORTED_LANGUAGES.some(
+    (lang) => lang.code === from,
+  );
+  const isToSupported = SUPPORTED_LANGUAGES.some((lang) => lang.code === to);
   if (!isFromSupported || !isToSupported) return text;
 
   if (from === to) return text;
@@ -39,6 +41,8 @@ export async function detectLanguage(text: string) {
   );
   const json = await response.json();
   const language = json.data.language as string;
-  const isSupported = supportedLanguages.some((lang) => lang.code === language);
+  const isSupported = SUPPORTED_LANGUAGES.some(
+    (lang) => lang.code === language,
+  );
   return isSupported ? language : DEFAULT_LANGUAGES_CODE.EN;
 }

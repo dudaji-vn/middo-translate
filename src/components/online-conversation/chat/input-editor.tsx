@@ -13,13 +13,13 @@ import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { IconButton } from '@/components/button';
 import { Participant } from '@/types/room';
+import { SOCKET_CONFIG } from '@/configs/socket';
 import { SendMessagePayload } from '@/types/socket';
 import { SvgSpinners270RingWithBg } from '@/components/icons';
 import { Text } from '@/components/text';
 import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import socket from '@/lib/socket-io';
-import { socketConfig } from '@/configs/socket';
 import { useChat } from './chat-context';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
@@ -120,7 +120,7 @@ export const InputEditor = (props: InputEditorProps) => {
         roomCode: room.code,
         message: newMessage,
       };
-      socket.emit(socketConfig.events.message.new, sendMessagePayload);
+      socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.NEW, sendMessagePayload);
       handleStopListening();
       reset();
       return;
@@ -139,7 +139,7 @@ export const InputEditor = (props: InputEditorProps) => {
         message: newMessage,
       };
 
-      socket.emit(socketConfig.events.message.new, sendMessagePayload);
+      socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.NEW, sendMessagePayload);
 
       handleStopListening();
       reset();
