@@ -39,7 +39,7 @@ export const TranslateEditor = ({
   children,
 }: TranslateEditorProps) => {
   const searchParams = useSearchParams();
-  const text = searchParams.get('query') || '';
+  const text = searchParams?.get('query') || '';
   const {
     value,
     setValue,
@@ -76,7 +76,7 @@ export const TranslateEditor = ({
     ) {
       return;
     }
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams as URLSearchParams);
     if (!params.get('source')) return;
     if (debouncedValue) {
       params.set('query', debouncedValue);
@@ -114,7 +114,7 @@ export const TranslateEditor = ({
 
   const handleClear = () => {
     setValue('');
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams as URLSearchParams);
     params.delete('query');
     params.delete('edit');
     params.delete('mquery');
