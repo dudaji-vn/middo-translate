@@ -36,9 +36,9 @@ export const LanguagesControlBar = forwardRef<
     >('none');
     const { searchParams, setParams } = useSetParams();
     const { setValue } = useTranslateStore();
-    const source = getCountryCode(searchParams.get('source'), true);
+    const source = getCountryCode(searchParams?.get('source'), true);
     const target = getCountryCode(
-      searchParams.get('target') || DEFAULT_LANGUAGES_CODE.EN,
+      searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN,
     );
 
     const [canClick, setCanClick] = useState(true);
@@ -73,7 +73,7 @@ export const LanguagesControlBar = forwardRef<
     const handleSelect = (code: string) => {
       setCurrentSelect('none');
       if (currentSelect === 'source') {
-        if (code === searchParams.get('target')) {
+        if (code === searchParams?.get('target')) {
           handleSwap();
           return;
         }
@@ -85,7 +85,7 @@ export const LanguagesControlBar = forwardRef<
         ]);
         return;
       }
-      if (code === searchParams.get('source')) {
+      if (code === searchParams?.get('source')) {
         handleSwap();
         return;
       }
@@ -99,13 +99,13 @@ export const LanguagesControlBar = forwardRef<
 
     useEffect(() => {
       const newParams = [];
-      if (!searchParams.get('source')) {
+      if (!searchParams?.get('source')) {
         newParams.push({
           key: 'source',
           value: 'auto',
         });
       }
-      if (!searchParams.get('target')) {
+      if (!searchParams?.get('target')) {
         newParams.push({
           key: 'target',
           value: DEFAULT_LANGUAGES_CODE.EN,
@@ -150,7 +150,7 @@ export const LanguagesControlBar = forwardRef<
                 </>
               )}
               {!isMobile &&
-                getLanguageByCode(searchParams.get('source') as string)?.name}
+                getLanguageByCode(searchParams?.get('source') as string)?.name}
             </SelectTrigger>
           </Select>
         </div>
@@ -174,7 +174,7 @@ export const LanguagesControlBar = forwardRef<
                 width={20}
               />
               {!isMobile &&
-                getLanguageByCode(searchParams.get('target') as string)?.name}
+                getLanguageByCode(searchParams?.get('target') as string)?.name}
             </SelectTrigger>
           </Select>
         </div>
@@ -190,7 +190,7 @@ export const LanguagesControlBar = forwardRef<
               <ListLanguages
                 allowDetect={currentSelect === 'source'}
                 onSelected={handleSelect}
-                selectedCode={searchParams.get(currentSelect) as string}
+                selectedCode={searchParams?.get(currentSelect) as string}
               />
             </BackLayout>
           </div>

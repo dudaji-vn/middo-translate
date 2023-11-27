@@ -10,14 +10,14 @@ export const useSetParams = () => {
       value: string;
     }[],
   ) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams as URLSearchParams);
     newParams.forEach(({ key, value }) => {
       params.set(key, value);
     });
     replace(`${pathname}?${params.toString()}`);
   };
   const removeParams = (keys: string[]) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams as URLSearchParams);
     keys.forEach((key) => {
       params.delete(key);
     });
@@ -25,13 +25,13 @@ export const useSetParams = () => {
   };
 
   const setParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams as URLSearchParams);
     params.set(key, value);
     replace(`${pathname}?${params.toString()}`);
   };
 
   const removeParam = (key: string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams as URLSearchParams);
     params.delete(key);
     replace(`${pathname}?${params.toString()}`);
   };

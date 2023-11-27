@@ -4,6 +4,7 @@ import 'regenerator-runtime/runtime';
 
 import { NextAuthProvider } from './next-auth';
 import React from 'react';
+import { ReactQueryProvider } from './react-query';
 import SocketProvider from './socket';
 import { Toaster } from '@/components/toast';
 
@@ -14,7 +15,9 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
     <>
       <Toaster />
       <SocketProvider />
-      <NextAuthProvider>{props.children}</NextAuthProvider>
+      <ReactQueryProvider>
+        <NextAuthProvider>{props.children}</NextAuthProvider>
+      </ReactQueryProvider>
     </>
   );
 };
