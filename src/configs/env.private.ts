@@ -9,3 +9,5 @@ export const MONGODB_URI = process.env.MONGODB_URI as string;
 export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID as string;
 export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET as string;
 export const NEXT_AUTH_SECRET = process.env.NEXTAUTH_SECRET as string;
+
+export const CLOUDINARY_SECRET = process.env.CLOUDINARY_SECRET as string;
