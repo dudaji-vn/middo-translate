@@ -40,8 +40,8 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
         <div className="flex w-full gap-1 px-4 py-2">
           {isSearch && (
             <Button.Icon
-              size="lg"
               variant="ghost"
+              color="default"
               onClick={() => setIsSearch(false)}
               className="-ml-2"
             >

@@ -107,7 +107,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             refreshFunction={refetch}
             pullDownToRefresh
             pullDownToRefreshThreshold={50}
-            className="flex flex-col gap-2"
+            className="flex flex-col"
             pullDownToRefreshContent={
               <h3 style={{ textAlign: 'center' }}>
                 &#8595; Pull down to refresh

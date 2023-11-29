@@ -74,12 +74,11 @@ export const Inbox = (props: InboxProps) => {
       )}
       {mode !== 'default' && (
         <div className="absolute left-0 top-0 flex h-full w-full flex-col bg-card">
-          <div className="flex items-center gap-2 px-5 pt-4">
+          <div className="flex items-center gap-2 px-5 pt-3">
             <Button.Icon
               onClick={() => removeParam('mode')}
-              size="lg"
               variant="ghost"
-              className="-ml-2"
+              color="default"
             >
               <ArrowBackOutline />
             </Button.Icon>

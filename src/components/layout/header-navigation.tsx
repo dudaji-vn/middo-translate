@@ -8,7 +8,6 @@ import { Button } from '@/components/actions';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
-import useAuthStore from '@/features/auth/stores/use-auth-store';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { usePathname } from 'next/navigation';
 

@@ -48,7 +48,7 @@ export const ChatCreator = (props: ChatCreatorProps) => {
             <PeopleOutline className="mr-3 h-5 w-5" /> Create group
           </Button>
         </div>
-        <div className="flex w-full flex-1 flex-col gap-2 overflow-y-auto px-2">
+        <div className="flex w-full flex-1 flex-col overflow-y-auto px-2">
           {data?.map((user) => (
             <Link key={user._id} href={`/talk/${user._id}`}>
               <UserItem isActive={user._id === params?.id} user={user} />

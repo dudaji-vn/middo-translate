@@ -7,10 +7,11 @@ import { forwardRef } from 'react';
 export interface UserItemProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User;
   isActive?: boolean;
+  rightElement?: React.ReactNode;
 }
 
 export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
-  ({ user, isActive, ...props }, ref) => {
+  ({ user, rightElement, isActive, ...props }, ref) => {
     return (
       <div
         ref={ref}
@@ -36,6 +37,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
               @{user.username}
             </Typography>
           </div>
+          {rightElement}
         </div>
       </div>
     );
