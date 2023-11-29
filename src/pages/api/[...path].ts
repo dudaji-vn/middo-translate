@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 import Cookies from 'cookies';
+import { FAKE_ACCESS_TOKEN } from '@/configs/common';
 import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
 import httpProxy from 'http-proxy';
 
@@ -19,7 +20,8 @@ export default function handler(
 ) {
   return new Promise(() => {
     const cookies = new Cookies(req, res);
-    const accessToken = cookies.get(ACCESS_TOKEN_NAME);
+    // const accessToken = cookies.get(ACCESS_TOKEN_NAME);
+    const accessToken = FAKE_ACCESS_TOKEN;
 
     if (accessToken) {
       req.headers.Authorization = `Bearer ${accessToken}`;
