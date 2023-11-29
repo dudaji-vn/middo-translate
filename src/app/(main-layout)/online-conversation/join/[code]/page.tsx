@@ -21,7 +21,6 @@ interface JoinProps {
 export const dynamic = 'force-dynamic';
 export default async function Join(props: JoinProps) {
   const room = await getConversation(props.params.code);
-  console.log(room);
   if (!room) {
     redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
   }
