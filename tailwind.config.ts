@@ -105,6 +105,7 @@ module.exports = {
         '1': 'var(--shadow-1)',
         '2': 'var(--shadow-2)',
         '3': 'var(--shadow-3)',
+        'n-1': 'var(--shadow-n-1)',
       },
     },
   },

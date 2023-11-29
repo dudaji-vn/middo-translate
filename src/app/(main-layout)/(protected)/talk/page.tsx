@@ -1,5 +1,3 @@
-// import { Typography } from '@/components/data-display';
-
 import { Typography } from '@/components/data-display';
 
 export default function ChatPage() {

@@ -13,6 +13,9 @@ import {
 
 import { Avatar } from '../data-display/avatar';
 import { HeaderNavigation } from './header-navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { ROUTE_NAMES } from '@/configs/route-name';
 import useAuthStore from '@/features/auth/stores/use-auth-store';
 
 type Props = {};
@@ -20,12 +23,12 @@ type Props = {};
 export const Header = (props: Props) => {
   const user = useAuthStore((state) => state.user);
   return (
-    <div className="z-2 mb-10 flex w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
+    <div className="z-50 flex w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
       <HeaderNavigation />
 
-      <a href="#" className="shrink-0">
-        <img src="/logo.png" alt="" className="w-[100px]" />
-      </a>
+      <Link href={ROUTE_NAMES.ROOT} className="block w-[100px]">
+        <Image src="/logo.png" alt="logo" width={500} height={500} />
+      </Link>
 
       <div className="flex flex-1 items-center justify-end">
         <DropdownMenu>
