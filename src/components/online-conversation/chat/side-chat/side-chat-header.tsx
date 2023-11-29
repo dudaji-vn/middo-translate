@@ -1,8 +1,8 @@
 'use client';
 
+import { Button } from '@/components/actions';
 import { ChatDownloadIcon } from '@/components/icons';
 import { CopyOutline } from '@easy-eva-icons/react';
-import { IconButton } from '@/components/button';
 import { Room } from '@/types/room';
 import { Section } from './section';
 import { genChatLogFile } from '@/utils/gen-chat-log-file';
@@ -31,12 +31,12 @@ export const SideChatHeader = ({ room }: SideChatHeaderProps) => {
         <div className="flex items-center justify-between py-3">
           <h4 className="text-primary">{room.code}</h4>
           <div className="flex">
-            <IconButton variant="ghost">
-              <CopyOutline className="opacity-60" onClick={() => copy()} />
-            </IconButton>
-            <IconButton onClick={handleDownload} variant="ghost">
-              <ChatDownloadIcon className="opacity-60" />
-            </IconButton>
+            <Button.Icon variant="ghost" color="default">
+              <CopyOutline onClick={() => copy()} />
+            </Button.Icon>
+            <Button color="default" onClick={handleDownload} variant="ghost">
+              <ChatDownloadIcon />
+            </Button>
           </div>
         </div>
       </Section>

@@ -1,7 +1,6 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/avatar';
-import { Button, IconButton } from '@/components/button';
 import { Google, Menu, MessageCircleOutline } from '@easy-eva-icons/react';
 import {
   Sheet,
@@ -11,6 +10,7 @@ import {
 } from '@/components/sheet';
 import { signIn, signOut, useSession } from 'next-auth/react';
 
+import { Button } from '@/components/actions';
 import Image from 'next/image';
 import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
@@ -36,17 +36,17 @@ export const Header = (props: Props) => {
       </Link>
       <div className="flex gap-2">
         <Link href="/online-conversation">
-          <IconButton variant="secondary" shape="default">
+          <Button.Icon color="secondary" shape="square">
             <MessageCircleOutline />
-          </IconButton>
+          </Button.Icon>
         </Link>
         {status === 'authenticated' ? (
           <Sheet>
             <SheetTrigger>
               <div>
-                <IconButton variant="secondary" shape="default">
+                <Button.Icon color="secondary" shape="square">
                   <Menu />
-                </IconButton>
+                </Button.Icon>
               </div>
             </SheetTrigger>
 
@@ -64,7 +64,7 @@ export const Header = (props: Props) => {
                 <Button
                   className="w-full"
                   onClick={() => signOut()}
-                  variant="error"
+                  color="error"
                 >
                   Logout
                 </Button>
@@ -72,13 +72,13 @@ export const Header = (props: Props) => {
             </SheetContent>
           </Sheet>
         ) : (
-          <IconButton
+          <Button.Icon
             onClick={() => signIn()}
-            variant="secondary"
-            shape="default"
+            color="secondary"
+            shape="square"
           >
             <Google />
-          </IconButton>
+          </Button.Icon>
         )}
       </div>
     </div>

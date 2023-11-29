@@ -7,11 +7,11 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { forwardRef, useEffect } from 'react';
 
-import { IconButton } from '@/components/button';
+import { Button } from '@/components/actions';
 import { MicOutline } from '@easy-eva-icons/react';
 import { Rectangle } from '@/components/icons';
+import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
-import { supportedVoiceMap } from '@/configs/default-language';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useToast } from '@/components/toast';
 import { useTranslateStore } from '@/stores/translate';
@@ -62,7 +62,8 @@ export const TranslateOptionBar = forwardRef<
     removeParam('query');
     setIsListening(true);
     SpeechRecognition.startListening({
-      language: supportedVoiceMap[sourceLang as keyof typeof supportedVoiceMap],
+      language:
+        SUPPORTED_VOICE_MAP[sourceLang as keyof typeof SUPPORTED_VOICE_MAP],
       continuous: !isMobile,
       interimResults: true,
     });
@@ -117,26 +118,25 @@ export const TranslateOptionBar = forwardRef<
         </div>
         {listening ? (
           <>
-            <IconButton
+            <Button.Icon
               size="lg"
-              variant="secondary"
+              color="secondary"
               className="relative shrink-0"
               onClick={handleStopListening}
             >
               <Rectangle />
-            </IconButton>
+            </Button.Icon>
             <span>Listening</span>
           </>
         ) : (
-          <IconButton
-            shape="circle"
+          <Button.Icon
             onClick={handleStartListening}
             size="lg"
-            variant="secondary"
+            color="secondary"
             className={cn('z-10', !ableListen && '!opacity-30')}
           >
             <MicOutline className="h-7 w-7" />
-          </IconButton>
+          </Button.Icon>
         )}
       </div>
     </div>

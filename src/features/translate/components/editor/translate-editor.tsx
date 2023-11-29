@@ -10,8 +10,8 @@ import {
 } from '@easy-eva-icons/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+import { Button } from '@/components/actions';
 import { CopyZoneClick } from '@/components/copy-zone-click';
-import { IconButton } from '@/components/button';
 import { TranslateEditorWrapper } from '@/features/translate/components/editor/translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
@@ -130,31 +130,34 @@ export const TranslateEditor = ({
       className={className}
       footerElement={
         <div className="bottom-3 right-3 mt-3 flex justify-end">
-          <IconButton
+          <Button.Icon
             onClick={() => {
               speak();
             }}
             disabled={!value}
-            variant="ghostPrimary"
+            variant="ghost"
+            color="primary"
           >
             <VolumeUpOutline />
-          </IconButton>
+          </Button.Icon>
+
           <CopyZoneClick text={value}>
-            <IconButton disabled={!value} variant="ghostPrimary">
+            <Button.Icon disabled={!value} variant="ghost" color="primary">
               <CopyOutline />
-            </IconButton>
+            </Button.Icon>
           </CopyZoneClick>
         </div>
       }
     >
       {value && !disabled && (
-        <IconButton
+        <Button.Icon
           onClick={handleClear}
           variant="ghost"
           className="btn-icon absolute right-3 top-3"
+          color="default"
         >
-          <CloseCircleOutline className="h-6 w-6 opacity-60" />
-        </IconButton>
+          <CloseCircleOutline />
+        </Button.Icon>
       )}
       <textarea
         rows={1}

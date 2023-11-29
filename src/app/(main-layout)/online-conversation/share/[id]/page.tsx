@@ -2,8 +2,8 @@ import '../style.css';
 
 import { CopyOutline, Share } from '@easy-eva-icons/react';
 
+import { Button } from '@/components/actions';
 import { CopyZoneClick } from '@/components/copy-zone-click';
-import { IconButton } from '@/components/button';
 import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import QRCode from 'react-qr-code';
@@ -32,9 +32,9 @@ export default async function Sharing({ params }: SharingProps) {
           <div className="codeWrapper">
             <h1>{room.code}</h1>
             <CopyZoneClick text={room.code}>
-              <IconButton variant="ghost">
-                <CopyOutline className="opacity-60" />
-              </IconButton>
+              <Button.Icon color="default" variant="ghost">
+                <CopyOutline />
+              </Button.Icon>
             </CopyZoneClick>
           </div>
           <div className="qrWrapper">
@@ -47,9 +47,9 @@ export default async function Sharing({ params }: SharingProps) {
           </div>
           <div className="circleButtonWrapper">
             <ShareZone text={link}>
-              <IconButton variant="secondary">
+              <Button color="secondary">
                 <Share />
-              </IconButton>
+              </Button>
             </ShareZone>
             Share through link
           </div>

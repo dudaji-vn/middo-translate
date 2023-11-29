@@ -1,12 +1,8 @@
 'use client';
 
-import {
-  MessageCircleOutline,
-  MoreVerticalOutline,
-} from '@easy-eva-icons/react';
-
-import { IconButton } from '@/components/button';
+import { Button } from '@/components/actions';
 import { Logo } from '@/components/icons';
+import { MoreVerticalOutline } from '@easy-eva-icons/react';
 import { useChat } from './chat-context';
 import { useEffect } from 'react';
 import { useIsMobile } from '@/hooks/use-is-mobile';
@@ -35,13 +31,13 @@ export const Header = (props: HeaderProps) => {
         <div>{host?.username}&apos;s room</div>
       </div>
       {isMobile && (
-        <IconButton
+        <Button.Icon
           onClick={() => {
             openSideChat();
           }}
         >
           <MoreVerticalOutline />
-        </IconButton>
+        </Button.Icon>
       )}
     </div>
   );

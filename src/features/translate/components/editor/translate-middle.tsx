@@ -2,9 +2,10 @@
 
 import './style.css';
 
-import { AcceptButton } from '@/features/translate/components/editor/accept-button';
+import { CheckmarkCircle2Outline, Edit2Outline } from '@easy-eva-icons/react';
+
+import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
-import { EditButton } from './edit-button';
 import Highlighter from 'react-highlight-words';
 import { cn } from '@/utils/cn';
 import { useCompare } from '@/features/translate/context/compare';
@@ -63,9 +64,17 @@ export const TranslateMiddle = ({
       </div>
       <div className="mt-2 flex justify-end">
         {type === 'edit' ? (
-          <EditButton onClick={editUnMatch} />
+          <Button.Icon variant="ghost" color="default" onClick={editUnMatch}>
+            <Edit2Outline />
+          </Button.Icon>
         ) : (
-          <>{!isMatch && !isEdit && <AcceptButton onClick={acceptUnMatch} />}</>
+          <>
+            {!isMatch && !isEdit && (
+              <Button.Icon color="success" onClick={acceptUnMatch}>
+                <CheckmarkCircle2Outline />
+              </Button.Icon>
+            )}
+          </>
         )}
       </div>
     </div>

@@ -1,24 +1,9 @@
-import {
-  Camera,
-  CameraOutline,
-  Close,
-  CloseCircleOutline,
-  PeopleOutline,
-} from '@easy-eva-icons/react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/actions/dropdown-menu';
-import { Fragment, useCallback, useRef, useState } from 'react';
+import { Camera, Close } from '@easy-eva-icons/react';
+import { useCallback, useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 
 import { Avatar } from '@/components/data-display/avatar';
-import { Button } from '@/components/actions/button';
-import { Chip } from '@/components/data-display/chip/chip';
-import { Input } from '@/components/data-entry/input';
-import { Button as OldButton } from '@/components/button';
+import { Button } from '@/components/actions';
 import { SearchInput } from '@/components/data-entry';
 import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
@@ -104,7 +89,6 @@ export const GroupCreator = (props: GroupCreatorProps) => {
             size="lg"
             onClick={open}
             type="button"
-            shape="circle"
             className="shrink-0"
           >
             <Camera />

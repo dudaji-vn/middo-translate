@@ -1,15 +1,15 @@
 'use client';
 
+import { useEffect, useMemo } from 'react';
+
 import { ArrowBackOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions/button';
 import { ChatCreator } from '@/features/chat/rooms/components/inbox-create/chat-creator';
 import { ChatSetting } from '../chat-setting';
 import { GroupCreator } from '../inbox-create/group-creator';
-import { IconButton } from '@/components/button';
 import { InboxMainTab } from './inbox-main-tab';
 import { MessagePlusIcon } from '@/components/icons';
 import { Typography } from '@/components/data-display';
-import { useMemo } from 'react';
 import { useSetParams } from '@/hooks/use-set-params';
 
 export interface InboxProps {}
@@ -45,11 +45,16 @@ export const Inbox = (props: InboxProps) => {
     if (paramMode && componentsMap[paramMode as InboxTabs]) {
       return paramMode as InboxTabs;
     } else {
-      removeParam('mode');
       return 'default';
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  useEffect(() => {
+    if (mode === 'default') {
+      removeParam('mode');
+    }
+  }, [mode, removeParam]);
 
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden border-r bg-card">
@@ -58,13 +63,13 @@ export const Inbox = (props: InboxProps) => {
       </div>
       {mode !== 'new-message' && (
         <div className="absolute bottom-14 right-5">
-          <IconButton
+          <Button.Icon
             size="lg"
             onClick={() => setParam('mode', 'new-message')}
             className="shadow-3"
           >
             <MessagePlusIcon />
-          </IconButton>
+          </Button.Icon>
         </div>
       )}
       {mode !== 'default' && (
@@ -74,7 +79,6 @@ export const Inbox = (props: InboxProps) => {
               onClick={() => removeParam('mode')}
               size="lg"
               variant="ghost"
-              shape="circle"
               className="-ml-2"
             >
               <ArrowBackOutline />

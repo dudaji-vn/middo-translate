@@ -7,7 +7,7 @@ import {
   CloseCircleOutline,
 } from '@easy-eva-icons/react';
 
-import { IconButton } from '@/components/button';
+import { Button } from '@/components/actions';
 import { cn } from '@/utils/cn';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useState } from 'react';
@@ -65,17 +65,18 @@ export const TranslateMiddleEditor = ({
         placeholder="hello"
       />
       <div className="flex flex-col justify-between">
-        <IconButton
+        <Button.Icon
           onClick={handleCancel}
           variant="ghost"
           className="btn-icon -mt-3"
+          color="default"
         >
-          <CloseCircleOutline className="opacity-60" />
-        </IconButton>
+          <CloseCircleOutline />
+        </Button.Icon>
         <div className="">
-          <IconButton disabled={!value} onClick={handleDone} variant="success">
+          <Button.Icon disabled={!value} onClick={handleDone} color="success">
             <CheckmarkCircle2Outline />
-          </IconButton>
+          </Button.Icon>
         </div>
       </div>
     </div>

@@ -61,9 +61,9 @@ export const InboxItemMenu = forwardRef<HTMLDivElement, InboxItemMenuProps>(
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button.Icon
-                shape="circle"
                 size="sm"
                 variant="default"
+                color="default"
                 className="border shadow"
               >
                 <MoreHorizontalOutline />

@@ -9,9 +9,9 @@ import {
 } from '@easy-eva-icons/react';
 import { useEffect, useMemo, useState } from 'react';
 
+import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { IconButton } from '@/components/button';
 import { Participant } from '@/types/room';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { SendMessagePayload } from '@/types/socket';
@@ -209,13 +209,14 @@ export const InputEditor = (props: InputEditorProps) => {
                   <Text value={translatedText} />
                 </div>
               </div>
-              <IconButton
+              <Button.Icon
                 disabled
                 variant="ghost"
                 className="self-end opacity-0"
+                color="default"
               >
-                <Edit2Outline className="opacity-60" />
-              </IconButton>
+                <Edit2Outline />
+              </Button.Icon>
             </div>
           )}
           {isEditing ? (
@@ -235,20 +236,21 @@ export const InputEditor = (props: InputEditorProps) => {
                 />
               </div>
               <div className="inputChatButtonWrapper h-full !flex-col !justify-between">
-                <IconButton
+                <Button.Icon
                   onClick={handleCancelEdit}
                   variant="ghost"
                   className="self-end"
+                  color="default"
                 >
-                  <CloseCircle className="opacity-60" />
-                </IconButton>
-                <IconButton
+                  <CloseCircle />
+                </Button.Icon>
+                <Button.Icon
                   onClick={handleSubmitEdit}
-                  variant="success"
+                  color="success"
                   className="self-end"
                 >
                   <CheckmarkCircle2 />
-                </IconButton>
+                </Button.Icon>
               </div>
             </div>
           ) : (
@@ -268,9 +270,13 @@ export const InputEditor = (props: InputEditorProps) => {
                     </div>
                   </div>
                   <div className="inputChatButtonWrapper h-full !items-end">
-                    <IconButton onClick={handleEdit} variant="ghost">
-                      <Edit2Outline className="opacity-60" />
-                    </IconButton>
+                    <Button.Icon
+                      onClick={handleEdit}
+                      variant="ghost"
+                      color="default"
+                    >
+                      <Edit2Outline />
+                    </Button.Icon>
                   </div>
                 </div>
               )}
@@ -300,10 +306,11 @@ export const InputEditor = (props: InputEditorProps) => {
         </div>
         <div className="inputChatButtonWrapper h-full items-end">
           {(!text || listening) && (
-            <IconButton
+            <Button.Icon
               onClick={listening ? handleStopListening : handleStartListening}
               variant="ghost"
               className="self-end"
+              color="default"
             >
               <MicOutline
                 className={cn(
@@ -311,13 +318,14 @@ export const InputEditor = (props: InputEditorProps) => {
                   listening && 'text-primary opacity-100',
                 )}
               />
-            </IconButton>
+            </Button.Icon>
           )}
           {
-            <IconButton
+            <Button.Icon
               disabled={!isSendAble}
               onClick={handleSendMessage}
-              variant="ghostPrimary"
+              variant="ghost"
+              color="primary"
               className="self-end"
             >
               {isLoading ? (
@@ -325,7 +333,7 @@ export const InputEditor = (props: InputEditorProps) => {
               ) : (
                 <PaperPlaneOutline />
               )}
-            </IconButton>
+            </Button.Icon>
           }
         </div>
       </div>

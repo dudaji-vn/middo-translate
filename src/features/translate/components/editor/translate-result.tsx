@@ -2,8 +2,8 @@
 
 import { CopyOutline, VolumeUpOutline } from '@easy-eva-icons/react';
 
+import { Button } from '@/components/actions';
 import { CopyZoneClick } from '@/components/copy-zone-click';
-import { IconButton } from '@/components/button';
 import React from 'react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
@@ -40,17 +40,18 @@ export const TranslateResult = ({
       languageCode={languageCode}
       footerElement={
         <div className="bottom-3 right-3 mt-3 flex justify-end">
-          <IconButton
+          <Button.Icon
             disabled={!result}
             onClick={() => speak()}
-            variant="ghostPrimary"
+            variant="ghost"
+            color="primary"
           >
             <VolumeUpOutline />
-          </IconButton>
+          </Button.Icon>
           <CopyZoneClick text={result}>
-            <IconButton disabled={!result} variant="ghostPrimary">
+            <Button.Icon disabled={!result} variant="ghost" color="primary">
               <CopyOutline />
-            </IconButton>
+            </Button.Icon>
           </CopyZoneClick>
         </div>
       }

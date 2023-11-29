@@ -1,4 +1,6 @@
-import { Button } from '@/components/button';
+'use client';
+
+import { Button } from '@/components/actions';
 import Link from 'next/link';
 import { PeopleOutline } from '@easy-eva-icons/react';
 import { SearchInput } from '@/components/data-entry';
@@ -39,9 +41,7 @@ export const ChatCreator = (props: ChatCreatorProps) => {
         <div className="p-5">
           <Button
             className="w-full"
-            shape="circle"
             variant="outline"
-            color="primary"
             size="lg"
             onClick={handleCreateGroup}
           >

@@ -1,6 +1,6 @@
 import { forwardRef, memo, useEffect, useMemo } from 'react';
 
-import { Button } from '@/components/button';
+import { Button } from '@/components/actions';
 import { InboxItem } from '../inbox-item';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Room } from '../../types';
@@ -72,6 +72,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       return () => {
         socket.off(SOCKET_CONFIG.EVENTS.ROOM.UPDATE);
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     if (rooms.length === 0 && !isLoading) {
@@ -82,9 +83,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             Create a new conversation to get started.
           </Typography>
 
-          <Button className="mt-2" color="primary" shape="circle">
-            New conversation
-          </Button>
+          <Button className="mt-2">New conversation</Button>
         </div>
       );
     }
