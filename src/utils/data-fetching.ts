@@ -7,7 +7,6 @@ const baseUrl = NEXT_PUBLIC_API_URL;
 
 export async function fetchApi<T>(path: string, options?: RequestInit) {
   const url = new URL(`/api${path}`, baseUrl).toString();
-  console.log(url);
   const accessToken = getAccessToken();
   const res = await fetch(url, {
     ...options,

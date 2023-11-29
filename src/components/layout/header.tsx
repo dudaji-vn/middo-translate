@@ -1,85 +1,65 @@
 'use client';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/avatar';
-import { Google, Menu, MessageCircleOutline } from '@easy-eva-icons/react';
 import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetTrigger,
-} from '@/components/sheet';
-import { signIn, signOut, useSession } from 'next-auth/react';
+  ChevronDown,
+  LogOutOutline,
+  SettingsOutline,
+} from '@easy-eva-icons/react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '@/components/data-display';
 
-import { Button } from '@/components/actions';
-import Image from 'next/image';
-import Link from 'next/link';
-import { NEXT_PUBLIC_URL } from '@/configs/env.public';
+import { HeaderNavigation } from './header-navigation';
 
 type Props = {};
 
 export const Header = (props: Props) => {
-  const { data, status } = useSession();
-
   return (
-    <div className="flex items-center justify-between px-[5vw] py-5">
-      <Link href={NEXT_PUBLIC_URL}>
-        <div className="w-[100px] md:w-[120px]">
-          <Image
-            src="/logo.png"
-            alt="logo"
-            priority
-            quality={100}
-            width={500}
-            height={500}
-          />
-        </div>
-      </Link>
-      <div className="flex gap-2">
-        <Link href="/online-conversation">
-          <Button.Icon color="secondary" shape="square">
-            <MessageCircleOutline />
-          </Button.Icon>
-        </Link>
-        {status === 'authenticated' ? (
-          <Sheet>
-            <SheetTrigger>
-              <div>
-                <Button.Icon color="secondary" shape="square">
-                  <Menu />
-                </Button.Icon>
-              </div>
-            </SheetTrigger>
+    <div className="z-2 mb-10 flex w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
+      <HeaderNavigation />
 
-            <SheetContent>
-              <div className="flex flex-col items-center gap-2">
-                <Avatar>
-                  <AvatarImage src={data.user?.image as string} />
-                  <AvatarFallback>
-                    {data.user?.name?.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-                <h3 className="mt-2 text-center">{data.user?.name}</h3>
+      <a href="#" className="shrink-0">
+        <img src="/logo.png" alt="" className="w-[100px]" />
+      </a>
+
+      <div className="flex flex-1 items-center justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <div className="relative flex gap-3 active:!text-shading ">
+              <div className="hidden flex-col items-end md:flex">
+                <div className="font-semibold">User name</div>
+                <div className="text-s font-light">email@gmail.com</div>
               </div>
-              <SheetFooter className="mt-3">
-                <Button
-                  className="w-full"
-                  onClick={() => signOut()}
-                  color="error"
-                >
-                  Logout
-                </Button>
-              </SheetFooter>
-            </SheetContent>
-          </Sheet>
-        ) : (
-          <Button.Icon
-            onClick={() => signIn()}
-            color="secondary"
-            shape="square"
+              <a href="#" className="relative">
+                <img src="/hero_avatar.png" alt="" className="h-12 w-12" />
+                <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-1">
+                  <ChevronDown className="opacity-60" />
+                </div>
+              </a>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
           >
-            <Google />
-          </Button.Icon>
-        )}
+            <a
+              href="#"
+              className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
+            >
+              <SettingsOutline />
+              Account setting
+            </a>{' '}
+            <a
+              href="#"
+              className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
+            >
+              <LogOutOutline />
+              Sign out
+            </a>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );
