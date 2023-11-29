@@ -1,7 +1,7 @@
 import './style.css';
 
+import { Button } from '@/components/actions';
 import { Close } from '@easy-eva-icons/react';
-import { IconButton } from '../button';
 import QrReader from 'react-qr-reader';
 import { cn } from '@/utils/cn';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
@@ -38,9 +38,9 @@ export const QrScanner: React.FC<QrScannerProps> = ({
         }}
         className="flex h-full w-full flex-1 !items-center !justify-center"
       />
-      <IconButton onClick={onCancel} variant="secondary">
+      <Button.Icon onClick={onCancel} color="secondary">
         <Close />
-      </IconButton>
+      </Button.Icon>
     </div>
   );
 };

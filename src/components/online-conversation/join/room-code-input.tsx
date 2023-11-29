@@ -1,8 +1,8 @@
 'use client';
 
-import { Button, IconButton } from '@/components/button';
 import { forwardRef, useState } from 'react';
 
+import { Button } from '@/components/actions';
 import { LoadingBase } from '@/components/loading-base';
 import { QRCodeIcon } from '@/components/icons';
 import { QrScanner } from '@/components/scanner';
@@ -68,14 +68,13 @@ export const RoomCodeInput = forwardRef<HTMLDivElement, RoomCodeInputProps>(
             placeholder="Enter room code"
           />
 
-          <IconButton
+          <Button.Icon
             onClick={() => setShowScanner(true)}
-            iconSizeUnset
             variant="ghost"
             className="iconNoBGButton"
           >
-            <QRCodeIcon className="opacity-60" />
-          </IconButton>
+            <QRCodeIcon />
+          </Button.Icon>
         </div>
         <Button
           disabled={code.length === 0}

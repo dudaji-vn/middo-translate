@@ -44,7 +44,7 @@ import {
   SelectValue,
 } from '@/components/select';
 
-import { Button } from '@/components/button';
+import { Button } from '@/components/actions';
 import { Input } from '@/components/input';
 import { Switch } from '@/components/switch';
 
@@ -107,8 +107,8 @@ export default async function DesignSystem(props: HomeProps) {
           </Section>
           <Section title="4. Button">
             <div className="flex flex-col gap-2">
-              <Button icon={<ArrowCircleLeftOutline />}>Button</Button>
-              <Button variant="outline" icon={<ArrowCircleLeftOutline />}>
+              <Button startIcon={<ArrowCircleLeftOutline />}>Button</Button>
+              <Button variant="outline" startIcon={<ArrowCircleLeftOutline />}>
                 Button
               </Button>
               <Button disabled>Button</Button>

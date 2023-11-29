@@ -1,8 +1,7 @@
 'use client';
 
+import { Button } from '@/components/actions';
 import { CopyImgIcon } from '../../../../components/icons';
-import { IconButton } from '../../../../components/button';
-import Image from 'next/image';
 import { forwardRef } from 'react';
 import { useCapture } from '../../../../components/capture';
 import { useCompare } from '../../context/compare';
@@ -17,13 +16,15 @@ export const ImgCopy = forwardRef<HTMLDivElement, ImgCopyProps>(
     const { isMatch } = useCompare();
     return (
       <div ref={ref} {...props}>
-        <IconButton
+        <Button.Icon
           disabled={!isMatch || isEnglishTranslate}
           onClick={onCapture}
-          variant="ghostPrimary"
+          variant="ghost"
+          color="primary"
+          size="lg"
         >
-          <CopyImgIcon className="h-7 w-7" />
-        </IconButton>
+          <CopyImgIcon />
+        </Button.Icon>
       </div>
     );
   },

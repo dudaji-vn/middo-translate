@@ -6,6 +6,7 @@ import { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
 import { BackLayout } from '../../../../components/layout/back-layout';
+import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { ListLanguages } from '../list-languages';
@@ -154,12 +155,10 @@ export const LanguagesControlBar = forwardRef<
             </SelectTrigger>
           </Select>
         </div>
-        <button
-          onClick={handleSwap}
-          className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full p-2.5 transition-all duration-200 active:bg-stroke md:hover:bg-background-darker"
-        >
-          <Swap />
-        </button>
+
+        <Button.Icon variant="ghost" color="default">
+          <Swap className="text-text" />
+        </Button.Icon>
         <div className="flex flex-1 justify-start">
           <Select>
             <SelectTrigger

@@ -6,7 +6,7 @@ import {
   setOnlineConversionInfo,
 } from '@/utils/local-storage';
 
-import { Button } from '../button';
+import { Button } from '@/components/actions';
 import Link from 'next/link';
 import { LoadingBase } from '../loading-base';
 import { ROUTE_NAMES } from '@/configs/route-name';

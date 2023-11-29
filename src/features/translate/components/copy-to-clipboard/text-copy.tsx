@@ -1,6 +1,6 @@
 'use client';
 
-import { IconButton } from '@/components/button';
+import { Button } from '@/components/actions';
 import { MultipleCopyIcon } from '@/components/icons';
 import { forwardRef } from 'react';
 import { getCountryCode } from '@/utils/language-fn';
@@ -49,13 +49,15 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
 
     return (
       <div ref={ref} {...props}>
-        <IconButton
+        <Button.Icon
           disabled={!isMatch || isEnglishTranslate}
           onClick={handleCopy}
-          variant="ghostPrimary"
+          variant="ghost"
+          color="primary"
+          size="lg"
         >
-          <MultipleCopyIcon className="h-7 w-7" />
-        </IconButton>
+          <MultipleCopyIcon />
+        </Button.Icon>
       </div>
     );
   },

@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 
 import { ArrowForward } from '@easy-eva-icons/react';
+import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { IconButton } from '@/components/button';
 import { MemberList } from './member-list';
 import { Participant } from '@/types/room';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -62,9 +62,13 @@ export const SideChat = (props: SideChatProps) => {
       >
         {isMobile && (
           <div className="mt-2 flex justify-end px-[5vw]">
-            <IconButton onClick={closeSideChat} variant="ghost">
+            <Button.Icon
+              onClick={closeSideChat}
+              variant="ghost"
+              color="default"
+            >
               <ArrowForward />
-            </IconButton>
+            </Button.Icon>
           </div>
         )}
         <SideChatHeader room={{ ...room, participants: members }} />

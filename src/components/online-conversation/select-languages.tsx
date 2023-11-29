@@ -13,8 +13,8 @@ import {
 import React, { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
+import {Button} from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
-import { IconButton } from '../button';
 import { Input } from '../input';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
@@ -161,8 +161,8 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
                 </button>
               );
             })}
-            <IconButton
-              variant="secondary"
+            <Button.Icon
+              color="secondary"
               size="sm"
               className="shadow-1"
               onClick={() => {
@@ -170,7 +170,7 @@ export const SelectLanguages = forwardRef<HTMLDivElement, SelectLanguagesProps>(
               }}
             >
               <Search className="h-5 w-5" />
-            </IconButton>
+            </Button.Icon>
           </div>
         </div>
       </div>
@@ -230,16 +230,16 @@ const SearchPanel = ({
           placeholder="Search"
           leftElement={
             search === '' ? (
-              <IconButton disabled variant="ghost" size="xs">
+              <Button.Icon disabled variant="ghost" size="xs">
                 <Search className="h-5 w-5 opacity-60" />
-              </IconButton>
+              </Button.Icon>
             ) : (
-              <IconButton variant="ghost" size="xs">
+              <Button.Icon variant="ghost" size="xs">
                 <CloseCircleOutline
                   className="opacity-60"
                   onClick={handleClear}
                 />
-              </IconButton>
+              </Button.Icon>
             )
           }
         />

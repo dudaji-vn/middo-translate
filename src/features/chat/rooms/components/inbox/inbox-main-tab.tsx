@@ -41,7 +41,6 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
           {isSearch && (
             <Button.Icon
               size="lg"
-              shape="circle"
               variant="ghost"
               onClick={() => setIsSearch(false)}
               className="-ml-2"
@@ -59,9 +58,8 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
           </div>
           {
             <Button.Icon
-              size="lg"
-              shape="circle"
               variant="ghost"
+              color="default"
               onClick={() => setIsSearch(false)}
               className="-mr-2"
             >

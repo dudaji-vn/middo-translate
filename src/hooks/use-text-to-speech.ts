@@ -1,4 +1,4 @@
-import { supportedVoiceMap } from '@/configs/default-language';
+import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { textToSpeech } from '@/services/voices';
 
 export const useTextToSpeech = (languageCode?: string, _text?: string) => {
@@ -7,7 +7,7 @@ export const useTextToSpeech = (languageCode?: string, _text?: string) => {
     const textSpeech = text || _text || '';
     textToSpeech(
       textSpeech,
-      supportedVoiceMap[languageCode as keyof typeof supportedVoiceMap],
+      SUPPORTED_VOICE_MAP[languageCode as keyof typeof SUPPORTED_VOICE_MAP],
     ).then((bufferData) => {
       playAudio(bufferData);
     });

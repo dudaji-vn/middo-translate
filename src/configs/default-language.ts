@@ -122,7 +122,7 @@ export const SUPPORTED_LANGUAGES = [
   { code: 'cy', name: 'Welsh' },
 ];
 
-export const supportedVoiceMap = {
+export const SUPPORTED_VOICE_MAP = {
   af: 'af',
   sq: 'sq-AL',
   am: 'am-ET',
