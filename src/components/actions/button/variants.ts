@@ -11,11 +11,11 @@ export const buttonVariants = cva(
       },
       color: {
         default:
-          'bg-gray-200 text-text hover:bg-gray-300 dark:bg-gray-700  dark:hover:bg-gray-800',
+          'bg-gray-200 text-text md:hover:bg-gray-300 dark:bg-gray-700  dark:hover:bg-gray-800',
         primary:
-          'text-background bg-primary hover:bg-secondary active:bg-shading',
+          'text-background bg-primary md:hover:bg-secondary active:bg-shading',
         secondary:
-          'text-primary bg-lighter hover:bg-secondary active:bg-primary active:text-background',
+          'text-primary bg-lighter md:hover:bg-secondary active:bg-primary active:text-background',
         success:
           'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
         error:
@@ -37,7 +37,7 @@ export const buttonVariants = cva(
         variant: 'outline',
         color: 'primary',
         className:
-          'border-primary text-primary hover:bg-primary hover:text-background bg-transparent active:bg-transparent active:border-shading active:text-shading',
+          'border-primary text-primary hover:bg-primary md:hover:text-background bg-transparent active:bg-transparent active:border-shading active:text-shading',
       },
       {
         variant: 'outline',
