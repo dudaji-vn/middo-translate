@@ -14,7 +14,7 @@ const buttonVariants = cva(
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border border-primary hover:border-secondary bg-background hover:bg-secondary text-primary hover:text-background active:bg-transparent active:text-shading active:border-shading',
+          'border border-primary hover:border-secondary bg-background hover:bg-primary text-primary hover:text-background active:bg-transparent active:text-shading active:border-shading',
         secondary:
           'bg-lighter text-primary  md:hover:bg-secondary active:!bg-primary active:text-background',
         success:
@@ -35,7 +35,7 @@ const buttonVariants = cva(
         xs: 'h-6 px-0 text-xs leading-4',
         md: 'px-8 !py-4 md:!py-3 text-base',
         sm: 'h-9 px-3',
-        lg: 'h-11  px-8',
+        lg: 'px-8 py-4',
       },
     },
     defaultVariants: {
