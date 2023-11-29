@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from '@/components/actions/button';
+import { Button, ButtonProps } from './button';
 import { Children, cloneElement, forwardRef, isValidElement } from 'react';
 
 import { buttonVariants } from './variants';

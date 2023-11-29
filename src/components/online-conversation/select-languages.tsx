@@ -5,7 +5,11 @@ import {
   CloseCircleOutline,
   Search,
 } from '@easy-eva-icons/react';
-import { Popover, PopoverContent, PopoverTrigger } from '../popover';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/data-display/popover';
 import React, { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
