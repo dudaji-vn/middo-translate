@@ -11,11 +11,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 
+import { Avatar } from '../data-display/avatar';
 import { HeaderNavigation } from './header-navigation';
+import useAuthStore from '@/features/auth/stores/use-auth-store';
 
 type Props = {};
 
 export const Header = (props: Props) => {
+  const user = useAuthStore((state) => state.user);
   return (
     <div className="z-2 mb-10 flex w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
       <HeaderNavigation />
@@ -33,7 +36,12 @@ export const Header = (props: Props) => {
                 <div className="text-s font-light">email@gmail.com</div>
               </div>
               <a href="#" className="relative">
-                <img src="/hero_avatar.png" alt="" className="h-12 w-12" />
+                <Avatar
+                  src={user?.avatar as string}
+                  size="lg"
+                  alt={user?.username || ' '}
+                />
+
                 <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-1">
                   <ChevronDown className="opacity-60" />
                 </div>
