@@ -11,6 +11,8 @@ export const SOCKET_CONFIG = {
         UPDATE: 'room.participant.update',
         LEAVE: 'room.participant.leave',
       },
+      UPDATE: 'room.update',
+      DELETE: 'room.delete',
     },
     CHAT: {
       JOIN: 'chat.join',
