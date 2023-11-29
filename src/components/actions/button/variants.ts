@@ -37,7 +37,7 @@ export const buttonVariants = cva(
         variant: 'outline',
         color: 'primary',
         className:
-          'border-primary text-primary hover:bg-primary md:hover:text-background bg-transparent active:bg-transparent active:border-shading active:text-shading',
+          'border-primary text-primary md:hover:bg-primary md:hover:text-background bg-transparent md:active:!bg-transparent active:!bg-transparent active:border-shading active:text-shading md:active:text-shading',
       },
       {
         variant: 'outline',

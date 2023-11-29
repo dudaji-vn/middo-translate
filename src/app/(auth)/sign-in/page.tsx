@@ -1,7 +1,7 @@
 interface LoginProps {}
 export default async function SignUp(props: LoginProps) {
   return (
-    <main className="relative flex h-full w-full flex-col justify-center">
+    <main className="relative mt-10 flex h-full w-full flex-col justify-center">
       Sign sin
       <input type="" placeholder="Full name" />
       <input type="email" placeholder="Email" />

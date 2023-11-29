@@ -6,8 +6,8 @@ export interface ChatLayoutProps {
 
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
-    <div className="flex h-screen">
-      <div className="hidden h-screen w-1/4 sm:block">
+    <div className="flex flex-1">
+      <div className="hidden basis-1/4 sm:block">
         <Inbox />
       </div>
       <div className="flex-1 p-0 sm:p-2 sm:pl-2">{children}</div>

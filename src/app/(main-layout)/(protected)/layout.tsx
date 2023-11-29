@@ -12,9 +12,9 @@ export default async function ProtectedLayout({
     redirect('/login');
   }
   return (
-    <div className="flex">
+    <>
       <InitializeAuthStore user={profile} />
-      <div className="flex-1">{children}</div>
-    </div>
+      {children}
+    </>
   );
 }
