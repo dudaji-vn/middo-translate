@@ -15,7 +15,6 @@ import socket from '@/lib/socket-io';
 import { useConversationStore } from '@/stores/conversation';
 import { useRoomJoiner } from '@/components/online-conversation/join/room-joiner-context';
 import { useRouter } from 'next/navigation';
-import { useSessionStore } from '@/stores/session';
 import { useToast } from '../../toast';
 
 export interface RoomJoinerSubmitProps
@@ -31,7 +30,6 @@ export const RoomJoinerSubmit = forwardRef<
   const [isCreating, setIsCreating] = useState(false);
   const [isRemember, setIsRemember] = useState(hasRememberedInfo);
   const router = useRouter();
-  const { sessionId } = useSessionStore();
   const { toast } = useToast();
   const handleSubmit = async () => {
     setIsCreating(true);
@@ -39,7 +37,7 @@ export const RoomJoinerSubmit = forwardRef<
       const user = createParticipant({
         username,
         language: selectedNativeLanguage,
-        socketId: sessionId,
+        socketId: socket.id,
       });
 
       if (isRemember) {
