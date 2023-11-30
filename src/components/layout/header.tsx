@@ -41,7 +41,8 @@ export const Header = (props: Props) => {
           >
             Sign up
           </Link>
-          <Button>Sign in</Button>
+          <Button className="hidden md:inline-block">Sign in</Button>
+          <Button className="p-4 px-8 md:hidden">Sign in</Button>
         </div>
         {/* <DropdownMenu>
           <DropdownMenuTrigger>
