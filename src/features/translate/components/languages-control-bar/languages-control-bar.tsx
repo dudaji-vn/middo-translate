@@ -5,7 +5,7 @@ import { Select, SelectTrigger } from '@/components/data-entry';
 import { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
-import { BackLayout } from '../../../../components/layout/back-layout';
+import { BackLayout } from '@/components/layout/back-layout';
 import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
