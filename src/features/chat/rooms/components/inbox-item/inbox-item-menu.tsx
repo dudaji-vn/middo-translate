@@ -14,7 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/actions/dropdown-menu';
+} from '@/components/data-display';
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/actions/button';
@@ -22,12 +22,6 @@ import { MoreHorizontalOutline } from '@easy-eva-icons/react';
 import { Room } from '../../types';
 import { roomApi } from '@/features/chat/rooms/api';
 import { useMutation } from '@tanstack/react-query';
-
-// import {
-//   ArrowLeftOnRectangleIcon,
-//   EllipsisHorizontalIcon,
-//   TrashIcon,
-// } from '@heroicons/react/24/solid';
 
 export interface InboxItemMenuProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -78,7 +72,6 @@ export const InboxItemMenu = forwardRef<HTMLDivElement, InboxItemMenuProps>(
                   className="w-full"
                 >
                   <DropdownMenuItem>
-                    {/* <TrashIcon className="mr-2 h-4 w-4" /> */}
                     <span>Delete</span>
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
@@ -90,7 +83,6 @@ export const InboxItemMenu = forwardRef<HTMLDivElement, InboxItemMenuProps>(
                   className="w-full"
                 >
                   <DropdownMenuItem>
-                    {/* <ArrowLeftOnRectangleIcon className="mr-2 h-4 w-4" /> */}
                     <span>Leave</span>
                   </DropdownMenuItem>
                 </AlertDialogTrigger>
@@ -108,12 +100,10 @@ export const InboxItemMenu = forwardRef<HTMLDivElement, InboxItemMenuProps>(
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel className="hover:bg-slate-400">
-                Cancel
-              </AlertDialogCancel>
+              <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
               <AlertDialogAction
                 type="submit"
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
                 onClick={() => {
                   mutateAsync(props.room._id);
                 }}
