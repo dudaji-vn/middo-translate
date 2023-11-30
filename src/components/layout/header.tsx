@@ -12,6 +12,7 @@ import {
 } from '@/components/data-display';
 
 import { Avatar } from '../data-display/avatar';
+import { Button } from '../actions';
 import { HeaderNavigation } from './header-navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -31,7 +32,18 @@ export const Header = (props: Props) => {
       </Link>
 
       <div className="flex flex-1 items-center justify-end">
-        <DropdownMenu>
+        <div className="flex items-center gap-3">
+          <Link
+            href={ROUTE_NAMES.ROOT}
+            className={
+              'hidden bg-background px-[5vw] py-4 font-semibold active:bg-background-darker active:!text-shading md:inline md:!p-0 md:hover:text-secondary md:active:!bg-transparent'
+            }
+          >
+            Sign up
+          </Link>
+          <Button>Sign in</Button>
+        </div>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="relative flex gap-3 active:!text-shading ">
               <div className="hidden flex-col items-end md:flex">
@@ -70,7 +82,7 @@ export const Header = (props: Props) => {
               Sign out
             </a>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
       </div>
     </div>
   );
