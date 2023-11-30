@@ -8,7 +8,7 @@ import {
 
 import { Button } from '@/components/actions';
 import Link from 'next/link';
-import { LoadingBase } from '../loading-base';
+import { LoadingBase } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/types/room';
 import { createConversation } from '@/services/conversation';
@@ -18,7 +18,7 @@ import socket from '@/lib/socket-io';
 import { useConversationStore } from '@/stores/conversation';
 import { useRoomCreator } from './room-creator-context';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../toast';
+import { useToast } from '@/components/feedback';
 
 export interface RoomCreatorSubmitProps
   extends React.HTMLAttributes<HTMLDivElement> {}

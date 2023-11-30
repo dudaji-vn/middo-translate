@@ -1,4 +1,4 @@
-import { CaptureProvider, CaptureZone } from '@/components/capture';
+import { CaptureProvider, CaptureZone } from '@/components/actions';
 import {
   DetectTranslateWay,
   LanguagesControlBar,

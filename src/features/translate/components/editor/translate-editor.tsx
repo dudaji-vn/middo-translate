@@ -11,7 +11,7 @@ import {
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/actions';
-import { CopyZoneClick } from '@/components/copy-zone-click';
+import { CopyZoneClick } from '@/components/actions';
 import { TranslateEditorWrapper } from '@/features/translate/components/editor/translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';

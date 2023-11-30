@@ -16,7 +16,7 @@ import { Participant } from '@/types/room';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { SendMessagePayload } from '@/types/socket';
 import { SvgSpinners270RingWithBg } from '@/components/icons';
-import { Text } from '@/components/text';
+import { Text } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { getCountryCode } from '@/utils/language-fn';
 import socket from '@/lib/socket-io';

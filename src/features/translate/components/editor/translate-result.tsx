@@ -3,7 +3,7 @@
 import { CopyOutline, VolumeUpOutline } from '@easy-eva-icons/react';
 
 import { Button } from '@/components/actions';
-import { CopyZoneClick } from '@/components/copy-zone-click';
+import { CopyZoneClick } from '@/components/actions';
 import React from 'react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';

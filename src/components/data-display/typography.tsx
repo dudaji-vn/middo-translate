@@ -30,8 +30,7 @@ const typographyVariants = cva('text-text text-base', {
   },
 });
 
-export interface TypographyProps
-  extends VariantProps<typeof typographyVariants> {
+interface TypographyProps extends VariantProps<typeof typographyVariants> {
   asChild?: boolean;
   children?: React.ReactNode;
   className?: string;
@@ -54,5 +53,3 @@ export const Typography = ({
 };
 
 Typography.displayName = 'Typography';
-
-export default Typography;

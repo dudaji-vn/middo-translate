@@ -1,5 +1,6 @@
 import { forwardRef } from 'react';
-export interface TextProps extends React.HTMLAttributes<HTMLDivElement> {
+
+interface TextProps extends React.HTMLAttributes<HTMLDivElement> {
   value: string;
 }
 

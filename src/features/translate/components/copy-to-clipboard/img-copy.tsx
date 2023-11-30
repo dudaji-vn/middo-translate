@@ -1,10 +1,10 @@
 'use client';
 
-import { Button } from '@/components/actions';
-import { CopyImgIcon } from '../../../../components/icons';
+import { Button, useCapture } from '@/components/actions';
+
+import { CopyImgIcon } from '@/components/icons';
 import { forwardRef } from 'react';
-import { useCapture } from '../../../../components/capture';
-import { useCompare } from '../../context/compare';
+import { useCompare } from '@/features/translate/context';
 import { useTranslateStore } from '@/stores/translate';
 
 export interface ImgCopyProps extends React.HTMLAttributes<HTMLDivElement> {}

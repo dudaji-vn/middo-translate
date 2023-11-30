@@ -4,7 +4,8 @@ import { SvgSpinnersGooeyBalls1 } from '../icons';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 import { useTranslateStore } from '@/stores/translate';
-export interface PageLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
+
+interface PageLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
 }
 

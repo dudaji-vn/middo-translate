@@ -8,14 +8,14 @@ import {
 
 import { Button } from '@/components/actions';
 import Link from 'next/link';
-import { LoadingBase } from '@/components/loading-base';
+import { LoadingBase } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { createParticipant } from '@/utils/conversation';
 import socket from '@/lib/socket-io';
 import { useConversationStore } from '@/stores/conversation';
 import { useRoomJoiner } from '@/components/online-conversation/join/room-joiner-context';
 import { useRouter } from 'next/navigation';
-import { useToast } from '../../toast';
+import { useToast } from '@/components/feedback';
 
 export interface RoomJoinerSubmitProps
   extends React.HTMLAttributes<HTMLDivElement> {}

@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from '@/components/feedback/alert-dialog';
+} from '@/components/feedback';
 import {
   DropdownMenu,
   DropdownMenuContent,

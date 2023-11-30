@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 
-export interface ChipProps extends React.HTMLAttributes<HTMLDivElement> {
+interface ChipProps extends React.HTMLAttributes<HTMLDivElement> {
   rightContent?: React.ReactNode;
   content: string;
   leftContent?: React.ReactNode;
