@@ -47,9 +47,9 @@ export default async function Sharing({ params }: SharingProps) {
           </div>
           <div className="circleButtonWrapper">
             <ShareZone text={link}>
-              <Button color="secondary">
+              <Button.Icon size="lg" color="secondary">
                 <Share />
-              </Button>
+              </Button.Icon>
             </ShareZone>
             Share through link
           </div>
