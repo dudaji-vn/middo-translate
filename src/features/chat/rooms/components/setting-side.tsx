@@ -1,8 +1,8 @@
-export interface ChatSettingProps {
+export interface SettingSideProps {
   onBack?: () => void;
 }
 
-export const ChatSetting = (props: ChatSettingProps) => {
+export const SettingSide = (props: SettingSideProps) => {
   return (
     <div className="h-full w-full rounded-md bg-black bg-card shadow-sm"></div>
   );

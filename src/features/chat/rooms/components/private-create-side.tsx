@@ -8,21 +8,21 @@ import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
 import { searchApi } from '@/features/search/api';
+import { useChangeInboxSide } from '../hooks/use-change-inbox-side';
 import { useParams } from 'next/navigation';
 import { useSearch } from '@/hooks/use-search';
-import { useSetParams } from '@/hooks/use-set-params';
 
-export interface ChatCreatorProps {
+export interface PrivateCreateSideProps {
   onBack?: () => void;
 }
 
-export const ChatCreator = (props: ChatCreatorProps) => {
+export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
   const { data, setSearchTerm } = useSearch<User[]>(searchApi.users);
+  const { changeSide } = useChangeInboxSide();
   const params = useParams();
-  const { setParam } = useSetParams();
 
   const handleCreateGroup = () => {
-    setParam('mode', 'new-group');
+    changeSide('new-group');
   };
 
   return (
