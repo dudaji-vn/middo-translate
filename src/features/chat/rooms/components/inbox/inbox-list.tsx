@@ -89,14 +89,14 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     }
 
     return (
-      <div ref={ref} className="h-full w-full overflow-hidden">
+      <div ref={ref} className="relative h-full w-full overflow-hidden ">
+        {isScrolled && (
+          <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
+        )}
         <div
           id="scrollableDiv"
           ref={scrollRef}
-          className={cn(
-            'h-full gap-2 overflow-y-auto',
-            isScrolled && 'border-t',
-          )}
+          className={cn('h-full gap-2 overflow-y-auto')}
         >
           <InfiniteScroll
             scrollableTarget="scrollableDiv"

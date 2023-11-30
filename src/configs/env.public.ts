@@ -9,3 +9,6 @@ export const NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = process.env
   .NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME as string;
 export const NEXT_PUBLIC_CLOUDINARY_API_KEY = process.env
   .NEXT_PUBLIC_CLOUDINARY_KEY as string;
+
+export const NEXT_PUBLIC_FAKE_TOKEN = process.env
+  .NEXT_PUBLIC_FAKE_TOKEN as string;

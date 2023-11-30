@@ -1,8 +1,8 @@
 import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
-import { FAKE_ACCESS_TOKEN } from '@/configs/common';
+import { NEXT_PUBLIC_FAKE_TOKEN } from '@/configs/env.public';
 import { cookies } from 'next/headers';
 
 export const getAccessToken = () => {
   // return cookies().get(ACCESS_TOKEN_NAME);
-  return FAKE_ACCESS_TOKEN;
+  return NEXT_PUBLIC_FAKE_TOKEN;
 };

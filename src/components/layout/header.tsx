@@ -23,7 +23,7 @@ type Props = {};
 export const Header = (props: Props) => {
   const user = useAuthStore((state) => state.user);
   return (
-    <div className="z-50 flex w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
+    <div className="z-50 flex h-[90px] w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
       <HeaderNavigation />
 
       <Link href={ROUTE_NAMES.ROOT} className="block w-[100px]">

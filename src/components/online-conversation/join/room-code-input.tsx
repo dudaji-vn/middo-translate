@@ -1,6 +1,6 @@
 'use client';
 
-import { QrScanner, ScannerStatus } from '@/components/actions';
+import { QrScanner, ScannerStatus } from '@/components/actions/scanner';
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
