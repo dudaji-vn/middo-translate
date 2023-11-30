@@ -1,4 +1,4 @@
-import { ArrowBackOutline, FunnelOutline } from '@easy-eva-icons/react';
+import { ArrowBackOutline, Options2Outline } from '@easy-eva-icons/react';
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/actions/button';
@@ -52,20 +52,20 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
             <SearchInput
               onFocus={() => setIsSearch(true)}
               btnDisabled
-              placeholder="Search talker"
+              placeholder="Search people or groups"
               onChange={(e) => setSearchTerm(e.currentTarget.value)}
             />
           </div>
-          {
+          {!isSearch && (
             <Button.Icon
               variant="ghost"
               color="default"
               onClick={() => setIsSearch(false)}
               className="-mr-2"
             >
-              <FunnelOutline />
+              <Options2Outline />
             </Button.Icon>
-          }
+          )}
         </div>
         <div className="relative flex flex-1 flex-col overflow-hidden">
           <InboxList type={type} />
@@ -80,17 +80,20 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
                   ))}
                 </SearchSection>
               )}
-              {data?.rooms && data.rooms.length > 0 && (
-                <SearchSection label="Groups">
-                  {data?.rooms.map((room) => (
-                    <InboxItem
-                      key={room._id}
-                      data={room}
-                      currentUserId={currentUserId!}
-                    />
-                  ))}
-                </SearchSection>
-              )}
+              <div className="mt-5">
+                {data?.rooms && data.rooms.length > 0 && (
+                  <SearchSection label="Groups">
+                    {data?.rooms.map((room) => (
+                      <InboxItem
+                        key={room._id}
+                        data={room}
+                        currentUserId={currentUserId!}
+                        showMembersName
+                      />
+                    ))}
+                  </SearchSection>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -110,7 +113,9 @@ const SearchSection = ({
   return (
     <div className="pb-2">
       <div className="pl-2">
-        <Typography variant="h5">{label}</Typography>
+        <Typography variant="h5" className="font-normal opacity-60">
+          {label}
+        </Typography>
       </div>
       <div>{children}</div>
     </div>
