@@ -27,7 +27,7 @@ export const Header = (props: Props) => {
       <HeaderNavigation />
 
       <Link href={ROUTE_NAMES.ROOT} className="block w-[100px]">
-        <Image src="/logo.png" alt="logo" width={500} height={500} />
+        <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
 
       <div className="flex flex-1 items-center justify-end">
@@ -42,7 +42,7 @@ export const Header = (props: Props) => {
                 <Avatar
                   src={user?.avatar as string}
                   size="lg"
-                  alt={user?.username || ' '}
+                  alt={user?.username || 'none'}
                 />
 
                 <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-1">
