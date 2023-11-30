@@ -10,7 +10,7 @@ import {
 
 import { copyBlobToClipboard } from 'copy-image-clipboard';
 import { toBlob } from 'html-to-image';
-import { useToast } from '@/components/feedback';
+import { useToast } from '@/components/toast';
 
 type CaptureContext = {
   captureRef?: React.RefObject<HTMLDivElement>;

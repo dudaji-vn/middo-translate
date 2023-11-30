@@ -13,7 +13,7 @@ import { Rectangle } from '@/components/icons';
 import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
 import { useSetParams } from '@/hooks/use-set-params';
-import { useToast } from '@/components/feedback';
+import { useToast } from '@/components/toast';
 import { useTranslateStore } from '@/stores/translate';
 import { useWindowSize } from 'usehooks-ts';
 

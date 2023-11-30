@@ -1,4 +1,4 @@
-import { useToast } from '@/components/feedback';
+import { useToast } from '@/components/toast';
 
 export const useTextCopy = (_text?: string) => {
   const { toast } = useToast();

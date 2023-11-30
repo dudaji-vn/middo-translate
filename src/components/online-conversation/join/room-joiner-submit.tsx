@@ -15,7 +15,7 @@ import socket from '@/lib/socket-io';
 import { useConversationStore } from '@/stores/conversation';
 import { useRoomJoiner } from '@/components/online-conversation/join/room-joiner-context';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/components/feedback';
+import { useToast } from '@/components/toast';
 
 export interface RoomJoinerSubmitProps
   extends React.HTMLAttributes<HTMLDivElement> {}

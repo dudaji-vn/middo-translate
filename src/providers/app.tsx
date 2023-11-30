@@ -6,7 +6,7 @@ import { NextAuthProvider } from './next-auth';
 import React from 'react';
 import { ReactQueryProvider } from './react-query';
 import SocketProvider from './socket';
-import { Toaster } from '@/components/feedback/toast';
+import { Toaster } from '@/components/toast';
 
 type Props = {};
 

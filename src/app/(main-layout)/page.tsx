@@ -16,7 +16,7 @@ import { detectLanguage, translateText } from '@/services/languages';
 
 import { CompareProvider } from '@/features/translate/context';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { PageLoading } from '@/components/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { cn } from '@/utils/cn';
 
 interface HomeProps {

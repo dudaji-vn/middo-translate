@@ -9,7 +9,7 @@ import { QRCodeIcon } from '@/components/icons';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { getConversation } from '@/services/conversation';
 import { useRouter } from 'next/navigation';
-import { useToast } from '@/components/feedback';
+import { useToast } from '@/components/toast';
 
 export interface RoomCodeInputProps
   extends React.HTMLAttributes<HTMLDivElement> {}
