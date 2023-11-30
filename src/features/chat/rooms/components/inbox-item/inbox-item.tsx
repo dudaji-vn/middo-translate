@@ -15,9 +15,13 @@ export interface InboxItemProps {
   isActive?: boolean;
   currentUserId: User['_id'];
   currentRoomId?: Room['_id'];
+  showMembersName?: boolean;
 }
 const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
-  ({ data: _data, isActive, currentUserId, currentRoomId }, ref) => {
+  (
+    { data: _data, isActive, currentUserId, showMembersName, currentRoomId },
+    ref,
+  ) => {
     const data = useMemo(
       () => generateRoomDisplay(_data, currentUserId),
       [_data, currentUserId],
@@ -56,7 +60,14 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
                   </span>
                 )}
               </div>
-              {data.lastMessage && (
+              {showMembersName && (
+                <div className="flex items-center">
+                  <span className="line-clamp-1 break-all text-sm text-text/50">
+                    {data.participants.map((user) => user.username).join(', ')}
+                  </span>
+                </div>
+              )}
+              {data.lastMessage && !showMembersName && (
                 <ItemSub
                   message={data.lastMessage}
                   participants={data.participants}
