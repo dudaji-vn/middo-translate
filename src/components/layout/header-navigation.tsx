@@ -44,7 +44,7 @@ export const HeaderNavigation = forwardRef<
   const pathName = usePathname();
 
   return (
-    <div className="flex-1">
+    <div className="md:flex-1">
       <Button.Icon
         onClick={toggleMenu}
         className="md:hidden"
