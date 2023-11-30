@@ -6,7 +6,7 @@ import { ArrowBackOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions/button';
 import { ChatCreator } from '@/features/chat/rooms/components/inbox-create/chat-creator';
 import { ChatSetting } from '../chat-setting';
-import { GroupCreator } from '../inbox-create/group-creator';
+import { GroupCreateSide } from '../group-create-side';
 import { InboxMainTab } from './inbox-main-tab';
 import { MessagePlusIcon } from '@/components/icons';
 import { Typography } from '@/components/data-display';
@@ -33,7 +33,7 @@ const componentsMap: Record<
   },
   'new-group': {
     title: 'Group chat',
-    component: <GroupCreator />,
+    component: <GroupCreateSide />,
   },
   default: null,
 };
