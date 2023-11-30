@@ -3,8 +3,7 @@ import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { Search } from '@easy-eva-icons/react';
 import { cn } from '@/utils/cn';
 
-export interface SearchInputProps
-  extends ButtonHTMLAttributes<HTMLInputElement> {
+interface SearchInputProps extends ButtonHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
   btnDisabled?: boolean;
 }

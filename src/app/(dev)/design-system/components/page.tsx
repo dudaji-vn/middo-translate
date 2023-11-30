@@ -1,5 +1,3 @@
-import {} from '@/components/select';
-
 interface HomeProps {}
 
 export default async function DesignSystem(props: HomeProps) {

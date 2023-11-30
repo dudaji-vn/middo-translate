@@ -3,7 +3,7 @@
 import { forwardRef, useEffect, useState } from 'react';
 
 import { Message as MessageType } from '@/types/room';
-import { Text } from '@/components/text';
+import { Text } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import { cn } from '@/utils/cn';
 import moment from 'moment';

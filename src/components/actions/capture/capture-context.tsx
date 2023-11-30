@@ -7,13 +7,10 @@ import {
   useContext,
   useRef,
 } from 'react';
-import {
-  canCopyImagesToClipboard,
-  copyBlobToClipboard,
-} from 'copy-image-clipboard';
 
+import { copyBlobToClipboard } from 'copy-image-clipboard';
 import { toBlob } from 'html-to-image';
-import { useToast } from '../toast';
+import { useToast } from '@/components/toast';
 
 type CaptureContext = {
   captureRef?: React.RefObject<HTMLDivElement>;

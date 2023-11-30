@@ -1,13 +1,12 @@
 'use client';
 
+import { QrScanner, ScannerStatus } from '@/components/actions';
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
-import { LoadingBase } from '@/components/loading-base';
+import { LoadingBase } from '@/components/feedback';
 import { QRCodeIcon } from '@/components/icons';
-import { QrScanner } from '@/components/scanner';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { ScannerStatus } from '@/components/scanner/scanner';
 import { getConversation } from '@/services/conversation';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/toast';

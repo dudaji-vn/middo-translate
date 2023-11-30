@@ -6,7 +6,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/select';
+} from '@/components/data-entry';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
 import { CircleFlag } from 'react-circle-flags';

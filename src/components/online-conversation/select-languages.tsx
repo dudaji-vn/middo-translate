@@ -13,9 +13,9 @@ import {
 import React, { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
-import {Button} from '@/components/actions';
+import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
-import { Input } from '../input';
+import { Input } from '@/components/data-entry';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
 import { useIsMobile } from '@/hooks/use-is-mobile';

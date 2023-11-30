@@ -6,7 +6,7 @@ import {
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
 import { Country } from '@/types/country';
-import { Input } from '../input';
+import { Input } from '@/components/data-entry';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
 

@@ -10,7 +10,7 @@ import { Participant } from '@/types/room';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { SideChatFooter } from './side-footer';
 import { SideChatHeader } from './side-chat-header';
-import { Switch } from '@/components/switch';
+import { Switch } from '@/components/data-entry';
 import { cn } from '@/utils/cn';
 import { setRoomSetting } from '@/utils/local-storage';
 import socket from '@/lib/socket-io';

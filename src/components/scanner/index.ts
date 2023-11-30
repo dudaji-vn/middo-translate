@@ -1,1 +1,0 @@
-export { QrScanner } from './scanner';

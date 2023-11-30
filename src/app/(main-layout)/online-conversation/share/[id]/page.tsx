@@ -3,12 +3,12 @@ import '../style.css';
 import { CopyOutline, Share } from '@easy-eva-icons/react';
 
 import { Button } from '@/components/actions';
-import { CopyZoneClick } from '@/components/copy-zone-click';
+import { CopyZoneClick } from '@/components/actions';
 import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import QRCode from 'react-qr-code';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { ShareZone } from '@/components/share-zone';
+import { ShareZone } from '@/components/actions';
 import { getConversation } from '@/services/conversation';
 
 interface SharingProps {

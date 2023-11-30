@@ -37,16 +37,16 @@ import {
   SwapOutline,
 } from '@easy-eva-icons/react';
 import {
+  Input,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/select';
+} from '@/components/data-entry';
 
 import { Button } from '@/components/actions';
-import { Input } from '@/components/input';
-import { Switch } from '@/components/switch';
+import { Switch } from '@/components/data-entry';
 
 interface HomeProps {
   searchParams: {

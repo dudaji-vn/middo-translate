@@ -1,6 +1,6 @@
 import { SvgSpinnersGooeyBalls2 } from '../icons';
 import { forwardRef } from 'react';
-export interface LoadingBaseProps extends React.HTMLAttributes<HTMLDivElement> {
+interface LoadingBaseProps extends React.HTMLAttributes<HTMLDivElement> {
   loadingText?: string;
 }
 

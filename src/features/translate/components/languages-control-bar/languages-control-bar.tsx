@@ -1,7 +1,7 @@
 'use client';
 
 import { Globe2Outline, Swap } from '@easy-eva-icons/react';
-import { Select, SelectTrigger } from '@/components/select';
+import { Select, SelectTrigger } from '@/components/data-entry';
 import { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
