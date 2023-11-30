@@ -1,17 +1,17 @@
 import { createContext, useContext } from 'react';
 
-import { InboxTabs } from './inbox';
+import { InboxSides } from '../../types';
 
 interface InboxContextProps {
-  currentTab: InboxTabs;
-  setCurrentTab: (tab: InboxTabs) => void;
+  currentTab: InboxSides;
+  setCurrentTab: (tab: InboxSides) => void;
   backToDefault: () => void;
 }
 
 export const InboxContext = createContext<InboxContextProps | undefined>({
   currentTab: 'default',
-  setCurrentTab: () => { },
-  backToDefault: () => { },
+  setCurrentTab: () => {},
+  backToDefault: () => {},
 });
 
 export const useInboxContext = () => {

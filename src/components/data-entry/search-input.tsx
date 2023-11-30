@@ -1,3 +1,5 @@
+'use client';
+
 import { ButtonHTMLAttributes, forwardRef, useState } from 'react';
 import { CloseCircleOutline, Search } from '@easy-eva-icons/react';
 
