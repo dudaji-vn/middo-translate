@@ -30,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={montserrat.className}>
+    <html lang="en" suppressHydrationWarning={true}>
+      <body className={montserrat.className} suppressHydrationWarning={true}>
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
