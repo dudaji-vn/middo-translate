@@ -20,18 +20,10 @@ export const useAuthStore = create<AuthState>()((set) => ({
     try {
       set(() => ({ loading: true }));
       const data = await registerService({ email, password });
-      toast({
-        title: 'Success',
-        description: data?.data?.message,
-        duration: 5000,
-      });
+      toast({ title: 'Success', description: data?.data?.message });
     } catch (error: any) {
       if(error?.response?.data?.message) {
-        toast({
-          title: 'Error',
-          description: error?.response?.data?.message,
-          duration: 5000,
-        });
+        toast({ title: 'Error', description: error?.response?.data?.message });
       }
     } finally {
       set(() => ({ loading: false }));

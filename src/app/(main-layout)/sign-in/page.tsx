@@ -10,6 +10,7 @@ import { InputField } from '@/components/form/InputField';
 import { FC, useEffect } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'next/navigation';
 
 interface SignInProps {
 }
@@ -31,7 +32,7 @@ const schema = yup
     .required()
 
 export default function SignIn(props: SignInProps) {
-
+    const router = useRouter();
     const {
         register,
         watch,
@@ -57,9 +58,7 @@ export default function SignIn(props: SignInProps) {
 
     useEffect(() => {
         if (isAuthentication) {
-            console.log('auth')
-        }else {
-            console.log('not auth')
+            router.push(ROUTE_NAMES.ROOT)
         }
     }, [isAuthentication])
 
