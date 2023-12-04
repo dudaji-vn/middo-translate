@@ -9,6 +9,7 @@ import { Button } from "@/components/actions/button";
 import { InputField } from '@/components/form/InputField';
 import Link from 'next/link';
 import { FC } from 'react';
+import { useAuthStore } from '@/stores/auth';
 
 interface SignUpProps {
 }
@@ -59,17 +60,20 @@ export default function SignUp(props: SignUpProps) {
       resolver: yupResolver(schema),
     });
 
+    const { loading, register: submitRegister } = useAuthStore();
+
     const handleSubmitForm = (e: React.FormEvent) => {
       e.preventDefault();
       trigger();
-      if (errors) return;
-      console.log(watch());
+      if (Object.keys(errors).length > 0) return;
+      let data = watch();
+      submitRegister(data);
     }
 
     return (  
       <div>
         <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-          <div className="bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+          <div className="bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2 w-full">
             <div className="flex w-full items-stretch justify-start gap-3">
               <div className="h-full w-1 rounded-full bg-primary"></div>
               <h4 className="text-primary">Sign up</h4>
