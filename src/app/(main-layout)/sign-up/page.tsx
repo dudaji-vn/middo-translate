@@ -68,8 +68,8 @@ export default function SignUp(props: SignUpProps) {
 
     return (  
       <div>
-        <div className="flex h-screen w-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/BG_SignIn.png')]">
-          <div className="w-screen bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+        <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+          <div className="bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
             <div className="flex w-full items-stretch justify-start gap-3">
               <div className="h-full w-1 rounded-full bg-primary"></div>
               <h4 className="text-primary">Sign up</h4>

@@ -13,7 +13,7 @@ interface InputFieldProps {
     isDirty?: boolean;
 }
 
-export const InputField: FC = ( props: InputFieldProps ) => {
+export const InputField = ( props: InputFieldProps ) => {
     const [isShowPassword, setIsShowPassword] = useState(false);
 
     const id = useId();
@@ -23,7 +23,7 @@ export const InputField: FC = ( props: InputFieldProps ) => {
         <div className={`w-full ${className}`}>
             {label && <label className="mb-2 ml-5 inline-block" htmlFor={id}>{label}</label>}
             {subLabel && <span className="mb-2 block max-w-[460px] break-words pl-5 text-sm opacity-60">{subLabel}</span>}
-            <div className={`flex h-[50px] w-full items-center justify-start rounded-full border px-4 ${errors ? 'border-error-2' : ''}`} >
+            <div className={`flex h-[50px] w-full items-center justify-start rounded-full border px-4 ${errors ? 'border-error-2' : ''} ${type === 'password' ? 'pr-1' : ''}`} >
                 <input
                     {...register }
                     className="w-full ring-0 focus:outline-none focus:ring-offset-0 focus-visible:ring-0 px-1"
@@ -39,9 +39,9 @@ export const InputField: FC = ( props: InputFieldProps ) => {
                         {isShowPassword ? <EyeOutline className="opacity-60" /> : <EyeOff2Outline className="opacity-60" />}
                     </div>
                 )}
-                {!errors && (
+                {/* {!errors && (
                     <CheckmarkCircle2 className={`h-5 w-5 min-w-[20px] min-h-[20px] text-success-2`}/>
-                )}
+                )} */}
             </div>
             {errors && (
                 <div className="mt-2 flex items-center gap-2 pl-5 text-error-2">

@@ -1,5 +1,8 @@
 export const ROUTE_NAMES = {
   ROOT: '/',
+  SIGN_IN: '/sign-in',
+  SIGN_UP: '/sign-up',
+  FORGOT_PASSWORD: '/forgot-password',
   ONLINE_CONVERSATION: '/online-conversation',
   ONLINE_CONVERSATION_CREATE: '/online-conversation/create',
   ONLINE_CONVERSATION_SHARE: '/online-conversation/share',
