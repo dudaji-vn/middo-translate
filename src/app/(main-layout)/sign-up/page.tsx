@@ -1,14 +1,11 @@
 "use client";
 
 import { useForm } from 'react-hook-form';
-import { AlertCircleOutline, CheckmarkCircle2, EyeOff2Outline, EyeOutline } from "@easy-eva-icons/react";
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-
-import { Button } from "@/components/actions/button";
 import { InputField } from '@/components/form/InputField';
 import Link from 'next/link';
-import { FC } from 'react';
+import { useState } from 'react';
 import { useAuthStore } from '@/stores/auth';
 
 interface SignUpProps {
@@ -44,11 +41,11 @@ const schema = yup
   .required()
 
 export default function SignUp(props: SignUpProps) {
-
     const {
       register,
       watch,
       trigger,
+      reset,
       formState: { errors, dirtyFields },
     } = useForm({
       mode: "onBlur",
@@ -62,12 +59,13 @@ export default function SignUp(props: SignUpProps) {
 
     const { loading, register: submitRegister } = useAuthStore();
 
-    const handleSubmitForm = (e: React.FormEvent) => {
+    const handleSubmitForm = async (e: React.FormEvent) => {
       e.preventDefault();
       trigger();
       if (Object.keys(errors).length > 0) return;
       let data = watch();
-      submitRegister(data);
+      await submitRegister(data);
+      reset();
     }
 
     return (  
@@ -106,7 +104,8 @@ export default function SignUp(props: SignUpProps) {
               />
               <button
                 type="submit"
-                className="mt-10 flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary"
+                className={`mt-10 flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary ${loading && '!bg-slate-400 pointer-events-none'}`}
+                disabled={loading}
               >
                 Sign up
               </button>

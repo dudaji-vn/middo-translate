@@ -1,27 +1,12 @@
 import { axios } from '@/lib/axios'
-export const get = async (url: string) => {
-    try {
-        const response = await axios.get(url);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+export const get = (url: string) => {
+    return axios.get(url);
 };
 
-export const post = async (url: string, body: any) => {
-    try {
-        const response = await axios.post(url, body);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+export const post = (url: string, body: any) => {
+    return axios.post(url, body);
 };
 
-export const put = async (url: string, body: any) => {
-    try {
-        const response = await axios.put(url, body);
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
+export const put = (url: string, body: any) => {
+    return axios.put(url, body);
 };

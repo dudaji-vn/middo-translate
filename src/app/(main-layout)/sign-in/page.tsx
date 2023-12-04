@@ -7,8 +7,9 @@ import * as yup from "yup"
 
 import { Button } from "@/components/actions/button";
 import { InputField } from '@/components/form/InputField';
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useAuthStore } from '@/stores/auth';
 
 interface SignInProps {
 }
@@ -45,12 +46,22 @@ export default function SignIn(props: SignInProps) {
         resolver: yupResolver(schema),
     });
 
+    const { isAuthentication, loading, login: submitLogin } = useAuthStore();
+
     const handleSubmitForm = (e: React.FormEvent) => {
         e.preventDefault();
         trigger();
-        if (errors) return;
-        console.log(watch());
+        if (Object.keys(errors).length > 0) return;
+        submitLogin(watch());
     }
+
+    useEffect(() => {
+        if (isAuthentication) {
+            console.log('auth')
+        }else {
+            console.log('not auth')
+        }
+    }, [isAuthentication])
 
     return (
         <div>

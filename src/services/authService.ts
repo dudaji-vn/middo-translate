@@ -4,12 +4,9 @@ export const login = async ({ email, password }: AuthData) => {
 
 };
 
-export const registerService = async ({ email, password }: AuthData) => {
-    try {
-        console.log('run 2')
-        const response = await post('/auth/register', { email, password });
-        console.log(response);
-    } catch (error) {
-        console.log(error);
-    }
+export const registerService = ({ email, password }: AuthData) => {
+    return post('/auth/sign-up', { email, password });
+};
+export const loginService = ({ email, password }: AuthData) => {
+    return post('/auth/sign-in', { email, password });
 };

@@ -3,10 +3,6 @@ import axios from 'axios';
 
 const instance = axios.create({
   baseURL: NEXT_PUBLIC_URL + '/api',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true,
 });
 
 // Add a request interceptor
