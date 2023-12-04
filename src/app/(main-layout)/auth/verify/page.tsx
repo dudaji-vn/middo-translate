@@ -1,8 +1,6 @@
 "use client";
 
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { useAuthStore } from '@/stores/auth';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { verifyEmailService } from '@/services/authService';

@@ -1,16 +1,17 @@
 "use client";
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-import { AlertCircleOutline, CheckmarkCircle2, EyeOff2Outline, EyeOutline } from "@easy-eva-icons/react";
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 
-import { Button } from "@/components/actions/button";
 import { InputField } from '@/components/form/InputField';
-import { FC, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
+import { PageLoading } from '@/components/feedback';
+import { loginService } from '@/services/authService';
+import { toast } from '@/components/toast';
 
 interface SignInProps {
 }
@@ -32,14 +33,16 @@ const schema = yup
     .required()
 
 export default function SignIn(props: SignInProps) {
+    const [loading, setLoading] = useState(false);
     const router = useRouter();
     const {
         register,
         watch,
+        reset,
         trigger,
-        formState: { errors, dirtyFields },
+        formState: { errors, isValid },
     } = useForm({
-        mode: "onBlur",
+        mode: "onSubmit",
         defaultValues: {
             email: "",
             password: "",
@@ -47,13 +50,32 @@ export default function SignIn(props: SignInProps) {
         resolver: yupResolver(schema),
     });
 
-    const { isAuthentication, loading, login: submitLogin } = useAuthStore();
+    const { isAuthentication, setData: setDataAuth } = useAuthStore();
 
-    const handleSubmitForm = (e: React.FormEvent) => {
+    const handleSubmitForm = async (e: React.FormEvent) => {
         e.preventDefault();
         trigger();
-        if (Object.keys(errors).length > 0) return;
-        submitLogin(watch());
+        
+        if (!isValid) return;
+        try {
+            setLoading(true);
+            const data = await loginService(watch());
+            const { accessToken,  refreshToken, user } = data?.data;
+
+            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem('refreshToken', refreshToken);
+
+            toast({ title: 'Success', description: 'Login success'});
+            setDataAuth({ ...user, isAuthentication: true });
+
+        } catch (error: any) {
+            if(error?.response?.data?.message) {
+                toast({ title: 'Error', description: error?.response?.data?.message });
+            }
+        } finally {
+            setLoading(false);
+            reset();
+        }
     }
 
     useEffect(() => {
@@ -64,6 +86,7 @@ export default function SignIn(props: SignInProps) {
 
     return (
         <div>
+            { loading && <PageLoading /> }
             <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
                 <div className="bg-background px-5 py-10 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2 w-full">
                     <h4 className="text-primary font-bold text-center text-[26px]">Sign in</h4>

@@ -9,6 +9,8 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { registerService } from '@/services/authService';
 import { toast } from '@/components/toast';
 import { useRouter } from 'next/navigation';
+import { PageLoading } from '@/components/feedback';
+import { useState } from 'react';
 
 interface SignUpProps {
 }
@@ -43,15 +45,17 @@ const schema = yup
   .required()
 
 export default function SignUp(props: SignUpProps) {
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
     const {
       register,
       watch,
       trigger,
       reset,
-      formState: { errors },
+      formState: { errors, isValid },
     } = useForm({
-      mode: "onBlur",
+      mode: "onSubmit",
       defaultValues: {
         email: "",
         password: "",
@@ -63,9 +67,10 @@ export default function SignUp(props: SignUpProps) {
     const handleSubmitForm = async (e: React.FormEvent) => {
       e.preventDefault();
       trigger();
-      if (Object.keys(errors).length > 0) return;
+      if (!isValid) return;
 
       try {
+        setLoading(true);
         await registerService(watch());
         localStorage.setItem("email_register", watch().email);
         router.push(ROUTE_NAMES.SIGN_UP_SUCCESS);
@@ -74,12 +79,14 @@ export default function SignUp(props: SignUpProps) {
           toast({ title: 'Error', description: error?.response?.data?.message });
         }
       } finally {
+        setLoading(false);
         reset();
       }
     }
 
     return (  
       <div>
+        {loading && <PageLoading />}
         <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
           <div className="bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2 w-full">
             <div className="flex w-full items-stretch justify-start gap-3">
