@@ -10,3 +10,9 @@ export const registerService = ({ email, password }: AuthData) => {
 export const loginService = ({ email, password }: AuthData) => {
     return post('/auth/sign-in', { email, password });
 };
+export const verifyEmailService = () => {
+    return get('/auth/activate-account');
+};
+export const resendEmailService = (email: string) => {
+    return post('/auth/resend-verify-email', { email });
+};

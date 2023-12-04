@@ -5,8 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { InputField } from '@/components/form/InputField';
 import Link from 'next/link';
-import { useState } from 'react';
-import { useAuthStore } from '@/stores/auth';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { registerService } from '@/services/authService';
+import { toast } from '@/components/toast';
+import { useRouter } from 'next/navigation';
 
 interface SignUpProps {
 }
@@ -41,12 +43,13 @@ const schema = yup
   .required()
 
 export default function SignUp(props: SignUpProps) {
+  const router = useRouter();
     const {
       register,
       watch,
       trigger,
       reset,
-      formState: { errors, dirtyFields },
+      formState: { errors },
     } = useForm({
       mode: "onBlur",
       defaultValues: {
@@ -57,15 +60,22 @@ export default function SignUp(props: SignUpProps) {
       resolver: yupResolver(schema),
     });
 
-    const { loading, register: submitRegister } = useAuthStore();
-
     const handleSubmitForm = async (e: React.FormEvent) => {
       e.preventDefault();
       trigger();
       if (Object.keys(errors).length > 0) return;
-      let data = watch();
-      await submitRegister(data);
-      reset();
+
+      try {
+        await registerService(watch());
+        localStorage.setItem("email_register", watch().email);
+        router.push(ROUTE_NAMES.SIGN_UP_SUCCESS);
+      } catch (error: any) {
+        if(error?.response?.data?.message) {
+          toast({ title: 'Error', description: error?.response?.data?.message });
+        }
+      } finally {
+        reset();
+      }
     }
 
     return (  
@@ -104,15 +114,14 @@ export default function SignUp(props: SignUpProps) {
               />
               <button
                 type="submit"
-                className={`mt-10 flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary ${loading && '!bg-slate-400 pointer-events-none'}`}
-                disabled={loading}
+                className={`mt-10 flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary`}
               >
                 Sign up
               </button>
             </form>
             <div className="mt-8 flex justify-center">
               <Link
-                href="/sign-in"
+                href={ROUTE_NAMES.SIGN_IN}
                 className="active:text-primary md:hover:font-medium mx-auto inline-block w-fit-content"
               >Cancel</Link>
             </div>
