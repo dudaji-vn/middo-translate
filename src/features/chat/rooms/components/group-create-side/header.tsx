@@ -69,7 +69,7 @@ export const GroupCreateHeader = (props: GroupCreateHeaderProps) => {
               <Avatar
                 size="lg"
                 src={preview}
-                alt={selectedUsers[0]?.username}
+                alt={selectedUsers[0]?.name}
                 className="ring-2 ring-background"
               />
             </DropdownMenuTrigger>
