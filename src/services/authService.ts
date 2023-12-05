@@ -1,5 +1,5 @@
 import { AuthData } from "@/types";
-import { get, post, put } from "./apiService";
+import { get, patch, post, put } from "./apiService";
 export const login = async ({ email, password }: AuthData) => {
 
 };
@@ -21,4 +21,10 @@ export const forgotPasswordService = (email: string) => {
 };
 export const resetPasswordService = (password: string) => {
     return put('/auth/reset-password', { password });
+}
+export const getProfileService = () => {
+    return get('/auth/me');
+};
+export const addInfoUserService = (data: any) => {
+    return patch('/users/setup', data);
 }

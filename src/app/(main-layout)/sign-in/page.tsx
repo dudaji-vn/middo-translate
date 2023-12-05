@@ -13,6 +13,7 @@ import { loginService } from '@/services/authService';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import Image from 'next/image';
+import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/configs/store-key';
 
 export default function SignIn() {
     const [loading, setLoading] = useState(false);
@@ -38,8 +39,8 @@ export default function SignIn() {
             const data = await loginService(watch());
             const { accessToken,  refreshToken, user } = data?.data;
 
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem(ACCESS_TOKEN_NAME, accessToken);
+            localStorage.setItem(REFRESH_TOKEN_NAME, refreshToken);
 
             setDataAuth({ ...user, isAuthentication: true });
         } catch (_: unknown) {} 

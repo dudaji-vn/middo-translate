@@ -12,6 +12,7 @@ import { PageLoading } from '@/components/loading/PageLoading';
 import { ResetPasswordSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 
 export default function ResetPassword() {
     const [loading, setLoading] = useState(false);
@@ -32,7 +33,7 @@ export default function ResetPassword() {
         if(!token) {
             router.push(ROUTE_NAMES.SIGN_IN);
         }
-        localStorage.setItem('access_token', token || '')
+        localStorage.setItem(ACCESS_TOKEN_NAME, token || '')
     }, [router, searchParams]);
 
 
@@ -43,7 +44,7 @@ export default function ResetPassword() {
         setLoading(true);
         try {
             await resetPasswordService(watch().password);
-            localStorage.removeItem('access_token')
+            localStorage.removeItem(ACCESS_TOKEN_NAME)
             router.push(ROUTE_NAMES.SIGN_IN);
         } catch (_: unknown) {} finally {
             setLoading(false);

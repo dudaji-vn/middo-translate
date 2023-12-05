@@ -85,3 +85,24 @@ export const ResetPasswordSchema = yup
         })
     })
     .required()
+
+export const CreateNewAccountSchema = yup
+    .object()
+    .shape({
+        name: yup.string().required({
+            value: true,
+            message: "Please enter name!"
+        }),
+        avatar: yup.mixed()
+        .test('required', 'Please choose your avatar', (value: any) => {
+            return value.length > 0 || value.size > 0;
+        })
+        .test('fileSize', 'File size must be less than 3MB', (value: any) => {
+            return value?.size < 3000000;
+        }),
+        language: yup.string().required({
+            value: true,
+            message: "Please choose language!"
+        }),
+    })
+    .required()

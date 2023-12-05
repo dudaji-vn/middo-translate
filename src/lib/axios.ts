@@ -1,5 +1,6 @@
 import { toast } from '@/components/toast';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
+import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 import axios from 'axios';
 
 const instance = axios.create({
@@ -9,7 +10,7 @@ const instance = axios.create({
 // Add a request interceptor
 instance.interceptors.request.use(
   function (request) {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem(ACCESS_TOKEN_NAME);
     if (token) {
       request.headers.Authorization = "Bearer " + token;
     }

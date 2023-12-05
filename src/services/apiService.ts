@@ -11,3 +11,6 @@ export const post = (url: string, body: any) => {
 export const put = (url: string, body: any) => {
     return axios.put(url, body);
 };
+export const patch = (url: string, body: any) => {
+    return axios.patch(url, body);
+}

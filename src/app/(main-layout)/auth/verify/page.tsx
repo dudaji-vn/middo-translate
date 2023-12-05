@@ -7,6 +7,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { verifyEmailService } from '@/services/authService';
 import { Button } from '@/components/form/Button';
 import Image from 'next/image';
+import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 
 export default function Verify() {
     const router = useRouter();
@@ -18,7 +19,7 @@ export default function Verify() {
         if(!token) {
             router.push(ROUTE_NAMES.SIGN_IN);
         }
-        localStorage.setItem('access_token', token || '')
+        localStorage.setItem(ACCESS_TOKEN_NAME, token || '')
         const verifyEmailWithToken = async () => {
             try {
                 await verifyEmailService();
@@ -26,7 +27,7 @@ export default function Verify() {
             } catch (error) {
                 setStatusVerify('expired')
             } finally {
-                localStorage.removeItem('access_token')
+                localStorage.removeItem(ACCESS_TOKEN_NAME)
             }
         }
         verifyEmailWithToken();
