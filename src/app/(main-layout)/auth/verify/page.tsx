@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { verifyEmailService } from '@/services/authService';
 import { Button } from '@/components/form/Button';
+import Image from 'next/image';
 
 export default function Verify() {
     const router = useRouter();
@@ -29,14 +30,19 @@ export default function Verify() {
             }
         }
         verifyEmailWithToken();
-    }, []);
+    }, [router, searchParams]);
 
     if(statusVerify == 'success') {
         return (  
             <div>
                 <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
-                    <div className='mx-auto'>
-                        <img className='mx-auto' src="/email_verified.svg" alt="Email verified!" />
+                    <div className='w-[223px] mx-auto'>
+                        <Image
+                            src="/email_verified.svg"
+                            alt="Email verified!"
+                            width={500}
+                            height={500}
+                        ></Image>
                     </div>
                     <p className='text-primary text-center mt-8 text-[22px] font-medium'>Email verified!</p>
                     <p className='text-center mt-5'>Your email has been verified. Now you can sign in with registered email to use all Middo’s features</p>
@@ -50,8 +56,13 @@ export default function Verify() {
         return (  
             <div>
                 <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
-                    <div className='mx-auto'>
-                        <img className='mx-auto' src="/link_expired.svg" alt="Link expired!" />
+                    <div className='w-[223px] mx-auto'>
+                        <Image
+                            src="/link_expired.svg"
+                            alt="Link expired!"
+                            width={500}
+                            height={500}
+                        ></Image>
                     </div>
                     <p className='text-primary text-center mt-8 text-[22px] font-medium'>Link expired!</p>
                     <p className='text-center mt-5'>Your email verification link has expired. Please sign up again to get a new verification link.</p>

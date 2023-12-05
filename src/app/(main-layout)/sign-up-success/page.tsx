@@ -8,6 +8,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { resendEmailService } from '@/services/authService';
 import { PageLoading } from '@/components/feedback';
 import { Button } from '@/components/form/Button';
+import Image from 'next/image';
 
 export default function SignUpSuccess() {
   const router = useRouter();
@@ -22,7 +23,7 @@ export default function SignUpSuccess() {
     }
     setEmail(emailLocalstorage);
     localStorage.removeItem("email_register");
-  }, []);
+  }, [router]);
 
   const resendEmail = async () => {
     try {
@@ -39,8 +40,13 @@ export default function SignUpSuccess() {
     <div>
       { loading && <PageLoading /> }
       <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
-        <div className='mx-auto'>
-          <img className='mx-auto' src="/sended_email.svg" alt="Verify your email address" />
+        <div className='mx-auto w-[223px]'>
+          <Image
+            src="/sended_email.svg"
+            alt="Verify your email address"
+            width={500}
+            height={500}
+          ></Image>
         </div>
         <p className='text-primary text-center mt-8 text-[22px] font-medium'>Verify your email address</p>
         <p className='text-center mt-5'>An link has been sent to <strong>{email}</strong> since you used it as your sign in method. <br /><br /> Please verify this email address to complete your Middo account registration.</p>

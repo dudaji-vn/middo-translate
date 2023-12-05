@@ -12,6 +12,7 @@ import { PageLoading } from '@/components/feedback';
 import { loginService } from '@/services/authService';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
+import Image from 'next/image';
 
 export default function SignIn() {
     const [loading, setLoading] = useState(false);
@@ -52,7 +53,7 @@ export default function SignIn() {
         if (isAuthentication) {
             router.push(ROUTE_NAMES.ROOT)
         }
-    }, [isAuthentication])
+    }, [isAuthentication, router])
 
     return (
         <div>
@@ -85,7 +86,9 @@ export default function SignIn() {
                     </div>
                     <div className='flex items-center justify-center gap-5'>
                         <p>Or log in with</p>
-                        <a href=""><img src="/google.png" alt="Google" /></a>
+                        <a href="">
+                            <Image src="/google.png" alt="Google" width={56} height={56} />
+                        </a>
                     </div>
                 </div>
             </div>

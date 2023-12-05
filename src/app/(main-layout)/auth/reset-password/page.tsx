@@ -33,7 +33,7 @@ export default function ResetPassword() {
             router.push(ROUTE_NAMES.SIGN_IN);
         }
         localStorage.setItem('access_token', token || '')
-    }, []);
+    }, [router, searchParams]);
 
 
     const handleSubmitForm = async (e: React.FormEvent) => {
