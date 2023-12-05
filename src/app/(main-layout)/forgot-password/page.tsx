@@ -1,29 +1,19 @@
 "use client";
 
 import Link from 'next/link';
-import * as yup from "yup"
 import { useState } from 'react';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { forgotPasswordService } from '@/services/authService';
 import { toast } from '@/components/toast';
 import { InputField } from '@/components/form/InputField';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { PageLoading } from '@/components/loading/PageLoading';
+import { ForgotPasswordSchema as schema } from '@/configs/yup-form';
+import { Button } from '@/components/form/Button';
 
-const schema = yup
-  .object()
-  .shape({
-    email: yup.string().required({
-      value: true,
-      message: "Please enter email address!"
-    }).email({
-      value: true,
-      message: "Please enter a valid email address!"
-    })
-  })
-  .required()
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -71,10 +61,7 @@ export default function ForgotPassword() {
             errors={errors.email}
             type="text"
           />
-          <button
-            type="submit"
-            className="mt-10 mx-auto flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary"
-          >Confirm</button>
+          <Button type="submit">Confirm</Button>
         </form>
         <div className="mt-8 flex justify-center">
           <Link

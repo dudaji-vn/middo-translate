@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter, useSearchParams } from 'next/navigation';
+
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { verifyEmailService } from '@/services/authService';
+import { Button } from '@/components/form/Button';
 
-interface VerifyProps {
-}
-
-export default function Verify(props: VerifyProps) {
+export default function Verify() {
     const router = useRouter();
     const searchParams = useSearchParams()
     const [statusVerify, setStatusVerify] = useState(''); // success, expired
@@ -41,11 +40,7 @@ export default function Verify(props: VerifyProps) {
                     </div>
                     <p className='text-primary text-center mt-8 text-[22px] font-medium'>Email verified!</p>
                     <p className='text-center mt-5'>Your email has been verified. Now you can sign in with registered email to use all Middo’s features</p>
-                    <button
-                        onClick={() => router.push(ROUTE_NAMES.SIGN_IN)}
-                        className={`mx-auto mt-10 flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary`}
-                    > Go to sign in
-                    </button>
+                    <Button tag='a' href={ROUTE_NAMES.SIGN_IN}>Go to sign in</Button>
                 </div>
             </div>
             );
@@ -60,11 +55,7 @@ export default function Verify(props: VerifyProps) {
                     </div>
                     <p className='text-primary text-center mt-8 text-[22px] font-medium'>Link expired!</p>
                     <p className='text-center mt-5'>Your email verification link has expired. Please sign up again to get a new verification link.</p>
-                    <button
-                        onClick={() => router.push(ROUTE_NAMES.SIGN_UP)}
-                        className={`mx-auto mt-10 flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary`}
-                    > Go to sign up
-                    </button>
+                    <Button tag='a' href={ROUTE_NAMES.SIGN_UP}>Go to sign up</Button>
                 </div>
             </div>
             );

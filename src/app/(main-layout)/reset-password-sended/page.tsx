@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter } from 'next/navigation';
+
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 export default function ResetPasswordSended() {
     const router = useRouter();
@@ -10,7 +11,6 @@ export default function ResetPasswordSended() {
 
     useEffect(() => {
         let emailLocalstorage = localStorage.getItem("email_reset_password") || '';
-        console.log(emailLocalstorage);
         if (!emailLocalstorage) {
             router.push(ROUTE_NAMES.SIGN_IN);
         }

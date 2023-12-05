@@ -1,47 +1,23 @@
 "use client";
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
+import { useAuthStore } from '@/stores/auth';
 
 import { InputField } from '@/components/form/InputField';
-import { useEffect, useState } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
 import { PageLoading } from '@/components/feedback';
 import { loginService } from '@/services/authService';
 import { toast } from '@/components/toast';
+import { LoginSchema as schema } from '@/configs/yup-form';
+import { Button } from '@/components/form/Button';
 
-interface SignInProps {
-}
-const schema = yup
-    .object()
-    .shape({
-        email: yup.string().required({
-            value: true,
-            message: "Please enter email address!"
-        }).email({
-            value: true,
-            message: "Please enter a valid email address!"
-        }),
-        password: yup.string().required({
-            value: true,
-            message: "Please enter password!"
-        })
-    })
-    .required()
-
-export default function SignIn(props: SignInProps) {
+export default function SignIn() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const {
-        register,
-        watch,
-        reset,
-        trigger,
-        formState: { errors, isValid },
-    } = useForm({
+    const { register, watch, reset, trigger, formState: { errors, isValid } } = useForm({
         mode: "onSubmit",
         defaultValues: {
             email: "",
@@ -106,12 +82,7 @@ export default function SignIn(props: SignInProps) {
                             type="password"
                         />
                         <Link className='inline-block ml-auto italic color-[#333] mt-3 hover:underline' href={ROUTE_NAMES.FORGOT_PASSWORD}>Forgot password?</Link>
-                        <button
-                            type="submit"
-                            className="mt-10 flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary"
-                        >
-                            Sign in
-                        </button>
+                        <Button type="submit">Sign in</Button>
                     </form>
                     <div className='my-10 mx-auto w-[120px] h-[1px] bg-[#ccc]'></div>
                     <p className='text-center text-[#333] mb-5'>Not have account yet?</p>

@@ -1,41 +1,18 @@
 "use client";
 
-import Link from 'next/link';
-import * as yup from "yup"
-import { use, useEffect, useState } from 'react';
-import { ROUTE_NAMES } from '@/configs/route-name';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { forgotPasswordService, resetPasswordService } from '@/services/authService';
+import { useForm } from 'react-hook-form';
+import { useSearchParams } from 'next/navigation';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+import { resetPasswordService } from '@/services/authService';
 import { toast } from '@/components/toast';
 import { InputField } from '@/components/form/InputField';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { PageLoading } from '@/components/loading/PageLoading';
-import { useSearchParams } from 'next/navigation';
-
-
-const schema = yup
-    .object()
-    .shape({
-        password: yup.string().required({
-            value: true,
-            message: "Please enter password!"
-        }).min(8, {
-            value: 8,
-            message: "Password must be at least 8 characters!"
-        }).matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-            "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
-        ),
-        confirmPassword: yup.string().required({
-            value: true,
-            message: "Please enter confirm password!"
-        }).oneOf([yup.ref('password')], {
-            value: true,
-            message: "Confirm password does not match!"
-        })
-    })
-    .required()
+import { ResetPasswordSchema as schema } from '@/configs/yup-form';
+import { Button } from '@/components/form/Button';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 export default function ResetPassword() {
     const [loading, setLoading] = useState(false);
@@ -67,7 +44,6 @@ export default function ResetPassword() {
         setLoading(true);
         try {
             let res = await resetPasswordService(watch().password);
-            console.log(res);
             toast({ title: 'Success', description: res?.data?.message })
             localStorage.removeItem('access_token')
             router.push(ROUTE_NAMES.SIGN_IN);
@@ -100,10 +76,7 @@ export default function ResetPassword() {
                         errors={errors.confirmPassword}
                         type="password"
                     />
-                    <button
-                        type="submit"
-                        className="mt-10 mx-auto flex w-full items-center justify-center rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:border md:hover:border-primary md:hover:bg-background md:hover:text-primary"
-                    >Confirm</button>
+                    <Button type="submit">Confirm</Button>
                 </form>
             </div>
         </div>
