@@ -1,6 +1,5 @@
 import { AlertCircleOutline, CheckmarkCircle2, EyeOff2Outline, EyeOutline } from "@easy-eva-icons/react";
-import { FC, useId, useState } from "react";
-import { Button } from "@/components/actions/button";
+import { useId, useState } from "react";
 
 interface InputFieldProps {
     label?: string;
@@ -17,7 +16,7 @@ export const InputField = ( props: InputFieldProps ) => {
     const [isShowPassword, setIsShowPassword] = useState(false);
 
     const id = useId();
-    const { label, subLabel, placeholder, register, errors, type, className, isDirty } = props;
+    const { label, subLabel, placeholder, register, errors, type, className } = props;
 
     return (
         <div className={`w-full ${className}`}>
@@ -45,8 +44,8 @@ export const InputField = ( props: InputFieldProps ) => {
             </div>
             {errors && (
                 <div className="mt-2 flex items-center gap-2 pl-5 text-error-2">
-                <AlertCircleOutline className="h-7 w-5" />
-                {errors?.message?.message as string}
+                <AlertCircleOutline className="min-w-[20px] h-7 w-5 " />
+                {errors?.message?.message as string || errors?.message as string}
             </div>
             )}
         </div>

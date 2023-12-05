@@ -1,5 +1,5 @@
 import { AuthData } from "@/types";
-import { get, post } from "./apiService";
+import { get, post, put } from "./apiService";
 export const login = async ({ email, password }: AuthData) => {
 
 };
@@ -16,3 +16,9 @@ export const verifyEmailService = () => {
 export const resendEmailService = (email: string) => {
     return post('/auth/resend-verify-email', { email });
 };
+export const forgotPasswordService = (email: string) => {
+    return post('/auth/forgot-password', { email });
+};
+export const resetPasswordService = (password: string) => {
+    return put('/auth/reset-password', { password });
+}
