@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { resendEmailService } from '@/services/authService';
-import { toast } from '@/components/toast';
 import { PageLoading } from '@/components/feedback';
 import { Button } from '@/components/form/Button';
 
@@ -30,16 +29,7 @@ export default function SignUpSuccess() {
       setLoading(true);
       setIsResend(true);
       const data = await resendEmailService(email);
-      toast({
-        title: 'Infomation',
-        description: data.data.message,
-      })
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Something went wrong! Please try again later.',
-      })
-    } finally {
+    } catch (_: unknown) {} finally {
       setLoading(false);
     }
   }

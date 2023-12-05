@@ -10,7 +10,6 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter } from 'next/navigation';
 import { PageLoading } from '@/components/feedback';
 import { loginService } from '@/services/authService';
-import { toast } from '@/components/toast';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 
@@ -41,14 +40,9 @@ export default function SignIn() {
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', refreshToken);
 
-            toast({ title: 'Success', description: 'Login success'});
             setDataAuth({ ...user, isAuthentication: true });
-
-        } catch (error: any) {
-            if(error?.response?.data?.message) {
-                toast({ title: 'Error', description: error?.response?.data?.message });
-            }
-        } finally {
+        } catch (_: unknown) {} 
+        finally {
             setLoading(false);
             reset();
         }

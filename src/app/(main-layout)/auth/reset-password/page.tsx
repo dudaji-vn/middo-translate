@@ -7,7 +7,6 @@ import { useSearchParams } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { resetPasswordService } from '@/services/authService';
-import { toast } from '@/components/toast';
 import { InputField } from '@/components/form/InputField';
 import { PageLoading } from '@/components/loading/PageLoading';
 import { ResetPasswordSchema as schema } from '@/configs/yup-form';
@@ -43,13 +42,10 @@ export default function ResetPassword() {
         if (!isValid) return;
         setLoading(true);
         try {
-            let res = await resetPasswordService(watch().password);
-            toast({ title: 'Success', description: res?.data?.message })
+            await resetPasswordService(watch().password);
             localStorage.removeItem('access_token')
             router.push(ROUTE_NAMES.SIGN_IN);
-        } catch (err: any) {
-            toast({ title: 'Error', description: err?.response?.data?.message || 'Something went wrong!' })
-        } finally {
+        } catch (_: unknown) {} finally {
             setLoading(false);
         }
     }

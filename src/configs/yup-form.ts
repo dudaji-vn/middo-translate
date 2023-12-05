@@ -1,4 +1,5 @@
 import * as yup from "yup"
+import { PASSWORD_PARTTERN } from "./regex-pattern"
 
 export const LoginSchema = yup
     .object()
@@ -34,7 +35,7 @@ export const RegisterSchema = yup
         value: 8,
         message: "Password must be at least 8 characters!"
         }).matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+        PASSWORD_PARTTERN,
         "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
         ),
     confirmPassword: yup.string().required({
@@ -72,7 +73,7 @@ export const ResetPasswordSchema = yup
             value: 8,
             message: "Password must be at least 8 characters!"
         }).matches(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+            PASSWORD_PARTTERN,
             "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
         ),
         confirmPassword: yup.string().required({

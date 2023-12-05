@@ -1,4 +1,5 @@
 import { axios } from '@/lib/axios'
+
 export const get = (url: string) => {
     return axios.get(url);
 };

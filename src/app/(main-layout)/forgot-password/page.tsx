@@ -8,7 +8,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { forgotPasswordService } from '@/services/authService';
-import { toast } from '@/components/toast';
 import { InputField } from '@/components/form/InputField';
 import { PageLoading } from '@/components/loading/PageLoading';
 import { ForgotPasswordSchema as schema } from '@/configs/yup-form';
@@ -34,12 +33,9 @@ export default function ForgotPassword() {
     setLoading(true);
     try {
       let res = await forgotPasswordService(watch().email);
-      toast({ title: 'Success', description: res?.data?.message })
       localStorage.setItem('email_reset_password', watch().email);
       router.push(ROUTE_NAMES.RESET_PASSWORD_SENDED);
-    } catch (err: any) {
-      toast({ title: 'Error', description: err?.response?.data?.message || 'Something went wrong!' })
-    } finally {
+    } catch (_: unknown) {} finally {
       setLoading(false);
     }
   }

@@ -9,7 +9,6 @@ import Link from 'next/link';
 import { InputField } from '@/components/form/InputField';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { registerService } from '@/services/authService';
-import { toast } from '@/components/toast';
 import { PageLoading } from '@/components/feedback';
 import { RegisterSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
@@ -45,11 +44,7 @@ export default function SignUp() {
         await registerService(watch());
         localStorage.setItem("email_register", watch().email);
         router.push(ROUTE_NAMES.SIGN_UP_SUCCESS);
-      } catch (error: any) {
-        if(error?.response?.data?.message) {
-          toast({ title: 'Error', description: error?.response?.data?.message });
-        }
-      } finally {
+      } catch (_: unknown) {} finally {
         setLoading(false);
         reset();
       }

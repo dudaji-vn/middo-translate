@@ -1,3 +1,4 @@
+import { toast } from '@/components/toast';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import axios from 'axios';
 
@@ -22,9 +23,14 @@ instance.interceptors.request.use(
 // Add a response interceptor
 instance.interceptors.response.use(
   function (response) {
+    if(response.data.message) toast({ title: 'Success',description: response.data.message })
     return response.data;
   },
   function (error) {
+    
+    if(error.response.data)
+      toast({ title: 'Error',description: error.response.data.message || error.response.data.error })
+    
     if (error.response.status === 401) {
       console.log('🚀 ~ file: axios-config.ts:29 ~ Unauthorized');
     } else {
