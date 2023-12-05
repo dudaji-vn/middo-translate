@@ -12,7 +12,7 @@ export async function fetchApi<T>(path: string, options?: RequestInit) {
     ...options,
     headers: {
       ...options?.headers,
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken?.value}`,
     },
   });
   if (!res.ok && res.status === 401) {
