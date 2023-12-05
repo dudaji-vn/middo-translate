@@ -1,14 +1,20 @@
 import { Checkmark } from '@easy-eva-icons/react';
 import { UserItem } from '@/features/users/components';
+import useAuthStore from '@/features/auth/stores/use-auth-store';
 import { useGroupCreate } from './context';
+import { useMemo } from 'react';
 
 export interface GroupCreateSearchListProps {}
 
 export const GroupCreateSearchList = (props: GroupCreateSearchListProps) => {
+  const user = useAuthStore((state) => state.user);
   const { searchUsers, selectedUsers, handleSelectUser } = useGroupCreate();
+  const filteredUsers = useMemo(() => {
+    return searchUsers?.filter((u) => u._id !== user!._id);
+  }, [searchUsers, user]);
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto">
-      {searchUsers?.map((user) => {
+      {filteredUsers?.map((user) => {
         const isChecked = !!selectedUsers.find((u) => u._id === user._id);
         return (
           <UserItem
