@@ -2,13 +2,13 @@ import { BaseEntity } from '@/types';
 import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
-// import { messageVariants } from '../components/message/message-item';
+import { messageVariants } from '../components/message-item';
 
 export type MessageType = 'text' | 'media' | 'call';
-// export type MessageStatus = Pick<
-//   VariantProps<typeof messageVariants>,
-//   'status'
-// >['status'];
+export type MessageStatus = Pick<
+  VariantProps<typeof messageVariants>,
+  'status'
+>['status'];
 
 export type MediaType = 'image' | 'video' | 'audio' | 'document';
 export type Media = {
@@ -26,5 +26,5 @@ export type Message = {
   deliveredTo?: User['_id'][];
   media?: Media[];
   type: MessageType;
-  // status: MessageStatus;
+  status: MessageStatus;
 } & BaseEntity;

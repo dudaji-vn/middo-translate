@@ -32,6 +32,9 @@ export const useSelectFiles = () => {
     }));
     setFiles((old) => [...old, ...newFiles]);
   };
+  const reset = () => {
+    setFiles([]);
+  };
   return {
     files,
     getInputProps,
@@ -39,5 +42,6 @@ export const useSelectFiles = () => {
     open,
     removeFile,
     handlePasteFile,
+    reset,
   };
 };

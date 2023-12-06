@@ -3,6 +3,8 @@ export const SOCKET_CONFIG = {
     MESSAGE: {
       NEW: 'message.new',
       SEND: 'message.send',
+      UPDATE: 'message.update',
+      DELETE: 'message.delete',
     },
     ROOM: {
       JOIN: 'room.join',

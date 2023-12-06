@@ -1,5 +1,8 @@
-import { ChatBoxFooter } from '@/features/chat/rooms/components/chat-box/footer';
-import { ChatBoxHeader } from '@/features/chat/rooms/components';
+import { ChatBoxFooter, ChatBoxHeader } from '@/features/chat/rooms/components';
+
+import { ChatBoxProvider } from '@/features/chat/rooms/contexts';
+import { MessageBox } from '@/features/chat/messages/components/message-box';
+import { MessagesBoxProvider } from '@/features/chat/messages/contexts';
 import { Response } from '@/types';
 import { Room } from '@/features/chat/rooms/types';
 import { fetchApi } from '@/utils/data-fetching';
@@ -25,8 +28,12 @@ const ChatRoomPage = async (props: {
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-lg bg-card">
       <ChatBoxHeader room={room} />
-      <div className="flex-1"></div>
-      <ChatBoxFooter />
+      <ChatBoxProvider room={room}>
+        <MessagesBoxProvider room={room}>
+          <MessageBox room={room} />
+          <ChatBoxFooter />
+        </MessagesBoxProvider>
+      </ChatBoxProvider>
     </div>
   );
 };
