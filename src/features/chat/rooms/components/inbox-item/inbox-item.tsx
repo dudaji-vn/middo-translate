@@ -16,10 +16,18 @@ export interface InboxItemProps {
   currentUserId: User['_id'];
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
+  showTime?: boolean;
 }
 const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
   (
-    { data: _data, isActive, currentUserId, showMembersName, currentRoomId },
+    {
+      data: _data,
+      isActive,
+      currentUserId,
+      showMembersName,
+      currentRoomId,
+      showTime = true,
+    },
     ref,
   ) => {
     const data = useMemo(
@@ -54,7 +62,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
                     {data.name}
                   </span>
                 </div>
-                {data.newMessageAt && (
+                {data.newMessageAt && showTime && (
                   <span className="ml-auto shrink-0 pl-2 text-sm text-text/50">
                     {time}
                   </span>
@@ -63,7 +71,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
               {showMembersName && (
                 <div className="flex items-center">
                   <span className="line-clamp-1 break-all text-sm text-text/50">
-                    {data.participants.map((user) => user.username).join(', ')}
+                    {data.participants.map((user) => user.name).join(', ')}
                   </span>
                 </div>
               )}

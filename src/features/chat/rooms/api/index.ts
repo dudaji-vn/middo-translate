@@ -21,7 +21,6 @@ export const roomApi = {
     });
     const res: Response<ListResponse<Room, CursorPagination>> =
       await axios.get(path);
-    console.log('😀', res.data);
     return res.data;
   },
   async createRoom(

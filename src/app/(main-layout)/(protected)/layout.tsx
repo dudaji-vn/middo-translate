@@ -2,8 +2,8 @@
 
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function ProtectedLayout({
   children,
@@ -13,19 +13,18 @@ export default function ProtectedLayout({
   const router = useRouter();
   const { user, isLoaded } = useAuthStore();
   useEffect(() => {
-    if(!user && isLoaded) {
+    if (!user && isLoaded) {
       router.push(ROUTE_NAMES.SIGN_IN);
       return;
     }
 
-    if(user && isLoaded && !user.avatar && !user.name && !user.language) {
+    if (user && isLoaded && !user.avatar && !user.name && !user.language) {
       router.push(ROUTE_NAMES.CREATE_ACCOUNT);
       return;
     }
-    
   }, [user, isLoaded, router]);
 
-  if(!isLoaded || !user) return null;
+  if (!isLoaded || !user) return null;
 
   return <>{children}</>;
 }
