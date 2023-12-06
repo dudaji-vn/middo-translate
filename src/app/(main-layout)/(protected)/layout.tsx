@@ -25,7 +25,7 @@ export default function ProtectedLayout({
     
   }, [user, isLoaded, router]);
 
-  if(!isLoaded) return null;
+  if(!isLoaded || !user) return null;
 
   return <>{children}</>;
 }

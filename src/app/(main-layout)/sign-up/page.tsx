@@ -12,6 +12,7 @@ import { registerService } from '@/services/authService';
 import { PageLoading } from '@/components/feedback';
 import { RegisterSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
+import { toast } from '@/components/toast';
 
 
 export default function SignUp() {
@@ -44,7 +45,9 @@ export default function SignUp() {
         await registerService(watch());
         localStorage.setItem("email_register", watch().email);
         router.push(ROUTE_NAMES.SIGN_UP_SUCCESS);
-      } catch (_: unknown) {} finally {
+      } catch (err: any) {
+        toast({ title: "Register failure!", description: err?.response?.data?.message });
+      } finally {
         setLoading(false);
         reset();
       }

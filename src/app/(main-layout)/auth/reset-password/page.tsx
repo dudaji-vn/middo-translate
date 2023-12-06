@@ -13,6 +13,7 @@ import { ResetPasswordSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
+import { toast } from '@/components/toast';
 
 export default function ResetPassword() {
     const [loading, setLoading] = useState(false);
@@ -49,7 +50,10 @@ export default function ResetPassword() {
             await resetPasswordService(watch().password);
             localStorage.removeItem(ACCESS_TOKEN_NAME)
             router.push(ROUTE_NAMES.SIGN_IN);
-        } catch (_: unknown) {} finally {
+            toast({ title: "Your password has been changed!", description: "Please login again!" });
+        } catch (err: any) {
+            toast({ title: "Change password failure!", description: err?.response?.data?.message });
+        } finally {
             setLoading(false);
         }
     }

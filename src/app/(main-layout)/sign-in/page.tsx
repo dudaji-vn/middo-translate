@@ -14,6 +14,7 @@ import { LoginSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import Image from 'next/image';
 import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/configs/store-key';
+import { toast } from '@/components/toast';
 
 export default function SignIn() {
     const [loading, setLoading] = useState(false);
@@ -39,7 +40,10 @@ export default function SignIn() {
             const data = await loginService(watch());
             const { user } = data?.data;
             setDataAuth({ user , isAuthentication: true });
-        } catch (_: unknown) {} 
+            toast({ title: "Congratulations!", description: "You are login in!" });
+        } catch (_: unknown) {
+            toast({ title: "Login failure!", description: "Username or password is incorrect" });
+        } 
         finally {
             setLoading(false);
             reset();

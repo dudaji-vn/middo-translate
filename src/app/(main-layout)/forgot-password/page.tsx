@@ -12,6 +12,7 @@ import { InputField } from '@/components/form/InputField';
 import { PageLoading } from '@/components/loading/PageLoading';
 import { ForgotPasswordSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
+import { toast } from '@/components/toast';
 
 export default function ForgotPassword() {
   const [loading, setLoading] = useState(false);
@@ -35,7 +36,10 @@ export default function ForgotPassword() {
       let res = await forgotPasswordService(watch().email);
       localStorage.setItem('email_reset_password', watch().email);
       router.push(ROUTE_NAMES.RESET_PASSWORD_SENDED);
-    } catch (_: unknown) {} finally {
+      toast({ title: "Your request has been send!", description: "Please check your email!" });
+    } catch (err: any) {
+      toast({ title: "Request reset password failure!", description: err?.response?.data?.message });
+    } finally {
       setLoading(false);
     }
   }

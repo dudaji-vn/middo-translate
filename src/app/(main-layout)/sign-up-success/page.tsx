@@ -9,6 +9,7 @@ import { resendEmailService } from '@/services/authService';
 import { PageLoading } from '@/components/feedback';
 import { Button } from '@/components/form/Button';
 import Image from 'next/image';
+import { toast } from '@/components/toast';
 
 export default function SignUpSuccess() {
   const router = useRouter();
@@ -30,7 +31,10 @@ export default function SignUpSuccess() {
       setLoading(true);
       setIsResend(true);
       const data = await resendEmailService(email);
-    } catch (_: unknown) {} finally {
+      toast({ title: "Email sended!", description: "Please re-check your email!" });
+    } catch (err: any) {
+      toast({ title: "Re-send email fail!", description: err?.response?.data?.message });
+    } finally {
       setLoading(false);
     }
   }
