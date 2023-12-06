@@ -32,12 +32,12 @@ export const ItemSub = ({
       return 'You:';
     }
     if (participants.length > 2) {
-      return `${message.sender.username}:`;
+      return `${message.sender.name}:`;
     }
     return '';
   }, [
     message.sender._id,
-    message.sender.username,
+    message.sender.name,
     currentUserId,
     participants.length,
   ]);
@@ -60,7 +60,7 @@ export const ItemSub = ({
             limit={2}
           >
             {readByUsers.map((user) => (
-              <Avatar key={user._id} alt={user.username} src={user.avatar} />
+              <Avatar key={user._id} alt={user.name} src={user.avatar} />
             ))}
           </AvatarGroup>
         </div>

@@ -24,17 +24,17 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
         )}
       >
         <div className="flex w-full items-center gap-2">
-          <Avatar src={user?.avatar} alt={user?.username} size="lg" />
+          <Avatar src={user?.avatar} alt={user?.name} size="lg" />
           <div className="w-full">
             <div className="flex items-center justify-between">
               <div className="max-w-full">
                 <span className="line-clamp-1 break-all text-base font-semibold text-text/90">
-                  {user.username}
+                  {user?.name}
                 </span>
               </div>
             </div>
             <Typography className="line-clamp-1 break-all text-sm text-text/50">
-              @{user.username}
+              @{user?.name}
             </Typography>
           </div>
           {rightElement}

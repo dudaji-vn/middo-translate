@@ -7,7 +7,7 @@ export function generateRoomDisplay(room: Room, currentUserId: User['_id']) {
   if (isGroup) {
     if (!name) {
       room.name = participants
-        .map((participant) => participant.username.split(' ')[0])
+        .map((participant) => participant.name.split(' ')[0])
         .join(', ');
     }
     room.link = `/talk/${room._id}`;
@@ -22,7 +22,7 @@ export function generateRoomDisplay(room: Room, currentUserId: User['_id']) {
 
   return {
     ...room,
-    name: participant.username,
+    name: participant.name,
     avatar: participant.avatar,
     link: `/talk/${participant._id}`,
   };
