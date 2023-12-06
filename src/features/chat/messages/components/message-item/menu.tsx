@@ -15,11 +15,13 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Label,
 } from '@/components/data-display';
+import { MoreVertical, PinIcon, Trash } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/data-entry';
 
 import { Button } from '@/components/actions';
 import { Message } from '@/features/chat/messages/types';
-import { PinIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { messageApi } from '../../api';
 import { useMutation } from '@tanstack/react-query';
@@ -52,15 +54,15 @@ export const Menu = ({ message, isMine }: MenuProps) => {
         <AlertDialog>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button.Icon size="sm" variant="ghost">
-                {/* <EllipsisHorizontal /> */}
+              <Button.Icon size="sm" variant="ghost" color="default">
+                <MoreVertical />
               </Button.Icon>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <AlertDialogTrigger className="w-full">
                 <DropdownMenuItem>
-                  {/* <TrashIcon className="mr-2 h-4 w-4" /> */}
-                  <span>Unsent</span>
+                  <Trash className="mr-2 h-4 w-4" />
+                  <span>Remove</span>
                 </DropdownMenuItem>
               </AlertDialogTrigger>
               <DropdownMenuGroup>
@@ -77,7 +79,7 @@ export const Menu = ({ message, isMine }: MenuProps) => {
               <AlertDialogTitle>
                 Who do you want to remove this message for?
               </AlertDialogTitle>
-              {/* <AlertDialogDescription>
+              <AlertDialogDescription>
                 <RadioGroup
                   value={removeType}
                   onValueChange={(value) => setRemoveType(value as any)}
@@ -85,7 +87,7 @@ export const Menu = ({ message, isMine }: MenuProps) => {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem
-                      disabled={!props.isMine}
+                      disabled={!isMine}
                       value="all"
                       id="option-two"
                     />
@@ -96,7 +98,7 @@ export const Menu = ({ message, isMine }: MenuProps) => {
                     <Label htmlFor="option-one">For you</Label>
                   </div>
                 </RadioGroup>
-              </AlertDialogDescription> */}
+              </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel className="hover:bg-slate-400">

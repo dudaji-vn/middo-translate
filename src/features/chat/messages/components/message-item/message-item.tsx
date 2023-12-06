@@ -20,11 +20,13 @@ export interface MessageProps
 export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
   ({ message, sender, order, className, readByUsers, ...props }, ref) => {
     const isMine = sender === 'me';
+    const isPending = message.status === 'pending';
     return (
       <div
         className={cn(
           'group relative flex',
           isMine ? 'justify-end pl-20' : 'pr-20',
+          isPending && 'opacity-50',
         )}
       >
         <div className="relative w-fit">
@@ -70,7 +72,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             )}
           </div>
           <ReadByUsers readByUsers={readByUsers} isMine={isMine} />
-          {message.status === 'pending' && <PendingStatus />}
+          {isPending && <PendingStatus />}
           <Menu isMine={isMine} message={message} />
         </div>
       </div>
