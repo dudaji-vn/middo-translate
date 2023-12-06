@@ -36,5 +36,12 @@ export type ListResponse<T, P extends OffsetPagination | CursorPagination> = {
   pageInfo: P;
 };
 
+export type MediaType = 'image' | 'video' | 'audio' | 'document';
 
-export * from './auth';
+export type Media = {
+  url: string;
+  type: MediaType;
+  file?: File;
+  size?: number;
+  name?: string;
+};

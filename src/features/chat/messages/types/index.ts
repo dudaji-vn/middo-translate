@@ -1,8 +1,9 @@
-import { BaseEntity } from '@/types';
+import { BaseEntity, Media } from '@/types';
+
 import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
-import { messageVariants } from '../components/message-item';
+import { messageVariants } from '../components/message-item/variants';
 
 export type MessageType = 'text' | 'media' | 'call';
 export type MessageStatus = Pick<
@@ -10,14 +11,6 @@ export type MessageStatus = Pick<
   'status'
 >['status'];
 
-export type MediaType = 'image' | 'video' | 'audio' | 'document';
-export type Media = {
-  url: string;
-  type: MediaType;
-  file?: File;
-  size?: number;
-  name?: string;
-};
 export type Message = {
   content: string;
   room?: Room;

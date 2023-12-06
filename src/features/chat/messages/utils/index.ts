@@ -1,5 +1,5 @@
-import { Media, Message } from '../types';
-
+import { Media } from '@/types';
+import { Message } from '../types';
 import { User } from '@/features/users/types';
 
 export const createLocalMessage = ({
@@ -20,4 +20,14 @@ export const createLocalMessage = ({
     media,
     createdAt: new Date().toISOString(),
   };
+};
+
+export const formatFileSize = (size: number) => {
+  const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
+  let index = 0;
+  while (size >= 1024) {
+    size /= 1024;
+    index++;
+  }
+  return `${size.toFixed(2)} ${units[index]}`;
 };
