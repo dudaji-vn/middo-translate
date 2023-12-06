@@ -61,6 +61,8 @@ export default function SignIn() {
         
     }, [isAuthentication, router, userData])
 
+    if(isAuthentication && userData) return null;
+
     return (
         <div>
             { loading && <PageLoading /> }

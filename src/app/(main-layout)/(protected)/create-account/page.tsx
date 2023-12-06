@@ -40,7 +40,7 @@ export default function CreateNewAccount() {
         try {
             setLoading(true);
             let img = await uploadImage(avatar as File);
-            let res = await addInfoUserService({avatar: img.url, name, language});
+            let res = await addInfoUserService({avatar: img.secure_url, name, language});
             setDataAuthStore({user: res.data});
             router.push(ROUTE_NAMES.ROOT);
         }catch (_: unknown) {}

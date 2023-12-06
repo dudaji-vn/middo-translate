@@ -28,3 +28,6 @@ export const getProfileService = () => {
 export const addInfoUserService = (data: any) => {
     return patch('/users/setup', data);
 }
+export const signOutService = () => {
+    return get('/auth/sign-out');
+};
