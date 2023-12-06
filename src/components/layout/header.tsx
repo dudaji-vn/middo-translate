@@ -74,13 +74,13 @@ export const Header = (props: Props) => {
               align="end"
               className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
             >
-              <a
-                href="#"
+              <Link
+                href={ROUTE_NAMES.ACCOUNT_SETTINGS}
                 className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
                 <SettingsOutline />
                 Account setting
-              </a>{' '}
+              </Link>{' '}
               <a
                 onClick={signOut}
                 className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary cursor-pointer"
