@@ -1,6 +1,6 @@
-import { Media, Message } from '@/features/chat/messages/types';
+import { Media, Response } from '@/types';
 
-import { Response } from '@/types';
+import { Message } from '@/features/chat/messages/types';
 import { axios } from '@/lib/axios';
 
 type CreateMessageData = {

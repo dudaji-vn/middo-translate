@@ -3,7 +3,7 @@ import { MicOutline, PaperPlaneOutline } from '@easy-eva-icons/react';
 import { AdditionalActions } from './additional-actions';
 import { Button } from '@/components/actions';
 import { FileList } from './file-list';
-import { Media } from '../../types';
+import { Media } from '@/types';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 import { useSelectFiles } from '@/hooks/use-select-files';

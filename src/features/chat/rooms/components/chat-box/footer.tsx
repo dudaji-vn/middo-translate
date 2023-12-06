@@ -5,7 +5,7 @@ import {
   MessageEditorSubmitData,
 } from '@/features/chat/messages/components/message-editor';
 
-import { Media } from '@/features/chat/messages/types';
+import { Media } from '@/types';
 import { createLocalMessage } from '@/features/chat/messages/utils';
 import { forwardRef } from 'react';
 import { messageApi } from '@/features/chat/messages/api';
