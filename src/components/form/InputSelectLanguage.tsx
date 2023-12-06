@@ -1,6 +1,6 @@
 import { AlertCircleOutline, CheckmarkCircle2, EyeOff2Outline, EyeOutline } from "@easy-eva-icons/react";
 import Image from "next/image";
-import { useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../data-entry";
 import { CircleFlag } from "react-circle-flags";
@@ -13,6 +13,7 @@ interface InputSelectLanguageProps {
     setValue?: any;
     field?: string;
     trigger?: any;
+    defaultValue?: string;
 }
 interface InputSelect {
     value: string;
@@ -21,7 +22,7 @@ interface InputSelect {
 export const InputSelectLanguage = ( props: InputSelectLanguageProps ) => {
     const id = useId();
     const [valueSelect, setValueSelect] = useState<InputSelect>({value: '', title: ''});
-    const { errors, className, setValue, field, trigger } = props;
+    const { errors, className, setValue, field, trigger, defaultValue } = props;
 
     const languageOptions = useMemo(()=> {
         return SUPPORTED_LANGUAGES.map((language) => {
@@ -32,13 +33,19 @@ export const InputSelectLanguage = ( props: InputSelectLanguageProps ) => {
         })
     }, [])
 
-    const handleSelectChange = (value: any) => {
+    const handleSelectChange = useCallback((value: any) => {
         let itemSelected = languageOptions?.find((item: any) => item.value === value);
         setValue(field, value);
         trigger(field)
         setValueSelect(itemSelected as InputSelect);
-    }
+    }, [field, languageOptions, setValue, trigger])
     
+    useEffect(() => {
+        if(defaultValue) {
+            handleSelectChange(defaultValue);
+        }
+    }, [defaultValue, handleSelectChange])
+
     return (
         <div className={className}>
             <label className="mb-2 ml-5 inline-block" htmlFor={id}>Language</label>
