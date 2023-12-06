@@ -21,17 +21,24 @@ export const MessageImgGallery = forwardRef<
         <div
           ref={ref}
           {...props}
-          className="grid max-w-[22.5rem] gap-1"
+          className="grid max-w-[22.5rem] gap-2"
           style={{
             gridTemplateColumns: `repeat(${num}, minmax(0, 1fr))`,
           }}
         >
           {images.map((img, index) => {
             return (
-              <div key={index} className="shadow">
+              <div
+                key={index}
+                style={{
+                  width,
+                  height: width,
+                }}
+                className="overflow-hidden rounded-md shadow hover:shadow-xl"
+              >
                 <Image
-                  width={width}
-                  height={width}
+                  width={500}
+                  height={500}
                   src={img.url}
                   alt="img"
                   className="aspect-square rounded-md"
