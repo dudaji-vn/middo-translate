@@ -51,7 +51,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               >
                 <span
                   className={cn(
-                    'break-all',
+                    'break-word-mt',
                     isMine && 'text-background',
                     message.status === 'removed' && 'text-text',
                   )}
