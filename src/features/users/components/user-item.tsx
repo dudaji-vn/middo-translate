@@ -34,7 +34,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
               </div>
             </div>
             <Typography className="line-clamp-1 break-all text-sm text-text/50">
-              @{user?.name}
+              {user?.email}
             </Typography>
           </div>
           {rightElement}

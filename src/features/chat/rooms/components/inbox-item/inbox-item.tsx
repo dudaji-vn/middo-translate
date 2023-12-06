@@ -17,6 +17,7 @@ export interface InboxItemProps {
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
   showTime?: boolean;
+  onClick?: () => void;
 }
 const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
   (
@@ -27,6 +28,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
       showMembersName,
       currentRoomId,
       showTime = true,
+      onClick,
     },
     ref,
   ) => {
@@ -43,7 +45,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
     }, [data.newMessageAt]);
 
     return (
-      <Link href={data.link!}>
+      <Link onClick={onClick} href={data.link!}>
         <div
           ref={ref}
           className={cn(
