@@ -10,7 +10,7 @@ export const SelectedItem = ({
   user: User;
   onClick?: () => void;
 }) => {
-  const name = user.username.split(' ')[0];
+  const name = user.name.split(' ')[0];
   return (
     <div
       onClick={onClick}
@@ -22,7 +22,7 @@ export const SelectedItem = ({
           className="h-12 w-12"
           src={user.avatar}
           shape="circle"
-          alt={user.username}
+          alt={user.name}
         />
         <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
           <Close />

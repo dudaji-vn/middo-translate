@@ -89,6 +89,7 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
                         data={room}
                         currentUserId={currentUserId!}
                         showMembersName
+                        showTime={false}
                       />
                     ))}
                   </SearchSection>

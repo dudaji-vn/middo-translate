@@ -9,3 +9,4 @@ export * from './qr-code-icon';
 export * from './SvgSpinners270RingWithBg';
 export * from './chat-download-icon';
 export * from './message-plus-icon';
+export * from './message-bubble-icon';

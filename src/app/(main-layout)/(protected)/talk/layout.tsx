@@ -10,7 +10,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
       <div className="hidden min-w-[320px] basis-1/4 sm:block">
         <Inbox />
       </div>
-      <div className="flex-1 p-0 sm:p-2 sm:pl-2">{children}</div>
+      <div className="flex-1">{children}</div>
     </div>
   );
 };

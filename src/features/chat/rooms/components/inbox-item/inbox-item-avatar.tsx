@@ -24,7 +24,7 @@ const avatarStylePositionMapByLengthAndIndex: Record<
     1: 'bottom-0 right-0',
   },
   3: {
-    0: 'top-0 left-0 transform w-12 h-12 -translate-x-[calc(50%_+_1px)]',
+    0: 'top-0 left-0 transform w-12 h-12 -translate-x-[calc(50%_+_2px)]',
     1: '-top-[1px] right-0 w-6 h-6',
     2: '-bottom-[1px] right-0 w-6 h-6',
   },
@@ -43,7 +43,13 @@ type Avatar = {
 
 const MAX_AVATAR_COUNT = 4;
 
-export const ItemAvatar = ({ room }: { room: Room }) => {
+export const ItemAvatar = ({
+  room,
+  isOnline = false,
+}: {
+  room: Room;
+  isOnline?: boolean;
+}) => {
   const avatars = useMemo(() => {
     const avatars: Avatar[] = [];
     const participants = room.participants;
@@ -57,13 +63,13 @@ export const ItemAvatar = ({ room }: { room: Room }) => {
     if (participants.length === 1) {
       avatars.push({
         src: participants[0].avatar!,
-        alt: participants[0].username,
+        alt: participants[0].name,
       });
     } else if (participants.length > 1) {
       participants.forEach((participant) => {
         avatars.push({
           src: participant.avatar!,
-          alt: participant.username,
+          alt: participant.name,
         });
       });
     }
@@ -76,29 +82,36 @@ export const ItemAvatar = ({ room }: { room: Room }) => {
     return avatars;
   }, [avatars]);
   return (
-    <div className="relative aspect-square h-12 shrink-0 overflow-hidden rounded-full">
-      {avatarsDisplay.map((avatar, index) => (
-        <Avatar
-          shape="square"
-          key={index}
-          alt={avatar.alt}
-          src={avatar.src}
-          className={cn(
-            'absolute ring-background',
-            avatarStyleSizeMapByLength[avatarsDisplay.length],
-            avatarStylePositionMapByLengthAndIndex[avatarsDisplay.length][
-              avatars.indexOf(avatar)
-            ],
-          )}
-        />
-      ))}
-      {avatars.length > MAX_AVATAR_COUNT && (
-        <div
-          className={cn(
-            'absolute bottom-0 flex h-1/2 w-full items-center justify-center bg-black/60 text-sm font-semibold text-background  ring-background',
-          )}
-        >
-          +{avatars.length - MAX_AVATAR_COUNT}
+    <div className="relative">
+      <div className="relative aspect-square h-12 shrink-0 overflow-hidden rounded-full">
+        {avatarsDisplay.map((avatar, index) => (
+          <Avatar
+            shape="square"
+            key={index}
+            alt={avatar.alt}
+            src={avatar.src}
+            className={cn(
+              'absolute ring-background',
+              avatarStyleSizeMapByLength[avatarsDisplay.length],
+              avatarStylePositionMapByLengthAndIndex[avatarsDisplay.length][
+                avatars.indexOf(avatar)
+              ],
+            )}
+          />
+        ))}
+        {avatars.length > MAX_AVATAR_COUNT && (
+          <div
+            className={cn(
+              'absolute bottom-0 flex h-1/2 w-full items-center justify-center bg-black/60 text-sm font-semibold text-background  ring-background',
+            )}
+          >
+            +{avatars.length - MAX_AVATAR_COUNT}
+          </div>
+        )}
+      </div>
+      {isOnline && (
+        <div className="absolute bottom-0 right-0 z-50 h-4 w-4 rounded-full bg-white p-[2.4px]">
+          <div className="h-full w-full rounded-full bg-success-2"></div>
         </div>
       )}
     </div>
