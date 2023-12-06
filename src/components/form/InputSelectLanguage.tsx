@@ -12,6 +12,7 @@ interface InputSelectLanguageProps {
     errors?: any;
     setValue?: any;
     field?: string;
+    trigger?: any;
 }
 interface InputSelect {
     value: string;
@@ -20,7 +21,7 @@ interface InputSelect {
 export const InputSelectLanguage = ( props: InputSelectLanguageProps ) => {
     const id = useId();
     const [valueSelect, setValueSelect] = useState<InputSelect>({value: '', title: ''});
-    const { errors, className, setValue, field } = props;
+    const { errors, className, setValue, field, trigger } = props;
 
     const languageOptions = useMemo(()=> {
         return SUPPORTED_LANGUAGES.map((language) => {
@@ -33,8 +34,9 @@ export const InputSelectLanguage = ( props: InputSelectLanguageProps ) => {
 
     const handleSelectChange = (value: any) => {
         let itemSelected = languageOptions?.find((item: any) => item.value === value);
-        setValueSelect(itemSelected as InputSelect);
         setValue(field, value);
+        trigger(field)
+        setValueSelect(itemSelected as InputSelect);
     }
     
     return (

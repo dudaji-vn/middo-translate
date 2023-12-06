@@ -54,8 +54,8 @@ export const Header = (props: Props) => {
             <DropdownMenuTrigger>
               <div className="relative flex gap-3 active:!text-shading ">
                 <div className="hidden flex-col items-end md:flex">
-                  <div className="font-semibold">User name</div>
-                  <div className="text-s font-light">email@gmail.com</div>
+                  <div className="font-semibold">{user?.name || 'Anonymous' }</div>
+                  <div className="text-s font-light">{user?.email || ''}</div>
                 </div>
                 <a href="#" className="relative">
                   <Avatar

@@ -8,13 +8,12 @@ import { useAuthStore } from '@/stores/auth';
 import { InputField } from '@/components/form/InputField';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter } from 'next/navigation';
-import { PageLoading } from '@/components/feedback';
 import { loginService } from '@/services/authService';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import Image from 'next/image';
-import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/configs/store-key';
 import { toast } from '@/components/toast';
+import { PageLoading } from '@/components/loading/PageLoading';
 
 export default function SignIn() {
     const [loading, setLoading] = useState(false);

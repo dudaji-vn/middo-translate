@@ -75,6 +75,7 @@ export default function CreateNewAccount() {
                         field='language'
                         setValue={setValue}
                         errors={errors.language}
+                        trigger={trigger}
                     ></InputSelectLanguage>
                     <Button type="submit">Create</Button>
                 </form>

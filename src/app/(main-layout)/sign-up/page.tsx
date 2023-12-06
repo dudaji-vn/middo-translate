@@ -9,10 +9,10 @@ import Link from 'next/link';
 import { InputField } from '@/components/form/InputField';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { registerService } from '@/services/authService';
-import { PageLoading } from '@/components/feedback';
 import { RegisterSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import { toast } from '@/components/toast';
+import { PageLoading } from '@/components/loading/PageLoading';
 
 
 export default function SignUp() {
