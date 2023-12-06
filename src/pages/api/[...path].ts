@@ -19,7 +19,8 @@ export default function handler(
 ) {
   return new Promise(() => {
     const cookies = new Cookies(req, res);
-    const accessToken = cookies.get(ACCESS_TOKEN_NAME);
+    const accessToken = cookies.get(ACCESS_TOKEN_NAME) || '';
+
     if (accessToken) {
       req.headers.Authorization = `Bearer ${accessToken}`;
     }

@@ -4,5 +4,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <MainLayout>{children}</MainLayout>;
+  // const profile = await getCurrentUser();
+  return (
+    <MainLayout>
+      {/* <InitializeAuthStore user={profile as User} /> */}
+      {children}
+    </MainLayout>
+  );
 }

@@ -17,10 +17,10 @@ export const PageLoading = forwardRef<HTMLDivElement, PageLoadingProps>(
         {isLoading && (
           <div
             className={cn(
-              'fixed left-1/2 top-1/2 z-[999] flex h-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center',
+              'fixed left-0 top-0 right-0 bottom-0 z-[999] flex items-center justify-center bg-black/20',
             )}
           >
-            <SvgSpinnersGooeyBalls1 className="h-[32px] w-[32px] text-secondary" />
+            <SvgSpinnersGooeyBalls1 className="h-[32px] w-[32px] text-primary" />
             <p>{props.title}</p>
           </div>
         )}
