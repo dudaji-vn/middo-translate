@@ -27,7 +27,7 @@ export default function SignIn() {
         resolver: yupResolver(schema),
     });
 
-    const { isAuthentication, setData: setDataAuth } = useAuthStore();
+    const { isAuthentication, setData: setDataAuth, user: userData } = useAuthStore();
 
     const handleSubmitForm = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -37,12 +37,8 @@ export default function SignIn() {
         try {
             setLoading(true);
             const data = await loginService(watch());
-            const { accessToken,  refreshToken, user } = data?.data;
-
-            localStorage.setItem(ACCESS_TOKEN_NAME, accessToken);
-            localStorage.setItem(REFRESH_TOKEN_NAME, refreshToken);
-
-            setDataAuth({ ...user, isAuthentication: true });
+            const { user } = data?.data;
+            setDataAuth({ user , isAuthentication: true });
         } catch (_: unknown) {} 
         finally {
             setLoading(false);
@@ -52,9 +48,14 @@ export default function SignIn() {
 
     useEffect(() => {
         if (isAuthentication) {
-            router.push(ROUTE_NAMES.ROOT)
+            if(!userData.avatar && !userData.name && !userData.language) {
+                router.push(ROUTE_NAMES.CREATE_ACCOUNT)
+            }else {
+                router.push(ROUTE_NAMES.ROOT)
+            }
         }
-    }, [isAuthentication, router])
+        
+    }, [isAuthentication, router, userData])
 
     return (
         <div>

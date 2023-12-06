@@ -22,8 +22,8 @@ export default function handler(
 ) {
   return new Promise(() => {
     const cookies = new Cookies(req, res);
-    // const accessToken = cookies.get(ACCESS_TOKEN_NAME);
-    const accessToken = NEXT_PUBLIC_FAKE_TOKEN;
+    const accessToken = cookies.get(ACCESS_TOKEN_NAME) || '';
+    // const accessToken = NEXT_PUBLIC_FAKE_TOKEN;
 
     if (accessToken) {
       req.headers.Authorization = `Bearer ${accessToken}`;

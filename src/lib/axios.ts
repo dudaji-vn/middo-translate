@@ -24,7 +24,7 @@ instance.interceptors.request.use(
 // Add a response interceptor
 instance.interceptors.response.use(
   function (response) {
-    if(response.data.message) toast({ title: 'Success',description: response.data.message })
+    if(response.data.message) toast({ title: 'Success', description: response.data.message })
     return response.data;
   },
   function (error) {

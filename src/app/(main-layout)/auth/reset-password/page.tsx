@@ -34,6 +34,9 @@ export default function ResetPassword() {
             router.push(ROUTE_NAMES.SIGN_IN);
         }
         localStorage.setItem(ACCESS_TOKEN_NAME, token || '')
+        return () => {
+            localStorage.removeItem(ACCESS_TOKEN_NAME)
+        }
     }, [router, searchParams]);
 
 

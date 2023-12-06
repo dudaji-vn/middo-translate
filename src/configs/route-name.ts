@@ -4,6 +4,7 @@ export const ROUTE_NAMES = {
   SIGN_UP: '/sign-up',
   SIGN_UP_SUCCESS: '/sign-up-success',
   FORGOT_PASSWORD: '/forgot-password',
+  CREATE_ACCOUNT: '/create-account',
   RESET_PASSWORD_SENDED: '/reset-password-sended',
   ONLINE_CONVERSATION: '/online-conversation',
   ONLINE_CONVERSATION_CREATE: '/online-conversation/create',
