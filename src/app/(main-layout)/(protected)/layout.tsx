@@ -1,20 +1,30 @@
-import { InitializeAuthStore } from '@/features/auth/stores/client-init-store';
-import { getCurrentUser } from '@/features/auth/api';
-import { redirect } from 'next/navigation';
-export const dynamic = 'force-dynamic';
-export default async function ProtectedLayout({
+'use client';
+
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { useAuthStore } from '@/stores/auth';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function ProtectedLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const profile = await getCurrentUser();
-  if (!profile) {
-    redirect('/login');
-  }
-  return (
-    <>
-      <InitializeAuthStore user={profile} />
-      {children}
-    </>
-  );
+  const router = useRouter();
+  const { user, isLoaded } = useAuthStore();
+  useEffect(() => {
+    if (!user && isLoaded) {
+      router.push(ROUTE_NAMES.SIGN_IN);
+      return;
+    }
+
+    if (user && isLoaded && !user.avatar && !user.name && !user.language) {
+      router.push(ROUTE_NAMES.CREATE_ACCOUNT);
+      return;
+    }
+  }, [user, isLoaded, router]);
+
+  if (!isLoaded || !user) return null;
+
+  return <>{children}</>;
 }
