@@ -32,7 +32,7 @@ export const ItemSub = ({
       return 'You:';
     }
     if (participants.length > 2) {
-      return `${message.sender.name}:`;
+      return `${message.sender.name.split(' ')[0]}: `;
     }
     return '';
   }, [
@@ -42,6 +42,24 @@ export const ItemSub = ({
     participants.length,
   ]);
 
+  const content = useMemo(() => {
+    if (message.status === 'removed') {
+      return 'unsent a message';
+    }
+
+    if (message.type === 'media') {
+      if (message?.media && message?.media[0]?.type === 'image') {
+        return `Sent ${message?.media.length} photo${
+          message?.media.length > 1 ? 's' : ''
+        }`;
+      }
+      if (message?.media && message?.media[0].type === 'document') {
+        return 'Sent file';
+      }
+    }
+    return message.content;
+  }, [message.content, message?.media, message.status, message.type]);
+
   return (
     <div className="flex items-center">
       <Typography
@@ -50,7 +68,7 @@ export const ItemSub = ({
           isRead ? 'text-text/50' : 'font-bold  text-text/90',
         )}
       >
-        {preMessage} {message?.content}
+        {preMessage} {content}
       </Typography>
       {readByUsers.length > 0 && (
         <div className="ml-auto flex items-center pl-2">

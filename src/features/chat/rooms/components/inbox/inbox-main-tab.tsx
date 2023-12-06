@@ -25,6 +25,7 @@ export interface InboxMainTabProps
 export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
   (props, ref) => {
     const [isSearch, setIsSearch] = useState(false);
+
     const [type, setType] = useState<keyof typeof inboxTypeMap>('all');
     const { data, setSearchTerm } = useSearch<{
       rooms: Room[];

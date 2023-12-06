@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Close, File, PlusCircleOutline } from '@easy-eva-icons/react';
 
 import { Button } from '@/components/actions';
-import { FileWithUrl } from '../../hooks/use-select-files';
+import { FileWithUrl } from '@/hooks/use-select-files';
 import Image from 'next/image';
 
 export const FileList = ({
