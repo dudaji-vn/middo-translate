@@ -56,17 +56,7 @@ export const Inbox = (props: InboxProps) => {
       <div className="flex-1 overflow-hidden pt-5">
         <InboxMainTab />
       </div>
-      {side !== 'new-message' && (
-        <div className="absolute bottom-14 right-5">
-          <Button.Icon
-            size="lg"
-            onClick={() => changeSide('new-message')}
-            className="shadow-3"
-          >
-            <MessagePlusIcon />
-          </Button.Icon>
-        </div>
-      )}
+
       {side !== 'default' && (
         <div className="absolute left-0 top-0 flex h-full w-full flex-col bg-card">
           <div className="flex items-center gap-2 px-5 pt-3">
