@@ -109,7 +109,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       }
     };
     return (
-      <div className="w-full bg-background-lightest px-5 py-4">
+      <div className="w-full border-t p-5">
         <MessageEditor onSubmitValue={handleSubmit} />
       </div>
     );

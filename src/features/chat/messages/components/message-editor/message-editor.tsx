@@ -4,6 +4,7 @@ import { AdditionalActions } from './additional-actions';
 import { Button } from '@/components/actions';
 import { FileList } from './file-list';
 import { Media } from '@/types';
+import { Smile } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 import { useSelectFiles } from '@/hooks/use-select-files';
@@ -64,12 +65,12 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       <form
         {...getRootProps()}
         onSubmit={handleSubmit}
-        className="flex w-full items-center gap-2 "
+        className="flex w-full items-center gap-2"
       >
         <input {...getInputProps()} hidden />
         <div
           className={cn(
-            'min-h-[3.75rem] flex-1 items-center gap-2 border  border-primary bg-card p-2 shadow-sm',
+            'flex-1 items-center gap-2 border  border-primary bg-card p-1 shadow-sm',
             files.length > 0 ? 'rounded-3xl' : 'rounded-full',
           )}
         >
@@ -87,9 +88,8 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
               <Button.Icon variant="ghost" className="self-end" color="default">
                 <MicOutline />
               </Button.Icon>
-
-              <Button.Icon variant="ghost" color="primary" className="self-end">
-                <PaperPlaneOutline />
+              <Button.Icon variant="ghost" className="self-end" color="default">
+                <Smile />
               </Button.Icon>
             </div>
           </div>
@@ -99,6 +99,9 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             onRemoveFile={removeFile}
           />
         </div>
+        <Button.Icon color="primary" className="">
+          <PaperPlaneOutline />
+        </Button.Icon>
       </form>
     );
   },

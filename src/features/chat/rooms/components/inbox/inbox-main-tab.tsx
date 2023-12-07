@@ -32,6 +32,10 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
       users: User[];
     }>(searchApi.inboxes);
     const currentUserId = useAuthStore((state) => state.user?._id);
+    const closeSearch = () => {
+      setIsSearch(false);
+      setSearchTerm('');
+    };
     return (
       <div
         ref={ref}
