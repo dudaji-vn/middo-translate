@@ -47,7 +47,7 @@ export default function UpdateUserPassword() {
         {loading && <PageLoading />}
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger className="w-full">
-                <p className='text-center font-medium p-4 cursor-pointer w-full mb-4'>Change password</p>
+                <span className='text-center font-medium p-4 cursor-pointer w-full mb-4 hover:bg-slate-100 transition-all'>Change password</span>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <form onSubmit={submit}>
