@@ -6,7 +6,7 @@ import { InboxItemAvatar } from '../inbox-item';
 import { Room } from '@/features/chat/rooms/types';
 import { Typography } from '@/components/data-display';
 import { generateRoomDisplay } from '../../utils';
-import useAuthStore from '@/features/auth/stores/use-auth-store';
+import { useAuthStore } from '@/stores/auth';
 import { useMemo } from 'react';
 
 export const ChatBoxHeader = ({ room: _room }: { room: Room }) => {
