@@ -1,2 +1,2 @@
-export * from './header';
-export * from './footer';
+export * from './chat-box-header';
+export * from './chat-box-footer';

@@ -17,10 +17,10 @@ import { HeaderNavigation } from './header-navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'next/navigation'
 import { signOutService } from '@/services/authService';
 import { toast } from '../toast';
+import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'next/navigation';
 
 type Props = {};
 
@@ -29,16 +29,16 @@ export const Header = (props: Props) => {
   const router = useRouter();
   const goToLink = (link: string) => () => {
     router.push(link);
-  }
+  };
   const signOut = async () => {
     try {
       await signOutService();
-      setDataAuth({user: null, isAuthentication: false});
-      toast({ title: 'Success', description: 'Sign out success' })
+      setDataAuth({ user: null, isAuthentication: false });
+      toast({ title: 'Success', description: 'Sign out success' });
     } catch (err: any) {
-      toast({ title: 'Error', description: err?.response?.data?.message })
+      toast({ title: 'Error', description: err?.response?.data?.message });
     }
-  }
+  };
 
   return (
     <div className="z-50 flex h-[90px] w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
@@ -49,7 +49,7 @@ export const Header = (props: Props) => {
       </Link>
 
       <div className="flex flex-1 items-center justify-end">
-        {isAuthentication ? 
+        {isAuthentication ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="relative flex gap-3 active:!text-shading ">
@@ -83,14 +83,14 @@ export const Header = (props: Props) => {
               </a>{' '}
               <a
                 onClick={signOut}
-                className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary cursor-pointer"
+                className="flex cursor-pointer items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
                 <LogOutOutline />
                 Sign out
               </a>
             </DropdownMenuContent>
           </DropdownMenu>
-        : (
+        ) : (
           <div className="flex items-center gap-3">
             <Link
               href={ROUTE_NAMES.SIGN_UP}
@@ -100,7 +100,12 @@ export const Header = (props: Props) => {
             >
               Sign up
             </Link>
-            <Button onClick={goToLink(ROUTE_NAMES.SIGN_IN)} className="inline-block p-4 px-8">Sign in</Button>
+            <Button
+              onClick={goToLink(ROUTE_NAMES.SIGN_IN)}
+              className="inline-block p-4 px-8"
+            >
+              Sign in
+            </Button>
           </div>
         )}
       </div>

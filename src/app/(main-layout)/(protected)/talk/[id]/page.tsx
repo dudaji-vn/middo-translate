@@ -15,7 +15,7 @@ async function getChatRoom(id: string) {
   return data.data;
 }
 
-const ChatRoomPage = async (props: {
+const ChatBoxPage = async (props: {
   params: {
     id: string;
   };
@@ -38,4 +38,4 @@ const ChatRoomPage = async (props: {
   );
 };
 
-export default ChatRoomPage;
+export default ChatBoxPage;

@@ -15,7 +15,7 @@ import { User } from '@/features/users/types';
 import { formatTimeDisplay } from '../../rooms/utils';
 import { getReadByUsers } from '../../utils';
 import moment from 'moment';
-import useAuthStore from '@/features/auth/stores/use-auth-store';
+import { useAuthStore } from '@/stores/auth';
 import { useMessagesBox } from '@/features/chat/messages/contexts';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';

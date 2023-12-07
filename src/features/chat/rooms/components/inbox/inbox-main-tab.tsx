@@ -11,7 +11,7 @@ import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
 import { searchApi } from '@/features/search/api';
-import useAuthStore from '@/features/auth/stores/use-auth-store';
+import { useAuthStore } from '@/stores/auth';
 import { useSearch } from '@/hooks/use-search';
 
 export const inboxTypeMap = {

@@ -1,6 +1,6 @@
 import { Checkmark } from '@easy-eva-icons/react';
 import { UserItem } from '@/features/users/components';
-import useAuthStore from '@/features/auth/stores/use-auth-store';
+import { useAuthStore } from '@/stores/auth';
 import { useGroupCreate } from './context';
 import { useMemo } from 'react';
 
