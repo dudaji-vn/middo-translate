@@ -2,7 +2,6 @@ import { GroupCreateFooter } from './footer';
 import { GroupCreateHeader } from './header';
 import { GroupCreateProvider } from './context';
 import { GroupCreateSearchList } from './search-list';
-
 export interface GroupCreateSideProps {}
 
 export const GroupCreateSide = (props: GroupCreateSideProps) => {
