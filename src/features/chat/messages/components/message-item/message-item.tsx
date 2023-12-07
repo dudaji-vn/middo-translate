@@ -4,11 +4,13 @@ import { Menu } from './menu';
 import { Message } from '@/features/chat/messages/types';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
+import { SeenIndicator } from './seen-indicator';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 import { messageVariants } from './variants';
+import { useAuthStore } from '@/stores/auth';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -19,16 +21,26 @@ export interface MessageProps
 
 export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
   ({ message, sender, order, className, readByUsers, ...props }, ref) => {
-    const isMine = sender === 'me';
+    const isMe = sender === 'me';
+    const userId = useAuthStore((state) => state.user._id);
     const isPending = message.status === 'pending';
+    const isRead = message.readBy?.includes(userId);
+
     return (
       <div
         className={cn(
           'group relative flex',
-          isMine ? 'justify-end pl-20' : 'pr-20',
+          isMe ? 'justify-end pl-20' : 'pr-20',
           isPending && 'opacity-50',
         )}
       >
+        {!isRead && (
+          <SeenIndicator
+            onSeen={() => {
+              console.log('seen', message._id);
+            }}
+          />
+        )}
         <div className="relative w-fit">
           <div
             {...props}
@@ -45,14 +57,14 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               <div
                 className={cn(
                   'px-3 py-2',
-                  isMine ? 'bg-primary' : 'bg-background-darker',
+                  isMe ? 'bg-primary' : 'bg-background-darker',
                   message.status === 'removed' && 'bg-transparent',
                 )}
               >
                 <span
                   className={cn(
                     'break-word-mt',
-                    isMine && 'text-background',
+                    isMe && 'text-background',
                     message.status === 'removed' && 'text-text',
                   )}
                 >
@@ -66,14 +78,14 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <ImgGallery images={message.media} />
                 )}
                 {message.media[0].type === 'document' && (
-                  <DocumentMessage file={message.media[0]} />
+                  <DocumentMessage isMe={isMe} file={message.media[0]} />
                 )}
               </>
             )}
           </div>
-          <ReadByUsers readByUsers={readByUsers} isMine={isMine} />
+          <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
           {isPending && <PendingStatus />}
-          <Menu isMine={isMine} message={message} />
+          <Menu isMe={isMe} message={message} />
         </div>
       </div>
     );

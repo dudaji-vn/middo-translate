@@ -43,6 +43,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
       }
       return '';
     }, [data.newMessageAt]);
+    const isRead = data?.lastMessage?.readBy?.includes(currentUserId);
 
     return (
       <Link onClick={onClick} href={data.link!}>
@@ -55,17 +56,22 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
               : 'bg-transparent hover:bg-[#fafafa]',
           )}
         >
-          <div className="flex w-full items-center gap-2">
+          <div className="flex w-full items-center gap-3">
             <ItemAvatar room={data} />
             <div className="w-full">
-              <div className="flex items-center justify-between">
+              <div className="mb-1 flex items-center justify-between">
                 <div className="max-w-full">
-                  <span className="line-clamp-1 break-all font-semibold text-text/90">
+                  <span
+                    className={cn(
+                      'line-clamp-1 break-all ',
+                      isRead ? 'font-normal' : 'font-semibold',
+                    )}
+                  >
                     {data.name}
                   </span>
                 </div>
                 {data.newMessageAt && showTime && (
-                  <span className="ml-auto shrink-0 pl-2 text-sm text-text/50">
+                  <span className="ml-auto shrink-0 pl-2 font-light">
                     {time}
                   </span>
                 )}

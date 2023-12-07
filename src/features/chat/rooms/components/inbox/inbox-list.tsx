@@ -8,7 +8,7 @@ import { Room } from '../../types';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
-import { inboxTypeMap } from './inbox-main-tab';
+import { inboxTypeMap } from './inbox-main-side';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth';

@@ -3,7 +3,6 @@ import { User } from '@/features/users/types';
 import moment from 'moment';
 
 export function generateRoomDisplay(room: Room, currentUserId: User['_id']) {
-  console.log(currentUserId);
   const { participants, isGroup, name } = room;
   if (isGroup) {
     if (!name) {

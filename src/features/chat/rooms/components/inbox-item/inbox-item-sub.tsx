@@ -64,12 +64,13 @@ export const ItemSub = ({
     <div className="flex items-center">
       <Typography
         className={cn(
-          'line-clamp-1 break-all text-sm',
-          isRead ? 'text-text/50' : 'font-bold  text-text/90',
+          'line-clamp-1 break-all',
+          isRead ? 'text-text opacity-80' : 'font-medium',
         )}
       >
         {preMessage} {content}
       </Typography>
+      {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
       {readByUsers.length > 0 && (
         <div className="ml-auto flex items-center pl-2">
           <AvatarGroup

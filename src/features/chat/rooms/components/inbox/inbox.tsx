@@ -5,9 +5,8 @@ import { useEffect, useMemo } from 'react';
 import { ArrowBackOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions/button';
 import { GroupCreateSide } from '../group-create-side';
-import { InboxMainTab } from './inbox-main-tab';
+import { InboxMainTab } from './inbox-main-side';
 import { InboxSides } from '../../types';
-import { MessagePlusIcon } from '@/components/icons';
 import { PrivateCreateSide } from '../private-create-side';
 import { SettingSide } from '../setting-side';
 import { Typography } from '@/components/data-display';
@@ -38,7 +37,7 @@ const sidesMap: Record<
 };
 
 export const Inbox = (props: InboxProps) => {
-  const { currentSide, changeSide, changeToDefault } = useChangeInboxSide();
+  const { currentSide, changeToDefault } = useChangeInboxSide();
   let side = useMemo(() => {
     if (currentSide && sidesMap[currentSide]) return currentSide;
     return 'default';

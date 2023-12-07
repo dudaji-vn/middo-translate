@@ -1,12 +1,12 @@
 import { ArrowBackOutline, Options2Outline } from '@easy-eva-icons/react';
-import { forwardRef, useState } from 'react';
+import { SearchInput, SearchInputRef } from '@/components/data-entry';
+import { forwardRef, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions/button';
 import { InboxItem } from '../inbox-item';
 import InboxList from './inbox-list';
 import Link from 'next/link';
 import { Room } from '../../types';
-import { SearchInput } from '@/components/data-entry';
 import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
@@ -26,15 +26,19 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
   (props, ref) => {
     const [isSearch, setIsSearch] = useState(false);
 
+    const searchInputRef = useRef<SearchInputRef>(null);
+
     const [type, setType] = useState<keyof typeof inboxTypeMap>('all');
     const { data, setSearchTerm } = useSearch<{
       rooms: Room[];
       users: User[];
-    }>(searchApi.inboxes);
+    }>(searchApi.inboxes, 'inboxes');
     const currentUserId = useAuthStore((state) => state.user?._id);
     const closeSearch = () => {
       setIsSearch(false);
       setSearchTerm('');
+      searchInputRef.current?.reset?.();
+      searchInputRef.current?.blur?.();
     };
     return (
       <div
@@ -42,12 +46,12 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
         {...props}
         className="flex h-full flex-col overflow-hidden"
       >
-        <div className="flex w-full gap-1 px-4 py-2">
+        <div className="flex w-full gap-1 p-5 pt-0">
           {isSearch && (
             <Button.Icon
               variant="ghost"
               color="default"
-              onClick={() => setIsSearch(false)}
+              onClick={closeSearch}
               className="-ml-2"
             >
               <ArrowBackOutline />
@@ -55,6 +59,7 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
           )}
           <div className="flex-1">
             <SearchInput
+              ref={searchInputRef}
               onFocus={() => setIsSearch(true)}
               btnDisabled
               placeholder="Search people or groups"
@@ -76,14 +81,18 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
           <InboxList type={type} />
           {isSearch && (
             <div className="absolute left-0 top-0 h-full w-full overflow-y-auto bg-card px-2">
-              {data?.users && data.users.length > 0 && (
-                <SearchSection label="People">
-                  {data?.users.map((user) => (
-                    <Link key={user._id} href={`/talk/${user._id}`}>
-                      <UserItem user={user} />
-                    </Link>
-                  ))}
-                </SearchSection>
+              {data && (
+                <>
+                  {data?.users && data.users.length > 0 && (
+                    <SearchSection label="People">
+                      {data?.users.map((user) => (
+                        <Link key={user._id} href={`/talk/${user._id}`}>
+                          <UserItem onClick={closeSearch} user={user} />
+                        </Link>
+                      ))}
+                    </SearchSection>
+                  )}
+                </>
               )}
               <div className="mt-5">
                 {data?.rooms && data.rooms.length > 0 && (

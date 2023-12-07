@@ -17,7 +17,9 @@ import { useMessagesBox } from '@/features/chat/messages/contexts';
 import { useMutation } from '@tanstack/react-query';
 
 export interface ChatBoxFooterProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  leftElement?: React.ReactNode;
+}
 
 export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
   ({ ...props }, ref) => {

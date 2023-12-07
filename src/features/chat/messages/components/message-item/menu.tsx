@@ -29,10 +29,10 @@ import { useState } from 'react';
 
 export interface MenuProps {
   message: Message;
-  isMine: boolean;
+  isMe: boolean;
 }
 
-export const Menu = ({ message, isMine }: MenuProps) => {
+export const Menu = ({ message, isMe }: MenuProps) => {
   const { mutate } = useMutation({
     mutationFn: messageApi.remove,
   });
@@ -47,7 +47,7 @@ export const Menu = ({ message, isMine }: MenuProps) => {
     <div
       className={cn(
         'absolute top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
-        isMine ? '-left-4 -translate-x-full' : '-right-4 translate-x-full',
+        isMe ? '-left-4 -translate-x-full' : '-right-4 translate-x-full',
       )}
     >
       {message.status !== 'removed' && (
@@ -87,7 +87,7 @@ export const Menu = ({ message, isMine }: MenuProps) => {
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem
-                      disabled={!isMine}
+                      disabled={!isMe}
                       value="all"
                       id="option-two"
                     />

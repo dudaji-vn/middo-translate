@@ -48,11 +48,15 @@ export const MessagesBoxProvider = ({
     queryKey: key,
     queryFn: ({ pageParam }) =>
       roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 }),
+    config: {
+      enabled: room.status !== 'temporary',
+    },
   });
 
   // socket event
 
   useEffect(() => {
+    if (room.status === 'temporary') return;
     socket.on(
       SOCKET_CONFIG.EVENTS.MESSAGE.NEW,
       ({
@@ -73,7 +77,7 @@ export const MessagesBoxProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
-  }, [replaceItem, room._id, updateItem]);
+  }, [replaceItem, room._id, room.status, updateItem]);
 
   return (
     <MessagesBoxContext.Provider
