@@ -13,6 +13,7 @@ import { toast } from '@/components/toast';
 import { LANGUAGE_CODES_MAP, SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
 import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
+import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
 
 export default function AccountSettings() {
     const router = useRouter();
@@ -58,12 +59,7 @@ export default function AccountSettings() {
 
                 <div className='mt-8 gap-6 flex items-center justify-center'>
                     <UpdateUserInfo />
-                    <div className='cursor-pointer hover:opacity-80 transition-all'>
-                        <span className='w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center'>
-                            <ShoppingBagOutline width={20} height={20} fill='#3D87ED'></ShoppingBagOutline>
-                        </span>
-                        <span className='font-light text-sm mt-2 text-center block'>Avatar</span>
-                    </div>
+                    <UpdateUserAvatar />
                 </div>
                 <div className='bg-[#FAFAFA] mt-4 h-2 w-full'></div>
                 <UpdateUserPassword />

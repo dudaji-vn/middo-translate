@@ -1,8 +1,8 @@
-import { post } from "./apiService";
+import { patch, post } from "./apiService";
 
-export const updateInfoUserService = ({ name, language }: {name: string, language: string}) => {
-    return post('/users/', { name, language });
+export const updateInfoUserService = (data: any) => {
+    return patch('/users/update', { ...data });
 };
-export const changePasswordUserService = ({ currentPassword, newPassword }: {currentPassword: string, newPassword: string}) => {
-    return post('/users/', { currentPassword, newPassword });
+export const changePasswordUserService = (data: {currentPassword: string, newPassword: string}) => {
+    return patch('/users/change-password', { ...data });
 };

@@ -3,18 +3,18 @@
 import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useAuthStore } from '@/stores/auth';
 import { toast } from '@/components/toast';
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger } from '@/components/feedback';
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger, PageLoading } from '@/components/feedback';
 import { InputField } from '@/components/form/InputField';
 import { useForm } from 'react-hook-form';
 import { ChangePasswordSchema as schema } from '@/configs/yup-form';
 import { changePasswordUserService } from '@/services/userService';
 
 export default function UpdateUserPassword() {
+    const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
 
-    const { register, watch, trigger, formState: { errors, isValid } } = useForm({
+    const { register, watch, trigger, reset, formState: { errors, isValid } } = useForm({
         mode: "onSubmit",
         defaultValues: {
             currentPassword: "",
@@ -28,19 +28,23 @@ export default function UpdateUserPassword() {
         e.preventDefault();
         trigger();
         if (!isValid) return;
-        // const { currentPassword, newPassword } = watch();
+        const { currentPassword, newPassword } = watch();
         try {
-            // let res = await changePasswordUserService({ currentPassword, newPassword });
-            toast({ title: 'Success', description: 'Update info success' })
+            setLoading(true);
+            await changePasswordUserService({ currentPassword, newPassword });
+            toast({ title: 'Success', description: 'Your password update successfully!' })
             setOpen(false);
         } catch (err: any) {
             toast({ title: 'Error', description: err?.response?.data?.message })
         } finally {
-            
+            setLoading(false);
+            reset();
         }
     }
 
     return (
+    <>
+        {loading && <PageLoading />}
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger className="w-full">
                 <p className='text-center font-medium p-4 cursor-pointer w-full mb-4'>Change password</p>
@@ -81,5 +85,6 @@ export default function UpdateUserPassword() {
                 </form>
             </AlertDialogContent>
         </AlertDialog>
+    </>
     );
 }
