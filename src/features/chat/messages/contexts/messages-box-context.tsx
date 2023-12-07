@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-} from 'react';
+import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 import { Message } from '@/features/chat/messages/types';
 import { Room } from '@/features/chat/rooms/types';
@@ -35,7 +29,7 @@ export const MessagesBoxProvider = ({
   children,
   room,
 }: PropsWithChildren<{ room: Room }>) => {
-  const key = useMemo(() => ['messages', room._id], [room._id]);
+  const key = ['messages', room._id];
   const {
     items,
     hasNextPage,
@@ -56,7 +50,6 @@ export const MessagesBoxProvider = ({
   // socket event
 
   useEffect(() => {
-    if (room.status === 'temporary') return;
     socket.on(
       SOCKET_CONFIG.EVENTS.MESSAGE.NEW,
       ({
@@ -77,7 +70,7 @@ export const MessagesBoxProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
-  }, [replaceItem, room._id, room.status, updateItem]);
+  }, [replaceItem, room._id, updateItem]);
 
   return (
     <MessagesBoxContext.Provider
