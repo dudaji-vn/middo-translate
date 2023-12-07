@@ -29,6 +29,7 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
         } else if (e.target) {
             files = e.target.files;
         }
+        if(!files) return;
         const reader = new FileReader();
         reader.onload = () => {
             setImage(reader.result as any);
@@ -81,8 +82,8 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
             </label>}
             <input type="file" onChange={onChange} hidden id={id}/>
             {image && 
-            <div className="rounded-lg mt-1 relative">
-                <label htmlFor={id} className="p-3 block w-fit absolute top-[-45px] z-100 right-0 cursor-pointer">
+            <div className="rounded-lg mt-3 relative">
+                <label htmlFor={id} className="p-3 block w-fit absolute -top-12 z-100 right-0 cursor-pointer">
                     <RotateCcw />
                 </label>
                 <div className="overflow-hidden rounded-md">
@@ -112,7 +113,7 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
                         }}
                     />
                 </div>
-                <div className="flex items-center justify-center max-w-[288px] mx-auto gap-2">
+                <div className="flex items-center justify-center max-w-[288px] mx-auto gap-2 mt-5">
                     <button type="button" className="w-12 h-12 flex items-center justify-center" onClick={()=> handleZoom({type: 'out'})}>
                         <ZoomOut width={24} height={24}/>
                     </button>
