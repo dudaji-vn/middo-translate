@@ -17,7 +17,7 @@ export interface PrivateCreateSideProps {
 }
 
 export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
-  const { data, setSearchTerm } = useSearch<User[]>(searchApi.users);
+  const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'users');
   const { changeSide } = useChangeInboxSide();
   const params = useParams();
 
@@ -48,13 +48,15 @@ export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
             <PeopleOutline className="mr-3 h-5 w-5" /> Create group
           </Button>
         </div>
-        <div className="flex w-full flex-1 flex-col overflow-y-auto px-2">
-          {data?.map((user) => (
-            <Link key={user._id} href={`/talk/${user._id}`}>
-              <UserItem isActive={user._id === params?.id} user={user} />
-            </Link>
-          ))}
-        </div>
+        {data && (
+          <div className="flex w-full flex-1 flex-col overflow-y-auto px-2">
+            {data.map((user) => (
+              <Link key={user._id} href={`/talk/${user._id}`}>
+                <UserItem isActive={user._id === params?.id} user={user} />
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
