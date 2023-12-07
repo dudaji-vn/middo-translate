@@ -39,8 +39,14 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
 
     const time = useMemo(() => {
       if (data.newMessageAt) {
-        return moment(data.newMessageAt).fromNow(true);
+        // if last message is today
+        if (moment(data.newMessageAt).isSame(moment(), 'day')) {
+          return moment(data.newMessageAt).format('HH:mm A');
+        } else {
+          return moment(data.newMessageAt).format('YYYY/MM/DD');
+        }
       }
+
       return '';
     }, [data.newMessageAt]);
     const isRead = data?.lastMessage?.readBy?.includes(currentUserId);
@@ -71,7 +77,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
                   </span>
                 </div>
                 {data.newMessageAt && showTime && (
-                  <span className="ml-auto shrink-0 pl-2 font-light">
+                  <span className="ml-auto shrink-0 pl-2 text-sm font-light">
                     {time}
                   </span>
                 )}
