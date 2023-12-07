@@ -14,21 +14,15 @@ import { LANGUAGE_CODES_MAP, SUPPORTED_LANGUAGES } from '@/configs/default-langu
 import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
 import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
 import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
+import { useAppStore } from '@/stores/app-store';
 
 export default function AccountSettings() {
-    const router = useRouter();
-    const { user, setData: setDataAuth } = useAuthStore();
+    const { user } = useAuthStore();
+    const { setData: setDataApp } = useAppStore();
 
-    const signOut = async () => {
-        try {
-            await signOutService();
-            setDataAuth({ user: null, isAuthentication: false });
-            toast({ title: 'Success', description: 'Sign out success' })
-        } catch (err: any) {
-            toast({ title: 'Error', description: err?.response?.data?.message })
-        }
+    const signOut = () => {
+        setDataApp({isShowConfirmLogout: true})
     }
-
 
     return (
         <div>
