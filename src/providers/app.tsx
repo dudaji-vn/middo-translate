@@ -2,7 +2,6 @@
 
 import 'regenerator-runtime/runtime';
 
-import { NextAuthProvider } from './next-auth';
 import React from 'react';
 import { ReactQueryProvider } from './react-query';
 import SocketProvider from './socket';
@@ -18,7 +17,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
       <SocketProvider />
       <BootstrapProvider />
       <ReactQueryProvider>
-        <NextAuthProvider>{props.children}</NextAuthProvider>
+        {props.children}
       </ReactQueryProvider>
     </>
   );
