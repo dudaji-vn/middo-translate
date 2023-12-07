@@ -57,7 +57,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               <div
                 className={cn(
                   'px-3 py-2',
-                  isMe ? 'bg-primary' : 'bg-background-darker',
+                  isMe ? 'bg-primary' : 'bg-colors-neutral-50',
                   message.status === 'removed' && 'bg-transparent',
                 )}
               >
@@ -65,7 +65,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   className={cn(
                     'break-word-mt',
                     isMe && 'text-background',
-                    message.status === 'removed' && 'text-text',
+                    message.status === 'removed' && 'text-neutral-300',
                   )}
                 >
                   {message.content}
