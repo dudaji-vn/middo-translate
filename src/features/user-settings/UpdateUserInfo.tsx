@@ -22,7 +22,7 @@ export default function UpdateUserInfo() {
     const [errorMessage, setErrorMessage] = useState("");
 
     const { register, watch, trigger, setValue , formState: { errors, isValid } } = useForm({
-        mode: "onSubmit",
+        mode: "onBlur",
         defaultValues: {
             name: user.name || '',
             language: user.language || '',

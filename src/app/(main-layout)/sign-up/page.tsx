@@ -27,7 +27,7 @@ export default function SignUp() {
       watch,
       trigger,
       reset,
-      formState: { errors, isValid },
+      formState: { errors, isValid, touchedFields },
     } = useForm({
       mode: "onBlur",
       defaultValues: {
@@ -74,6 +74,7 @@ export default function SignUp() {
                 placeholder="Enter your email"
                 register={{...register('email')}}
                 errors={errors.email}
+                isTouched={touchedFields.email}
                 type="text"
               />
               <InputField 
@@ -83,6 +84,7 @@ export default function SignUp() {
                 placeholder="Enter your password"
                 register={{...register('password')}}
                 errors={errors.password}
+                isTouched={touchedFields.password}
                 type="password"
               />
               <InputField
@@ -91,6 +93,7 @@ export default function SignUp() {
                 placeholder="Confirm your password"
                 register={{...register('confirmPassword')}}
                 errors={errors.confirmPassword}
+                isTouched={touchedFields.confirmPassword}
                 type="password"
               />
               <Button type="submit">Sign up</Button>
