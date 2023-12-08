@@ -9,15 +9,17 @@ import { Media } from '@/types';
 import { createLocalMessage } from '@/features/chat/messages/utils';
 import { forwardRef } from 'react';
 import { messageApi } from '@/features/chat/messages/api';
-import { roomApi } from '../../api';
+import { roomApi } from '@/features/chat/rooms/api';
 import { uploadImage } from '@/utils/upload-img';
-import useAuthStore from '@/features/auth/stores/use-auth-store';
+import { useAuthStore } from '@/stores/auth';
 import { useChatBox } from '../../contexts/chat-box-context';
 import { useMessagesBox } from '@/features/chat/messages/contexts';
 import { useMutation } from '@tanstack/react-query';
 
 export interface ChatBoxFooterProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  leftElement?: React.ReactNode;
+}
 
 export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
   ({ ...props }, ref) => {

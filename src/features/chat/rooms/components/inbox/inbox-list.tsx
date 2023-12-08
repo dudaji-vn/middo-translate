@@ -8,10 +8,10 @@ import { Room } from '../../types';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
-import { inboxTypeMap } from './inbox-main-tab';
+import { inboxTypeMap } from './inbox-main-side';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
-import useAuthStore from '@/features/auth/stores/use-auth-store';
+import { useAuthStore } from '@/stores/auth';
 import { useChangeInboxSide } from '../../hooks/use-change-inbox-side';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useParams } from 'next/navigation';
@@ -89,7 +89,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
           </div>
           <div className="absolute bottom-14 right-5">
             {
-              <div className="animate-ping-cs absolute left-0 top-0 h-full w-full rounded-full border border-secondary"></div>
+              <div className="absolute left-0 top-0 h-full w-full animate-ping-cs rounded-full border border-secondary"></div>
             }
             <Button.Icon
               size="lg"

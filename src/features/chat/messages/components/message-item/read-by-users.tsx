@@ -4,11 +4,11 @@ import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 export interface ReadByUsersProps extends React.HTMLAttributes<HTMLDivElement> {
   readByUsers?: User[];
-  isMine?: boolean;
+  isMe?: boolean;
 }
 
 export const ReadByUsers = forwardRef<HTMLDivElement, ReadByUsersProps>(
-  ({ readByUsers, className, isMine, ...props }, ref) => {
+  ({ readByUsers, className, isMe, ...props }, ref) => {
     if (!readByUsers?.length) return null;
     return (
       <div ref={ref} {...props}>
@@ -16,7 +16,7 @@ export const ReadByUsers = forwardRef<HTMLDivElement, ReadByUsersProps>(
           <div
             className={cn(
               'ml-auto flex justify-end space-x-0.5',
-              isMine ? 'mt-1' : 'absolute bottom-0 right-0',
+              isMe ? 'mt-1' : 'absolute bottom-0 right-0',
             )}
           >
             {readByUsers?.map((user) => (

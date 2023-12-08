@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-} from 'react';
+import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 import { Message } from '@/features/chat/messages/types';
 import { Room } from '@/features/chat/rooms/types';
@@ -35,7 +29,7 @@ export const MessagesBoxProvider = ({
   children,
   room,
 }: PropsWithChildren<{ room: Room }>) => {
-  const key = useMemo(() => ['messages', room._id], [room._id]);
+  const key = ['messages', room._id];
   const {
     items,
     hasNextPage,
@@ -48,6 +42,9 @@ export const MessagesBoxProvider = ({
     queryKey: key,
     queryFn: ({ pageParam }) =>
       roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 }),
+    config: {
+      enabled: room.status !== 'temporary',
+    },
   });
 
   // socket event

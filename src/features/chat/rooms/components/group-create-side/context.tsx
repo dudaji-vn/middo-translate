@@ -49,8 +49,7 @@ export const useGroupCreate = () => {
 };
 interface GroupCreateProviderProps extends PropsWithChildren {}
 export const GroupCreateProvider = ({ children }: GroupCreateProviderProps) => {
-  const { data, setSearchTerm } = useSearch<User[]>(searchApi.users);
-  const [loading, setLoading] = useState(false);
+  const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'group');
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const router = useRouter();
 

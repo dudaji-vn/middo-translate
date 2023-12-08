@@ -8,7 +8,7 @@ import {
 import { Message } from '@/features/chat/messages/types';
 import { Room } from '../types';
 import { axios } from '@/lib/axios';
-import { inboxTypeMap } from '../components/inbox/inbox-main-tab';
+import { inboxTypeMap } from '../components/inbox/inbox-main-side';
 import queryString from 'query-string';
 import { uploadImage } from '@/utils/upload-img';
 

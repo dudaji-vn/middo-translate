@@ -1,28 +1,51 @@
 'use client';
 
-import { ButtonHTMLAttributes, forwardRef, useState } from 'react';
+import {
+  ButtonHTMLAttributes,
+  InputHTMLAttributes,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { CloseCircleOutline, Search } from '@easy-eva-icons/react';
 
 import { cn } from '@/utils/cn';
 
-interface SearchInputProps extends ButtonHTMLAttributes<HTMLInputElement> {
+interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
   btnDisabled?: boolean;
 }
 
-export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
+export interface SearchInputRef extends HTMLInputElement {
+  reset: () => void;
+}
+export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
   ({ btnDisabled, ...props }, ref) => {
     const [value, setValue] = useState('');
+    const inputRef = useRef<HTMLInputElement>(null);
     const handleClear = () => {
       setValue('');
     };
     const canClear = value !== '';
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        ...(inputRef.current as HTMLInputElement),
+        reset: () => {
+          handleClear();
+        },
+      }),
+      [],
+    );
+
     return (
       <div className="relative w-full overflow-hidden rounded-full border bg-background">
         <div className="flex h-11 pl-3">
           <input
             value={value}
-            ref={ref}
+            ref={inputRef}
             type="text"
             {...props}
             onChange={(e) => {
