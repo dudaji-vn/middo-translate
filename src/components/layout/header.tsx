@@ -17,27 +17,21 @@ import { HeaderNavigation } from './header-navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { signOutService } from '@/services/authService';
-import { toast } from '../toast';
+import { useAppStore } from '@/stores/app-store';
 import { useAuthStore } from '@/stores/auth';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 type Props = {};
 
 export const Header = (props: Props) => {
-  const { isAuthentication, user, setData: setDataAuth } = useAuthStore();
+  const [isOpenDropdown, setOpenDropdown] = useState(false);
+  const { isAuthentication, user } = useAuthStore();
+  const { setData: setDataApp } = useAppStore();
   const router = useRouter();
-  const goToLink = (link: string) => () => {
-    router.push(link);
-  };
+
   const signOut = async () => {
-    try {
-      await signOutService();
-      setDataAuth({ user: null, isAuthentication: false });
-      toast({ title: 'Success', description: 'Sign out success' });
-    } catch (err: any) {
-      toast({ title: 'Error', description: err?.response?.data?.message });
-    }
+    setDataApp({ isShowConfirmLogout: true });
   };
 
   return (
@@ -54,8 +48,10 @@ export const Header = (props: Props) => {
             <DropdownMenuTrigger>
               <div className="relative flex gap-3 active:!text-shading ">
                 <div className="hidden flex-col items-end md:flex">
-                  <div className="font-semibold">User name</div>
-                  <div className="text-s font-light">email@gmail.com</div>
+                  <div className="font-semibold">
+                    {user?.name || 'Anonymous'}
+                  </div>
+                  <div className="text-s font-light">{user?.email || ''}</div>
                 </div>
                 <a href="#" className="relative">
                   <Avatar
@@ -73,14 +69,15 @@ export const Header = (props: Props) => {
             <DropdownMenuContent
               align="end"
               className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
+              onClick={() => setOpenDropdown(false)}
             >
-              <a
-                href="#"
+              <Link
+                href={ROUTE_NAMES.ACCOUNT_SETTINGS}
                 className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
                 <SettingsOutline />
                 Account setting
-              </a>{' '}
+              </Link>{' '}
               <a
                 onClick={signOut}
                 className="flex cursor-pointer items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
@@ -101,7 +98,7 @@ export const Header = (props: Props) => {
               Sign up
             </Link>
             <Button
-              onClick={goToLink(ROUTE_NAMES.SIGN_IN)}
+              onClick={() => router.push(ROUTE_NAMES.SIGN_IN)}
               className="inline-block p-4 px-8"
             >
               Sign in

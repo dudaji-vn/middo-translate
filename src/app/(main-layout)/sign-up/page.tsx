@@ -9,14 +9,15 @@ import Link from 'next/link';
 import { InputField } from '@/components/form/InputField';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { registerService } from '@/services/authService';
-import { PageLoading } from '@/components/feedback';
 import { RegisterSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import { toast } from '@/components/toast';
+import { PageLoading } from '@/components/loading/PageLoading';
 
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
     const {
@@ -26,7 +27,7 @@ export default function SignUp() {
       reset,
       formState: { errors, isValid },
     } = useForm({
-      mode: "onSubmit",
+      mode: "onBlur",
       defaultValues: {
         email: "",
         password: "",
@@ -45,11 +46,12 @@ export default function SignUp() {
         await registerService(watch());
         localStorage.setItem("email_register", watch().email);
         router.push(ROUTE_NAMES.SIGN_UP_SUCCESS);
+        setErrorMessage("");
       } catch (err: any) {
-        toast({ title: "Register failure!", description: err?.response?.data?.message });
+        setErrorMessage(err?.response?.data?.message);
       } finally {
         setLoading(false);
-        reset();
+        // reset();
       }
     }
 
@@ -60,7 +62,7 @@ export default function SignUp() {
           <div className="bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2 w-full">
             <div className="flex w-full items-stretch justify-start gap-3">
               <div className="h-full w-1 rounded-full bg-primary"></div>
-              <h4 className="text-primary">Sign up</h4>
+              <h3 className="text-primary relative pl-4 leading-tight before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:w-1 before:rounded-md before:bg-primary">Sign up</h3>
             </div>
             <form className="flex w-full flex-col items-center" onSubmit={handleSubmitForm}>
               <InputField
@@ -88,6 +90,9 @@ export default function SignUp() {
                 errors={errors.confirmPassword}
                 type="password"
               />
+              {errorMessage && 
+                <p className="mt-4 text-error-2 w-full text-center text-sm">{errorMessage}</p>
+              }
               <Button type="submit">Sign up</Button>
             </form>
             <div className="mt-8 flex justify-center">

@@ -106,3 +106,45 @@ export const CreateNewAccountSchema = yup
         }),
     })
     .required()
+
+export const UpdateInforSchema = yup
+    .object()
+    .shape({
+        name: yup.string().required({
+            value: true,
+            message: "Please enter name!"
+        }),
+        language: yup.string().required({
+            value: true,
+            message: "Please choose language!"
+        }),
+    })
+    .required()
+
+
+export const ChangePasswordSchema = yup
+    .object()
+    .shape({
+        currentPassword: yup.string().required({
+            value: true,
+            message: "Please enter current password!"
+        }),
+        newPassword: yup.string().required({
+            value: true,
+            message: "Please enter password!"
+        }).min(8, {
+            value: 8,
+            message: "Password must be at least 8 characters!"
+        }).matches(
+            PASSWORD_PARTTERN,
+            "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
+        ),
+        confirmPassword: yup.string().required({
+            value: true,
+            message: "Please enter confirm password!"
+        }).oneOf([yup.ref('newPassword')], {
+            value: true,
+            message: "Confirm password does not match!"
+        })
+    })
+    .required()

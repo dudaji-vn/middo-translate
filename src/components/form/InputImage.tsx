@@ -27,7 +27,7 @@ export const InputImage = ( props: InputImageProps ) => {
 
     return (
         <div>
-            <div className={`mx-auto relative w-[120px] h-[120px] rounded-full ${className}`}>
+            <label htmlFor={id} className={`block cursor-pointer mx-auto relative w-[120px] h-[120px] rounded-full ${className}`}>
                 <Image
                     src={imageSource as string}
                     alt="avatar"
@@ -37,7 +37,7 @@ export const InputImage = ( props: InputImageProps ) => {
                     className="rounded-full relative block"
                 ></Image>
                 <input {...register } onChange={handleFileChange} type="file" id={id} hidden accept="image/png, image/gif, image/jpeg"/>
-                <label htmlFor={id} className="w-8 h-8 absolute bottom-0 right-0 rounded-full cursor-pointer hover:opacity-70 transition-all">
+                <div className="w-8 h-8 absolute bottom-0 right-0 rounded-full cursor-pointer hover:opacity-70 transition-all">
                     <Image
                         src='/edit-outline.svg'
                         alt="avatar"
@@ -45,8 +45,8 @@ export const InputImage = ( props: InputImageProps ) => {
                         style={{objectFit:"cover"}}
                         className="rounded-full"
                     ></Image>
-                </label>
-            </div>
+                </div>
+            </label>
             {errors && (
                 <div className="mt-2 flex items-center gap-2 pl-5 text-error-2 justify-center">
                     <AlertCircleOutline className="min-w-[20px] h-7 w-5 " />
