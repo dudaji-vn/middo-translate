@@ -26,10 +26,10 @@ export const ConfirmLogoutModal = () => {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                    Are you sure you want to log out?
+                    Are you sure you want to sign out?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        You will be logged out of the application and will need to log in again.
+                        You will be sign out of the application and will need to sign in again.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -39,7 +39,7 @@ export const ConfirmLogoutModal = () => {
                     className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
                     onClick={handleLogout}
                     >
-                    Logout
+                    Sign out
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

@@ -52,10 +52,16 @@ export default function UpdateUserInfo() {
         }
     }
 
+    const onModalChange = () => {
+        setOpen(!open);
+        setValue('name', user.name);
+        setValue('language', user.language);
+    }
+
     return (
         <>
             {loading && <PageLoading />}
-            <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialog open={open} onOpenChange={onModalChange}>
                 <AlertDialogTrigger>
                 <div className='cursor-pointer hover:opacity-80 transition-all'>
                     <span className='w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center'>

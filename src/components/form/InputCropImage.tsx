@@ -96,7 +96,7 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
             <input type="file" onChange={onChange} hidden id={id} accept="image/png, image/gif, image/jpeg"/>
             {image && 
             <div className="rounded-lg mt-3 relative">
-                <label htmlFor={id} className="p-3 block w-fit absolute -top-12 z-100 right-0 cursor-pointer">
+                <label htmlFor={id} className="p-3 block w-fit absolute top-[-50px] z-100 right-0 cursor-pointer hover:bg-slate-100 transition-all rounded-full">
                     <RotateCcw />
                 </label>
                 <div className="overflow-hidden rounded-md">
