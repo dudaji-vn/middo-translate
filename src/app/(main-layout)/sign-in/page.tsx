@@ -20,7 +20,7 @@ export default function SignIn() {
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const router = useRouter();
-    const { register, watch, reset, trigger, formState: { errors, isValid, touchedFields } } = useForm({
+    const { register, watch, reset, trigger, formState: { errors, isValid } } = useForm({
         mode: "onBlur",
         defaultValues: {
             email: "",
@@ -43,8 +43,8 @@ export default function SignIn() {
             setDataAuth({ user , isAuthentication: true });
             toast({ title: "Congratulations!", description: "You are login in!" });
             setErrorMessage("");
-        } catch (_: unknown) {
-            setErrorMessage("Username or password is incorrect");
+        } catch (err: any) {
+            setErrorMessage(err?.response?.data?.message);
         } 
         finally {
             setLoading(false);
@@ -78,7 +78,6 @@ export default function SignIn() {
                             placeholder="Enter your email"
                             register={{ ...register('email') }}
                             errors={errors.email}
-                            isTouched={touchedFields.email}
                             type="text"
                         />
                         <InputField
@@ -86,7 +85,6 @@ export default function SignIn() {
                             placeholder="Enter your password"
                             register={{ ...register('password') }}
                             errors={errors.password}
-                            isTouched={touchedFields.password}
                             type="password"
                         />
                         <Link className='inline-block ml-auto italic color-[#333] mt-3 hover:underline' href={ROUTE_NAMES.FORGOT_PASSWORD}>Forgot password?</Link>
