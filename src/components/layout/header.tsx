@@ -44,7 +44,7 @@ export const Header = (props: Props) => {
 
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication ? (
-          <DropdownMenu>
+          <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
             <DropdownMenuTrigger>
               <div className="relative flex gap-3 active:!text-shading ">
                 <div className="hidden flex-col items-end md:flex">
