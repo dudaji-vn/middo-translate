@@ -98,9 +98,9 @@ export default function SignIn() {
                     </div>
                     <div className='flex items-center justify-center gap-5'>
                         <p>Or log in with</p>
-                        <a href="">
+                        <Link href="/api/auth/google">
                             <Image src="/google.png" alt="Google" width={56} height={56} />
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>

@@ -15,9 +15,8 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
     ( props: InputCropImageProps, ref) => {
     const [image, setImage] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const [zoom, setZoom] = useState<number[]>([1]);
     const cropperRef = createRef<ReactCropperElement>();
-
-    const [zoom, setZoom] = useState([1]);
 
     const id = useId();
     const { className } = props;
@@ -68,18 +67,21 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
     };
 
     const handleZoom = ({type: zoomType}: {type: string}) => {
-        if(zoomType === 'in') {
-            setZoom((prev)=> {
-                if(prev[0] >= 2) return prev;
-                return [prev[0] + 0.1];
-            });
+        const currentZoom = cropperRef.current?.cropper?.getData();
+        if(zoomType === 'in' && currentZoom) {
+            const { scaleX, scaleY } = currentZoom;
+            if(scaleX >= 2 || scaleY >= 2) return false;
+            cropperRef.current?.cropper?.scaleX(scaleX + 0.1);
+            cropperRef.current?.cropper?.scaleY(scaleY + 0.1);
+            setZoom([scaleX + 0.1])
+        } else if(zoomType === 'out' && currentZoom) {
+            const { scaleX, scaleY } = currentZoom;
+            if(scaleX <= 1 || scaleY <= 1) return false;
+            cropperRef.current?.cropper?.scaleX(scaleX - 0.1);
+            cropperRef.current?.cropper?.scaleY(scaleY - 0.1);
+            setZoom([scaleX - 0.1])
         }
-        if(zoomType === 'out') {
-            setZoom((prev)=> {
-                if(prev[0] <= 0.2) return prev;
-                return [prev[0] - 0.1];
-            });
-        }
+        return true;
     }
 
     useImperativeHandle(ref, () => ({
@@ -104,7 +106,6 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
                         className="crop-container"
                         ref={cropperRef}
                         style={{ height: 400, width: "100%" }}
-                        zoomTo={zoom[0]}
                         initialAspectRatio={1}
                         aspectRatio={1}
                         src={image}
@@ -118,11 +119,10 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
                         autoCropArea={1}
                         highlight={false}
                         zoom={(e) => {
-                            let zoomRatio = e.detail.ratio;
-                            if(zoomRatio >= 1.8 || zoomRatio <= 0.1) {
-                                e.preventDefault();
-                            }
-                            setZoom([zoomRatio]);
+                            e.preventDefault();
+                            const { oldRatio, ratio } = e.detail;
+                            const type = oldRatio > ratio ? 'out' : 'in';
+                            handleZoom({type});
                         }}
                     />
                 </div>
@@ -132,10 +132,14 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
                     </button>
                     <Range
                         step={0.1}
-                        min={0.2}
+                        min={1}
                         max={2}
                         values={zoom}
-                        onChange={(values) => setZoom(values)}
+                        onChange={(values) => {
+                            cropperRef.current?.cropper?.scaleX(values[0]);
+                            cropperRef.current?.cropper?.scaleY(values[0]);
+                            setZoom(values);
+                        }}
                         renderTrack={({ props, children }) => (
                             <div {...props} className="h-1 w-full bg-gray-200 rounded">
                                 {children}
