@@ -14,11 +14,13 @@ import { Button } from '@/components/form/Button';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 import { toast } from '@/components/toast';
+import { AlertError } from '@/components/Alert/AlertError';
 
 export default function ResetPassword() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams()
+    const [errorMessage, setErrorMessage] = useState("");
 
     const { register, watch, trigger, formState: { errors, isValid } } = useForm({
         mode: "onBlur",
@@ -51,8 +53,9 @@ export default function ResetPassword() {
             localStorage.removeItem(ACCESS_TOKEN_NAME)
             router.push(ROUTE_NAMES.SIGN_IN);
             toast({ title: "Your password has been changed!", description: "Please login again!" });
+            setErrorMessage("");
         } catch (err: any) {
-            toast({ title: "Change password failure!", description: err?.response?.data?.message });
+            setErrorMessage(err?.response?.data?.message);
         } finally {
             setLoading(false);
         }
@@ -80,6 +83,7 @@ export default function ResetPassword() {
                         errors={errors.confirmPassword}
                         type="password"
                     />
+                    <AlertError errorMessage={errorMessage}></AlertError>
                     <Button type="submit">Confirm</Button>
                 </form>
             </div>

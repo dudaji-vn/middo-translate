@@ -17,8 +17,9 @@ export default function ProtectedLayout({
       router.push(ROUTE_NAMES.SIGN_IN);
       return;
     }
-
-    if (user && isLoaded && !user.avatar && !user.name && !user.language) {
+    console.log(user);
+    
+    if (user && isLoaded && (user.status == 'unset')) {
       router.push(ROUTE_NAMES.CREATE_ACCOUNT);
       return;
     }
