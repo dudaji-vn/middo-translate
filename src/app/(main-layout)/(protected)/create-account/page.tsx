@@ -23,7 +23,7 @@ export default function CreateNewAccount() {
     const { user, setData: setDataAuthStore } = useAuthStore();
 
     useEffect(() => {
-        if(user?.avatar && user?.name && user?.language) {
+        if(user?.avatar && user?.name && user?.language && user?.status != "unset") {
             router.push(ROUTE_NAMES.ROOT);
         }
     }, [router, user]);
