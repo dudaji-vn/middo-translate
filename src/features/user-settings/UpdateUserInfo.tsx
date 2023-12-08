@@ -32,6 +32,7 @@ export default function UpdateUserInfo() {
         trigger();
         if (!isValid) return;
         const { name, language } = watch();
+        if(name == user.name && language == user.language) return;
         try {
             setLoading(true);
             let res = await updateInfoUserService({ name, language });
@@ -86,7 +87,7 @@ export default function UpdateUserInfo() {
                         <AlertDialogCancel className='mr-2 bg-transparent border-0 hover:!border-0 hover:!bg-transparent'>
                             <p>Cancel</p>
                         </AlertDialogCancel>
-                        <button className='rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:opacity-80' type='submit'>Save</button>
+                        <button className={`rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:opacity-80 ${ (user.name == watch().name && user.language == watch().language) && 'pointer-events-none bg-gray-400'}`} type='submit'>Save</button>
                     </div>
                     </form>
                 </AlertDialogContent>

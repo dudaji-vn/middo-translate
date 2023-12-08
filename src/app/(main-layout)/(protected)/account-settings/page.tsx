@@ -55,7 +55,7 @@ export default function AccountSettings() {
                     <UpdateUserInfo />
                     <UpdateUserAvatar />
                 </div>
-                <div className='bg-[#FAFAFA] mt-4 h-2 w-full'></div>
+                <div className='bg-[#FAFAFA] mt-4 h-2 -mx-[5vw] md:-mx-6'></div>
                 <UpdateUserPassword />
                 <p
                     onClick={signOut}

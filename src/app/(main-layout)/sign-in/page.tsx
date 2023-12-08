@@ -17,9 +17,10 @@ import { PageLoading } from '@/components/loading/PageLoading';
 
 export default function SignIn() {
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const router = useRouter();
     const { register, watch, reset, trigger, formState: { errors, isValid } } = useForm({
-        mode: "onSubmit",
+        mode: "onBlur",
         defaultValues: {
             email: "",
             password: "",
@@ -40,12 +41,13 @@ export default function SignIn() {
             const { user } = data?.data;
             setDataAuth({ user , isAuthentication: true });
             toast({ title: "Congratulations!", description: "You are login in!" });
+            setErrorMessage("");
         } catch (_: unknown) {
-            toast({ title: "Login failure!", description: "Username or password is incorrect" });
+            setErrorMessage("Username or password is incorrect");
         } 
         finally {
             setLoading(false);
-            reset();
+            // reset();
         }
     }
 
@@ -66,7 +68,7 @@ export default function SignIn() {
         <div>
             { loading && <PageLoading /> }
             <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-                <div className="bg-background px-5 py-10 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2 w-full">
+                <div className="bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2 w-full">
                     <h4 className="text-primary font-bold text-center text-[26px]">Sign in</h4>
                     <form className="flex w-full flex-col items-center" onSubmit={handleSubmitForm}>
                         <InputField
@@ -84,6 +86,9 @@ export default function SignIn() {
                             type="password"
                         />
                         <Link className='inline-block ml-auto italic color-[#333] mt-3 hover:underline' href={ROUTE_NAMES.FORGOT_PASSWORD}>Forgot password?</Link>
+                        {errorMessage && 
+                        <p className="mt-2 flex items-center gap-2 text-error-2 text-sm">{errorMessage}</p>
+                        }
                         <Button type="submit">Sign in</Button>
                     </form>
                     <div className='my-10 mx-auto w-[120px] h-[1px] bg-[#ccc]'></div>

@@ -21,7 +21,7 @@ export default function ResetPassword() {
     const searchParams = useSearchParams()
 
     const { register, watch, trigger, formState: { errors, isValid } } = useForm({
-        mode: "onSubmit",
+        mode: "onBlur",
         defaultValues: {
             password: "",
             confirmPassword: "",
@@ -59,9 +59,9 @@ export default function ResetPassword() {
     }
 
     return (
-        <div>
+        <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
             {loading && <PageLoading />}
-            <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
+            <div className='w-full md:max-w-[500px] mx-auto py-8 md:shadow-2 mt-10 md:rounded-3xl px-[5vw] md:px-6'>
                 <h2 className="text-primary relative pl-4 mb-5 leading-tight before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:w-1 before:rounded-md before:bg-primary">Change password</h2>
                 <form onSubmit={handleSubmitForm}>
                     <InputField

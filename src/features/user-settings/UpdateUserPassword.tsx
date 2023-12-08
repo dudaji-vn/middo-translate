@@ -12,10 +12,11 @@ import { changePasswordUserService } from '@/services/userService';
 
 export default function UpdateUserPassword() {
     const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
     const [open, setOpen] = useState(false);
 
     const { register, watch, trigger, reset, formState: { errors, isValid } } = useForm({
-        mode: "onSubmit",
+        mode: "onBlur",
         defaultValues: {
             currentPassword: "",
             newPassword: "",
@@ -34,8 +35,9 @@ export default function UpdateUserPassword() {
             await changePasswordUserService({ currentPassword, newPassword });
             toast({ title: 'Success', description: 'Your password update successfully!' })
             setOpen(false);
+            setErrorMessage("");
         } catch (err: any) {
-            toast({ title: 'Error', description: err?.response?.data?.message })
+            setErrorMessage(err?.response?.data?.message);
         } finally {
             setLoading(false);
             reset();
@@ -47,7 +49,7 @@ export default function UpdateUserPassword() {
         {loading && <PageLoading />}
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger className="w-full">
-                <span className='text-center font-medium p-4 cursor-pointer w-full mb-4 hover:bg-slate-100 transition-all'>Change password</span>
+                <span className='-mx-[5vw] md:-mx-6 block text-center font-medium p-4 cursor-pointer hover:bg-slate-100 transition-all border-b border-b-[#F2F2F2]'>Change password</span>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <form onSubmit={submit}>
@@ -76,6 +78,9 @@ export default function UpdateUserPassword() {
                     register={{ ...register('confirmPassword') }}
                     errors={errors.confirmPassword}
                 ></InputField>
+                {errorMessage && 
+                <p className="mt-4 text-error-2 w-full text-center text-sm">{errorMessage}</p>
+                }
                 <div className='mt-6 flex justify-end items-center'>
                     <AlertDialogCancel className='mr-2 bg-transparent border-0 hover:!border-0 hover:!bg-transparent'>
                         <p>Cancel</p>

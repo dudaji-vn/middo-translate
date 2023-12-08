@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,11 +19,17 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 export default function CreateNewAccount() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const [errorMessage, setErrorMessage] = useState("");
+    const { user, setData: setDataAuthStore } = useAuthStore();
 
-    const { setData: setDataAuthStore } = useAuthStore();
+    useEffect(() => {
+        if(user?.avatar && user?.name && user?.language) {
+            router.push(ROUTE_NAMES.ROOT);
+        }
+    }, [router, user]);
 
     const { register, setValue, watch, trigger, formState: { errors, isValid } } = useForm({
-        mode: "onSubmit",
+        mode: "onBlur",
         defaultValues: {
             name: "",
             avatar: undefined,
@@ -43,16 +49,19 @@ export default function CreateNewAccount() {
             let res = await addInfoUserService({avatar: img.secure_url, name, language});
             setDataAuthStore({user: res.data});
             router.push(ROUTE_NAMES.ROOT);
-        }catch (_: unknown) {}
+            setErrorMessage("");
+        }catch (err: any) {
+            setErrorMessage(err?.response?.data?.message);
+        }
         finally {
             setLoading(false);
         }
     }
 
     return (
-        <div>
+        <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
             {loading && <PageLoading />}
-            <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
+            <div className='w-full md:max-w-[500px] mx-auto py-8 md:shadow-2 mt-10 md:rounded-3xl px-[5vw] md:px-6'>
                 <h2 className="text-primary relative pl-4 mb-8 leading-tight before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:w-1 before:rounded-md before:bg-primary">Create new account</h2>
                 <form onSubmit={handleSubmitForm}>
                     <InputImage
@@ -77,6 +86,7 @@ export default function CreateNewAccount() {
                         errors={errors.language}
                         trigger={trigger}
                     ></InputSelectLanguage>
+                    <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
                     <Button type="submit">Create</Button>
                 </form>
             </div>

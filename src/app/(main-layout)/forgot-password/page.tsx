@@ -15,11 +15,12 @@ import { Button } from '@/components/form/Button';
 import { toast } from '@/components/toast';
 
 export default function ForgotPassword() {
+  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const { register, watch, trigger, formState: { errors, isValid } } = useForm({
-    mode: "onSubmit",
+    mode: "onBlur",
     defaultValues: {
       email: "",
     },
@@ -37,8 +38,9 @@ export default function ForgotPassword() {
       localStorage.setItem('email_reset_password', watch().email);
       router.push(ROUTE_NAMES.RESET_PASSWORD_SENDED);
       toast({ title: "Your request has been send!", description: "Please check your email!" });
+      setErrorMessage("");
     } catch (err: any) {
-      toast({ title: "Request reset password failure!", description: err?.response?.data?.message });
+      setErrorMessage(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -47,9 +49,9 @@ export default function ForgotPassword() {
 
 
   return (
-    <div>
+    <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
       {loading && <PageLoading />}
-      <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
+      <div className='w-full md:max-w-[500px] mx-auto py-8 md:shadow-2 mt-10 md:rounded-3xl px-[5vw] md:px-6'>
         <h2 className="text-primary relative pl-4 mb-5 leading-tight before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:w-1 before:rounded-md before:bg-primary">Forgot password</h2>
         <p>We&apos;ll send a link through your provided email to help you reset your password</p>
         <form onSubmit={handleSubmitForm}>
@@ -61,6 +63,7 @@ export default function ForgotPassword() {
             errors={errors.email}
             type="text"
           />
+          {errorMessage && <p className="text-red-500 text-sm mt-2 text-center">{errorMessage}</p>}
           <Button type="submit">Confirm</Button>
         </form>
         <div className="mt-8 flex justify-center">

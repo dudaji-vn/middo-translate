@@ -34,8 +34,8 @@ export const InputField = ( props: InputFieldProps ) => {
                 {type === 'password' && (
                     <div
                         onClick={() => setIsShowPassword(!isShowPassword)} 
-                        className="font-semibold inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all focus-visible:ring-offset-2 disabled:pointer-events-none  text-sm rounded-full bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary disabled:!bg-transparent disabled:!opacity-30 shrink-0 p-0 w-11 h-11 cursor-pointer">
-                        {isShowPassword ? <EyeOutline className="opacity-60" /> : <EyeOff2Outline className="opacity-60" />}
+                        className="font-semibold inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all focus-visible:ring-offset-2 disabled:pointer-events-none  text-sm rounded-full bg-transparent text-primary md:hover:bg-slate-200 disabled:!bg-transparent disabled:!opacity-30 shrink-0 p-0 w-11 h-11 cursor-pointer">
+                        {isShowPassword ? <EyeOutline className="opacity-60 text-slate-600" /> : <EyeOff2Outline className="opacity-60 text-slate-600" />}
                     </div>
                 )}
                 {/* {!errors && (
@@ -43,7 +43,7 @@ export const InputField = ( props: InputFieldProps ) => {
                 )} */}
             </div>
             {errors && (
-                <div className="mt-2 flex items-center gap-2 pl-5 text-error-2">
+                <div className="mt-2 flex items-center gap-2 pl-5 text-error-2 text-[14px]">
                 <AlertCircleOutline className="min-w-[20px] h-7 w-5 " />
                 {errors?.message?.message as string || errors?.message as string}
             </div>

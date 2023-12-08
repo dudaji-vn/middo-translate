@@ -14,6 +14,7 @@ export interface InputCropImageRef {
 export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>(
     ( props: InputCropImageProps, ref) => {
     const [image, setImage] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
     const cropperRef = createRef<ReactCropperElement>();
 
     const [zoom, setZoom] = useState([1]);
@@ -30,11 +31,23 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
             files = e.target.files;
         }
         if(!files) return;
+        if(files[0].size > 1024 * 1024 * 3) { // 3MB
+            setErrorMessage('File size need to be less than 3MB');
+            return;
+        }
+        const type = files[0].type;
+        const typeSplit = type.split('/');
+        const fileType = typeSplit[typeSplit.length - 1];
+        if(fileType !== 'png' && fileType !== 'jpeg' && fileType !== 'jpg' && fileType !== 'gif') {
+            setErrorMessage('File type is not supported');
+            return;
+        }
         const reader = new FileReader();
         reader.onload = () => {
             setImage(reader.result as any);
         };
         reader.readAsDataURL(files[0]);
+        setErrorMessage("");
     };
 
     const getCropData = () => {
@@ -80,7 +93,7 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
                 <span className="p-4 bg-blue-200 rounded-full"><Upload width={24} height={24} className="stroke-primary"/></span>
                 <span className="mt-[10px] font-normal">Upload Image</span>
             </label>}
-            <input type="file" onChange={onChange} hidden id={id}/>
+            <input type="file" onChange={onChange} hidden id={id} accept="image/png, image/gif, image/jpeg"/>
             {image && 
             <div className="rounded-lg mt-3 relative">
                 <label htmlFor={id} className="p-3 block w-fit absolute -top-12 z-100 right-0 cursor-pointer">
@@ -138,6 +151,7 @@ export const InputCropImage = forwardRef<InputCropImageRef, InputCropImageProps>
                 </div>
             </div>
             }
+            {errorMessage && <p className="mt-2 text-error-2 text-sm text-center">{errorMessage}</p>}
         </div>
     )
 })
