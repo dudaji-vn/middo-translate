@@ -37,7 +37,7 @@ export default function ForgotPassword() {
       let res = await forgotPasswordService(watch().email);
       localStorage.setItem('email_reset_password', watch().email);
       router.push(ROUTE_NAMES.RESET_PASSWORD_SENDED);
-      toast({ title: "Your request has been send!", description: "Please check your email!" });
+      // toast({ title: "Your request has been send!", description: "Please check your email!" });
       setErrorMessage("");
     } catch (err: any) {
       setErrorMessage(err?.response?.data?.message);
