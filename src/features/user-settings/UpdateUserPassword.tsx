@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { toast } from '@/components/toast';
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger, PageLoading } from '@/components/feedback';
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger } from '@/components/feedback';
 import { InputField } from '@/components/form/InputField';
 import { useForm } from 'react-hook-form';
 import { ChangePasswordSchema as schema } from '@/configs/yup-form';
 import { changePasswordUserService } from '@/services/userService';
+import { AlertError } from '@/components/Alert/AlertError';
+import { PageLoading } from '@/components/loading/PageLoading';
 
 export default function UpdateUserPassword() {
     const [loading, setLoading] = useState(false);
@@ -78,9 +80,7 @@ export default function UpdateUserPassword() {
                     register={{ ...register('confirmPassword') }}
                     errors={errors.confirmPassword}
                 ></InputField>
-                {errorMessage && 
-                <p className="mt-4 text-error-2 w-full text-center text-sm">{errorMessage}</p>
-                }
+                <AlertError errorMessage={errorMessage}></AlertError>
                 <div className='mt-6 flex justify-end items-center'>
                     <AlertDialogCancel className='mr-2 bg-transparent border-0 hover:!border-0 hover:!bg-transparent'>
                         <p>Cancel</p>

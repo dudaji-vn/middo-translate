@@ -6,9 +6,10 @@ import { useAuthStore } from '@/stores/auth';
 import { toast } from '@/components/toast';
 import { ShoppingBagOutline } from '@easy-eva-icons/react';
 import { updateInfoUserService } from '@/services/userService';
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger, PageLoading } from '@/components/feedback';
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger } from '@/components/feedback';
 import { uploadImage } from '@/utils/upload-img';
 import { InputCropImage, InputCropImageRef } from '@/components/form/InputCropImage';
+import { PageLoading } from '@/components/loading/PageLoading';
 
 export default function UpdateUserAvatar() {
     const [loading, setLoading] = useState(false);

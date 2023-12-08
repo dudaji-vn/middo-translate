@@ -52,7 +52,6 @@ export default function SignUpSuccess() {
     }
   }
 
-
   return (  
     <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
       { loading && <PageLoading /> }

@@ -6,17 +6,20 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { toast } from '@/components/toast';
-import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger, PageLoading } from '@/components/feedback';
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger } from '@/components/feedback';
 import { InputField } from '@/components/form/InputField';
 import { UpdateInforSchema as schema } from '@/configs/yup-form';
 import { InputSelectLanguage } from '@/components/form/InputSelectLanguage';
 import { Edit2Outline } from '@easy-eva-icons/react';
 import { updateInfoUserService } from '@/services/userService';
+import { AlertError } from '@/components/Alert/AlertError';
+import { PageLoading } from '@/components/loading/PageLoading';
 
 export default function UpdateUserInfo() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const { user, setData: setDataAuth } = useAuthStore();
+    const [errorMessage, setErrorMessage] = useState("");
 
     const { register, watch, trigger, setValue , formState: { errors, isValid } } = useForm({
         mode: "onSubmit",
@@ -42,9 +45,10 @@ export default function UpdateUserInfo() {
                 language: res.data.language,
             }});
             toast({ title: 'Success', description: 'Your information has been update!' })
+            setErrorMessage("");
             setOpen(false);
         } catch (err: any) {
-            toast({ title: 'Error', description: err?.response?.data?.message })
+            setErrorMessage(err?.response?.data?.message);
         } finally {
             setLoading(false);
             setValue('name', user.name);
@@ -89,6 +93,7 @@ export default function UpdateUserInfo() {
                         trigger={trigger}
                         defaultValue={user.language || ''}
                     ></InputSelectLanguage>
+                    <AlertError errorMessage={errorMessage}></AlertError>
                     <div className='mt-6 flex justify-end items-center'>
                         <AlertDialogCancel className='mr-2 bg-transparent border-0 hover:!border-0 hover:!bg-transparent'>
                             <p>Cancel</p>

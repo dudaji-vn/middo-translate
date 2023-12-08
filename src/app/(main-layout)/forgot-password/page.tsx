@@ -13,6 +13,7 @@ import { PageLoading } from '@/components/loading/PageLoading';
 import { ForgotPasswordSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import { toast } from '@/components/toast';
+import { AlertError } from '@/components/Alert/AlertError';
 
 export default function ForgotPassword() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -63,7 +64,7 @@ export default function ForgotPassword() {
             errors={errors.email}
             type="text"
           />
-          {errorMessage && <p className="text-red-500 text-sm mt-2 text-center">{errorMessage}</p>}
+          <AlertError errorMessage={errorMessage}></AlertError>
           <Button type="submit">Confirm</Button>
         </form>
         <div className="mt-8 flex justify-center">

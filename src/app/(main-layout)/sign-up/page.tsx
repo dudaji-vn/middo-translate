@@ -13,6 +13,8 @@ import { RegisterSchema as schema } from '@/configs/yup-form';
 import { Button } from '@/components/form/Button';
 import { toast } from '@/components/toast';
 import { PageLoading } from '@/components/loading/PageLoading';
+import { AlertCircleOutline } from '@easy-eva-icons/react';
+import { AlertError } from '@/components/Alert/AlertError';
 
 
 export default function SignUp() {
@@ -64,9 +66,10 @@ export default function SignUp() {
               <div className="h-full w-1 rounded-full bg-primary"></div>
               <h3 className="text-primary relative pl-4 leading-tight before:content-[''] before:absolute before:top-0 before:bottom-0 before:left-0 before:w-1 before:rounded-md before:bg-primary">Sign up</h3>
             </div>
+            <AlertError errorMessage={errorMessage}></AlertError>
             <form className="flex w-full flex-col items-center" onSubmit={handleSubmitForm}>
               <InputField
-                className="mt-8"
+                className="mt-4"
                 label="Email"
                 placeholder="Enter your email"
                 register={{...register('email')}}
@@ -90,9 +93,6 @@ export default function SignUp() {
                 errors={errors.confirmPassword}
                 type="password"
               />
-              {errorMessage && 
-                <p className="mt-4 text-error-2 w-full text-center text-sm">{errorMessage}</p>
-              }
               <Button type="submit">Sign up</Button>
             </form>
             <div className="mt-8 flex justify-center">
