@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -16,6 +16,19 @@ export default function SignUpSuccess() {
   const [email, setEmail] = useState("");
   const [isResend, setIsResend] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [time, setTime] = useState(30);
+  const timerRef = useRef<any>();
+  
+  useEffect(() => {
+    if (time > 0) {
+      timerRef.current = setInterval(() => {
+        setTime((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timerRef.current);
+    };
+  }, [isResend, time]);
 
   useEffect(() => {
     let emailLocalstorage = localStorage.getItem("email_register") || '';
@@ -54,7 +67,9 @@ export default function SignUpSuccess() {
         </div>
         <p className='text-primary text-center mt-8 text-[22px] font-medium'>Verify your email address</p>
         <p className='text-center mt-5'>An link has been sent to <strong>{email}</strong> since you used it as your sign in method. <br /><br /> Please verify this email address to complete your Middo account registration.</p>
-        <Button onClick={resendEmail} disabled={isResend}>Re-send</Button>
+        <Button onClick={resendEmail} disabled={isResend || time > 0}>
+        Re-send {time > 0 ? `in ${time}s` : ''}
+        </Button>
         <div className="mt-8 flex justify-center">
             <Link href={ROUTE_NAMES.SIGN_IN} className="active:text-primary md:hover:font-medium mx-auto inline-block w-fit-content">Cancel</Link>
           </div>
