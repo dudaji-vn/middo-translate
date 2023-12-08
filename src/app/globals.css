@@ -159,4 +159,11 @@
   .scrollbar-track-transparent::-webkit-scrollbar {
     @apply w-[0.5rem];
   }
+  .crop-container .cropper-container .cropper-crop-box .cropper-view-box {
+    border-radius: 50%;
+  }
+  .crop-container .cropper-container .cropper-crop-box .cropper-dashed,
+  .crop-container .cropper-container .cropper-crop-box .cropper-center {
+    display: none;
+  }
 }

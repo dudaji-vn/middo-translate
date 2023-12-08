@@ -22,8 +22,8 @@ export default function ResetPasswordSended() {
 
 
     return (
-        <div>
-            <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
+        <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+            <div className='bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2 w-full'>
                 <div className='mx-auto w-[223px]'>
                     <Image
                         src="/sended_email.svg"

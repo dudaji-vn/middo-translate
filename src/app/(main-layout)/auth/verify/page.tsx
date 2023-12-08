@@ -35,8 +35,8 @@ export default function Verify() {
 
     if(statusVerify == 'success') {
         return (  
-            <div>
-                <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
+            <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+                <div className='w-full md:max-w-[500px] mx-auto py-8 md:shadow-2 mt-10 md:rounded-3xl px-[5vw] md:px-6'>
                     <div className='w-[223px] mx-auto'>
                         <Image
                             src="/email_verified.svg"
@@ -55,8 +55,8 @@ export default function Verify() {
 
     if(statusVerify == 'expired') {
         return (  
-            <div>
-                <div className='px-5 w-full md:max-w-[500px] mx-auto py-8'>
+            <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+                <div className='w-full md:max-w-[500px] mx-auto py-8 md:shadow-2 mt-10 md:rounded-3xl px-[5vw] md:px-6'>
                     <div className='w-[223px] mx-auto'>
                         <Image
                             src="/link_expired.svg"
