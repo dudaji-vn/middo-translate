@@ -17,7 +17,6 @@ export default function ProtectedLayout({
       router.push(ROUTE_NAMES.SIGN_IN);
       return;
     }
-    console.log(user);
     
     if (user && isLoaded && (user.status == 'unset')) {
       router.push(ROUTE_NAMES.CREATE_ACCOUNT);

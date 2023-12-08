@@ -10,6 +10,7 @@ import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger 
 import { uploadImage } from '@/utils/upload-img';
 import { InputCropImage, InputCropImageRef } from '@/components/form/InputCropImage';
 import { PageLoading } from '@/components/loading/PageLoading';
+import { Camera } from 'lucide-react';
 
 export default function UpdateUserAvatar() {
     const [loading, setLoading] = useState(false);
@@ -27,7 +28,9 @@ export default function UpdateUserAvatar() {
         try {
             setLoading(true);
             let image = await uploadImage(file);
-            let res = await updateInfoUserService({ avatar: image.secure_url });
+            let imgUrl = image.secure_url;
+            if(!imgUrl) throw new Error('Upload image failed!');
+            let res = await updateInfoUserService({ avatar: imgUrl });
             setDataAuth({ user: {
                 ...user,
                 avatar: res.data.avatar,
@@ -35,7 +38,7 @@ export default function UpdateUserAvatar() {
             toast({ title: 'Success', description: 'Your avatar has been update!' })
             setOpen(false);
         } catch (err: any) {
-            toast({ title: 'Error', description: err?.response?.data?.message })
+            toast({ title: 'Error', description: err?.response?.data?.message || err.message })
         } finally {
             setLoading(false);
         }
@@ -48,7 +51,7 @@ export default function UpdateUserAvatar() {
                 <AlertDialogTrigger>
                 <div className='cursor-pointer hover:opacity-80 transition-all'>
                     <span className='w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center'>
-                        <ShoppingBagOutline width={20} height={20} fill='#3D87ED'></ShoppingBagOutline>
+                        <Camera width={20} height={20} className='stroke-primary'></Camera>
                     </span>
                     <span className='font-light text-sm mt-2 text-center block'>Avatar</span>
                 </div>
