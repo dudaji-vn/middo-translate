@@ -1,5 +1,9 @@
 import { Inbox } from '@/features/chat/rooms/components';
+import { Metadata } from 'next';
 
+export const metadata: Metadata = {
+  title: 'Talk',
+};
 export interface ChatLayoutProps {
   children: React.ReactNode;
 }
