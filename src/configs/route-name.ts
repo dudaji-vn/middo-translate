@@ -7,7 +7,7 @@ export const ROUTE_NAMES = {
   CREATE_ACCOUNT: '/create-account',
   ACCOUNT_SETTINGS: '/account-settings',
   RESET_PASSWORD_SENDED: '/reset-password-sended',
-  ONLINE_CONVERSATION: '/online-conversation',
+  ONLINE_CONVERSATION: '/talk',
   ONLINE_CONVERSATION_CREATE: '/online-conversation/create',
   ONLINE_CONVERSATION_SHARE: '/online-conversation/share',
   ONLINE_CONVERSATION_JOIN: '/online-conversation/join',
