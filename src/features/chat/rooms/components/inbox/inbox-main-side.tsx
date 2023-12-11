@@ -1,5 +1,12 @@
 import { ArrowBackOutline, Options2Outline } from '@easy-eva-icons/react';
-import { SearchInput, SearchInputRef } from '@/components/data-entry';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Typography,
+} from '@/components/data-display';
+import { SearchInput, SearchInputRef, Switch } from '@/components/data-entry';
 import { forwardRef, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions/button';
@@ -7,11 +14,13 @@ import { InboxItem } from '../inbox-item';
 import InboxList from './inbox-list';
 import Link from 'next/link';
 import { Room } from '../../types';
-import { Typography } from '@/components/data-display';
+import { Settings } from 'lucide-react';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
+import { cn } from '@/utils/cn';
 import { searchApi } from '@/features/search/api';
 import { useAuthStore } from '@/stores/auth';
+import { useChatStore } from '@/features/chat/store';
 import { useSearch } from '@/hooks/use-search';
 
 export const inboxTypeMap = {
@@ -25,6 +34,7 @@ export interface InboxMainTabProps
 export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
   (props, ref) => {
     const [isSearch, setIsSearch] = useState(false);
+    const [isOpenDropdown, setOpenDropdown] = useState(false);
 
     const searchInputRef = useRef<SearchInputRef>(null);
 
@@ -40,6 +50,8 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
       searchInputRef.current?.reset?.();
       searchInputRef.current?.blur?.();
     };
+
+    const { showTranslateOnType, toggleShowTranslateOnType } = useChatStore();
     return (
       <div
         ref={ref}
@@ -67,14 +79,47 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
             />
           </div>
           {!isSearch && (
-            <Button.Icon
-              variant="ghost"
-              color="default"
-              onClick={() => setIsSearch(false)}
-              className="-mr-2"
-            >
-              <Options2Outline />
-            </Button.Icon>
+            <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
+              <DropdownMenuTrigger>
+                <Button.Icon
+                  variant="ghost"
+                  color="default"
+                  onClick={() => setIsSearch(false)}
+                  className="-mr-2"
+                >
+                  <Settings />
+                </Button.Icon>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                align="end"
+                className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
+                onClick={() => setOpenDropdown(false)}
+              >
+                <div
+                  className={cn(
+                    'flex items-center justify-between gap-5 bg-background p-5',
+                  )}
+                >
+                  <span>Translate tool</span>
+                  <Switch
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    checked={showTranslateOnType}
+                    onCheckedChange={toggleShowTranslateOnType}
+                  />
+                </div>
+                <div
+                  className={cn(
+                    'flex items-center justify-between gap-5 bg-background p-5',
+                  )}
+                >
+                  <span>Message translate</span>
+                  <Switch />
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
         <div className="relative flex flex-1 flex-col overflow-hidden">

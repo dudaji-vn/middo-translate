@@ -15,7 +15,7 @@ export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
       target="_blank"
       href={file.url}
       className={cn(
-        'flex w-full items-center justify-center gap-2 rounded-lg p-2 px-3',
+        'flex w-full items-center justify-center gap-2 rounded-lg p-4',
         isMe ? 'bg-primary' : 'bg-background-darker',
       )}
     >
