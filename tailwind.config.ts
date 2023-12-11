@@ -18,7 +18,7 @@ module.exports = {
     extend: {
       height: {
         header: 'var(--header-height, 60px)',
-        'main-container-height': 'calc(100% - var(--header-height, 60px))',
+        'main-container-height': 'calc(100vh - var(--header-height, 60px))',
       },
       colors: {
         border: 'hsl(var(--border))',
