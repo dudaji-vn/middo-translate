@@ -10,6 +10,7 @@ import { createLocalMessage } from '@/features/chat/messages/utils';
 import { forwardRef } from 'react';
 import { messageApi } from '@/features/chat/messages/api';
 import { roomApi } from '@/features/chat/rooms/api';
+import { uploadFile } from '@/utils/upload-file';
 import { uploadImage } from '@/utils/upload-img';
 import { useAuthStore } from '@/stores/auth';
 import { useChatBox } from '../../contexts/chat-box-context';
@@ -94,7 +95,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         });
         Promise.all(
           localDocumentMessages.map(async (message, index) => {
-            const res = await uploadImage(documents[index].file!);
+            const res = await uploadFile(documents[index].file!);
             mutateAsync({
               content: '',
               roomId,
