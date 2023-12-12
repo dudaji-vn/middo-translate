@@ -19,6 +19,7 @@ import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
 import { cn } from '@/utils/cn';
 import { searchApi } from '@/features/search/api';
+import { stopPropagation } from '@/utils/stop-propagation';
 import { useAuthStore } from '@/stores/auth';
 import { useChatStore } from '@/features/chat/store';
 import { useSearch } from '@/hooks/use-search';
@@ -28,10 +29,10 @@ export const inboxTypeMap = {
   unread: 'unread',
 };
 
-export interface InboxMainTabProps
+export interface InboxMainSideProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
+export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
   (props, ref) => {
     const [isSearch, setIsSearch] = useState(false);
     const [isOpenDropdown, setOpenDropdown] = useState(false);
@@ -43,7 +44,7 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
       rooms: Room[];
       users: User[];
     }>(searchApi.inboxes, 'inboxes');
-    const currentUserId = useAuthStore((state) => state.user?._id);
+    const currentUser = useAuthStore((state) => state.user);
     const closeSearch = () => {
       setIsSearch(false);
       setSearchTerm('');
@@ -51,7 +52,12 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
       searchInputRef.current?.blur?.();
     };
 
-    const { showTranslateOnType, toggleShowTranslateOnType } = useChatStore();
+    const {
+      showTranslateOnType,
+      toggleShowTranslateOnType,
+      showMiddleTranslation,
+      toggleShowMiddleTranslation,
+    } = useChatStore();
     return (
       <div
         ref={ref}
@@ -80,7 +86,7 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
           </div>
           {!isSearch && (
             <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <Button.Icon
                   variant="ghost"
                   color="default"
@@ -103,9 +109,7 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
                 >
                   <span>Translate tool</span>
                   <Switch
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
+                    onClick={stopPropagation}
                     checked={showTranslateOnType}
                     onCheckedChange={toggleShowTranslateOnType}
                   />
@@ -116,7 +120,11 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
                   )}
                 >
                   <span>Message translate</span>
-                  <Switch />
+                  <Switch
+                    onClick={stopPropagation}
+                    checked={showMiddleTranslation}
+                    onCheckedChange={toggleShowMiddleTranslation}
+                  />
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -146,7 +154,7 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
                       <InboxItem
                         key={room._id}
                         data={room}
-                        currentUserId={currentUserId!}
+                        currentUser={currentUser!}
                         showMembersName
                         showTime={false}
                       />
@@ -161,7 +169,7 @@ export const InboxMainTab = forwardRef<HTMLDivElement, InboxMainTabProps>(
     );
   },
 );
-InboxMainTab.displayName = 'InboxMainTab';
+InboxMainSide.displayName = 'InboxMainSide';
 
 const SearchSection = ({
   label,

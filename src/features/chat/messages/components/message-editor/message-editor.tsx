@@ -14,6 +14,7 @@ type SubmitData = {
   content: string;
   images: Media[];
   documents: Media[];
+  contentEnglish: string;
 };
 
 export interface MessageEditorProps
@@ -39,6 +40,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
       const content = formData.get('message') as string;
+      const contentEnglish = formData.get('messageEnglish') as string;
       const images: Media[] = [];
       const documents: Media[] = [];
       for (const file of files) {
@@ -60,7 +62,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           });
         }
       }
-      onSubmitValue?.({ content, images, documents });
+      onSubmitValue?.({ content, images, documents, contentEnglish });
       e.currentTarget.reset();
       textInputRef.current?.reset();
       reset();

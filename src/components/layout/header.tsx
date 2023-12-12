@@ -35,7 +35,7 @@ export const Header = (props: Props) => {
   };
 
   return (
-    <div className="h-header z-50 flex w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
+    <div className="z-50 flex h-header w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
       <HeaderNavigation />
 
       <Link href={ROUTE_NAMES.ROOT} className="block w-[100px]">
@@ -43,7 +43,7 @@ export const Header = (props: Props) => {
       </Link>
 
       <div className="flex flex-1 items-center justify-end">
-        {isAuthentication ? (
+        {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
             <DropdownMenuTrigger>
               <div className="relative flex gap-3 active:!text-shading ">
@@ -57,7 +57,7 @@ export const Header = (props: Props) => {
                   <Avatar
                     src={user.avatar || '/person.svg'}
                     size="lg"
-                    alt={user?.username || 'Anonymous'}
+                    alt={user?.name || 'Anonymous'}
                   />
 
                   <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-1">

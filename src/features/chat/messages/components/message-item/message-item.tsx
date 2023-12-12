@@ -23,10 +23,19 @@ export interface MessageProps
 export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
   ({ message, sender, order, className, readByUsers, ...props }, ref) => {
     const isMe = sender === 'me';
-    const userId = useAuthStore((state) => state.user._id);
+    const userId = useAuthStore((state) => state!.user!._id);
     const isPending = message.status === 'pending';
     const isRead = message.readBy?.includes(userId);
     const mediaLength = message.media?.length || 0;
+    if (message.type === 'notification') {
+      return (
+        <div className="mx-auto p-4">
+          <span className="text-sm font-light text-colors-neutral-500">
+            {message.sender.name + ' ' + message.content}
+          </span>
+        </div>
+      );
+    }
 
     return (
       <div

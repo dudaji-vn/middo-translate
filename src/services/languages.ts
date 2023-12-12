@@ -25,7 +25,7 @@ export async function translateText(text: string, from?: string, to?: string) {
   const textEncoded = encodeURIComponent(text);
 
   const response = await fetch(
-    `${NEXT_PUBLIC_URL}/api/languages/translate?query=${textEncoded}&from=${from}&to=${to}`,
+    `${NEXT_PUBLIC_URL}/api/languages/translate-cache?query=${textEncoded}&from=${from}&to=${to}`,
   );
 
   const json = await response.json();
