@@ -12,6 +12,7 @@ export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
   return (
     <a
       download
+      target="_blank"
       href={file.url}
       className={cn(
         'flex w-full items-center justify-center gap-2 rounded-lg p-2 px-3',

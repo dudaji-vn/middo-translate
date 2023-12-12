@@ -77,7 +77,7 @@ export default async function Home(props: HomeProps) {
   const isShowMiddleTarget = targetEnglishResult && !isEnglishTranslate;
 
   return (
-    <main className="relative flex h-full w-full flex-col justify-center pt-10">
+    <main className="relative flex h-full w-full flex-col pt-10">
       <PageLoading title="Loading">
         <CompareProvider
           text={sourceEnglishResult}
