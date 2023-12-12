@@ -15,7 +15,14 @@ export const TextInput = forwardRef<
 >((props, ref) => {
   const userLanguage = useAuthStore((s) => s.user?.language) ?? 'en';
 
-  const { text, setText, translatedText } = useTranslate({
+  const {
+    text,
+    setText,
+    translatedText,
+    middleText,
+    setMiddleText,
+    handleMiddleTranslate,
+  } = useTranslate({
     sourceLanguage: userLanguage,
     targetLanguage: DEFAULT_LANGUAGES_CODE.EN,
   });
@@ -38,19 +45,33 @@ export const TextInput = forwardRef<
         ref={inputRef}
         {...props}
         value={text}
-        onChange={(e) => setText(e.target.value)}
+        onChange={(e) => {
+          setText(e.target.value);
+          setMiddleText('');
+        }}
         className="flex-1 bg-transparent outline-none"
         autoComplete="off"
         name="message"
         type="text"
         placeholder="Type a message"
       />
-      <input type="hidden" name="messageEnglish" value={translatedText} />
       <TranslateTool
         showTool={!!showTranslateOnType && !!translatedText}
         checked={showTranslateOnType}
         onCheckedChange={toggleShowTranslateOnType}
         content={translatedText}
+        isEditing={!!middleText}
+        middleText={middleText}
+        setMiddleText={setMiddleText}
+        onCancel={() => {
+          setMiddleText('');
+        }}
+        onConfirm={() => {
+          handleMiddleTranslate();
+        }}
+        onEdit={() => {
+          setMiddleText(translatedText);
+        }}
       />
     </>
   );
