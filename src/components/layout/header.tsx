@@ -12,7 +12,6 @@ import {
 } from '@/components/data-display';
 
 import { Avatar } from '../data-display/avatar';
-import { Button } from '../actions';
 import { HeaderNavigation } from './header-navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -88,22 +87,31 @@ export const Header = (props: Props) => {
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <div className="flex items-center gap-3">
-            <Link
-              href={ROUTE_NAMES.SIGN_UP}
+          <Link
+            href={ROUTE_NAMES.SIGN_IN}
+            className="group flex items-center gap-3"
+          >
+            <span
               className={
-                'hidden bg-background px-[5vw] py-4 font-semibold active:bg-background-darker active:!text-shading md:inline md:!p-0 md:hover:text-secondary md:active:!bg-transparent'
+                'hidden bg-background px-[5vw] py-4 font-semibold active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-colors-primary-500-main'
               }
             >
-              Sign up
-            </Link>
-            <Button
-              onClick={() => router.push(ROUTE_NAMES.SIGN_IN)}
-              className="inline-block p-4 px-8"
-            >
               Sign in
-            </Button>
-          </div>
+            </span>
+
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-colors-neutral-50">
+              <div className="w-6">
+                <Image
+                  src="/avatar.png"
+                  priority
+                  className="block"
+                  alt="logo"
+                  width={500}
+                  height={500}
+                />
+              </div>
+            </div>
+          </Link>
         )}
       </div>
     </div>

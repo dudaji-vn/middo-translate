@@ -21,7 +21,7 @@ export default function ResetPasswordSended() {
   }, [router]);
 
   return (
-    <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+    <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
       <div className="w-full bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
         <div className="mx-auto w-[223px]">
           <Image
@@ -37,9 +37,7 @@ export default function ResetPasswordSended() {
         <p className="mt-5 text-center">
           An reset password link has been sent to <strong>{email}</strong>
         </p>
-        <Button tag="a" href={ROUTE_NAMES.SIGN_IN}>
-          Go to sign in
-        </Button>
+        {/* <Button tag='a' href={ROUTE_NAMES.SIGN_IN}>Go to sign in</Button> */}
       </div>
     </div>
   );
