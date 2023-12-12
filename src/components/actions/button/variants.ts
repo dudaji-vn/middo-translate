@@ -11,7 +11,7 @@ export const buttonVariants = cva(
       },
       color: {
         default:
-          'bg-gray-200 text-text md:hover:bg-gray-300 dark:bg-gray-700  dark:hover:bg-gray-800',
+          'bg-gray-200 text-colors-neutral-700 md:hover:bg-gray-300 dark:bg-gray-700  dark:hover:bg-gray-800',
         primary:
           'text-background bg-primary md:hover:bg-secondary active:bg-shading',
         secondary:
@@ -24,7 +24,7 @@ export const buttonVariants = cva(
       size: {
         xs: 'h-7 px-3 text-xs rounded-sm',
         sm: 'h-9 px-4 text-sm rounded-sm',
-        md: 'h-10 px-5 text-base rounded-md',
+        md: 'py-2 px-3 text-base font-medium rounded-md',
         lg: 'px-8 py-4 text-base font-semibold',
       },
       shape: {
@@ -49,7 +49,7 @@ export const buttonVariants = cva(
         variant: 'ghost',
         color: 'default',
         className:
-          'bg-transparent text-gray-500 md:hover:bg-background-darker active:!bg-stroke disabled:!bg-transparent',
+          'bg-transparent text-colors-neutral-700 md:hover:bg-background-darker active:!bg-stroke disabled:!bg-transparent',
       },
       {
         variant: 'ghost',

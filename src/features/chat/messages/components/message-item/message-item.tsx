@@ -5,6 +5,7 @@ import { Message } from '@/features/chat/messages/types';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { SeenIndicator } from './seen-indicator';
+import { TextMessage } from './text-message';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
@@ -22,9 +23,19 @@ export interface MessageProps
 export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
   ({ message, sender, order, className, readByUsers, ...props }, ref) => {
     const isMe = sender === 'me';
-    const userId = useAuthStore((state) => state.user._id);
+    const userId = useAuthStore((state) => state!.user!._id);
     const isPending = message.status === 'pending';
     const isRead = message.readBy?.includes(userId);
+    const mediaLength = message.media?.length || 0;
+    if (message.type === 'notification') {
+      return (
+        <div className="mx-auto p-4">
+          <span className="text-sm font-light text-colors-neutral-500">
+            {message.sender.name + ' ' + message.content}
+          </span>
+        </div>
+      );
+    }
 
     return (
       <div
@@ -48,30 +59,10 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             className={cn(
               messageVariants({ sender, order, status: message.status }),
               className,
-              message.media?.length &&
-                message.media?.length > 1 &&
-                'rounded-none',
+              mediaLength > 1 && 'rounded-none',
             )}
           >
-            {message.content && (
-              <div
-                className={cn(
-                  'px-3 py-2',
-                  isMe ? 'bg-primary' : 'bg-colors-neutral-50',
-                  message.status === 'removed' && 'bg-transparent',
-                )}
-              >
-                <span
-                  className={cn(
-                    'break-word-mt',
-                    isMe && 'text-background',
-                    message.status === 'removed' && 'text-neutral-300',
-                  )}
-                >
-                  {message.content}
-                </span>
-              </div>
-            )}
+            {message.content && <TextMessage isMe={isMe} message={message} />}
             {message?.media && message.media.length > 0 && (
               <>
                 {message.media[0].type === 'image' && (

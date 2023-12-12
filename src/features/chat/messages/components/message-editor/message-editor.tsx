@@ -1,4 +1,6 @@
 import { MicOutline, PaperPlaneOutline } from '@easy-eva-icons/react';
+import { TextInput, TextInputRef } from './text-input';
+import { forwardRef, useRef } from 'react';
 
 import { AdditionalActions } from './additional-actions';
 import { Button } from '@/components/actions';
@@ -6,13 +8,13 @@ import { FileList } from './file-list';
 import { Media } from '@/types';
 import { Smile } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { forwardRef } from 'react';
 import { useSelectFiles } from '@/hooks/use-select-files';
 
 type SubmitData = {
   content: string;
   images: Media[];
   documents: Media[];
+  contentEnglish: string;
 };
 
 export interface MessageEditorProps
@@ -32,10 +34,13 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       reset,
     } = useSelectFiles();
 
+    const textInputRef = useRef<TextInputRef>(null);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(e.currentTarget);
       const content = formData.get('message') as string;
+      const contentEnglish = formData.get('messageEnglish') as string;
       const images: Media[] = [];
       const documents: Media[] = [];
       for (const file of files) {
@@ -57,15 +62,16 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           });
         }
       }
-      onSubmitValue?.({ content, images, documents });
+      onSubmitValue?.({ content, images, documents, contentEnglish });
       e.currentTarget.reset();
+      textInputRef.current?.reset();
       reset();
     };
     return (
       <form
         {...getRootProps()}
         onSubmit={handleSubmit}
-        className="flex w-full items-center gap-2"
+        className="relative flex w-full items-center gap-2"
       >
         <input {...getInputProps()} hidden />
         <div
@@ -76,14 +82,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         >
           <div className="flex flex-1">
             <AdditionalActions onOpenSelectFiles={open} />
-            <input
-              autoComplete="off"
-              onPaste={handlePasteFile}
-              name="message"
-              type="text"
-              className="flex-1 bg-transparent outline-none"
-              placeholder="Type a message"
-            />
+            <TextInput ref={textInputRef} onPaste={handlePasteFile} />
             <div className="h-full items-end">
               <Button.Icon variant="ghost" className="self-end" color="default">
                 <MicOutline />
@@ -99,7 +98,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             onRemoveFile={removeFile}
           />
         </div>
-        <Button.Icon color="primary" className="">
+        <Button.Icon color="primary">
           <PaperPlaneOutline />
         </Button.Icon>
       </form>

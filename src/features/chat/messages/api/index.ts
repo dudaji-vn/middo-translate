@@ -16,6 +16,7 @@ export const messageApi = {
     roomId: string;
     media?: Media[];
     content: string;
+    contentEnglish?: string;
     clientTempId: string;
   }) {
     const res: Response<Message> = await axios.post(basePath, data);

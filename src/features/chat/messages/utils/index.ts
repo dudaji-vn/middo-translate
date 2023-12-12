@@ -2,19 +2,24 @@ import { Media } from '@/types';
 import { Message } from '../types';
 import { User } from '@/features/users/types';
 
+type CreateLocalMessageParams = {
+  sender: User;
+  content?: string;
+  contentEnglish?: string;
+  media?: Media[];
+};
+
 export const createLocalMessage = ({
   sender,
   content = '',
+  contentEnglish = '',
   media = [],
-}: {
-  sender: User;
-  content?: string;
-  media?: Media[];
-}): Message => {
+}: CreateLocalMessageParams): Message => {
   return {
     _id: self.crypto.randomUUID(),
     sender: sender!,
     content,
+    contentEnglish,
     status: 'pending',
     type: 'text',
     media,

@@ -1,21 +1,26 @@
 import { Avatar, AvatarGroup } from '@/components/data-display/avatar';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Message } from '@/features/chat/messages/types';
 import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { getReadByUsers } from '@/features/chat/utils';
-import { useMemo } from 'react';
+import { translateText } from '@/services/languages';
 
 export const ItemSub = ({
   message,
   participants,
-  currentUserId,
+  isGroup,
+  currentUser,
 }: {
   message: Message;
   participants: User[];
-  currentUserId: User['_id'];
+  currentUser: User;
+  isGroup: boolean;
 }) => {
+  const currentUserId = currentUser._id;
+  const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
   const readByUsers = useMemo(() => {
     return getReadByUsers({
@@ -31,16 +36,11 @@ export const ItemSub = ({
     if (message.sender._id === currentUserId) {
       return 'You:';
     }
-    if (participants.length > 2) {
+    if (isGroup) {
       return `${message.sender.name.split(' ')[0]}: `;
     }
     return '';
-  }, [
-    message.sender._id,
-    message.sender.name,
-    currentUserId,
-    participants.length,
-  ]);
+  }, [message.sender._id, message.sender.name, currentUserId, isGroup]);
 
   const content = useMemo(() => {
     if (message.status === 'removed') {
@@ -60,6 +60,22 @@ export const ItemSub = ({
     return message.content;
   }, [message.content, message?.media, message.status, message.type]);
 
+  const [contentDisplay, setContentDisplay] = useState(content);
+  useEffect(() => {
+    if (message.type === 'text') {
+      if (userLanguage === message.sender.language) return;
+      const translateContent = async () => {
+        const translated = await translateText(
+          message.content,
+          message.sender.language,
+          userLanguage,
+        );
+        setContentDisplay(translated);
+      };
+      translateContent();
+    }
+  }, [userLanguage, message.content, message.sender.language, message.type]);
+
   return (
     <div className="flex items-center">
       <Typography
@@ -68,7 +84,7 @@ export const ItemSub = ({
           isRead ? 'text-text opacity-80' : 'font-medium',
         )}
       >
-        {preMessage} {content}
+        {preMessage} {contentDisplay}
       </Typography>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
       {readByUsers.length > 0 && (

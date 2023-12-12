@@ -16,13 +16,13 @@ const typographyTags = {
 const typographyVariants = cva('text-text text-base', {
   variants: {
     variant: {
-      h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
-      h2: 'scroll-m-20 text-3xl font-semibold tracking-tight',
-      h3: 'scroll-m-20 text-2xl font-semibold tracking-tight',
-      h4: 'scroll-m-20 text-xl font-semibold tracking-tight',
+      h1: 'scroll-m-20 text-7xl font-semibold tracking-tight leading-[5rem]',
+      h2: 'scroll-m-20 text-5xl font-semibold tracking-tight leading-[3.25rem]',
+      h3: 'scroll-m-20 text-[2rem] font-semibold tracking-tight leading-9',
+      h4: 'scroll-m-20 text-2xl font-semibold tracking-tight leading-7',
       h5: 'scroll-m-20 text-lg font-semibold tracking-tight',
       muted: 'text-text/70',
-      default: 'text-base',
+      default: 'text-base text-text',
     },
   },
   defaultVariants: {
