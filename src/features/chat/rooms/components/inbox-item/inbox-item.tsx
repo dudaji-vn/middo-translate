@@ -13,7 +13,7 @@ import moment from 'moment';
 export interface InboxItemProps {
   data: Room;
   isActive?: boolean;
-  currentUserId: User['_id'];
+  currentUser: User;
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
   showTime?: boolean;
@@ -24,7 +24,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
     {
       data: _data,
       isActive,
-      currentUserId,
+      currentUser,
       showMembersName,
       currentRoomId,
       showTime = true,
@@ -32,6 +32,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
     },
     ref,
   ) => {
+    const currentUserId = currentUser._id;
     const data = useMemo(
       () => generateRoomDisplay(_data, currentUserId),
       [_data, currentUserId],
@@ -91,9 +92,10 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
               )}
               {data.lastMessage && !showMembersName && (
                 <ItemSub
+                  currentUser={currentUser}
+                  isGroup={data.isGroup}
                   message={data.lastMessage}
                   participants={data.participants}
-                  currentUserId={currentUserId}
                 />
               )}
             </div>

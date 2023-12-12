@@ -6,7 +6,7 @@ import { useEffect, useMemo } from 'react';
 import { ArrowBackOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions/button';
 import { GroupCreateSide } from '../group-create-side';
-import { InboxMainTab } from './inbox-main-side';
+import { InboxMainSide } from './inbox-main-side';
 import { InboxSides } from '../../types';
 import { PrivateCreateSide } from '../private-create-side';
 import { SettingSide } from '../setting-side';
@@ -54,7 +54,7 @@ export const Inbox = (props: InboxProps) => {
   return (
     <div className="relative flex h-full w-full flex-col overflow-hidden border-r bg-card">
       <div className="flex-1 overflow-hidden pt-5">
-        <InboxMainTab />
+        <InboxMainSide />
       </div>
       <AnimatePresence>
         {side !== 'default' && (

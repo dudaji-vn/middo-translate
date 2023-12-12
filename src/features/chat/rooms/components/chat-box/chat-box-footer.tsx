@@ -36,7 +36,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     });
 
     const handleSubmit = async (data: MessageEditorSubmitData) => {
-      const { content, images, documents } = data;
+      const { content, images, documents, contentEnglish } = data;
       let roomId = room._id;
 
       if (room.status === 'temporary') {
@@ -51,11 +51,13 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         const localMessage = createLocalMessage({
           sender: currentUser!,
           content,
+          contentEnglish,
         });
 
         addMessage(localMessage);
         mutateAsync({
           content,
+          contentEnglish,
           roomId,
           clientTempId: localMessage._id,
         });
@@ -112,7 +114,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       }
     };
     return (
-      <div className="w-full border-t p-5">
+      <div className="w-full border-t p-3">
         <MessageEditor onSubmitValue={handleSubmit} />
       </div>
     );

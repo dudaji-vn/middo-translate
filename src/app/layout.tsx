@@ -8,9 +8,9 @@ import {
 
 import { AppProvider } from '@/providers/app';
 import type { Metadata } from 'next';
-import { Montserrat } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 
-const montserrat = Montserrat({ subsets: ['latin'] });
+const font = Open_Sans({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(NEXT_PUBLIC_URL),
@@ -33,7 +33,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={montserrat.className} suppressHydrationWarning={true}>
+      <body className={font.className} suppressHydrationWarning={true}>
         <AppProvider>{children}</AppProvider>
       </body>
     </html>

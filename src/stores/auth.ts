@@ -1,13 +1,13 @@
+import { User } from '@/features/users/types';
 import { create } from 'zustand';
 
 export type AuthState = {
   isAuthentication: boolean;
   isLoaded: boolean;
-  user: any;
+  user: User | null;
   loading: boolean;
   setData: (data: any) => void;
 };
-
 
 export const useAuthStore = create<AuthState>()((set) => ({
   isAuthentication: false,
@@ -15,10 +15,8 @@ export const useAuthStore = create<AuthState>()((set) => ({
   isLoaded: false,
   loading: false,
   user: null,
-  setData: (data: any) => set(() => ({ ...data }))
+  setData: (data: any) => set(() => ({ ...data })),
 }));
-
-
 
 // import { StateCreator, create } from 'zustand';
 // import { PersistOptions, persist } from 'zustand/middleware';

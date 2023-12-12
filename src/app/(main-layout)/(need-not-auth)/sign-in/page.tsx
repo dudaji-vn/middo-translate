@@ -64,7 +64,7 @@ export default function SignIn() {
 
   useEffect(() => {
     if (isAuthentication) {
-      if (!userData.avatar && !userData.name && !userData.language) {
+      if (!userData?.avatar && !userData?.name && !userData?.language) {
         router.push(ROUTE_NAMES.CREATE_ACCOUNT);
       } else {
         router.push(ROUTE_NAMES.ROOT);

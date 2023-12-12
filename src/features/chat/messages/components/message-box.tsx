@@ -150,26 +150,27 @@ export const MessageBox = ({ room }: { room: Room }) => {
             );
             const isShowTimeGroup = timeDiff > maxTimeGroupDiff;
             const isMe = group.lastMessage.sender._id === currentUserId;
+            const isNotify = group.lastMessage.type === 'notification';
             return (
               <div key={group.lastMessage._id}>
                 {isShowTimeGroup && (
                   <div className="my-4 flex items-center justify-center">
                     <div className="flex items-center space-x-2">
                       <div className="h-[1px] w-16 bg-primary/30" />
-                      <div className="text-sm text-primary/60">
+                      <div className="text-sm font-light text-colors-neutral-500">
                         {formatTimeDisplay(group.lastMessage.createdAt!)}
                       </div>
                       <div className="h-[1px] w-16 bg-primary/30" />
                     </div>
                   </div>
                 )}
-                {!isMe && room.isGroup && (
+                {!isMe && !isNotify && room.isGroup && (
                   <div className="pl-11 text-sm">
                     <span>{group.lastMessage.sender.name}</span>
                   </div>
                 )}
                 <div className="flex w-full gap-1">
-                  {!isMe && (
+                  {!isMe && !isNotify && (
                     <Avatar
                       className="mb-0.5 mt-auto h-7 w-7"
                       src={group.lastMessage.sender.avatar}

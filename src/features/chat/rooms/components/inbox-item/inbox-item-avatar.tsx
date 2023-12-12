@@ -20,8 +20,8 @@ const avatarStylePositionMapByLengthAndIndex: Record<
     0: 'top-0 left-0',
   },
   2: {
-    0: 'top-0 left-0',
-    1: 'bottom-0 right-0',
+    0: 'top-0 left-0 transform w-12 h-12 -translate-x-[calc(50%_+_1px)]',
+    1: 'top-0 right-0 transform w-12 h-12 translate-x-[calc(50%_+_1px)]',
   },
   3: {
     0: 'top-0 left-0 transform w-12 h-12 -translate-x-[calc(50%_+_2px)]',
