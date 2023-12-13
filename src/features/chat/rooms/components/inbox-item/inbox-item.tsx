@@ -32,7 +32,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
     },
     ref,
   ) => {
-    const currentUserId = currentUser._id;
+    const currentUserId = currentUser?._id;
     const data = useMemo(
       () => generateRoomDisplay(_data, currentUserId),
       [_data, currentUserId],

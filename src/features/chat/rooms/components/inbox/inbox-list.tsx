@@ -78,6 +78,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    if (!currentUser) return null;
+
     if (rooms.length === 0 && !isLoading) {
       return (
         <>

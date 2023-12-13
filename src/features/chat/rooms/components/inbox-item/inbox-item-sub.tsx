@@ -19,7 +19,7 @@ export const ItemSub = ({
   currentUser: User;
   isGroup: boolean;
 }) => {
-  const currentUserId = currentUser._id;
+  const currentUserId = currentUser?._id;
   const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
   const readByUsers = useMemo(() => {
