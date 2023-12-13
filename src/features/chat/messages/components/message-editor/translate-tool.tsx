@@ -21,6 +21,7 @@ export interface TranslateToolProps {
   onEdit?: () => void;
   middleText: string;
   setMiddleText?: (text: string) => void;
+  onEditStateChange?: (isEditing: boolean) => void;
 }
 
 export const TranslateTool = ({
@@ -32,6 +33,7 @@ export const TranslateTool = ({
   onConfirm,
   middleText,
   setMiddleText,
+  onEditStateChange,
   onEdit,
 }: TranslateToolProps) => {
   const [showNotification, setShowNotification] = useState(false);
@@ -45,9 +47,11 @@ export const TranslateTool = ({
   const handleCancel = () => {
     closeEdit();
     onCancel?.();
+    onEditStateChange?.(false);
   };
   const handleStartEdit = () => {
     setIsEditing(true);
+    onEditStateChange?.(true);
     onEdit?.();
     setTimeout(() => {
       // focus to text area end cursor
