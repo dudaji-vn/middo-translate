@@ -1,14 +1,13 @@
-import { ArrowBackOutline, Options2Outline } from '@easy-eva-icons/react';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
   Typography,
 } from '@/components/data-display';
 import { SearchInput, SearchInputRef, Switch } from '@/components/data-entry';
 import { forwardRef, useRef, useState } from 'react';
 
+import { ArrowBackOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions/button';
 import { InboxItem } from '../inbox-item';
 import InboxList from './inbox-list';
