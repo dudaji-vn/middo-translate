@@ -23,14 +23,19 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
     if (userLanguage === message.sender.language) return;
     const translateContent = async () => {
       const translated = await translateText(
-        message.content,
+        message.contentEnglish || message.content,
         message.sender.language,
         userLanguage,
       );
       setContentDisplay(translated);
     };
     translateContent();
-  }, [userLanguage, message.content, message.sender.language]);
+  }, [
+    userLanguage,
+    message.content,
+    message.sender.language,
+    message.contentEnglish,
+  ]);
   return (
     <div
       className={cn(

@@ -4,10 +4,13 @@ import { forwardRef, useRef } from 'react';
 
 import { AdditionalActions } from './additional-actions';
 import { Button } from '@/components/actions';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { FileList } from './file-list';
 import { Media } from '@/types';
 import { Smile } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { translateText } from '@/services/languages';
+import { useAuthStore } from '@/stores/auth';
 import { useSelectFiles } from '@/hooks/use-select-files';
 
 type SubmitData = {
@@ -35,12 +38,25 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     } = useSelectFiles();
 
     const textInputRef = useRef<TextInputRef>(null);
+    const userLanguage = useAuthStore((s) => s.user?.language) ?? 'en';
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
+      e?.currentTarget?.reset();
+      textInputRef?.current?.reset();
+      reset();
       const formData = new FormData(e.currentTarget);
       const content = formData.get('message') as string;
-      const contentEnglish = formData.get('messageEnglish') as string;
+      let contentEnglish = formData.get('messageEnglish') as string;
+
+      if (!contentEnglish) {
+        contentEnglish = await translateText(
+          content,
+          userLanguage,
+          DEFAULT_LANGUAGES_CODE.EN,
+        );
+      }
+
       const images: Media[] = [];
       const documents: Media[] = [];
       for (const file of files) {
@@ -63,9 +79,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         }
       }
       onSubmitValue?.({ content, images, documents, contentEnglish });
-      e.currentTarget.reset();
-      textInputRef.current?.reset();
-      reset();
     };
     return (
       <form
@@ -83,14 +96,14 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           <div className="flex flex-1">
             <AdditionalActions onOpenSelectFiles={open} />
             <TextInput ref={textInputRef} onPaste={handlePasteFile} />
-            <div className="h-full items-end">
+            {/* <div className="h-full items-end">
               <Button.Icon variant="ghost" className="self-end" color="default">
                 <MicOutline />
               </Button.Icon>
               <Button.Icon variant="ghost" className="self-end" color="default">
                 <Smile />
               </Button.Icon>
-            </div>
+            </div> */}
           </div>
           <FileList
             onAddMoreFiles={open}
@@ -98,7 +111,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             onRemoveFile={removeFile}
           />
         </div>
-        <Button.Icon color="primary">
+        <Button.Icon type="submit" color="primary">
           <PaperPlaneOutline />
         </Button.Icon>
       </form>

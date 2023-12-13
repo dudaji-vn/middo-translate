@@ -34,13 +34,21 @@ export const ItemSub = ({
 
   const preMessage = useMemo(() => {
     if (message.sender._id === currentUserId) {
-      return 'You:';
+      return `You${message.type === 'notification' ? '' : ': '} `;
     }
     if (isGroup) {
-      return `${message.sender.name.split(' ')[0]}: `;
+      return `${message.sender.name.split(' ')[0]}${
+        message.type === 'notification' ? '' : ': '
+      } `;
     }
     return '';
-  }, [message.sender._id, message.sender.name, currentUserId, isGroup]);
+  }, [
+    message.sender._id,
+    message.sender.name,
+    message.type,
+    currentUserId,
+    isGroup,
+  ]);
 
   const content = useMemo(() => {
     if (message.status === 'removed') {
@@ -66,7 +74,7 @@ export const ItemSub = ({
       if (userLanguage === message.sender.language) return;
       const translateContent = async () => {
         const translated = await translateText(
-          message.content,
+          message.contentEnglish || message.content,
           message.sender.language,
           userLanguage,
         );
@@ -74,7 +82,13 @@ export const ItemSub = ({
       };
       translateContent();
     }
-  }, [userLanguage, message.content, message.sender.language, message.type]);
+  }, [
+    userLanguage,
+    message.content,
+    message.sender.language,
+    message.type,
+    message.contentEnglish,
+  ]);
 
   return (
     <div className="flex items-center">

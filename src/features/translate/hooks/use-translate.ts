@@ -3,7 +3,6 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { useEffect, useState } from 'react';
 
-import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { translateText } from '@/services/languages';
 import { useDebounce } from 'usehooks-ts';
 
@@ -52,13 +51,9 @@ export const useTranslate = ({
   ]);
 
   const middleTranslate = async (text: string) => {
-    const [sourceResult, targetResult] = await Promise.all([
-      translateText(text, 'en', sourceLanguage),
-      translateText(text, 'en', targetLanguage),
-    ]);
+    const sourceResult = await translateText(text, 'en', sourceLanguage);
     setText(sourceResult);
-    if (targetLanguage === DEFAULT_LANGUAGES_CODE.EN) return;
-    setTranslatedText(targetResult);
+    setTranslatedText(text);
   };
 
   const handleMiddleTranslate = () => {

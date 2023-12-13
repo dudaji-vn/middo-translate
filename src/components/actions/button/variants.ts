@@ -24,7 +24,7 @@ export const buttonVariants = cva(
       size: {
         xs: 'h-7 px-3 text-xs rounded-sm',
         sm: 'h-9 px-4 text-sm rounded-sm',
-        md: 'py-2 px-3 text-base font-medium rounded-md',
+        md: 'py-3 px-5 text-base font-medium rounded-md',
         lg: 'px-8 py-4 text-base font-semibold',
       },
       shape: {

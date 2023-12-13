@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Pen, Settings } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import { Switch } from '@/components/data-entry';
 import { Triangle } from '@/components/icons';
-import { useState } from 'react';
+import { cn } from '@/utils/cn';
+import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 
 const TIMEOUT = 5000;
 export interface TranslateToolProps {
@@ -13,6 +15,13 @@ export interface TranslateToolProps {
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   content: string;
+  isEditing?: boolean;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  onEdit?: () => void;
+  middleText: string;
+  setMiddleText?: (text: string) => void;
+  onEditStateChange?: (isEditing: boolean) => void;
 }
 
 export const TranslateTool = ({
@@ -20,8 +29,49 @@ export const TranslateTool = ({
   checked,
   onCheckedChange,
   content,
+  onCancel,
+  onConfirm,
+  middleText,
+  setMiddleText,
+  onEditStateChange,
+  onEdit,
 }: TranslateToolProps) => {
   const [showNotification, setShowNotification] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const { textAreaRef: middleTextAreaRef } = useTextAreaResize(
+    middleText,
+    10,
+    isEditing,
+  );
+  const closeEdit = () => setIsEditing(false);
+  const handleCancel = () => {
+    closeEdit();
+    onCancel?.();
+    onEditStateChange?.(false);
+  };
+  const handleStartEdit = () => {
+    setIsEditing(true);
+    onEditStateChange?.(true);
+    onEdit?.();
+    setTimeout(() => {
+      // focus to text area end cursor
+      middleTextAreaRef?.current?.focus();
+      middleTextAreaRef?.current?.setSelectionRange(
+        middleTextAreaRef?.current?.value.length ?? 0,
+        middleTextAreaRef?.current?.value.length ?? 0,
+      );
+    }, 100);
+  };
+
+  const handleConfirm = () => {
+    closeEdit();
+    onConfirm?.();
+  };
+  useEffect(() => {
+    if (!checked) {
+      setIsEditing(false);
+    }
+  }, [checked]);
   return (
     <div className="absolute -top-4 left-0 w-full -translate-y-full outline-none">
       <AnimatePresence mode="wait">
@@ -53,13 +103,65 @@ export const TranslateTool = ({
                   className="ml-auto"
                 />
               </div>
-              <div className="flex pb-3 pl-3 pr-1 pt-1 ">
-                <div className="flex-1">
-                  <p className="text-colors-neutral-600">{content}</p>
+              <div className="flex px-3 pb-3 pt-1">
+                <div
+                  className={cn('flex flex-1 flex-col', !isEditing && 'hidden')}
+                >
+                  <div
+                    className={
+                      'flex flex-1 rounded-xl border border-colors-primary-500-main p-3'
+                    }
+                  >
+                    <textarea
+                      ref={middleTextAreaRef}
+                      className={cn(
+                        'max-h-[160px] flex-1 resize-none outline-none',
+                        // !isEditing && 'hidden',
+                      )}
+                      value={middleText}
+                      onChange={(e) => setMiddleText?.(e.target.value)}
+                      name="messageEnglish"
+                      placeholder="Type a message"
+                    />
+                  </div>
+                  <div className="mt-2 flex justify-end gap-2">
+                    <Button
+                      shape="square"
+                      size="md"
+                      onClick={handleCancel}
+                      variant="ghost"
+                      color="default"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      shape="square"
+                      size="md"
+                      type="button"
+                      onClick={handleConfirm}
+                      variant="default"
+                      color="primary"
+                    >
+                      Save change
+                    </Button>
+                  </div>
                 </div>
-                <Button.Icon variant="ghost" color="default">
-                  <Pen />
-                </Button.Icon>
+                {!isEditing && (
+                  <div className="flex-1">
+                    <p className="text-colors-neutral-600">{content}</p>
+                  </div>
+                )}
+
+                {!isEditing && (
+                  <Button.Icon
+                    type="button"
+                    onClick={handleStartEdit}
+                    variant="ghost"
+                    color="default"
+                  >
+                    <Pen />
+                  </Button.Icon>
+                )}
               </div>
             </div>
             <div className="pl-[60px]">
