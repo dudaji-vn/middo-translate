@@ -27,12 +27,15 @@ export default function handler(req: any, res: any) {
         body += chunk;
       });
 
+      console.log('proxyRes', body);
+
       proxyRes.on('end', function () {
         try {
           const isSuccess =
             proxyRes.statusCode &&
             proxyRes.statusCode >= 200 &&
             proxyRes.statusCode < 300;
+          console.log('isSuccess', isSuccess);
           if (!isSuccess) {
             res.status(proxyRes.statusCode || 500).json(JSON.parse(body));
             return resolve(true);
@@ -43,6 +46,7 @@ export default function handler(req: any, res: any) {
           const cookies = new Cookies(req, res, {
             secure: process.env.NODE_ENV !== 'development',
           });
+          console.log('cookies', cookies);
           cookies.set(ACCESS_TOKEN_NAME, accessToken, {
             httpOnly: true,
             sameSite: 'lax',
@@ -53,6 +57,7 @@ export default function handler(req: any, res: any) {
             sameSite: 'lax',
             expires: new Date(Date.now() + 86400 * 1000 * 7) /* 7 day */,
           });
+          console.log('cookies success', cookies);
           res.status(200).json({
             message: 'success',
             data: {
