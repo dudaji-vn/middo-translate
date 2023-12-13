@@ -1,4 +1,3 @@
-import { MicOutline, PaperPlaneOutline } from '@easy-eva-icons/react';
 import { TextInput, TextInputRef } from './text-input';
 import { forwardRef, useRef } from 'react';
 
@@ -7,7 +6,7 @@ import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { FileList } from './file-list';
 import { Media } from '@/types';
-import { Smile } from 'lucide-react';
+import { PaperPlaneOutline } from '@easy-eva-icons/react';
 import { cn } from '@/utils/cn';
 import { translateText } from '@/services/languages';
 import { useAuthStore } from '@/stores/auth';

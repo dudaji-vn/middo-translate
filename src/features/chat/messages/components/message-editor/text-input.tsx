@@ -1,8 +1,14 @@
 import { Mic, Smile } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/data-display/popover';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import EmojiPicker from 'emoji-picker-react';
 import { TranslateTool } from './translate-tool';
 import { useAuthStore } from '@/stores/auth';
 import { useChatStore } from '@/features/chat/store';
@@ -88,9 +94,28 @@ export const TextInput = forwardRef<
           </Button.Icon>
         )}
 
-        <Button.Icon variant="ghost" className="self-end" color="default">
-          <Smile />
-        </Button.Icon>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button.Icon variant="ghost" color="default">
+              <Smile />
+            </Button.Icon>
+          </PopoverTrigger>
+          <PopoverContent
+            sideOffset={24}
+            alignOffset={-14}
+            align="end"
+            className="w-fit border-none !bg-transparent p-0 shadow"
+          >
+            <EmojiPicker
+              onEmojiClick={(emojiObj) => {
+                setText(text + emojiObj.emoji);
+                setTimeout(() => {
+                  inputRef.current?.focus();
+                }, 1);
+              }}
+            />
+          </PopoverContent>
+        </Popover>
       </div>
       <TranslateTool
         showTool={!!showTranslateOnType && !!translatedText}
