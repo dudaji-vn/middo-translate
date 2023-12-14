@@ -18,7 +18,7 @@ import {
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/actions/button';
-import { MoreHorizontalOutline } from '@easy-eva-icons/react';
+import { MoreVertical } from 'lucide-react';
 import { Room } from '../../types';
 import { roomApi } from '@/features/chat/rooms/api';
 import { useMutation } from '@tanstack/react-query';
@@ -55,12 +55,12 @@ export const InboxItemMenu = forwardRef<HTMLDivElement, InboxItemMenuProps>(
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button.Icon
-                size="sm"
+                size="md"
                 variant="default"
                 color="default"
                 className="border shadow"
               >
-                <MoreHorizontalOutline />
+                <MoreVertical />
               </Button.Icon>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

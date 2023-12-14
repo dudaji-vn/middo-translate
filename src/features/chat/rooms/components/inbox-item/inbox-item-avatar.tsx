@@ -5,9 +5,9 @@ import { useMemo } from 'react';
 
 const avatarStyleSizeMapByLength: Record<number, string> = {
   1: 'w-12 h-12 ring-0',
-  2: 'w-10 h-10',
-  3: 'w-6 h-6 ring-1',
-  4: 'w-6 h-6 ring-1',
+  2: 'w-12 h-12',
+  3: 'w-6 h-6',
+  4: 'w-6 h-6',
 };
 
 const avatarStylePositionMapByLengthAndIndex: Record<
@@ -59,6 +59,18 @@ export const ItemAvatar = ({
         alt: room.name ?? '',
       });
       return avatars;
+    }
+    if (!room.isGroup) {
+      const other = participants.find(
+        (participant) => participant._id !== room.admin._id,
+      );
+      if (other) {
+        avatars.push({
+          src: other.avatar!,
+          alt: other.name,
+        });
+        return avatars;
+      }
     }
     if (participants.length === 1) {
       avatars.push({

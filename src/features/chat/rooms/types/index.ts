@@ -13,4 +13,5 @@ export type Room = {
   newMessageAt?: string;
   link?: string;
   status: RoomStatus;
+  admin: User;
 } & BaseEntity;

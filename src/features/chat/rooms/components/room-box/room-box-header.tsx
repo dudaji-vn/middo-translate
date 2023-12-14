@@ -20,7 +20,8 @@ export const ChatBoxHeader = ({ room: _room }: { room: Room }) => {
       <div className="flex items-center gap-2">
         <InboxItemAvatar isOnline room={room} />
         <div>
-          <Typography variant="h4">{room.name}</Typography>
+          <p className="font-medium">{room.name}</p>
+          <p className="font-light">Online</p>
         </div>
       </div>
       <div className="-mr-2 ml-auto">
