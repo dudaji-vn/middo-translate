@@ -86,7 +86,7 @@ export const RoomAvatar = ({
       });
     }
     return avatars;
-  }, [room.participants, room.avatar, room.name]);
+  }, [room.participants, room.avatar, room.isGroup, room.name, room.admin._id]);
   const avatarsDisplay = useMemo(() => {
     if (avatars.length > MAX_AVATAR_COUNT) {
       return avatars.slice(0, MAX_AVATAR_COUNT);
