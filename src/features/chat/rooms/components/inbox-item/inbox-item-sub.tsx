@@ -71,7 +71,10 @@ export const ItemSub = ({
   const [contentDisplay, setContentDisplay] = useState(content);
   useEffect(() => {
     if (message.type === 'text') {
-      if (userLanguage === message.sender.language) return;
+      if (userLanguage === message.sender.language) {
+        setContentDisplay(content);
+        return;
+      }
       const translateContent = async () => {
         const translated = await translateText(
           message.contentEnglish || message.content,
@@ -81,6 +84,8 @@ export const ItemSub = ({
         setContentDisplay(translated);
       };
       translateContent();
+    } else {
+      setContentDisplay(content);
     }
   }, [
     userLanguage,
@@ -88,6 +93,7 @@ export const ItemSub = ({
     message.sender.language,
     message.type,
     message.contentEnglish,
+    content,
   ]);
 
   return (
