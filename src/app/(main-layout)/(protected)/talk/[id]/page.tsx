@@ -33,7 +33,7 @@ const ChatBoxPage = async (props: {
     <ChatBoxProvider room={room}>
       <div className="flex h-full">
         <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
-          <ChatBoxHeader room={room} />
+          <ChatBoxHeader />
           <MessagesBoxProvider room={room}>
             <MessageBox room={room} />
             <ChatBoxFooter />
