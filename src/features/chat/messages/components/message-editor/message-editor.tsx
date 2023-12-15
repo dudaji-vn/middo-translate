@@ -95,14 +95,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           <div className="flex flex-1">
             <AdditionalActions onOpenSelectFiles={open} />
             <TextInput ref={textInputRef} onPaste={handlePasteFile} />
-            {/* <div className="h-full items-end">
-              <Button.Icon variant="ghost" className="self-end" color="default">
-                <MicOutline />
-              </Button.Icon>
-              <Button.Icon variant="ghost" className="self-end" color="default">
-                <Smile />
-              </Button.Icon>
-            </div> */}
           </div>
           <FileList
             onAddMoreFiles={open}

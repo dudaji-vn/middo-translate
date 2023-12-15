@@ -1,4 +1,5 @@
-import { FileOutline } from '@easy-eva-icons/react';
+import { FileIcon, defaultStyles } from 'react-file-icon';
+
 import { Media } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatFileSize } from '../../utils';
@@ -9,6 +10,7 @@ export interface DocumentProps {
 }
 
 export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
+  const extension = file.name?.split('.').pop();
   return (
     <a
       download
@@ -19,8 +21,13 @@ export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
         isMe ? 'bg-primary' : 'bg-background-darker',
       )}
     >
-      <div className="rounded-full bg-lighter p-2">
-        <FileOutline className="h-5 w-5 text-primary" />
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-lighter p-3">
+        <FileIcon
+          extension={extension}
+          {...file}
+          {...defaultStyles[extension as keyof typeof defaultStyles]}
+          radius={8}
+        />
       </div>
       <div className="flex flex-col">
         <span
