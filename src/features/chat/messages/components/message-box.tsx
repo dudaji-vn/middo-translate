@@ -137,7 +137,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
           refreshFunction={refetchMessages}
           inverse={true}
           scrollThreshold={0.7}
-          className="flex flex-col-reverse gap-2"
+          className="flex flex-col-reverse gap-6"
           style={{
             height: 'none',
             overflow: 'visible',

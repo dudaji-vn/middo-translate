@@ -18,7 +18,7 @@ export const ImgGallery = forwardRef<HTMLDivElement, ImgGalleryProps>(
           <div
             ref={ref}
             {...props}
-            className="grid max-w-[22.5rem] gap-2"
+            className="grid gap-x-1 gap-y-1"
             style={{
               gridTemplateColumns: `repeat(${num}, minmax(0, 1fr))`,
             }}
@@ -31,14 +31,14 @@ export const ImgGallery = forwardRef<HTMLDivElement, ImgGalleryProps>(
                     width,
                     height: width,
                   }}
-                  className="overflow-hidden rounded-md shadow hover:shadow-xl"
+                  className="relative overflow-hidden rounded-md border border-colors-neutral-50"
                 >
                   <Image
-                    width={500}
-                    height={500}
+                    alt={img.name || img.url}
                     src={img.url}
-                    alt="img"
-                    className="aspect-square rounded-md"
+                    fill
+                    quality={50}
+                    className="aspect-square object-cover"
                   />
                 </div>
               );
