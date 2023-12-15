@@ -31,7 +31,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       return (
         <div className="mx-auto p-4">
           <span className="text-sm font-light text-colors-neutral-500">
-            {message.sender.name + ' ' + message.content}
+            {message.sender.name + ' '}
+            <div
+              className="inline-block"
+              dangerouslySetInnerHTML={{ __html: message.content }}
+            ></div>
           </span>
         </div>
       );
