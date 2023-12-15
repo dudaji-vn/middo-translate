@@ -10,6 +10,10 @@ const avatarVariants = cva('overflow-hidden shrink-0 relative aspect-square', {
       sm: 'h-9',
       md: 'h-10',
       lg: 'h-12',
+      xl: 'h-14',
+      '2xl': 'h-16',
+      '3xl': 'h-20',
+      '4xl': 'h-24',
     },
     shape: {
       circle: 'rounded-full',

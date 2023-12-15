@@ -11,7 +11,7 @@ export const buttonVariants = cva(
       },
       color: {
         default:
-          'bg-gray-200 text-colors-neutral-700 md:hover:bg-gray-300 dark:bg-gray-700  dark:hover:bg-gray-800',
+          'bg-colors-neutral-50 text-colors-neutral-700 md:hover:bg-colors-neutral-100 active:bg-colors-neutral-200 md:active:bg-colors-neutral-200 dark:bg-gray-700  dark:hover:bg-gray-800',
         primary:
           'text-background bg-primary md:hover:bg-secondary active:bg-shading',
         secondary:
@@ -22,10 +22,10 @@ export const buttonVariants = cva(
           'bg-error md:hover:bg-error-lighter text-background active:!bg-error-darker',
       },
       size: {
-        xs: 'h-7 px-3 text-xs rounded-sm',
-        sm: 'h-9 px-4 text-sm rounded-sm',
+        xs: 'py-2 px-3 text-xs rounded-sm',
+        sm: 'py-3 px-4 text-sm rounded-sm',
         md: 'py-3 px-5 text-base font-medium rounded-md',
-        lg: 'px-8 py-4 text-base font-semibold',
+        lg: 'px-7 py-4 text-base font-semibold',
       },
       shape: {
         square: 'rounded-xl',
@@ -88,7 +88,7 @@ export const IconVariants = cva('inline-block', {
       default: '',
     },
     size: {
-      xs: 'w-5 h-5',
+      xs: 'w-4 h-4',
       sm: 'w-5 h-5',
       md: 'w-6 h-6',
       lg: 'w-7 h-7',

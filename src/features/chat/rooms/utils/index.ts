@@ -43,3 +43,9 @@ export function formatTimeDisplay(time: string) {
       return dateMoment.format('MMM DD, LT');
   }
 }
+
+export function getOtherParticipant(room: Room, currentUserId: User['_id']) {
+  return room.participants.find(
+    (participant) => participant._id !== currentUserId,
+  );
+}

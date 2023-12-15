@@ -12,20 +12,13 @@ import { SearchInput } from '@/components/data-entry';
 import { SelectedList } from './selected-list';
 import { useDropzone } from 'react-dropzone';
 import { useGroupCreate } from './context';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export interface GroupCreateHeaderProps {}
 
 export const GroupCreateHeader = (props: GroupCreateHeaderProps) => {
-  const {
-    selectedUsers,
-    setSearchTerm,
-    handleUnSelectUser,
-    handleCreateGroup,
-  } = useGroupCreate();
+  const { selectedUsers, setSearchTerm, handleCreateGroup } = useGroupCreate();
   const [preview, setPreview] = useState<string | undefined>();
-  const router = useRouter();
 
   const { getRootProps, getInputProps, open, acceptedFiles, inputRef } =
     useDropzone({

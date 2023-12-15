@@ -1,2 +1,3 @@
 export * from './inbox';
-export * from './chat-box';
+export * from './room-box';
+export * from './room-side';

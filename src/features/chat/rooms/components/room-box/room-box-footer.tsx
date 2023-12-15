@@ -72,9 +72,12 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         const imagesUploaded: Media[] = await Promise.all(
           images.map(async (img) => {
             const res = await uploadImage(img.file!);
+            console.log(res.width, res.height);
             return {
               url: res.secure_url,
               type: 'image',
+              width: res.width,
+              height: res.height,
             };
           }),
         );

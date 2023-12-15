@@ -8,10 +8,15 @@ export interface UserItemProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User;
   isActive?: boolean;
   rightElement?: React.ReactNode;
+  subContent?: React.ReactNode;
+  wrapperClassName?: string;
 }
 
 export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
-  ({ user, rightElement, isActive, ...props }, ref) => {
+  (
+    { user, rightElement, isActive, subContent, wrapperClassName, ...props },
+    ref,
+  ) => {
     return (
       <div
         ref={ref}
@@ -21,6 +26,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
           isActive
             ? 'bg-background-lightest'
             : 'bg-transparent hover:bg-background-lighter',
+          wrapperClassName,
         )}
       >
         <div className="flex w-full items-center gap-2">
@@ -34,7 +40,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
               </div>
             </div>
             <Typography className="line-clamp-1 break-all text-sm text-text/50">
-              {user?.email}
+              {subContent ? subContent : user?.email}
             </Typography>
           </div>
           {rightElement}

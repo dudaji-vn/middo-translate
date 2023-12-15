@@ -16,7 +16,9 @@ import { useRouter } from 'next/navigation';
 
 interface ChatBoxContextProps {
   room: Room;
-  updateRoom: (room: Room) => void;
+  updateRoom: (room: Partial<Room>) => void;
+  showSide: boolean;
+  toggleSide: () => void;
 }
 
 export const ChatBoxContext = createContext<ChatBoxContextProps>(
@@ -28,10 +30,15 @@ export const ChatBoxProvider = ({
   room: _room,
 }: PropsWithChildren<{ room: Room }>) => {
   const [room, setRoom] = useState<Room>(_room);
-  const updateRoom = useCallback((room: Room) => {
+  const updateRoom = useCallback((room: Partial<Room>) => {
     setRoom((old) => ({ ...old, ...room }));
   }, []);
   const router = useRouter();
+
+  const [showSide, setShowSide] = useState(false);
+  const toggleSide = useCallback(() => {
+    setShowSide((old) => !old);
+  }, []);
 
   // socket events
 
@@ -63,7 +70,7 @@ export const ChatBoxProvider = ({
   }, [handleForceLeaveRoom, room._id, updateRoom]);
 
   return (
-    <ChatBoxContext.Provider value={{ room, updateRoom }}>
+    <ChatBoxContext.Provider value={{ room, updateRoom, showSide, toggleSide }}>
       {children}
     </ChatBoxContext.Provider>
   );

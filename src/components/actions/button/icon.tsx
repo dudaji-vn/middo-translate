@@ -15,7 +15,11 @@ export const Icon = ({ children, type, className, size }: IconProps) => {
       {Children.map(children, (child) => {
         if (isValidElement(child)) {
           return cloneElement(child, {
-            className: cn(IconVariants({ type, size }), className),
+            className: cn(
+              IconVariants({ type, size }),
+              className,
+              child.props.className,
+            ),
           } as React.HTMLProps<HTMLElement>);
         }
         return child;

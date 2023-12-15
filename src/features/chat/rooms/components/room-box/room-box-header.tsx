@@ -4,12 +4,13 @@ import { AlertCircleOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions';
 import { InboxItemAvatar } from '../inbox-item';
 import { Room } from '@/features/chat/rooms/types';
-import { Typography } from '@/components/data-display';
 import { generateRoomDisplay } from '../../utils';
 import { useAuthStore } from '@/stores/auth';
+import { useChatBox } from '../../contexts';
 import { useMemo } from 'react';
 
-export const ChatBoxHeader = ({ room: _room }: { room: Room }) => {
+export const ChatBoxHeader = () => {
+  const { room: _room } = useChatBox();
   const currentUserId = useAuthStore((s) => s.user?._id) || '';
   const room = useMemo(
     () => generateRoomDisplay(_room, currentUserId),
@@ -20,7 +21,8 @@ export const ChatBoxHeader = ({ room: _room }: { room: Room }) => {
       <div className="flex items-center gap-2">
         <InboxItemAvatar isOnline room={room} />
         <div>
-          <Typography variant="h4">{room.name}</Typography>
+          <p className="font-medium">{room.name}</p>
+          <p className="font-light">Online</p>
         </div>
       </div>
       <div className="-mr-2 ml-auto">
@@ -31,6 +33,7 @@ export const ChatBoxHeader = ({ room: _room }: { room: Room }) => {
 };
 
 const ActionBar = () => {
+  const { toggleSide, showSide } = useChatBox();
   return (
     <div>
       {/* <Button.Icon size="sm" variant="ghost">
@@ -39,7 +42,12 @@ const ActionBar = () => {
       <Button.Icon size="sm" variant="ghost">
         <VideoCameraIcon />
       </Button.Icon> */}
-      <Button.Icon size="md" variant="ghost">
+      <Button.Icon
+        onClick={toggleSide}
+        size="md"
+        color={showSide ? 'primary' : 'default'}
+        variant="ghost"
+      >
         <AlertCircleOutline />
       </Button.Icon>
     </div>
