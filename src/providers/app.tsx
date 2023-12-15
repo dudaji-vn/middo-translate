@@ -1,6 +1,8 @@
 'use client';
 
 import 'regenerator-runtime/runtime';
+import 'yet-another-react-lightbox/styles.css';
+import 'yet-another-react-lightbox/plugins/thumbnails.css';
 
 import BootstrapProvider from './bootstrap';
 import { CommonComponent } from './common-component';

@@ -44,6 +44,8 @@ export type Media = {
   file?: File;
   size?: number;
   name?: string;
+  width?: number;
+  height?: number;
 };
 
 export * from './auth';
