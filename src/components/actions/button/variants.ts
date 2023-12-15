@@ -70,7 +70,7 @@ export const IconButtonVariants = cva('p-0', {
   variants: {
     size: {
       xs: 'w-9 h-9',
-      sm: 'w-4 h-4',
+      sm: 'w-11 h-11',
       md: 'w-12 h-12',
       lg: 'w-[60px] h-[60px]',
     },
