@@ -10,6 +10,8 @@ import { Button } from '@/components/actions';
 import { Room } from '../../types';
 import { RoomFiles } from './room-files';
 import { RoomMedia } from './room-media';
+import { roomApi } from '../../api';
+import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 export interface RoomCloudProps {
@@ -23,13 +25,20 @@ const ComponentMap: Record<'media' | 'file', JSX.Element> = {
 
 export const RoomCloud = ({ room }: RoomCloudProps) => {
   const [currentTab, setCurrentTab] = useState<'media' | 'file'>('media');
+  const { data } = useQuery({
+    queryKey: ['cloud-count'],
+    queryFn: () => roomApi.getCloudCount(room._id),
+  });
+
   return (
     <Accordion type="single" collapsible className="mt-8">
       <AccordionItem value="item-1">
         <AccordionTrigger>
           <div className="flex items-center gap-2">
             <Package2 width={16} height={16} /> <span>Cloud shared</span>{' '}
-            <span className="text-sm text-colors-neutral-600">(+99)</span>
+            <span className="text-sm text-colors-neutral-600">
+              ({data?.count || 0})
+            </span>
           </div>
         </AccordionTrigger>
         <AccordionContent className="border-t">
@@ -42,7 +51,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
               variant={currentTab === 'media' ? 'default' : 'ghost'}
               color={currentTab === 'media' ? 'secondary' : 'default'}
             >
-              Media
+              Media ({data?.mediaCount || 0})
             </Button>
             <Button
               onClick={() => setCurrentTab('file')}
@@ -52,7 +61,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
               variant={currentTab === 'file' ? 'default' : 'ghost'}
               color={currentTab === 'file' ? 'secondary' : 'default'}
             >
-              File
+              File ({data?.fileCount || 0})
             </Button>
           </div>
           <div className="mt-3">{ComponentMap[currentTab]}</div>

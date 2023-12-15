@@ -2,7 +2,6 @@ import {
   CursorPagination,
   CursorParams,
   ListResponse,
-  Media,
   Response,
 } from '@/types';
 
@@ -114,6 +113,27 @@ export const roomApi = {
   async deleteAllMessages(roomId: string) {
     const res: Response<Room> = await axios.delete(
       `${basePath}/${roomId}/messages`,
+    );
+    return res.data;
+  },
+
+  async getCloudCount(roomId: string) {
+    const res: Response<{
+      count: number;
+      mediaCount: number;
+      fileCount: number;
+    }> = await axios.get(`${basePath}/${roomId}/cloud/count`);
+    return res.data;
+  },
+  async getFileCount(roomId: string) {
+    const res: Response<{ count: number }> = await axios.get(
+      `${basePath}/${roomId}/cloud/file/count`,
+    );
+    return res.data;
+  },
+  async getMediaCount(roomId: string) {
+    const res: Response<{ count: number }> = await axios.get(
+      `${basePath}/${roomId}/cloud/media/count`,
     );
     return res.data;
   },
