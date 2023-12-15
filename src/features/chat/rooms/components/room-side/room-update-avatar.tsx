@@ -9,14 +9,24 @@ import { Button } from '@/components/actions';
 import { Camera } from 'lucide-react';
 import { toast } from '@/components/toast';
 import { uploadImage } from '@/utils/upload-img';
+import { useChatBox } from '../../contexts';
 import { useDropzone } from 'react-dropzone';
+import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
 
 export interface RoomUpdateAvatarProps {
   initialAvatar?: string;
+  onUploading?: () => void;
+  onUploaded?: () => void;
 }
 
-export const RoomUpdateAvatar = ({ initialAvatar }: RoomUpdateAvatarProps) => {
-  const { getRootProps, getInputProps, open, inputRef } = useDropzone({
+export const RoomUpdateAvatar = ({
+  initialAvatar,
+  onUploading,
+  onUploaded,
+}: RoomUpdateAvatarProps) => {
+  const { mutateAsync } = useUpdateRoomInfo();
+  const { room } = useChatBox();
+  const { getInputProps, open, inputRef } = useDropzone({
     noClick: true,
     multiple: false,
     accept: {
@@ -25,7 +35,16 @@ export const RoomUpdateAvatar = ({ initialAvatar }: RoomUpdateAvatarProps) => {
     maxSize: 3 * 1024 * 1024, // 3MB
     onDropAccepted: async (files) => {
       const file = files[0];
+      onUploading?.();
       const avatar = await uploadImage(file);
+      await mutateAsync({
+        roomId: room._id,
+        data: {
+          avatar: avatar.secure_url,
+        },
+      });
+      onUploaded?.();
+
       // call api to update avatar, tomorrow
     },
     onDropRejected: () => {

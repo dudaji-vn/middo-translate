@@ -16,7 +16,7 @@ import { useRouter } from 'next/navigation';
 
 interface ChatBoxContextProps {
   room: Room;
-  updateRoom: (room: Room) => void;
+  updateRoom: (room: Partial<Room>) => void;
   showSide: boolean;
   toggleSide: () => void;
 }
@@ -30,7 +30,7 @@ export const ChatBoxProvider = ({
   room: _room,
 }: PropsWithChildren<{ room: Room }>) => {
   const [room, setRoom] = useState<Room>(_room);
-  const updateRoom = useCallback((room: Room) => {
+  const updateRoom = useCallback((room: Partial<Room>) => {
     setRoom((old) => ({ ...old, ...room }));
   }, []);
   const router = useRouter();

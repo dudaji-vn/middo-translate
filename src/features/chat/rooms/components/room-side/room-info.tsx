@@ -1,25 +1,15 @@
 'use client';
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogTrigger,
-} from '@/components/feedback';
-import {
-  InputCropImage,
-  InputCropImageRef,
-} from '@/components/form/InputCropImage';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 import { useMemo, useRef, useState } from 'react';
 
-import { Camera } from 'lucide-react';
 import { CircleFlag } from 'react-circle-flags';
+import { InputCropImageRef } from '@/components/form/InputCropImage';
 import { Room } from '@/features/chat/rooms/types';
 import { RoomAvatar } from '../room-avatar';
 import { RoomUpdateAvatar } from './room-update-avatar';
 import { RoomUpdateName } from './room-update-name';
+import { Spinner } from '@/components/feedback';
 import { generateRoomDisplay } from '../../utils';
 import { toast } from '@/components/toast';
 import { uploadImage } from '@/utils/upload-img';
@@ -52,36 +42,18 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
     };
   }, [_room, user?._id, user?.language]);
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const inputCropImage = useRef<InputCropImageRef>(null);
-
-  const onSubmitForm = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const file = inputCropImage.current?.getCropData();
-    if (!file) {
-      toast({ title: 'Error', description: 'Please choose your image!' });
-      return;
-    }
-    try {
-      setLoading(true);
-      let image = await uploadImage(file);
-      let imgUrl = image.secure_url;
-      if (!imgUrl) throw new Error('Upload image failed!');
-      toast({ title: 'Success', description: 'Your avatar has been update!' });
-      setOpen(false);
-    } catch (err: any) {
-      toast({
-        title: 'Error',
-        description: err?.response?.data?.message || err.message,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="flex flex-col items-center">
-      <RoomAvatar room={room} />
+      <div className="relative">
+        {' '}
+        <RoomAvatar room={room} />
+        {loading && (
+          <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-white bg-opacity-80">
+            <Spinner className="text-primary" />
+          </div>
+        )}
+      </div>
       <p className=" mt-3 font-medium">{room.name}</p>
       {!room.isGroup ? (
         <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2">
@@ -95,7 +67,10 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
       ) : (
         <div className="mt-4 flex gap-6">
           <RoomUpdateName />
-          <RoomUpdateAvatar />
+          <RoomUpdateAvatar
+            onUploading={() => setLoading(true)}
+            onUploaded={() => setLoading(false)}
+          />
         </div>
       )}
     </div>

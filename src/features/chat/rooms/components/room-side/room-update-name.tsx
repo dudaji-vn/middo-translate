@@ -13,20 +13,25 @@ import { useId, useRef } from 'react';
 import { Button } from '@/components/actions';
 import { Input } from '@/components/data-entry';
 import { Pen } from 'lucide-react';
-import { toast } from '@/components/toast';
+import { useChatBox } from '../../contexts';
+import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
 
 export interface RoomUpdateNameProps {}
 
 export const RoomUpdateName = (props: RoomUpdateNameProps) => {
+  const { room } = useChatBox();
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { mutate } = useUpdateRoomInfo();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const name = data.get('name') as string;
-    toast({
-      title: 'Success',
-      description: 'Group name has been changed to ' + name,
+    mutate({
+      roomId: room._id,
+      data: {
+        name,
+      },
     });
   };
   return (

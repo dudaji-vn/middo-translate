@@ -9,7 +9,8 @@ import { useAuthStore } from '@/stores/auth';
 import { useChatBox } from '../../contexts';
 import { useMemo } from 'react';
 
-export const ChatBoxHeader = ({ room: _room }: { room: Room }) => {
+export const ChatBoxHeader = () => {
+  const { room: _room } = useChatBox();
   const currentUserId = useAuthStore((s) => s.user?._id) || '';
   const room = useMemo(
     () => generateRoomDisplay(_room, currentUserId),

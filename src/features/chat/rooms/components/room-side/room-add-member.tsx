@@ -18,21 +18,29 @@ import { User } from '@/features/users/types';
 import { UserPlus2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { searchApi } from '@/features/search/api';
+import { useAddMembers } from '../../hooks/use-add-members';
 import { useAuthStore } from '@/stores/auth';
+import { useChatBox } from '../../contexts';
 import { useSearch } from '@/hooks/use-search';
 
 export interface RoomAddMemberProps {}
 
 export const RoomAddMember = (props: RoomAddMemberProps) => {
+  const { room } = useChatBox();
   const { data, setSearchTerm } = useSearch<User[]>(
     searchApi.users,
     'add-member',
   );
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const { mutate } = useAddMembers();
   const user = useAuthStore((state) => state.user);
   const filteredUsers = useMemo(() => {
-    return data?.filter((u) => u._id !== user!._id);
-  }, [data, user]);
+    return data?.filter((u) => {
+      if (u._id === user?._id) return false;
+      if (room.participants.some((p) => p._id === u._id)) return false;
+      return true;
+    });
+  }, [data, room.participants, user?._id]);
 
   const handleSelectUser = useCallback((user: User) => {
     setSelectedUsers((prev) => {
@@ -52,7 +60,11 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
   }, []);
 
   const handleSubmit = () => {
-    console.log(selectedUsers);
+    mutate({
+      roomId: room._id,
+      userIds: selectedUsers.map((u) => u._id),
+    });
+    setSelectedUsers([]);
   };
   return (
     <div>
