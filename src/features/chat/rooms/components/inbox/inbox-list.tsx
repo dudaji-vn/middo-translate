@@ -80,7 +80,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     }, []);
 
     if (!currentUser) return null;
-
     if (rooms.length === 0 && !isLoading) {
       return (
         <>
@@ -90,7 +89,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               Press button belows to start a conversation
             </Typography>
           </div>
-          <div className="absolute bottom-14 right-5">
+          <div className="absolute bottom-10 right-5">
             {
               <div className="absolute left-0 top-0 h-full w-full animate-ping-cs rounded-full border border-secondary"></div>
             }
@@ -136,7 +135,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             ))}
           </InfiniteScroll>
         </div>
-        <div className="absolute bottom-14 right-5">
+        <div className="absolute bottom-10 right-5">
           <Button.Icon
             size="lg"
             onClick={() => changeSide('new-message')}

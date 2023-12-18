@@ -5,6 +5,8 @@ export type ChatState = {
   toggleShowTranslateOnType: () => void;
   showMiddleTranslation: boolean;
   toggleShowMiddleTranslation: () => void;
+  rooIdInteract: string | null;
+  setRoomIdInteract: (id: string) => void;
 };
 
 export const useChatStore = create<ChatState>()((set) => ({
@@ -14,4 +16,6 @@ export const useChatStore = create<ChatState>()((set) => ({
   showMiddleTranslation: true,
   toggleShowMiddleTranslation: () =>
     set((state) => ({ showMiddleTranslation: !state.showMiddleTranslation })),
+  rooIdInteract: null,
+  setRoomIdInteract: (id) => set(() => ({ rooIdInteract: id })),
 }));

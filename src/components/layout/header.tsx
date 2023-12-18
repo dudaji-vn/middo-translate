@@ -10,6 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/data-display';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { Avatar } from '../data-display/avatar';
 import { HeaderNavigation } from './header-navigation';
@@ -18,7 +19,7 @@ import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app-store';
 import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'next/navigation';
+import { useMediaQuery } from 'usehooks-ts';
 import { useState } from 'react';
 
 type Props = {};
@@ -34,9 +35,8 @@ export const Header = (props: Props) => {
   };
 
   return (
-    <div className="z-50 flex h-header w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
+    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-colors-neutral-50 bg-background px-[5vw] py-4">
       <HeaderNavigation />
-
       <Link href={ROUTE_NAMES.ROOT} className="block w-[100px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
@@ -71,7 +71,8 @@ export const Header = (props: Props) => {
               onClick={() => setOpenDropdown(false)}
             >
               <Link
-                href={ROUTE_NAMES.ACCOUNT_SETTINGS}
+                // href={ROUTE_NAMES.ACCOUNT_SETTINGS}
+                href={ROUTE_NAMES.ONLINE_CONVERSATION}
                 className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
                 <SettingsOutline />

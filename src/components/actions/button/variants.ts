@@ -49,13 +49,19 @@ export const buttonVariants = cva(
         variant: 'ghost',
         color: 'default',
         className:
-          'bg-transparent text-colors-neutral-700 md:hover:bg-background-darker active:!bg-stroke disabled:!bg-transparent',
+          'bg-transparent text-colors-neutral-700 md:hover:bg-background-darker active:!bg-colors-neutral-100 disabled:!bg-transparent',
       },
       {
         variant: 'ghost',
         color: 'primary',
         className:
           'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary disabled:!bg-transparent disabled:!opacity-30',
+      },
+      {
+        variant: 'ghost',
+        color: 'error',
+        className:
+          'bg-transparent text-error md:hover:bg-lighter active:!bg-colors-neutral-100 disabled:!bg-transparent disabled:!opacity-30',
       },
     ],
     defaultVariants: {

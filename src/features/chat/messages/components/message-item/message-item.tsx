@@ -27,6 +27,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isPending = message.status === 'pending';
     const isRead = message.readBy?.includes(userId);
     const mediaLength = message.media?.length || 0;
+
     if (message.type === 'notification') {
       return (
         <div className="mx-auto p-4">
@@ -45,7 +46,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       <div
         className={cn(
           'group relative flex',
-          isMe ? 'justify-end pl-20' : 'pr-20',
+          isMe ? 'justify-end md:pl-20' : 'md:pr-20',
           isPending && 'opacity-50',
         )}
       >
