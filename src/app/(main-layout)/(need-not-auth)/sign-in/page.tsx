@@ -4,9 +4,11 @@ import { useEffect, useState } from 'react';
 
 import { AlertError } from '@/components/Alert/AlertError';
 import { Button } from '@/components/form/Button';
+import { GoogleIcon } from '@/components/icons';
 import Image from 'next/image';
 import { InputField } from '@/components/form/InputField';
 import Link from 'next/link';
+import { Button as MyButton } from '@/components/actions/button';
 import { PageLoading } from '@/components/loading/PageLoading';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { loginService } from '@/services/authService';
@@ -123,7 +125,9 @@ export default function SignIn() {
           <div className="flex items-center justify-center gap-5">
             <p>Or log in with</p>
             <Link href="/api/auth/google">
-              <Image src="/google.png" alt="Google" width={56} height={56} />
+              <MyButton.Icon color="default">
+                <GoogleIcon />
+              </MyButton.Icon>
             </Link>
           </div>
         </div>

@@ -31,7 +31,7 @@ export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
               {room.isGroup && (
                 <RoomMember
                   members={room.participants}
-                  adminId={room.admin._id}
+                  adminId={room.admin?._id}
                 />
               )}
               <RoomCloud room={room} />

@@ -133,12 +133,15 @@ export const TextInput = forwardRef<
         }}
         onCancel={() => {
           setMiddleText('');
+          setDisabled(false);
         }}
         onConfirm={() => {
           handleMiddleTranslate();
+          setDisabled(false);
         }}
         onEdit={() => {
           setMiddleText(translatedText);
+          setDisabled(true);
         }}
       />
       {disabled && (

@@ -62,7 +62,7 @@ export const ItemAvatar = ({
     }
     if (!room.isGroup) {
       const other = participants.find(
-        (participant) => participant._id !== room.admin._id,
+        (participant) => participant._id !== room.admin?._id,
       );
       if (other) {
         avatars.push({
@@ -86,7 +86,13 @@ export const ItemAvatar = ({
       });
     }
     return avatars;
-  }, [room.participants, room.avatar, room.isGroup, room.name, room.admin._id]);
+  }, [
+    room.participants,
+    room.avatar,
+    room.isGroup,
+    room.name,
+    room.admin?._id,
+  ]);
   const avatarsDisplay = useMemo(() => {
     if (avatars.length > MAX_AVATAR_COUNT) {
       return avatars.slice(0, MAX_AVATAR_COUNT);
