@@ -16,9 +16,8 @@ import { HeaderNavigation } from './header-navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useAppStore } from '@/stores/app-store';
+import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 type Props = {};
@@ -26,17 +25,16 @@ type Props = {};
 export const Header = (props: Props) => {
   const [isOpenDropdown, setOpenDropdown] = useState(false);
   const { isAuthentication, user } = useAuthStore();
-  const { setData: setDataApp } = useAppStore();
-  const router = useRouter();
-
+  const setShowConfirmLogout = useAppStore(
+    (state) => state.setShowConfirmLogout,
+  );
   const signOut = async () => {
-    setDataApp({ isShowConfirmLogout: true });
+    setShowConfirmLogout(true);
   };
 
   return (
-    <div className="z-50 flex h-header w-full items-center justify-between gap-5 bg-background px-[5vw] py-4 shadow-1">
+    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-colors-neutral-50 bg-background px-[5vw] py-4">
       <HeaderNavigation />
-
       <Link href={ROUTE_NAMES.ROOT} className="block w-[100px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>

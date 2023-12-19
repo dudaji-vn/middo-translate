@@ -7,6 +7,8 @@ export type AuthState = {
   user: User | null;
   loading: boolean;
   setData: (data: any) => void;
+  isMobile: boolean;
+  setIsMobile: (data: boolean) => void;
 };
 
 export const useAuthStore = create<AuthState>()((set) => ({
@@ -16,34 +18,6 @@ export const useAuthStore = create<AuthState>()((set) => ({
   loading: false,
   user: null,
   setData: (data: any) => set(() => ({ ...data })),
+  isMobile: false,
+  setIsMobile: (data: boolean) => set(() => ({ isMobile: data })),
 }));
-
-// import { StateCreator, create } from 'zustand';
-// import { PersistOptions, persist } from 'zustand/middleware';
-
-// export type AuthState = {
-//   isAuthentication: boolean;
-//   isLoaded: boolean;
-//   user: any;
-//   loading: boolean;
-//   setData: (data: any) => void;
-// };
-// type MyPersist = (
-//   config: StateCreator<AuthState>,
-//   options: PersistOptions<AuthState>,
-// ) => StateCreator<AuthState>;
-
-// export const useAuthStore = create<AuthState, []>(
-//   (persist as MyPersist)(
-//     (set) => ({
-//       isAuthentication: false,
-//       isLoaded: false,
-//       loading: false,
-//       user: null,
-//       setData: (data: any) => set(() => ({ ...data }))
-//     }),
-//     {
-//       name: 'authStore',
-//     },
-//   ),
-// );

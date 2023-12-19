@@ -46,7 +46,7 @@ export const Menu = ({ message, isMe }: MenuProps) => {
   return (
     <div
       className={cn(
-        'absolute top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+        'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:block',
         isMe ? '-left-4 -translate-x-full' : '-right-4 translate-x-full',
       )}
     >

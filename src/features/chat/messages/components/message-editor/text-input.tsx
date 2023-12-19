@@ -10,8 +10,10 @@ import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import EmojiPicker from 'emoji-picker-react';
 import { TranslateTool } from './translate-tool';
+import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth';
 import { useChatStore } from '@/features/chat/store';
+import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTranslate } from '@/features/translate/hooks/use-translate';
 
 export interface TextInputRef extends HTMLInputElement {
@@ -23,6 +25,7 @@ export const TextInput = forwardRef<
 >((props, ref) => {
   const userLanguage = useAuthStore((s) => s.user?.language) ?? 'en';
   const [disabled, setDisabled] = useState(false);
+  const isMobile = useIsMobile();
 
   const {
     text,
@@ -102,11 +105,15 @@ export const TextInput = forwardRef<
           </PopoverTrigger>
           <PopoverContent
             sideOffset={24}
-            alignOffset={-14}
+            alignOffset={isMobile ? 0 : -14}
             align="end"
-            className="w-fit border-none !bg-transparent p-0 shadow"
+            className={cn(
+              'w-fit border-none !bg-transparent p-0 shadow-none',
+              isMobile && 'w-screen px-3',
+            )}
           >
             <EmojiPicker
+              width={isMobile ? '100%' : ''}
               onEmojiClick={(emojiObj) => {
                 setText(text + emojiObj.emoji);
                 setTimeout(() => {

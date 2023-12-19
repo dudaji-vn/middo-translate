@@ -9,6 +9,7 @@ import { CommonComponent } from './common-component';
 import { Toaster as HotToaster } from 'react-hot-toast';
 import React from 'react';
 import { ReactQueryProvider } from './react-query';
+import { SideEffectProvider } from './side-effect.provider';
 import SocketProvider from './socket';
 import { Toaster } from '@/components/toast';
 
@@ -23,6 +24,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
       <BootstrapProvider />
       <CommonComponent />
       <ReactQueryProvider>{props.children}</ReactQueryProvider>
+      <SideEffectProvider />
     </>
   );
 };

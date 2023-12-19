@@ -1,3 +1,6 @@
+import { AnimatePresence } from 'framer-motion';
+import { ChatLeftSide } from '@/features/chat/components/chat-left-side';
+import { ChatMain } from '@/features/chat/components/chat-main';
 import { Inbox } from '@/features/chat/rooms/components';
 import { Metadata } from 'next';
 
@@ -11,10 +14,10 @@ export interface ChatLayoutProps {
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
     <div className="flex h-main-container-height overflow-hidden">
-      <div className="hidden min-w-[320px] basis-1/4 sm:block">
+      <ChatLeftSide>
         <Inbox />
-      </div>
-      <div className="flex-1">{children}</div>
+      </ChatLeftSide>
+      <ChatMain>{children}</ChatMain>
     </div>
   );
 };

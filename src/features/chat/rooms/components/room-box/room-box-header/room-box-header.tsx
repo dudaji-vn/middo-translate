@@ -2,11 +2,11 @@
 
 import { AlertCircleOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions';
-import { InboxItemAvatar } from '../inbox-item';
-import { Room } from '@/features/chat/rooms/types';
-import { generateRoomDisplay } from '../../utils';
+import { InboxItemAvatar } from '../../inbox-item';
+import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
+import { generateRoomDisplay } from '../../../utils';
 import { useAuthStore } from '@/stores/auth';
-import { useChatBox } from '../../contexts';
+import { useChatBox } from '../../../contexts';
 import { useMemo } from 'react';
 
 export const ChatBoxHeader = () => {
@@ -17,7 +17,8 @@ export const ChatBoxHeader = () => {
     [_room, currentUserId],
   );
   return (
-    <div className="flex w-full items-center border-b px-5 py-3">
+    <div className="flex w-full items-center border-b  px-1 py-2 md:px-5">
+      <RoomBoxHeaderNavigation />
       <div className="flex items-center gap-2">
         <InboxItemAvatar isOnline room={room} />
         <div>
@@ -36,12 +37,6 @@ const ActionBar = () => {
   const { toggleSide, showSide } = useChatBox();
   return (
     <div>
-      {/* <Button.Icon size="sm" variant="ghost">
-        <PhoneIcon />
-      </Button.Icon>
-      <Button.Icon size="sm" variant="ghost">
-        <VideoCameraIcon />
-      </Button.Icon> */}
       <Button.Icon
         onClick={toggleSide}
         size="md"

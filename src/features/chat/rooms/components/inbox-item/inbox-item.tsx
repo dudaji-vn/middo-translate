@@ -1,9 +1,12 @@
-import { forwardRef, memo, useMemo } from 'react';
+import { createContext, forwardRef, memo, useContext, useMemo } from 'react';
 
-import { InboxItemMenu } from './inbox-item-menu';
-import { ItemAvatar } from './inbox-item-avatar';
-import { ItemSub } from './inbox-item-sub';
+import { InboxItemHead } from './inbox-item.head';
+import { InboxItemMenu } from './inbox-item.menu';
+import { InboxItemWrapper } from './inbox-item.wrapper';
+import { ItemAvatar } from './inbox-item.avatar';
+import { ItemSub } from './inbox-item.sub';
 import Link from 'next/link';
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
@@ -19,95 +22,89 @@ export interface InboxItemProps {
   showTime?: boolean;
   onClick?: () => void;
 }
-const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>(
-  (
-    {
-      data: _data,
-      isActive,
-      currentUser,
-      showMembersName,
-      currentRoomId,
-      showTime = true,
-      onClick,
-    },
-    ref,
-  ) => {
-    const currentUserId = currentUser?._id;
-    const data = useMemo(
-      () => generateRoomDisplay(_data, currentUserId),
-      [_data, currentUserId],
-    );
 
-    const time = useMemo(() => {
-      if (data.newMessageAt) {
-        // if last message is today
-        if (moment(data.newMessageAt).isSame(moment(), 'day')) {
-          return moment(data.newMessageAt).format('HH:mm A');
-        } else {
-          return moment(data.newMessageAt).format('YYYY/MM/DD');
-        }
+const InboxItemContext = createContext<InboxItemProps>({} as InboxItemProps);
+export const useInboxItem = () => {
+  const context = useContext(InboxItemContext);
+  if (!context) {
+    throw new Error('useInboxItem must be used within InboxItemContext');
+  }
+  return context;
+};
+const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>((props, ref) => {
+  const {
+    data: _data,
+    isActive: _isActive,
+    currentUser,
+    showMembersName,
+    currentRoomId,
+    showTime = true,
+    onClick,
+  } = props;
+  const currentUserId = currentUser?._id;
+
+  const data = useMemo(
+    () => generateRoomDisplay(_data, currentUserId),
+    [_data, currentUserId],
+  );
+
+  const time = useMemo(() => {
+    if (data.newMessageAt) {
+      // if last message is today
+      if (moment(data.newMessageAt).isSame(moment(), 'day')) {
+        return moment(data.newMessageAt).format('HH:mm A');
+      } else {
+        return moment(data.newMessageAt).format('YYYY/MM/DD');
       }
+    }
 
-      return '';
-    }, [data.newMessageAt]);
-    const isRead = data?.lastMessage?.readBy?.includes(currentUserId);
+    return '';
+  }, [data.newMessageAt]);
+  const isRead = data?.lastMessage?.readBy?.includes(currentUserId);
+  const isActive =
+    data.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
+    _isActive;
 
-    return (
-      <Link onClick={onClick} href={data.link!}>
-        <div
-          ref={ref}
-          className={cn(
-            'group relative flex cursor-pointer items-center justify-between p-3 transition-all',
-            data.link === `/talk/${currentRoomId}` || isActive
-              ? 'bg-background-darker'
-              : 'bg-transparent hover:bg-[#fafafa]',
-          )}
-        >
-          <div className="flex w-full items-center gap-3">
-            <ItemAvatar room={data} />
-            <div className="w-full">
-              <div className="mb-1 flex items-center justify-between">
-                <div className="max-w-full">
-                  <span
-                    className={cn(
-                      'line-clamp-1 break-all ',
-                      isRead ? 'font-normal' : 'font-semibold',
-                    )}
-                  >
-                    {data.name}
-                  </span>
-                </div>
-                {data.newMessageAt && showTime && (
-                  <span className="ml-auto shrink-0 pl-2 text-sm font-light">
-                    {time}
-                  </span>
-                )}
-              </div>
-              {showMembersName && (
-                <div className="flex items-center">
-                  <span className="line-clamp-1 break-all text-sm text-text/50">
-                    {data.participants.map((user) => user.name).join(', ')}
-                  </span>
-                </div>
-              )}
-              {data.lastMessage && !showMembersName && (
-                <ItemSub
-                  currentUser={currentUser}
-                  isGroup={data.isGroup}
-                  message={data.lastMessage}
-                  participants={data.participants}
-                />
-              )}
+  return (
+    <InboxItemContext.Provider
+      value={{
+        data,
+        isActive,
+        currentUser,
+        showMembersName,
+        showTime,
+        onClick,
+      }}
+    >
+      <InboxItemWrapper>
+        <ItemAvatar room={data} />
+        <div className="w-full">
+          <InboxItemHead
+            name={data.name}
+            isRead={isRead}
+            showTime={showTime}
+            time={time}
+          />
+          {showMembersName && (
+            <div className="flex items-center">
+              <span className="line-clamp-1 break-all text-sm text-text/50">
+                {data.participants.map((user) => user.name).join(', ')}
+              </span>
             </div>
-          </div>
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
-            <InboxItemMenu room={data} />
-          </div>
+          )}
+          {data.lastMessage && !showMembersName && (
+            <ItemSub
+              currentUser={currentUser}
+              isGroup={data.isGroup}
+              message={data.lastMessage}
+              participants={data.participants}
+            />
+          )}
         </div>
-      </Link>
-    );
-  },
-);
+      </InboxItemWrapper>
+    </InboxItemContext.Provider>
+  );
+});
 
 InboxItem.displayName = 'InboxItem';
 

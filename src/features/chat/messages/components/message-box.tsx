@@ -120,7 +120,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
       <div
         ref={ref}
         id="inbox-list"
-        className="flex w-full flex-1 flex-col-reverse overflow-y-scroll bg-primary/5 px-5 pb-2 pt-6"
+        className="flex w-full flex-1 flex-col-reverse overflow-y-scroll bg-primary/5 px-3 pb-2 pt-6 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
@@ -137,7 +137,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
           refreshFunction={refetchMessages}
           inverse={true}
           scrollThreshold={0.7}
-          className="flex flex-col-reverse gap-6"
+          className="flex flex-col-reverse gap-3"
           style={{
             height: 'none',
             overflow: 'visible',
