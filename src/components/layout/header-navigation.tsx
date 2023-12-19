@@ -50,6 +50,7 @@ export const HeaderNavigation = forwardRef<
         className="md:hidden"
         color="secondary"
         shape="square"
+        size="xs"
       >
         {isMenuOpen ? <Close /> : <BarChartOutline className="rotate-90" />}
       </Button.Icon>

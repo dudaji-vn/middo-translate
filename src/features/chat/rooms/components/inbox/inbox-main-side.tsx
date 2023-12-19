@@ -63,7 +63,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
         {...props}
         className="flex h-full flex-col overflow-hidden"
       >
-        <div className="flex w-full gap-1 p-5 pt-0">
+        <div className="flex w-full gap-1 p-3 pt-0">
           {isSearch && (
             <Button.Icon
               variant="ghost"

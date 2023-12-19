@@ -39,14 +39,14 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
   return (
     <div
       className={cn(
-        'p-3',
+        'px-3 py-2',
         isMe ? 'bg-primary' : 'bg-colors-neutral-50',
         message.status === 'removed' && 'bg-transparent',
       )}
     >
       <span
         className={cn(
-          'break-word-mt',
+          'break-word-mt text-start',
           isMe && 'text-background',
           message.status === 'removed' && 'text-neutral-300',
         )}
@@ -62,7 +62,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
           />
           <div
             className={cn(
-              'mt-2 rounded-lg p-1 px-2',
+              'mb-1 mt-2 rounded-xl p-1 px-3',
               isMe
                 ? 'bg-colors-primary-400 text-background'
                 : 'bg-colors-neutral-100 text-colors-neutral-600',
@@ -70,7 +70,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
           >
             <Text
               value={message.contentEnglish}
-              className="text-sm font-light"
+              className="text-start text-sm font-light"
             />
           </div>
         </div>

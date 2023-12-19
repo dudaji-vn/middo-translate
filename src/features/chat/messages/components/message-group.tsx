@@ -29,7 +29,7 @@ export const MessageItemGroup = forwardRef<
   return (
     <div
       ref={ref}
-      className={cn('flex flex-1 flex-col-reverse gap-1', props.className)}
+      className={cn('flex flex-1 flex-col-reverse gap-0.5', props.className)}
     >
       {props.children && renderChildrenWithOrder(props.children)}
     </div>

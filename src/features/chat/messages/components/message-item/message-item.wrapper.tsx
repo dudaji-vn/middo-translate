@@ -12,9 +12,12 @@ export const MessageItemWrapper = (
 ) => {
   const isMobile = useAppStore((state) => state.isMobile);
 
-  const { isMe, isPending } = useMessageItem();
+  const { isMe, isPending, message } = useMessageItem();
 
-  const Wrapper = isMobile ? MessageItemMobileWrapper : React.Fragment;
+  const Wrapper =
+    isMobile && message.status !== 'removed'
+      ? MessageItemMobileWrapper
+      : React.Fragment;
 
   return (
     <Wrapper>

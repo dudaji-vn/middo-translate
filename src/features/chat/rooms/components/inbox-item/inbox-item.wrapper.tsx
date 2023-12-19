@@ -25,7 +25,7 @@ export const InboxItemWrapper = (
         isActive ? 'bg-background-darker' : 'bg-transparent hover:bg-[#fafafa]',
       )}
     >
-      <Wrapper room={data}>
+      <Wrapper>
         <Link
           onClick={onClick}
           href={data.link!}
