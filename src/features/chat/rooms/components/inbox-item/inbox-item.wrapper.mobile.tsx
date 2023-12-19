@@ -16,6 +16,7 @@ import { Button } from '@/components/actions';
 import { Room } from '../../types';
 import { roomApi } from '../../api';
 import { useBoolean } from 'usehooks-ts';
+import { useInboxItem } from './inbox-item';
 import { useLongPress } from 'use-long-press';
 import { useMutation } from '@tanstack/react-query';
 
@@ -38,9 +39,9 @@ const selectOptionsMap = {
 };
 
 export const InboxItemMobileWrapper = ({
-  room,
   children,
 }: InboxItemMobileWrapperProps & PropsWithChildren) => {
+  const { data } = useInboxItem();
   const { setFalse, setTrue, toggle, value } = useBoolean(false);
   const bind = useLongPress(() => {
     setTrue();
@@ -58,9 +59,9 @@ export const InboxItemMobileWrapper = ({
         <AlertDialog>
           <div className="fixed left-0 top-0 z-50 flex h-screen w-screen flex-col bg-black/60">
             <div onClick={setFalse} className="flex-1"></div>
-            <div className="absolute bottom-0 z-10 w-full overflow-hidden rounded-t-3xl border-t bg-background">
-              <div className="mx-auto mt-2 h-1 w-8 rounded-full bg-colors-neutral-100"></div>
-              <AlertDialogTrigger>
+            <div className="absolute bottom-0 z-10 w-full overflow-hidden rounded-t-3xl border-t bg-background pb-3">
+              <div className="mx-auto my-3 h-1 w-8 rounded-full bg-colors-neutral-100"></div>
+              <AlertDialogTrigger asChild>
                 <Button
                   onClick={() => {
                     setSelected('leave');
@@ -77,7 +78,7 @@ export const InboxItemMobileWrapper = ({
               </AlertDialogTrigger>
               <div className="h-[1px] w-full bg-colors-neutral-50"></div>
 
-              <AlertDialogTrigger>
+              <AlertDialogTrigger asChild>
                 <Button
                   onClick={() => {
                     setSelected('delete');
@@ -110,7 +111,7 @@ export const InboxItemMobileWrapper = ({
                     type="submit"
                     className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
                     onClick={() => {
-                      mutateAsync(room._id);
+                      mutateAsync(data._id);
                     }}
                   >
                     {selectOptionsMap[selected].label}

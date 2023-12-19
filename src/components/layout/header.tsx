@@ -10,16 +10,14 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import { Avatar } from '../data-display/avatar';
 import { HeaderNavigation } from './header-navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useAppStore } from '@/stores/app-store';
+import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth';
-import { useMediaQuery } from 'usehooks-ts';
 import { useState } from 'react';
 
 type Props = {};
@@ -27,11 +25,11 @@ type Props = {};
 export const Header = (props: Props) => {
   const [isOpenDropdown, setOpenDropdown] = useState(false);
   const { isAuthentication, user } = useAuthStore();
-  const { setData: setDataApp } = useAppStore();
-  const router = useRouter();
-
+  const setShowConfirmLogout = useAppStore(
+    (state) => state.setShowConfirmLogout,
+  );
   const signOut = async () => {
-    setDataApp({ isShowConfirmLogout: true });
+    setShowConfirmLogout(true);
   };
 
   return (
@@ -71,8 +69,7 @@ export const Header = (props: Props) => {
               onClick={() => setOpenDropdown(false)}
             >
               <Link
-                // href={ROUTE_NAMES.ACCOUNT_SETTINGS}
-                href={ROUTE_NAMES.ONLINE_CONVERSATION}
+                href={ROUTE_NAMES.ACCOUNT_SETTINGS}
                 className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
                 <SettingsOutline />

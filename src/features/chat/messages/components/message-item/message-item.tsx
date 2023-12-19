@@ -57,7 +57,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             }}
           />
         )}
-        <div className="relative w-fit">
+        <div className="relative">
           <div
             {...props}
             ref={ref}

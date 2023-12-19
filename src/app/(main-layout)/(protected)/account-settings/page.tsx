@@ -13,15 +13,17 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
 import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
 import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
-import { useAppStore } from '@/stores/app-store';
+import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
-  const { setData: setDataApp } = useAppStore();
+  const setShowConfirmLogout = useAppStore(
+    (state) => state.setShowConfirmLogout,
+  );
 
   const signOut = () => {
-    setDataApp({ isShowConfirmLogout: true });
+    setShowConfirmLogout(true);
   };
 
   return (

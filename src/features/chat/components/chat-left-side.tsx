@@ -4,21 +4,21 @@ import { useParams, usePathname } from 'next/navigation';
 
 import { PropsWithChildren } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useMediaQuery } from 'usehooks-ts';
+import { useAppStore } from '@/stores/app.store';
 
 export interface ChatLeftSideProps {}
 
 export const ChatLeftSide = ({
   children,
 }: ChatLeftSideProps & PropsWithChildren) => {
-  const isMobileOrTablet = useMediaQuery('(max-width: 768px)');
+  const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
   const params = useParams();
 
   const isInRoom =
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
 
-  const showSide = !isMobileOrTablet || !isInRoom;
+  const showSide = !isMobile || !isInRoom;
 
   return (
     // <AnimatePresence initial={false}>

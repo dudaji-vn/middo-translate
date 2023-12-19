@@ -1,24 +1,23 @@
 'use client';
 
-import { AnimatePresence, motion } from 'framer-motion';
 import { useParams, usePathname } from 'next/navigation';
 
 import { PropsWithChildren } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
-import { useMediaQuery } from 'usehooks-ts';
+import { useAppStore } from '@/stores/app.store';
 
 export interface ChatMainProps {}
 
 export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
-  const isMobileOrTablet = useMediaQuery('(max-width: 768px)');
+  const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
   const params = useParams();
 
   const isInRoom =
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
 
-  const show = !isMobileOrTablet || isInRoom;
+  const show = !isMobile || isInRoom;
 
   return (
     // <AnimatePresence initial={false}>
@@ -30,8 +29,8 @@ export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
           // exit={{ x: '100%' }}
           className={cn(
             'flex-1',
-            isMobileOrTablet
-              ? 'absolute left-0 top-0 z-50 h-screen'
+            isMobile
+              ? 'absolute left-0 top-0 z-50 h-screen w-screen'
               : 'h-main-container-height',
           )}
         >

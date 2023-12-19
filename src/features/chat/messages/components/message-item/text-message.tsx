@@ -70,7 +70,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
           >
             <Text
               value={message.contentEnglish}
-              className="text-sm font-light "
+              className="text-sm font-light"
             />
           </div>
         </div>
