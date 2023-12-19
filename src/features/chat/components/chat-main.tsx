@@ -28,7 +28,7 @@ export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
           // animate={{ x: 0 }}
           // exit={{ x: '100%' }}
           style={{
-            height: isMobile ? '100dvh' : 'auto',
+            height: isMobile ? '100svh' : 'auto',
           }}
           className={cn(
             'flex-1',

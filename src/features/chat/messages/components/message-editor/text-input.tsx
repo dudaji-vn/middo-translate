@@ -113,6 +113,7 @@ export const TextInput = forwardRef<
             )}
           >
             <EmojiPicker
+              autoFocusSearch={false}
               width={isMobile ? '100%' : ''}
               onEmojiClick={(emojiObj) => {
                 setText(text + emojiObj.emoji);
