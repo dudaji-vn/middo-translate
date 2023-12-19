@@ -113,6 +113,10 @@ export const TextInput = forwardRef<
             )}
           >
             <EmojiPicker
+              skinTonesDisabled
+              previewConfig={{ showPreview: false }}
+              lazyLoadEmojis
+              searchDisabled
               autoFocusSearch={false}
               width={isMobile ? '100%' : ''}
               onEmojiClick={(emojiObj) => {

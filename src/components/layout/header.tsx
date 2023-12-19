@@ -42,15 +42,13 @@ export const Header = (props: Props) => {
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
-            <DropdownMenuTrigger>
-              <div className="relative flex gap-3 active:!text-shading ">
-                <div className="hidden flex-col items-end md:flex">
-                  <div className="font-semibold">
-                    {user?.name || 'Anonymous'}
-                  </div>
-                  <div className="text-s font-light">{user?.email || ''}</div>
-                </div>
-                <a href="#" className="relative">
+            <div className="relative flex gap-3 active:!text-shading ">
+              <div className="hidden flex-col items-end md:flex">
+                <div className="font-semibold">{user?.name || 'Anonymous'}</div>
+                <div className="text-s font-light">{user?.email || ''}</div>
+              </div>
+              <DropdownMenuTrigger>
+                <div className="relative">
                   <Avatar
                     src={user.avatar || '/person.svg'}
                     size="lg"
@@ -60,9 +58,9 @@ export const Header = (props: Props) => {
                   <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-1">
                     <ChevronDown className="opacity-60" />
                   </div>
-                </a>
-              </div>
-            </DropdownMenuTrigger>
+                </div>
+              </DropdownMenuTrigger>
+            </div>
             <DropdownMenuContent
               align="end"
               className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
