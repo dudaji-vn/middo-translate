@@ -9,11 +9,12 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import { forwardRef } from 'react';
 import useRotate from '@/components/data-display/rotate';
 
-export interface ImgGalleryProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ImageGalleryProps
+  extends React.HTMLAttributes<HTMLDivElement> {
   images: Media[];
 }
 
-export const ImgGallery = forwardRef<HTMLDivElement, ImgGalleryProps>(
+export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
   ({ images, ...props }, ref) => {
     const length = images.length;
     const isMultiple = length > 1;
@@ -87,4 +88,4 @@ export const ImgGallery = forwardRef<HTMLDivElement, ImgGalleryProps>(
     );
   },
 );
-ImgGallery.displayName = 'ImgGallery';
+ImageGallery.displayName = 'ImageGallery';
