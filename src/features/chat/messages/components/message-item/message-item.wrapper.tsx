@@ -24,7 +24,7 @@ export const MessageItemWrapper = (
       <div
         className={cn(
           'group relative flex',
-          isMe ? 'justify-end md:pl-20' : 'md:pr-20',
+          isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
           isPending && 'opacity-50',
         )}
       >
