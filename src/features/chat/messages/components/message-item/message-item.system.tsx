@@ -8,7 +8,7 @@ export const MessageItemSystem = ({
   senderName,
 }: MessageItemSystemProps) => {
   return (
-    <div className="mx-auto p-4">
+    <div className="mx-auto">
       <span className="text-sm font-light text-colors-neutral-500">
         {senderName + ' '}
         <div

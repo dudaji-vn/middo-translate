@@ -17,7 +17,7 @@ export const AdditionalActions = ({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button.Icon size="md" variant="ghost">
+        <Button.Icon size="sm" variant="ghost">
           <PlusCircle />
         </Button.Icon>
       </PopoverTrigger>

@@ -17,12 +17,12 @@ export const ChatBoxHeader = () => {
     [_room, currentUserId],
   );
   return (
-    <div className="flex w-full items-center border-b  px-1 py-2 md:px-5">
+    <div className="flex w-full items-center border-b  px-1 py-2 md:px-3">
       <RoomBoxHeaderNavigation />
       <div className="flex items-center gap-2">
         <InboxItemAvatar isOnline room={room} />
         <div>
-          <p className="font-medium">{room.name}</p>
+          <p className="line-clamp-1 font-medium">{room.name}</p>
           <p className="font-light">Online</p>
         </div>
       </div>

@@ -137,7 +137,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
           refreshFunction={refetchMessages}
           inverse={true}
           scrollThreshold={0.7}
-          className="flex flex-col-reverse gap-3"
+          className="flex flex-col-reverse gap-2"
           style={{
             height: 'none',
             overflow: 'visible',
@@ -154,10 +154,10 @@ export const MessageBox = ({ room }: { room: Room }) => {
             return (
               <div key={group.lastMessage._id}>
                 {isShowTimeGroup && (
-                  <div className="my-4 flex items-center justify-center">
+                  <div className="my-2 flex items-center justify-center">
                     <div className="flex items-center space-x-2">
                       <div className="h-[1px] w-16 bg-primary/30" />
-                      <div className="text-sm font-light text-colors-neutral-500">
+                      <div className="text-sm font-light text-colors-neutral-300">
                         {formatTimeDisplay(group.lastMessage.createdAt!)}
                       </div>
                       <div className="h-[1px] w-16 bg-primary/30" />
@@ -165,7 +165,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
                   </div>
                 )}
                 {!isMe && !isNotify && room.isGroup && (
-                  <div className="pl-11 text-sm">
+                  <div className="pl-11 text-sm text-colors-neutral-600">
                     <span>{group.lastMessage.sender.name}</span>
                   </div>
                 )}

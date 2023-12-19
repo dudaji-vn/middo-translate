@@ -35,23 +35,22 @@ export const Header = (props: Props) => {
   return (
     <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-colors-neutral-50 bg-background px-[5vw] py-4">
       <HeaderNavigation />
-      <Link href={ROUTE_NAMES.ROOT} className="block w-[100px]">
+      <Link href={ROUTE_NAMES.ROOT} className="block w-[70px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
 
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
-            <div className="relative flex gap-3 active:!text-shading ">
-              <div className="hidden flex-col items-end md:flex">
+            <div className="relative flex gap-2 active:!text-shading ">
+              <div className="hidden  items-center md:flex">
                 <div className="font-semibold">{user?.name || 'Anonymous'}</div>
-                <div className="text-s font-light">{user?.email || ''}</div>
               </div>
               <DropdownMenuTrigger>
                 <div className="relative">
                   <Avatar
                     src={user.avatar || '/person.svg'}
-                    size="lg"
+                    size="sm"
                     alt={user?.name || 'Anonymous'}
                   />
 

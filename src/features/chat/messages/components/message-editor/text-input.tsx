@@ -82,6 +82,7 @@ export const TextInput = forwardRef<
             onClick={handleStopListening}
             variant="ghost"
             className="self-end"
+            size="sm"
             color="primary"
           >
             <Mic />
@@ -91,6 +92,7 @@ export const TextInput = forwardRef<
             onClick={handleStartListening}
             variant="ghost"
             className="self-end"
+            size="sm"
             color="default"
           >
             <Mic />
@@ -99,7 +101,7 @@ export const TextInput = forwardRef<
 
         <Popover>
           <PopoverTrigger asChild>
-            <Button.Icon variant="ghost" color="default">
+            <Button.Icon variant="ghost" color="default" size="sm">
               <Smile />
             </Button.Icon>
           </PopoverTrigger>
