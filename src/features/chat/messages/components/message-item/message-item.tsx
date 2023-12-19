@@ -1,9 +1,10 @@
-import { createContext, forwardRef, useContext } from 'react';
+import { Fragment, createContext, forwardRef, useContext } from 'react';
 
 import { DocumentMessage } from './document-message';
 import { ImageGallery } from './message-item.image-gallery';
 import { Menu } from './menu';
 import { Message } from '@/features/chat/messages/types';
+import { MessageItemSystem } from './message-item.system';
 import { MessageItemWrapper } from './message-item.wrapper';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
@@ -47,15 +48,10 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
 
     if (message.type === 'notification') {
       return (
-        <div className="mx-auto p-4">
-          <span className="text-sm font-light text-colors-neutral-500">
-            {message.sender.name + ' '}
-            <div
-              className="inline-block"
-              dangerouslySetInnerHTML={{ __html: message.content }}
-            ></div>
-          </span>
-        </div>
+        <MessageItemSystem
+          senderName={message.sender.name}
+          content={message.content}
+        />
       );
     }
 
@@ -68,12 +64,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
         }}
       >
         <MessageItemWrapper>
-          <SeenTracker
-            onSeen={() => {
-              console.log('seen', message._id);
-            }}
-          />
-
+          <SeenTracker />
           <div className="relative">
             <div
               {...props}
@@ -86,14 +77,14 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             >
               {message.content && <TextMessage isMe={isMe} message={message} />}
               {message?.media && message.media.length > 0 && (
-                <>
+                <Fragment>
                   {message.media[0].type === 'image' && (
                     <ImageGallery images={message.media} />
                   )}
                   {message.media[0].type === 'document' && (
                     <DocumentMessage isMe={isMe} file={message.media[0]} />
                   )}
-                </>
+                </Fragment>
               )}
             </div>
             <ReadByUsers readByUsers={readByUsers} isMe={isMe} />

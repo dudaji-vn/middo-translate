@@ -3,6 +3,7 @@
 import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 import { Message } from '@/features/chat/messages/types';
+import { MessageActions } from '../components/message.actions';
 import { Room } from '@/features/chat/rooms/types';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '../../rooms/api';
@@ -86,7 +87,7 @@ export const MessagesBoxProvider = ({
         removeMessage: removeItem,
       }}
     >
-      {children}
+      <MessageActions>{children}</MessageActions>
     </MessagesBoxContext.Provider>
   );
 };
