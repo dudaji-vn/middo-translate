@@ -107,47 +107,45 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     }
 
     return (
-      <RoomActions>
-        <div ref={ref} className="relative h-full w-full overflow-hidden ">
-          {isScrolled && (
-            <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
-          )}
-          <div
-            id="scrollableDiv"
-            ref={scrollRef}
-            className={cn('h-full gap-2 overflow-y-auto')}
+      <div ref={ref} className="relative h-full w-full overflow-hidden ">
+        {isScrolled && (
+          <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
+        )}
+        <div
+          id="scrollableDiv"
+          ref={scrollRef}
+          className={cn('h-full gap-2 overflow-y-auto')}
+        >
+          <InfiniteScroll
+            scrollableTarget="scrollableDiv"
+            dataLength={rooms.length}
+            next={fetchNextPage}
+            hasMore={hasNextPage || false}
+            loader={<h4>Loading...</h4>}
+            refreshFunction={refetch}
+            className="flex flex-col"
           >
-            <InfiniteScroll
-              scrollableTarget="scrollableDiv"
-              dataLength={rooms.length}
-              next={fetchNextPage}
-              hasMore={hasNextPage || false}
-              loader={<h4>Loading...</h4>}
-              refreshFunction={refetch}
-              className="flex flex-col"
-            >
-              {rooms.map((room) => (
-                <InboxItem
-                  key={room._id}
-                  data={room}
-                  isActive={currentRoomId === room._id}
-                  currentUser={currentUser!}
-                  currentRoomId={currentRoomId as string}
-                />
-              ))}
-            </InfiniteScroll>
-          </div>
-          <div className="absolute bottom-10 right-5">
-            <Button.Icon
-              size="lg"
-              onClick={() => changeSide('new-message')}
-              className="relative shadow-3"
-            >
-              <MessagePlusIcon />
-            </Button.Icon>
-          </div>
+            {rooms.map((room) => (
+              <InboxItem
+                key={room._id}
+                data={room}
+                isActive={currentRoomId === room._id}
+                currentUser={currentUser!}
+                currentRoomId={currentRoomId as string}
+              />
+            ))}
+          </InfiniteScroll>
         </div>
-      </RoomActions>
+        <div className="absolute bottom-10 right-5">
+          <Button.Icon
+            size="lg"
+            onClick={() => changeSide('new-message')}
+            className="relative shadow-3"
+          >
+            <MessagePlusIcon />
+          </Button.Icon>
+        </div>
+      </div>
     );
   },
 );

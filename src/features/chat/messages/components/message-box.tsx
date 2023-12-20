@@ -165,7 +165,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
                   </div>
                 )}
                 {!isMe && !isNotify && room.isGroup && (
-                  <div className="pl-11 text-sm text-colors-neutral-600">
+                  <div className="mb-0.5 pl-11 text-xs text-colors-neutral-600">
                     <span>{group.lastMessage.sender.name}</span>
                   </div>
                 )}
@@ -195,10 +195,11 @@ export const MessageBox = ({ room }: { room: Room }) => {
       </div>
       {isScrolled && (
         <Button.Icon
+          size="sm"
           onClick={scrollIntoView}
-          className="absolute bottom-4  left-1/2 -translate-x-1/2"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 border border-primary bg-background"
         >
-          <ArrowDownIcon />
+          <ArrowDownIcon className="text-primary" />
         </Button.Icon>
       )}
     </div>

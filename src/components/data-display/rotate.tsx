@@ -44,7 +44,6 @@ function isRotateSupported(
   carousel: CarouselSettings,
   slide?: Slide,
 ): slide is SlideImage {
-  console.log(slide);
   return (
     slide !== undefined &&
     isImageSlide(slide) &&
