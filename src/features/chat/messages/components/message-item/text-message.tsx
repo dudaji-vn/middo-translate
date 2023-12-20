@@ -46,7 +46,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
     >
       <span
         className={cn(
-          'break-word-mt text-start',
+          'break-word-mt text-start text-sm',
           isMe && 'text-background',
           message.status === 'removed' && 'text-neutral-300',
         )}

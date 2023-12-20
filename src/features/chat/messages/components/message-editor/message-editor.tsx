@@ -102,7 +102,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             onRemoveFile={removeFile}
           />
         </div>
-        <Button.Icon type="submit" color="primary">
+        <Button.Icon type="submit" size="sm" color="primary">
           <PaperPlaneOutline />
         </Button.Icon>
       </form>

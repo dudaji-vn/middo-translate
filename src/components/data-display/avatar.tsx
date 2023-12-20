@@ -7,6 +7,7 @@ import { cn } from '@/utils/cn';
 const avatarVariants = cva('overflow-hidden shrink-0 relative aspect-square', {
   variants: {
     size: {
+      xs: 'h-6',
       sm: 'h-9',
       md: 'h-10',
       lg: 'h-12',
