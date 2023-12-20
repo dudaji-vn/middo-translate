@@ -14,4 +14,5 @@ export type Room = {
   link?: string;
   status: RoomStatus;
   admin: User;
+  isSetName: boolean;
 } & BaseEntity;
