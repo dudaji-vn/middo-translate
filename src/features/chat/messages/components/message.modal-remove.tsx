@@ -97,14 +97,9 @@ export const MessageModalRemove = ({
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button
-            color="error"
-            shape="square"
-            type="submit"
-            onClick={handleSubmit}
-          >
+          <AlertDialogAction type="submit" onClick={handleSubmit} color="error">
             Remove
-          </Button>
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

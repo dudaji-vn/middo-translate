@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Message } from '../../types';
 import { Text } from '@/components/data-display';
@@ -20,6 +20,10 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
+    if (message.status === 'removed') {
+      setContentDisplay(message.content);
+      return;
+    }
     if (userLanguage === message.sender.language) return;
     const translateContent = async () => {
       const translated = await translateText(
@@ -35,6 +39,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
     message.content,
     message.sender.language,
     message.contentEnglish,
+    message.status,
   ]);
   return (
     <div
@@ -53,28 +58,30 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
       >
         {contentDisplay}
       </span>
-      {message?.contentEnglish && showMiddleTranslation && (
-        <div className="relative mt-2">
-          <TriangleSmall
-            fill={isMe ? '#72a5e9' : '#e6e6e6'}
-            position="top"
-            className="absolute left-4 top-0 -translate-y-full"
-          />
-          <div
-            className={cn(
-              'mb-1 mt-2 rounded-xl p-1 px-3',
-              isMe
-                ? 'bg-colors-primary-400 text-background'
-                : 'bg-colors-neutral-100 text-colors-neutral-600',
-            )}
-          >
-            <Text
-              value={message.contentEnglish}
-              className="text-start text-sm font-light"
+      {message?.contentEnglish &&
+        message.status !== 'removed' &&
+        showMiddleTranslation && (
+          <div className="relative mt-2">
+            <TriangleSmall
+              fill={isMe ? '#72a5e9' : '#e6e6e6'}
+              position="top"
+              className="absolute left-4 top-0 -translate-y-full"
             />
+            <div
+              className={cn(
+                'mb-1 mt-2 rounded-xl p-1 px-3',
+                isMe
+                  ? 'bg-colors-primary-400 text-background'
+                  : 'bg-colors-neutral-100 text-colors-neutral-600',
+              )}
+            >
+              <Text
+                value={message.contentEnglish}
+                className="text-start text-sm font-light"
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };

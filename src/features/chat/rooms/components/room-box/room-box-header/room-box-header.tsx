@@ -16,6 +16,7 @@ export const ChatBoxHeader = () => {
     () => generateRoomDisplay(_room, currentUserId),
     [_room, currentUserId],
   );
+  console.log('room', room);
   return (
     <div className="flex w-full items-center border-b  px-1 py-1 md:px-3">
       <RoomBoxHeaderNavigation />
