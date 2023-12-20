@@ -4,10 +4,10 @@ import { cn } from '@/utils/cn';
 import { useMemo } from 'react';
 
 const avatarStyleSizeMapByLength: Record<number | string, string> = {
-  1: 'size-9 ring-0',
-  2: 'size-9',
-  3: 'size-[18px]',
-  4: 'size-[18px]',
+  1: '!size-9 ring-0',
+  2: '!size-9',
+  3: '!size-[18px]',
+  4: '!size-[18px]',
 };
 
 const avatarStylePositionMapByLengthAndIndex: Record<

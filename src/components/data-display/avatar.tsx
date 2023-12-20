@@ -7,14 +7,14 @@ import { cn } from '@/utils/cn';
 const avatarVariants = cva('overflow-hidden shrink-0 relative aspect-square', {
   variants: {
     size: {
-      xs: 'h-6',
-      sm: 'h-9',
-      md: 'h-10',
-      lg: 'h-12',
-      xl: 'h-14',
-      '2xl': 'h-16',
-      '3xl': 'h-20',
-      '4xl': 'h-24',
+      xs: 'size-6',
+      sm: 'size-9',
+      md: 'size-10',
+      lg: 'size-12',
+      xl: 'size-14',
+      '2xl': 'size-16',
+      '3xl': 'size-20',
+      '4xl': 'size-24',
     },
     shape: {
       circle: 'rounded-full',
@@ -80,7 +80,7 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
     }, [avatarClassName, children, limit, shape, size]);
 
     return (
-      <div ref={ref} className={cn('flex h-fit', className)} {...props}>
+      <div ref={ref} className={cn('size-fit flex', className)} {...props}>
         {renderChildren}
         {limit && Children.count(children) > limit && (
           <div

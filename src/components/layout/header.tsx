@@ -84,23 +84,20 @@ export const Header = (props: Props) => {
         ) : (
           <Link
             href={ROUTE_NAMES.SIGN_IN}
-            className="group flex items-center gap-2 rounded-xl bg-colors-neutral-50 px-3 py-2 active:!bg-colors-neutral-200 active:!text-shading md:hover:bg-colors-neutral-100"
+            className="size-9 md:size-fit group flex items-center rounded-full bg-colors-neutral-50 p-1 active:!bg-colors-neutral-200 active:!text-shading md:gap-2 md:rounded-xl md:p-2 md:px-4 md:hover:bg-colors-neutral-100"
           >
-            <div className="flex h-9 w-9 items-center justify-center rounded-full md:hidden ">
-              <div className="w-5">
-                <Image
-                  src="/avatar.png"
-                  priority
-                  className="block"
-                  alt="logo"
-                  width={500}
-                  height={500}
-                />
-              </div>
-            </div>
+            <Image
+              src="/hero_avatar.png"
+              priority
+              className="block md:hidden"
+              alt="logo"
+              width={500}
+              height={500}
+            />
+
             <span
               className={
-                'hidden   font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-colors-primary-500-main'
+                'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-colors-primary-500-main'
               }
             >
               Sign in
