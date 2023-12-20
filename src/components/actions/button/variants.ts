@@ -19,7 +19,7 @@ export const buttonVariants = cva(
         success:
           'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
         error:
-          'bg-error md:hover:bg-error-lighter text-background active:!bg-error-darker',
+          'bg-colors-error-400-main md:hover:bg-colors-error-500 text-background active:!bg-colors-error-600',
       },
       size: {
         xs: 'py-2 px-3 text-xs rounded-sm',

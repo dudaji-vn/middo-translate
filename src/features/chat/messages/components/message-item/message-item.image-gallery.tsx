@@ -1,7 +1,9 @@
+import { X, ZoomIn } from 'lucide-react';
+
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Image from 'next/image';
-import LightImage from '@/components/data-display/LingboxImage';
+import LightImage from '@/components/data-display/lingtbox-image';
 import Lightbox from 'yet-another-react-lightbox';
 import { Media } from '@/types';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
@@ -77,12 +79,12 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
           />
         )}
         <Lightbox
+          slides={slides}
           index={index}
           open={index !== undefined}
           close={() => setIndex(undefined)}
-          slides={slides}
+          plugins={[Download, Rotate, Thumbnails, Zoom]}
           render={{ slide: LightImage }}
-          plugins={[Thumbnails, Download, Fullscreen, Zoom, Rotate]}
         />
       </>
     );

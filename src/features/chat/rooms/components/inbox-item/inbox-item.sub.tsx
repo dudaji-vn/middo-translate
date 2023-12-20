@@ -33,6 +33,12 @@ export const ItemSub = ({
   }, [message.readBy, message.sender._id, participants, currentUserId]);
 
   const preMessage = useMemo(() => {
+    if (message.status === 'removed') {
+      if (message.sender._id === currentUserId) {
+        return 'You';
+      }
+      return `${message.sender.name.split(' ')[0]}`;
+    }
     if (message.sender._id === currentUserId) {
       return `You${message.type === 'notification' ? '' : ': '} `;
     }
@@ -43,6 +49,7 @@ export const ItemSub = ({
     }
     return '';
   }, [
+    message.status,
     message.sender._id,
     message.sender.name,
     message.type,

@@ -195,10 +195,11 @@ export const MessageBox = ({ room }: { room: Room }) => {
       </div>
       {isScrolled && (
         <Button.Icon
+          size="sm"
           onClick={scrollIntoView}
-          className="absolute bottom-4  left-1/2 -translate-x-1/2"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2 border border-primary bg-background"
         >
-          <ArrowDownIcon />
+          <ArrowDownIcon className="text-primary" />
         </Button.Icon>
       )}
     </div>
