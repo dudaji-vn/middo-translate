@@ -121,7 +121,7 @@ const MobileNavigation = ({
           },
         }}
         className={cn(
-          'absolute left-0 top-[90px] z-50 flex w-full flex-col items-stretch  bg-background shadow-1',
+          'absolute left-0 top-[52px] z-50 flex w-full flex-col items-stretch overflow-hidden rounded-b-2xl  bg-background shadow-1',
         )}
       >
         {navigationItems.map((item, index) => {
@@ -146,7 +146,7 @@ const MobileNavigation = ({
               }}
             >
               <Link
-                className="block h-full w-full px-[5vw] py-4 "
+                className="block h-full w-full px-[5vw] py-4 text-sm"
                 href={item.href}
               >
                 {item.name}

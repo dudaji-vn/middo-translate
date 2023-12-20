@@ -1,6 +1,6 @@
 import { Fragment, createContext, forwardRef, useContext } from 'react';
 
-import { DocumentMessage } from './document-message';
+import { DocumentMessage } from './message-item.document';
 import { ImageGallery } from './message-item.image-gallery';
 import { Menu } from './menu';
 import { Message } from '@/features/chat/messages/types';

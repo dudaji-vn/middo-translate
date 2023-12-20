@@ -35,31 +35,31 @@ export const Header = (props: Props) => {
   return (
     <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-colors-neutral-50 bg-background px-[5vw] py-4">
       <HeaderNavigation />
-      <Link href={ROUTE_NAMES.ROOT} className="block w-[70px]">
+      <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
 
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
-            <div className="relative flex gap-2 active:!text-shading ">
-              <div className="hidden  items-center md:flex">
-                <div className="font-semibold">{user?.name || 'Anonymous'}</div>
-              </div>
-              <DropdownMenuTrigger>
-                <div className="relative">
-                  <Avatar
-                    src={user.avatar || '/person.svg'}
-                    size="sm"
-                    alt={user?.name || 'Anonymous'}
-                  />
+            <DropdownMenuTrigger>
+              <div className="relative flex gap-2 rounded-xl bg-colors-neutral-50 p-2 active:!bg-colors-neutral-200 active:!text-shading md:hover:bg-colors-neutral-100">
+                <Avatar
+                  src={user.avatar || '/person.svg'}
+                  size="xs"
+                  alt={user?.name || 'Anonymous'}
+                />
 
-                  <div className="absolute bottom-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-background shadow-1">
-                    <ChevronDown className="opacity-60" />
+                <div className="hidden items-center md:flex">
+                  <div className="text-sm font-medium">
+                    {user?.name || 'Anonymous'}
                   </div>
                 </div>
-              </DropdownMenuTrigger>
-            </div>
+                <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
+                  <ChevronDown className="opacity-60" />
+                </div>
+              </div>
+            </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
               className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
@@ -84,18 +84,10 @@ export const Header = (props: Props) => {
         ) : (
           <Link
             href={ROUTE_NAMES.SIGN_IN}
-            className="group flex items-center gap-3"
+            className="group flex items-center gap-2 rounded-xl bg-colors-neutral-50 px-3 py-2 active:!bg-colors-neutral-200 active:!text-shading md:hover:bg-colors-neutral-100"
           >
-            <span
-              className={
-                'hidden bg-background px-[5vw] py-4 font-semibold active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-colors-primary-500-main'
-              }
-            >
-              Sign in
-            </span>
-
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-colors-neutral-50">
-              <div className="w-6">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full md:hidden ">
+              <div className="w-5">
                 <Image
                   src="/avatar.png"
                   priority
@@ -106,6 +98,13 @@ export const Header = (props: Props) => {
                 />
               </div>
             </div>
+            <span
+              className={
+                'hidden   font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-colors-primary-500-main'
+              }
+            >
+              Sign in
+            </span>
           </Link>
         )}
       </div>

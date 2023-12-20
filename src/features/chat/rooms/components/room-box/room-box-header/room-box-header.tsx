@@ -2,7 +2,7 @@
 
 import { AlertCircleOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions';
-import { InboxItemAvatar } from '../../inbox-item';
+import { RoomAvatar } from '../../room-avatar.small';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import { generateRoomDisplay } from '../../../utils';
 import { useAuthStore } from '@/stores/auth';
@@ -17,13 +17,13 @@ export const ChatBoxHeader = () => {
     [_room, currentUserId],
   );
   return (
-    <div className="flex w-full items-center border-b  px-1 py-2 md:px-3">
+    <div className="flex w-full items-center border-b  px-1 py-1 md:px-3">
       <RoomBoxHeaderNavigation />
       <div className="flex items-center gap-2">
-        <InboxItemAvatar isOnline room={room} />
+        <RoomAvatar isOnline room={room} />
         <div>
           <p className="line-clamp-1 font-medium">{room.name}</p>
-          <p className="font-light">Online</p>
+          <p className="text-sm font-light">Online</p>
         </div>
       </div>
       <div className="-mr-2 ml-auto">
