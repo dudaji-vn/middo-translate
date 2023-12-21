@@ -5,6 +5,12 @@ import {
   Typography,
 } from '@/components/data-display';
 import { SearchInput, SearchInputRef, Switch } from '@/components/data-entry';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@/components/navigation';
 import { forwardRef, useRef, useState } from 'react';
 
 import { ArrowBackOutline } from '@easy-eva-icons/react';
@@ -23,11 +29,23 @@ import { useAuthStore } from '@/stores/auth';
 import { useChatStore } from '@/features/chat/store';
 import { useSearch } from '@/hooks/use-search';
 
-export const inboxTypeMap = {
-  all: 'all',
-  unread: 'unread',
+export type InboxType = 'all' | 'group';
+export const inboxTabMap: Record<
+  InboxType,
+  {
+    label: string;
+    value: InboxType;
+  }
+> = {
+  all: {
+    label: 'All',
+    value: 'all',
+  },
+  group: {
+    label: 'Group',
+    value: 'group',
+  },
 };
-
 export interface InboxMainSideProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -38,7 +56,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
 
     const searchInputRef = useRef<SearchInputRef>(null);
 
-    const [type, setType] = useState<keyof typeof inboxTypeMap>('all');
+    const [type, setType] = useState<InboxType>('all');
     const { data, setSearchTerm } = useSearch<{
       rooms: Room[];
       users: User[];
@@ -63,7 +81,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
         {...props}
         className="flex h-full flex-col overflow-hidden"
       >
-        <div className="flex w-full gap-1 p-3 pt-0">
+        <div className="flex w-full gap-1 px-3">
           {isSearch && (
             <Button.Icon
               variant="ghost"
@@ -130,6 +148,19 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
           )}
         </div>
         <div className="relative flex flex-1 flex-col overflow-hidden">
+          <Tabs defaultValue="account" className="w-full px-3">
+            <TabsList>
+              {Object.values(inboxTabMap).map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  onClick={() => setType(tab.value)}
+                >
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
           <InboxList type={type} />
           {isSearch && (
             <div className="absolute left-0 top-0 h-full w-full overflow-y-auto bg-card px-2">

@@ -90,7 +90,7 @@ const NavigationItem = ({
     <Link
       href={item.href}
       className={cn(
-        'bg-background px-[5vw] py-4 font-semibold active:bg-background-darker active:!text-shading md:!p-0 md:hover:text-secondary md:active:!bg-transparent',
+        'bg-background px-[5vw] py-4 text-sm font-semibold active:bg-background-darker active:!text-shading md:!p-0 md:hover:text-secondary md:active:!bg-transparent',
         isActive && '!text-primary',
       )}
     >
@@ -146,7 +146,7 @@ const MobileNavigation = ({
               }}
             >
               <Link
-                className="block h-full w-full px-[5vw] py-4 text-sm"
+                className="block h-full w-full px-[5vw] py-4"
                 href={item.href}
               >
                 {item.name}
