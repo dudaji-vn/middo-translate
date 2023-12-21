@@ -7,9 +7,8 @@ import {
 import { SearchInput, SearchInputRef, Switch } from '@/components/data-entry';
 import {
   Tabs,
-  TabsContent,
   TabsList,
-  TabsTrigger,
+  TabsTrigger
 } from '@/components/navigation';
 import { forwardRef, useRef, useState } from 'react';
 
