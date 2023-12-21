@@ -64,6 +64,7 @@ export const MessagesBoxProvider = ({
       },
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
+      console.log('update message', message);
       updateItem(message);
     });
 

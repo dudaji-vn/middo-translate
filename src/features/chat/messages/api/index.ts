@@ -29,4 +29,8 @@ export const messageApi = {
     });
     return res.data;
   },
+  async seenMessage(id: string) {
+    const res: Response<Message> = await axios.patch(`${basePath}/${id}/seen`);
+    return res.data;
+  },
 };

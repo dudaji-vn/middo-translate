@@ -86,9 +86,9 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     useEffect(() => {
       // enable submit form by enter
       const handleKeyDown = (e: KeyboardEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
         if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          e.stopPropagation();
           formRef.current?.dispatchEvent(
             new Event('submit', { cancelable: true, bubbles: true }),
           );

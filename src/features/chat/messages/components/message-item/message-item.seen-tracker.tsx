@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+import { messageApi } from '../../api';
 import { useAuthStore } from '@/stores/auth';
 import { useIntersectionObserver } from 'usehooks-ts';
 import { useMessageItem } from '.';
+import { useMutation } from '@tanstack/react-query';
 
 export interface SeenTrackProps {
   onSeen?: () => void;
@@ -13,10 +15,21 @@ export const SeenTracker = ({ onSeen }: SeenTrackProps) => {
   const userId = useAuthStore((state) => state!.user!._id);
   const isRead = message.readBy?.includes(userId);
 
-  if (isRead) {
+  const { mutate } = useMutation({
+    mutationFn: messageApi.seenMessage,
+  });
+
+  if (isRead || message.status === 'pending' || message.status === 'removed') {
     return null;
   }
-  return <Track onSeen={onSeen} />;
+  return (
+    <Track
+      onSeen={() => {
+        onSeen?.();
+        mutate(message._id);
+      }}
+    />
+  );
 };
 
 export const Track = ({ onSeen }: SeenTrackProps) => {
