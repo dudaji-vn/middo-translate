@@ -5,11 +5,7 @@ import {
   Typography,
 } from '@/components/data-display';
 import { SearchInput, SearchInputRef, Switch } from '@/components/data-entry';
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger
-} from '@/components/navigation';
+import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { forwardRef, useRef, useState } from 'react';
 
 import { ArrowBackOutline } from '@easy-eva-icons/react';
@@ -147,7 +143,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
           )}
         </div>
         <div className="relative flex flex-1 flex-col overflow-hidden">
-          <Tabs defaultValue="account" className="w-full px-3">
+          <Tabs defaultValue="all" className="w-full px-3">
             <TabsList>
               {Object.values(inboxTabMap).map((tab) => (
                 <TabsTrigger
