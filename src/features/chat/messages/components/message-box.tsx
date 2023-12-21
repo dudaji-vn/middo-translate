@@ -69,6 +69,14 @@ export const MessageBox = ({ room }: { room: Room }) => {
       }
       const lastGroup = acc[acc.length - 1];
       const lastMessage = lastGroup.lastMessage;
+      // if last message is notification
+      if (lastMessage.type === 'notification') {
+        acc.push({
+          messages: [message],
+          lastMessage: message,
+        });
+        return acc;
+      }
       // if last message is not from the same sender
       if (lastMessage.sender._id !== message.sender._id) {
         acc.push({

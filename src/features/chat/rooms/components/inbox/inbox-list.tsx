@@ -2,6 +2,7 @@ import { forwardRef, memo, useEffect, useMemo } from 'react';
 
 import { Button } from '@/components/actions';
 import { InboxItem } from '../inbox-item';
+import { InboxType } from './inbox-main-side';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MessagePlusIcon } from '@/components/icons';
 import { Room } from '../../types';
@@ -9,7 +10,6 @@ import { RoomActions } from '../room.actions';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
-import { inboxTypeMap } from './inbox-main-side';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth';
@@ -20,7 +20,7 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import useStore from '@/stores/use-store';
 
 interface InboxListProps {
-  type: keyof typeof inboxTypeMap;
+  type: InboxType;
 }
 
 const InboxList = forwardRef<HTMLDivElement, InboxListProps>(

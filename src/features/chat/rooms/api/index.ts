@@ -5,16 +5,16 @@ import {
   Response,
 } from '@/types';
 
+import { InboxType } from '../components/inbox/inbox-main-side';
 import { Message } from '@/features/chat/messages/types';
 import { Room } from '../types';
 import { axios } from '@/lib/axios';
-import { inboxTypeMap } from '../components/inbox/inbox-main-side';
 import queryString from 'query-string';
 import { uploadImage } from '@/utils/upload-img';
 
 const basePath = '/rooms';
 export const roomApi = {
-  async getRooms(params: CursorParams & { type: keyof typeof inboxTypeMap }) {
+  async getRooms(params: CursorParams & { type: InboxType }) {
     const path = queryString.stringifyUrl({
       url: basePath,
       query: params,
