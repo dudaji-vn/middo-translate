@@ -4894,6 +4894,11 @@ react-modal-sheet@^2.2.0:
   dependencies:
     "@react-aria/utils" "3.17.0"
 
+react-push-notification@^1.5.4:
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/react-push-notification/-/react-push-notification-1.5.4.tgz#98d708cbb48375856158fcd94403d35d994f3174"
+  integrity sha512-ZsiJfz8dNvfz0ClKcrzaKojIAdYou+s2N2M4Z6EuAlQlBsVqex/Wv0hldgueSLKihmGbZouj/oPih/gy5xlKIQ==
+
 react-qr-code@^2.0.12:
   version "2.0.12"
   resolved "https://registry.yarnpkg.com/react-qr-code/-/react-qr-code-2.0.12.tgz#98f99e9ad5ede46d73ab819e2dd9925c5f5d7a2d"
