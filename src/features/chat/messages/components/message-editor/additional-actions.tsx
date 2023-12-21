@@ -1,9 +1,10 @@
 import { AttachOutline, Camera, PlusCircle } from '@easy-eva-icons/react';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/data-display/popover';
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/data-display';
 
 import { Button } from '@/components/actions';
 
@@ -15,31 +16,44 @@ export const AdditionalActions = ({
   onOpenSelectFiles,
 }: AdditionalActionsProps) => {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button.Icon size="sm" variant="ghost">
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button.Icon tabIndex={-1} size="sm" variant="ghost">
           <PlusCircle />
         </Button.Icon>
-      </PopoverTrigger>
-      <PopoverContent
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
         side="top"
-        className="w-fit p-2"
+        className="flex w-fit min-w-min p-2"
         align="start"
         sideOffset={16}
         alignOffset={-8}
       >
-        <Button.Icon disabled size="sm" color="default" variant="ghost">
-          <Camera />
-        </Button.Icon>
-        <Button.Icon
-          color="default"
-          onClick={onOpenSelectFiles}
-          size="sm"
-          variant="ghost"
-        >
-          <AttachOutline />
-        </Button.Icon>
-      </PopoverContent>
-    </Popover>
+        <DropdownMenuItem asChild>
+          <Button.Icon
+            disabled
+            size="sm"
+            color="default"
+            variant="ghost"
+            shape="default"
+            className="rounded-full"
+          >
+            <Camera />
+          </Button.Icon>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Button.Icon
+            color="default"
+            onClick={onOpenSelectFiles}
+            size="sm"
+            variant="ghost"
+            shape="default"
+            className="rounded-full"
+          >
+            <AttachOutline />
+          </Button.Icon>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

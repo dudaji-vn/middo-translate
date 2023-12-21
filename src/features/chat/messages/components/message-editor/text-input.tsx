@@ -4,7 +4,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
 import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
@@ -50,6 +56,8 @@ export const TextInput = forwardRef<
       ...(inputRef.current as HTMLInputElement),
       reset: () => {
         setText('');
+        setMiddleText('');
+        handleStopListening();
       },
     }),
     [setText],
@@ -132,7 +140,7 @@ export const TextInput = forwardRef<
         </Popover>
       </div>
       <TranslateTool
-        showTool={!!showTranslateOnType && !!translatedText}
+        showTool={!!showTranslateOnType && !!text}
         checked={showTranslateOnType}
         onCheckedChange={toggleShowTranslateOnType}
         content={translatedText}
