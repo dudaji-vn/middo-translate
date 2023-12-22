@@ -3,7 +3,6 @@
 import { useMemo, useRef } from 'react';
 
 import { ArrowDownIcon } from 'lucide-react';
-import { Avatar } from '@/components/data-display/avatar';
 import { Button } from '@/components/actions/button';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Message } from '../types';
@@ -128,8 +127,8 @@ export const MessageBox = ({ room }: { room: Room }) => {
     let alreadyShow: string[] = [];
     const usersReadMessageMap: { [key: string]: User[] } = {};
     messagesGroup.forEach((group, index) => {
-      group.messages.forEach((message) => {
-        if (index === 0 && group.lastMessage._id === message._id) {
+      group.messages.forEach((message, messageIndex) => {
+        if (index === 0 && messageIndex === 0) {
           alreadyShow = message.readBy ?? [];
           usersReadMessageMap[message._id] = [];
           message.readBy?.forEach((userId) => {
@@ -143,11 +142,11 @@ export const MessageBox = ({ room }: { room: Room }) => {
         } else {
           message.readBy?.forEach((userId) => {
             if (!alreadyShow.includes(userId)) {
-              alreadyShow.push(userId);
               const user = room.participants.find(
                 (u) => u._id === userId && u._id !== currentUserId,
               );
               if (user) {
+                alreadyShow.push(userId);
                 usersReadMessageMap[message._id] = [
                   ...(usersReadMessageMap[message._id] ?? []),
                   user,
