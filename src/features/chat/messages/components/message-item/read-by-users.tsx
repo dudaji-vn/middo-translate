@@ -13,12 +13,7 @@ export const ReadByUsers = forwardRef<HTMLDivElement, ReadByUsersProps>(
     return (
       <div ref={ref} {...props}>
         {readByUsers?.length && (
-          <div
-            className={cn(
-              'ml-auto flex justify-end space-x-0.5',
-              isMe ? 'mt-1' : 'absolute bottom-0 right-0',
-            )}
-          >
+          <div className={cn('ml-auto mt-1 flex justify-end space-x-0.5')}>
             {readByUsers?.map((user) => (
               <Avatar
                 key={user._id}
