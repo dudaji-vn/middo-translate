@@ -1,5 +1,6 @@
 import { Fragment, createContext, forwardRef, useContext } from 'react';
 
+import { Avatar } from '@/components/data-display';
 import { DocumentMessage } from './message-item.document';
 import { ImageGallery } from './message-item.image-gallery';
 import { Menu } from './menu';
@@ -20,6 +21,7 @@ export interface MessageProps
     VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
+  showAvatar?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -41,7 +43,10 @@ export const useMessageItem = () => {
 };
 
 export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
-  ({ message, sender, order, className, readByUsers, ...props }, ref) => {
+  (
+    { message, sender, order, className, readByUsers, showAvatar, ...props },
+    ref,
+  ) => {
     const isMe = sender === 'me';
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
@@ -63,9 +68,19 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           message,
         }}
       >
+        <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
         <MessageItemWrapper>
+          {showAvatar ? (
+            <Avatar
+              className="mb-0.5 mr-1 mt-auto h-7 w-7"
+              src={message.sender.avatar}
+              alt={message.sender.name}
+            />
+          ) : (
+            <div className="mb-0.5 mr-1 mt-auto h-7 w-7" />
+          )}
           <SeenTracker />
-          <div className="relative">
+          <div className="">
             <div
               {...props}
               ref={ref}
@@ -87,7 +102,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 </Fragment>
               )}
             </div>
-            <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
             {isPending && <PendingStatus />}
             <Menu isMe={isMe} message={message} />
           </div>

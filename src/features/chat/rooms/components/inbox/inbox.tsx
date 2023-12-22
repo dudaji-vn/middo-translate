@@ -67,7 +67,7 @@ export const Inbox = (props: InboxProps) => {
               transition={{ duration: 0.2 }}
               className="absolute left-0 top-0 flex h-full w-full flex-col bg-card"
             >
-              <div className="flex items-center gap-2 px-5 pt-3">
+              <div className="flex items-center gap-2 px-1 pt-1">
                 <Button.Icon
                   onClick={changeToDefault}
                   variant="ghost"

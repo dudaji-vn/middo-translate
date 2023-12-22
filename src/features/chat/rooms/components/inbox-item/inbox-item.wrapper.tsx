@@ -21,7 +21,7 @@ export const InboxItemWrapper = (
   return (
     <div
       className={cn(
-        'group relative flex cursor-pointer items-center justify-between p-3 transition-all',
+        'group relative flex cursor-pointer items-center justify-between px-3 py-2 transition-all',
         isActive ? 'bg-background-darker' : 'bg-transparent hover:bg-[#fafafa]',
       )}
     >

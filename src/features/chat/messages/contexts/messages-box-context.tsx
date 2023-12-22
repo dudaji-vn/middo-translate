@@ -4,10 +4,13 @@ import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 import { Message } from '@/features/chat/messages/types';
 import { MessageActions } from '../components/message.actions';
+import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
 import { Room } from '@/features/chat/rooms/types';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import addNotification from 'react-push-notification';
 import { roomApi } from '../../rooms/api';
 import socket from '@/lib/socket-io';
+import { useAuthStore } from '@/stores/auth';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 
 interface MessagesBoxContextProps {
@@ -48,6 +51,8 @@ export const MessagesBoxProvider = ({
     },
   });
 
+  const userId = useAuthStore((s) => s.user?._id);
+
   // socket event
 
   useEffect(() => {
@@ -61,9 +66,25 @@ export const MessagesBoxProvider = ({
         clientTempId: string;
       }) => {
         replaceItem(message, clientTempId);
+        if (message.sender._id === userId) return;
+        const messageNotify = `${message.sender.name} to ${
+          message.room?.isGroup && message.room?.name
+            ? message.room?.name
+            : 'your group'
+        }: ${message.content} `;
+        addNotification({
+          title: NEXT_PUBLIC_NAME,
+          subtitle: `${message.sender.name}: ${message.content}`,
+          message: messageNotify,
+          theme: 'darkblue',
+          native: true,
+          duration: 5000,
+          icon: message.sender.avatar,
+        });
       },
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
+      console.log('update message', message);
       updateItem(message);
     });
 
@@ -71,7 +92,7 @@ export const MessagesBoxProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
-  }, [replaceItem, room._id, updateItem]);
+  }, [replaceItem, room._id, updateItem, userId]);
 
   return (
     <MessagesBoxContext.Provider

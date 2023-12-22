@@ -123,12 +123,51 @@ export const MessageBox = ({ room }: { room: Room }) => {
       };
     };
   }, [messages, room.participants]);
+
+  const usersReadMessageMap = useMemo(() => {
+    let alreadyShow: string[] = [];
+    const usersReadMessageMap: { [key: string]: User[] } = {};
+    messagesGroup.forEach((group, index) => {
+      group.messages.forEach((message) => {
+        if (index === 0 && group.lastMessage._id === message._id) {
+          alreadyShow = message.readBy ?? [];
+          usersReadMessageMap[message._id] = [];
+          message.readBy?.forEach((userId) => {
+            const user = room.participants.find(
+              (u) => u._id === userId && u._id !== currentUserId,
+            );
+            if (user) {
+              usersReadMessageMap[message._id].push(user);
+            }
+          });
+        } else {
+          message.readBy?.forEach((userId) => {
+            if (!alreadyShow.includes(userId)) {
+              alreadyShow.push(userId);
+              const user = room.participants.find(
+                (u) => u._id === userId && u._id !== currentUserId,
+              );
+              if (user) {
+                usersReadMessageMap[message._id] = [
+                  ...(usersReadMessageMap[message._id] ?? []),
+                  user,
+                ];
+              }
+            }
+          });
+        }
+      });
+    });
+
+    return usersReadMessageMap;
+  }, [currentUserId, messagesGroup, room.participants]);
+
   return (
     <div className="relative flex h-full w-full flex-1 overflow-hidden">
       <div
         ref={ref}
         id="inbox-list"
-        className="flex w-full flex-1 flex-col-reverse overflow-y-scroll bg-primary/5 px-3 pb-2 pt-6 md:px-5"
+        className="flex w-full flex-1 flex-col-reverse overflow-x-hidden overflow-y-scroll bg-primary/5 px-3 pb-2 pt-6 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
@@ -178,20 +217,18 @@ export const MessageBox = ({ room }: { room: Room }) => {
                   </div>
                 )}
                 <div className="flex w-full gap-1">
-                  {!isMe && !isNotify && (
-                    <Avatar
-                      className="mb-0.5 mt-auto h-7 w-7"
-                      src={group.lastMessage.sender.avatar}
-                      alt={group.lastMessage.sender.name}
-                    />
-                  )}
                   <MessageItemGroup>
                     {group.messages.map((message) => (
                       <MessageItem
+                        showAvatar={
+                          !isMe &&
+                          !isNotify &&
+                          message._id === group.messages[0]._id
+                        }
                         key={message._id}
                         message={message}
                         sender={isMe ? 'me' : 'other'}
-                        readByUsers={userAtMessage[message._id]}
+                        readByUsers={usersReadMessageMap[message._id] ?? []}
                       />
                     ))}
                   </MessageItemGroup>
