@@ -152,6 +152,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
                   key={tab.value}
                   value={tab.value}
                   onClick={() => setType(tab.value)}
+                  className="!rounded-none"
                 >
                   {tab.label}
                 </TabsTrigger>
