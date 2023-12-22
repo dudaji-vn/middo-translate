@@ -1,4 +1,5 @@
 import { Checkmark } from '@easy-eva-icons/react';
+import { Typography } from '@/components/data-display';
 import { UserItem } from '@/features/users/components';
 import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
 import { useGroupCreate } from './group-create-side/context';
@@ -11,8 +12,10 @@ export const SuggestionList = (props: SuggestionListProps) => {
 
   if (searchUsers.length > 0) return null;
   return (
-    <div className="flex w-full flex-1 flex-col overflow-y-auto">
-      <h6 className="p-3 font-normal">Suggestion</h6>
+    <div className="mt-3 flex w-full flex-1 flex-col overflow-y-auto">
+      <Typography variant="h5" className="pb-3 pl-3 font-normal opacity-60">
+        Suggestion
+      </Typography>
       {data?.map((user) => {
         const isChecked = !!selectedUsers.find((u) => u._id === user._id);
         return (

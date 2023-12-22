@@ -22,6 +22,7 @@ import { searchApi } from '@/features/search/api';
 import { stopPropagation } from '@/utils/stop-propagation';
 import { useAuthStore } from '@/stores/auth';
 import { useChatStore } from '@/features/chat/store';
+import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
 import { useSearch } from '@/hooks/use-search';
 
 export type InboxType = 'all' | 'group';
@@ -48,6 +49,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
   (props, ref) => {
     const [isSearch, setIsSearch] = useState(false);
     const [isOpenDropdown, setOpenDropdown] = useState(false);
+    const { data: recData } = useGetUsersRecChat();
 
     const searchInputRef = useRef<SearchInputRef>(null);
 
@@ -158,7 +160,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
           </Tabs>
           <InboxList type={type} />
           {isSearch && (
-            <div className="absolute left-0 top-0 h-full w-full overflow-y-auto bg-card px-2">
+            <div className="absolute left-0 top-0 h-full w-full overflow-y-auto bg-card">
               {data && (
                 <>
                   {data?.users && data.users.length > 0 && (
@@ -172,8 +174,8 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
                   )}
                 </>
               )}
-              <div className="mt-5">
-                {data?.rooms && data.rooms.length > 0 && (
+              {data?.rooms && data.rooms.length > 0 && (
+                <div className="mt-5">
                   <SearchSection label="Groups">
                     {data?.rooms.map((room) => (
                       <InboxItem
@@ -185,8 +187,19 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
                       />
                     ))}
                   </SearchSection>
-                )}
-              </div>
+                </div>
+              )}
+              {recData && recData.length > 0 && !data && (
+                <SearchSection label="Suggestion">
+                  {recData?.map((user) => {
+                    return (
+                      <Link key={user._id} href={`/talk/${user._id}`}>
+                        <UserItem user={user} />
+                      </Link>
+                    );
+                  })}
+                </SearchSection>
+              )}
             </div>
           )}
         </div>
@@ -204,8 +217,8 @@ const SearchSection = ({
   children: React.ReactNode;
 }) => {
   return (
-    <div className="pb-2">
-      <div className="pl-2">
+    <div className="mt-3">
+      <div className="pb-2 pl-3">
         <Typography variant="h5" className="font-normal opacity-60">
           {label}
         </Typography>

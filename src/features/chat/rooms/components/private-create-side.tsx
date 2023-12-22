@@ -40,7 +40,7 @@ export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
             placeholder="Search"
           />
         </div>
-        <div className="p-5">
+        <div className="p-3">
           <Button
             className="w-full"
             variant="outline"
@@ -61,7 +61,12 @@ export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
         )}
         {recData && recData.length > 0 && !data && (
           <div className="flex w-full flex-1 flex-col overflow-y-auto">
-            <h6 className="p-3 font-normal">Suggestion</h6>
+            <Typography
+              variant="h5"
+              className="pb-2 pl-3 font-normal opacity-60"
+            >
+              Suggestion
+            </Typography>
             {recData?.map((user) => {
               return (
                 <Link key={user._id} href={`/talk/${user._id}`}>

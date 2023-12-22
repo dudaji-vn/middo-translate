@@ -67,10 +67,15 @@ export const MessagesBoxProvider = ({
       }) => {
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
+        const messageNotify = `${message.sender.name} to ${
+          message.room?.isGroup && message.room?.name
+            ? message.room?.name
+            : 'your group'
+        }: ${message.content} `;
         addNotification({
           title: NEXT_PUBLIC_NAME,
           subtitle: `${message.sender.name}: ${message.content}`,
-          message: `${message.sender.name}: ${message.content}`,
+          message: messageNotify,
           theme: 'darkblue',
           native: true,
           duration: 5000,
@@ -87,7 +92,7 @@ export const MessagesBoxProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
-  }, [replaceItem, room._id, updateItem]);
+  }, [replaceItem, room._id, updateItem, userId]);
 
   return (
     <MessagesBoxContext.Provider

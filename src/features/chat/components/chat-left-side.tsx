@@ -5,6 +5,7 @@ import { useParams, usePathname } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
+import { useRequirePushNotify } from '@/hooks/use-require-push-notify';
 
 export interface ChatLeftSideProps {}
 
@@ -19,6 +20,8 @@ export const ChatLeftSide = ({
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
 
   const showSide = !isMobile || !isInRoom;
+
+  useRequirePushNotify();
 
   return (
     // <AnimatePresence initial={false}>
