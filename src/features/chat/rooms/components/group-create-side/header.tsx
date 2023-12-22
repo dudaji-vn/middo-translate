@@ -55,7 +55,7 @@ export const GroupCreateHeader = (props: GroupCreateHeaderProps) => {
       onSubmit={handleSubmit}
       className="z-10 border-b"
     >
-      <div className="flex items-center gap-3 space-y-1 p-5 py-2">
+      <div className="flex items-center gap-3 space-y-1 px-3 py-2">
         {preview ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -111,7 +111,7 @@ export const GroupCreateHeader = (props: GroupCreateHeaderProps) => {
           className="flex-1 border-none px-0 outline-none ring-0 focus:border-none focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
         />
       </div>
-      <div className="z-10 items-center gap-2 space-y-1 p-4 py-2 pb-5">
+      <div className="z-10 items-center gap-2 space-y-1 px-3 py-2 pb-3">
         <SearchInput
           className="flex-1"
           onChange={(e) =>

@@ -9,6 +9,7 @@ import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
 import { searchApi } from '@/features/search/api';
 import { useChangeInboxSide } from '../hooks/use-change-inbox-side';
+import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
 import { useParams } from 'next/navigation';
 import { useSearch } from '@/hooks/use-search';
 
@@ -18,6 +19,7 @@ export interface PrivateCreateSideProps {
 
 export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
   const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'users');
+  const { data: recData } = useGetUsersRecChat();
   const { changeSide } = useChangeInboxSide();
   const params = useParams();
 
@@ -55,6 +57,18 @@ export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
                 <UserItem isActive={user._id === params?.id} user={user} />
               </Link>
             ))}
+          </div>
+        )}
+        {recData && recData.length > 0 && !data && (
+          <div className="flex w-full flex-1 flex-col overflow-y-auto">
+            <h6 className="p-3 font-normal">Suggestion</h6>
+            {recData?.map((user) => {
+              return (
+                <Link key={user._id} href={`/talk/${user._id}`}>
+                  <UserItem isActive={user._id === params?.id} user={user} />
+                </Link>
+              );
+            })}
           </div>
         )}
       </div>
