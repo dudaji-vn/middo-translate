@@ -51,13 +51,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
 
-    if (message.type === 'notification') {
-      return (
-        <MessageItemSystem
-          senderName={message.sender.name}
-          content={message.content}
-        />
-      );
+    if (message.type === 'notification' || message.type === 'action') {
+      return <MessageItemSystem message={message} isMe={isMe} />;
     }
 
     return (
