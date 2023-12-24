@@ -35,6 +35,7 @@
     "cookies": "^0.8.0",
     "copy-image-clipboard": "^2.1.2",
     "emoji-picker-react": "^4.5.16",
+    "firebase": "^10.7.1",
     "framer-motion": "^10.16.5",
     "html-to-image": "^1.11.11",
     "http-proxy": "^1.18.1",
