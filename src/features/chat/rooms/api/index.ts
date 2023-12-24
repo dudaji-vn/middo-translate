@@ -86,7 +86,7 @@ export const roomApi = {
   },
   async addMembers({ roomId, userIds }: { roomId: string; userIds: string[] }) {
     const res: Response<Room> = await axios.post(
-      `${basePath}/${roomId}/members/add`,
+      `${basePath}/${roomId}/members`,
       {
         participants: userIds,
       },
@@ -101,7 +101,7 @@ export const roomApi = {
     userId: string;
   }): Promise<Room> {
     const res: Response<Room> = await axios.delete(
-      `${basePath}/${roomId}/members/remove`,
+      `${basePath}/${roomId}/members`,
       {
         data: {
           userId,

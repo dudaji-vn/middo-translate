@@ -33,21 +33,28 @@ export const ItemSub = ({
   }, [message.readBy, message.sender._id, participants, currentUserId]);
 
   const preMessage = useMemo(() => {
-    if (message.status === 'removed') {
-      if (message.sender._id === currentUserId) {
-        return 'You';
-      }
-      return `${message.sender.name.split(' ')[0]}`;
-    }
-    if (message.sender._id === currentUserId) {
-      return `You${message.type === 'notification' ? '' : ': '} `;
-    }
+    const isMessageRemoved = message.status === 'removed';
+    const isCurrentUserSender = message.sender._id === currentUserId;
+    const isSystemMessage =
+      message.type === 'notification' || message.type === 'action';
+
+    let actor = '';
     if (isGroup) {
-      return `${message.sender.name.split(' ')[0]}${
-        message.type === 'notification' ? '' : ': '
-      } `;
+      if (isCurrentUserSender) {
+        actor = 'You';
+      } else {
+        actor = message.sender.name.split(' ')[0];
+      }
+    } else if (isCurrentUserSender) {
+      actor = 'You';
     }
-    return '';
+
+    if (isSystemMessage) {
+      actor += ' ';
+    } else {
+      actor += isGroup ? ': ' : ' ';
+    }
+    return actor;
   }, [
     message.status,
     message.sender._id,
@@ -58,22 +65,49 @@ export const ItemSub = ({
   ]);
 
   const content = useMemo(() => {
-    if (message.status === 'removed') {
-      return 'unsent a message';
+    switch (message.status) {
+      case 'removed':
+        return 'unsent a message';
+      default:
+        break;
     }
 
-    if (message.type === 'media') {
-      if (message?.media && message?.media[0]?.type === 'image') {
-        return `Sent ${message?.media.length} photo${
-          message?.media.length > 1 ? 's' : ''
-        }`;
-      }
-      if (message?.media && message?.media[0].type === 'document') {
-        return 'Sent file';
-      }
+    switch (message.type) {
+      case 'media':
+        if (message.media) {
+          const mediaType = message.media[0]?.type;
+          switch (mediaType) {
+            case 'image':
+              return `Sent ${message.media.length} photo${
+                message.media.length > 1 ? 's' : ''
+              }`;
+            case 'document':
+              return 'Sent file';
+            default:
+              break;
+          }
+        }
+        break;
+      case 'action':
+        if (message.targetUsers && message.targetUsers.length > 0) {
+          const targetUserNamesString = message.targetUsers
+            .map((user) => user.name)
+            .join(', ');
+          return `${message.content} ${targetUserNamesString}`;
+        }
+        break;
+      default:
+        break;
     }
+
     return message.content;
-  }, [message.content, message?.media, message.status, message.type]);
+  }, [
+    message.content,
+    message.media,
+    message.status,
+    message.targetUsers,
+    message.type,
+  ]);
 
   const [contentDisplay, setContentDisplay] = useState(content);
   useEffect(() => {

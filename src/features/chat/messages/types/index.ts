@@ -5,7 +5,7 @@ import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { messageVariants } from '../components/message-item/variants';
 
-export type MessageType = 'text' | 'media' | 'call' | 'notification';
+export type MessageType = 'text' | 'media' | 'call' | 'notification' | 'action';
 export type MessageStatus = Pick<
   VariantProps<typeof messageVariants>,
   'status'
@@ -18,6 +18,7 @@ export type Message = {
   sender: User;
   readBy?: User['_id'][];
   deliveredTo?: User['_id'][];
+  targetUsers?: User[];
   media?: Media[];
   type: MessageType;
   status: MessageStatus;
