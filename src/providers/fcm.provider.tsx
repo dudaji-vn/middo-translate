@@ -36,7 +36,7 @@ export const FCMProvider = (props: FCMProviderProps) => {
     }
   };
   useEffect(() => {
-    retrieveToken();
+    // retrieveToken();
   }, []);
   return (
     <>

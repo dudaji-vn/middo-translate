@@ -19,13 +19,13 @@ type Props = {};
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
   return (
     <>
-      <FCMProvider />
       <Toaster />
       <HotToaster />
       <SocketProvider />
       <BootstrapProvider />
       <CommonComponent />
       <ReactQueryProvider>{props.children}</ReactQueryProvider>
+      {/* <FCMProvider /> */}
       <SideEffectProvider />
     </>
   );
