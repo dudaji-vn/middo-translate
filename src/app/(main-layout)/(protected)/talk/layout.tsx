@@ -14,7 +14,7 @@ export interface ChatLayoutProps {
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
     <div className="flex h-main-container-height overflow-hidden">
-      <FCMProvider />
+      {/* <FCMProvider /> */}
       <ChatLeftSide>
         <Inbox />
       </ChatLeftSide>
