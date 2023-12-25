@@ -75,7 +75,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             <div className="mb-0.5 mr-1 mt-auto h-7 w-7" />
           )}
           <SeenTracker />
-          <div className="">
+          <div className="relative">
             <div
               {...props}
               ref={ref}
