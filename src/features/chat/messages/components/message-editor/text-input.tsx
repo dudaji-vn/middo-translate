@@ -60,7 +60,7 @@ export const TextInput = forwardRef<
         handleStopListening();
       },
     }),
-    [setText],
+    [],
   );
 
   return (
