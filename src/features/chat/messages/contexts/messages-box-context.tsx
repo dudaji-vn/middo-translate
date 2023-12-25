@@ -2,7 +2,6 @@
 
 import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
-import { FCMProvider } from '@/providers/fcm.provider';
 import { Message } from '@/features/chat/messages/types';
 import { MessageActions } from '../components/message.actions';
 import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
@@ -109,7 +108,6 @@ export const MessagesBoxProvider = ({
         removeMessage: removeItem,
       }}
     >
-      <FCMProvider />
       <MessageActions>{children}</MessageActions>
     </MessagesBoxContext.Provider>
   );
