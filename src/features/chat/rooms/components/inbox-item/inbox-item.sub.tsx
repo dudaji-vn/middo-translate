@@ -52,7 +52,7 @@ export const ItemSub = ({
     if (isSystemMessage) {
       actor += ' ';
     } else {
-      actor += isGroup ? ': ' : ' ';
+      actor += isCurrentUserSender ? ': ' : ' ';
     }
     return actor;
   }, [
