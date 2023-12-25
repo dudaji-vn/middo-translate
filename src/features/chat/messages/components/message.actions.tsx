@@ -78,7 +78,6 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
     setId('');
   };
 
-  console.log('action', action, id, isMe);
   return (
     <MessageActionsContext.Provider
       value={{

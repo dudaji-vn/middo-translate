@@ -51,6 +51,7 @@ export const roomApi = {
     });
     const res: Response<ListResponse<Message, CursorPagination>> =
       await axios.get(path);
+
     return res.data;
   },
 
