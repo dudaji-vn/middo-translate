@@ -1,7 +1,7 @@
 'use client';
 
 import { TextInput, TextInputRef } from './text-input';
-import { forwardRef, use, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 
 import { AdditionalActions } from './additional-actions';
 import { Button } from '@/components/actions';
@@ -83,27 +83,27 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     };
 
     const formRef = useRef<HTMLFormElement>(null);
-    useEffect(() => {
-      // enable submit form by enter
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          e.stopPropagation();
-          formRef.current?.dispatchEvent(
-            new Event('submit', { cancelable: true, bubbles: true }),
-          );
-        }
-      };
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    // useEffect(() => {
+    //   // enable submit form by enter
+    //   const handleKeyDown = (e: KeyboardEvent) => {
+    //     if (e.key === 'Enter' && !e.shiftKey) {
+    //       e.preventDefault();
+    //       e.stopPropagation();
+    //       formRef.current?.dispatchEvent(
+    //         new Event('submit', { cancelable: true, bubbles: true }),
+    //       );
+    //     }
+    //   };
+    //   document.addEventListener('keydown', handleKeyDown);
+    //   return () => document.removeEventListener('keydown', handleKeyDown);
+    // }, []);
 
     return (
       <form
         {...getRootProps()}
         onSubmit={handleSubmit}
         className="relative flex w-full items-center gap-2"
-        ref={formRef}
+        // ref={formRef}
       >
         <input {...getInputProps()} hidden />
         <div
