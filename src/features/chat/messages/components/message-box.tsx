@@ -34,7 +34,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { scrollIntoView } = useScrollIntoView(bottomRef);
 
-  const { messagesGroup, userAtMessage } = useMemo(() => {
+  const messagesGroup = useMemo(() => {
     const userAtMessageRaw = room.participants.map(
       (participant) =>
         ({
@@ -101,26 +101,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
       return acc;
     }, [] as MessageGroup[]);
 
-    return {
-      messagesGroup: data,
-      userAtMessage: userAtMessageRaw.reduce(
-        (acc, userAtMessage) => {
-          if (userAtMessage.messageId) {
-            acc[userAtMessage.messageId] = [
-              ...(acc[userAtMessage.messageId] ?? []),
-              userAtMessage.user,
-            ];
-          }
-          return acc;
-        },
-        {} as { [key: Message['_id']]: User[] },
-      ),
-    } as {
-      messagesGroup: MessageGroup[];
-      userAtMessage: {
-        [key: Message['_id']]: User[];
-      };
-    };
+    return data;
   }, [messages, room.participants]);
 
   const usersReadMessageMap = useMemo(() => {

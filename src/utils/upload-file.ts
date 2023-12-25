@@ -27,7 +27,6 @@ export const uploadFile = async (
   const formData = new FormData();
   const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/raw/upload/`;
   const cloudinaryKey = process.env.NEXT_PUBLIC_CLOUDINARY_KEY!;
-  // console.log('cloudinaryKey', fileUpload);
   formData.append('file', fileUpload);
   formData.append('signature', signature);
   formData.append('timestamp', timestamp);
