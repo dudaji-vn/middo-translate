@@ -78,10 +78,10 @@ export const useTranslate = ({
   };
 
   useEffect(() => {
-    if (interimTranscript) {
+    if (interimTranscript && listening) {
       setText(interimTranscript);
     }
-  }, [interimTranscript]);
+  }, [interimTranscript, listening]);
 
   const reset = () => {
     setText('');
