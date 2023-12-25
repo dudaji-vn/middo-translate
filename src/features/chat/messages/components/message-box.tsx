@@ -166,7 +166,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
       <div
         ref={ref}
         id="inbox-list"
-        className="flex w-full flex-1 flex-col-reverse overflow-x-hidden overflow-y-scroll bg-primary/5 px-3 pb-2 pt-6 md:px-5"
+        className="flex w-full flex-1 flex-col-reverse  overflow-y-scroll bg-primary/5 px-3 pb-2 pt-6 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
