@@ -1,7 +1,4 @@
-import { X, ZoomIn } from 'lucide-react';
-
 import Download from 'yet-another-react-lightbox/plugins/download';
-import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Image from 'next/image';
 import LightImage from '@/components/data-display/lingtbox-image';
 import Lightbox from 'yet-another-react-lightbox';
