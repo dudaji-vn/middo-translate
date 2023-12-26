@@ -50,9 +50,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
     const [isSearch, setIsSearch] = useState(false);
     const [isOpenDropdown, setOpenDropdown] = useState(false);
     const { data: recData } = useGetUsersRecChat();
-
     const searchInputRef = useRef<SearchInputRef>(null);
-
     const [type, setType] = useState<InboxType>('all');
     const { data, setSearchTerm } = useSearch<{
       rooms: Room[];
@@ -166,8 +164,8 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
                 <>
                   {data?.users && data.users.length > 0 && (
                     <SearchSection label="People">
-                      {data?.users.map((user) => (
-                        <Link key={user._id} href={`/talk/${user._id}`}>
+                      {data?.users?.map((user) => (
+                        <Link key={user?._id} href={`/talk/${user?._id}`}>
                           <UserItem onClick={closeSearch} user={user} />
                         </Link>
                       ))}
@@ -194,7 +192,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
                 <SearchSection label="Suggestion">
                   {recData?.map((user) => {
                     return (
-                      <Link key={user._id} href={`/talk/${user._id}`}>
+                      <Link key={user?._id} href={`/talk/${user?._id}`}>
                         <UserItem user={user} />
                       </Link>
                     );

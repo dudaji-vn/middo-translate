@@ -24,6 +24,9 @@ export const metadata: Metadata = {
     card: 'summary',
     site: '@middo',
   },
+  verification: {
+    google: '93nxwzFXGw9SFXutb6FCgeqV5Pz9rL9MTxCRxzJwDKM',
+  },
 };
 
 export default function RootLayout({
