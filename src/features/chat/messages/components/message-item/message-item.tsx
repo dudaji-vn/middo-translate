@@ -50,10 +50,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isMe = sender === 'me';
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
-
-    if (message.type === 'notification' || message.type === 'action') {
-      return <MessageItemSystem message={message} isMe={isMe} />;
-    }
+    const isSystemMessage =
+      message.type === 'notification' || message.type === 'action';
 
     return (
       <MessageItemContext.Provider
@@ -63,44 +61,52 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           message,
         }}
       >
-        <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
-        <MessageItemWrapper>
-          {showAvatar ? (
-            <Avatar
-              className="mb-0.5 mr-1 mt-auto h-7 w-7"
-              src={message.sender.avatar}
-              alt={message.sender.name}
-            />
-          ) : (
-            <div className="mb-0.5 mr-1 mt-auto h-7 w-7" />
-          )}
-          <SeenTracker />
-          <div className="relative">
-            <div
-              {...props}
-              ref={ref}
-              className={cn(
-                messageVariants({ sender, order, status: message.status }),
-                className,
-                mediaLength > 1 && 'rounded-none',
+        <SeenTracker />
+        {isSystemMessage ? (
+          <MessageItemSystem message={message} />
+        ) : (
+          <>
+            <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
+            <MessageItemWrapper>
+              {showAvatar ? (
+                <Avatar
+                  className="mb-0.5 mr-1 mt-auto h-7 w-7"
+                  src={message.sender.avatar}
+                  alt={message.sender.name}
+                />
+              ) : (
+                <div className="mb-0.5 mr-1 mt-auto h-7 w-7" />
               )}
-            >
-              {message.content && <TextMessage isMe={isMe} message={message} />}
-              {message?.media && message.media.length > 0 && (
-                <Fragment>
-                  {message.media[0].type === 'image' && (
-                    <ImageGallery images={message.media} />
+              <div className="relative">
+                <div
+                  {...props}
+                  ref={ref}
+                  className={cn(
+                    messageVariants({ sender, order, status: message.status }),
+                    className,
+                    mediaLength > 1 && 'rounded-none',
                   )}
-                  {message.media[0].type === 'document' && (
-                    <DocumentMessage isMe={isMe} file={message.media[0]} />
+                >
+                  {message.content && (
+                    <TextMessage isMe={isMe} message={message} />
                   )}
-                </Fragment>
-              )}
-            </div>
-            {isPending && <PendingStatus />}
-            <Menu isMe={isMe} message={message} />
-          </div>
-        </MessageItemWrapper>
+                  {message?.media && message.media.length > 0 && (
+                    <Fragment>
+                      {message.media[0].type === 'image' && (
+                        <ImageGallery images={message.media} />
+                      )}
+                      {message.media[0].type === 'document' && (
+                        <DocumentMessage isMe={isMe} file={message.media[0]} />
+                      )}
+                    </Fragment>
+                  )}
+                </div>
+                {isPending && <PendingStatus />}
+                <Menu isMe={isMe} message={message} />
+              </div>
+            </MessageItemWrapper>
+          </>
+        )}
       </MessageItemContext.Provider>
     );
   },
