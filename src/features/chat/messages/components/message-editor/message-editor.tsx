@@ -1,7 +1,7 @@
 'use client';
 
 import { TextInput, TextInputRef } from './text-input';
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 
 import { AdditionalActions } from './additional-actions';
 import { Button } from '@/components/actions';
@@ -42,6 +42,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     const userLanguage = useAuthStore((s) => s.user?.language) ?? 'en';
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      console.log('handleSubmit');
       e.preventDefault();
       e?.currentTarget?.reset();
       textInputRef?.current?.reset();
@@ -82,29 +83,17 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onSubmitValue?.({ content, images, documents, contentEnglish });
     };
 
-    const formRef = useRef<HTMLFormElement>(null);
     useEffect(() => {
-      // enable submit form by enter
-      if (!formRef.current) return;
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          e.stopPropagation();
-          formRef.current?.dispatchEvent(
-            new Event('submit', { cancelable: true, bubbles: true }),
-          );
-        }
-      };
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }, [formRef]);
+      if (!textInputRef?.current?.focus) return;
+      textInputRef?.current?.focus();
+    }, [files.length, textInputRef]);
 
     return (
       <form
+        id="message-editor"
         {...getRootProps()}
         onSubmit={handleSubmit}
         className="relative flex w-full items-center gap-2"
-        ref={formRef}
       >
         <input {...getInputProps()} hidden />
         <div
