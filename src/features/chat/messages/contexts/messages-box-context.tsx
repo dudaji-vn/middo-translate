@@ -23,6 +23,7 @@ interface MessagesBoxContextProps {
   replaceMessage: (message: Message, clientTempId: string) => void;
   updateMessage: (message: Message) => void;
   removeMessage: (messageId: string) => void;
+  isFetching: boolean;
 }
 
 export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
@@ -35,6 +36,7 @@ export const MessagesBoxProvider = ({
 }: PropsWithChildren<{ room: Room }>) => {
   const key = ['messages', room._id];
   const {
+    isFetching,
     items,
     hasNextPage,
     fetchNextPage,
@@ -106,6 +108,7 @@ export const MessagesBoxProvider = ({
         replaceMessage: replaceItem,
         updateMessage: updateItem,
         removeMessage: removeItem,
+        isFetching,
       }}
     >
       {/* <FCMProvider /> */}
