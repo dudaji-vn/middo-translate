@@ -54,7 +54,7 @@ export const Inbox = (props: InboxProps) => {
 
   return (
     <RoomActions>
-      <div className="relative flex h-full w-full flex-col overflow-hidden border-r bg-card">
+      <div className="relative flex h-dvh w-full flex-col  overflow-hidden border-r bg-card md:h-full">
         <div className="flex-1 overflow-hidden pt-5">
           <InboxMainSide />
         </div>
