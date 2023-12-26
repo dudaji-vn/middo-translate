@@ -47,6 +47,13 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       e?.currentTarget?.reset();
       textInputRef?.current?.reset();
       reset();
+      // scroll bottom after submit
+      const messageBox = document.getElementById('inbox-list');
+      setTimeout(() => {
+        messageBox?.scrollTo({
+          top: messageBox.scrollHeight,
+        });
+      }, 1);
       const formData = new FormData(e.currentTarget);
       const content = formData.get('message') as string;
       let contentEnglish = formData.get('messageEnglish') as string;
@@ -80,6 +87,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           });
         }
       }
+
       onSubmitValue?.({ content, images, documents, contentEnglish });
     };
 

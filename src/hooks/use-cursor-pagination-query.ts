@@ -38,7 +38,6 @@ export const useCursorPaginationQuery = <TData>({
   });
 
   const queryClient = useQueryClient();
-  console.log('data', data);
 
   const addItem = useCallback(
     (item: TypeWithBaseEntity<TData>) => {
