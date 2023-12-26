@@ -24,6 +24,7 @@ import { useTranslate } from '@/features/translate/hooks/use-translate';
 
 export interface TextInputRef extends HTMLInputElement {
   reset: () => void;
+  focus: () => void;
 }
 export const TextInput = forwardRef<
   TextInputRef,
@@ -59,9 +60,34 @@ export const TextInput = forwardRef<
         setMiddleText('');
         handleStopListening();
       },
+      focus: () => {
+        inputRef.current?.focus();
+      },
     }),
     [],
   );
+
+  useEffect(() => {
+    // enable submit form by enter
+    const formRef = document.getElementById('message-editor');
+    if (!formRef) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        e.stopPropagation();
+        formRef?.dispatchEvent(
+          new Event('submit', { cancelable: true, bubbles: true }),
+        );
+      }
+    };
+    if (listening) {
+      document.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [listening]);
 
   return (
     <>
@@ -87,7 +113,10 @@ export const TextInput = forwardRef<
       <div className="h-full items-end">
         {listening ? (
           <Button.Icon
-            onClick={handleStopListening}
+            onClick={() => {
+              handleStopListening();
+              inputRef.current?.focus();
+            }}
             variant="ghost"
             className="self-end"
             size="sm"

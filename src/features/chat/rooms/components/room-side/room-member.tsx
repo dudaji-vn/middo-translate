@@ -7,6 +7,8 @@ import {
 import { MoreVertical, Users2 } from 'lucide-react';
 
 import { Button } from '@/components/actions';
+import Link from 'next/link';
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { RoomAddMember } from './room-add-member';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
@@ -80,8 +82,12 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
                         <span>Remove</span>
                       </DropdownMenuItem>
                     )}
-                    <DropdownMenuItem>
-                      <span>Start conversation</span>
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href={`${ROUTE_NAMES.ONLINE_CONVERSATION}/${member._id}`}
+                      >
+                        <span>Start conversation</span>
+                      </Link>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
