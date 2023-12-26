@@ -1,15 +1,12 @@
 import { createContext, forwardRef, memo, useContext, useMemo } from 'react';
 
 import { InboxItemHead } from './inbox-item.head';
-import { InboxItemMenu } from './inbox-item.menu';
 import { InboxItemWrapper } from './inbox-item.wrapper';
 import { ItemAvatar } from './inbox-item.avatar';
 import { ItemSub } from './inbox-item.sub';
-import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
-import { cn } from '@/utils/cn';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import moment from 'moment';
 
@@ -49,17 +46,17 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>((props, ref) => {
   );
 
   const time = useMemo(() => {
-    if (data.newMessageAt) {
-      // if last message is today
-      if (moment(data.newMessageAt).isSame(moment(), 'day')) {
-        return moment(data.newMessageAt).format('HH:mm A');
+    const dateString = data.lastMessage?.createdAt || data.createdAt;
+    if (dateString) {
+      if (moment(dateString).isSame(moment(), 'day')) {
+        return moment(dateString).format('HH:mm A');
       } else {
-        return moment(data.newMessageAt).format('YYYY/MM/DD');
+        return moment(dateString).format('YYYY/MM/DD');
       }
     }
 
     return '';
-  }, [data.newMessageAt]);
+  }, [data.createdAt, data.lastMessage?.createdAt]);
   const isRead = data?.lastMessage?.readBy?.includes(currentUserId);
   const isActive =
     data.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||

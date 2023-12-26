@@ -55,7 +55,9 @@ export const ItemSub = ({
     if (isSystemMessage) {
       actor += ' ';
     } else {
-      actor += isCurrentUserSender ? ': ' : ' ';
+      if (isGroup) {
+        actor += ': ';
+      } else actor += isCurrentUserSender ? ': ' : ' ';
     }
     return actor;
   }, [
