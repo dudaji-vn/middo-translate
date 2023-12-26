@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 const avatarStyleSizeMapByLength: Record<number | string, string> = {
   1: '!size-9 ring-0',
   2: '!size-9',
-  3: '!size-[18px]',
+  3: 'size-[18px]',
   4: '!size-[18px]',
 };
 
@@ -24,7 +24,7 @@ const avatarStylePositionMapByLengthAndIndex: Record<
     1: 'top-0 right-0 transform size-[18px] translate-x-[calc(50%_+_1px)]',
   },
   3: {
-    0: 'top-0 left-0 transform size-[18px] -translate-x-[calc(50%_+_2px)]',
+    0: 'top-0 left-0 transform !size-9 -translate-x-[calc(50%_+_2px)]',
     1: '-top-[1px] right-0 size-[18px]',
     2: '-bottom-[1px] right-0 size-[18px]',
   },
@@ -101,7 +101,7 @@ export const RoomAvatar = ({
   }, [avatars]);
   return (
     <div className="relative">
-      <div className="size-9 relative aspect-square shrink-0 overflow-hidden rounded-full">
+      <div className="relative aspect-square size-9 shrink-0 overflow-hidden rounded-full">
         {avatarsDisplay.map((avatar, index) => (
           <Avatar
             shape="square"
