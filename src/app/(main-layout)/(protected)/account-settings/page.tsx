@@ -8,13 +8,12 @@ import {
 
 import { CircleFlag } from 'react-circle-flags';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
 import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
 import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'next/navigation';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -25,17 +24,18 @@ export default function AccountSettings() {
   const signOut = () => {
     setShowConfirmLogout(true);
   };
+  const router = useRouter();
 
   return (
     <div>
       <div className="mx-auto w-full px-[5vw] py-5">
-        <Link href={ROUTE_NAMES.ROOT} className="group flex w-fit items-center">
-          <span className="mr-4 transition-all group-hover:-translate-x-1">
-            {' '}
-            <ArrowBackOutline />
-          </span>
-          <span className="font-semibold">Account setting</span>
-        </Link>
+        <span
+          onClick={() => router.back()}
+          className="mr-4 transition-all group-hover:-translate-x-1"
+        >
+          <ArrowBackOutline />
+        </span>
+        <span className="font-semibold">Account setting</span>
       </div>
 
       <div className="mx-auto w-full rounded-3xl px-5 py-5 pb-0 md:max-w-[500px] md:overflow-hidden md:shadow-2">
