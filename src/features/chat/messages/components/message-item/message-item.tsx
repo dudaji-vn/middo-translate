@@ -70,12 +70,12 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             <MessageItemWrapper>
               {showAvatar ? (
                 <Avatar
-                  className="mb-0.5 mr-1 mt-auto h-7 w-7"
+                  className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0"
                   src={message.sender.avatar}
                   alt={message.sender.name}
                 />
               ) : (
-                <div className="mb-0.5 mr-1 mt-auto h-7 w-7" />
+                <div className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0" />
               )}
               <div className="relative">
                 <div

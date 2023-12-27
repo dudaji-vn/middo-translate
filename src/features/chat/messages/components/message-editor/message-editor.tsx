@@ -1,7 +1,7 @@
 'use client';
 
 import { TextInput, TextInputRef } from './text-input';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 
 import { AdditionalActions } from './additional-actions';
 import { Button } from '@/components/actions';
@@ -42,12 +42,10 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     const userLanguage = useAuthStore((s) => s.user?.language) ?? 'en';
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      console.log('handleSubmit');
       e.preventDefault();
       e?.currentTarget?.reset();
       textInputRef?.current?.reset();
       reset();
-      // scroll bottom after submit
       const messageBox = document.getElementById('inbox-list');
       setTimeout(() => {
         messageBox?.scrollTo({

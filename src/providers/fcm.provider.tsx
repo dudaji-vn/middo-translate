@@ -1,10 +1,10 @@
 'use client';
 
-import { firebaseApp, requestForToken } from '@/lib/firebase';
 import { getMessaging, getToken } from 'firebase/messaging';
 
 import { Button } from '@/components/actions';
 import { NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY } from '@/configs/env.public';
+import { firebaseApp } from '@/lib/firebase';
 import { useEffect } from 'react';
 
 export interface FCMProviderProps {}
