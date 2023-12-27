@@ -219,8 +219,6 @@ export const MessageBox = ({ room }: { room: Room }) => {
         <div className="relative h-10 w-10">
           <div ref={triggerRef} className="absolute top-80"></div>
         </div>
-
-        {/* </InfiniteScroll> */}
       </div>
       {isScrolled && (
         <Button.Icon
