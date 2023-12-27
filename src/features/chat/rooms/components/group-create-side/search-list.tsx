@@ -12,6 +12,8 @@ export const GroupCreateSearchList = (props: GroupCreateSearchListProps) => {
   const filteredUsers = useMemo(() => {
     return searchUsers?.filter((u) => u._id !== user!._id);
   }, [searchUsers, user]);
+
+  if (!filteredUsers?.length) return null;
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto">
       {filteredUsers?.map((user) => {

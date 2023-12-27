@@ -45,6 +45,7 @@ export const LanguagesControlBar = forwardRef<
     const [canClick, setCanClick] = useState(true);
 
     const handleSwap = () => {
+      console.log(canClick);
       if (!canClick) return;
       if (!_source || !_target) return;
       const newParams = [
@@ -156,7 +157,7 @@ export const LanguagesControlBar = forwardRef<
           </Select>
         </div>
 
-        <Button.Icon variant="ghost" color="default">
+        <Button.Icon onClick={handleSwap} variant="ghost" color="default">
           <Swap className="text-text" />
         </Button.Icon>
         <div className="flex flex-1 justify-start">

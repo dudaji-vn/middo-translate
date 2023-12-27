@@ -27,13 +27,10 @@ export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
           // initial={{ x: '100%' }}
           // animate={{ x: 0 }}
           // exit={{ x: '100%' }}
-          style={{
-            height: isMobile ? '100dvh' : 'auto',
-          }}
           className={cn(
             'flex-1',
             isMobile
-              ? 'absolute left-0 top-0 z-50 w-screen'
+              ? 'absolute left-0 top-0 z-50 h-dvh w-screen'
               : 'h-main-container-height',
           )}
         >

@@ -36,7 +36,10 @@ export const ItemSub = ({
     const isMessageRemoved = message.status === 'removed';
     const isCurrentUserSender = message.sender._id === currentUserId;
     const isSystemMessage =
-      message.type === 'notification' || message.type === 'action';
+      message.type === 'notification' ||
+      message.type === 'action' ||
+      message.type === 'media' ||
+      message.status === 'removed';
 
     let actor = '';
     if (isGroup) {
@@ -80,11 +83,11 @@ export const ItemSub = ({
           const mediaType = message.media[0]?.type;
           switch (mediaType) {
             case 'image':
-              return `Sent ${message.media.length} photo${
+              return `sent ${message.media.length} photo${
                 message.media.length > 1 ? 's' : ''
               }`;
             case 'document':
-              return 'Sent file';
+              return 'sent file';
             default:
               break;
           }

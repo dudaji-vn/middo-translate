@@ -6,15 +6,15 @@ import {
   SUPPORTED_LANGUAGES,
 } from '@/configs/default-language';
 
+import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import Image from 'next/image';
-import Link from 'next/link';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
 import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
 import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth';
+import { useRouter } from 'next/navigation';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -25,52 +25,48 @@ export default function AccountSettings() {
   const signOut = () => {
     setShowConfirmLogout(true);
   };
+  const router = useRouter();
 
   return (
     <div>
-      <div className="mx-auto w-full px-[5vw] py-5">
-        <Link href={ROUTE_NAMES.ROOT} className="group flex w-fit items-center">
-          <span className="mr-4 transition-all group-hover:-translate-x-1">
-            {' '}
-            <ArrowBackOutline />
-          </span>
-          <span className="font-semibold">Account setting</span>
-        </Link>
+      <div className="mx-auto flex w-full items-center gap-2 px-[5vw] py-5">
+        <Button.Icon
+          color="default"
+          variant="ghost"
+          onClick={() => router.back()}
+        >
+          <ArrowBackOutline />
+        </Button.Icon>
+        <span className="font-semibold">Account setting</span>
       </div>
 
       <div className="mx-auto w-full rounded-3xl px-5 py-5 pb-0 md:max-w-[500px] md:overflow-hidden md:shadow-2">
-        <div className="mx-auto h-20 w-20 overflow-hidden rounded-full">
+        <div className="relative mx-auto h-20 w-20 ">
           <Image
             src={user?.avatar || '/person.svg'}
             priority
             alt={user?.name || 'Anonymous'}
             width={500}
             height={500}
-            className="h-full w-full object-cover"
+            className="h-full w-full overflow-hidden rounded-full object-cover"
           ></Image>
+          {user?.language && (
+            <div className="absolute bottom-0 left-1/2 mt-2 flex -translate-x-1/2 translate-y-1/2 items-center justify-center">
+              <CircleFlag
+                countryCode={
+                  LANGUAGE_CODES_MAP[
+                    user?.language as keyof typeof LANGUAGE_CODES_MAP
+                  ].toLowerCase() || ''
+                }
+                className="inline-block h-5 w-5"
+              />
+            </div>
+          )}
         </div>
-        <h2 className="mt-3 text-center text-base">
+        <h2 className="mt-5 text-center text-base">
           {user?.name || 'Anonymous'}
         </h2>
-        <p className="mt-2 text-center text-base text-[#333]">
-          {user?.email || ''}
-        </p>
-        {user?.language && (
-          <div className="mt-2 flex items-center justify-center">
-            <CircleFlag
-              countryCode={
-                LANGUAGE_CODES_MAP[
-                  user?.language as keyof typeof LANGUAGE_CODES_MAP
-                ].toLowerCase() || ''
-              }
-              className="mr-2 inline-block h-5 w-5"
-            />
-            <span className="text-sm">
-              {SUPPORTED_LANGUAGES.find((lang) => lang.code === user?.language)
-                ?.name || ''}
-            </span>
-          </div>
-        )}
+        <p className="text-center text-base text-[#333]">{user?.email || ''}</p>
 
         <div className="mt-8 flex items-center justify-center gap-6">
           <UpdateUserInfo />
