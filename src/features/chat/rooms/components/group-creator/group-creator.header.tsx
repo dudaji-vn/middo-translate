@@ -9,30 +9,42 @@ import {
 import { Button } from '@/components/actions';
 import { CameraIcon } from 'lucide-react';
 import { SearchInput } from '@/components/data-entry';
-import { SelectedList } from './selected-list';
+import { SelectedList } from '../selected-list';
+import { User } from '@/features/users/types';
 import { useDropzone } from 'react-dropzone';
-import { useGroupCreate } from './context';
 import { useState } from 'react';
 
-export interface GroupCreateHeaderProps {}
+export interface GroupCreateHeaderProps {
+  handleCreateGroup: (data: {
+    name: string;
+    participants: string[];
+    avatarFile?: File;
+  }) => void;
+  setSearchTerm: (term: string) => void;
+  selectedUsers: User[];
+  handleUnSelectUser: (user: User) => void;
+}
 
-export const GroupCreateHeader = (props: GroupCreateHeaderProps) => {
-  const { selectedUsers, setSearchTerm, handleCreateGroup } = useGroupCreate();
+export const GroupCreateHeader = ({
+  handleCreateGroup,
+  setSearchTerm,
+  selectedUsers,
+  handleUnSelectUser,
+}: GroupCreateHeaderProps) => {
   const [preview, setPreview] = useState<string | undefined>();
 
-  const { getRootProps, getInputProps, open, acceptedFiles, inputRef } =
-    useDropzone({
-      noClick: true,
-      multiple: false,
-      accept: {
-        'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
-      },
-      onDropAccepted: (files) => {
-        const file = files[0];
-        const preview = URL.createObjectURL(file);
-        setPreview(preview);
-      },
-    });
+  const { getInputProps, open, acceptedFiles, inputRef } = useDropzone({
+    noClick: true,
+    multiple: false,
+    accept: {
+      'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
+    },
+    onDropAccepted: (files) => {
+      const file = files[0];
+      const preview = URL.createObjectURL(file);
+      setPreview(preview);
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -119,7 +131,7 @@ export const GroupCreateHeader = (props: GroupCreateHeaderProps) => {
           }
           placeholder="Search"
         />
-        <SelectedList />
+        <SelectedList items={selectedUsers} onItemClick={handleUnSelectUser} />
       </div>
     </form>
   );

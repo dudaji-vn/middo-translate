@@ -3,10 +3,9 @@ import { forwardRef, memo, useEffect, useMemo } from 'react';
 import { Button } from '@/components/actions';
 import { InboxItem } from '../inbox-item';
 import { InboxType } from './inbox-side.main';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { InfiniteScroll } from '@/components/infinity-scroll';
 import { MessagePlusIcon } from '@/components/icons';
 import { Room } from '../../types';
-import { RoomActions } from '../room.actions';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
@@ -34,37 +33,34 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const {
       items: rooms,
-      refetch,
       fetchNextPage,
       hasNextPage,
       isLoading,
+      removeItem,
+      updateItem,
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
         roomApi.getRooms({ cursor: pageParam, limit: 10, type }),
     });
 
-    const updateRoom = (room: Partial<Room>) => {
-      // will be updated in the future, not refetch but update the data
-
-      refetch();
+    const updateRoom = (room: Partial<Room> & { _id: string }) => {
+      updateItem(room);
     };
 
     const deleteRoom = (roomId: string) => {
-      // will be updated in the future, not refetch but update the data
-      refetch();
+      removeItem(roomId);
     };
 
     const leaveRoom = (roomId: string) => {
-      // will be updated in the future, not refetch but update the data
-      refetch();
+      removeItem(roomId);
     };
 
     useEffect(() => {
       socket.on(
         SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
-          updateRoom(payload.data);
+          updateRoom({ _id: payload.roomId, ...payload.data });
         },
       );
       socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, (roomId: string) => {
@@ -116,12 +112,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
           className={cn('h-full gap-2 overflow-y-auto')}
         >
           <InfiniteScroll
-            scrollableTarget="scrollableDiv"
-            dataLength={rooms.length}
-            next={fetchNextPage}
+            onLoadMore={fetchNextPage}
             hasMore={hasNextPage || false}
-            loader={<h4>Loading...</h4>}
-            refreshFunction={refetch}
+            isFetching={isLoading}
             className="flex flex-col"
           >
             {rooms.map((room) => (

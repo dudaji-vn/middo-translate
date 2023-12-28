@@ -21,7 +21,7 @@ import { searchApi } from '@/features/search/api';
 import { stopPropagation } from '@/utils/stop-propagation';
 import { useAuthStore } from '@/stores/auth';
 import { useChatStore } from '@/features/chat/store';
-import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
+import { useGetUsersRecChat } from '@/features/recommendation/hooks';
 import { useSearch } from '@/hooks/use-search';
 
 export type InboxType = 'all' | 'group';

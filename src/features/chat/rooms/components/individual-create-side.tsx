@@ -9,15 +9,15 @@ import { UserItem } from '@/features/users/components';
 import { Users2Icon } from 'lucide-react';
 import { searchApi } from '@/features/search/api';
 import { useChangeInboxSide } from '../hooks/use-change-inbox-side';
-import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
+import { useGetUsersRecChat } from '@/features/recommendation/hooks';
 import { useParams } from 'next/navigation';
 import { useSearch } from '@/hooks/use-search';
 
-export interface PrivateCreateSideProps {
+export interface IndividualSideCreateProps {
   onBack?: () => void;
 }
 
-export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
+export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
   const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'users');
   const { data: recData } = useGetUsersRecChat();
   const { changeSide } = useChangeInboxSide();
@@ -43,11 +43,11 @@ export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
         <div className="p-3">
           <Button
             className="w-full"
-            variant="outline"
+            shape="square"
             size="lg"
             onClick={handleCreateGroup}
           >
-            <Users2Icon className="mr-3 h-5 w-5" /> Create group
+            <Users2Icon className="mr-3 h-5 w-5" /> New group chat
           </Button>
         </div>
         {data && (

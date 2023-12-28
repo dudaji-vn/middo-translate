@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { ArrowDownIcon } from 'lucide-react';
 import { Button } from '@/components/actions/button';
+import { InfiniteScroll } from '@/components/infinity-scroll';
 import { Message } from '../types';
 import { MessageItem } from './message-item';
 import { MessageItemGroup } from './message-group';
@@ -14,7 +15,6 @@ import { formatTimeDisplay } from '../../rooms/utils';
 import { getReadByUsers } from '../../utils';
 import moment from 'moment';
 import { useAuthStore } from '@/stores/auth';
-import { useIntersectionObserver } from 'usehooks-ts';
 import { useMessagesBox } from '@/features/chat/messages/contexts';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
@@ -27,16 +27,8 @@ type MessageGroup = {
 };
 export const MessageBox = ({ room }: { room: Room }) => {
   const currentUserId = useAuthStore((s) => s.user?._id);
-  const {
-    hasNextPage,
-    loadMoreMessages,
-    refetchMessages,
-    messages,
-    isFetching,
-  } = useMessagesBox();
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const entry = useIntersectionObserver(triggerRef, {});
-  const isTriggered = !!entry?.isIntersecting;
+  const { hasNextPage, loadMoreMessages, messages, isFetching } =
+    useMessagesBox();
 
   const { ref, isScrolled } = useScrollDistanceFromTop(0, true);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -150,25 +142,17 @@ export const MessageBox = ({ room }: { room: Room }) => {
     return usersReadMessageMap;
   }, [currentUserId, messagesGroup, room.participants]);
 
-  useEffect(() => {
-    if (isTriggered && hasNextPage) {
-      loadMoreMessages();
-    }
-  }, [hasNextPage, isTriggered, loadMoreMessages, isFetching]);
-
   return (
     <div className="relative flex h-full w-full flex-1 overflow-hidden">
-      <div
+      <InfiniteScroll
+        hasMore={hasNextPage || false}
+        onLoadMore={loadMoreMessages}
+        isFetching={isFetching}
         ref={ref}
         id="inbox-list"
         className="bg-primary/5 flex w-full flex-1  flex-col-reverse gap-2 overflow-y-scroll px-3 pb-2 pt-6 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
-        {isFetching && (
-          <div className="bg-primary/10 absolute left-1/2 top-6 -translate-x-1/2 rounded-full p-2 text-primary">
-            <Spinner size="lg" />
-          </div>
-        )}
 
         {messagesGroup.map((group, index) => {
           const timeDiff = moment(moment(group.lastMessage.createdAt)).diff(
@@ -216,10 +200,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
             </div>
           );
         })}
-        <div className="relative h-10 w-10">
-          <div ref={triggerRef} className="absolute top-80"></div>
-        </div>
-      </div>
+      </InfiniteScroll>
       {isScrolled && (
         <Button.Icon
           size="sm"

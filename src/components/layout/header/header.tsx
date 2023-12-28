@@ -7,8 +7,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 
-import { Avatar } from '../data-display/avatar';
-import { HeaderNavigation } from './header-navigation';
+import { Avatar } from '@/components/data-display';
+import { HeaderNav } from './header-nav';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
@@ -29,8 +29,8 @@ export const Header = (props: Props) => {
   };
 
   return (
-    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background px-[5vw] py-4">
-      <HeaderNavigation />
+    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]">
+      <HeaderNav />
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
@@ -93,7 +93,7 @@ export const Header = (props: Props) => {
 
             <span
               className={
-                'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-colors-primary-500-main'
+                'md:group-hover:text-primary-500-main  hidden font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent'
               }
             >
               Sign in

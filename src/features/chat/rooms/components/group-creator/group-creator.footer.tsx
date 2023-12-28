@@ -1,12 +1,17 @@
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button } from '@/components/actions';
-import { useGroupCreate } from './context';
+import { User } from '@/features/users/types';
 
-export interface GroupCreateFooterProps {}
+export interface GroupCreateFooterProps {
+  createLoading: boolean;
+  selectedUsers: User[];
+}
 
-export const GroupCreateFooter = (props: GroupCreateFooterProps) => {
-  const { selectedUsers, createLoading } = useGroupCreate();
+export const GroupCreateFooter = ({
+  createLoading,
+  selectedUsers,
+}: GroupCreateFooterProps) => {
   return (
     <AnimatePresence>
       {selectedUsers.length > 1 && (

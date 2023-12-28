@@ -2,7 +2,7 @@
 
 import { AlertCircleIcon } from 'lucide-react';
 import { Button } from '@/components/actions';
-import { RoomAvatar } from '../../room-avatar.small';
+import { RoomAvatar } from '../../room-avatar';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import { generateRoomDisplay } from '../../../utils';
 import { useAuthStore } from '@/stores/auth';
@@ -20,7 +20,7 @@ export const ChatBoxHeader = () => {
     <div className="flex w-full items-center border-b  px-1 py-1 md:px-3">
       <RoomBoxHeaderNavigation />
       <div className="flex items-center gap-2">
-        <RoomAvatar isOnline room={room} />
+        <RoomAvatar isOnline room={room} size={36} />
         <div>
           <p className="line-clamp-1 font-medium">{room.name}</p>
           <p className="text-sm font-light">Online</p>

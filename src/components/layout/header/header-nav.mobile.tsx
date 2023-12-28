@@ -1,105 +1,37 @@
-'use client';
-
 import { AnimatePresence, motion } from 'framer-motion';
-import { BarChartIcon, XIcon } from 'lucide-react';
-import { forwardRef, useState } from 'react';
+import { BarChartIcon, Menu, XIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import Link from 'next/link';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
-import { useAppStore } from '@/stores/app.store';
+import { forwardRef } from 'react';
+import { navItems } from './header.config';
+import { useBoolean } from 'usehooks-ts';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
 import { usePathname } from 'next/navigation';
 
-type NavigationItem = {
-  name: string;
-  href: string;
-};
-const navigationItems: NavigationItem[] = [
-  {
-    name: 'Translation',
-    href: ROUTE_NAMES.ROOT,
-  },
-  {
-    name: 'Conversation',
-    href: ROUTE_NAMES.ONLINE_CONVERSATION,
-  },
-  {
-    name: 'Duel',
-    href: '#',
-  },
-];
-
-export interface HeaderNavigationProps
+export interface HeaderNavMobileProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const HeaderNavigation = forwardRef<
-  HTMLDivElement,
-  HeaderNavigationProps
->((props, ref) => {
-  const isMobile = useAppStore((state) => state.isMobile);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-  const pathName = usePathname();
+export const HeaderNavMobile = forwardRef<HTMLDivElement, HeaderNavMobileProps>(
+  (props, ref) => {
+    const { toggle, value } = useBoolean(false);
+    const pathName = usePathname();
 
-  return (
-    <div className="flex-1">
-      <Button.Icon
-        onClick={toggleMenu}
-        className="md:hidden"
-        color="secondary"
-        shape="square"
-        size="xs"
-      >
-        {isMenuOpen ? <XIcon /> : <BarChartIcon className="rotate-90" />}
-      </Button.Icon>
-
-      {!isMobile && (
-        <div className="flex w-screen flex-row items-stretch gap-[60px] bg-background shadow-none md:!ml-0 md:w-auto md:items-center">
-          {navigationItems.map((item) => (
-            <NavigationItem
-              isActive={pathName === item.href}
-              key={item.name}
-              item={item}
-            />
-          ))}
-        </div>
-      )}
-      <AnimatePresence>
-        {isMobile && isMenuOpen && (
-          <MobileNavigation toggleMenu={toggleMenu} pathName={pathName} />
-        )}
-      </AnimatePresence>
-    </div>
-  );
-});
-HeaderNavigation.displayName = 'HeaderNavigation';
-
-const NavigationItem = ({
-  item,
-  isActive = false,
-}: {
-  item: {
-    name: string;
-    href: string;
-  };
-  isActive?: boolean;
-}) => {
-  return (
-    <Link
-      href={item.href}
-      className={cn(
-        'bg-background px-[5vw] py-4 text-sm font-semibold active:bg-background-darker active:!text-shading md:!p-0 md:hover:text-secondary md:active:!bg-transparent',
-        isActive && '!text-primary',
-      )}
-    >
-      {item.name}
-    </Link>
-  );
-};
-
-const MobileNavigation = ({
+    return (
+      <>
+        <Button.Icon onClick={toggle} color="primary" variant="ghost" size="sm">
+          {value ? <XIcon /> : <Menu />}
+        </Button.Icon>
+        <AnimatePresence>
+          {value && <MobileNav toggleMenu={toggle} pathName={pathName} />}
+        </AnimatePresence>
+      </>
+    );
+  },
+);
+HeaderNavMobile.displayName = 'HeaderNavMobile';
+const MobileNav = ({
   pathName,
   toggleMenu,
 }: {
@@ -124,7 +56,7 @@ const MobileNavigation = ({
           'absolute left-0 top-[52px] z-50 flex w-full flex-col items-stretch overflow-hidden rounded-b-2xl  bg-background shadow-1',
         )}
       >
-        {navigationItems.map((item, index) => {
+        {navItems.map((item, index) => {
           return (
             <motion.div
               onClick={toggleMenu}

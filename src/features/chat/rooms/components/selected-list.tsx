@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
-import { SelectedItem } from './selected-item';
 import { User } from '@/features/users/types';
+import { UserSelectedItem } from '@/features/users/components/user-item.selected';
 
 export interface SelectedListProps {
   items: User[];
@@ -48,7 +48,10 @@ export const SelectedList = ({ items, onItemClick }: SelectedListProps) => {
                 exit={{ opacity: 0, scale: 0 }}
                 key={user._id}
               >
-                <SelectedItem onClick={() => onItemClick(user)} user={user} />
+                <UserSelectedItem
+                  onClick={() => onItemClick(user)}
+                  user={user}
+                />
               </motion.div>
             ))}
           </AnimatePresence>

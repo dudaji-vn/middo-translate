@@ -3,13 +3,12 @@ import { Avatar, Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { XIcon } from 'lucide-react';
 
-export const SelectedItem = ({
-  user,
-  onClick,
-}: {
+type UserSelectedItemProps = {
   user: User;
   onClick?: () => void;
-}) => {
+};
+
+export const UserSelectedItem = ({ user, onClick }: UserSelectedItemProps) => {
   const name = user.name.split(' ')[0];
   return (
     <div
@@ -25,7 +24,7 @@ export const SelectedItem = ({
           alt={user.name}
         />
         <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
-          <XIcon />
+          <XIcon className="size-4" />
         </div>
       </div>
       <Typography className="truncate">{name}</Typography>
