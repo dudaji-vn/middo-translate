@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  ChevronDown,
-  LogOutOutline,
-  SettingsOutline,
-} from '@easy-eva-icons/react';
+import { ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,7 +29,7 @@ export const Header = (props: Props) => {
   };
 
   return (
-    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-colors-neutral-50 bg-background px-[5vw] py-4">
+    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background px-[5vw] py-4">
       <HeaderNavigation />
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
@@ -43,7 +39,7 @@ export const Header = (props: Props) => {
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
             <DropdownMenuTrigger>
-              <div className="relative flex gap-2 rounded-xl bg-colors-neutral-50 p-2 active:!bg-colors-neutral-200 active:!text-shading md:hover:bg-colors-neutral-100">
+              <div className="relative flex gap-2 rounded-xl bg-neutral-50 p-2 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
                 <Avatar
                   src={user.avatar || '/person.svg'}
                   size="xs"
@@ -56,7 +52,7 @@ export const Header = (props: Props) => {
                   </div>
                 </div>
                 <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
-                  <ChevronDown className="opacity-60" />
+                  <ChevronDownIcon className="opacity-60" />
                 </div>
               </div>
             </DropdownMenuTrigger>
@@ -69,14 +65,14 @@ export const Header = (props: Props) => {
                 href={ROUTE_NAMES.ACCOUNT_SETTINGS}
                 className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
-                <SettingsOutline />
+                <SettingsIcon />
                 Account setting
               </Link>{' '}
               <a
                 onClick={signOut}
                 className="flex cursor-pointer items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
-                <LogOutOutline />
+                <LogOutIcon />
                 Sign out
               </a>
             </DropdownMenuContent>
@@ -84,7 +80,7 @@ export const Header = (props: Props) => {
         ) : (
           <Link
             href={ROUTE_NAMES.SIGN_IN}
-            className="size-9 md:size-fit group flex items-center rounded-full bg-colors-neutral-50 p-1 active:!bg-colors-neutral-200 active:!text-shading md:gap-2 md:rounded-xl md:p-2 md:px-4 md:hover:bg-colors-neutral-100"
+            className="group flex size-9 items-center rounded-full bg-neutral-50 p-1 active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl md:p-2 md:px-4 md:hover:bg-neutral-100"
           >
             <Image
               src="/hero_avatar.png"

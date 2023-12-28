@@ -1,14 +1,11 @@
 'use client';
 
-import { ArrowBackOutline, LogOutOutline } from '@easy-eva-icons/react';
-import {
-  LANGUAGE_CODES_MAP,
-  SUPPORTED_LANGUAGES,
-} from '@/configs/default-language';
+import { ArrowLeft, LogOutIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import Image from 'next/image';
+import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
 import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
 import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
 import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
@@ -35,12 +32,12 @@ export default function AccountSettings() {
           variant="ghost"
           onClick={() => router.back()}
         >
-          <ArrowBackOutline />
+          <ArrowLeft />
         </Button.Icon>
         <span className="font-semibold">Account setting</span>
       </div>
 
-      <div className="mx-auto w-full rounded-3xl px-5 py-5 pb-0 md:max-w-[500px] md:overflow-hidden md:shadow-2">
+      <div className="mx-auto w-full rounded-3xl py-5 pb-0 md:max-w-[500px] md:overflow-hidden md:shadow-2">
         <div className="relative mx-auto h-20 w-20 ">
           <Image
             src={user?.avatar || '/person.svg'}
@@ -74,19 +71,15 @@ export default function AccountSettings() {
         </div>
         <div className="-mx-[5vw] mt-4 h-2 bg-[#FAFAFA] md:-mx-6"></div>
         <UpdateUserPassword />
-        <p
+        <Button
+          variant="ghost"
+          color="error"
+          startIcon={<LogOutIcon />}
           onClick={signOut}
-          className="mx-[-20px] flex cursor-pointer items-center justify-center p-4 text-center font-medium transition-all hover:bg-red-50"
+          className="w-full rounded-none"
         >
-          <span>
-            <LogOutOutline
-              width={16}
-              height={16}
-              fill="#ef4444"
-            ></LogOutOutline>
-          </span>
-          <span className="ml-2 font-medium text-red-500">Sign out</span>
-        </p>
+          Sign out
+        </Button>
       </div>
     </div>
   );

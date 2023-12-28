@@ -1,15 +1,15 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { BarChartOutline, Close } from '@easy-eva-icons/react';
+import { BarChartIcon, XIcon } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
+import { useAppStore } from '@/stores/app.store';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
-import { useIsMobile } from '@/hooks/use-is-mobile';
 import { usePathname } from 'next/navigation';
 
 type NavigationItem = {
@@ -38,7 +38,7 @@ export const HeaderNavigation = forwardRef<
   HTMLDivElement,
   HeaderNavigationProps
 >((props, ref) => {
-  const isMobile = useIsMobile();
+  const isMobile = useAppStore((state) => state.isMobile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const pathName = usePathname();
@@ -52,7 +52,7 @@ export const HeaderNavigation = forwardRef<
         shape="square"
         size="xs"
       >
-        {isMenuOpen ? <Close /> : <BarChartOutline className="rotate-90" />}
+        {isMenuOpen ? <XIcon /> : <BarChartIcon className="rotate-90" />}
       </Button.Icon>
 
       {!isMobile && (

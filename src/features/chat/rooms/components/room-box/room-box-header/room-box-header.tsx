@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircleOutline } from '@easy-eva-icons/react';
+import { AlertCircleIcon } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { RoomAvatar } from '../../room-avatar.small';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
@@ -43,7 +43,7 @@ const ActionBar = () => {
         color={showSide ? 'primary' : 'default'}
         variant="ghost"
       >
-        <AlertCircleOutline />
+        <AlertCircleIcon />
       </Button.Icon>
     </div>
   );

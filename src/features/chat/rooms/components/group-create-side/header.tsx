@@ -7,7 +7,7 @@ import {
 } from '@/components/data-display';
 
 import { Button } from '@/components/actions';
-import { Camera } from '@easy-eva-icons/react';
+import { CameraIcon } from 'lucide-react';
 import { SearchInput } from '@/components/data-entry';
 import { SelectedList } from './selected-list';
 import { useDropzone } from 'react-dropzone';
@@ -92,7 +92,7 @@ export const GroupCreateHeader = (props: GroupCreateHeaderProps) => {
               type="button"
               className="shrink-0"
             >
-              <Camera />
+              <CameraIcon />
             </Button.Icon>
 
             <input

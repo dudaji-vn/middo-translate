@@ -42,7 +42,7 @@ export const RoomMedia = () => {
         {media.map((media) => (
           <div
             key={media.url}
-            className="relative aspect-square overflow-hidden rounded-[4px] border border-colors-neutral-50"
+            className="relative aspect-square overflow-hidden rounded-[4px] border border-neutral-50"
           >
             <Image
               src={media.url}

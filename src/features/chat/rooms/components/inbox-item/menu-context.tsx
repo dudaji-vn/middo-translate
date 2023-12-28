@@ -42,7 +42,7 @@ export const InboxMenuProvider = ({
             >
               Leave
             </Button>
-            <div className="h-[1px] w-full bg-colors-neutral-50"></div>
+            <div className="h-[1px] w-full bg-neutral-50"></div>
             <Button
               startIcon={<Trash className="h-4 w-4" />}
               color="error"

@@ -2,7 +2,7 @@
 
 import './style.css';
 
-import { CheckmarkCircle2Outline, Edit2Outline } from '@easy-eva-icons/react';
+import { CheckCircle2Icon, Edit2Icon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
@@ -65,13 +65,13 @@ export const TranslateMiddle = ({
       <div className="mt-2 flex justify-end">
         {type === 'edit' ? (
           <Button.Icon variant="ghost" color="default" onClick={editUnMatch}>
-            <Edit2Outline />
+            <Edit2Icon />
           </Button.Icon>
         ) : (
           <>
             {!isMatch && !isEdit && (
               <Button.Icon color="success" onClick={acceptUnMatch}>
-                <CheckmarkCircle2Outline />
+                <CheckCircle2Icon />
               </Button.Icon>
             )}
           </>

@@ -83,10 +83,10 @@ export const TranslateTool = ({
             transition={{ duration: 0.2, ease: 'backOut' }}
             className=""
           >
-            <div className="rounded-xl bg-colors-neutral-white shadow-2 ">
+            <div className="bg-neutral-white rounded-xl shadow-2 ">
               <div className="flex items-center gap-3 p-3">
                 <CircleFlag countryCode="gb" height="20" width="20" />
-                <span className="text-sm font-medium text-colors-neutral-600">
+                <span className="text-sm font-medium text-neutral-600">
                   EN - Translate tool
                 </span>
                 <Switch
@@ -148,7 +148,7 @@ export const TranslateTool = ({
                 </div>
                 {!isEditing && (
                   <div className="flex-1">
-                    <p className="text-colors-neutral-600">{content}</p>
+                    <p className="text-neutral-600">{content}</p>
                   </div>
                 )}
 
@@ -192,7 +192,7 @@ export const TranslateTool = ({
 
 const NotificationTranslation = ({ onClose }: { onClose?: () => void }) => {
   return (
-    <div className="flex items-center justify-between rounded-xl bg-colors-neutral-white p-3 shadow-2">
+    <div className="bg-neutral-white flex items-center justify-between rounded-xl p-3 shadow-2">
       <p>
         EN - Translate tool is turn off, you can turn it on again in{' '}
         <span className="font-medium text-colors-primary-500-main">

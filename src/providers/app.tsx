@@ -12,14 +12,12 @@ import React from 'react';
 import { ReactQueryProvider } from './react-query';
 import { SideEffectProvider } from './side-effect.provider';
 import SocketProvider from './socket';
-import { Toaster } from '@/components/toast';
 
 type Props = {};
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
   return (
     <>
-      <Toaster />
       <HotToaster />
       <SocketProvider />
       <BootstrapProvider />

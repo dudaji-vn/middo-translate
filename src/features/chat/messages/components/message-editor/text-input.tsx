@@ -17,9 +17,9 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import EmojiPicker from 'emoji-picker-react';
 import { TranslateTool } from './translate-tool';
 import { cn } from '@/utils/cn';
+import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth';
 import { useChatStore } from '@/features/chat/store';
-import { useIsMobile } from '@/hooks/use-is-mobile';
 import { useTranslate } from '@/features/translate/hooks/use-translate';
 
 export interface TextInputRef extends HTMLInputElement {
@@ -32,7 +32,7 @@ export const TextInput = forwardRef<
 >((props, ref) => {
   const userLanguage = useAuthStore((s) => s.user?.language) ?? 'en';
   const [disabled, setDisabled] = useState(false);
-  const isMobile = useIsMobile();
+  const isMobile = useAppStore((state) => state.isMobile);
 
   const {
     text,

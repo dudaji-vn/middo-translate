@@ -3,8 +3,8 @@
 import * as React from 'react';
 import * as SelectPrimitive from '@radix-ui/react-select';
 
-import { ArrowIosDownward } from '@easy-eva-icons/react';
-import { Check } from 'lucide-react';
+import { Check, ChevronDownIcon } from 'lucide-react';
+
 import { cn } from '@/utils/cn';
 
 const Select = SelectPrimitive.Root;
@@ -27,7 +27,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ArrowIosDownward className="h-5 w-5 text-text group-active:text-background" />
+      <ChevronDownIcon className="size-5 opacity-50 group-active:text-background" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));

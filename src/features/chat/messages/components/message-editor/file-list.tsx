@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { Close, File, PlusCircleOutline } from '@easy-eva-icons/react';
 import { FileIcon, defaultStyles } from 'react-file-icon';
+import { PlusCircleIcon, XIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { FileWithUrl } from '@/hooks/use-select-files';
@@ -69,7 +69,7 @@ export const FileList = ({
                     onClick={() => onRemoveFile?.(file)}
                   >
                     <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
-                      <Close width={20} height={20} />
+                      <XIcon width={20} height={20} />
                     </div>
                   </button>
                 </motion.div>
@@ -84,7 +84,7 @@ export const FileList = ({
             size="lg"
             className="rounded-2xl"
           >
-            <PlusCircleOutline />
+            <PlusCircleIcon />
           </Button.Icon>
         </div>
       )}

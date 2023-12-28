@@ -1,4 +1,4 @@
-import { Checkmark } from '@easy-eva-icons/react';
+import { CheckIcon } from 'lucide-react';
 import { Typography } from '@/components/data-display';
 import { UserItem } from '@/features/users/components';
 import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
@@ -27,7 +27,7 @@ export const SuggestionList = (props: SuggestionListProps) => {
             rightElement={
               <div className="flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full border border-stroke p-[0.5px]">
                 {isChecked && (
-                  <Checkmark className="h-3 w-3 rounded-full bg-primary text-background" />
+                  <CheckIcon className="h-3 w-3 rounded-full bg-primary text-background" />
                 )}
               </div>
             }

@@ -1,4 +1,4 @@
-import { Checkmark } from '@easy-eva-icons/react';
+import { CheckIcon } from 'lucide-react';
 import { UserItem } from '@/features/users/components';
 import { useAuthStore } from '@/stores/auth';
 import { useGroupCreate } from './context';
@@ -27,7 +27,7 @@ export const GroupCreateSearchList = (props: GroupCreateSearchListProps) => {
             rightElement={
               <div className="flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full border border-stroke p-[0.5px]">
                 {isChecked && (
-                  <Checkmark className="h-3 w-3 rounded-full bg-primary text-background" />
+                  <CheckIcon className="h-3 w-3 rounded-full bg-primary text-background" />
                 )}
               </div>
             }

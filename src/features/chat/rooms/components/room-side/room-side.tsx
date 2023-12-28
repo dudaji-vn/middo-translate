@@ -10,15 +10,15 @@ import { RoomMember } from './room-member';
 import { RoomSetting } from './room-setting';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
+import { useAppStore } from '@/stores/app.store';
 import { useChatBox } from '../../contexts';
-import { useIsMobile } from '@/hooks/use-is-mobile';
 
 export interface RoomSideProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
   (props, ref) => {
     const { room, showSide, toggleSide } = useChatBox();
-    const isMobile = useIsMobile();
+    const isMobile = useAppStore((state) => state.isMobile);
 
     return (
       <>

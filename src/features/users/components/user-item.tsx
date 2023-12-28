@@ -30,7 +30,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
         )}
       >
         <div className="flex w-full items-center gap-2">
-          <Avatar src={user?.avatar} alt={user?.name} size="lg" />
+          <Avatar src={user?.avatar} alt={user?.name} />
           <div className="w-full">
             <div className="flex items-center justify-between">
               <div className="max-w-full">

@@ -1,3 +1,4 @@
+import { ArrowLeftIcon, Settings } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,13 +9,11 @@ import { SearchInput, SearchInputRef, Switch } from '@/components/data-entry';
 import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { forwardRef, useRef, useState } from 'react';
 
-import { ArrowBackOutline } from '@easy-eva-icons/react';
 import { Button } from '@/components/actions/button';
 import { InboxItem } from '../inbox-item';
 import InboxList from './inbox-list';
 import Link from 'next/link';
 import { Room } from '../../types';
-import { Settings } from 'lucide-react';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
 import { cn } from '@/utils/cn';
@@ -42,10 +41,10 @@ export const inboxTabMap: Record<
     value: 'group',
   },
 };
-export interface InboxMainSideProps
+export interface InboxSideMainProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
+export const InboxSideMain = forwardRef<HTMLDivElement, InboxSideMainProps>(
   (props, ref) => {
     const [isSearch, setIsSearch] = useState(false);
     const [isOpenDropdown, setOpenDropdown] = useState(false);
@@ -84,7 +83,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
               onClick={closeSearch}
               className="-ml-2"
             >
-              <ArrowBackOutline />
+              <ArrowLeftIcon />
             </Button.Icon>
           )}
           <div className="flex-1">
@@ -206,7 +205,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
     );
   },
 );
-InboxMainSide.displayName = 'InboxMainSide';
+InboxSideMain.displayName = 'InboxSideMain';
 
 const SearchSection = ({
   label,

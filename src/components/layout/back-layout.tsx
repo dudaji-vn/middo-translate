@@ -4,7 +4,7 @@ import './style.css';
 
 import { usePathname, useRouter } from 'next/navigation';
 
-import { ArrowBack } from '@easy-eva-icons/react';
+import { ArrowLeftIcon } from 'lucide-react';
 import { forwardRef } from 'react';
 
 export interface BackLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -33,7 +33,7 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
             }
             className="backButton active:bg-stroke md:hover:bg-background-darker"
           >
-            <ArrowBack className="h-[30px] w-[30px]" />
+            <ArrowLeftIcon className="h-[30px] w-[30px]" />
           </button>
           <p className="pageTitle">{title}</p>
         </div>

@@ -3,10 +3,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 
-import { ArrowBackOutline } from '@easy-eva-icons/react';
+import { ArrowLeftIcon } from 'lucide-react';
 import { Button } from '@/components/actions/button';
 import { GroupCreateSide } from '../group-create-side';
-import { InboxMainSide } from './inbox-main-side';
+import { InboxSideMain } from './inbox-side.main';
 import { InboxSides } from '../../types';
 import { PrivateCreateSide } from '../private-create-side';
 import { RoomActions } from '../room.actions';
@@ -56,7 +56,7 @@ export const Inbox = (props: InboxProps) => {
     <RoomActions>
       <div className="relative flex h-[calc(100dvh_-_56px)] w-full flex-col border-r bg-background">
         <div className="flex-1 overflow-hidden pt-5">
-          <InboxMainSide />
+          <InboxSideMain />
         </div>
         <AnimatePresence>
           {side !== 'default' && (
@@ -73,7 +73,7 @@ export const Inbox = (props: InboxProps) => {
                   variant="ghost"
                   color="default"
                 >
-                  <ArrowBackOutline />
+                  <ArrowLeftIcon />
                 </Button.Icon>
                 <Typography variant="default" className="font-semibold">
                   {sidesMap[side]?.title}

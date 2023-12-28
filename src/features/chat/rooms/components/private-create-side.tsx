@@ -2,11 +2,11 @@
 
 import { Button } from '@/components/actions';
 import Link from 'next/link';
-import { PeopleOutline } from '@easy-eva-icons/react';
 import { SearchInput } from '@/components/data-entry';
 import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
+import { Users2Icon } from 'lucide-react';
 import { searchApi } from '@/features/search/api';
 import { useChangeInboxSide } from '../hooks/use-change-inbox-side';
 import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
@@ -47,7 +47,7 @@ export const PrivateCreateSide = (props: PrivateCreateSideProps) => {
             size="lg"
             onClick={handleCreateGroup}
           >
-            <PeopleOutline className="mr-3 h-5 w-5" /> Create group
+            <Users2Icon className="mr-3 h-5 w-5" /> Create group
           </Button>
         </div>
         {data && (
