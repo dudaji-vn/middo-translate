@@ -14,7 +14,7 @@ import { InputSelectLanguage } from '@/components/form/InputSelectLanguage';
 import { PageLoading } from '@/components/loading/PageLoading';
 import { User } from '../users/types';
 import { UpdateInforSchema as schema } from '@/configs/yup-form';
-import { toast } from '@/components/toast';
+import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/userService';
 import { useAuthStore } from '@/stores/auth';
 import { useForm } from 'react-hook-form';
@@ -59,10 +59,7 @@ export default function UpdateUserInfo() {
           language: res.data.language,
         },
       });
-      toast({
-        title: 'Success',
-        description: 'Your information has been update!',
-      });
+      toast.success('Update info success!');
       setErrorMessage('');
       setOpen(false);
     } catch (err: any) {

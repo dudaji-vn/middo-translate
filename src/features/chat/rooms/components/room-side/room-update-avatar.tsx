@@ -7,7 +7,7 @@ import {
 
 import { Button } from '@/components/actions';
 import { Camera } from 'lucide-react';
-import { toast } from '@/components/toast';
+import toast from 'react-hot-toast';
 import { uploadImage } from '@/utils/upload-img';
 import { useChatBox } from '../../contexts';
 import { useDropzone } from 'react-dropzone';
@@ -48,10 +48,7 @@ export const RoomUpdateAvatar = ({
       // call api to update avatar, tomorrow
     },
     onDropRejected: () => {
-      toast({
-        title: 'Error',
-        description: 'Please choose image with size less than 3MB!',
-      });
+      toast.error('File is too large or not supported!');
     },
   });
 

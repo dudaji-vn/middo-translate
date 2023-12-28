@@ -8,7 +8,6 @@ import { PageLoading } from '@/components/loading/PageLoading';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { forgotPasswordService } from '@/services/authService';
 import { ForgotPasswordSchema as schema } from '@/configs/yup-form';
-import { toast } from '@/components/toast';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

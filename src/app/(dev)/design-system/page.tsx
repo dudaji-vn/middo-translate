@@ -58,7 +58,7 @@ interface HomeProps {
 
 export default async function DesignSystem(props: HomeProps) {
   return (
-    <main className="max-w-screen flex min-h-screen flex-col items-center overflow-x-hidden p-4">
+    <main className="max-w-screen flex min-h-screen flex-col items-center overflow-x-hidden bg-white p-4">
       <div className="flex w-full flex-1 pb-2">
         <div className="flex h-full basis-1/4 flex-col gap-4">
           <Section title="1. Color">
@@ -107,11 +107,23 @@ export default async function DesignSystem(props: HomeProps) {
           </Section>
           <Section title="4. Button">
             <div className="flex flex-col gap-2">
-              <Button startIcon={<ArrowCircleLeftOutline />}>Button</Button>
-              <Button variant="outline" startIcon={<ArrowCircleLeftOutline />}>
+              <Button
+                size="lg"
+                variant="ghost"
+                color="error"
+                startIcon={<ArrowCircleLeftOutline />}
+              >
                 Button
               </Button>
-              <Button disabled>Button</Button>
+              <Button
+                size="lg"
+                variant="ghost"
+                color="error"
+                disabled
+                startIcon={<ArrowCircleLeftOutline />}
+              >
+                Button
+              </Button>
             </div>
           </Section>
         </div>
