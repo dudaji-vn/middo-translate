@@ -1,4 +1,4 @@
-import { AttachOutline, Camera, PlusCircle } from '@easy-eva-icons/react';
+import { CameraIcon, PaperclipIcon, PlusCircleIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,7 +19,7 @@ export const AdditionalActions = ({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button.Icon tabIndex={-1} size="sm" variant="ghost">
-          <PlusCircle />
+          <PlusCircleIcon />
         </Button.Icon>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -38,7 +38,7 @@ export const AdditionalActions = ({
             shape="default"
             className="rounded-full"
           >
-            <Camera />
+            <CameraIcon />
           </Button.Icon>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
@@ -50,7 +50,7 @@ export const AdditionalActions = ({
             shape="default"
             className="rounded-full"
           >
-            <AttachOutline />
+            <PaperclipIcon />
           </Button.Icon>
         </DropdownMenuItem>
       </DropdownMenuContent>

@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo } from 'react';
 
-import { ArrowBackOutline } from '@easy-eva-icons/react';
+import { ArrowLeftIcon } from 'lucide-react';
 import { Button } from '@/components/actions/button';
 import { GroupCreateSide } from '../group-create-side';
 import { InboxSideMain } from './inbox-side.main';
@@ -73,7 +73,7 @@ export const Inbox = (props: InboxProps) => {
                   variant="ghost"
                   color="default"
                 >
-                  <ArrowBackOutline />
+                  <ArrowLeftIcon />
                 </Button.Icon>
                 <Typography variant="default" className="font-semibold">
                   {sidesMap[side]?.title}

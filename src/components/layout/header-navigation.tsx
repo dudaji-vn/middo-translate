@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { BarChartOutline, Close } from '@easy-eva-icons/react';
+import { BarChartIcon, XIcon } from 'lucide-react';
 import { forwardRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
@@ -52,7 +52,7 @@ export const HeaderNavigation = forwardRef<
         shape="square"
         size="xs"
       >
-        {isMenuOpen ? <Close /> : <BarChartOutline className="rotate-90" />}
+        {isMenuOpen ? <XIcon /> : <BarChartIcon className="rotate-90" />}
       </Button.Icon>
 
       {!isMobile && (

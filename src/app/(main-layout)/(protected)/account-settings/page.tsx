@@ -1,14 +1,11 @@
 'use client';
 
-import { ArrowBackOutline, LogOutOutline } from '@easy-eva-icons/react';
-import {
-  LANGUAGE_CODES_MAP,
-  SUPPORTED_LANGUAGES,
-} from '@/configs/default-language';
+import { ArrowLeft, LogOutIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import Image from 'next/image';
+import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
 import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
 import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
 import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
@@ -35,7 +32,7 @@ export default function AccountSettings() {
           variant="ghost"
           onClick={() => router.back()}
         >
-          <ArrowBackOutline />
+          <ArrowLeft />
         </Button.Icon>
         <span className="font-semibold">Account setting</span>
       </div>
@@ -79,11 +76,7 @@ export default function AccountSettings() {
           className="mx-[-20px] flex cursor-pointer items-center justify-center p-4 text-center font-medium transition-all hover:bg-red-50"
         >
           <span>
-            <LogOutOutline
-              width={16}
-              height={16}
-              fill="#ef4444"
-            ></LogOutOutline>
+            <LogOutIcon width={16} height={16} fill="#ef4444"></LogOutIcon>
           </span>
           <span className="ml-2 font-medium text-red-500">Sign out</span>
         </p>

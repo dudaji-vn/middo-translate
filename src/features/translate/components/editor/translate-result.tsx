@@ -1,6 +1,6 @@
 'use client';
 
-import { CopyOutline, VolumeUpOutline } from '@easy-eva-icons/react';
+import { CopyIcon, Volume2Icon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { CopyZoneClick } from '@/components/actions';
@@ -46,11 +46,11 @@ export const TranslateResult = ({
             variant="ghost"
             color="primary"
           >
-            <VolumeUpOutline />
+            <Volume2Icon />
           </Button.Icon>
           <CopyZoneClick text={result}>
             <Button.Icon disabled={!result} variant="ghost" color="primary">
-              <CopyOutline />
+              <CopyIcon />
             </Button.Icon>
           </CopyZoneClick>
         </div>

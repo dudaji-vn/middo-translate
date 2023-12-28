@@ -2,6 +2,7 @@
   "name": "intermediate-translate",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,7 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@easy-eva-icons/react": "^1.0.2",
     "@google-cloud/text-to-speech": "^5.0.1",
     "@google-cloud/translate": "^8.0.2",
     "@hookform/resolvers": "^3.3.2",

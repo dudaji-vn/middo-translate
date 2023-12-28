@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  ChevronDown,
-  LogOutOutline,
-  SettingsOutline,
-} from '@easy-eva-icons/react';
+import { ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,7 +52,7 @@ export const Header = (props: Props) => {
                   </div>
                 </div>
                 <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
-                  <ChevronDown className="opacity-60" />
+                  <ChevronDownIcon className="opacity-60" />
                 </div>
               </div>
             </DropdownMenuTrigger>
@@ -69,14 +65,14 @@ export const Header = (props: Props) => {
                 href={ROUTE_NAMES.ACCOUNT_SETTINGS}
                 className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
-                <SettingsOutline />
+                <SettingsIcon />
                 Account setting
               </Link>{' '}
               <a
                 onClick={signOut}
                 className="flex cursor-pointer items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
               >
-                <LogOutOutline />
+                <LogOutIcon />
                 Sign out
               </a>
             </DropdownMenuContent>

@@ -1,42 +1,4 @@
 import {
-  ArrowBack,
-  ArrowBackOutline,
-  ArrowCircleDown,
-  ArrowCircleDownOutline,
-  ArrowCircleLeftOutline,
-  ArrowIosDownward,
-  ArrowIosDownwardOutline,
-  CheckmarkCircle2,
-  CheckmarkCircle2Outline,
-  Close,
-  CloseCircle,
-  CloseCircleOutline,
-  CloseOutline,
-  Copy,
-  CopyOutline,
-  Edit,
-  EditOutline,
-  FileAdd,
-  FileAddOutline,
-  FileText,
-  FileTextOutline,
-  Globe2,
-  Globe2Outline,
-  Heart,
-  HeartOutline,
-  Image as ImageIcon,
-  ImageOutline,
-  Menu,
-  Mic,
-  MicOutline,
-  Options2,
-  Options2Outline,
-  Refresh,
-  RefreshOutline,
-  Swap,
-  SwapOutline,
-} from '@easy-eva-icons/react';
-import {
   Input,
   Select,
   SelectContent,
@@ -45,6 +7,7 @@ import {
   SelectValue,
 } from '@/components/data-entry';
 
+import { ArrowLeftCircleIcon } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { Switch } from '@/components/data-entry';
 
@@ -111,7 +74,7 @@ export default async function DesignSystem(props: HomeProps) {
                 size="lg"
                 variant="ghost"
                 color="error"
-                startIcon={<ArrowCircleLeftOutline />}
+                startIcon={<ArrowLeftCircleIcon />}
               >
                 Button
               </Button>
@@ -120,92 +83,14 @@ export default async function DesignSystem(props: HomeProps) {
                 variant="ghost"
                 color="error"
                 disabled
-                startIcon={<ArrowCircleLeftOutline />}
+                startIcon={<ArrowLeftCircleIcon />}
               >
                 Button
               </Button>
             </div>
           </Section>
         </div>
-        <div className="flex h-full  basis-1/4 flex-col gap-4">
-          <Section title="5. Icon">
-            <div className="flex w-full flex-wrap gap-2">
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <Menu className="h-7 w-7" />
-                <Menu className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <MicOutline className="h-7 w-7" />
-                <Mic className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <EditOutline className="h-7 w-7" />
-                <Edit className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <CloseCircleOutline className="h-7 w-7" />
-                <CloseCircle className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <HeartOutline className="h-7 w-7" />
-                <Heart className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <FileAddOutline className="h-7 w-7" />
-                <FileAdd className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <ArrowCircleDownOutline className="h-7 w-7" />
-                <ArrowCircleDown className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <FileTextOutline className="h-7 w-7" />
-                <FileText className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <ImageOutline className="h-7 w-7" />
-                <ImageIcon className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <ArrowBackOutline className="h-7 w-7" />
-                <ArrowBack className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <ArrowIosDownwardOutline className="h-7 w-7" />
-                <ArrowIosDownward className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <CheckmarkCircle2Outline className="h-7 w-7" />
-                <CheckmarkCircle2 className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <CloseOutline className="h-7 w-7" />
-                <Close className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <Options2Outline className="h-7 w-7" />
-                <Options2 className="h-7 w-7" />
-              </div>
 
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <CopyOutline className="h-7 w-7" />
-                <Copy className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <Globe2Outline className="h-7 w-7" />
-                <Globe2 className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <SwapOutline className="h-7 w-7" />
-                <Swap className="h-7 w-7" />
-              </div>
-              <div className="w-fit rounded-md border border-dashed border-purple-500 p-2">
-                <RefreshOutline className="h-7 w-7" />
-                <Refresh className="h-7 w-7" />
-              </div>
-            </div>
-          </Section>
-        </div>
         <div className="flex h-full  basis-1/4 flex-col gap-4">
           <Section title="6. Form">
             <div>

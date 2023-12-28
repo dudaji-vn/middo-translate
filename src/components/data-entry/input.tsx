@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { AlertCircleOutline } from '@easy-eva-icons/react';
+import { AlertCircleIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -24,7 +24,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         />
         {isError && (
           <div className="absolute right-5 top-1/2 flex -translate-y-1/2 items-center text-error">
-            <AlertCircleOutline className="h-5 w-5" />
+            <AlertCircleIcon className="h-5 w-5" />
           </div>
         )}
         {leftElement && (

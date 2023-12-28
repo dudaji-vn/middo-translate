@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckmarkCircle2Outline, Edit2Outline } from '@easy-eva-icons/react';
+import { CheckCircle2, Edit2Icon } from 'lucide-react';
 import {
   addAcceptDiffResult,
   getAcceptDiffResult,
@@ -54,14 +54,14 @@ export const CompareBar = forwardRef<HTMLDivElement, CompareBarProps>(
               onClick={handleAccept}
               className="circleButton ml-auto !bg-success !text-white shadow-1"
             >
-              <CheckmarkCircle2Outline className="h-5 w-5" />
+              <CheckCircle2 className="h-5 w-5" />
             </button>
           ) : (
             <button
               onClick={handleClickEdit}
               className="circleButton ml-auto !bg-primary !text-white shadow-1"
             >
-              <Edit2Outline className="h-5 w-5" />
+              <Edit2Icon className="h-5 w-5" />
             </button>
           )}
         </div>

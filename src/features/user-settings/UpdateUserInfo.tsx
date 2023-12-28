@@ -8,7 +8,7 @@ import {
 } from '@/components/feedback';
 
 import { AlertError } from '@/components/Alert/AlertError';
-import { Edit2Outline } from '@easy-eva-icons/react';
+import { Edit2Icon } from 'lucide-react';
 import { InputField } from '@/components/form/InputField';
 import { InputSelectLanguage } from '@/components/form/InputSelectLanguage';
 import { PageLoading } from '@/components/loading/PageLoading';
@@ -84,11 +84,7 @@ export default function UpdateUserInfo() {
         <AlertDialogTrigger>
           <div className="cursor-pointer transition-all hover:opacity-80">
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-200">
-              <Edit2Outline
-                width={20}
-                height={20}
-                fill="#3D87ED"
-              ></Edit2Outline>
+              <Edit2Icon width={20} height={20} fill="#3D87ED" />
             </span>
             <span className="mt-2 block text-center text-sm font-light">
               Profile

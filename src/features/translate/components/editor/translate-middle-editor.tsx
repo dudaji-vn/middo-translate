@@ -2,10 +2,7 @@
 
 import './style.css';
 
-import {
-  CheckmarkCircle2Outline,
-  CloseCircleOutline,
-} from '@easy-eva-icons/react';
+import { CheckCircle2Icon, XCircleIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { cn } from '@/utils/cn';
@@ -71,11 +68,11 @@ export const TranslateMiddleEditor = ({
           className="btn-icon -mt-3"
           color="default"
         >
-          <CloseCircleOutline />
+          <XCircleIcon />
         </Button.Icon>
         <div className="">
           <Button.Icon disabled={!value} onClick={handleDone} color="success">
-            <CheckmarkCircle2Outline />
+            <CheckCircle2Icon />
           </Button.Icon>
         </div>
       </div>

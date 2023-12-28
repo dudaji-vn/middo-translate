@@ -8,7 +8,7 @@ import SpeechRecognition, {
 import { forwardRef, useEffect } from 'react';
 
 import { Button } from '@/components/actions';
-import { MicOutline } from '@easy-eva-icons/react';
+import { MicIcon } from 'lucide-react';
 import { Rectangle } from '@/components/icons';
 import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
@@ -132,7 +132,7 @@ export const TranslateOptionBar = forwardRef<
             color="secondary"
             className={cn('z-10', !ableListen && '!opacity-30')}
           >
-            <MicOutline className="h-7 w-7" />
+            <MicIcon className="h-7 w-7" />
           </Button.Icon>
         )}
       </div>

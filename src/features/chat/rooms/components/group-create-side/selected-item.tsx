@@ -1,7 +1,7 @@
 import { Avatar, Typography } from '@/components/data-display';
 
-import { Close } from '@easy-eva-icons/react';
 import { User } from '@/features/users/types';
+import { XIcon } from 'lucide-react';
 
 export const SelectedItem = ({
   user,
@@ -25,7 +25,7 @@ export const SelectedItem = ({
           alt={user.name}
         />
         <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
-          <Close />
+          <XIcon />
         </div>
       </div>
       <Typography className="truncate">{name}</Typography>

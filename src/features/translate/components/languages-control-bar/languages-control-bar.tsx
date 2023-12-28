@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe2Outline, Swap } from '@easy-eva-icons/react';
+import { ArrowRightLeftIcon, Globe2Icon } from 'lucide-react';
 import { Select, SelectTrigger } from '@/components/data-entry';
 import { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
@@ -147,7 +147,7 @@ export const LanguagesControlBar = forwardRef<
                 </>
               ) : (
                 <>
-                  <Globe2Outline className="h-5 w-5 text-primary" />
+                  <Globe2Icon className="h-5 w-5 text-primary" />
                   <>{!isMobile && 'Detect language'}</>
                 </>
               )}
@@ -158,7 +158,7 @@ export const LanguagesControlBar = forwardRef<
         </div>
 
         <Button.Icon onClick={handleSwap} variant="ghost" color="default">
-          <Swap className="text-text" />
+          <ArrowRightLeftIcon className="text-text" />
         </Button.Icon>
         <div className="flex flex-1 justify-start">
           <Select>
