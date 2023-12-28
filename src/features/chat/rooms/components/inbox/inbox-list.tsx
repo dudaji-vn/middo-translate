@@ -2,7 +2,7 @@ import { forwardRef, memo, useEffect, useMemo } from 'react';
 
 import { Button } from '@/components/actions';
 import { InboxItem } from '../inbox-item';
-import { InboxType } from './inbox-main-side';
+import { InboxType } from './inbox-side.main';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { MessagePlusIcon } from '@/components/icons';
 import { Room } from '../../types';

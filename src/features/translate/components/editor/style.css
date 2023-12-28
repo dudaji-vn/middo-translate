@@ -1,5 +1,5 @@
 .translateTextWrapper {
-  border: solid 1px hsl(var(--primary));
+  border: solid 1px var(--primary);
   border-radius: 20px;
   padding: 20px;
   background-color: hsl(var(--background));

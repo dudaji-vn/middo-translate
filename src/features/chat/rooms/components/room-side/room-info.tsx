@@ -1,18 +1,15 @@
 'use client';
 
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CircleFlag } from 'react-circle-flags';
-import { InputCropImageRef } from '@/components/form/InputCropImage';
 import { Room } from '@/features/chat/rooms/types';
 import { RoomAvatar } from '../room-avatar';
 import { RoomUpdateAvatar } from './room-update-avatar';
 import { RoomUpdateName } from './room-update-name';
 import { Spinner } from '@/components/feedback';
 import { generateRoomDisplay } from '../../utils';
-import { toast } from '@/components/toast';
-import { uploadImage } from '@/utils/upload-img';
 import { useAuthStore } from '@/stores/auth';
 
 export interface RoomInfoProps {

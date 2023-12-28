@@ -1,31 +1,31 @@
 import { cva } from 'class-variance-authority';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0  transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0  transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-semibold',
   {
     variants: {
       variant: {
-        default: 'text-primary-foreground ',
+        default: 'text-primary-foreground',
         outline: 'border border-input hover:bg-accent',
         ghost: 'bg-transparent',
       },
       color: {
         default:
-          'bg-colors-neutral-50 text-colors-neutral-700 md:hover:bg-colors-neutral-100 active:bg-colors-neutral-200 md:active:bg-colors-neutral-200 dark:bg-gray-700  dark:hover:bg-gray-800',
+          'bg-neutral-50 text-neutral-700 md:hover:bg-neutral-100 active:bg-neutral-200 md:active:bg-neutral-200 dark:bg-gray-700  dark:hover:bg-gray-800',
         primary:
-          'text-background bg-primary md:hover:bg-secondary active:bg-shading',
+          'text-background bg-primary hover:bg-primary-600 active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 ',
         secondary:
-          'text-primary bg-lighter md:hover:bg-secondary active:bg-primary active:text-background',
+          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:bg-primary-100 disabled:text-primary-200',
         success:
           'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
         error:
-          'bg-colors-error-400-main md:hover:bg-colors-error-500 text-background active:!bg-colors-error-600',
+          'bg-error md:hover:bg-error-500 text-background active:!bg-error-600',
       },
       size: {
-        xs: 'py-2 px-3 text-xs rounded-sm',
-        sm: 'py-3 px-4 text-sm rounded-sm',
-        md: 'py-3 px-5 text-base font-medium rounded-md',
-        lg: 'px-7 py-4 text-base font-semibold',
+        xs: 'py-2 px-3',
+        sm: 'py-3 px-4',
+        md: 'py-3 px-5',
+        lg: 'px-7 py-4',
       },
       shape: {
         square: 'rounded-xl',
@@ -49,19 +49,19 @@ export const buttonVariants = cva(
         variant: 'ghost',
         color: 'default',
         className:
-          'bg-transparent text-colors-neutral-700 md:hover:bg-background-darker active:!bg-colors-neutral-100 disabled:!bg-transparent',
+          'bg-transparent text-neutral-700 md:hover:bg-neutral-50 active:!bg-neutral-100 disabled:!bg-transparent disabled:text-neutral-50',
       },
       {
         variant: 'ghost',
         color: 'primary',
         className:
-          'bg-transparent text-primary md:hover:bg-lighter active:!bg-secondary disabled:!bg-transparent disabled:!opacity-30',
+          'bg-transparent text-primary md:hover:bg-primary-200 active:!bg-primary-300 disabled:!bg-transparent disabled:text-primary-200 disabled:bg-primary-100',
       },
       {
         variant: 'ghost',
         color: 'error',
         className:
-          'bg-transparent text-error md:hover:bg-lighter active:!bg-colors-neutral-100 disabled:!bg-transparent disabled:!opacity-30',
+          'bg-transparent text-error md:hover:bg-error-200 active:!bg-rose-300 disabled:!bg-transparent disabled:!opacity-30',
       },
     ],
     defaultVariants: {

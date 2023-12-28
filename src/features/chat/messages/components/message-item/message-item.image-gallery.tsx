@@ -50,7 +50,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                     width,
                     height: width,
                   }}
-                  className="relative cursor-pointer overflow-hidden rounded-[20px] border border-colors-neutral-50"
+                  className="relative cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50"
                 >
                   <Image
                     alt={img.name || img.url}
@@ -72,7 +72,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             height={280}
             src={images[0].url}
             alt="img"
-            className="cursor-pointer overflow-hidden rounded-[20px] border border-colors-neutral-50"
+            className="cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50"
           />
         )}
         <Lightbox

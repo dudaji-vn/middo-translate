@@ -13,7 +13,7 @@
   margin-bottom: 20px;
 }
 .pageTitle {
-  color: hsl(var(--primary));
+  color: var(--primary);
   font-weight: 600;
   text-transform: capitalize;
 }
@@ -37,7 +37,7 @@
   justify-content: center;
   align-items: center;
   min-height: 50vh;
-  border: dashed 1px hsl(var(--primary));
+  border: dashed 1px var(--primary);
   border-radius: 20px;
   margin: 20px 0px 40px;
 }

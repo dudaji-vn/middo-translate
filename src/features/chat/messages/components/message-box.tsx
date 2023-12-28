@@ -161,11 +161,11 @@ export const MessageBox = ({ room }: { room: Room }) => {
       <div
         ref={ref}
         id="inbox-list"
-        className="flex w-full flex-1 flex-col-reverse  gap-2 overflow-y-scroll bg-primary/5 px-3 pb-2 pt-6 md:px-5"
+        className="bg-primary/5 flex w-full flex-1  flex-col-reverse gap-2 overflow-y-scroll px-3 pb-2 pt-6 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
         {isFetching && (
-          <div className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full bg-primary/10 p-2 text-primary">
+          <div className="bg-primary/10 absolute left-1/2 top-6 -translate-x-1/2 rounded-full p-2 text-primary">
             <Spinner size="lg" />
           </div>
         )}
@@ -183,16 +183,16 @@ export const MessageBox = ({ room }: { room: Room }) => {
               {isShowTimeGroup && (
                 <div className="my-2 flex items-center justify-center">
                   <div className="flex items-center space-x-2">
-                    <div className="h-[1px] w-16 bg-primary/30" />
-                    <div className="text-sm font-light text-colors-neutral-300">
+                    <div className="bg-primary/30 h-[1px] w-16" />
+                    <div className="text-sm font-light text-neutral-300">
                       {formatTimeDisplay(group.lastMessage.createdAt!)}
                     </div>
-                    <div className="h-[1px] w-16 bg-primary/30" />
+                    <div className="bg-primary/30 h-[1px] w-16" />
                   </div>
                 </div>
               )}
               {!isMe && !isNotify && room.isGroup && (
-                <div className="mb-0.5 pl-11 text-xs text-colors-neutral-600">
+                <div className="mb-0.5 pl-11 text-xs text-neutral-600">
                   <span>{group.lastMessage.sender.name}</span>
                 </div>
               )}

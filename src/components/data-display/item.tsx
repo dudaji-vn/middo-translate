@@ -14,7 +14,7 @@ export const Item = ({ children, leftIcon, right, className }: ItemProps) => {
   return (
     <div
       className={cn(
-        'flex w-full items-center gap-2 rounded-xl bg-colors-neutral-50 px-3 py-4',
+        'flex w-full items-center gap-2 rounded-xl bg-neutral-50 px-3 py-4',
         className,
       )}
     >

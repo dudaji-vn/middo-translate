@@ -45,7 +45,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
     <div
       className={cn(
         'px-3 py-2',
-        isMe ? 'bg-primary' : 'bg-colors-neutral-50',
+        isMe ? 'bg-primary' : 'bg-neutral-50',
         message.status === 'removed' && 'bg-transparent',
       )}
     >
@@ -72,7 +72,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
                 'mb-1 mt-2 rounded-xl p-1 px-3',
                 isMe
                   ? 'bg-colors-primary-400 text-background'
-                  : 'bg-colors-neutral-100 text-colors-neutral-600',
+                  : 'bg-neutral-100 text-neutral-600',
               )}
             >
               <Text

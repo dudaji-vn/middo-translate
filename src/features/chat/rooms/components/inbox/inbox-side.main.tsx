@@ -42,10 +42,10 @@ export const inboxTabMap: Record<
     value: 'group',
   },
 };
-export interface InboxMainSideProps
+export interface InboxSideMainProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
+export const InboxSideMain = forwardRef<HTMLDivElement, InboxSideMainProps>(
   (props, ref) => {
     const [isSearch, setIsSearch] = useState(false);
     const [isOpenDropdown, setOpenDropdown] = useState(false);
@@ -206,7 +206,7 @@ export const InboxMainSide = forwardRef<HTMLDivElement, InboxMainSideProps>(
     );
   },
 );
-InboxMainSide.displayName = 'InboxMainSide';
+InboxSideMain.displayName = 'InboxSideMain';
 
 const SearchSection = ({
   label,
