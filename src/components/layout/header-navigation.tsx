@@ -8,6 +8,7 @@ import { Button } from '@/components/actions';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
+import { useAppStore } from '@/stores/app.store';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
 import { useIsMobile } from '@/hooks/use-is-mobile';
 import { usePathname } from 'next/navigation';
@@ -38,7 +39,7 @@ export const HeaderNavigation = forwardRef<
   HTMLDivElement,
   HeaderNavigationProps
 >((props, ref) => {
-  const isMobile = useIsMobile();
+  const isMobile = useAppStore((state) => state.isMobile);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const pathName = usePathname();

@@ -13,7 +13,7 @@ export const buttonVariants = cva(
         default:
           'bg-neutral-50 text-neutral-700 md:hover:bg-neutral-100 active:bg-neutral-200 md:active:bg-neutral-200 dark:bg-gray-700  dark:hover:bg-gray-800',
         primary:
-          'text-background bg-primary hover:bg-primary-600 active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 ',
+          'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 ',
         secondary:
           'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:bg-primary-100 disabled:text-primary-200',
         success:
