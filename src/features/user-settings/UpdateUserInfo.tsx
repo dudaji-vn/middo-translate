@@ -8,6 +8,7 @@ import {
 } from '@/components/feedback';
 
 import { AlertError } from '@/components/Alert/AlertError';
+import { Button } from '@/components/actions';
 import { Edit2Icon } from 'lucide-react';
 import { InputField } from '@/components/form/InputField';
 import { InputSelectLanguage } from '@/components/form/InputSelectLanguage';
@@ -83,9 +84,9 @@ export default function UpdateUserInfo() {
       <AlertDialog open={open} onOpenChange={onModalChange}>
         <AlertDialogTrigger>
           <div className="cursor-pointer transition-all hover:opacity-80">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-200">
-              <Edit2Icon width={20} height={20} fill="#3D87ED" />
-            </span>
+            <Button.Icon color="secondary">
+              <Edit2Icon />
+            </Button.Icon>
             <span className="mt-2 block text-center text-sm font-light">
               Profile
             </span>
@@ -115,16 +116,15 @@ export default function UpdateUserInfo() {
               <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
                 <p>Cancel</p>
               </AlertDialogCancel>
-              <button
-                className={`rounded-full border border-transparent px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:opacity-80 ${
+              <Button
+                shape="square"
+                disabled={
                   user.name == watch().name && user.language == watch().language
-                    ? 'pointer-events-none bg-gray-400'
-                    : 'bg-primary'
-                }`}
+                }
                 type="submit"
               >
                 Save
-              </button>
+              </Button>
             </div>
           </form>
         </AlertDialogContent>

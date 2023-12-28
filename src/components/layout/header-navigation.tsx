@@ -10,7 +10,6 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
-import { useIsMobile } from '@/hooks/use-is-mobile';
 import { usePathname } from 'next/navigation';
 
 type NavigationItem = {

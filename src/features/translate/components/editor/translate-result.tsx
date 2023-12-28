@@ -7,7 +7,7 @@ import { CopyZoneClick } from '@/components/actions';
 import React from 'react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
-import { useIsMobile } from '@/hooks/use-is-mobile';
+import { useAppStore } from '@/stores/app.store';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 import { useTranslateStore } from '@/stores/translate';
 
@@ -26,7 +26,7 @@ export const TranslateResult = ({
   const { textStyle } = useTranslateStore();
 
   const { speak } = useTextToSpeech(languageCode, result);
-  const isMobile = useIsMobile();
+  const isMobile = useAppStore((state) => state.isMobile);
   const array = result.split('\n');
   return (
     <TranslateEditorWrapper

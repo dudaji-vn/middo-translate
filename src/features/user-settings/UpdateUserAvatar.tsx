@@ -12,6 +12,7 @@ import {
 } from '@/components/form/InputCropImage';
 import { useRef, useState } from 'react';
 
+import { Button } from '@/components/actions';
 import { Camera } from 'lucide-react';
 import { PageLoading } from '@/components/loading/PageLoading';
 import toast from 'react-hot-toast';
@@ -59,13 +60,10 @@ export default function UpdateUserAvatar() {
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger>
           <div className="cursor-pointer transition-all hover:opacity-80">
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-200">
-              <Camera
-                width={20}
-                height={20}
-                className="stroke-primary"
-              ></Camera>
-            </span>
+            <Button.Icon color="secondary">
+              <Camera />
+            </Button.Icon>
+
             <span className="mt-2 block text-center text-sm font-light">
               Avatar
             </span>
@@ -81,13 +79,9 @@ export default function UpdateUserAvatar() {
               <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
                 <p>Cancel</p>
               </AlertDialogCancel>
-              <button
-                className={`rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:opacity-80`}
-                type="submit"
-                disabled={loading}
-              >
+              <Button shape="square" disabled={loading}>
                 Save
-              </button>
+              </Button>
             </div>
           </form>
         </AlertDialogContent>

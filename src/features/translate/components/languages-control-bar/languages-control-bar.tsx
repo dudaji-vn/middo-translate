@@ -11,7 +11,7 @@ import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { ListLanguages } from '../list-languages';
 import { cn } from '@/utils/cn';
-import { useIsMobile } from '@/hooks/use-is-mobile';
+import { useAppStore } from '@/stores/app.store';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useTranslateStore } from '@/stores/translate';
 
@@ -31,7 +31,7 @@ export const LanguagesControlBar = forwardRef<
     { targetResult, source: _source, target: _target, detect, ...props },
     ref,
   ) => {
-    const isMobile = useIsMobile();
+    const isMobile = useAppStore((state) => state.isMobile);
     const [currentSelect, setCurrentSelect] = useState<
       'source' | 'target' | 'none'
     >('none');
