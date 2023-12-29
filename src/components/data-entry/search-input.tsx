@@ -37,15 +37,15 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       () => ({
         ...(inputRef.current as HTMLInputElement),
         reset: () => {
-          handleClear();
+          setValue('');
         },
       }),
-      [handleClear],
+      [],
     );
 
     return (
-      <div className="relative w-full overflow-hidden rounded-full border bg-background">
-        <div className="flex h-[48px] pl-3">
+      <div className="relative w-full overflow-hidden rounded-full border bg-background transition-all">
+        <div className="flex h-[48px] pl-3 transition-all">
           <input
             value={value}
             ref={inputRef}
