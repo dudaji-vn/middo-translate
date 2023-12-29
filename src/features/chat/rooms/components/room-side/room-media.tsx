@@ -62,7 +62,7 @@ export const RoomMedia = () => {
           size="lg"
           className="w-full"
         >
-          <span className="text-colors-primary-500-main">Show more</span>
+          <span className="text-primary-500-main">Show more</span>
         </Button>
       )}
     </>

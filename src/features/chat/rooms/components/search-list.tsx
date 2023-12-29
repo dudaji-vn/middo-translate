@@ -15,6 +15,7 @@ export const SearchList = ({
   selectedItems,
   itemClassName,
 }: SearchListProps) => {
+  if (!items?.length) return null;
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto">
       {items?.map((user) => {

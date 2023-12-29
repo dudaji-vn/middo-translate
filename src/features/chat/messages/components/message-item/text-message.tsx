@@ -71,7 +71,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
               className={cn(
                 'mb-1 mt-2 rounded-xl p-1 px-3',
                 isMe
-                  ? 'bg-colors-primary-400 text-background'
+                  ? 'bg-primary-400 text-background'
                   : 'bg-neutral-100 text-neutral-600',
               )}
             >

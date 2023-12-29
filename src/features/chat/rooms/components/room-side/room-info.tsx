@@ -44,7 +44,7 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
     <div className="flex flex-col items-center">
       <div className="relative">
         {' '}
-        <RoomAvatar room={room} />
+        <RoomAvatar room={room} size={96} />
         {loading && (
           <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-white bg-opacity-80">
             <Spinner className="text-primary" />

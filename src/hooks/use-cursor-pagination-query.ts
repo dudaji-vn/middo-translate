@@ -107,7 +107,7 @@ export const useCursorPaginationQuery = <TData>({
   );
 
   const updateItem = useCallback(
-    (_item: TypeWithBaseEntity<TData>) => {
+    (_item: TypeWithBaseEntity<Partial<TData> & { _id: string }>) => {
       queryClient.setQueryData<typeof data | undefined>(queryKey, (old) => {
         const oldDeepCopy = deepCopy(old) as typeof data;
         if (!oldDeepCopy) return oldDeepCopy;

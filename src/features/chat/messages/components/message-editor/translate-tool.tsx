@@ -109,7 +109,7 @@ export const TranslateTool = ({
                 >
                   <div
                     className={
-                      'flex flex-1 rounded-xl border border-colors-primary-500-main p-3'
+                      'border-primary-500-main flex flex-1 rounded-xl border p-3'
                     }
                   >
                     <textarea
@@ -195,7 +195,7 @@ const NotificationTranslation = ({ onClose }: { onClose?: () => void }) => {
     <div className="bg-neutral-white flex items-center justify-between rounded-xl p-3 shadow-2">
       <p>
         EN - Translate tool is turn off, you can turn it on again in{' '}
-        <span className="font-medium text-colors-primary-500-main">
+        <span className="text-primary-500-main font-medium">
           Chat setting
           <Settings className="ml-1 inline-block" />
         </span>

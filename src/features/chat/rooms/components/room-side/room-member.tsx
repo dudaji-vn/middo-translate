@@ -102,7 +102,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
           size="lg"
           className="w-full"
         >
-          <span className="text-colors-primary-500-main"> Show all</span>
+          <span className="text-primary-500-main"> Show all</span>
         </Button>
       )}
       {isShowAll && INITIAL_SHOW_MEMBERS < membersToShow.length && (
@@ -113,7 +113,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
           size="lg"
           className="w-full"
         >
-          <span className="text-colors-primary-500-main">Hide</span>
+          <span className="text-primary-500-main">Hide</span>
         </Button>
       )}
     </div>

@@ -1,16 +1,24 @@
 import { CheckIcon } from 'lucide-react';
 import { Typography } from '@/components/data-display';
+import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
-import { useGetUsersRecChat } from '@/features/recommendation/hooks/use-get-users-rec-chat';
-import { useGroupCreate } from './group-create-side/context';
+import { useGetUsersRecChat } from '@/features/recommendation/hooks';
 
-export interface SuggestionListProps {}
+export interface SuggestionListProps {
+  selectedUsers: User[];
+  handleSelectUser: (user: User) => void;
+  searchUsers: User[];
+}
 
-export const SuggestionList = (props: SuggestionListProps) => {
+export const SuggestionList = ({
+  selectedUsers,
+  handleSelectUser,
+  searchUsers,
+}: SuggestionListProps) => {
   const { data } = useGetUsersRecChat();
-  const { selectedUsers, handleSelectUser, searchUsers } = useGroupCreate();
 
   if (searchUsers.length > 0) return null;
+
   return (
     <div className="mt-3 flex w-full flex-1 flex-col overflow-y-auto">
       <Typography variant="h5" className="pb-3 pl-3 font-normal opacity-60">
