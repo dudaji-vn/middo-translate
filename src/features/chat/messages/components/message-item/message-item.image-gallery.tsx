@@ -50,7 +50,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                     width,
                     height: width,
                   }}
-                  className="relative cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50"
+                  className="relative cursor-pointer overflow-hidden rounded-xl border border-neutral-50"
                 >
                   <Image
                     alt={img.name || img.url}
