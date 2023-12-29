@@ -34,11 +34,11 @@ export const InboxItemWrapper = (
           {props.children}
         </Link>
 
-        {!isMobile && (
+        {/* {!isMobile && (
           <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
             <InboxItemMenu room={data} />
           </div>
-        )}
+        )} */}
       </Wrapper>
     </div>
   );

@@ -75,7 +75,7 @@ export const InboxSideMain = forwardRef<HTMLDivElement, InboxSideMainProps>(
         {...props}
         className="flex h-full flex-col overflow-hidden"
       >
-        <div className="flex w-full gap-1 px-3">
+        {/* <div className="flex w-full gap-1 px-3">
           {isSearch && (
             <Button.Icon
               variant="ghost"
@@ -140,7 +140,7 @@ export const InboxSideMain = forwardRef<HTMLDivElement, InboxSideMainProps>(
               </DropdownMenuContent>
             </DropdownMenu>
           )}
-        </div>
+        </div> */}
         <div className="relative flex flex-1 flex-col overflow-hidden">
           <Tabs defaultValue="all" className="w-full px-3">
             <TabsList>

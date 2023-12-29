@@ -54,11 +54,10 @@ export const Inbox = (props: InboxProps) => {
 
   return (
     <RoomActions>
-      <div className="relative flex h-[calc(100dvh_-_56px)] w-full flex-col overflow-hidden border-r bg-background">
-        <div className="flex-1 overflow-hidden pt-5">
-          <InboxSideMain />
-        </div>
-        <AnimatePresence>
+      <div className="relative flex w-full flex-1 flex-col overflow-hidden bg-background">
+        <InboxSideMain />
+
+        {/* <AnimatePresence>
           {side !== 'default' && (
             <Sideslip className="absolute left-0 top-0 flex h-full w-full flex-col bg-card">
               <div className="flex items-center gap-2 px-1 pt-1">
@@ -78,7 +77,7 @@ export const Inbox = (props: InboxProps) => {
               </div>
             </Sideslip>
           )}
-        </AnimatePresence>
+        </AnimatePresence> */}
       </div>
     </RoomActions>
   );
