@@ -8,11 +8,11 @@ import { RoomItemHead } from './room-item.head';
 import { RoomItemWrapper } from './room-item.wrapper';
 import { User } from '@/features/users/types';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
-import moment from 'moment';
 
 export interface RoomItemProps {
   data: Room;
   isActive?: boolean;
+  isRead: boolean;
   currentUser: User;
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
@@ -21,13 +21,7 @@ export interface RoomItemProps {
 }
 
 const RoomItemContext = createContext<RoomItemProps>({} as RoomItemProps);
-export const useRoomItem = () => {
-  const context = useContext(RoomItemContext);
-  if (!context) {
-    throw new Error('useRoomItem must be used within RoomItemContext');
-  }
-  return context;
-};
+
 const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const {
     data: _data,
@@ -40,32 +34,21 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   } = props;
   const currentUserId = currentUser?._id;
 
-  const data = useMemo(
+  const room = useMemo(
     () => generateRoomDisplay(_data, currentUserId),
     [_data, currentUserId],
   );
+  const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
 
-  const time = useMemo(() => {
-    const dateString = data.lastMessage?.createdAt || data.createdAt;
-    if (dateString) {
-      if (moment(dateString).isSame(moment(), 'day')) {
-        return moment(dateString).format('HH:mm A');
-      } else {
-        return moment(dateString).format('YYYY/MM/DD');
-      }
-    }
-
-    return '';
-  }, [data.createdAt, data.lastMessage?.createdAt]);
-  const isRead = data?.lastMessage?.readBy?.includes(currentUserId);
   const isActive =
-    data.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
+    room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     _isActive;
 
   return (
     <RoomItemContext.Provider
       value={{
-        data,
+        isRead,
+        data: room,
         isActive,
         currentUser,
         showMembersName,
@@ -74,27 +57,27 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
       }}
     >
       <RoomItemWrapper>
-        <ItemAvatar room={data} />
+        <ItemAvatar room={room} />
         <div className="w-full">
           <RoomItemHead
-            name={data.name}
             isRead={isRead}
             showTime={showTime}
-            time={time}
+            time={room.lastMessage?.createdAt || room.newMessageAt}
+            name={room.name}
           />
           {showMembersName && (
             <div className="flex items-center">
               <span className="line-clamp-1 break-all text-sm text-text/50">
-                {data.participants.map((user) => user.name).join(', ')}
+                {room.participants.map((user) => user.name).join(', ')}
               </span>
             </div>
           )}
-          {data.lastMessage && !showMembersName && (
+          {room.lastMessage && !showMembersName && (
             <ItemSub
               currentUser={currentUser}
-              isGroup={data.isGroup}
-              message={data.lastMessage}
-              participants={data.participants}
+              isGroup={room.isGroup}
+              message={room.lastMessage}
+              participants={room.participants}
             />
           )}
         </div>
@@ -106,3 +89,11 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
 RoomItem.displayName = 'RoomItem';
 
 export const MemoizedRoomItem = memo(RoomItem);
+
+export const useRoomItem = () => {
+  const context = useContext(RoomItemContext);
+  if (!context) {
+    throw new Error('useRoomItem must be used within RoomItemContext');
+  }
+  return context;
+};

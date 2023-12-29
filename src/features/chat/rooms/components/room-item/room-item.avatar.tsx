@@ -51,53 +51,38 @@ export const ItemAvatar = ({
   isOnline?: boolean;
 }) => {
   const avatars = useMemo(() => {
-    const avatars: Avatar[] = [];
-    const participants = room.participants;
-    if (room.avatar) {
+    const avatars = [];
+    const { participants, avatar, isGroup, name, admin } = room;
+
+    if (avatar) {
       avatars.push({
-        src: room.avatar,
-        alt: room.name ?? '',
+        src: avatar,
+        alt: name ?? '',
       });
-      return avatars;
-    }
-    if (!room.isGroup) {
+    } else if (!isGroup) {
       const other = participants.find(
-        (participant) => participant._id !== room.admin?._id,
+        (participant) => participant._id !== admin?._id,
       );
       if (other) {
         avatars.push({
           src: other.avatar!,
           alt: other.name,
         });
-        return avatars;
       }
-    }
-    if (participants.length === 1) {
-      avatars.push({
-        src: participants[0].avatar!,
-        alt: participants[0].name,
-      });
-    } else if (participants.length > 1) {
-      participants.forEach((participant) => {
+    } else {
+      participants.slice(0, MAX_AVATAR_COUNT).forEach((participant) => {
         avatars.push({
           src: participant.avatar!,
           alt: participant.name,
         });
       });
     }
+
     return avatars;
-  }, [
-    room.participants,
-    room.avatar,
-    room.isGroup,
-    room.name,
-    room.admin?._id,
-  ]);
+  }, [room]);
+
   const avatarsDisplay = useMemo(() => {
-    if (avatars.length > MAX_AVATAR_COUNT) {
-      return avatars.slice(0, MAX_AVATAR_COUNT);
-    }
-    return avatars;
+    return avatars.slice(0, MAX_AVATAR_COUNT);
   }, [avatars]);
   return (
     <div className="relative">

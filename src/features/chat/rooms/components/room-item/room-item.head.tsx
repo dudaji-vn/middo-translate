@@ -1,18 +1,17 @@
+import { RoomItemTime } from './room-item.time';
 import { cn } from '@/utils/cn';
+import { useRoomItem } from './room-item';
 
 export interface RoomItemHeadProps {
   name?: string;
   isRead?: boolean;
   showTime?: boolean;
   time?: string;
+  rightElement?: React.ReactNode;
 }
 
-export const RoomItemHead = ({
-  name,
-  isRead,
-  showTime,
-  time,
-}: RoomItemHeadProps) => {
+export const RoomItemHead = ({ isRead, showTime, time }: RoomItemHeadProps) => {
+  const { data } = useRoomItem();
   return (
     <div className="mb-1 flex items-center justify-between">
       <div className="max-w-full">
@@ -22,11 +21,11 @@ export const RoomItemHead = ({
             isRead ? 'font-normal' : 'font-semibold',
           )}
         >
-          {name}
+          {data.name}
         </span>
       </div>
       {time && showTime && (
-        <span className="ml-auto shrink-0 pl-2 text-sm font-light">{time}</span>
+        <RoomItemTime date={time} className="ml-2 text-sm font-light" />
       )}
     </div>
   );
