@@ -12,7 +12,6 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 export interface RoomItemProps {
   data: Room;
   isActive?: boolean;
-  isRead: boolean;
   currentUser: User;
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
@@ -47,7 +46,6 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   return (
     <RoomItemContext.Provider
       value={{
-        isRead,
         data: room,
         isActive,
         currentUser,
