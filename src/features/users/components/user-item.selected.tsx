@@ -23,8 +23,8 @@ export const UserSelectedItem = ({ user, onClick }: UserSelectedItemProps) => {
           shape="circle"
           alt={user.name}
         />
-        <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
-          <XIcon className="size-4" />
+        <div className="absolute right-0 top-0 rounded-full border-[0.1px] bg-background">
+          <XIcon className="size-3.5" />
         </div>
       </div>
       <Typography className="truncate">{name}</Typography>
