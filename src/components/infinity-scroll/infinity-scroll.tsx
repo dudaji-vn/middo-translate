@@ -28,7 +28,7 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
             <Spinner size="lg" />
           </div>
         )}
-        <div className="relative h-10 w-10">
+        <div className="relative h-[1px] w-[1px]">
           <div ref={triggerRef} className="absolute top-80"></div>
         </div>
       </div>
