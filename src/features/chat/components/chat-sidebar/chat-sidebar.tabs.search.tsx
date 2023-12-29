@@ -1,6 +1,6 @@
-import { InboxItem } from '../../rooms/components/inbox-item';
 import Link from 'next/link';
 import { Room } from '../../rooms/types';
+import { RoomItem } from '../../rooms/components/room-item';
 import { SPK_SEARCH } from '../../configs';
 import { Section } from '@/components/data-display/section';
 import { User } from '@/features/users/types';
@@ -26,7 +26,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     }>(searchApi.inboxes, 'chat-search', value || '');
     const currentUser = useAuthStore((state) => state.user);
     return (
-      <div className="absolute left-0 top-0 h-full w-full overflow-y-auto bg-white pt-2">
+      <div className="absolute left-0 top-[62px] h-[calc(100%_-_62px)] w-full overflow-y-auto bg-white pt-3">
         <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -46,7 +46,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
             <div className="mt-5">
               <Section label="Groups">
                 {data?.rooms.map((room) => (
-                  <InboxItem
+                  <RoomItem
                     key={room._id}
                     data={room}
                     currentUser={currentUser!}

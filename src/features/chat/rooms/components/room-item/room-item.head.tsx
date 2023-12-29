@@ -1,18 +1,18 @@
 import { cn } from '@/utils/cn';
 
-export interface InboxItemHeadProps {
+export interface RoomItemHeadProps {
   name?: string;
   isRead?: boolean;
   showTime?: boolean;
   time?: string;
 }
 
-export const InboxItemHead = ({
+export const RoomItemHead = ({
   name,
   isRead,
   showTime,
   time,
-}: InboxItemHeadProps) => {
+}: RoomItemHeadProps) => {
   return (
     <div className="mb-1 flex items-center justify-between">
       <div className="max-w-full">

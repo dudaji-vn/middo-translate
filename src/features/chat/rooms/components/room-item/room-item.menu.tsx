@@ -12,12 +12,12 @@ import { MoreVertical } from 'lucide-react';
 import { Room } from '../../types';
 import { cn } from '@/utils/cn';
 
-export interface InboxItemMenuProps
+export interface RoomItemMenuProps
   extends React.HTMLAttributes<HTMLDivElement> {
   room: Room;
 }
 
-export const InboxItemMenu = forwardRef<HTMLDivElement, InboxItemMenuProps>(
+export const RoomItemMenu = forwardRef<HTMLDivElement, RoomItemMenuProps>(
   (props, ref) => {
     const { onAction } = useRoomActions();
     return (
@@ -56,4 +56,4 @@ export const InboxItemMenu = forwardRef<HTMLDivElement, InboxItemMenuProps>(
     );
   },
 );
-InboxItemMenu.displayName = 'InboxItemMenu';
+RoomItemMenu.displayName = 'RoomItemMenu';

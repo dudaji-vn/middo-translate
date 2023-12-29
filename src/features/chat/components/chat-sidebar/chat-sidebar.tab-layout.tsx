@@ -15,7 +15,7 @@ export const TabLayout = forwardRef<HTMLDivElement, TabLayoutProps>(
       <Sideslip
         ref={ref}
         {...props}
-        className="absolute -top-[62px] left-0 flex h-[calc(100%_+_62px)] w-full flex-1 flex-col  bg-white"
+        className="absolute left-0 top-0 flex h-[calc(100%_+_62px)] w-full flex-1 flex-col  bg-white"
       >
         <div className="flex items-center gap-2 px-1 pt-1">
           <Button.Icon

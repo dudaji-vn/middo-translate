@@ -31,10 +31,16 @@ export const ChatSidebarTabs = forwardRef<HTMLDivElement, ChatSidebarTabsProps>(
   ({ children, ...props }, ref) => {
     const { currentSide } = useSidebarTabs();
     return (
-      <div ref={ref} {...props} className="relative flex flex-1 flex-col">
-        {children}
+      <>
+        <div
+          ref={ref}
+          {...props}
+          className="relative flex flex-1 flex-col overflow-hidden"
+        >
+          {children}
+        </div>
         <AnimatePresence>{tabMap[currentSide]?.component}</AnimatePresence>
-      </div>
+      </>
     );
   },
 );

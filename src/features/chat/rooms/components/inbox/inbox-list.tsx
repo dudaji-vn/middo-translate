@@ -1,11 +1,12 @@
 import { forwardRef, memo, useEffect, useMemo } from 'react';
 
 import { Button } from '@/components/actions';
-import { InboxItem } from '../inbox-item';
-import { InboxType } from './inbox-side.main';
+import { InboxType } from './inbox';
 import { InfiniteScroll } from '@/components/infinity-scroll';
 import { MessagePlusIcon } from '@/components/icons';
 import { Room } from '../../types';
+import { RoomItem } from '../room-item';
+import { RoomItemActionWrapper } from '../room-item/room-item.action-wrapper';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
@@ -102,7 +103,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     }
 
     return (
-      <div ref={ref} className="relative h-full w-full overflow-hidden ">
+      <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
         {isScrolled && (
           <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
         )}
@@ -118,13 +119,14 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             className="flex flex-col"
           >
             {rooms.map((room) => (
-              <InboxItem
-                key={room._id}
-                data={room}
-                isActive={currentRoomId === room._id}
-                currentUser={currentUser!}
-                currentRoomId={currentRoomId as string}
-              />
+              <RoomItemActionWrapper key={room._id} room={room}>
+                <RoomItem
+                  data={room}
+                  isActive={currentRoomId === room._id}
+                  currentUser={currentUser!}
+                  currentRoomId={currentRoomId as string}
+                />
+              </RoomItemActionWrapper>
             ))}
           </InfiniteScroll>
         </div>

@@ -1,16 +1,16 @@
 import { createContext, forwardRef, memo, useContext, useMemo } from 'react';
 
-import { InboxItemHead } from './inbox-item.head';
-import { InboxItemWrapper } from './inbox-item.wrapper';
-import { ItemAvatar } from './inbox-item.avatar';
-import { ItemSub } from './inbox-item.sub';
+import { ItemAvatar } from './room-item.avatar';
+import { ItemSub } from './room-item.sub';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
+import { RoomItemHead } from './room-item.head';
+import { RoomItemWrapper } from './room-item.wrapper';
 import { User } from '@/features/users/types';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import moment from 'moment';
 
-export interface InboxItemProps {
+export interface RoomItemProps {
   data: Room;
   isActive?: boolean;
   currentUser: User;
@@ -20,15 +20,15 @@ export interface InboxItemProps {
   onClick?: () => void;
 }
 
-const InboxItemContext = createContext<InboxItemProps>({} as InboxItemProps);
-export const useInboxItem = () => {
-  const context = useContext(InboxItemContext);
+const RoomItemContext = createContext<RoomItemProps>({} as RoomItemProps);
+export const useRoomItem = () => {
+  const context = useContext(RoomItemContext);
   if (!context) {
-    throw new Error('useInboxItem must be used within InboxItemContext');
+    throw new Error('useRoomItem must be used within RoomItemContext');
   }
   return context;
 };
-const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>((props, ref) => {
+const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const {
     data: _data,
     isActive: _isActive,
@@ -63,7 +63,7 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>((props, ref) => {
     _isActive;
 
   return (
-    <InboxItemContext.Provider
+    <RoomItemContext.Provider
       value={{
         data,
         isActive,
@@ -73,10 +73,10 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>((props, ref) => {
         onClick,
       }}
     >
-      <InboxItemWrapper>
+      <RoomItemWrapper>
         <ItemAvatar room={data} />
         <div className="w-full">
-          <InboxItemHead
+          <RoomItemHead
             name={data.name}
             isRead={isRead}
             showTime={showTime}
@@ -98,11 +98,11 @@ const InboxItem = forwardRef<HTMLDivElement, InboxItemProps>((props, ref) => {
             />
           )}
         </div>
-      </InboxItemWrapper>
-    </InboxItemContext.Provider>
+      </RoomItemWrapper>
+    </RoomItemContext.Provider>
   );
 });
 
-InboxItem.displayName = 'InboxItem';
+RoomItem.displayName = 'RoomItem';
 
-export const MemoizedInboxItem = memo(InboxItem);
+export const MemoizedRoomItem = memo(RoomItem);
