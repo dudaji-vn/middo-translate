@@ -10,7 +10,7 @@ export const Section = forwardRef<HTMLDivElement, SectionProps>(
     return (
       <div ref={ref} {...props}>
         <div className="pb-2 pl-3">
-          <Typography variant="h5" className="font-normal opacity-60">
+          <Typography variant="h5" className="text-base font-normal opacity-60">
             {label}
           </Typography>
         </div>
