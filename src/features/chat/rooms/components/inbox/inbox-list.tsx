@@ -12,10 +12,10 @@ import { cn } from '@/utils/cn';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth';
-import { useChangeInboxSide } from '../../hooks/use-change-inbox-side';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useParams } from 'next/navigation';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
+import { useSidebarTabs } from '@/features/chat/hooks';
 import useStore from '@/stores/use-store';
 
 interface InboxListProps {
@@ -28,7 +28,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const params = useParams();
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
-    const { changeSide } = useChangeInboxSide();
+    const { changeSide } = useSidebarTabs();
     const key = useMemo(() => ['rooms', type], [type]);
 
     const {
@@ -91,7 +91,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             }
             <Button.Icon
               size="lg"
-              onClick={() => changeSide('new-message')}
+              onClick={() => changeSide('individual')}
               className="relative shadow-3"
             >
               <MessagePlusIcon />
@@ -131,7 +131,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         <div className="absolute bottom-10 right-5">
           <Button.Icon
             size="lg"
-            onClick={() => changeSide('new-message')}
+            onClick={() => changeSide('individual')}
             className="relative shadow-3"
           >
             <MessagePlusIcon />

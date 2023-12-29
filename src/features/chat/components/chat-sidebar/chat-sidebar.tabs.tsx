@@ -1,6 +1,8 @@
 import React, { forwardRef } from 'react';
 
-import { GroupCreateTab } from './chat-sidebar.tabs.group-create';
+import { AnimatePresence } from 'framer-motion';
+import { GroupTab } from './chat-sidebar.tabs.group';
+import { IndividualTab } from './chat-sidebar.tabs.individual';
 import { SearchTab } from './chat-sidebar.tabs.search';
 import { SidebarTabs } from '../../types';
 import { useSidebarTabs } from '../../hooks';
@@ -17,8 +19,11 @@ const tabMap: Record<
   search: {
     component: <SearchTab />,
   },
-  createGroup: {
-    component: <GroupCreateTab />,
+  group: {
+    component: <GroupTab />,
+  },
+  individual: {
+    component: <IndividualTab />,
   },
 };
 
@@ -28,7 +33,7 @@ export const ChatSidebarTabs = forwardRef<HTMLDivElement, ChatSidebarTabsProps>(
     return (
       <div ref={ref} {...props} className="relative flex flex-1 flex-col">
         {children}
-        {tabMap[currentSide]?.component}
+        <AnimatePresence>{tabMap[currentSide]?.component}</AnimatePresence>
       </div>
     );
   },

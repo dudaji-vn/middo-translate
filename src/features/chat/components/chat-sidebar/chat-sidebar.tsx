@@ -25,7 +25,7 @@ export const ChatSidebar = ({
   return (
     <>
       {showSide && (
-        <div className="relative flex h-[calc(100dvh_-_56px)] w-full min-w-[320px] flex-col overflow-hidden border-r md:basis-1/4">
+        <div className="relative flex h-[calc(100dvh_-_56px)] w-full min-w-[320px] flex-col overflow-hidden border-r md:w-[26.5rem]">
           <ChatSidebarHeader />
           <ChatSidebarTabs>{children}</ChatSidebarTabs>
         </div>

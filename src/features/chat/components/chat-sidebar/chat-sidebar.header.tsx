@@ -1,9 +1,11 @@
+import { AnimatePresence, motion } from 'framer-motion';
+import { ArrowLeftIcon, Settings } from 'lucide-react';
 import { SPK_CHAT_TAB, SPK_SEARCH } from '../../configs';
 import { SearchInput, SearchInputRef } from '@/components/data-entry';
 import { useCallback, useRef } from 'react';
 
-import { ArrowLeftIcon } from 'lucide-react';
 import { Button } from '@/components/actions';
+import { ChatSettingMenu } from '../chat-setting';
 import { useSidebarTabs } from '../../hooks';
 
 export interface ChatSidebarHeaderProps {}
@@ -20,10 +22,6 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const searchValue = searchParams?.get(SPK_SEARCH);
   const isSearch = currentSide === 'search';
   const searchInputRef = useRef<SearchInputRef>(null);
-  const handleClear = useCallback(() => {
-    removeParam(SPK_SEARCH);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleBack = useCallback(() => {
     removeParams([SPK_SEARCH, SPK_CHAT_TAB]);
@@ -31,17 +29,32 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   }, [removeParams, searchInputRef]);
   return (
     <div className="flex w-full gap-1 px-3 pt-3">
-      {isSearch && (
-        <Button.Icon
-          variant="ghost"
-          color="default"
-          onClick={handleBack}
-          className="-ml-2"
-        >
-          <ArrowLeftIcon />
-        </Button.Icon>
-      )}
-      <div className="flex-1">
+      <AnimatePresence>
+        {isSearch ? (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+          >
+            <Button.Icon variant="ghost" color="default" onClick={handleBack}>
+              <ArrowLeftIcon />
+            </Button.Icon>
+          </motion.div>
+        ) : (
+          <ChatSettingMenu>
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0, opacity: 0 }}
+            >
+              <Button.Icon variant="ghost" color="default">
+                <Settings />
+              </Button.Icon>
+            </motion.div>
+          </ChatSettingMenu>
+        )}
+      </AnimatePresence>
+      <div className="w-full transition-all">
         <SearchInput
           ref={searchInputRef}
           defaultValue={searchValue || ''}
@@ -49,7 +62,9 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           btnDisabled
           placeholder="Search people or groups"
           onChange={(e) => setParam(SPK_SEARCH, e.currentTarget.value)}
-          onClear={handleClear}
+          onClear={() => {
+            removeParam(SPK_SEARCH);
+          }}
         />
       </div>
     </div>

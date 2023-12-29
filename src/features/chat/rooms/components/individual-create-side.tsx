@@ -1,17 +1,19 @@
 'use client';
 
+import { Section, Typography } from '@/components/data-display';
+
 import { Button } from '@/components/actions';
 import Link from 'next/link';
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { SearchInput } from '@/components/data-entry';
-import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
 import { Users2Icon } from 'lucide-react';
 import { searchApi } from '@/features/search/api';
-import { useChangeInboxSide } from '../hooks/use-change-inbox-side';
 import { useGetUsersRecChat } from '@/features/recommendation/hooks';
 import { useParams } from 'next/navigation';
 import { useSearch } from '@/hooks/use-search';
+import { useSidebarTabs } from '../../hooks';
 
 export interface IndividualSideCreateProps {
   onBack?: () => void;
@@ -20,11 +22,15 @@ export interface IndividualSideCreateProps {
 export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
   const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'users');
   const { data: recData } = useGetUsersRecChat();
-  const { changeSide } = useChangeInboxSide();
+  const { changeSide } = useSidebarTabs();
   const params = useParams();
 
   const handleCreateGroup = () => {
-    changeSide('new-group');
+    changeSide('group');
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.currentTarget.value.toLocaleLowerCase());
   };
 
   return (
@@ -34,9 +40,7 @@ export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
           <Typography>To: </Typography>
           <SearchInput
             className="flex-1"
-            onChange={(e) =>
-              setSearchTerm(e.currentTarget.value.toLocaleLowerCase())
-            }
+            onChange={handleSearch}
             placeholder="Search"
           />
         </div>
@@ -53,28 +57,25 @@ export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
         {data && (
           <div className="flex w-full flex-1 flex-col overflow-y-auto px-2">
             {data.map((user) => (
-              <Link key={user._id} href={`/talk/${user._id}`}>
+              <Link
+                key={user._id}
+                href={`${ROUTE_NAMES.ONLINE_CONVERSATION}/${user._id}`}
+              >
                 <UserItem isActive={user._id === params?.id} user={user} />
               </Link>
             ))}
           </div>
         )}
         {recData && recData.length > 0 && !data && (
-          <div className="flex w-full flex-1 flex-col overflow-y-auto">
-            <Typography
-              variant="h5"
-              className="pb-2 pl-3 font-normal opacity-60"
-            >
-              Suggestion
-            </Typography>
+          <Section label="Suggestion">
             {recData?.map((user) => {
               return (
-                <Link key={user._id} href={`/talk/${user._id}`}>
-                  <UserItem isActive={user._id === params?.id} user={user} />
+                <Link key={user?._id} href={`/talk/${user?._id}`}>
+                  <UserItem user={user} />
                 </Link>
               );
             })}
-          </div>
+          </Section>
         )}
       </div>
     </div>

@@ -6,6 +6,7 @@ import { Section } from '@/components/data-display/section';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
 import { forwardRef } from 'react';
+import { motion } from 'framer-motion';
 import { searchApi } from '@/features/search/api';
 import { useAuthStore } from '@/stores/auth';
 import { useGetUsersRecChat } from '@/features/recommendation/hooks';
@@ -25,46 +26,49 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     }>(searchApi.inboxes, 'chat-search', value || '');
     const currentUser = useAuthStore((state) => state.user);
     return (
-      <div
-        ref={ref}
-        {...props}
-        className="bg-neutral-white absolute left-0 top-0 h-full w-full overflow-y-auto pt-2"
-      >
-        {data?.users && data.users.length > 0 && (
-          <Section label="People">
-            {data?.users?.map((user) => (
-              <Link key={user?._id} href={`/talk/${user?._id}`}>
-                <UserItem user={user} />
-              </Link>
-            ))}
-          </Section>
-        )}
-        {data?.rooms && data.rooms.length > 0 && (
-          <div className="mt-5">
-            <Section label="Groups">
-              {data?.rooms.map((room) => (
-                <InboxItem
-                  key={room._id}
-                  data={room}
-                  currentUser={currentUser!}
-                  showMembersName
-                  showTime={false}
-                />
-              ))}
-            </Section>
-          </div>
-        )}
-        {recData && recData.length > 0 && !data && (
-          <Section label="Suggestion">
-            {recData?.map((user) => {
-              return (
+      <div className="absolute left-0 top-0 h-full w-full overflow-y-auto bg-white pt-2">
+        <motion.div
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          ref={ref}
+          className="bg-neutral-white w-full"
+        >
+          {data?.users && data.users.length > 0 && (
+            <Section label="People">
+              {data?.users?.map((user) => (
                 <Link key={user?._id} href={`/talk/${user?._id}`}>
                   <UserItem user={user} />
                 </Link>
-              );
-            })}
-          </Section>
-        )}
+              ))}
+            </Section>
+          )}
+          {data?.rooms && data.rooms.length > 0 && (
+            <div className="mt-5">
+              <Section label="Groups">
+                {data?.rooms.map((room) => (
+                  <InboxItem
+                    key={room._id}
+                    data={room}
+                    currentUser={currentUser!}
+                    showMembersName
+                    showTime={false}
+                  />
+                ))}
+              </Section>
+            </div>
+          )}
+          {recData && recData.length > 0 && !data && (
+            <Section label="Suggestion">
+              {recData?.map((user) => {
+                return (
+                  <Link key={user?._id} href={`/talk/${user?._id}`}>
+                    <UserItem user={user} />
+                  </Link>
+                );
+              })}
+            </Section>
+          )}
+        </motion.div>
       </div>
     );
   },
