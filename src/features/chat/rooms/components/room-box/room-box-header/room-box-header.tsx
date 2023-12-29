@@ -8,10 +8,12 @@ import { generateRoomDisplay } from '../../../utils';
 import { useAuthStore } from '@/stores/auth';
 import { useChatBox } from '../../../contexts';
 import { useMemo } from 'react';
+import { Video } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
-  const currentUserId = useAuthStore((s) => s.user?._id) || '';
+  const currentUserId = useAuthStore((s) => s.user?._id)  || '';
   const room = useMemo(
     () => generateRoomDisplay(_room, currentUserId),
     [_room, currentUserId],
@@ -26,7 +28,8 @@ export const ChatBoxHeader = () => {
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
-      <div className="-mr-2 ml-auto">
+      <div className="-mr-2 ml-auto flex gap-1">
+        <VideoCall roomId={room._id}/>
         <ActionBar />
       </div>
     </div>
@@ -48,3 +51,23 @@ const ActionBar = () => {
     </div>
   );
 };
+const VideoCall = ({roomId}: {roomId: string}) => {
+  const router = useRouter();
+  const startVideoCall = () => {
+    console.log("start video call with room: ", roomId);
+    router.push(`/call/${roomId}`);
+  };
+
+  return (
+    <div>
+      <Button.Icon
+        onClick={startVideoCall}
+        size="md"
+        color='primary'
+        variant="ghost"
+      >
+        <Video />
+      </Button.Icon>
+    </div>
+  );
+}
