@@ -10,6 +10,7 @@ interface ParicipantInVideoCall {
     isVideoOn?: boolean;
     userId?: string;
     stream?: MediaStream;
+    user?: any;
 }
 export type VideoCallState = {
     showTranslateOnType: boolean;
@@ -22,6 +23,9 @@ export type VideoCallState = {
     myPeerId: string;
     myVideoStream: MediaStream | null;
     setMyVideoStream: (stream: MediaStream) => void;
+    addParticipant: (participant: ParicipantInVideoCall) => void;
+    removeParticipant: (peerId: string) => void;
+    updateParticipant: (participants: ParicipantInVideoCall[]) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -34,7 +38,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     videoCallIdInteract: null,
     setVideoCallIdInteract: (id) => set(() => ({ videoCallIdInteract: id })),
     participants: [],
-    addPaticipant: (participant: ParicipantInVideoCall) => {
+    addParticipant: (participant: ParicipantInVideoCall) => {
         const isExist = useVideoCallStore.getState().participants.some(
             (p) => p.peerId === participant.peerId,
         );
@@ -52,6 +56,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
         set((state) => ({
             participants: state.participants.filter((p) => p.peerId !== peerId),
         }));
+    },
+    updateParticipant: (participants: ParicipantInVideoCall[]) => {
+        set(() => ({ participants }));
     },
     myPeerId: '',
     setMyPeerId: (id: string) => set(() => ({ myPeerId: id })),

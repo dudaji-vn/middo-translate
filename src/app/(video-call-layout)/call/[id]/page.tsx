@@ -9,21 +9,22 @@ import peerInstance from "@/features/call/context/peerInstance";
 import { useVideoCallStore } from "@/features/call/store";
 import ReactPlayer from "react-player";
 import socket from "@/lib/socket-io";
+import { useAuthStore } from "@/stores/auth";
 
 interface VideoCallPageProps {
   params: { id: string };
 }
 const VideoCallPage = ({ params }: VideoCallPageProps) => {
   const { id: roomId } = params;
-  const { participants, myPeerId, setMyPeerId, myVideoStream, setMyVideoStream, addPaticipant } = useVideoCallStore();
+  const { user } = useAuthStore();
+  const { participants, myPeerId, setMyPeerId, addParticipant, removeParticipant } = useVideoCallStore();
   const myVideoStreamRef = useRef(null);
-  const [peers, setPeers] = useState({});
-  console.log("participants:", participants)
+
+  console.log({participants})
   useEffect(() => {
     peerInstance.on('open', (peerId) => {
       setMyPeerId(peerId);
-      console.log("My peer Id: ", peerId)
-      socket.emit('call.join', { peerId, roomId });
+      socket.emit('call.join', { peerId, roomId, user });
     })
     
     peerInstance.on('error', (err) => console.log(err))
@@ -32,32 +33,33 @@ const VideoCallPage = ({ params }: VideoCallPageProps) => {
       if(!myVideoStreamRef.current) return;
       const call = peerInstance.call(data.peerId, myVideoStreamRef.current);
       call.on('stream', userStream => {
-        console.log('Receive stream from::', data.peerId)
-        console.log(userStream)
-        // let tmpStream = {...userStream}
-        // tmpStream.id = tmpStream.replace("{", "").replace("}", "")
-        // console.log(tmpStream)
-        addPaticipant({ peerId: data.peerId, stream: userStream })
+        addParticipant({ peerId: data.peerId, stream: userStream, user: data.user })
       })
     })
+    socket.on('call.leave', (peerId) => {
+      removeParticipant(peerId)
+    })
+
     const navigator = window.navigator as any;
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((stream) => {
         if(!myPeerId) return;
-        setMyVideoStream(stream);
         myVideoStreamRef.current = stream;
-        addPaticipant({ peerId: myPeerId, stream })
+        addParticipant({ peerId: myPeerId, stream, user })
         peerInstance.on('call', call => {
           call.answer(stream);
           call.on('stream', userStream => {
-            console.log('Start Stream of another user::', userStream)
-            addPaticipant({ peerId: call.peer, stream: userStream })
+            // add par
+            console.log("Add pa")
+            console.log({userStream})
+            addParticipant({ peerId: call.peer, stream: userStream, user })
           })
           call.on('error', (err) => console.log(err))
           call.on("close", () => console.log('Close'))
         })
       }).catch(err => console.log(err.message))
-  }, [addPaticipant, myPeerId, roomId, setMyPeerId, setMyVideoStream]);
+    
+  }, [addParticipant, myPeerId, removeParticipant, roomId, setMyPeerId, user]);
 
   return <main className="h-dvh w-full flex flex-col">
     <VideoCallHeader />
