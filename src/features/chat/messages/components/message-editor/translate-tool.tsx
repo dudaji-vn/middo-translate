@@ -109,7 +109,7 @@ export const TranslateTool = ({
                 >
                   <div
                     className={
-                      'flex flex-1 rounded-xl border border-primary-500-main p-3'
+                      'flex flex-1 rounded-xl border border-primary-500-main bg-white p-3'
                     }
                   >
                     <textarea
