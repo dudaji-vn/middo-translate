@@ -17,11 +17,12 @@ export const MessageEditorToolbarTranslateTool = (
     inputDisabled,
     focusInput,
   } = useMessageEditorText();
+  const srcLang = useChatStore((s) => s.srcLang);
   const { showTranslateOnType, toggleShowTranslateOnType } = useChatStore();
   return (
     <>
       <TranslateTool
-        showTool={!!showTranslateOnType && !!text}
+        showTool={!!showTranslateOnType && !!text && srcLang !== 'en'}
         checked={showTranslateOnType}
         onCheckedChange={toggleShowTranslateOnType}
         content={translatedText}

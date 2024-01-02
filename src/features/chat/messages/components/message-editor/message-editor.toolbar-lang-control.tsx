@@ -28,7 +28,7 @@ export const MessageEditorToolbarLangControl = (
           setSrcLang(value || 'auto');
         }}
       >
-        <SelectTrigger className="mr-5 w-[180px] rounded-xl bg-neutral-50 shadow-none">
+        <SelectTrigger className="mr-5 w-[180px] rounded-xl bg-neutral-50 !py-2 shadow-none">
           <SelectValue placeholder="Theme" />
         </SelectTrigger>
         <SelectContent>
