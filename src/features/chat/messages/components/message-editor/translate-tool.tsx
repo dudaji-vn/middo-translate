@@ -73,9 +73,9 @@ export const TranslateTool = ({
     }
   }, [checked]);
   return (
-    <div className="absolute -top-4 left-0 w-full -translate-y-full outline-none">
-      <AnimatePresence mode="wait">
-        {showTool && (
+    <AnimatePresence mode="wait">
+      {showTool && (
+        <div className="w-full outline-none">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -83,7 +83,7 @@ export const TranslateTool = ({
             transition={{ duration: 0.2, ease: 'backOut' }}
             className=""
           >
-            <div className="bg-neutral-white rounded-xl shadow-2 ">
+            <div className="rounded-xl bg-primary-100 ">
               <div className="flex items-center gap-3 p-3">
                 <CircleFlag countryCode="gb" height="20" width="20" />
                 <span className="text-sm font-medium text-neutral-600">
@@ -109,7 +109,7 @@ export const TranslateTool = ({
                 >
                   <div
                     className={
-                      'border-primary-500-main flex flex-1 rounded-xl border p-3'
+                      'flex flex-1 rounded-xl border border-primary-500-main p-3'
                     }
                   >
                     <textarea
@@ -164,38 +164,30 @@ export const TranslateTool = ({
                 )}
               </div>
             </div>
-            <div className="pl-[60px]">
-              <Triangle fill="white" position="bottom" />
-            </div>
           </motion.div>
-        )}
-        {showNotification && !checked && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10, transition: { duration: 0.2 } }}
-            transition={{ duration: 0.2, ease: 'backOut' }}
-            className=""
-          >
-            <NotificationTranslation
-              onClose={() => setShowNotification(false)}
-            />
-            <div className="pl-[60px]">
-              <Triangle fill="white" position="bottom" />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+        </div>
+      )}
+      {showNotification && !checked && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 10, transition: { duration: 0.2 } }}
+          transition={{ duration: 0.2, ease: 'backOut' }}
+          className=""
+        >
+          <NotificationTranslation onClose={() => setShowNotification(false)} />
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 
 const NotificationTranslation = ({ onClose }: { onClose?: () => void }) => {
   return (
-    <div className="bg-neutral-white flex items-center justify-between rounded-xl p-3 shadow-2">
+    <div className="flex items-center justify-between rounded-xl bg-neutral-white p-3 shadow-2">
       <p>
         EN - Translate tool is turn off, you can turn it on again in{' '}
-        <span className="text-primary-500-main font-medium">
+        <span className="font-medium text-primary-500-main">
           Chat setting
           <Settings className="ml-1 inline-block" />
         </span>

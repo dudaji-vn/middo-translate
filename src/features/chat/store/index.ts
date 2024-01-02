@@ -7,6 +7,10 @@ export type ChatState = {
   toggleShowMiddleTranslation: () => void;
   rooIdInteract: string | null;
   setRoomIdInteract: (id: string) => void;
+  srcLang: string;
+  setSrcLang: (lang: string) => void;
+  detLang: string;
+  setDetLang: (lang: string) => void;
 };
 
 export const useChatStore = create<ChatState>()((set) => ({
@@ -18,4 +22,8 @@ export const useChatStore = create<ChatState>()((set) => ({
     set((state) => ({ showMiddleTranslation: !state.showMiddleTranslation })),
   rooIdInteract: null,
   setRoomIdInteract: (id) => set(() => ({ rooIdInteract: id })),
+  srcLang: 'auto',
+  setSrcLang: (lang) => set(() => ({ srcLang: lang })),
+  detLang: '',
+  setDetLang: (lang) => set(() => ({ detLang: lang })),
 }));

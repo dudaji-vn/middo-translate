@@ -25,3 +25,10 @@ export const getCountryCode = (
   }
   return 'us';
 };
+
+export const getCountryNameByCode = (countryCode: string) => {
+  const language = SUPPORTED_LANGUAGES.find(
+    (language) => language.code === countryCode,
+  );
+  return language?.name || '';
+};

@@ -46,3 +46,12 @@ export async function detectLanguage(text: string) {
   );
   return isSupported ? language : DEFAULT_LANGUAGES_CODE.EN;
 }
+
+export async function translateWithDetection(text: string, to: string) {
+  if (!text || !to) return '';
+  const from = await detectLanguage(text);
+  return {
+    detectedLanguage: from,
+    translatedText: await translateText(text, from, to),
+  };
+}

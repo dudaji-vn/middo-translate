@@ -21,7 +21,9 @@ export const useSelectFiles = () => {
   const removeFile = (file: FileWithUrl) => {
     setFiles((old) => old.filter((f) => f.url !== file.url));
   };
-  const handlePasteFile = (e: React.ClipboardEvent<HTMLDivElement>) => {
+  const handlePasteFile = (
+    e: React.ClipboardEvent<HTMLDivElement | HTMLTextAreaElement>,
+  ) => {
     const items = e.clipboardData.items;
     const files = Array.from(items)
       .filter((item) => item.kind === 'file')

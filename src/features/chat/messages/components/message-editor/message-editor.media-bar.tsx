@@ -3,18 +3,13 @@ import { FileIcon, defaultStyles } from 'react-file-icon';
 import { PlusCircleIcon, XIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
-import { FileWithUrl } from '@/hooks/use-select-files';
 import Image from 'next/image';
+import { useMessageEditorMedia } from './message-editor.media-context';
 
-export const FileList = ({
-  files,
-  onRemoveFile,
-  onAddMoreFiles,
-}: {
-  files: FileWithUrl[];
-  onRemoveFile?: (file: FileWithUrl) => void;
-  onAddMoreFiles?: () => void;
-}) => {
+export interface MessageEditorMediaBarProps {}
+
+export const MessageEditorMediaBar = (props: MessageEditorMediaBarProps) => {
+  const { files, removeFile, open } = useMessageEditorMedia();
   return (
     <AnimatePresence>
       {files.length > 0 && (
@@ -66,7 +61,7 @@ export const FileList = ({
                   <button
                     tabIndex={-1}
                     type="button"
-                    onClick={() => onRemoveFile?.(file)}
+                    onClick={() => removeFile(file)}
                   >
                     <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
                       <XIcon width={20} height={20} />
@@ -78,7 +73,7 @@ export const FileList = ({
           </AnimatePresence>
 
           <Button.Icon
-            onClick={onAddMoreFiles}
+            onClick={open}
             type="button"
             color="secondary"
             size="lg"

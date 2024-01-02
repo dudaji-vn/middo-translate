@@ -14,6 +14,7 @@ export interface TextMessageProps {
 }
 
 export const TextMessage = ({ isMe, message }: TextMessageProps) => {
+  console.log(message.language);
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
@@ -28,7 +29,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
     const translateContent = async () => {
       const translated = await translateText(
         message.contentEnglish || message.content,
-        message.sender.language,
+        message?.language || message.sender.language,
         userLanguage,
       );
       setContentDisplay(translated);
@@ -40,6 +41,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
     message.sender.language,
     message.contentEnglish,
     message.status,
+    message.language,
   ]);
   return (
     <div
