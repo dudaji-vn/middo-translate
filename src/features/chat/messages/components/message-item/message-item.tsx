@@ -10,7 +10,7 @@ import { MessageItemWrapper } from './message-item.wrapper';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { SeenTracker } from './message-item.seen-tracker';
-import { TextMessage } from './text-message';
+import { TextMessage } from './message-item.text';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';

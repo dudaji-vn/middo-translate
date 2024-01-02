@@ -7,12 +7,14 @@ type CreateLocalMessageParams = {
   content?: string;
   contentEnglish?: string;
   media?: Media[];
+  language?: string;
 };
 
 export const createLocalMessage = ({
   sender,
   content = '',
   contentEnglish = '',
+  language = 'en',
   media = [],
 }: CreateLocalMessageParams): Message => {
   return {
@@ -24,6 +26,7 @@ export const createLocalMessage = ({
     type: 'text',
     media,
     createdAt: new Date().toISOString(),
+    language,
   };
 };
 

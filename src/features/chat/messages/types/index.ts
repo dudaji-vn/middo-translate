@@ -22,4 +22,5 @@ export type Message = {
   media?: Media[];
   type: MessageType;
   status: MessageStatus;
+  language: string;
 } & BaseEntity;
