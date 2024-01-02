@@ -9,17 +9,19 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/feedback';
-import { LogOut, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/actions';
+import { Trash2 } from 'lucide-react';
+import { cn } from '@/utils/cn';
 import { useDeleteConversation } from '../../hooks/use-delete-conversation';
-import { useLeaveRoom } from '../../hooks/use-leave-room';
 
 export interface RoomDeleteConversationProps {
   roomId: string;
+  isGroup?: boolean;
 }
 
 export const RoomDeleteConversation = ({
+  isGroup,
   roomId,
 }: RoomDeleteConversationProps) => {
   const { mutate } = useDeleteConversation();
@@ -27,11 +29,11 @@ export const RoomDeleteConversation = ({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          startIcon={<Trash2 className="h-4 w-4 text-colors-error-400-main" />}
+          startIcon={<Trash2 className="text-colors-error-400-main h-4 w-4" />}
           shape="square"
           color="default"
           size="lg"
-          className="w-full rounded-t-[4px]"
+          className={cn('w-full ', isGroup ? 'rounded-t-[4px]' : '-mt-4')}
         >
           <span className="text-colors-error-400-main">
             Delete conversation
