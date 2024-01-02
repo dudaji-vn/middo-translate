@@ -93,6 +93,7 @@
     "@types/react-qr-reader": "^2.1.7",
     "@types/react-speech-recognition": "^3.9.3",
     "@types/regenerator-runtime": "^0.13.3",
+    "@types/simple-peer": "^9.11.8",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.0.1",
