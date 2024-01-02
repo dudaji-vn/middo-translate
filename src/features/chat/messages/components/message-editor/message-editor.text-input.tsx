@@ -1,5 +1,6 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 
+import { useMessageEditorMedia } from './message-editor.media-context';
 import { useMessageEditorText } from './message-editor.text-context';
 
 export interface TextInputRef extends HTMLInputElement {
@@ -18,6 +19,8 @@ export const TextInput = forwardRef<
     listening,
     inputDisabled,
   } = useMessageEditorText();
+
+  const { handlePasteFile } = useMessageEditorMedia();
 
   const inputRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(
@@ -53,6 +56,7 @@ export const TextInput = forwardRef<
           name="message"
           type="text"
           placeholder={listening ? 'Listening...' : 'Type a message'}
+          onPaste={handlePasteFile}
         />
         {listening && (
           <div className="absolute left-0 top-0 h-full w-full"></div>

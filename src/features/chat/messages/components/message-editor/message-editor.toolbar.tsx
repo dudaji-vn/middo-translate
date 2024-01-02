@@ -6,6 +6,7 @@ import { MessageEditorToolbarEmoji } from './message-editor.toolbar-emoji';
 import { MessageEditorToolbarLangControl } from './message-editor.toolbar-lang-control';
 import { MessageEditorToolbarMic } from './message-editor.toolbar-mic';
 import { MessageEditorToolbarTranslateTool } from './message-editor.toolbar-translate-tool';
+import { useMessageEditorMedia } from './message-editor.media-context';
 import { useMessageEditorText } from './message-editor.text-context';
 
 export interface MessageEditorToolbarProps
@@ -16,6 +17,7 @@ export const MessageEditorToolbar = forwardRef<
   MessageEditorToolbarProps
 >((props, ref) => {
   const { listening } = useMessageEditorText();
+  const { open } = useMessageEditorMedia();
 
   useEffect(() => {
     // enable submit form by enter
@@ -43,7 +45,7 @@ export const MessageEditorToolbar = forwardRef<
       <MessageEditorToolbarTranslateTool />
       <div ref={ref} {...props} className="flex items-center">
         <MessageEditorToolbarLangControl />
-        <Button.Icon color="default" size="sm" variant="ghost">
+        <Button.Icon onClick={open} color="default" size="sm" variant="ghost">
           <FilePlus2 />
         </Button.Icon>
         <MessageEditorToolbarMic />
