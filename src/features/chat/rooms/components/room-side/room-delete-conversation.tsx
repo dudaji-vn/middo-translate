@@ -29,15 +29,13 @@ export const RoomDeleteConversation = ({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          startIcon={<Trash2 className="text-colors-error-400-main h-4 w-4" />}
+          startIcon={<Trash2 className="h-4 w-4 text-error-400-main" />}
           shape="square"
           color="default"
           size="lg"
           className={cn('w-full ', isGroup ? 'rounded-t-[4px]' : '-mt-4')}
         >
-          <span className="text-colors-error-400-main">
-            Delete conversation
-          </span>
+          <span className="text-error-400-main">Delete conversation</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

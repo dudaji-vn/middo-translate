@@ -1,7 +1,7 @@
 'use client';
 
 import { FileWithUrl, useSelectFiles } from '@/hooks/use-select-files';
-import { PropsWithChildren, createContext, useContext } from 'react';
+import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 import { DropzoneRootProps } from 'react-dropzone';
 
@@ -22,7 +22,12 @@ export const MessageEditorMediaContext =
     {} as MessageEditorMediaContextProps,
   );
 
-export const MessageEditorMediaProvider = ({ children }: PropsWithChildren) => {
+export const MessageEditorMediaProvider = ({
+  children,
+  onFileUploaded,
+}: PropsWithChildren & {
+  onFileUploaded?: (files: FileWithUrl[]) => void;
+}) => {
   const {
     files,
     getInputProps,
@@ -31,7 +36,15 @@ export const MessageEditorMediaProvider = ({ children }: PropsWithChildren) => {
     removeFile,
     handlePasteFile,
     reset,
+    uploadedFiles,
   } = useSelectFiles();
+
+  useEffect(() => {
+    if (uploadedFiles[uploadedFiles.length - 1]?.uploaded) {
+      onFileUploaded?.(uploadedFiles);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uploadedFiles]);
   return (
     <MessageEditorMediaContext.Provider
       value={{
