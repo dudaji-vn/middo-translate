@@ -14,7 +14,6 @@ export interface TextMessageProps {
 }
 
 export const TextMessage = ({ isMe, message }: TextMessageProps) => {
-  console.log(message.language);
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );

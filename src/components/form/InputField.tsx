@@ -81,12 +81,12 @@ export const InputField = (props: InputFieldProps) => {
         )}
         {isTouched && !errors && (
           <CheckCircle2
-            className={`h-5 min-h-[20px] w-5 min-w-[20px] text-success-2`}
+            className={`text-success-2 h-5 min-h-[20px] w-5 min-w-[20px]`}
           />
         )}
       </div>
       {errors && (
-        <div className="mt-2 flex items-center gap-2 pl-5 text-[14px] text-error-2">
+        <div className="mt-2 flex items-center gap-2 pl-5 text-[14px] text-error">
           <AlertCircleIcon className="h-7 w-5 min-w-[20px] " />
           {(errors?.message?.message as string) || (errors?.message as string)}
         </div>

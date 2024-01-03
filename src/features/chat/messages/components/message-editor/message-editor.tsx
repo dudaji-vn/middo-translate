@@ -6,6 +6,7 @@ import { forwardRef, useRef } from 'react';
 
 import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { FileWithUrl } from '@/hooks/use-select-files';
 import { Media } from '@/types';
 import { MessageEditorForm } from './message-editor.form';
 import { MessageEditorMediaBar } from './message-editor.media-bar';
@@ -26,10 +27,11 @@ type SubmitData = {
 export interface MessageEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   onSubmitValue?: (data: SubmitData) => void;
+  onFileUploaded?: (files: FileWithUrl[]) => void;
 }
 
 export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
-  ({ onSubmitValue, ...props }, ref) => {
+  ({ onSubmitValue, onFileUploaded, ...props }, ref) => {
     const textInputRef = useRef<TextInputRef>(null);
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
@@ -81,7 +83,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     };
 
     return (
-      <MessageEditorMediaProvider>
+      <MessageEditorMediaProvider onFileUploaded={onFileUploaded}>
         <MessageEditorTextProvider>
           <MessageEditorForm id="message-editor" onFormSubmit={handleSubmit}>
             <MessageEditorToolbar />
