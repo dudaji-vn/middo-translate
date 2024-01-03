@@ -1,5 +1,7 @@
 import { ChatMain } from '@/features/chat/components/chat-main';
 import { ChatSidebar } from '@/features/chat/components/chat-sidebar';
+import { FCMProvider } from '@/providers/fcm.provider';
+import { Fragment } from 'react';
 import { Inbox } from '@/features/chat/rooms/components';
 import { Metadata } from 'next';
 
@@ -12,12 +14,15 @@ export interface ChatLayoutProps {
 
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
-    <div className="flex">
-      <ChatSidebar>
-        <Inbox />
-      </ChatSidebar>
-      <ChatMain>{children}</ChatMain>
-    </div>
+    <Fragment>
+      <div className="flex">
+        <ChatSidebar>
+          <Inbox />
+        </ChatSidebar>
+        <ChatMain>{children}</ChatMain>
+      </div>
+      <FCMProvider />
+    </Fragment>
   );
 };
 

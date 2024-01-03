@@ -6,7 +6,6 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 
 import BootstrapProvider from './bootstrap';
 import { CommonComponent } from './common-component';
-import { FCMProvider } from './fcm.provider';
 import { Toaster as HotToaster } from 'react-hot-toast';
 import React from 'react';
 import { ReactQueryProvider } from './react-query';
@@ -23,7 +22,6 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
       <BootstrapProvider />
       <CommonComponent />
       <ReactQueryProvider>{props.children}</ReactQueryProvider>
-      {/* <FCMProvider /> */}
       <SideEffectProvider />
     </>
   );
