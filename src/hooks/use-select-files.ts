@@ -4,6 +4,7 @@ import {
   uploadMultiMedia,
 } from '@/utils/upload-media';
 
+import toast from 'react-hot-toast';
 import { useDropzone } from 'react-dropzone';
 import { useState } from 'react';
 
@@ -45,7 +46,7 @@ export const useSelectFiles = () => {
             `${file.file.name} (${covertBytesToMB(file.file.size, true)}MB)`,
         )
         .join(', ');
-      alert(`File ${message} max size is ${MAX_FILE_SIZE}MB!`);
+      toast.error(`File size must be less than ${MAX_FILE_SIZE}MB. ${message}`);
     },
   });
   const removeFile = (file: FileWithUrl) => {

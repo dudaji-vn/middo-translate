@@ -9,7 +9,6 @@ import { Message } from '../types';
 import { MessageItem } from './message-item';
 import { MessageItemGroup } from './message-group';
 import { Room } from '../../rooms/types';
-import { Spinner } from '@/components/feedback/spinner';
 import { User } from '@/features/users/types';
 import { formatTimeDisplay } from '../../rooms/utils';
 import { getReadByUsers } from '../../utils';
