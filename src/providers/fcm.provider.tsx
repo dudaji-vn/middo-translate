@@ -43,13 +43,16 @@ export const FCMProvider = (props: FCMProviderProps) => {
   };
 
   useEffect(() => {
-    setPermission(Notification.permission);
+    try {
+      setPermission(Notification.permission);
+    } catch (error) {
+      console.log('error', error);
+    }
   }, []);
 
   useEffect(() => {
     if (permission === 'default') {
       if (toastId) return;
-
       const id = toast.loading(
         (t) => {
           return (
