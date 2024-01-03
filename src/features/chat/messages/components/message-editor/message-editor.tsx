@@ -62,13 +62,15 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       const formData = new FormData(e.currentTarget);
       const content = formData.get('message') as string;
       let language = srcLang;
-      if (language === 'auto') {
-        language = formData.get('detLang') as string;
-        if (!language) {
-          language = await detectLanguage(content);
+      if (content) {
+        if (language === 'auto') {
+          language = formData.get('detLang') as string;
+          if (!language) {
+            language = await detectLanguage(content);
+          }
         }
+        setSrcLang(language);
       }
-      setSrcLang(language);
       let contentEnglish = formData.get('messageEnglish') as string;
       if (!contentEnglish) {
         contentEnglish = await translateText(
