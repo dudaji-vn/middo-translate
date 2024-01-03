@@ -39,6 +39,7 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 
 				// Event receive list user
 				socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT, ({users, room}) => {
+					console.log('Room Info', room)
 					setRoom(room);
 					const peers: any[] = [];
 					users.forEach((user: {id: string, user: any}) => {
@@ -118,6 +119,7 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 	}, []);
 
 	const handleShareScreen = () => {
+		if(participants.some((participant) => participant.isShareScreen)) return;
 		const navigator = window.navigator as any;
         navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
         .then(async (stream: MediaStream) => {

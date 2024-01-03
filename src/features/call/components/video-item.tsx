@@ -13,7 +13,7 @@ const VideoItem = ({ participant, size = 'md' }: VideoItemProps) => {
     const { streamVideo } = useLoadStream(participant, videoRef)
     const { isTalk } = useAudioLevel(streamVideo)
     const classForSize = {
-        sm: 'w-[240px]',
+        sm: 'w-[240px] mx-1',
         md: '',
         lg: 'h-[480px]'
     }

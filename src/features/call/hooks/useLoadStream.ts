@@ -12,11 +12,11 @@ export default function useLoadStream(participant: any, elementRef: React.RefObj
             return;
         }
         participant.peer.on('stream', (stream: any) => {
+            if(!elementRef.current) return;
             elementRef.current!.srcObject = stream
             setStreamVideo(stream)
             setStreamForParticipant(stream, participant.socketId, participant.isShareScreen)
         })
-        
     }, [])
     return {
         streamVideo

@@ -1,7 +1,7 @@
 'use client';
 
-import { PropsWithChildren, useState } from 'react';
-import { Users2Icon, LayoutDashboard, MoreVertical } from 'lucide-react';
+import { PropsWithChildren, useEffect, useState } from 'react';
+import { Users2Icon, LayoutDashboard, MoreVertical, Maximize2, Minimize2 } from 'lucide-react';
 import { Button } from '@/components/actions/button';
 import { ArrowBackOutline } from '@easy-eva-icons/react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/data-display';
@@ -12,7 +12,32 @@ export interface VideoCallHeaderProps { }
 
 export const VideoCallHeader = ({ }: VideoCallHeaderProps) => {
     const handleBack = () => { }
+    const [isFullScreen, setFullScreen] = useState(false);
     const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
+
+    const toggleFullScreen = () => {
+        setFullScreen(prev => !prev);
+        if (!isFullScreen) {
+            document.documentElement.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    }
+
+    useEffect(() => {
+        const handleFullScreenChange = () => {
+            if (document.fullscreenElement) {
+                setFullScreen(true);
+            } else {
+                setFullScreen(false);
+            }
+        }
+        window.addEventListener('fullscreenchange', handleFullScreenChange)
+        return () => {
+            window.removeEventListener('fullscreenchange',handleFullScreenChange)
+        }
+    }, [])
+
     return (
         <header className='p-1 flex justify-between border-b border-neutral-50'>
             <div className='flex items-center'>
@@ -46,24 +71,9 @@ export const VideoCallHeader = ({ }: VideoCallHeaderProps) => {
                         </div>
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <DropdownMenu open={false} onOpenChange={()=>{}}>
-                    <DropdownMenuTrigger>
-                    <ButtonDataAction className='rounded-full px-2'>
-                        <MoreVertical className='w-5 h-5'/>
-                    </ButtonDataAction>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent
-                        align="end"
-                        className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
-                        onClick={()=>{}}
-                    >
-                        <div
-                            className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
-                        >
-                            Layout 1
-                        </div>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <ButtonDataAction className="rounded-full" onClick={toggleFullScreen}>
+                    {isFullScreen ? <Minimize2 className='w-5 h-5'/> : <Maximize2 className='w-5 h-5'/>}
+                </ButtonDataAction>
             </div>
         </header>
     );

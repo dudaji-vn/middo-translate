@@ -8,12 +8,12 @@ export default function VideoCallContent() {
 
     const { participants, layout, setLayout } = useVideoCallStore();
     useEffect(() => {
-        // const isHaveShareScreen = participants.some((participant) => participant.isShareScreen);
-        // if (isHaveShareScreen && layout !== 'SHARE_SCREEN') {
-        //     setLayout('SHARE_SCREEN');
-        // } else if (!isHaveShareScreen && layout !== 'VIEW') {
-        //     setLayout('VIEW');
-        // }
+        const isHaveShareScreen = participants.some((participant) => participant.isShareScreen);
+        if (isHaveShareScreen && layout !== 'SHARE_SCREEN') {
+            setLayout('SHARE_SCREEN');
+        } else if (!isHaveShareScreen && layout !== 'VIEW') {
+            setLayout('VIEW');
+        }
     }, [layout, participants, setLayout]);
 
     switch (layout) {
