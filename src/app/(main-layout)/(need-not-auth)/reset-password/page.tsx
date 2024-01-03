@@ -10,7 +10,7 @@ import { PageLoading } from '@/components/loading/PageLoading';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { resetPasswordService } from '@/services/authService';
 import { ResetPasswordSchema as schema } from '@/configs/yup-form';
-import { toast } from '@/components/toast';
+import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
@@ -56,10 +56,7 @@ export default function ResetPassword() {
       await resetPasswordService(watch().password);
       localStorage.removeItem(ACCESS_TOKEN_NAME);
       router.push(ROUTE_NAMES.SIGN_IN);
-      toast({
-        title: 'Your password has been changed!',
-        description: 'Please login again!',
-      });
+      toast.success('Your password has been changed!');
       setErrorMessage('');
     } catch (err: any) {
       setErrorMessage(err?.response?.data?.message);

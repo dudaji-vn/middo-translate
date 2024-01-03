@@ -1,6 +1,6 @@
 'use client';
 
-import { Globe2Outline, Swap } from '@easy-eva-icons/react';
+import { ArrowRightLeftIcon, Globe2Icon } from 'lucide-react';
 import { Select, SelectTrigger } from '@/components/data-entry';
 import { forwardRef, useEffect, useState } from 'react';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
@@ -11,7 +11,7 @@ import { CircleFlag } from 'react-circle-flags';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { ListLanguages } from '../list-languages';
 import { cn } from '@/utils/cn';
-import { useIsMobile } from '@/hooks/use-is-mobile';
+import { useAppStore } from '@/stores/app.store';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useTranslateStore } from '@/stores/translate';
 
@@ -31,7 +31,7 @@ export const LanguagesControlBar = forwardRef<
     { targetResult, source: _source, target: _target, detect, ...props },
     ref,
   ) => {
-    const isMobile = useIsMobile();
+    const isMobile = useAppStore((state) => state.isMobile);
     const [currentSelect, setCurrentSelect] = useState<
       'source' | 'target' | 'none'
     >('none');
@@ -45,6 +45,7 @@ export const LanguagesControlBar = forwardRef<
     const [canClick, setCanClick] = useState(true);
 
     const handleSwap = () => {
+      console.log(canClick);
       if (!canClick) return;
       if (!_source || !_target) return;
       const newParams = [
@@ -146,7 +147,7 @@ export const LanguagesControlBar = forwardRef<
                 </>
               ) : (
                 <>
-                  <Globe2Outline className="h-5 w-5 text-primary" />
+                  <Globe2Icon className="h-5 w-5 text-primary" />
                   <>{!isMobile && 'Detect language'}</>
                 </>
               )}
@@ -156,8 +157,8 @@ export const LanguagesControlBar = forwardRef<
           </Select>
         </div>
 
-        <Button.Icon variant="ghost" color="default">
-          <Swap className="text-text" />
+        <Button.Icon onClick={handleSwap} variant="ghost" color="default">
+          <ArrowRightLeftIcon className="text-text" />
         </Button.Icon>
         <div className="flex flex-1 justify-start">
           <Select>

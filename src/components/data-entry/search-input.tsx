@@ -4,29 +4,32 @@ import {
   ButtonHTMLAttributes,
   InputHTMLAttributes,
   forwardRef,
+  useCallback,
   useImperativeHandle,
   useRef,
   useState,
 } from 'react';
-import { CloseCircleOutline, Search } from '@easy-eva-icons/react';
+import { SearchIcon, XCircleIcon } from 'lucide-react';
 
 import { cn } from '@/utils/cn';
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
   btnDisabled?: boolean;
+  onClear?: () => void;
 }
 
 export interface SearchInputRef extends HTMLInputElement {
   reset: () => void;
 }
 export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
-  ({ btnDisabled, ...props }, ref) => {
-    const [value, setValue] = useState('');
+  ({ btnDisabled, defaultValue, onClear, ...props }, ref) => {
+    const [value, setValue] = useState(defaultValue || '');
     const inputRef = useRef<HTMLInputElement>(null);
-    const handleClear = () => {
+    const handleClear = useCallback(() => {
       setValue('');
-    };
+      onClear?.();
+    }, [onClear]);
     const canClear = value !== '';
 
     useImperativeHandle(
@@ -34,15 +37,15 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       () => ({
         ...(inputRef.current as HTMLInputElement),
         reset: () => {
-          handleClear();
+          setValue('');
         },
       }),
       [],
     );
 
     return (
-      <div className="relative w-full overflow-hidden rounded-full border bg-background">
-        <div className="flex h-[50px] pl-3">
+      <div className="relative w-full overflow-hidden rounded-full border bg-background transition-all">
+        <div className="flex h-[48px] pl-3 transition-all">
           <input
             value={value}
             ref={inputRef}
@@ -61,7 +64,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
                 'flex aspect-square h-full items-center justify-center p-2  disabled:text-text'
               }
             >
-              <CloseCircleOutline className="h-5 w-5 opacity-60" />
+              <XCircleIcon className="h-5 w-5 opacity-60" />
             </button>
           ) : (
             <div className="flex items-center bg-inherit">
@@ -90,7 +93,7 @@ const SearchButton = forwardRef<HTMLButtonElement, SearchButtonProps>(
         )}
         {...props}
       >
-        <Search className="h-5 w-5 opacity-60" />
+        <SearchIcon className="h-5 w-5 opacity-60" />
       </button>
     );
   },

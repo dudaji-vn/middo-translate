@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const messageVariants = cva(
-  'w-fit  relative overflow-hidden rounded-[20px]',
+  'w-fit relative overflow-hidden rounded-[20px] max-w-xl',
   {
     variants: {
       sender: {
@@ -15,7 +15,7 @@ export const messageVariants = cva(
         last: '',
       },
       status: {
-        removed: 'border border-colors-neutral-50',
+        removed: 'border border-neutral-50',
         pending: '',
         sent: '',
         received: '',

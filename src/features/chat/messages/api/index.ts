@@ -18,6 +18,7 @@ export const messageApi = {
     content: string;
     contentEnglish?: string;
     clientTempId: string;
+    language?: string;
   }) {
     const res: Response<Message> = await axios.post(basePath, data);
     return res.data;

@@ -3,6 +3,7 @@ import { Message } from '@/features/chat/messages/types';
 import { User } from '@/features/users/types';
 
 export type InboxSides = 'default' | 'settings' | 'new-message' | 'new-group';
+
 export type RoomStatus = 'active' | 'temporary' | 'deleted' | 'cannot_message';
 export type Room = {
   name?: string;

@@ -1,7 +1,4 @@
-import { X, ZoomIn } from 'lucide-react';
-
 import Download from 'yet-another-react-lightbox/plugins/download';
-import Fullscreen from 'yet-another-react-lightbox/plugins/fullscreen';
 import Image from 'next/image';
 import LightImage from '@/components/data-display/lingtbox-image';
 import Lightbox from 'yet-another-react-lightbox';
@@ -53,7 +50,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                     width,
                     height: width,
                   }}
-                  className="relative cursor-pointer overflow-hidden rounded-md border border-colors-neutral-50"
+                  className="relative cursor-pointer overflow-hidden rounded-xl border border-neutral-50"
                 >
                   <Image
                     alt={img.name || img.url}
@@ -75,7 +72,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             height={280}
             src={images[0].url}
             alt="img"
-            className="cursor-pointer rounded-md"
+            className="cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50"
           />
         )}
         <Lightbox

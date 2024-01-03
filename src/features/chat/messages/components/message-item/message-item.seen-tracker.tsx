@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { messageApi } from '../../api';
 import { useAuthStore } from '@/stores/auth';
+import { useHasFocus } from '@/features/chat/rooms/hooks/use-has-focus';
 import { useIntersectionObserver } from 'usehooks-ts';
 import { useMessageItem } from '.';
 import { useMutation } from '@tanstack/react-query';
@@ -19,7 +20,7 @@ export const SeenTracker = ({ onSeen }: SeenTrackProps) => {
     mutationFn: messageApi.seenMessage,
   });
 
-  if (isRead || message.status === 'pending' || message.status === 'removed') {
+  if (isRead || message.status === 'pending') {
     return null;
   }
   return (
@@ -35,7 +36,10 @@ export const SeenTracker = ({ onSeen }: SeenTrackProps) => {
 export const Track = ({ onSeen }: SeenTrackProps) => {
   const messRef = useRef<HTMLDivElement | null>(null);
   const entry = useIntersectionObserver(messRef, {});
-  const isVisible = !!entry?.isIntersecting;
+
+  const isFocused = useHasFocus();
+
+  const isVisible = !!entry?.isIntersecting && isFocused;
 
   useEffect(() => {
     if (isVisible && onSeen) {

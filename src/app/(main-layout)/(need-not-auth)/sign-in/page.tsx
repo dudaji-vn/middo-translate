@@ -13,7 +13,7 @@ import { PageLoading } from '@/components/loading/PageLoading';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { loginService } from '@/services/authService';
 import { LoginSchema as schema } from '@/configs/yup-form';
-import { toast } from '@/components/toast';
+import toast from 'react-hot-toast';
 import { useAuthStore } from '@/stores/auth';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -54,7 +54,7 @@ export default function SignIn() {
       const data = await loginService(watch());
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
-      toast({ title: 'Congratulations!', description: 'You are login in!' });
+      toast.success('Login success!');
       setErrorMessage('');
     } catch (err: any) {
       setErrorMessage(err?.response?.data?.message);

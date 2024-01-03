@@ -10,7 +10,7 @@ import {
 
 import { copyBlobToClipboard } from 'copy-image-clipboard';
 import { toBlob } from 'html-to-image';
-import { useToast } from '@/components/toast';
+import toast from 'react-hot-toast';
 
 type CaptureContext = {
   captureRef?: React.RefObject<HTMLDivElement>;
@@ -27,7 +27,6 @@ export const useCapture = () => {
 interface CaptureProviderProps extends PropsWithChildren {}
 export const CaptureProvider = ({ children }: CaptureProviderProps) => {
   const refCapture = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
   const onButtonClick = useCallback(() => {
     if (refCapture.current === null) {
       return;
@@ -35,9 +34,7 @@ export const CaptureProvider = ({ children }: CaptureProviderProps) => {
     toBlob(refCapture.current, { cacheBust: true, backgroundColor: '#fff' })
       .then(async (blob) => {
         copyBlobToClipboard(blob as Blob);
-        toast({
-          description: 'Image copied!',
-        });
+        toast.success('Image copied!');
       })
       .catch((err) => {
         console.log(err);

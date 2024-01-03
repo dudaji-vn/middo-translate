@@ -1,6 +1,6 @@
 import { Children, cloneElement, isValidElement } from 'react';
 
-import { IconVariants } from './variants';
+import { IconVariants } from './button.styles';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 

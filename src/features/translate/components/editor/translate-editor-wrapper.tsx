@@ -5,7 +5,7 @@ import './style.css';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 
 import { CircleFlag } from 'react-circle-flags';
-import { Globe2Outline } from '@easy-eva-icons/react';
+import { Globe2Icon } from 'lucide-react';
 import { Triangle } from '@/components/icons';
 import { cn } from '@/utils/cn';
 
@@ -61,7 +61,7 @@ export const TranslateEditorWrapper = ({
             height="35"
           />
         ) : (
-          <Globe2Outline className="countryCircleIcon font-light text-primary" />
+          <Globe2Icon className="countryCircleIcon font-light text-primary" />
         )}
         <div className="opacity-40">
           {prefixLanguage && <span>{prefixLanguage} - </span>}

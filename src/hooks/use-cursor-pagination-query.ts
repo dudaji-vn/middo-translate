@@ -8,6 +8,8 @@ import {
 } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
+import { deepCopy } from '@/utils/deep-copy';
+
 type TDataResponse<T> = ListResponse<T, CursorPagination>;
 
 type TypeWithBaseEntity<T> = T & BaseEntity;
@@ -40,23 +42,24 @@ export const useCursorPaginationQuery = <TData>({
   const addItem = useCallback(
     (item: TypeWithBaseEntity<TData>) => {
       queryClient.setQueryData<typeof data | undefined>(queryKey, (old) => {
+        const oldDeepCopy = deepCopy(old) as typeof data;
         const newPage: TDataResponse<TData> = {
           pageInfo: {
             endCursor: item._id,
             hasNextPage: false,
           },
-          items: [item],
+          items: [deepCopy(item)],
         };
 
-        if (!old) {
+        if (!oldDeepCopy) {
           return {
             pageParams: [item._id],
             pages: [newPage],
           };
         }
         return {
-          ...old,
-          pages: [newPage, ...old.pages],
+          ...oldDeepCopy,
+          pages: [newPage, ...oldDeepCopy.pages],
         };
       });
     },
@@ -66,9 +69,10 @@ export const useCursorPaginationQuery = <TData>({
   const replaceItem = useCallback(
     (_item: TypeWithBaseEntity<TData>, replaceId: string) => {
       queryClient.setQueryData<typeof data | undefined>(queryKey, (old) => {
-        if (!old) return old;
+        const oldDeepCopy = deepCopy(old) as typeof data;
+        if (!oldDeepCopy) return oldDeepCopy;
         let hasReplace = false;
-        const newPage = old?.pages.map((page) => {
+        const newPage = oldDeepCopy?.pages.map((page) => {
           return {
             ...page,
             items: page.items.map((item) => {
@@ -90,11 +94,11 @@ export const useCursorPaginationQuery = <TData>({
               endCursor: _item._id,
               hasNextPage: false,
             },
-            items: [_item],
+            items: [deepCopy(_item)],
           });
         }
         return {
-          ...old,
+          ...oldDeepCopy,
           pages: newPage,
         };
       });
@@ -103,10 +107,11 @@ export const useCursorPaginationQuery = <TData>({
   );
 
   const updateItem = useCallback(
-    (_item: TypeWithBaseEntity<TData>) => {
+    (_item: TypeWithBaseEntity<Partial<TData> & { _id: string }>) => {
       queryClient.setQueryData<typeof data | undefined>(queryKey, (old) => {
-        if (!old) return old;
-        const newPage = old?.pages.map((page) => {
+        const oldDeepCopy = deepCopy(old) as typeof data;
+        if (!oldDeepCopy) return oldDeepCopy;
+        const newPage = oldDeepCopy?.pages.map((page) => {
           return {
             ...page,
             items: page.items.map((item) => {
@@ -122,7 +127,7 @@ export const useCursorPaginationQuery = <TData>({
           };
         });
         return {
-          ...old,
+          ...oldDeepCopy,
           pages: newPage,
         };
       });
@@ -133,8 +138,9 @@ export const useCursorPaginationQuery = <TData>({
   const removeItem = useCallback(
     (removeId: string) => {
       queryClient.setQueryData<typeof data | undefined>(queryKey, (old) => {
-        if (!old) return old;
-        const newPage = old?.pages.map((page) => {
+        const oldDeepCopy = deepCopy(old) as typeof data;
+        if (!oldDeepCopy) return oldDeepCopy;
+        const newPage = oldDeepCopy?.pages.map((page) => {
           return {
             ...page,
             items: page.items.filter((item) => {
@@ -144,7 +150,7 @@ export const useCursorPaginationQuery = <TData>({
           };
         });
         return {
-          ...old,
+          ...oldDeepCopy,
           pages: newPage,
         };
       });
@@ -153,7 +159,8 @@ export const useCursorPaginationQuery = <TData>({
   );
 
   const items = useMemo(() => {
-    return data?.pages.flatMap((page) => page.items) ?? [];
+    const dataDeepCopy = deepCopy(data) as typeof data;
+    return dataDeepCopy?.pages.flatMap((page) => page.items) ?? [];
   }, [data]);
   return {
     ...rest,

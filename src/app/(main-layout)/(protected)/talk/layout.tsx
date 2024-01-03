@@ -1,6 +1,5 @@
-import { ChatLeftSide } from '@/features/chat/components/chat-left-side';
 import { ChatMain } from '@/features/chat/components/chat-main';
-import { FCMProvider } from '@/providers/fcm.provider';
+import { ChatSidebar } from '@/features/chat/components/chat-sidebar';
 import { Inbox } from '@/features/chat/rooms/components';
 import { Metadata } from 'next';
 
@@ -13,11 +12,10 @@ export interface ChatLayoutProps {
 
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
-    <div className="flex h-main-container-height overflow-hidden">
-      {/* <FCMProvider /> */}
-      <ChatLeftSide>
+    <div className="flex">
+      <ChatSidebar>
         <Inbox />
-      </ChatLeftSide>
+      </ChatSidebar>
       <ChatMain>{children}</ChatMain>
     </div>
   );

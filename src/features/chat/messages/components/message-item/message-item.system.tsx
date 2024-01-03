@@ -11,7 +11,7 @@ export const MessageItemSystem = ({
 }: MessageItemSystemProps) => {
   return (
     <div className="mx-auto">
-      <span className="text-sm font-light text-colors-neutral-500">
+      <span className="text-sm font-light text-neutral-500">
         {isMe ? 'You' : message.sender.name}
         {' ' + message.content}
 
