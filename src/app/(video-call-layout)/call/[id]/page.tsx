@@ -11,11 +11,10 @@ interface VideoCallPageProps {
 }
 const VideoCallPage = ({ params }: VideoCallPageProps) => {
   const { id: roomId } = params;
-  
   return <VideoCallProvider roomId={roomId}>
-    <main className="h-dvh w-full flex flex-col">
+    <main className="h-dvh w-full flex flex-col overflow-hidden">
       <VideoCallHeader />
-      <section className="flex-1">
+      <section className="h-[calc(100vh-107px)]">
         <VideoCallContent />
       </section>
       <VideoCallBottom />

@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 
-export default function useAudioLevel(stream: MediaStream) {
+export default function useAudioLevel(stream?: MediaStream) {
     const [isTalk, setIsTalk] = useState(false)
 
     useEffect(() => {
+        if(!stream) return;
+        if(stream.getAudioTracks().length === 0) return;
         var audioContext = new AudioContext();
         var mediaStreamSource = audioContext.createMediaStreamSource(stream);
         var processor = audioContext.createScriptProcessor(2048, 1, 1);
@@ -22,7 +24,13 @@ export default function useAudioLevel(stream: MediaStream) {
             if(rms > 0.1 && !isTalk) setIsTalk(true)
             else if(rms < 0.1 && isTalk) setIsTalk(false)
         };
-    }, [isTalk, stream])
+        return () => {
+            if(!mediaStreamSource) return;
+            processor.disconnect(audioContext.destination);
+            mediaStreamSource.disconnect(processor);
+            mediaStreamSource.disconnect(audioContext.destination);
+        }
+    }, [stream])
 
     return {
         isTalk

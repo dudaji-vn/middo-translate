@@ -27,11 +27,6 @@ export const VideoCallHeader = ({ }: VideoCallHeaderProps) => {
                 <span className='font-semibold'>Group name</span>
             </div>
             <div className='flex gap-2'>
-                <ButtonDataAction>
-                    <Users2Icon className='w-5 h-5 mr-2'/>
-                    <span>4</span>
-                </ButtonDataAction>
-                <ButtonDataAction>01:00</ButtonDataAction>
                 <DropdownMenu open={isOpenMenuSelectLayout} onOpenChange={()=>setMenuSelectLayout(prev=>!prev)}>
                     <DropdownMenuTrigger>
                     <ButtonDataAction>
