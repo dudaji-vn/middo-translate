@@ -1,10 +1,8 @@
 import { Fragment, useMemo } from "react";
 import { useVideoCallStore } from "../../store";
 import VideoItem from "../video-item";
-import { ScrollMenu } from "react-horizontal-scrolling-menu";
-import 'react-horizontal-scrolling-menu/dist/styles.css';
 
-const ViewLayout = () => {
+const GalleryView = () => {
     const { participants, layout } = useVideoCallStore();
 
     const calculateGridLayout = useMemo(() => {
@@ -24,14 +22,11 @@ const ViewLayout = () => {
 
     return (
         <div className={`p-1 w-full h-full grid ${calculateGridLayout} gap-1`}>
-            {participants.filter((participant) => participant.isShareScreen).map((participant, index) => (
-                <VideoItem key={index} participant={participant} />
-            ))}
-            {participants.filter((participant) => !participant.isShareScreen).map((participant, index) => (
+            {participants.map((participant, index) => (
                 <VideoItem key={index} participant={participant} />
             ))}
         </div>
     );
 };
 
-export default ViewLayout;
+export default GalleryView;

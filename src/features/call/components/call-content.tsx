@@ -1,28 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { LAYOUTS, useVideoCallStore } from '../store';
-import ViewLayout from './layouts/view-layout';
-import ShareScreenLayout from './layouts/share-screen-layout';
+import { useVideoCallStore } from '../store';
+import GalleryView from './layouts/gallery-view';
+import ShareScreenLayout from './layouts/share-screen-view';
+import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 export default function VideoCallContent() {
 
-    const { participants, layout, setLayout } = useVideoCallStore();
-    useEffect(() => {
-        const isHaveShareScreen = participants.some((participant) => participant.isShareScreen);
-        if (isHaveShareScreen && layout !== 'SHARE_SCREEN') {
-            setLayout('SHARE_SCREEN');
-        } else if (!isHaveShareScreen && layout !== 'VIEW') {
-            setLayout('VIEW');
-        }
-    }, [layout, participants, setLayout]);
+    const { layout } = useVideoCallStore();
 
     switch (layout) {
-        case LAYOUTS.VIEW:
-            return <ViewLayout />;
-        case LAYOUTS.SHARE_SCREEN:
+        case VIDEOCALL_LAYOUTS.GALLERY_VIEW:
+            return <GalleryView />;
+        case VIDEOCALL_LAYOUTS.SHARE_SCREEN:
             return <ShareScreenLayout />;
         default:
-            return <ViewLayout />;
+            return <GalleryView />;
     }
 }
 

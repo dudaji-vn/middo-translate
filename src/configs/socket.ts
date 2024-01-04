@@ -30,9 +30,14 @@ export const SOCKET_CONFIG = {
       USER_JOINED: 'call.user_joined',
       RECEIVE_RETURN_SIGNAL: 'call.receive_return_signal',
       SHARE_SCREEN: 'call.share_screen',
+      LIST_PARTICIPANT_NEED_ADD_SCREEN: 'call.list_participant_need_add_screen',
       ANSWER_SHARE_SCREEN: 'call.answer_share_screen',
       ICE_CANDIDATE: 'call.ice_candidate',
       STOP_SHARE_SCREEN: 'call.stop_share_screen',
+      REQUEST_JOIN_ROOM: 'call.request_join_room',
+      ACCEPT_JOIN_ROOM: 'call.accept_join_room',
+      REJECT_JOIN_ROOM: 'call.reject_join_room',
+      ANSWERED_JOIN_ROOM: 'call.answered_join_room',
     }
   },
 };

@@ -1,13 +1,15 @@
 'use client';
 
 import { useAuthStore } from '@/stores/auth';
-import { PropsWithChildren, createContext, useContext, useEffect, useRef } from 'react';
+import { PropsWithChildren, createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useVideoCallStore } from '../store';
 import socket from '@/lib/socket-io';
-import Peer from 'simple-peer'
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { addPeer, createPeer } from '../utils/peerAction';
 import SimplePeer from 'simple-peer';
+import { ConfirmLeaveRoomModal } from '../components/common/ModalLeaveCall';
+import { RequestJoinRoomModal } from '../components/common/ModalRequestJoinRoom';
+import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 
 interface VideoCallContextProps {
 	handleShareScreen: () => void;
@@ -18,29 +20,25 @@ const VideoCallContext = createContext<VideoCallContextProps>(
 );
 
 interface VideoCallProviderProps {
-	roomId: string;
 }
 
-export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps & PropsWithChildren) => {
+export const VideoCallProvider = ({ children }: VideoCallProviderProps & PropsWithChildren) => {
 	const { user: myInfo } = useAuthStore();
-	const { participants, updateParticipant, addParticipant, removeParticipant, setRoomId, setShareScreen, removeParticipantShareScreen, setRoom } = useVideoCallStore();
+	const { participants, updateParticipant, addParticipant, removeParticipant, setShareScreen, removeParticipantShareScreen, setRoom, room: call, addUsersRequestJoinRoom, removeUsersRequestJoinRoom, setLayout } = useVideoCallStore();
 	const peersRef = useRef<any>([]);
-	// const shareScreenRef = useRef<any>([]);
-	// console.log({participants})
+	const [_shareScreenStream, setShareScreenStream] = useState<MediaStream | null>(null);
 	useEffect(() => {
-		// shareScreenRef.current = new RTCPeerConnection({'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]});
-		setRoomId(roomId);
+		let myVideoStream: MediaStream | null = null;
 		const navigator = window.navigator as any;
 		navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 			.then((stream: MediaStream) => {
+				myVideoStream = stream;
 				const me = { stream, user: myInfo, isMe: true, socketId: socket.id }
 				// Event join room
-				socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, { roomId, user: myInfo });
+				socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, { roomId: call.slug, user: myInfo });
 
 				// Event receive list user
-				socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT, ({users, room}) => {
-					console.log('Room Info', room)
-					setRoom(room);
+				socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT, ({users}) => {
 					const peers: any[] = [];
 					users.forEach((user: {id: string, user: any}) => {
 						if (user.id === socket.id) return;
@@ -63,8 +61,6 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 
 				// Event have new user join room
 				socket.on(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED, (payload : {signal: SimplePeer.SignalData, callerId: string, user: any, isShareScreen: boolean}) => {
-					console.log('Have user Join room', payload)
-					// if(payload.signal.type === 'offer') return;
 					const peer = addPeer({
 						signal: payload.signal,
 						callerId: payload.callerId,
@@ -84,7 +80,11 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 						user: payload.user,
 						isShareScreen: payload.isShareScreen,
 					}
+					if(payload.isShareScreen) {
+						setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
+					}
 					addParticipant(newUser);
+					
 				})
 
 				// Event receive return signal
@@ -92,31 +92,62 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 					const item = peersRef.current.find((p: any)=> (p.peerId === payload.id && p.isShareScreen === payload.isShareScreen));
 					item.peer.signal(payload.signal);
 				});
-
-				// Event when have user leave room
-				socket.on(SOCKET_CONFIG.EVENTS.CALL.LEAVE, (socketId: string) => {
-					const item = peersRef.current.find((p: any)=> p.peerId === socketId);
-					if (item) {
-						item.peer.destroy();
-						peersRef.current = peersRef.current.filter((p: any)=> p.peerId !== socketId);
-						removeParticipant(socketId);
-					}
-				})
-
-				socket.on(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN, ({userId}: {userId: string}) => {
-					const item = peersRef.current.find((p: any)=> p.peerId === userId && p.isShareScreen);
-					if (item) {
-						item.peer.destroy();
-						peersRef.current = peersRef.current.filter((p: any)=> p.peerId !== userId);
-						removeParticipantShareScreen(userId);
-					}
-				});
 			})
-		
+
+		// Event when have user leave room
+		socket.on(SOCKET_CONFIG.EVENTS.CALL.LEAVE, (socketId: string) => {
+			const item = peersRef.current.find((p: any)=> p.peerId === socketId);
+			if (item) {
+				item.peer.destroy();
+				peersRef.current = peersRef.current.filter((p: any)=> p.peerId !== socketId);
+				removeParticipant(socketId);
+			}
+		})
+
+		// Event when have user stop share screen
+		socket.on(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN, ({userId}: {userId: string}) => {
+			const item = peersRef.current.find((p: any)=> p.peerId === userId && p.isShareScreen);
+			if (item) {
+				item.peer.destroy();
+				peersRef.current = peersRef.current.filter((p: any)=> p.peerId !== userId);
+				removeParticipantShareScreen(userId);
+				setLayout() // Prev Layout
+			}
+		});
+
+		// Event when have user want to join room
+		socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_JOIN_ROOM, ({user, socketId}: {user: any, socketId: string}) => {
+			addUsersRequestJoinRoom({ socketId, user });
+		})
+
+		// Event when have another user response request join room
+		socket.on(SOCKET_CONFIG.EVENTS.CALL.ANSWERED_JOIN_ROOM, ({userId}: {userId: string}) => {
+			removeUsersRequestJoinRoom(userId);
+		})
+
 		return () => {
-			socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, roomId );
+			socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, call.slug );
+			socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT);
+			socket.off(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED);
+			socket.off(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL);
+			socket.off(SOCKET_CONFIG.EVENTS.CALL.LEAVE);
+			socket.off(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
+			setRoom(null);
+			if(myVideoStream) {
+				myVideoStream.getTracks().forEach((track) => {
+					track.stop();
+				});
+			}
+			setShareScreenStream((prev: null|MediaStream)=> {
+				if(prev) {
+					prev.getTracks().forEach((track) => {
+						track.stop();
+					});
+				}
+				return null;
+			});
 		}
-	}, []);
+	}, [addParticipant, addUsersRequestJoinRoom, call.slug, myInfo, removeParticipant, removeParticipantShareScreen, removeUsersRequestJoinRoom, setLayout, setRoom, setShareScreen, updateParticipant]);
 
 	const handleShareScreen = () => {
 		if(participants.some((participant) => participant.isShareScreen)) return;
@@ -126,13 +157,12 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
             const shareScreen = { stream, user: myInfo, isMe: true, isShareScreen: true, socketId: socket.id}
             addParticipant(shareScreen);
 			setShareScreen(true);
-			// if(!shareScreenRef.current) return;
-			socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, {roomId});
-			socket.on("call.list_participant_need_add_screen", (users: any[]) => {
-				// console.log('list_participant_need_add_screen', users)
+			socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, {roomId: call.slug});
+			socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN, (users: any[]) => {
+				setShareScreenStream(stream);
+				setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
 				users.forEach((user: {id: string, user: any}) => {
 					if (user.id === socket.id) return;
-					console.log('Create peer for user', user)
 					const peer = createPeer({
 						id: user.id,
 						socketId: socket.id,
@@ -148,24 +178,12 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 					});
 				});
 			})
-			// shareScreenRef.current.addTrack(stream.getVideoTracks()[0], stream);
-			// const sdp = await shareScreenRef.current.createOffer();
-            // await shareScreenRef.current.setLocalDescription(sdp);
-            // socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, shareScreenRef.current.localDescription);
-
-			// peersRef.current.forEach((peer: any) => {
-			// 	if(peer.peerId === socket.id) return;
-			// 	// peer.peer.replaceTrack(peer.peer.streams[0].getVideoTracks()[0], stream.getVideoTracks()[0], peer.peer.streams[0]);
-			// 	// peer.peer.addTrack(stream.getVideoTracks()[0], stream);
-			// 	// add one more track
-			// 	peer.peer.emit('share-screen', stream)
-				
-			// });
-
+			
 			stream.getVideoTracks()[0].onended = () => {
 				setShareScreen(false);
 				removeParticipantShareScreen(socket.id);
 				socket.emit(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
+				setLayout() // Prev Layout
 			}
         }).catch((err: any) => {
             console.log(err);
@@ -177,6 +195,8 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 		<VideoCallContext.Provider value={{
 			handleShareScreen: handleShareScreen,
 		}}>
+			<ConfirmLeaveRoomModal />
+			<RequestJoinRoomModal />
 			{children}
 		</VideoCallContext.Provider>
 	);
@@ -185,7 +205,7 @@ export const VideoCallProvider = ({ roomId, children }: VideoCallProviderProps &
 export const useVideoCallContext = () => {
 	const context = useContext(VideoCallContext);
 	if (!context) {
-	  throw new Error('useMessagesBox must be used within MessagesBoxProvider');
+	  throw new Error('useVideoCallContext must be used within VideoCallProvider');
 	}
 	return context;
   };

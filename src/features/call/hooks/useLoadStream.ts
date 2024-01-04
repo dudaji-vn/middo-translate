@@ -17,7 +17,7 @@ export default function useLoadStream(participant: any, elementRef: React.RefObj
             setStreamVideo(stream)
             setStreamForParticipant(stream, participant.socketId, participant.isShareScreen)
         })
-    }, [])
+    }, [elementRef, participant.isShareScreen, participant.peer, participant.socketId, participant.stream, setStreamForParticipant])
     return {
         streamVideo
     }

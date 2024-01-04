@@ -1,8 +1,6 @@
 import { create } from 'zustand';
-export const LAYOUTS = {
-    VIEW: 'VIEW',
-    SHARE_SCREEN: 'SHARE_SCREEN',
-}
+import {VIDEOCALL_LAYOUTS} from '../constant/layout';
+
 interface ParicipantInVideoCall {
     peer?: any;
     user?: any;
@@ -30,8 +28,13 @@ export type VideoCallState = {
     removeParticipantShareScreen: (socketId: string) => void;
     room: any;
     setRoom: (room: any) => void;
-    layout: keyof typeof LAYOUTS;
-    setLayout: (layout: keyof typeof LAYOUTS) => void;
+    layout: string;
+    setLayout: (layout?: string) => void;
+    confirmLeave: boolean;
+    setConfirmLeave: (confirmLeave: boolean) => void;
+    usersRequestJoinRoom: any[];
+    addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => void;
+    removeUsersRequestJoinRoom: (socketId: string) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -60,6 +63,11 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
             participants: state.participants.filter((p) => p.socketId != socketId),
         }));
     },
+    removeParticipantShareScreen: (socketId: string) => {
+        set((state) => ({
+            participants: state.participants.filter((p) => p.socketId != socketId || !p.isShareScreen),
+        }));
+    },
     isShareScreen: false,
     isTurnOnCamera: true,
     isMute: false,
@@ -76,17 +84,23 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     setRoomId: (roomId: string) => {
         set(() => ({ roomId }));
     },
-    removeParticipantShareScreen: (socketId: string) => {
-        set((state) => ({
-            participants: state.participants.filter((p) => p.socketId != socketId || !p.isShareScreen),
-        }));
-    },
-    room: {},
+    room: null,
     setRoom: (room: any) => {
         set(() => ({ room }));
     },
-    layout: 'VIEW',
-    setLayout: (layout: keyof typeof LAYOUTS) => {
-        set(() => ({ layout }));
+    layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
+    setLayout: (layout?: string) => {
+        set(() => ({ layout: layout || VIDEOCALL_LAYOUTS.GALLERY_VIEW }));
+    },
+    confirmLeave: false,
+    setConfirmLeave: (confirmLeave: boolean) => {
+        set(() => ({ confirmLeave }));
+    },
+    usersRequestJoinRoom: [],
+    addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => {
+        set((state) => ({ usersRequestJoinRoom: [...state.usersRequestJoinRoom, {socketId, user}] }));
+    },
+    removeUsersRequestJoinRoom: (socketId: string) => {
+        set((state) => ({ usersRequestJoinRoom: state.usersRequestJoinRoom.filter((u) => u.socketId != socketId) }));
     },
 }));

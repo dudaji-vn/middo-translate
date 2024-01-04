@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 import useAudioLevel from "../hooks/useAudioLevel";
 import { Mic, VideoOff } from "lucide-react";
 import useLoadStream from "../hooks/useLoadStream";
+import trimLongName from "../utils/trimLongName";
 interface VideoItemProps {
     participant?: any;
     size?: 'sm' | 'md' | 'lg';
@@ -28,9 +29,9 @@ const VideoItem = ({ participant, size = 'md' }: VideoItemProps) => {
                 />
             </div>} */}
             {/* <div className='w-full h-full bg-neutral-900 rounded-xl'></div> */}
-            <video ref={videoRef} className='w-full aspect-video flex-1 object-cover rounded-xl' autoPlay muted playsInline controls={false}></video>
+            <video ref={videoRef} className='w-full max-h-full flex-1 object-cover rounded-xl' autoPlay muted playsInline controls={false}></video>
             <div className='absolute bottom-4 left-4 p-2 rounded-full flex gap-2 bg-black/80 text-white items-center justify-center'>
-                <span className='leading-none relative'>{participant?.user?.name || ""} {participant?.isShareScreen ? 'Screen' : ''}</span>
+                <span className='leading-none relative'>{trimLongName(participant?.user?.name) || ""} {participant?.isShareScreen ? 'Screen' : ''}</span>
                 <span className='w-[1px] h-5 bg-neutral-800'></span>
                 <VideoOff className='w-5 h-5 stroke-error-2'></VideoOff>
                 <Mic className='w-5 h-5 stroke-neutral-500'></Mic>
