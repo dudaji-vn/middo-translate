@@ -57,6 +57,7 @@ export const VideoCallProvider = ({ children }: VideoCallProviderProps & PropsWi
 						peers.push({ peer, user: user.user, socketId: user.id })
 					})
 					updateParticipant([...peers, me]);
+					socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, {roomId: call.slug, userId: socket.id});
 				})
 
 				// Event have new user join room
@@ -178,7 +179,22 @@ export const VideoCallProvider = ({ children }: VideoCallProviderProps & PropsWi
 					});
 				});
 			})
-			
+			socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, ({userId}: {userId: string}) => {
+				if(userId === socket.id) return;
+				const peer = createPeer({
+					id: userId,
+					socketId: socket.id,
+					stream,
+					user: myInfo,
+					isShareScreen: true,
+				});
+				peersRef.current.push({
+					peerId: userId,
+					peer,
+					user: myInfo,
+					isShareScreen: true,
+				});
+			});
 			stream.getVideoTracks()[0].onended = () => {
 				setShareScreen(false);
 				removeParticipantShareScreen(socket.id);

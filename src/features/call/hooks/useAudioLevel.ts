@@ -12,17 +12,23 @@ export default function useAudioLevel(stream?: MediaStream) {
         mediaStreamSource.connect(audioContext.destination);
         mediaStreamSource.connect(processor);
         processor.connect(audioContext.destination);
+        let isTalkTemp = isTalk;
         processor.onaudioprocess = function (e) {
             var inputData = e.inputBuffer.getChannelData(0);
             var inputDataLength = inputData.length;
             var total = 0;
-
             for (var i = 0; i < inputDataLength; i++) {
                 total += Math.abs(inputData[i++]);
             }
             var rms = Math.sqrt(total / inputDataLength);
-            if(rms > 0.1 && !isTalk) setIsTalk(true)
-            else if(rms < 0.1 && isTalk) setIsTalk(false)
+            if(rms > 0.1 && !isTalkTemp){
+                setIsTalk(true)
+                isTalkTemp = true;
+            }
+            else if(rms < 0.1 && isTalkTemp) {
+                setIsTalk(false)
+                isTalkTemp = false;
+            }
         };
         return () => {
             if(!mediaStreamSource) return;

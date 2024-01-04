@@ -38,6 +38,7 @@ export const SOCKET_CONFIG = {
       ACCEPT_JOIN_ROOM: 'call.accept_join_room',
       REJECT_JOIN_ROOM: 'call.reject_join_room',
       ANSWERED_JOIN_ROOM: 'call.answered_join_room',
+      REQUEST_GET_SHARE_SCREEN: 'call.request_get_share_screen',
     }
   },
 };
