@@ -1,6 +1,6 @@
 import { ChatMain } from '@/features/chat/components/chat-main';
 import { ChatSidebar } from '@/features/chat/components/chat-sidebar';
-import { FCMProvider } from '@/providers/fcm.provider';
+import { FCMBackground } from '@/features/notification/components';
 import { Fragment } from 'react';
 import { Inbox } from '@/features/chat/rooms/components';
 import { Metadata } from 'next';
@@ -21,7 +21,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
         </ChatSidebar>
         <ChatMain>{children}</ChatMain>
       </div>
-      <FCMProvider />
+      <FCMBackground />
     </Fragment>
   );
 };
