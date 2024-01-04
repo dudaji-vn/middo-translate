@@ -8,8 +8,8 @@ import BootstrapProvider from './bootstrap';
 import { CommonComponent } from './common-component';
 import { Toaster as HotToaster } from 'react-hot-toast';
 import React from 'react';
-import { ReactQueryProvider } from './react-query';
-import { SideEffectProvider } from './side-effect.provider';
+import { ReactQueryProvider } from './react-query-provider';
+import { SideEffectProvider } from './side-effect-provider';
 import SocketProvider from './socket';
 
 type Props = {};

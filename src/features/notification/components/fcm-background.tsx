@@ -1,19 +1,22 @@
 'use client';
 
-import { BellIcon, XIcon } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
 import { getMessaging, getToken } from 'firebase/messaging';
 
+import { BellIcon } from 'lucide-react';
 import { NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY } from '@/configs/env.public';
+import { ToastNotification } from './toast-notification';
 import { firebaseApp } from '@/lib/firebase';
+import { notificationApi } from '../api';
 import toast from 'react-hot-toast';
+import { useNotification } from '../hooks/use-notification';
 
-export interface FCMProviderProps {}
+export interface FCMBackgroundProps {}
 
-export const FCMProvider = (props: FCMProviderProps) => {
-  const [permission, setPermission] = useState<NotificationPermission | null>(
-    null,
-  );
+export const FCMBackground = (props: FCMBackgroundProps) => {
+  const { isShowRequestPermission, setPermission, setFcmToken } =
+    useNotification();
+
   const [toastId, setToastId] = useState<string | undefined>(undefined);
 
   const retrieveToken = async (): Promise<void> => {
@@ -30,6 +33,8 @@ export const FCMProvider = (props: FCMProviderProps) => {
           });
           if (currentToken) {
             console.log('current token for client: ', currentToken);
+            setFcmToken(currentToken);
+            notificationApi.subscribe(currentToken);
           } else {
             console.log(
               'No registration token available. Request permission to generate one.',
@@ -43,41 +48,25 @@ export const FCMProvider = (props: FCMProviderProps) => {
   };
 
   useEffect(() => {
-    try {
-      setPermission(Notification.permission);
-    } catch (error) {
-      console.log('error', error);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (permission === 'default') {
+    if (isShowRequestPermission) {
       if (toastId) return;
       const id = toast.loading(
-        (t) => {
-          return (
-            <div className="flex w-full">
-              <span>
-                Middo needs your permission to{' '}
-                <span
-                  onClick={retrieveToken}
-                  className="cursor-pointer font-medium underline"
-                >
-                  enable desktop notifications.
-                </span>
-              </span>
-              <button
-                onClick={() => {
-                  toast.dismiss(t.id);
-                }}
-              >
-                <XIcon width={20} height={20} />
-              </button>
-            </div>
-          );
-        },
+        (t) => (
+          <ToastNotification
+            onDismiss={() => {
+              toast.dismiss(t.id);
+            }}
+            onEnable={() => {
+              retrieveToken();
+            }}
+            onDeny={() => {
+              setPermission('denied');
+            }}
+          />
+        ),
         {
-          icon: <BellIcon size={32} className="mx-1" />,
+          icon: <BellIcon size={20} className="mx-1" />,
+          className: '!max-w-none',
         },
       );
 
@@ -87,7 +76,7 @@ export const FCMProvider = (props: FCMProviderProps) => {
         toast.dismiss(toastId);
       }
     }
-  }, [permission, toastId]);
+  }, [isShowRequestPermission, toastId]);
 
   return <Fragment></Fragment>;
 };
