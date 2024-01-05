@@ -19,7 +19,6 @@ export const useTranslate = ({
   translateOnType?: boolean;
   onDetectLanguage?: (lang: string) => void;
 }) => {
-  _srcLang;
   const [srcLang, setSrcLang] = useState(_srcLang);
   const [tgtLang, setTgtLang] = useState(_tgtLang);
   const [detLang, setDetLang] = useState('');
@@ -57,9 +56,11 @@ export const useTranslate = ({
   }, [debounceValue, middleText, srcLang, tgtLang, translateOnType]);
 
   const middleTranslate = async (text: string) => {
+    setIsLoading(true);
     const sourceResult = await translateText(text, 'en', srcLang);
     setText(sourceResult);
     setTranslatedText(text);
+    setIsLoading(false);
   };
 
   const handleMiddleTranslate = () => {
