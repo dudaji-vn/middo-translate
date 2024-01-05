@@ -1,4 +1,4 @@
-import { Mic, VideoOff } from 'lucide-react';
+import { Mic, MicOff, VideoIcon, VideoOff } from 'lucide-react';
 import { memo, useRef } from 'react';
 
 import { Avatar } from '@/components/data-display';
@@ -6,14 +6,17 @@ import trimLongName from '../utils/trimLongName';
 import { twMerge } from 'tailwind-merge';
 import useAudioLevel from '../hooks/useAudioLevel';
 import useLoadStream from '../hooks/useLoadStream';
+import { useVideoCallStore } from '../store';
 interface VideoItemProps {
   participant?: any;
   size?: 'sm' | 'md' | 'lg';
 }
 const VideoItem = ({ participant, size = 'md' }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const { streamVideo } = useLoadStream(participant, videoRef);
+  const { streamVideo, isMute, isTurnOnCamera } = useLoadStream(participant, videoRef);
   const { isTalk } = useAudioLevel(streamVideo);
+  const {isTurnOnCamera: isMeTurnOnCamera, isMute: isMeMute} = useVideoCallStore();
+  if(participant.isMe && videoRef.current) videoRef.current.volume = 0;
   const classForSize = {
     sm: 'w-[240px] mx-1',
     md: '',
@@ -32,17 +35,16 @@ const VideoItem = ({ participant, size = 'md' }: VideoItemProps) => {
           isTalk ? 'opacity-100' : 'opacity-0',
         )}
       ></div>
-      {/* {!participant && <div className={twMerge('absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[96px] max aspect-square')}>
-                <Avatar
-                    className='w-full h-full'
-                    src='/person.svg'
-                    alt='avatar'
-                />
-            </div>} */}
-      {/* <div className='w-full h-full bg-neutral-900 rounded-xl'></div> */}
+      {!isTurnOnCamera && <div className={twMerge('absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[96px] max aspect-square')}>
+          <Avatar
+              className='w-full h-full'
+              src={participant?.user?.avatar || '/person.svg'}
+              alt={participant?.user?.name || 'Anonymous'}
+          />
+      </div>}
       <video
         ref={videoRef}
-        className="max-h-full w-full flex-1 rounded-xl object-cover"
+        className={`h-full w-full flex-1 rounded-xl object-cover ${isTurnOnCamera ? 'block' : 'hidden'}`}
         autoPlay
         muted
         playsInline
@@ -54,8 +56,13 @@ const VideoItem = ({ participant, size = 'md' }: VideoItemProps) => {
           {participant?.isShareScreen ? 'Screen' : ''}
         </span>
         <span className="h-5 w-[1px] bg-neutral-800"></span>
-        <VideoOff className="h-5 w-5 stroke-error"></VideoOff>
-        <Mic className="h-5 w-5 stroke-neutral-500"></Mic>
+        {(participant?.isMe ? isMeTurnOnCamera : isTurnOnCamera)
+          ? <VideoIcon className="h-5 w-5 stroke-neutral-700"></VideoIcon> 
+          : <VideoOff className="h-5 w-5 stroke-error"></VideoOff>
+        }
+        {(participant?.isMe && isMeMute) || (participant && isMute)
+          ? <MicOff className="h-5 w-5 stroke-error"></MicOff> 
+          : <Mic className="h-5 w-5 stroke-neutral-700"></Mic>}
       </div>
     </section>
   );

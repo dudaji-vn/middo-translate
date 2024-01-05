@@ -9,7 +9,8 @@ import {
   useState,
 } from 'react';
 import { addPeer, createPeer } from '../utils/peerAction';
-
+import * as htmlToImage from 'html-to-image';
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import { ConfirmLeaveRoomModal } from '../components/common/ModalLeaveCall';
 import { RequestJoinRoomModal } from '../components/common/ModalRequestJoinRoom';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -17,10 +18,17 @@ import SimplePeer from 'simple-peer';
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth';
-import { useVideoCallStore } from '../store';
+import { ParicipantInVideoCall, useVideoCallStore } from '../store';
+import toast from 'react-hot-toast';
+import { ConfirmStopDoodle } from '../components/common/ModalStopDoodle';
+import { uploadImage } from '@/utils/upload-img';
+import { LoadingCreatingDoodle } from '../components/common/LoadingCreatingDoodle';
 
 interface VideoCallContextProps {
   handleShareScreen: () => void;
+  handleToggleCamera: (status: boolean) => void;
+  handleToggleMute: (status: boolean) => void;
+  handleStartDoodle: () => void;
 }
 
 const VideoCallContext = createContext<VideoCallContextProps>(
@@ -45,10 +53,13 @@ export const VideoCallProvider = ({
     addUsersRequestJoinRoom,
     removeUsersRequestJoinRoom,
     setLayout,
+    setDoodle,
+    setDoodleImage,
+    setMeDoodle
   } = useVideoCallStore();
   const peersRef = useRef<any>([]);
-  const [_shareScreenStream, setShareScreenStream] =
-    useState<MediaStream | null>(null);
+  const [_shareScreenStream, setShareScreenStream] = useState<MediaStream | null>(null);
+  const [ isCreatingDoodle, setIsCreatingDoodle ] = useState(false);
   useEffect(() => {
     let myVideoStream: MediaStream | null = null;
     const navigator = window.navigator as any;
@@ -119,6 +130,7 @@ export const VideoCallProvider = ({
             };
             if (payload.isShareScreen) {
               setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
+              toast.success(`${payload.user.name} is sharing screen`);
             }
             addParticipant(newUser);
           },
@@ -224,6 +236,12 @@ export const VideoCallProvider = ({
     setShareScreen,
     updateParticipant,
   ]);
+  useEffect(() => {
+    socket.on(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, ({image_url}: {image_url: string}) => {
+       setDoodle(true);
+       setDoodleImage(image_url);
+    });
+  }, [setDoodle, setDoodleImage]);
 
   const handleShareScreen = () => {
     if (participants.some((participant) => participant.isShareScreen)) return;
@@ -300,15 +318,79 @@ export const VideoCallProvider = ({
         setShareScreen(false);
       });
   };
-
+  const handleToggleCamera = (status: boolean) => {
+    participants.forEach((participant: ParicipantInVideoCall) => {
+      if(participant.isShareScreen) return;
+      if(!participant.isMe) return;
+      if(!participant?.stream) return;
+      participant.stream.getVideoTracks()[0].enabled = status;
+      // if(status) {
+      //   const navigator = window.navigator as any;
+      //   console.log('TUrn on camera with status', status, isMute);
+      //   navigator.mediaDevices
+      //     .getUserMedia({ video: true, audio: !isMute})
+      //     .then((stream: MediaStream) => {
+      //       participant.stream = stream;
+      //       setStreamForParticipant(stream, participant.socketId, true)
+      //     });
+      // } else {
+      //   console.log('TUrn off camera');
+      //   console.log(participant.stream.getVideoTracks()[0])
+      //   participant.stream.getVideoTracks()[0].stop();
+      //   // participant.stream.getVideoTracks()[0].enabled = false;
+      //   setStreamForParticipant(new MediaStream(), participant.socketId, true)
+      // }
+    });
+  }
+  const handleToggleMute = (status: boolean) => {
+    participants.forEach((participant: ParicipantInVideoCall) => {
+      if(participant.isShareScreen) return;
+      if(!participant.isMe) return;
+      if(!participant?.stream) return;
+      participant.stream.getAudioTracks()[0].enabled = status;
+      // if(!status) {
+      //   console.log('TUrn off mic');
+      //   participant.stream.getAudioTracks()[0].stop();
+      // }else {
+      //   const navigator = window.navigator as any;
+      //   console.log('TUrn on mic with status', status, isTurnOnCamera);
+      //   navigator.mediaDevices
+      //     .getUserMedia({ video: isTurnOnCamera, audio: true })
+      //     .then((stream: MediaStream) => {
+      //       setStreamForParticipant(stream, participant.socketId, true)
+      //     });
+      // }
+    });
+  }
+  const handleStartDoodle = async () => {
+    setIsCreatingDoodle(true);
+    let videoEl = document.querySelector('.focus-view video') as HTMLVideoElement;
+    if(!videoEl) return;
+    const canvas = document.createElement("canvas") as HTMLCanvasElement;
+    canvas.width = videoEl.videoWidth;
+    canvas.height = videoEl.videoHeight;
+    canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+    const dataURL = canvas.toDataURL();
+    const fileImage = new File([dataURL], 'doodle.png', {type: 'image/png'});
+    const image = await uploadImage(fileImage);
+    if(!image) return;
+    setMeDoodle(true);
+    socket.emit(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, {image_url: image.secure_url});
+    setIsCreatingDoodle(false);
+  }
   return (
     <VideoCallContext.Provider
       value={{
         handleShareScreen: handleShareScreen,
+        handleToggleCamera: handleToggleCamera,
+        handleToggleMute: handleToggleMute,
+        handleStartDoodle: handleStartDoodle,
       }}
     >
+      {isCreatingDoodle && <LoadingCreatingDoodle />}
       <ConfirmLeaveRoomModal />
       <RequestJoinRoomModal />
+      <ConfirmStopDoodle />
       {children}
     </VideoCallContext.Provider>
   );

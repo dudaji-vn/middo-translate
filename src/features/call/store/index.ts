@@ -1,44 +1,66 @@
+import { ConfirmStopDoodle } from './../components/common/ModalStopDoodle';
 import { create } from 'zustand';
 import {VIDEOCALL_LAYOUTS} from '../constant/layout';
+import getRandomColor from '../utils/getRandomColor';
 
-interface ParicipantInVideoCall {
+export interface ParicipantInVideoCall {
     peer?: any;
     user?: any;
     isMe?: boolean;
     stream?: MediaStream;
     isShareScreen?: boolean;
-    isTurnOnCamera?: boolean;
-    isMute?: boolean;
     socketId: string;
 }
 export type VideoCallState = {
     participants: ParicipantInVideoCall[];
+    isShareScreen: boolean;
+    isTurnOnCamera: boolean;
+    isMute: boolean;
+    room: any;
+    layout: string;
+    confirmLeave: boolean;
+    usersRequestJoinRoom: any[];
+    isDoodle: boolean;
+    isDrawing: boolean;
+    doodleImage: string | null;
+    isMeDoole: boolean;
+    confirmStopDoodle: boolean;
+    colorDoodle: string;
     updateParticipant: (participants: ParicipantInVideoCall[]) => void;
     addParticipant: (participant: ParicipantInVideoCall) => void;
     setStreamForParticipant: (stream: MediaStream, socketId: string, isShareScreen: boolean) => void;
     removeParticipant: (socketId: string) => void;
-    isShareScreen?: boolean;
-    isTurnOnCamera?: boolean;
-    isMute?: boolean;
     setShareScreen: (isShareScreen: boolean) => void;
     setTurnOnCamera: (isTurnOnCamera: boolean) => void;
     setMute: (isMute: boolean) => void;
-    roomId: string;
-    setRoomId: (roomId: string) => void;
     removeParticipantShareScreen: (socketId: string) => void;
-    room: any;
     setRoom: (room: any) => void;
-    layout: string;
     setLayout: (layout?: string) => void;
-    confirmLeave: boolean;
     setConfirmLeave: (confirmLeave: boolean) => void;
-    usersRequestJoinRoom: any[];
     addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => void;
     removeUsersRequestJoinRoom: (socketId: string) => void;
+    setDoodle: (isDoodle: boolean) => void;
+    setDoodleImage: (doodleImage: string) => void;
+    setMeDoodle: (isMeDoole: boolean) => void;
+    setDrawing: (isDrawing: boolean) => void;
+    setConfirmStopDoodle: (confirmStopDoodle: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
     participants: [],
+    isShareScreen: false,
+    isTurnOnCamera: true,
+    isMute: false,
+    room: null,
+    layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
+    confirmLeave: false,
+    usersRequestJoinRoom: [],
+    isDoodle: false,
+    doodleImage: null,
+    isMeDoole: false,
+    isDrawing: false,
+    confirmStopDoodle: false,
+    colorDoodle: getRandomColor(),
     updateParticipant: (participants: ParicipantInVideoCall[]) => {
         set(() => ({ participants }));
     },
@@ -68,9 +90,6 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
             participants: state.participants.filter((p) => p.socketId != socketId || !p.isShareScreen),
         }));
     },
-    isShareScreen: false,
-    isTurnOnCamera: true,
-    isMute: false,
     setShareScreen: (isShareScreen: boolean) => {
         set(() => ({ isShareScreen }));
     },
@@ -80,27 +99,34 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     setMute: (isMute: boolean) => {
         set(() => ({ isMute }));
     },
-    roomId: '',
-    setRoomId: (roomId: string) => {
-        set(() => ({ roomId }));
-    },
-    room: null,
     setRoom: (room: any) => {
         set(() => ({ room }));
     },
-    layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
     setLayout: (layout?: string) => {
         set(() => ({ layout: layout || VIDEOCALL_LAYOUTS.GALLERY_VIEW }));
     },
-    confirmLeave: false,
     setConfirmLeave: (confirmLeave: boolean) => {
         set(() => ({ confirmLeave }));
     },
-    usersRequestJoinRoom: [],
     addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => {
         set((state) => ({ usersRequestJoinRoom: [...state.usersRequestJoinRoom, {socketId, user}] }));
     },
     removeUsersRequestJoinRoom: (socketId: string) => {
         set((state) => ({ usersRequestJoinRoom: state.usersRequestJoinRoom.filter((u) => u.socketId != socketId) }));
     },
+    setDoodle: (isDoodle: boolean) => {
+        set(() => ({ isDoodle }));
+    },
+    setDoodleImage: (doodleImage: string) => {
+        set(() => ({ doodleImage }));
+    },
+    setMeDoodle: (isMeDoole: boolean) => {
+        set(() => ({ isMeDoole }));
+    },
+    setDrawing: (isDrawing: boolean) => {
+        set(() => ({ isDrawing }));
+    },
+    setConfirmStopDoodle: (confirmStopDoodle: boolean) => {
+        set(() => ({ confirmStopDoodle }));
+    }
 }));

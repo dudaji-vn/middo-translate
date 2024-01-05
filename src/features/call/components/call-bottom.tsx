@@ -39,13 +39,25 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
 };
 
 const MeetingAction = () => {
-  const { participants, isShareScreen } = useVideoCallStore();
-  const { handleShareScreen } = useVideoCallContext();
+  const { participants, isShareScreen, isDoodle, isMeDoole, isDrawing, setDrawing } = useVideoCallStore();
+  const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
+  const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
   const haveShareScreen = participants.some(
     (participant) => participant.isShareScreen,
   );
-  const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
-
+  const onDoodle = () => {
+    if(!isDoodle && isMeDoole) return;
+    // Start doodle
+    if(haveShareScreen && !isDoodle) {
+      setDrawing(true);
+      handleStartDoodle();
+    }
+    // Toggle drawing
+    if(isDoodle) {
+      setDrawing(!isDrawing);
+    }
+  }
+  
   return (
     <Fragment>
       <div className="hidden gap-1 md:flex md:gap-8">
@@ -60,8 +72,14 @@ const MeetingAction = () => {
         >
           <MonitorUp className="h-6 w-6" />
         </ButtonDataAction>
-        <ButtonDataAction className="rounded-full px-3 py-3">
-          <Brush className="h-6 w-6" />
+        <ButtonDataAction 
+          className={twMerge('rounded-full px-3 py-3 opacity-50',
+          (haveShareScreen && !isDoodle) && 'opacity-100',
+          (haveShareScreen && isShareScreen && !isDoodle ) && 'opacity-50',
+          (isDoodle && isDrawing) && 'opacity-100 stroke-primary',
+          (isDoodle && !isDrawing) && 'opacity-100 stroke-neutral-700')} 
+          onClick={onDoodle}>
+          <Brush className="h-6 w-6 stroke-inherit" />
         </ButtonDataAction>
         <ButtonDataAction className="rounded-full px-3 py-3">
           <MessageSquare className="h-6 w-6" />
@@ -143,19 +161,26 @@ const MeetingInfo = () => {
 };
 
 const MeetingControl = () => {
-  const { setConfirmLeave } = useVideoCallStore();
+  const { setConfirmLeave, isMute, isTurnOnCamera, setMute, setTurnOnCamera } = useVideoCallStore();
+  const { handleToggleCamera, handleToggleMute } = useVideoCallContext();
   const handleLeave = () => {
     setConfirmLeave(true);
   };
+  const onToggleCamera = () => {
+    setTurnOnCamera(!isTurnOnCamera);
+    handleToggleCamera(!isTurnOnCamera);
+  }
+  const onToggleMute = () => {
+    setMute(!isMute);
+    handleToggleMute(isMute || false);
+  }
   return (
     <div className="flex gap-2">
-      <ButtonDataAction className="rounded-full px-3 py-3">
-        {/* <Video className='w-6 h-6'/> */}
-        <VideoOff className="h-6 w-6" />
+      <ButtonDataAction className="rounded-full px-3 py-3" onClick={onToggleCamera}>
+        {isTurnOnCamera ? (<Video className="h-6 w-6" />) : (<VideoOff className="h-6 w-6 stroke-error" />)}
       </ButtonDataAction>
-      <ButtonDataAction className="rounded-full px-3 py-3">
-        <Mic className="h-6 w-6" />
-        {/* <MicOff className='w-6 h-6'/> */}
+      <ButtonDataAction className="rounded-full px-3 py-3" onClick={onToggleMute}>
+        {isMute ? (<MicOff className="h-6 w-6 stroke-error" />) : (<Mic className="h-6 w-6" />)}
       </ButtonDataAction>
       <ButtonDataAction
         className="rounded-full bg-error px-3 py-3 md:hover:bg-red-500"

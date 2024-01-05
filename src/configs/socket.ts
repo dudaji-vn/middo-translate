@@ -39,6 +39,9 @@ export const SOCKET_CONFIG = {
       REJECT_JOIN_ROOM: 'call.reject_join_room',
       ANSWERED_JOIN_ROOM: 'call.answered_join_room',
       REQUEST_GET_SHARE_SCREEN: 'call.request_get_share_screen',
+      START_DOODLE: 'call.start_doodle',
+      END_DOODLE: 'call.end_doodle',
+      DRAW_DOODLE: 'call.draw_doodle',
     }
   },
 };
