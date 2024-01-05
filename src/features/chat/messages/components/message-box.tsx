@@ -160,7 +160,9 @@ export const MessageBox = ({ room }: { room: Room }) => {
           );
           const isShowTimeGroup = timeDiff > maxTimeGroupDiff;
           const isMe = group.lastMessage.sender._id === currentUserId;
-          const isNotify = group.lastMessage.type === 'notification';
+          const isSystem =
+            group.lastMessage.type === 'notification' ||
+            group.lastMessage.type === 'action';
           return (
             <div key={group.lastMessage._id}>
               {isShowTimeGroup && (
@@ -174,7 +176,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
                   </div>
                 </div>
               )}
-              {!isMe && !isNotify && room.isGroup && (
+              {!isMe && !isSystem && room.isGroup && (
                 <div className="mb-0.5 pl-11 text-xs text-neutral-600">
                   <span>{group.lastMessage.sender.name}</span>
                 </div>
@@ -185,7 +187,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
                     <MessageItem
                       showAvatar={
                         !isMe &&
-                        !isNotify &&
+                        !isSystem &&
                         message._id === group.messages[0]._id
                       }
                       key={message._id}
