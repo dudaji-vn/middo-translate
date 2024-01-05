@@ -47,7 +47,7 @@ export const InputField = (props: InputFieldProps) => {
       )}
       <div
         className={`flex h-[50px] w-full items-center justify-start rounded-full border px-4 
-                ${errors ? 'border-error-2' : ''} 
+                ${errors ? 'border-error' : ''} 
                 ${
                   type === 'password'
                     ? isTouched && !errors
