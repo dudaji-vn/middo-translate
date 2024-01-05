@@ -1,20 +1,19 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { ArrowDownIcon } from 'lucide-react';
 import { Button } from '@/components/actions/button';
+import { InfiniteScroll } from '@/components/infinity-scroll';
 import { Message } from '../types';
 import { MessageItem } from './message-item';
 import { MessageItemGroup } from './message-group';
 import { Room } from '../../rooms/types';
-import { Spinner } from '@/components/feedback/spinner';
 import { User } from '@/features/users/types';
 import { formatTimeDisplay } from '../../rooms/utils';
 import { getReadByUsers } from '../../utils';
 import moment from 'moment';
 import { useAuthStore } from '@/stores/auth';
-import { useIntersectionObserver } from 'usehooks-ts';
 import { useMessagesBox } from '@/features/chat/messages/contexts';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
@@ -27,16 +26,8 @@ type MessageGroup = {
 };
 export const MessageBox = ({ room }: { room: Room }) => {
   const currentUserId = useAuthStore((s) => s.user?._id);
-  const {
-    hasNextPage,
-    loadMoreMessages,
-    refetchMessages,
-    messages,
-    isFetching,
-  } = useMessagesBox();
-  const triggerRef = useRef<HTMLDivElement>(null);
-  const entry = useIntersectionObserver(triggerRef, {});
-  const isTriggered = !!entry?.isIntersecting;
+  const { hasNextPage, loadMoreMessages, messages, isFetching } =
+    useMessagesBox();
 
   const { ref, isScrolled } = useScrollDistanceFromTop(0, true);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -150,25 +141,17 @@ export const MessageBox = ({ room }: { room: Room }) => {
     return usersReadMessageMap;
   }, [currentUserId, messagesGroup, room.participants]);
 
-  useEffect(() => {
-    if (isTriggered && hasNextPage) {
-      loadMoreMessages();
-    }
-  }, [hasNextPage, isTriggered, loadMoreMessages, isFetching]);
-
   return (
     <div className="relative flex h-full w-full flex-1 overflow-hidden">
-      <div
+      <InfiniteScroll
+        hasMore={hasNextPage || false}
+        onLoadMore={loadMoreMessages}
+        isFetching={isFetching}
         ref={ref}
         id="inbox-list"
-        className="flex w-full flex-1 flex-col-reverse  gap-2 overflow-y-scroll bg-primary/5 px-3 pb-2 pt-6 md:px-5"
+        className="bg-primary/5 flex w-full flex-1  flex-col-reverse gap-2 overflow-y-scroll px-3 pb-2 pt-6 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
-        {isFetching && (
-          <div className="absolute left-1/2 top-6 -translate-x-1/2 rounded-full bg-primary/10 p-2 text-primary">
-            <Spinner size="lg" />
-          </div>
-        )}
 
         {messagesGroup.map((group, index) => {
           const timeDiff = moment(moment(group.lastMessage.createdAt)).diff(
@@ -183,16 +166,16 @@ export const MessageBox = ({ room }: { room: Room }) => {
               {isShowTimeGroup && (
                 <div className="my-2 flex items-center justify-center">
                   <div className="flex items-center space-x-2">
-                    <div className="h-[1px] w-16 bg-primary/30" />
-                    <div className="text-sm font-light text-colors-neutral-300">
+                    <div className="bg-primary/30 h-[1px] w-16" />
+                    <div className="text-sm font-light text-neutral-300">
                       {formatTimeDisplay(group.lastMessage.createdAt!)}
                     </div>
-                    <div className="h-[1px] w-16 bg-primary/30" />
+                    <div className="bg-primary/30 h-[1px] w-16" />
                   </div>
                 </div>
               )}
               {!isMe && !isNotify && room.isGroup && (
-                <div className="mb-0.5 pl-11 text-xs text-colors-neutral-600">
+                <div className="mb-0.5 pl-11 text-xs text-neutral-600">
                   <span>{group.lastMessage.sender.name}</span>
                 </div>
               )}
@@ -216,10 +199,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
             </div>
           );
         })}
-        <div className="relative h-10 w-10">
-          <div ref={triggerRef} className="absolute top-80"></div>
-        </div>
-      </div>
+      </InfiniteScroll>
       {isScrolled && (
         <Button.Icon
           size="sm"

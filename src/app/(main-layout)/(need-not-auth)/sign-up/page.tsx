@@ -1,6 +1,5 @@
 'use client';
 
-import { AlertCircleOutline } from '@easy-eva-icons/react';
 import { AlertError } from '@/components/Alert/AlertError';
 import { Button } from '@/components/form/Button';
 import { InputField } from '@/components/form/InputField';
@@ -9,7 +8,6 @@ import { PageLoading } from '@/components/loading/PageLoading';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { registerService } from '@/services/authService';
 import { RegisterSchema as schema } from '@/configs/yup-form';
-import { toast } from '@/components/toast';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

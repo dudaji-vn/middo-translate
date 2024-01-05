@@ -1,11 +1,11 @@
 'use client';
 
 import {
-  CheckmarkCircle2Outline,
-  CloseCircleOutline,
-  Globe2Outline,
-  Search,
-} from '@easy-eva-icons/react';
+  CheckCircle2Icon,
+  Globe2Icon,
+  SearchIcon,
+  XCircleIcon,
+} from 'lucide-react';
 import { addRecentlyUsed, getRecentlyUsed } from '@/utils/local-storage';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
@@ -67,9 +67,9 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             placeholder="Search"
             leftElement={
               search === '' ? (
-                <Search className="h-5 w-5" />
+                <SearchIcon className="h-5 w-5" />
               ) : (
-                <CloseCircleOutline
+                <XCircleIcon
                   onClick={() => setSearch('')}
                   className="h-5 w-5"
                 />
@@ -83,7 +83,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
               {allowDetect && (
                 <Item
                   selected={selectedCode === 'auto'}
-                  rightElement={<Globe2Outline className="mr-2 h-5 w-5" />}
+                  rightElement={<Globe2Icon className="mr-2 h-5 w-5" />}
                   language={{
                     code: 'auto',
                     name: 'Language detect',
@@ -173,7 +173,7 @@ const Item = ({
       <span className={cn(selected && 'font-semibold text-primary')}>
         {language.name}
       </span>
-      {selected && <CheckmarkCircle2Outline className="ml-auto h-5 w-5 " />}
+      {selected && <CheckCircle2Icon className="ml-auto h-5 w-5 " />}
     </button>
   );
 };

@@ -3,7 +3,7 @@ import { type VariantProps } from 'class-variance-authority';
 
 import { IconButton } from '@/components/actions/button/button.icon';
 import { Icon } from '@/components/actions/button/icon';
-import { buttonVariants } from '@/components/actions/button/variants';
+import { buttonVariants } from '@/components/actions/button/button.styles';
 import { Spinner } from '@/components/feedback/spinner';
 import { cn } from '@/utils/cn';
 import { ButtonHTMLAttributes, forwardRef } from 'react';

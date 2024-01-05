@@ -3,11 +3,7 @@
 import './style.css';
 
 import { ChangeEvent, useEffect } from 'react';
-import {
-  CloseCircleOutline,
-  CopyOutline,
-  VolumeUpOutline,
-} from '@easy-eva-icons/react';
+import { CopyIcon, Volume2Icon, XCircleIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/actions';
@@ -138,12 +134,12 @@ export const TranslateEditor = ({
             variant="ghost"
             color="primary"
           >
-            <VolumeUpOutline />
+            <Volume2Icon />
           </Button.Icon>
 
           <CopyZoneClick text={value}>
             <Button.Icon disabled={!value} variant="ghost" color="primary">
-              <CopyOutline />
+              <CopyIcon />
             </Button.Icon>
           </CopyZoneClick>
         </div>
@@ -156,7 +152,7 @@ export const TranslateEditor = ({
           className="btn-icon absolute right-3 top-3"
           color="default"
         >
-          <CloseCircleOutline />
+          <XCircleIcon />
         </Button.Icon>
       )}
       <textarea

@@ -11,5 +11,12 @@ export const useChangeInboxSide = () => {
   const changeToDefault = () => {
     removeParam(SPK_INBOX_SIDE);
   };
-  return { changeSide, currentSide, changeToDefault };
+  return {
+    changeSide,
+    currentSide,
+    changeToDefault,
+    setParam,
+    searchParams,
+    removeParam,
+  };
 };

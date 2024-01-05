@@ -3,13 +3,6 @@ import { Media, Response } from '@/types';
 import { Message } from '@/features/chat/messages/types';
 import { axios } from '@/lib/axios';
 
-type CreateMessageData = {
-  roomId: string;
-  media?: Media[];
-  content: string;
-  localId: string;
-};
-
 const basePath = '/messages';
 export const messageApi = {
   async sendMessage(data: {
@@ -18,6 +11,7 @@ export const messageApi = {
     content: string;
     contentEnglish?: string;
     clientTempId: string;
+    language?: string;
   }) {
     const res: Response<Message> = await axios.post(basePath, data);
     return res.data;

@@ -8,12 +8,12 @@ import SpeechRecognition, {
 import { forwardRef, useEffect } from 'react';
 
 import { Button } from '@/components/actions';
-import { MicOutline } from '@easy-eva-icons/react';
+import { MicIcon } from 'lucide-react';
 import { Rectangle } from '@/components/icons';
 import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
+import toast from 'react-hot-toast';
 import { useSetParams } from '@/hooks/use-set-params';
-import { useToast } from '@/components/toast';
 import { useTranslateStore } from '@/stores/translate';
 import { useWindowSize } from 'usehooks-ts';
 
@@ -28,7 +28,6 @@ export const TranslateOptionBar = forwardRef<
 >(({ sourceLang, ...props }, ref) => {
   const { width } = useWindowSize();
   const isMobile = width < 768;
-  const { toast } = useToast();
   const { listening, interimTranscript, finalTranscript } =
     useSpeechRecognition();
   const { setParam, removeParam } = useSetParams();
@@ -53,9 +52,7 @@ export const TranslateOptionBar = forwardRef<
 
   const handleStartListening = () => {
     if (!ableListen) {
-      toast({
-        description: 'Select a specific language to enable voice input',
-      });
+      toast.error('Please select a language to listen');
       return;
     }
     setValue('');
@@ -135,7 +132,7 @@ export const TranslateOptionBar = forwardRef<
             color="secondary"
             className={cn('z-10', !ableListen && '!opacity-30')}
           >
-            <MicOutline className="h-7 w-7" />
+            <MicIcon className="h-7 w-7" />
           </Button.Icon>
         )}
       </div>

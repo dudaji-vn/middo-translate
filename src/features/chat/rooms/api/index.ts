@@ -5,7 +5,7 @@ import {
   Response,
 } from '@/types';
 
-import { InboxType } from '../components/inbox/inbox-main-side';
+import { InboxType } from '../components/inbox/inbox';
 import { Message } from '@/features/chat/messages/types';
 import { Room } from '../types';
 import { axios } from '@/lib/axios';

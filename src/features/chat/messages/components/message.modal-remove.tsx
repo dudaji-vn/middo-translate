@@ -69,7 +69,7 @@ export const MessageModalRemove = ({
                   />
                   <Label htmlFor="option-two">For everyone</Label>
                 </div>
-                <div className="mt-1 pl-6 text-sm text-colors-neutral-600">
+                <div className="mt-1 pl-6 text-sm text-neutral-600">
                   This message will be removed in this conversation. Message may
                   has been seen or forwarded. Removed messages may still be
                   reported.
@@ -80,7 +80,7 @@ export const MessageModalRemove = ({
                   <RadioGroupItem value="me" id="option-one" />
                   <Label htmlFor="option-one">For you</Label>
                 </div>
-                <div className="mt-1 pl-6 text-sm text-colors-neutral-600">
+                <div className="mt-1 pl-6 text-sm text-neutral-600">
                   This message will be removed on your end. Others in this
                   conversation can still see it.
                 </div>
@@ -88,7 +88,7 @@ export const MessageModalRemove = ({
             </>
           )}
           {!isMe && (
-            <div className="text-sm text-colors-neutral-600">
+            <div className="text-sm text-neutral-600">
               This message will be removed on your end. Others in this
               conversation can still see it.
             </div>

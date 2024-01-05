@@ -10,21 +10,24 @@ import {
 } from '../feedback';
 
 import { signOutService } from '@/services/authService';
-import { toast } from '../toast';
+import toast from 'react-hot-toast';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth';
+import { useNotificationStore } from '@/features/notification/store';
 
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
   const { isShowConfirmLogout, setShowConfirmLogout } = useAppStore();
+  const resetNotification = useNotificationStore((state) => state.reset);
 
   const handleLogout = async () => {
     try {
       await signOutService();
       setDataAuth({ user: null, isAuthentication: false });
-      toast({ title: 'Success', description: 'Sign out success' });
+      resetNotification();
+      toast.success('Sign out success!');
     } catch (err: any) {
-      toast({ title: 'Error', description: err?.response?.data?.message });
+      toast.error(err?.response?.data?.message);
     }
   };
   const closeModal = () => {

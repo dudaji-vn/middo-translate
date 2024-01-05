@@ -47,7 +47,7 @@ export const RoomFiles = () => {
             target="_blank"
             href={file.url}
             className={cn(
-              'flex w-full items-center gap-2 rounded-lg p-2 hover:bg-colors-neutral-50 active:bg-colors-neutral-100',
+              'flex w-full items-center gap-2 rounded-lg p-2 hover:bg-neutral-50 active:bg-neutral-100',
             )}
           >
             <div className="rounded-full bg-lighter p-2">
@@ -72,7 +72,7 @@ export const RoomFiles = () => {
           size="lg"
           className="w-full"
         >
-          <span className="text-colors-primary-500-main">Show more</span>
+          <span className="text-primary-500-main">Show more</span>
         </Button>
       )}
     </>

@@ -15,11 +15,8 @@ export const useTextToSpeech = (languageCode?: string, _text?: string) => {
   return { speak };
 };
 const playAudio = async (bufferData: number[]) => {
-  const audioArrayBuffer = new Uint8Array(bufferData).buffer;
-  const audioCtx = new window.AudioContext();
-  const audioData = await audioCtx.decodeAudioData(audioArrayBuffer);
-  const source = audioCtx.createBufferSource();
-  source.buffer = audioData;
-  source.connect(audioCtx.destination);
-  source.start();
+  const blob = new Blob([new Uint8Array(bufferData)], { type: 'audio/mp3' });
+  const url = URL.createObjectURL(blob);
+  const audio = new Audio(url);
+  audio.play();
 };

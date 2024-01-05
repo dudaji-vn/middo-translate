@@ -46,9 +46,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
       <div className="flex items-center justify-between gap-2.5 border-b p-1 pl-3">
         <div className="flex items-center gap-2">
           <Users2 width={16} height={16} /> <span>Member</span>
-          <span className="text-sm text-colors-neutral-600">
-            ({members?.length})
-          </span>
+          <span className="text-sm text-neutral-600">({members?.length})</span>
         </div>
         <RoomAddMember />
       </div>
@@ -104,7 +102,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
           size="lg"
           className="w-full"
         >
-          <span className="text-colors-primary-500-main"> Show all</span>
+          <span className="text-primary-500-main"> Show all</span>
         </Button>
       )}
       {isShowAll && INITIAL_SHOW_MEMBERS < membersToShow.length && (
@@ -115,7 +113,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
           size="lg"
           className="w-full"
         >
-          <span className="text-colors-primary-500-main">Hide</span>
+          <span className="text-primary-500-main">Hide</span>
         </Button>
       )}
     </div>

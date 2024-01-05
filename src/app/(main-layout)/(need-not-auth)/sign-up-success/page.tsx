@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { resendEmailService } from '@/services/authService';
-import { toast } from '@/components/toast';
+import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 
 export default function SignUpSuccess() {
@@ -44,15 +44,9 @@ export default function SignUpSuccess() {
       setLoading(true);
       setIsResend(true);
       const data = await resendEmailService(email);
-      toast({
-        title: 'Email sended!',
-        description: 'Please re-check your email!',
-      });
+      toast.success('Re-send email success!');
     } catch (err: any) {
-      toast({
-        title: 'Re-send email fail!',
-        description: err?.response?.data?.message,
-      });
+      toast.error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }

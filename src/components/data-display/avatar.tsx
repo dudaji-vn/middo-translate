@@ -9,8 +9,8 @@ const avatarVariants = cva('overflow-hidden shrink-0 relative aspect-square', {
     size: {
       xs: 'size-6',
       sm: 'size-9',
-      md: 'size-10',
-      lg: 'size-12',
+      md: 'size-12',
+      lg: 'size-16',
       xl: 'size-14',
       '2xl': 'size-16',
       '3xl': 'size-20',
@@ -32,9 +32,13 @@ export interface AvatarProps
     VariantProps<typeof avatarVariants> {}
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  ({ size, alt, shape, className, src, ...props }, ref) => {
+  ({ size, alt, shape, className, src, style, ...props }, ref) => {
     return (
-      <div ref={ref} className={cn(avatarVariants({ size, shape }), className)}>
+      <div
+        style={style}
+        ref={ref}
+        className={cn(avatarVariants({ size, shape }), className)}
+      >
         <Image
           {...props}
           fill
@@ -80,13 +84,13 @@ export const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
     }, [avatarClassName, children, limit, shape, size]);
 
     return (
-      <div ref={ref} className={cn('size-fit flex', className)} {...props}>
+      <div ref={ref} className={cn('flex size-fit', className)} {...props}>
         {renderChildren}
         {limit && Children.count(children) > limit && (
           <div
             className={cn(
               avatarVariants({ size, shape }),
-              'flex items-center justify-center bg-background font-semibold text-primary/60',
+              'text-primary/60 flex items-center justify-center bg-background font-semibold',
               avatarClassName,
             )}
           >

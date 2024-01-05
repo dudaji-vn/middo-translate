@@ -7,7 +7,7 @@ export const MainLayout = forwardRef<HTMLDivElement, MainLayoutProps>(
     return (
       <div ref={ref} className="full mx-auto flex h-full flex-col">
         <Header />
-        <div className="">{props.children}</div>
+        {props.children}
       </div>
     );
   },
