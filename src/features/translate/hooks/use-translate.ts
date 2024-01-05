@@ -116,6 +116,10 @@ export const useTranslate = ({
     };
   };
 
+  const setDetToSrc = () => {
+    setSrcLang(detLang);
+  };
+
   return {
     text,
     setText,
@@ -134,5 +138,6 @@ export const useTranslate = ({
     detLang,
     srcLang,
     setSrcLang,
+    setDetToSrc,
   };
 };

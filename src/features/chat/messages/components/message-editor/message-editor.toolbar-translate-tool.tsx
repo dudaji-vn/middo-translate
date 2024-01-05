@@ -17,7 +17,8 @@ export const MessageEditorToolbarTranslateTool = (
     inputDisabled,
     focusInput,
   } = useMessageEditorText();
-  const srcLang = useChatStore((s) => s.srcLang);
+  const { setSrcLang, detLang, srcLang } = useChatStore((s) => s);
+
   const { showTranslateOnType, toggleShowTranslateOnType } = useChatStore();
   return (
     <>
@@ -46,6 +47,7 @@ export const MessageEditorToolbarTranslateTool = (
         onEdit={() => {
           setMiddleText(translatedText);
           setInputDisabled(true);
+          setSrcLang(detLang);
         }}
       />
     </>
