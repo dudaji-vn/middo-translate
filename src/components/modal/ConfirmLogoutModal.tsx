@@ -25,6 +25,7 @@ export const ConfirmLogoutModal = () => {
       await signOutService();
       setDataAuth({ user: null, isAuthentication: false });
       resetNotification();
+
       toast.success('Sign out success!');
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
