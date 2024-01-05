@@ -4,8 +4,8 @@ import {
   uploadMultiMedia,
 } from '@/utils/upload-media';
 
-import toast from 'react-hot-toast';
 import { useDropzone } from 'react-dropzone';
+import { useModalStore } from '@/stores/modal-store';
 import { useState } from 'react';
 
 const MAX_FILE_SIZE = 25;
@@ -18,6 +18,7 @@ export type FileWithUrl = {
 };
 export const useSelectFiles = () => {
   const [files, setFiles] = useState<FileWithUrl[]>([]);
+  const show = useModalStore((state) => state.show);
 
   const [uploadedFiles, setUploadedFiles] = useState<FileWithUrl[]>([]);
 
@@ -34,19 +35,20 @@ export const useSelectFiles = () => {
     });
     setUploadedFiles((old) => [...old, ...uploadedFiles]);
   };
+  const handleReject = (files: File[]) => {
+    show({
+      title: 'Failed to upload file',
+      description: `The file that you have selected is too large. The maximum size is 25 MB.`,
+      type: 'error',
+    });
+  };
   const { getInputProps, getRootProps, open } = useDropzone({
     onDropAccepted: handleAccept,
     noClick: true,
     noKeyboard: true,
     maxSize: MAX_FILE_SIZE * 1024 * 1024, // 25MB
     onDropRejected: (files) => {
-      const message = files
-        .map(
-          (file) =>
-            `${file.file.name} (${covertBytesToMB(file.file.size, true)}MB)`,
-        )
-        .join(', ');
-      toast.error(`File size must be less than ${MAX_FILE_SIZE}MB. ${message}`);
+      handleReject(files.map((fileRejection) => fileRejection.file));
     },
   });
   const removeFile = (file: FileWithUrl) => {
@@ -67,16 +69,23 @@ export const useSelectFiles = () => {
   ) => {
     const items = e.clipboardData.items;
     const files: File[] = [];
+    const rejectedFiles: File[] = [];
     Array.from(items).forEach((item) => {
       if (item.kind === 'file') {
         const file = item.getAsFile();
         if (file) {
-          files.push(file);
+          if (file.size > MAX_FILE_SIZE * 1024 * 1024) {
+            rejectedFiles.push(file);
+          } else files.push(file);
         }
       }
     });
     if (files.length > 0) {
       handleAccept(files);
+    }
+
+    if (rejectedFiles.length > 0) {
+      handleReject(rejectedFiles);
     }
   };
 
