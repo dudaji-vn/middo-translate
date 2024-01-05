@@ -21,6 +21,8 @@ interface MessageEditorTextContextProps {
   inputDisabled: boolean;
   setInputDisabled: (disabled: boolean) => void;
   focusInput: () => void;
+  setDetToSrc: () => void;
+  isTranslating?: boolean;
 }
 
 export const MessageEditorTextContext =
@@ -43,6 +45,8 @@ export const MessageEditorTextProvider = ({ children }: PropsWithChildren) => {
     handleStartListening,
     handleStopListening,
     listening,
+    setDetToSrc,
+    isLoading,
   } = useTranslate({
     srcLang: scrLangStore,
     tgtLang: DEFAULT_LANGUAGES_CODE.EN,
@@ -71,6 +75,8 @@ export const MessageEditorTextProvider = ({ children }: PropsWithChildren) => {
         inputDisabled: disabled,
         setInputDisabled: setDisabled,
         focusInput,
+        setDetToSrc,
+        isTranslating: isLoading,
       }}
     >
       {children}
