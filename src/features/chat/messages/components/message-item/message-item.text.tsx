@@ -27,7 +27,7 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
     if (userLanguage === message.sender.language) return;
     const translateContent = async () => {
       const translated = await translateText(
-        message.contentEnglish || message.content,
+        message.content,
         message?.language || message.sender.language,
         userLanguage,
       );
