@@ -60,7 +60,7 @@ export const InputImage = (props: InputImageProps) => {
         </div>
       </label>
       {errors && (
-        <div className="mt-2 flex items-center justify-center gap-2 pl-5 text-error-2">
+        <div className="mt-2 flex items-center justify-center gap-2 pl-5 text-error">
           <AlertCircleIcon className="h-7 w-5 min-w-[20px] " />
           {(errors?.message?.message as string) || (errors?.message as string)}
         </div>

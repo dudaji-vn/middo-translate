@@ -201,7 +201,7 @@ export const InputCropImage = forwardRef<
         </div>
       )}
       {errorMessage && (
-        <p className="mt-2 text-center text-sm text-error-2">{errorMessage}</p>
+        <p className="mt-2 text-center text-sm text-error">{errorMessage}</p>
       )}
     </div>
   );
