@@ -1,19 +1,43 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import { notificationApi } from '../api';
+import { requestForToken } from '@/lib/firebase';
 import { useNotificationStore } from '../store';
 
 export const useNotification = () => {
   const [permission, setPermission] = useState<NotificationPermission | null>(
     null,
   );
-  const { fcmToken, isDenied, setDenied, setFcmToken } = useNotificationStore(
-    (state) => state,
-  );
-  const isShowRequestPermission = permission === 'default' && !isDenied;
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const { isDenied, setDenied } = useNotificationStore((state) => state);
+  const [isSubscribed, setIsSubscribed] = useState<boolean>(true);
+  const isShowRequestPermission = useMemo(() => {
+    if (isDenied) return false;
+    if (permission === 'default') return true;
+    if (permission === 'granted' && !isSubscribed) return true;
+    return false;
+  }, [isDenied, isSubscribed, permission]);
+
+  const checkSubscription = async () => {
+    try {
+      const currentToken = await requestForToken();
+      if (currentToken) {
+        const isSubscribed =
+          await notificationApi.checkSubscription(currentToken);
+        setIsSubscribed(isSubscribed);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window) {
-      setPermission(Notification.permission);
+      const currentPermission = Notification.permission;
+      setPermission(currentPermission);
+      if (currentPermission === 'granted') {
+        checkSubscription();
+      }
     }
   }, []);
 
@@ -29,5 +53,6 @@ export const useNotification = () => {
     fcmToken,
     setPermission: handleSetPermission,
     setFcmToken,
+    setIsSubscribed,
   };
 };
