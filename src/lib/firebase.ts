@@ -45,11 +45,10 @@ export const requestForToken = async () => {
 export const deleteFCMToken = async () => {
   await deleteToken(messaging);
 };
-
-export const onMessageListener = () =>
-  new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      console.log('payload', payload);
-      resolve(payload);
-    });
-  });
+// export const onMessageListener = () =>
+//   new Promise((resolve) => {
+//     onMessage(messaging, (payload) => {
+//       console.log('payload', payload);
+//       resolve(payload);
+//     });
+//   });
