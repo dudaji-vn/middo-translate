@@ -1,6 +1,5 @@
 import { SOCKET_CONFIG } from "@/configs/socket";
 import socket from "@/lib/socket-io";
-import SimplePeer from "simple-peer";
 import Peer from "simple-peer";
 
 const peerConfigurations = {
@@ -29,7 +28,7 @@ export const createPeer = ({ id, socketId, stream, user, isShareScreen = false }
 };
 
 interface AddPeerParams {
-    signal: SimplePeer.SignalData,
+    signal: Peer.SignalData,
     callerId: string,
     stream: MediaStream,
     user: any,
@@ -42,9 +41,6 @@ export const addPeer = ({signal, callerId, stream, user, isShareScreen} : AddPee
         if(signal.type == "transceiverRequest") return; // Ignore "transceiverRequest
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.RETURN_SIGNAL, { signal, callerId, user, isShareScreen })
     })
-    peer.on("iceCandidate", (iceCandidate) => {
-        console.log("iceCandidate222", iceCandidate);
-    });
     peer.signal(signal);
     return peer;
 };
