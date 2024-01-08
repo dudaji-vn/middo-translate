@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import DEFAULT_USER_CALL_STATE from '../constant/default-user-call-state';
 
 export type MyVideoCallState = {
     myStream: MediaStream | undefined;
@@ -14,8 +15,8 @@ export type MyVideoCallState = {
 export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
     myStream: undefined,
     isShareScreen: false,
-    isTurnOnCamera: true,
-    isMute: false,
+    isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera,
+    isMute: DEFAULT_USER_CALL_STATE.isMute,
     setMyStream: (stream?: MediaStream) => {
         set(() => ({ myStream: stream }));
     },
