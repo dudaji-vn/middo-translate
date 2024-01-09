@@ -1,14 +1,9 @@
 'use client';
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/navigation';
+import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 
 import InboxList from './inbox-list';
-import { RoomActions } from '../room.actions';
+import { RoomActions } from '../room-actions';
 import { useState } from 'react';
 
 export interface InboxProps {}

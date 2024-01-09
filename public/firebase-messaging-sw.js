@@ -21,6 +21,13 @@ messaging.onBackgroundMessage((payload) => {
   const notificationOptions = {
     body: payload.data.body,
     icon: '/notify-logo.png',
+    data: {
+      url: payload.data.url,
+    },
   };
   self.registration.showNotification(notificationTitle, notificationOptions);
+  self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    event.waitUntil(clients.openWindow(event.notification.data.url));
+  });
 });

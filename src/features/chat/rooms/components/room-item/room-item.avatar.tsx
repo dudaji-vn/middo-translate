@@ -1,4 +1,5 @@
 import { Avatar } from '@/components/data-display/avatar';
+import { BellOffIcon } from '@/components/icons';
 import { Room } from '@/features/chat//rooms/types';
 import { cn } from '@/utils/cn';
 import { useMemo } from 'react';
@@ -46,9 +47,11 @@ const MAX_AVATAR_COUNT = 4;
 export const ItemAvatar = ({
   room,
   isOnline = false,
+  isMuted = false,
 }: {
   room: Room;
   isOnline?: boolean;
+  isMuted?: boolean;
 }) => {
   const avatars = useMemo(() => {
     const avatars = [];
@@ -114,7 +117,12 @@ export const ItemAvatar = ({
       </div>
       {isOnline && (
         <div className="absolute bottom-0 right-0 z-50 h-4 w-4 rounded-full bg-white p-[2.4px]">
-          <div className="h-full w-full rounded-full bg-success-2"></div>
+          <div className="h-full w-full rounded-full bg-success"></div>
+        </div>
+      )}
+      {isMuted && (
+        <div className="absolute right-0 top-0 z-50 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-error-100 ">
+          <BellOffIcon width={12} height={12} className="text-error" />
         </div>
       )}
     </div>
