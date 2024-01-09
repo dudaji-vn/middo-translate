@@ -53,6 +53,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                   className="relative cursor-pointer overflow-hidden rounded-xl border border-neutral-50"
                 >
                   <Image
+                    priority
                     alt={img.name || img.url}
                     src={img.url}
                     fill
@@ -65,6 +66,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
           </div>
         ) : (
           <Image
+            priority
             onClick={() => {
               setIndex(0);
             }}
