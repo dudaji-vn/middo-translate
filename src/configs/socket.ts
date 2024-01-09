@@ -7,6 +7,7 @@ export const SOCKET_CONFIG = {
       DELETE: 'message.delete',
     },
     ROOM: {
+      NEW: 'room.new',
       JOIN: 'room.join',
       LEAVE: 'room.leave',
       PARTICIPANT: {
@@ -39,6 +40,6 @@ export const SOCKET_CONFIG = {
       REJECT_JOIN_ROOM: 'call.reject_join_room',
       ANSWERED_JOIN_ROOM: 'call.answered_join_room',
       REQUEST_GET_SHARE_SCREEN: 'call.request_get_share_screen',
-    }
+    },
   },
 };

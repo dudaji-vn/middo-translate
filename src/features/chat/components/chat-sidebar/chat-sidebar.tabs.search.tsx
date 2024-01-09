@@ -31,7 +31,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           ref={ref}
-          className="bg-neutral-white w-full"
+          className="w-full bg-neutral-white"
         >
           {data?.users && data.users.length > 0 && (
             <Section label="People">
@@ -47,6 +47,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
               <Section label="Groups">
                 {data?.rooms.map((room) => (
                   <RoomItem
+                    disabledAction
                     key={room._id}
                     data={room}
                     currentUser={currentUser!}

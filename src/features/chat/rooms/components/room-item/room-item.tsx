@@ -1,10 +1,13 @@
+import {
+  RoomItemActionWrapper,
+  RoomItemActionWrapperDisabled,
+} from './room-item.action-wrapper';
 import { createContext, forwardRef, memo, useContext, useMemo } from 'react';
 
 import { ItemAvatar } from './room-item.avatar';
 import { ItemSub } from './room-item.sub';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
-import { RoomItemActionWrapper } from './room-item.action-wrapper';
 import { RoomItemHead } from './room-item.head';
 import { RoomItemWrapper } from './room-item.wrapper';
 import { User } from '@/features/users/types';
@@ -20,6 +23,7 @@ export interface RoomItemProps {
   showTime?: boolean;
   onClick?: () => void;
   isMuted?: boolean;
+  disabledAction?: boolean;
 }
 
 const RoomItemContext = createContext<RoomItemProps>({} as RoomItemProps);
@@ -33,6 +37,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     currentRoomId,
     showTime = true,
     onClick,
+    disabledAction,
   } = props;
   const currentUserId = currentUser?._id;
 
@@ -48,8 +53,12 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
 
   const { isMuted } = useIsMutedRoom(room._id);
 
+  const Wrapper = disabledAction
+    ? RoomItemActionWrapperDisabled
+    : RoomItemActionWrapper;
+
   return (
-    <RoomItemActionWrapper room={room} isMuted={isMuted}>
+    <Wrapper room={room} isMuted={isMuted}>
       <RoomItemContext.Provider
         value={{
           data: room,
@@ -88,7 +97,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           </div>
         </RoomItemWrapper>
       </RoomItemContext.Provider>
-    </RoomItemActionWrapper>
+    </Wrapper>
   );
 });
 
