@@ -204,9 +204,10 @@ export const MessageBox = ({ room }: { room: Room }) => {
       </InfiniteScroll>
       {isScrolled && (
         <Button.Icon
-          size="sm"
+          size="xs"
+          color="secondary"
           onClick={scrollIntoView}
-          className="absolute bottom-4 left-1/2 -translate-x-1/2 border border-primary bg-background"
+          className="absolute bottom-4 left-1/2 -translate-x-1/2"
         >
           <ArrowDownIcon className="text-primary" />
         </Button.Icon>

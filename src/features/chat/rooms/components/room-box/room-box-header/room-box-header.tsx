@@ -31,7 +31,7 @@ export const ChatBoxHeader = () => {
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
-      <div className="-mr-2 ml-auto flex items-center gap-1">
+      <div className="-mr-2 ml-auto mr-3 flex items-center gap-1">
         <VideoCall roomId={room._id} />
         <ActionBar />
       </div>

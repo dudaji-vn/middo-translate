@@ -32,10 +32,10 @@ export const ChatSettingMenu = forwardRef<HTMLDivElement, ChatSettingProps>(
         >
           <div
             className={cn(
-              'flex items-center justify-between gap-5 bg-background p-5',
+              'flex items-center justify-between gap-5 bg-background p-3',
             )}
           >
-            <span>Translate tool</span>
+            <span className="text-sm">Translate tool</span>
             <Switch
               onClick={stopPropagation}
               checked={showTranslateOnType}
@@ -44,10 +44,10 @@ export const ChatSettingMenu = forwardRef<HTMLDivElement, ChatSettingProps>(
           </div>
           <div
             className={cn(
-              'flex items-center justify-between gap-5 bg-background p-5',
+              'flex items-center justify-between gap-5 bg-background p-3',
             )}
           >
-            <span>Message translate</span>
+            <span className="text-sm">Message translate</span>
             <Switch
               onClick={stopPropagation}
               checked={showMiddleTranslation}

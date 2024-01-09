@@ -34,11 +34,6 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
       <div className="mb-3 flex items-center justify-between">
         <Typography variant="h6">Conversation</Typography>
         <div className="flex gap-3">
-          <ChatSettingMenu>
-            <Button.Icon color="default" size="xs">
-              <Settings />
-            </Button.Icon>
-          </ChatSettingMenu>
           <Button.Icon
             onClick={() => changeSide('individual')}
             color="default"
@@ -46,6 +41,11 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           >
             <PenSquareIcon />
           </Button.Icon>
+          <ChatSettingMenu>
+            <Button.Icon color="default" size="xs">
+              <Settings />
+            </Button.Icon>
+          </ChatSettingMenu>
         </div>
       </div>
       <div className="flex  items-center gap-1 ">

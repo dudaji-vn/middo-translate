@@ -99,7 +99,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
                 </div>
                 <MessageEditorMediaBar />
               </div>
-              <Button.Icon type="submit" size="sm" color="primary">
+              <Button.Icon type="submit" size="xs" color="primary">
                 <Send />
               </Button.Icon>
             </div>

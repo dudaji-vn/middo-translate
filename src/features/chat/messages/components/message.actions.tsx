@@ -7,7 +7,10 @@ import {
 } from 'lucide-react';
 import { createContext, useContext, useState } from 'react';
 
+import { Message } from '../types';
 import { MessageModalRemove } from './message.modal-remove';
+import { useCopyMessage } from '../hooks/use-copy-message';
+import { useTextCopy } from '@/hooks/use-text-copy';
 
 type Action = 'remove' | 'pin' | 'reply' | 'copy' | 'forward' | 'none';
 type ActionItem = {
@@ -22,7 +25,6 @@ export const actionItems: ActionItem[] = [
     action: 'copy',
     label: 'Copy',
     icon: <CopyIcon />,
-    disabled: true,
   },
   {
     action: 'reply',
@@ -50,8 +52,14 @@ export const actionItems: ActionItem[] = [
     color: 'error',
   },
 ];
+
+type OnActionParams = {
+  action: Action;
+  message: Message;
+  isMe: boolean;
+};
 export interface MessageActionsContextProps {
-  onAction: (action: Action, id: string, isMe: boolean) => void;
+  onAction: (params: OnActionParams) => void;
 }
 const MessageActionsContext = createContext<
   MessageActionsContextProps | undefined
@@ -67,9 +75,14 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
   const [id, setId] = useState<string>('');
   const [isMe, setIsMe] = useState<boolean>(false);
   const [action, setAction] = useState<Action>('none');
-  const onAction = (action: Action, id: string, isMe: boolean) => {
+  const { copyMessage } = useCopyMessage();
+  const onAction = ({ action, isMe, message }: OnActionParams) => {
+    if (action === 'copy') {
+      copyMessage(message);
+      return;
+    }
     setAction(action);
-    setId(id);
+    setId(message._id);
     setIsMe(isMe);
   };
   const reset = () => {
