@@ -96,7 +96,7 @@ const DesktopWrapper = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button.Icon
-              size="md"
+              size="xs"
               variant="default"
               color="default"
               className="border shadow"

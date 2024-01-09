@@ -22,6 +22,8 @@ export const GroupCreateFooter = ({
           className={'p-3 shadow-n-1'}
         >
           <Button
+            size="md"
+            shape="square"
             loading={createLoading}
             form="create-group-form"
             type="submit"

@@ -22,6 +22,7 @@ export const TabLayout = forwardRef<HTMLDivElement, TabLayoutProps>(
             onClick={changeToDefault}
             variant="ghost"
             color="default"
+            size="xs"
           >
             <ArrowLeftIcon />
           </Button.Icon>

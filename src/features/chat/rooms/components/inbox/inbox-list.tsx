@@ -1,12 +1,9 @@
 import { forwardRef, memo, useEffect, useMemo } from 'react';
 
-import { Button } from '@/components/actions';
 import { InboxType } from './inbox';
 import { InfiniteScroll } from '@/components/infinity-scroll';
-import { MessagePlusIcon } from '@/components/icons';
 import { Room } from '../../types';
 import { RoomItem } from '../room-item';
-import { RoomItemActionWrapper } from '../room-item/room-item.action-wrapper';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
@@ -29,7 +26,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const params = useParams();
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
-    const { changeSide } = useSidebarTabs();
+
     const key = useMemo(() => ['rooms', type], [type]);
 
     const {
@@ -86,26 +83,12 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!currentUser) return null;
     if (rooms.length === 0 && !isLoading) {
       return (
-        <>
-          <div className="mt-10 bg-card px-4 text-center">
-            <Typography variant="h3">Welcome to Middo conversation!</Typography>
-            <Typography variant="muted" className="mt-3 block opacity-60">
-              Press button belows to start a conversation
-            </Typography>
-          </div>
-          <div className="absolute bottom-10 right-5">
-            {
-              <div className="absolute left-0 top-0 h-full w-full animate-ping-cs rounded-full border border-secondary"></div>
-            }
-            <Button.Icon
-              size="lg"
-              onClick={() => changeSide('individual')}
-              className="relative shadow-3"
-            >
-              <MessagePlusIcon />
-            </Button.Icon>
-          </div>
-        </>
+        <div className="mt-10 bg-card px-4 text-center">
+          <Typography variant="h3">Welcome to Middo conversation!</Typography>
+          <Typography variant="muted" className="mt-3 block opacity-60">
+            Press button belows to start a conversation
+          </Typography>
+        </div>
       );
     }
 
@@ -135,15 +118,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               />
             ))}
           </InfiniteScroll>
-        </div>
-        <div className="absolute bottom-10 right-5">
-          <Button.Icon
-            size="lg"
-            onClick={() => changeSide('individual')}
-            className="relative shadow-3"
-          >
-            <MessagePlusIcon />
-          </Button.Icon>
         </div>
       </div>
     );
