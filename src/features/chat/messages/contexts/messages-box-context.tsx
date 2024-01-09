@@ -1,15 +1,23 @@
 'use client';
 
-import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { Message } from '@/features/chat/messages/types';
 import { MessageActions } from '../components/message.actions';
+import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
 import { Room } from '@/features/chat/rooms/types';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '../../rooms/api';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
+import { useHasFocus } from '../../rooms/hooks/use-has-focus';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -53,6 +61,10 @@ export const MessagesBoxProvider = ({
 
   const userId = useAuthStore((s) => s.user?._id);
 
+  const [notification, setNotification] = useState<string>('');
+
+  const isFocused = useHasFocus();
+
   // socket event
 
   useEffect(() => {
@@ -67,11 +79,12 @@ export const MessagesBoxProvider = ({
       }) => {
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
-        // const messageNotify = `${message.sender.name} to ${
-        //   message.room?.isGroup && message.room?.name
-        //     ? message.room?.name
-        //     : 'your group'
-        // }: ${message.content} `;
+        const messageNotify = `${message.sender.name} to ${
+          message.room?.isGroup && message.room?.name
+            ? message.room?.name
+            : 'your group'
+        }: ${message.content} `;
+        setNotification(messageNotify);
       },
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
@@ -83,6 +96,27 @@ export const MessagesBoxProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
   }, [replaceItem, room._id, updateItem, userId]);
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (notification && !isFocused) {
+      intervalId = setInterval(() => {
+        console.log('notification');
+        const defaultTitle = `Talk | ${NEXT_PUBLIC_NAME}`;
+        document.title =
+          document.title === `Talk | ${NEXT_PUBLIC_NAME}`
+            ? notification
+            : defaultTitle;
+      }, 1000);
+    }
+    if (isFocused) {
+      document.title = `Talk | ${NEXT_PUBLIC_NAME}`;
+      setNotification('');
+    }
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isFocused, notification]);
 
   return (
     <MessagesBoxContext.Provider

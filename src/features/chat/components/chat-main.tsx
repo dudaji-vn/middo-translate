@@ -4,6 +4,7 @@ import { useParams, usePathname } from 'next/navigation';
 
 import { PropsWithChildren } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { RoomActions } from '../rooms/components/room-actions';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 

@@ -11,3 +11,4 @@ export * from './chat-download-icon';
 export * from './message-plus-icon';
 export * from './message-bubble-icon';
 export * from './google-icon';
+export * from './bell-off-icon';

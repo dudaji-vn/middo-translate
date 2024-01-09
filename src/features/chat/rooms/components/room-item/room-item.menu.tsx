@@ -5,12 +5,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { cloneElement, forwardRef } from 'react';
-import { roomActionItems, useRoomActions } from '../room.actions';
 
 import { Button } from '@/components/actions/button';
 import { MoreVertical } from 'lucide-react';
 import { Room } from '../../types';
 import { cn } from '@/utils/cn';
+import { useRoomActions } from '../room-actions';
 
 export interface RoomItemMenuProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -19,7 +19,7 @@ export interface RoomItemMenuProps
 
 export const RoomItemMenu = forwardRef<HTMLDivElement, RoomItemMenuProps>(
   (props, ref) => {
-    const { onAction } = useRoomActions();
+    const { onAction, actionItems } = useRoomActions();
     return (
       <div ref={ref} {...props}>
         <DropdownMenu>
@@ -34,7 +34,7 @@ export const RoomItemMenu = forwardRef<HTMLDivElement, RoomItemMenuProps>(
             </Button.Icon>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {roomActionItems.map((item) => (
+            {actionItems.map((item) => (
               <DropdownMenuItem
                 key={item.action}
                 disabled={item.disabled}

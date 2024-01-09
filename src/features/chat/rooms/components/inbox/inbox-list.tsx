@@ -119,14 +119,13 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             className="flex flex-col"
           >
             {rooms.map((room) => (
-              <RoomItemActionWrapper key={room._id} room={room}>
-                <RoomItem
-                  data={room}
-                  isActive={currentRoomId === room._id}
-                  currentUser={currentUser!}
-                  currentRoomId={currentRoomId as string}
-                />
-              </RoomItemActionWrapper>
+              <RoomItem
+                key={room._id}
+                data={room}
+                isActive={currentRoomId === room._id}
+                currentUser={currentUser!}
+                currentRoomId={currentRoomId as string}
+              />
             ))}
           </InfiniteScroll>
         </div>
