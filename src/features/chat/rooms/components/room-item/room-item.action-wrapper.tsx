@@ -1,5 +1,4 @@
 import { ActionItem, useRoomActions } from '../room-actions';
-import { BellOffIcon, MoreVertical } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +9,7 @@ import { PropsWithChildren, cloneElement, forwardRef, useMemo } from 'react';
 
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
+import { MoreVertical } from 'lucide-react';
 import { Room } from '../../types';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
@@ -44,6 +44,7 @@ export const RoomItemActionWrapper = forwardRef<
     return itemFiltered;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMuted, room._id]);
+
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>
       {children}
@@ -126,3 +127,12 @@ const DesktopWrapper = ({
     </div>
   );
 };
+
+export const RoomItemActionWrapperDisabled = forwardRef<
+  HTMLDivElement,
+  RoomItemActionWrapperProps
+>(({ children }, ref) => {
+  return <>{children}</>;
+});
+
+RoomItemActionWrapperDisabled.displayName = 'RoomItemActionWrapperDisabled';

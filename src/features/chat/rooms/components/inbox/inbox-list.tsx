@@ -39,6 +39,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       isLoading,
       removeItem,
       updateItem,
+      addItem,
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
@@ -58,6 +59,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     };
 
     useEffect(() => {
+      socket.on(SOCKET_CONFIG.EVENTS.ROOM.NEW, (payload: Room) => {
+        addItem(payload);
+      });
       socket.on(
         SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
@@ -72,6 +76,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       });
       return () => {
         socket.off(SOCKET_CONFIG.EVENTS.ROOM.UPDATE);
+        socket.off(SOCKET_CONFIG.EVENTS.ROOM.DELETE);
+        socket.off(SOCKET_CONFIG.EVENTS.ROOM.LEAVE);
+        socket.off(SOCKET_CONFIG.EVENTS.ROOM.NEW);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
