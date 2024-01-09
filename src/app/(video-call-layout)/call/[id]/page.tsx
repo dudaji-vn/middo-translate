@@ -5,9 +5,10 @@ import { SOCKET_CONFIG } from "@/configs/socket";
 import { VideoCallBottom } from "@/features/call/components/call-bottom";
 import VideoCallContent from "@/features/call/components/call-content";
 import { VideoCallHeader } from "@/features/call/components/call-header";
+import { ParticipantListSidebar } from "@/features/call/components/participant-list";
 import { STATUS } from "@/features/call/constant/status";
 import { VideoCallProvider } from "@/features/call/context/video-call-context";
-import { useVideoCallStore } from "@/features/call/store";
+import { useVideoCallStore } from "@/features/call/store/video-call";
 import socket from "@/lib/socket-io";
 import { getVideoCall } from "@/services/videoCallService";
 import { useAuthStore } from "@/stores/auth";
@@ -50,9 +51,10 @@ const VideoCallPage = ({ params }: VideoCallPageProps) => {
   if(isWaiting) return <WaittingForAccept />
   if(!room) return null;
   return <VideoCallProvider>
-    <main className="fixed inset-0 flex flex-col overflow-hidden">
+    <main className="h-dvh w-full flex flex-col overflow-hidden">
       <VideoCallHeader />
       <section className="relative flex h-full w-full flex-1 overflow-hidden">
+        {/* <ParticipantListSidebar /> */}
         <VideoCallContent />
       </section>
       <VideoCallBottom />

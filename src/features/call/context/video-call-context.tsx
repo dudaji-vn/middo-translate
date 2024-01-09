@@ -259,131 +259,91 @@ export const VideoCallProvider = ({
         };
         addParticipant(shareScreen);
         setShareScreen(true);
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, {
-          roomId: call.slug,
-        });
-        socket.on(
-          SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN,
+        setShareScreenStream(stream);
+        const peersShareScreenTmp: any[] = [];
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, call?.slug);
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN,
           (users: any[]) => {
-            setShareScreenStream(stream);
-            setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
             users.forEach((user: { id: string; user: any }) => {
               if (!socket.id) return;
               const peer = createPeer({
                 id: user.id,
                 socketId: socket.id,
-                stream,
                 user: myInfo,
                 isShareScreen: true,
               });
-              peersRef.current.push({
-                peerId: user.id,
+              peer.addStream(stream);
+              peersShareScreenTmp.push(peer);
+              addPeerShareScreen({
+                id: user.id,
                 peer,
-                user: user.user,
-                isShareScreen: true,
               });
             });
           },
         );
-
-        socket.on(
-          SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN,
-          ({ userId }: { userId: string }) => {
-            if (!socket.id || userId === socket.id) return;
-            const peer = createPeer({
-              id: userId,
-              socketId: socket.id,
-              stream,
-              user: myInfo,
-              isShareScreen: true,
-            });
-            peersRef.current.push({
-              peerId: userId,
-              peer,
-              user: myInfo,
-              isShareScreen: true,
-            });
-          },
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, (socketId: string) => {
+          if (!socket.id || socketId === socket.id) return;
+          const peer = createPeer({
+            id: socketId,
+            socketId: socket.id,
+            user: myInfo,
+            isShareScreen: true,
+          });
+          peer.addStream(stream);
+          peersShareScreenTmp.push({
+            peerId: socketId,
+            peer,
+            user: myInfo,
+            isShareScreen: true,
+          });
+          addPeerShareScreen({
+            id: socketId,
+            peer,
+          });
+        },
         );
         stream.getVideoTracks()[0].onended = () => {
           if (!socket.id) return;
           setShareScreen(false);
           removeParticipantShareScreen(socket.id);
           socket.emit(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
-          setLayout(); // Prev Layout
+          socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN);
+          socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN);
+          peersShareScreenTmp.forEach((peer: any) => {
+            peer.destroy();
+          })
+          clearPeerShareScreen();
         };
       })
       .catch((err: any) => {
         console.log(err);
-        setShareScreen(false);
       });
   };
-  const handleToggleCamera = (status: boolean) => {
-    participants.forEach((participant: ParicipantInVideoCall) => {
-      if(participant.isShareScreen) return;
-      if(!participant.isMe) return;
-      if(!participant?.stream) return;
-      participant.stream.getVideoTracks()[0].enabled = status;
-      // if(status) {
-      //   const navigator = window.navigator as any;
-      //   console.log('TUrn on camera with status', status, isMute);
-      //   navigator.mediaDevices
-      //     .getUserMedia({ video: true, audio: !isMute})
-      //     .then((stream: MediaStream) => {
-      //       participant.stream = stream;
-      //       setStreamForParticipant(stream, participant.socketId, true)
-      //     });
-      // } else {
-      //   console.log('TUrn off camera');
-      //   console.log(participant.stream.getVideoTracks()[0])
-      //   participant.stream.getVideoTracks()[0].stop();
-      //   // participant.stream.getVideoTracks()[0].enabled = false;
-      //   setStreamForParticipant(new MediaStream(), participant.socketId, true)
-      // }
-    });
-  }
-  const handleToggleMute = (status: boolean) => {
-    participants.forEach((participant: ParicipantInVideoCall) => {
-      if(participant.isShareScreen) return;
-      if(!participant.isMe) return;
-      if(!participant?.stream) return;
-      participant.stream.getAudioTracks()[0].enabled = status;
-      // if(!status) {
-      //   console.log('TUrn off mic');
-      //   participant.stream.getAudioTracks()[0].stop();
-      // }else {
-      //   const navigator = window.navigator as any;
-      //   console.log('TUrn on mic with status', status, isTurnOnCamera);
-      //   navigator.mediaDevices
-      //     .getUserMedia({ video: isTurnOnCamera, audio: true })
-      //     .then((stream: MediaStream) => {
-      //       setStreamForParticipant(stream, participant.socketId, true)
-      //     });
-      // }
-    });
-  }
   const handleStartDoodle = async () => {
     setIsCreatingDoodle(true);
     let videoEl = document.querySelector('.focus-view video') as HTMLVideoElement;
-    if(!videoEl) return;
+    if (!videoEl) return;
     const canvas = document.createElement("canvas") as HTMLCanvasElement;
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
     canvas.getContext('2d').drawImage(videoEl, 0, 0, canvas.width, canvas.height);
     const dataURL = canvas.toDataURL();
     const fileImage = new File([dataURL], 'doodle.png', {type: 'image/png'});
-    const image = await uploadImage(fileImage);
-    if(!image) return;
+    canvas.getContext('2d')?.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+    const quality = 0.2;
+    const dataURL = canvas.toDataURL('image/png', quality);
+    // const fileImage = new File([dataURL], 'doodle.png', { type: 'image/png' });
+    // const image = await uploadImage(fileImage);
+    // if (!image) return;
     setMeDoodle(true);
-    socket.emit(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, {image_url: image.secure_url});
+    socket.emit(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, dataURL);
     setIsCreatingDoodle(false);
   }
+
   return (
     <VideoCallContext.Provider
       value={{
         handleShareScreen: handleShareScreen,
-        handleToggleCamera: handleToggleCamera,
-        handleToggleMute: handleToggleMute,
         handleStartDoodle: handleStartDoodle,
       }}
     >

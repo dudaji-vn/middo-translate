@@ -24,11 +24,15 @@ import ButtonDataAction from '@/components/actions/button/button-data-action';
 import formatTime from '../utils/formatTime';
 import { twMerge } from 'tailwind-merge';
 import { useVideoCallContext } from '../context/video-call-context';
-import { useVideoCallStore } from '../store';
+import { useVideoCallStore } from '../store/video-call';
+import { useParticipantVideoCallStore } from '../store/participant';
+import { useMyVideoCallStore } from '../store/me';
+import ParicipantInVideoCall from '../interfaces/participant';
+import socket from '@/lib/socket-io';
 
-export interface VideoCallBottomProps {}
+export interface VideoCallBottomProps { }
 
-export const VideoCallBottom = ({}: VideoCallBottomProps) => {
+export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   return (
     <section className="flex items-center justify-between border-b border-t border-neutral-50 p-1">
       <MeetingInfo />
@@ -39,25 +43,27 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
 };
 
 const MeetingAction = () => {
-  const { participants, isShareScreen, isDoodle, isMeDoole, isDrawing, setDrawing } = useVideoCallStore();
+  const { isDoodle, isMeDoole, isDrawing, setDrawing } = useVideoCallStore();
+  const { participants } = useParticipantVideoCallStore();
+  const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
   const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
   const haveShareScreen = participants.some(
     (participant) => participant.isShareScreen,
   );
   const onDoodle = () => {
-    if(!isDoodle && isMeDoole) return;
+    if (!isDoodle && isMeDoole) return;
     // Start doodle
-    if(haveShareScreen && !isDoodle) {
+    if (haveShareScreen && !isDoodle) {
       setDrawing(true);
       handleStartDoodle();
     }
     // Toggle drawing
-    if(isDoodle) {
+    if (isDoodle) {
       setDrawing(!isDrawing);
     }
   }
-  
+
   return (
     <Fragment>
       <div className="hidden gap-1 md:flex md:gap-8">

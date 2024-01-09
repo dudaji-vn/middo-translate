@@ -1,14 +1,21 @@
-
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
-import { useVideoCallStore } from '../../store';
 import { useRouter } from 'next/navigation';
+import { useVideoCallStore } from '../../store/video-call';
+import { useParticipantVideoCallStore } from '../../store/participant';
 
 export const ConfirmLeaveRoomModal = () => {
     const router = useRouter();
     const { confirmLeave, setConfirmLeave } = useVideoCallStore();
+    const { participants, removeParticipant } = useParticipantVideoCallStore();
 
     const handleLeave = async () => {
         setConfirmLeave(false);
+        participants.forEach(participant => {
+            if (!participant.isMe) {
+                participant.peer?.destroy();
+            }
+            removeParticipant(participant.socketId);
+        })
         router.back();
     };
 

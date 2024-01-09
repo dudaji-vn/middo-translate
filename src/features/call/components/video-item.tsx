@@ -1,12 +1,12 @@
 import { Mic, MicOff, VideoIcon, VideoOff } from 'lucide-react';
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import { Avatar } from '@/components/data-display';
 import trimLongName from '../utils/trimLongName';
 import { twMerge } from 'tailwind-merge';
 import useAudioLevel from '../hooks/useAudioLevel';
 import useLoadStream from '../hooks/useLoadStream';
-import { useVideoCallStore } from '../store';
+import { useMyVideoCallStore } from '../store/me';
 interface VideoItemProps {
   participant?: any;
   size?: 'sm' | 'md' | 'lg';
@@ -15,7 +15,7 @@ const VideoItem = ({ participant, size = 'md' }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const { streamVideo, isMute, isTurnOnCamera } = useLoadStream(participant, videoRef);
   const { isTalk } = useAudioLevel(streamVideo);
-  const {isTurnOnCamera: isMeTurnOnCamera, isMute: isMeMute} = useVideoCallStore();
+  const {isTurnOnCamera: isMeTurnOnCamera, isMute: isMeMute} = useMyVideoCallStore();
   if(participant.isMe && videoRef.current) videoRef.current.volume = 0;
   const classForSize = {
     sm: 'w-[240px] mx-1',
@@ -46,7 +46,7 @@ const VideoItem = ({ participant, size = 'md' }: VideoItemProps) => {
         ref={videoRef}
         className={`h-full w-full flex-1 rounded-xl object-cover ${isTurnOnCamera ? 'block' : 'hidden'}`}
         autoPlay
-        muted
+        muted={participant.isMe ? true : false}
         playsInline
         controls={false}
       ></video>

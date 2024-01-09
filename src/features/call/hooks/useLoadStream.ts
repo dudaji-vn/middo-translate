@@ -6,7 +6,8 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
     const [streamVideo, setStreamVideo] = useState<MediaStream>()
     const [isMute, setIsMute] = useState<boolean>(false)
     const [isTurnOnCamera, setIsTurnOnCamera] = useState<boolean>(false)
-    const { setStreamForParticipant } = useParticipantVideoCallStore();
+    const { setStreamForParticipant, removeParticipant } = useParticipantVideoCallStore();
+    
     useEffect(() => {
         if(!elementRef.current || !participant) return;
         if(participant.stream) {

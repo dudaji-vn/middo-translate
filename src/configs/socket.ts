@@ -42,6 +42,8 @@ export const SOCKET_CONFIG = {
       START_DOODLE: 'call.start_doodle',
       END_DOODLE: 'call.end_doodle',
       DRAW_DOODLE: 'call.draw_doodle',
+      REQUEST_GET_OLD_DOODLE_DATA: 'call.request_get_old_doodle_data',
+      SEND_OLD_DOODLE_DATA: 'call.send_old_doodle_data',
     }
   },
 };

@@ -30,7 +30,7 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
     setStreamForParticipant(stream: MediaStream, socketId: string, isShareScreen: boolean) {
         set((state) => ({
             participants: state.participants.map((p) => {
-                if (p.socketId == socketId && p.isShareScreen == isShareScreen) {
+                if (p.socketId == socketId && (p.isShareScreen || false) == isShareScreen) {
                     return {
                         ...p,
                         stream

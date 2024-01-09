@@ -1,13 +1,15 @@
 import { Fragment, useMemo } from "react";
-import { useVideoCallStore } from "../../store";
 import VideoItem from "../video-item";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import FocusVideoItem from "../focus-video-item";
 import { DoodleArea } from "../common/DoodleArea";
+import { useVideoCallStore } from "../../store/video-call";
+import { useParticipantVideoCallStore } from "../../store/participant";
 
 const FocusScreenView = () => {
-    const { participants, isDoodle } = useVideoCallStore();
+    const { isDoodle } = useVideoCallStore();
+    const { participants } = useParticipantVideoCallStore();
     const haveShareScreen = useMemo(() => participants.some((participant: any) => participant.isShareScreen), [participants]);
     const listParticipant = useMemo(()=>{
         if(isDoodle) return participants;

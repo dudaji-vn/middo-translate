@@ -1,9 +1,11 @@
 import { Fragment, useMemo } from "react";
-import { useVideoCallStore } from "../../store";
 import VideoItem from "../video-item";
+import { useVideoCallStore } from "../../store/video-call";
+import { useParticipantVideoCallStore } from "../../store/participant";
 
 const GalleryView = () => {
-    const { participants, layout } = useVideoCallStore();
+    const { layout } = useVideoCallStore();
+    const { participants } = useParticipantVideoCallStore();
 
     const calculateGridLayout = useMemo(() => {
         switch (true) {
