@@ -48,7 +48,7 @@ export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
           <Button
             className="w-full"
             shape="square"
-            size="lg"
+            size="md"
             onClick={handleCreateGroup}
           >
             <Users2Icon className="mr-3 h-5 w-5" /> New group chat

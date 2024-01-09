@@ -26,7 +26,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     }>(searchApi.inboxes, 'chat-search', value || '');
     const currentUser = useAuthStore((state) => state.user);
     return (
-      <div className="absolute left-0 top-[62px] h-[calc(100%_-_62px)] w-full overflow-y-auto bg-white pt-3">
+      <div className="absolute left-0 top-[106px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3">
         <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
