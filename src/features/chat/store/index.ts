@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export type ChatState = {
   showTranslateOnType: boolean;
@@ -13,17 +14,26 @@ export type ChatState = {
   setDetLang: (lang: string) => void;
 };
 
-export const useChatStore = create<ChatState>()((set) => ({
-  showTranslateOnType: true,
-  toggleShowTranslateOnType: () =>
-    set((state) => ({ showTranslateOnType: !state.showTranslateOnType })),
-  showMiddleTranslation: true,
-  toggleShowMiddleTranslation: () =>
-    set((state) => ({ showMiddleTranslation: !state.showMiddleTranslation })),
-  rooIdInteract: null,
-  setRoomIdInteract: (id) => set(() => ({ rooIdInteract: id })),
-  srcLang: 'auto',
-  setSrcLang: (lang) => set(() => ({ srcLang: lang })),
-  detLang: '',
-  setDetLang: (lang) => set(() => ({ detLang: lang })),
-}));
+export const useChatStore = create<ChatState>()(
+  persist(
+    (set) => ({
+      showTranslateOnType: true,
+      toggleShowTranslateOnType: () =>
+        set((state) => ({ showTranslateOnType: !state.showTranslateOnType })),
+      showMiddleTranslation: true,
+      toggleShowMiddleTranslation: () =>
+        set((state) => ({
+          showMiddleTranslation: !state.showMiddleTranslation,
+        })),
+      rooIdInteract: null,
+      setRoomIdInteract: (id) => set(() => ({ rooIdInteract: id })),
+      srcLang: 'auto',
+      setSrcLang: (lang) => set(() => ({ srcLang: lang })),
+      detLang: '',
+      setDetLang: (lang) => set(() => ({ detLang: lang })),
+    }),
+    {
+      name: 'chat-storage',
+    },
+  ),
+);
