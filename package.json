@@ -61,6 +61,7 @@
     "react-qr-code": "^2.0.12",
     "react-qr-reader": "2.2.1",
     "react-range": "^1.8.14",
+    "react-resizable-panels": "^1.0.8",
     "react-sketch-canvas": "^6.2.0",
     "react-speech-recognition": "^3.10.0",
     "regenerator-runtime": "^0.14.0",

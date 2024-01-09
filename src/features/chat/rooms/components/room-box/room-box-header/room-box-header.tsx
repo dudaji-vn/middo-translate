@@ -1,6 +1,6 @@
 'use client';
 
-import { AlertCircleIcon } from 'lucide-react';
+import { AlertCircleIcon, Phone } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { RoomAvatar } from '../../room-avatar';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
@@ -8,11 +8,11 @@ import { generateRoomDisplay } from '../../../utils';
 import { useAuthStore } from '@/stores/auth';
 import { useChatBox } from '../../../contexts';
 import { useMemo } from 'react';
-import { Video } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { joinVideoCallRoom } from '@/services/videoCallService';
 import toast from 'react-hot-toast';
 import { STATUS } from '@/features/call/constant/status';
+import { useVideoCallStore } from '@/features/call/store/video-call';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -56,10 +56,11 @@ const ActionBar = () => {
 };
 const VideoCall = ({roomId}: {roomId: string}) => {
   const router = useRouter();
+  const { setRoom } = useVideoCallStore();
   const startVideoCall = async () => {
     let res = await joinVideoCallRoom({roomId});
     if(res.data.status === STATUS.JOIN_SUCCESS) {
-      router.push(`/call/${res?.data?.slug}`);
+      setRoom(res.data?.room)
     } else {
       toast.error('Error when join room');
     }
@@ -73,7 +74,7 @@ const VideoCall = ({roomId}: {roomId: string}) => {
         color='primary'
         variant="ghost"
       >
-        <Video />
+        <Phone />
       </Button.Icon>
     </div>
   );

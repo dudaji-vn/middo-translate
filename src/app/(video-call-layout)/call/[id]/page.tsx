@@ -52,7 +52,7 @@ const VideoCallPage = ({ params }: VideoCallPageProps) => {
   if(!room) return null;
   return <VideoCallProvider>
     <main className="h-dvh w-full flex flex-col overflow-hidden">
-      <VideoCallHeader />
+      {/* <VideoCallHeader /> */}
       <section className="relative flex h-full w-full flex-1 overflow-hidden">
         {/* <ParticipantListSidebar /> */}
         <VideoCallContent />

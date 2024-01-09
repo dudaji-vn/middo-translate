@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import {VIDEOCALL_LAYOUTS} from '../constant/layout';
-import getRandomColor from '../utils/getRandomColor';
+import getRandomColor from '../utils/get-random-color.util';
 
 export type VideoCallState = {
     room: any;
@@ -12,6 +12,7 @@ export type VideoCallState = {
     isMeDoole: boolean;
     confirmStopDoodle: boolean;
     colorDoodle: string;
+    isFullScreen: boolean;
     setRoom: (room: any) => void;
     setLayout: (layout?: string) => void;
     setConfirmLeave: (confirmLeave: boolean) => void;
@@ -20,6 +21,7 @@ export type VideoCallState = {
     setMeDoodle: (isMeDoole: boolean) => void;
     setDrawing: (isDrawing: boolean) => void;
     setConfirmStopDoodle: (confirmStopDoodle: boolean) => void;
+    setFullScreen: (isFullScreen: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -34,6 +36,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     confirmStopDoodle: false,
     colorDoodle: getRandomColor(),
     peerShareScreen: [],
+    isFullScreen: false,
     setRoom: (room: any) => {
         set(() => ({ room }));
     },
@@ -57,5 +60,8 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     },
     setConfirmStopDoodle: (confirmStopDoodle: boolean) => {
         set(() => ({ confirmStopDoodle }));
+    },
+    setFullScreen: (isFullScreen: boolean) => {
+        set(() => ({ isFullScreen }));
     }
 }));

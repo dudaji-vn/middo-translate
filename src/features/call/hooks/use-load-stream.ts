@@ -26,14 +26,29 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
             setStreamVideo(tempStream)
             setIsMute(isMute)
             setIsTurnOnCamera(isTurnOnCamera)
+            const audioTrack = tempStream.getAudioTracks()[0];
+            const videoTrack = tempStream.getVideoTracks()[0];
+            if(audioTrack) {
+                audioTrack.addEventListener('enabled', ()=>{
+                    console.log('audioTrack::', audioTrack.enabled)
+                })
+            }
+            if(videoTrack) {
+                videoTrack.addEventListener('enabled', ()=>{
+                    console.log('videoTrack::', videoTrack.enabled)
+                })
+            }
         }
         if(!participant.peer) return;
         participant.peer.on('stream', (stream: any) => {
             if(!elementRef.current) return;
-
             setStreamForParticipant(stream, participant.socketId, participant.isShareScreen || false)
         })
-    }, [elementRef, participant, setStreamForParticipant])
+        participant.peer.on('error', (error: any) => {
+            participant.peer.destroy()
+            removeParticipant(participant.socketId)
+        })
+    }, [elementRef, participant, removeParticipant, setStreamForParticipant])
     return {
         streamVideo,
         isMute,
