@@ -45,7 +45,7 @@ export const MessageEditorToolbar = forwardRef<
       <MessageEditorToolbarTranslateTool />
       <div ref={ref} {...props} className="flex items-center">
         <MessageEditorToolbarLangControl />
-        <Button.Icon onClick={open} color="default" size="sm" variant="ghost">
+        <Button.Icon onClick={open} color="default" size="xs" variant="ghost">
           <FilePlus2 />
         </Button.Icon>
         <MessageEditorToolbarMic />

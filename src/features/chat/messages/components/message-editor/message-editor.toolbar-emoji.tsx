@@ -22,7 +22,7 @@ export const MessageEditorToolbarEmoji = (
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button.Icon variant="ghost" color="default" size="sm">
+        <Button.Icon variant="ghost" color="default" size="xs">
           <Smile />
         </Button.Icon>
       </PopoverTrigger>

@@ -3,7 +3,6 @@ import { Fragment, createContext, forwardRef, useContext } from 'react';
 import { Avatar } from '@/components/data-display';
 import { DocumentMessage } from './message-item.document';
 import { ImageGallery } from './message-item.image-gallery';
-import { Menu } from './menu';
 import { Message } from '@/features/chat/messages/types';
 import { MessageItemSystem } from './message-item.system';
 import { MessageItemWrapper } from './message-item.wrapper';
@@ -67,7 +66,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
         ) : (
           <>
             <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
-            <MessageItemWrapper>
+            <div
+              className={cn(
+                'group relative flex',
+                isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
+                isPending && 'opacity-50',
+              )}
+            >
               {showAvatar ? (
                 <Avatar
                   className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0"
@@ -77,7 +82,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               ) : (
                 <div className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0" />
               )}
-              <div className="relative">
+              <MessageItemWrapper>
                 <div
                   {...props}
                   ref={ref}
@@ -102,9 +107,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   )}
                 </div>
                 {isPending && <PendingStatus />}
-                <Menu isMe={isMe} message={message} />
-              </div>
-            </MessageItemWrapper>
+              </MessageItemWrapper>
+            </div>
           </>
         )}
       </MessageItemContext.Provider>

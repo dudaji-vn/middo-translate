@@ -23,7 +23,7 @@ export const MessageEditorToolbarMic = (
         <Button.Icon
           onClick={handleStopListening}
           variant="ghost"
-          size="sm"
+          size="xs"
           color="primary"
         >
           <Mic />
@@ -39,7 +39,7 @@ export const MessageEditorToolbarMic = (
             }
           }}
           variant="ghost"
-          size="sm"
+          size="xs"
           color="default"
         >
           <Mic />

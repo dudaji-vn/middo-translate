@@ -33,14 +33,14 @@ export const MessageEditorToolbarLangControl = (
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="auto">
-            <Globe2Icon className="mr-2 inline-block h-5 w-5 text-primary" />
+            <Globe2Icon className="mr-2 inline-block h-4 w-4 text-primary" />
             Detection
           </SelectItem>
           <SelectItem value={userLanguage}>
             <CircleFlag
               countryCode={getCountryCode(userLanguage) ?? 'gb'}
-              height="20"
-              width="20"
+              height="16"
+              width="16"
               className="mr-2 inline-block"
             />
             <span>{getCountryNameByCode(userLanguage)}</span>
@@ -49,8 +49,8 @@ export const MessageEditorToolbarLangControl = (
             <SelectItem value={detLang}>
               <CircleFlag
                 countryCode={getCountryCode(detLang) ?? 'gb'}
-                height="20"
-                width="20"
+                height="16"
+                width="16"
                 className="mr-2 inline-block"
               />
               <span>{getCountryNameByCode(detLang)}</span>
