@@ -2,16 +2,16 @@
 
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/form/Button';
-import { InputField } from '@/components/form/InputField';
-import { InputImage } from '@/components/form/InputImage';
-import { InputSelectLanguage } from '@/components/form/InputSelectLanguage';
-import { PageLoading } from '@/components/loading/PageLoading';
+import { Button } from '@/components/form/button';
+import { InputField } from '@/components/form/Input-field';
+import { InputImage } from '@/components/form/input-image';
+import { InputSelectLanguage } from '@/components/form/input-select-language';
+import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { addInfoUserService } from '@/services/authService';
+import { addInfoUserService } from '@/services/auth.service';
 import { CreateNewAccountSchema as schema } from '@/configs/yup-form';
 import { uploadImage } from '@/utils/upload-img';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';

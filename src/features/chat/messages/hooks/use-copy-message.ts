@@ -1,6 +1,6 @@
 import { Message } from '../types';
-import { translateText } from '@/services/languages';
-import { useAuthStore } from '@/stores/auth';
+import { translateText } from '@/services/languages.service';
+import { useAuthStore } from '@/stores/auth.store';
 import { useTextCopy } from '@/hooks/use-text-copy';
 
 export const useCopyMessage = () => {

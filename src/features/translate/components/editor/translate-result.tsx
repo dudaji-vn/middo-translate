@@ -9,7 +9,7 @@ import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
-import { useTranslateStore } from '@/stores/translate';
+import { useTranslateStore } from '@/stores/translate.store';
 
 export interface TranslateResultProps {
   result: string;

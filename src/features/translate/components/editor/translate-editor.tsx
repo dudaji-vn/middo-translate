@@ -15,7 +15,7 @@ import { useDebounce } from 'usehooks-ts';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
-import { useTranslateStore } from '@/stores/translate';
+import { useTranslateStore } from '@/stores/translate.store';
 
 export interface TranslateEditorProps {
   className?: string;

@@ -48,4 +48,4 @@ export type Media = {
   height?: number;
 };
 
-export * from './auth';
+export * from './auth.type';

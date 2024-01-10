@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/form/Button';
+import { Button } from '@/components/form/button';
 import Image from 'next/image';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter } from 'next/navigation';

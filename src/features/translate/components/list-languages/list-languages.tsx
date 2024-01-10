@@ -9,7 +9,7 @@ import {
 import { addRecentlyUsed, getRecentlyUsed } from '@/utils/local-storage';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 
-import { Country } from '@/types/country';
+import { Country } from '@/types/country.type';
 import { Input } from '@/components/data-entry';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
@@ -26,9 +26,8 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
     const [search, setSearch] = useState('');
     const searchRef = useRef<any>(null);
 
-    const [recentlyUsed, setRecentlyUsed] = useState<string[]>(
-      getRecentlyUsed(),
-    );
+    const [recentlyUsed, setRecentlyUsed] =
+      useState<string[]>(getRecentlyUsed());
     const handleSelected = (code: string) => {
       const newRecentlyUsed = addRecentlyUsed(code);
       setRecentlyUsed(newRecentlyUsed);

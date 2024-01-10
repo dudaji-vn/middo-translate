@@ -1,15 +1,15 @@
 import { Fragment, createContext, forwardRef, useContext } from 'react';
 
 import { Avatar } from '@/components/data-display';
-import { DocumentMessage } from './message-item.document';
-import { ImageGallery } from './message-item.image-gallery';
+import { DocumentMessage } from './message-item-document';
+import { ImageGallery } from './message-item-image-gallery';
 import { Message } from '@/features/chat/messages/types';
-import { MessageItemSystem } from './message-item.system';
-import { MessageItemWrapper } from './message-item.wrapper';
+import { MessageItemSystem } from './message-item-system';
+import { MessageItemWrapper } from './message-item-wrapper';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
-import { SeenTracker } from './message-item.seen-tracker';
-import { TextMessage } from './message-item.text';
+import { SeenTracker } from './message-item-seen-tracker';
+import { TextMessage } from './message-item-text';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';

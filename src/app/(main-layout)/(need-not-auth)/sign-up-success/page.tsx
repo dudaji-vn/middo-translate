@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { Button } from '@/components/form/Button';
+import { Button } from '@/components/form/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { resendEmailService } from '@/services/authService';
+import { resendEmailService } from '@/services/auth.service';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 

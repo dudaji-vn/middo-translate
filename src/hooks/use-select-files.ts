@@ -5,7 +5,7 @@ import {
 } from '@/utils/upload-media';
 
 import { useDropzone } from 'react-dropzone';
-import { useModalStore } from '@/stores/modal-store';
+import { useModalStore } from '@/stores/modal.store';
 import { useState } from 'react';
 
 const MAX_FILE_SIZE = 25;

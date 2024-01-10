@@ -2,8 +2,8 @@
 
 import { useParams, usePathname } from 'next/navigation';
 
-import ChatSidebarHeader from './chat-sidebar.header';
-import { ChatSidebarTabs } from './chat-sidebar.tabs';
+import ChatSidebarHeader from './chat-sidebar-header';
+import { ChatSidebarTabs } from './chat-sidebar-tabs';
 import { PropsWithChildren } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';

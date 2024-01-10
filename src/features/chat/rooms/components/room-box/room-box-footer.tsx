@@ -12,10 +12,11 @@ import { Message } from '@/features/chat/messages/types';
 import { createLocalMessage } from '@/features/chat/messages/utils';
 import { messageApi } from '@/features/chat/messages/api';
 import { roomApi } from '@/features/chat/rooms/api';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts/chat-box-context';
-import { useMessagesBox } from '@/features/chat/messages/contexts';
+
 import { useMutation } from '@tanstack/react-query';
+import { useMessagesBox } from '@/features/chat/messages/components/message-box';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
