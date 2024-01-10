@@ -6,7 +6,7 @@ export * from './copy-img-icon';
 export * from './multiple-copy-icon';
 export * from './svg-spinners-gooey-balls2';
 export * from './qr-code-icon';
-export * from './SvgSpinners270RingWithBg';
+export * from './svg-spinners-270-ring-with-bg';
 export * from './chat-download-icon';
 export * from './message-plus-icon';
 export * from './message-bubble-icon';

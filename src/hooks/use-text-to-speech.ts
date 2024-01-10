@@ -1,5 +1,5 @@
 import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
-import { textToSpeech } from '@/services/voices';
+import { textToSpeech } from '@/services/voices.service';
 
 export const useTextToSpeech = (languageCode?: string, _text?: string) => {
   const speak = (text?: string) => {

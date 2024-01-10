@@ -2,7 +2,7 @@
 
 import { forwardRef, useEffect } from 'react';
 
-import { useTranslateStore } from '@/stores/translate';
+import { useTranslateStore } from '@/stores/translate.store';
 
 export interface DetectTranslateWayProps
   extends React.HTMLAttributes<HTMLDivElement> {

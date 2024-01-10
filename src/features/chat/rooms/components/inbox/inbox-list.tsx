@@ -9,7 +9,7 @@ import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useParams } from 'next/navigation';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';

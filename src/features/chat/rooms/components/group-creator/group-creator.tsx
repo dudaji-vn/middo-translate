@@ -1,5 +1,5 @@
-import { GroupCreateFooter } from './group-creator.footer';
-import { GroupCreateHeader } from './group-creator.header';
+import { GroupCreateFooter } from './group-creator-footer';
+import { GroupCreateHeader } from './group-creator-header';
 import { SearchList } from '../search-list';
 import { SuggestionList } from '../suggestion-list';
 import { useGroupCreateSide } from './group-creator.hook';

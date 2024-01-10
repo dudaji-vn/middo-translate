@@ -1,15 +1,15 @@
 import {
   RoomItemActionWrapper,
   RoomItemActionWrapperDisabled,
-} from './room-item.action-wrapper';
+} from './room-item-action-wrapper';
 import { createContext, forwardRef, memo, useContext, useMemo } from 'react';
 
-import { ItemAvatar } from './room-item.avatar';
-import { ItemSub } from './room-item.sub';
+import { ItemAvatar } from './room-item-avatar';
+import { ItemSub } from './room-item-sub';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
-import { RoomItemHead } from './room-item.head';
-import { RoomItemWrapper } from './room-item.wrapper';
+import { RoomItemHead } from './room-item-head';
+import { RoomItemWrapper } from './room-item-wrapper';
 import { User } from '@/features/users/types';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';

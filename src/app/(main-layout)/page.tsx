@@ -12,7 +12,7 @@ import {
   ImgCopy,
   TextCopy,
 } from '@/features/translate/components/copy-to-clipboard';
-import { detectLanguage, translateText } from '@/services/languages';
+import { detectLanguage, translateText } from '@/services/languages.service';
 
 import { CompareProvider } from '@/features/translate/context';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';

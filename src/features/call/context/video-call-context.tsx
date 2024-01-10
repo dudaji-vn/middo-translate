@@ -16,7 +16,7 @@ import { SOCKET_CONFIG } from '@/configs/socket';
 import SimplePeer from 'simple-peer';
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 import socket from '@/lib/socket-io';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useVideoCallStore } from '../store';
 
 interface VideoCallContextProps {
