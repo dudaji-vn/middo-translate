@@ -45,7 +45,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
 
     return (
       <div className="relative w-full overflow-hidden rounded-full border bg-background transition-all">
-        <div className="flex h-[48px] pl-3 transition-all">
+        <div className="flex h-11 pl-3 transition-all">
           <input
             value={value}
             ref={inputRef}

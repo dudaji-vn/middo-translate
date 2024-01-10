@@ -13,7 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useState } from 'react';
 
 type Props = {};
@@ -93,7 +93,7 @@ export const Header = (props: Props) => {
 
             <span
               className={
-                'md:group-hover:text-primary-500-main  hidden font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent'
+                'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
               }
             >
               Sign in

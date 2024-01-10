@@ -1,12 +1,12 @@
 'use client';
 
-import { AlertError } from '@/components/Alert/AlertError';
-import { Button } from '@/components/form/Button';
-import { InputField } from '@/components/form/InputField';
+import { AlertError } from '@/components/alert/alert-error';
+import { Button } from '@/components/form/button';
+import { InputField } from '@/components/form/Input-field';
 import Link from 'next/link';
-import { PageLoading } from '@/components/loading/PageLoading';
+import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { forgotPasswordService } from '@/services/authService';
+import { forgotPasswordService } from '@/services/auth.service';
 import { ForgotPasswordSchema as schema } from '@/configs/yup-form';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';

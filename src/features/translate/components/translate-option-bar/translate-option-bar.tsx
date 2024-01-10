@@ -14,7 +14,7 @@ import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
 import toast from 'react-hot-toast';
 import { useSetParams } from '@/hooks/use-set-params';
-import { useTranslateStore } from '@/stores/translate';
+import { useTranslateStore } from '@/stores/translate.store';
 import { useWindowSize } from 'usehooks-ts';
 
 export interface TranslateOptionBarProps

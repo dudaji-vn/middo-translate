@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from 'react';
 
-import { AlertError } from '@/components/Alert/AlertError';
-import { Button } from '@/components/form/Button';
+import { AlertError } from '@/components/alert/alert-error';
+import { Button } from '@/components/form/button';
 import { GoogleIcon } from '@/components/icons';
 import Image from 'next/image';
-import { InputField } from '@/components/form/InputField';
+import { InputField } from '@/components/form/Input-field';
 import Link from 'next/link';
 import { Button as MyButton } from '@/components/actions/button';
-import { PageLoading } from '@/components/loading/PageLoading';
+import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { loginService } from '@/services/authService';
+import { loginService } from '@/services/auth.service';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';

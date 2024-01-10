@@ -5,8 +5,11 @@ import {
 } from '@/features/chat/rooms/components';
 
 import { ChatBoxProvider } from '@/features/chat/rooms/contexts';
-import { MessageBox } from '@/features/chat/messages/components/message-box';
-import { MessagesBoxProvider } from '@/features/chat/messages/contexts';
+import {
+  MessageBox,
+  MessagesBoxProvider,
+} from '@/features/chat/messages/components/message-box';
+
 import { Response } from '@/types';
 import { Room } from '@/features/chat/rooms/types';
 import { fetchApi } from '@/utils/data-fetching';

@@ -5,7 +5,7 @@ import { Button, useCapture } from '@/components/actions';
 import { CopyImgIcon } from '@/components/icons';
 import { forwardRef } from 'react';
 import { useCompare } from '@/features/translate/context';
-import { useTranslateStore } from '@/stores/translate';
+import { useTranslateStore } from '@/stores/translate.store';
 
 export interface ImgCopyProps extends React.HTMLAttributes<HTMLDivElement> {}
 

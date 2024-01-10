@@ -12,7 +12,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { RoomAddMember } from './room-add-member';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts';
 import { useRemoveMember } from '../../hooks/use-remove-members';
 import { useState } from 'react';

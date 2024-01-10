@@ -2,6 +2,7 @@
 
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/actions';
+import { RoomActions } from '../room-actions';
 import { RoomCloud } from './room-cloud';
 import { RoomDeleteConversation } from './room-delete-conversation';
 import { RoomInfo } from './room-info';
@@ -18,7 +19,7 @@ export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
     const { room, showSide, toggleSide } = useChatBox();
 
     return (
-      <>
+      <RoomActions>
         {showSide && (
           <div
             ref={ref}
@@ -45,7 +46,7 @@ export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
             <RoomDeleteConversation isGroup={room.isGroup} roomId={room._id} />
           </div>
         )}
-      </>
+      </RoomActions>
     );
   },
 );

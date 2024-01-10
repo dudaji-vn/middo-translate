@@ -6,7 +6,7 @@ import { forwardRef } from 'react';
 import { getCountryCode } from '@/utils/language-fn';
 import { useCompare } from '@/features/translate/context';
 import { useTextCopy } from '@/hooks/use-text-copy';
-import { useTranslateStore } from '@/stores/translate';
+import { useTranslateStore } from '@/stores/translate.store';
 
 export interface TextCopyProps extends React.HTMLAttributes<HTMLDivElement> {
   sourceText: string;

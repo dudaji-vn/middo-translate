@@ -10,7 +10,7 @@ import { RoomUpdateAvatar } from './room-update-avatar';
 import { RoomUpdateName } from './room-update-name';
 import { Spinner } from '@/components/feedback';
 import { generateRoomDisplay } from '../../utils';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 
 export interface RoomInfoProps {
   room: Room;

@@ -1,7 +1,7 @@
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
-import { detectLanguage, translateText } from '@/services/languages';
+import { detectLanguage, translateText } from '@/services/languages.service';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from 'usehooks-ts';

@@ -4,7 +4,7 @@ import SpeechRecognition, {
 import { useEffect, useState } from 'react';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { translateText } from '@/services/languages';
+import { translateText } from '@/services/languages.service';
 import { useDebounce } from 'usehooks-ts';
 
 export const useTranslate = ({

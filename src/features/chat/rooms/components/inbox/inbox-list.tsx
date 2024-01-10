@@ -1,18 +1,15 @@
 import { forwardRef, memo, useEffect, useMemo } from 'react';
 
-import { Button } from '@/components/actions';
 import { InboxType } from './inbox';
 import { InfiniteScroll } from '@/components/infinity-scroll';
-import { MessagePlusIcon } from '@/components/icons';
 import { Room } from '../../types';
 import { RoomItem } from '../room-item';
-import { RoomItemActionWrapper } from '../room-item/room-item.action-wrapper';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useParams } from 'next/navigation';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
@@ -29,7 +26,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const params = useParams();
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
-    const { changeSide } = useSidebarTabs();
+
     const key = useMemo(() => ['rooms', type], [type]);
 
     const {
@@ -39,6 +36,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       isLoading,
       removeItem,
       updateItem,
+      addItem,
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
@@ -58,6 +56,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     };
 
     useEffect(() => {
+      socket.on(SOCKET_CONFIG.EVENTS.ROOM.NEW, (payload: Room) => {
+        addItem(payload);
+      });
       socket.on(
         SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
@@ -72,6 +73,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       });
       return () => {
         socket.off(SOCKET_CONFIG.EVENTS.ROOM.UPDATE);
+        socket.off(SOCKET_CONFIG.EVENTS.ROOM.DELETE);
+        socket.off(SOCKET_CONFIG.EVENTS.ROOM.LEAVE);
+        socket.off(SOCKET_CONFIG.EVENTS.ROOM.NEW);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -79,26 +83,12 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!currentUser) return null;
     if (rooms.length === 0 && !isLoading) {
       return (
-        <>
-          <div className="mt-10 bg-card px-4 text-center">
-            <Typography variant="h3">Welcome to Middo conversation!</Typography>
-            <Typography variant="muted" className="mt-3 block opacity-60">
-              Press button belows to start a conversation
-            </Typography>
-          </div>
-          <div className="absolute bottom-10 right-5">
-            {
-              <div className="absolute left-0 top-0 h-full w-full animate-ping-cs rounded-full border border-secondary"></div>
-            }
-            <Button.Icon
-              size="lg"
-              onClick={() => changeSide('individual')}
-              className="relative shadow-3"
-            >
-              <MessagePlusIcon />
-            </Button.Icon>
-          </div>
-        </>
+        <div className="mt-10 bg-card px-4 text-center">
+          <Typography variant="h3">Welcome to Middo conversation!</Typography>
+          <Typography variant="muted" className="mt-3 block opacity-60">
+            Press button belows to start a conversation
+          </Typography>
+        </div>
       );
     }
 
@@ -119,25 +109,15 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             className="flex flex-col"
           >
             {rooms.map((room) => (
-              <RoomItemActionWrapper key={room._id} room={room}>
-                <RoomItem
-                  data={room}
-                  isActive={currentRoomId === room._id}
-                  currentUser={currentUser!}
-                  currentRoomId={currentRoomId as string}
-                />
-              </RoomItemActionWrapper>
+              <RoomItem
+                key={room._id}
+                data={room}
+                isActive={currentRoomId === room._id}
+                currentUser={currentUser!}
+                currentRoomId={currentRoomId as string}
+              />
             ))}
           </InfiniteScroll>
-        </div>
-        <div className="absolute bottom-10 right-5">
-          <Button.Icon
-            size="lg"
-            onClick={() => changeSide('individual')}
-            className="relative shadow-3"
-          >
-            <MessagePlusIcon />
-          </Button.Icon>
         </div>
       </div>
     );

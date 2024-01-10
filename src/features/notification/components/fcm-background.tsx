@@ -14,7 +14,7 @@ import { useNotification } from '../hooks/use-notification';
 export interface FCMBackgroundProps {}
 
 export const FCMBackground = (props: FCMBackgroundProps) => {
-  const { isShowRequestPermission, setPermission, setFcmToken } =
+  const { isShowRequestPermission, setPermission, setIsSubscribed } =
     useNotification();
 
   const [toastId, setToastId] = useState<string | undefined>(undefined);
@@ -32,9 +32,8 @@ export const FCMBackground = (props: FCMBackgroundProps) => {
             vapidKey: NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY,
           });
           if (currentToken) {
-            console.log('current token for client: ', currentToken);
-            setFcmToken(currentToken);
-            notificationApi.subscribe(currentToken);
+            await notificationApi.subscribe(currentToken);
+            setIsSubscribed(true);
           } else {
             console.log(
               'No registration token available. Request permission to generate one.',

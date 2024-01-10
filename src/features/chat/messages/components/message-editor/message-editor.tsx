@@ -1,18 +1,18 @@
 'use client';
 
-import { TextInput, TextInputRef } from './message-editor.text-input';
-import { detectLanguage, translateText } from '@/services/languages';
+import { TextInput, TextInputRef } from './message-editor-text-input';
+import { detectLanguage, translateText } from '@/services/languages.service';
 import { forwardRef, useRef } from 'react';
 
 import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { FileWithUrl } from '@/hooks/use-select-files';
 import { Media } from '@/types';
-import { MessageEditorForm } from './message-editor.form';
-import { MessageEditorMediaBar } from './message-editor.media-bar';
-import { MessageEditorMediaProvider } from './message-editor.media-context';
-import { MessageEditorTextProvider } from './message-editor.text-context';
-import { MessageEditorToolbar } from './message-editor.toolbar';
+import { MessageEditorForm } from './message-editor-form';
+import { MessageEditorMediaBar } from './message-editor-media-bar';
+import { MessageEditorMediaProvider } from './message-editor-media-context';
+import { MessageEditorTextProvider } from './message-editor-text-context';
+import { MessageEditorToolbar } from './message-editor-toolbar';
 import { Send } from 'lucide-react';
 import { useChatStore } from '@/features/chat/store';
 
@@ -99,7 +99,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
                 </div>
                 <MessageEditorMediaBar />
               </div>
-              <Button.Icon type="submit" size="sm" color="primary">
+              <Button.Icon type="submit" size="xs" color="primary">
                 <Send />
               </Button.Icon>
             </div>
