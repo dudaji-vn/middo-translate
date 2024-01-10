@@ -15,6 +15,7 @@ export type VideoCallState = {
     removeParticipantShareScreen: (socketId: string) => void;
     addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => void;
     removeUsersRequestJoinRoom: (socketId: string) => void;
+    pinParticipant: (socketId: string, isShareScreen: boolean) => void;
 };
 
 export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
@@ -65,4 +66,20 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
     removeUsersRequestJoinRoom: (socketId: string) => {
         set((state) => ({ usersRequestJoinRoom: state.usersRequestJoinRoom.filter((u) => u.socketId != socketId) }));
     },
+    pinParticipant: (socketId: string, isShareScreen: boolean) => {
+        set((state) => ({
+            participants: state.participants.map((p) => {
+                if (p.socketId == socketId && (p.isShareScreen || false) == (isShareScreen || false)) {
+                    return {
+                        ...p,
+                        pin: true
+                    };
+                }
+                return {
+                    ...p,
+                    pin: false
+                };
+            }),
+        }));
+    }
 }));

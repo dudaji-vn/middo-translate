@@ -5,18 +5,21 @@ export type MyVideoCallState = {
     myStream: MediaStream | undefined;
     isShareScreen: boolean;
     isTurnOnCamera: boolean;
-    isMute: boolean;
+    isTurnOnMic: boolean;
+    shareScreenStream: MediaStream | undefined;
     setMyStream: (stream?: MediaStream) => void;
     setShareScreen: (isShareScreen: boolean) => void;
     setTurnOnCamera: (isTurnOnCamera: boolean) => void;
-    setMute: (isMute: boolean) => void;
+    setTurnOnMic: (isTurnOnMic: boolean) => void;
+    setShareScreenStream: (stream?: MediaStream) => void;
 };
 
 export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
     myStream: undefined,
     isShareScreen: false,
     isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera,
-    isMute: DEFAULT_USER_CALL_STATE.isMute,
+    isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic,
+    shareScreenStream: undefined,
     setMyStream: (stream?: MediaStream) => {
         set(() => ({ myStream: stream }));
     },
@@ -26,7 +29,10 @@ export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
     setTurnOnCamera: (isTurnOnCamera: boolean) => {
         set(() => ({ isTurnOnCamera }));
     },
-    setMute: (isMute: boolean) => {
-        set(() => ({ isMute }));
+    setTurnOnMic: (isTurnOnMic: boolean) => {
+        set(() => ({ isTurnOnMic }));
+    },
+    setShareScreenStream: (stream?: MediaStream) => {
+        set(() => ({ shareScreenStream: stream }));
     }
 }));

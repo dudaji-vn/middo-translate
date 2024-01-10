@@ -5,4 +5,5 @@ export default interface ParicipantInVideoCall {
     stream?: MediaStream;
     isShareScreen?: boolean;
     socketId: string;
+    pin?: boolean;
 }
