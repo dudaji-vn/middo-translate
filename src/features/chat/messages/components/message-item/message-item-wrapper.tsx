@@ -14,10 +14,17 @@ import { actionItems, useMessageActions } from '../message-actions';
 
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
-import { MoreVerticalIcon } from 'lucide-react';
+import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useMessageItem } from '.';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/data-display/popover';
+import EmojiPicker from 'emoji-picker-react';
+import { useReactMessage } from '../../hooks';
 
 export interface MessageItemWrapperProps {}
 
@@ -49,7 +56,7 @@ export const MessageItemWrapper = (
   }, [isMe, message]);
 
   const Wrapper = useMemo(() => {
-    if (message.status === 'removed') return Fragment;
+    if (message.status === 'removed') return RemovedWrapper;
     if (isMobile) return MobileWrapper;
     return DesktopWrapper;
   }, [isMobile, message.status]);
@@ -94,7 +101,8 @@ const DesktopWrapper = ({
 }: PropsWithChildren & {
   items: any[];
 }) => {
-  const { isMe } = useMessageItem();
+  const { isMe, message } = useMessageItem();
+  const { mutate } = useReactMessage();
 
   return (
     <>
@@ -130,7 +138,37 @@ const DesktopWrapper = ({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button.Icon size="xs" variant="ghost" color="default">
+              <SmilePlusIcon />
+            </Button.Icon>
+          </PopoverTrigger>
+          <PopoverContent
+            align="end"
+            className={cn('w-fit border-none !bg-transparent p-0 shadow-none')}
+          >
+            <EmojiPicker
+              skinTonesDisabled
+              previewConfig={{ showPreview: false }}
+              lazyLoadEmojis
+              searchDisabled
+              autoFocusSearch={false}
+              height={320}
+              onEmojiClick={(emojiObj) => {
+                mutate({ id: message._id, emoji: emojiObj.emoji });
+              }}
+            />
+          </PopoverContent>
+        </Popover>
       </div>
     </>
   );
+};
+
+const RemovedWrapper = ({
+  children,
+  items,
+}: PropsWithChildren & { items: any[] }) => {
+  return <>{children}</>;
 };

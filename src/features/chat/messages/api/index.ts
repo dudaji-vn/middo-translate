@@ -23,8 +23,18 @@ export const messageApi = {
     });
     return res.data;
   },
-  async seenMessage(id: string) {
+  async seen(id: string) {
     const res: Response<Message> = await axios.patch(`${basePath}/${id}/seen`);
+    return res.data;
+  },
+
+  async react({ id, emoji }: { id: string; emoji: string }) {
+    const res: Response<Message> = await axios.patch(
+      `${basePath}/${id}/react`,
+      {
+        emoji,
+      },
+    );
     return res.data;
   },
 };
