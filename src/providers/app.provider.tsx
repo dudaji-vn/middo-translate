@@ -12,6 +12,7 @@ import { ReactQueryProvider } from './react-query.provider';
 import { SideEffectProvider } from './side-effect.provider';
 import SocketProvider from './socket.provider';
 import { Toaster } from 'react-hot-toast';
+import { TooltipProvider } from '@/components/data-display/tooltip';
 
 type Props = {};
 
@@ -32,7 +33,9 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
       <SocketProvider />
       <BootstrapProvider />
       <CommonComponent />
-      <ReactQueryProvider>{props.children}</ReactQueryProvider>
+      <TooltipProvider>
+        <ReactQueryProvider>{props.children}</ReactQueryProvider>
+      </TooltipProvider>
       <SideEffectProvider />
       <ModalProvider />
     </>

@@ -6,6 +6,10 @@ import { VariantProps } from 'class-variance-authority';
 import { messageVariants } from '../components/message-item/variants';
 
 export type MessageType = 'text' | 'media' | 'call' | 'notification' | 'action';
+export type Reaction = {
+  emoji: string;
+  user: User;
+};
 export type MessageStatus = Pick<
   VariantProps<typeof messageVariants>,
   'status'
@@ -23,4 +27,5 @@ export type Message = {
   type: MessageType;
   status: MessageStatus;
   language: string;
+  reactions?: Reaction[];
 } & BaseEntity;

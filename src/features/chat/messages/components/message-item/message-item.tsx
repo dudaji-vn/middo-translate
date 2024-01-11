@@ -14,6 +14,7 @@ import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { messageVariants } from './variants';
+import { MessageItemReactionBar } from './message-item-reaction-bar';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -107,6 +108,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   )}
                 </div>
                 {isPending && <PendingStatus />}
+                {message?.reactions && message.reactions.length > 0 && (
+                  <MessageItemReactionBar message={message} />
+                )}
               </MessageItemWrapper>
             </div>
           </>

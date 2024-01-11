@@ -17,7 +17,7 @@ export const SeenTracker = ({ onSeen }: SeenTrackProps) => {
   const isRead = message.readBy?.includes(userId);
 
   const { mutate } = useMutation({
-    mutationFn: messageApi.seenMessage,
+    mutationFn: messageApi.seen,
   });
 
   if (isRead || message.status === 'pending') {

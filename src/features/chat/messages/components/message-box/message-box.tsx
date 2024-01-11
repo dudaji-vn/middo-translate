@@ -17,7 +17,7 @@ import { useAuthStore } from '@/stores/auth.store';
 
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
-import { useMessagesBox } from '.';
+import { useMessagesBox } from './messages-box.context';
 
 const maxTimeDiff = 5; // 5 minutes
 const maxTimeGroupDiff = 10; // 10 minutes
