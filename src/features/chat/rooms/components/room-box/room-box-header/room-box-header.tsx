@@ -56,11 +56,15 @@ const ActionBar = () => {
 };
 const VideoCall = ({roomId}: {roomId: string}) => {
   const router = useRouter();
-  const { setRoom } = useVideoCallStore();
+  const { setRoom, room, setTempRoom } = useVideoCallStore();
   const startVideoCall = async () => {
     let res = await joinVideoCallRoom({roomId});
     if(res.data.status === STATUS.JOIN_SUCCESS) {
-      setRoom(res.data?.room)
+      if(!room) {
+        setRoom(res.data?.room)
+      } else {
+        setTempRoom(res.data?.room)
+      }
     } else {
       toast.error('Error when join room');
     }

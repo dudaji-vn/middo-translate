@@ -50,7 +50,7 @@ const VideoItem = ({ participant }: VideoItemProps) => {
 
               />
             </div>
-            {isFullScreen && <span className="relative leading-none mt-1 block text-center">{trimLongName(participant?.user?.name) || ''}</span>}
+            {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && <span className="relative leading-none mt-1 block text-center">{trimLongName(participant?.user?.name) || ''}</span>}
           </div>
           <video
             ref={videoRef}
@@ -60,10 +60,11 @@ const VideoItem = ({ participant }: VideoItemProps) => {
             playsInline
             controls={false}
           ></video>
-          <div className='cursor-pointer md:opacity-0 opacity-100 transition-all hover:opacity-100 absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-white gap-1' onClick={expandVideoItem}>
+          <div className='cursor-pointer opacity-0 transition-all hover:opacity-100 absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-white gap-1' onClick={expandVideoItem}>
             <Fullscreen className='w-6 h-6' />
             {isFullScreen && layout !== VIDEOCALL_LAYOUTS.FOCUS_VIEW && <p className='text-center'>Click to expand</p>}
           </div>
+          
           <p className='leading-none absolute bottom-1 left-1 text-white text-sm cursor-none pointer-events-none'>
             {participant.isMe ? "You" : (trimLongName(participant?.user?.name) || '')}
             {participant?.isShareScreen ? "  (Screen)" : ""}

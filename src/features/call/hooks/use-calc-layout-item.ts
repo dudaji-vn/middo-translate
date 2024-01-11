@@ -33,7 +33,8 @@ export default function useCalcLayoutItem(elementRef: React.RefObject<HTMLElemen
         if(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen) {
             className.push('w-full')
         } else {
-            className.push('w-1/4')
+            className.push('md:w-1/4')
+            className.push('w-1/2')
         }
         // switch (true) {
         //     case length % 4 === 0:

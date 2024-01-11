@@ -7,6 +7,7 @@ import { DoodleArea } from "../common/doodle-area";
 import { useVideoCallStore } from "../../store/video-call";
 import { useParticipantVideoCallStore } from "../../store/participant";
 import DoodleItem from "./doodle-item";
+import ParicipantInVideoCall from "../../interfaces/participant";
 
 const FocusScreenView = () => {
     const { isDoodle, isPinDoodle } = useVideoCallStore();
@@ -28,9 +29,15 @@ const FocusScreenView = () => {
                     <div className="overflow-auto">
                         <div className="flex items-center h-[68px]">
                             {isDoodle && <div className="max-w-[100px] min-w-[60px] !h-[60px]"><DoodleItem /></div>}
-                            {participants?.map((participant: any) => (
-                                <div key={participant.socketId + participant.isShareScreen} 
-                                className="max-w-[100px] min-w-[60px] !h-[60px]">
+                            {participants?.filter((p: ParicipantInVideoCall) => p.isShareScreen).map((participant: ParicipantInVideoCall) => (
+                                <div key={participant.socketId + participant.isShareScreen}
+                                    className="max-w-[100px] min-w-[60px] !h-[60px]">
+                                    <VideoItem participant={participant} />
+                                </div>
+                            )) || []}
+                            {participants?.filter((p: ParicipantInVideoCall) => !p.isShareScreen).map((participant: ParicipantInVideoCall) => (
+                                <div key={participant.socketId + participant.isShareScreen}
+                                    className="max-w-[100px] min-w-[60px] !h-[60px]">
                                     <VideoItem participant={participant} />
                                 </div>
                             )) || []}

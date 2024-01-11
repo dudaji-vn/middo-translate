@@ -2,12 +2,14 @@
 
 import {
   Brush,
+  LayoutGrid,
   MessageSquare,
   Mic,
   MicOff,
   MonitorUp,
   MoreVertical,
   Phone,
+  ScanText,
   Subtitles,
   TextSelect,
   Users2Icon,
@@ -26,14 +28,16 @@ import { useMyVideoCallStore } from '../store/me';
 import ParicipantInVideoCall from '../interfaces/participant';
 import socket from '@/lib/socket-io';
 import { Button } from '@/components/actions';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
+import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 
 export interface VideoCallBottomProps { }
 
 export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   const { setConfirmLeave } = useVideoCallStore();
   const { isTurnOnMic, isTurnOnCamera, setTurnOnMic, setTurnOnCamera, myStream } = useMyVideoCallStore()
-  const { participants } = useParticipantVideoCallStore()
-  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen } = useVideoCallStore();
+  const { participants, clearPinParticipant } = useParticipantVideoCallStore()
+  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setPinDoodle, setPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption } = useVideoCallStore();
   const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
   const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
@@ -55,6 +59,9 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   const handleLeave = () => {
     setConfirmLeave(true);
   };
+  const changeLayout = () => {
+    setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
+  }
   const handleUpdatePeerMedia = (newMediaStream: MediaStream) => {
     participants.forEach(async (p: ParicipantInVideoCall) => {
       if (p.isMe || !p.peer) return;
@@ -123,20 +130,42 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     })
   }
   return (
-    <section className={twMerge("flex items-center justify-between",
-    isFullScreen ? "bg-black/70 p-3 md:gap-6 gap-2 rounded-xl absolute bottom-2 right-1/2 translate-x-1/2" : "border-b border-t border-neutral-50 p-1")}>
-      <div className="flex gap-6 justify-center w-full">
+    <section className={twMerge("flex items-center justify-between z-20",
+    isFullScreen ? "bg-black/70 p-3 rounded-xl absolute bottom-2 right-1/2 translate-x-1/2" : "border-b border-t border-neutral-50 p-1")}>
+      <div className="flex md:gap-6 gap-2 justify-center w-full">
+      <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button.Icon  
+            variant='default'
+            color='default'
+            className={`${!isFullScreen ? 'hidden' : ''}`}
+            >
+              <MoreVertical />
+            </Button.Icon>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+              <DropdownMenuItem onClick={changeLayout}>
+                <LayoutGrid />
+                <span className='ml-2'>Galery View</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled={!haveShareScreen || !isFullScreen || !isPinShareScreen} onClick={onDoodle}>
+                <Brush />
+                <span className='ml-2'>Screen Doodle</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setShowCaption(!isShowCaption)}
+                className={isShowCaption ? 'bg-primary-200' : ''}
+              >
+                <ScanText />
+                <span className='ml-2'>Caption</span>
+              </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <Button.Icon
           variant='default'
-          color='default'
+          color={isShowChat ? 'primary' : 'default'}
           className={`${!isFullScreen ? 'hidden' : ''}`}
-        >
-          <MoreVertical/>
-        </Button.Icon>
-        <Button.Icon
-          variant='default'
-          color='default'
-          className={`${!isFullScreen ? 'hidden' : ''}`}
+          onClick={() => setShowChat(!isShowChat)}
         >
           <Subtitles/>
         </Button.Icon>
@@ -148,13 +177,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         >
           <MonitorUp/>
         </Button.Icon>
-        <Button.Icon
-          variant='default'
-          color={(isDoodle && isDrawing) ? 'primary' : 'default'}
-          className={`${(!haveShareScreen || !isFullScreen || !isPinShareScreen) && 'hidden'}`}
-          onClick={onDoodle}>
-          <Brush/>
-        </Button.Icon>
+        
         <Button.Icon
           variant='default'
           color={isTurnOnCamera ? 'primary' : 'default'}
