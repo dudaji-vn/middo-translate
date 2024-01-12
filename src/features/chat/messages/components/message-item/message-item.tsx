@@ -141,7 +141,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 </MessageItemWrapper>
               </div>
               {message?.reactions && message.reactions.length > 0 && (
-                <MessageItemReactionBar message={message} />
+                <MessageItemReactionBar isMe={isMe} message={message} />
               )}
             </div>
           </>

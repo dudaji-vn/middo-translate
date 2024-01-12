@@ -5,14 +5,17 @@ import {
   TooltipTrigger,
 } from '@/components/data-display';
 
+import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 
 export interface MessageItemReactionBarProps {
   message: Message;
+  isMe: boolean;
 }
 
 export const MessageItemReactionBar = ({
   message,
+  isMe,
 }: MessageItemReactionBarProps) => {
   const reactions = message.reactions || [];
   const reactionsByEmoji = reactions.reduce(
@@ -28,7 +31,12 @@ export const MessageItemReactionBar = ({
   );
 
   return (
-    <div className="mb-1 mt-0.5 flex h-5 justify-end">
+    <div
+      className={cn(
+        'mb-1 mt-0.5 flex h-5',
+        isMe ? 'justify-end' : 'justify-start pl-8 md:pl-8',
+      )}
+    >
       <div className="flex gap-1">
         <div className="flex items-center gap-1">
           {Object.entries(reactionsByEmoji).map(([emoji, reactions]) => (
