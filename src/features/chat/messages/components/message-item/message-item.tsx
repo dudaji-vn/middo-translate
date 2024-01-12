@@ -1,9 +1,17 @@
-import { Fragment, createContext, forwardRef, useContext } from 'react';
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  createContext,
+  forwardRef,
+  useContext,
+} from 'react';
 
 import { Avatar } from '@/components/data-display';
 import { DocumentMessage } from './message-item-document';
 import { ImageGallery } from './message-item-image-gallery';
 import { Message } from '@/features/chat/messages/types';
+import { MessageItemReactionBar } from './message-item-reaction-bar';
 import { MessageItemSystem } from './message-item-system';
 import { MessageItemWrapper } from './message-item-wrapper';
 import { PendingStatus } from './pending-status';
@@ -14,7 +22,7 @@ import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { messageVariants } from './variants';
-import { MessageItemReactionBar } from './message-item-reaction-bar';
+import { useBoolean } from 'usehooks-ts';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -28,6 +36,7 @@ type MessageItemContextProps = {
   isMe: boolean;
   isPending: boolean;
   message: Message;
+  setActive: Dispatch<SetStateAction<boolean>>;
 };
 
 const MessageItemContext = createContext<MessageItemContextProps | undefined>(
@@ -53,12 +62,15 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isSystemMessage =
       message.type === 'notification' || message.type === 'action';
 
+    const { value: isActive, setValue: setActive } = useBoolean(false);
+
     return (
       <MessageItemContext.Provider
         value={{
           isMe,
           isPending,
           message,
+          setActive,
         }}
       >
         <SeenTracker />
@@ -69,49 +81,68 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
             <div
               className={cn(
-                'group relative flex',
+                'group relative flex flex-col',
                 isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
                 isPending && 'opacity-50',
               )}
             >
-              {showAvatar ? (
-                <Avatar
-                  className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0"
-                  src={message.sender.avatar}
-                  alt={message.sender.name}
-                />
-              ) : (
-                <div className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0" />
-              )}
-              <MessageItemWrapper>
-                <div
-                  {...props}
-                  ref={ref}
-                  className={cn(
-                    messageVariants({ sender, order, status: message.status }),
-                    className,
-                    mediaLength > 1 && 'rounded-none',
-                  )}
-                >
-                  {message.content && (
-                    <TextMessage isMe={isMe} message={message} />
-                  )}
-                  {message?.media && message.media.length > 0 && (
-                    <Fragment>
-                      {message.media[0].type === 'image' && (
-                        <ImageGallery images={message.media} />
-                      )}
-                      {message.media[0].type === 'document' && (
-                        <DocumentMessage isMe={isMe} file={message.media[0]} />
-                      )}
-                    </Fragment>
-                  )}
-                </div>
-                {isPending && <PendingStatus />}
-                {message?.reactions && message.reactions.length > 0 && (
-                  <MessageItemReactionBar message={message} />
+              <div
+                className={cn(
+                  'relative flex',
+                  isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
+                  isPending && 'opacity-50',
                 )}
-              </MessageItemWrapper>
+              >
+                {showAvatar ? (
+                  <Avatar
+                    className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0"
+                    src={message.sender.avatar}
+                    alt={message.sender.name}
+                  />
+                ) : (
+                  <div className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0" />
+                )}
+                <MessageItemWrapper>
+                  <div
+                    {...props}
+                    ref={ref}
+                    className={cn(
+                      messageVariants({
+                        sender,
+                        order,
+                        status: message.status,
+                      }),
+                      className,
+                      mediaLength > 1 && 'rounded-none',
+                    )}
+                  >
+                    {message.content && (
+                      <TextMessage
+                        position={isMe ? 'right' : 'left'}
+                        message={message}
+                        active={isActive}
+                      />
+                    )}
+                    {message?.media && message.media.length > 0 && (
+                      <Fragment>
+                        {message.media[0].type === 'image' && (
+                          <ImageGallery images={message.media} />
+                        )}
+                        {message.media[0].type === 'document' && (
+                          <DocumentMessage
+                            isMe={isMe}
+                            file={message.media[0]}
+                          />
+                        )}
+                      </Fragment>
+                    )}
+                  </div>
+                  {isPending && <PendingStatus />}
+                </MessageItemWrapper>
+              </div>
+              {message?.reactions && message.reactions.length > 0 && (
+                <MessageItemReactionBar isMe={isMe} message={message} />
+              )}
             </div>
           </>
         )}

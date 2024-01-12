@@ -1,19 +1,25 @@
+import { textVariants, wrapperVariants } from './message-item-text.style';
 import { useEffect, useState } from 'react';
 
 import { Message } from '../../types';
 import { Text } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
+import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatStore } from '@/features/chat/store';
 
-export interface TextMessageProps {
-  isMe: boolean;
+export interface TextMessageProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
 }
 
-export const TextMessage = ({ isMe, message }: TextMessageProps) => {
+export const TextMessage = ({
+  position,
+  active,
+  status,
+  message,
+}: TextMessageProps) => {
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
@@ -45,18 +51,10 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
   return (
     <div
       className={cn(
-        'px-3 py-2',
-        isMe ? 'bg-primary' : 'bg-neutral-50',
-        message.status === 'removed' && 'bg-transparent',
+        wrapperVariants({ active, position, status: message.status }),
       )}
     >
-      <span
-        className={cn(
-          'break-word-mt text-start text-sm',
-          isMe && 'text-background',
-          message.status === 'removed' && 'text-neutral-300',
-        )}
-      >
+      <span className={cn(textVariants({ position, status: message.status }))}>
         {contentDisplay}
       </span>
       {message?.contentEnglish &&
@@ -64,14 +62,14 @@ export const TextMessage = ({ isMe, message }: TextMessageProps) => {
         showMiddleTranslation && (
           <div className="relative mt-2">
             <TriangleSmall
-              fill={isMe ? '#72a5e9' : '#e6e6e6'}
+              fill={position === 'right' ? '#72a5e9' : '#e6e6e6'}
               position="top"
               className="absolute left-4 top-0 -translate-y-full"
             />
             <div
               className={cn(
                 'mb-1 mt-2 rounded-xl p-1 px-3',
-                isMe
+                position === 'right'
                   ? 'bg-primary-400 text-background'
                   : 'bg-neutral-100 text-neutral-600',
               )}
