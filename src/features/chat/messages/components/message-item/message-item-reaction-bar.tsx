@@ -14,10 +14,13 @@ import {
   TooltipTrigger,
 } from '@/components/data-display';
 
+import { Button } from '@/components/actions';
+import { CloseIcon } from 'yet-another-react-lightbox';
 import { UserItem } from '@/features/users/components';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 import { useBoolean } from 'usehooks-ts';
+import { useReactMessage } from '../../hooks';
 import { useState } from 'react';
 
 export interface MessageItemReactionBarProps {
@@ -42,9 +45,13 @@ export const MessageItemReactionBar = ({
     {},
   );
 
+  const user = useAuthStore((state) => state.user);
+
   const [tabValue, setTabValue] = useState<string>('all');
 
   const { setValue, value } = useBoolean(false);
+
+  const { mutate } = useReactMessage();
 
   return (
     <div
@@ -80,7 +87,7 @@ export const MessageItemReactionBar = ({
                 onClick={() => setTabValue('all')}
                 className="w-16 !rounded-none"
               >
-                All {reactions.length}
+                All
               </TabsTrigger>
               {Object.values(reactions).map((react) => {
                 return (
@@ -102,23 +109,64 @@ export const MessageItemReactionBar = ({
           <div>
             {tabValue === 'all' && (
               <div>
-                {reactions.map((reaction) => (
-                  <UserItem
-                    key={reaction.user._id}
-                    user={reaction.user}
-                    rightElement={
-                      <span className="mx-[2px] text-2xl">
-                        {reaction.emoji}
-                      </span>
-                    }
-                  />
-                ))}
+                {reactions.map((reaction) => {
+                  const isMe = reaction.user._id === user?._id;
+                  return (
+                    <UserItem
+                      key={reaction.user._id}
+                      user={reaction.user}
+                      rightElement={
+                        <div className="flex items-center">
+                          <span className="mx-[2px] text-2xl">
+                            {reaction.emoji}
+                          </span>
+                          {isMe && (
+                            <Button.Icon
+                              onClick={() => {
+                                mutate({
+                                  id: message._id,
+                                  emoji: reaction.emoji,
+                                });
+                              }}
+                              size="xs"
+                              variant="ghost"
+                              color="default"
+                            >
+                              <CloseIcon />
+                            </Button.Icon>
+                          )}
+                        </div>
+                      }
+                    />
+                  );
+                })}
               </div>
             )}
             {tabValue !== 'all' && (
               <>
                 {reactionsByEmoji[tabValue]?.map((reaction) => (
-                  <UserItem key={reaction.user._id} user={reaction.user} />
+                  <UserItem
+                    key={reaction.user._id}
+                    user={reaction.user}
+                    rightElement={
+                      reaction.user._id === user?._id && (
+                        <Button.Icon
+                          onClick={() => {
+                            mutate({
+                              id: message._id,
+                              emoji: reaction.emoji,
+                            });
+                          }}
+                          size="xs"
+                          color="default"
+                          variant="ghost"
+                          className="shrink-0"
+                        >
+                          <CloseIcon />
+                        </Button.Icon>
+                      )
+                    }
+                  />
                 ))}
               </>
             )}
