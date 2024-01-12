@@ -4,27 +4,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import React, {
-  Fragment,
-  PropsWithChildren,
-  cloneElement,
-  useMemo,
-} from 'react';
-import { actionItems, useMessageActions } from '../message-actions';
-
-import { Button } from '@/components/actions';
-import { LongPressMenu } from '@/components/actions/long-press-menu';
 import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useAppStore } from '@/stores/app.store';
-import { useMessageItem } from '.';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import EmojiPicker from 'emoji-picker-react';
-import { useReactMessage } from '../../hooks';
+import React, { PropsWithChildren, cloneElement, useMemo } from 'react';
+import { actionItems, useMessageActions } from '../message-actions';
+
+import { Button } from '@/components/actions';
+import { LongPressMenu } from '@/components/actions/long-press-menu';
+import { MessageEmojiPicker } from '../message-emoji-picker';
+import { cn } from '@/utils/cn';
+import { useAppStore } from '@/stores/app.store';
+import { useBoolean } from 'usehooks-ts';
+import { useMessageItem } from '.';
 
 export interface MessageItemWrapperProps {}
 
@@ -76,8 +71,17 @@ const MobileWrapper = ({
   children,
   items,
 }: MessageItemMobileWrapperProps & PropsWithChildren) => {
+  const { message, isMe, setActive } = useMessageItem();
+  const { value, setValue, setFalse } = useBoolean(false);
   return (
-    <LongPressMenu>
+    <LongPressMenu
+      isOpen={value}
+      hasBackdrop={false}
+      onOpenChange={(isOpen) => {
+        setValue(isOpen);
+        setActive(isOpen);
+      }}
+    >
       <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
       <LongPressMenu.Menu>
         {items.map((item) => (
@@ -91,6 +95,26 @@ const MobileWrapper = ({
           </LongPressMenu.Item>
         ))}
       </LongPressMenu.Menu>
+
+      {value && (
+        <>
+          <LongPressMenu.CloseTrigger className="fixed left-0 top-0 z-[99] h-screen w-screen" />
+          <div
+            className={cn(
+              'absolute -top-1 right-0 z-[999] w-fit -translate-y-full',
+              isMe ? 'right-0' : 'left-0',
+            )}
+          >
+            <MessageEmojiPicker
+              onEmojiClick={() => {
+                setFalse();
+                setActive(false);
+              }}
+              messageId={message._id}
+            />
+          </div>
+        </>
+      )}
     </LongPressMenu>
   );
 };
@@ -102,15 +126,17 @@ const DesktopWrapper = ({
   items: any[];
 }) => {
   const { isMe, message } = useMessageItem();
-  const { mutate } = useReactMessage();
+  const { setFalse, value, setValue } = useBoolean(false);
 
   return (
     <>
       {children}
       <div
         className={cn(
-          'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:block',
-          isMe ? '-left-4 -translate-x-full' : '-right-4 translate-x-full',
+          'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:flex',
+          isMe
+            ? '-left-4 -translate-x-full'
+            : '-right-4 translate-x-full flex-row-reverse',
         )}
       >
         <DropdownMenu>
@@ -138,26 +164,27 @@ const DesktopWrapper = ({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Popover>
+        <Popover
+          open={value}
+          onOpenChange={(open) => {
+            setValue(open);
+          }}
+        >
           <PopoverTrigger asChild>
             <Button.Icon size="xs" variant="ghost" color="default">
               <SmilePlusIcon />
             </Button.Icon>
           </PopoverTrigger>
           <PopoverContent
-            align="end"
+            align={isMe ? 'end' : 'start'}
             className={cn('w-fit border-none !bg-transparent p-0 shadow-none')}
           >
-            <EmojiPicker
-              skinTonesDisabled
-              previewConfig={{ showPreview: false }}
-              lazyLoadEmojis
-              searchDisabled
-              autoFocusSearch={false}
-              height={320}
-              onEmojiClick={(emojiObj) => {
-                mutate({ id: message._id, emoji: emojiObj.emoji });
+            <MessageEmojiPicker
+              align={isMe ? 'end' : 'start'}
+              onEmojiClick={() => {
+                setFalse();
               }}
+              messageId={message._id}
             />
           </PopoverContent>
         </Popover>
