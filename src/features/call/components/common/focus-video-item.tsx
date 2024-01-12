@@ -45,9 +45,9 @@ const FocusVideoItem = ({ participant}: FocusVideoItemProps) => {
     }, [streamVideo])
     return ( 
         <section ref={parentRef} className='rounded-xl overflow-hidden relative transition-all w-full h-full flex items-center justify-center bg-neutral-900'>
-            <video ref={videoRef} className='relative rounded-sm w-full h-full object-contain' autoPlay muted playsInline controls={false} ></video>
+            <video ref={videoRef} className='relative w-full h-full object-contain' autoPlay muted playsInline controls={false} ></video>
             {/* Overlay black gradient from bottom to top */}
-            <div className="absolute inset-0 bg-gradient-to-t md:hover:from-black/70 transition-all flex justify-end items-end p-3">
+            <div className="absolute bottom-0 left-0 right-0 top-1/2 bg-gradient-to-t md:hover:from-black/70 transition-all flex justify-end items-end p-3">
                 <Maximize className="w-5 h-5 stroke-white cursor-pointer" onClick={fullScreenVideo}/>
             </div>
             <div className='absolute bottom-1 left-1 p-2 rounded-xl flex gap-2 bg-white/80 text-black items-center justify-center'>

@@ -126,7 +126,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       setLocalImageMessageWaiting(null);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [localImageMessageWaiting, filesUploaded, room._id]);
+    }, [localImageMessageWaiting, filesUploaded, room?._id]);
 
     useEffect(() => {
       if (!localDocumentMessagesWaiting.length || !filesUploaded.length) return;
@@ -161,7 +161,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       setLocalDocumentMessagesWaiting([]);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [localDocumentMessagesWaiting, filesUploaded, room._id]);
+    }, [localDocumentMessagesWaiting, filesUploaded, room?._id]);
 
     return (
       <div className="w-full border-t p-2">

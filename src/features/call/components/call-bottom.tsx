@@ -131,34 +131,34 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   }
   return (
     <section className={twMerge("flex items-center justify-between z-20 border-b border-t",
-    isFullScreen ? " p-3" : "border-b border-t border-neutral-50 p-1")}>
+      isFullScreen ? " p-3" : "border-b border-t border-neutral-50 p-1")}>
       <div className="flex md:gap-6 gap-2 justify-center w-full">
-      <DropdownMenu>
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button.Icon  
-            variant='default'
-            color='default'
-            className={`${!isFullScreen ? 'hidden' : ''}`}
+            <Button.Icon
+              variant='default'
+              color='default'
+              className={`${!isFullScreen ? 'hidden' : ''}`}
             >
               <MoreVertical />
             </Button.Icon>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-              <DropdownMenuItem onClick={changeLayout}>
-                <LayoutGrid />
-                <span className='ml-2'>Galery View</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem disabled={!haveShareScreen || !isFullScreen || !isPinShareScreen} onClick={onDoodle}>
-                <Brush />
-                <span className='ml-2'>Screen Doodle</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setShowCaption(!isShowCaption)}
-                className={isShowCaption ? 'bg-primary-200' : ''}
-              >
-                <ScanText />
-                <span className='ml-2'>Caption</span>
-              </DropdownMenuItem>
+            <DropdownMenuItem onClick={changeLayout}>
+              <LayoutGrid />
+              <span className='ml-2'>Galery View</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem disabled={!haveShareScreen || !isFullScreen || !isPinShareScreen} onClick={onDoodle}>
+              <Brush />
+              <span className='ml-2'>Screen Doodle</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => setShowCaption(!isShowCaption)}
+              className={isShowCaption ? 'bg-primary-200' : ''}
+            >
+              <ScanText />
+              <span className='ml-2'>Caption</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <Button.Icon
@@ -167,7 +167,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
           className={`${!isFullScreen ? 'hidden' : ''}`}
           onClick={() => setShowChat(!isShowChat)}
         >
-          <Subtitles/>
+          <Subtitles />
         </Button.Icon>
         <Button.Icon
           variant='default'
@@ -175,22 +175,22 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
           disabled={haveShareScreen && !isShareScreen}
           onClick={handleShareScreen}
         >
-          <MonitorUp/>
+          <MonitorUp />
         </Button.Icon>
-        
+
         <Button.Icon
           variant='default'
           color={isTurnOnCamera ? 'primary' : 'default'}
           onClick={onToggleCamera}
         >
-          {isTurnOnCamera ? <Video/> : <VideoOff/>}
+          {isTurnOnCamera ? <Video /> : <VideoOff />}
         </Button.Icon>
         <Button.Icon
           variant='default'
           color={isTurnOnMic ? 'primary' : 'default'}
           onClick={onToggleMute}
         >
-          {isTurnOnMic ? <Mic/> : <MicOff/> }
+          {isTurnOnMic ? <Mic /> : <MicOff />}
         </Button.Icon>
         <Button.Icon
           variant='default'

@@ -3,7 +3,7 @@
 import { Button } from "@/components/actions";
 import { motion, useDragControls } from "framer-motion"
 import { Maximize2, Minimize2, Phone, PhoneOff, X } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useVideoCallStore } from "../store/video-call.store";
 import VideoCallPage from "./video-call-main";
 import { Avatar } from "@/components/data-display";
@@ -14,7 +14,8 @@ const ReceiveVideoCall = () => {
     const constraintsRef = useRef<HTMLDivElement>(null)
     const controls = useDragControls()
     const { requestCall, removeRequestCall, addRequestCall, setRoom } = useVideoCallStore();
-    const audioRef = useRef<HTMLAudioElement>(new Audio('/mp3/ringing.mp3'));
+    const audioRef = useRef<HTMLAudioElement>();
+    const [audio, setAudio] = useState<HTMLAudioElement>();
     const declineCall = () => {
         removeRequestCall();
     }
@@ -22,6 +23,9 @@ const ReceiveVideoCall = () => {
         removeRequestCall();
         setRoom(requestCall[0]?.call);
     }
+    useEffect(() => {
+        setAudio(new Audio('/mp3/ringing.mp3'))
+    }, [])
 
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, ({ call, user }) => {
@@ -36,15 +40,18 @@ const ReceiveVideoCall = () => {
     }, [addRequestCall, removeRequestCall])
 
     useEffect(() => {
+        if(!audio) return;
         if(requestCall.length > 0) {
-            audioRef.current.play();
-            audioRef.current.addEventListener('ended', () => {
-                audioRef.current.play();
+            audio.currentTime = 0;
+            audio.play();
+            audio.addEventListener('ended', () => {
+                audio.play();
             });
+
         } else {
-            audioRef.current.pause();
+            audio.pause();
         }
-    }, [requestCall])
+    }, [audio, requestCall])
 
     return (
         <motion.div
@@ -79,7 +86,7 @@ const ReceiveVideoCall = () => {
                                     src={requestCall[0]?.call?.avatar || requestCall[0]?.user?.avatar || '/person.svg'}
                                     alt="avatar"
                                 />
-                                <p>{requestCall[0]?.call?.name}</p>
+                                {requestCall[0]?.room?.participants?.length > 2 &&  <p>{requestCall[0]?.call?.name}</p>}
                             </div>
                             <p className="text-center mt-3"><strong>{requestCall[0]?.user?.name}</strong> is calling</p>
                         </div>
