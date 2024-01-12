@@ -14,70 +14,31 @@ import { getVideoCall } from "@/services/video-call.service";
 import { useAuthStore } from "@/stores/auth.store";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useParticipantVideoCallStore } from "../store/participant.store";
+import { Spinner } from "@/components/feedback";
+import ChatThread from "./chat-thread";
 
 interface VideoCallPageProps {
   params: { id: string };
 }
 const VideoCallPage = () => {
-  const { user } = useAuthStore();
-  const callSlug = '5rn-u6h-hcb111';
-  const { room, setRoom, isFullScreen } = useVideoCallStore();
-  const [isWaiting, setIsWaiting] = useState(false);
+  const { room,  } = useVideoCallStore();
+  const {participants} = useParticipantVideoCallStore();
 
-  const router = useRouter();
-
-  useEffect(() => {
-    if(!user) return;
-    const handleGetCall = async () => {
-      let res = await getVideoCall(callSlug);
-      if(res.data.status == STATUS.JOIN_SUCCESS) {
-        setRoom(res.data.call);
-      } else if (res.data.status == STATUS.USER_NOT_IN_ROOM){
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_JOIN_ROOM, { roomId: callSlug, user: user});
-        setIsWaiting(true);
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.ACCEPT_JOIN_ROOM, ({roomInfo}) => {
-          setRoom(roomInfo);
-          setIsWaiting(false);
-        })
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.REJECT_JOIN_ROOM, () => {
-          setRoom(null);
-        })
-      } 
-      else{
-        setRoom(null)
-      }
-    }
-    // handleGetCall();
-  }, [callSlug, router, setRoom, user]);
-
-  if(isWaiting) return <WaittingForAccept />
   if(!room) return null;
   return <VideoCallProvider>
     <div className="flex w-full h-full">
         <main className="w-full h-full flex flex-col overflow-hidden relative">
         {/* <VideoCallHeader /> */}
-        <section className="relative flex h-full w-full flex-1 overflow-hidden min-h-[70px]">
+        <section className="relative flex justify-center h-full w-full flex-1 overflow-hidden min-h-[70px]">
             {/* <ParticipantListSidebar /> */}
-            <VideoCallContent />
+            {participants.length == 0 ? <div className='h-full w-full flex-1 rounded-xl min-h-[70px] flex items-center justify-center'><Spinner className='text-primary' /></div> : <VideoCallContent /> }
         </section>
         <VideoCallBottom />
         </main>
-        {/* <aside className={`max-w-[400px] w-full bg-neutral-50 ${isFullScreen ? 'block' : 'hidden'}`}>
-            Chat Thread will be here
-        </aside> */}
+        <ChatThread />
     </div>
   </VideoCallProvider>
 };
 
 export default VideoCallPage;
-
-const WaittingForAccept = () => {
-  return (
-    <div className="fixed inset-0 flex items-center justify-center flex-col">
-      <div>
-        <div className="w-16 h-16 border-4 border-primary border-double rounded-full animate-spin border-t-transparent"></div>
-      </div>
-      <p className="mt-1">Waitting for accept from participant in meeting</p>
-    </div>
-  )
-};
