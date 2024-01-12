@@ -1,12 +1,12 @@
 import { Fragment, useMemo } from "react";
-import VideoItem from "./video-item";
+import VideoItem from "../common/video-item";
 import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import 'react-horizontal-scrolling-menu/dist/styles.css';
-import FocusVideoItem from "./focus-video-item";
+import FocusVideoItem from "../common/focus-video-item";
 import { DoodleArea } from "../common/doodle-area";
 import { useVideoCallStore } from "../../store/video-call.store";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
-import DoodleItem from "./doodle-item";
+import DoodleItem from "../common/doodle-item";
 import ParicipantInVideoCall from "../../interfaces/participant";
 
 const FocusScreenView = () => {

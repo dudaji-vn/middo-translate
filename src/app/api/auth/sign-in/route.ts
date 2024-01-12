@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     }),
   }).then((res) => res.json());
 
-  const { accessToken, refreshToken } = response.data;
+  const { accessToken, refreshToken } = response?.data;
 
   cookies().set(ACCESS_TOKEN_NAME, accessToken);
   cookies().set(REFRESH_TOKEN_NAME, refreshToken);

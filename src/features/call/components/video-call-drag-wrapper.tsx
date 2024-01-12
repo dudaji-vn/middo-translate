@@ -5,9 +5,9 @@ import { motion, useDragControls } from "framer-motion"
 import { Maximize2, Minimize2, Phone } from "lucide-react";
 import { useRef } from "react";
 import { useVideoCallStore } from "../store/video-call.store";
-import VideoCallPage from ".";
+import VideoCallPage from "./video-call-main";
 
-const CallVideoModalContainer = () => {
+const VideoCallDragWrapper = () => {
     const constraintsRef = useRef<HTMLDivElement>(null)
     const controls = useDragControls()
     const { room, isFullScreen, setFullScreen } = useVideoCallStore();
@@ -54,4 +54,4 @@ const CallVideoModalContainer = () => {
     )
 };
 
-export default CallVideoModalContainer;
+export default VideoCallDragWrapper;
