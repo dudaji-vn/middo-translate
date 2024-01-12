@@ -3,6 +3,7 @@ import {
   createContext,
   forwardRef,
   useContext,
+  useEffect,
 } from 'react';
 
 import { Button } from '@/components/actions';
@@ -16,24 +17,58 @@ type LongPressMenuProps = {
   open: () => void;
   close: () => void;
   bind: ReturnType<typeof useLongPress>;
+  hasBackdrop?: boolean;
 };
 
 const LongPressMenuContext = createContext<LongPressMenuProps | undefined>(
   undefined,
 );
 
-export const LongPressMenu = ({ children }: PropsWithChildren) => {
+export const LongPressMenu = ({
+  children,
+  hasBackdrop = true,
+  onPressed,
+  onOpenChange,
+  isOpen,
+}: PropsWithChildren & {
+  isOpen?: boolean;
+  hasBackdrop?: boolean;
+  onPressed?: () => void;
+  onOpenChange?: (isOpen: boolean) => void;
+}) => {
   const { setFalse, setTrue, value } = useBoolean(false);
-  const bind = useLongPress(() => {
+  const bind = useLongPress((event) => {
+    onPressed && onPressed();
     setTrue();
+    onOpenChange && onOpenChange(true);
   });
+
+  const handleOpen = () => {
+    setTrue();
+    onOpenChange && onOpenChange(true);
+  };
+  const handleClose = () => {
+    setFalse();
+    onOpenChange && onOpenChange(false);
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      handleOpen();
+    } else {
+      handleClose();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+
   return (
     <LongPressMenuContext.Provider
       value={{
         isOpen: value,
-        open: setTrue,
-        close: setFalse,
+        open: handleOpen,
+        close: handleClose,
         bind,
+        hasBackdrop,
       }}
     >
       <> {children}</>
@@ -61,7 +96,7 @@ export const Trigger = (
 export const Menu = (
   props: PropsWithChildren<React.HTMLProps<HTMLDivElement>>,
 ) => {
-  const { isOpen, close } = useLongPressMenu();
+  const { isOpen, close, hasBackdrop } = useLongPressMenu();
   return (
     <Sheet isOpen={isOpen} onClose={close}>
       <Sheet.Container className="!h-fit !rounded-t-3xl pb-6">
@@ -70,7 +105,11 @@ export const Menu = (
           <div className="flex justify-evenly"> {props.children}</div>
         </Sheet.Content>
       </Sheet.Container>
-      <Sheet.Backdrop onTap={close} className="!bg-black/60" />
+      {hasBackdrop ? (
+        <Sheet.Backdrop onTap={close} className="!bg-black/60" />
+      ) : (
+        <></>
+      )}
     </Sheet>
   );
 };
@@ -111,6 +150,18 @@ const Item = forwardRef<
 
 Item.displayName = 'Item';
 
+export interface CloseTriggerProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const CloseTrigger = forwardRef<HTMLDivElement, CloseTriggerProps>(
+  (props, ref) => {
+    const { close } = useLongPressMenu();
+    return <div ref={ref} {...props} onClick={close} />;
+  },
+);
+CloseTrigger.displayName = 'CloseTrigger';
+
 LongPressMenu.Trigger = Trigger;
 LongPressMenu.Menu = Menu;
 LongPressMenu.Item = Item;
+LongPressMenu.CloseTrigger = CloseTrigger;
