@@ -143,7 +143,10 @@
   ::-webkit-scrollbar-track {
     @apply bg-[#fcfcfc] dark:bg-gray-700;
   }
-
+  .disable-ios-img-tap {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
   .scrollbar-hoverAble::-webkit-scrollbar {
     @apply hidden;
   }
@@ -174,24 +177,48 @@
   }
 
   .cursor-drawing {
-    cursor: url('/drawing.png') 0 20, auto;
+    cursor:
+      url('/drawing.png') 0 20,
+      auto;
   }
 
   .cursor-eraser {
-    cursor: url('/eraser.png') 0 20, auto;
+    cursor:
+      url('/eraser.png') 0 20,
+      auto;
   }
 
   /* video::-webkit-media-controls-fullscreen-button { display: none; } */
-  video::-webkit-media-controls-play-button { display: none; }
-  video::-webkit-media-controls-timeline { display: none; }
-  video::-webkit-media-controls-current-time-display { display: none; }
-  video::-webkit-media-controls-time-remaining-display { display: none; }
-  video::-webkit-media-controls-time-remaining-display { display: none; }
-  video::-webkit-media-controls-mute-button { display: none; }
-  video::-webkit-media-controls-toggle-closed-captions-button { display: none; }
-  video::-webkit-media-controls-volume-slider { display: none; }
-  video::-webkit-media-controls-volume-slider-container { display: none; }
-  video::-webkit-media-controls-overlay-play-button { display: none; }
+  video::-webkit-media-controls-play-button {
+    display: none;
+  }
+  video::-webkit-media-controls-timeline {
+    display: none;
+  }
+  video::-webkit-media-controls-current-time-display {
+    display: none;
+  }
+  video::-webkit-media-controls-time-remaining-display {
+    display: none;
+  }
+  video::-webkit-media-controls-time-remaining-display {
+    display: none;
+  }
+  video::-webkit-media-controls-mute-button {
+    display: none;
+  }
+  video::-webkit-media-controls-toggle-closed-captions-button {
+    display: none;
+  }
+  video::-webkit-media-controls-volume-slider {
+    display: none;
+  }
+  video::-webkit-media-controls-volume-slider-container {
+    display: none;
+  }
+  video::-webkit-media-controls-overlay-play-button {
+    display: none;
+  }
   video::-webkit-media-controls-overlay-enclosure {
     display: none !important;
   }

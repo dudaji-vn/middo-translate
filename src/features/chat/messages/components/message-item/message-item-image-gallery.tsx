@@ -58,7 +58,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                     src={img.url}
                     fill
                     quality={50}
-                    className="aspect-square object-cover"
+                    className="disable-ios-img-tap aspect-square object-cover"
                   />
                 </div>
               );
@@ -74,7 +74,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             height={280}
             src={images[0].url}
             alt="img"
-            className="cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50"
+            className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50"
           />
         )}
         <Lightbox
