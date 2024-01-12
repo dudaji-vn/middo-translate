@@ -163,4 +163,10 @@
   .crop-container .cropper-container .cropper-crop-box .cropper-center {
     display: none;
   }
+  .cursor-drawing {
+    cursor: url('/drawing.png') 0 20, auto;
+  }
+  .cursor-eraser {
+    cursor: url('/eraser.png') 0 20, auto;
+  }
 }

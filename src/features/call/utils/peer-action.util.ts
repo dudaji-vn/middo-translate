@@ -1,6 +1,5 @@
 import { SOCKET_CONFIG } from "@/configs/socket";
 import socket from "@/lib/socket-io";
-import SimplePeer from "simple-peer";
 import Peer from "simple-peer";
 
 const peerConfigurations = {
@@ -16,12 +15,11 @@ const peerConfigurations = {
 interface CreatePeerParams {
     id: string;
     socketId: string;
-    stream: MediaStream;
     user: any;
     isShareScreen?: boolean;
 }
-export const createPeer = ({ id, socketId, stream, user, isShareScreen = false } : CreatePeerParams) => {
-    const peer = new Peer({ initiator: true, trickle: false, stream, config: peerConfigurations });
+export const createPeer = ({ id, socketId, user, isShareScreen = false } : CreatePeerParams) => {
+    const peer = new Peer({ initiator: true, trickle: false, config: peerConfigurations });
     peer.on("signal", (signal) => {
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id, user, callerId: socketId, signal, isShareScreen })
     });
@@ -29,22 +27,18 @@ export const createPeer = ({ id, socketId, stream, user, isShareScreen = false }
 };
 
 interface AddPeerParams {
-    signal: SimplePeer.SignalData,
+    signal: Peer.SignalData,
     callerId: string,
-    stream: MediaStream,
     user: any,
     isShareScreen?: boolean
 }
 
-export const addPeer = ({signal, callerId, stream, user, isShareScreen} : AddPeerParams) => {
-    const peer = new Peer({ initiator: false, trickle: true, stream, config: peerConfigurations })
+export const addPeer = ({signal, callerId, user, isShareScreen} : AddPeerParams) => {
+    const peer = new Peer({ initiator: false, trickle: true, config: peerConfigurations })
     peer.on("signal", signal => {
         if(signal.type == "transceiverRequest") return; // Ignore "transceiverRequest
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.RETURN_SIGNAL, { signal, callerId, user, isShareScreen })
     })
-    peer.on("iceCandidate", (iceCandidate) => {
-        console.log("iceCandidate222", iceCandidate);
-    });
     peer.signal(signal);
     return peer;
 };

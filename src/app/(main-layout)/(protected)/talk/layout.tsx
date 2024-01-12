@@ -4,6 +4,7 @@ import { FCMBackground } from '@/features/notification/components';
 import { Fragment } from 'react';
 import { Inbox } from '@/features/chat/rooms/components';
 import { Metadata } from 'next';
+import CallVideoModalContainer from '@/features/call/components/call-video-modal-container';
 
 export const metadata: Metadata = {
   title: 'Talk',
@@ -22,6 +23,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
         <ChatMain>{children}</ChatMain>
       </div>
       <FCMBackground />
+      <CallVideoModalContainer />
     </Fragment>
   );
 };
