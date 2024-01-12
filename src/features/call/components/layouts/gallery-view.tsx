@@ -1,8 +1,8 @@
 import { Fragment, useMemo } from "react";
-import VideoItem from "./video-item";
+import VideoItem from "../common/video-item";
 import { useVideoCallStore } from "../../store/video-call.store";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
-import DoodleItem from "./doodle-item";
+import DoodleItem from "../common/doodle-item";
 import ParicipantInVideoCall from "../../interfaces/participant";
 
 const GalleryView = () => {

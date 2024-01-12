@@ -130,8 +130,8 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     })
   }
   return (
-    <section className={twMerge("flex items-center justify-between z-20",
-    isFullScreen ? "bg-black/70 p-3 rounded-xl absolute bottom-2 right-1/2 translate-x-1/2" : "border-b border-t border-neutral-50 p-1")}>
+    <section className={twMerge("flex items-center justify-between z-20 border-b border-t",
+    isFullScreen ? " p-3" : "border-b border-t border-neutral-50 p-1")}>
       <div className="flex md:gap-6 gap-2 justify-center w-full">
       <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -18,6 +18,7 @@ export type VideoCallState = {
     tmpRoom: any;
     isShowChat: boolean;
     isShowCaption: boolean;
+    requestCall: any[];
     setRoom: (room: any) => void;
     setLayout: (layout?: string) => void;
     setConfirmLeave: (confirmLeave: boolean) => void;
@@ -32,6 +33,8 @@ export type VideoCallState = {
     setTempRoom: (tmpRoom: any) => void;
     setShowChat: (isShowChat: boolean) => void;
     setShowCaption: (isShowCaption: boolean) => void;
+    addRequestCall: (data: any) => void;
+    removeRequestCall: (roomId?:string) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -52,6 +55,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     tmpRoom: null,
     isShowChat: true,
     isShowCaption: false,
+    requestCall: [],
     setRoom: (room: any) => {
         set(() => ({ room }));
     },
@@ -95,5 +99,12 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     },
     setShowCaption: (isShowCaption: boolean) => {
         set(() => ({ isShowCaption }));
+    },
+    addRequestCall: (data: any) => {
+        set((state) => ({ requestCall: [...state.requestCall, data] }));
+    },
+    removeRequestCall: (roomId?: string) => {
+        if(roomId) set((state) => ({ requestCall: state.requestCall.filter((item) => item.id !== roomId) }));
+        else set((state) => ({ requestCall: state.requestCall.slice(1) }));
     },
 }));
