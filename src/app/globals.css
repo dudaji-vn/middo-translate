@@ -95,9 +95,11 @@
   * {
     @apply border-border;
   }
+
   html {
     -webkit-tap-highlight-color: transparent;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -121,9 +123,11 @@
   .btn-icon {
     @apply rounded-full p-2.5 active:bg-stroke md:bg-background-darker;
   }
+
   .break-word-mt {
     word-break: break-word;
   }
+
   ::-webkit-scrollbar {
     @apply h-[0.7rem] w-[0.7rem];
   }
@@ -139,9 +143,11 @@
   ::-webkit-scrollbar-track {
     @apply bg-[#fcfcfc] dark:bg-gray-700;
   }
+
   .scrollbar-hoverAble::-webkit-scrollbar {
     @apply hidden;
   }
+
   .scrollbar-hoverAble:hover::-webkit-scrollbar {
     @apply block;
   }
@@ -153,20 +159,47 @@
   .scrollbar-track-transparent::-webkit-scrollbar-thumb {
     @apply border-none;
   }
+
   .scrollbar-track-transparent::-webkit-scrollbar {
     @apply w-[0.5rem];
   }
+
   .crop-container .cropper-container .cropper-crop-box .cropper-view-box {
     border-radius: 50%;
   }
+
   .crop-container .cropper-container .cropper-crop-box .cropper-dashed,
   .crop-container .cropper-container .cropper-crop-box .cropper-center {
     display: none;
   }
+
   .cursor-drawing {
     cursor: url('/drawing.png') 0 20, auto;
   }
+
   .cursor-eraser {
     cursor: url('/eraser.png') 0 20, auto;
   }
+
+  /* video::-webkit-media-controls-fullscreen-button { display: none; } */
+  video::-webkit-media-controls-play-button { display: none; }
+  video::-webkit-media-controls-timeline { display: none; }
+  video::-webkit-media-controls-current-time-display { display: none; }
+  video::-webkit-media-controls-time-remaining-display { display: none; }
+  video::-webkit-media-controls-time-remaining-display { display: none; }
+  video::-webkit-media-controls-mute-button { display: none; }
+  video::-webkit-media-controls-toggle-closed-captions-button { display: none; }
+  video::-webkit-media-controls-volume-slider { display: none; }
+  video::-webkit-media-controls-volume-slider-container { display: none; }
+  video::-webkit-media-controls-overlay-play-button { display: none; }
+  video::-webkit-media-controls-overlay-enclosure {
+    display: none !important;
+  }
+  /* video::-webkit-media-controls-enclosure {
+    display: none !important;
+  }
+  
+  video::-webkit-media-controls {
+    display: none !important;
+  } */
 }

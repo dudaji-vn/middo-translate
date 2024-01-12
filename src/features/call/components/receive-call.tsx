@@ -1,0 +1,115 @@
+'use client';
+
+import { Button } from "@/components/actions";
+import { motion, useDragControls } from "framer-motion"
+import { Maximize2, Minimize2, Phone, PhoneOff, X } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { useVideoCallStore } from "../store/video-call.store";
+import VideoCallPage from "./video-call-main";
+import { Avatar } from "@/components/data-display";
+import socket from "@/lib/socket-io";
+import { SOCKET_CONFIG } from "@/configs/socket";
+
+const ReceiveVideoCall = () => {
+    const constraintsRef = useRef<HTMLDivElement>(null)
+    const controls = useDragControls()
+    const { requestCall, removeRequestCall, addRequestCall, setRoom } = useVideoCallStore();
+    const audioRef = useRef<HTMLAudioElement>(new Audio('/mp3/ringing.mp3'));
+    const declineCall = () => {
+        removeRequestCall();
+    }
+    const acceptCall = () => {
+        removeRequestCall();
+        setRoom(requestCall[0]?.call);
+    }
+
+    useEffect(() => {
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, ({ call, user }) => {
+            addRequestCall({ id: call.roomId, call, user });
+        });
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomId: string) => {
+            removeRequestCall(roomId);
+        });
+        return () => {
+            socket.off(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL);
+        }
+    }, [addRequestCall, removeRequestCall])
+
+    useEffect(() => {
+        if(requestCall.length > 0) {
+            audioRef.current.play();
+            audioRef.current.addEventListener('ended', () => {
+                audioRef.current.play();
+            });
+        } else {
+            audioRef.current.pause();
+        }
+    }, [requestCall])
+
+    return (
+        <motion.div
+            ref={constraintsRef}
+            className={`fixed inset-0 z-50 max-h-dvh bg-transparent pointer-events-none cursor-auto block ${requestCall.length > 0 ? 'block' : 'hidden'}`}
+        >
+            <motion.div
+                drag
+                dragConstraints={constraintsRef}
+                dragControls={controls}
+                dragMomentum={false}
+                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit md:w-[336px] md:bottom-4 md:left-4`}
+            >
+                <div className="rounded-xl overflow-hidden border border-primary-400 bg-white flex flex-col h-full w-full shadow-2 shadow-primary-500/30 max-h-dvh">
+                    <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-neutral-50 md:cursor-grab md:active:cursor-grabbing`}>
+                        <Phone className="h-4 w-4 stroke-current" />
+                        <span className="flex-1 font-semibold">{requestCall[0]?.call?.name}</span>
+                        <Button.Icon
+                            variant='default'
+                            color='default'
+                            size='sm'
+                            onClick={declineCall}
+                        >
+                            <X />
+                        </Button.Icon>
+                    </div>
+                    <div className="relative h-[calc(100%-60px)]">
+                        <div className="h-full relative p-3">
+                            <div className="flex gap-2 items-center justify-center">
+                                <Avatar 
+                                    size="lg"
+                                    src={requestCall[0]?.call?.avatar || requestCall[0]?.user?.avatar || '/person.svg'}
+                                    alt="avatar"
+                                />
+                                <p>{requestCall[0]?.call?.name}</p>
+                            </div>
+                            <p className="text-center mt-3"><strong>{requestCall[0]?.user?.name}</strong> is calling</p>
+                        </div>
+                        <div className="p-3 flex gap-2">
+                            <Button
+                                onClick={declineCall}
+                                size="xs"
+                                color="error"
+                                variant="default"
+                                startIcon={<PhoneOff />}
+                                className="flex-1"
+                            >
+                                Decline
+                            </Button>
+                            <Button
+                                onClick={acceptCall}
+                                size="xs"
+                                color="success"
+                                variant="default"
+                                startIcon={<Phone />}
+                                className="flex-1"
+                            >
+                                Accept
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+        </motion.div>
+    )
+};
+
+export default ReceiveVideoCall;
