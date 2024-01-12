@@ -134,7 +134,7 @@ const Item = forwardRef<
         className={cn(className)}
         color={color || 'default'}
         variant="ghost"
-        size="lg"
+        size="sm"
         {...props}
         onClick={(e) => {
           onClick && onClick(e);
