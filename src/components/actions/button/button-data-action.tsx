@@ -8,7 +8,7 @@ interface Props {
 
 export default function ButtonDataAction({ children, className, ...props }: Props & PropsWithChildren) {
   return (
-    <div className={twMerge("rounded-xl bg-colors-neutral-50 px-3 py-2 md:hover:bg-colors-neutral-100 cursor-pointer flex items-center outline-none text-neutral-700 stroke-neutral-700", className)} {...props}>
+    <div className={twMerge("rounded-xl bg-neutral-50 px-3 py-2 md:hover:bg-colors-neutral-100 cursor-pointer flex items-center outline-none text-neutral-700 stroke-neutral-700", className)} {...props}>
         {children}
     </div>
   )

@@ -1,28 +1,17 @@
 import { Fragment, useMemo } from "react";
-import { useVideoCallStore } from "../../store";
-import VideoItem from "../video-item";
+import VideoItem from "./video-item";
+import { useVideoCallStore } from "../../store/video-call.store";
+import { useParticipantVideoCallStore } from "../../store/participant.store";
+import DoodleItem from "./doodle-item";
+import ParicipantInVideoCall from "../../interfaces/participant";
 
 const GalleryView = () => {
-    const { participants, layout } = useVideoCallStore();
-
-    const calculateGridLayout = useMemo(() => {
-        switch (true) {
-            case participants.length == 1:
-                return 'grid-cols-1';
-            case participants.length > 1 && participants.length <= 4:
-                return 'grid-cols-2';
-            case participants.length > 4 && participants.length <= 9:
-                return 'grid-cols-3';
-            case participants.length > 9:
-                return 'grid-cols-4';
-            default:
-                return 'grid-cols-'+Math.ceil(Math.sqrt(participants.length));
-        }
-    }, [participants.length]);
-
+    const { participants } = useParticipantVideoCallStore();
+    const {isDoodle} = useVideoCallStore();
     return (
-        <div className={`p-1 w-full h-full grid ${calculateGridLayout} gap-1`}>
-            {participants.map((participant, index) => (
+        <div className={`p-2 w-full h-full flex flex-wrap justify-center items-center overflow-auto`}>
+            {isDoodle && <DoodleItem />}
+            {participants.map((participant: ParicipantInVideoCall, index: number) => (
                 <VideoItem key={index} participant={participant} />
             ))}
         </div>

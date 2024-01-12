@@ -1,30 +1,29 @@
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
-import { useVideoCallStore } from '../../store';
-import { useRouter } from 'next/navigation';
+import socket from '@/lib/socket-io';
+import { SOCKET_CONFIG } from '@/configs/socket';
+import { useVideoCallStore } from '../../store/video-call.store';
+import { useAuthStore } from '@/stores/auth.store';
 
-export const ConfirmLeaveRoomModal = () => {
-    const router = useRouter();
-    const { confirmLeave, setConfirmLeave } = useVideoCallStore();
+export const ModalSwitchRoom = () => {
+    const { tmpRoom, setTempRoom, setRoom } = useVideoCallStore()
 
-    const handleLeave = async () => {
-        setConfirmLeave(false);
-        router.back();
-    };
-
-    const closeModal = () => {
-        setConfirmLeave(false);
+    const handleSwitch = () => {
+        setRoom(tmpRoom);
+        setTempRoom(null);
     };
 
     return (
-        <AlertDialog open={confirmLeave} onOpenChange={closeModal}>
+        <AlertDialog open={tmpRoom} onOpenChange={()=>setTempRoom(null)}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Are you sure you want to leave meeting?
+                        Are you sure you want to switch room?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        <span className='block mt-5'>You will be leave this meeting. And another people will be continue this meeting.</span>
+                        <span className='block mt-5'>
+                            You will be switch to room <strong>{tmpRoom?.name}</strong>.
+                        </span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -32,9 +31,9 @@ export const ConfirmLeaveRoomModal = () => {
                     <AlertDialogAction
                         type="submit"
                         className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
-                        onClick={handleLeave}
+                        onClick={handleSwitch}
                     >
-                        Leave
+                        Switch
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

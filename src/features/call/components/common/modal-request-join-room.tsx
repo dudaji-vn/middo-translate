@@ -1,19 +1,21 @@
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
-import { useVideoCallStore } from '../../store';
 import { useRouter } from 'next/navigation';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import { useVideoCallStore } from '../../store/video-call.store';
+import { useParticipantVideoCallStore } from '../../store/participant.store';
 
 export const RequestJoinRoomModal = () => {
-    const { usersRequestJoinRoom, removeUsersRequestJoinRoom, room } = useVideoCallStore();
+    const { room } = useVideoCallStore();
+    const { usersRequestJoinRoom, removeUsersRequestJoinRoom } = useParticipantVideoCallStore()
 
     const handleReject = async () => {
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REJECT_JOIN_ROOM, {userId: usersRequestJoinRoom[0].socketId});
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REJECT_JOIN_ROOM, {socketId: usersRequestJoinRoom[0].socketId});
         removeUsersRequestJoinRoom(usersRequestJoinRoom[0].socketId);
     };
     const handleAccept = async () => {
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.ACCEPT_JOIN_ROOM, {userId: usersRequestJoinRoom[0].socketId, roomInfo: room});
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.ACCEPT_JOIN_ROOM, {socketId: usersRequestJoinRoom[0].socketId, roomInfo: room});
         removeUsersRequestJoinRoom(usersRequestJoinRoom[0].socketId);
     };
 

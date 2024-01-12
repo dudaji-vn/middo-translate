@@ -2,168 +2,205 @@
 
 import {
   Brush,
+  LayoutGrid,
   MessageSquare,
   Mic,
   MicOff,
   MonitorUp,
   MoreVertical,
   Phone,
+  ScanText,
+  Subtitles,
   TextSelect,
   Users2Icon,
   Video,
   VideoOff,
 } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/data-display';
 import { Fragment, useEffect, useState } from 'react';
 
 import ButtonDataAction from '@/components/actions/button/button-data-action';
-import formatTime from '../utils/formatTime';
+import formatTime from '../utils/format-time.util';
 import { twMerge } from 'tailwind-merge';
 import { useVideoCallContext } from '../context/video-call-context';
-import { useVideoCallStore } from '../store';
+import { useVideoCallStore } from '../store/video-call.store';
+import { useParticipantVideoCallStore } from '../store/participant.store';
+import { useMyVideoCallStore } from '../store/me.store';
+import ParicipantInVideoCall from '../interfaces/participant';
+import socket from '@/lib/socket-io';
+import { Button } from '@/components/actions';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
+import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 
-export interface VideoCallBottomProps {}
+export interface VideoCallBottomProps { }
 
-export const VideoCallBottom = ({}: VideoCallBottomProps) => {
-  return (
-    <section className="flex items-center justify-between border-b border-t border-neutral-50 p-1">
-      <MeetingInfo />
-      <MeetingAction />
-      <MeetingControl />
-    </section>
-  );
-};
-
-const MeetingAction = () => {
-  const { participants, isShareScreen } = useVideoCallStore();
-  const { handleShareScreen } = useVideoCallContext();
+export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
+  const { setConfirmLeave } = useVideoCallStore();
+  const { isTurnOnMic, isTurnOnCamera, setTurnOnMic, setTurnOnCamera, myStream } = useMyVideoCallStore()
+  const { participants, clearPinParticipant } = useParticipantVideoCallStore()
+  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setPinDoodle, setPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption } = useVideoCallStore();
+  const { isShareScreen } = useMyVideoCallStore();
+  const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
+  const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
   const haveShareScreen = participants.some(
     (participant) => participant.isShareScreen,
   );
-  const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
-
-  return (
-    <Fragment>
-      <div className="hidden gap-1 md:flex md:gap-8">
-        <ButtonDataAction
-          className={twMerge(
-            'rounded-full px-3 py-3',
-            isShareScreen || haveShareScreen
-              ? 'opacity-50'
-              : 'hover:bg-primary-100',
-          )}
-          onClick={handleShareScreen}
-        >
-          <MonitorUp className="h-6 w-6" />
-        </ButtonDataAction>
-        <ButtonDataAction className="rounded-full px-3 py-3">
-          <Brush className="h-6 w-6" />
-        </ButtonDataAction>
-        <ButtonDataAction className="rounded-full px-3 py-3">
-          <MessageSquare className="h-6 w-6" />
-        </ButtonDataAction>
-        <ButtonDataAction className="rounded-full px-3 py-3">
-          <TextSelect className="h-6 w-6" />
-        </ButtonDataAction>
-      </div>
-      <div className="block md:hidden">
-        <DropdownMenu
-          open={isOpenMenuSelectLayout}
-          onOpenChange={() => setMenuSelectLayout((prev) => !prev)}
-        >
-          <DropdownMenuTrigger>
-            <ButtonDataAction className="rounded-full px-3 py-3">
-              <MoreVertical className="h-6 w-6" />
-            </ButtonDataAction>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="ml-1 overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
-            onClick={() => setMenuSelectLayout((prev) => !prev)}
-          >
-            <ButtonDataAction
-              className={twMerge(
-                'rounded-full px-3 py-3',
-                isShareScreen || haveShareScreen
-                  ? 'opacity-50'
-                  : 'hover:bg-primary-100',
-              )}
-              onClick={handleShareScreen}
-            >
-              <MonitorUp className="mr-2 h-6 w-6" />
-              Share screen
-            </ButtonDataAction>
-            <ButtonDataAction className="rounded-full px-3 py-3">
-              <Brush className="mr-2 h-6 w-6" />
-              Doodle
-            </ButtonDataAction>
-            <ButtonDataAction className="rounded-full px-3 py-3">
-              <MessageSquare className="mr-2 h-6 w-6" />
-              Open chat
-            </ButtonDataAction>
-            <ButtonDataAction className="rounded-full px-3 py-3">
-              <TextSelect className="mr-2 h-6 w-6" />
-              Show caption
-            </ButtonDataAction>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    </Fragment>
-  );
-};
-
-const MeetingInfo = () => {
-  const { participants, room } = useVideoCallStore();
-  const [meetingTime, setMeetingTime] = useState(0);
-  useEffect(() => {
-    if (!room) return;
-    const startedAt = new Date(room.createdAt);
-    const interval = setInterval(() => {
-      const now = new Date();
-      const diff = now.getTime() - startedAt.getTime();
-      setMeetingTime(diff);
-    }, 1000);
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [room]);
-  return (
-    <div className="hidden h-fit items-center gap-2 md:flex md:w-[160px]">
-      <ButtonDataAction>
-        <Users2Icon className="mr-2 h-5 w-5" />
-        <span>{participants.length || 0}</span>
-      </ButtonDataAction>
-      <ButtonDataAction>{formatTime(meetingTime)}</ButtonDataAction>
-    </div>
-  );
-};
-
-const MeetingControl = () => {
-  const { setConfirmLeave } = useVideoCallStore();
+  const onDoodle = () => {
+    if (!isDoodle && isMeDoole) return;
+    // Start doodle
+    if (haveShareScreen && !isDoodle) {
+      setDrawing(true);
+      handleStartDoodle();
+    }
+    // Toggle drawing
+    if (isDoodle) {
+      setDrawing(!isDrawing);
+    }
+  }
   const handleLeave = () => {
     setConfirmLeave(true);
   };
+  const changeLayout = () => {
+    setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
+  }
+  const handleUpdatePeerMedia = (newMediaStream: MediaStream) => {
+    participants.forEach(async (p: ParicipantInVideoCall) => {
+      if (p.isMe || !p.peer) return;
+      const oldStream = p.peer.streams[0];
+      if (oldStream) {
+        oldStream.getTracks().forEach((track: any) => {
+          p.peer.removeTrack(track, oldStream)
+        });
+      }
+      newMediaStream.getTracks().forEach((track: any) => {
+        p.peer.addTrack(track, newMediaStream)
+      });
+    })
+  }
+  const handleChangeCameraOrMic = ({ video, audio }: { video: boolean; audio: boolean }) => {
+    if (!myStream) return;
+    if (!socket.id) return;
+    // Disable both audio and video
+    // if (!video && !audio) {
+    //   let newMyStream = new MediaStream();
+    //   myStream.getTracks().forEach((track) => {
+    //     track.stop();
+    //   });
+    //   setMyStream(newMyStream);
+    //   setStreamForParticipant(newMyStream, socket.id, false)
+    //   handleUpdatePeerMedia(newMyStream)
+    //   return;
+    // }
+    // // If video on and current video on and audio off => just disable track audio
+    // if (video && isTurnOnCamera && myStream.getAudioTracks()[0]) {
+    //   myStream.getAudioTracks()[0].enabled = audio;
+    //   return;
+    // }
+    // // Create new stream
+    // myStream.getTracks().forEach((track) => {
+    //   track.stop();
+    // });
+    // const navigator = window.navigator as any;
+    // navigator.mediaDevices
+    //   .getUserMedia({ video: video, audio: true })
+    //   .then((stream: MediaStream) => {
+    //     if (!socket.id) return;
+    //     stream.getAudioTracks()[0].enabled = audio
+    //     setMyStream(stream)
+    //     setStreamForParticipant(stream, socket.id, false)
+    //     handleUpdatePeerMedia(stream)
+    //   });
+
+    myStream.getTracks().forEach((track) => {
+      if (track.kind === 'audio') track.enabled = audio;
+      if (track.kind === 'video') track.enabled = video;
+    });
+  }
+  const onToggleCamera = () => {
+    setTurnOnCamera(!isTurnOnCamera);
+    handleChangeCameraOrMic({
+      video: !isTurnOnCamera,
+      audio: isTurnOnMic
+    })
+  }
+  const onToggleMute = () => {
+    setTurnOnMic(!isTurnOnMic)
+    handleChangeCameraOrMic({
+      video: isTurnOnCamera,
+      audio: !isTurnOnMic
+    })
+  }
   return (
-    <div className="flex gap-2">
-      <ButtonDataAction className="rounded-full px-3 py-3">
-        {/* <Video className='w-6 h-6'/> */}
-        <VideoOff className="h-6 w-6" />
-      </ButtonDataAction>
-      <ButtonDataAction className="rounded-full px-3 py-3">
-        <Mic className="h-6 w-6" />
-        {/* <MicOff className='w-6 h-6'/> */}
-      </ButtonDataAction>
-      <ButtonDataAction
-        className="rounded-full bg-error px-3 py-3 md:hover:bg-red-500"
-        title="Leave"
-        onClick={handleLeave}
-      >
-        <Phone className="h-6 w-6 rotate-[135deg] stroke-white" />
-      </ButtonDataAction>
-    </div>
+    <section className={twMerge("flex items-center justify-between z-20",
+    isFullScreen ? "bg-black/70 p-3 rounded-xl absolute bottom-2 right-1/2 translate-x-1/2" : "border-b border-t border-neutral-50 p-1")}>
+      <div className="flex md:gap-6 gap-2 justify-center w-full">
+      <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button.Icon  
+            variant='default'
+            color='default'
+            className={`${!isFullScreen ? 'hidden' : ''}`}
+            >
+              <MoreVertical />
+            </Button.Icon>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+              <DropdownMenuItem onClick={changeLayout}>
+                <LayoutGrid />
+                <span className='ml-2'>Galery View</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled={!haveShareScreen || !isFullScreen || !isPinShareScreen} onClick={onDoodle}>
+                <Brush />
+                <span className='ml-2'>Screen Doodle</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => setShowCaption(!isShowCaption)}
+                className={isShowCaption ? 'bg-primary-200' : ''}
+              >
+                <ScanText />
+                <span className='ml-2'>Caption</span>
+              </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Button.Icon
+          variant='default'
+          color={isShowChat ? 'primary' : 'default'}
+          className={`${!isFullScreen ? 'hidden' : ''}`}
+          onClick={() => setShowChat(!isShowChat)}
+        >
+          <Subtitles/>
+        </Button.Icon>
+        <Button.Icon
+          variant='default'
+          color={isShareScreen ? 'primary' : 'default'}
+          disabled={haveShareScreen && !isShareScreen}
+          onClick={handleShareScreen}
+        >
+          <MonitorUp/>
+        </Button.Icon>
+        
+        <Button.Icon
+          variant='default'
+          color={isTurnOnCamera ? 'primary' : 'default'}
+          onClick={onToggleCamera}
+        >
+          {isTurnOnCamera ? <Video/> : <VideoOff/>}
+        </Button.Icon>
+        <Button.Icon
+          variant='default'
+          color={isTurnOnMic ? 'primary' : 'default'}
+          onClick={onToggleMute}
+        >
+          {isTurnOnMic ? <Mic/> : <MicOff/> }
+        </Button.Icon>
+        <Button.Icon
+          variant='default'
+          color='error'
+          title="Leave"
+          onClick={handleLeave}
+        >
+          <Phone className="h-6 w-6 rotate-[135deg]" />
+        </Button.Icon>
+      </div>
+    </section>
   );
 };

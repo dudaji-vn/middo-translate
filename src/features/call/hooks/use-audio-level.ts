@@ -12,7 +12,7 @@ export default function useAudioLevel(stream?: MediaStream) {
         mediaStreamSource.connect(audioContext.destination);
         mediaStreamSource.connect(processor);
         processor.connect(audioContext.destination);
-        let isTalkTemp = isTalk;
+        let isTalkTemp = false;
         processor.onaudioprocess = function (e) {
             var inputData = e.inputBuffer.getChannelData(0);
             var inputDataLength = inputData.length;
