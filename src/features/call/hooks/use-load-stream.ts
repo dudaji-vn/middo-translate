@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ParicipantInVideoCall from "../interfaces/participant";
-import { useParticipantVideoCallStore } from "../store/participant";
+import { useParticipantVideoCallStore } from "../store/participant.store";
 
 export default function useLoadStream(participant: ParicipantInVideoCall, elementRef: React.RefObject<HTMLVideoElement>) {
     const [streamVideo, setStreamVideo] = useState<MediaStream>()

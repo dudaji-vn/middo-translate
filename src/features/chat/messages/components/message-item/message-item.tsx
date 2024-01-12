@@ -1,20 +1,20 @@
 import { Fragment, createContext, forwardRef, useContext } from 'react';
 
 import { Avatar } from '@/components/data-display';
-import { DocumentMessage } from './message-item.document';
-import { ImageGallery } from './message-item.image-gallery';
-import { Menu } from './menu';
+import { DocumentMessage } from './message-item-document';
+import { ImageGallery } from './message-item-image-gallery';
 import { Message } from '@/features/chat/messages/types';
-import { MessageItemSystem } from './message-item.system';
-import { MessageItemWrapper } from './message-item.wrapper';
+import { MessageItemSystem } from './message-item-system';
+import { MessageItemWrapper } from './message-item-wrapper';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
-import { SeenTracker } from './message-item.seen-tracker';
-import { TextMessage } from './message-item.text';
+import { SeenTracker } from './message-item-seen-tracker';
+import { TextMessage } from './message-item-text';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { messageVariants } from './variants';
+import { MessageItemReactionBar } from './message-item-reaction-bar';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -67,7 +67,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
         ) : (
           <>
             <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
-            <MessageItemWrapper>
+            <div
+              className={cn(
+                'group relative flex',
+                isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
+                isPending && 'opacity-50',
+              )}
+            >
               {showAvatar ? (
                 <Avatar
                   className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0"
@@ -77,7 +83,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               ) : (
                 <div className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0" />
               )}
-              <div className="relative">
+              <MessageItemWrapper>
                 <div
                   {...props}
                   ref={ref}
@@ -102,9 +108,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   )}
                 </div>
                 {isPending && <PendingStatus />}
-                <Menu isMe={isMe} message={message} />
-              </div>
-            </MessageItemWrapper>
+                {message?.reactions && message.reactions.length > 0 && (
+                  <MessageItemReactionBar message={message} />
+                )}
+              </MessageItemWrapper>
+            </div>
           </>
         )}
       </MessageItemContext.Provider>

@@ -6,11 +6,11 @@ import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
 import Image from 'next/image';
 import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
-import UpdateUserAvatar from '@/features/user-settings/UpdateUserAvatar';
-import UpdateUserInfo from '@/features/user-settings/UpdateUserInfo';
-import UpdateUserPassword from '@/features/user-settings/UpdateUserPassword';
+import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
+import UpdateUserInfo from '@/features/user-settings/update-user-info';
+import UpdateUserPassword from '@/features/user-settings/update-user-password';
 import { useAppStore } from '@/stores/app.store';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useRouter } from 'next/navigation';
 
 export default function AccountSettings() {

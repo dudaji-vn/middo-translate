@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
-import { Button } from '@/components/form/Button';
+import { Button } from '@/components/form/button';
 import Image from 'next/image';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { verifyEmailService } from '@/services/authService';
+import { verifyEmailService } from '@/services/auth.service';
 
 export default function Verify() {
   const router = useRouter();

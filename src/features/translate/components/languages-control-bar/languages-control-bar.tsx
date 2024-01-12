@@ -13,7 +13,7 @@ import { ListLanguages } from '../list-languages';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useSetParams } from '@/hooks/use-set-params';
-import { useTranslateStore } from '@/stores/translate';
+import { useTranslateStore } from '@/stores/translate.store';
 
 export interface LanguagesControlBarProps
   extends React.HTMLAttributes<HTMLDivElement> {

@@ -6,10 +6,10 @@ import trimLongName from '../../utils/trim-long-name.util';
 import { twMerge } from 'tailwind-merge';
 import useAudioLevel from '../../hooks/use-audio-level';
 import useLoadStream from '../../hooks/use-load-stream';
-import { useMyVideoCallStore } from '../../store/me';
+import { useMyVideoCallStore } from '../../store/me.store';
 import useCalcLayoutItem from '../../hooks/use-calc-layout-item';
-import { useParticipantVideoCallStore } from '../../store/participant';
-import { useVideoCallStore } from '../../store/video-call';
+import { useParticipantVideoCallStore } from '../../store/participant.store';
+import { useVideoCallStore } from '../../store/video-call.store';
 import { VIDEOCALL_LAYOUTS } from '../../constant/layout';
 interface VideoItemProps {
   participant?: any;

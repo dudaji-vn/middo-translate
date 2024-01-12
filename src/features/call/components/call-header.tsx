@@ -24,7 +24,7 @@ import ButtonDataAction from '@/components/actions/button/button-data-action';
 import formatTextUppercase from '../utils/format-text-uppercase.util';
 import { twMerge } from 'tailwind-merge';
 import { useRouter } from 'next/navigation';
-import { useVideoCallStore } from '../store/video-call';
+import { useVideoCallStore } from '../store/video-call.store';
 
 export interface VideoCallHeaderProps {}
 

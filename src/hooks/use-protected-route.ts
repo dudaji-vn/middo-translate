@@ -1,7 +1,7 @@
 'use client';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -13,8 +13,8 @@ export default function useProtectedRoute() {
       router.push(ROUTE_NAMES.SIGN_IN);
       return;
     }
-    
-    if (user && isLoaded && (user.status == 'unset')) {
+
+    if (user && isLoaded && user.status == 'unset') {
       router.push(ROUTE_NAMES.CREATE_ACCOUNT);
       return;
     }
@@ -23,5 +23,5 @@ export default function useProtectedRoute() {
   return {
     user,
     isLoaded,
-  }
+  };
 }

@@ -19,7 +19,7 @@ import { UserPlus2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { searchApi } from '@/features/search/api';
 import { useAddMembers } from '../../hooks/use-add-members';
-import { useAuthStore } from '@/stores/auth';
+import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts';
 import { useSearch } from '@/hooks/use-search';
 

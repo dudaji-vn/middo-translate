@@ -4,7 +4,7 @@ import { MoreVertical, Pin, Trash2, UsersIcon, X } from 'lucide-react';
 import { Avatar, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
 
 import { Button } from '@/components/actions/button';
-import { useParticipantVideoCallStore } from '../store/participant';
+import { useParticipantVideoCallStore } from '../store/participant.store';
 import ParicipantInVideoCall from '../interfaces/participant';
 
 export interface VideoCallHeaderProps { }

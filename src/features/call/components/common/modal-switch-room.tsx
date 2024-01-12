@@ -2,8 +2,8 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useVideoCallStore } from '../../store/video-call';
-import { useAuthStore } from '@/stores/auth';
+import { useVideoCallStore } from '../../store/video-call.store';
+import { useAuthStore } from '@/stores/auth.store';
 
 export const ModalSwitchRoom = () => {
     const { tmpRoom, setTempRoom, setRoom } = useVideoCallStore()

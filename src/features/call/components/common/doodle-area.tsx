@@ -7,7 +7,7 @@ import { motion, useDragControls } from "framer-motion"
 import { CanvasPath, ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
-import { useVideoCallStore } from '../../store/video-call';
+import { useVideoCallStore } from '../../store/video-call.store';
 
 export const DoodleArea = () => {
     const { doodleImage, setConfirmStopDoodle, colorDoodle, isMeDoole } = useVideoCallStore();

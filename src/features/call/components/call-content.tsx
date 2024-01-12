@@ -3,7 +3,7 @@
 import GalleryView from './layouts/gallery-view';
 import FocusScreenView from './layouts/focus-screen-view';
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
-import { useVideoCallStore } from '../store/video-call';
+import { useVideoCallStore } from '../store/video-call.store';
 
 export default function VideoCallContent() {
 

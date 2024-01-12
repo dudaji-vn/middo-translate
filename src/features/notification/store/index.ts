@@ -22,7 +22,10 @@ export const useNotificationStore = create<
 
       fcmToken: '',
       setFcmToken: (token) => set(() => ({ fcmToken: token })),
-      reset: () => set(() => ({ isDenied: false, fcmToken: '' })),
+      reset: () =>
+        set(() => {
+          return { isDenied: false, fcmToken: '' };
+        }),
     }),
     {
       name: 'notification-storage',

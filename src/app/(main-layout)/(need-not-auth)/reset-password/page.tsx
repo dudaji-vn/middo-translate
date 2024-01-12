@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 
 import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
-import { AlertError } from '@/components/Alert/AlertError';
-import { Button } from '@/components/form/Button';
-import { InputField } from '@/components/form/InputField';
-import { PageLoading } from '@/components/loading/PageLoading';
+import { AlertError } from '@/components/alert/alert-error';
+import { Button } from '@/components/form/button';
+import { InputField } from '@/components/form/Input-field';
+import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { resetPasswordService } from '@/services/authService';
+import { resetPasswordService } from '@/services/auth.service';
 import { ResetPasswordSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';

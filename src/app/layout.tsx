@@ -6,7 +6,7 @@ import {
   NEXT_PUBLIC_URL,
 } from '@/configs/env.public';
 
-import { AppProvider } from '@/providers/app';
+import { AppProvider } from '@/providers/app.provider';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 

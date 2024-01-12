@@ -1,7 +1,7 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
 import { useRouter } from 'next/navigation';
-import { useVideoCallStore } from '../../store/video-call';
-import { useParticipantVideoCallStore } from '../../store/participant';
+import { useVideoCallStore } from '../../store/video-call.store';
+import { useParticipantVideoCallStore } from '../../store/participant.store';
 
 export const ConfirmLeaveRoomModal = () => {
     const router = useRouter();

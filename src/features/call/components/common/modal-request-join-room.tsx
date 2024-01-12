@@ -3,8 +3,8 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { useRouter } from 'next/navigation';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useVideoCallStore } from '../../store/video-call';
-import { useParticipantVideoCallStore } from '../../store/participant';
+import { useVideoCallStore } from '../../store/video-call.store';
+import { useParticipantVideoCallStore } from '../../store/participant.store';
 
 export const RequestJoinRoomModal = () => {
     const { room } = useVideoCallStore();

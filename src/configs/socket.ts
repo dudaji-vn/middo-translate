@@ -7,6 +7,7 @@ export const SOCKET_CONFIG = {
       DELETE: 'message.delete',
     },
     ROOM: {
+      NEW: 'room.new',
       JOIN: 'room.join',
       LEAVE: 'room.leave',
       PARTICIPANT: {

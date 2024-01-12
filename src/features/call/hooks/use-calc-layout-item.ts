@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useVideoCallStore } from "../store/video-call";
+import { useVideoCallStore } from "../store/video-call.store";
 import { VIDEOCALL_LAYOUTS } from "../constant/layout";
 
 export default function useCalcLayoutItem(elementRef: React.RefObject<HTMLElement>, length: number) {

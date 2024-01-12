@@ -4,8 +4,8 @@ import { ScrollMenu } from "react-horizontal-scrolling-menu";
 import 'react-horizontal-scrolling-menu/dist/styles.css';
 import FocusVideoItem from "./focus-video-item";
 import { DoodleArea } from "../common/doodle-area";
-import { useVideoCallStore } from "../../store/video-call";
-import { useParticipantVideoCallStore } from "../../store/participant";
+import { useVideoCallStore } from "../../store/video-call.store";
+import { useParticipantVideoCallStore } from "../../store/participant.store";
 import DoodleItem from "./doodle-item";
 import ParicipantInVideoCall from "../../interfaces/participant";
 

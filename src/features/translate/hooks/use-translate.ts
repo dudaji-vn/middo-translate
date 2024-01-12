@@ -1,7 +1,7 @@
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
-import { detectLanguage, translateText } from '@/services/languages';
+import { detectLanguage, translateText } from '@/services/languages.service';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from 'usehooks-ts';
@@ -19,7 +19,6 @@ export const useTranslate = ({
   translateOnType?: boolean;
   onDetectLanguage?: (lang: string) => void;
 }) => {
-  _srcLang;
   const [srcLang, setSrcLang] = useState(_srcLang);
   const [tgtLang, setTgtLang] = useState(_tgtLang);
   const [detLang, setDetLang] = useState('');
@@ -57,9 +56,11 @@ export const useTranslate = ({
   }, [debounceValue, middleText, srcLang, tgtLang, translateOnType]);
 
   const middleTranslate = async (text: string) => {
+    setIsLoading(true);
     const sourceResult = await translateText(text, 'en', srcLang);
     setText(sourceResult);
     setTranslatedText(text);
+    setIsLoading(false);
   };
 
   const handleMiddleTranslate = () => {
@@ -116,6 +117,10 @@ export const useTranslate = ({
     };
   };
 
+  const setDetToSrc = () => {
+    setSrcLang(detLang);
+  };
+
   return {
     text,
     setText,
@@ -134,5 +139,6 @@ export const useTranslate = ({
     detLang,
     srcLang,
     setSrcLang,
+    setDetToSrc,
   };
 };

@@ -4,7 +4,7 @@ import { Button } from "@/components/actions";
 import { motion, useDragControls } from "framer-motion"
 import { Maximize2, Minimize2, Phone } from "lucide-react";
 import { useRef } from "react";
-import { useVideoCallStore } from "../store/video-call";
+import { useVideoCallStore } from "../store/video-call.store";
 import VideoCallPage from ".";
 
 const CallVideoModalContainer = () => {

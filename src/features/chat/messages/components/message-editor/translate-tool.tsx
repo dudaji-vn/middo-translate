@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { CircleFlag } from 'react-circle-flags';
+import { Spinner } from '@/components/feedback';
 import { Switch } from '@/components/data-entry';
-import { Triangle } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 
@@ -22,6 +22,7 @@ export interface TranslateToolProps {
   middleText: string;
   setMiddleText?: (text: string) => void;
   onEditStateChange?: (isEditing: boolean) => void;
+  loading?: boolean;
 }
 
 export const TranslateTool = ({
@@ -35,6 +36,7 @@ export const TranslateTool = ({
   setMiddleText,
   onEditStateChange,
   onEdit,
+  loading,
 }: TranslateToolProps) => {
   const [showNotification, setShowNotification] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -89,6 +91,8 @@ export const TranslateTool = ({
                 <span className="text-sm font-medium text-neutral-600">
                   EN - Translate tool
                 </span>
+                {loading && <Spinner className="h-4 w-4 text-primary" />}
+
                 <Switch
                   checked={checked}
                   onCheckedChange={(checked) => {
@@ -148,7 +152,13 @@ export const TranslateTool = ({
                 </div>
                 {!isEditing && (
                   <div className="flex-1">
-                    <p className="text-neutral-600">{content}</p>
+                    {content ? (
+                      <p className="text-neutral-600">{content}</p>
+                    ) : (
+                      <p className="italic text-neutral-300">
+                        Stop typing to see translation...
+                      </p>
+                    )}
                   </div>
                 )}
 
