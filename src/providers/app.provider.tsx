@@ -13,6 +13,7 @@ import { SideEffectProvider } from './side-effect.provider';
 import SocketProvider from './socket.provider';
 import { Toaster } from 'react-hot-toast';
 import { TooltipProvider } from '@/components/data-display/tooltip';
+import CallVideoModalContainer from '@/features/call/components';
 
 type Props = {};
 

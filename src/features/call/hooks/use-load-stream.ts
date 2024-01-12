@@ -7,7 +7,8 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
     const [isTurnOnMic, setTurnOnMic] = useState<boolean>(false)
     const [isTurnOnCamera, setIsTurnOnCamera] = useState<boolean>(false)
     const { setStreamForParticipant, removeParticipant } = useParticipantVideoCallStore();
-    
+    const [isLoaded, setIsLoaded] = useState<boolean>(false)
+
     useEffect(() => {
         if(!elementRef.current || !participant) return;
         if(participant.stream) {
@@ -26,18 +27,9 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
             setStreamVideo(tempStream)
             setTurnOnMic(isMicOn)
             setIsTurnOnCamera(isCamOn)
-            // const audioTrack = tempStream.getAudioTracks()[0];
-            // const videoTrack = tempStream.getVideoTracks()[0];
-            // if(audioTrack) {
-            //     audioTrack.addEventListener('enabled', ()=>{
-            //         console.log('audioTrack::', audioTrack.enabled)
-            //     })
-            // }
-            // if(videoTrack) {
-            //     videoTrack.addEventListener('enabled', ()=>{
-            //         console.log('videoTrack::', videoTrack.enabled)
-            //     })
-            // }
+            elementRef.current.addEventListener('loadedmetadata', () => {
+                setIsLoaded(true)
+            })
         }
         if(!participant.peer) return;
         participant.peer.on('stream', (stream: any) => {
@@ -53,6 +45,7 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
         streamVideo,
         isTurnOnMic,
         isTurnOnCamera,
+        isLoaded
     }
 
 }
