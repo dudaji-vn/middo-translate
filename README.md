@@ -70,3 +70,12 @@ pnpm start
 ```
 
 6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+
+### TIP : Set up sentry (crash report)
+
+- Set SENTRY_DSN
+
+- Go to https://dudajivn.sentry.io/projects/
+- Click setting button of project
+- Copy 'Client Keys (DSN)' and paste into it into .env 'SENTRY_DSN'
