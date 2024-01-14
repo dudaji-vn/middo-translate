@@ -76,6 +76,12 @@ pnpm start
 
 - Set SENTRY_DSN
 
-- Go to https://dudajivn.sentry.io/projects/
-- Click setting button of project
-- Copy 'Client Keys (DSN)' and paste into it into .env 'SENTRY_DSN'
+  - Go to https://dudajivn.sentry.io/projects/
+  - Click setting button of project
+  - Copy 'Client Keys (DSN)' and paste into it into .env 'SENTRY_DSN'
+
+- Post sentry error
+  ```
+  import * as Sentry from '@sentry/react';
+  Sentry.captureException(msg);
+  ```
