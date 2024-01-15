@@ -99,20 +99,27 @@ const MobileWrapper = ({
       {value && (
         <>
           <LongPressMenu.CloseTrigger className="fixed left-0 top-0 z-[99] h-screen w-screen" />
-          <div
-            className={cn(
-              'absolute -top-1 right-0 z-[999] w-fit -translate-y-full',
-              isMe ? 'right-0' : 'left-0',
-            )}
-          >
-            <MessageEmojiPicker
-              onEmojiClick={() => {
-                setFalse();
-                setActive(false);
-              }}
-              messageId={message._id}
-            />
-          </div>
+          <Popover open>
+            <PopoverTrigger asChild>
+              <div
+                className={cn(
+                  'absolute top-0 h-[1px] w-full -translate-y-[calc(100%_+_8px)]',
+                )}
+              ></div>
+            </PopoverTrigger>
+            <PopoverContent
+              align={isMe ? 'end' : 'start'}
+              className="w-fit -translate-y-full border-none bg-transparent p-0 shadow-none"
+            >
+              <MessageEmojiPicker
+                onEmojiClick={() => {
+                  setFalse();
+                  setActive(false);
+                }}
+                messageId={message._id}
+              />
+            </PopoverContent>
+          </Popover>
         </>
       )}
     </LongPressMenu>

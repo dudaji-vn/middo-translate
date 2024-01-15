@@ -7,7 +7,11 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const accessToken = searchParams.get('access_token') || '';
   const refreshToken = searchParams.get('refresh_token') || '';
-  cookies().set(ACCESS_TOKEN_NAME, accessToken);
-  cookies().set(REFRESH_TOKEN_NAME, refreshToken);
+  cookies().set(ACCESS_TOKEN_NAME, accessToken, {
+    maxAge: 60 * 60 * 24 * 1,
+  });
+  cookies().set(REFRESH_TOKEN_NAME, refreshToken, {
+    maxAge: 60 * 60 * 24 * 7,
+  });
   redirect('/');
 }
