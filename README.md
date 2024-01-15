@@ -82,6 +82,6 @@ pnpm start
 
 - Post sentry error
   ```
-  import * as Sentry from '@sentry/react';
+  import * as Sentry from '@sentry/nextjs';
   Sentry.captureException(msg);
   ```

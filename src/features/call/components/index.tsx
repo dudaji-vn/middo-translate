@@ -5,7 +5,7 @@ import ReceiveVideoCall from "./receive-call";
 import VideoCallDragWrapper from "./video-call-drag-wrapper";
 
 const CallVideoModalContainer = () => {
-    
+
     return (
         <>
             <VideoCallDragWrapper />
