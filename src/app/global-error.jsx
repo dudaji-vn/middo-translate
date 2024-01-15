@@ -1,19 +1,20 @@
 "use client";
 
 import * as Sentry from "@sentry/nextjs";
-import Error from "next/error";
 import { useEffect } from "react";
 
 export default function GlobalError({ error }) {
   useEffect(() => {
-    console.error('Error in browser');
+    try {
+      throw new Error('message of throw new Error');
+    }
+    catch (err) {
+      console.error(err);
+      Sentry.captureException(err);
+    }
   }, [error]);
 
   return (
-    <html>
-      <body>
-        <Error />
-      </body>
-    </html>
+    <div />
   );
 }

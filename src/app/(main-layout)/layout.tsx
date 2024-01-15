@@ -9,10 +9,10 @@ export default async function RootLayout({
   // const profile = await getCurrentUser();
   return (
     <MainLayout>
-      {/* <GlobalError error='Error test'/> */}
       {/* <InitializeAuthStore user={profile as User} /> */}
       {children}
       <CallVideoModalContainer />
+      {/* <GlobalError error='Error test'/> */}
     </MainLayout>
   );
 }
