@@ -1,19 +1,9 @@
 'use client';
 
-import { ROUTE_NAMES } from "@/configs/route-name";
-import { SOCKET_CONFIG } from "@/configs/socket";
 import { VideoCallBottom } from "@/features/call/components/call-bottom";
 import VideoCallContent from "@/features/call/components/call-content";
-import { VideoCallHeader } from "@/features/call/components/call-header";
-import { ParticipantListSidebar } from "@/features/call/components/participant-list";
-import { STATUS } from "@/features/call/constant/status";
 import { VideoCallProvider } from "@/features/call/context/video-call-context";
 import { useVideoCallStore } from "@/features/call/store/video-call.store";
-import socket from "@/lib/socket-io";
-import { getVideoCall } from "@/services/video-call.service";
-import { useAuthStore } from "@/stores/auth.store";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { useParticipantVideoCallStore } from "../store/participant.store";
 import { Spinner } from "@/components/feedback";
 import ChatThread from "./chat-thread";
