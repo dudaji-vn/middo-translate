@@ -5,6 +5,7 @@
 import * as Sentry from "@sentry/nextjs";
 
 import { NEXT_PUBLIC_SENTRY_DSN } from "@/configs/env.public";
+import { CaptureConsole } from "@sentry/integrations";
 
 Sentry.init({
   dsn: NEXT_PUBLIC_SENTRY_DSN,
@@ -30,5 +31,6 @@ Sentry.init({
       maskAllText: true,
       blockAllMedia: true,
     }),
+    new CaptureConsole({ levels: ['error'] }),
   ],
 });
