@@ -30,7 +30,7 @@ const VideoCallDragWrapper = () => {
                 className={`pointer-events-auto cursor-auto absolute ${isFullScreen ? 'w-full h-full !translate-y-0 !translate-x-0' : 'w-[336px] bottom-4 left-4 rounded-xl overflow-hidden border border-primary-400'}`}
             >
                 <div className=" bg-white flex flex-col h-full w-full shadow-2 shadow-primary-500/30 max-h-dvh">
-                    <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-neutral-50 ${!isFullScreen && 'cursor-grab active:cursor-grabbing'}`}>
+                    <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 ${!isFullScreen && 'cursor-grab active:cursor-grabbing'}`}>
                         <Phone className="h-4 w-4 stroke-current" />
                         <span className="flex-1 font-semibold">{room?.name}</span>
                         <Button.Icon
