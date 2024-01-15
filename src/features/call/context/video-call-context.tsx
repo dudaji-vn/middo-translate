@@ -24,6 +24,7 @@ import { useVideoCallStore } from '../store/video-call.store';
 import ParicipantInVideoCall from '../interfaces/participant';
 import DEFAULT_USER_CALL_STATE from '../constant/default-user-call-state';
 import { ModalSwitchRoom } from '../components/common/modal-switch-room';
+import { ModalAddUser } from '../components/common/modal-add-user';
 
 interface VideoCallContextProps {
   handleShareScreen: () => void;
@@ -418,6 +419,7 @@ export const VideoCallProvider = ({
       <RequestJoinRoomModal />
       <ConfirmStopDoodle />
       <ModalSwitchRoom />
+      <ModalAddUser />
       {children}
     </VideoCallContext.Provider>
   );

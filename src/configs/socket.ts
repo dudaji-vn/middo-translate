@@ -47,6 +47,7 @@ export const SOCKET_CONFIG = {
       SEND_OLD_DOODLE_DATA: 'call.send_old_doodle_data',
       STARTING_NEW_CALL: 'call.starting_new_call',
       MEETING_END: 'call.meeting_end',
+      INVITE_TO_CALL: 'call.invite_to_call',
     }
   },
 };

@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { checkRoomIsHaveMeetingService } from '@/services/call.servide';
-import { CALL_TYPE } from '@/features/call/constant/call-type';
+import { CALL_TYPE, JOIN_TYPE } from '@/features/call/constant/call-type';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '../../../api';
@@ -106,17 +106,15 @@ const VideoCall = () => {
         call: data?.call,
         room: data?.room,
       })
-      return;
     }
     setRoom(data?.call)
-    // Get participants id except me
-    const participants = data?.room?.participants.filter((p:any) => p._id !== user?._id).map((p:any) => p._id);
-    if(data.type == CALL_TYPE.NEW_CALL ) {
-      socket.emit(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, {
-        participants,
+    if(data.type == JOIN_TYPE.NEW_CALL && data.call.type === CALL_TYPE.DIRECT) {
+      // Get participants id except me
+      const participants = data?.room?.participants.filter((p:any) => p._id !== user?._id).map((p:any) => p._id);
+      socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
+        users: participants,
         call: data?.call,
-        user: user,
-        room: data?.room,
+        user: user
       });
     }
   };

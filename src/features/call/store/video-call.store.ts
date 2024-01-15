@@ -19,6 +19,7 @@ export type VideoCallState = {
     isShowChat: boolean;
     isShowCaption: boolean;
     requestCall: any[];
+    isShowModalAddUser: boolean;
     setRoom: (room: any) => void;
     setLayout: (layout?: string) => void;
     setConfirmLeave: (confirmLeave: boolean) => void;
@@ -35,6 +36,7 @@ export type VideoCallState = {
     setShowCaption: (isShowCaption: boolean) => void;
     addRequestCall: (data: any) => void;
     removeRequestCall: (roomId?:string) => void;
+    setModalAddUser: (isShowModalAddUser: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -53,9 +55,10 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     isPinDoodle: false,
     isPinShareScreen: false,
     tmpRoom: null,
-    isShowChat: true,
+    isShowChat: false,
     isShowCaption: false,
     requestCall: [],
+    isShowModalAddUser: false,
     setRoom: (room: any) => {
         set(() => ({ room }));
     },
@@ -106,5 +109,8 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     removeRequestCall: (roomId?: string) => {
         if(roomId) set((state) => ({ requestCall: state.requestCall.filter((item) => item.id !== roomId) }));
         else set((state) => ({ requestCall: state.requestCall.slice(1) }));
+    },
+    setModalAddUser: (isShowModalAddUser: boolean) => {
+        set(() => ({ isShowModalAddUser }));
     },
 }));
