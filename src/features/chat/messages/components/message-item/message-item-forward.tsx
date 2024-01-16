@@ -20,6 +20,7 @@ export interface MessageItemForwardProps {
 export const MessageItemForward = ({
   message,
   hasParent,
+  isMe,
 }: MessageItemForwardProps) => {
   const displayForwardFrom = useMemo(() => {
     if (!message.room?.isGroup) {
@@ -30,6 +31,11 @@ export const MessageItemForward = ({
   }, [message]);
   return (
     <div className="mt-1 flex h-fit gap-1">
+      {hasParent && !isMe && (
+        <div>
+          <div className="h-1/2 w-2 border-b border-l border-neutral-100" />
+        </div>
+      )}
       <div className="order-neutral-100 ml-auto w-fit rounded-2xl border p-2">
         <div>
           <div className="text-sm">
@@ -53,7 +59,7 @@ export const MessageItemForward = ({
           </div>
         </div>
       </div>
-      {hasParent && (
+      {hasParent && isMe && (
         <div>
           <div className="h-1/2 w-2 border-b border-r border-neutral-100" />
         </div>
