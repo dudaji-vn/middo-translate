@@ -38,7 +38,7 @@ export const ChatBoxHeader = () => {
         </div>
       </div>
       <div className="-mr-2 ml-auto mr-3 flex items-center gap-1">
-        <VideoCall roomId={room._id} />
+        <VideoCall />
         <ActionBar />
       </div>
     </div>
@@ -66,7 +66,7 @@ const VideoCall = () => {
   const { room: roomChatBox, updateRoom } = useChatBox();
   const [isHaveMeeting, setHaveMeeting] = useState(false);
   useEffect(() => {
-    if (!roomId) return;
+    if (!roomChatBox?._id) return;
     const checkHaveMeeting = async () => {
       let res = await checkRoomIsHaveMeetingService(roomChatBox?._id);
       const data = res.data;
@@ -87,29 +87,37 @@ const VideoCall = () => {
     return res._id; // room id
   };
 
-  const startVideoCall = async () => {
+  const startVideoCall = async (roomId: string) => {
     let res = await joinVideoCallRoom({ roomId });
     const data = res?.data;
-    if (!data || !data.status || data.status !== STATUS.JOIN_SUCCESS) {
+    if (data.status === STATUS.ROOM_NOT_FOUND) {
+      const newRoomId = await createRoomMeeting();
+      startVideoCall(newRoomId);
+      return;
+    }
+    if (data.status !== STATUS.JOIN_SUCCESS) {
       toast.error('Error when join room');
       return;
     }
     if (room) {
+      // If user is in a meeting => set temp room to show modal
       setTempRoom({
         type: data?.type,
         call: data?.call,
         room: data?.room,
       });
-      return;
     }
     setRoom(data?.call);
-    // Get participants id accept me
-    const participants = data?.room?.participants
-      .filter((p: any) => p._id !== user?._id)
-      .map((p: any) => p._id);
-    if (data.type == CALL_TYPE.NEW_CALL) {
-      socket.emit(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, {
-        participants,
+    if (
+      data.type == JOIN_TYPE.NEW_CALL &&
+      data.call.type === CALL_TYPE.DIRECT
+    ) {
+      // Get participants id except me
+      const participants = data?.room?.participants
+        .filter((p: any) => p._id !== user?._id)
+        .map((p: any) => p._id);
+      socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
+        users: participants,
         call: data?.call,
         user: user,
       });
