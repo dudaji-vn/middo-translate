@@ -25,6 +25,7 @@ import ParicipantInVideoCall from '../interfaces/participant';
 import DEFAULT_USER_CALL_STATE from '../constant/default-user-call-state';
 import { ModalSwitchRoom } from '../components/common/modal-switch-room';
 import { ModalAddUser } from '../components/common/modal-add-user';
+import useExtractTextFromStream from '../hooks/socket/use-extract-text-from-stream';
 
 interface VideoCallContextProps {
   handleShareScreen: () => void;
@@ -67,6 +68,7 @@ export const VideoCallProvider = ({
   } = useParticipantVideoCallStore();
   const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen } = useVideoCallStore();
   const [isCreatingDoodle, setIsCreatingDoodle] = useState(false);
+  
   // Start Stream when user access this page
   useEffect(() => {
     let myVideoStream: MediaStream | null = null;

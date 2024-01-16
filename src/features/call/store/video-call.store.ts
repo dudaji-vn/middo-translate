@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import {VIDEOCALL_LAYOUTS} from '../constant/layout';
 import getRandomColor from '../utils/get-random-color.util';
+import CaptionInterface from '../interfaces/caption.interface';
 
 export type VideoCallState = {
     room: any;
@@ -20,6 +21,7 @@ export type VideoCallState = {
     isShowCaption: boolean;
     requestCall: any[];
     isShowModalAddUser: boolean;
+    captions: CaptionInterface[];
     setRoom: (room: any) => void;
     setLayout: (layout?: string) => void;
     setConfirmLeave: (confirmLeave: boolean) => void;
@@ -37,6 +39,8 @@ export type VideoCallState = {
     addRequestCall: (data: any) => void;
     removeRequestCall: (roomId?:string) => void;
     setModalAddUser: (isShowModalAddUser: boolean) => void;
+    addCaption: (caption: CaptionInterface) => void;
+    clearCaption: () => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -59,6 +63,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     isShowCaption: false,
     requestCall: [],
     isShowModalAddUser: false,
+    captions: [],
     setRoom: (room: any) => {
         set(() => ({ room }));
     },
@@ -112,5 +117,11 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     },
     setModalAddUser: (isShowModalAddUser: boolean) => {
         set(() => ({ isShowModalAddUser }));
+    },
+    addCaption: (caption: CaptionInterface) => {
+        set((state) => ({ captions: [...state.captions, caption] }));
+    },
+    clearCaption: () => {
+        set(() => ({ captions: [] }));
     },
 }));

@@ -46,6 +46,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption, setModalAddUser, room } = useVideoCallStore();
   const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
+  const [isShowInvite, setShowInvite] = useState(true);
   const haveShareScreen = participants.some(
     (participant) => participant.isShareScreen,
   );
@@ -221,13 +222,13 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
           <Phone className="h-6 w-6 rotate-[135deg]" />
         </Button.Icon>
       </div>
-      {participants.length == 1 && room.type === CALL_TYPE.GROUP && 
+      {participants.length == 1 && room.type === CALL_TYPE.GROUP && isShowInvite && isFullScreen && 
       <div className='absolute md:hidden bottom-full left-0 right-0 px-3 py-5 bg-gradient-to-t from-black/20'>
         <div className='bg-neutral-50 rounded-xl p-2'>
           <div className='text-neutral-600 flex items-center'>
             <Lightbulb className='text-neutral-400 w-4 h-4' />
             <p className='ml-1 flex-1'>Notice</p>
-            <X className='text-neutral-400 w-4 h-4 cursor-pointer' onClick={() => { }} />
+            <X className='text-neutral-400 w-4 h-4 cursor-pointer' onClick={() => setShowInvite(false)} />
           </div>
           <p className='text-sm text-neutral-400 font-light mt-2'>Memeber in group will not receive any in coming call alert till you invite them to join</p>
         </div>

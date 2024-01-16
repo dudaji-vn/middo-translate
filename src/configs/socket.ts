@@ -48,6 +48,7 @@ export const SOCKET_CONFIG = {
       STARTING_NEW_CALL: 'call.starting_new_call',
       MEETING_END: 'call.meeting_end',
       INVITE_TO_CALL: 'call.invite_to_call',
+      SEND_CAPTION: 'call.send_caption',
     }
   },
 };
