@@ -79,13 +79,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
         ) : (
           <>
             <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
-            <div
-              className={cn(
-                'group relative flex flex-col',
-                isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
-                isPending && 'opacity-50',
-              )}
-            >
+            <div className="group relative flex flex-col">
               <div
                 className={cn(
                   'relative flex',
