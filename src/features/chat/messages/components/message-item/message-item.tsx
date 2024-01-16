@@ -137,7 +137,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     <MessageItemForward
                       hasParent={!!message.content}
                       message={message.forwardOf}
-                      isMe
+                      isMe={isMe}
                     />
                   )}
                 </MessageItemWrapper>
