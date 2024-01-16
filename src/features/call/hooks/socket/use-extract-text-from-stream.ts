@@ -42,7 +42,7 @@ const useExtractTextFromStream = () => {
             } else if (rms <= 0.2 && starting) {
                 if(!startNoSound) startNoSound = new Date();
                 timer = new Date();
-                if((timer.getTime() - startNoSound.getTime()) > 2000) {
+                if((timer.getTime() - startNoSound.getTime()) > 1000) {
                     starting = false;
                     SpeechRecognition.stopListening();
                     resetTranscript();
