@@ -8,8 +8,8 @@ import { UserItem } from '@/features/users/components';
 import { forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { searchApi } from '@/features/search/api';
-import { useAuthStore } from '@/stores/auth.store';
-import { useGetUsersRecChat } from '@/features/recommendation/hooks';
+
+import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
 import { useQuerySearch } from '@/hooks/use-query-search';
 import { useSearchParams } from 'next/navigation';
 
@@ -19,12 +19,11 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchParams = useSearchParams();
     const value = searchParams?.get(SPK_SEARCH);
-    const { data: recData } = useGetUsersRecChat();
+    const { data: recData } = useGetRoomsRecChat();
     const { data } = useQuerySearch<{
       rooms: Room[];
       users: User[];
     }>(searchApi.inboxes, 'chat-search', value || '');
-    const currentUser = useAuthStore((state) => state.user);
     return (
       <div className="absolute left-0 top-[106px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3">
         <motion.div
@@ -50,7 +49,6 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
                     disabledAction
                     key={room._id}
                     data={room}
-                    currentUser={currentUser!}
                     showMembersName
                     showTime={false}
                   />
@@ -60,11 +58,15 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
           )}
           {recData && recData.length > 0 && !data && (
             <Section label="Suggestion">
-              {recData?.map((user) => {
+              {recData?.map((room) => {
                 return (
-                  <Link key={user?._id} href={`/talk/${user?._id}`}>
-                    <UserItem user={user} />
-                  </Link>
+                  <RoomItem
+                    disabledAction
+                    key={room._id}
+                    data={room}
+                    showMembersName
+                    showTime={false}
+                  />
                 );
               })}
             </Section>

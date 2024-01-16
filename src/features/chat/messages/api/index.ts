@@ -4,15 +4,16 @@ import { Message } from '@/features/chat/messages/types';
 import { axios } from '@/lib/axios';
 
 const basePath = '/messages';
+export type CreateMessage = {
+  roomId: string;
+  media?: Media[];
+  content: string;
+  contentEnglish?: string;
+  clientTempId: string;
+  language?: string;
+};
 export const messageApi = {
-  async sendMessage(data: {
-    roomId: string;
-    media?: Media[];
-    content: string;
-    contentEnglish?: string;
-    clientTempId: string;
-    language?: string;
-  }) {
+  async sendMessage(data: CreateMessage) {
     const res: Response<Message> = await axios.post(basePath, data);
     return res.data;
   },
@@ -34,6 +35,19 @@ export const messageApi = {
       {
         emoji,
       },
+    );
+    return res.data;
+  },
+
+  async forward(data: {
+    roomIds: string[];
+    forwardedMessageId: string;
+    message: Omit<CreateMessage, 'roomId' | 'clientTempId'>;
+  }) {
+    const { forwardedMessageId, ...sendData } = data;
+    const res: Response<Message> = await axios.post(
+      `${basePath}/${data.forwardedMessageId}/forward`,
+      sendData,
     );
     return res.data;
   },

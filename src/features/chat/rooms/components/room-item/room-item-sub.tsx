@@ -39,7 +39,8 @@ export const ItemSub = ({
       message.type === 'notification' ||
       message.type === 'action' ||
       message.type === 'media' ||
-      message.status === 'removed';
+      message.status === 'removed' ||
+      (!message?.content && message.forwardOf);
 
     let actor = '';
     if (isGroup) {
@@ -104,10 +105,13 @@ export const ItemSub = ({
       default:
         break;
     }
-
+    if (!message?.content && message.forwardOf) {
+      return `forwarded a message`;
+    }
     return message.content;
   }, [
     message.content,
+    message.forwardOf,
     message.media,
     message.status,
     message.targetUsers,

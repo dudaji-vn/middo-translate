@@ -6,10 +6,10 @@ import { formatFileSize } from '../../utils';
 
 export interface DocumentProps {
   file: Media;
-  isMe: boolean;
+  isMe?: boolean;
 }
 
-export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
+export const DocumentMessage = ({ file, isMe = false }: DocumentProps) => {
   const extension = file.name?.split('.').pop();
   return (
     <a

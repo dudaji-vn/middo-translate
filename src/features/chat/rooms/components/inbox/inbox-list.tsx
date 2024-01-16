@@ -37,6 +37,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       removeItem,
       updateItem,
       addItem,
+      refetch,
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
@@ -62,7 +63,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       socket.on(
         SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
-          updateRoom({ _id: payload.roomId, ...payload.data });
+          refetch();
+          // updateRoom({ _id: payload.roomId, ...payload.data });
         },
       );
       socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, (roomId: string) => {
@@ -113,7 +115,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                 key={room._id}
                 data={room}
                 isActive={currentRoomId === room._id}
-                currentUser={currentUser!}
                 currentRoomId={currentRoomId as string}
               />
             ))}

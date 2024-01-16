@@ -19,7 +19,7 @@ export const MessageEditorForm = forwardRef<
   HTMLFormElement,
   MessageEditorFormProps
 >(({ onFormSubmit, children, ...props }, ref) => {
-  const { getInputProps, getRootProps, files, reset } = useMessageEditorMedia();
+  const { getRootProps, files, reset } = useMessageEditorMedia();
   const { focusInput } = useMessageEditorText();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,7 +70,6 @@ export const MessageEditorForm = forwardRef<
       onSubmit={handleSubmit}
       className="relative flex w-full flex-col gap-2"
     >
-      <input {...getInputProps()} hidden />
       {children}
     </form>
   );

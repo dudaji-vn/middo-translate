@@ -20,7 +20,7 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
   const user = useAuthStore((state) => state.user);
 
   const { room, language } = useMemo(() => {
-    const room = generateRoomDisplay(_room, user?._id || '');
+    const room = generateRoomDisplay(_room, user?._id || '', true);
     const others = room.participants.filter(
       (member) => member._id !== user?._id,
     );

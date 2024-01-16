@@ -17,7 +17,6 @@ export interface TextMessageProps extends VariantProps<typeof wrapperVariants> {
 export const TextMessage = ({
   position,
   active,
-  status,
   message,
 }: TextMessageProps) => {
   const showMiddleTranslation = useChatStore(

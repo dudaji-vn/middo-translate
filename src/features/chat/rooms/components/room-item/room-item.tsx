@@ -13,37 +13,49 @@ import { RoomItemWrapper } from './room-item-wrapper';
 import { User } from '@/features/users/types';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
+import { useAuthStore } from '@/stores/auth.store';
 
 export interface RoomItemProps {
   data: Room;
   isActive?: boolean;
-  currentUser: User;
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
   showTime?: boolean;
   onClick?: () => void;
   isMuted?: boolean;
   disabledAction?: boolean;
+  rightElement?: JSX.Element;
+  disabledRedirect?: boolean;
 }
 
-const RoomItemContext = createContext<RoomItemProps>({} as RoomItemProps);
+const RoomItemContext = createContext<
+  RoomItemProps & {
+    currentUser: User;
+  }
+>(
+  {} as RoomItemProps & {
+    currentUser: User;
+  },
+);
 
 const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const {
     data: _data,
     isActive: _isActive,
-    currentUser,
     showMembersName,
     currentRoomId,
     showTime = true,
     onClick,
     disabledAction,
+    rightElement,
+    disabledRedirect,
   } = props;
+  const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
 
   const room = useMemo(
-    () => generateRoomDisplay(_data, currentUserId),
-    [_data, currentUserId],
+    () => generateRoomDisplay(_data, currentUserId, !disabledRedirect),
+    [_data, currentUserId, disabledRedirect],
   );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
 
@@ -95,6 +107,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
               />
             )}
           </div>
+          {rightElement}
         </RoomItemWrapper>
       </RoomItemContext.Provider>
     </Wrapper>
