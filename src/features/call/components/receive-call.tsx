@@ -8,12 +8,14 @@ import { useVideoCallStore } from "../store/video-call.store";
 import { Avatar } from "@/components/data-display";
 import socket from "@/lib/socket-io";
 import { SOCKET_CONFIG } from "@/configs/socket";
+import { useAuthStore } from "@/stores/auth.store";
 
 const ReceiveVideoCall = () => {
     const constraintsRef = useRef<HTMLDivElement>(null)
     const controls = useDragControls()
     const { requestCall, removeRequestCall, addRequestCall, setRoom } = useVideoCallStore();
     const [audio, setAudio] = useState<HTMLAudioElement>();
+    const {user} = useAuthStore();
     const declineCall = () => {
         removeRequestCall();
     }
@@ -26,16 +28,17 @@ const ReceiveVideoCall = () => {
     }, [])
 
     useEffect(() => {
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, ({ call, user }) => {
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, ({ call, user }) => {
+            if(user._id == user._id) return;
             addRequestCall({ id: call.roomId, call, user });
         });
         socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomId: string) => {
             removeRequestCall(roomId);
         });
         return () => {
-            socket.off(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL);
+            socket.off(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL);
         }
-    }, [addRequestCall, removeRequestCall])
+    }, [addRequestCall, user?._id, removeRequestCall])
 
     useEffect(() => {
         if(!audio) return;

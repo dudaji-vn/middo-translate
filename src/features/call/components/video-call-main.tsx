@@ -7,6 +7,7 @@ import { useVideoCallStore } from "@/features/call/store/video-call.store";
 import { useParticipantVideoCallStore } from "../store/participant.store";
 import { Spinner } from "@/components/feedback";
 import ChatThread from "./chat-thread";
+import CaptionSection from "./caption";
 
 interface VideoCallPageProps {
   params: { id: string };
@@ -24,6 +25,7 @@ const VideoCallPage = () => {
             {/* <ParticipantListSidebar /> */}
             {participants.length == 0 ? <div className='h-full w-full flex-1 rounded-xl min-h-[70px] flex items-center justify-center'><Spinner className='text-primary' /></div> : <VideoCallContent /> }
         </section>
+        <CaptionSection />
         <VideoCallBottom />
         </main>
         <ChatThread />

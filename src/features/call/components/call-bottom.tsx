@@ -3,6 +3,7 @@
 import {
   Brush,
   LayoutGrid,
+  Lightbulb,
   MessageSquare,
   Mic,
   MicOff,
@@ -12,9 +13,13 @@ import {
   ScanText,
   Subtitles,
   TextSelect,
+  UserPlus2,
+  UserPlus2Icon,
+  Users2,
   Users2Icon,
   Video,
   VideoOff,
+  X,
 } from 'lucide-react';
 import { Fragment, useEffect, useState } from 'react';
 
@@ -30,17 +35,18 @@ import socket from '@/lib/socket-io';
 import { Button } from '@/components/actions';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
+import { CALL_TYPE } from '../constant/call-type';
 
 export interface VideoCallBottomProps { }
 
 export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   const { setConfirmLeave } = useVideoCallStore();
   const { isTurnOnMic, isTurnOnCamera, setTurnOnMic, setTurnOnCamera, myStream } = useMyVideoCallStore()
-  const { participants, clearPinParticipant } = useParticipantVideoCallStore()
-  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setPinDoodle, setPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption } = useVideoCallStore();
+  const { participants } = useParticipantVideoCallStore()
+  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption, setModalAddUser, room } = useVideoCallStore();
   const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
-  const [isOpenMenuSelectLayout, setMenuSelectLayout] = useState(false);
+  const [isShowInvite, setShowInvite] = useState(true);
   const haveShareScreen = participants.some(
     (participant) => participant.isShareScreen,
   );
@@ -130,7 +136,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     })
   }
   return (
-    <section className={twMerge("flex items-center justify-between z-20 border-b border-t",
+    <section className={twMerge("relative flex items-center justify-between z-20 border-b border-t",
       isFullScreen ? " p-3" : "border-b border-t border-neutral-50 p-1")}>
       <div className="flex md:gap-6 gap-2 justify-center w-full">
         <DropdownMenu>
@@ -152,6 +158,12 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
               <Brush />
               <span className='ml-2'>Screen Doodle</span>
             </DropdownMenuItem>
+            {room.type === CALL_TYPE.GROUP && 
+            <DropdownMenuItem onClick={() => setModalAddUser(true)}>
+              <UserPlus2 />
+              <span className='ml-2'>Add member</span>
+            </DropdownMenuItem>
+            }
             <DropdownMenuItem
               onClick={() => setShowCaption(!isShowCaption)}
               className={isShowCaption ? 'bg-primary-200' : ''}
@@ -168,6 +180,15 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
           onClick={() => setShowChat(!isShowChat)}
         >
           <Subtitles />
+        </Button.Icon>
+        <Button.Icon
+          variant='default'
+          color={isShareScreen ? 'primary' : 'default'}
+          // disabled={haveShareScreen && !isShareScreen}
+          className={`${(isFullScreen || room.type !== CALL_TYPE.GROUP) ? 'hidden' : ''}`}
+          onClick={() => setModalAddUser(true)}
+        >
+          <UserPlus2 />
         </Button.Icon>
         <Button.Icon
           variant='default'
@@ -201,6 +222,28 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
           <Phone className="h-6 w-6 rotate-[135deg]" />
         </Button.Icon>
       </div>
+      {participants.length == 1 && room.type === CALL_TYPE.GROUP && isShowInvite && isFullScreen && 
+      <div className='absolute md:hidden bottom-full left-0 right-0 px-3 py-5 bg-gradient-to-t from-black/20'>
+        <div className='bg-neutral-50 rounded-xl p-2'>
+          <div className='text-neutral-600 flex items-center'>
+            <Lightbulb className='text-neutral-400 w-4 h-4' />
+            <p className='ml-1 flex-1'>Notice</p>
+            <X className='text-neutral-400 w-4 h-4 cursor-pointer' onClick={() => setShowInvite(false)} />
+          </div>
+          <p className='text-sm text-neutral-400 font-light mt-2'>Memeber in group will not receive any in coming call alert till you invite them to join</p>
+        </div>
+        <Button
+          onClick={() => setModalAddUser(true)}
+          size="sm"
+          color="primary"
+          variant="default"
+          className='mx-auto mt-2 block'
+          shape="square"
+          startIcon={<UserPlus2Icon />}
+        >
+          Invite
+        </Button>
+      </div>}
     </section>
   );
 };
