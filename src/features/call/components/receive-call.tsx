@@ -15,7 +15,7 @@ const ReceiveVideoCall = () => {
     const controls = useDragControls()
     const { requestCall, removeRequestCall, addRequestCall, setRoom } = useVideoCallStore();
     const [audio, setAudio] = useState<HTMLAudioElement>();
-    const {user} = useAuthStore();
+    const {user: me} = useAuthStore();
     const declineCall = () => {
         removeRequestCall();
     }
@@ -29,7 +29,7 @@ const ReceiveVideoCall = () => {
 
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, ({ call, user }) => {
-            if(user._id == user._id) return;
+            if(user._id == me?._id) return;
             addRequestCall({ id: call.roomId, call, user });
         });
         socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomId: string) => {
@@ -38,7 +38,7 @@ const ReceiveVideoCall = () => {
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL);
         }
-    }, [addRequestCall, user?._id, removeRequestCall])
+    }, [addRequestCall, me?._id, removeRequestCall])
 
     useEffect(() => {
         if(!audio) return;

@@ -40,10 +40,9 @@ import { CALL_TYPE } from '../constant/call-type';
 export interface VideoCallBottomProps { }
 
 export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
-  const { setConfirmLeave } = useVideoCallStore();
   const { isTurnOnMic, isTurnOnCamera, setTurnOnMic, setTurnOnCamera, myStream } = useMyVideoCallStore()
   const { participants } = useParticipantVideoCallStore()
-  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption, setModalAddUser, room } = useVideoCallStore();
+  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption, setModalAddUser, room, setConfirmLeave, layout } = useVideoCallStore();
   const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
   const [isShowInvite, setShowInvite] = useState(true);
@@ -154,7 +153,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
               <LayoutGrid />
               <span className='ml-2'>Galery View</span>
             </DropdownMenuItem>
-            <DropdownMenuItem disabled={!haveShareScreen || !isFullScreen || !isPinShareScreen} onClick={onDoodle}>
+            <DropdownMenuItem disabled={!haveShareScreen || !isFullScreen || !isPinShareScreen || layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW} onClick={onDoodle}>
               <Brush />
               <span className='ml-2'>Screen Doodle</span>
             </DropdownMenuItem>
