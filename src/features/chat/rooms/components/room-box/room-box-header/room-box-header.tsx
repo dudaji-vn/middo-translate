@@ -15,9 +15,10 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { checkRoomIsHaveMeetingService } from '@/services/call.servide';
-import { CALL_TYPE } from '@/features/call/constant/call-type';
+import { CALL_TYPE, JOIN_TYPE } from '@/features/call/constant/call-type';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import { roomApi } from '../../../api';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -36,7 +37,7 @@ export const ChatBoxHeader = () => {
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
-      <div className="ml-auto mr-3 flex items-center gap-1">
+      <div className="-mr-2 ml-auto mr-3 flex items-center gap-1">
         <VideoCall roomId={room._id} />
         <ActionBar />
       </div>
@@ -59,15 +60,15 @@ const ActionBar = () => {
     </div>
   );
 };
-const VideoCall = ({ roomId }: { roomId: string }) => {
-  const router = useRouter();
+const VideoCall = () => {
   const { user } = useAuthStore();
   const { setRoom, room, setTempRoom } = useVideoCallStore();
+  const { room: roomChatBox, updateRoom } = useChatBox();
   const [isHaveMeeting, setHaveMeeting] = useState(false);
   useEffect(() => {
     if (!roomId) return;
     const checkHaveMeeting = async () => {
-      let res = await checkRoomIsHaveMeetingService(roomId);
+      let res = await checkRoomIsHaveMeetingService(roomChatBox?._id);
       const data = res.data;
       if (data.status === STATUS.MEETING_STARTED) {
         setHaveMeeting(true);
@@ -76,7 +77,15 @@ const VideoCall = ({ roomId }: { roomId: string }) => {
       }
     };
     checkHaveMeeting();
-  }, [room, roomId]);
+  }, [room, roomChatBox, room]);
+
+  const createRoomMeeting = async () => {
+    const res = await roomApi.createRoom({
+      participants: roomChatBox.participants.map((p) => p._id),
+    });
+    updateRoom(res);
+    return res._id; // room id
+  };
 
   const startVideoCall = async () => {
     let res = await joinVideoCallRoom({ roomId });
@@ -103,7 +112,6 @@ const VideoCall = ({ roomId }: { roomId: string }) => {
         participants,
         call: data?.call,
         user: user,
-        room: data?.room,
       });
     }
   };
@@ -111,7 +119,7 @@ const VideoCall = ({ roomId }: { roomId: string }) => {
   return (
     <div>
       <Button.Icon
-        onClick={startVideoCall}
+        onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"
         color="primary"
         variant="ghost"
@@ -121,7 +129,7 @@ const VideoCall = ({ roomId }: { roomId: string }) => {
         {isHaveMeeting && 'Join call'}
       </Button.Icon>
       <Button
-        onClick={startVideoCall}
+        onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"
         color="primary"
         variant="ghost"

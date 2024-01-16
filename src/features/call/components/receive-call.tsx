@@ -2,20 +2,20 @@
 
 import { Button } from "@/components/actions";
 import { motion, useDragControls } from "framer-motion"
-import { Maximize2, Minimize2, Phone, PhoneOff, X } from "lucide-react";
+import { Phone, PhoneOff, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useVideoCallStore } from "../store/video-call.store";
-import VideoCallPage from "./video-call-main";
 import { Avatar } from "@/components/data-display";
 import socket from "@/lib/socket-io";
 import { SOCKET_CONFIG } from "@/configs/socket";
+import { useAuthStore } from "@/stores/auth.store";
 
 const ReceiveVideoCall = () => {
     const constraintsRef = useRef<HTMLDivElement>(null)
     const controls = useDragControls()
     const { requestCall, removeRequestCall, addRequestCall, setRoom } = useVideoCallStore();
-    const audioRef = useRef<HTMLAudioElement>();
     const [audio, setAudio] = useState<HTMLAudioElement>();
+    const {user: me} = useAuthStore();
     const declineCall = () => {
         removeRequestCall();
     }
@@ -28,16 +28,17 @@ const ReceiveVideoCall = () => {
     }, [])
 
     useEffect(() => {
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, ({ call, user }) => {
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, ({ call, user }) => {
+            if(user._id == me?._id) return;
             addRequestCall({ id: call.roomId, call, user });
         });
         socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomId: string) => {
             removeRequestCall(roomId);
         });
         return () => {
-            socket.off(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL);
+            socket.off(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL);
         }
-    }, [addRequestCall, removeRequestCall])
+    }, [addRequestCall, me?._id, removeRequestCall])
 
     useEffect(() => {
         if(!audio) return;
@@ -47,7 +48,6 @@ const ReceiveVideoCall = () => {
             audio.addEventListener('ended', () => {
                 audio.play();
             });
-
         } else {
             audio.pause();
         }
@@ -66,7 +66,7 @@ const ReceiveVideoCall = () => {
                 className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit md:w-[336px] md:bottom-4 md:left-4`}
             >
                 <div className="rounded-xl overflow-hidden border border-primary-400 bg-white flex flex-col h-full w-full shadow-2 shadow-primary-500/30 max-h-dvh">
-                    <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-neutral-50 md:cursor-grab md:active:cursor-grabbing`}>
+                    <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing`}>
                         <Phone className="h-4 w-4 stroke-current" />
                         <span className="flex-1 font-semibold">{requestCall[0]?.call?.name}</span>
                         <Button.Icon
@@ -78,7 +78,7 @@ const ReceiveVideoCall = () => {
                             <X />
                         </Button.Icon>
                     </div>
-                    <div className="relative h-[calc(100%-60px)]">
+                    <div className="relative flex flex-col h-[calc(100%-60px)]">
                         <div className="h-full relative p-3">
                             <div className="flex gap-2 items-center justify-center">
                                 <Avatar 
