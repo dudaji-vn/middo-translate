@@ -19,7 +19,7 @@ export const RoomItemWrapper = (
     >
       <Link
         onClick={onClick}
-        href={data.link!}
+        href={data.link || ''}
         className="flex w-full items-center gap-3"
       >
         {props.children}

@@ -2,7 +2,11 @@ import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
 import moment from 'moment';
 
-export function generateRoomDisplay(room: Room, currentUserId: User['_id']) {
+export function generateRoomDisplay(
+  room: Room,
+  currentUserId: User['_id'],
+  inCludeLink?: boolean,
+) {
   const { participants, isGroup, name } = room;
   if (isGroup) {
     if (!name) {
@@ -10,7 +14,8 @@ export function generateRoomDisplay(room: Room, currentUserId: User['_id']) {
         .map((participant) => participant.name.split(' ')[0])
         .join(', ');
     }
-    room.link = `/talk/${room._id}`;
+
+    room.link = inCludeLink ? `/talk/${room._id}` : '';
     return room;
   }
   let [participant] = participants.filter(
@@ -24,7 +29,7 @@ export function generateRoomDisplay(room: Room, currentUserId: User['_id']) {
     ...room,
     name: participant.name,
     avatar: participant.avatar,
-    link: `/talk/${participant._id}`,
+    link: inCludeLink ? `/talk/${room._id}` : '',
   };
 }
 

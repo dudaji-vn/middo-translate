@@ -10,12 +10,14 @@ import { useMessageEditorMedia } from './message-editor-media-context';
 import { useMessageEditorText } from './message-editor-text-context';
 
 export interface MessageEditorToolbarProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  disableMedia?: boolean;
+}
 
 export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
->((props, ref) => {
+>(({ disableMedia = false, ...props }, ref) => {
   const { listening } = useMessageEditorText();
   const { open } = useMessageEditorMedia();
 
@@ -45,9 +47,11 @@ export const MessageEditorToolbar = forwardRef<
       <MessageEditorToolbarTranslateTool />
       <div ref={ref} {...props} className="flex items-center">
         <MessageEditorToolbarLangControl />
-        <Button.Icon onClick={open} color="default" size="xs" variant="ghost">
-          <FilePlus2 />
-        </Button.Icon>
+        {!disableMedia && (
+          <Button.Icon onClick={open} color="default" size="xs" variant="ghost">
+            <FilePlus2 />
+          </Button.Icon>
+        )}
         <MessageEditorToolbarMic />
         <MessageEditorToolbarEmoji />
       </div>

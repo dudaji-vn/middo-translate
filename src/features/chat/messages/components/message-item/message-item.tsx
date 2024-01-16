@@ -23,6 +23,7 @@ import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { messageVariants } from './variants';
 import { useBoolean } from 'usehooks-ts';
+import { MessageItemForward } from './message-item-forward';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -132,6 +133,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     )}
                   </div>
                   {isPending && <PendingStatus />}
+                  {message.forwardOf && (
+                    <MessageItemForward
+                      hasParent={!!message.content}
+                      message={message.forwardOf}
+                      isMe
+                    />
+                  )}
                 </MessageItemWrapper>
               </div>
               {message?.reactions && message.reactions.length > 0 && (

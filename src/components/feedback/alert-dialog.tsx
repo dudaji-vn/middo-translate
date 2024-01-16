@@ -122,6 +122,7 @@ const AlertDialogCancel = React.forwardRef<
     ref={ref}
     className={cn(
       buttonVariants({
+        size: 'md',
         variant: 'ghost',
         color: 'default',
         shape: 'square',

@@ -5,12 +5,12 @@ import {
   ReplyIcon,
   TrashIcon,
 } from 'lucide-react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 
 import { Message } from '../types';
 import { MessageModalRemove } from './message-modal-remove';
 import { useCopyMessage } from '../hooks/use-copy-message';
-import { useTextCopy } from '@/hooks/use-text-copy';
+import { ForwardModal } from './forward-modal';
 
 type Action = 'remove' | 'pin' | 'reply' | 'copy' | 'forward' | 'none';
 type ActionItem = {
@@ -37,7 +37,7 @@ export const actionItems: ActionItem[] = [
     action: 'forward',
     label: 'Forward',
     icon: <ForwardIcon />,
-    disabled: true,
+    disabled: false,
   },
   {
     action: 'pin',
@@ -72,7 +72,7 @@ export const useMessageActions = () => {
   return context;
 };
 export const MessageActions = ({ children }: { children: React.ReactNode }) => {
-  const [id, setId] = useState<string>('');
+  const [message, setMessage] = useState<Message | null>(null);
   const [isMe, setIsMe] = useState<boolean>(false);
   const [action, setAction] = useState<Action>('none');
   const { copyMessage } = useCopyMessage();
@@ -82,14 +82,29 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
       return;
     }
     setAction(action);
-    setId(message._id);
+    setMessage(message);
     setIsMe(isMe);
   };
   const reset = () => {
     setAction('none');
     setIsMe(false);
-    setId('');
+    setMessage(null);
   };
+
+  const Modal = useMemo(() => {
+    if (!message) return null;
+    switch (action) {
+      case 'remove':
+        return (
+          <MessageModalRemove onClosed={reset} id={message._id} isMe={isMe} />
+        );
+      case 'forward':
+        return <ForwardModal message={message} onClosed={reset} />;
+
+      default:
+        return null;
+    }
+  }, [action, isMe, message]);
 
   return (
     <MessageActionsContext.Provider
@@ -98,9 +113,7 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-      {action === 'remove' && (
-        <MessageModalRemove onClosed={reset} id={id} isMe={isMe} />
-      )}
+      {Modal}
     </MessageActionsContext.Provider>
   );
 };

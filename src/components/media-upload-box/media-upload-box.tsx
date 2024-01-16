@@ -5,7 +5,7 @@ import { PropsWithChildren, createContext, useContext, useEffect } from 'react';
 
 import { DropzoneRootProps } from 'react-dropzone';
 
-interface MessageEditorMediaContextProps {
+interface MediaUploadBoxContextProps {
   files: FileWithUrl[];
   getInputProps: <T extends DropzoneRootProps>(props?: T | undefined) => T;
   getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T;
@@ -17,12 +17,11 @@ interface MessageEditorMediaContextProps {
   reset: () => void;
 }
 
-export const MessageEditorMediaContext =
-  createContext<MessageEditorMediaContextProps>(
-    {} as MessageEditorMediaContextProps,
-  );
+export const MediaUploadBoxContext = createContext<MediaUploadBoxContextProps>(
+  {} as MediaUploadBoxContextProps,
+);
 
-export const MessageEditorMediaProvider = ({
+export const MediaUploadBoxProvider = ({
   children,
   onFileUploaded,
 }: PropsWithChildren & {
@@ -46,7 +45,7 @@ export const MessageEditorMediaProvider = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uploadedFiles]);
   return (
-    <MessageEditorMediaContext.Provider
+    <MediaUploadBoxContext.Provider
       value={{
         files,
         getInputProps,
@@ -58,16 +57,15 @@ export const MessageEditorMediaProvider = ({
       }}
     >
       {children}
-      <input {...getInputProps()} hidden />
-    </MessageEditorMediaContext.Provider>
+    </MediaUploadBoxContext.Provider>
   );
 };
 
-export const useMessageEditorMedia = () => {
-  const context = useContext(MessageEditorMediaContext);
+export const useMediaUploadBox = () => {
+  const context = useContext(MediaUploadBoxContext);
   if (!context) {
     throw new Error(
-      'useMessageEditorMedia must be used within MessageEditorMediaProvider',
+      'useMediaUploadBox must be used within MediaUploadBoxProvider',
     );
   }
   return context;

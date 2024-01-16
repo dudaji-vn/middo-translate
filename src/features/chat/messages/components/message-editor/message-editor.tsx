@@ -2,7 +2,7 @@
 
 import { TextInput, TextInputRef } from './message-editor-text-input';
 import { detectLanguage, translateText } from '@/services/languages.service';
-import { forwardRef, useRef } from 'react';
+import { HTMLAttributes, forwardRef, useImperativeHandle, useRef } from 'react';
 
 import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
@@ -28,10 +28,15 @@ export interface MessageEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   onSubmitValue?: (data: SubmitData) => void;
   onFileUploaded?: (files: FileWithUrl[]) => void;
+  disabledMedia?: boolean;
 }
 
-export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
-  ({ onSubmitValue, onFileUploaded, ...props }, ref) => {
+export interface MessageEditorRef extends HTMLAttributes<HTMLDivElement> {
+  valueSubmit: () => void;
+}
+
+export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
+  ({ onSubmitValue, onFileUploaded, disabledMedia, ...props }, ref) => {
     const textInputRef = useRef<TextInputRef>(null);
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
@@ -61,6 +66,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       scrollToBottom();
       const formData = new FormData(e.currentTarget);
       const content = formData.get('message') as string;
+      console.log('content', content);
       let language = srcLang;
       if (content) {
         if (language === 'auto') {
@@ -83,6 +89,16 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       const documents = files.documents || [];
       onSubmitValue?.({ content, images, documents, contentEnglish, language });
     };
+
+    useImperativeHandle(ref, () => ({
+      valueSubmit: () => {
+        const formRef = document.getElementById('message-editor');
+        if (!formRef) return;
+        formRef?.dispatchEvent(
+          new Event('submit', { cancelable: true, bubbles: true }),
+        );
+      },
+    }));
 
     return (
       <MessageEditorMediaProvider onFileUploaded={onFileUploaded}>

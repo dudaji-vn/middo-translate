@@ -23,7 +23,7 @@ export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
   const currentUserId = useAuthStore((s) => s.user?._id) || '';
   const room = useMemo(
-    () => generateRoomDisplay(_room, currentUserId),
+    () => generateRoomDisplay(_room, currentUserId, true),
     [_room, currentUserId],
   );
   return (
@@ -36,7 +36,7 @@ export const ChatBoxHeader = () => {
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
-      <div className="-mr-2 ml-auto mr-3 flex items-center gap-1">
+      <div className="ml-auto mr-3 flex items-center gap-1">
         <VideoCall roomId={room._id} />
         <ActionBar />
       </div>
@@ -65,11 +65,11 @@ const VideoCall = ({ roomId }: { roomId: string }) => {
   const { setRoom, room, setTempRoom } = useVideoCallStore();
   const [isHaveMeeting, setHaveMeeting] = useState(false);
   useEffect(() => {
-    if(!roomId) return;
+    if (!roomId) return;
     const checkHaveMeeting = async () => {
       let res = await checkRoomIsHaveMeetingService(roomId);
       const data = res.data;
-      if(data.status === STATUS.MEETING_STARTED) {
+      if (data.status === STATUS.MEETING_STARTED) {
         setHaveMeeting(true);
       } else {
         setHaveMeeting(false);
@@ -79,24 +79,26 @@ const VideoCall = ({ roomId }: { roomId: string }) => {
   }, [room, roomId]);
 
   const startVideoCall = async () => {
-    let res = await joinVideoCallRoom({roomId});
+    let res = await joinVideoCallRoom({ roomId });
     const data = res?.data;
-    if(!data || !data.status || data.status !== STATUS.JOIN_SUCCESS) {
+    if (!data || !data.status || data.status !== STATUS.JOIN_SUCCESS) {
       toast.error('Error when join room');
       return;
-    };
-    if(room) {
+    }
+    if (room) {
       setTempRoom({
         type: data?.type,
         call: data?.call,
         room: data?.room,
-      })
+      });
       return;
     }
-    setRoom(data?.call)
+    setRoom(data?.call);
     // Get participants id accept me
-    const participants = data?.room?.participants.filter((p:any) => p._id !== user?._id).map((p:any) => p._id);
-    if(data.type == CALL_TYPE.NEW_CALL ) {
+    const participants = data?.room?.participants
+      .filter((p: any) => p._id !== user?._id)
+      .map((p: any) => p._id);
+    if (data.type == CALL_TYPE.NEW_CALL) {
       socket.emit(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, {
         participants,
         call: data?.call,
@@ -116,7 +118,7 @@ const VideoCall = ({ roomId }: { roomId: string }) => {
         className={`${isHaveMeeting ? 'hidden' : ''}`}
       >
         <Phone />
-        { isHaveMeeting && 'Join call' }
+        {isHaveMeeting && 'Join call'}
       </Button.Icon>
       <Button
         onClick={startVideoCall}
