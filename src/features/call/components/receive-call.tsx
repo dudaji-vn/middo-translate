@@ -30,6 +30,8 @@ const ReceiveVideoCall = () => {
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, ({ call, user }) => {
             if(user._id == me?._id) return;
+            const isHave = requestCall.find((item) => item.id == call.roomId);
+            if(isHave) return;
             addRequestCall({ id: call.roomId, call, user });
         });
         socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomId: string) => {
@@ -38,7 +40,7 @@ const ReceiveVideoCall = () => {
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL);
         }
-    }, [addRequestCall, me?._id, removeRequestCall])
+    }, [addRequestCall, me?._id, removeRequestCall, requestCall])
 
     useEffect(() => {
         if(!audio) return;
@@ -63,7 +65,7 @@ const ReceiveVideoCall = () => {
                 dragConstraints={constraintsRef}
                 dragControls={controls}
                 dragMomentum={false}
-                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit md:w-[336px] md:bottom-4 md:left-4`}
+                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit min-h-[252px] md:w-[336px] md:bottom-4 md:left-4 shadow-lg shadow-primary/500`}
             >
                 <div className="rounded-xl overflow-hidden border border-primary-400 bg-white flex flex-col h-full w-full shadow-2 shadow-primary-500/30 max-h-dvh">
                     <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing`}>

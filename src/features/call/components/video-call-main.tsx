@@ -18,7 +18,7 @@ const VideoCallPage = () => {
 
   if(!room) return null;
   return <VideoCallProvider>
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-full flex-col md:flex-row">
         <main className="w-full h-full flex flex-col overflow-hidden relative">
         {/* <VideoCallHeader /> */}
         <section className="relative flex justify-center h-full w-full flex-1 overflow-hidden min-h-[70px]">
@@ -26,9 +26,10 @@ const VideoCallPage = () => {
             {participants.length == 0 ? <div className='h-full w-full flex-1 rounded-xl min-h-[70px] flex items-center justify-center'><Spinner className='text-primary' /></div> : <VideoCallContent /> }
         </section>
         <CaptionSection />
+        <ChatThread className="block md:hidden"/>
         <VideoCallBottom />
         </main>
-        <ChatThread />
+        <ChatThread className="hidden md:block"/>
     </div>
   </VideoCallProvider>
 };

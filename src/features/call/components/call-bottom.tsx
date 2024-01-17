@@ -135,13 +135,14 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     })
   }
   return (
-    <section className={twMerge("relative flex items-center justify-between z-20 border-b border-t",
-      isFullScreen ? " p-3" : "border-b border-t border-neutral-50 p-1")}>
-      <div className="flex md:gap-6 gap-2 justify-center w-full">
+    <section className={twMerge("relative flex items-center justify-between z-20 border-b border-t p-2",
+      isFullScreen ? "" : "border-b border-t border-neutral-50")}>
+      <div className="flex gap-6 justify-center w-full">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button.Icon
               variant='default'
+              size='xs'
               color='default'
               className={`${!isFullScreen ? 'hidden' : ''}`}
             >
@@ -174,6 +175,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         </DropdownMenu>
         <Button.Icon
           variant='default'
+          size='xs'
           color={isShowChat ? 'primary' : 'default'}
           className={`${!isFullScreen ? 'hidden' : ''}`}
           onClick={() => setShowChat(!isShowChat)}
@@ -182,6 +184,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         </Button.Icon>
         <Button.Icon
           variant='default'
+          size='xs'
           color={isShareScreen ? 'primary' : 'default'}
           // disabled={haveShareScreen && !isShareScreen}
           className={`${(isFullScreen || room.type !== CALL_TYPE.GROUP) ? 'hidden' : ''}`}
@@ -191,6 +194,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         </Button.Icon>
         <Button.Icon
           variant='default'
+          size='xs'
           color={isShareScreen ? 'primary' : 'default'}
           disabled={haveShareScreen && !isShareScreen}
           onClick={handleShareScreen}
@@ -200,6 +204,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
 
         <Button.Icon
           variant='default'
+          size='xs'
           color={isTurnOnCamera ? 'primary' : 'default'}
           onClick={onToggleCamera}
         >
@@ -207,6 +212,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         </Button.Icon>
         <Button.Icon
           variant='default'
+          size='xs'
           color={isTurnOnMic ? 'primary' : 'default'}
           onClick={onToggleMute}
         >
@@ -214,11 +220,12 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         </Button.Icon>
         <Button.Icon
           variant='default'
+          size='xs'
           color='error'
           title="Leave"
           onClick={handleLeave}
         >
-          <Phone className="h-6 w-6 rotate-[135deg]" />
+          <Phone className="rotate-[135deg]" />
         </Button.Icon>
       </div>
       {participants.length == 1 && room.type === CALL_TYPE.GROUP && isShowInvite && isFullScreen && 

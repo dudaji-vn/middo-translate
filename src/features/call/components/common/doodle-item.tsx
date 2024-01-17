@@ -24,12 +24,13 @@ const DoodleItem = ({  }: DoodleItemProps) => {
     setPinDoodle(true)
   }
   
-  return ( <section className='p-[2px] h-full flex items-center justify-center max-h-[300px] rounded-xl overflow-hidden relative bg-neutral-50'>
-        <div className='w-full h-full flex items-center justify-center'>
+  return ( <section className='p-[2px] h-full flex items-center justify-center'>
+        <div className='w-full h-full flex items-center justify-center bg-neutral-50 relative rounded-xl overflow-hidden  '>
             <Image
                 src={doodleImage || ''}
-                width={300}
-                height={300}
+                width={1000}
+                height={1000}
+                className='h-full object-contain'
                 alt="Doodle Image"
             />
             <div className='cursor-pointer md:opacity-0 opacity-100 transition-all hover:opacity-100 absolute inset-0 bg-black/80 flex flex-col items-center justify-center text-white gap-1' onClick={expandDoodle}>

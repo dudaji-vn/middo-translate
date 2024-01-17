@@ -84,9 +84,9 @@ export default function UpdateUserInfo() {
       <AlertDialog open={open} onOpenChange={onModalChange}>
         <AlertDialogTrigger>
           <div className="cursor-pointer transition-all hover:opacity-80">
-            <Button.Icon color="secondary">
+            <div className="inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0 transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-semibold text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:bg-primary-100 disabled:text-primary-200 rounded-full p-0 w-12 h-12">
               <Edit2Icon />
-            </Button.Icon>
+            </div>
             <span className="mt-2 block text-center text-sm font-light">
               Profile
             </span>
