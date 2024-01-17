@@ -24,6 +24,7 @@ import { cn } from '@/utils/cn';
 import { messageVariants } from './variants';
 import { useBoolean } from 'usehooks-ts';
 import { MessageItemForward } from './message-item-forward';
+import { CallMessage } from './message-item-call';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -116,6 +117,12 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                         position={isMe ? 'right' : 'left'}
                         message={message}
                         active={isActive}
+                      />
+                    )}
+                    {message.type === 'call' && (
+                      <CallMessage
+                        position={isMe ? 'right' : 'left'}
+                        message={message}
                       />
                     )}
                     {message?.media && message.media.length > 0 && (

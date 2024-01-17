@@ -92,7 +92,7 @@ const DesktopWrapper = ({
   return (
     <div className="group relative">
       {children}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button.Icon

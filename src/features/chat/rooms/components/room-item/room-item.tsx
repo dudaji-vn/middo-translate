@@ -14,6 +14,7 @@ import { User } from '@/features/users/types';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { useAuthStore } from '@/stores/auth.store';
+import { RoomItemComingCall } from './room-item-coming-call';
 
 export interface RoomItemProps {
   data: Room;
@@ -108,6 +109,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             )}
           </div>
           {rightElement}
+          <RoomItemComingCall roomChatBox={room} />
         </RoomItemWrapper>
       </RoomItemContext.Provider>
     </Wrapper>
