@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 import { cn } from '@/utils/cn';
 import { useRoomItem } from './room-item';
+import { RoomItemComingCall } from './room-item-coming-call';
 
 export interface RoomItemWrapperProps {}
 
@@ -13,7 +14,7 @@ export const RoomItemWrapper = (
   return (
     <div
       className={cn(
-        'relative flex cursor-pointer items-center justify-between px-3 py-2 transition-all',
+        'relative flex flex-1 cursor-pointer items-center justify-between px-3 py-2 transition-all',
         isActive ? 'bg-background-darker' : 'bg-transparent hover:bg-[#fafafa]',
       )}
     >
