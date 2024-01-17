@@ -20,7 +20,10 @@ export type MessageStatus = Pick<
   VariantProps<typeof messageVariants>,
   'status'
 >['status'];
-
+type Call = {
+  endTime: string | null;
+  type: 'DIRECT' | 'GROUP';
+} & BaseEntity;
 export type Message = {
   content: string;
   contentEnglish?: string;
@@ -35,4 +38,5 @@ export type Message = {
   language: string;
   reactions?: Reaction[];
   forwardOf?: Message;
+  call?: Call;
 } & BaseEntity;
