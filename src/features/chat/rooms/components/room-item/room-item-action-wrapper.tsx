@@ -90,7 +90,7 @@ const DesktopWrapper = ({
     items: Item[];
   }) => {
   return (
-    <div className="group relative">
+    <div className="group relative flex-1">
       {children}
       <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
         <DropdownMenu>

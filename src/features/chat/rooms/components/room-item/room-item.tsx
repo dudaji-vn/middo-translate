@@ -15,6 +15,7 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { useAuthStore } from '@/stores/auth.store';
 import { RoomItemComingCall } from './room-item-coming-call';
+import { cn } from '@/utils/cn';
 
 export interface RoomItemProps {
   data: Room;
@@ -71,48 +72,55 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     : RoomItemActionWrapper;
 
   return (
-    <Wrapper room={room} isMuted={isMuted}>
-      <RoomItemContext.Provider
-        value={{
-          data: room,
-          isActive,
-          currentUser,
-          showMembersName,
-          showTime,
-          onClick,
-          isMuted,
-        }}
-      >
-        <RoomItemWrapper>
-          <ItemAvatar room={room} isMuted={isMuted} />
-          <div className="w-full">
-            <RoomItemHead
-              isRead={isRead}
-              showTime={showTime}
-              time={room.lastMessage?.createdAt || room.newMessageAt}
-              name={room.name}
-            />
-            {showMembersName && (
-              <div className="flex items-center">
-                <span className="line-clamp-1 break-all text-sm text-text/50">
-                  {room.participants.map((user) => user.name).join(', ')}
-                </span>
-              </div>
-            )}
-            {room.lastMessage && !showMembersName && (
-              <ItemSub
-                currentUser={currentUser}
-                isGroup={room.isGroup}
-                message={room.lastMessage}
-                participants={room.participants}
+    <div
+      className={cn(
+        'flex',
+        isActive ? 'bg-background-darker' : 'bg-transparent hover:bg-[#fafafa]',
+      )}
+    >
+      <Wrapper room={room} isMuted={isMuted}>
+        <RoomItemContext.Provider
+          value={{
+            data: room,
+            isActive,
+            currentUser,
+            showMembersName,
+            showTime,
+            onClick,
+            isMuted,
+          }}
+        >
+          <RoomItemWrapper>
+            <ItemAvatar room={room} isMuted={isMuted} />
+            <div className="w-full">
+              <RoomItemHead
+                isRead={isRead}
+                showTime={showTime}
+                time={room.lastMessage?.createdAt || room.newMessageAt}
+                name={room.name}
               />
-            )}
-          </div>
-          {rightElement}
-          <RoomItemComingCall roomChatBox={room} />
-        </RoomItemWrapper>
-      </RoomItemContext.Provider>
-    </Wrapper>
+              {showMembersName && (
+                <div className="flex items-center">
+                  <span className="line-clamp-1 break-all text-sm text-text/50">
+                    {room.participants.map((user) => user.name).join(', ')}
+                  </span>
+                </div>
+              )}
+              {room.lastMessage && !showMembersName && (
+                <ItemSub
+                  currentUser={currentUser}
+                  isGroup={room.isGroup}
+                  message={room.lastMessage}
+                  participants={room.participants}
+                />
+              )}
+            </div>
+            {rightElement}
+          </RoomItemWrapper>
+        </RoomItemContext.Provider>
+      </Wrapper>
+      <RoomItemComingCall roomChatBox={room} />
+    </div>
   );
 });
 
