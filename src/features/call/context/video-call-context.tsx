@@ -64,11 +64,11 @@ export const VideoCallProvider = ({
     removePeerShareScreen,
     pinParticipant,
     resetParticipants,
-    resetUsersRequestJoinRoom
+    resetUsersRequestJoinRoom,
+    updatePeerParticipant
   } = useParticipantVideoCallStore();
   const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen } = useVideoCallStore();
   const [isCreatingDoodle, setIsCreatingDoodle] = useState(false);
-  
   // Start Stream when user access this page
   useEffect(() => {
     let myVideoStream: MediaStream | null = null;
@@ -138,6 +138,7 @@ export const VideoCallProvider = ({
         user: any;
         isShareScreen: boolean;
       }) => {
+        console.log('New User Join');
         const peer = addPeer({
           signal: payload.signal,
           callerId: payload.callerId,
@@ -145,6 +146,13 @@ export const VideoCallProvider = ({
           isShareScreen: payload.isShareScreen,
         });
         peer.addStream(myStream);
+        let oldParticipant = participants.find((p: ParicipantInVideoCall) => p.socketId === payload.callerId && p.isShareScreen === payload.isShareScreen);
+        if(oldParticipant) {
+          // Update peer User
+          oldParticipant?.peer.removeAllListeners('close')
+          updatePeerParticipant(peer, payload.callerId)
+          return;
+        };
         const newUser = {
           socketId: payload.callerId,
           peer,
@@ -383,8 +391,12 @@ export const VideoCallProvider = ({
           stopShareScreen();
         };
       })
-      .catch((err: any) => {
-        console.log(err);
+      .catch((err: Error) => {
+        if(err.name == 'NotAllowedError') {
+          // 
+        } else {
+          toast.error('Device not support share screen');
+        }
       });
   };
   const handleStartDoodle = async () => {

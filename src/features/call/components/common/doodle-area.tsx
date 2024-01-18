@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import ButtonDataAction from '@/components/actions/button/button-data-action';
-import { Brush, ChevronDown, ChevronUp, Eraser, GripHorizontal, ImageIcon, RotateCcw, Undo2, X } from 'lucide-react';
+import { Brush, ChevronDown, ChevronUp, Eraser, GripHorizontal, RotateCcw, Undo2, X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { motion, useDragControls } from "framer-motion"
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas';

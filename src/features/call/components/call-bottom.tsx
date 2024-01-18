@@ -1,30 +1,7 @@
 'use client';
 
-import {
-  Brush,
-  LayoutGrid,
-  Lightbulb,
-  MessageSquare,
-  Mic,
-  MicOff,
-  MonitorUp,
-  MoreVertical,
-  Phone,
-  ScanText,
-  Subtitles,
-  TextSelect,
-  UserPlus2,
-  UserPlus2Icon,
-  Users2,
-  Users2Icon,
-  Video,
-  VideoOff,
-  X,
-} from 'lucide-react';
-import { Fragment, useEffect, useState } from 'react';
-
-import ButtonDataAction from '@/components/actions/button/button-data-action';
-import formatTime from '../utils/format-time.util';
+import { Brush, LayoutGrid, Lightbulb, Mic, MicOff, MonitorUp, MoreVertical, Phone, ScanText, Subtitles, UserPlus2, UserPlus2Icon, Video, VideoOff, X } from 'lucide-react';
+import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useVideoCallContext } from '../context/video-call-context';
 import { useVideoCallStore } from '../store/video-call.store';
@@ -40,10 +17,9 @@ import { CALL_TYPE } from '../constant/call-type';
 export interface VideoCallBottomProps { }
 
 export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
-  const { isTurnOnMic, isTurnOnCamera, setTurnOnMic, setTurnOnCamera, myStream } = useMyVideoCallStore()
-  const { participants } = useParticipantVideoCallStore()
+  const { isTurnOnMic, isTurnOnCamera, setTurnOnMic, setTurnOnCamera, myStream, setMyStream, isShareScreen } = useMyVideoCallStore()
+  const { participants, setStreamForParticipant } = useParticipantVideoCallStore()
   const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption, setModalAddUser, room, setConfirmLeave, layout } = useVideoCallStore();
-  const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
   const [isShowInvite, setShowInvite] = useState(true);
   const haveShareScreen = participants.some(
@@ -67,54 +43,46 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   const changeLayout = () => {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
   }
-  const handleUpdatePeerMedia = (newMediaStream: MediaStream) => {
-    participants.forEach(async (p: ParicipantInVideoCall) => {
-      if (p.isMe || !p.peer) return;
-      const oldStream = p.peer.streams[0];
-      if (oldStream) {
-        oldStream.getTracks().forEach((track: any) => {
-          p.peer.removeTrack(track, oldStream)
-        });
-      }
-      newMediaStream.getTracks().forEach((track: any) => {
-        p.peer.addTrack(track, newMediaStream)
-      });
-    })
-  }
+  
   const handleChangeCameraOrMic = ({ video, audio }: { video: boolean; audio: boolean }) => {
-    if (!myStream) return;
     if (!socket.id) return;
-    // Disable both audio and video
-    // if (!video && !audio) {
-    //   let newMyStream = new MediaStream();
-    //   myStream.getTracks().forEach((track) => {
-    //     track.stop();
-    //   });
-    //   setMyStream(newMyStream);
-    //   setStreamForParticipant(newMyStream, socket.id, false)
-    //   handleUpdatePeerMedia(newMyStream)
-    //   return;
-    // }
-    // // If video on and current video on and audio off => just disable track audio
-    // if (video && isTurnOnCamera && myStream.getAudioTracks()[0]) {
-    //   myStream.getAudioTracks()[0].enabled = audio;
-    //   return;
-    // }
-    // // Create new stream
+    if(!myStream) return;
     // myStream.getTracks().forEach((track) => {
-    //   track.stop();
+    //   track.enabled = false
+    // })
+    // myStream.getTracks().forEach((track) => {
+    //   track.stop()
     // });
-    // const navigator = window.navigator as any;
-    // navigator.mediaDevices
-    //   .getUserMedia({ video: video, audio: true })
-    //   .then((stream: MediaStream) => {
-    //     if (!socket.id) return;
-    //     stream.getAudioTracks()[0].enabled = audio
-    //     setMyStream(stream)
-    //     setStreamForParticipant(stream, socket.id, false)
-    //     handleUpdatePeerMedia(stream)
-    //   });
+    // if(!video && !audio) {
+    //   return;
+    // };
+    // navigator.mediaDevices.getUserMedia({ video: video, audio: audio }).then((newStream: MediaStream) => {
+    //   console.log('Start new stream')
+    //   setStreamForParticipant(newStream, socket.id || '', false)
+    //   participants.forEach((p: ParicipantInVideoCall) => {
+    //     if (!p.isMe && p.peer.destroyed === false) {
+    //       // p.peer.addStream(newStream)
+    //       // REPLACE TRACK
+    //       // Check have old video track
+    //       if(myStream.getVideoTracks().length > 0) {
+    //         p.peer.replaceTrack(myStream.getVideoTracks()[0], newStream.getVideoTracks()[0], myStream)
+    //       } else {
+    //         p.peer.addTrack(newStream.getVideoTracks()[0], newStream)
+    //       }
 
+    //       // Check audio track
+    //       if(myStream.getAudioTracks().length > 0) {
+    //         p.peer.replaceTrack(myStream.getAudioTracks()[0], newStream.getAudioTracks()[0], myStream)
+    //       } else {
+    //         p.peer.addTrack(newStream.getAudioTracks()[0], newStream)
+    //       }
+    //     }
+    //   })
+    //   setMyStream(newStream)
+    // })
+    
+    
+    
     myStream.getTracks().forEach((track) => {
       if (track.kind === 'audio') track.enabled = audio;
       if (track.kind === 'video') track.enabled = video;

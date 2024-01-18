@@ -11,7 +11,7 @@ import useCalcLayoutItem from '../../hooks/use-calc-layout-item';
 import { useParticipantVideoCallStore } from '../../store/participant.store';
 import { useVideoCallStore } from '../../store/video-call.store';
 import { VIDEOCALL_LAYOUTS } from '../../constant/layout';
-import { Spinner } from '@/components/feedback';
+
 interface VideoItemProps {
   participant?: any;
   size?: 'sm' | 'md' | 'lg';
@@ -21,7 +21,7 @@ const VideoItem = ({ participant }: VideoItemProps) => {
   const itemRef = useRef<HTMLElement>(null);
   const { streamVideo, isTurnOnMic, isTurnOnCamera } = useLoadStream(participant, videoRef);
   const { isTalk } = useAudioLevel(streamVideo);
-  const { participants, pinParticipant } = useParticipantVideoCallStore();
+  const { pinParticipant } = useParticipantVideoCallStore();
   const { setLayout, layout } = useVideoCallStore();
   // useCalcLayoutItem(itemRef, participants?.length);
   const { isFullScreen, setFullScreen, setPinShareScreen, setPinDoodle } = useVideoCallStore();

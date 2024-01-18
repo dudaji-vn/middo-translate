@@ -1,13 +1,4 @@
-import { Fullscreen, Mic, MicOff, VideoIcon, VideoOff } from 'lucide-react';
-import { memo, useEffect, useMemo, useRef } from 'react';
-
-import { Avatar } from '@/components/data-display';
-import trimLongName from '../../utils/trim-long-name.util';
-import { twMerge } from 'tailwind-merge';
-import useAudioLevel from '../../hooks/use-audio-level';
-import useLoadStream from '../../hooks/use-load-stream';
-import { useMyVideoCallStore } from '../../store/me.store';
-import useCalcLayoutItem from '../../hooks/use-calc-layout-item';
+import { Fullscreen } from 'lucide-react';
 import { useParticipantVideoCallStore } from '../../store/participant.store';
 import { useVideoCallStore } from '../../store/video-call.store';
 import { VIDEOCALL_LAYOUTS } from '../../constant/layout';

@@ -36,10 +36,18 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
             if(!elementRef.current) return;
             setStreamForParticipant(stream, participant.socketId, participant.isShareScreen || false)
         })
+        // participant.peer.on('track', (track: any) => {
+        //     console.log('track', track)
+        // })
+        // close
+        participant.peer.on('close', () => {
+            console.log('close')
+        })
         participant.peer.on('error', (error: any) => {
             participant.peer.destroy()
             removeParticipant(participant.socketId)
         })
+        
     }, [elementRef, participant, removeParticipant, setStreamForParticipant])
     return {
         streamVideo,
