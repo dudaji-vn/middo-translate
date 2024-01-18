@@ -45,15 +45,15 @@ const ReceiveVideoCall = () => {
     useEffect(() => {
         if (!audio) return;
         if (requestCall.length > 0) {
-            const isPlaying = audio.currentTime > 0 && !audio.paused && !audio.ended
-                && audio.readyState > audio.HAVE_CURRENT_DATA;
-            if (!isPlaying) {
+            // const isPlaying = audio.currentTime > 0 && !audio.paused && !audio.ended
+            //     && audio.readyState > audio.HAVE_CURRENT_DATA;
+            // if (!isPlaying) {
                 audio.currentTime = 0;
                 audio.play();
                 audio.addEventListener('ended', () => {
                     audio.play();
                 });
-            }
+            // }
         } else {
             if (audio.paused) return;
             audio.pause();

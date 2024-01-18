@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Brush, ChevronDown, ChevronUp, Eraser, GripHorizontal, RotateCcw, Undo2, X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { motion, useDragControls } from "framer-motion"
+
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
@@ -30,6 +31,8 @@ export const DoodleArea = () => {
     const [canvasSize, setCanvasSize] = useState({width: 0, height: 0})
     const [imagesCanvas, setImagesCanvas] = useState<IDoodleImage>({})
     const [isShowColor, setShowColor] = useState(false);
+    const timer = useRef(new Date().getTime());
+
     const imagesCanvasArray = useMemo(()=>{
         return Object.values(imagesCanvas).map((item) => item.image);
     }, [imagesCanvas])
@@ -50,9 +53,16 @@ export const DoodleArea = () => {
             canvasRef.current?.eraseMode(true);
         }
     }
+    
     const handleChangeCanvas = async () => {
         if(!canvasRef.current) return;
-        
+        // check debounce
+        const newTimer = new Date().getTime();
+        if(newTimer - timer.current < 100) {
+            return;
+        }
+        timer.current = newTimer;
+
         // Send doodle
         const image = await canvasRef.current?.exportImage('png');
         if(!image) return;
