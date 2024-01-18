@@ -6,11 +6,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Button } from '@/components/actions';
 import { ChatBoxFooter } from '@/features/chat/rooms/components';
 
-export default function ChatThread() {
+export default function ChatThread({className}: {className?: string}) {
     const { isFullScreen, isShowChat, setShowChat } = useVideoCallStore();
     const [isShowAlert, setShowAlert] = useState(true);
     return (
-        <aside className={twMerge('max-w-[400px] w-full', (isFullScreen && isShowChat) ? 'block' : 'hidden')}>
+        <aside className={twMerge('md:max-w-[400px] w-full h-[424px] md:h-auto', className, (!isFullScreen || !isShowChat) && 'hidden md:hidden')}>
             <div className='w-full h-full flex flex-col border-l border-neutral-50'>
                 <div className='bg-neutral-50 p-1 pl-3 flex items-center justify-center text-primary gap-2'>
                     <Subtitles />

@@ -1,8 +1,5 @@
-import { Avatar } from "@/components/data-display";
-import { memo, use, useEffect, useRef } from "react";
-import { twMerge } from "tailwind-merge";
-import useAudioLevel from "../../hooks/use-audio-level";
-import { Maximize, Mic, VideoOff } from "lucide-react";
+import { memo, useEffect, useRef } from "react";
+import { Maximize } from "lucide-react";
 import useLoadStream from "../../hooks/use-load-stream";
 import trimLongName from "../../utils/trim-long-name.util";
 import useFitRatio from "../../hooks/use-fit-ratio";
@@ -50,7 +47,7 @@ const FocusVideoItem = ({ participant}: FocusVideoItemProps) => {
             <div className="absolute bottom-0 left-0 right-0 top-1/2 bg-gradient-to-t md:hover:from-black/70 transition-all flex justify-end items-end p-3">
                 <Maximize className="w-5 h-5 stroke-white cursor-pointer" onClick={fullScreenVideo}/>
             </div>
-            <div className='absolute bottom-1 left-1 p-2 rounded-xl flex gap-2 bg-white/80 text-black items-center justify-center'>
+            <div className='absolute bottom-1 left-1 p-2 rounded-xl flex gap-2 bg-black/80 text-white items-center justify-center'>
                 <span className='leading-none relative'>
                     {participant?.isMe ? "You" : (trimLongName(participant?.user?.name) || '')}
                     {participant?.isShareScreen ? "  (Screen)" : ""}

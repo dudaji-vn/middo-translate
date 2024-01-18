@@ -11,7 +11,7 @@ import useCalcLayoutItem from '../../hooks/use-calc-layout-item';
 import { useParticipantVideoCallStore } from '../../store/participant.store';
 import { useVideoCallStore } from '../../store/video-call.store';
 import { VIDEOCALL_LAYOUTS } from '../../constant/layout';
-import { Spinner } from '@/components/feedback';
+
 interface VideoItemProps {
   participant?: any;
   size?: 'sm' | 'md' | 'lg';
@@ -21,9 +21,9 @@ const VideoItem = ({ participant }: VideoItemProps) => {
   const itemRef = useRef<HTMLElement>(null);
   const { streamVideo, isTurnOnMic, isTurnOnCamera } = useLoadStream(participant, videoRef);
   const { isTalk } = useAudioLevel(streamVideo);
-  const { participants, pinParticipant } = useParticipantVideoCallStore();
+  const { pinParticipant } = useParticipantVideoCallStore();
   const { setLayout, layout } = useVideoCallStore();
-  useCalcLayoutItem(itemRef, participants?.length);
+  // useCalcLayoutItem(itemRef, participants?.length);
   const { isFullScreen, setFullScreen, setPinShareScreen, setPinDoodle } = useVideoCallStore();
   if (participant.isMe && videoRef.current) videoRef.current.volume = 0;
   const expandVideoItem = () => {
@@ -34,7 +34,7 @@ const VideoItem = ({ participant }: VideoItemProps) => {
     pinParticipant(participant.socketId, participant.isShareScreen);
   }
   return (
-    <section ref={itemRef} className='p-[2px] flex items-center justify-center max-h-[300px]'>
+    <section ref={itemRef} className='p-[2px] flex items-center justify-center h-full w-full'>
       <div className={twMerge('relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-50 transition-all', !isTurnOnCamera && !isFullScreen && 'w-[60px] aspect-square')}>
         <div
           className={twMerge(

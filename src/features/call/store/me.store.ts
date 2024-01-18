@@ -7,11 +7,13 @@ export type MyVideoCallState = {
     isTurnOnCamera: boolean;
     isTurnOnMic: boolean;
     shareScreenStream: MediaStream | undefined;
+    myOldDoodle: any;
     setMyStream: (stream?: MediaStream) => void;
     setShareScreen: (isShareScreen: boolean) => void;
     setTurnOnCamera: (isTurnOnCamera: boolean) => void;
     setTurnOnMic: (isTurnOnMic: boolean) => void;
     setShareScreenStream: (stream?: MediaStream) => void;
+    setMyOldDoodle: (doodle: any) => void;
 };
 
 export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
@@ -20,6 +22,7 @@ export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
     isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera,
     isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic,
     shareScreenStream: undefined,
+    myOldDoodle: undefined,
     setMyStream: (stream?: MediaStream) => {
         set(() => ({ myStream: stream }));
     },
@@ -34,5 +37,8 @@ export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
     },
     setShareScreenStream: (stream?: MediaStream) => {
         set(() => ({ shareScreenStream: stream }));
+    },
+    setMyOldDoodle: (doodle: any) => {
+        set(() => ({ myOldDoodle: doodle }));
     }
 }));
