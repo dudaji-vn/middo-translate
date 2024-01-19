@@ -1,24 +1,42 @@
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
-import ButtonDataAction from '@/components/actions/button/button-data-action';
-import { Brush, Eraser, GripHorizontal, ImageIcon, RotateCcw, Undo2, X } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Brush, ChevronDown, ChevronUp, Eraser, GripHorizontal, RotateCcw, Undo2, X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { motion, useDragControls } from "framer-motion"
-import { CanvasPath, ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas';
+
+import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { useVideoCallStore } from '../../store/video-call.store';
+import { useAuthStore } from '@/stores/auth.store';
+import { Button } from '@/components/actions';
+import trimLongName from '../../utils/trim-long-name.util';
+import { useMyVideoCallStore } from '../../store/me.store';
+type IDoodleImage = Record<string, {
+    user: any,
+    image: string,
+    color: string
+}>;
 
 export const DoodleArea = () => {
+    const { user } = useAuthStore();
     const { doodleImage, setConfirmStopDoodle, colorDoodle, isMeDoole } = useVideoCallStore();
+    const { myOldDoodle, setMyOldDoodle } = useMyVideoCallStore();
     const imageRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<ReactSketchCanvasRef>(null);
-    const canvasAnotherParticipantRef = useRef<ReactSketchCanvasRef>(null);
     const { isDrawing, setDrawing } = useVideoCallStore();
     const [isEraser, setIsEraser] = useState(false);
     const constraintsRef = useRef(null)
     const controls = useDragControls()
     const [canvasSize, setCanvasSize] = useState({width: 0, height: 0})
+    const [imagesCanvas, setImagesCanvas] = useState<IDoodleImage>({})
+    const [isShowColor, setShowColor] = useState(false);
+    const timer = useRef(new Date().getTime());
+
+    const imagesCanvasArray = useMemo(()=>{
+        return Object.values(imagesCanvas).map((item) => item.image);
+    }, [imagesCanvas])
+
     const toggleDrawing = () => {
         if(!isDrawing) setIsEraser(false)
         setDrawing(!isDrawing);
@@ -35,7 +53,26 @@ export const DoodleArea = () => {
             canvasRef.current?.eraseMode(true);
         }
     }
-    const handleUndo = () => {
+    
+    const handleChangeCanvas = async () => {
+        if(!canvasRef.current) return;
+        // check debounce
+        const newTimer = new Date().getTime();
+        if(newTimer - timer.current < 100) {
+            return;
+        }
+        timer.current = newTimer;
+
+        // Send doodle
+        const image = await canvasRef.current?.exportImage('png');
+        if(!image) return;
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.DRAW_DOODLE, {
+            image,
+            user,
+            color: colorDoodle
+        })
+    }
+    const handleUndo = async () => {
         canvasRef.current?.undo();
     }
     const handleClear = () => {
@@ -44,14 +81,11 @@ export const DoodleArea = () => {
     const handleStopDoodle = () => {
         setConfirmStopDoodle(true)
     }
-    const handleChangeCanvas = async (path: CanvasPath, isEraser: boolean) => {
+    const handleSavePath = async () => {
         if(!canvasRef.current) return;
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.DRAW_DOODLE, {
-            path,
-            isEraser,
-            width: canvasSize.width,
-            height: canvasSize.height
-        })
+        const path = await canvasRef.current?.exportPaths();
+        if(!path) return;
+        setMyOldDoodle(path);
     }
 
     useEffect(() => {
@@ -65,30 +99,6 @@ export const DoodleArea = () => {
                 height = imageRef.current.width/ratio
             }
             setCanvasSize({width, height})
-            // Update paths
-            // if(!canvasRef.current || !canvasAnotherParticipantRef.current) return;
-            // const paths = await canvasRef.current?.exportPaths();
-            // if(paths) {
-            //     const newPaths = paths.map((path: any) => {
-            //         return {
-            //             ...path,
-            //             x: path.x*(width/canvasSize.width),
-            //             y: path.y*(height/canvasSize.height)
-            //         }
-            //     })
-            //     canvasRef.current?.loadPaths(newPaths);
-            // }
-            // const pathParticipant = await canvasAnotherParticipantRef.current?.exportPaths();
-            // if(pathParticipant) {
-            //     const newPaths = pathParticipant.map((path: any) => {
-            //         return {
-            //             ...path,
-            //             x: path.x*(width/canvasSize.width),
-            //             y: path.y*(height/canvasSize.height)
-            //         }
-            //     })
-            //     canvasAnotherParticipantRef.current?.loadPaths(newPaths);
-            // }
         }
         window.addEventListener('resize', fillCanvasToImage);
         window.addEventListener('load', fillCanvasToImage);
@@ -101,68 +111,49 @@ export const DoodleArea = () => {
 
     useEffect(() => {
         // Event draw doodle
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.DRAW_DOODLE, async ( payload: {path: CanvasPath; isEraser: boolean, userId: string, width: number, height: number}) => {
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.DRAW_DOODLE, async ( payload: {image: string, user: any, color: string, socketId: string }) => {
             if(!canvasRef.current) return;
-            if(payload.userId === socket.id) return;
-            const paths = payload.path.paths.map(path => {
-                return {
-                    ...path,
-                    x: path.x*(canvasSize.width/payload.width),
-                    y: path.y*(canvasSize.height/payload.height)
-                }
-            })
-            const path = {
-                ...payload.path,
-                paths
+            if(payload.socketId === socket.id) return;
+            const currentImagesCanvas = {...imagesCanvas};
+            currentImagesCanvas[payload.socketId] = {
+                user: payload.user,
+                image: payload.image,
+                color: payload.color
             }
-            if(payload.isEraser) {
-                canvasAnotherParticipantRef.current?.eraseMode(true);
-            } else {
-                canvasAnotherParticipantRef.current?.eraseMode(false);
-            }
-            canvasAnotherParticipantRef.current?.loadPaths([path]);
-            
+            setImagesCanvas(currentImagesCanvas);
         })
-        // Event have user request get doodle data
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_OLD_DOODLE_DATA, async (payload: { path: CanvasPath, userId: string, width: number, height: number, isEraser: boolean }[]) => {
+        // Event receive doodle
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_OLD_DOODLE_DATA, async (payload: Record<string, { user: any; image: string; color: string }>) => {
             if(!canvasRef.current) return;
-            payload.map((data) => {
-                let paths = data.path.paths.map(path => {
-                    return {
-                        ...path,
-                        x: path.x*(canvasSize.width/data.width),
-                        y: path.y*(canvasSize.height/data.height)
-                    }
-                })
-                const path = {
-                    ...data.path,
-                    paths
-                }
-                if(data.isEraser) {
-                    canvasRef.current?.eraseMode(true);
-                    canvasAnotherParticipantRef.current?.eraseMode(true);
-                }
-                if(data.userId === socket.id) {
-                    canvasRef.current?.loadPaths([path]);
-                } else {
-                    canvasAnotherParticipantRef.current?.loadPaths([path]);
-                }
-                canvasRef.current?.eraseMode(false);
-                canvasAnotherParticipantRef.current?.eraseMode(false);
-            })
-
+            const currentImagesCanvas = {...imagesCanvas};
+            for(const [key, value] of Object.entries(payload)) {
+                // if(key === socket.id) continue;
+                currentImagesCanvas[key] = value
+            }
+            setImagesCanvas(currentImagesCanvas);
         })
 
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.DRAW_DOODLE)
             socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_OLD_DOODLE_DATA)
         }
-    }, [canvasSize.height, canvasSize.width])
+    }, [imagesCanvas])
 
     useEffect(() => {
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_OLD_DOODLE_DATA)
     }, [])
     
+    // useEffect(() => {
+    //     if(!canvasRef.current || !myOldDoodle) return;
+    //     const checkPathAndLoadOldPath = async () => {
+    //         let currentPath = await canvasRef.current?.exportPaths();
+    //         if(!currentPath || currentPath.length == 0) {
+    //             canvasRef.current?.loadPaths(myOldDoodle);
+    //         }
+    //     }
+    //     checkPathAndLoadOldPath()
+    // }, [myOldDoodle])
+
     return (
     <motion.section ref={constraintsRef} className='rounded-xl overflow-hidden relative transition-all w-full h-full  bg-neutral-900'>
         <Image src={doodleImage || ''} width={500} height={500} alt="Doodle" ref={imageRef} className='object-contain w-full h-full' />
@@ -174,51 +165,94 @@ export const DoodleArea = () => {
             eraserWidth={10}
             withTimestamp={true}
             canvasColor="transparent"
-            onStroke={handleChangeCanvas}
+            onChange={handleChangeCanvas}
+            // onStroke={handleSavePath}
             className={twMerge('absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 z-10 bg-transparent', isDrawing ? 'cursor-drawing' : '', isEraser ? 'cursor-eraser' : '',
             !isDrawing && !isEraser && 'cursor-auto pointer-events-none')}
         />
-        <ReactSketchCanvas
-            ref={canvasAnotherParticipantRef}
-            style={{width: `${canvasSize.width}px`, height: `${canvasSize.height}px`}}
-            withTimestamp={true}
-            strokeWidth={5}
-            allowOnlyPointerType="none"
-            canvasColor="transparent"
-            className="absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 z-[9] pointer-events-none cursor-none"
-        />
+        {imagesCanvasArray.map((src, index) => (
+            src && <div 
+                key={index} 
+                style={{width: `${canvasSize.width}px`, height: `${canvasSize.height}px`}} 
+                className='absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 z-[9] bg-transparent'>
+                <Image width={1000} height={1000} src={src} alt="Image" className='w-full h-full object-cover'/>
+            </div>
+        ))}
         <motion.div 
             drag
             dragConstraints={constraintsRef}
             dragMomentum={false}
             whileTap={{ boxShadow: "0px 0px 15px rgba(0,0,0,0.2)" }}
-            dragControls={controls} className='z-20 absolute top-2 left-2 p-2 rounded-md bg-white flex flex-col gap-3 cursor-move items-center'>
+            dragControls={controls} className='z-20 absolute top-2 left-2 p-2 rounded-md bg-white hidden md:flex flex-col gap-3 cursor-move items-center'>
             <GripHorizontal></GripHorizontal>
-            <ButtonDataAction 
-            onClick={toggleDrawing}
-            className={twMerge('rounded-full px-2 py-2 bg-neutral-50 stroke-neutral-700', isDrawing && 'bg-primary-200 stroke-primary')}>
-                <Brush className='h-5 w-5 stroke-inherit' />
-            </ButtonDataAction>
-            <ButtonDataAction 
-            onClick={toggleEraser}
-            className={twMerge('rounded-full px-2 py-2 bg-neutral-50 stroke-neutral-700', isEraser && 'bg-primary-200 stroke-primary')}>
-                <Eraser className='h-5 w-5 stroke-inherit' />
-            </ButtonDataAction>
-            <ButtonDataAction 
-            onClick={handleUndo}
-            className={twMerge('rounded-full px-2 py-2 bg-neutral-50 stroke-neutral-700')}>
-                <Undo2 className='h-5 w-5 stroke-inherit' />
-            </ButtonDataAction>
-            <ButtonDataAction 
-            onClick={handleClear}
-            className={twMerge('rounded-full px-2 py-2 bg-neutral-50 stroke-neutral-700')}>
-                <RotateCcw className='h-5 w-5 stroke-inherit' />
-            </ButtonDataAction>
-            {isMeDoole && <ButtonDataAction 
-            onClick={handleStopDoodle}
-            className={twMerge('rounded-full px-2 py-2 bg-error-400-main stroke-white')}>
-                <X className='h-5 w-5 stroke-inherit' />
-            </ButtonDataAction> }
+            <Button.Icon
+                variant='default'
+                size='xs'
+                color={isDrawing ? 'primary' : 'default'}
+                onClick={toggleDrawing}
+            >
+                <Brush />
+            </Button.Icon>
+            <Button.Icon
+                variant='default'
+                size='xs'
+                color={isEraser ? 'primary' : 'default'}
+                onClick={toggleEraser}
+            >
+                <Eraser />
+            </Button.Icon>
+            <Button.Icon
+                variant='default'
+                size='xs'
+                color='default'
+                onClick={handleUndo}
+            >
+                <Undo2 />
+            </Button.Icon>
+            <Button.Icon
+                variant='default'
+                size='xs'
+                color='default' 
+                onClick={handleClear}
+            >
+                <RotateCcw />
+            </Button.Icon>
+            {isMeDoole && 
+            <Button.Icon 
+                variant='default'
+                size='xs'
+                color='error'
+                onClick={handleStopDoodle}
+            >
+                <X />
+            </Button.Icon> }
+            <div className='flex flex-col items-center'>
+                {isShowColor && <ul className='border-t border-neutral-50 pt-4 pb-4 flex flex-col justify-center items-center gap-5 max-h-[180px] overflow-auto'>
+                    <li className='flex flex-col justify-center items-center gap-1'>
+                        <div className='w-3 h-3 rounded-full' style={{backgroundColor: colorDoodle}}></div>
+                        <span className='text-sm'>You</span>
+                    </li>
+                    {Object.values(imagesCanvas).map((item, index) => {
+                        if(item.user._id === user?._id) return;
+                        return (
+                            <li key={index} className='flex flex-col justify-center items-center gap-1'>
+                                <div className='w-3 h-3 rounded-full' style={{backgroundColor: item.color}}></div>
+                                <span className='text-sm'>{trimLongName(item.user.name, 3)}</span>
+                            </li>
+                        )
+                    })}
+                </ul>}
+                <div className="border-t border-neutral-50 ">
+                    <Button.Icon
+                        variant='ghost'
+                        size='xs'
+                        color='default' 
+                        onClick={()=>setShowColor(!isShowColor)}
+                    >
+                        {isShowColor ? <ChevronUp /> : <ChevronDown />}
+                    </Button.Icon>
+                </div>
+            </div>
         </motion.div>
     </motion.section>
     );

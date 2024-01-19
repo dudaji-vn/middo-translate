@@ -6,3 +6,4 @@ export const checkRoomIsHaveMeetingService = (roomId: string) => {
 export const getCallInfoService = (roomId: string) => {
   return post('/call/get-call-info', { roomId });
 }
+
