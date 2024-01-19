@@ -64,7 +64,7 @@ const ActionBar = () => {
 };
 const VideoCall = () => {
   const { user } = useAuthStore();
-  const { setRoom, room, setTempRoom } = useVideoCallStore();
+  const { setRoom, room, setTempRoom, setMessageId } = useVideoCallStore();
   const { room: roomChatBox, updateRoom } = useChatBox();
   const [isHaveMeeting, setHaveMeeting] = useState(false);
   useEffect(() => {
