@@ -142,4 +142,14 @@ export const roomApi = {
     );
     return res.data;
   },
+
+  async pin(roomId: string) {
+    const res: Response<Room> = await axios.post(`${basePath}/${roomId}/pin`);
+    return res.data;
+  },
+
+  async getPinned() {
+    const res: Response<Room[]> = await axios.get(`${basePath}/pin`);
+    return res.data;
+  },
 };

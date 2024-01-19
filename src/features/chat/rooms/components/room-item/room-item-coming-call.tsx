@@ -2,7 +2,6 @@ import { Button } from '@/components/actions';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { PhoneCallIcon } from 'lucide-react';
-import { useChatBox } from '../../contexts';
 import { useEffect, useState } from 'react';
 import { checkRoomIsHaveMeetingService } from '@/services/call.servide';
 import { Room } from '../../types';
@@ -63,13 +62,12 @@ export const RoomItemComingCall = ({
     };
     checkHaveMeeting();
   }, [room, roomChatBox, room]);
+  if (!isHaveMeeting) return null;
   return (
     <div className="flex items-center pr-3">
-      {isHaveMeeting && (
-        <Button.Icon onClick={() => startVideoCall(roomChatBox._id)} size="xs">
-          <PhoneCallIcon />
-        </Button.Icon>
-      )}
+      <Button.Icon onClick={() => startVideoCall(roomChatBox._id)} size="xs">
+        <PhoneCallIcon />
+      </Button.Icon>
     </div>
   );
 };
