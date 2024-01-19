@@ -5,6 +5,13 @@ export const SOCKET_CONFIG = {
       SEND: 'message.send',
       UPDATE: 'message.update',
       DELETE: 'message.delete',
+      REPLY: {
+        NEW: 'message.reply.new',
+        JOIN: 'message.reply.join',
+        LEAVE: 'message.reply.leave',
+        UPDATE: 'message.reply.update',
+        REMOVE: 'message.reply.remove',
+      },
     },
     ROOM: {
       NEW: 'room.new',
@@ -49,6 +56,6 @@ export const SOCKET_CONFIG = {
       MEETING_END: 'call.meeting_end',
       INVITE_TO_CALL: 'call.invite_to_call',
       SEND_CAPTION: 'call.send_caption',
-    }
+    },
   },
 };

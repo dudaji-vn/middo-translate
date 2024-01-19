@@ -25,6 +25,7 @@ import { messageVariants } from './variants';
 import { useBoolean } from 'usehooks-ts';
 import { MessageItemForward } from './message-item-forward';
 import { CallMessage } from './message-item-call';
+import { MessageItemReply } from './message-item-reply';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -32,6 +33,8 @@ export interface MessageProps
   message: Message;
   readByUsers?: User[];
   showAvatar?: boolean;
+  showReply?: boolean;
+  direction?: 'bottom' | 'top';
 }
 
 type MessageItemContextProps = {
@@ -55,7 +58,17 @@ export const useMessageItem = () => {
 
 export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
   (
-    { message, sender, order, className, readByUsers, showAvatar, ...props },
+    {
+      message,
+      sender,
+      order,
+      className,
+      readByUsers,
+      showAvatar,
+      direction,
+      showReply = true,
+      ...props
+    },
     ref,
   ) => {
     const isMe = sender === 'me';
@@ -80,7 +93,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           <MessageItemSystem message={message} />
         ) : (
           <>
-            <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
+            {direction === 'bottom' && (
+              <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
+            )}
             <div className="group relative flex flex-col">
               <div
                 className={cn(
@@ -91,12 +106,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               >
                 {showAvatar ? (
                   <Avatar
-                    className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0"
+                    className="mb-auto mr-1 mt-0.5  shrink-0"
                     src={message.sender.avatar}
                     alt={message.sender.name}
+                    size="xs"
                   />
                 ) : (
-                  <div className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0" />
+                  <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
                 )}
                 <MessageItemWrapper>
                   <div
@@ -147,12 +163,18 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                       isMe={isMe}
                     />
                   )}
+                  {message.hasChild && showReply && (
+                    <MessageItemReply isMe={isMe} messageId={message._id} />
+                  )}
                 </MessageItemWrapper>
               </div>
               {message?.reactions && message.reactions.length > 0 && (
                 <MessageItemReactionBar isMe={isMe} message={message} />
               )}
             </div>
+            {direction === 'top' && (
+              <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
+            )}
           </>
         )}
       </MessageItemContext.Provider>

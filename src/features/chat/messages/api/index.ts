@@ -13,8 +13,13 @@ export type CreateMessage = {
   language?: string;
 };
 export const messageApi = {
-  async sendMessage(data: CreateMessage) {
+  async send(data: CreateMessage) {
     const res: Response<Message> = await axios.post(basePath, data);
+    return res.data;
+  },
+
+  async getOne(id: string) {
+    const res: Response<Message> = await axios.get(`${basePath}/${id}`);
     return res.data;
   },
 
@@ -48,6 +53,25 @@ export const messageApi = {
     const res: Response<Message> = await axios.post(
       `${basePath}/${data.forwardedMessageId}/forward`,
       sendData,
+    );
+    return res.data;
+  },
+
+  async reply(data: {
+    repliedMessageId: string;
+    message: Omit<CreateMessage, 'clientTempId'>;
+  }) {
+    const { repliedMessageId, message } = data;
+    const res: Response<Message> = await axios.post(
+      `${basePath}/${repliedMessageId}/reply`,
+      message,
+    );
+    return res.data;
+  },
+
+  async getReplies(id: string) {
+    const res: Response<Message[]> = await axios.get(
+      `${basePath}/${id}/replies`,
     );
     return res.data;
   },

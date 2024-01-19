@@ -11,6 +11,7 @@ import { Message } from '../types';
 import { MessageModalRemove } from './message-modal-remove';
 import { useCopyMessage } from '../hooks/use-copy-message';
 import { ForwardModal } from './forward-modal';
+import { useClickReplyMessage } from '../hooks/use-click-reply-message';
 
 type Action = 'remove' | 'pin' | 'reply' | 'copy' | 'forward' | 'none';
 type ActionItem = {
@@ -30,14 +31,12 @@ export const actionItems: ActionItem[] = [
     action: 'reply',
     label: 'Reply',
     icon: <ReplyIcon />,
-    disabled: true,
   },
 
   {
     action: 'forward',
     label: 'Forward',
     icon: <ForwardIcon />,
-    disabled: false,
   },
   {
     action: 'pin',
@@ -76,14 +75,21 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
   const [isMe, setIsMe] = useState<boolean>(false);
   const [action, setAction] = useState<Action>('none');
   const { copyMessage } = useCopyMessage();
+  const { onClickReplyMessage } = useClickReplyMessage();
   const onAction = ({ action, isMe, message }: OnActionParams) => {
-    if (action === 'copy') {
-      copyMessage(message);
-      return;
+    switch (action) {
+      case 'copy':
+        copyMessage(message);
+        break;
+      case 'reply':
+        onClickReplyMessage(message._id);
+        break;
+      default:
+        setAction(action);
+        setMessage(message);
+        setIsMe(isMe);
+        break;
     }
-    setAction(action);
-    setMessage(message);
-    setIsMe(isMe);
   };
   const reset = () => {
     setAction('none');

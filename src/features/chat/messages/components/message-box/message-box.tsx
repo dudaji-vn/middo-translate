@@ -19,9 +19,9 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
 
-const maxTimeDiff = 5; // 5 minutes
-const maxTimeGroupDiff = 10; // 10 minutes
-type MessageGroup = {
+export const MAX_TIME_DIFF = 5; // 5 minutes
+export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
+export type MessageGroup = {
   messages: Message[];
   lastMessage: Message;
 };
@@ -66,7 +66,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
         moment(message.createdAt),
         'minute',
       );
-      if (timeDiff > maxTimeDiff) {
+      if (timeDiff > MAX_TIME_DIFF) {
         acc.push({
           messages: [message],
           lastMessage: message,
@@ -136,7 +136,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
             messagesGroup[index + 1]?.messages[0].createdAt ?? moment(),
             'minute',
           );
-          const isShowTimeGroup = timeDiff > maxTimeGroupDiff;
+          const isShowTimeGroup = timeDiff > MAX_TIME_GROUP_DIFF;
           const isMe = group.lastMessage.sender._id === currentUserId;
           const isSystem =
             group.lastMessage.type === 'notification' ||
@@ -166,7 +166,8 @@ export const MessageBox = ({ room }: { room: Room }) => {
                       showAvatar={
                         !isMe &&
                         !isSystem &&
-                        message._id === group.messages[0]._id
+                        message._id ===
+                          group.messages[group.messages.length - 1]._id
                       }
                       key={message._id}
                       message={message}
