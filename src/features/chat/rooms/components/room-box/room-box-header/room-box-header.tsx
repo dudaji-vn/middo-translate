@@ -5,13 +5,11 @@ import { Button } from '@/components/actions';
 import { RoomAvatar } from '../../room-avatar';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import { STATUS } from '@/features/call/constant/status';
-import { Video } from 'lucide-react';
 import { generateRoomDisplay } from '../../../utils';
 import { joinVideoCallRoom } from '@/services/video-call.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../../contexts';
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { checkRoomIsHaveMeetingService } from '@/services/call.servide';
@@ -19,6 +17,7 @@ import { CALL_TYPE, JOIN_TYPE } from '@/features/call/constant/call-type';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '../../../api';
+import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -37,7 +36,7 @@ export const ChatBoxHeader = () => {
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
-      <div className="-mr-2 ml-auto mr-3 flex items-center gap-1">
+      <div className="ml-auto mr-3 flex items-center gap-1">
         <VideoCall />
         <ActionBar />
       </div>
@@ -46,14 +45,17 @@ export const ChatBoxHeader = () => {
 };
 
 const ActionBar = () => {
-  const { toggleSide, showSide } = useChatBox();
+  const { toggleTab, currentSide } = useRoomSidebarTabs();
+  const isShowInfo = currentSide === 'info';
   return (
     <div>
       <Button.Icon
-        onClick={toggleSide}
+        onClick={() => {
+          toggleTab('info');
+        }}
         size="xs"
-        color={showSide ? 'secondary' : 'primary'}
-        variant={showSide ? 'default' : 'ghost'}
+        color={isShowInfo ? 'secondary' : 'primary'}
+        variant={isShowInfo ? 'default' : 'ghost'}
       >
         <AlertCircleIcon />
       </Button.Icon>
