@@ -39,4 +39,5 @@ export type Message = {
   reactions?: Reaction[];
   forwardOf?: Message;
   call?: Call;
+  hasChild?: boolean;
 } & BaseEntity;

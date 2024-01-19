@@ -47,8 +47,7 @@ export const MessageItemWrapper = (
       });
     });
     return itemFiltered;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMe, message]);
+  }, [isMe, message, onAction]);
 
   const Wrapper = useMemo(() => {
     if (message.status === 'removed') return RemovedWrapper;
