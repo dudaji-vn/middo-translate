@@ -11,7 +11,7 @@ const useExtractTextFromStream = () => {
     const { user } = useAuthStore();
     useEffect(() => {
         if (!myStream) return;
-        if (!myStream.getAudioTracks().length)return;
+        // if (!myStream.getAudioTracks().length)return;
         const audioContext = new AudioContext();
         const analyser = audioContext.createAnalyser();
         const microphone = audioContext.createMediaStreamSource(myStream);

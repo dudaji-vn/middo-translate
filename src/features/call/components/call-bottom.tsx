@@ -61,21 +61,21 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     //   setStreamForParticipant(newStream, socket.id || '', false)
     //   participants.forEach((p: ParicipantInVideoCall) => {
     //     if (!p.isMe && p.peer.destroyed === false) {
-    //       // p.peer.addStream(newStream)
+    //       p.peer.addStream(newStream)
     //       // REPLACE TRACK
     //       // Check have old video track
-    //       if(myStream.getVideoTracks().length > 0) {
-    //         p.peer.replaceTrack(myStream.getVideoTracks()[0], newStream.getVideoTracks()[0], myStream)
-    //       } else {
-    //         p.peer.addTrack(newStream.getVideoTracks()[0], newStream)
-    //       }
+    //       // if(myStream.getVideoTracks().length > 0) {
+    //       //   p.peer.replaceTrack(myStream.getVideoTracks()[0], newStream.getVideoTracks()[0], myStream)
+    //       // } else {
+    //       //   p.peer.addTrack(newStream.getVideoTracks()[0], newStream)
+    //       // }
 
-    //       // Check audio track
-    //       if(myStream.getAudioTracks().length > 0) {
-    //         p.peer.replaceTrack(myStream.getAudioTracks()[0], newStream.getAudioTracks()[0], myStream)
-    //       } else {
-    //         p.peer.addTrack(newStream.getAudioTracks()[0], newStream)
-    //       }
+    //       // // Check audio track
+    //       // if(myStream.getAudioTracks().length > 0) {
+    //       //   p.peer.replaceTrack(myStream.getAudioTracks()[0], newStream.getAudioTracks()[0], myStream)
+    //       // } else {
+    //       //   p.peer.addTrack(newStream.getAudioTracks()[0], newStream)
+    //       // }
     //     }
     //   })
     //   setMyStream(newStream)

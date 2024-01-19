@@ -171,7 +171,7 @@ export const DoodleArea = () => {
             !isDrawing && !isEraser && 'cursor-auto pointer-events-none')}
         />
         {imagesCanvasArray.map((src, index) => (
-            <div 
+            src && <div 
                 key={index} 
                 style={{width: `${canvasSize.width}px`, height: `${canvasSize.height}px`}} 
                 className='absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 z-[9] bg-transparent'>
@@ -183,7 +183,7 @@ export const DoodleArea = () => {
             dragConstraints={constraintsRef}
             dragMomentum={false}
             whileTap={{ boxShadow: "0px 0px 15px rgba(0,0,0,0.2)" }}
-            dragControls={controls} className='z-20 absolute top-2 left-2 p-2 rounded-md bg-white flex flex-col gap-3 cursor-move items-center'>
+            dragControls={controls} className='z-20 absolute top-2 left-2 p-2 rounded-md bg-white hidden md:flex flex-col gap-3 cursor-move items-center'>
             <GripHorizontal></GripHorizontal>
             <Button.Icon
                 variant='default'

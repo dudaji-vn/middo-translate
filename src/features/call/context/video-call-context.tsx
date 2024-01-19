@@ -138,7 +138,6 @@ export const VideoCallProvider = ({
         user: any;
         isShareScreen: boolean;
       }) => {
-        console.log('New User Join');
         const peer = addPeer({
           signal: payload.signal,
           callerId: payload.callerId,
@@ -178,7 +177,7 @@ export const VideoCallProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT);
       socket.off(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED);
     }
-  }, [addParticipant, call?._id, isPinDoodle, myInfo, myStream, participants, pinParticipant, setDoodle, setDoodleImage, setLayout, setPinDoodle, setPinShareScreen, updateParticipant]);
+  }, [addParticipant, call?._id, isPinDoodle, myInfo, myStream, participants, pinParticipant, setDoodle, setDoodleImage, setLayout, setPinDoodle, setPinShareScreen, updateParticipant, updatePeerParticipant]);
 
   // useEffect listen event return signal
   useEffect(() => {
@@ -371,6 +370,10 @@ export const VideoCallProvider = ({
       return;
     }
     const navigator = window.navigator as any;
+    if(!navigator.mediaDevices.getDisplayMedia) {
+      toast.error('Device not support share screen');
+      return;
+    }
     navigator.mediaDevices
       .getDisplayMedia({ video: true, audio: true })
       .then(async (stream: MediaStream) => {
