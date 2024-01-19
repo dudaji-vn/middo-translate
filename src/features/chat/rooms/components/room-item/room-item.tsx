@@ -16,6 +16,7 @@ import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { useAuthStore } from '@/stores/auth.store';
 import { RoomItemComingCall } from './room-item-coming-call';
 import { cn } from '@/utils/cn';
+import { PinIcon } from 'lucide-react';
 
 export interface RoomItemProps {
   data: Room;
@@ -119,6 +120,11 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           </RoomItemWrapper>
         </RoomItemContext.Provider>
       </Wrapper>
+      {room?.isPinned && (
+        <div className="flex items-center pr-3">
+          <PinIcon className="size-4 text-neutral-600" />
+        </div>
+      )}
       <RoomItemComingCall roomChatBox={room} />
     </div>
   );

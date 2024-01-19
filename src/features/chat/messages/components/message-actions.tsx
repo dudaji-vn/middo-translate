@@ -7,11 +7,11 @@ import {
 } from 'lucide-react';
 import { createContext, useContext, useMemo, useState } from 'react';
 
-import { Message } from '../types';
-import { MessageModalRemove } from './message-modal-remove';
-import { useCopyMessage } from '../hooks/use-copy-message';
-import { ForwardModal } from './forward-modal';
 import { useClickReplyMessage } from '../hooks/use-click-reply-message';
+import { useCopyMessage } from '../hooks/use-copy-message';
+import { Message } from '../types';
+import { ForwardModal } from './forward-modal';
+import { MessageModalRemove } from './message-modal-remove';
 
 type Action = 'remove' | 'pin' | 'reply' | 'copy' | 'forward' | 'none';
 type ActionItem = {
@@ -42,7 +42,6 @@ export const actionItems: ActionItem[] = [
     action: 'pin',
     label: 'Pin',
     icon: <PinIcon />,
-    disabled: true,
   },
   {
     action: 'remove',
@@ -84,6 +83,9 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
       case 'reply':
         onClickReplyMessage(message._id);
         break;
+      case 'pin':
+        break;
+
       default:
         setAction(action);
         setMessage(message);

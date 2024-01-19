@@ -27,7 +27,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
               if (checked) {
                 onAction('notify', _room._id);
               } else {
-                onAction('unnofity', _room._id);
+                onAction('unnotify', _room._id);
               }
             }}
           />

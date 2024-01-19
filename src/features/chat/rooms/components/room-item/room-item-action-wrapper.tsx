@@ -32,18 +32,26 @@ export const RoomItemActionWrapper = forwardRef<
   const Wrapper = isMobile ? MobileWrapper : DesktopWrapper;
   const { onAction, actionItems } = useRoomActions();
   const items = useMemo(() => {
-    const itemFiltered: Item[] = [];
-    actionItems.forEach((item) => {
-      if (item.action === 'notify' && !isMuted) return;
-      if (item.action === 'unnofity' && isMuted) return;
-      itemFiltered.push({
+    return actionItems
+      .filter((item) => {
+        switch (item.action) {
+          case 'notify':
+            return !isMuted;
+          case 'unnotify':
+            return isMuted;
+          case 'pin':
+            return !room.isPinned;
+          case 'unpin':
+            return room.isPinned;
+          default:
+            return true;
+        }
+      })
+      .map((item) => ({
         ...item,
         onAction: () => onAction(item.action, room._id),
-      });
-    });
-    return itemFiltered;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMuted, room._id]);
+      }));
+  }, [actionItems, isMuted, onAction, room._id, room.isPinned]);
 
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>

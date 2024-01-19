@@ -15,6 +15,9 @@ import { useParams } from 'next/navigation';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useSidebarTabs } from '@/features/chat/hooks';
 import useStore from '@/stores/use-store';
+import { PinnedRoom } from '../pinned-room';
+import { useQueryClient } from '@tanstack/react-query';
+import { USE_GET_PINNED_ROOMS_KEY } from '@/features/chat/messages/hooks/use-pin-room';
 
 interface InboxListProps {
   type: InboxType;
@@ -44,35 +47,35 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         roomApi.getRooms({ cursor: pageParam, limit: 10, type }),
     });
 
+    const queryClient = useQueryClient();
+
     const updateRoom = (room: Partial<Room> & { _id: string }) => {
-      updateItem(room);
+      refetch();
+      // updateItem(room);
+      queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
     };
 
     const deleteRoom = (roomId: string) => {
+      queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
+
       removeItem(roomId);
     };
 
     const leaveRoom = (roomId: string) => {
+      queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
       removeItem(roomId);
     };
 
     useEffect(() => {
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.NEW, (payload: Room) => {
-        addItem(payload);
-      });
+      socket.on(SOCKET_CONFIG.EVENTS.ROOM.NEW, addItem);
       socket.on(
         SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
-          refetch();
-          // updateRoom({ _id: payload.roomId, ...payload.data });
+          updateRoom({ _id: payload.roomId, ...payload.data });
         },
       );
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, (roomId: string) => {
-        deleteRoom(roomId);
-      });
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, (roomId: string) => {
-        leaveRoom(roomId);
-      });
+      socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, deleteRoom);
+      socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, leaveRoom);
       return () => {
         socket.off(SOCKET_CONFIG.EVENTS.ROOM.UPDATE);
         socket.off(SOCKET_CONFIG.EVENTS.ROOM.DELETE);
@@ -110,6 +113,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             isFetching={isLoading}
             className="flex flex-col"
           >
+            <PinnedRoom currentRoomId={currentRoomId as string} />
             {rooms.map((room) => (
               <RoomItem
                 key={room._id}
