@@ -5,6 +5,7 @@ import { detectLanguage, translateText } from '@/services/languages.service';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from 'usehooks-ts';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
 
 export const useTranslate = ({
   srcLang: _srcLang,
@@ -28,6 +29,8 @@ export const useTranslate = ({
   const [middleText, setMiddleText] = useState('');
 
   const debounceValue = useDebounce(text, 500);
+  const room = useVideoCallStore((state) => state.room);
+  const canNotListen = !!room;
 
   useEffect(() => {
     if (!translateOnType) return;
@@ -72,6 +75,7 @@ export const useTranslate = ({
   const { listening, interimTranscript } = useSpeechRecognition();
 
   const handleStartListening = (lang?: string) => {
+    if (canNotListen) return;
     setText('');
     SpeechRecognition.startListening({
       language: lang || srcLang,
@@ -85,10 +89,10 @@ export const useTranslate = ({
   };
 
   useEffect(() => {
-    if (interimTranscript && listening) {
+    if (interimTranscript && listening && !canNotListen) {
       setText(interimTranscript);
     }
-  }, [interimTranscript, listening]);
+  }, [canNotListen, interimTranscript, listening]);
 
   const reset = () => {
     setText('');
@@ -130,7 +134,7 @@ export const useTranslate = ({
     middleTranslate,
     handleMiddleTranslate,
     handleStartListening,
-    listening,
+    listening: listening && !canNotListen,
     interimTranscript,
     handleStopListening,
     isLoading,

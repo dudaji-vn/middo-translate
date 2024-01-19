@@ -8,6 +8,7 @@ import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-translate';
 import { useMessageEditorMedia } from './message-editor-media-context';
 import { useMessageEditorText } from './message-editor-text-context';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
 
 export interface MessageEditorToolbarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,6 +21,7 @@ export const MessageEditorToolbar = forwardRef<
 >(({ disableMedia = false, ...props }, ref) => {
   const { listening } = useMessageEditorText();
   const { open } = useMessageEditorMedia();
+  const room = useVideoCallStore((state) => state.room);
 
   useEffect(() => {
     // enable submit form by enter
@@ -42,6 +44,7 @@ export const MessageEditorToolbar = forwardRef<
 
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [listening]);
+  console.log(room);
   return (
     <>
       <MessageEditorToolbarTranslateTool />
@@ -52,7 +55,7 @@ export const MessageEditorToolbar = forwardRef<
             <FilePlus2 />
           </Button.Icon>
         )}
-        <MessageEditorToolbarMic />
+        {!room && <MessageEditorToolbarMic />}
         <MessageEditorToolbarEmoji />
       </div>
     </>

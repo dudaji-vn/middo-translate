@@ -2,12 +2,21 @@ import { Avatar, Text } from '@/components/data-display';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
 import { useAuthStore } from '@/stores/auth.store';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { translateText } from '@/services/languages.service';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
 import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
 import { useDiscussion } from './discussion';
+import moment from 'moment';
+import { convertToTimeReadable } from '@/utils/time';
+import { PhoneCall, PhoneCallIcon, PhoneIcon } from 'lucide-react';
+import {
+  textVariants,
+  wrapperVariants,
+} from '../../messages/components/message-item/message-item-text.style';
+import { cn } from '@/utils/cn';
+import { Button } from '@/components/actions';
 
 export interface MainMessageProps {}
 
@@ -16,11 +25,13 @@ export const MainMessage = () => {
   const sender = message.sender;
   return (
     <div className="flex flex-col">
-      <div className="flex items-center gap-2">
-        <Avatar size="xs" src={sender.avatar} alt={sender.name} />
-        <span className="text-sm font-semibold">{sender.name}</span>
-      </div>
-      <div className="pl-8">
+      {message.type !== 'call' && (
+        <div className="flex items-center gap-2">
+          <Avatar size="xs" src={sender.avatar} alt={sender.name} />
+          <span className="text-sm font-semibold">{sender.name}</span>
+        </div>
+      )}
+      <div className={cn(message.type !== 'call' ? 'ml-8' : '')}>
         <TextMessage message={message} />
         {message?.media && message.media.length > 0 && (
           <Fragment>
@@ -34,6 +45,7 @@ export const MainMessage = () => {
             </div>
           </Fragment>
         )}
+        {message?.call && <CallMessage message={message} />}
       </div>
     </div>
   );
@@ -88,6 +100,57 @@ const TextMessage = ({ message }: { message: Message }) => {
             </div>
           </div>
         )}
+    </div>
+  );
+};
+
+const CallMessage = ({ message }: { message: Message }) => {
+  const { call, sender } = message;
+  const { content, icon, subContent } = useMemo((): {
+    content: string;
+    icon: React.ReactNode;
+    subContent?: string;
+  } => {
+    if (call?.endTime) {
+      return {
+        content: 'Call end at ' + moment(call.endTime).format('HH:mm'),
+        subContent: convertToTimeReadable(
+          call.createdAt as string,
+          call.endTime,
+        ),
+        icon: (
+          <PhoneIcon className="mr-2 inline-block h-4 w-4 rotate-[135deg]" />
+        ),
+      };
+    }
+    return {
+      content: sender.name + ' has started a call',
+      icon: <PhoneCallIcon className="mr-2 inline-block h-4 w-4" />,
+    };
+  }, [call?.createdAt, call?.endTime, sender.name]);
+  return (
+    <div className={cn('')}>
+      <div>
+        <span
+          className={cn(
+            textVariants({ position: 'left', status: message.status }),
+          )}
+        >
+          {icon}
+          {content}
+          <div className="mt-1 text-sm font-light">{subContent}</div>
+        </span>
+      </div>
+      {call?.type === 'GROUP' && !call.endTime && (
+        <Button
+          color="secondary"
+          size="xs"
+          shape="square"
+          className="mt-2 w-full"
+        >
+          Invite
+        </Button>
+      )}
     </div>
   );
 };
