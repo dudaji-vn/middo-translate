@@ -51,7 +51,7 @@ const Discussion = ({ messageId }: Props) => {
         replies: messages || [],
       }}
     >
-      <div className="flex flex-1 flex-col overflow-hidden p-1">
+      <div className="flex flex-1 flex-col overflow-hidden p-3">
         <div
           ref={messageBoxRef}
           className="flex flex-1 flex-col overflow-y-auto pb-2"

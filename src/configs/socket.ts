@@ -56,6 +56,7 @@ export const SOCKET_CONFIG = {
       MEETING_END: 'call.meeting_end',
       INVITE_TO_CALL: 'call.invite_to_call',
       SEND_CAPTION: 'call.send_caption',
+      UPDATE: 'call.update',
     },
   },
 };
