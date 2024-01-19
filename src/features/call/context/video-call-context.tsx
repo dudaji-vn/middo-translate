@@ -67,7 +67,7 @@ export const VideoCallProvider = ({
     resetUsersRequestJoinRoom,
     updatePeerParticipant
   } = useParticipantVideoCallStore();
-  const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen } = useVideoCallStore();
+  const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen, setMessageId } = useVideoCallStore();
   const [isCreatingDoodle, setIsCreatingDoodle] = useState(false);
   // Start Stream when user access this page
   useEffect(() => {
@@ -100,8 +100,9 @@ export const VideoCallProvider = ({
       setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
       resetParticipants()
       resetUsersRequestJoinRoom()
+      setMessageId('')
     };
-  }, [call, clearPeerShareScreen, myInfo, resetParticipants, resetUsersRequestJoinRoom, setDoodle, setDoodleImage, setDrawing, setLayout, setMeDoodle, setMyStream, setPinDoodle, setPinShareScreen, setShareScreen, setShareScreenStream]);
+  }, [call, clearPeerShareScreen, myInfo, resetParticipants, resetUsersRequestJoinRoom, setDoodle, setDoodleImage, setDrawing, setLayout, setMeDoodle, setMessageId, setMyStream, setPinDoodle, setPinShareScreen, setShareScreen, setShareScreenStream]);
 
   // useEffect when myStream change
   useEffect(() => {
