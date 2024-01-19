@@ -14,6 +14,10 @@ import { uploadImage } from '@/utils/upload-img';
 
 const basePath = '/rooms';
 export const roomApi = {
+  async getRoom(roomId: string) {
+    const res: Response<Room> = await axios.get(`${basePath}/${roomId}`);
+    return res.data;
+  },
   async getRooms(params: CursorParams & { type: InboxType }) {
     const path = queryString.stringifyUrl({
       url: basePath,

@@ -38,7 +38,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       useState<Message[]>([]);
 
     const { mutateAsync } = useMutation({
-      mutationFn: messageApi.sendMessage,
+      mutationFn: messageApi.send,
     });
 
     const handleSendText = async (
@@ -162,7 +162,6 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [localDocumentMessagesWaiting, filesUploaded, room?._id]);
-
     return (
       <div className="w-full border-t p-2">
         <MessageEditor
