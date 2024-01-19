@@ -15,7 +15,7 @@ const ReceiveVideoCall = () => {
     const controls = useDragControls()
     const { requestCall, removeRequestCall, addRequestCall, setRoom } = useVideoCallStore();
     const [audio, setAudio] = useState<HTMLAudioElement>();
-    const {user: me} = useAuthStore();
+    const { user: me } = useAuthStore();
     const declineCall = () => {
         removeRequestCall();
     }
@@ -29,7 +29,9 @@ const ReceiveVideoCall = () => {
 
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, ({ call, user }) => {
-            if(user._id == me?._id) return;
+            if (user._id == me?._id) return;
+            const isHave = requestCall.find((item) => item.id == call.roomId);
+            if (isHave) return;
             addRequestCall({ id: call.roomId, call, user });
         });
         socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomId: string) => {
@@ -38,17 +40,22 @@ const ReceiveVideoCall = () => {
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL);
         }
-    }, [addRequestCall, me?._id, removeRequestCall])
+    }, [addRequestCall, me?._id, removeRequestCall, requestCall])
 
     useEffect(() => {
-        if(!audio) return;
-        if(requestCall.length > 0) {
-            audio.currentTime = 0;
-            audio.play();
-            audio.addEventListener('ended', () => {
+        if (!audio) return;
+        if (requestCall.length > 0) {
+            // const isPlaying = audio.currentTime > 0 && !audio.paused && !audio.ended
+            //     && audio.readyState > audio.HAVE_CURRENT_DATA;
+            // if (!isPlaying) {
+                audio.currentTime = 0;
                 audio.play();
-            });
+                audio.addEventListener('ended', () => {
+                    audio.play();
+                });
+            // }
         } else {
+            if (audio.paused) return;
             audio.pause();
         }
     }, [audio, requestCall])
@@ -63,7 +70,7 @@ const ReceiveVideoCall = () => {
                 dragConstraints={constraintsRef}
                 dragControls={controls}
                 dragMomentum={false}
-                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit md:w-[336px] md:bottom-4 md:left-4`}
+                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit min-h-[252px] md:w-[336px] md:bottom-4 md:left-4 shadow-lg shadow-primary/500`}
             >
                 <div className="rounded-xl overflow-hidden border border-primary-400 bg-white flex flex-col h-full w-full shadow-2 shadow-primary-500/30 max-h-dvh">
                     <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing`}>
@@ -81,12 +88,12 @@ const ReceiveVideoCall = () => {
                     <div className="relative flex flex-col h-[calc(100%-60px)]">
                         <div className="h-full relative p-3">
                             <div className="flex gap-2 items-center justify-center">
-                                <Avatar 
+                                <Avatar
                                     size="lg"
                                     src={requestCall[0]?.call?.avatar || requestCall[0]?.user?.avatar || '/person.svg'}
                                     alt="avatar"
                                 />
-                                {requestCall[0]?.room?.participants?.length > 2 &&  <p>{requestCall[0]?.call?.name}</p>}
+                                {requestCall[0]?.room?.participants?.length > 2 && <p>{requestCall[0]?.call?.name}</p>}
                             </div>
                             <p className="text-center mt-3"><strong>{requestCall[0]?.user?.name}</strong> is calling</p>
                         </div>

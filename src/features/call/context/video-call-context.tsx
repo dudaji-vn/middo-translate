@@ -64,11 +64,11 @@ export const VideoCallProvider = ({
     removePeerShareScreen,
     pinParticipant,
     resetParticipants,
-    resetUsersRequestJoinRoom
+    resetUsersRequestJoinRoom,
+    updatePeerParticipant
   } = useParticipantVideoCallStore();
   const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen } = useVideoCallStore();
   const [isCreatingDoodle, setIsCreatingDoodle] = useState(false);
-  
   // Start Stream when user access this page
   useEffect(() => {
     let myVideoStream: MediaStream | null = null;
@@ -145,6 +145,13 @@ export const VideoCallProvider = ({
           isShareScreen: payload.isShareScreen,
         });
         peer.addStream(myStream);
+        let oldParticipant = participants.find((p: ParicipantInVideoCall) => p.socketId === payload.callerId && p.isShareScreen === payload.isShareScreen);
+        if(oldParticipant) {
+          // Update peer User
+          oldParticipant?.peer.removeAllListeners('close')
+          updatePeerParticipant(peer, payload.callerId)
+          return;
+        };
         const newUser = {
           socketId: payload.callerId,
           peer,
@@ -170,7 +177,7 @@ export const VideoCallProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT);
       socket.off(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED);
     }
-  }, [addParticipant, call?._id, isPinDoodle, myInfo, myStream, participants, pinParticipant, setDoodle, setDoodleImage, setLayout, setPinDoodle, setPinShareScreen, updateParticipant]);
+  }, [addParticipant, call?._id, isPinDoodle, myInfo, myStream, participants, pinParticipant, setDoodle, setDoodleImage, setLayout, setPinDoodle, setPinShareScreen, updateParticipant, updatePeerParticipant]);
 
   // useEffect listen event return signal
   useEffect(() => {
@@ -363,6 +370,10 @@ export const VideoCallProvider = ({
       return;
     }
     const navigator = window.navigator as any;
+    if(!navigator.mediaDevices.getDisplayMedia) {
+      toast.error('Device not support share screen');
+      return;
+    }
     navigator.mediaDevices
       .getDisplayMedia({ video: true, audio: true })
       .then(async (stream: MediaStream) => {
@@ -383,8 +394,12 @@ export const VideoCallProvider = ({
           stopShareScreen();
         };
       })
-      .catch((err: any) => {
-        console.log(err);
+      .catch((err: Error) => {
+        if(err.name == 'NotAllowedError') {
+          // 
+        } else {
+          toast.error('Device not support share screen');
+        }
       });
   };
   const handleStartDoodle = async () => {

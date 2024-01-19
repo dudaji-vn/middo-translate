@@ -6,6 +6,7 @@ import { DiscussionSocket } from './discussion-socket';
 import { MainMessage } from './main-message';
 import { RepliesBox } from './replies-box';
 import { Message } from '../../messages/types';
+import { MessageActions } from '../../messages/components/message-actions';
 
 type Props = {
   messageId: string;
@@ -45,25 +46,27 @@ const Discussion = ({ messageId }: Props) => {
   );
   if (!data) return null;
   return (
-    <DiscussionContext.Provider
-      value={{
-        message: data,
-        replies: messages || [],
-      }}
-    >
-      <div className="flex flex-1 flex-col overflow-hidden p-1">
-        <div
-          ref={messageBoxRef}
-          className="flex flex-1 flex-col overflow-y-auto pb-2"
-        >
-          <MainMessage />
-          <RepliesBox />
-        </div>
+    <MessageActions>
+      <DiscussionContext.Provider
+        value={{
+          message: data,
+          replies: messages || [],
+        }}
+      >
+        <div className="flex flex-1 flex-col overflow-hidden p-1 h-full">
+          <div
+            ref={messageBoxRef}
+            className="flex flex-1 flex-col overflow-y-auto pb-2"
+          >
+            <MainMessage />
+            <RepliesBox />
+          </div>
 
-        <DiscussionForm />
-      </div>
-      <DiscussionSocket />
-    </DiscussionContext.Provider>
+          <DiscussionForm />
+        </div>
+        <DiscussionSocket />
+      </DiscussionContext.Provider>
+    </MessageActions>
   );
 };
 

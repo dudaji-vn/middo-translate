@@ -22,6 +22,7 @@ export type VideoCallState = {
     requestCall: any[];
     isShowModalAddUser: boolean;
     captions: CaptionInterface[];
+    messageId: string;
     setRoom: (room: any) => void;
     setLayout: (layout?: string) => void;
     setConfirmLeave: (confirmLeave: boolean) => void;
@@ -41,6 +42,7 @@ export type VideoCallState = {
     setModalAddUser: (isShowModalAddUser: boolean) => void;
     addCaption: (caption: CaptionInterface) => void;
     clearCaption: () => void;
+    setMessageId: (messageId: string) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -59,11 +61,12 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     isPinDoodle: false,
     isPinShareScreen: false,
     tmpRoom: null,
-    isShowChat: false,
+    isShowChat: true,
     isShowCaption: false,
     requestCall: [],
     isShowModalAddUser: false,
     captions: [],
+    messageId: '',
     setRoom: (room: any) => {
         set(() => ({ room }));
     },
@@ -124,4 +127,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     clearCaption: () => {
         set(() => ({ captions: [] }));
     },
+    setMessageId: (messageId: string) => {
+        set(() => ({ messageId }));
+    }
 }));

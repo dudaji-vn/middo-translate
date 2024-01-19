@@ -60,9 +60,9 @@ export default function UpdateUserAvatar() {
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger>
           <div className="cursor-pointer transition-all hover:opacity-80">
-            <Button.Icon color="secondary">
+            <div className="inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0 transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-semibold text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:bg-primary-100 disabled:text-primary-200 rounded-full p-0 w-12 h-12">
               <Camera />
-            </Button.Icon>
+            </div>
 
             <span className="mt-2 block text-center text-sm font-light">
               Avatar
@@ -79,7 +79,7 @@ export default function UpdateUserAvatar() {
               <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
                 <p>Cancel</p>
               </AlertDialogCancel>
-              <Button shape="square" disabled={loading}>
+              <Button shape="square" disabled={loading} type="submit">
                 Save
               </Button>
             </div>
