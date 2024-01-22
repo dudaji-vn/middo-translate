@@ -218,6 +218,9 @@ export const VideoCallProvider = ({
           removeParticipant(socketId);
         });
       }
+      if(items[0]?.user?.name) {
+        toast.success(`${items[0].user.name} left meeting`);
+      }
 
       // Check have in share screen peer
       const itemShareScreen = peerShareScreen.find((p: any) => p.id === socketId);
