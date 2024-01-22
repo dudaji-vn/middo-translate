@@ -34,6 +34,13 @@ export const ItemSub = ({
 
   const preMessage = useMemo(() => {
     const isCurrentUserSender = message.sender._id === currentUserId;
+    if (message.type === 'call' && message.call?.endTime) {
+      return '';
+    }
+
+    if (message.type === 'call' && !isCurrentUserSender) {
+      return `${message.sender.name} `;
+    }
     const isSystemMessage =
       message.type === 'notification' ||
       message.type === 'action' ||
@@ -65,6 +72,7 @@ export const ItemSub = ({
     message.sender._id,
     message.sender.name,
     message.type,
+    message.call?.endTime,
     message.status,
     message?.content,
     message.forwardOf,
@@ -139,7 +147,7 @@ export const ItemSub = ({
     }
     if (message.type === 'call') {
       if (message?.call?.endTime) {
-        setContentDisplay('ended a call');
+        setContentDisplay('Call ended');
       } else {
         setContentDisplay('started a call');
       }
