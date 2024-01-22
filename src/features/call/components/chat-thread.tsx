@@ -7,10 +7,12 @@ import { Button } from '@/components/actions';
 import { ChatBoxFooter } from '@/features/chat/rooms/components';
 import { getMessageIdFromCallIdService } from '@/services/message.service';
 import Discussion from '@/features/chat/discussion/components/discussion';
+import { useChatStore } from '@/features/chat/store';
 
 export default function ChatThread({className}: {className?: string}) {
     const { isFullScreen, isShowChat, setShowChat, room, messageId, setMessageId } = useVideoCallStore();
     const [isShowAlert, setShowAlert] = useState(true);
+    const { toggleShowMiddleTranslation,  showMiddleTranslation} = useChatStore();
     useEffect(() => {
         if(messageId) return;
         const callId = room?._id;
@@ -40,9 +42,11 @@ export default function ChatThread({className}: {className?: string}) {
                             </Button.Icon>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
+                            <DropdownMenuItem className='flex gap-1' onClick={()=>toggleShowMiddleTranslation()}>
+                                {showMiddleTranslation ? 'Hide' : 'Show'} translated message
+                            </DropdownMenuItem>
                             <DropdownMenuItem className='flex gap-1' onClick={()=>setShowChat(false)}>
-                                <X />
-                                Close
+                                Close window
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
