@@ -103,10 +103,21 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
               {showMembersName && (
                 <div className="flex items-center">
                   <span className="line-clamp-1 break-all text-sm text-text/50">
-                    {room.participants.map((user) => user.name).join(', ')}
+                    {room.isGroup ? (
+                      <>
+                        {room.participants.map((user) => user.name).join(', ')}
+                      </>
+                    ) : (
+                      <>
+                        {room.participants.filter(
+                          (user) => user._id !== currentUserId,
+                        )[0]?.email || 'you'}
+                      </>
+                    )}
                   </span>
                 </div>
               )}
+
               {room.lastMessage && !showMembersName && (
                 <ItemSub
                   currentUser={currentUser}

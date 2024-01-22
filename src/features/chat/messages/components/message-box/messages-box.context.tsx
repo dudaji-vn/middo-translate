@@ -79,11 +79,12 @@ export const MessagesBoxProvider = ({
       }) => {
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
-        const messageNotify = `${message.sender.name} to ${
-          message.room?.isGroup && message.room?.name
+        const targetText = message.room?.isGroup
+          ? message.room?.name
             ? message.room?.name
             : 'your group'
-        }: ${message.content} `;
+          : 'you';
+        const messageNotify = `${message.sender.name} to ${targetText}: ${message.content} `;
         setNotification(messageNotify);
       },
     );

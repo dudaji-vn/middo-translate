@@ -1857,7 +1857,7 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/regenerator-runtime@^0.13.5":
+"@types/regenerator-runtime@^0.13.3":
   version "0.13.5"
   resolved "https://registry.yarnpkg.com/@types/regenerator-runtime/-/regenerator-runtime-0.13.5.tgz#988e5fa1e3da8a947932b37bdeb68c8a9184e173"
   integrity sha512-kuQTuRQB2RafkNk1qimK3zu4KSfy6z47diYGXVDcFcAZ3pVTR25CXiSb3adKry+onx2BBB9DBXxxLdbuglx5mw==
