@@ -12,7 +12,7 @@ import { useCallback } from "react";
 
 export const useJoinCall = () => {
     const { user } = useAuthStore();
-    const { setRoom, room, setTempRoom, setMessageId } = useVideoCallStore();
+    const { setRoom, room, setTempRoom, clearRequestCall } = useVideoCallStore();
     const { room: roomChatBox, updateRoom } = useChatBox();
     const createRoomMeeting = useCallback(async () => {
         const res = await roomApi.createRoom({
@@ -35,6 +35,7 @@ export const useJoinCall = () => {
             toast.error('Error when join room');
             return;
         }
+        clearRequestCall();
         if (room) {
             // If user is in a meeting => set temp room to show modal
             setTempRoom({
