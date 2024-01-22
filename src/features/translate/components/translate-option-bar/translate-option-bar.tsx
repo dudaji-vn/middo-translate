@@ -50,9 +50,17 @@ export const TranslateOptionBar = forwardRef<
 
   const ableListen = sourceLang && sourceLang !== 'auto';
 
-  const handleStartListening = () => {
+  const handleStartListening = async () => {
     if (!ableListen) {
       toast.error('Please select a language to listen');
+      return;
+    }
+
+    // request permission
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+    const isAllowed = SpeechRecognition.browserSupportsSpeechRecognition();
+    if (!isAllowed) {
+      toast.error('Your browser is not supported');
       return;
     }
     setValue('');
