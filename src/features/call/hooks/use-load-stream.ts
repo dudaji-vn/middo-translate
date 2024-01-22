@@ -16,12 +16,15 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
             const isCamOn = participant.stream.getVideoTracks()[0]?.enabled || false;
             let tempStream = new MediaStream();
             if(participant.isMe) {
+                elementRef.current.muted = true;
+                elementRef.current.volume = 0;
                 if(participant.stream.getVideoTracks()[0]) {
                     const videoTrack = participant.stream.getVideoTracks()[0]
                     tempStream.addTrack(videoTrack)
                 }
             } else {
                 tempStream = participant.stream;
+                elementRef.current.volume = 0.9;
             }
             elementRef.current!.srcObject = tempStream;
             setStreamVideo(tempStream)
@@ -30,6 +33,7 @@ export default function useLoadStream(participant: ParicipantInVideoCall, elemen
             elementRef.current.addEventListener('loadedmetadata', () => {
                 setIsLoaded(true)
             })
+            elementRef.current.play()
         }
         if(!participant.peer) return;
         participant.peer.on('stream', (stream: any) => {
