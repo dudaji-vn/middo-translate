@@ -33,14 +33,14 @@ export const ItemSub = ({
   }, [message.readBy, message.sender._id, participants, currentUserId]);
 
   const preMessage = useMemo(() => {
-    const isMessageRemoved = message.status === 'removed';
     const isCurrentUserSender = message.sender._id === currentUserId;
     const isSystemMessage =
       message.type === 'notification' ||
       message.type === 'action' ||
       message.type === 'media' ||
       message.status === 'removed' ||
-      (!message?.content && message.forwardOf);
+      (!message?.content && message.forwardOf) ||
+      message.type === 'call';
 
     let actor = '';
     if (isGroup) {
@@ -62,10 +62,12 @@ export const ItemSub = ({
     }
     return actor;
   }, [
-    message.status,
     message.sender._id,
     message.sender.name,
     message.type,
+    message.status,
+    message?.content,
+    message.forwardOf,
     currentUserId,
     isGroup,
   ]);
@@ -134,17 +136,17 @@ export const ItemSub = ({
         setContentDisplay(translated);
       };
       translateContent();
+    }
+    if (message.type === 'call') {
+      if (message?.call?.endTime) {
+        setContentDisplay('ended a call');
+      } else {
+        setContentDisplay('started a call');
+      }
     } else {
       setContentDisplay(content);
     }
-  }, [
-    userLanguage,
-    message.content,
-    message.sender.language,
-    message.type,
-    message.contentEnglish,
-    content,
-  ]);
+  }, [userLanguage, message, content]);
 
   return (
     <div className="flex items-center">
