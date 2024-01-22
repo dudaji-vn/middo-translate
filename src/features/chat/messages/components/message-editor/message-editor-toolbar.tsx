@@ -44,7 +44,6 @@ export const MessageEditorToolbar = forwardRef<
 
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [listening]);
-  console.log(room);
   return (
     <>
       <MessageEditorToolbarTranslateTool />
