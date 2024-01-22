@@ -17,11 +17,10 @@ export async function POST(request: Request) {
     }),
   }).then((res) => res.json());
 
-  const { accessToken, refreshToken } = response?.data;
-
+  const accessToken = response?.data?.accessToken;
+  const refreshToken = response?.data?.refreshToken;
   cookies().set(ACCESS_TOKEN_NAME, accessToken);
   cookies().set(REFRESH_TOKEN_NAME, refreshToken);
-
   return Response.json({
     data: response.data,
   });
