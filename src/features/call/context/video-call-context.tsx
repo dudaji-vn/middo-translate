@@ -74,10 +74,16 @@ export const VideoCallProvider = ({
     let myVideoStream: MediaStream | null = null;
     const navigator = window.navigator as any;
     navigator.mediaDevices
-      .getUserMedia({ video: {
-        facingMode: 'user',
-        frameRate: { ideal: 10, max: 15 },
-      }, audio: DEFAULT_USER_CALL_STATE.isTurnOnMic })
+      .getUserMedia({ 
+        video: {
+          facingMode: 'user',
+          frameRate: { ideal: 10, max: 15 },
+        }, 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100,
+      }})
       .then((stream: MediaStream) => {
         myVideoStream = stream;
         setMyStream(stream)
