@@ -1,25 +1,16 @@
 'use client';
 
-import { AlertCircleIcon, Phone } from 'lucide-react';
 import { Button } from '@/components/actions';
-import { RoomAvatar } from '../../room-avatar';
-import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
-import { STATUS } from '@/features/call/constant/status';
-import { generateRoomDisplay } from '../../../utils';
-import { joinVideoCallRoom } from '@/services/video-call.service';
 import { useAuthStore } from '@/stores/auth.store';
+import { AlertCircleIcon, Phone } from 'lucide-react';
+import { useMemo } from 'react';
 import { useChatBox } from '../../../contexts';
-import { useEffect, useMemo, useState } from 'react';
-import toast from 'react-hot-toast';
-import { useVideoCallStore } from '@/features/call/store/video-call.store';
-import { checkRoomIsHaveMeetingService } from '@/services/call.servide';
-import { CALL_TYPE, JOIN_TYPE } from '@/features/call/constant/call-type';
-import socket from '@/lib/socket-io';
-import { SOCKET_CONFIG } from '@/configs/socket';
-import { roomApi } from '../../../api';
-import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
 import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
 import { useJoinCall } from '../../../hooks/use-join-call';
+import { generateRoomDisplay } from '../../../utils';
+import { RoomAvatar } from '../../room-avatar';
+import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
+import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -66,8 +57,8 @@ const ActionBar = () => {
 };
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
-  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id)
-  const startVideoCall = useJoinCall()
+  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
+  const startVideoCall = useJoinCall();
   return (
     <div>
       <Button.Icon
