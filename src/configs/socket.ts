@@ -31,6 +31,7 @@ export const SOCKET_CONFIG = {
     },
     CALL: {
       JOIN: 'call.join',
+      START: 'call.start',
       LEAVE: 'call.leave',
       LIST_PARTICIPANT: 'call.list',
       SEND_SIGNAL: 'call.send_signal',

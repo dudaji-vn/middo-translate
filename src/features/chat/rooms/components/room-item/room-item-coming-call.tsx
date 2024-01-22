@@ -10,6 +10,9 @@ import { joinVideoCallRoom } from '@/services/video-call.service';
 import { CALL_TYPE, JOIN_TYPE } from '@/features/call/constant/call-type';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import { useCheckHaveMeeting } from '../../hooks/use-check-have-meeting';
+import { useJoinCall } from '../../hooks/use-join-call';
+import { useChatBox } from '../../contexts';
 
 export interface RoomItemComingCallProps {
   roomChatBox: Room;
@@ -18,50 +21,8 @@ export interface RoomItemComingCallProps {
 export const RoomItemComingCall = ({
   roomChatBox,
 }: RoomItemComingCallProps) => {
-  const { user } = useAuthStore();
-  const { setRoom, room, setTempRoom } = useVideoCallStore();
-  const [isHaveMeeting, setHaveMeeting] = useState(false);
-
-  const startVideoCall = async (roomId: string) => {
-    let res = await joinVideoCallRoom({ roomId });
-    const data = res?.data;
-    if (room) {
-      // If user is in a meeting => set temp room to show modal
-      setTempRoom({
-        type: data?.type,
-        call: data?.call,
-        room: data?.room,
-      });
-    }
-    setRoom(data?.call);
-    if (
-      data.type == JOIN_TYPE.NEW_CALL &&
-      data.call.type === CALL_TYPE.DIRECT
-    ) {
-      // Get participants id except me
-      const participants = data?.room?.participants
-        .filter((p: any) => p._id !== user?._id)
-        .map((p: any) => p._id);
-      socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
-        users: participants,
-        call: data?.call,
-        user: user,
-      });
-    }
-  };
-  useEffect(() => {
-    if (!roomChatBox?._id) return;
-    const checkHaveMeeting = async () => {
-      let res = await checkRoomIsHaveMeetingService(roomChatBox?._id);
-      const data = res.data;
-      if (data.status === STATUS.MEETING_STARTED) {
-        setHaveMeeting(true);
-      } else {
-        setHaveMeeting(false);
-      }
-    };
-    checkHaveMeeting();
-  }, [room, roomChatBox, room]);
+  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id)
+  const startVideoCall = useJoinCall()
   if (!isHaveMeeting) return null;
   return (
     <div className="flex items-center pr-3">

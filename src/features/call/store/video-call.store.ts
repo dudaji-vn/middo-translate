@@ -43,6 +43,7 @@ export type VideoCallState = {
   addCaption: (caption: CaptionInterface) => void;
   clearCaption: () => void;
   setMessageId: (messageId: string) => void;
+  clearStateVideoCall: () => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -133,4 +134,27 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   setMessageId: (messageId: string) => {
     set(() => ({ messageId }));
   },
+  clearStateVideoCall: () => {
+    set(() => ({
+      room: null,
+      layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
+      confirmLeave: false,
+      isDoodle: false,
+      doodleImage: null,
+      isMeDoole: false,
+      isDrawing: false,
+      confirmStopDoodle: false,
+      peerShareScreen: [],
+      isFullScreen: false,
+      isPinDoodle: false,
+      isPinShareScreen: false,
+      tmpRoom: null,
+      isShowChat: true,
+      isShowCaption: false,
+      requestCall: [],
+      isShowModalAddUser: false,
+      captions: [],
+      messageId: '',
+    }));
+  }
 }));

@@ -18,6 +18,8 @@ import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '../../../api';
 import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
+import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
+import { useJoinCall } from '../../../hooks/use-join-call';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -63,69 +65,9 @@ const ActionBar = () => {
   );
 };
 const VideoCall = () => {
-  const { user } = useAuthStore();
-  const { setRoom, room, setTempRoom, setMessageId } = useVideoCallStore();
-  const { room: roomChatBox, updateRoom } = useChatBox();
-  const [isHaveMeeting, setHaveMeeting] = useState(false);
-  useEffect(() => {
-    if (!roomChatBox?._id) return;
-    const checkHaveMeeting = async () => {
-      let res = await checkRoomIsHaveMeetingService(roomChatBox?._id);
-      const data = res.data;
-      if (data.status === STATUS.MEETING_STARTED) {
-        setHaveMeeting(true);
-      } else {
-        setHaveMeeting(false);
-      }
-    };
-    checkHaveMeeting();
-  }, [room, roomChatBox, room]);
-
-  const createRoomMeeting = async () => {
-    const res = await roomApi.createRoom({
-      participants: roomChatBox.participants.map((p) => p._id),
-    });
-    updateRoom(res);
-    return res._id; // room id
-  };
-
-  const startVideoCall = async (roomId: string) => {
-    let res = await joinVideoCallRoom({ roomId });
-    const data = res?.data;
-    if (data.status === STATUS.ROOM_NOT_FOUND) {
-      const newRoomId = await createRoomMeeting();
-      startVideoCall(newRoomId);
-      return;
-    }
-    if (data.status !== STATUS.JOIN_SUCCESS) {
-      toast.error('Error when join room');
-      return;
-    }
-    if (room) {
-      // If user is in a meeting => set temp room to show modal
-      setTempRoom({
-        type: data?.type,
-        call: data?.call,
-        room: data?.room,
-      });
-    }
-    setRoom(data?.call);
-    if (
-      data.type == JOIN_TYPE.NEW_CALL &&
-      data.call.type === CALL_TYPE.DIRECT
-    ) {
-      // Get participants id except me
-      const participants = data?.room?.participants
-        .filter((p: any) => p._id !== user?._id)
-        .map((p: any) => p._id);
-      socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
-        users: participants,
-        call: data?.call,
-        user: user,
-      });
-    }
-  };
-
+  const { room: roomChatBox } = useChatBox();
+  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id)
+  const startVideoCall = useJoinCall()
   return (
     <div>
       <Button.Icon
