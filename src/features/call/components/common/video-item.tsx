@@ -56,7 +56,6 @@ const VideoItem = ({ participant }: VideoItemProps) => {
           <video
             ref={videoRef}
             className={`h-full w-full flex-1 rounded-xl object-cover ${isTurnOnCamera ? 'block' : 'hidden'}`}
-            autoPlay
             playsInline
             controls={false}
           ></video>

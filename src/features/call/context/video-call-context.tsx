@@ -25,6 +25,7 @@ import ParicipantInVideoCall from '../interfaces/participant';
 import DEFAULT_USER_CALL_STATE from '../constant/default-user-call-state';
 import { ModalSwitchRoom } from '../components/common/modal-switch-room';
 import { ModalAddUser } from '../components/common/modal-add-user';
+import SpeechRecognition from 'react-speech-recognition';
 
 interface VideoCallContextProps {
   handleShareScreen: () => void;
@@ -73,7 +74,10 @@ export const VideoCallProvider = ({
     let myVideoStream: MediaStream | null = null;
     const navigator = window.navigator as any;
     navigator.mediaDevices
-      .getUserMedia({ video: DEFAULT_USER_CALL_STATE.isTurnOnCamera, audio: DEFAULT_USER_CALL_STATE.isTurnOnMic })
+      .getUserMedia({ video: {
+        facingMode: 'user',
+        frameRate: { ideal: 10, max: 15 },
+      }, audio: DEFAULT_USER_CALL_STATE.isTurnOnMic })
       .then((stream: MediaStream) => {
         myVideoStream = stream;
         setMyStream(stream)
@@ -93,6 +97,7 @@ export const VideoCallProvider = ({
       setMyStream(undefined);
       resetParticipants()
       resetUsersRequestJoinRoom()
+      SpeechRecognition.stopListening();
     };
   }, [call, clearPeerShareScreen, clearStateVideoCall, myInfo, resetParticipants, resetUsersRequestJoinRoom, setDoodle, setDoodleImage, setDrawing, setLayout, setMeDoodle, setMessageId, setMyStream, setPinDoodle, setPinShareScreen, setShareScreen, setShareScreenStream]);
   // useEffect when myStream change
