@@ -25,7 +25,7 @@ const VideoItem = ({ participant }: VideoItemProps) => {
   const { setLayout, layout } = useVideoCallStore();
   // useCalcLayoutItem(itemRef, participants?.length);
   const { isFullScreen, setFullScreen, setPinShareScreen, setPinDoodle } = useVideoCallStore();
-  if (participant.isMe && videoRef.current) videoRef.current.volume = 0;
+  
   const expandVideoItem = () => {
     if(!isFullScreen) setFullScreen(true);
     setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW)
@@ -57,7 +57,6 @@ const VideoItem = ({ participant }: VideoItemProps) => {
             ref={videoRef}
             className={`h-full w-full flex-1 rounded-xl object-cover ${isTurnOnCamera ? 'block' : 'hidden'}`}
             autoPlay
-            muted={participant.isMe ? true : false}
             playsInline
             controls={false}
           ></video>
