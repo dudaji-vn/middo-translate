@@ -34,9 +34,6 @@ const ReceiveVideoCall = () => {
             if (isHave) return;
             addRequestCall({ id: call.roomId, call, user });
         });
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomId: string) => {
-            removeRequestCall(roomId);
-        });
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL);
         }

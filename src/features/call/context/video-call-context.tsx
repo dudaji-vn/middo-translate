@@ -25,7 +25,6 @@ import ParicipantInVideoCall from '../interfaces/participant';
 import DEFAULT_USER_CALL_STATE from '../constant/default-user-call-state';
 import { ModalSwitchRoom } from '../components/common/modal-switch-room';
 import { ModalAddUser } from '../components/common/modal-add-user';
-import useExtractTextFromStream from '../hooks/socket/use-extract-text-from-stream';
 
 interface VideoCallContextProps {
   handleShareScreen: () => void;
@@ -67,7 +66,7 @@ export const VideoCallProvider = ({
     resetUsersRequestJoinRoom,
     updatePeerParticipant
   } = useParticipantVideoCallStore();
-  const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen, setMessageId } = useVideoCallStore();
+  const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen, setMessageId, clearStateVideoCall, removeRequestCall } = useVideoCallStore();
   const [isCreatingDoodle, setIsCreatingDoodle] = useState(false);
   // Start Stream when user access this page
   useEffect(() => {
@@ -78,7 +77,7 @@ export const VideoCallProvider = ({
       .then((stream: MediaStream) => {
         myVideoStream = stream;
         setMyStream(stream)
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, { roomId: call?._id, user: myInfo });
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, { callId: call?._id, user: myInfo, roomId: call.roomId });
       });
     return () => {
       socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, call._id);
@@ -87,23 +86,15 @@ export const VideoCallProvider = ({
           track.stop();
         });
       }
+      clearStateVideoCall();
       clearPeerShareScreen();
       setShareScreen(false);
       setShareScreenStream(undefined);
       setMyStream(undefined);
-      setDoodle(false);
-      setDoodleImage('');
-      setMeDoodle(false);
-      setDrawing(false);
-      setPinDoodle(false)
-      setPinShareScreen(false)
-      setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
       resetParticipants()
       resetUsersRequestJoinRoom()
-      setMessageId('')
     };
-  }, [call, clearPeerShareScreen, myInfo, resetParticipants, resetUsersRequestJoinRoom, setDoodle, setDoodleImage, setDrawing, setLayout, setMeDoodle, setMessageId, setMyStream, setPinDoodle, setPinShareScreen, setShareScreen, setShareScreenStream]);
-
+  }, [call, clearPeerShareScreen, clearStateVideoCall, myInfo, resetParticipants, resetUsersRequestJoinRoom, setDoodle, setDoodleImage, setDrawing, setLayout, setMeDoodle, setMessageId, setMyStream, setPinDoodle, setPinShareScreen, setShareScreen, setShareScreenStream]);
   // useEffect when myStream change
   useEffect(() => {
     if (!socket.id) return;
@@ -179,7 +170,6 @@ export const VideoCallProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED);
     }
   }, [addParticipant, call?._id, isPinDoodle, myInfo, myStream, participants, pinParticipant, setDoodle, setDoodleImage, setLayout, setPinDoodle, setPinShareScreen, updateParticipant, updatePeerParticipant]);
-
   // useEffect listen event return signal
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL,
@@ -204,7 +194,6 @@ export const VideoCallProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL);
     }
   }, [participants, peerShareScreen]);
-
   // useEffect Socket Event not effect to stream
   useEffect(() => {
     // Event when have user leave room
@@ -257,7 +246,6 @@ export const VideoCallProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.CALL.ANSWERED_JOIN_ROOM);
     }
   }, [addUsersRequestJoinRoom, participants, peerShareScreen, removeParticipant, removeParticipantShareScreen, removePeerShareScreen, removeUsersRequestJoinRoom, setLayout]);
-
   // useEffect Send Share screen
   useEffect(() => {
     if (!shareScreenStream) return;
@@ -316,7 +304,6 @@ export const VideoCallProvider = ({
       });
     };
   }, [shareScreenStream]);
-
   // Doodle Event
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, (payload: { image_url: string, name: string }) => {
@@ -343,7 +330,7 @@ export const VideoCallProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE);
     }
   }, [participants, setDoodle, setDoodleImage, setDrawing, setLayout, setPinDoodle]);
-
+  
   // useContext function
   const stopShareScreen = () => {
     if (!socket.id) return;
