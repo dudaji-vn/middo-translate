@@ -11,6 +11,7 @@ import 'moment-precise-range-plugin';
 import { convertToTimeReadable } from '@/utils/time';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import { useQueryClient } from '@tanstack/react-query';
 
 export interface TextMessageProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -21,6 +22,7 @@ export const CallMessage = ({
   active,
   message,
 }: TextMessageProps) => {
+  const queryClient = useQueryClient();
   const { call: _call } = message;
   const [call, setCall] = useState(_call);
   const { content, icon, subContent } = useMemo((): {
@@ -49,12 +51,15 @@ export const CallMessage = ({
     socket.on(SOCKET_CONFIG.EVENTS.CALL.UPDATE, (call) => {
       if (call._id === _call?._id) {
         setCall(call);
+        queryClient.invalidateQueries(['rooms', 'all']);
+        queryClient.invalidateQueries(['rooms', 'pinned']);
+        queryClient.invalidateQueries(['rooms', 'group']);
       }
     });
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.UPDATE);
     };
-  }, []);
+  }, [_call?._id, queryClient]);
   return (
     <div
       className={cn(

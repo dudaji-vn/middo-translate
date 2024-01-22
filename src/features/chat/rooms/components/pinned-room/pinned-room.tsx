@@ -1,16 +1,28 @@
+import { useMemo } from 'react';
+import { InboxType } from '../inbox/inbox';
 import { RoomItem } from '../room-item';
 import { useGetPinnedRooms } from '@/features/chat/messages/hooks/use-pin-room';
 
 export interface PinnedRoomProps {
   currentRoomId?: string;
+  type: InboxType;
 }
 
-export const PinnedRoom = ({ currentRoomId }: PinnedRoomProps) => {
+export const PinnedRoom = ({ currentRoomId, type }: PinnedRoomProps) => {
   const { rooms } = useGetPinnedRooms();
+
+  const filteredRooms = useMemo(() => {
+    if (!rooms) return [];
+    return rooms.filter((room) => {
+      if (type === 'all') return true;
+      else if (type === 'group') return room.isGroup;
+    });
+  }, [rooms, type]);
+
   if (!rooms || !rooms.length) return null;
   return (
     <div className="">
-      {rooms.map((room) => (
+      {filteredRooms.map((room) => (
         <RoomItem
           key={room._id}
           data={room}

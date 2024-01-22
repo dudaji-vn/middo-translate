@@ -21,16 +21,15 @@ export const DiscussionContext = createContext<DiscussionContextProps>(
 );
 
 const Discussion = ({ messageId }: Props) => {
+  const { data } = useQuery({
+    queryKey: ['message', messageId],
+    queryFn: () => messageApi.getOne(messageId),
+    enabled: !!messageId,
+  });
   const { data: messages } = useQuery({
     queryKey: ['message-replies', messageId],
     queryFn: () => messageApi.getReplies(messageId),
     keepPreviousData: true,
-    enabled: !!messageId,
-  });
-
-  const { data } = useQuery({
-    queryKey: ['message', messageId],
-    queryFn: () => messageApi.getOne(messageId),
     enabled: !!messageId,
   });
 
