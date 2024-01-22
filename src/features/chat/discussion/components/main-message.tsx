@@ -1,27 +1,25 @@
+import { Button } from '@/components/actions';
 import { Avatar, Text } from '@/components/data-display';
+import { TriangleSmall } from '@/components/icons/triangle-small';
+import { translateText } from '@/services/languages.service';
+import { useAuthStore } from '@/stores/auth.store';
+import { cn } from '@/utils/cn';
+import { convertToTimeReadable } from '@/utils/time';
+import { PhoneCallIcon, PhoneIcon } from 'lucide-react';
+import moment from 'moment';
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
+import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
+import { textVariants } from '../../messages/components/message-item/message-item-text.style';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
-import { useAuthStore } from '@/stores/auth.store';
-import { Fragment, useEffect, useMemo, useState } from 'react';
-import { translateText } from '@/services/languages.service';
-import { TriangleSmall } from '@/components/icons/triangle-small';
-import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
-import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
 import { useDiscussion } from './discussion';
-import moment from 'moment';
-import { convertToTimeReadable } from '@/utils/time';
-import { PhoneCall, PhoneCallIcon, PhoneIcon } from 'lucide-react';
-import {
-  textVariants,
-  wrapperVariants,
-} from '../../messages/components/message-item/message-item-text.style';
-import { cn } from '@/utils/cn';
-import { Button } from '@/components/actions';
 
 export interface MainMessageProps {}
 
 export const MainMessage = () => {
   const { message } = useDiscussion();
+  console.log('message', message);
   const sender = message.sender;
   return (
     <div className="flex flex-col">
@@ -32,7 +30,7 @@ export const MainMessage = () => {
         </div>
       )}
       <div className={cn(message.type !== 'call' ? 'ml-8' : '')}>
-        <TextMessage message={message} />
+        {message.content && <TextMessage message={message} />}
         {message?.media && message.media.length > 0 && (
           <Fragment>
             {message.media[0].type === 'image' && (
@@ -129,7 +127,7 @@ const CallMessage = ({ message }: { message: Message }) => {
     };
   }, [call?.createdAt, call?.endTime, sender.name]);
   return (
-    <div className={cn('')}>
+    <div className={cn('px-2')}>
       <div>
         <span
           className={cn(

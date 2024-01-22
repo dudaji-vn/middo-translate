@@ -13,7 +13,6 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useParams } from 'next/navigation';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
-import { useSidebarTabs } from '@/features/chat/hooks';
 import useStore from '@/stores/use-store';
 import { PinnedRoom } from '../pinned-room';
 import { useQueryClient } from '@tanstack/react-query';
@@ -113,7 +112,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             isFetching={isLoading}
             className="flex flex-col"
           >
-            <PinnedRoom currentRoomId={currentRoomId as string} />
+            <PinnedRoom type={type} currentRoomId={currentRoomId as string} />
             {rooms.map((room) => (
               <RoomItem
                 key={room._id}
