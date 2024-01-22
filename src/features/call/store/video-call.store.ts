@@ -44,6 +44,7 @@ export type VideoCallState = {
   clearCaption: () => void;
   setMessageId: (messageId: string) => void;
   clearStateVideoCall: () => void;
+  clearRequestCall: () => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -121,6 +122,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
         requestCall: state.requestCall.filter((item) => item.id !== roomId),
       }));
     else set((state) => ({ requestCall: state.requestCall.slice(1) }));
+  },
+  clearRequestCall: () => {
+    set(() => ({ requestCall: [] }));
   },
   setModalAddUser: (isShowModalAddUser: boolean) => {
     set(() => ({ isShowModalAddUser }));
