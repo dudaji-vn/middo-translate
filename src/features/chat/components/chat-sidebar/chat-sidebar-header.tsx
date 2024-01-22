@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeftIcon, PenSquareIcon, Settings } from 'lucide-react';
 import { SPK_CHAT_TAB, SPK_SEARCH } from '../../configs';
 import { SearchInput, SearchInputRef } from '@/components/data-entry';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { Button } from '@/components/actions';
 import { ChatSettingMenu } from '../chat-setting';
@@ -28,6 +28,12 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     removeParams([SPK_SEARCH, SPK_CHAT_TAB]);
     searchInputRef.current?.reset();
   }, [removeParams, searchInputRef]);
+
+  useEffect(() => {
+    if (searchParams?.get(SPK_SEARCH) === null) {
+      searchInputRef.current?.reset();
+    }
+  }, [searchParams]);
 
   return (
     <div className="w-full px-3 pt-3">

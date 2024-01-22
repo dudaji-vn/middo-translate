@@ -36,6 +36,7 @@ export const MessageItemWrapper = (
     const itemFiltered: any[] = [];
     actionItems.forEach((item) => {
       if (item.action === 'copy' && message.type !== 'text') return;
+      if (item.action === 'forward' && message.type === 'call') return;
       itemFiltered.push({
         ...item,
         onAction: () =>

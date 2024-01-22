@@ -43,6 +43,8 @@ export const RoomItemActionWrapper = forwardRef<
             return !room.isPinned;
           case 'unpin':
             return room.isPinned;
+          case 'leave':
+            return room.isGroup;
           default:
             return true;
         }
@@ -51,7 +53,7 @@ export const RoomItemActionWrapper = forwardRef<
         ...item,
         onAction: () => onAction(item.action, room._id),
       }));
-  }, [actionItems, isMuted, onAction, room._id, room.isPinned]);
+  }, [actionItems, isMuted, onAction, room._id, room.isGroup, room.isPinned]);
 
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>
