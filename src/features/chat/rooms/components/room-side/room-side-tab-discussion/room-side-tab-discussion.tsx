@@ -11,6 +11,7 @@ export const RoomSideTabDiscussion = (props: RoomSideTabDiscussionProps) => {
   const params = useSearchParams();
   const messageId = params?.get('ms_id') || '';
   const { onBack } = useClickReplyMessage();
+  console.log('messageId', messageId);
 
   return (
     <MessageActions>
