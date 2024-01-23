@@ -9,8 +9,8 @@ import {
   AlertDialogTitle,
 } from '@/components/feedback';
 import { useRouter } from 'next/navigation';
-import { useVideoCallStore } from '../../store/video-call.store';
-import { useParticipantVideoCallStore } from '../../store/participant.store';
+import { useVideoCallStore } from '../../../store/video-call.store';
+import { useParticipantVideoCallStore } from '../../../store/participant.store';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 

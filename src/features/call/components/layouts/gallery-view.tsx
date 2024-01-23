@@ -3,7 +3,7 @@ import VideoItem from "../common/video-item";
 import { useVideoCallStore } from "../../store/video-call.store";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import DoodleItem from "../common/doodle-item";
-import ParicipantInVideoCall from "../../interfaces/participant";
+import ParticipantInVideoCall from "../../interfaces/participant";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 
 const GalleryView = () => {
@@ -35,7 +35,7 @@ const GalleryView = () => {
     return (
         <div className={`p-2 w-full h-full grid justify-center items-center content-center overflow-auto md:overflow-hidden ${classes}`}>
             {isDoodle && <DoodleItem />}
-            {participants.map((participant: ParicipantInVideoCall, index: number) => (
+            {participants.map((participant: ParticipantInVideoCall, index: number) => (
                 <VideoItem key={index} participant={participant} />
             ))}
         </div>

@@ -2,9 +2,9 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useVideoCallStore } from '../../store/video-call.store';
+import { useVideoCallStore } from '../../../store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
-import { JOIN_TYPE } from '../../constant/call-type';
+import { JOIN_TYPE } from '../../../constant/call-type';
 
 export const ModalSwitchRoom = () => {
     const { user } = useAuthStore();

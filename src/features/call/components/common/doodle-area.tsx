@@ -12,7 +12,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
 import trimLongName from '../../utils/trim-long-name.util';
 import { useMyVideoCallStore } from '../../store/me.store';
-import { ModalConfirmClearDoodle } from './modal-confirm-clear-doodle';
+import { ModalConfirmClearDoodle } from './modal/modal-confirm-clear-doodle';
 import debounce from '@/utils/debounce';
 type IDoodleImage = Record<string, {
     user: any,

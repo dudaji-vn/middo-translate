@@ -5,13 +5,13 @@ import { Avatar, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMe
 
 import { Button } from '@/components/actions/button';
 import { useParticipantVideoCallStore } from '../store/participant.store';
-import ParicipantInVideoCall from '../interfaces/participant';
+import ParticipantInVideoCall from '../interfaces/participant';
 
 export interface VideoCallHeaderProps { }
 
 export const ParticipantListSidebar = ({ }: VideoCallHeaderProps) => {
     const { participants } = useParticipantVideoCallStore()
-    let participantList = participants.filter((p: ParicipantInVideoCall) => !p.isShareScreen)
+    let participantList = participants.filter((p: ParticipantInVideoCall) => !p.isShareScreen)
     return (
         <aside className='w-full md:max-w-[320px] h-full border-r border-neutral-50 md:relative absolute inset-0 z-10 bg-white flex flex-col'>
             <div className='p-1 pl-3 flex items-center justify-center gap-2 border-b border-neutral-50'>
@@ -22,7 +22,7 @@ export const ParticipantListSidebar = ({ }: VideoCallHeaderProps) => {
                 </button>
             </div>
             <ul className='overflow-auto flex-1'>
-                {participantList.map((participant: ParicipantInVideoCall) => (
+                {participantList.map((participant: ParticipantInVideoCall) => (
                     <li key={participant.socketId} className='p-3 pr-1 flex items-center gap-2'>
                     <Avatar
                         src={participant.user?.avatar || '/avatar.png'}
