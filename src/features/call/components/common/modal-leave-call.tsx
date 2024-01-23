@@ -21,15 +21,13 @@ export const ConfirmLeaveRoomModal = () => {
 
   const handleLeave = async () => {
     setConfirmLeave(false);
-    socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, room?._id);
-
-    // participants.forEach(participant => {
-    //     if (!participant.isMe) {
-    //         participant.peer?.destroy();
-    //     }
-    //     removeParticipant(participant.socketId);
-    // })
-    // setRoom(null)
+    participants.forEach((participant) => {
+      if (!participant.isMe) {
+        participant.peer?.destroy();
+      }
+      removeParticipant(participant.socketId);
+    });
+    setRoom(null);
   };
 
   const closeModal = () => {
