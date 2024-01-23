@@ -11,7 +11,6 @@ import { generateRoomDisplay } from '../../../utils';
 import { RoomAvatar } from '../../room-avatar';
 import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
-import { useVideoCallStore } from '@/features/call/store/video-call.store';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -60,21 +59,8 @@ const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
   const startVideoCall = useJoinCall();
-  const { setConfirmLeave } = useVideoCallStore();
-  const handleLeave = () => {
-    setConfirmLeave(true);
-  };
   return (
     <div>
-      <Button.Icon
-        variant="default"
-        size="xs"
-        color="error"
-        title="Leave"
-        onClick={handleLeave}
-      >
-        <Phone className="rotate-[135deg]" />
-      </Button.Icon>
       <Button.Icon
         onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"
