@@ -2,27 +2,38 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useVideoCallStore } from '../../store/video-call.store';
+import { useVideoCallStore } from '../../../store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
+import { JOIN_TYPE } from '../../../constant/call-type';
 
-export const ConfirmStopDoodle = () => {
-    const { confirmStopDoodle, setConfirmStopDoodle, setDoodle, setDoodleImage, setDrawing, setMeDoodle } = useVideoCallStore();
+export const ModalSwitchRoom = () => {
     const { user } = useAuthStore();
-    const handleStop = () => {
-        setMeDoodle(false);
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE, user?.name);
+    const { tmpRoom, setTempRoom, setRoom } = useVideoCallStore()
+
+    const handleSwitch = () => {
+        setRoom(tmpRoom?.call);
+        setTempRoom(null);
+        if(tmpRoom.type == JOIN_TYPE.NEW_CALL) {
+            const participants = tmpRoom?.room?.participants.filter((p:any) => p._id !== user?._id).map((p:any) => p._id);
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.STARTING_NEW_CALL, {
+                participants,
+                call: tmpRoom?.call,
+                user: user,
+            });
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_JOIN_ROOM, { roomId: tmpRoom?._id, user});
+        }
     };
 
     return (
-        <AlertDialog open={confirmStopDoodle} onOpenChange={()=>setConfirmStopDoodle(false)}>
+        <AlertDialog open={tmpRoom} onOpenChange={()=>setTempRoom(null)}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Are you sure you want to stop doodle?
+                        Switch room?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        <span className='block mt-5'>
-                            You and other participants will be stop doodle.
+                        <span>
+                            You will be switch to room <strong>{tmpRoom?.call?.name}</strong>.
                         </span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>
@@ -31,9 +42,9 @@ export const ConfirmStopDoodle = () => {
                     <AlertDialogAction
                         type="submit"
                         className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
-                        onClick={handleStop}
+                        onClick={handleSwitch}
                     >
-                        Stop
+                        Switch
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

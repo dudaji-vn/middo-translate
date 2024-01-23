@@ -12,7 +12,8 @@ import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
 import trimLongName from '../../utils/trim-long-name.util';
 import { useMyVideoCallStore } from '../../store/me.store';
-import { ModalConfirmClearDoodle } from './modal-confirm-clear-doodle';
+import { ModalConfirmClearDoodle } from './modal/modal-confirm-clear-doodle';
+import debounce from '@/utils/debounce';
 type IDoodleImage = Record<string, {
     user: any,
     image: string,
@@ -73,6 +74,11 @@ export const DoodleArea = () => {
             user,
             color: colorDoodle
         })
+
+        // get Paths
+        const path = await canvasRef.current?.exportPaths();
+        if(!path) return;
+        setMyOldDoodle(path);
     }
     const handleUndo = async () => {
         canvasRef.current?.undo();
@@ -91,7 +97,7 @@ export const DoodleArea = () => {
     }
 
     useEffect(() => {
-        const fillCanvasToImage = async () => {
+        const fillCanvasToImage = debounce(async () => {
             if(!imageRef.current) return;
             const ratio = imageRef.current.naturalWidth/imageRef.current.naturalHeight
             let width = imageRef.current.height*ratio
@@ -101,13 +107,38 @@ export const DoodleArea = () => {
                 height = imageRef.current.width/ratio
             }
             setCanvasSize({width, height})
-        }
+
+            // Re calculate paths of canvas
+            const paths = await canvasRef.current?.exportPaths();
+            if(!paths || paths.length === 0) return;
+            const newPaths = paths.map((path) => {
+                return {
+                    ...path,
+                    paths: path.paths.map((p) => {
+                        return {
+                            ...p,
+                            x: p.x/(canvasSize.width || 1) * width,
+                            y: p.y/(canvasSize.height || 1) * height
+                        }
+                    })
+                }
+            })
+            canvasRef.current?.resetCanvas();
+            canvasRef.current?.loadPaths(newPaths);
+
+        }, 300)
         window.addEventListener('resize', fillCanvasToImage);
-        window.addEventListener('load', fillCanvasToImage);
+
+        const imageRefInstant = imageRef.current;
+        if(imageRef.current) {
+            imageRef.current.addEventListener('load', fillCanvasToImage);
+        }
         fillCanvasToImage();
         return () => {
             window.removeEventListener('resize', fillCanvasToImage);
-            window.removeEventListener('load', fillCanvasToImage);
+            if(imageRefInstant) {
+                imageRefInstant.removeEventListener('load', fillCanvasToImage);
+            }
         }
     }, [canvasSize.height, canvasSize.width]);
 
@@ -129,7 +160,7 @@ export const DoodleArea = () => {
             if(!canvasRef.current) return;
             const currentImagesCanvas = {...imagesCanvas};
             for(const [key, value] of Object.entries(payload)) {
-                // if(key === socket.id) continue;
+                if(key === socket.id) continue;
                 currentImagesCanvas[key] = value
             }
             setImagesCanvas(currentImagesCanvas);
@@ -141,21 +172,17 @@ export const DoodleArea = () => {
         }
     }, [imagesCanvas])
 
+    
     useEffect(() => {
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_OLD_DOODLE_DATA)
     }, [])
-    
-    // useEffect(() => {
-    //     if(!canvasRef.current || !myOldDoodle) return;
-    //     const checkPathAndLoadOldPath = async () => {
-    //         let currentPath = await canvasRef.current?.exportPaths();
-    //         if(!currentPath || currentPath.length == 0) {
-    //             canvasRef.current?.loadPaths(myOldDoodle);
-    //         }
-    //     }
-    //     checkPathAndLoadOldPath()
-    // }, [myOldDoodle])
 
+    useEffect(() => {
+        if(!canvasRef.current || !myOldDoodle) return;
+        canvasRef.current?.loadPaths(myOldDoodle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+    
     return (
     <motion.section ref={constraintsRef} className='rounded-xl overflow-hidden relative transition-all w-full h-full  bg-neutral-900'>
         <Image src={doodleImage || ''} width={500} height={500} alt="Doodle" ref={imageRef} className='object-contain w-full h-full' />

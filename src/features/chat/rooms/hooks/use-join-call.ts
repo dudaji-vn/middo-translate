@@ -59,7 +59,7 @@ export const useJoinCall = () => {
                 user: user,
             });
         }
-    },[createRoomMeeting, room, setRoom, setTempRoom, user]);
+    },[clearRequestCall, createRoomMeeting, room, setRoom, setTempRoom, user]);
 
     return startVideoCall;
 };

@@ -7,7 +7,7 @@ import { useVideoCallContext } from '../context/video-call-context';
 import { useVideoCallStore } from '../store/video-call.store';
 import { useParticipantVideoCallStore } from '../store/participant.store';
 import { useMyVideoCallStore } from '../store/me.store';
-import ParicipantInVideoCall from '../interfaces/participant';
+import ParticipantInVideoCall from '../interfaces/participant';
 import socket from '@/lib/socket-io';
 import { Button } from '@/components/actions';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
@@ -65,7 +65,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     // navigator.mediaDevices.getUserMedia({ video: video, audio: audio }).then((newStream: MediaStream) => {
     //   console.log('Got new Stream')
     //   setStreamForParticipant(newStream, socket.id || '', false)
-    //   participants.forEach((p: ParicipantInVideoCall) => {
+    //   participants.forEach((p: ParticipantInVideoCall) => {
     //     if (!p.isMe && p.peer.destroyed === false) {
     //       // newStream.getTracks().forEach((track) => {
     //       //   p.peer.addTrack(track, newStream)

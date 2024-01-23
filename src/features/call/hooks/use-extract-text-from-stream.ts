@@ -1,12 +1,10 @@
 
-import { useEffect, useState } from "react";
-import { useMyVideoCallStore } from "../../store/me.store";
+import { useEffect } from "react";
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { SUPPORTED_VOICE_MAP } from "@/configs/default-language";
 import { useAuthStore } from "@/stores/auth.store";
 
-const useExtractTextFromStream = () => {
-    const { myStream } = useMyVideoCallStore();
+const useExtractTextFromStream = (myStream?: MediaStream) => {
     const { resetTranscript, finalTranscript, interimTranscript } = useSpeechRecognition(); 
     const { user } = useAuthStore();
     useEffect(() => {
