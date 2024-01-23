@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useVideoCallStore } from '../store/video-call.store'
-import { MoreVertical, ScanText, X } from 'lucide-react';
-import { Avatar, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Text } from '@/components/data-display';
+import { ScanText, XIcon } from 'lucide-react';
+import { Avatar, Text } from '@/components/data-display';
 import { Button } from '@/components/actions';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import useExtractTextFromStream from '../hooks/socket/use-extract-text-from-stream';
@@ -104,22 +104,14 @@ export default function CaptionSection() {
             <div className='bg-neutral-50 p-1 pl-3 flex items-center justify-center text-primary gap-2'>
                 <ScanText className='w-4 h-4' />
                 <span className='flex-1'>Caption</span>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button.Icon
-                            variant='default'
-                            color='default'
-                        >
-                            <MoreVertical />
-                        </Button.Icon>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuItem className='flex gap-1' onClick={() => setShowCaption(false)}>
-                            <X />
-                            Close
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Button.Icon
+                    onClick={() => setShowCaption(false)}
+                    size="sm"
+                    variant="ghost"
+                    color="default"
+                >
+                    <XIcon />
+                </Button.Icon>
             </div>
             <div className='h-[160px] overflow-auto' ref={captionListRef}>
                 {captions.length > 0 && captions.map((caption, index) => {
