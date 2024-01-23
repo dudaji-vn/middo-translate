@@ -19,7 +19,7 @@ export const PinnedRoom = ({ currentRoomId, type }: PinnedRoomProps) => {
     });
   }, [rooms, type]);
 
-  if (!rooms || !rooms.length) return null;
+  if (!filteredRooms || !filteredRooms.length) return null;
   return (
     <div className="">
       {filteredRooms.map((room) => (

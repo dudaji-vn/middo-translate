@@ -66,7 +66,6 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       scrollToBottom();
       const formData = new FormData(e.currentTarget);
       const content = formData.get('message') as string;
-      console.log('content', content);
       let language = srcLang;
       if (content) {
         if (language === 'auto') {
