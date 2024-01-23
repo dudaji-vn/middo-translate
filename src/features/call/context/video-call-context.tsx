@@ -108,7 +108,6 @@ export const VideoCallProvider = ({
         });
       });
     return () => {
-      socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, call._id);
       if (myVideoStream) {
         myVideoStream.getTracks().forEach((track) => {
           track.stop();
@@ -121,7 +120,6 @@ export const VideoCallProvider = ({
       setMyStream(undefined);
       resetParticipants();
       resetUsersRequestJoinRoom();
-      SpeechRecognition.stopListening();
     };
   }, [
     call,
@@ -537,6 +535,18 @@ export const VideoCallProvider = ({
     setIsCreatingDoodle(false);
     setPinDoodle(true);
   };
+
+  useEffect(() => {
+    return () => {
+      socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, call._id);
+    };
+  }, [call._id]);
+
+  useEffect(() => {
+    return () => {
+      SpeechRecognition.stopListening();
+    };
+  }, []);
 
   return (
     <VideoCallContext.Provider
