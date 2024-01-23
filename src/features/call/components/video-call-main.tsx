@@ -8,36 +8,33 @@ import { useParticipantVideoCallStore } from '../store/participant.store';
 import { Spinner } from '@/components/feedback';
 import ChatThread from './chat-thread';
 import CaptionSection from './caption';
-import { useAppStore } from '@/stores/app.store';
 
-interface VideoCallPageProps {
-  params: { id: string };
-}
 const VideoCallPage = () => {
   const { room } = useVideoCallStore();
   const { participants } = useParticipantVideoCallStore();
-  const { isMobile } = useAppStore();
 
   if (!room) return null;
   return (
     <VideoCallProvider>
-      <div className="flex h-full w-full flex-col md:flex-row">
-        <main className="relative flex h-full w-full flex-col overflow-hidden">
+      <div className="flex h-full w-full flex-col">
+        <main className="relative flex h-full w-full flex-col md:flex-row flex-1 overflow-hidden">
           {/* <VideoCallHeader /> */}
-          <section className="relative flex h-full min-h-[70px] w-full flex-1 justify-center overflow-hidden">
-            {/* <ParticipantListSidebar /> */}
-            {participants.length == 0 ? (
-              <div className="flex h-full min-h-[70px] w-full flex-1 items-center justify-center rounded-xl">
-                <Spinner className="text-primary" />
-              </div>
-            ) : (
-              <VideoCallContent />
-            )}
-          </section>
-          <CaptionSection />
-          {isMobile && <ChatThread />}
-          <VideoCallBottom />
+          <div className='flex flex-col flex-1 overflow-hidden'>
+            <section className="relative flex h-full min-h-[70px] w-full flex-1 justify-center overflow-hidden">
+              {/* <ParticipantListSidebar /> */}
+              {participants.length == 0 ? (
+                <div className="flex h-full min-h-[70px] w-full flex-1 items-center justify-center rounded-xl">
+                  <Spinner className="text-primary" />
+                </div>
+              ) : (
+                <VideoCallContent />
+              )}
+            </section>
+            <CaptionSection />
+          </div>
+          <ChatThread />
         </main>
+        <VideoCallBottom />
         {/* {!isMobile && <ChatThread />} */}
       </div>
     </VideoCallProvider>

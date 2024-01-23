@@ -43,46 +43,41 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   const changeLayout = () => {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
   }
-  
+
   const handleChangeCameraOrMic = ({ video, audio }: { video: boolean; audio: boolean }) => {
     if (!socket.id) return;
-    if(!myStream) return;
-    // myStream.getTracks().forEach((track) => {
-    //   track.enabled = false
-    // })
-    // myStream.getTracks().forEach((track) => {
-    //   track.stop()
-    // });
-    // if(!video && !audio) {
+    if (!myStream) return;
+
+    // if(video && isTurnOnCamera && myStream.getAudioTracks().length > 0) {
+    //   myStream.getAudioTracks().forEach((track) => {
+    //     track.enabled = audio;
+    //   });
+    //   return;
+    // }
+    
+    // myStream.getTracks().forEach((track) => track.stop());
+
+    // if (!video && !audio) {
+    //   console.log(2)
     //   return;
     // };
+
     // navigator.mediaDevices.getUserMedia({ video: video, audio: audio }).then((newStream: MediaStream) => {
-    //   console.log('Start new stream')
+    //   console.log('Got new Stream')
     //   setStreamForParticipant(newStream, socket.id || '', false)
     //   participants.forEach((p: ParicipantInVideoCall) => {
     //     if (!p.isMe && p.peer.destroyed === false) {
+    //       // newStream.getTracks().forEach((track) => {
+    //       //   p.peer.addTrack(track, newStream)
+    //       // })
+    //       console.log('Add new stream to peer::', p)
+    //       console.log({newStream})
     //       p.peer.addStream(newStream)
-    //       // REPLACE TRACK
-    //       // Check have old video track
-    //       // if(myStream.getVideoTracks().length > 0) {
-    //       //   p.peer.replaceTrack(myStream.getVideoTracks()[0], newStream.getVideoTracks()[0], myStream)
-    //       // } else {
-    //       //   p.peer.addTrack(newStream.getVideoTracks()[0], newStream)
-    //       // }
-
-    //       // // Check audio track
-    //       // if(myStream.getAudioTracks().length > 0) {
-    //       //   p.peer.replaceTrack(myStream.getAudioTracks()[0], newStream.getAudioTracks()[0], myStream)
-    //       // } else {
-    //       //   p.peer.addTrack(newStream.getAudioTracks()[0], newStream)
-    //       // }
     //     }
     //   })
     //   setMyStream(newStream)
     // })
-    
-    
-    
+
     myStream.getTracks().forEach((track) => {
       if (track.kind === 'audio') track.enabled = audio;
       if (track.kind === 'video') track.enabled = video;
@@ -126,11 +121,11 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
               <Brush />
               <span className='ml-2'>Screen Doodle</span>
             </DropdownMenuItem>
-            {room.type === CALL_TYPE.GROUP && 
-            <DropdownMenuItem onClick={() => setModalAddUser(true)}>
-              <UserPlus2 />
-              <span className='ml-2'>Add member</span>
-            </DropdownMenuItem>
+            {room.type === CALL_TYPE.GROUP &&
+              <DropdownMenuItem onClick={() => setModalAddUser(true)}>
+                <UserPlus2 />
+                <span className='ml-2'>Add member</span>
+              </DropdownMenuItem>
             }
             <DropdownMenuItem
               onClick={() => setShowCaption(!isShowCaption)}
@@ -196,28 +191,28 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
           <Phone className="rotate-[135deg]" />
         </Button.Icon>
       </div>
-      {participants.length == 1 && room.type === CALL_TYPE.GROUP && isShowInvite && isFullScreen && 
-      <div className='absolute md:hidden bottom-full left-0 right-0 px-3 py-5 bg-gradient-to-t from-black/20'>
-        <div className='bg-neutral-50 rounded-xl p-2'>
-          <div className='text-neutral-600 flex items-center'>
-            <Lightbulb className='text-neutral-400 w-4 h-4' />
-            <p className='ml-1 flex-1'>Notice</p>
-            <X className='text-neutral-400 w-4 h-4 cursor-pointer' onClick={() => setShowInvite(false)} />
+      {participants.length == 1 && room.type === CALL_TYPE.GROUP && isShowInvite && isFullScreen &&
+        <div className='absolute md:hidden bottom-full left-0 right-0 px-3 py-5 bg-gradient-to-t from-black/20'>
+          <div className='bg-neutral-50 rounded-xl p-2'>
+            <div className='text-neutral-600 flex items-center'>
+              <Lightbulb className='text-neutral-400 w-4 h-4' />
+              <p className='ml-1 flex-1'>Notice</p>
+              <X className='text-neutral-400 w-4 h-4 cursor-pointer' onClick={() => setShowInvite(false)} />
+            </div>
+            <p className='text-sm text-neutral-400 font-light mt-2'>Memeber in group will not receive any in coming call alert till you invite them to join</p>
           </div>
-          <p className='text-sm text-neutral-400 font-light mt-2'>Memeber in group will not receive any in coming call alert till you invite them to join</p>
-        </div>
-        <Button
-          onClick={() => setModalAddUser(true)}
-          size="sm"
-          color="primary"
-          variant="default"
-          className='mx-auto mt-2 block'
-          shape="square"
-          startIcon={<UserPlus2Icon />}
-        >
-          Invite
-        </Button>
-      </div>}
+          <Button
+            onClick={() => setModalAddUser(true)}
+            size="sm"
+            color="primary"
+            variant="default"
+            className='mx-auto mt-2 block'
+            shape="square"
+            startIcon={<UserPlus2Icon />}
+          >
+            Invite
+          </Button>
+        </div>}
     </section>
   );
 };
