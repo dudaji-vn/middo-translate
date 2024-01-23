@@ -10,18 +10,19 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import { addPeer, createPeer } from "../../utils/peer-action.util";
 import { IJoinCallPayload } from "../../interfaces/socket/join.interface";
+import { MonitorUpIcon, LogIn } from "lucide-react";
 
 export default function useHandleCreatePeerConnection() {
     const { setDoodle, setDoodleImage, setLayout, room } = useVideoCallStore();
     const { participants, addParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
     const { myStream } = useMyVideoCallStore();
-    const { user } = useAuthStore();
+    const { user: myInfo } = useAuthStore();
 
     // useEffect when myStream change
     useEffect(() => {
         if (!socket.id) return;
         if (!myStream) return;
-        const me = { stream: myStream, user, isMe: true, socketId: socket.id };
+        const me = { stream: myStream, user: myInfo, isMe: true, socketId: socket.id };
         // Event receive list user
         socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT, ({ users, doodleImage }) => {
             // Loop and create peer connection for each user
@@ -31,7 +32,7 @@ export default function useHandleCreatePeerConnection() {
                 const peer = createPeer({
                     id: user.id,
                     socketId: socket.id || '',
-                    user,
+                    user: myInfo,
                 });
                 peer.addStream(myStream);
                 addParticipant({
@@ -53,7 +54,7 @@ export default function useHandleCreatePeerConnection() {
             const peer = addPeer({
                 signal: payload.signal,
                 callerId: payload.callerId,
-                user,
+                user: myInfo,
                 isShareScreen: payload.isShareScreen,
             });
             peer.addStream(myStream);
@@ -75,9 +76,9 @@ export default function useHandleCreatePeerConnection() {
             };
             if (payload.isShareScreen) {
                 setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
-                toast.success(`${payload.user.name} is sharing screen`);
+                toast.success(`${payload.user.name} is sharing screen`, {icon: <MonitorUpIcon size={20}/>});
             } else {
-                toast.success(`${payload.user.name} joined meeting`);
+                toast.success(`${payload.user.name} joined meeting`, {icon: <LogIn size={20}/>});
             }
             addParticipant(newUser);
         },
@@ -86,5 +87,5 @@ export default function useHandleCreatePeerConnection() {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT);
             socket.off(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED);
         };
-    }, [addParticipant, myStream, participants, room?._id, setDoodle, setDoodleImage, setLayout, updatePeerParticipant, user]);
+    }, [addParticipant, myStream, participants, room?._id, setDoodle, setDoodleImage, setLayout, updatePeerParticipant, myInfo]);
 }

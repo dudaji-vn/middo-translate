@@ -8,6 +8,7 @@ import { useMyVideoCallStore } from "../../store/me.store";
 import { useEffect } from "react";
 import { createPeer } from "../../utils/peer-action.util";
 import ParticipantInVideoCall from "../../interfaces/participant";
+import { MonitorX } from "lucide-react";
 
 export default function useHandleShareScreen() {
     const { room } = useVideoCallStore();
@@ -74,7 +75,7 @@ export default function useHandleShareScreen() {
             if (item) {
                 item.peer.destroy();
                 removeParticipantShareScreen(socketId);
-                toast.success(`${item.user.name} stopped sharing screen`)
+                toast.success(`${item.user.name} stopped sharing screen`, {icon: <MonitorX size={20}/>})
             }
         });
         return () => {

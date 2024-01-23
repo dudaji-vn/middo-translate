@@ -8,6 +8,7 @@ import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { IStartDoodlePayload } from "../../interfaces/socket/doodle.interface";
 import { useAuthStore } from "@/stores/auth.store";
+import { Ban, Brush } from "lucide-react";
 
 export default function useHandleDoodle() {
     const { setDoodle, setDoodleImage, setDrawing, setLayout, setPinDoodle, setMeDoodle } = useVideoCallStore();
@@ -16,7 +17,7 @@ export default function useHandleDoodle() {
     
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, (payload: IStartDoodlePayload) => {
-            toast.success(payload.name + ' is start doodle');
+            toast.success(payload.name + ' is start doodle', {icon: <Brush size={20} />});
             setDoodle(true);
             setDoodleImage(payload.image_url);
             const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
@@ -26,7 +27,7 @@ export default function useHandleDoodle() {
             }
         });
         socket.on(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE, (name: string) => {
-            toast.success(name + ' is stop doodle');
+            toast.success(name + ' is stop doodle', {icon: <Ban size={20} />});
             setDoodle(false);
             setDrawing(false);
             setDoodleImage('');

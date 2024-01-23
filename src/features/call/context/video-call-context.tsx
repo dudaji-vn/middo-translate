@@ -1,30 +1,6 @@
 'use client';
 
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
-import { addPeer, createPeer } from '../utils/peer-action.util';
-import { ConfirmLeaveRoomModal } from '../components/common/modal/modal-leave-call';
-import { RequestJoinRoomModal } from '../components/common/modal/modal-request-join-room';
-import { SOCKET_CONFIG } from '@/configs/socket';
-import SimplePeer from 'simple-peer';
-import { VIDEOCALL_LAYOUTS } from '../constant/layout';
-import socket from '@/lib/socket-io';
-import { useAuthStore } from '@/stores/auth.store';
-import toast from 'react-hot-toast';
-import { ConfirmStopDoodle } from '../components/common/modal/modal-stop-doodle';
-import { useMyVideoCallStore } from '../store/me.store';
-import { useParticipantVideoCallStore } from '../store/participant.store';
-import { useVideoCallStore } from '../store/video-call.store';
-import ParticipantInVideoCall from '../interfaces/participant';
-import DEFAULT_USER_CALL_STATE from '../constant/default-user-call-state';
-import { ModalSwitchRoom } from '../components/common/modal/modal-switch-room';
-import { ModalAddUser } from '../components/common/modal/modal-add-user';
-import SpeechRecognition from 'react-speech-recognition';
+import { PropsWithChildren, createContext, useContext } from 'react';
 import useHandleDoodle from '../hooks/socket/use-handle-doodle';
 import useHandleShareScreen from '../hooks/socket/use-handle-share-screen';
 import useHandleJoinLeaveCall from '../hooks/socket/use-handle-join-leave-call';
@@ -48,7 +24,7 @@ export const VideoCallProvider = ({ children }: PropsWithChildren) => {
   useHandleJoinLeaveCall();
   useHandleStreamMyVideo();
   useHandleCreatePeerConnection();
-  
+
   return (
     <VideoCallContext.Provider
       value={{

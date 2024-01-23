@@ -7,6 +7,7 @@ import { IReturnSignal } from "../../interfaces/socket/signal.interface";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { useVideoCallStore } from "../../store/video-call.store";
 import SpeechRecognition from "react-speech-recognition";
+import { LogOutIcon } from "lucide-react";
 
 export default function useHandleJoinLeaveCall() {
     const { removeParticipant, participants, peerShareScreen, removePeerShareScreen, addUsersRequestJoinRoom, removeUsersRequestJoinRoom } = useParticipantVideoCallStore();
@@ -25,7 +26,7 @@ export default function useHandleJoinLeaveCall() {
                 });
             }
             if (items[0]?.user?.name) {
-                toast.success(`${items[0].user.name} left meeting`);
+                toast.success(`${items[0].user.name} left meeting`, {icon: <LogOutIcon size={20} />});
             }
 
             // Check have in share screen peer
