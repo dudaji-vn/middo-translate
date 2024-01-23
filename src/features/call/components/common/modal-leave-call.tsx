@@ -39,12 +39,11 @@ export const ConfirmLeaveRoomModal = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure you want to leave meeting?
+            Leave call?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            <span className="mt-5 block">
-              You will be leave this meeting. And another people will be
-              continue this meeting.
+            <span>
+              You will leave this call and other still continue. Are you sure to leave?
             </span>
           </AlertDialogDescription>
         </AlertDialogHeader>

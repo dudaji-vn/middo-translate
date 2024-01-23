@@ -18,11 +18,11 @@ export const ConfirmStopDoodle = () => {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Are you sure you want to stop doodle?
+                        Stop doodle?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        <span className='block mt-5'>
-                            You and other participants will be stop doodle.
+                        <span>
+                            Other&apos;s drew will be wiped away? Are you sure to stop doodle?
                         </span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>

@@ -29,10 +29,10 @@ export const ModalSwitchRoom = () => {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Are you sure you want to switch room?
+                        Switch room?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        <span className='block mt-5'>
+                        <span>
                             You will be switch to room <strong>{tmpRoom?.call?.name}</strong>.
                         </span>
                     </AlertDialogDescription>
