@@ -27,8 +27,8 @@ export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
           startIcon={<LogOut className="h-4 w-4" />}
           shape="square"
           color="default"
-          size="lg"
-          className="mb-2 w-full rounded-b-[4px]"
+          size="md"
+          className="mb-1 w-full rounded-b-[4px]"
         >
           Leave group
         </Button>

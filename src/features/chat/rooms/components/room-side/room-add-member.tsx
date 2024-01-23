@@ -70,8 +70,8 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
     <div>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button.Icon variant="ghost">
-            <UserPlus2 width={16} height={16} />
+          <Button.Icon size="xs" variant="ghost">
+            <UserPlus2 />
           </Button.Icon>
         </AlertDialogTrigger>
         <AlertDialogContent>
