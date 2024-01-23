@@ -15,7 +15,7 @@ import { UserItem } from '@/features/users/components';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts';
 import { useRemoveMember } from '../../hooks/use-remove-members';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export interface RoomMemberProps {
   members: User[];
@@ -29,9 +29,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
   const userId = useAuthStore((state) => state.user?._id);
   const [showMembers, setShowMembers] = useState(INITIAL_SHOW_MEMBERS);
   const isShowAll = showMembers === members?.length;
-  const membersToShow = isShowAll
-    ? members
-    : members?.slice(0, showMembers) || [];
+
   const isAdmin = userId === adminId;
   const handleShowAll = () => {
     setShowMembers(members?.length || 0);
@@ -41,6 +39,15 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
     setShowMembers(INITIAL_SHOW_MEMBERS);
   };
   const { mutate } = useRemoveMember();
+
+  const membersToShow = useMemo(() => {
+    const uniqueMembers = members?.filter(
+      (member, index, self) =>
+        index === self.findIndex((m) => m._id === member._id),
+    );
+    if (isShowAll) return uniqueMembers;
+    return uniqueMembers?.slice(0, showMembers) || [];
+  }, [isShowAll, members, showMembers]);
 
   return (
     <div className="mt-8">
