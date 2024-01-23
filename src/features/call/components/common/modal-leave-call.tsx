@@ -1,50 +1,66 @@
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/feedback';
 import { useRouter } from 'next/navigation';
 import { useVideoCallStore } from '../../store/video-call.store';
 import { useParticipantVideoCallStore } from '../../store/participant.store';
+import socket from '@/lib/socket-io';
+import { SOCKET_CONFIG } from '@/configs/socket';
 
 export const ConfirmLeaveRoomModal = () => {
-    const router = useRouter();
-    const { confirmLeave, setConfirmLeave, setRoom } = useVideoCallStore();
-    const { participants, removeParticipant } = useParticipantVideoCallStore();
+  const router = useRouter();
+  const { confirmLeave, setConfirmLeave, setRoom, room } = useVideoCallStore();
+  const { participants, removeParticipant } = useParticipantVideoCallStore();
 
-    const handleLeave = async () => {
-        setConfirmLeave(false);
-        participants.forEach(participant => {
-            if (!participant.isMe) {
-                participant.peer?.destroy();
-            }
-            removeParticipant(participant.socketId);
-        })
-        setRoom(null)
-    };
+  const handleLeave = async () => {
+    setConfirmLeave(false);
+    socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, room?._id);
 
-    const closeModal = () => {
-        setConfirmLeave(false);
-    };
+    // participants.forEach(participant => {
+    //     if (!participant.isMe) {
+    //         participant.peer?.destroy();
+    //     }
+    //     removeParticipant(participant.socketId);
+    // })
+    // setRoom(null)
+  };
 
-    return (
-        <AlertDialog open={confirmLeave} onOpenChange={closeModal}>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>
-                        Are you sure you want to leave meeting?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                        <span className='block mt-5'>You will be leave this meeting. And another people will be continue this meeting.</span>
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                        type="submit"
-                        className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
-                        onClick={handleLeave}
-                    >
-                        Leave
-                    </AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
-    );
+  const closeModal = () => {
+    setConfirmLeave(false);
+  };
+
+  return (
+    <AlertDialog open={confirmLeave} onOpenChange={closeModal}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Are you sure you want to leave meeting?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            <span className="mt-5 block">
+              You will be leave this meeting. And another people will be
+              continue this meeting.
+            </span>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            type="submit"
+            className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
+            onClick={handleLeave}
+          >
+            Leave
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 };

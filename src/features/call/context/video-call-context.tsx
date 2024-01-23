@@ -36,7 +36,7 @@ const VideoCallContext = createContext<VideoCallContextProps>(
   {} as VideoCallContextProps,
 );
 
-interface VideoCallProviderProps { }
+interface VideoCallProviderProps {}
 
 export const VideoCallProvider = ({
   children,
@@ -48,7 +48,7 @@ export const VideoCallProvider = ({
     myStream,
     isShareScreen,
     shareScreenStream,
-    setShareScreenStream
+    setShareScreenStream,
   } = useMyVideoCallStore();
   const {
     participants,
@@ -65,29 +65,47 @@ export const VideoCallProvider = ({
     pinParticipant,
     resetParticipants,
     resetUsersRequestJoinRoom,
-    updatePeerParticipant
+    updatePeerParticipant,
   } = useParticipantVideoCallStore();
-  const { room: call, setLayout, setDoodle, setDoodleImage, setMeDoodle, setDrawing, setPinDoodle, isPinDoodle, setPinShareScreen, setMessageId, clearStateVideoCall, removeRequestCall } = useVideoCallStore();
+  const {
+    room: call,
+    setLayout,
+    setDoodle,
+    setDoodleImage,
+    setMeDoodle,
+    setDrawing,
+    setPinDoodle,
+    isPinDoodle,
+    setPinShareScreen,
+    setMessageId,
+    clearStateVideoCall,
+    removeRequestCall,
+  } = useVideoCallStore();
   const [isCreatingDoodle, setIsCreatingDoodle] = useState(false);
   // Start Stream when user access this page
   useEffect(() => {
     let myVideoStream: MediaStream | null = null;
     const navigator = window.navigator as any;
     navigator.mediaDevices
-      .getUserMedia({ 
+      .getUserMedia({
         video: {
           facingMode: 'user',
           frameRate: { ideal: 10, max: 15 },
-        }, 
+        },
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
           sampleRate: 44100,
-      }})
+        },
+      })
       .then((stream: MediaStream) => {
         myVideoStream = stream;
-        setMyStream(stream)
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, { callId: call?._id, user: myInfo, roomId: call.roomId });
+        setMyStream(stream);
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
+          callId: call?._id,
+          user: myInfo,
+          roomId: call.roomId,
+        });
       });
     return () => {
       socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, call._id);
@@ -101,40 +119,72 @@ export const VideoCallProvider = ({
       setShareScreen(false);
       setShareScreenStream(undefined);
       setMyStream(undefined);
-      resetParticipants()
-      resetUsersRequestJoinRoom()
+      resetParticipants();
+      resetUsersRequestJoinRoom();
       SpeechRecognition.stopListening();
     };
-  }, [call, clearPeerShareScreen, clearStateVideoCall, myInfo, resetParticipants, resetUsersRequestJoinRoom, setDoodle, setDoodleImage, setDrawing, setLayout, setMeDoodle, setMessageId, setMyStream, setPinDoodle, setPinShareScreen, setShareScreen, setShareScreenStream]);
+  }, [
+    call,
+    clearPeerShareScreen,
+    clearStateVideoCall,
+    myInfo,
+    resetParticipants,
+    resetUsersRequestJoinRoom,
+    setDoodle,
+    setDoodleImage,
+    setDrawing,
+    setLayout,
+    setMeDoodle,
+    setMessageId,
+    setMyStream,
+    setPinDoodle,
+    setPinShareScreen,
+    setShareScreen,
+    setShareScreenStream,
+  ]);
   // useEffect when myStream change
   useEffect(() => {
     if (!socket.id) return;
     if (!myStream) return;
-    const me = { stream: myStream, user: myInfo, isMe: true, socketId: socket.id };
+    const me = {
+      stream: myStream,
+      user: myInfo,
+      isMe: true,
+      socketId: socket.id,
+    };
     // Event receive list user
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT, ({ users, doodleImage }) => {
-      users.forEach((user: { id: string; user: any }) => {
-        if (user.id === socket.id) return;
-        const peer = createPeer({
-          id: user.id,
-          socketId: socket.id || '',
-          user: myInfo,
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT,
+      ({ users, doodleImage }) => {
+        users.forEach((user: { id: string; user: any }) => {
+          if (user.id === socket.id) return;
+          const peer = createPeer({
+            id: user.id,
+            socketId: socket.id || '',
+            user: myInfo,
+          });
+          peer.addStream(myStream);
+          addParticipant({
+            peer,
+            user: user.user,
+            socketId: user.id,
+            isShareScreen: false,
+          });
         });
-        peer.addStream(myStream);
-        addParticipant({ peer, user: user.user, socketId: user.id, isShareScreen: false });
-      });
-      addParticipant(me);
-      socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, {
-        roomId: call?._id,
-        userId: socket.id,
-      });
-      if (doodleImage) {
-        setDoodle(true);
-        setDoodleImage(doodleImage);
-      }
-    });
+        addParticipant(me);
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, {
+          roomId: call?._id,
+          userId: socket.id,
+        });
+        if (doodleImage) {
+          setDoodle(true);
+          setDoodleImage(doodleImage);
+        }
+      },
+    );
     // Event have new user join room
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED,
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.USER_JOINED,
       (payload: {
         signal: SimplePeer.SignalData;
         callerId: string;
@@ -148,13 +198,17 @@ export const VideoCallProvider = ({
           isShareScreen: payload.isShareScreen,
         });
         peer.addStream(myStream);
-        let oldParticipant = participants.find((p: ParicipantInVideoCall) => p.socketId === payload.callerId && p.isShareScreen === payload.isShareScreen);
-        if(oldParticipant) {
+        let oldParticipant = participants.find(
+          (p: ParicipantInVideoCall) =>
+            p.socketId === payload.callerId &&
+            p.isShareScreen === payload.isShareScreen,
+        );
+        if (oldParticipant) {
           // Update peer User
-          oldParticipant?.peer.removeAllListeners('close')
-          updatePeerParticipant(peer, payload.callerId)
+          oldParticipant?.peer.removeAllListeners('close');
+          updatePeerParticipant(peer, payload.callerId);
           return;
-        };
+        }
         const newUser = {
           socketId: payload.callerId,
           peer,
@@ -179,22 +233,42 @@ export const VideoCallProvider = ({
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT);
       socket.off(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED);
-    }
-  }, [addParticipant, call?._id, isPinDoodle, myInfo, myStream, participants, pinParticipant, setDoodle, setDoodleImage, setLayout, setPinDoodle, setPinShareScreen, updateParticipant, updatePeerParticipant]);
+    };
+  }, [
+    addParticipant,
+    call?._id,
+    isPinDoodle,
+    myInfo,
+    myStream,
+    participants,
+    pinParticipant,
+    setDoodle,
+    setDoodleImage,
+    setLayout,
+    setPinDoodle,
+    setPinShareScreen,
+    updateParticipant,
+    updatePeerParticipant,
+  ]);
   // useEffect listen event return signal
   useEffect(() => {
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL,
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL,
       (payload: {
         id: string;
         signal: string;
         user: any;
         isShareScreen: boolean;
       }) => {
-        const itemInParticipant = participants.find((p: any) => p.socketId === payload.id && p.isShareScreen === payload.isShareScreen);
+        const itemInParticipant = participants.find(
+          (p: any) =>
+            p.socketId === payload.id &&
+            p.isShareScreen === payload.isShareScreen,
+        );
         if (itemInParticipant) {
           itemInParticipant.peer.signal(payload.signal);
           return;
-        };
+        }
         if (!peerShareScreen) return;
         const item = peerShareScreen.find((p: any) => p.id === payload.id);
         if (!item || !item.peer) return;
@@ -203,7 +277,7 @@ export const VideoCallProvider = ({
     );
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL);
-    }
+    };
   }, [participants, peerShareScreen]);
   // useEffect Socket Event not effect to stream
   useEffect(() => {
@@ -218,39 +292,48 @@ export const VideoCallProvider = ({
           removeParticipant(socketId);
         });
       }
-      if(items[0]?.user?.name) {
+      if (items[0]?.user?.name) {
         toast.success(`${items[0].user.name} left meeting`);
       }
 
       // Check have in share screen peer
-      const itemShareScreen = peerShareScreen.find((p: any) => p.id === socketId);
+      const itemShareScreen = peerShareScreen.find(
+        (p: any) => p.id === socketId,
+      );
       if (itemShareScreen) {
         itemShareScreen.peer.destroy();
-        removePeerShareScreen(socketId)
+        removePeerShareScreen(socketId);
       }
     });
 
     // Event when user stop share screen
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN, (socketId: string) => {
-      const item = participants.find((p: any) => p.socketId === socketId && p.isShareScreen);
-      if (item) {
-        item.peer.destroy();
-        removeParticipantShareScreen(socketId);
-      }
-    },
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN,
+      (socketId: string) => {
+        const item = participants.find(
+          (p: any) => p.socketId === socketId && p.isShareScreen,
+        );
+        if (item) {
+          item.peer.destroy();
+          removeParticipantShareScreen(socketId);
+        }
+      },
     );
 
     // Event when have user want to join room
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_JOIN_ROOM,
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.REQUEST_JOIN_ROOM,
       ({ user, socketId }: { user: any; socketId: string }) => {
         addUsersRequestJoinRoom({ socketId, user });
       },
     );
 
     // Event when have another user response request join room
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.ANSWERED_JOIN_ROOM, (socketId: string) => {
-      removeUsersRequestJoinRoom(socketId);
-    },
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.ANSWERED_JOIN_ROOM,
+      (socketId: string) => {
+        removeUsersRequestJoinRoom(socketId);
+      },
     );
 
     return () => {
@@ -258,13 +341,23 @@ export const VideoCallProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
       socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_JOIN_ROOM);
       socket.off(SOCKET_CONFIG.EVENTS.CALL.ANSWERED_JOIN_ROOM);
-    }
-  }, [addUsersRequestJoinRoom, participants, peerShareScreen, removeParticipant, removeParticipantShareScreen, removePeerShareScreen, removeUsersRequestJoinRoom, setLayout]);
+    };
+  }, [
+    addUsersRequestJoinRoom,
+    participants,
+    peerShareScreen,
+    removeParticipant,
+    removeParticipantShareScreen,
+    removePeerShareScreen,
+    removeUsersRequestJoinRoom,
+    setLayout,
+  ]);
   // useEffect Send Share screen
   useEffect(() => {
     if (!shareScreenStream) return;
     let peersShareScreenTmp: any[] = [];
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN,
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN,
       (users: any[]) => {
         users.forEach((user: { id: string; user: any }) => {
           if (!socket.id) return;
@@ -283,32 +376,35 @@ export const VideoCallProvider = ({
         });
       },
     );
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, (socketId: string) => {
-      if (!socket.id || socketId === socket.id) return;
-      const peer = createPeer({
-        id: socketId,
-        socketId: socket.id,
-        user: myInfo,
-        isShareScreen: true,
-      });
-      peer.addStream(shareScreenStream);
-      peersShareScreenTmp.push(peer);
-      addPeerShareScreen({
-        id: socketId,
-        peer,
-      });
-    });
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN,
+      (socketId: string) => {
+        if (!socket.id || socketId === socket.id) return;
+        const peer = createPeer({
+          id: socketId,
+          socketId: socket.id,
+          user: myInfo,
+          isShareScreen: true,
+        });
+        peer.addStream(shareScreenStream);
+        peersShareScreenTmp.push(peer);
+        addPeerShareScreen({
+          id: socketId,
+          peer,
+        });
+      },
+    );
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN);
       socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN);
-      if(peersShareScreenTmp && peersShareScreenTmp.length > 0) {
+      if (peersShareScreenTmp && peersShareScreenTmp.length > 0) {
         peersShareScreenTmp.forEach((peer: any) => {
           if (!peer) return;
           peer.destroy();
         });
       }
-    }
-  }, [addPeerShareScreen, myInfo, shareScreenStream])
+    };
+  }, [addPeerShareScreen, myInfo, shareScreenStream]);
   // Cleanup sharescreen stream
   useEffect(() => {
     return () => {
@@ -320,31 +416,43 @@ export const VideoCallProvider = ({
   }, [shareScreenStream]);
   // Doodle Event
   useEffect(() => {
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, (payload: { image_url: string, name: string }) => {
-      toast.success(payload.name + ' is start doodle');
-      setDoodle(true);
-      setDoodleImage(payload.image_url);
-      const isHavePin = participants.some((p: ParicipantInVideoCall) => p.pin)
-      if (!isHavePin) {
-        setPinDoodle(true)
-        setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW)
-      }
-    });
+    socket.on(
+      SOCKET_CONFIG.EVENTS.CALL.START_DOODLE,
+      (payload: { image_url: string; name: string }) => {
+        toast.success(payload.name + ' is start doodle');
+        setDoodle(true);
+        setDoodleImage(payload.image_url);
+        const isHavePin = participants.some(
+          (p: ParicipantInVideoCall) => p.pin,
+        );
+        if (!isHavePin) {
+          setPinDoodle(true);
+          setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+        }
+      },
+    );
     socket.on(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE, (name: string) => {
       toast.success(name + ' is stop doodle');
       setDoodle(false);
       setDrawing(false);
       setDoodleImage('');
-      setPinDoodle(false)
+      setPinDoodle(false);
 
-      setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
+      setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
     });
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE);
       socket.off(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE);
-    }
-  }, [participants, setDoodle, setDoodleImage, setDrawing, setLayout, setPinDoodle]);
-  
+    };
+  }, [
+    participants,
+    setDoodle,
+    setDoodleImage,
+    setDrawing,
+    setLayout,
+    setPinDoodle,
+  ]);
+
   // useContext function
   const stopShareScreen = () => {
     if (!socket.id) return;
@@ -362,9 +470,9 @@ export const VideoCallProvider = ({
     peerShareScreen.forEach((peer: any) => {
       if (!peer.peer) return;
       peer.peer.destroy();
-    })
+    });
     clearPeerShareScreen();
-  }
+  };
   const handleShareScreen = () => {
     // if (participants.some((participant) => participant.isShareScreen)) return;
     if (isShareScreen) {
@@ -372,7 +480,7 @@ export const VideoCallProvider = ({
       return;
     }
     const navigator = window.navigator as any;
-    if(!navigator.mediaDevices.getDisplayMedia) {
+    if (!navigator.mediaDevices.getDisplayMedia) {
       toast.error('Device not support share screen');
       return;
     }
@@ -397,8 +505,8 @@ export const VideoCallProvider = ({
         };
       })
       .catch((err: Error) => {
-        if(err.name == 'NotAllowedError') {
-          // 
+        if (err.name == 'NotAllowedError') {
+          //
         } else {
           toast.error('Device not support share screen');
         }
@@ -406,12 +514,16 @@ export const VideoCallProvider = ({
   };
   const handleStartDoodle = async () => {
     setIsCreatingDoodle(true);
-    let videoEl = document.querySelector('.focus-view video') as HTMLVideoElement;
+    let videoEl = document.querySelector(
+      '.focus-view video',
+    ) as HTMLVideoElement;
     if (!videoEl) return;
-    const canvas = document.createElement("canvas") as HTMLCanvasElement;
+    const canvas = document.createElement('canvas') as HTMLCanvasElement;
     canvas.width = videoEl.videoWidth;
     canvas.height = videoEl.videoHeight;
-    canvas.getContext('2d')?.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+    canvas
+      .getContext('2d')
+      ?.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
     const quality = 0.2;
     const dataURL = canvas.toDataURL('image/png', quality);
     // const fileImage = new File([dataURL], 'doodle.png', { type: 'image/png' });
@@ -423,8 +535,8 @@ export const VideoCallProvider = ({
       name: myInfo?.name,
     });
     setIsCreatingDoodle(false);
-    setPinDoodle(true)
-  }
+    setPinDoodle(true);
+  };
 
   return (
     <VideoCallContext.Provider
