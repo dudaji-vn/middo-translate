@@ -178,13 +178,13 @@
 
   .cursor-drawing {
     cursor:
-      url('/drawing.png') 0 20,
+      url('/circle.png') 5 5,
       auto;
   }
 
   .cursor-eraser {
     cursor:
-      url('/eraser.png') 0 20,
+      url('/circle.png') 5 5,
       auto;
   }
 
