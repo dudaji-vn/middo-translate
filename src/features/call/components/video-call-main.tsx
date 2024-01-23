@@ -17,9 +17,9 @@ const VideoCallPage = () => {
   return (
     <VideoCallProvider>
       <div className="flex h-full w-full flex-col">
-        <main className="relative flex h-full w-full flex-col md:flex-row flex-1 overflow-hidden">
+        <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden md:flex-row">
           {/* <VideoCallHeader /> */}
-          <div className='flex flex-col flex-1 overflow-hidden'>
+          <div className="flex flex-1 flex-col overflow-hidden">
             <section className="relative flex h-full min-h-[70px] w-full flex-1 justify-center overflow-hidden">
               {/* <ParticipantListSidebar /> */}
               {participants.length == 0 ? (
@@ -35,7 +35,7 @@ const VideoCallPage = () => {
           <ChatThread />
         </main>
         <VideoCallBottom />
-        {/* {!isMobile && <ChatThread />} */}
+        {/* <ChatThread /> */}
       </div>
     </VideoCallProvider>
   );

@@ -60,7 +60,6 @@ const Discussion = ({ messageId }: Props) => {
             <MainMessage />
             <RepliesBox />
           </div>
-
           <DiscussionForm />
         </div>
         <DiscussionSocket />
