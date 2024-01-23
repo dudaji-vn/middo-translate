@@ -12,6 +12,7 @@ export type MessageType =
   | 'notification'
   | 'action'
   | 'forward';
+
 export type Reaction = {
   emoji: string;
   user: User;
@@ -40,4 +41,10 @@ export type Message = {
   forwardOf?: Message;
   call?: Call;
   hasChild?: boolean;
+  isPinned?: boolean;
+} & BaseEntity;
+
+export type PinMessage = {
+  message: Message;
+  pinnedBy: User;
 } & BaseEntity;

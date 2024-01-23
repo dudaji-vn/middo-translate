@@ -2,6 +2,8 @@ import {
   CopyIcon,
   ForwardIcon,
   PinIcon,
+  PinOff,
+  PinOffIcon,
   ReplyIcon,
   TrashIcon,
 } from 'lucide-react';
@@ -12,8 +14,16 @@ import { useCopyMessage } from '../hooks/use-copy-message';
 import { Message } from '../types';
 import { ForwardModal } from './forward-modal';
 import { MessageModalRemove } from './message-modal-remove';
+import { usePinMessage } from '../hooks/use-pin-message';
 
-type Action = 'remove' | 'pin' | 'reply' | 'copy' | 'forward' | 'none';
+type Action =
+  | 'remove'
+  | 'pin'
+  | 'reply'
+  | 'copy'
+  | 'forward'
+  | 'none'
+  | 'unpin';
 type ActionItem = {
   action: Action;
   label: string;
@@ -42,6 +52,11 @@ export const actionItems: ActionItem[] = [
     action: 'pin',
     label: 'Pin',
     icon: <PinIcon />,
+  },
+  {
+    action: 'unpin',
+    label: 'Unpin',
+    icon: <PinOffIcon />,
   },
   {
     action: 'remove',
@@ -75,6 +90,7 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
   const [action, setAction] = useState<Action>('none');
   const { copyMessage } = useCopyMessage();
   const { onClickReplyMessage } = useClickReplyMessage();
+  const { pin } = usePinMessage();
   const onAction = ({ action, isMe, message }: OnActionParams) => {
     switch (action) {
       case 'copy':
@@ -84,8 +100,11 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
         onClickReplyMessage(message._id);
         break;
       case 'pin':
+        pin(message._id);
         break;
-
+      case 'unpin':
+        pin(message._id);
+        break;
       default:
         setAction(action);
         setMessage(message);

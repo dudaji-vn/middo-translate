@@ -75,6 +75,7 @@ export const FCMBackground = (props: FCMBackgroundProps) => {
         toast.dismiss(toastId);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowRequestPermission, toastId]);
 
   return <Fragment></Fragment>;

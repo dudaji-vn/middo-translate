@@ -15,10 +15,11 @@ import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
 import { useDiscussion } from './discussion';
 
-export interface MainMessageProps {}
+export interface MainMessageProps {
+  message: Message;
+}
 
-export const MainMessage = () => {
-  const { message } = useDiscussion();
+export const MainMessage = ({ message }: MainMessageProps) => {
   console.log('message', message);
   const sender = message.sender;
   return (

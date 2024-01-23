@@ -1,6 +1,6 @@
 import { Media, Response } from '@/types';
 
-import { Message } from '@/features/chat/messages/types';
+import { Message, PinMessage } from '@/features/chat/messages/types';
 import { axios } from '@/lib/axios';
 
 const basePath = '/messages';
@@ -72,6 +72,17 @@ export const messageApi = {
   async getReplies(id: string) {
     const res: Response<Message[]> = await axios.get(
       `${basePath}/${id}/replies`,
+    );
+    return res.data;
+  },
+
+  async pin(id: string) {
+    const res: Response<Message> = await axios.post(`${basePath}/${id}/pin`);
+    return res.data;
+  },
+  async getPinned(id: string) {
+    const res: Response<PinMessage[]> = await axios.get(
+      `${basePath}/pinned/${id}`,
     );
     return res.data;
   },

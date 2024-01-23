@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/actions';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, PinIcon } from 'lucide-react';
 import { forwardRef } from 'react';
 import { RoomActions } from '../room-actions';
 import { RoomSideTabInfo } from './room-side-tab-info';
@@ -10,10 +10,12 @@ import {
   useRoomSidebarTabs,
 } from './room-side-tabs/room-side-tabs.hook';
 import { RoomSideTabDiscussion } from './room-side-tab-discussion';
+import { RoomSideTabPinned } from './room-side-tabs/room-side-tab-pinned';
 
 const tabsMap: Record<RoomSidebarTabs, React.ReactNode> = {
   info: <RoomSideTabInfo />,
   discussion: <RoomSideTabDiscussion />,
+  pinned: <RoomSideTabPinned />,
 };
 
 export interface RoomSideProps extends React.HTMLAttributes<HTMLDivElement> {}

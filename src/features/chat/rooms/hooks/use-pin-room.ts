@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { roomApi } from '../../rooms/api';
-import { InboxType } from '../../rooms/components/inbox/inbox';
+import { roomApi } from '../api';
+import { InboxType } from '../components/inbox/inbox';
 
 export const usePinRoom = () => {
   const queryClient = useQueryClient();

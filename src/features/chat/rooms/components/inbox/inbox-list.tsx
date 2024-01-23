@@ -16,7 +16,7 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import useStore from '@/stores/use-store';
 import { PinnedRoom } from '../pinned-room';
 import { useQueryClient } from '@tanstack/react-query';
-import { USE_GET_PINNED_ROOMS_KEY } from '@/features/chat/messages/hooks/use-pin-room';
+import { USE_GET_PINNED_ROOMS_KEY } from '@/features/chat/rooms/hooks/use-pin-room';
 
 interface InboxListProps {
   type: InboxType;
