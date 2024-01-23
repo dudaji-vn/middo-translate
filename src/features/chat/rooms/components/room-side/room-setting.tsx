@@ -18,7 +18,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
   const { onAction } = useRoomActions();
   const [isPinned, setIsPinned] = useState(_room.isPinned);
   return (
-    <div className="mt-12 flex flex-col items-center gap-2">
+    <div className="mt-0 flex flex-col items-center gap-1">
       <Item
         className="rounded-b-[4px]"
         leftIcon={<Bell />}

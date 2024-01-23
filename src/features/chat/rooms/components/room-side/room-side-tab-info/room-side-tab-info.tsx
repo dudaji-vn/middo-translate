@@ -13,7 +13,7 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
   return (
     <div>
       <RoomInfo room={room} />
-      <div className="my-12">
+      <div className="my-8">
         <RoomSetting room={room} />
         {room.isGroup && (
           <RoomMember members={room.participants} adminId={room.admin?._id} />

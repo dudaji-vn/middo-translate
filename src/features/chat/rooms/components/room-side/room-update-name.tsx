@@ -40,6 +40,7 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button.Icon
+          size="xs"
           onClick={() => {
             setTimeout(() => {
               inputRef.current?.focus();
