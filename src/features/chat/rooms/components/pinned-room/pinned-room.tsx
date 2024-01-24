@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { InboxType } from '../inbox/inbox';
 import { RoomItem } from '../room-item';
-import { useGetPinnedRooms } from '@/features/chat/messages/hooks/use-pin-room';
+import { useGetPinnedRooms } from '@/features/chat/rooms/hooks/use-pin-room';
 
 export interface PinnedRoomProps {
   currentRoomId?: string;

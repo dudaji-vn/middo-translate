@@ -11,7 +11,7 @@ import { createContext, useContext, useMemo, useState } from 'react';
 import { RoomModalDelete } from './room.modal-delete';
 import { RoomModalLeave } from './room.modal-leave';
 import { RoomModalNotification } from './room.modal-notification';
-import { usePinRoom } from '../../messages/hooks/use-pin-room';
+import { usePinRoom } from '../hooks/use-pin-room';
 
 export type Action =
   | 'delete'
