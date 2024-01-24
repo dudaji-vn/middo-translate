@@ -1,4 +1,4 @@
-export default interface ParicipantInVideoCall {
+export default interface ParticipantInVideoCall {
     peer?: any;
     user?: any;
     isMe?: boolean;

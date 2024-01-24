@@ -4,18 +4,20 @@ import { ScanText, XIcon } from 'lucide-react';
 import { Avatar, Text } from '@/components/data-display';
 import { Button } from '@/components/actions';
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import useExtractTextFromStream from '../hooks/socket/use-extract-text-from-stream';
+import useExtractTextFromStream from '../hooks/use-extract-text-from-stream';
 import { useAuthStore } from '@/stores/auth.store';
 import { translateText } from '@/services/languages.service';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import CaptionInterface from '../interfaces/caption.interface';
+import { useMyVideoCallStore } from '../store/me.store';
 
 export default function CaptionSection() {
     const { isFullScreen, isShowCaption, setShowCaption, captions, addCaption, clearCaption } = useVideoCallStore();
     const { user } = useAuthStore();
+    const { myStream } = useMyVideoCallStore();
     const captionListRef = useRef<HTMLDivElement>(null);
-    const { transcript } = useExtractTextFromStream();
+    const { transcript } = useExtractTextFromStream(myStream);
     const [isScroll, setScroll] = useState(false);
 
     const scrollToBottom = useCallback((isForceScroll = false) => {

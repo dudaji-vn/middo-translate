@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import ParicipantInVideoCall from "../interfaces/participant";
+import ParticipantInVideoCall from "../interfaces/participant";
 import { useParticipantVideoCallStore } from "../store/participant.store";
 
-export default function useLoadStream(participant: ParicipantInVideoCall, elementRef: React.RefObject<HTMLVideoElement>) {
+export default function useLoadStream(participant: ParticipantInVideoCall, elementRef: React.RefObject<HTMLVideoElement>) {
     const [streamVideo, setStreamVideo] = useState<MediaStream>()
     const [isTurnOnMic, setTurnOnMic] = useState<boolean>(false)
     const [isTurnOnCamera, setIsTurnOnCamera] = useState<boolean>(false)

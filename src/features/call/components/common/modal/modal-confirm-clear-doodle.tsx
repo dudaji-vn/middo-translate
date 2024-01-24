@@ -12,11 +12,11 @@ export const ModalConfirmClearDoodle = ({ isOpen, toggleModal, handleSubmit }: M
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Are you sure you want to clear your doodle?
+                        Clear doodle?
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        <span className='block mt-5'>
-                            You will be clear your doodle.
+                        <span>
+                            Your doodle will be clear and can not be undo. Are you sure to clear your doodle?
                         </span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>

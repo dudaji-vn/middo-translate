@@ -9,8 +9,8 @@ import {
   AlertDialogTitle,
 } from '@/components/feedback';
 import { useRouter } from 'next/navigation';
-import { useVideoCallStore } from '../../store/video-call.store';
-import { useParticipantVideoCallStore } from '../../store/participant.store';
+import { useVideoCallStore } from '../../../store/video-call.store';
+import { useParticipantVideoCallStore } from '../../../store/participant.store';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 
@@ -39,12 +39,11 @@ export const ConfirmLeaveRoomModal = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure you want to leave meeting?
+            Leave call?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            <span className="mt-5 block">
-              You will be leave this meeting. And another people will be
-              continue this meeting.
+            <span>
+              You will leave this call and other still continue. Are you sure to leave?
             </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
