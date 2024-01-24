@@ -1,15 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { messageApi } from '../api';
+import { PIN_MESSAGE_KEY } from '../../rooms/hooks/use-get-pin-message';
 
 export const usePinMessage = () => {
-  // const queryClient = useQueryClient();
   const { mutate, ...rest } = useMutation({
     mutationFn: messageApi.pin,
-    onSuccess: () => {
-      // queryClient.invalidateQueries(['rooms', 'pinned']);
-      // queryClient.invalidateQueries(['rooms', 'all' as InboxType]);
-      // queryClient.invalidateQueries(['rooms', 'group' as InboxType]);
-    },
   });
   return { pin: mutate, ...rest };
 };

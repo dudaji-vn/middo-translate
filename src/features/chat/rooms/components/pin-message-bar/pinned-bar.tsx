@@ -1,15 +1,31 @@
 'use client';
 import { PinIcon } from 'lucide-react';
-import { forwardRef } from 'react';
-import { useGetPinMessage } from '../../hooks/use-get-pin-message';
+import { forwardRef, useEffect } from 'react';
+import {
+  PIN_MESSAGE_KEY,
+  useGetPinMessage,
+} from '../../hooks/use-get-pin-message';
 import { useRoomId } from '../../hooks/use-roomId';
 import { ViewPinButton } from '../view-pin-button';
+import socket from '@/lib/socket-io';
+import { SOCKET_CONFIG } from '@/configs/socket';
+import { useQueryClient } from '@tanstack/react-query';
 export interface PinnedBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const PinnedBar = forwardRef<HTMLDivElement, PinnedBarProps>(
   (props, ref) => {
     const roomId = useRoomId();
     const { data } = useGetPinMessage({ roomId });
+    const queryClient = useQueryClient();
+    useEffect(() => {
+      socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.PIN, () => {
+        queryClient.invalidateQueries([PIN_MESSAGE_KEY, roomId]);
+      });
+      return () => {
+        socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.PIN);
+      };
+    }, [queryClient, roomId]);
+
     if (!data?.length) return <></>;
     return (
       <div
