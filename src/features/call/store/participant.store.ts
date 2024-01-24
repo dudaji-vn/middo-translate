@@ -110,6 +110,7 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
         }));
     },
     resetParticipants: () => {
+        console.log('Reset participants')
         set(() => ({ participants: [] }));
     },
     resetUsersRequestJoinRoom: () => {

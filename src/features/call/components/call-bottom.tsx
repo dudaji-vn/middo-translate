@@ -13,6 +13,7 @@ import { Button } from '@/components/actions';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 import { CALL_TYPE } from '../constant/call-type';
+import getStreamConfig from '../utils/get-stream-config';
 
 export interface VideoCallBottomProps { }
 
@@ -48,40 +49,39 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     if (!socket.id) return;
     if (!myStream) return;
 
-    // if(video && isTurnOnCamera && myStream.getAudioTracks().length > 0) {
-    //   myStream.getAudioTracks().forEach((track) => {
-    //     track.enabled = audio;
-    //   });
-    //   return;
-    // }
-    
+    if (video && isTurnOnCamera && myStream.getAudioTracks().length > 0) {
+      myStream.getAudioTracks().forEach((track) => {
+        track.enabled = audio;
+      });
+      return;
+    }
+
     // myStream.getTracks().forEach((track) => track.stop());
 
     // if (!video && !audio) {
     //   console.log(2)
     //   return;
     // };
-
-    // navigator.mediaDevices.getUserMedia({ video: video, audio: audio }).then((newStream: MediaStream) => {
-    //   console.log('Got new Stream')
-    //   setStreamForParticipant(newStream, socket.id || '', false)
-    //   participants.forEach((p: ParticipantInVideoCall) => {
-    //     if (!p.isMe && p.peer.destroyed === false) {
-    //       // newStream.getTracks().forEach((track) => {
-    //       //   p.peer.addTrack(track, newStream)
-    //       // })
-    //       console.log('Add new stream to peer::', p)
-    //       console.log({newStream})
-    //       p.peer.addStream(newStream)
-    //     }
-    //   })
-    //   setMyStream(newStream)
+    
+    // const streamConfig = getStreamConfig(video, audio)
+    // navigator.mediaDevices.getUserMedia({ ...streamConfig }).then((stream: MediaStream) => {
+    //   console.log('Got new Stream::', stream)
+    //   setStreamForParticipant(stream, socket.id || '', false)
+    //   setMyStream(stream)
     // })
-
-    myStream.getTracks().forEach((track) => {
-      if (track.kind === 'audio') track.enabled = audio;
-      if (track.kind === 'video') track.enabled = video;
-    });
+    navigator.mediaDevices
+      .getDisplayMedia({ video: true, audio: true })
+      .then(async (stream: MediaStream) => {
+        myStream.getTracks().forEach((track) => {
+          track.stop();
+        });
+        setStreamForParticipant(stream, socket.id || '', false)
+        setMyStream(stream)
+      })
+    // myStream.getTracks().forEach((track) => {
+    //   if (track.kind === 'audio') track.enabled = audio;
+    //   if (track.kind === 'video') track.enabled = video;
+    // });
   }
   const onToggleCamera = () => {
     setTurnOnCamera(!isTurnOnCamera);

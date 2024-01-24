@@ -19,7 +19,7 @@ const VideoCallDragWrapper = () => {
     return (
         <motion.div
             ref={constraintsRef}
-            className={`fixed inset-0 z-50 max-h-dvh bg-transparent pointer-events-none cursor-auto ${room ? 'block' : 'hidden'}`}
+            className={`fixed inset-0 z-50 max-h-dvh bg-transparent pointer-events-none cursor-auto ${room?._id ? 'block' : 'hidden'}`}
         >
             <motion.div
                 drag
@@ -43,10 +43,8 @@ const VideoCallDragWrapper = () => {
                         </Button.Icon>
 
                     </div>
-                    <div className="relative h-[calc(100%-60px)]">
-                        <div className="h-full relative">
+                    <div className="relative flex-1 overflow-hidden">
                         <VideoCallPage></VideoCallPage>
-                        </div>
                     </div>
                 </div>
             </motion.div>

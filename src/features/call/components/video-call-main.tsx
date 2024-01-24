@@ -8,15 +8,16 @@ import { useParticipantVideoCallStore } from '../store/participant.store';
 import { Spinner } from '@/components/feedback';
 import ChatThread from './chat-thread';
 import CaptionSection from './caption';
+import { twMerge } from 'tailwind-merge';
 
 const VideoCallPage = () => {
   const { room } = useVideoCallStore();
   const { participants } = useParticipantVideoCallStore();
 
-  if (!room) return null;
+  if(!room) return null;
   return (
     <VideoCallProvider>
-      <div className="flex h-full w-full flex-col">
+      <div className={twMerge("flex h-full w-full flex-col")}>
         <main className="relative flex h-full w-full flex-col md:flex-row flex-1 overflow-hidden">
           {/* <VideoCallHeader /> */}
           <div className='flex flex-col flex-1 overflow-hidden'>
@@ -35,7 +36,6 @@ const VideoCallPage = () => {
           <ChatThread />
         </main>
         <VideoCallBottom />
-        {/* {!isMobile && <ChatThread />} */}
       </div>
     </VideoCallProvider>
   );

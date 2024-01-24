@@ -7,6 +7,7 @@ import socket from '@/lib/socket-io';
 import { sendEvent } from '../utils/custom-event.util';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useVideoCallStore } from '../store/video-call.store';
+import { CommonComponent } from './common/common';
 
 const CallVideoModalContainer = () => {
   const { removeRequestCall } = useVideoCallStore();
@@ -28,6 +29,7 @@ const CallVideoModalContainer = () => {
     <>
       <VideoCallDragWrapper />
       <ReceiveVideoCall />
+      <CommonComponent />
     </>
   );
 };

@@ -5,85 +5,90 @@ import toast from "react-hot-toast";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { createPeer } from "../../utils/peer-action.util";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { MonitorX } from "lucide-react";
+import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 
 export default function useHandleShareScreen() {
-    const { room } = useVideoCallStore();
+    const { room, setLayout } = useVideoCallStore();
     const { participants, removeParticipantShareScreen, peerShareScreen, clearPeerShareScreen, addParticipant, addPeerShareScreen } = useParticipantVideoCallStore();
     const { shareScreenStream, setShareScreen, isShareScreen, setShareScreenStream } = useMyVideoCallStore();
     const { user } = useAuthStore();
 
-    useEffect(() => {
+    const removeShareScreen = useCallback((socketId: string) => {
+        const item = participants.find((p: ParticipantInVideoCall) => p.socketId === socketId && p.isShareScreen);
+        if (item) {
+            item.peer.destroy();
+            removeParticipantShareScreen(socketId);
+            toast.success(`${item.user.name} stopped sharing screen`, { icon: <MonitorX size={20} /> })
+        }
+        if(item?.pin) {
+            setShareScreen(false);
+            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+        }
+    }, [participants, removeParticipantShareScreen, setLayout, setShareScreen])
+
+    const createPeerShareScreenConnection = useCallback((users: any[]) => {
         if (!shareScreenStream) return;
-        let peersShareScreenTmp: any[] = [];
-        // Receive list user in room
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN, (users: any[]) => {
-            users.forEach((u: { id: string; user: any }) => {
-                if (!socket.id) return;
-                const peer = createPeer({
-                    id: u.id,
-                    socketId: socket.id,
-                    user: user,
-                    isShareScreen: true,
-                });
-                peer.addStream(shareScreenStream);
-                peersShareScreenTmp.push(peer);
-                addPeerShareScreen({
-                    id: u.id,
-                    peer,
-                });
-            });
-        });
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, (socketId: string) => {
-            if (!socket.id || socketId === socket.id) return;
+        users.forEach((u: { id: string; user: any }) => {
+            if (!socket.id) return;
             const peer = createPeer({
-                id: socketId,
+                id: u.id,
                 socketId: socket.id,
                 user: user,
                 isShareScreen: true,
             });
             peer.addStream(shareScreenStream);
-            peersShareScreenTmp.push(peer);
             addPeerShareScreen({
-                id: socketId,
+                id: u.id,
                 peer,
             });
         });
+    }, [addPeerShareScreen, shareScreenStream, user])
+
+    const sendShareScreenStream = useCallback((socketId: string) => {
+        if (!shareScreenStream) return;
+        if (!socket.id || socketId === socket.id) return;
+        const peer = createPeer({
+            id: socketId,
+            socketId: socket.id,
+            user: user,
+            isShareScreen: true,
+        });
+        peer.addStream(shareScreenStream);
+        addPeerShareScreen({
+            id: socketId,
+            peer,
+        });
+    }, [addPeerShareScreen, shareScreenStream, user])
+
+    useEffect(() => {
+        if (!shareScreenStream) return;
+        // Receive list user in room
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN, createPeerShareScreenConnection);
+        // Have someone in room want to get share screen stream
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, sendShareScreenStream);
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN);
             socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN);
-            if (peersShareScreenTmp && peersShareScreenTmp.length > 0) {
-                peersShareScreenTmp.forEach((peer: any) => {
-                    if (!peer) return;
-                    peer.destroy();
-                });
-            }
             if (!shareScreenStream) return;
             shareScreenStream.getTracks().forEach((track: any) => {
                 track.stop();
             });
         };
-    }, [addPeerShareScreen, shareScreenStream, user]);
+    }, [createPeerShareScreenConnection, sendShareScreenStream, shareScreenStream]);
 
     useEffect(() => {
         // Event when have someone stop share screen
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN, (socketId: string) => {
-            const item = participants.find((p: ParticipantInVideoCall) => p.socketId === socketId && p.isShareScreen);
-            if (item) {
-                item.peer.destroy();
-                removeParticipantShareScreen(socketId);
-                toast.success(`${item.user.name} stopped sharing screen`, {icon: <MonitorX size={20}/>})
-            }
-        });
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN, removeShareScreen);
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
         }
-    }, [participants, removeParticipantShareScreen]);
+    }, [removeShareScreen]);
 
-    useEffect(()=>{
+    useEffect(() => {
         // Emit event to request get share screen
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, {
             roomId: room?._id,
@@ -91,7 +96,7 @@ export default function useHandleShareScreen() {
         });
     }, [room?._id])
 
-    const stopShareScreen = () => {
+    const stopShareScreen = useCallback(() => {
         if (!socket.id) return;
         if (shareScreenStream) {
             shareScreenStream.getTracks().forEach((track: any) => {
@@ -108,8 +113,9 @@ export default function useHandleShareScreen() {
             peer.peer.destroy();
         });
         clearPeerShareScreen();
-    };
-    const handleShareScreen = () => {
+    },[clearPeerShareScreen, peerShareScreen, removeParticipantShareScreen, setShareScreen, shareScreenStream])
+
+    const handleShareScreen = useCallback(()=>{
         // if (participants.some((participant) => participant.isShareScreen)) return;
         if (isShareScreen) {
             stopShareScreen();
@@ -145,7 +151,8 @@ export default function useHandleShareScreen() {
                     toast.error('Device not support share screen');
                 }
             });
-    };
+    }, [addParticipant, isShareScreen, room?._id, setShareScreen, setShareScreenStream, stopShareScreen, user])
+
     return {
         handleShareScreen,
         stopShareScreen

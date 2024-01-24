@@ -7,30 +7,30 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
 import getStreamConfig from "../../utils/get-stream-config";
+import toast from "react-hot-toast";
+import ParticipantInVideoCall from "../../interfaces/participant";
 
 export default function useHandleStreamMyVideo() {
     const { user } = useAuthStore();
-    const { setShareScreen, setMyStream, setShareScreenStream } = useMyVideoCallStore();
-    const { clearPeerShareScreen, resetParticipants, resetUsersRequestJoinRoom } = useParticipantVideoCallStore();
-    const { room, clearStateVideoCall } = useVideoCallStore();
+    const { myStream, setMyStream, setShareScreenStream, setShareScreen } = useMyVideoCallStore();
+    const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant } = useParticipantVideoCallStore();
+    const { room: call, clearStateVideoCall } = useVideoCallStore();
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
+        // Can not start stream if user turn off both camera and mic
         if (!DEFAULT_USER_CALL_STATE.isTurnOnCamera && !DEFAULT_USER_CALL_STATE.isTurnOnMic) return;
         const navigator = window.navigator as any;
         const streamConfig = getStreamConfig(DEFAULT_USER_CALL_STATE.isTurnOnCamera, DEFAULT_USER_CALL_STATE.isTurnOnMic)
-        navigator.mediaDevices.getUserMedia({
-            ...streamConfig
-        }).then((stream: MediaStream) => {
+
+        // Start get streaming
+        navigator.mediaDevices.getUserMedia({...streamConfig}).then((stream: MediaStream) => {
             myVideoStream = stream;
             setMyStream(stream);
-            socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
-                callId: room?._id,
-                user,
-                roomId: room.roomId,
-            });
-        }).catch((err: any) => {
-            console.log('Error stream my video', err)
+            setStreamForParticipant(stream, socket.id || '', false)
+        }).catch((err: any) =>  {
+            toast.error("Can not access to your camera and mic!")
         })
+
         return () => {
             if (myVideoStream) {
                 myVideoStream.getTracks().forEach((track) => {
@@ -43,9 +43,17 @@ export default function useHandleStreamMyVideo() {
             setShareScreenStream(undefined);
             setMyStream(undefined);
             resetParticipants();
-            resetUsersRequestJoinRoom();
         };
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, resetUsersRequestJoinRoom, room?._id, room.roomId, setMyStream, setShareScreen, setShareScreenStream, user]);
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, call._id, call.roomId, setMyStream, setShareScreen, setShareScreenStream, user, setStreamForParticipant]);
 
+    // Add my stream to all participants
+    useEffect(()=>{
+        if(!myStream) return;
+        participants.forEach((p: ParticipantInVideoCall) => {
+            if(!p.peer) return;
+            p.peer.addStream(myStream);
+        })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [myStream])
 
 }
