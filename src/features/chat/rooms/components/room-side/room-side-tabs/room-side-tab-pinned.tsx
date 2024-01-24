@@ -46,7 +46,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                   variant="ghost"
                   color="default"
                   size="xs"
-                  className="absolute right-0 top-0 hidden group-hover:flex"
+                  className="absolute right-0 top-1 group-hover:flex md:hidden"
                 >
                   <XIcon />
                 </Button.Icon>

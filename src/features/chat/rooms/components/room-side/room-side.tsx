@@ -22,7 +22,7 @@ export interface RoomSideProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
   (props, ref) => {
-    const { currentSide, changeToDefault } = useRoomSidebarTabs();
+    const { currentSide } = useRoomSidebarTabs();
     if (!currentSide) return <></>;
     return (
       <RoomActions>
@@ -31,15 +31,6 @@ export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
           {...props}
           className="absolute left-0 top-0 z-50 h-screen w-screen overflow-y-auto border-l bg-background p-3 md:relative md:z-auto md:h-auto md:w-[26.5rem]"
         >
-          <div className="-mx-3 -mt-3 px-1 pt-2 md:hidden">
-            <Button.Icon
-              onClick={changeToDefault}
-              variant="ghost"
-              color="default"
-            >
-              <ArrowLeft />
-            </Button.Icon>
-          </div>
           {tabsMap[currentSide]}
         </div>
       </RoomActions>
