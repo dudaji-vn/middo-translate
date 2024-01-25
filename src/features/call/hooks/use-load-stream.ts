@@ -11,53 +11,41 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
 
     useEffect(() => {
         if(!elementRef.current || !participant) return;
-        if(participant.stream) {
-            const isMicOn = !participant.stream.getAudioTracks()[0]?.enabled || false;
-            const isCamOn = participant.stream.getVideoTracks()[0]?.enabled || false;
-            let tempStream = new MediaStream();
-            if(participant.isMe) {
-                elementRef.current.muted = true;
-                elementRef.current.volume = 0;
-                if(participant.stream.getVideoTracks()[0]) {
-                    const videoTrack = participant.stream.getVideoTracks()[0]
-                    tempStream.addTrack(videoTrack)
-                }
-            } else {
-                tempStream = participant.stream;
-                elementRef.current.volume = 0.9;
+        if(!participant.stream) return;
+        const isMicOn = !participant.stream.getAudioTracks()[0]?.enabled || false;
+        const isCamOn = participant.stream.getVideoTracks()[0]?.enabled || false;
+        let tempStream = new MediaStream();
+        if(participant.isMe) {
+            elementRef.current.muted = true;
+            elementRef.current.volume = 0;
+            if(participant.stream.getVideoTracks()[0]) {
+                const videoTrack = participant.stream.getVideoTracks()[0]
+                tempStream.addTrack(videoTrack)
             }
-            elementRef.current!.srcObject = tempStream;
-            setStreamVideo(tempStream)
-            setTurnOnMic(isMicOn)
-            setIsTurnOnCamera(isCamOn)
-            elementRef.current.addEventListener('loadedmetadata', () => {
-                setIsLoaded(true)
-            })
-            elementRef.current.play()
+        } else {
+            tempStream = participant.stream;
+            elementRef.current.volume = 0.9;
         }
-        if(!participant.peer) return;
-        participant.peer.on('stream', (stream: any) => {
-            if(!elementRef.current) return;
-            setStreamForParticipant(stream, participant.socketId, participant.isShareScreen || false)
+        elementRef.current!.srcObject = tempStream;
+        setStreamVideo(tempStream)
+        setTurnOnMic(isMicOn)
+        setIsTurnOnCamera(isCamOn)
+        elementRef.current.addEventListener('loadedmetadata', () => {
+            setIsLoaded(true)
         })
-        // participant.peer.on('track', (track: any) => {
-        //     console.log('track', track)
-        // })
-        // close
-        participant.peer.on('close', () => {
-            console.log('close')
-        })
-        participant.peer.on('error', (error: any) => {
-            participant.peer.destroy()
-            removeParticipant(participant.socketId)
-        })
-        
+        // Add event stop for stream
+        if(participant.stream.getVideoTracks()[0]) {
+            tempStream.getVideoTracks()[0].onended = () => {
+                setIsTurnOnCamera(false)
+            }
+        }
+        elementRef.current.play().then(()=>{}).catch(()=>{})
     }, [elementRef, participant, removeParticipant, setStreamForParticipant])
     return {
         streamVideo,
         isTurnOnMic,
         isTurnOnCamera,
-        isLoaded
+        isLoaded,
     }
 
 }

@@ -43,6 +43,7 @@ export const useJoinCall = () => {
                 call: data?.call,
                 room: data?.room,
             });
+            return;
         }
         setRoom(data?.call);
         if (

@@ -140,7 +140,6 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   clearStateVideoCall: () => {
     set(() => ({
-      room: null,
       layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
       confirmLeave: false,
       isDoodle: false,

@@ -89,13 +89,7 @@ export const DoodleArea = () => {
     const handleStopDoodle = () => {
         setConfirmStopDoodle(true)
     }
-    const handleSavePath = async () => {
-        if(!canvasRef.current) return;
-        const path = await canvasRef.current?.exportPaths();
-        if(!path) return;
-        setMyOldDoodle(path);
-    }
-
+    
     useEffect(() => {
         const fillCanvasToImage = debounce(async () => {
             if(!imageRef.current) return;
@@ -179,9 +173,18 @@ export const DoodleArea = () => {
 
     useEffect(() => {
         if(!canvasRef.current || !myOldDoodle) return;
-        canvasRef.current?.loadPaths(myOldDoodle);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        const checkToLoadOldDoodle = async () => {
+            if(!myOldDoodle || myOldDoodle.length == 0) return;
+            let currentPaths = await canvasRef.current?.exportPaths();
+            if(!currentPaths || currentPaths.length === 0) {
+                setTimeout(()=>{
+                    canvasRef.current?.loadPaths(myOldDoodle);
+                }, 500)
+                return;
+            }
+        }
+        checkToLoadOldDoodle();
+    }, [myOldDoodle])
     
     return (
     <motion.section ref={constraintsRef} className='rounded-xl overflow-hidden relative transition-all w-full h-full  bg-neutral-900'>

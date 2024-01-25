@@ -4,15 +4,15 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import { SUPPORTED_VOICE_MAP } from "@/configs/default-language";
 import { useAuthStore } from "@/stores/auth.store";
 
-const useExtractTextFromStream = (myStream?: MediaStream) => {
+const useExtractTextFromStream = (stream?: MediaStream) => {
     const { resetTranscript, finalTranscript, interimTranscript } = useSpeechRecognition(); 
     const { user } = useAuthStore();
     useEffect(() => {
-        if (!myStream) return;
-        if (!myStream.getAudioTracks().length) return;
+        if (!stream) return;
+        if (!stream.getAudioTracks().length) return;
         const audioContext = new AudioContext();
         const analyser = audioContext.createAnalyser();
-        const microphone = audioContext.createMediaStreamSource(myStream);
+        const microphone = audioContext.createMediaStreamSource(stream);
         const scriptProcessor = audioContext.createScriptProcessor(2048, 1, 1);
         analyser.smoothingTimeConstant = 0.3;
         analyser.fftSize = 1024;
@@ -55,7 +55,7 @@ const useExtractTextFromStream = (myStream?: MediaStream) => {
             scriptProcessor.disconnect();
         };
         
-    }, [myStream, resetTranscript, user?.language]);
+    }, [stream, resetTranscript, user?.language]);
 
 
     return {

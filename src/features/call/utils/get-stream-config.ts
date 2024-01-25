@@ -1,13 +1,11 @@
 export const STREAM_CONFIG = {
-    video: {
-        facingMode: 'user',
-        frameRate: { ideal: 10, max: 15 },
-    },
     audio: {
         echoCancellation: true,
         noiseSuppression: true,
         sampleRate: 44100,
-    }
+    },
+    video: true,
+    // audio: true,
 }
 
 export default function getStreamConfig(isTurnOnCamera: boolean, isTurnOnMic: boolean) {
@@ -19,7 +17,7 @@ export default function getStreamConfig(isTurnOnCamera: boolean, isTurnOnMic: bo
             video: STREAM_CONFIG.video
         }
     }
-    if (isTurnOnMic) {
+    if (isTurnOnMic || isTurnOnCamera) {
         config = {
             ...config,
             audio: STREAM_CONFIG.audio
