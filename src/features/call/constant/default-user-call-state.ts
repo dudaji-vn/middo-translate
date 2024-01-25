@@ -1,5 +1,5 @@
 const DEFAULT_USER_CALL_STATE = {
-    isTurnOnCamera: true,
+    isTurnOnCamera: false,
     isTurnOnMic: true,
 }
 

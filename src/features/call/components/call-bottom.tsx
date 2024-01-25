@@ -14,6 +14,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 import { CALL_TYPE } from '../constant/call-type';
 import getStreamConfig from '../utils/get-stream-config';
+import toast from 'react-hot-toast';
+import SpeechRecognition from 'react-speech-recognition';
 
 export interface VideoCallBottomProps { }
 
@@ -48,40 +50,33 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
   const handleChangeCameraOrMic = ({ video, audio }: { video: boolean; audio: boolean }) => {
     if (!socket.id) return;
     if (!myStream) return;
-
+    if(!audio) {
+      SpeechRecognition.stopListening();
+    }
     if (video && isTurnOnCamera && myStream.getAudioTracks().length > 0) {
       myStream.getAudioTracks().forEach((track) => {
         track.enabled = audio;
       });
       return;
     }
-
-    // myStream.getTracks().forEach((track) => track.stop());
-
-    // if (!video && !audio) {
-    //   console.log(2)
-    //   return;
-    // };
-    
-    // const streamConfig = getStreamConfig(video, audio)
-    // navigator.mediaDevices.getUserMedia({ ...streamConfig }).then((stream: MediaStream) => {
-    //   console.log('Got new Stream::', stream)
+    myStream.getTracks().forEach((track) => track.stop());
+    if (!video && !audio) return;
+    const streamConfig = getStreamConfig(video, audio)
+    navigator.mediaDevices.getUserMedia({ ...streamConfig }).then((stream: MediaStream) => {
+      if(!audio && stream.getAudioTracks().length > 0) {
+        stream.getAudioTracks().forEach((track) => {
+          track.enabled = false;
+        });
+      }
+      setStreamForParticipant(stream, socket.id || '', false)
+      setMyStream(stream)
+    }).catch(() => {
+      toast.error('Can not access to your camera or mic')
+    })
+    // navigator.mediaDevices.getDisplayMedia({ video: true, audio: false }).then((stream: MediaStream) => {
     //   setStreamForParticipant(stream, socket.id || '', false)
     //   setMyStream(stream)
     // })
-    navigator.mediaDevices
-      .getDisplayMedia({ video: true, audio: true })
-      .then(async (stream: MediaStream) => {
-        myStream.getTracks().forEach((track) => {
-          track.stop();
-        });
-        setStreamForParticipant(stream, socket.id || '', false)
-        setMyStream(stream)
-      })
-    // myStream.getTracks().forEach((track) => {
-    //   if (track.kind === 'audio') track.enabled = audio;
-    //   if (track.kind === 'video') track.enabled = video;
-    // });
   }
   const onToggleCamera = () => {
     setTurnOnCamera(!isTurnOnCamera);
@@ -148,7 +143,7 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         <Button.Icon
           variant='default'
           size='xs'
-          color={isShareScreen ? 'primary' : 'default'}
+          color={'default'}
           // disabled={haveShareScreen && !isShareScreen}
           className={`${(isFullScreen || room.type !== CALL_TYPE.GROUP) ? 'hidden' : ''}`}
           onClick={() => setModalAddUser(true)}

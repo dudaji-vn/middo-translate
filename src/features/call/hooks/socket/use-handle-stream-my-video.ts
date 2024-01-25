@@ -9,11 +9,12 @@ import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
 import getStreamConfig from "../../utils/get-stream-config";
 import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
+import { createPeer } from "../../utils/peer-action.util";
 
 export default function useHandleStreamMyVideo() {
     const { user } = useAuthStore();
     const { myStream, setMyStream, setShareScreenStream, setShareScreen } = useMyVideoCallStore();
-    const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant } = useParticipantVideoCallStore();
+    const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
     const { room: call, clearStateVideoCall } = useVideoCallStore();
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
@@ -50,9 +51,20 @@ export default function useHandleStreamMyVideo() {
     useEffect(()=>{
         if(!myStream) return;
         participants.forEach((p: ParticipantInVideoCall) => {
-            if(!p.peer) return;
-            p.peer.addStream(myStream);
+            if(!p.peer || p.isShareScreen) return;
+            p.peer.destroy();
+            const newPeer = createPeer();
+            if(myStream) {
+                newPeer.addStream(myStream);
+            }
+            updatePeerParticipant(newPeer, p.socketId)
         })
+        return () => {
+            if(!myStream) return;
+            myStream.getTracks().forEach((track) => {
+                track.stop();
+            });
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [myStream])
 

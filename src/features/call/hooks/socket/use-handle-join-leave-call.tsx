@@ -10,13 +10,14 @@ import SpeechRecognition from "react-speech-recognition";
 import { LogOutIcon } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
+import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
 
 export default function useHandleJoinLeaveCall() {
     const { removeParticipant, participants, peerShareScreen, removePeerShareScreen, addParticipant } = useParticipantVideoCallStore();
     const { room } = useVideoCallStore();
-    const {myStream} = useMyVideoCallStore();
+    const { myStream, setTurnOnCamera, setTurnOnMic } = useMyVideoCallStore();
     const { user } = useAuthStore();
-   
+
     const removeUserLeavedRoom = useCallback((socketId: string) => {
         // use filter because when user share screen leave, need remove both user and share screen
         const items = participants.filter((p: any) => p.socketId === socketId);
@@ -39,12 +40,12 @@ export default function useHandleJoinLeaveCall() {
     }, [participants, peerShareScreen, removeParticipant, removePeerShareScreen])
 
     const saveSignal = useCallback((payload: IReturnSignal) => {
-        const itemInParticipant = participants.find((p: ParticipantInVideoCall) =>
+        const participant = participants.find((p: ParticipantInVideoCall) =>
             p.socketId === payload.id &&
             p.isShareScreen === payload.isShareScreen,
         );
-        if (itemInParticipant) {
-            itemInParticipant.peer.signal(payload.signal);
+        if (participant) {
+            participant.peer.signal(payload.signal);
             return;
         }
         if (!peerShareScreen) return;
@@ -56,7 +57,7 @@ export default function useHandleJoinLeaveCall() {
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.LEAVE, removeUserLeavedRoom);
         socket.on(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL, saveSignal);
-        
+
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.LEAVE);
             socket.off(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL);
@@ -74,16 +75,18 @@ export default function useHandleJoinLeaveCall() {
         return () => {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, room._id);
             SpeechRecognition.stopListening();
+            setTurnOnCamera(DEFAULT_USER_CALL_STATE.isTurnOnCamera)
+            setTurnOnMic(DEFAULT_USER_CALL_STATE.isTurnOnMic)
         };
-    }, [addParticipant, room._id, room.roomId, user]);
+    }, [addParticipant, room._id, room.roomId, setTurnOnCamera, setTurnOnMic, user]);
 
 
     // Add Me To list participant
     useEffect(() => {
         const isHaveMe = participants.some((p: ParticipantInVideoCall) => p.isMe);
-        if(!isHaveMe) {
+        if (!isHaveMe) {
             const me: ParticipantInVideoCall = { user, isMe: true, socketId: socket.id || '' }
-            if(myStream) {
+            if (myStream) {
                 me.stream = myStream
             }
             addParticipant(me);

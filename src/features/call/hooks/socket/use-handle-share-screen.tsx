@@ -34,11 +34,9 @@ export default function useHandleShareScreen() {
         if (!shareScreenStream) return;
         users.forEach((u: { id: string; user: any }) => {
             if (!socket.id) return;
-            const peer = createPeer({
-                id: u.id,
-                socketId: socket.id,
-                user: user,
-                isShareScreen: true,
+            const peer = createPeer();
+            peer.on("signal", (signal) => {
+                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true })
             });
             peer.addStream(shareScreenStream);
             addPeerShareScreen({
@@ -51,11 +49,9 @@ export default function useHandleShareScreen() {
     const sendShareScreenStream = useCallback((socketId: string) => {
         if (!shareScreenStream) return;
         if (!socket.id || socketId === socket.id) return;
-        const peer = createPeer({
-            id: socketId,
-            socketId: socket.id,
-            user: user,
-            isShareScreen: true,
+        const peer = createPeer();
+        peer.on("signal", (signal) => {
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: socketId, user, callerId: socket.id, signal, isShareScreen: true })
         });
         peer.addStream(shareScreenStream);
         addPeerShareScreen({
@@ -97,6 +93,7 @@ export default function useHandleShareScreen() {
     }, [room?._id])
 
     const stopShareScreen = useCallback(() => {
+        console.log('Stop share screen')
         if (!socket.id) return;
         if (shareScreenStream) {
             shareScreenStream.getTracks().forEach((track: any) => {
@@ -141,10 +138,6 @@ export default function useHandleShareScreen() {
                 setShareScreen(true);
                 setShareScreenStream(stream);
                 socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
-                stream.getVideoTracks()[0].onended = () => {
-                    if (!socket.id) return;
-                    stopShareScreen();
-                };
             })
             .catch((err: Error) => {
                 if (err.name != 'NotAllowedError') {
@@ -153,6 +146,22 @@ export default function useHandleShareScreen() {
             });
     }, [addParticipant, isShareScreen, room?._id, setShareScreen, setShareScreenStream, stopShareScreen, user])
 
+    useEffect(() => {
+        if(!shareScreenStream) return;
+        const handleEnd = () => {
+            if (!socket.id) return;
+            stopShareScreen();
+        }
+        // shareScreenStream.getVideoTracks()[0].onended = () => {
+        //     if (!socket.id) return;
+        //     stopShareScreen();
+        // };
+        shareScreenStream.addEventListener('inactive', handleEnd)
+        return () => {
+            if(handleEnd)
+            shareScreenStream.removeEventListener('inactive', handleEnd)
+        }
+    }, [shareScreenStream, stopShareScreen])
     return {
         handleShareScreen,
         stopShareScreen

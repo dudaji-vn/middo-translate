@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
-import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import { addPeer, createPeer } from "../../utils/peer-action.util";
 import { IJoinCallPayload } from "../../interfaces/socket/join.interface";
@@ -16,20 +15,15 @@ export default function useHandleCreatePeerConnection() {
     const { setDoodle, setDoodleImage, setLayout, isPinDoodle } = useVideoCallStore();
     const { participants, addParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
     const { myStream } = useMyVideoCallStore();
-    const { user: myInfo } = useAuthStore();
-
+    
+    // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
     const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: any[], doodleImage: string}) => {
         if(!socket.id) return;
         // Loop and create peer connection for each user
         users.forEach((user: { id: string; user: any }) => {
             if (user.id === socket.id) return;
-            const peer = createPeer({
-                id: user.id,
-                socketId: socket.id || '',
-                user: myInfo,
-            });
+            const peer = createPeer();
             if(myStream) {
-                // peer.emit('stream', myStream)
                 peer.addStream(myStream);
             }
             addParticipant({
@@ -46,16 +40,11 @@ export default function useHandleCreatePeerConnection() {
             setDoodleImage(doodleImage);
         }
 
-    },[addParticipant, myInfo, myStream, setDoodle, setDoodleImage])
+    },[addParticipant, myStream, setDoodle, setDoodleImage])
 
+    // SOCKET_CONFIG.EVENTS.CALL.USER_JOINED
     const addPeerUserConnection = useCallback((payload: IJoinCallPayload) => {
-        console.log('Have New User Joind-> Add Peer')
-        const peer = addPeer({
-            signal: payload.signal,
-            callerId: payload.callerId,
-            user: myInfo,
-            isShareScreen: payload.isShareScreen,
-        });
+        const peer = addPeer(payload.signal);
         if(myStream) {
             peer.addStream(myStream);
         }
@@ -65,7 +54,7 @@ export default function useHandleCreatePeerConnection() {
         );
         if (oldParticipant) {
             // Update peer User
-            // oldParticipant.peer.destroy();
+            oldParticipant.peer.destroy();
             updatePeerParticipant(peer, payload.callerId);
             return;
         }
@@ -87,7 +76,7 @@ export default function useHandleCreatePeerConnection() {
             toast.success(`${payload.user.name} joined meeting`, {icon: <LogIn size={20}/>});
         }
         addParticipant(newUser);
-    },[addParticipant, isPinDoodle, myInfo, myStream, participants, setLayout, updatePeerParticipant])
+    },[addParticipant, isPinDoodle, myStream, participants, setLayout, updatePeerParticipant])
 
     
     // useEffect when myStream change

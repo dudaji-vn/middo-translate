@@ -17,7 +17,7 @@ export default function getStreamConfig(isTurnOnCamera: boolean, isTurnOnMic: bo
             video: STREAM_CONFIG.video
         }
     }
-    if (isTurnOnMic) {
+    if (isTurnOnMic || isTurnOnCamera) {
         config = {
             ...config,
             audio: STREAM_CONFIG.audio

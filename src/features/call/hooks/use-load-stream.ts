@@ -33,13 +33,19 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
         elementRef.current.addEventListener('loadedmetadata', () => {
             setIsLoaded(true)
         })
+        // Add event stop for stream
+        if(participant.stream.getVideoTracks()[0]) {
+            tempStream.getVideoTracks()[0].onended = () => {
+                setIsTurnOnCamera(false)
+            }
+        }
         elementRef.current.play().then(()=>{}).catch(()=>{})
     }, [elementRef, participant, removeParticipant, setStreamForParticipant])
     return {
         streamVideo,
         isTurnOnMic,
         isTurnOnCamera,
-        isLoaded
+        isLoaded,
     }
 
 }
