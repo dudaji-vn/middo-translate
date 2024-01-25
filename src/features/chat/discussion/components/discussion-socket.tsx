@@ -18,13 +18,12 @@ export const DiscussionSocket = (props: DiscussionSocketProps) => {
       queryClient.invalidateQueries(['message-replies', messageId]);
     });
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.UPDATE, (message: Message) => {
-      console.log('update message', message);
       queryClient.invalidateQueries(['message-replies', messageId]);
     });
 
     return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
+      // socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
+      // socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
       socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.LEAVE, messageId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

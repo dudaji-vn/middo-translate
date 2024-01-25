@@ -12,6 +12,7 @@ export const SOCKET_CONFIG = {
         UPDATE: 'message.reply.update',
         REMOVE: 'message.reply.remove',
       },
+      PIN: 'message.pin',
     },
     ROOM: {
       NEW: 'room.new',

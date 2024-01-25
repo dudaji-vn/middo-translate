@@ -58,6 +58,7 @@ export const RoomUpdateAvatar = ({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button.Icon
+              size="xs"
               color="secondary"
               onClick={open}
               type="button"
@@ -81,6 +82,7 @@ export const RoomUpdateAvatar = ({
         <>
           <div>
             <Button.Icon
+              size="xs"
               color="secondary"
               onClick={open}
               type="button"

@@ -22,7 +22,7 @@ export const ChatBoxHeader = () => {
   return (
     <div className="flex w-full items-center border-b  px-1 py-1 md:px-3">
       <RoomBoxHeaderNavigation />
-      <div className="flex items-center gap-2">
+      <div className="flex flex-1 items-center gap-2">
         <RoomAvatar isOnline room={room} size={36} />
         <div>
           <p className="line-clamp-1 font-medium">{room.name}</p>

@@ -90,7 +90,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       >
         <SeenTracker />
         {isSystemMessage ? (
-          <MessageItemSystem message={message} />
+          <MessageItemSystem message={message} isMe={isMe} />
         ) : (
           <>
             {direction === 'bottom' && (
@@ -114,7 +114,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 ) : (
                   <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
                 )}
-                <MessageItemWrapper>
+                <MessageItemWrapper
+                  setActive={setActive}
+                  isMe={isMe}
+                  message={message}
+                >
                   <div
                     {...props}
                     ref={ref}
