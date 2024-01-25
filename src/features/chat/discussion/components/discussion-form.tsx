@@ -56,7 +56,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     // }
   };
   return (
-    <div className="-mx-3 border-t px-3 pt-1">
+    <div className="border-t p-2">
       <MessageEditor
         onSubmitValue={handleSubmit}
         // onFileUploaded={setFilesUploaded}

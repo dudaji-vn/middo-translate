@@ -29,6 +29,7 @@ export interface RoomItemProps {
   disabledAction?: boolean;
   rightElement?: JSX.Element;
   disabledRedirect?: boolean;
+  className?: string;
 }
 
 const RoomItemContext = createContext<
@@ -52,6 +53,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     disabledAction,
     rightElement,
     disabledRedirect,
+    className,
   } = props;
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
@@ -77,6 +79,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
       className={cn(
         'flex',
         isActive ? 'bg-background-darker' : 'bg-transparent hover:bg-[#fafafa]',
+        className,
       )}
     >
       <Wrapper room={room} isMuted={isMuted}>

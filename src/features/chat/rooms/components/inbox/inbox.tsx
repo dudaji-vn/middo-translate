@@ -31,7 +31,7 @@ export const Inbox = (props: InboxProps) => {
     <RoomActions>
       <div className="relative flex w-full flex-1 flex-col overflow-hidden bg-background">
         <div className="flex h-full flex-1 flex-col overflow-hidden">
-          <Tabs defaultValue="all" className="w-full px-3">
+          <Tabs defaultValue="all" className="w-full">
             <TabsList>
               {Object.values(inboxTabMap).map((tab) => (
                 <TabsTrigger

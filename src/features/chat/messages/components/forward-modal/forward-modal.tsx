@@ -122,7 +122,7 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
           <div className="-mx-5 max-h-[200px] overflow-y-auto border-b">
             <Select.List />
             {recData && recData.length > 0 && !data && (
-              <Section label="Recently">
+              <Section label="Recently" labelClassName="pl-2.5">
                 {recData?.map((room) => {
                   if (!room.isGroup) {
                     let user = currentUser;
