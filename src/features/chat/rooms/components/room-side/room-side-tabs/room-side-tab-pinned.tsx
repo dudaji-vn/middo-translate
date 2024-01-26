@@ -51,9 +51,9 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
               >
                 <div
                   key={pin._id}
-                  className="group relative flex w-full items-center pt-3"
+                  className="group relative flex w-full flex-1 items-center pt-3"
                 >
-                  <MainMessage message={message} />
+                  <MainMessage message={message} className="flex-1" />
                   <Menu isMe={isMe} message={message} />
                 </div>
                 <span className="ml-auto mt-1 text-xs font-light text-neutral-800">
