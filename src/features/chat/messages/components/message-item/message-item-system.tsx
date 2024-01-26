@@ -21,15 +21,16 @@ export const MessageItemSystem = ({
           return index === 0 ? ' ' + user.name : ', ' + user.name;
         })}
       </span>
-      {message.content.includes('pin') && (
-        <span
-          onClick={() => changeTab('pinned')}
-          className="cursor-pointer text-sm text-primary active:text-primary-700 md:hover:text-primary-600"
-        >
-          {' '}
-          View
-        </span>
-      )}
+      {message.content.includes('pin') &&
+        !message.content.includes('unpin') && (
+          <span
+            onClick={() => changeTab('pinned')}
+            className="cursor-pointer text-sm text-primary active:text-primary-700 md:hover:text-primary-600"
+          >
+            {' '}
+            View
+          </span>
+        )}
     </div>
   );
 };

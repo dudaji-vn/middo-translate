@@ -36,9 +36,9 @@ export const RoomItemActionWrapper = forwardRef<
       .filter((item) => {
         switch (item.action) {
           case 'notify':
-            return !isMuted;
-          case 'unnotify':
             return isMuted;
+          case 'unnotify':
+            return !isMuted;
           case 'pin':
             return !room.isPinned;
           case 'unpin':

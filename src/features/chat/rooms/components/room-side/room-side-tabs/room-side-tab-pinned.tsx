@@ -56,7 +56,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                   <MainMessage message={message} className="flex-1" />
                   <Menu isMe={isMe} message={message} />
                 </div>
-                <span className="ml-auto mt-1 text-xs font-light text-neutral-800">
+                <span className="my-1 mb-3 ml-auto text-xs font-light text-neutral-800">
                   Pinned by {isMe ? 'you' : pin.pinnedBy.name}
                 </span>
               </div>
@@ -87,6 +87,8 @@ const Menu = ({ isMe, message }: { isMe: boolean; message: Message }) => {
             );
           case 'unpin':
             return message.isPinned;
+          case 'remove':
+            return false;
           default:
             return true;
         }
