@@ -23,14 +23,14 @@ export const MessageItemForward = ({
   isMe,
 }: MessageItemForwardProps) => {
   const displayForwardFrom = useMemo(() => {
-    if (!message.room?.isGroup) {
-      return message?.sender?.name;
-    } else {
-      return message.room?.name || 'a group';
+    let text = message?.sender?.name;
+    if (message.room?.isGroup) {
+      text += ` in ${message.room?.name || 'a group'}`;
     }
+    return text;
   }, [message]);
   return (
-    <div className="mt-1 flex h-fit gap-1">
+    <div className="my-1 flex h-fit gap-1">
       {hasParent && !isMe && (
         <div>
           <div className="h-1/2 w-2 border-b border-l border-neutral-100" />

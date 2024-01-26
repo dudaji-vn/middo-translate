@@ -38,7 +38,7 @@ export const MessageItemReply = ({
         onClickReplyMessage(messageId);
       }}
       className={cn(
-        'mt-1 flex cursor-pointer',
+        'mb-1 mt-1 flex cursor-pointer',
         isMe ? 'justify-end' : 'justify-start',
       )}
     >

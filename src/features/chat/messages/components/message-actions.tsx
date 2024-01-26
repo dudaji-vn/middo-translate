@@ -2,7 +2,6 @@ import {
   CopyIcon,
   ForwardIcon,
   PinIcon,
-  PinOff,
   PinOffIcon,
   ReplyIcon,
   TrashIcon,
@@ -39,7 +38,7 @@ export const actionItems: ActionItem[] = [
   },
   {
     action: 'reply',
-    label: 'Reply',
+    label: 'Discussion',
     icon: <ReplyIcon />,
   },
 

@@ -37,7 +37,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
         icon={<PinIcon />}
         onBack={changeToDefault}
       >
-        <div className="flex w-full flex-col divide-y divide-neutral-100  overflow-hidden p-3">
+        <div className="flex w-full flex-col divide-y divide-neutral-100  overflow-hidden">
           {data?.map((pin) => {
             const isMe = pin.pinnedBy._id === currentUserId;
             const message = {
@@ -47,16 +47,16 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
             return (
               <div
                 key={pin._id}
-                className="group relative flex flex-col items-center first:-mt-3"
+                className="group relative flex flex-col items-center p-3"
               >
                 <div
                   key={pin._id}
-                  className="group relative flex w-full flex-1 items-center pt-3"
+                  className="group relative flex w-full flex-1 items-center"
                 >
                   <MainMessage message={message} className="flex-1" />
                   <Menu isMe={isMe} message={message} />
                 </div>
-                <span className="ml-auto mt-1 text-xs font-light text-neutral-800">
+                <span className="my-1 mb-3 ml-auto text-xs font-light text-neutral-800">
                   Pinned by {isMe ? 'you' : pin.pinnedBy.name}
                 </span>
               </div>
@@ -87,6 +87,8 @@ const Menu = ({ isMe, message }: { isMe: boolean; message: Message }) => {
             );
           case 'unpin':
             return message.isPinned;
+          case 'remove':
+            return false;
           default:
             return true;
         }

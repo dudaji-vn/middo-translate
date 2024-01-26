@@ -29,6 +29,7 @@ export interface MessageEditorProps
   onSubmitValue?: (data: SubmitData) => void;
   onFileUploaded?: (files: FileWithUrl[]) => void;
   disabledMedia?: boolean;
+  scrollId?: string;
 }
 
 export interface MessageEditorRef extends HTMLAttributes<HTMLDivElement> {
@@ -36,7 +37,10 @@ export interface MessageEditorRef extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
-  ({ onSubmitValue, onFileUploaded, disabledMedia, ...props }, ref) => {
+  (
+    { onSubmitValue, onFileUploaded, disabledMedia, scrollId, ...props },
+    ref,
+  ) => {
     const textInputRef = useRef<TextInputRef>(null);
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
@@ -47,7 +51,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     };
 
     const scrollToBottom = () => {
-      const messageBox = document.getElementById('inbox-list');
+      const messageBox = document.getElementById(scrollId || '');
       setTimeout(() => {
         messageBox?.scrollTo({
           top: messageBox.scrollHeight,

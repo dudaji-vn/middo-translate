@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, PinOff } from 'lucide-react';
+import { Bell, PinIcon } from 'lucide-react';
 
 import { Item } from '@/components/data-display';
 import { Room } from '@/features/chat/rooms/types';
@@ -39,7 +39,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
       </Item>
       <Item
         className="rounded-t-[4px]"
-        leftIcon={<PinOff />}
+        leftIcon={<PinIcon />}
         right={
           <Switch
             checked={isPinned}
@@ -50,7 +50,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
           />
         }
       >
-        Pin on top
+        Pin conversation
       </Item>
     </div>
   );
