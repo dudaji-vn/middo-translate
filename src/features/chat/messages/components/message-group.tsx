@@ -51,7 +51,7 @@ export const MessageItemGroup = forwardRef<
     <div
       ref={ref}
       className={cn(
-        'flex flex-1 gap-0.5',
+        'flex flex-1 gap-1',
         direction === 'bottom' ? 'flex-col-reverse' : 'flex-col',
         props.className,
       )}

@@ -155,7 +155,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
                 </div>
               )}
               {!isMe && !isSystem && room.isGroup && (
-                <div className="mb-0.5 pl-11 text-xs text-neutral-600">
+                <div className="mb-0.5 pl-7 text-xs text-neutral-600">
                   <span>{group.lastMessage.sender.name}</span>
                 </div>
               )}
