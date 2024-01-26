@@ -91,6 +91,7 @@ export const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
           showTime={false}
           disabledRedirect
           data={item}
+          className="pl-2"
           rightElement={
             <div className="flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full border border-stroke p-[0.5px]">
               {isSelected && (

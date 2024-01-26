@@ -25,7 +25,7 @@ export const RoomSideTabLayout = forwardRef<
         <div className="ml-auto">
           <Button.Icon
             onClick={onBack}
-            size="sm"
+            size="xs"
             variant="ghost"
             color="default"
           >

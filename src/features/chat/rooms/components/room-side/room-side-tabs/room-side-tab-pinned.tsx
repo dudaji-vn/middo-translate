@@ -47,19 +47,18 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
             return (
               <div
                 key={pin._id}
-                className="group relative flex items-center gap-2"
+                className="group relative flex flex-col items-center first:-mt-3"
               >
                 <div
                   key={pin._id}
-                  className="group relative flex flex-1 flex-col py-3"
+                  className="group relative flex w-full items-center pt-3"
                 >
                   <MainMessage message={message} />
-
-                  <span className="ml-auto mt-1 text-xs font-light text-neutral-800">
-                    Pinned by {isMe ? 'you' : pin.pinnedBy.name}
-                  </span>
+                  <Menu isMe={isMe} message={message} />
                 </div>
-                <Menu isMe={isMe} message={message} />
+                <span className="ml-auto mt-1 text-xs font-light text-neutral-800">
+                  Pinned by {isMe ? 'you' : pin.pinnedBy.name}
+                </span>
               </div>
             );
           })}
