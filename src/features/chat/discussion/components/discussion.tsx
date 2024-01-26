@@ -57,7 +57,7 @@ const Discussion = ({ messageId }: Props) => {
             ref={messageBoxRef}
             className="flex flex-1 flex-col overflow-y-auto"
           >
-            <MainMessage message={data} />
+            <MainMessage message={data} className="p-3" />
             <RepliesBox />
           </div>
           <DiscussionForm />

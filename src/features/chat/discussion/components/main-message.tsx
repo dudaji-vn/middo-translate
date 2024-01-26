@@ -128,7 +128,7 @@ const CallMessage = ({ message }: { message: Message }) => {
     };
   }, [call?.createdAt, call?.endTime, sender.name]);
   return (
-    <div className={cn('p-3')}>
+    <div>
       <div>
         <span
           className={cn(
