@@ -17,7 +17,7 @@ import {
   VideoOff,
   X,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useVideoCallContext } from '../context/video-call-context';
 import { useVideoCallStore } from '../store/video-call.store';
@@ -37,6 +37,7 @@ import { CALL_TYPE } from '../constant/call-type';
 import getStreamConfig from '../utils/get-stream-config';
 import toast from 'react-hot-toast';
 import SpeechRecognition from 'react-speech-recognition';
+import { useAppStore } from '@/stores/app.store';
 
 export interface VideoCallBottomProps {}
 
@@ -71,6 +72,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
   } = useVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
   const [isShowInvite, setShowInvite] = useState(true);
+  const isMobile = useAppStore((state) => state.isMobile);
   const haveShareScreen = participants.some(
     (participant) => participant.isShareScreen,
   );
@@ -147,6 +149,9 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
       audio: !isTurnOnMic,
     });
   };
+  useEffect(() => {
+    if (isMobile) setShowChat(false);
+  }, []);
   return (
     <section
       className={twMerge(

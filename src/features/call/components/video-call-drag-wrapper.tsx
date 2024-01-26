@@ -32,7 +32,7 @@ const VideoCallDragWrapper = () => {
         className={`pointer-events-auto absolute cursor-auto ${
           isFullScreen
             ? 'h-full w-full !translate-x-0 !translate-y-0'
-            : 'shadow-primary/500 bottom-4 left-4 w-[336px] rounded-xl border border-primary-400 shadow-lg'
+            : 'shadow-primary/500 shadow-glow bottom-4 left-4 w-[336px] rounded-xl border border-primary-400'
         }`}
       >
         <div className=" shadow-primary-500/30 flex h-full max-h-dvh w-full flex-col overflow-hidden rounded-xl bg-white shadow-2">
