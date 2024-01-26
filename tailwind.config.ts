@@ -156,6 +156,7 @@ module.exports = {
         '2': 'var(--shadow-2)',
         '3': 'var(--shadow-3)',
         'n-1': 'var(--shadow-n-1)',
+        glow: 'var(--glow)',
       },
     },
   },

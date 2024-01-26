@@ -64,8 +64,8 @@ const VideoCall = () => {
       <Button.Icon
         onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"
-        color="primary"
-        variant="ghost"
+        color={isHaveMeeting ? 'secondary' : 'primary'}
+        variant={isHaveMeeting ? 'default' : 'ghost'}
         className={`${isHaveMeeting ? 'hidden' : ''}`}
       >
         <Phone />
@@ -74,8 +74,8 @@ const VideoCall = () => {
       <Button
         onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"
-        color="primary"
-        variant="ghost"
+        color={isHaveMeeting ? 'secondary' : 'primary'}
+        variant={isHaveMeeting ? 'default' : 'ghost'}
         className={`${isHaveMeeting ? '' : 'hidden'}`}
         startIcon={<Phone />}
       >

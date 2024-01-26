@@ -50,7 +50,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       ref={parentRef}
       className={cn(
         'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-900 transition-all',
-        isShowChat && 'h-[200px] md:h-full',
+        // isShowChat && 'h-[200px] md:h-full',
       )}
     >
       <video
