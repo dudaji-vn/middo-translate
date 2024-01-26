@@ -140,7 +140,7 @@ const CallMessage = ({ message }: { message: Message }) => {
           <div className="mt-1 text-sm font-light">{subContent}</div>
         </span>
       </div>
-      {call?.type === 'GROUP' && !call.endTime && (
+      {/* {call?.type === 'GROUP' && !call.endTime && (
         <Button
           color="secondary"
           size="xs"
@@ -149,7 +149,7 @@ const CallMessage = ({ message }: { message: Message }) => {
         >
           Invite
         </Button>
-      )}
+      )} */}
     </div>
   );
 };

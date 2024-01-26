@@ -1,60 +1,92 @@
-import React, { useEffect, useState } from 'react'
-import { useVideoCallStore } from '../store/video-call.store'
+import React, { useEffect, useState } from 'react';
+import { useVideoCallStore } from '../store/video-call.store';
 import { twMerge } from 'tailwind-merge';
-import { Lightbulb, Subtitles, X, XIcon } from 'lucide-react';
+import {
+  Lightbulb,
+  MessageSquareQuote,
+  Subtitles,
+  X,
+  XIcon,
+} from 'lucide-react';
 import { Button } from '@/components/actions';
 import { getMessageIdFromCallIdService } from '@/services/message.service';
 import Discussion from '@/features/chat/discussion/components/discussion';
 
 export default function ChatThread({ className }: { className?: string }) {
-    const { isFullScreen, isShowChat, setShowChat, room, messageId, setMessageId } = useVideoCallStore();
-    const [isShowAlert, setShowAlert] = useState(true);
-    useEffect(() => {
-        if (messageId) return;
-        const callId = room?._id;
-        if (!callId) return;
-        const handleGetMessageId = async () => {
-            const { data } = await getMessageIdFromCallIdService(callId);
-            setMessageId(data)
-        }
-        handleGetMessageId();
-    }, [room, messageId, setMessageId])
+  const {
+    isFullScreen,
+    isShowChat,
+    setShowChat,
+    room,
+    messageId,
+    setMessageId,
+  } = useVideoCallStore();
+  const [isShowAlert, setShowAlert] = useState(true);
+  useEffect(() => {
+    if (messageId) return;
+    const callId = room?._id;
+    if (!callId) return;
+    const handleGetMessageId = async () => {
+      const { data } = await getMessageIdFromCallIdService(callId);
+      setMessageId(data);
+    };
+    handleGetMessageId();
+  }, [room, messageId, setMessageId]);
 
-    if (!messageId) return null;
-    return (
-        <aside className={twMerge('md:max-w-[400px] w-full h-[424px] md:h-auto', className, (!isFullScreen || !isShowChat) && 'hidden md:hidden')}>
-            <div className='w-full h-full flex flex-col border-l border-neutral-50'>
-                <div className='bg-neutral-50 p-1 pl-3 flex items-center justify-center text-primary gap-2'>
-                    <Subtitles className='w-4 h-4' />
-                    <span className='flex-1'>Discussion</span>
-                    <Button.Icon
-                        onClick={()=>setShowChat(false)}
-                        size="sm"
-                        variant="ghost"
-                        color="default"
-                    >
-                        <XIcon />
-                    </Button.Icon>
+  if (!messageId) return null;
+  return (
+    <aside
+      className={twMerge(
+        'w-full flex-1 overflow-y-hidden border-t md:h-auto md:max-w-[400px] md:overflow-auto md:border-t-0',
+        className,
+        (!isFullScreen || !isShowChat) && 'hidden md:hidden',
+      )}
+    >
+      <div className="flex h-full w-full flex-col border-l border-neutral-50">
+        <div className="flex h-[53px] w-full items-center gap-2 border-b p-3 font-semibold text-primary">
+          <MessageSquareQuote className="size-4" />
+          <span>Discussion</span>
+          <div className="ml-auto">
+            <Button.Icon
+              onClick={() => setShowChat(false)}
+              size="xs"
+              variant="ghost"
+              color="default"
+            >
+              <XIcon />
+            </Button.Icon>
+          </div>
+        </div>
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {isShowAlert && (
+            <div className="p-3">
+              <div className="rounded-xl bg-neutral-50 p-2">
+                <div className="flex items-center text-neutral-600">
+                  <Lightbulb className="h-4 w-4 text-neutral-400" />
+                  <p className="ml-1 flex-1">
+                    Discussion created by Middo Call
+                  </p>
+                  <X
+                    className="h-4 w-4 cursor-pointer text-neutral-400"
+                    onClick={() => setShowAlert(false)}
+                  />
                 </div>
-                <div className='flex-1 flex flex-col overflow-hidden'>
-                    <div className='p-3'>
-                        {isShowAlert &&
-                            <div className='bg-neutral-50 rounded-xl p-2'>
-                                <div className='text-neutral-600 flex items-center'>
-                                    <Lightbulb className='text-neutral-400 w-4 h-4' />
-                                    <p className='ml-1 flex-1'>Discussion created by Middo Call</p>
-                                    <X className='text-neutral-400 w-4 h-4 cursor-pointer' onClick={() => setShowAlert(false)} />
-                                </div>
-                                <p className='text-sm text-neutral-400 font-light mt-2'>Every messages, files and links were sent in this discussion have been saved in this group’s conversation. Members can access it even after the call is done.</p>
-                            </div>}
-                    </div>
-                    <div className='flex-1 overflow-hidden'>
-                        <div className='h-full'>
-                            <Discussion messageId={messageId} />
-                        </div>
-                    </div>
-                </div>
+                <p className="mt-2 text-sm font-light text-neutral-400">
+                  Every messages, files and links were sent in this discussion
+                  have been saved in this group’s conversation. Members can
+                  access it even after the call is done.
+                </p>
+              </div>
             </div>
-        </aside>
-    )
+          )}
+
+          <div className="flex-1 overflow-hidden">
+            <div className="h-full">
+              <Discussion messageId={messageId} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  );
 }
