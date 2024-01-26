@@ -38,7 +38,11 @@ export const ItemSub = ({
       return '';
     }
 
-    if (message.type === 'call' && !isCurrentUserSender) {
+    if (
+      (message.type === 'call' ||
+        (message.type === 'action' && message.content.includes('pin'))) &&
+      !isCurrentUserSender
+    ) {
       return `${message.sender.name} `;
     }
     const isSystemMessage =

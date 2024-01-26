@@ -26,6 +26,7 @@ import { useBoolean } from 'usehooks-ts';
 import { MessageItemForward } from './message-item-forward';
 import { CallMessage } from './message-item-call';
 import { MessageItemReply } from './message-item-reply';
+import { MessageItemPinned } from './message-item-pinned';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -35,6 +36,7 @@ export interface MessageProps
   showAvatar?: boolean;
   showReply?: boolean;
   direction?: 'bottom' | 'top';
+  pinnedBy?: User;
 }
 
 type MessageItemContextProps = {
@@ -67,6 +69,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       showAvatar,
       direction,
       showReply = true,
+      pinnedBy,
       ...props
     },
     ref,
@@ -159,7 +162,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                       </Fragment>
                     )}
                   </div>
+
                   {isPending && <PendingStatus />}
+                  {pinnedBy && (
+                    <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
+                  )}
                   {message.forwardOf && (
                     <MessageItemForward
                       hasParent={!!message.content}

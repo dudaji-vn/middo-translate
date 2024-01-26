@@ -1,7 +1,12 @@
 import { Button } from '@/components/actions';
 import Discussion from '@/features/chat/discussion/components/discussion';
 import { useClickReplyMessage } from '@/features/chat/messages/hooks/use-click-reply-message';
-import { SubtitlesIcon, XIcon } from 'lucide-react';
+import {
+  MessageSquare,
+  MessageSquareQuote,
+  SubtitlesIcon,
+  XIcon,
+} from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { RoomSideTabLayout } from '../room-side-tabs/room-side-tab-layout';
 
@@ -14,7 +19,7 @@ export const RoomSideTabDiscussion = (props: RoomSideTabDiscussionProps) => {
   return (
     <RoomSideTabLayout
       title="Discussion"
-      icon={<SubtitlesIcon />}
+      icon={<MessageSquareQuote />}
       onBack={onBack}
     >
       <Discussion messageId={messageId} />

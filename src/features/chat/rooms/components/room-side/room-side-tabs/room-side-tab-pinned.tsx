@@ -17,7 +17,7 @@ import { cn } from '@/utils/cn';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { MoreVerticalIcon, PinIcon } from 'lucide-react';
 import { cloneElement, useMemo } from 'react';
-import { useGetPinMessage } from '../../../hooks/use-get-pin-message';
+import { useGetPinnedMessages } from '../../../hooks/use-get-pinned-messages';
 import { useRoomId } from '../../../hooks/use-roomId';
 import { RoomSideTabLayout } from './room-side-tab-layout';
 import { useRoomSidebarTabs } from './room-side-tabs.hook';
@@ -26,7 +26,7 @@ export interface RoomSideTabPinnedProps {}
 
 export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
   const roomId = useRoomId();
-  const { data } = useGetPinMessage({ roomId });
+  const { data } = useGetPinnedMessages({ roomId });
   const currentUserId = useAuthStore((state) => state.user?._id);
   const { changeToDefault } = useRoomSidebarTabs();
 
@@ -49,6 +49,9 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                 key={pin._id}
                 className="group relative flex flex-col items-center p-3"
               >
+                <span className="ml-auto text-xs font-light text-neutral-800">
+                  Pinned by {isMe ? 'you' : pin.pinnedBy.name}
+                </span>
                 <div
                   key={pin._id}
                   className="group relative flex w-full flex-1 items-center"
@@ -56,9 +59,6 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                   <MainMessage message={message} className="flex-1" />
                   <Menu isMe={isMe} message={message} />
                 </div>
-                <span className="my-1 mb-3 ml-auto text-xs font-light text-neutral-800">
-                  Pinned by {isMe ? 'you' : pin.pinnedBy.name}
-                </span>
               </div>
             );
           })}

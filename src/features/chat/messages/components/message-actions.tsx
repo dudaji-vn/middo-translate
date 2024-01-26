@@ -1,6 +1,8 @@
 import {
   CopyIcon,
   ForwardIcon,
+  MessageSquareQuote,
+  MessageSquareQuoteIcon,
   PinIcon,
   PinOffIcon,
   ReplyIcon,
@@ -39,7 +41,7 @@ export const actionItems: ActionItem[] = [
   {
     action: 'reply',
     label: 'Discussion',
-    icon: <ReplyIcon />,
+    icon: <MessageSquareQuoteIcon />,
   },
 
   {

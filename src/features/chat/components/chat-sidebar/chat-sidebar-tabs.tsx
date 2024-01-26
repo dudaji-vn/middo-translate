@@ -39,7 +39,7 @@ export const ChatSidebarTabs = forwardRef<HTMLDivElement, ChatSidebarTabsProps>(
         >
           {children}
         </div>
-        π<AnimatePresence>{tabMap[currentSide]?.component}</AnimatePresence>
+        <AnimatePresence>{tabMap[currentSide]?.component}</AnimatePresence>
       </>
     );
   },
