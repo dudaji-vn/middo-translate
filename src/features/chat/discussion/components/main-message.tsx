@@ -17,13 +17,13 @@ import { useDiscussion } from './discussion';
 
 export interface MainMessageProps {
   message: Message;
+  className?: string;
 }
 
-export const MainMessage = ({ message }: MainMessageProps) => {
-  console.log('message', message);
+export const MainMessage = ({ message, className }: MainMessageProps) => {
   const sender = message.sender;
   return (
-    <div className="flex flex-col">
+    <div className={cn('flex flex-col', className)}>
       {message.type !== 'call' && (
         <div className="flex items-center gap-2">
           <Avatar size="xs" src={sender.avatar} alt={sender.name} />
