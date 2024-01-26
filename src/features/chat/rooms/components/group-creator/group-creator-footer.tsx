@@ -19,7 +19,7 @@ export const GroupCreateFooter = ({
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
-          className={'p-3 shadow-n-1'}
+          className={'mt-auto p-3 shadow-n-1'}
         >
           <Button
             size="md"
