@@ -1,6 +1,22 @@
 'use client';
 
-import { Brush, LayoutGrid, Lightbulb, Mic, MicOff, MonitorUp, MoreVertical, Phone, ScanText, Subtitles, UserPlus2, UserPlus2Icon, Video, VideoOff, X } from 'lucide-react';
+import {
+  Brush,
+  LayoutGrid,
+  Lightbulb,
+  Mic,
+  MicOff,
+  MonitorUp,
+  MoreVertical,
+  Phone,
+  ScanText,
+  Subtitles,
+  UserPlus2,
+  UserPlus2Icon,
+  Video,
+  VideoOff,
+  X,
+} from 'lucide-react';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { useVideoCallContext } from '../context/video-call-context';
@@ -10,19 +26,49 @@ import { useMyVideoCallStore } from '../store/me.store';
 import ParticipantInVideoCall from '../interfaces/participant';
 import socket from '@/lib/socket-io';
 import { Button } from '@/components/actions';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/data-display';
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 import { CALL_TYPE } from '../constant/call-type';
 import getStreamConfig from '../utils/get-stream-config';
 import toast from 'react-hot-toast';
 import SpeechRecognition from 'react-speech-recognition';
 
-export interface VideoCallBottomProps { }
+export interface VideoCallBottomProps {}
 
-export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
-  const { isTurnOnMic, isTurnOnCamera, setTurnOnMic, setTurnOnCamera, myStream, setMyStream, isShareScreen } = useMyVideoCallStore()
-  const { participants, setStreamForParticipant } = useParticipantVideoCallStore()
-  const { isDoodle, isMeDoole, isDrawing, setDrawing, isFullScreen, isPinShareScreen, setLayout, isShowChat, setShowChat, isShowCaption, setShowCaption, setModalAddUser, room, setConfirmLeave, layout } = useVideoCallStore();
+export const VideoCallBottom = ({}: VideoCallBottomProps) => {
+  const {
+    isTurnOnMic,
+    isTurnOnCamera,
+    setTurnOnMic,
+    setTurnOnCamera,
+    myStream,
+    setMyStream,
+    isShareScreen,
+  } = useMyVideoCallStore();
+  const { participants, setStreamForParticipant } =
+    useParticipantVideoCallStore();
+  const {
+    isDoodle,
+    isMeDoole,
+    isDrawing,
+    setDrawing,
+    isFullScreen,
+    isPinShareScreen,
+    setLayout,
+    isShowChat,
+    setShowChat,
+    isShowCaption,
+    setShowCaption,
+    setModalAddUser,
+    room,
+    setConfirmLeave,
+    layout,
+  } = useVideoCallStore();
   const { handleShareScreen, handleStartDoodle } = useVideoCallContext();
   const [isShowInvite, setShowInvite] = useState(true);
   const haveShareScreen = participants.some(
@@ -39,18 +85,24 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     if (isDoodle) {
       setDrawing(!isDrawing);
     }
-  }
+  };
   const handleLeave = () => {
     setConfirmLeave(true);
   };
   const changeLayout = () => {
-    setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW)
-  }
+    setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+  };
 
-  const handleChangeCameraOrMic = ({ video, audio }: { video: boolean; audio: boolean }) => {
+  const handleChangeCameraOrMic = ({
+    video,
+    audio,
+  }: {
+    video: boolean;
+    audio: boolean;
+  }) => {
     if (!socket.id) return;
     if (!myStream) return;
-    if(!audio) {
+    if (!audio) {
       SpeechRecognition.stopListening();
     }
     if (video && isTurnOnCamera && myStream.getAudioTracks().length > 0) {
@@ -61,79 +113,96 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
     }
     myStream.getTracks().forEach((track) => track.stop());
     if (!video && !audio) return;
-    const streamConfig = getStreamConfig(video, audio)
-    navigator.mediaDevices.getUserMedia({ ...streamConfig }).then((stream: MediaStream) => {
-      if(!audio && stream.getAudioTracks().length > 0) {
-        stream.getAudioTracks().forEach((track) => {
-          track.enabled = false;
-        });
-      }
-      setStreamForParticipant(stream, socket.id || '', false)
-      setMyStream(stream)
-    }).catch(() => {
-      toast.error('Can not access to your camera or mic')
-    })
+    const streamConfig = getStreamConfig(video, audio);
+    navigator.mediaDevices
+      .getUserMedia({ ...streamConfig })
+      .then((stream: MediaStream) => {
+        if (!audio && stream.getAudioTracks().length > 0) {
+          stream.getAudioTracks().forEach((track) => {
+            track.enabled = false;
+          });
+        }
+        setStreamForParticipant(stream, socket.id || '', false);
+        setMyStream(stream);
+      })
+      .catch(() => {
+        toast.error('Can not access to your camera or mic');
+      });
     // navigator.mediaDevices.getDisplayMedia({ video: true, audio: false }).then((stream: MediaStream) => {
     //   setStreamForParticipant(stream, socket.id || '', false)
     //   setMyStream(stream)
     // })
-  }
+  };
   const onToggleCamera = () => {
     setTurnOnCamera(!isTurnOnCamera);
     handleChangeCameraOrMic({
       video: !isTurnOnCamera,
-      audio: isTurnOnMic
-    })
-  }
+      audio: isTurnOnMic,
+    });
+  };
   const onToggleMute = () => {
-    setTurnOnMic(!isTurnOnMic)
+    setTurnOnMic(!isTurnOnMic);
     handleChangeCameraOrMic({
       video: isTurnOnCamera,
-      audio: !isTurnOnMic
-    })
-  }
+      audio: !isTurnOnMic,
+    });
+  };
   return (
-    <section className={twMerge("relative flex items-center justify-between z-20 border-b border-t p-2",
-      isFullScreen ? "" : "border-b border-t border-neutral-50")}>
-      <div className="flex gap-6 justify-center w-full">
+    <section
+      className={twMerge(
+        'relative z-20 flex items-center justify-between bg-primary-100 p-2',
+      )}
+    >
+      <div className="flex w-full justify-center gap-6">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button.Icon
-              variant='default'
-              size='xs'
-              color='default'
+              variant="default"
+              size="xs"
+              color="default"
               className={`${!isFullScreen ? 'hidden' : ''}`}
             >
               <MoreVertical />
             </Button.Icon>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={changeLayout}>
+            <DropdownMenuItem
+              disabled={layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW}
+              onClick={changeLayout}
+            >
               <LayoutGrid />
-              <span className='ml-2'>Galery View</span>
+              <span className="ml-2">Galery View</span>
             </DropdownMenuItem>
-            <DropdownMenuItem disabled={!haveShareScreen || !isFullScreen || !isPinShareScreen || layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW} onClick={onDoodle}>
+            <DropdownMenuItem
+              disabled={
+                !haveShareScreen ||
+                !isFullScreen ||
+                !isPinShareScreen ||
+                layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW
+              }
+              onClick={onDoodle}
+            >
               <Brush />
-              <span className='ml-2'>Screen Doodle</span>
+              <span className="ml-2">Screen Doodle</span>
             </DropdownMenuItem>
-            {room.type === CALL_TYPE.GROUP &&
+            {room.type === CALL_TYPE.GROUP && (
               <DropdownMenuItem onClick={() => setModalAddUser(true)}>
                 <UserPlus2 />
-                <span className='ml-2'>Add member</span>
+                <span className="ml-2">Add member</span>
               </DropdownMenuItem>
-            }
+            )}
             <DropdownMenuItem
               onClick={() => setShowCaption(!isShowCaption)}
               className={isShowCaption ? 'bg-primary-200' : ''}
             >
               <ScanText />
-              <span className='ml-2'>Caption</span>
+              <span className="ml-2">Caption</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
         <Button.Icon
-          variant='default'
-          size='xs'
+          variant="default"
+          size="xs"
           color={isShowChat ? 'primary' : 'default'}
           className={`${!isFullScreen ? 'hidden' : ''}`}
           onClick={() => setShowChat(!isShowChat)}
@@ -141,18 +210,20 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
           <Subtitles />
         </Button.Icon>
         <Button.Icon
-          variant='default'
-          size='xs'
+          variant="default"
+          size="xs"
           color={'default'}
           // disabled={haveShareScreen && !isShareScreen}
-          className={`${(isFullScreen || room.type !== CALL_TYPE.GROUP) ? 'hidden' : ''}`}
+          className={`${
+            isFullScreen || room.type !== CALL_TYPE.GROUP ? 'hidden' : ''
+          }`}
           onClick={() => setModalAddUser(true)}
         >
           <UserPlus2 />
         </Button.Icon>
         <Button.Icon
-          variant='default'
-          size='xs'
+          variant="default"
+          size="xs"
           color={isShareScreen ? 'primary' : 'default'}
           disabled={haveShareScreen && !isShareScreen}
           onClick={handleShareScreen}
@@ -161,53 +232,63 @@ export const VideoCallBottom = ({ }: VideoCallBottomProps) => {
         </Button.Icon>
 
         <Button.Icon
-          variant='default'
-          size='xs'
+          variant="default"
+          size="xs"
           color={isTurnOnCamera ? 'primary' : 'default'}
           onClick={onToggleCamera}
         >
           {isTurnOnCamera ? <Video /> : <VideoOff />}
         </Button.Icon>
         <Button.Icon
-          variant='default'
-          size='xs'
+          variant="default"
+          size="xs"
           color={isTurnOnMic ? 'primary' : 'default'}
           onClick={onToggleMute}
         >
           {isTurnOnMic ? <Mic /> : <MicOff />}
         </Button.Icon>
         <Button.Icon
-          variant='default'
-          size='xs'
-          color='error'
+          variant="default"
+          size="xs"
+          color="error"
           title="Leave"
           onClick={handleLeave}
         >
           <Phone className="rotate-[135deg]" />
         </Button.Icon>
       </div>
-      {participants.length == 1 && room.type === CALL_TYPE.GROUP && isShowInvite && isFullScreen &&
-        <div className='absolute md:hidden bottom-full left-0 right-0 px-3 py-5 bg-gradient-to-t from-black/20'>
-          <div className='bg-neutral-50 rounded-xl p-2'>
-            <div className='text-neutral-600 flex items-center'>
-              <Lightbulb className='text-neutral-400 w-4 h-4' />
-              <p className='ml-1 flex-1'>Notice</p>
-              <X className='text-neutral-400 w-4 h-4 cursor-pointer' onClick={() => setShowInvite(false)} />
+      {participants.length == 1 &&
+        room.type === CALL_TYPE.GROUP &&
+        isShowInvite &&
+        isFullScreen && (
+          <div className="absolute bottom-full left-0 right-0 flex h-[300px] flex-col bg-gradient-to-t from-black/80 px-3 py-5  md:hidden">
+            <div className="mt-auto rounded-xl bg-neutral-50 p-2">
+              <div className="flex items-center text-neutral-600">
+                <Lightbulb className="h-4 w-4 text-neutral-400" />
+                <p className="ml-1 flex-1">Notice</p>
+                <X
+                  className="h-4 w-4 cursor-pointer text-neutral-400"
+                  onClick={() => setShowInvite(false)}
+                />
+              </div>
+              <p className="mt-2 text-sm font-light text-neutral-400">
+                Memeber in group will not receive any in coming call alert till
+                you invite them to join
+              </p>
             </div>
-            <p className='text-sm text-neutral-400 font-light mt-2'>Memeber in group will not receive any in coming call alert till you invite them to join</p>
+            <Button
+              onClick={() => setModalAddUser(true)}
+              size="sm"
+              color="primary"
+              variant="default"
+              className="mx-auto mt-2 block"
+              shape="square"
+              startIcon={<UserPlus2Icon />}
+            >
+              Invite
+            </Button>
           </div>
-          <Button
-            onClick={() => setModalAddUser(true)}
-            size="sm"
-            color="primary"
-            variant="default"
-            className='mx-auto mt-2 block'
-            shape="square"
-            startIcon={<UserPlus2Icon />}
-          >
-            Invite
-          </Button>
-        </div>}
+        )}
     </section>
   );
 };
