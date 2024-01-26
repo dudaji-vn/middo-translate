@@ -3,8 +3,8 @@ import { PinIcon } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
 import {
   PIN_MESSAGE_KEY,
-  useGetPinMessage,
-} from '../../hooks/use-get-pin-message';
+  useGetPinnedMessages,
+} from '../../hooks/use-get-pinned-messages';
 import { useRoomId } from '../../hooks/use-roomId';
 import { ViewPinButton } from '../view-pin-button';
 import socket from '@/lib/socket-io';
@@ -15,10 +15,11 @@ export interface PinnedBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const PinnedBar = forwardRef<HTMLDivElement, PinnedBarProps>(
   (props, ref) => {
     const roomId = useRoomId();
-    const { data } = useGetPinMessage({ roomId });
+    const { data } = useGetPinnedMessages({ roomId });
     const queryClient = useQueryClient();
     useEffect(() => {
       socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.PIN, () => {
+        console.log([PIN_MESSAGE_KEY, roomId]);
         queryClient.invalidateQueries([PIN_MESSAGE_KEY, roomId]);
       });
       return () => {

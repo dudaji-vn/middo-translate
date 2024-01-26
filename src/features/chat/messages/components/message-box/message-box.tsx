@@ -27,8 +27,13 @@ export type MessageGroup = {
 };
 export const MessageBox = ({ room }: { room: Room }) => {
   const currentUserId = useAuthStore((s) => s.user?._id);
-  const { hasNextPage, loadMoreMessages, messages, isFetching } =
-    useMessagesBox();
+  const {
+    hasNextPage,
+    loadMoreMessages,
+    messages,
+    isFetching,
+    pinnedMessages,
+  } = useMessagesBox();
 
   const { ref, isScrolled } = useScrollDistanceFromTop(0, true);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -161,20 +166,31 @@ export const MessageBox = ({ room }: { room: Room }) => {
               )}
               <div className="flex w-full gap-1">
                 <MessageItemGroup>
-                  {group.messages.map((message) => (
-                    <MessageItem
-                      showAvatar={
-                        !isMe &&
-                        !isSystem &&
-                        message._id ===
-                          group.messages[group.messages.length - 1]._id
-                      }
-                      key={message._id}
-                      message={message}
-                      sender={isMe ? 'me' : 'other'}
-                      readByUsers={usersReadMessageMap[message._id] ?? []}
-                    />
-                  ))}
+                  {group.messages.map((message) => {
+                    const pinnedBy = pinnedMessages?.find(
+                      (pinnedMessage) =>
+                        pinnedMessage.message._id === message._id,
+                    )?.pinnedBy;
+                    const newMessage = {
+                      ...message,
+                      isPinned: !!pinnedBy,
+                    };
+                    return (
+                      <MessageItem
+                        pinnedBy={pinnedBy}
+                        showAvatar={
+                          !isMe &&
+                          !isSystem &&
+                          message._id ===
+                            group.messages[group.messages.length - 1]._id
+                        }
+                        key={message._id}
+                        message={newMessage}
+                        sender={isMe ? 'me' : 'other'}
+                        readByUsers={usersReadMessageMap[message._id] ?? []}
+                      />
+                    );
+                  })}
                 </MessageItemGroup>
               </div>
             </div>

@@ -21,7 +21,7 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
           <ArrowLeftIcon />
         </Button.Icon>
       </div>
-      <div>
+      <div className="pb-2">
         <RoomInfo room={room} />
         <div className="my-8">
           <RoomSetting room={room} />

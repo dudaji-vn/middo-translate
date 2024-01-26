@@ -45,11 +45,14 @@ export const MessageItemWrapper = (
           case 'forward':
             return message.type !== 'call';
           case 'pin':
-            return (
-              !message.isPinned &&
-              message.type !== 'call' &&
-              message.forwardOf === undefined
-            );
+            if (message.isPinned) return false;
+            if (message.type === 'call') return false;
+            if (
+              message.forwardOf &&
+              (!message.content || !message.media?.length)
+            )
+              return false;
+            return true;
           case 'unpin':
             return message.isPinned;
           default:
