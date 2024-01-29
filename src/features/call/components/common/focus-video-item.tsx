@@ -5,16 +5,17 @@ import trimLongName from '../../utils/trim-long-name.util';
 import useFitRatio from '../../hooks/use-fit-ratio';
 import { useVideoCallStore } from '../../store/video-call.store';
 import { cn } from '@/utils/cn';
+import { twMerge } from 'tailwind-merge';
+import { Avatar } from '@/components/data-display';
+import useAudioLevel from '../../hooks/use-audio-level';
 interface FocusVideoItemProps {
   participant?: any;
 }
 const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const parentRef = useRef<HTMLElement>(null);
-  const { streamVideo } = useLoadStream(participant, videoRef);
-  const { isShowChat } = useVideoCallStore();
-  // const { isTalk } = useAudioLevel(streamVideo)
-
+  const { streamVideo, isTurnOnCamera } = useLoadStream(participant, videoRef);
+  const { isTalk } = useAudioLevel(streamVideo);
   useFitRatio(videoRef, parentRef);
 
   const fullScreenVideo = () => {
@@ -53,6 +54,12 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         // isShowChat && 'h-[200px] md:h-full',
       )}
     >
+      <div
+          className={twMerge(
+            'absolute inset-0 rounded-xl border-4 border-primary transition-all z-10 pointer-events-none',
+            isTalk ? 'opacity-100' : 'opacity-0',
+          )}
+        ></div>
       <video
         ref={videoRef}
         className="relative h-full w-full object-contain"
@@ -62,12 +69,28 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         controls={false}
       ></video>
       {/* Overlay black gradient from bottom to top */}
-      <div className="absolute bottom-0 left-0 right-0 top-1/2 hidden items-end justify-end bg-gradient-to-t p-3 transition-all md:flex md:hover:from-black/70">
+      { isTurnOnCamera && <div className="absolute bottom-0 left-0 right-0 top-1/2 hidden items-end justify-end bg-gradient-to-t p-3 transition-all md:flex md:hover:from-black/70">
         <Maximize
           className="h-5 w-5 cursor-pointer stroke-white"
           onClick={fullScreenVideo}
         />
-      </div>
+      </div> }
+
+      {/* Overlay name */}
+      <div
+          className={twMerge(
+            'absolute left-1/2 top-1/2 flex max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center w-full h-full',
+            isTurnOnCamera ? 'pointer-events-none hidden cursor-none' : '',
+          )}
+        >
+          <div className='aspect-square max-w-[90%] w-40'>
+            <Avatar
+              className="h-full w-full bg-neutral-900 object-cover"
+              src={participant?.user?.avatar || '/person.svg'}
+              alt={participant?.user?.name || 'Anonymous'}
+            />
+          </div>
+        </div>
       <div className="absolute bottom-1 left-1 flex items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
         <span className="relative leading-none">
           {participant?.isMe
