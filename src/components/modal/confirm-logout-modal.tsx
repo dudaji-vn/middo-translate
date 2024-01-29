@@ -14,22 +14,16 @@ import toast from 'react-hot-toast';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useNotificationStore } from '@/features/notification/store';
-
+import { useRouter } from 'next/navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
   const { isShowConfirmLogout, setShowConfirmLogout } = useAppStore();
   const resetNotification = useNotificationStore((state) => state.reset);
+  const router = useRouter();
 
   const handleLogout = async () => {
-    try {
-      await signOutService();
-      setDataAuth({ user: null, isAuthentication: false });
-      resetNotification();
-
-      toast.success('Sign out success!');
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
-    }
+    router.push(ROUTE_NAMES.ONLINE_CONVERSATION + '/sign-out');
   };
   const closeModal = () => {
     setShowConfirmLogout(false);

@@ -8,12 +8,7 @@ import {
   NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY,
   NEXT_PUBLIC_FCM_STORAGE_BUCKET,
 } from '@/configs/env.public';
-import {
-  deleteToken,
-  getMessaging,
-  getToken,
-  onMessage,
-} from 'firebase/messaging';
+import { deleteToken, getMessaging, getToken } from 'firebase/messaging';
 
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
@@ -43,6 +38,7 @@ export const requestForToken = async () => {
 };
 
 export const deleteFCMToken = async () => {
+  console.log('deleteFCMToken');
   await deleteToken(messaging);
 };
 // export const onMessageListener = () =>

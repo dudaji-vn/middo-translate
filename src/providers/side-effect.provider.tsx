@@ -11,5 +11,6 @@ export const SideEffectProvider = () => {
     setMobile(isMobile);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
+
   return <></>;
 };
