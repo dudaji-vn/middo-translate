@@ -51,6 +51,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           !isFullScreen && 'aspect-square h-[60px] w-[60px]',
           !isFullScreen && isGalleryView && isTurnOnCamera && 'w-[100px]',
           isGalleryView && isFullScreen && 'min-h-[200px]',
+          !isGalleryView && 'bg-neutral-80',
         )}
       >
         <div
@@ -107,10 +108,10 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         {!isPin && (
           <div className="pointer-events-none absolute bottom-1 w-full px-1">
             <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
-              <p className="truncate text-sm leading-none text-white">
+              <p className="truncate text-sm leading-none text-white px-1">
                 {participant.isMe
                   ? 'You'
-                  : trimLongName(participant?.user?.name) || ''}
+                  : participant?.user?.name || ''}
                 {participant?.isShareScreen ? '  (Screen)' : ''}
               </p>
             </div>
@@ -118,7 +119,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         )}
         <div
           className={cn(
-            'pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/80 opacity-0',
+            'pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90 opacity-0',
             isPin &&
               !isPinDoodle &&
               isFullScreen &&
@@ -126,10 +127,10 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
               'opacity-100',
           )}
         >
-          <p className="truncate text-sm leading-none text-white">
+          <p className="truncate text-sm leading-none text-white px-1">
             {participant.isMe
               ? 'You'
-              : trimLongName(participant?.user?.name, 3) || ''}
+              : trimLongName(participant?.user?.name, (itemRef.current?.clientWidth || 15) / 5) || ''}
             {participant?.isShareScreen ? '  (Screen)' : ''}
           </p>
         </div>

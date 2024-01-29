@@ -129,8 +129,8 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
       })
       .catch(() => {
         toast.error('Can not access to your camera or mic');
-        setTurnOnCamera(isTurnOnCamera);
-        setTurnOnMic(isTurnOnMic);
+        setTurnOnCamera(false);
+        setTurnOnMic(false);
       });
   };
   const onToggleCamera = () => {
@@ -150,6 +150,10 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
   useEffect(() => {
     if (isMobile) setShowChat(false);
   }, []);
+  useEffect(() => {
+    let numParticipant = participants.length;
+    if(numParticipant > 1 && isShowInvite) setShowInvite(false);
+  }, [isShowInvite, participants.length]);
   return (
     <section
       className={twMerge(
