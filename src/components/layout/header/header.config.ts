@@ -13,10 +13,10 @@ const items: NavItem[] = [
     name: 'Conversation',
     href: ROUTE_NAMES.ONLINE_CONVERSATION,
   },
-  {
-    name: 'Duel',
-    href: '#',
-  },
+  // {
+  //   name: 'Duel',
+  //   href: '#',
+  // },
 ];
 
 export { items as navItems };
