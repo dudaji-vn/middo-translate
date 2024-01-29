@@ -146,6 +146,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                       <CallMessage
                         position={isMe ? 'right' : 'left'}
                         message={message}
+                        active={isActive}
                       />
                     )}
                     {message?.media && message.media.length > 0 && (

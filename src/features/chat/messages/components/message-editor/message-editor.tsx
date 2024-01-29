@@ -4,7 +4,6 @@ import { HTMLAttributes, forwardRef, useImperativeHandle, useRef } from 'react';
 import { TextInput, TextInputRef } from './message-editor-text-input';
 import { detectLanguage, translateText } from '@/services/languages.service';
 
-import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { FileWithUrl } from '@/hooks/use-select-files';
 import { Media } from '@/types';
@@ -14,7 +13,6 @@ import { MessageEditorMediaProvider } from './message-editor-media-context';
 import { MessageEditorSubmitButton } from './message-editor-submit-button';
 import { MessageEditorTextProvider } from './message-editor-text-context';
 import { MessageEditorToolbar } from './message-editor-toolbar';
-import { Send } from 'lucide-react';
 import { useChatStore } from '@/features/chat/store';
 
 type SubmitData = {

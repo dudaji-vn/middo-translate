@@ -10,7 +10,7 @@ export const MessageEditorSubmitButton = (
 ) => {
   const { text } = useMessageEditorText();
   const { files } = useMessageEditorMedia();
-  const disabled = text.length === 0 && files.length === 0;
+  const disabled = text.trim().length === 0 && files.length === 0;
   if (disabled) {
     return null;
   }

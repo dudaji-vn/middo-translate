@@ -10,7 +10,6 @@ import { MessageItem } from '../message-item';
 import { MessageItemGroup } from '../message-group';
 import { Room } from '../../../rooms/types';
 import { User } from '@/features/users/types';
-import { formatTimeDisplay } from '../../../rooms/utils';
 
 import moment from 'moment';
 import { useAuthStore } from '@/stores/auth.store';
@@ -18,6 +17,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
+import { TimeDisplay } from '../time-display';
 
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
@@ -149,15 +149,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
           return (
             <div key={group.lastMessage._id}>
               {isShowTimeGroup && (
-                <div className="my-2 flex items-center justify-center">
-                  <div className="flex items-center space-x-2">
-                    <div className="bg-primary/30 h-[1px] w-16" />
-                    <div className="text-sm font-light text-neutral-300">
-                      {formatTimeDisplay(group.lastMessage.createdAt!)}
-                    </div>
-                    <div className="bg-primary/30 h-[1px] w-16" />
-                  </div>
-                </div>
+                <TimeDisplay time={group.lastMessage.createdAt} />
               )}
               {!isMe && !isSystem && room.isGroup && (
                 <div className="mb-0.5 pl-7 text-xs text-neutral-600">
@@ -196,6 +188,13 @@ export const MessageBox = ({ room }: { room: Room }) => {
             </div>
           );
         })}
+        {!hasNextPage && (
+          <TimeDisplay
+            time={
+              messagesGroup[messagesGroup.length - 1]?.messages[0].createdAt
+            }
+          />
+        )}
       </InfiniteScroll>
       {isScrolled && (
         <Button.Icon
