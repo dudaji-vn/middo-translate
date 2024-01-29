@@ -129,11 +129,9 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
       })
       .catch(() => {
         toast.error('Can not access to your camera or mic');
+        setTurnOnCamera(isTurnOnCamera);
+        setTurnOnMic(isTurnOnMic);
       });
-    // navigator.mediaDevices.getDisplayMedia({ video: true, audio: false }).then((stream: MediaStream) => {
-    //   setStreamForParticipant(stream, socket.id || '', false)
-    //   setMyStream(stream)
-    // })
   };
   const onToggleCamera = () => {
     setTurnOnCamera(!isTurnOnCamera);

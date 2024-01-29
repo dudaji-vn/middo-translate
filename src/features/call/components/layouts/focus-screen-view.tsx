@@ -18,14 +18,6 @@ const FocusScreenView = () => {
         <div className="relative flex w-full h-full p-1">
             <div className="flex flex-col w-full h-full gap-1">
                 <div className="">
-                    {/* <ScrollMenu
-                        itemClassName="h-[68px]"
-                    >
-                        {isDoodle ? <DoodleItem /> : {}}
-                        {participants?.map((participant: any) => (
-                            <VideoItem key={participant.socketId} participant={participant} size="sm" />
-                        )) || []}
-                    </ScrollMenu> */}
                     <div className="overflow-auto">
                         <div className="flex items-center h-[68px]">
                             {isDoodle && <div className="max-w-[100px] min-w-[60px] !h-[60px]"><DoodleItem /></div>}

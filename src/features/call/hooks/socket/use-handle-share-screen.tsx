@@ -86,10 +86,7 @@ export default function useHandleShareScreen() {
 
     useEffect(() => {
         // Emit event to request get share screen
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, {
-            roomId: room?._id,
-            userId: socket.id,
-        });
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, room?._id);
     }, [room?._id])
 
     const stopShareScreen = useCallback(() => {
