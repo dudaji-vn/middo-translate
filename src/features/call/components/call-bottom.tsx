@@ -149,7 +149,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
   };
   useEffect(() => {
     if (isMobile) setShowChat(false);
-  }, []);
+  }, [isMobile, setShowChat]);
   useEffect(() => {
     let numParticipant = participants.length;
     if(numParticipant > 1 && isShowInvite) setShowInvite(false);
