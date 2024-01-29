@@ -27,14 +27,16 @@ export const DoodleArea = () => {
     const imageRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<ReactSketchCanvasRef>(null);
     const { isDrawing, setDrawing } = useVideoCallStore();
-    const [isEraser, setIsEraser] = useState(false);
-    const constraintsRef = useRef(null)
     const controls = useDragControls()
+
+    const [isEraser, setIsEraser] = useState(false);
     const [canvasSize, setCanvasSize] = useState({width: 0, height: 0})
     const [imagesCanvas, setImagesCanvas] = useState<IDoodleImage>({})
     const [isShowColor, setShowColor] = useState(false);
-    const timer = useRef(new Date().getTime());
     const [isShowConfirmClear, setShowConfirmClear] = useState(false);
+    const constraintsRef = useRef(null)
+
+    const timer = useRef(new Date().getTime());
 
     const imagesCanvasArray = useMemo(()=>{
         return Object.values(imagesCanvas).map((item) => item.image);
@@ -165,7 +167,6 @@ export const DoodleArea = () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_OLD_DOODLE_DATA)
         }
     }, [imagesCanvas])
-
     
     useEffect(() => {
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_OLD_DOODLE_DATA)
@@ -191,7 +192,7 @@ export const DoodleArea = () => {
         <Image src={doodleImage || ''} width={500} height={500} alt="Doodle" ref={imageRef} className='object-contain w-full h-full' />
         <ReactSketchCanvas
             ref={canvasRef}
-            strokeWidth={5}
+            strokeWidth={Math.max(canvasSize.width/160, 2)}
             style={{width: `${canvasSize.width}px`, height: `${canvasSize.height}px`}}
             strokeColor={colorDoodle}
             eraserWidth={10}
@@ -259,20 +260,22 @@ export const DoodleArea = () => {
                 <X />
             </Button.Icon> }
             <div className='flex flex-col items-center'>
-                {isShowColor && <ul className='border-t border-neutral-50 pt-4 pb-4 flex flex-col justify-center items-center gap-5 max-h-[180px] overflow-auto'>
-                    <li className='flex flex-col justify-center items-center gap-1'>
-                        <div className='w-3 h-3 rounded-full' style={{backgroundColor: colorDoodle}}></div>
-                        <span className='text-sm'>You</span>
-                    </li>
-                    {Object.values(imagesCanvas).map((item, index) => {
-                        if(item.user._id === user?._id) return;
-                        return (
-                            <li key={index} className='flex flex-col justify-center items-center gap-1'>
-                                <div className='w-3 h-3 rounded-full' style={{backgroundColor: item.color}}></div>
-                                <span className='text-sm'>{trimLongName(item.user.name, 3)}</span>
-                            </li>
-                        )
-                    })}
+                {isShowColor && <ul className='border-t border-neutral-50 pt-4 pb-4 max-h-[180px] flex-1  overflow-auto'>
+                    <ul className='w-full flex flex-col justify-center items-center gap-5 '>
+                        <li className='flex flex-col justify-center items-center gap-1'>
+                            <div className='w-3 h-3 rounded-full' style={{backgroundColor: colorDoodle}}></div>
+                            <span className='text-sm'>You</span>
+                        </li>
+                        {Object.values(imagesCanvas).map((item, index) => {
+                            if(item.user._id === user?._id) return;
+                            return (
+                                <li key={index} className='flex flex-col justify-center items-center gap-1'>
+                                    <div className='w-3 h-3 rounded-full' style={{backgroundColor: item.color}}></div>
+                                    <span className='text-sm'>{trimLongName(item.user.name, 3)}</span>
+                                </li>
+                            )
+                        })}
+                    </ul>
                 </ul>}
                 <div className="border-t border-neutral-50 ">
                     <Button.Icon
