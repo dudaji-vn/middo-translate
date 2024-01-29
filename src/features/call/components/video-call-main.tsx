@@ -22,7 +22,7 @@ const VideoCallPage = () => {
       <div className={twMerge('flex h-full w-full flex-col')}>
         <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden md:flex-row">
           {/* <VideoCallHeader /> */}
-          <div className={cn('flex flex-1 flex-col')}>
+          <div className={cn('flex flex-col h-full w-full')}>
             <section className="relative flex h-full min-h-[70px] w-full flex-1 justify-center overflow-hidden">
               {/* <ParticipantListSidebar /> */}
               {participants.length == 0 ? (
