@@ -1,19 +1,13 @@
-import {
-  NEXT_PUBLIC_API_URL,
-} from '@/configs/env.public';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
+import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/configs/store-key';
 import Cookies from 'cookies';
-import httpProxy from 'http-proxy';
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-const proxy = httpProxy.createProxyServer();
 
 export default function handler(
   req: NextApiRequest,
@@ -29,7 +23,7 @@ export default function handler(
       sameSite: 'lax',
       expires: new Date(Date.now()),
     });
-    cookies.set('refreshToken', '', {
+    cookies.set(REFRESH_TOKEN_NAME, '', {
       httpOnly: true,
       sameSite: 'lax',
       expires: new Date(Date.now()),
