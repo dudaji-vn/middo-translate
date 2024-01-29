@@ -8,10 +8,16 @@ import {
   NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY,
   NEXT_PUBLIC_FCM_STORAGE_BUCKET,
 } from '@/configs/env.public';
-import { deleteToken, getMessaging, getToken } from 'firebase/messaging';
+import {
+  deleteToken,
+  getMessaging,
+  getToken,
+  onMessage,
+} from 'firebase/messaging';
 
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
+import toast from 'react-hot-toast';
 
 const firebaseConfig = {
   apiKey: NEXT_PUBLIC_FCM_API_KEY,
@@ -41,10 +47,11 @@ export const deleteFCMToken = async () => {
   console.log('deleteFCMToken');
   await deleteToken(messaging);
 };
-// export const onMessageListener = () =>
-//   new Promise((resolve) => {
-//     onMessage(messaging, (payload) => {
-//       console.log('payload', payload);
-//       resolve(payload);
-//     });
-//   });
+
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      toast.success(payload.data?.body || 'New message received!');
+      resolve(payload);
+    });
+  });

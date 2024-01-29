@@ -15,7 +15,6 @@ import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useNotificationStore } from '@/features/notification/store';
 import { useRouter } from 'next/navigation';
-import { ROUTE_NAMES } from '@/configs/route-name';
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
   const { isShowConfirmLogout, setShowConfirmLogout } = useAppStore();
@@ -23,7 +22,16 @@ export const ConfirmLogoutModal = () => {
   const router = useRouter();
 
   const handleLogout = async () => {
-    router.push(ROUTE_NAMES.ONLINE_CONVERSATION + '/sign-out');
+    try {
+      await signOutService();
+      setDataAuth({ user: null, isAuthentication: false });
+      resetNotification();
+      toast.success('Sign out success!');
+      const { deleteFCMToken } = await import('@/lib/firebase');
+      await deleteFCMToken();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
   };
   const closeModal = () => {
     setShowConfirmLogout(false);
