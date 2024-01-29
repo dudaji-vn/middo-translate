@@ -48,4 +48,9 @@ export type Media = {
   height?: number;
 };
 
+export type Tokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
 export * from './auth.type';
