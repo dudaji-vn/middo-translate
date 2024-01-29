@@ -14,7 +14,7 @@ export const RoomBoxHeaderNavigation = forwardRef<
   return (
     <div ref={ref} {...props} className="md:hidden">
       <Link href={ROUTE_NAMES.ONLINE_CONVERSATION}>
-        <Button.Icon size="md" variant="ghost" color="default">
+        <Button.Icon size="xs" variant="ghost" color="default">
           <ArrowLeft />
         </Button.Icon>
       </Link>
