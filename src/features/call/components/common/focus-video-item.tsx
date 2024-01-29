@@ -51,6 +51,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       ref={parentRef}
       className={cn(
         'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-900 transition-all',
+        isTurnOnCamera ? 'bg-neutral-900' : 'bg-neutral-50'
         // isShowChat && 'h-[200px] md:h-full',
       )}
     >
@@ -75,7 +76,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
           onClick={fullScreenVideo}
         />
       </div> }
-
+    
       {/* Overlay name */}
       <div
           className={twMerge(
