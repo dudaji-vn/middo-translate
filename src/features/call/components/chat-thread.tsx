@@ -40,9 +40,9 @@ export default function ChatThread({ className }: { className?: string }) {
   return (
     <aside
       className={twMerge(
-        'w-full flex-1 overflow-y-hidden border-t bg-background md:h-auto md:max-w-[400px] md:overflow-auto md:border-t-0',
+        'w-full h-full flex-1 overflow-y-hidden border-t bg-background md:max-w-[400px] md:w-[400px] md:overflow-auto md:border-t-0 z-10',
         className,
-        isMobile && 'fixed h-[calc(100dvh_-_104px)]',
+        isMobile && 'fixed h-[calc(100dvh_-_104px)] top-[52px]',
         (!isFullScreen || !isShowChat) && 'hidden md:hidden',
       )}
     >
