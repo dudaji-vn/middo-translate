@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
 export type NotificationState = {
   fcmToken: string;
   isDenied: boolean;
@@ -19,7 +18,7 @@ export const useNotificationStore = create<
     (set) => ({
       isDenied: false,
       setDenied: (isDenied) => set(() => ({ isDenied })),
-
+      resetReason: '',
       fcmToken: '',
       setFcmToken: (token) => set(() => ({ fcmToken: token })),
       reset: () =>

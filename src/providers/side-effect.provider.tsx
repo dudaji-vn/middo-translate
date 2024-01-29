@@ -11,5 +11,17 @@ export const SideEffectProvider = () => {
     setMobile(isMobile);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
+
+  useEffect(() => {
+    const handleMessage = async () => {
+      const { onMessageListener } = await import('@/lib/firebase');
+      onMessageListener();
+    };
+    handleMessage();
+
+    // onMessageListener();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return <></>;
 };
