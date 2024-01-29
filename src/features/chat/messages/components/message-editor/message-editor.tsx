@@ -1,8 +1,8 @@
 'use client';
 
+import { HTMLAttributes, forwardRef, useImperativeHandle, useRef } from 'react';
 import { TextInput, TextInputRef } from './message-editor-text-input';
 import { detectLanguage, translateText } from '@/services/languages.service';
-import { HTMLAttributes, forwardRef, useImperativeHandle, useRef } from 'react';
 
 import { Button } from '@/components/actions';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
@@ -11,6 +11,7 @@ import { Media } from '@/types';
 import { MessageEditorForm } from './message-editor-form';
 import { MessageEditorMediaBar } from './message-editor-media-bar';
 import { MessageEditorMediaProvider } from './message-editor-media-context';
+import { MessageEditorSubmitButton } from './message-editor-submit-button';
 import { MessageEditorTextProvider } from './message-editor-text-context';
 import { MessageEditorToolbar } from './message-editor-toolbar';
 import { Send } from 'lucide-react';
@@ -118,9 +119,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
                 </div>
                 <MessageEditorMediaBar />
               </div>
-              <Button.Icon type="submit" size="xs" color="primary">
-                <Send />
-              </Button.Icon>
+              <MessageEditorSubmitButton />
             </div>
           </MessageEditorForm>
         </MessageEditorTextProvider>
