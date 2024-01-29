@@ -14,9 +14,8 @@ import { messageApi } from '@/features/chat/messages/api';
 import { roomApi } from '@/features/chat/rooms/api';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts/chat-box-context';
-
-import { useMutation } from '@tanstack/react-query';
 import { useMessagesBox } from '@/features/chat/messages/components/message-box';
+import { useMutation } from '@tanstack/react-query';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -76,7 +75,8 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         updateRoom(res);
       }
 
-      if (content) {
+      const trimContent = content.trim();
+      if (trimContent) {
         handleSendText(roomId, content, contentEnglish, language);
       }
 
