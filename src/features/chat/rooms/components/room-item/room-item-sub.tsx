@@ -175,8 +175,8 @@ export const ItemSub = ({
         <div className="ml-auto flex items-center pl-2">
           <AvatarGroup
             avatarClassName="w-4 h-4"
-            className="text-[0.625rem]"
-            limit={2}
+            className="space-x-0.5 text-[0.625rem]"
+            limit={3}
           >
             {readByUsers.map((user) => (
               <Avatar key={user._id} alt={user.name} src={user.avatar} />
