@@ -51,7 +51,6 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           !isFullScreen && 'aspect-square h-[60px] w-[60px]',
           !isFullScreen && isGalleryView && isTurnOnCamera && 'w-[100px]',
           isGalleryView && isFullScreen && 'min-h-[200px]',
-          !isGalleryView && 'bg-neutral-80',
         )}
       >
         <div
