@@ -23,7 +23,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
   const [localDocumentMessagesWaiting, setLocalDocumentMessagesWaiting] =
     useState<Message[]>([]);
 
-  const { message } = useDiscussion();
+  const { message, addReply } = useDiscussion();
   const { mutate } = useMutation({
     mutationFn: messageApi.reply,
   });
@@ -32,6 +32,13 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     contentEnglish?: string,
     language?: string,
   ) => {
+    const localMessage = createLocalMessage({
+      sender: currentUser!,
+      content,
+      contentEnglish,
+      language,
+    });
+    addReply(localMessage);
     mutate({
       repliedMessageId: message._id,
       message: {
@@ -56,7 +63,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
         sender: currentUser!,
         media: images,
       });
-      // addMessage(localImageMessage);
+      addReply(localImageMessage);
       setLocalImageMessageWaiting(localImageMessage);
     }
     if (documents.length) {
@@ -65,7 +72,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
           sender: currentUser!,
           media: [doc],
         });
-        // addMessage(localDocumentMessage);
+        addReply(localDocumentMessage);
         return localDocumentMessage;
       });
       setLocalDocumentMessagesWaiting(localDocumentMessages);

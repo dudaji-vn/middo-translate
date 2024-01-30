@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, useContext, useEffect, useRef } from 'react';
 import { messageApi } from '../../messages/api';
 import { DiscussionForm } from './discussion-form';
@@ -18,6 +18,7 @@ type Props = {
 interface DiscussionContextProps {
   message: Message;
   replies: Message[];
+  addReply: (reply: Message) => void;
 }
 
 export const DiscussionContext = createContext<DiscussionContextProps>(
@@ -25,19 +26,25 @@ export const DiscussionContext = createContext<DiscussionContextProps>(
 );
 
 const Discussion = ({ messageId }: Props) => {
+  const messageBoxRef = useRef<HTMLDivElement>(null);
+
   const { data } = useQuery({
     queryKey: ['message', messageId],
     queryFn: () => messageApi.getOne(messageId),
     enabled: !!messageId,
   });
+  const repliesKey = ['message-replies', messageId];
+  const queryClient = useQueryClient();
   const { data: messages } = useQuery({
-    queryKey: ['message-replies', messageId],
+    queryKey: repliesKey,
     queryFn: () => messageApi.getReplies(messageId),
     keepPreviousData: true,
     enabled: !!messageId,
   });
 
-  const messageBoxRef = useRef<HTMLDivElement>(null);
+  const addReply = (reply: Message) => {
+    queryClient.setQueryData(repliesKey, (old: any) => [...old, reply]);
+  };
 
   useEffect(
     () => {
@@ -55,9 +62,10 @@ const Discussion = ({ messageId }: Props) => {
           value={{
             message: data,
             replies: messages || [],
+            addReply,
           }}
         >
-          <MediaUploadDropzone>
+          <MediaUploadDropzone className='overflow-hidden" flex h-full flex-1 flex-col'>
             <div
               ref={messageBoxRef}
               className="flex flex-1 flex-col overflow-y-auto"

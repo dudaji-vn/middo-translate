@@ -10,7 +10,6 @@ import {
   MoreVertical,
   Phone,
   ScanText,
-  Subtitles,
   UserPlus2,
   UserPlus2Icon,
   Video,
@@ -23,7 +22,6 @@ import { useVideoCallContext } from '../context/video-call-context';
 import { useVideoCallStore } from '../store/video-call.store';
 import { useParticipantVideoCallStore } from '../store/participant.store';
 import { useMyVideoCallStore } from '../store/me.store';
-import ParticipantInVideoCall from '../interfaces/participant';
 import socket from '@/lib/socket-io';
 import { Button } from '@/components/actions';
 import {
@@ -38,6 +36,7 @@ import getStreamConfig from '../utils/get-stream-config';
 import toast from 'react-hot-toast';
 import SpeechRecognition from 'react-speech-recognition';
 import { useAppStore } from '@/stores/app.store';
+import { CallBottomChatButton } from './call-bottom-chat-button';
 
 export interface VideoCallBottomProps {}
 
@@ -152,7 +151,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
   }, [isMobile, setShowChat]);
   useEffect(() => {
     let numParticipant = participants.length;
-    if(numParticipant > 1 && isShowInvite) setShowInvite(false);
+    if (numParticipant > 1 && isShowInvite) setShowInvite(false);
   }, [isShowInvite, participants.length]);
   return (
     <section
@@ -207,15 +206,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button.Icon
-          variant="default"
-          size="xs"
-          color={isShowChat ? 'primary' : 'default'}
-          className={`${!isFullScreen ? 'hidden' : ''}`}
-          onClick={() => setShowChat(!isShowChat)}
-        >
-          <Subtitles />
-        </Button.Icon>
+        <CallBottomChatButton />
         <Button.Icon
           variant="default"
           size="xs"

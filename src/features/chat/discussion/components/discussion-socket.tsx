@@ -22,9 +22,9 @@ export const DiscussionSocket = (props: DiscussionSocketProps) => {
     });
 
     return () => {
-      // socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
-      // socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
       socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.LEAVE, messageId);
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.NEW);
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.UPDATE);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageId]);
