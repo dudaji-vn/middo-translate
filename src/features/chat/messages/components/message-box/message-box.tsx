@@ -18,6 +18,8 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
 import { TimeDisplay } from '../time-display';
+import { cn } from '@/utils/cn';
+import { useMediaUpload } from '@/components/media-upload';
 
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
@@ -125,7 +127,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
   }, [currentUserId, messagesGroup, room.participants]);
 
   return (
-    <div className="relative flex h-full w-full flex-1 overflow-hidden">
+    <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
       <InfiniteScroll
         hasMore={hasNextPage || false}
         onLoadMore={loadMoreMessages}

@@ -4,12 +4,12 @@ import { PlusCircleIcon, XIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import Image from 'next/image';
-import { useMessageEditorMedia } from './message-editor-media-context';
+import { useMediaUpload } from '@/components/media-upload';
 
 export interface MessageEditorMediaBarProps {}
 
 export const MessageEditorMediaBar = (props: MessageEditorMediaBarProps) => {
-  const { files, removeFile, open } = useMessageEditorMedia();
+  const { files, removeFile, open } = useMediaUpload();
   return (
     <AnimatePresence>
       {files.length > 0 && (
@@ -64,7 +64,7 @@ export const MessageEditorMediaBar = (props: MessageEditorMediaBarProps) => {
                     onClick={() => removeFile(file)}
                   >
                     <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
-                      <XIcon width={20} height={20} />
+                      <XIcon width={16} height={16} />
                     </div>
                   </button>
                 </motion.div>

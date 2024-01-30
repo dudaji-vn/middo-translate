@@ -7,6 +7,10 @@ import { MainMessage } from './main-message';
 import { RepliesBox } from './replies-box';
 import { Message } from '../../messages/types';
 import { MessageActions } from '../../messages/components/message-actions';
+import {
+  MediaUploadDropzone,
+  MediaUploadProvider,
+} from '@/components/media-upload';
 
 type Props = {
   messageId: string;
@@ -45,26 +49,28 @@ const Discussion = ({ messageId }: Props) => {
   );
   if (!data) return null;
   return (
-    <MessageActions>
-      <DiscussionContext.Provider
-        value={{
-          message: data,
-          replies: messages || [],
-        }}
-      >
-        <div className="flex h-full flex-1 flex-col overflow-hidden">
-          <div
-            ref={messageBoxRef}
-            className="flex flex-1 flex-col overflow-y-auto"
-          >
-            <MainMessage message={data} className="p-3" />
-            <RepliesBox />
-          </div>
-          <DiscussionForm />
-        </div>
-        <DiscussionSocket />
-      </DiscussionContext.Provider>
-    </MessageActions>
+    <MediaUploadProvider>
+      <MessageActions>
+        <DiscussionContext.Provider
+          value={{
+            message: data,
+            replies: messages || [],
+          }}
+        >
+          <MediaUploadDropzone>
+            <div
+              ref={messageBoxRef}
+              className="flex flex-1 flex-col overflow-y-auto"
+            >
+              <MainMessage message={data} className="p-3" />
+              <RepliesBox />
+            </div>
+            <DiscussionForm />
+          </MediaUploadDropzone>
+          <DiscussionSocket />
+        </DiscussionContext.Provider>
+      </MessageActions>
+    </MediaUploadProvider>
   );
 };
 
