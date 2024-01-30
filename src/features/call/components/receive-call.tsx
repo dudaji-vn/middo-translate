@@ -63,14 +63,14 @@ const ReceiveVideoCall = () => {
     return (
         <motion.div
             ref={constraintsRef}
-            className={`fixed inset-0 z-50 max-h-dvh bg-transparent pointer-events-none cursor-auto block ${requestCall.length > 0 ? 'block' : 'hidden'}`}
+            className={`fixed inset-0 z-[51] max-h-dvh bg-transparent pointer-events-none cursor-auto block ${requestCall.length > 0 ? 'block' : 'hidden'}`}
         >
             <motion.div
                 drag
                 dragConstraints={constraintsRef}
                 dragControls={controls}
                 dragMomentum={false}
-                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit md:rounded-xl md:w-[336px] md:bottom-4 md:left-4 shadow-glow`}
+                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-[252px]  md:rounded-xl md:w-[336px] md:bottom-4 md:left-4 shadow-glow`}
             >
                 <div className="md:rounded-xl overflow-hidden md:border md:border-primary-400 bg-white flex flex-col h-full w-full max-h-dvh">
                     <div className="py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing">
@@ -86,14 +86,14 @@ const ReceiveVideoCall = () => {
                         </Button.Icon>
                     </div>
                     <div className="relative flex flex-col flex-1 overflow-hidden">
-                        <div className="h-full relative p-3 flex justify-center flex-col">
+                        <div className="h-full relative p-3 flex justify-center flex-col flex-1 overflow-hidden">
                             <div className="flex gap-2 items-center justify-center">
                                 <Avatar
                                     size="lg"
                                     src={requestCall[0]?.call?.avatar || requestCall[0]?.user?.avatar || '/person.svg'}
                                     alt="avatar"
                                 />
-                                {requestCall[0]?.room?.participants?.length > 2 && <p>{requestCall[0]?.call?.name}</p>}
+                                {requestCall[0]?.room?.participants?.length > 2 && <p className="truncate">{requestCall[0]?.call?.name}</p>}
                             </div>
                             <p className="text-center mt-3"><strong>{requestCall[0]?.user?.name}</strong> is calling</p>
                         </div>
