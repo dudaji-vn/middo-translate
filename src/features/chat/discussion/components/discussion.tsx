@@ -65,7 +65,7 @@ const Discussion = ({ messageId }: Props) => {
             addReply,
           }}
         >
-          <MediaUploadDropzone>
+          <MediaUploadDropzone className='overflow-hidden" flex h-full flex-1 flex-col'>
             <div
               ref={messageBoxRef}
               className="flex flex-1 flex-col overflow-y-auto"
