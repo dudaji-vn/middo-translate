@@ -1,8 +1,8 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef } from 'react';
 
 import { Media } from '@/types';
-import { useMessageEditorMedia } from './message-editor-media-context';
 import { useMessageEditorText } from './message-editor-text-context';
+import { useMediaUpload } from '@/components/media-upload';
 
 export interface MessageEditorFormProps
   extends React.HTMLAttributes<HTMLFormElement> {
@@ -19,7 +19,7 @@ export const MessageEditorForm = forwardRef<
   HTMLFormElement,
   MessageEditorFormProps
 >(({ onFormSubmit, children, ...props }, ref) => {
-  const { getRootProps, files, reset } = useMessageEditorMedia();
+  const { files, reset } = useMediaUpload();
   const { focusInput } = useMessageEditorText();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,22 +51,9 @@ export const MessageEditorForm = forwardRef<
     });
   };
 
-  useEffect(() => {
-    focusInput();
-    const inputWrapper = document.getElementById(
-      'message-editor-input-wrapper',
-    );
-    if (files.length) {
-      inputWrapper?.style.setProperty('border-radius', '1.5rem');
-    } else {
-      inputWrapper?.style.setProperty('border-radius', '9999px');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [files.length]);
   return (
     <form
       {...props}
-      {...getRootProps()}
       onSubmit={handleSubmit}
       className="relative flex w-full flex-col gap-2"
     >
