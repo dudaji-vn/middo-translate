@@ -1,4 +1,3 @@
-import { SOCKET_CONFIG } from "@/configs/socket";
 import socket from "@/lib/socket-io";
 import { useEffect } from "react";
 import { useVideoCallStore } from "../../store/video-call.store";

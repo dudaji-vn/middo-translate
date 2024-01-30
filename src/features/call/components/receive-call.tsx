@@ -9,6 +9,7 @@ import { Avatar } from "@/components/data-display";
 import socket from "@/lib/socket-io";
 import { SOCKET_CONFIG } from "@/configs/socket";
 import { useAuthStore } from "@/stores/auth.store";
+import { useAppStore } from "@/stores/app.store";
 
 const ReceiveVideoCall = () => {
     const constraintsRef = useRef<HTMLDivElement>(null)
@@ -16,6 +17,8 @@ const ReceiveVideoCall = () => {
     const { requestCall, removeRequestCall, addRequestCall, setRoom } = useVideoCallStore();
     const [audio, setAudio] = useState<HTMLAudioElement>();
     const { user: me } = useAuthStore();
+    const isMobile = useAppStore((state) => state.isMobile);
+
     const declineCall = () => {
         removeRequestCall();
     }
@@ -67,23 +70,23 @@ const ReceiveVideoCall = () => {
                 dragConstraints={constraintsRef}
                 dragControls={controls}
                 dragMomentum={false}
-                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit min-h-[252px] md:w-[336px] md:bottom-4 md:left-4 shadow-lg shadow-primary/500`}
+                className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-fit md:rounded-xl md:w-[336px] md:bottom-4 md:left-4 shadow-glow`}
             >
-                <div className="rounded-xl overflow-hidden border border-primary-400 bg-white flex flex-col h-full w-full shadow-2 shadow-primary-500/30 max-h-dvh">
-                    <div className={`py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing`}>
+                <div className="md:rounded-xl overflow-hidden md:border md:border-primary-400 bg-white flex flex-col h-full w-full max-h-dvh">
+                    <div className="py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing">
                         <Phone className="h-4 w-4 stroke-current" />
                         <span className="flex-1 font-semibold">{requestCall[0]?.call?.name}</span>
                         <Button.Icon
                             variant='default'
                             color='default'
-                            size='sm'
+                            size='xs'
                             onClick={declineCall}
                         >
                             <X />
                         </Button.Icon>
                     </div>
-                    <div className="relative flex flex-col h-[calc(100%-60px)]">
-                        <div className="h-full relative p-3">
+                    <div className="relative flex flex-col flex-1 overflow-hidden">
+                        <div className="h-full relative p-3 flex justify-center flex-col">
                             <div className="flex gap-2 items-center justify-center">
                                 <Avatar
                                     size="lg"
@@ -94,26 +97,28 @@ const ReceiveVideoCall = () => {
                             </div>
                             <p className="text-center mt-3"><strong>{requestCall[0]?.user?.name}</strong> is calling</p>
                         </div>
-                        <div className="p-3 flex gap-2">
+                        <div className="p-3 px-5 md:px-3 flex justify-between gap-2 pb-20 md:pb-3">
                             <Button
                                 onClick={declineCall}
-                                size="xs"
+                                size={isMobile ? "md" : 'xs'}
                                 color="error"
+                                shape={isMobile ? "default" : "square"}
                                 variant="default"
-                                startIcon={<PhoneOff />}
-                                className="flex-1"
+                                startIcon={<PhoneOff className="m-0 md:mr-1"/>}
+                                className="md:flex-1 p-5 md:px-3 md:py-2"
                             >
-                                Decline
+                                <span className="md:inline-block hidden">Decline</span>
                             </Button>
                             <Button
                                 onClick={acceptCall}
-                                size="xs"
+                                size={isMobile ? "md" : 'xs'}
                                 color="success"
+                                shape={isMobile ? "default" : "square"}
                                 variant="default"
-                                startIcon={<Phone />}
-                                className="flex-1"
+                                startIcon={<Phone className="m-0 md:mr-1"/>}
+                                className="md:flex-1 p-5 md:px-3 md:py-2"
                             >
-                                Accept
+                                <span className="md:inline-block hidden">Accept</span>
                             </Button>
                         </div>
                     </div>

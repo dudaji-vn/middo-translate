@@ -78,7 +78,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
             />
           </div>
           {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
-            <span className="truncate relative mt-2 block text-center leading-none w-full px-1">
+            <span className="truncate relative mt-2 block text-center leading-snug w-full px-1">
               { participant?.user?.name || ''}
             </span>
           )}
@@ -107,7 +107,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         {(!isPin || isGalleryView) && (
           <div className="pointer-events-none absolute bottom-1 w-full px-1">
             <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
-              <p className="truncate text-sm leading-none text-white px-1">
+              <p className="truncate text-sm leading-snug text-white px-1">
                 {participant.isMe
                   ? 'You'
                   : participant?.user?.name || ''}
@@ -126,7 +126,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
               'opacity-100',
           )}
         >
-          <p className="truncate text-sm leading-none text-white px-1">
+          <p className="truncate text-sm leading-snug text-white px-1">
             {participant.isMe
               ? 'You'
               : participant?.user?.name || ''}
