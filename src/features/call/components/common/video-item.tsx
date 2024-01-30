@@ -61,7 +61,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         ></div>
         <div
           className={twMerge(
-            'absolute left-1/2 top-1/2 flex max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center',
+            'absolute left-1/2 top-1/2 flex max-h-full w-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center',
             isTurnOnCamera ? 'pointer-events-none hidden cursor-none' : '',
           )}
         >
@@ -78,8 +78,8 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
             />
           </div>
           {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
-            <span className="relative mt-2 block text-center leading-none">
-              {trimLongName(participant?.user?.name) || ''}
+            <span className="truncate relative mt-2 block text-center leading-none w-full px-1">
+              { participant?.user?.name || ''}
             </span>
           )}
         </div>
@@ -104,13 +104,13 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           )}
         </div>
 
-        {!isPin && (
+        {(!isPin || isGalleryView) && (
           <div className="pointer-events-none absolute bottom-1 w-full px-1">
             <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
-              <p className="truncate text-sm leading-none text-white">
+              <p className="truncate text-sm leading-none text-white px-1">
                 {participant.isMe
                   ? 'You'
-                  : trimLongName(participant?.user?.name) || ''}
+                  : participant?.user?.name || ''}
                 {participant?.isShareScreen ? '  (Screen)' : ''}
               </p>
             </div>
@@ -118,7 +118,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         )}
         <div
           className={cn(
-            'pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/80 opacity-0',
+            'pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90 opacity-0',
             isPin &&
               !isPinDoodle &&
               isFullScreen &&
@@ -126,10 +126,10 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
               'opacity-100',
           )}
         >
-          <p className="truncate text-sm leading-none text-white">
+          <p className="truncate text-sm leading-none text-white px-1">
             {participant.isMe
               ? 'You'
-              : trimLongName(participant?.user?.name, 3) || ''}
+              : participant?.user?.name || ''}
             {participant?.isShareScreen ? '  (Screen)' : ''}
           </p>
         </div>

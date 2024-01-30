@@ -17,6 +17,7 @@ import {
 
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
+import toast from 'react-hot-toast';
 
 const firebaseConfig = {
   apiKey: NEXT_PUBLIC_FCM_API_KEY,
@@ -43,12 +44,14 @@ export const requestForToken = async () => {
 };
 
 export const deleteFCMToken = async () => {
+  console.log('deleteFCMToken');
   await deleteToken(messaging);
 };
-// export const onMessageListener = () =>
-//   new Promise((resolve) => {
-//     onMessage(messaging, (payload) => {
-//       console.log('payload', payload);
-//       resolve(payload);
-//     });
-//   });
+
+export const onMessageListener = () =>
+  new Promise((resolve) => {
+    onMessage(messaging, (payload) => {
+      toast.success(payload.data?.body || 'New message received!');
+      resolve(payload);
+    });
+  });

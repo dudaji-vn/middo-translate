@@ -13,7 +13,7 @@ import { createPeer } from "../../utils/peer-action.util";
 
 export default function useHandleStreamMyVideo() {
     const { user } = useAuthStore();
-    const { myStream, setMyStream, setShareScreenStream, setShareScreen } = useMyVideoCallStore();
+    const { myStream, setMyStream, setShareScreenStream, setShareScreen, setTurnOnCamera, setTurnOnMic } = useMyVideoCallStore();
     const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
     const { room: call, clearStateVideoCall } = useVideoCallStore();
     useEffect(() => {
@@ -29,6 +29,8 @@ export default function useHandleStreamMyVideo() {
             setMyStream(stream);
             setStreamForParticipant(stream, socket.id || '', false)
         }).catch((err: any) =>  {
+            setTurnOnCamera(false);
+            setTurnOnMic(false);
             toast.error("Can not access to your camera and mic!")
         })
 
@@ -45,7 +47,7 @@ export default function useHandleStreamMyVideo() {
             setMyStream(undefined);
             resetParticipants();
         };
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, call._id, call.roomId, setMyStream, setShareScreen, setShareScreenStream, user, setStreamForParticipant]);
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, call._id, call.roomId, setMyStream, setShareScreen, setShareScreenStream, user, setStreamForParticipant, setTurnOnCamera, setTurnOnMic]);
 
     // Add my stream to all participants
     useEffect(()=>{

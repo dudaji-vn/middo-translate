@@ -92,11 +92,11 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
             />
           </div>
         </div>
-      <div className="absolute bottom-1 left-1 flex items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
-        <span className="relative leading-none">
+      <div className="absolute bottom-1 left-1 max-w-[90%] flex items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
+        <span className="relative leading-none truncate">
           {participant?.isMe
             ? 'You'
-            : trimLongName(participant?.user?.name) || ''}
+            : participant?.user?.name || ''}
           {participant?.isShareScreen ? '  (Screen)' : ''}
         </span>
       </div>
