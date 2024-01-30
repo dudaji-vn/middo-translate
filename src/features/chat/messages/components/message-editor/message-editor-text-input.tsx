@@ -20,7 +20,7 @@ export const TextInput = forwardRef<
     inputDisabled,
   } = useMessageEditorText();
 
-  const { handlePasteFile } = useMediaUpload();
+  const { handlePasteFile, getInputProps } = useMediaUpload();
 
   const inputRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(
