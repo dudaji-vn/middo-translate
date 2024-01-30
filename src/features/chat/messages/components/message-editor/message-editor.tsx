@@ -9,7 +9,6 @@ import { FileWithUrl } from '@/hooks/use-select-files';
 import { Media } from '@/types';
 import { MessageEditorForm } from './message-editor-form';
 import { MessageEditorMediaBar } from './message-editor-media-bar';
-import { MessageEditorMediaProvider } from './message-editor-media-context';
 import { MessageEditorSubmitButton } from './message-editor-submit-button';
 import { MessageEditorTextProvider } from './message-editor-text-context';
 import { MessageEditorToolbar } from './message-editor-toolbar';
@@ -26,7 +25,6 @@ type SubmitData = {
 export interface MessageEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
   onSubmitValue?: (data: SubmitData) => void;
-  onFileUploaded?: (files: FileWithUrl[]) => void;
   disabledMedia?: boolean;
   scrollId?: string;
 }
@@ -36,10 +34,7 @@ export interface MessageEditorRef extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
-  (
-    { onSubmitValue, onFileUploaded, disabledMedia, scrollId, ...props },
-    ref,
-  ) => {
+  ({ onSubmitValue, disabledMedia, scrollId, ...props }, ref) => {
     const textInputRef = useRef<TextInputRef>(null);
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
@@ -103,25 +98,20 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     }));
 
     return (
-      <MessageEditorMediaProvider onFileUploaded={onFileUploaded}>
-        <MessageEditorTextProvider>
-          <MessageEditorForm id="message-editor" onFormSubmit={handleSubmit}>
-            <MessageEditorToolbar />
-            <div className="relative flex w-full items-center gap-2">
-              <div
-                id="message-editor-input-wrapper"
-                className="flex-1 items-center gap-2 rounded-full  border border-primary bg-card p-1 px-4 shadow-sm"
-              >
-                <div className="flex min-h-9 flex-1">
-                  <TextInput ref={textInputRef} />
-                </div>
-                <MessageEditorMediaBar />
+      <MessageEditorTextProvider>
+        <MessageEditorForm id="message-editor" onFormSubmit={handleSubmit}>
+          <MessageEditorToolbar />
+          <div className="relative flex w-full items-center gap-2">
+            <div className="flex-1 items-center gap-2 rounded-[1.5rem] border border-primary bg-card p-1 px-4 shadow-sm">
+              <div className="flex min-h-9 flex-1">
+                <TextInput ref={textInputRef} />
               </div>
-              <MessageEditorSubmitButton />
+              <MessageEditorMediaBar />
             </div>
-          </MessageEditorForm>
-        </MessageEditorTextProvider>
-      </MessageEditorMediaProvider>
+            <MessageEditorSubmitButton />
+          </div>
+        </MessageEditorForm>
+      </MessageEditorTextProvider>
     );
   },
 );
