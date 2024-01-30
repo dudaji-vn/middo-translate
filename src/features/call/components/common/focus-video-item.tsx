@@ -93,7 +93,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
           </div>
         </div>
       <div className="absolute bottom-1 left-1 max-w-[90%] flex items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
-        <span className="relative leading-none truncate">
+        <span className="relative leading-snug truncate">
           {participant?.isMe
             ? 'You'
             : participant?.user?.name || ''}

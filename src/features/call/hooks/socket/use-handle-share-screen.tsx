@@ -90,7 +90,6 @@ export default function useHandleShareScreen() {
     }, [room?._id])
 
     const stopShareScreen = useCallback(() => {
-        console.log('Stop share screen')
         if (!socket.id) return;
         if (shareScreenStream) {
             shareScreenStream.getTracks().forEach((track: any) => {
@@ -154,9 +153,12 @@ export default function useHandleShareScreen() {
         //     stopShareScreen();
         // };
         shareScreenStream.addEventListener('inactive', handleEnd)
+        shareScreenStream.getVideoTracks()[0].addEventListener('ended', handleEnd)
         return () => {
-            if(handleEnd)
-            shareScreenStream.removeEventListener('inactive', handleEnd)
+            if(handleEnd) {
+                shareScreenStream.removeEventListener('inactive', handleEnd)
+                shareScreenStream.getVideoTracks()[0].removeEventListener('ended', handleEnd)
+            }
         }
     }, [shareScreenStream, stopShareScreen])
     return {
