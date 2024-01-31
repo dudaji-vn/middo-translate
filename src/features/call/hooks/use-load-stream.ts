@@ -12,7 +12,7 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
     useEffect(() => {
         if(!elementRef.current || !participant) return;
         if(!participant.stream) return;
-        const isMicOn = !participant.stream.getAudioTracks()[0]?.enabled || false;
+        const isMicOn = participant.stream.getAudioTracks()[0]?.enabled || false;
         const isCamOn = participant.stream.getVideoTracks()[0]?.enabled || false;
         let tempStream = new MediaStream();
         if(participant.isMe) {
@@ -30,16 +30,34 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
         setStreamVideo(tempStream)
         setTurnOnMic(isMicOn)
         setIsTurnOnCamera(isCamOn)
-        elementRef.current.addEventListener('loadedmetadata', () => {
+
+        const loadMetadataSuccess = () => {
             setIsLoaded(true)
-        })
+        }
+        
         // Add event stop for stream
-        if(participant.stream.getVideoTracks()[0]) {
-            tempStream.getVideoTracks()[0].onended = () => {
-                setIsTurnOnCamera(false)
-            }
+        const handleVideoTrackEnded = () => {
+            setIsTurnOnCamera(false)
+        }
+        const elementRefCurrent = elementRef.current;
+        elementRef.current.addEventListener('loadedmetadata', loadMetadataSuccess)
+        
+        tempStream.addEventListener('inactive', handleVideoTrackEnded)
+        if(tempStream.getVideoTracks()[0]) {
+            tempStream.getVideoTracks()[0].addEventListener('ended', handleVideoTrackEnded)
         }
         elementRef.current.play().then(()=>{}).catch(()=>{})
+
+        return () => {
+            if(elementRefCurrent) {
+                elementRefCurrent.removeEventListener('loadedmetadata', loadMetadataSuccess)
+            }
+            tempStream.removeEventListener('inactive', handleVideoTrackEnded)
+            if(tempStream?.getVideoTracks()[0]) {
+                tempStream.getVideoTracks()[0].removeEventListener('ended', handleVideoTrackEnded)
+            }
+        }
+        
     }, [elementRef, participant, removeParticipant, setStreamForParticipant])
     return {
         streamVideo,

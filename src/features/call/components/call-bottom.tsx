@@ -37,6 +37,8 @@ import toast from 'react-hot-toast';
 import SpeechRecognition from 'react-speech-recognition';
 import { useAppStore } from '@/stores/app.store';
 import { CallBottomChatButton } from './call-bottom-chat-button';
+import { encoderData } from '../utils/text-decoder-encoder';
+import debounce from '@/utils/debounce';
 
 export interface VideoCallBottomProps {}
 
@@ -93,14 +95,8 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
   const changeLayout = () => {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
   };
-
-  const handleChangeCameraOrMic = ({
-    video,
-    audio,
-  }: {
-    video: boolean;
-    audio: boolean;
-  }) => {
+  const handleChangeCameraOrMic = debounce(({ video, audio }: { video: boolean; audio: boolean}) => {
+    console.log('rinnnn')
     if (!socket.id) return;
     if (!myStream) return;
     if (!audio) {
@@ -113,7 +109,20 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
       return;
     }
     myStream.getTracks().forEach((track) => track.stop());
-    if (!video && !audio) return;
+    if (!video && !audio) {
+      let newUserMedia = new MediaStream();
+      setStreamForParticipant(newUserMedia, socket.id || '', false);
+      participants.forEach((participant) => {
+        if (participant.peer) {
+          let data = {
+            type: 'STOP_STREAM',
+            payload: null,
+          };
+          participant.peer.send(encoderData(data));
+        }
+      });
+      return;
+    }
     const streamConfig = getStreamConfig(video, audio);
     navigator.mediaDevices
       .getUserMedia({ ...streamConfig })
@@ -131,7 +140,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
         setTurnOnCamera(false);
         setTurnOnMic(false);
       });
-  };
+  }, 2000);
   const onToggleCamera = () => {
     setTurnOnCamera(!isTurnOnCamera);
     handleChangeCameraOrMic({

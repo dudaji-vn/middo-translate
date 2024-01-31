@@ -63,7 +63,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         ></div>
       <video
         ref={videoRef}
-        className="relative h-full w-full object-contain"
+        className={twMerge('relative h-full w-full object-contain', isTurnOnCamera ? '' : 'hidden')}
         autoPlay
         muted
         playsInline
@@ -80,7 +80,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       {/* Overlay name */}
       <div
           className={twMerge(
-            'absolute left-1/2 top-1/2 flex max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center w-full h-full',
+            'absolute left-1/2 top-1/2 flex max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center w-full h-full bg-neutral-50',
             isTurnOnCamera ? 'pointer-events-none hidden cursor-none' : '',
           )}
         >

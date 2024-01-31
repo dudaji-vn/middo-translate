@@ -75,7 +75,7 @@ const ReceiveVideoCall = () => {
                 <div className="md:rounded-xl overflow-hidden md:border md:border-primary-400 bg-white flex flex-col h-full w-full max-h-dvh">
                     <div className="py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing">
                         <Phone className="h-4 w-4 stroke-current" />
-                        <span className="flex-1 font-semibold">{requestCall[0]?.call?.name}</span>
+                        <span className="flex-1 font-semibold truncate">{requestCall[0]?.call?.name}</span>
                         <Button.Icon
                             variant='default'
                             color='default'
@@ -97,7 +97,7 @@ const ReceiveVideoCall = () => {
                             </div>
                             <p className="text-center mt-3"><strong>{requestCall[0]?.user?.name}</strong> is calling</p>
                         </div>
-                        <div className="p-3 px-5 md:px-3 flex justify-between gap-2 pb-20 md:pb-3">
+                        <div className="p-3 flex justify-around gap-2 pb-20 md:pb-3">
                             <Button
                                 onClick={declineCall}
                                 size={isMobile ? "md" : 'xs'}
