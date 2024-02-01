@@ -46,7 +46,7 @@ const DoodleItem = ({}: DoodleItemProps) => {
         </div>
         {!isPinDoodle && <div className="pointer-events-none absolute bottom-1 w-full px-1">
           <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
-            <p className="truncate px-1 text-sm leading-none text-white">
+            <p className="truncate px-1 text-sm leading-snug text-white">
               Doodle
             </p>
           </div>
@@ -60,7 +60,7 @@ const DoodleItem = ({}: DoodleItemProps) => {
               'opacity-100',
           )}
         >
-          <p className="truncate text-sm leading-none text-white">Doodle</p>
+          <p className="truncate text-sm leading-snug text-white">Doodle</p>
         </div>
       </div>
     </section>

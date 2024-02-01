@@ -10,9 +10,10 @@ import useLoadStream from '../../hooks/use-load-stream';
 import { useParticipantVideoCallStore } from '../../store/participant.store';
 import { useVideoCallStore } from '../../store/video-call.store';
 import trimLongName from '../../utils/trim-long-name.util';
+import ParticipantInVideoCall from '../../interfaces/participant';
 
 interface VideoItemProps {
-  participant?: any;
+  participant: ParticipantInVideoCall;
   size?: 'sm' | 'md' | 'lg';
   isGalleryView?: boolean;
 }
@@ -30,13 +31,12 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   // useCalcLayoutItem(itemRef, participants?.length);
   const { isFullScreen, setFullScreen, setPinShareScreen, setPinDoodle } =
     useVideoCallStore();
-
   const expandVideoItem = () => {
     if (!isFullScreen) setFullScreen(true);
     setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
     if (participant.isShareScreen) setPinShareScreen(true);
     setPinDoodle(false);
-    pinParticipant(participant.socketId, participant.isShareScreen);
+    pinParticipant(participant.socketId, participant.isShareScreen || false);
   };
   return (
     <section
@@ -78,8 +78,8 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
             />
           </div>
           {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
-            <span className="truncate relative mt-2 block text-center leading-none w-full px-1">
-              { participant?.user?.name || ''}
+            <span className="relative mt-2 block w-full truncate px-1 text-center leading-snug">
+              {participant?.user?.name || ''}
             </span>
           )}
         </div>
@@ -107,10 +107,8 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         {(!isPin || isGalleryView) && (
           <div className="pointer-events-none absolute bottom-1 w-full px-1">
             <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
-              <p className="truncate text-sm leading-none text-white px-1">
-                {participant.isMe
-                  ? 'You'
-                  : participant?.user?.name || ''}
+              <p className="truncate px-1 text-sm leading-snug text-white">
+                {participant.isMe ? 'You' : participant?.user?.name || ''}
                 {participant?.isShareScreen ? '  (Screen)' : ''}
               </p>
             </div>
@@ -126,10 +124,8 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
               'opacity-100',
           )}
         >
-          <p className="truncate text-sm leading-none text-white px-1">
-            {participant.isMe
-              ? 'You'
-              : participant?.user?.name || ''}
+          <p className="truncate px-1 text-sm leading-snug text-white">
+            {participant.isMe ? 'You' : participant?.user?.name || ''}
             {participant?.isShareScreen ? '  (Screen)' : ''}
           </p>
         </div>
