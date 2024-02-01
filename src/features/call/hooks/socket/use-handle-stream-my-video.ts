@@ -12,7 +12,7 @@ import { createPeer } from "../../utils/peer-action.util";
 
 export default function useHandleStreamMyVideo() {
     const { user } = useAuthStore();
-    const { myStream, setMyStream, setShareScreenStream, setShareScreen, setTurnOnCamera, setTurnOnMic } = useMyVideoCallStore();
+    const { myStream, setMyStream, setShareScreenStream, setShareScreen, setTurnOnCamera, setTurnOnMic, setLoadingVideo } = useMyVideoCallStore();
     const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
     const { room: call, clearStateVideoCall } = useVideoCallStore();
     useEffect(() => {
@@ -21,15 +21,17 @@ export default function useHandleStreamMyVideo() {
         if (!DEFAULT_USER_CALL_STATE.isTurnOnCamera && !DEFAULT_USER_CALL_STATE.isTurnOnMic) return;
         const navigator = window.navigator as any;
         const streamConfig = getStreamConfig(DEFAULT_USER_CALL_STATE.isTurnOnCamera, DEFAULT_USER_CALL_STATE.isTurnOnMic)
-
+        setLoadingVideo(true);
         // Start get streaming
         navigator.mediaDevices.getUserMedia({...streamConfig}).then((stream: MediaStream) => {
             myVideoStream = stream;
             setMyStream(stream);
             setStreamForParticipant(stream, socket.id || '', false)
+            setLoadingVideo(false);
         }).catch((err: any) =>  {
             setTurnOnCamera(false);
             setTurnOnMic(false);
+            setLoadingVideo(false);
             toast.error("Can not access to your camera and mic!")
         })
 
@@ -46,7 +48,7 @@ export default function useHandleStreamMyVideo() {
             setMyStream(undefined);
             resetParticipants();
         };
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, call._id, call.roomId, setMyStream, setShareScreen, setShareScreenStream, user, setStreamForParticipant, setTurnOnCamera, setTurnOnMic]);
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, call._id, call.roomId, setMyStream, setShareScreen, setShareScreenStream, user, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, setLoadingVideo]);
 
     // Add my stream to all participants
     useEffect(()=>{
