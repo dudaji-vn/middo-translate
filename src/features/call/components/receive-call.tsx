@@ -72,7 +72,7 @@ const ReceiveVideoCall = () => {
                 dragMomentum={false}
                 className={`pointer-events-auto cursor-auto absolute w-full h-full md:h-[252px]  md:rounded-xl md:w-[336px] md:bottom-4 md:left-4 shadow-glow`}
             >
-                <div className="md:rounded-xl overflow-hidden md:border md:border-primary-400 bg-white flex flex-col h-full w-full max-h-dvh">
+                <div className="md:rounded-xl overflow-hidden md:border md:border-primary-400 bg-primary-100 flex flex-col h-full w-full max-h-dvh">
                     <div className="py-2 pr-1 pl-3 flex items-center text-primary gap-1 bg-primary-100 md:cursor-grab md:active:cursor-grabbing">
                         <Phone className="h-4 w-4 stroke-current" />
                         <span className="flex-1 font-semibold truncate">{requestCall[0]?.call?.name}</span>
@@ -89,7 +89,7 @@ const ReceiveVideoCall = () => {
                         <div className="h-full relative p-3 flex justify-center flex-col flex-1 overflow-hidden">
                             <div className="flex gap-2 items-center justify-center">
                                 <Avatar
-                                    size="lg"
+                                    size={isMobile ? "4xl" : 'lg'}
                                     src={requestCall[0]?.call?.avatar || requestCall[0]?.user?.avatar || '/person.svg'}
                                     alt="avatar"
                                 />
@@ -105,7 +105,7 @@ const ReceiveVideoCall = () => {
                                 shape={isMobile ? "default" : "square"}
                                 variant="default"
                                 startIcon={<PhoneOff className="m-0 md:mr-1"/>}
-                                className="md:flex-1 p-5 md:px-3 md:py-2"
+                                className="md:flex-1 p-7 md:px-3 md:py-2"
                             >
                                 <span className="md:inline-block hidden">Decline</span>
                             </Button>
@@ -116,7 +116,7 @@ const ReceiveVideoCall = () => {
                                 shape={isMobile ? "default" : "square"}
                                 variant="default"
                                 startIcon={<Phone className="m-0 md:mr-1"/>}
-                                className="md:flex-1 p-5 md:px-3 md:py-2"
+                                className="md:flex-1 p-7 md:px-3 md:py-2"
                             >
                                 <span className="md:inline-block hidden">Accept</span>
                             </Button>
