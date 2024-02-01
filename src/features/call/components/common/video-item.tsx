@@ -1,4 +1,4 @@
-import { Fullscreen } from 'lucide-react';
+import { Fullscreen, MicOff } from 'lucide-react';
 import { memo, useRef } from 'react';
 
 import { Avatar } from '@/components/data-display';
@@ -79,7 +79,8 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           </div>
           {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
             <span className="relative mt-2 block w-full truncate px-1 text-center leading-snug">
-              {participant?.user?.name || ''}
+              {participant.isMe ? 'You' : participant?.user?.name || ''}
+              {participant?.isShareScreen ? '  (Screen)' : ''}
             </span>
           )}
         </div>
@@ -129,6 +130,12 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
             {participant?.isShareScreen ? '  (Screen)' : ''}
           </p>
         </div>
+
+        {/* Mic Status */}
+        {/* {!isTurnOnMic && 
+        <div className='absolute bottom-0 right-0 w-6 h-6 rounded-full bg-neutral-50 p-1'>
+          <MicOff className='w-4 h-4 text-error-500 stroke-error-500 bg-neutral-100 rounded-full p-[1px]' />
+        </div>} */}
       </div>
     </section>
   );
