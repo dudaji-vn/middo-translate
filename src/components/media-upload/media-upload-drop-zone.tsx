@@ -10,8 +10,7 @@ export const MediaUploadDropzone = ({
 }: PropsWithChildren & {
   className?: string;
 }) => {
-  const { files, getRootProps, isDragActive, getInputProps } = useMediaUpload();
-  console.log('files', files);
+  const { getRootProps, isDragActive, getInputProps } = useMediaUpload();
   return (
     <div
       {...getRootProps()}

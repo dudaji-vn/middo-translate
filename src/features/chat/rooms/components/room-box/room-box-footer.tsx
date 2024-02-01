@@ -128,7 +128,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     }, [localImageMessageWaiting, uploadedFiles, room?._id]);
 
     useEffect(() => {
-      if (!localDocumentMessagesWaiting.length || uploadedFiles.length) return;
+      if (!localDocumentMessagesWaiting.length || !uploadedFiles.length) return;
       const localDocumentMessages = localDocumentMessagesWaiting;
       const documentsUploaded: Media[][] = localDocumentMessages.map(
         (message) => {
