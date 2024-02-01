@@ -32,18 +32,16 @@ export const RoomModalLeave = (props: RoomModalLeaveProps) => {
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to leave this room?
-          </AlertDialogTitle>
+          <AlertDialogTitle>Leave group?</AlertDialogTitle>
           <AlertDialogDescription>
-            You will lose all of your messages and files in this room.
+            You will lose all of your messages and files. Others still can see
+            your messages. Are you sure to leave?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
           <AlertDialogAction
             type="submit"
-            className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
             onClick={() => {
               mutateAsync(props.id);
             }}
