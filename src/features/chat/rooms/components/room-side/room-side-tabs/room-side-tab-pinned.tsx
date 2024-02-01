@@ -15,7 +15,11 @@ import { Message } from '@/features/chat/messages/types';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
-import { MoreVerticalIcon, PinIcon } from 'lucide-react';
+import {
+  MessageSquareDashedIcon,
+  MoreVerticalIcon,
+  PinIcon,
+} from 'lucide-react';
 import { cloneElement, useMemo } from 'react';
 import { useGetPinnedMessages } from '../../../hooks/use-get-pinned-messages';
 import { useRoomId } from '../../../hooks/use-roomId';
@@ -37,6 +41,14 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
         icon={<PinIcon />}
         onBack={changeToDefault}
       >
+        {!data?.length && (
+          <div className="flex h-full flex-col items-center  justify-center bg-white/80 backdrop-blur-lg">
+            <MessageSquareDashedIcon className="mb-4 size-16 text-[#c5dcfa]" />
+            <span className="w-[72%] text-center text-sm font-light">
+              There are no pinned messages yet. Pin a message to show it here.
+            </span>
+          </div>
+        )}
         <div className="flex w-full flex-col divide-y divide-neutral-100  overflow-hidden">
           {data?.map((pin) => {
             const isMe = pin.pinnedBy._id === currentUserId;

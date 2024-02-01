@@ -125,7 +125,7 @@ export const RepliesBox = () => {
           </div>
         </div>
       )}
-      <div className="flex-1 p-3">
+      <div className="flex flex-1 flex-col gap-2 p-3">
         {messagesGroup.map((group, index) => {
           const timeDiff = moment(moment(group.lastMessage.createdAt)).diff(
             messagesGroup[index + 1]?.messages[0].createdAt ?? moment(),
