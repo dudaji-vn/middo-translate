@@ -8,6 +8,8 @@ import { cn } from '@/utils/cn';
 import { twMerge } from 'tailwind-merge';
 import { Avatar } from '@/components/data-display';
 import useAudioLevel from '../../hooks/use-audio-level';
+import { Spinner } from '@/components/feedback';
+import { useMyVideoCallStore } from '../../store/me.store';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -16,6 +18,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const parentRef = useRef<HTMLElement>(null);
   const { streamVideo, isTurnOnCamera } = useLoadStream(participant, videoRef);
   const { isTalk } = useAudioLevel(streamVideo);
+  const { isLoadingVideo } = useMyVideoCallStore();
   useFitRatio(videoRef, parentRef);
 
   const fullScreenVideo = () => {
@@ -51,55 +54,66 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       ref={parentRef}
       className={cn(
         'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-900 transition-all',
-        isTurnOnCamera ? 'bg-neutral-900' : 'bg-neutral-50'
+        isTurnOnCamera ? 'bg-neutral-900' : 'bg-neutral-50',
         // isShowChat && 'h-[200px] md:h-full',
       )}
     >
       <div
-          className={twMerge(
-            'absolute inset-0 rounded-xl border-4 border-primary transition-all z-10 pointer-events-none',
-            isTalk ? 'opacity-100' : 'opacity-0',
-          )}
-        ></div>
+        className={twMerge(
+          'pointer-events-none absolute inset-0 z-10 rounded-xl border-4 border-primary transition-all',
+          isTalk ? 'opacity-100' : 'opacity-0',
+        )}
+      ></div>
       <video
         ref={videoRef}
-        className={twMerge('relative h-full w-full object-contain', isTurnOnCamera ? '' : 'hidden')}
+        className={twMerge(
+          'relative h-full w-full object-contain',
+          isTurnOnCamera ? '' : 'hidden',
+        )}
         autoPlay
         muted
         playsInline
         controls={false}
       ></video>
       {/* Overlay black gradient from bottom to top */}
-      { isTurnOnCamera && <div className="absolute bottom-0 left-0 right-0 top-1/2 hidden items-end justify-end bg-gradient-to-t p-3 transition-all md:flex md:hover:from-black/70">
-        <Maximize
-          className="h-5 w-5 cursor-pointer stroke-white"
-          onClick={fullScreenVideo}
-        />
-      </div> }
-    
+      {isTurnOnCamera && (
+        <div className="absolute bottom-0 left-0 right-0 top-1/2 hidden items-end justify-end bg-gradient-to-t p-3 transition-all md:flex md:hover:from-black/70">
+          <Maximize
+            className="h-5 w-5 cursor-pointer stroke-white"
+            onClick={fullScreenVideo}
+          />
+        </div>
+      )}
+
       {/* Overlay name */}
       <div
-          className={twMerge(
-            'absolute left-1/2 top-1/2 flex max-h-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center w-full h-full bg-neutral-50',
-            isTurnOnCamera ? 'pointer-events-none hidden cursor-none' : '',
-          )}
-        >
-          <div className='aspect-square max-w-[90%] w-40'>
-            <Avatar
-              className="h-full w-full bg-neutral-900 object-cover"
-              src={participant?.user?.avatar || '/person.svg'}
-              alt={participant?.user?.name || 'Anonymous'}
-            />
-          </div>
+        className={twMerge(
+          'absolute left-1/2 top-1/2 flex h-full max-h-full w-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center bg-neutral-50',
+          isTurnOnCamera ? 'pointer-events-none hidden cursor-none' : '',
+        )}
+      >
+        <div className="aspect-square w-40 max-w-[90%]">
+          <Avatar
+            className="h-full w-full bg-neutral-900 object-cover"
+            src={participant?.user?.avatar || '/person.svg'}
+            alt={participant?.user?.name || 'Anonymous'}
+          />
         </div>
-      <div className="absolute bottom-1 left-1 max-w-[90%] flex items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
-        <span className="relative leading-snug truncate">
-          {participant?.isMe
-            ? 'You'
-            : participant?.user?.name || ''}
+      </div>
+      {/*  */}
+      <div className="absolute bottom-1 left-1 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white z-10">
+        <span className="relative truncate leading-snug">
+          {participant?.isMe ? 'You' : participant?.user?.name || ''}
           {participant?.isShareScreen ? '  (Screen)' : ''}
         </span>
       </div>
+
+      {/* Video Loading */}
+      {isLoadingVideo && participant.isMe && !participant.isShareScreen && (
+          <div className="absolute inset-0 flex items-center justify-center bg-neutral-800">
+            <Spinner className="text-white"></Spinner>
+          </div>
+        )}
     </section>
   );
 };
