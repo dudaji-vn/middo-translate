@@ -140,7 +140,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
 
         {/* Video Loading */}
         {isLoadingVideo && participant.isMe && !participant.isShareScreen && (
-          <div className="absolute inset-0 flex items-center justify-center bg-neutral-800">
+          <div className="absolute inset-0 flex items-center justify-center bg-neutral-800 pointer-events-none">
             <Spinner className="text-white"></Spinner>
           </div>
         )}
