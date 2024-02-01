@@ -81,6 +81,7 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
               <SearchInput
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search"
+                autoFocus
               />
               <SelectedList
                 items={selectedUsers}

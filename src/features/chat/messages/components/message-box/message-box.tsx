@@ -134,7 +134,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
         isFetching={isFetching}
         ref={ref}
         id="inbox-list"
-        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2 overflow-y-scroll px-3 pb-2 md:px-5"
+        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2 overflow-y-scroll px-2 pb-2 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
