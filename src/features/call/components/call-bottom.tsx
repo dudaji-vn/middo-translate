@@ -54,6 +54,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
   } = useMyVideoCallStore();
   const { participants, setStreamForParticipant } =
     useParticipantVideoCallStore();
+  const { isLoadingVideo, setLoadingVideo} = useMyVideoCallStore();
   const {
     isDoodle,
     isMeDoole,
@@ -62,7 +63,6 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
     isFullScreen,
     isPinShareScreen,
     setLayout,
-    isShowChat,
     setShowChat,
     isShowCaption,
     setShowCaption,
@@ -95,8 +95,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
   const changeLayout = () => {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
   };
-  const handleChangeCameraOrMic = debounce(({ video, audio }: { video: boolean; audio: boolean}) => {
-    console.log('rinnnn')
+  const handleChangeCameraOrMic = ({ video, audio }: { video: boolean; audio: boolean}) => {
     if (!socket.id) return;
     if (!myStream) return;
     if (!audio) {
@@ -108,6 +107,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
       });
       return;
     }
+    setLoadingVideo(true);
     myStream.getTracks().forEach((track) => track.stop());
     if (!video && !audio) {
       let newUserMedia = new MediaStream();
@@ -121,6 +121,7 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
           participant.peer.send(encoderData(data));
         }
       });
+      setLoadingVideo(false);
       return;
     }
     const streamConfig = getStreamConfig(video, audio);
@@ -134,13 +135,15 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
         }
         setStreamForParticipant(stream, socket.id || '', false);
         setMyStream(stream);
+        setLoadingVideo(false);
       })
       .catch(() => {
         toast.error('Can not access to your camera or mic');
         setTurnOnCamera(false);
         setTurnOnMic(false);
+        setLoadingVideo(false);
       });
-  }, 2000);
+  };
   const onToggleCamera = () => {
     setTurnOnCamera(!isTurnOnCamera);
     handleChangeCameraOrMic({

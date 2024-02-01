@@ -11,6 +11,8 @@ import { useParticipantVideoCallStore } from '../../store/participant.store';
 import { useVideoCallStore } from '../../store/video-call.store';
 import trimLongName from '../../utils/trim-long-name.util';
 import ParticipantInVideoCall from '../../interfaces/participant';
+import { Spinner } from '@/components/feedback';
+import { useMyVideoCallStore } from '../../store/me.store';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -24,6 +26,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
     participant,
     videoRef,
   );
+  const { isLoadingVideo } = useMyVideoCallStore();
   const { isTalk } = useAudioLevel(streamVideo);
   const { pinParticipant } = useParticipantVideoCallStore();
   const { setLayout, layout, isPinDoodle } = useVideoCallStore();
@@ -92,6 +95,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           playsInline
           controls={false}
         ></video>
+        {/* Expand video */}
         <div
           className={cn(
             'absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-1 bg-black/80 text-white opacity-0 transition-all',
@@ -105,8 +109,9 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           )}
         </div>
 
+        {/* Text Bottom */}
         {(!isPin || isGalleryView) && (
-          <div className="pointer-events-none absolute bottom-1 w-full px-1">
+          <div className="pointer-events-none absolute bottom-1 w-full px-1 z-10">
             <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
               <p className="truncate px-1 text-sm leading-snug text-white">
                 {participant.isMe ? 'You' : participant?.user?.name || ''}
@@ -115,6 +120,8 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
             </div>
           </div>
         )}
+
+        {/* Text overlay focus view when pin */}
         <div
           className={cn(
             'pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90 opacity-0',
@@ -130,6 +137,13 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
             {participant?.isShareScreen ? '  (Screen)' : ''}
           </p>
         </div>
+
+        {/* Video Loading */}
+        {isLoadingVideo && participant.isMe && !participant.isShareScreen && (
+          <div className="absolute inset-0 flex items-center justify-center bg-neutral-800">
+            <Spinner className="text-white"></Spinner>
+          </div>
+        )}
 
         {/* Mic Status */}
         {/* {!isTurnOnMic && 
