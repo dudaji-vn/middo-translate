@@ -37,7 +37,7 @@ export const SelectedList = ({ items, onItemClick }: SelectedListProps) => {
             height: 0,
           }}
           ref={selectedRef}
-          className="flex max-w-[480px] gap-8 overflow-x-auto overflow-y-hidden"
+          className="flex max-w-[460px] gap-8 overflow-x-auto overflow-y-hidden"
         >
           <AnimatePresence>
             {items.map((user) => (

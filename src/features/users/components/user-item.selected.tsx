@@ -9,7 +9,6 @@ type UserSelectedItemProps = {
 };
 
 export const UserSelectedItem = ({ user, onClick }: UserSelectedItemProps) => {
-  const name = user.name.split(' ')[0];
   return (
     <div
       onClick={onClick}
@@ -27,7 +26,7 @@ export const UserSelectedItem = ({ user, onClick }: UserSelectedItemProps) => {
           <XIcon className="size-3.5" />
         </div>
       </div>
-      <Typography className="truncate">{name}</Typography>
+      <Typography className="truncate">{user.name}</Typography>
     </div>
   );
 };
