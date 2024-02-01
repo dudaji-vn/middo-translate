@@ -1,16 +1,15 @@
 import { useMemo } from 'react';
 import { InboxType } from '../inbox/inbox';
 import { RoomItem } from '../room-item';
-import { useGetPinnedRooms } from '@/features/chat/rooms/hooks/use-pin-room';
+import { Room } from '../../types';
 
 export interface PinnedRoomProps {
   currentRoomId?: string;
   type: InboxType;
+  rooms?: Room[];
 }
 
-export const PinnedRoom = ({ currentRoomId, type }: PinnedRoomProps) => {
-  const { rooms } = useGetPinnedRooms();
-
+export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
   const filteredRooms = useMemo(() => {
     if (!rooms) return [];
     return rooms.filter((room) => {

@@ -16,7 +16,10 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import useStore from '@/stores/use-store';
 import { PinnedRoom } from '../pinned-room';
 import { useQueryClient } from '@tanstack/react-query';
-import { USE_GET_PINNED_ROOMS_KEY } from '@/features/chat/rooms/hooks/use-pin-room';
+import {
+  USE_GET_PINNED_ROOMS_KEY,
+  useGetPinnedRooms,
+} from '@/features/chat/rooms/hooks/use-pin-room';
 
 interface InboxListProps {
   type: InboxType;
@@ -45,6 +48,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       queryFn: ({ pageParam }) =>
         roomApi.getRooms({ cursor: pageParam, limit: 10, type }),
     });
+    const { rooms: pinnedRooms } = useGetPinnedRooms();
 
     const queryClient = useQueryClient();
 
@@ -85,7 +89,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     }, []);
 
     if (!currentUser) return null;
-    if (rooms.length === 0 && !isLoading) {
+    if (!rooms.length && !isLoading && !pinnedRooms?.length) {
       return (
         <div className="mt-10 bg-card px-4 text-center">
           <Typography variant="h3">Welcome to Middo conversation!</Typography>
@@ -112,7 +116,11 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             isFetching={isLoading}
             className="flex flex-col"
           >
-            <PinnedRoom type={type} currentRoomId={currentRoomId as string} />
+            <PinnedRoom
+              type={type}
+              rooms={pinnedRooms}
+              currentRoomId={currentRoomId as string}
+            />
             {rooms.map((room) => (
               <RoomItem
                 key={room._id}
