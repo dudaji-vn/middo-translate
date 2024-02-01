@@ -157,7 +157,13 @@ export const LanguagesControlBar = forwardRef<
           </Select>
         </div>
 
-        <Button.Icon onClick={handleSwap} variant="ghost" color="default">
+        <Button.Icon
+          size="xs"
+          onClick={handleSwap}
+          variant="ghost"
+          color="default"
+          className="mt-2"
+        >
           <ArrowRightLeftIcon className="text-text" />
         </Button.Icon>
         <div className="flex flex-1 justify-start">

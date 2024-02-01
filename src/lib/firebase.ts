@@ -51,7 +51,9 @@ export const deleteFCMToken = async () => {
 export const onMessageListener = () =>
   new Promise((resolve) => {
     onMessage(messaging, (payload) => {
-      toast.success(payload.data?.body || 'New message received!');
+      toast.success(payload.data?.body || 'New message received!', {
+        position: 'top-right',
+      });
       resolve(payload);
     });
   });
