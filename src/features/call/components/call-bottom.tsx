@@ -107,7 +107,10 @@ export const VideoCallBottom = ({}: VideoCallBottomProps) => {
       });
       return;
     }
-    setLoadingVideo(true);
+    if(video != isTurnOnCamera) {
+      setLoadingVideo(true);
+    }
+
     myStream.getTracks().forEach((track) => track.stop());
     if (!video && !audio) {
       let newUserMedia = new MediaStream();
