@@ -51,7 +51,7 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
           </div>
         )}
       </div>
-      <p className=" mt-3 font-medium">{room.name}</p>
+      <p className=" mt-3 text-center font-medium">{room.name}</p>
       {!room.isGroup ? (
         <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2">
           <CircleFlag
@@ -59,7 +59,7 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
             height={20}
             width={20}
           />
-          <span className="">{language.name}</span>
+          <span className="text-center">{language.name}</span>
         </div>
       ) : (
         <div className="mt-4 flex gap-6">
