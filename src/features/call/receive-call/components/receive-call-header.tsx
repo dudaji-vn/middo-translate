@@ -3,7 +3,7 @@
 import { Button } from '@/components/actions';
 import { Phone, X } from 'lucide-react';
 import { memo } from 'react';
-import { useVideoCallStore } from '../store/video-call.store';
+import { useVideoCallStore } from '../../store/video-call.store';
 
 const ReceiveVideoCallHeader = () => {
   const { requestCall, removeRequestCall } = useVideoCallStore();

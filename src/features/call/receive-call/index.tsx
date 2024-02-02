@@ -1,14 +1,13 @@
 'use client';
 
-import { useDragControls } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useVideoCallStore } from '../store/video-call.store';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useAuthStore } from '@/stores/auth.store';
-import ReceiveVideoCallHeader from './receive-call-header';
-import ReceiveVideoCallContent from './receive-call-content';
-import ReceiveVideoCallActions from './receive-call-actions';
+import ReceiveVideoCallHeader from './components/receive-call-header';
+import ReceiveVideoCallContent from './components/receive-call-content';
+import ReceiveVideoCallActions from './components/receive-call-actions';
 import CallDragable from '../components/call-dragable';
 import usePlayAudio from '../hooks/use-play-audio';
 
@@ -20,7 +19,7 @@ const ReceiveVideoCall = () => {
   const listenToCall = useCallback(
     ({ call, user }: any) => {
       if (user._id == me?._id) return;
-      const isHave = requestCall.find((item) => item.id == call.roomId);
+      const isHave = requestCall.find((item: any) => item.id == call.roomId);
       if (isHave) return;
       addRequestCall({ id: call.roomId, call, user });
     },
@@ -45,7 +44,7 @@ const ReceiveVideoCall = () => {
   if (requestCall.length === 0) return null;
 
   return (
-    <CallDragable>
+    <CallDragable className='md:h-[252px]'>
       <ReceiveVideoCallHeader />
       <div className="relative flex flex-1 flex-col overflow-hidden">
         <ReceiveVideoCallContent />

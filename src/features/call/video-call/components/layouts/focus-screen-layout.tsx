@@ -1,19 +1,15 @@
-import { Fragment, useMemo } from "react";
-import VideoItem from "../common/video-item";
-import { ScrollMenu } from "react-horizontal-scrolling-menu";
-import 'react-horizontal-scrolling-menu/dist/styles.css';
-import FocusVideoItem from "../common/focus-video-item";
-import { DoodleArea } from "../common/doodle-area";
-import { useVideoCallStore } from "../../store/video-call.store";
-import { useParticipantVideoCallStore } from "../../store/participant.store";
-import DoodleItem from "../common/doodle-item";
-import ParticipantInVideoCall from "../../interfaces/participant";
+import { useParticipantVideoCallStore } from "@/features/call/store/participant.store";
+import { useVideoCallStore } from "@/features/call/store/video-call.store";
+import DoodleItem from "../doodle/doodle-item";
+import ParticipantInVideoCall from "@/features/call/interfaces/participant";
+import VideoItem from "../video/video-item";
+import { DoodleArea } from "../doodle/doodle-area";
+import FocusVideoItem from "../video/focus-video-item";
 
-const FocusScreenView = () => {
+
+const FocusScreenLayout = () => {
     const { isDoodle, isPinDoodle } = useVideoCallStore();
     const { participants } = useParticipantVideoCallStore();
-
-
     return (
         <div className="relative flex w-full h-full p-1">
             <div className="flex flex-col w-full h-full gap-1">
@@ -47,4 +43,4 @@ const FocusScreenView = () => {
     );
 };
 
-export default FocusScreenView;
+export default FocusScreenLayout;

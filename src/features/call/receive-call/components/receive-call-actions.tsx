@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/actions';
 import { Phone, PhoneOff } from 'lucide-react';
-import { useVideoCallStore } from '../store/video-call.store';
+import { useVideoCallStore } from '../../store/video-call.store';
 import { useAppStore } from '@/stores/app.store';
 import { memo } from 'react';
 

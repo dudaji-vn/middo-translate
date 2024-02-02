@@ -1,6 +1,6 @@
 'use client';
 
-import { useVideoCallStore } from '../store/video-call.store';
+import { useVideoCallStore } from '../../store/video-call.store';
 import { Avatar } from '@/components/data-display';
 import { useAppStore } from '@/stores/app.store';
 import { memo } from 'react';

@@ -7,13 +7,13 @@ import { motion, useDragControls } from "framer-motion"
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
-import { useVideoCallStore } from '../../store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
-import trimLongName from '../../utils/trim-long-name.util';
-import { useMyVideoCallStore } from '../../store/me.store';
-import { ModalConfirmClearDoodle } from './modal/modal-confirm-clear-doodle';
 import debounce from '@/utils/debounce';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { useMyVideoCallStore } from '@/features/call/store/me.store';
+import trimLongName from '@/features/call/utils/trim-long-name.util';
+import { ModalConfirmClearDoodle } from '@/features/call/components/common/modal/modal-confirm-clear-doodle';
 type IDoodleImage = Record<string, {
     user: any,
     image: string,
