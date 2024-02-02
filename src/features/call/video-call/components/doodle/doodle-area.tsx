@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { PointerEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import { Brush, ChevronDown, ChevronUp, Eraser, GripHorizontal, RotateCcw, Undo2, X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { motion, useDragControls } from "framer-motion"
@@ -7,13 +7,13 @@ import { motion, useDragControls } from "framer-motion"
 import { ReactSketchCanvas, ReactSketchCanvasRef } from 'react-sketch-canvas';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
-import { useVideoCallStore } from '../../store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
-import trimLongName from '../../utils/trim-long-name.util';
-import { useMyVideoCallStore } from '../../store/me.store';
-import { ModalConfirmClearDoodle } from './modal/modal-confirm-clear-doodle';
 import debounce from '@/utils/debounce';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { useMyVideoCallStore } from '@/features/call/store/me.store';
+import trimLongName from '@/features/call/utils/trim-long-name.util';
+import { ModalConfirmClearDoodle } from '@/features/call/components/common/modal/modal-confirm-clear-doodle';
 type IDoodleImage = Record<string, {
     user: any,
     image: string,
@@ -186,7 +186,10 @@ export const DoodleArea = () => {
         }
         checkToLoadOldDoodle();
     }, [myOldDoodle])
-    
+    const startDrag = (e: any) => {
+        console.log('start drag')
+        controls.start(e)
+    }
     return (
     <motion.section ref={constraintsRef} className='rounded-xl overflow-hidden relative transition-all w-full h-full  bg-neutral-900'>
         <Image src={doodleImage || ''} width={500} height={500} alt="Doodle" ref={imageRef} className='object-contain w-full h-full' />
@@ -218,7 +221,7 @@ export const DoodleArea = () => {
             dragMomentum={false}
             whileTap={{ boxShadow: "0px 0px 15px rgba(0,0,0,0.2)" }}
             dragControls={controls} className='z-20 absolute top-2 left-2 p-2 rounded-md bg-white flex flex-col gap-3 items-center'>
-            <div onPointerDown={(e) => controls.start(e)} className='cursor-move'>
+            <div onPointerDown={startDrag} className='cursor-move'>
                 <GripHorizontal></GripHorizontal>
             </div>
             <Button.Icon

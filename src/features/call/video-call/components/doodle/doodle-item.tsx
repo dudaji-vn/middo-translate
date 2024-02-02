@@ -1,8 +1,8 @@
 import { Fullscreen } from 'lucide-react';
-import { useVideoCallStore } from '../../store/video-call.store';
-import { VIDEOCALL_LAYOUTS } from '../../constant/layout';
 import Image from 'next/image';
 import { cn } from '@/utils/cn';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 interface DoodleItemProps {}
 const DoodleItem = ({}: DoodleItemProps) => {
   const { doodleImage } = useVideoCallStore();

@@ -1,19 +1,18 @@
+import ParticipantInVideoCall from '@/features/call/interfaces/participant';
+import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { Fragment, useMemo } from 'react';
-import VideoItem from '../common/video-item';
-import { useVideoCallStore } from '../../store/video-call.store';
-import { useParticipantVideoCallStore } from '../../store/participant.store';
-import DoodleItem from '../common/doodle-item';
-import ParticipantInVideoCall from '../../interfaces/participant';
-import { VIDEOCALL_LAYOUTS } from '../../constant/layout';
 import { twMerge } from 'tailwind-merge';
+import DoodleItem from '../doodle/doodle-item';
+import VideoItem from '../video/video-item';
 
-const GalleryView = () => {
+const GalleryLayout = () => {
   const { participants } = useParticipantVideoCallStore();
   const { isDoodle, isFullScreen } = useVideoCallStore();
+
   const classes = useMemo(() => {
     if (!isFullScreen) return 'grid-cols-4';
     const numberItem = participants.length + (isDoodle ? 1 : 0);
-    // const numberItem = participants.length + 2 + (isDoodle ? 1 : 0);
     switch (numberItem) {
       case 1:
         return 'grid-cols-1 grid-rows-1';
@@ -34,6 +33,7 @@ const GalleryView = () => {
         return 'grid-cols-2 md:grid-cols-3';
     }
   }, [isDoodle, isFullScreen, participants.length]);
+  
   return (
     <div className="h-full w-full overflow-auto md:overflow-hidden">
       <div
@@ -58,4 +58,4 @@ const GalleryView = () => {
   );
 };
 
-export default GalleryView;
+export default GalleryLayout;

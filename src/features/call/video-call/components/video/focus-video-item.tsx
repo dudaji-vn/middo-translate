@@ -1,15 +1,13 @@
 import { memo, useEffect, useRef } from 'react';
 import { Maximize } from 'lucide-react';
-import useLoadStream from '../../hooks/use-load-stream';
-import trimLongName from '../../utils/trim-long-name.util';
-import useFitRatio from '../../hooks/use-fit-ratio';
-import { useVideoCallStore } from '../../store/video-call.store';
 import { cn } from '@/utils/cn';
 import { twMerge } from 'tailwind-merge';
-import { Avatar } from '@/components/data-display';
-import useAudioLevel from '../../hooks/use-audio-level';
-import { Spinner } from '@/components/feedback';
-import { useMyVideoCallStore } from '../../store/me.store';
+import useLoadStream from '@/features/call/hooks/use-load-stream';
+import useAudioLevel from '@/features/call/hooks/use-audio-level';
+import { useMyVideoCallStore } from '@/features/call/store/me.store';
+import useFitRatio from '@/features/call/hooks/use-fit-ratio';
+import VideoItemLoading from './components/video-item-loading';
+import VideoItemAvatar from './components/video-item-avatar';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -86,20 +84,8 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       )}
 
       {/* Overlay name */}
-      <div
-        className={twMerge(
-          'absolute left-1/2 top-1/2 flex h-full max-h-full w-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center bg-neutral-50',
-          isTurnOnCamera ? 'pointer-events-none hidden cursor-none' : '',
-        )}
-      >
-        <div className="aspect-square w-40 max-w-[90%]">
-          <Avatar
-            className="h-full w-full bg-neutral-900 object-cover"
-            src={participant?.user?.avatar || '/person.svg'}
-            alt={participant?.user?.name || 'Anonymous'}
-          />
-        </div>
-      </div>
+      <VideoItemAvatar size='lg' participant={participant} isTurnOnCamera={isTurnOnCamera}/>
+
       {/*  */}
       <div className="absolute bottom-1 left-1 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white z-10">
         <span className="relative truncate leading-snug">
@@ -109,11 +95,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       </div>
 
       {/* Video Loading */}
-      {isLoadingVideo && participant.isMe && !participant.isShareScreen && (
-          <div className="absolute inset-0 flex items-center justify-center bg-neutral-800 pointer-events-none">
-            <Spinner className="text-white"></Spinner>
-          </div>
-        )}
+      <VideoItemLoading isLoading={isLoadingVideo} isMe={participant.isMe} isShareScreen={participant.isShareScreen} />
     </section>
   );
 };

@@ -1,19 +1,18 @@
 import { Button } from '@/components/actions';
 import { SubtitlesIcon } from 'lucide-react';
-import { useVideoCallStore } from '../store/video-call.store';
 import { cn } from '@/utils/cn';
 import socket from '@/lib/socket-io';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useQueryClient } from '@tanstack/react-query';
 import { Message } from '@/features/chat/messages/types';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { useAppStore } from '@/stores/app.store';
 
-export interface CallBottomChatButtonProps {}
-
-export const CallBottomChatButton = (props: CallBottomChatButtonProps) => {
+const ActionChat = () => {
   const [newCount, setNewCount] = useState(0);
-  const { isFullScreen, isShowChat, setShowChat, messageId } =
-    useVideoCallStore();
+  const { isFullScreen, isShowChat, setShowChat, messageId } = useVideoCallStore();
+  const isMobile = useAppStore((state) => state.isMobile);
   const queryClient = useQueryClient();
   useEffect(() => {
     if (isShowChat) {
@@ -32,6 +31,11 @@ export const CallBottomChatButton = (props: CallBottomChatButtonProps) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageId, isShowChat]);
+
+  useEffect(() => {
+    if (isMobile) setShowChat(false);
+  }, [isMobile, setShowChat]);
+  
   return (
     <div className={cn('relative', !isFullScreen && 'hidden')}>
       <Button.Icon
@@ -50,3 +54,5 @@ export const CallBottomChatButton = (props: CallBottomChatButtonProps) => {
     </div>
   );
 };
+
+export default memo(ActionChat);

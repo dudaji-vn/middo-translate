@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useVideoCallStore } from '../store/video-call.store';
 import { twMerge } from 'tailwind-merge';
 import {
   Lightbulb,
   MessageSquareQuote,
-  Subtitles,
   X,
   XIcon,
 } from 'lucide-react';
@@ -12,6 +10,7 @@ import { Button } from '@/components/actions';
 import { getMessageIdFromCallIdService } from '@/services/message.service';
 import Discussion from '@/features/chat/discussion/components/discussion';
 import { useAppStore } from '@/stores/app.store';
+import { useVideoCallStore } from '../../store/video-call.store';
 
 export default function ChatThread({ className }: { className?: string }) {
   const {
