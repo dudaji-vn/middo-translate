@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import ReceiveVideoCall from './receive-call';
+import ReceiveVideoCall from '../receive-call';
 import VideoCallDragWrapper from './video-call-drag-wrapper';
 import socket from '@/lib/socket-io';
 import { sendEvent } from '../utils/custom-event.util';

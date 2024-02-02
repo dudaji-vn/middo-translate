@@ -14,17 +14,14 @@ import { cn } from '@/utils/cn';
 const VideoCallPage = () => {
   const { room } = useVideoCallStore();
   const { participants } = useParticipantVideoCallStore();
-  const {isShowChat, isFullScreen} = useVideoCallStore();
   if (!room) return null;
 
   return (
     <VideoCallProvider>
       <div className={twMerge('flex h-full w-full flex-col')}>
         <main className="relative flex h-full w-full flex-1 flex-col overflow-hidden md:flex-row">
-          {/* <VideoCallHeader /> */}
           <div className={cn('flex flex-col h-full w-full flex-1 overflow-hidden')}>
             <section className="relative flex h-full min-h-[70px] w-full flex-1 justify-center overflow-hidden">
-              {/* <ParticipantListSidebar /> */}
               {participants.length == 0 ? (
                 <div className="flex h-full min-h-[70px] w-full flex-1 items-center justify-center rounded-xl">
                   <Spinner className="text-primary" />
