@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { PointerEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import { Brush, ChevronDown, ChevronUp, Eraser, GripHorizontal, RotateCcw, Undo2, X } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { motion, useDragControls } from "framer-motion"
@@ -186,7 +186,10 @@ export const DoodleArea = () => {
         }
         checkToLoadOldDoodle();
     }, [myOldDoodle])
-    
+    const startDrag = (e: any) => {
+        console.log('start drag')
+        controls.start(e)
+    }
     return (
     <motion.section ref={constraintsRef} className='rounded-xl overflow-hidden relative transition-all w-full h-full  bg-neutral-900'>
         <Image src={doodleImage || ''} width={500} height={500} alt="Doodle" ref={imageRef} className='object-contain w-full h-full' />
@@ -218,7 +221,7 @@ export const DoodleArea = () => {
             dragMomentum={false}
             whileTap={{ boxShadow: "0px 0px 15px rgba(0,0,0,0.2)" }}
             dragControls={controls} className='z-20 absolute top-2 left-2 p-2 rounded-md bg-white flex flex-col gap-3 items-center'>
-            <div onPointerDown={(e) => controls.start(e)} className='cursor-move'>
+            <div onPointerDown={startDrag} className='cursor-move'>
                 <GripHorizontal></GripHorizontal>
             </div>
             <Button.Icon

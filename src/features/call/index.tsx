@@ -2,12 +2,12 @@
 
 import { useEffect } from 'react';
 import socket from '@/lib/socket-io';
-import { sendEvent } from '../utils/custom-event.util';
+import { sendEvent } from './utils/custom-event.util';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useVideoCallStore } from '../store/video-call.store';
-import { CommonComponent } from './common/common';
-import VideoCall from '../video-call';
-import ReceiveVideoCall from '../receive-call';
+import { useVideoCallStore } from './store/video-call.store';
+import { CommonComponent } from './components/common/common';
+import VideoCall from './video-call';
+import ReceiveVideoCall from './receive-call';
 
 const CallVideoModalContainer = () => {
   const { removeRequestCall } = useVideoCallStore();

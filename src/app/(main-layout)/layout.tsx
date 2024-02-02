@@ -1,5 +1,5 @@
 import { MainLayout } from '@/components/layout/main-layout';
-import CallVideoModalContainer from '@/features/call/components';
+import CallVideoModalContainer from '@/features/call';
 // import GlobalError from '@/app/global-error';
 export default async function RootLayout({
   children,

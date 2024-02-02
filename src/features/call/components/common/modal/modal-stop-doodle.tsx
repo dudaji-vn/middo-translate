@@ -4,12 +4,15 @@ import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useVideoCallStore } from '../../../store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
+import { useMyVideoCallStore } from '@/features/call/store/me.store';
 
 export const ConfirmStopDoodle = () => {
     const { confirmStopDoodle, setConfirmStopDoodle, setDoodle, setDoodleImage, setDrawing, setMeDoodle } = useVideoCallStore();
     const { user } = useAuthStore();
+    const { setMyOldDoodle } = useMyVideoCallStore();
     const handleStop = () => {
         setMeDoodle(false);
+        setMyOldDoodle(null)
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE, user?.name);
     };
 
