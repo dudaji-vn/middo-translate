@@ -18,6 +18,7 @@ import { CompareProvider } from '@/features/translate/context';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { PageLoading } from '@/components/feedback';
 import { cn } from '@/utils/cn';
+import { Extension } from '@/features/translate/components/extension';
 
 interface HomeProps {
   searchParams: {
@@ -84,14 +85,14 @@ export default async function Home(props: HomeProps) {
           textCompare={targetEnglishResult}
         >
           <LanguagesControlBar
-            className="px-5"
+            className="px-[5vw]"
             source={sourceLanguage}
             target={targetLanguage}
             detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
             targetResult={targetResult}
           />
           <CaptureProvider>
-            <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-5 md:flex-row md:justify-evenly md:gap-[88px]">
+            <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-3 md:flex-row md:justify-evenly md:gap-[88px]">
               <TranslateEditor
                 disabled={isEdit}
                 isDetect={props.searchParams.source === 'auto'}
@@ -130,6 +131,8 @@ export default async function Home(props: HomeProps) {
                 )}
               </TranslateResult>
             </CaptureZone>
+            <Extension />
+
             <div className="mt-5 flex items-center justify-center gap-8">
               <TextCopy
                 sourceText={sourceText || sourceTranslateResult}
