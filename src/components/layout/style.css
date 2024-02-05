@@ -12,22 +12,7 @@
   padding: 10px 5vw;
   margin-bottom: 20px;
 }
-.pageTitle {
-  color: var(--primary);
-  font-weight: 600;
-  text-transform: capitalize;
-}
-.backButton {
-  position: absolute;
-  left: 5vw;
-  padding: 10px;
-  border-radius: 999px;
-}
-.languageSwitcherWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .countryCircleIcon {
   width: 20px;
   height: 20px;
