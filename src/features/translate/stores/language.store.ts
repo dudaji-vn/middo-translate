@@ -16,8 +16,8 @@ export type LanguageActions = {
 export const useLanguageStore = create<LanguageState & LanguageActions>()(
   persist(
     (set) => ({
-      recentlySourceUsed: ['auto'],
-      recentlyTargetUsed: ['en'],
+      recentlySourceUsed: [''],
+      recentlyTargetUsed: [''],
       setRecentlyUsed: (recentlyUsed, type) =>
         set(() => {
           if (type === 'source') {
