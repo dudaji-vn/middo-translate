@@ -1,14 +1,15 @@
 
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
+import { useDoodleContext } from '../context/doodle-context-context';
 
 interface ModalConfirmClearDoodleProps {
-    isOpen: boolean;
-    toggleModal: () => void;
+    
     handleSubmit: () => void;
 }
-export const ModalConfirmClearDoodle = ({ isOpen, toggleModal, handleSubmit }: ModalConfirmClearDoodleProps) => {
+export const ModalConfirmClearDoodle = ({ handleSubmit }: ModalConfirmClearDoodleProps) => {
+    const {isShowConfirmClear, setShowConfirmClear} = useDoodleContext();
     return (
-        <AlertDialog open={isOpen} onOpenChange={() => toggleModal()}>
+        <AlertDialog open={isShowConfirmClear} onOpenChange={() => setShowConfirmClear(false)}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>

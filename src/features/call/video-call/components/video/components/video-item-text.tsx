@@ -3,7 +3,6 @@ import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
 import React from 'react';
-import { twMerge } from 'tailwind-merge';
 interface VideoItemTextProps {
   participant?: ParticipantInVideoCall;
 }
