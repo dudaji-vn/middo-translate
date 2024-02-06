@@ -8,6 +8,7 @@ import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { Country } from '@/types/country.type';
 import { cn } from '@/utils/cn';
 import { useLanguageStore } from '../../stores/language.store';
+import { useAppStore } from '@/stores/app.store';
 
 export interface ListLanguagesProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -20,6 +21,7 @@ export interface ListLanguagesProps
 export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
   ({ selectedCode, onSelected, allowDetect, type, ...props }, ref) => {
     const [search, setSearch] = useState('');
+    const isMobile = useAppStore((state) => state.isMobile);
     const searchRef = useRef<any>(null);
     const { recentlySourceUsed, recentlyTargetUsed, addRecentlyUsed } =
       useLanguageStore();
@@ -54,7 +56,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
     }, []);
 
     return (
-      <div ref={ref} {...props} className="flex h-full flex-col pb-5">
+      <div ref={ref} {...props} className="flex h-full flex-col">
         <div className="px-5 py-5 pt-0 md:mx-auto md:w-[480px] ">
           <SearchInput
             ref={searchRef}
@@ -63,7 +65,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             placeholder="Search"
           />
         </div>
-        <div className="mb-8 flex-1 columns-1 gap-0 overflow-y-auto md:columns-3">
+        <div className="flex-1 columns-1 gap-0 overflow-y-auto md:columns-3">
           {search === '' ? (
             <>
               {allowDetect && (
@@ -78,7 +80,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                 />
               )}
 
-              {recentlyUsed.length > 0 && (
+              {recentlyUsed.length > 0 && isMobile && (
                 <>
                   <Title>Recently used</Title>
                   {recentlyUsed.map((code) => {

@@ -16,7 +16,7 @@ export interface LanguageSelectProps {
 export const LanguageSelect = ({
   onChevronClick,
   firstCode = 'auto',
-  secondaryCode = 'vi',
+  secondaryCode,
   currentCode,
   onChange,
 }: LanguageSelectProps) => {
@@ -32,13 +32,15 @@ export const LanguageSelect = ({
         >
           Detect
         </LanguageItem>
-        <LanguageItem
-          onClick={() => {
-            onChange?.(secondaryCode);
-          }}
-          active={currentCode === secondaryCode}
-          code={secondaryCode}
-        />
+        {secondaryCode && (
+          <LanguageItem
+            onClick={() => {
+              onChange?.(secondaryCode);
+            }}
+            active={currentCode === secondaryCode}
+            code={secondaryCode}
+          />
+        )}
       </div>
       <Button.Icon
         className="hidden md:flex"
