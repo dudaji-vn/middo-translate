@@ -23,7 +23,7 @@ const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
     <div
       className={cn(
         'absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-1 bg-black/80 text-white opacity-0 transition-all z-10',
-        isGalleryView && isFullScreen && 'md:hover:opacity-100',
+        isGalleryView && isFullScreen && 'hover:opacity-0 md:hover:opacity-100',
       )}
       onClick={expandVideoItem}
     >

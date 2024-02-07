@@ -66,8 +66,8 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         {/* Video Loading */}
         <VideoItemLoading
           isLoading={isLoadingVideo}
-          isMe={participant.isMe}
-          isShareScreen={participant.isShareScreen}
+          isMe={participant?.isMe}
+          isShareScreen={participant?.isShareScreen}
         />
 
         {/* Mic Status */}
