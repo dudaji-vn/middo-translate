@@ -108,7 +108,7 @@ export default function useHandleShareScreen() {
         clearPeerShareScreen();
     },[clearPeerShareScreen, peerShareScreen, removeParticipantShareScreen, setShareScreen, shareScreenStream])
 
-    const handleShareScreen = useCallback(()=>{
+    const handleShareScreen = useCallback(async ()=>{
         // if (participants.some((participant) => participant.isShareScreen)) return;
         if (isShareScreen) {
             stopShareScreen();
@@ -119,27 +119,26 @@ export default function useHandleShareScreen() {
             toast.error('Device not support share screen');
             return;
         }
-        navigator.mediaDevices
-            .getDisplayMedia({ video: true, audio: true })
-            .then(async (stream: MediaStream) => {
-                if (!socket.id) return;
-                const shareScreen = {
-                    stream,
-                    user: user,
-                    isMe: true,
-                    isShareScreen: true,
-                    socketId: socket.id,
-                };
-                addParticipant(shareScreen);
-                setShareScreen(true);
-                setShareScreenStream(stream);
-                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
-            })
-            .catch((err: Error) => {
-                if (err.name != 'NotAllowedError') {
-                    toast.error('Device not support share screen');
-                }
-            });
+        try {
+            let stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 15 }, audio: true })
+            if (!socket.id) return;
+            const shareScreen = {
+                stream,
+                user: user,
+                isMe: true,
+                isShareScreen: true,
+                socketId: socket.id,
+            };
+            addParticipant(shareScreen);
+            setShareScreen(true);
+            setShareScreenStream(stream);
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
+        } catch (err: unknown) {
+            if (err instanceof Error && err.name !== 'NotAllowedError') {
+              toast.error('Device not supported for sharing screen');
+            }
+        }
+
     }, [addParticipant, isShareScreen, room?._id, setShareScreen, setShareScreenStream, stopShareScreen, user])
 
     useEffect(() => {

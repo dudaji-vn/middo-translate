@@ -17,6 +17,7 @@ const ActionShareScreen = () => {
       color={isShareScreen ? 'primary' : 'default'}
       disabled={haveShareScreen && !isShareScreen}
       onClick={handleShareScreen}
+      id="share-screen"
     >
       <MonitorUp />
     </Button.Icon>

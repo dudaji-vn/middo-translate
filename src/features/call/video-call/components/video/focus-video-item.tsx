@@ -95,7 +95,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       </div>
 
       {/* Video Loading */}
-      <VideoItemLoading isLoading={isLoadingVideo} isMe={participant.isMe} isShareScreen={participant.isShareScreen} />
+      <VideoItemLoading isLoading={isLoadingVideo} isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
     </section>
   );
 };
