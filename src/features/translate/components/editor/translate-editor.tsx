@@ -151,7 +151,7 @@ export const TranslateEditor = ({
         </div>
       }
     >
-      {value && !disabled && (
+      {value && !disabled && !isListening && (
         <Button.Icon
           onClick={handleClear}
           variant="ghost"
