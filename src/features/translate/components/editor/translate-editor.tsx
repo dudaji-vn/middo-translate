@@ -133,12 +133,18 @@ export const TranslateEditor = ({
             disabled={!value}
             variant="ghost"
             color="primary"
+            size="xs"
           >
             <Volume2Icon />
           </Button.Icon>
 
           <CopyZoneClick text={value}>
-            <Button.Icon disabled={!value} variant="ghost" color="primary">
+            <Button.Icon
+              disabled={!value}
+              variant="ghost"
+              color="primary"
+              size="xs"
+            >
               <CopyIcon />
             </Button.Icon>
           </CopyZoneClick>

@@ -45,11 +45,17 @@ export const TranslateResult = ({
             onClick={() => speak()}
             variant="ghost"
             color="primary"
+            size="xs"
           >
             <Volume2Icon />
           </Button.Icon>
           <CopyZoneClick text={result}>
-            <Button.Icon disabled={!result} variant="ghost" color="primary">
+            <Button.Icon
+              disabled={!result}
+              variant="ghost"
+              color="primary"
+              size="xs"
+            >
               <CopyIcon />
             </Button.Icon>
           </CopyZoneClick>
