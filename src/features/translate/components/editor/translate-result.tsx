@@ -39,7 +39,7 @@ export const TranslateResult = ({
       bottomElement={!isMobile && children}
       languageCode={languageCode}
       footerElement={
-        <div className="bottom-3 right-3 mt-3 flex justify-end">
+        <div className="bottom-3 right-3 mt-3 flex justify-end gap-2">
           <Button.Icon
             disabled={!result}
             onClick={() => speak()}

@@ -12,6 +12,9 @@ import { cn } from '@/utils/cn';
 import { LanguageSelect } from '../language-select';
 import { ListLanguages } from '../list-languages';
 import { useLanguageStore } from '../../stores/language.store';
+import { useAppStore } from '@/stores/app.store';
+
+const MAX_SELECTED_LANGUAGES = 3;
 
 export interface LanguagesControlBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,67 +39,66 @@ export const LanguagesControlBar = forwardRef<
     const { setValue } = useTranslateStore();
     const source = searchParams?.get('source');
     const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
-    const { recentlySourceUsed, recentlyTargetUsed, addRecentlyUsed } =
-      useLanguageStore();
+    const isTablet = useAppStore((state) => state.isTablet);
+    const {
+      recentlySourceUsed,
+      recentlyTargetUsed,
+      addRecentlyUsed,
+      lastSourceUsed,
+      lastTargetUsed,
+    } = useLanguageStore();
 
     const [canClick, setCanClick] = useState(true);
 
     const handleSwap = () => {
-      if (!canClick) return;
-      if (!_source || !_target) return;
+      if (!canClick || !_target) return;
+      const sourceValue =
+        _source || recentlyTargetUsed.filter((item) => item !== _target)[0];
       const newParams = [
-        {
-          key: 'source',
-          value: _target,
-        },
+        { key: 'source', value: _target },
         {
           key: 'target',
-          value: _source,
+          value: sourceValue,
         },
       ];
+
       addRecentlyUsed(_target, 'source');
-      addRecentlyUsed(_source, 'target');
+      addRecentlyUsed(sourceValue, 'target');
+
       if (targetResult) {
         setCanClick(false);
         setTimeout(() => {
           setValue(targetResult);
           setCanClick(true);
         }, 500);
-        newParams.push({
-          key: 'query',
-          value: targetResult,
-        });
+        newParams.push({ key: 'query', value: targetResult });
       }
+
       setParams(newParams);
     };
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');
+
+      const sourceValue = searchParams?.get('source');
+      const targetValue =
+        searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
+
       if (type === 'source') {
-        if (code === searchParams?.get('source')) {
+        if (code === targetValue) {
           handleSwap();
           return;
         }
-        setParams([
-          {
-            key: 'source',
-            value: code,
-          },
-        ]);
+        setParams([{ key: 'source', value: code }]);
         addRecentlyUsed(code, type);
-        return;
+      } else {
+        if (code === sourceValue) {
+          handleSwap();
+          return;
+        }
+        setParams([{ key: 'target', value: code }]);
+        addRecentlyUsed(code, type);
       }
-      if (code === searchParams?.get('source')) {
-        handleSwap();
-        return;
-      }
-      setParams([
-        {
-          key: 'target',
-          value: code,
-        },
-      ]);
-      addRecentlyUsed(code, type);
     };
 
     useEffect(() => {
@@ -104,13 +106,13 @@ export const LanguagesControlBar = forwardRef<
       if (!searchParams?.get('source')) {
         newParams.push({
           key: 'source',
-          value: recentlySourceUsed[0] || 'auto',
+          value: lastSourceUsed,
         });
       }
       if (!searchParams?.get('target')) {
         newParams.push({
           key: 'target',
-          value: recentlyTargetUsed[0] || DEFAULT_LANGUAGES_CODE.EN,
+          value: lastTargetUsed,
         });
       }
 
@@ -133,42 +135,52 @@ export const LanguagesControlBar = forwardRef<
           ref={ref}
           {...props}
           className={cn(
-            'flex w-full items-center justify-center gap-5',
+            'flex w-full items-center justify-center gap-5 md:gap-0',
             props.className,
           )}
         >
-          <div className="flex flex-1 justify-end md:justify-start">
+          <div className="flex flex-1 justify-end overflow-hidden rounded-2xl border shadow-1 lg:justify-start lg:border-none lg:shadow-none">
             <LanguageSelect
-              firstCode="auto"
               onChevronClick={() => {
                 setCurrentSelect('source');
               }}
-              secondaryCode={
-                recentlySourceUsed[0] === 'auto' ? 'vi' : recentlySourceUsed[0]
+              languageCodes={
+                recentlySourceUsed?.slice(0, MAX_SELECTED_LANGUAGES) || []
               }
               currentCode={source || 'auto'}
               onChange={(code) => {
+                if (isTablet) {
+                  setCurrentSelect('source');
+                  return;
+                }
                 handleSelect(code, 'source');
               }}
             />
           </div>
 
-          <Button.Icon
-            size="xs"
-            onClick={handleSwap}
-            variant="ghost"
-            color="default"
-          >
-            <ArrowRightLeftIcon className="text-text" />
-          </Button.Icon>
-          <div className="flex flex-1 justify-start">
+          <div className="flex w-5 items-center justify-center md:w-[88px]">
+            <Button.Icon
+              size="xs"
+              className="shrink-0"
+              disabled={source === 'auto'}
+              onClick={handleSwap}
+              variant="ghost"
+              color="default"
+            >
+              <ArrowRightLeftIcon className="text-text" />
+            </Button.Icon>
+          </div>
+          <div className="flex flex-1 justify-start overflow-hidden rounded-2xl border shadow-1 lg:border-none lg:shadow-none">
             <LanguageSelect
               onChange={(code) => {
+                if (isTablet) {
+                  setCurrentSelect('target');
+                  return;
+                }
                 handleSelect(code, 'target');
               }}
-              firstCode="en"
-              secondaryCode={
-                recentlyTargetUsed[0] === 'en' ? 'ko' : recentlyTargetUsed[0]
+              languageCodes={
+                recentlyTargetUsed?.slice(0, MAX_SELECTED_LANGUAGES) || []
               }
               onChevronClick={() => {
                 setCurrentSelect('target');

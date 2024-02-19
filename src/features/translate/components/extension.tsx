@@ -7,7 +7,7 @@ export interface ExtensionProps {}
 
 export const Extension = (props: ExtensionProps) => {
   return (
-    <div className="flex gap-2 px-[5vw] md:justify-end">
+    <div className="flex w-full justify-end gap-2 px-[5vw]">
       <Button
         shape="square"
         color="default"
