@@ -65,7 +65,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             placeholder="Search"
           />
         </div>
-        <div className="flex-1 columns-1 gap-0 overflow-y-auto md:columns-3">
+        <div className="flex flex-col overflow-y-auto md:flex-row md:flex-wrap">
           {search === '' ? (
             <>
               {allowDetect && (
@@ -133,7 +133,11 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
 ListLanguages.displayName = 'ListLanguages';
 
 const Title = ({ children }: { children: React.ReactNode }) => {
-  return <p className="mb-3 mt-6 pl-5 text-secondary">{children}</p>;
+  return (
+    <p className="mb-3 mt-6 inline w-full pl-5 text-secondary md:hidden md:w-1/3">
+      {children}
+    </p>
+  );
 };
 
 const Item = ({
@@ -153,7 +157,7 @@ const Item = ({
       onClick={onClick}
       key={language.code}
       className={cn(
-        'flex w-full items-center px-5 py-3 active:bg-stroke md:hover:bg-background-darker',
+        'flex w-full items-center px-5 py-3 active:bg-stroke md:w-1/3 md:hover:bg-background-darker',
         selected && 'bg-lighter text-primary disabled:bg-lighter',
       )}
     >

@@ -125,7 +125,7 @@ export const TranslateEditor = ({
       type={disabled ? 'result' : 'default'}
       className={className}
       footerElement={
-        <div className="bottom-3 right-3 mt-3 flex justify-end">
+        <div className="bottom-3 right-3 mt-3 flex justify-end gap-2">
           <Button.Icon
             onClick={() => {
               speak();
@@ -133,12 +133,18 @@ export const TranslateEditor = ({
             disabled={!value}
             variant="ghost"
             color="primary"
+            size="xs"
           >
             <Volume2Icon />
           </Button.Icon>
 
           <CopyZoneClick text={value}>
-            <Button.Icon disabled={!value} variant="ghost" color="primary">
+            <Button.Icon
+              disabled={!value}
+              variant="ghost"
+              color="primary"
+              size="xs"
+            >
               <CopyIcon />
             </Button.Icon>
           </CopyZoneClick>
@@ -151,6 +157,7 @@ export const TranslateEditor = ({
           variant="ghost"
           className="btn-icon absolute right-3 top-3"
           color="default"
+          size="xs"
         >
           <XCircleIcon />
         </Button.Icon>

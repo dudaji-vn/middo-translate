@@ -34,13 +34,15 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
                 router.back();
               })
             }
-            className="absolute left-[5vw]"
+            className="absolute left-[4px] md:left-[5vw]"
           >
             <ArrowLeftIcon />
           </Button.Icon>
           <p className="font-semibold capitalize text-primary">{title}</p>
         </div>
-        <div className="flex-1 overflow-hidden px-[5vw]">{props.children}</div>
+        <div className="flex-1 overflow-hidden md:px-[5vw]">
+          {props.children}
+        </div>
       </div>
     );
   },

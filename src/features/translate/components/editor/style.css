@@ -35,9 +35,8 @@
   background-color: hsl(var(--error), 0.4);
 }
 .translateTextWrapper.result {
-  box-shadow: var(--shadow-1);
-  background-color: #fcfcfc;
-  border: none;
+  background-color: white;
+  border: solid 1px #f2f2f2;
 }
 .translateResultText {
   margin-top: 12px;

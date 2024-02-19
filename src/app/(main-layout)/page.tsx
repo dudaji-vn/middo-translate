@@ -78,7 +78,7 @@ export default async function Home(props: HomeProps) {
   const isShowMiddleTarget = targetEnglishResult && !isEnglishTranslate;
 
   return (
-    <main className="relative flex h-full w-full flex-col pt-10">
+    <main className="relative flex h-full w-full flex-col pt-5">
       <PageLoading title="Loading">
         <CompareProvider
           text={sourceEnglishResult}
@@ -133,7 +133,7 @@ export default async function Home(props: HomeProps) {
             </CaptureZone>
             <Extension />
 
-            <div className="mt-5 flex items-center justify-center gap-8">
+            <div className="mt-8 flex items-center justify-center gap-8">
               <TextCopy
                 sourceText={sourceText || sourceTranslateResult}
                 targetText={targetResult}

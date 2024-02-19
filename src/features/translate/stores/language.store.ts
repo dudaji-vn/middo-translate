@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware';
 const MAX_RECENTLY_USED = 5;
 type RecentlyType = 'source' | 'target';
 export type LanguageState = {
+  lastSourceUsed: string;
+  lastTargetUsed: string;
   recentlySourceUsed: string[];
   recentlyTargetUsed: string[];
 };
@@ -16,8 +18,10 @@ export type LanguageActions = {
 export const useLanguageStore = create<LanguageState & LanguageActions>()(
   persist(
     (set) => ({
-      recentlySourceUsed: [''],
-      recentlyTargetUsed: [''],
+      lastSourceUsed: 'auto',
+      lastTargetUsed: 'en',
+      recentlySourceUsed: ['auto', 'en', 'vi'],
+      recentlyTargetUsed: ['en', 'ko', 'vi'],
       setRecentlyUsed: (recentlyUsed, type) =>
         set(() => {
           if (type === 'source') {
@@ -27,24 +31,48 @@ export const useLanguageStore = create<LanguageState & LanguageActions>()(
         }),
       addRecentlyUsed: (recentlyUsed, type) => {
         set((state) => {
-          if (type === 'source') {
-            const recentlySourceUsed = state.recentlySourceUsed.filter(
-              (l) => l !== recentlyUsed,
-            );
-            recentlySourceUsed.unshift(recentlyUsed);
-            if (recentlySourceUsed.length > MAX_RECENTLY_USED) {
-              recentlySourceUsed.pop();
-            }
-            return { recentlySourceUsed };
+          if (recentlyUsed === 'auto') {
+            state.lastSourceUsed = recentlyUsed;
+            return state;
           }
-          const recentlyTargetUsed = state.recentlyTargetUsed.filter(
-            (l) => l !== recentlyUsed,
-          );
-          recentlyTargetUsed.unshift(recentlyUsed);
-          if (recentlyTargetUsed.length > MAX_RECENTLY_USED) {
-            recentlyTargetUsed.pop();
+
+          const isSource = type === 'source';
+          const recentlyUsedList = isSource
+            ? state.recentlySourceUsed
+            : state.recentlyTargetUsed;
+          const index = recentlyUsedList.indexOf(recentlyUsed);
+
+          if (index !== -1 && index < 3) {
+            return isSource
+              ? {
+                  lastSourceUsed: recentlyUsed,
+
+                  recentlySourceUsed: state.recentlySourceUsed,
+                }
+              : {
+                  lastTargetUsed: recentlyUsed,
+                  recentlyTargetUsed: state.recentlyTargetUsed,
+                };
           }
-          return { recentlyTargetUsed };
+
+          let updatedList = [
+            recentlyUsed,
+            ...recentlyUsedList.filter(
+              (l) => l !== recentlyUsed && l !== 'auto',
+            ),
+          ];
+
+          if (isSource) {
+            updatedList = ['auto', ...updatedList];
+          }
+
+          if (updatedList.length > MAX_RECENTLY_USED) {
+            updatedList.pop();
+          }
+
+          return isSource
+            ? { recentlySourceUsed: updatedList }
+            : { recentlyTargetUsed: updatedList };
         });
       },
 
