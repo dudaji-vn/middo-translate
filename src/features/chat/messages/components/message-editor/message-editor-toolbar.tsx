@@ -10,6 +10,8 @@ import { MessageEditorToolbarFile } from './message-editor-toolbar-file';
 import { MessageEditorToolbarLangControl } from './message-editor-toolbar-lang-control';
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-translate';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { TooltipTrigger } from '@radix-ui/react-tooltip';
 
 export interface MessageEditorToolbarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -49,14 +51,24 @@ export const MessageEditorToolbar = forwardRef<
       <MessageEditorToolbarTranslateTool />
       <div ref={ref} {...props} className="flex items-center">
         <MessageEditorToolbarLangControl />
-        {!disableMedia && <MessageEditorToolbarFile />}
-        {!room && <MessageEditorToolbarMic />}
-        <MessageEditorToolbarEmoji />
-        <ChatSettingMenu>
-          <Button.Icon color="default" size="xs" variant="ghost">
-            <Settings />
-          </Button.Icon>
-        </ChatSettingMenu>
+        {!disableMedia && <Tooltip title="File upload" triggerItem={<MessageEditorToolbarFile />} />}
+        {!room && (
+          <Tooltip title="Voice" triggerItem={<MessageEditorToolbarMic />} />
+        )}
+        <Tooltip
+          title="Select emojis"
+          triggerItem={<MessageEditorToolbarEmoji />}
+        />
+        <Tooltip
+          title="Settings"
+          triggerItem={
+            <ChatSettingMenu>
+              <Button.Icon color="default" size="xs" variant="ghost">
+                <Settings />
+              </Button.Icon>
+            </ChatSettingMenu>
+          }
+        />
       </div>
     </>
   );
