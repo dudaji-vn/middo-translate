@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import {
-  Lightbulb,
-  MessageSquareQuote,
-  X,
-  XIcon,
-} from 'lucide-react';
+import { Lightbulb, MessageSquareQuote, X, XIcon } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { getMessageIdFromCallIdService } from '@/services/message.service';
 import Discussion from '@/features/chat/discussion/components/discussion';
 import { useAppStore } from '@/stores/app.store';
 import { useVideoCallStore } from '../../store/video-call.store';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 export default function ChatThread({ className }: { className?: string }) {
   const {
@@ -39,9 +35,9 @@ export default function ChatThread({ className }: { className?: string }) {
   return (
     <aside
       className={twMerge(
-        'w-full h-full flex-1 overflow-y-hidden border-t bg-background md:max-w-[400px] md:w-[400px] md:overflow-auto md:border-t-0 z-10',
+        'z-10 h-full w-full flex-1 overflow-y-hidden border-t bg-background md:w-[400px] md:max-w-[400px] md:overflow-auto md:border-t-0',
         className,
-        isMobile && 'fixed h-[calc(100dvh_-_104px)] top-[52px]',
+        isMobile && 'fixed top-[52px] h-[calc(100dvh_-_104px)]',
         (!isFullScreen || !isShowChat) && 'hidden md:hidden',
       )}
     >
@@ -50,14 +46,19 @@ export default function ChatThread({ className }: { className?: string }) {
           <MessageSquareQuote className="size-4" />
           <span>Discussion</span>
           <div className="ml-auto">
-            <Button.Icon
-              onClick={() => setShowChat(false)}
-              size="xs"
-              variant="ghost"
-              color="default"
-            >
-              <XIcon />
-            </Button.Icon>
+            <Tooltip
+              title={'Close discussion'}
+              triggerItem={
+                <Button.Icon
+                  onClick={() => setShowChat(false)}
+                  size="xs"
+                  variant="ghost"
+                  color="default"
+                >
+                  <XIcon />
+                </Button.Icon>
+              }
+            />
           </div>
         </div>
         <div className="flex flex-1 flex-col overflow-hidden">

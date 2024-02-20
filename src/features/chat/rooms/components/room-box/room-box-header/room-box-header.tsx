@@ -11,6 +11,7 @@ import { generateRoomDisplay } from '../../../utils';
 import { RoomAvatar } from '../../room-avatar';
 import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -31,7 +32,7 @@ export const ChatBoxHeader = () => {
       </div>
       <div className="ml-auto mr-3 flex items-center gap-1">
         <VideoCall />
-        <ActionBar />
+        <Tooltip title="Chat info" triggerItem={<ActionBar />} />
       </div>
     </div>
   );
@@ -61,16 +62,21 @@ const VideoCall = () => {
   const startVideoCall = useJoinCall();
   return (
     <div>
-      <Button.Icon
-        onClick={() => startVideoCall(roomChatBox?._id)}
-        size="xs"
-        color={isHaveMeeting ? 'secondary' : 'primary'}
-        variant={isHaveMeeting ? 'default' : 'ghost'}
-        className={`${isHaveMeeting ? 'hidden' : ''}`}
-      >
-        <Phone />
-        {isHaveMeeting && 'Join call'}
-      </Button.Icon>
+      <Tooltip
+        title="Start a video call"
+        triggerItem={
+          <Button.Icon
+            onClick={() => startVideoCall(roomChatBox?._id)}
+            size="xs"
+            color={isHaveMeeting ? 'secondary' : 'primary'}
+            variant={isHaveMeeting ? 'default' : 'ghost'}
+            className={`${isHaveMeeting ? 'hidden' : ''}`}
+          >
+            <Phone />
+            {isHaveMeeting && 'Join call'}
+          </Button.Icon>
+        }
+      />
       <Button
         onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"

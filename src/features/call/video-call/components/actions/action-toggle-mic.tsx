@@ -1,4 +1,5 @@
 import { Button } from '@/components/actions';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import { Mic, MicOff } from 'lucide-react';
 import React, { memo } from 'react';
@@ -24,7 +25,11 @@ const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
       color={isTurnOnMic ? 'primary' : 'default'}
       onClick={onToggleMic}
     >
-      {isTurnOnMic ? <Mic /> : <MicOff />}
+      <Tooltip
+        title={isTurnOnMic ? 'Turn off mic' : 'Turn on mic'}
+        contentProps={{ className: 'text-black font-normal ' }}
+        triggerItem={isTurnOnMic ? <Mic /> : <MicOff />}
+      />
     </Button.Icon>
   );
 };
