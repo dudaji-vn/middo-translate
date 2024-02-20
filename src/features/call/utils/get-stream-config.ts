@@ -2,10 +2,23 @@ export const STREAM_CONFIG = {
     audio: {
         echoCancellation: true,
         noiseSuppression: true,
+        autoGainControl: false,
         sampleRate: 44100,
+        advanced:
+        [
+           {googEchoCancellation: { exact: true }},
+           {googExperimentalEchoCancellation: {exact: true}},
+           {googAutoGainControl: {exact: true}},
+           {googExperimentalAutoGainControl: {exact: true}},
+           {googNoiseSuppression: {exact: true}},
+           {googHighpassFilter: {exact: true}},
+           {googAudioMirroring: {exact: false}},
+           {googExperimentalNoiseSuppression: {exact: true}},
+           {deviceId: {exact: ["default"]}}
+        ]
     },
     video: true,
-    // audio: true,
+    // audio: true
 }
 
 export default function getStreamConfig(isTurnOnCamera: boolean, isTurnOnMic: boolean) {
