@@ -8,6 +8,11 @@ import { Button } from '@/components/actions';
 import { ChatSettingMenu } from '../chat-setting';
 import { Typography } from '@/components/data-display';
 import { useSidebarTabs } from '../../hooks';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/data-display';
 
 export interface ChatSidebarHeaderProps {}
 
@@ -40,18 +45,32 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
       <div className="mb-3 flex items-center justify-between">
         <Typography variant="h6">Conversation</Typography>
         <div className="flex gap-3">
-          <Button.Icon
-            onClick={() => changeSide('individual')}
-            color="default"
-            size="xs"
-          >
-            <PenSquareIcon />
-          </Button.Icon>
-          <ChatSettingMenu>
-            <Button.Icon color="default" size="xs">
-              <Settings />
-            </Button.Icon>
-          </ChatSettingMenu>
+          <Tooltip>
+            <TooltipContent className="rounded-full">
+              <p>Add new group</p>
+            </TooltipContent>
+            <TooltipTrigger asChild>
+              <Button.Icon
+                onClick={() => changeSide('individual')}
+                color="default"
+                size="xs"
+              >
+                <PenSquareIcon />
+              </Button.Icon>
+            </TooltipTrigger>
+          </Tooltip>
+          <Tooltip>
+            <TooltipContent className="rounded-full">
+              <p>Settings</p>
+            </TooltipContent>
+            <ChatSettingMenu>
+              <TooltipTrigger asChild>
+                <Button.Icon color="default" size="xs">
+                  <Settings />
+                </Button.Icon>
+              </TooltipTrigger>
+            </ChatSettingMenu>
+          </Tooltip>
         </div>
       </div>
       <div className="flex  items-center gap-1 ">
