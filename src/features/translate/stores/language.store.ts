@@ -93,6 +93,7 @@ export const useLanguageStore = create<LanguageState & LanguageActions>()(
     }),
     {
       name: 'language-storage',
+      skipHydration: true,
     },
   ),
 );

@@ -25,10 +25,6 @@ export const SideEffectProvider = () => {
       onMessageListener();
     };
     handleMessage();
-
-    // onMessageListener();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return <></>;
 };
