@@ -8,10 +8,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Message } from '@/features/chat/messages/types';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useAppStore } from '@/stores/app.store';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 const ActionChat = () => {
   const [newCount, setNewCount] = useState(0);
-  const { isFullScreen, isShowChat, setShowChat, messageId } = useVideoCallStore();
+  const { isFullScreen, isShowChat, setShowChat, messageId } =
+    useVideoCallStore();
   const isMobile = useAppStore((state) => state.isMobile);
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -35,17 +37,22 @@ const ActionChat = () => {
   useEffect(() => {
     if (isMobile) setShowChat(false);
   }, [isMobile, setShowChat]);
-  
+
   return (
     <div className={cn('relative', !isFullScreen && 'hidden')}>
-      <Button.Icon
-        variant="default"
-        size="xs"
-        color={isShowChat ? 'primary' : 'default'}
-        onClick={() => setShowChat(!isShowChat)}
-      >
-        <SubtitlesIcon />
-      </Button.Icon>
+      <Tooltip
+        title={isShowChat ? 'Hide chat' : 'Show chat'}
+        triggerItem={
+          <Button.Icon
+            variant="default"
+            size="xs"
+            color={isShowChat ? 'primary' : 'default'}
+            onClick={() => setShowChat(!isShowChat)}
+          >
+            <SubtitlesIcon />
+          </Button.Icon>
+        }
+      />
       {newCount > 0 && (
         <div className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-primary text-xs text-white">
           {newCount}
