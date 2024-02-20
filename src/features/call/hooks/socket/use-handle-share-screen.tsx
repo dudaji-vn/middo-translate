@@ -145,7 +145,7 @@ export default function useHandleShareScreen() {
             }
         }
 
-    }, [addParticipant, isShareScreen, room?._id, setShareScreen, setShareScreenStream, stopShareScreen, user])
+    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user])
 
     useEffect(() => {
         if(!shareScreenStream) return;
