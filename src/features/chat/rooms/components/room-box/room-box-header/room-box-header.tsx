@@ -32,7 +32,7 @@ export const ChatBoxHeader = () => {
       </div>
       <div className="ml-auto mr-3 flex items-center gap-1">
         <VideoCall />
-        <Tooltip title="Chat info" triggerItem={<ActionBar />} />
+        <Tooltip title="Info" triggerItem={<ActionBar />} />
       </div>
     </div>
   );
@@ -63,7 +63,7 @@ const VideoCall = () => {
   return (
     <div>
       <Tooltip
-        title="Start a video call"
+        title="Start Middo Call"
         triggerItem={
           <Button.Icon
             onClick={() => startVideoCall(roomChatBox?._id)}

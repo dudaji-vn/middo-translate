@@ -42,7 +42,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
         <Typography variant="h6">Conversation</Typography>
         <div className="flex gap-3">
           <Tooltip
-            title="Add new group"
+            title="New Conversation"
             triggerItem={
               <Button.Icon
                 onClick={() => changeSide('individual')}

@@ -47,7 +47,10 @@ export default function ChatThread({ className }: { className?: string }) {
           <span>Discussion</span>
           <div className="ml-auto">
             <Tooltip
-              title={'Close discussion'}
+              title={'Close Discussion'}
+              contentProps={{
+                className: 'text-neutral-800',
+              }}
               triggerItem={
                 <Button.Icon
                   onClick={() => setShowChat(false)}

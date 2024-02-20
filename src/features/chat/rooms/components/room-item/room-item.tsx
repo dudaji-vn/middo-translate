@@ -17,6 +17,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { RoomItemComingCall } from './room-item-coming-call';
 import { cn } from '@/utils/cn';
 import { PinIcon } from 'lucide-react';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 export interface RoomItemProps {
   data: Room;
@@ -139,7 +140,10 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           <PinIcon className="size-4 text-neutral-600" />
         </div>
       )}
-      <RoomItemComingCall roomChatBox={room} />
+      <Tooltip
+        title="Join call"
+        triggerItem={<RoomItemComingCall roomChatBox={room} />}
+      />
     </div>
   );
 });
