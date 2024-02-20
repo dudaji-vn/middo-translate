@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowRightLeftIcon } from 'lucide-react';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { BackLayout } from '@/components/layout/back-layout';
@@ -13,6 +13,7 @@ import { LanguageSelect } from '../language-select';
 import { ListLanguages } from '../list-languages';
 import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
 const MAX_SELECTED_LANGUAGES = 3;
 
@@ -23,6 +24,7 @@ export interface LanguagesControlBarProps
   detect?: string;
   targetResult?: string;
 }
+const SHORTCUT_SWAPLANGUAGE= ['s'];
 
 export const LanguagesControlBar = forwardRef<
   HTMLDivElement,
@@ -49,10 +51,10 @@ export const LanguagesControlBar = forwardRef<
       lastTargetUsed,
     } = useLanguageStore();
 
-    const [canClick, setCanClick] = useState(true);
+    const [clickable, setClickable] = useState(true);
 
-    const handleSwap = () => {
-      if (!canClick || !_target) return;
+    const handleSwapLanguage = useCallback(() => {
+      if (!clickable || !_target) return;
       const sourceValue =
         _source || recentlyTargetUsed.filter((item) => item !== _target)[0];
       const newParams = [
@@ -67,16 +69,26 @@ export const LanguagesControlBar = forwardRef<
       addRecentlyUsed(sourceValue, 'target');
 
       if (targetResult) {
-        setCanClick(false);
+        setClickable(false);
         setTimeout(() => {
           setValue(targetResult);
-          setCanClick(true);
-        }, 500);
+          setClickable(true);
+        }, 300);
         newParams.push({ key: 'query', value: targetResult });
       }
 
       setParams(newParams);
-    };
+    }, [
+      _source,
+      _target,
+      addRecentlyUsed,
+      clickable,
+      recentlyTargetUsed,
+      setParams,
+      setValue,
+      targetResult,
+    ]);
+    useKeyboardShortcut(SHORTCUT_SWAPLANGUAGE, handleSwapLanguage);
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');
@@ -87,14 +99,14 @@ export const LanguagesControlBar = forwardRef<
 
       if (type === 'source') {
         if (code === targetValue) {
-          handleSwap();
+          handleSwapLanguage();
           return;
         }
         setParams([{ key: 'source', value: code }]);
         addRecentlyUsed(code, type);
       } else {
         if (code === sourceValue) {
-          handleSwap();
+          handleSwapLanguage();
           return;
         }
         setParams([{ key: 'target', value: code }]);
@@ -170,7 +182,7 @@ export const LanguagesControlBar = forwardRef<
               size="xs"
               className="shrink-0"
               disabled={source === 'auto'}
-              onClick={handleSwap}
+              onClick={handleSwapLanguage}
               variant="ghost"
               color="default"
             >
