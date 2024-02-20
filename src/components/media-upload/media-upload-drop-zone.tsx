@@ -1,6 +1,6 @@
 'use client';
 import { PropsWithChildren } from 'react';
-import { useMediaUpload } from '.';
+import { useMediaUpload } from './media-upload-context';
 import { cn } from '@/utils/cn';
 import { FilePlus2Icon } from 'lucide-react';
 
