@@ -5,6 +5,10 @@ import Link from 'next/link';
 
 export interface ExtensionProps {}
 
+// TODO: Add shortcut to open history and phrases after the feature is implemented
+const SHORTCUT_HISTORY = ['h'];
+const SHORTCUT_PHRASES = ['p'];
+
 export const Extension = (props: ExtensionProps) => {
   return (
     <div className="flex w-full justify-end gap-2 px-[5vw]">
