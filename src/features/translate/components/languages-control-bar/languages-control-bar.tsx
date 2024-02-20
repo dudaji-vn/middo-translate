@@ -40,6 +40,7 @@ export const LanguagesControlBar = forwardRef<
     const source = searchParams?.get('source');
     const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
     const isTablet = useAppStore((state) => state.isTablet);
+    const [isHydrated, setIsHydrated] = useState(false);
     const {
       recentlySourceUsed,
       recentlyTargetUsed,
@@ -102,6 +103,12 @@ export const LanguagesControlBar = forwardRef<
     };
 
     useEffect(() => {
+      useLanguageStore.persist.rehydrate();
+      setIsHydrated(true);
+    }, []);
+
+    useEffect(() => {
+      if (!isHydrated) return;
       const newParams = [];
       if (!searchParams?.get('source')) {
         newParams.push({
@@ -127,7 +134,7 @@ export const LanguagesControlBar = forwardRef<
         setParams(newParams);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams, detect]);
+    }, [searchParams, detect, isHydrated]);
 
     return (
       <>
