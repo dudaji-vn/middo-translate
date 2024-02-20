@@ -14,9 +14,9 @@ export type TooltipProps = {
 };
 
 const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
-  ({ children, title, triggerItem, triggerProps, contentProps, ...rest }) => {
+  ({ children, title, triggerItem, triggerProps, contentProps, ...rest }, ref) => {
     return (
-      <ShadcnTooltip {...rest}>
+      <ShadcnTooltip delayDuration={100} {...rest}>
         <TooltipContent className="rounded-full" {...contentProps}>
           <p>{title}</p>
         </TooltipContent>

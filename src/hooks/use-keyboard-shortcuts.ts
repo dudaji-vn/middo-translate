@@ -8,7 +8,7 @@ type Key = "shift" | string;
 
 export const useKeyboardShortcut = (
   keys: Key[],
-  callback: () => void
+  callback: (event?: KeyboardEvent) => void
 ) => {
   const {
     isFocused
@@ -24,7 +24,7 @@ export const useKeyboardShortcut = (
             (typeof key === "string" && event.key.toLowerCase() === key.toLowerCase())
         )
       ) {
-        callback();
+        callback(event);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
