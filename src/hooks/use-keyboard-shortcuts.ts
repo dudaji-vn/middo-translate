@@ -15,14 +15,13 @@ export const useKeyboardShortcut = (
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isFocused &&
+      if (!isFocused && 
         keys.every(
           (key) =>
             (key === "shift" && event.shiftKey) ||
             (typeof key === "string" && event.key.toLowerCase() === key.toLowerCase())
         )
       ) {
-
         callback();
       }
     };
@@ -30,5 +29,5 @@ export const useKeyboardShortcut = (
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [keys, callback]);
+  }, [keys, callback, isFocused]);
 };
