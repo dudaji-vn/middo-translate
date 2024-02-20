@@ -1,5 +1,6 @@
 "use client";
 
+import { useShortcutListenStore } from "@/stores/shortcut-listen.store";
 import { useTranslateStore } from "@/stores/translate.store";
 import { useEffect } from "react";
 
@@ -12,13 +13,14 @@ export const useKeyboardShortcut = (
   const {
     isFocused
   } = useTranslateStore();
+  const { allowShortcutListener } = useShortcutListenStore();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isFocused && 
+      if (!isFocused && allowShortcutListener &&
         keys.every(
           (key) =>
-            (key === "shift" && event.shiftKey) ||
+            (key.toLowerCase() === "shift" && event.shiftKey) ||
             (typeof key === "string" && event.key.toLowerCase() === key.toLowerCase())
         )
       ) {
