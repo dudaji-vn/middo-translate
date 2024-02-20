@@ -51,12 +51,12 @@ export const MessageEditorToolbar = forwardRef<
       <MessageEditorToolbarTranslateTool />
       <div ref={ref} {...props} className="flex items-center">
         <MessageEditorToolbarLangControl />
-        {!disableMedia && <Tooltip title="File upload" triggerItem={<MessageEditorToolbarFile />} />}
+        {!disableMedia && <Tooltip title="Upload files" triggerItem={<MessageEditorToolbarFile />} />}
         {!room && (
-          <Tooltip title="Voice" triggerItem={<MessageEditorToolbarMic />} />
+          <Tooltip title="Speech-to-text" triggerItem={<MessageEditorToolbarMic />} />
         )}
         <Tooltip
-          title="Select emojis"
+          title="Emojis"
           triggerItem={<MessageEditorToolbarEmoji />}
         />
         <Tooltip
