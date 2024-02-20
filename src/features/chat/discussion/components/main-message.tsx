@@ -1,4 +1,3 @@
-import { Button } from '@/components/actions';
 import { Avatar, Text } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import { translateText } from '@/services/languages.service';
@@ -13,7 +12,6 @@ import { ImageGallery } from '../../messages/components/message-item/message-ite
 import { textVariants } from '../../messages/components/message-item/message-item-text.style';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
-import { useDiscussion } from './discussion';
 
 export interface MainMessageProps {
   message: Message;
@@ -140,16 +138,6 @@ const CallMessage = ({ message }: { message: Message }) => {
           <div className="mt-1 text-sm font-light">{subContent}</div>
         </span>
       </div>
-      {/* {call?.type === 'GROUP' && !call.endTime && (
-        <Button
-          color="secondary"
-          size="xs"
-          shape="square"
-          className="mt-2 w-full"
-        >
-          Invite
-        </Button>
-      )} */}
     </div>
   );
 };

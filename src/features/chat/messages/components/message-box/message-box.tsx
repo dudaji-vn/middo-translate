@@ -18,6 +18,8 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
 import { TimeDisplay } from '../time-display';
+import { cn } from '@/utils/cn';
+import { useMediaUpload } from '@/components/media-upload';
 
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
@@ -125,14 +127,14 @@ export const MessageBox = ({ room }: { room: Room }) => {
   }, [currentUserId, messagesGroup, room.participants]);
 
   return (
-    <div className="relative flex h-full w-full flex-1 overflow-hidden">
+    <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
       <InfiniteScroll
         hasMore={hasNextPage || false}
         onLoadMore={loadMoreMessages}
         isFetching={isFetching}
         ref={ref}
         id="inbox-list"
-        className="bg-primary/5 flex w-full flex-1  flex-col-reverse gap-2 overflow-y-scroll px-3 pb-2 pt-6 md:px-5"
+        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2 overflow-y-scroll px-2 pb-2 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 

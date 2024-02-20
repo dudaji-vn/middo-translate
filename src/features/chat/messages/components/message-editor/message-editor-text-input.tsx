@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 
-import { useMessageEditorMedia } from './message-editor-media-context';
 import { useMessageEditorText } from './message-editor-text-context';
+import { useMediaUpload } from '@/components/media-upload';
 
 export interface TextInputRef extends HTMLInputElement {
   reset: () => void;
@@ -20,7 +20,7 @@ export const TextInput = forwardRef<
     inputDisabled,
   } = useMessageEditorText();
 
-  const { handlePasteFile } = useMessageEditorMedia();
+  const { handlePasteFile, getInputProps } = useMediaUpload();
 
   const inputRef = useRef<HTMLInputElement>(null);
   useImperativeHandle(

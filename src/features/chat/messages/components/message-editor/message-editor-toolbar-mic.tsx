@@ -8,13 +8,8 @@ export interface MessageEditorToolbarMicProps {}
 export const MessageEditorToolbarMic = (
   props: MessageEditorToolbarMicProps,
 ) => {
-  const {
-    listening,
-    handleStopListening,
-    handleStartListening,
-
-    userLanguage,
-  } = useMessageEditorText();
+  const { listening, handleStopListening, handleStartListening, userLanguage } =
+    useMessageEditorText();
   const { setSrcLang, srcLang } = useChatStore((s) => s);
 
   return (

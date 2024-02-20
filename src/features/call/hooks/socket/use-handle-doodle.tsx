@@ -9,11 +9,13 @@ import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { IStartDoodlePayload } from "../../interfaces/socket/doodle.interface";
 import { useAuthStore } from "@/stores/auth.store";
 import { Ban, Brush } from "lucide-react";
+import { useMyVideoCallStore } from "../../store/me.store";
 
 export default function useHandleDoodle() {
     const { setDoodle, setDoodleImage, setDrawing, setLayout, setPinDoodle, setMeDoodle } = useVideoCallStore();
     const { participants } = useParticipantVideoCallStore();
     const { user } = useAuthStore();
+    const { setMyOldDoodle } = useMyVideoCallStore();
 
     const doodleStart = useCallback((payload: IStartDoodlePayload) => {
         toast.success(payload.name + ' is start doodle', {icon: <Brush size={20} />});
@@ -29,11 +31,12 @@ export default function useHandleDoodle() {
     const doodleEnd = useCallback((name: string) => {
         toast.success(name + ' is stop doodle', {icon: <Ban size={20} />});
         setDoodle(false);
+        setMyOldDoodle(null)
         setDrawing(false);
         setDoodleImage('');
         setPinDoodle(false);
         setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
-    },[setDoodle, setDoodleImage, setDrawing, setLayout, setPinDoodle])
+    },[setDoodle, setDoodleImage, setDrawing, setLayout, setMyOldDoodle, setPinDoodle])
     
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, doodleStart);

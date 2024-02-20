@@ -185,7 +185,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               )}
             </div>
             {direction === 'top' && (
-              <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
+              <ReadByUsers
+                readByUsers={readByUsers}
+                isMe={isMe}
+                className="mb-2 mt-0"
+              />
             )}
           </>
         )}

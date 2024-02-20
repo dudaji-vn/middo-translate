@@ -1,7 +1,7 @@
 .bodyContainer {
   color: #333;
   padding-bottom: 40px;
-  height: 100%;
+  height: calc(100dvh - 52px);
   max-width: 1440px;
 }
 .pageNavigationBar {
@@ -12,22 +12,7 @@
   padding: 10px 5vw;
   margin-bottom: 20px;
 }
-.pageTitle {
-  color: var(--primary);
-  font-weight: 600;
-  text-transform: capitalize;
-}
-.backButton {
-  position: absolute;
-  left: 5vw;
-  padding: 10px;
-  border-radius: 999px;
-}
-.languageSwitcherWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .countryCircleIcon {
   width: 20px;
   height: 20px;

@@ -1,44 +1,47 @@
 'use client';
 
-import {
-  CheckCircle2Icon,
-  Globe2Icon,
-  SearchIcon,
-  XCircleIcon,
-} from 'lucide-react';
-import { addRecentlyUsed, getRecentlyUsed } from '@/utils/local-storage';
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { CheckCircle2Icon, Globe2Icon } from 'lucide-react';
+import { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Country } from '@/types/country.type';
-import { Input } from '@/components/data-entry';
+import { SearchInput } from '@/components/data-entry';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
+import { Country } from '@/types/country.type';
 import { cn } from '@/utils/cn';
+import { useLanguageStore } from '../../stores/language.store';
+import { useAppStore } from '@/stores/app.store';
 
 export interface ListLanguagesProps
   extends React.HTMLAttributes<HTMLDivElement> {
   selectedCode: string;
   onSelected: (code: string) => void;
   allowDetect?: boolean;
+  type: 'source' | 'target';
 }
 
 export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
-  ({ selectedCode, onSelected, allowDetect, ...props }, ref) => {
+  ({ selectedCode, onSelected, allowDetect, type, ...props }, ref) => {
     const [search, setSearch] = useState('');
+    const isMobile = useAppStore((state) => state.isMobile);
     const searchRef = useRef<any>(null);
+    const { recentlySourceUsed, recentlyTargetUsed, addRecentlyUsed } =
+      useLanguageStore();
 
-    const [recentlyUsed, setRecentlyUsed] =
-      useState<string[]>(getRecentlyUsed());
+    const recentlyUsed = useMemo(() => {
+      {
+        return Array.from(
+          new Set([...recentlySourceUsed, ...recentlyTargetUsed]),
+        );
+      }
+    }, [recentlySourceUsed, recentlyTargetUsed]);
+
     const handleSelected = (code: string) => {
-      const newRecentlyUsed = addRecentlyUsed(code);
-      setRecentlyUsed(newRecentlyUsed);
+      addRecentlyUsed(code, type);
       onSelected(code);
     };
     const filterLanguages = SUPPORTED_LANGUAGES.filter((language) => {
       if (search === '') return true;
       return language.name.toLowerCase().includes(search.toLowerCase());
     });
-
-    // hide keyboard on mobile when enter on keyboard
 
     useEffect(() => {
       const handleEnter = (e: KeyboardEvent) => {
@@ -52,31 +55,17 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
       };
     }, []);
 
-    useEffect(() => {
-      if (searchRef.current) searchRef.current?.focus();
-    }, []);
-
     return (
-      <div ref={ref} {...props} className="flex h-full flex-col pb-5">
+      <div ref={ref} {...props} className="flex h-full flex-col">
         <div className="px-5 py-5 pt-0 md:mx-auto md:w-[480px] ">
-          <Input
+          <SearchInput
             ref={searchRef}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search"
-            leftElement={
-              search === '' ? (
-                <SearchIcon className="h-5 w-5" />
-              ) : (
-                <XCircleIcon
-                  onClick={() => setSearch('')}
-                  className="h-5 w-5"
-                />
-              )
-            }
           />
         </div>
-        <div className="mb-8 flex-1 columns-1 gap-0 overflow-y-auto md:columns-3">
+        <div className="flex flex-col overflow-y-auto md:flex-row md:flex-wrap">
           {search === '' ? (
             <>
               {allowDetect && (
@@ -91,7 +80,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                 />
               )}
 
-              {recentlyUsed.length > 0 && (
+              {recentlyUsed.length > 0 && isMobile && (
                 <>
                   <Title>Recently used</Title>
                   {recentlyUsed.map((code) => {
@@ -144,7 +133,11 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
 ListLanguages.displayName = 'ListLanguages';
 
 const Title = ({ children }: { children: React.ReactNode }) => {
-  return <p className="mb-3 mt-6 pl-5 text-secondary">{children}</p>;
+  return (
+    <p className="mb-3 mt-6 inline w-full pl-5 text-secondary md:hidden md:w-1/3">
+      {children}
+    </p>
+  );
 };
 
 const Item = ({
@@ -164,7 +157,7 @@ const Item = ({
       onClick={onClick}
       key={language.code}
       className={cn(
-        'flex w-full items-center px-5 py-3 active:bg-stroke md:hover:bg-background-darker',
+        'flex w-full items-center px-5 py-3 active:bg-stroke md:w-1/3 md:hover:bg-background-darker',
         selected && 'bg-lighter text-primary disabled:bg-lighter',
       )}
     >
@@ -174,20 +167,5 @@ const Item = ({
       </span>
       {selected && <CheckCircle2Icon className="ml-auto h-5 w-5 " />}
     </button>
-  );
-};
-
-const Section = ({
-  title,
-  children,
-}: {
-  title?: string;
-  children: React.ReactNode;
-}) => {
-  return (
-    <div className="mb-8">
-      {title && <p className="mb-3 pl-[5vw] text-secondary">{title}</p>}
-      <div>{children}</div>
-    </div>
   );
 };

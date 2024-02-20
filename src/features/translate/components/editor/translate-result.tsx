@@ -39,17 +39,23 @@ export const TranslateResult = ({
       bottomElement={!isMobile && children}
       languageCode={languageCode}
       footerElement={
-        <div className="bottom-3 right-3 mt-3 flex justify-end">
+        <div className="bottom-3 right-3 mt-3 flex justify-end gap-2">
           <Button.Icon
             disabled={!result}
             onClick={() => speak()}
             variant="ghost"
             color="primary"
+            size="xs"
           >
             <Volume2Icon />
           </Button.Icon>
           <CopyZoneClick text={result}>
-            <Button.Icon disabled={!result} variant="ghost" color="primary">
+            <Button.Icon
+              disabled={!result}
+              variant="ghost"
+              color="primary"
+              size="xs"
+            >
               <CopyIcon />
             </Button.Icon>
           </CopyZoneClick>

@@ -14,6 +14,10 @@ import { Response } from '@/types';
 import { Room } from '@/features/chat/rooms/types';
 import { fetchApi } from '@/utils/data-fetching';
 import { PinnedBar } from '@/features/chat/rooms/components/pin-message-bar';
+import {
+  MediaUploadDropzone,
+  MediaUploadProvider,
+} from '@/components/media-upload';
 
 async function getChatRoom(id: string) {
   const data = await fetchApi<Response<Room>>(`/rooms/${id}`);
@@ -39,10 +43,14 @@ const ChatBoxPage = async (props: {
         <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
           <ChatBoxHeader />
           <PinnedBar />
-          <MessagesBoxProvider room={room}>
-            <MessageBox room={room} />
-            <ChatBoxFooter />
-          </MessagesBoxProvider>
+          <MediaUploadProvider>
+            <MediaUploadDropzone>
+              <MessagesBoxProvider room={room}>
+                <MessageBox room={room} />
+                <ChatBoxFooter />
+              </MessagesBoxProvider>
+            </MediaUploadDropzone>
+          </MediaUploadProvider>
         </div>
         <RoomSide />
       </div>

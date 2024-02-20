@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import { ArrowLeftIcon } from 'lucide-react';
 import { forwardRef } from 'react';
+import { Button } from '../actions';
 
 export interface BackLayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   onBack?: () => void;
@@ -23,7 +24,9 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
         className="bodyContainer mx-auto flex flex-col justify-center"
       >
         <div className="pageNavigationBar">
-          <button
+          <Button.Icon
+            size="xs"
+            color="default"
             onClick={
               onBack ||
               (() => {
@@ -31,13 +34,15 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
                 router.back();
               })
             }
-            className="backButton active:bg-stroke md:hover:bg-background-darker"
+            className="absolute left-[4px] md:left-[5vw]"
           >
-            <ArrowLeftIcon className="h-[30px] w-[30px]" />
-          </button>
-          <p className="pageTitle">{title}</p>
+            <ArrowLeftIcon />
+          </Button.Icon>
+          <p className="font-semibold capitalize text-primary">{title}</p>
         </div>
-        <div className="flex-1 overflow-hidden px-[5vw]">{props.children}</div>
+        <div className="flex-1 overflow-hidden md:px-[5vw]">
+          {props.children}
+        </div>
       </div>
     );
   },

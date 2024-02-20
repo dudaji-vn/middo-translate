@@ -1,7 +1,8 @@
 import { Button } from '@/components/actions';
 import { SendIcon } from 'lucide-react';
-import { useMessageEditorMedia } from './message-editor-media-context';
+
 import { useMessageEditorText } from './message-editor-text-context';
+import { useMediaUpload } from '@/components/media-upload';
 
 export interface MessageEditorSubmitButtonProps {}
 
@@ -9,7 +10,7 @@ export const MessageEditorSubmitButton = (
   props: MessageEditorSubmitButtonProps,
 ) => {
   const { text } = useMessageEditorText();
-  const { files } = useMessageEditorMedia();
+  const { files } = useMediaUpload();
   const disabled = text.trim().length === 0 && files.length === 0;
   if (disabled) {
     return null;

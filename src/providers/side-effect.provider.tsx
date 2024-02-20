@@ -6,11 +6,18 @@ import { useMediaQuery } from 'usehooks-ts';
 
 export const SideEffectProvider = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
+  const isTablet = useMediaQuery('(max-width: 1024px)');
   const setMobile = useAppStore((state) => state.setMobile);
+  const setTablet = useAppStore((state) => state.setTablet);
   useEffect(() => {
     setMobile(isMobile);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMobile]);
+
+  useEffect(() => {
+    setTablet(isTablet);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isTablet]);
 
   useEffect(() => {
     const handleMessage = async () => {
@@ -18,10 +25,6 @@ export const SideEffectProvider = () => {
       onMessageListener();
     };
     handleMessage();
-
-    // onMessageListener();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   return <></>;
 };

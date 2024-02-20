@@ -32,11 +32,10 @@ export const RoomModalDelete = (props: RoomModalDeleteProps) => {
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to delete this room?
-          </AlertDialogTitle>
+          <AlertDialogTitle>Delete conversation?</AlertDialogTitle>
           <AlertDialogDescription>
-            You will lose all of your messages and files in this room.
+            You will lose all of your messages and files. Others still can see
+            your messages. Are you sure to delete?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
