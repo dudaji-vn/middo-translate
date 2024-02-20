@@ -9,6 +9,7 @@ import {
   NEXT_PUBLIC_FCM_STORAGE_BUCKET,
 } from '@/configs/env.public';
 import {
+  Messaging,
   deleteToken,
   getMessaging,
   getToken,
@@ -17,7 +18,6 @@ import {
 
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
-import toast from 'react-hot-toast';
 
 const firebaseConfig = {
   apiKey: NEXT_PUBLIC_FCM_API_KEY,
@@ -31,29 +31,48 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const messaging = getMessaging();
+let messaging: Messaging | null = null;
+try {
+  messaging = getMessaging();
+} catch (error) {
+  console.log('An error occurred while retrieving token:', error);
+}
 const analytics = getAnalytics(app);
 
 export { app as firebaseApp, messaging as firebaseMessaging };
 
 export const requestForToken = async () => {
-  const token = await getToken(messaging, {
-    vapidKey: NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY,
-  });
-  return token;
+  try {
+    if (!messaging) {
+      messaging = getMessaging(app);
+    }
+    const token = await getToken(messaging, {
+      vapidKey: NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY,
+    });
+    return token;
+  } catch (error) {
+    console.error('An error occurred while retrieving token:', error);
+  }
 };
 
 export const deleteFCMToken = async () => {
-  console.log('deleteFCMToken');
-  await deleteToken(messaging);
+  try {
+    if (!messaging) {
+      messaging = getMessaging(app);
+      await deleteToken(messaging);
+    }
+    await deleteToken(messaging);
+  } catch (error) {
+    console.error('An error occurred while deleting token:', error);
+  }
 };
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
-    onMessage(messaging, (payload) => {
-      toast.success(payload.data?.body || 'New message received!', {
-        position: 'top-right',
-      });
-      resolve(payload);
-    });
+    // onMessage(messaging, (payload) => {
+    //   toast.success(payload.data?.body || 'New message received!', {
+    //     position: 'top-right',
+    //   });
+    //   resolve(payload);
+    // });
   });
