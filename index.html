@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        button {
+            padding: 10px 20px;
+            color: #fff;
+            background-color: rgb(52, 175, 231);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <button id="start">Start Record</button>
+    <div id="timer">Timer: <span>3</span>s</div>
+    <div id="audio"></div>
+    <script>
+        const button = document.querySelector('button');
+        const constraints = { audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+        }};
+        let timer = document.querySelector('#timer span');
+        let count = 5;
+        let timerInterval;
+        let recordedChunks = [];
+
+        let btnStart = document.getElementById('start');
+        let btnPlay = document.getElementById('play');
+
+        btnStart.addEventListener('click', () => {
+            navigator.mediaDevices.getUserMedia(constraints)
+            .then(stream => {
+                const myStream = stream
+                // Handle to remove echo sound
+                const audioContext = new AudioContext();
+                const source = audioContext.createMediaStreamSource(myStream);
+
+                // Create a ScriptProcessorNode to process the audio
+                const scriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+                
+                // Connect the source to the scriptNode
+                source.connect(scriptNode);
+                
+                // Connect the scriptNode to the destination (e.g., speakers)
+                scriptNode.connect(audioContext.destination);
+
+                // Add your audio processing logic here, such as echo cancellation
+
+                // Handle audio data in the onaudioprocess event
+                scriptNode.onaudioprocess = function(audioProcessingEvent) {
+                    const inputBuffer = audioProcessingEvent.inputBuffer;
+                    const outputBuffer = audioProcessingEvent.outputBuffer;
+
+                    for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+                        const inputData = inputBuffer.getChannelData(channel);
+                        const outputData = outputBuffer.getChannelData(channel);
+
+                        // Process the audio data here
+                        // For echo cancellation, you can implement your own algorithm
+                        // or use a library like WebRTC's AEC
+
+                        // Example: copy input to output (no processing)
+                        for (let sample = 0; sample < inputBuffer.length; sample++) {
+                            outputData[sample] = inputData[sample];
+                        }
+                    }
+                };
+
+                const mediaRecorder = new MediaRecorder(myStream);
+                mediaRecorder.start();
+
+                mediaRecorder.ondataavailable = function(e) {
+                    recordedChunks.push(e.data);
+                }
+
+                mediaRecorder.onstop = function() {
+                    const audio = document.getElementById('audio');
+                    const audioBlob = new Blob(recordedChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    audio.innerHTML = `<audio controls src="${audioUrl}"></audio>`;
+                }
+
+                timerInterval = setInterval(() => {
+                    count--;
+                    timer.textContent = count;
+                    if (count === 0) {
+                        clearInterval(timerInterval);
+                        mediaRecorder.stop();
+                        count = 3;
+                        timer.textContent = count;
+                    }
+                }, 1000);
+            }).catch(err => {
+                alert('You must allow access to the microphone to use this feature');
+            });
+        });
+
+    </script>
+</body>
+</html>

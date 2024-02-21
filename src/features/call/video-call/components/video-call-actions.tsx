@@ -82,7 +82,7 @@ export default function VideoCallActions() {
     
     getUserStream({isTurnOnCamera: video, isTurnOnMic: audio})
       .then((stream: MediaStream) => {
-        const myVideoStream = processingStream(stream);
+        const myVideoStream = stream;
         if (!audio && myVideoStream.getAudioTracks().length > 0) {
           myVideoStream.getAudioTracks().forEach((track) => {
             track.enabled = false;

@@ -24,7 +24,7 @@ export default function useHandleStreamMyVideo() {
         // Start get streaming
         getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic})
         .then((stream: MediaStream) => {
-            myVideoStream = processingStream(stream);
+            myVideoStream = stream;
             setMyStream(myVideoStream);
             setStreamForParticipant(myVideoStream, socket.id || '', false)
             setLoadingVideo(false);
