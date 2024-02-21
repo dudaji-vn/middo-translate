@@ -12,12 +12,23 @@ import { MoreVertical, UserPlus2 } from 'lucide-react';
 import ActionToggleCaption from './action-toggle-caption';
 import ActionDoodle from './action-doodle';
 import ActionToggleLayout from './action-toggle-layout';
+import { useState } from 'react';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
+const SHORTCUT_TOGGLE_ACTIONS = ['o'];
 export default function DropdownActions() {
   const { room, isFullScreen, setModalAddUser } = useVideoCallStore();
+  const  [openActions, setOpenActions] = useState(false);
+  
+  useKeyboardShortcut(SHORTCUT_TOGGLE_ACTIONS, () => {
+    setOpenActions(!openActions);
+  })
 
   return (
-    <DropdownMenu>
+    <DropdownMenu
+      open={openActions}
+      onOpenChange={setOpenActions}
+    >
       <DropdownMenuTrigger asChild>
         <Button.Icon
           variant="default"

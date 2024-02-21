@@ -21,8 +21,8 @@ export default function ActionDoodle() {
   } = useVideoCallStore();
   const { handleStartDoodle } = useVideoCallContext();
 
-  const haveShareScreen = useHaveShareScreen()
-  
+  const haveShareScreen = useHaveShareScreen();
+
   const onDoodle = () => {
     if (!isDoodle && isMeDoole) return;
     // Start doodle
@@ -35,18 +35,23 @@ export default function ActionDoodle() {
       setDrawing(!isDrawing);
     }
   };
-  useKeyboardShortcut(SHORTCUT_TOGGLE_DOODLE, onDoodle);
+  const isDoodleDisabled = useMemo(() => {
+    return (
+      !haveShareScreen ||
+      !isFullScreen ||
+      !isPinShareScreen ||
+      layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW
+    );
+  }, [haveShareScreen, isFullScreen, isPinShareScreen, layout]);
+
+  useKeyboardShortcut(SHORTCUT_TOGGLE_DOODLE, () => {
+    if (!isDoodleDisabled) {
+      onDoodle();
+    }
+  });
 
   return (
-    <DropdownMenuItem
-      disabled={
-        !haveShareScreen ||
-        !isFullScreen ||
-        !isPinShareScreen ||
-        layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW
-      }
-      onClick={onDoodle}
-    >
+    <DropdownMenuItem disabled={isDoodleDisabled} onClick={onDoodle}>
       <Brush />
       <span className="ml-2">Screen Doodle</span>
     </DropdownMenuItem>

@@ -12,7 +12,10 @@ const ActionToggleLayout = () =>  {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
   };
 
-  useKeyboardShortcut(SHORTCUT_TOGGLE_LAYOUT, changeLayout);
+  useKeyboardShortcut(SHORTCUT_TOGGLE_LAYOUT, (e)=>{
+    e?.preventDefault();
+    changeLayout();
+  });
 
   return (
     <DropdownMenuItem
