@@ -1,16 +1,19 @@
 import { Maximize2, Minimize2, Phone } from 'lucide-react';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from '@/components/actions';
 import { useVideoCallStore } from '../../store/video-call.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
 export default function VideoCallHeader() {
   const { room, isFullScreen, setFullScreen } = useVideoCallStore();
 
-  const toggleFullScreen = () => {
+  const toggleFullScreen =  useCallback(() => {
     setFullScreen(!isFullScreen);
-  };
+  }, [setFullScreen, isFullScreen]);
 
+  useKeyboardShortcut(['shift', 'm'], toggleFullScreen);
+  
   return (
     <div
       className={`flex items-center gap-1 bg-primary-100 py-2 pl-3 pr-1 text-primary ${
