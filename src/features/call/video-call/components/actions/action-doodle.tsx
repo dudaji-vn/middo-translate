@@ -6,7 +6,9 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { Brush } from 'lucide-react';
 import React, { useMemo } from 'react';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
+const SHORTCUT_TOGGLE_DOODLE = ['e'];
 export default function ActionDoodle() {
   const {
     isFullScreen,
@@ -33,6 +35,8 @@ export default function ActionDoodle() {
       setDrawing(!isDrawing);
     }
   };
+  useKeyboardShortcut(SHORTCUT_TOGGLE_DOODLE, onDoodle);
+
   return (
     <DropdownMenuItem
       disabled={
