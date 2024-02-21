@@ -6,13 +6,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { CALL_TYPE } from '@/features/call/constant/call-type';
-import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { MoreVertical, UserPlus2 } from 'lucide-react';
 import ActionToggleCaption from './action-toggle-caption';
 import ActionDoodle from './action-doodle';
 import ActionToggleLayout from './action-toggle-layout';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useVideoCallContext } from '@/features/call/context/video-call-context';
