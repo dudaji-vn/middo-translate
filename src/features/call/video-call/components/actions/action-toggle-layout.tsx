@@ -5,18 +5,11 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { LayoutGrid } from 'lucide-react';
 import React, { memo } from 'react';
 
-const SHORTCUT_TOGGLE_LAYOUT = ['g'];
 const ActionToggleLayout = () =>  {
   const { layout, setLayout } = useVideoCallStore();
   const changeLayout = () => {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
   };
-
-  useKeyboardShortcut([SHORTCUT_TOGGLE_LAYOUT], (e)=>{
-    e?.preventDefault();
-    changeLayout();
-  });
-
   return (
     <DropdownMenuItem
       disabled={layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW}

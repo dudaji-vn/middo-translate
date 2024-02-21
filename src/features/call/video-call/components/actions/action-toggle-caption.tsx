@@ -1,18 +1,10 @@
 import { DropdownMenuItem } from '@/components/data-display';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
-import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { ScanText } from 'lucide-react';
-import React, { useCallback } from 'react';
+import React from 'react';
 
-const SHORTCUT_TOGGLE_CAPTION = ['l'];
 export default function ActionToggleCaption() {
   const { isShowCaption, setShowCaption } = useVideoCallStore();
-
-  const onToggleCaption = useCallback(() => {
-    setShowCaption(!isShowCaption);
-  }, [isShowCaption, setShowCaption]);
-
-  useKeyboardShortcut([SHORTCUT_TOGGLE_CAPTION], onToggleCaption);
   return (
     <DropdownMenuItem
       onClick={() => setShowCaption(!isShowCaption)}
