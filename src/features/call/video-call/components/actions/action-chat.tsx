@@ -2,14 +2,16 @@ import { Button } from '@/components/actions';
 import { SubtitlesIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import socket from '@/lib/socket-io';
-import { memo, useEffect, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useQueryClient } from '@tanstack/react-query';
 import { Message } from '@/features/chat/messages/types';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useAppStore } from '@/stores/app.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
+const SHORTCUT_TOGGLE_DISCUSSION = ['d'];
 const ActionChat = () => {
   const [newCount, setNewCount] = useState(0);
   const { isFullScreen, isShowChat, setShowChat, messageId } =
@@ -38,6 +40,12 @@ const ActionChat = () => {
     if (isMobile) setShowChat(false);
   }, [isMobile, setShowChat]);
 
+  const onToggleDiscussion = useCallback(() => {
+    setShowChat(!isShowChat);
+  }, [setShowChat, isShowChat]);
+
+  useKeyboardShortcut(SHORTCUT_TOGGLE_DISCUSSION, onToggleDiscussion);
+
   return (
     <div className={cn('relative', !isFullScreen && 'hidden')}>
       <Tooltip
@@ -47,7 +55,7 @@ const ActionChat = () => {
             variant="default"
             size="xs"
             color={isShowChat ? 'primary' : 'default'}
-            onClick={() => setShowChat(!isShowChat)}
+            onClick={onToggleDiscussion}
           >
             <SubtitlesIcon />
           </Button.Icon>
