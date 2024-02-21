@@ -15,6 +15,7 @@ import ActionAddMembers from './actions/action-add-members';
 import ActionChat from './actions/action-chat';
 import InviteTooltip from './invite-tooltip';
 import DropdownActions from './actions/dropdown-actions';
+import processingStream from '../../utils/processing-stream';
 
 export default function VideoCallActions() {
   const {
@@ -80,13 +81,14 @@ export default function VideoCallActions() {
     navigator.mediaDevices
       .getUserMedia({ ...streamConfig })
       .then((stream: MediaStream) => {
-        if (!audio && stream.getAudioTracks().length > 0) {
-          stream.getAudioTracks().forEach((track) => {
+        const myVideoStream = processingStream(stream);
+        if (!audio && myVideoStream.getAudioTracks().length > 0) {
+          myVideoStream.getAudioTracks().forEach((track) => {
             track.enabled = false;
           });
         }
-        setStreamForParticipant(stream, socket.id || '', false);
-        setMyStream(stream);
+        setStreamForParticipant(myVideoStream, socket.id || '', false);
+        setMyStream(myVideoStream);
         setLoadingVideo(false);
       })
       .catch(() => {

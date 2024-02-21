@@ -12,7 +12,7 @@ import { MonitorX } from "lucide-react";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 
 export default function useHandleShareScreen() {
-    const { room, setLayout } = useVideoCallStore();
+    const { room, setLayout, setChooseScreen } = useVideoCallStore();
     const { participants, removeParticipantShareScreen, peerShareScreen, clearPeerShareScreen, addParticipant, addPeerShareScreen } = useParticipantVideoCallStore();
     const { shareScreenStream, setShareScreen, isShareScreen, setShareScreenStream } = useMyVideoCallStore();
     const { user } = useAuthStore();
@@ -120,6 +120,12 @@ export default function useHandleShareScreen() {
             return;
         }
         try {
+            const isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
+            if(isElectron) {
+                setChooseScreen(true);
+                return;
+            }
+
             let stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 15 }, audio: true })
             if (!socket.id) return;
             const shareScreen = {
@@ -139,7 +145,7 @@ export default function useHandleShareScreen() {
             }
         }
 
-    }, [addParticipant, isShareScreen, room?._id, setShareScreen, setShareScreenStream, stopShareScreen, user])
+    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user])
 
     useEffect(() => {
         if(!shareScreenStream) return;

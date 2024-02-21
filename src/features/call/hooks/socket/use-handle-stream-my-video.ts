@@ -9,6 +9,7 @@ import getStreamConfig from "../../utils/get-stream-config";
 import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { createPeer } from "../../utils/peer-action.util";
+import processingStream from "../../utils/processing-stream";
 
 export default function useHandleStreamMyVideo() {
     const { user } = useAuthStore();
@@ -24,14 +25,15 @@ export default function useHandleStreamMyVideo() {
         setLoadingVideo(true);
         // Start get streaming
         navigator.mediaDevices.getUserMedia({...streamConfig}).then((stream: MediaStream) => {
-            myVideoStream = stream;
-            setMyStream(stream);
-            setStreamForParticipant(stream, socket.id || '', false)
+            myVideoStream = processingStream(stream);
+            setMyStream(myVideoStream);
+            setStreamForParticipant(myVideoStream, socket.id || '', false)
             setLoadingVideo(false);
         }).catch((err: any) =>  {
             setTurnOnCamera(false);
             setTurnOnMic(false);
             setLoadingVideo(false);
+            console.log(err)
             toast.error("Can not access to your camera and mic!")
         })
 

@@ -23,6 +23,7 @@ export type VideoCallState = {
   isShowModalAddUser: boolean;
   captions: CaptionInterface[];
   messageId: string;
+  showChooseScreen: boolean;
   setRoom: (room: any) => void;
   setLayout: (layout?: string) => void;
   setConfirmLeave: (confirmLeave: boolean) => void;
@@ -45,6 +46,7 @@ export type VideoCallState = {
   setMessageId: (messageId: string) => void;
   clearStateVideoCall: () => void;
   clearRequestCall: () => void;
+  setChooseScreen: (showChooseScreen: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -69,6 +71,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   isShowModalAddUser: false,
   captions: [],
   messageId: '',
+  showChooseScreen: false,
   setRoom: (room: any) => {
     set(() => ({ room }));
   },
@@ -137,6 +140,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   setMessageId: (messageId: string) => {
     set(() => ({ messageId }));
+  },
+  setChooseScreen: (showChooseScreen: boolean) => {
+    set(() => ({ showChooseScreen }));
   },
   clearStateVideoCall: () => {
     set(() => ({
