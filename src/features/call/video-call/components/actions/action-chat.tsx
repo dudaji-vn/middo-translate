@@ -10,8 +10,8 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useAppStore } from '@/stores/app.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
-const SHORTCUT_TOGGLE_DISCUSSION = ['d'];
 const ActionChat = () => {
   const [newCount, setNewCount] = useState(0);
   const { isFullScreen, isShowChat, setShowChat, messageId } =
@@ -44,7 +44,7 @@ const ActionChat = () => {
     setShowChat(!isShowChat);
   }, [setShowChat, isShowChat]);
 
-  useKeyboardShortcut([SHORTCUT_TOGGLE_DISCUSSION], onToggleDiscussion);
+  useKeyboardShortcut([SHORTCUTS.TOGGLE_DISCUSSION], onToggleDiscussion);
 
   return (
     <div className={cn('relative', !isFullScreen && 'hidden')}>

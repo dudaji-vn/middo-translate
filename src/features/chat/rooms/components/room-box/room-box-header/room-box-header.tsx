@@ -13,6 +13,7 @@ import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tab
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -38,7 +39,6 @@ export const ChatBoxHeader = () => {
     </div>
   );
 };
-const SHORTCUT_TOGGLE_INFO = ['shift', 'i'];
 const ActionBar = () => {
   const { toggleTab, currentSide } = useRoomSidebarTabs();
   const isShowInfo = currentSide === 'info';
@@ -47,7 +47,7 @@ const ActionBar = () => {
     toggleTab('info');
   }, [toggleTab]);
   
-  useKeyboardShortcut([SHORTCUT_TOGGLE_INFO], handleToggleInfo);
+  useKeyboardShortcut([SHORTCUTS.VIEW_CONVERSATION_INFORMATION], handleToggleInfo);
 
   return (
     <div>

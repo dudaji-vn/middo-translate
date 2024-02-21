@@ -3,15 +3,15 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { CALL_TYPE } from '@/features/call/constant/call-type';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 import { UserPlus2 } from 'lucide-react';
-import React, { memo, useCallback } from 'react';
-import { boolean } from 'yup';
+import React, { memo } from 'react';
 
-const SHORTCUT_ADD_MEMBERS = ['a'];
 const ActionAddMembers = () => {
-  const { room, isFullScreen, setModalAddUser, isShowModalAddUser } = useVideoCallStore();
+  const { room, isFullScreen, setModalAddUser, isShowModalAddUser } =
+    useVideoCallStore();
 
-  useKeyboardShortcut([SHORTCUT_ADD_MEMBERS], () => {
+  useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
     setModalAddUser(!isShowModalAddUser);
   });
 

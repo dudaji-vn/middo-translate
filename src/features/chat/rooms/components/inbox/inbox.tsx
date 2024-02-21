@@ -6,6 +6,7 @@ import InboxList from './inbox-list';
 import { RoomActions } from '../room-actions';
 import { useCallback, useState } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface InboxProps {}
 export type InboxType = 'all' | 'group';
@@ -26,14 +27,16 @@ export const inboxTabMap: Record<
   },
 };
 
-const SHORTCUT_SWITCH_TABS = [['shift', 'a'], ['shift', 'g']];
 export const Inbox = (props: InboxProps) => {
   const [type, setType] = useState<InboxType>('all');
 
-  useKeyboardShortcut(SHORTCUT_SWITCH_TABS, (e) => {
-    if(!e) return;
-    setType(e.key.toLowerCase() === 'a' ? 'all' : 'group');
-  });
+  useKeyboardShortcut(
+    [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
+    (e) => {
+      if (!e || !e.shiftKey) return;
+      setType(e.key.toLowerCase() === 'a' ? 'all' : 'group');
+    },
+  );
 
   return (
     <RoomActions>
