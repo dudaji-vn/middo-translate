@@ -44,7 +44,7 @@ export default function ActionDoodle() {
     );
   }, [haveShareScreen, isFullScreen, isPinShareScreen, layout]);
 
-  useKeyboardShortcut(SHORTCUT_TOGGLE_DOODLE, () => {
+  useKeyboardShortcut([SHORTCUT_TOGGLE_DOODLE], () => {
     if (!isDoodleDisabled) {
       onDoodle();
     }

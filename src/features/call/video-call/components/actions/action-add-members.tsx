@@ -11,7 +11,7 @@ const SHORTCUT_ADD_MEMBERS = ['a'];
 const ActionAddMembers = () => {
   const { room, isFullScreen, setModalAddUser, isShowModalAddUser } = useVideoCallStore();
 
-  useKeyboardShortcut(SHORTCUT_ADD_MEMBERS, () => {
+  useKeyboardShortcut([SHORTCUT_ADD_MEMBERS], () => {
     setModalAddUser(!isShowModalAddUser);
   });
 

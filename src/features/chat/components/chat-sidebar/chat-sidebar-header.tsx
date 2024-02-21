@@ -30,7 +30,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     changeSide('individual');
   }, [changeSide]);
 
-  useKeyboardShortcut(SHORTCUT_NEW_CONVERSATION, handleNewConversation);
+  useKeyboardShortcut([SHORTCUT_NEW_CONVERSATION], handleNewConversation);
 
   const handleBack = useCallback(() => {
     removeParams([SPK_SEARCH, SPK_CHAT_TAB]);

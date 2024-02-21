@@ -30,7 +30,7 @@ export const MessageEditorToolbar = forwardRef<
     console.log('openSetting', openSetting)
     setOpenSetting((prev) => !prev);
   };
-  useKeyboardShortcut(SHORTCUT_TOGGLE_SETTING, handleToggleSetting);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_SETTING], handleToggleSetting);
   useEffect(() => {
     // enable submit form by enter
     const formRef = document.getElementById('message-editor');

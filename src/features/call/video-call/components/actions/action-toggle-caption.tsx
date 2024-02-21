@@ -12,7 +12,7 @@ export default function ActionToggleCaption() {
     setShowCaption(!isShowCaption);
   }, [isShowCaption, setShowCaption]);
 
-  useKeyboardShortcut(SHORTCUT_TOGGLE_CAPTION, onToggleCaption);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_CAPTION], onToggleCaption);
   return (
     <DropdownMenuItem
       onClick={() => setShowCaption(!isShowCaption)}

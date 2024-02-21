@@ -85,7 +85,7 @@ export const TranslateOptionBar = forwardRef<
       SpeechRecognition.stopListening();
     }, 500);
   };
-  useKeyboardShortcut(SHORTCUT_SPEECH_TO_TEXT, () =>
+  useKeyboardShortcut([SHORTCUT_SPEECH_TO_TEXT], () =>
     isListening ? handleStopListening() : handleStartListening(),
   );
 

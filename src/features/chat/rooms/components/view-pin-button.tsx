@@ -12,7 +12,7 @@ export const ViewPinButton = (props: ViewPinButtonProps) => {
   const viewPinnedMessages = useCallback(() => {
     toggleTab('pinned');
   }, [toggleTab]);
-  useKeyboardShortcut(SHORTCUT_TOGGLE_PINNED, viewPinnedMessages);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_PINNED], viewPinnedMessages);
 
   const isShowPinned = currentSide === 'pinned';
   return (

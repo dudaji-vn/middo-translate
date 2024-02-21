@@ -44,7 +44,7 @@ const ActionChat = () => {
     setShowChat(!isShowChat);
   }, [setShowChat, isShowChat]);
 
-  useKeyboardShortcut(SHORTCUT_TOGGLE_DISCUSSION, onToggleDiscussion);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_DISCUSSION], onToggleDiscussion);
 
   return (
     <div className={cn('relative', !isFullScreen && 'hidden')}>

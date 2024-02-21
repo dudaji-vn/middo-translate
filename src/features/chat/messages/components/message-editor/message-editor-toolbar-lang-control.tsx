@@ -25,7 +25,7 @@ export const MessageEditorToolbarLangControl = (
 
   const SHORTCUT_TOGGLE_SWITCH_LANG = ['shift', 'l'];
 
-  useKeyboardShortcut(SHORTCUT_TOGGLE_SWITCH_LANG, () => {
+  useKeyboardShortcut([SHORTCUT_TOGGLE_SWITCH_LANG], () => {
     setOpenSwicthLanguage(prev => !prev);
   });
 

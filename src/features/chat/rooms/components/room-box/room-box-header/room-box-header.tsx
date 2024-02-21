@@ -47,7 +47,7 @@ const ActionBar = () => {
     toggleTab('info');
   }, [toggleTab]);
   
-  useKeyboardShortcut(SHORTCUT_TOGGLE_INFO, handleToggleInfo);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_INFO], handleToggleInfo);
 
   return (
     <div>

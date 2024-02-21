@@ -13,7 +13,7 @@ export default function VideoCallHeader() {
     setFullScreen(!isFullScreen);
   }, [setFullScreen, isFullScreen]);
 
-  useKeyboardShortcut(SHORTCUT_TOGGLE_FULLSCREEN, toggleFullScreen);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_FULLSCREEN], toggleFullScreen);
   
   return (
     <div

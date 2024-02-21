@@ -7,7 +7,7 @@ import { useEffect } from "react";
 type Key = "shift" | string;
 
 export const useKeyboardShortcut = (
-  keys: Key[],
+  keysSet: Array<Key[]>,
   callback: (event?: KeyboardEvent) => void
 ) => {
   const {
@@ -18,10 +18,12 @@ export const useKeyboardShortcut = (
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (!isFocused && allowShortcutListener &&
-        keys.every(
-          (key) =>
-            (key.toLowerCase() === "shift" && event.shiftKey) ||
-            (typeof key === "string" && event.key.toLowerCase() === key.toLowerCase())
+        keysSet?.some((keys) =>
+          keys?.every(
+            (key) =>
+              (key.toLowerCase() === "shift" && event.shiftKey) ||
+              (typeof key === "string" && event.key.toLowerCase() === key.toLowerCase())
+          )
         )
       ) {
         callback(event);
@@ -31,5 +33,5 @@ export const useKeyboardShortcut = (
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [keys, callback, isFocused]);
+  }, [keysSet, callback, isFocused]);
 };

@@ -12,7 +12,7 @@ const ActionToggleLayout = () =>  {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
   };
 
-  useKeyboardShortcut(SHORTCUT_TOGGLE_LAYOUT, (e)=>{
+  useKeyboardShortcut([SHORTCUT_TOGGLE_LAYOUT], (e)=>{
     e?.preventDefault();
     changeLayout();
   });

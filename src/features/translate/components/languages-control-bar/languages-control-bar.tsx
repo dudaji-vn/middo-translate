@@ -88,7 +88,7 @@ export const LanguagesControlBar = forwardRef<
       setValue,
       targetResult,
     ]);
-    useKeyboardShortcut(SHORTCUT_SWAPLANGUAGE, handleSwapLanguage);
+    useKeyboardShortcut([SHORTCUT_SWAPLANGUAGE], handleSwapLanguage);
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');

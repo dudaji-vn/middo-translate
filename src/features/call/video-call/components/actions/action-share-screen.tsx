@@ -12,7 +12,7 @@ const ActionShareScreen = () => {
   const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen } = useVideoCallContext();
   const haveShareScreen = useHaveShareScreen();
-  useKeyboardShortcut(SHORTCUT_SHARING_SCREEN, handleShareScreen);
+  useKeyboardShortcut([SHORTCUT_SHARING_SCREEN], handleShareScreen);
   return (
     <Tooltip
       title={isShareScreen ? 'Stop sharing screen' : 'Share screen'}
