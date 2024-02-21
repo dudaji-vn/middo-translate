@@ -71,7 +71,6 @@ pnpm start
 
 6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
 ### TIP : Set up sentry (crash report)
 
 - Set SENTRY_DSN
@@ -85,3 +84,45 @@ pnpm start
   import * as Sentry from '@sentry/nextjs';
   Sentry.captureException(msg);
   ```
+
+### Google Cloud APIs Integration in Project
+
+This for integration of Google Cloud APIs within the project, detailing their respective endpoints, functionalities, and usage.
+
+[Google Cloud Translation API](https://cloud.google.com/translate/docs):
+
+- API Endpoints:
+
+  - Detect language of text: `POST https://translation.googleapis.com/language/translate/v2/detect`
+  - Translate text: `POST https://translation.googleapis.com/language/translate/v2`
+  - Supported languages: `GET https://translation.googleapis.com/language/translate/v2/languages`
+
+- JS Library: `@google-cloud/translate`
+
+- Configuration Details:
+
+  - File: src/lib/cloud-translate.ts
+  - This file contains the configuration settings for the Google Cloud Translation API, including authentication setup and other required parameters.
+
+- Usage:
+
+  - File: src/app/api/language
+  - This file demonstrates the usage of the Translation API within the project, including detecting language of text, translating text, and fetching supported languages.
+
+[Google Cloud Text-to-Speech API](https://cloud.google.com/text-to-speech/docs):
+
+- API Endpoints:
+
+  - Convert text to speech: `POST https://texttospeech.googleapis.com/v1/text:synthesize`
+  - Supported voices: `GET https://texttospeech.googleapis.com/v1/voices`
+
+- JS Library: `@google-cloud/text-to-speech`
+
+- Configuration Details:
+
+  - File: src/lib/cloud-voice.ts
+  - This file contains the configuration settings for the Google Cloud Text-to-Speech API, including authentication setup and other required parameters.
+
+- Usage:
+  - File: src/app/api/voice
+  - This file demonstrates the usage of the Text-to-Speech API within the project, including converting text to speech and fetching supported voices.
