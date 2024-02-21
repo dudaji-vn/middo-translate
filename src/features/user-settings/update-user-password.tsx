@@ -76,7 +76,7 @@ export default function UpdateUserPassword() {
               className="mt-4"
               register={{ ...register('currentPassword') }}
               errors={errors.currentPassword}
-            ></InputField>
+            />
             <InputField
               label="New password"
               type="password"
@@ -84,7 +84,7 @@ export default function UpdateUserPassword() {
               className="mt-4"
               register={{ ...register('newPassword') }}
               errors={errors.newPassword}
-            ></InputField>
+            />
             <InputField
               label="Confirm new password"
               type="password"
@@ -92,14 +92,15 @@ export default function UpdateUserPassword() {
               className="mt-4"
               register={{ ...register('confirmPassword') }}
               errors={errors.confirmPassword}
-            ></InputField>
-            <AlertError errorMessage={errorMessage}></AlertError>
+            />
+            <AlertError errorMessage={errorMessage}/>
             <div className="mt-6 flex items-center justify-end">
               <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
                 <p>Cancel</p>
               </AlertDialogCancel>
               <button
-                className="rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:opacity-80"
+                disabled={!isValid || loading}
+                className="rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background md:max-w-[320px] md:hover:opacity-80 disabled:bg-stone-300 disabled:hover:opacity-100"
                 type="submit"
               >
                 Save

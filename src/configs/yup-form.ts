@@ -21,29 +21,29 @@ export const LoginSchema = yup
 export const RegisterSchema = yup
     .object()
     .shape({
-    email: yup.string().required({
-        value: true,
-        message: "Please enter email address!"
+        email: yup.string().required({
+            value: true,
+            message: "Please enter email address!"
         }).email({
-        value: true,
-        message: "Please enter a valid email address!"
+            value: true,
+            message: "Please enter a valid email address!"
         }),
-    password: yup.string().required({
-        value: true,
-        message: "Please enter password!"
+        password: yup.string().required({
+            value: true,
+            message: "Please enter password!"
         }).min(8, {
-        value: 8,
-        message: "Password must be at least 8 characters!"
+            value: 8,
+            message: "Password must be at least 8 characters!"
         }).matches(
-        PASSWORD_PARTTERN,
-        "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
+            PASSWORD_PARTTERN,
+            "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
         ),
-    confirmPassword: yup.string().required({
-        value: true,
-        message: "Please enter confirm password!"
+        confirmPassword: yup.string().required({
+            value: true,
+            message: "Please enter confirm password!"
         }).oneOf([yup.ref('password')], {
-        value: true,
-        message: "Confirm password does not match!"
+            value: true,
+            message: "Confirm password does not match!"
         })
     })
     .required()
@@ -53,11 +53,11 @@ export const ForgotPasswordSchema = yup
     .object()
     .shape({
         email: yup.string().required({
-        value: true,
-        message: "Please enter email address!"
+            value: true,
+            message: "Please enter email address!"
         }).email({
-        value: true,
-        message: "Please enter a valid email address!"
+            value: true,
+            message: "Please enter a valid email address!"
         })
     })
     .required()
@@ -94,12 +94,12 @@ export const CreateNewAccountSchema = yup
             message: "Please enter name!"
         }),
         avatar: yup.mixed()
-        .test('required', 'Please choose your avatar', (value: any) => {
-            return value.length > 0 || value.size > 0;
-        })
-        .test('fileSize', 'File size must be less than 3MB', (value: any) => {
-            return value?.size < 3000000;
-        }),
+            .test('required', 'Please choose your avatar', (value: any) => {
+                return value.length > 0 || value.size > 0;
+            })
+            .test('fileSize', 'File size must be less than 3MB', (value: any) => {
+                return value?.size < 3000000;
+            }),
         language: yup.string().required({
             value: true,
             message: "Please choose language!"
@@ -138,7 +138,10 @@ export const ChangePasswordSchema = yup
         }).matches(
             PASSWORD_PARTTERN,
             "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
-        ),
+        ).test('differentFromOldPassword', 'New password must differ from old password', function (value) {
+            const { currentPassword } = this.parent;
+            return value !== currentPassword;
+        }),
         confirmPassword: yup.string().required({
             value: true,
             message: "Please enter confirm password!"
