@@ -15,12 +15,13 @@ import ActionToggleLayout from './action-toggle-layout';
 import { useState } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
-const SHORTCUT_TOGGLE_ACTIONS = ['o'];
+const SHORTCUT_TOGGLE_ACTIONS = [['g'], ['e'], ['l'], ['a']];
 export default function DropdownActions() {
   const { room, isFullScreen, setModalAddUser } = useVideoCallStore();
   const  [openActions, setOpenActions] = useState(false);
   
-  useKeyboardShortcut(SHORTCUT_TOGGLE_ACTIONS, () => {
+  useKeyboardShortcut(SHORTCUT_TOGGLE_ACTIONS, (e) => {
+    if(!e || !isFullScreen)  return;  
     setOpenActions(!openActions);
   })
 

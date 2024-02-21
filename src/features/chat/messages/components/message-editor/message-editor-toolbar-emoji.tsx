@@ -24,7 +24,7 @@ export const MessageEditorToolbarEmoji = (
 
   const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
     
-  useKeyboardShortcut(SHORTCUT_OPEN_EMOJIS, (e) => {
+  useKeyboardShortcut([SHORTCUT_OPEN_EMOJIS], (e) => {
     e?.preventDefault();
     setOpenEmojisPicker((prev) => !prev);
   });

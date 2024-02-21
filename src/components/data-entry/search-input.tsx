@@ -36,7 +36,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
     }, [onClear]);
     const canClear = value !== '';
     const { setAllowShortcutListener } = useShortcutListenStore();
-    useKeyboardShortcut(SHORTCUT_FOCUS_SEARCH, (e) => {
+    useKeyboardShortcut([SHORTCUT_FOCUS_SEARCH], (e) => {
       setAllowShortcutListener(false);
       e?.preventDefault();
       inputRef.current?.focus();

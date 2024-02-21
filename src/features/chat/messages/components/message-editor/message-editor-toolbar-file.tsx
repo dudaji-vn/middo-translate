@@ -10,7 +10,7 @@ export const MessageEditorToolbarFile = (
   props: MessageEditorToolbarFileProps, 
 ) => {
   const { open } = useMediaUpload();
-  useKeyboardShortcut(SHORTCUT_UPLOAD_FILE, () => open());
+  useKeyboardShortcut([SHORTCUT_UPLOAD_FILE], () => open());
 
   return (
     <Button.Icon onClick={open} color="default" size="xs" variant="ghost">

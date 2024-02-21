@@ -26,14 +26,13 @@ export const inboxTabMap: Record<
   },
 };
 
+const SHORTCUT_SWITCH_TABS = [['shift', 'a'], ['shift', 'g']];
 export const Inbox = (props: InboxProps) => {
   const [type, setType] = useState<InboxType>('all');
 
-  useKeyboardShortcut(['shift', 'a'], () => {
-    setType('all');
-  });
-  useKeyboardShortcut(['shift', 'g'], () => {
-    setType('group');
+  useKeyboardShortcut(SHORTCUT_SWITCH_TABS, (e) => {
+    if(!e) return;
+    setType(e.key.toLowerCase() === 'a' ? 'all' : 'group');
   });
 
   return (

@@ -20,7 +20,7 @@ const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
       audio: !isTurnOnMic,
     });
   };
-  useKeyboardShortcut(SHORTCUT_TOGGLE_MIC, onToggleMic);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_MIC], onToggleMic);
 
   return (
     <Button.Icon

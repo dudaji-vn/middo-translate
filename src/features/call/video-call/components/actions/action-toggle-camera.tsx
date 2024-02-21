@@ -22,7 +22,7 @@ const ActionToggleCamera = ({
       video: !isTurnOnCamera,
     });
   };
-  useKeyboardShortcut(SHORTCUT_TOGGLE_CAMERA, onToggleCamera);
+  useKeyboardShortcut([SHORTCUT_TOGGLE_CAMERA], onToggleCamera);
 
   return (
     <Tooltip
