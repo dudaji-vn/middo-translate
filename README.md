@@ -71,7 +71,6 @@ pnpm start
 
 6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-
 ### TIP : Set up sentry (crash report)
 
 - Set SENTRY_DSN
@@ -85,3 +84,19 @@ pnpm start
   import * as Sentry from '@sentry/nextjs';
   Sentry.captureException(msg);
   ```
+
+### GOOGLE CLOUD API: api use in this project
+
+- [Google Cloud Translation API](https://cloud.google.com/translate/docs):
+
+  - Api use in this project:
+    - Detect language of text: `POST https://translation.googleapis.com/language/translate/v2/detect`
+    - Translate text: `POST https://translation.googleapis.com/language/translate/v2`
+    - Supported languages: `GET https://translation.googleapis.com/language/translate/v2/languages`
+  - Js Library: `@google-cloud/translate`
+
+- [Google Cloud Text-to-Speech API](https://cloud.google.com/text-to-speech/docs):
+  - Api use in this project:
+    - Convert text to speech: `POST https://texttospeech.googleapis.com/v1/text:synthesize`
+    - Supported voices: `GET https://texttospeech.googleapis.com/v1/voices`
+  - Js Library: `@google-cloud/text-to-speech`
