@@ -16,6 +16,7 @@ import ActionChat from './actions/action-chat';
 import InviteTooltip from './invite-tooltip';
 import DropdownActions from './actions/dropdown-actions';
 import processingStream from '../../utils/processing-stream';
+import getUserStream from '../../utils/get-user-stream';
 
 export default function VideoCallActions() {
   const {
@@ -78,8 +79,8 @@ export default function VideoCallActions() {
       return;
     }
     const streamConfig = getStreamConfig(video, audio);
-    navigator.mediaDevices
-      .getUserMedia({ ...streamConfig })
+    
+    getUserStream({isTurnOnCamera: video, isTurnOnMic: audio})
       .then((stream: MediaStream) => {
         const myVideoStream = processingStream(stream);
         if (!audio && myVideoStream.getAudioTracks().length > 0) {

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { createPeer } from "../../utils/peer-action.util";
 import processingStream from "../../utils/processing-stream";
+import getUserStream from "../../utils/get-user-stream";
 
 export default function useHandleStreamMyVideo() {
     const { user } = useAuthStore();
@@ -18,13 +19,11 @@ export default function useHandleStreamMyVideo() {
     const { room: call, clearStateVideoCall } = useVideoCallStore();
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
-        // Can not start stream if user turn off both camera and mic
-        if (!DEFAULT_USER_CALL_STATE.isTurnOnCamera && !DEFAULT_USER_CALL_STATE.isTurnOnMic) return;
-        const navigator = window.navigator as any;
         const streamConfig = getStreamConfig(DEFAULT_USER_CALL_STATE.isTurnOnCamera, DEFAULT_USER_CALL_STATE.isTurnOnMic)
         setLoadingVideo(true);
         // Start get streaming
-        navigator.mediaDevices.getUserMedia({...streamConfig}).then((stream: MediaStream) => {
+        getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic})
+        .then((stream: MediaStream) => {
             myVideoStream = processingStream(stream);
             setMyStream(myVideoStream);
             setStreamForParticipant(myVideoStream, socket.id || '', false)
