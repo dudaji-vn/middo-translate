@@ -16,8 +16,6 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
         const isCamOn = participant.stream.getVideoTracks()[0]?.enabled || false;
         let tempStream = new MediaStream();
         if(participant.isMe) {
-            elementRef.current.muted = true;
-            elementRef.current.volume = 0;
             if(participant.stream.getVideoTracks()[0]) {
                 const videoTrack = participant.stream.getVideoTracks()[0]
                 tempStream.addTrack(videoTrack)
@@ -26,7 +24,10 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
             tempStream = participant.stream;
             elementRef.current.volume = 0.9;
         }
+        elementRef.current.muted = true;
+        elementRef.current.volume = 0;
         elementRef.current!.srcObject = tempStream;
+        elementRef.current!.autoplay = true;
         setStreamVideo(tempStream)
         setTurnOnMic(isMicOn)
         setIsTurnOnCamera(isCamOn)
