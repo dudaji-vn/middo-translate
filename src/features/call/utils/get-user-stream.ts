@@ -12,8 +12,6 @@ export default async function getUserStream({isTurnOnCamera , isTurnOnMic} : Par
             audio: {
                 echoCancellation: true,
                 noiseSuppression: true,
-                autoGainControl: false,
-                sampleRate: 44100,
             }
         }
         // create audio and video streams separately
@@ -26,6 +24,12 @@ export default async function getUserStream({isTurnOnCamera , isTurnOnMic} : Par
         }
         if(isTurnOnMic) {
             audioStream = await navigator.mediaDevices.getUserMedia(constraintsAudio)
+            const audioContext = new AudioContext();
+            const streamSource = audioContext.createMediaStreamSource(audioStream);
+            const gain = audioContext.createGain();
+            gain.gain.value = 0.5;
+            gain.connect(audioContext.destination);
+            streamSource.connect(gain);
             combineArr = [...combineArr, ...audioStream.getAudioTracks()]
         }
         const combinedStream = new MediaStream(combineArr)
