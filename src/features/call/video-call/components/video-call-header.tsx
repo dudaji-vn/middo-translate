@@ -5,6 +5,7 @@ import { useVideoCallStore } from '../../store/video-call.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
+const SHORTCUT_TOGGLE_FULLSCREEN = ['shift', 'f'];
 export default function VideoCallHeader() {
   const { room, isFullScreen, setFullScreen } = useVideoCallStore();
 
@@ -12,7 +13,7 @@ export default function VideoCallHeader() {
     setFullScreen(!isFullScreen);
   }, [setFullScreen, isFullScreen]);
 
-  useKeyboardShortcut(['shift', 'm'], toggleFullScreen);
+  useKeyboardShortcut(SHORTCUT_TOGGLE_FULLSCREEN, toggleFullScreen);
   
   return (
     <div
