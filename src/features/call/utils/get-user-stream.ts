@@ -24,12 +24,18 @@ export default async function getUserStream({isTurnOnCamera , isTurnOnMic} : Par
         }
         if(isTurnOnMic) {
             audioStream = await navigator.mediaDevices.getUserMedia(constraintsAudio)
-            const audioContext = new AudioContext();
-            const streamSource = audioContext.createMediaStreamSource(audioStream);
-            const gain = audioContext.createGain();
-            gain.gain.value = 0.5;
-            gain.connect(audioContext.destination);
-            streamSource.connect(gain);
+            // const audioContext = new AudioContext();
+            // const streamSource = audioContext.createMediaStreamSource(audioStream);
+            // const gain = audioContext.createGain();
+            // gain.gain.value = 0.5;
+            // gain.connect(audioContext.destination);
+            // streamSource.connect(gain);
+            // const audioContext = new AudioContext()
+            // const destinationNode = audioContext.createMediaStreamDestination();
+            // audioContext.createMediaStreamSource(new MediaStream([audioStream.getAudioTracks()[0]]))
+            //         .connect(createDistortion(audioContext))
+            //         .connect(destinationNode);
+            // const loopbackStream = await createLoopbackConnection(destinationNode);
             combineArr = [...combineArr, ...audioStream.getAudioTracks()]
         }
         const combinedStream = new MediaStream(combineArr)
