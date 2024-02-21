@@ -85,18 +85,44 @@ pnpm start
   Sentry.captureException(msg);
   ```
 
-### GOOGLE CLOUD API: api use in this project
+### Google Cloud APIs Integration in Project
 
-- [Google Cloud Translation API](https://cloud.google.com/translate/docs):
+This for integration of Google Cloud APIs within the project, detailing their respective endpoints, functionalities, and usage.
 
-  - Api use in this project:
-    - Detect language of text: `POST https://translation.googleapis.com/language/translate/v2/detect`
-    - Translate text: `POST https://translation.googleapis.com/language/translate/v2`
-    - Supported languages: `GET https://translation.googleapis.com/language/translate/v2/languages`
-  - Js Library: `@google-cloud/translate`
+[Google Cloud Translation API](https://cloud.google.com/translate/docs):
 
-- [Google Cloud Text-to-Speech API](https://cloud.google.com/text-to-speech/docs):
-  - Api use in this project:
-    - Convert text to speech: `POST https://texttospeech.googleapis.com/v1/text:synthesize`
-    - Supported voices: `GET https://texttospeech.googleapis.com/v1/voices`
-  - Js Library: `@google-cloud/text-to-speech`
+- API Endpoints:
+
+  - Detect language of text: `POST https://translation.googleapis.com/language/translate/v2/detect`
+  - Translate text: `POST https://translation.googleapis.com/language/translate/v2`
+  - Supported languages: `GET https://translation.googleapis.com/language/translate/v2/languages`
+
+- JS Library: `@google-cloud/translate`
+
+- Configuration Details:
+
+  - File: src/lib/cloud-translate.ts
+  - This file contains the configuration settings for the Google Cloud Translation API, including authentication setup and other required parameters.
+
+- Usage:
+
+  - File: src/app/api/language
+  - This file demonstrates the usage of the Translation API within the project, including detecting language of text, translating text, and fetching supported languages.
+
+[Google Cloud Text-to-Speech API](https://cloud.google.com/text-to-speech/docs):
+
+- API Endpoints:
+
+  - Convert text to speech: `POST https://texttospeech.googleapis.com/v1/text:synthesize`
+  - Supported voices: `GET https://texttospeech.googleapis.com/v1/voices`
+
+- JS Library: `@google-cloud/text-to-speech`
+
+- Configuration Details:
+
+  - File: src/lib/cloud-voice.ts
+  - This file contains the configuration settings for the Google Cloud Text-to-Speech API, including authentication setup and other required parameters.
+
+- Usage:
+  - File: src/app/api/voice
+  - This file demonstrates the usage of the Text-to-Speech API within the project, including converting text to speech and fetching supported voices.
