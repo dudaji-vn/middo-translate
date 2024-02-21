@@ -1,4 +1,4 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
@@ -11,20 +11,26 @@ import { MessageEditorToolbarLangControl } from './message-editor-toolbar-lang-c
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-translate';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
-import { TooltipTrigger } from '@radix-ui/react-tooltip';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
 export interface MessageEditorToolbarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   disableMedia?: boolean;
 }
 
+  const SHORTCUT_TOGGLE_SETTING = ['shift', '?'];
 export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
 >(({ disableMedia = false, ...props }, ref) => {
   const { listening } = useMessageEditorText();
   const room = useVideoCallStore((state) => state.room);
-
+  const [openSetting, setOpenSetting] = useState(false);
+  const handleToggleSetting = () => {
+    console.log('openSetting', openSetting)
+    setOpenSetting((prev) => !prev);
+  };
+  useKeyboardShortcut(SHORTCUT_TOGGLE_SETTING, handleToggleSetting);
   useEffect(() => {
     // enable submit form by enter
     const formRef = document.getElementById('message-editor');
@@ -62,7 +68,7 @@ export const MessageEditorToolbar = forwardRef<
         <Tooltip
           title="Settings"
           triggerItem={
-            <ChatSettingMenu>
+            <ChatSettingMenu open={openSetting} onOpenChange={setOpenSetting}>
               <Button.Icon color="default" size="xs" variant="ghost">
                 <Settings />
               </Button.Icon>

@@ -4,18 +4,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 
-import { Button } from '@/components/actions';
-import { Settings } from 'lucide-react';
 import { Switch } from '@/components/data-entry';
 import { cn } from '@/utils/cn';
-import { forwardRef } from 'react';
+import { forwardRef} from 'react';
 import { stopPropagation } from '@/utils/stop-propagation';
 import { useChatStore } from '../store';
+import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
 
 export interface ChatSettingProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
-export const ChatSettingMenu = forwardRef<HTMLDivElement, ChatSettingProps>(
+export const ChatSettingMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(
   ({ children, ...props }, ref) => {
     const {
       showTranslateOnType,
@@ -24,7 +23,7 @@ export const ChatSettingMenu = forwardRef<HTMLDivElement, ChatSettingProps>(
       toggleShowMiddleTranslation,
     } = useChatStore();
     return (
-      <DropdownMenu>
+      <DropdownMenu dir={'ltr'}  {...props}>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"

@@ -9,9 +9,10 @@ import { ChatSettingMenu } from '../chat-setting';
 import { useSidebarTabs } from '../../hooks';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Typography } from '@/components/data-display';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
 export interface ChatSidebarHeaderProps {}
-
+const SHORTCUT_NEW_CONVERSATION = ['shift', 'n'];
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const {
     changeSide,
@@ -24,6 +25,12 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const searchValue = searchParams?.get(SPK_SEARCH);
   const isSearch = currentSide === 'search';
   const searchInputRef = useRef<SearchInputRef>(null);
+
+  const handleNewConversation = useCallback(() => {
+    changeSide('individual');
+  }, [changeSide]);
+
+  useKeyboardShortcut(SHORTCUT_NEW_CONVERSATION, handleNewConversation);
 
   const handleBack = useCallback(() => {
     removeParams([SPK_SEARCH, SPK_CHAT_TAB]);
@@ -45,7 +52,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             title="New Conversation"
             triggerItem={
               <Button.Icon
-                onClick={() => changeSide('individual')}
+                onClick={handleNewConversation}
                 color="default"
                 size="xs"
               >

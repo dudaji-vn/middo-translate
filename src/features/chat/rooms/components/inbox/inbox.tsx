@@ -4,7 +4,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 
 import InboxList from './inbox-list';
 import { RoomActions } from '../room-actions';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
 export interface InboxProps {}
 export type InboxType = 'all' | 'group';
@@ -27,11 +28,19 @@ export const inboxTabMap: Record<
 
 export const Inbox = (props: InboxProps) => {
   const [type, setType] = useState<InboxType>('all');
+
+  useKeyboardShortcut(['shift', 'a'], () => {
+    setType('all');
+  });
+  useKeyboardShortcut(['shift', 'g'], () => {
+    setType('group');
+  });
+
   return (
     <RoomActions>
       <div className="relative flex w-full flex-1 flex-col overflow-hidden bg-background">
         <div className="flex h-full flex-1 flex-col overflow-hidden">
-          <Tabs defaultValue="all" className="w-full">
+          <Tabs defaultValue="all" value={type} className="w-full">
             <TabsList>
               {Object.values(inboxTabMap).map((tab) => (
                 <TabsTrigger

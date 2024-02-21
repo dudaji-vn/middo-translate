@@ -3,7 +3,7 @@
 import { Button } from '@/components/actions';
 import { useAuthStore } from '@/stores/auth.store';
 import { AlertCircleIcon, Phone } from 'lucide-react';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useChatBox } from '../../../contexts';
 import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
 import { useJoinCall } from '../../../hooks/use-join-call';
@@ -12,6 +12,7 @@ import { RoomAvatar } from '../../room-avatar';
 import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -37,16 +38,21 @@ export const ChatBoxHeader = () => {
     </div>
   );
 };
-
+const SHORTCUT_TOGGLE_INFO = ['shift', 'i'];
 const ActionBar = () => {
   const { toggleTab, currentSide } = useRoomSidebarTabs();
   const isShowInfo = currentSide === 'info';
+
+  const handleToggleInfo = useCallback(() => {
+    toggleTab('info');
+  }, [toggleTab]);
+  
+  useKeyboardShortcut(SHORTCUT_TOGGLE_INFO, handleToggleInfo);
+
   return (
     <div>
       <Button.Icon
-        onClick={() => {
-          toggleTab('info');
-        }}
+        onClick={handleToggleInfo}
         size="xs"
         color={isShowInfo ? 'secondary' : 'primary'}
         variant={isShowInfo ? 'default' : 'ghost'}

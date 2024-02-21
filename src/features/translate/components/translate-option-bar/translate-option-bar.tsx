@@ -16,12 +16,14 @@ import toast from 'react-hot-toast';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useTranslateStore } from '@/stores/translate.store';
 import { useWindowSize } from 'usehooks-ts';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   sourceLang?: string;
 }
 
+const SHORTCUT_SPEECH_TO_TEXT = [' '];
 export const TranslateOptionBar = forwardRef<
   HTMLDivElement,
   TranslateOptionBarProps
@@ -73,7 +75,6 @@ export const TranslateOptionBar = forwardRef<
       interimResults: true,
     });
   };
-
   const handleStopListening = () => {
     setIsListening(false);
     if (interimTranscript) {
@@ -84,6 +85,9 @@ export const TranslateOptionBar = forwardRef<
       SpeechRecognition.stopListening();
     }, 500);
   };
+  useKeyboardShortcut(SHORTCUT_SPEECH_TO_TEXT, () =>
+    isListening ? handleStopListening() : handleStartListening(),
+  );
 
   useEffect(() => {
     if (!isListening) {
@@ -128,6 +132,7 @@ export const TranslateOptionBar = forwardRef<
               color="secondary"
               className="relative shrink-0"
               onClick={handleStopListening}
+              disabled={!isListening}
             >
               <Rectangle />
             </Button.Icon>

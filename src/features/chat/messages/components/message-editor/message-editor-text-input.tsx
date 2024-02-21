@@ -2,6 +2,7 @@ import { forwardRef, useImperativeHandle, useRef } from 'react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
+import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
 
 export interface TextInputRef extends HTMLInputElement {
   reset: () => void;
@@ -19,6 +20,7 @@ export const TextInput = forwardRef<
     listening,
     inputDisabled,
   } = useMessageEditorText();
+  const { setAllowShortcutListener } = useShortcutListenStore();
 
   const { handlePasteFile, getInputProps } = useMediaUpload();
 
@@ -48,6 +50,8 @@ export const TextInput = forwardRef<
           ref={inputRef}
           {...props}
           value={text}
+          onFocus={() => setAllowShortcutListener(false)}
+          onBlur={() => setAllowShortcutListener(true)}
           onChange={(e) => {
             setText(e.target.value);
             setMiddleText('');
