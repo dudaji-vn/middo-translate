@@ -81,19 +81,19 @@ export default function ShortcutsGuide() {
 
       <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">        <DialogTitle>
           <Typography variant="h1" className="text-md font-bold text-center">
-            Shortcut Information
+            Shortcut
           </Typography>
         </DialogTitle>
         <div className=" max-w-screen-md space-y-3 divide-y [&_h3]:mt-4 [&_h3]:text-[1.25rem] ">
           <ShortcutSection
-            title="Miido Translation"
+            title="Middo Translation"
             shortcuts={translationShortcuts}
           />
           <ShortcutSection
-            title="Miido Conversation"
+            title="Middo Conversation"
             shortcuts={conversationShortcuts}
           />
-          <ShortcutSection title="Miido Call" shortcuts={callShortcuts} />
+          <ShortcutSection title="Middo Call" shortcuts={callShortcuts} />
         </div>
       </DialogContent>
     </Dialog>
