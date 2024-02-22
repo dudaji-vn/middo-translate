@@ -6,7 +6,7 @@ import {
 
 import { Switch } from '@/components/data-entry';
 import { cn } from '@/utils/cn';
-import { forwardRef} from 'react';
+import { forwardRef } from 'react';
 import { stopPropagation } from '@/utils/stop-propagation';
 import { useChatStore } from '../store';
 import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
@@ -22,8 +22,9 @@ export const ChatSettingMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(
       showMiddleTranslation,
       toggleShowMiddleTranslation,
     } = useChatStore();
+
     return (
-      <DropdownMenu dir={'ltr'}  {...props}>
+      <DropdownMenu dir={'ltr'} {...props}>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
