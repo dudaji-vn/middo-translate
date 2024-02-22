@@ -1,8 +1,10 @@
+//@ts-nocheck
 import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
     AlertDialogContent,
+    AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
@@ -32,17 +34,14 @@ export const ModalChooseScreen = () => {
     const { room } = useVideoCallStore();
 
     useEffect(() => {
-        //@ts-ignore
-        if (!navigator?.mediaDevices?.getAllSources) return;
+        if (!navigator?.mediaDevices?.getAllSources || !showChooseScreen) return;
         const getAllSource = async () => {
-            //@ts-ignore
             const sources = await navigator.mediaDevices.getAllSources();
             setSources(sources);
-            console.log(sources)
         }
 
         getAllSource();
-    }, []);
+    }, [showChooseScreen]);
 
     const handleShareScreen =useCallback(async ()=>{
         try {
@@ -70,19 +69,21 @@ export const ModalChooseScreen = () => {
 
     return (
         <AlertDialog open={showChooseScreen} onOpenChange={() => setChooseScreen(false)}>
-            <AlertDialogContent>
+            <AlertDialogContent className="min-w-[80%]" >
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Chooose screen
+                        Sharing Screen
                     </AlertDialogTitle>
-                    <div className='flex gap-x-1 gap-y-3 justify-around flex-wrap'>
+                    <AlertDialogDescription>
+                        This application will be able to see the contents of your screen.
+                    </AlertDialogDescription>
+                    <div className='grid grid-cols-4 gap-3 mt-3'>
                         {sources.map((source: any) => {
                             return (
                                 <div key={source.id} 
-                                    className={cn('w-[120px]', selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-2 border-transparent')}
+                                    className={cn('p-2 border rounded-2xl',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50')}
                                     onClick={()=>setSelectedSource(source)}>
-                                    <h4 className='truncate'>{source.name}</h4>
-                                    <div className='w-full'>
+                                    <div className='w-full rounded-xl overflow-hidden aspect-video'>
                                         <Image 
                                             src={source.thumbnail}
                                             alt=''
@@ -90,6 +91,7 @@ export const ModalChooseScreen = () => {
                                             height={1000}
                                         />
                                     </div>
+                                    <p className='truncate mt-[10px]'>{source.name}</p>
                                 </div>
                             )
                         })}
