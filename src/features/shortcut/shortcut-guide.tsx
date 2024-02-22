@@ -33,7 +33,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
   title,
   shortcuts,
 }) => (
-  <div className="flex flex-col py-2">
+  <div className="flex flex-col py-4">
     <Typography variant="h2" className="text-2xl">
       {title}
     </Typography>
@@ -75,7 +75,7 @@ export default function ShortcutsGuide() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">
-        <div className=" max-w-screen-md space-y-3 divide-y px-8 [&_h3]:mt-4 [&_h3]:text-[1.25rem]">        <DialogTitle>
+        <div className=" max-w-screen-md space-y-5 divide-y px-8 [&_h3]:mt-4 [&_h3]:text-[1.25rem]">        <DialogTitle>
           <Typography
             variant="h1"
             className="relative text-[1.65rem] font-bold"
