@@ -23,16 +23,14 @@ export const MessageEditorToolbarEmoji = (
   const { text, setText, focusInput } = useMessageEditorText();
 
   const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
-    
+
   useKeyboardShortcut([SHORTCUTS.OPEN_EMOJI], (e) => {
     e?.preventDefault();
     setOpenEmojisPicker((prev) => !prev);
   });
 
   return (
-    <Popover open={openEmojisPicker}
-    onOpenChange={setOpenEmojisPicker}
-    >
+    <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
       <PopoverTrigger asChild>
         <Button.Icon variant="ghost" color="default" size="xs">
           <Smile />
