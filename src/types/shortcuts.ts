@@ -74,133 +74,144 @@ export const SHORTCUTS: Record<
     [SCCall.START_STOP_SCREEN_DOODLE]: ['e'],
     [SCCall.TOGGLE_LIVE_CAPTION]: ['l'],
 };
+export const SPECIAL_KEYS_CONTENT: Record<string, string[]> = {
+    [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: ['space'],
+    [SCConversation.OPEN_EDIT_TRANSLATION]: ['ctrl', 'alt', 'e'],
+    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['ctrl', 'alt', 't'],
+    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['ctrl', 'alt', 'p'],
+    [SCConversation.START_STOP_SPEECH_TO_TEXT]: ['shift', 'space'],
+    [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: ['space'],
+};
+
 
 export interface ShortcutInfo {
     title: string;
     description: string;
+    shortcut?: string[];
 }
-export const ShortcutsContents: Record<
+export const SHORTCUT_CONTENTS: Record<
     SCConversation | SCTranslation | SCCall,
     ShortcutInfo
 > = {
     [SCConversation.NEW_CONVERSATION]: {
         title: 'New Conversation',
-        description: 'Start a new conversation',
+        description: 'Press Shift + N to start a new conversation.',
     },
     [SCConversation.TOGGLE_CONVERSATION_SETTINGS]: {
         title: 'Toggle Conversation Settings',
-        description: 'Open or close conversation settings',
+        description: 'Press Shift + ? to open or close conversation settings.',
     },
     [SCConversation.SEARCH]: {
         title: 'Search',
-        description: 'Search within the conversation',
+        description: 'Press Shift + F to search within the conversation.',
     },
     [SCConversation.SWITCH_TO_ALL_TAB]: {
         title: 'Switch to All Tab',
-        description: 'Switch to the All tab in conversation view',
+        description: 'Press Shift + A to switch to the All tab in conversation view.',
     },
     [SCConversation.SWITCH_TO_GROUP_TAB]: {
         title: 'Switch to Group Tab',
-        description: 'Switch to the Group tab in conversation view',
+        description: 'Press Shift + G to switch to the Group tab in conversation view.',
     },
     [SCConversation.VIEW_PINNED_MESSAGES]: {
         title: 'View Pinned Messages',
-        description: 'View all pinned messages in the conversation',
+        description: 'Press Shift + P to view all pinned messages in the conversation.',
     },
     [SCConversation.VIEW_CONVERSATION_INFORMATION]: {
         title: 'View Conversation Information',
-        description: 'View detailed information about the conversation',
+        description: 'Press Shift + I to view detailed information about the conversation.',
     },
     [SCConversation.SWITCH_INPUT_LANGUAGE]: {
         title: 'Switch Input Language',
-        description: 'Change the input language for the conversation',
+        description: 'Press Shift + L to change the input language for the conversation.',
     },
     [SCConversation.UPLOAD_FILES]: {
         title: 'Upload Files',
-        description: 'Attach files to the conversation',
+        description: 'Press Shift + U to attach files to the conversation.',
     },
     [SCConversation.START_STOP_SPEECH_TO_TEXT]: {
         title: 'Start/Stop Speech to Text',
-        description: 'Start or stop converting speech to text',
+        description: 'Press Shift + Space to start or stop converting speech to text.',
     },
     [SCConversation.OPEN_EMOJI]: {
         title: 'Open Emoji',
-        description: 'Open the emoji picker',
+        description: 'Press Shift + , to open the emoji picker.',
     },
     [SCTranslation.SWAP_LANGUAGES]: {
         title: 'Swap Languages',
-        description: 'Swap the source and target languages for translation',
+        description: 'Press S to swap the source and target languages for translation.',
     },
     [SCTranslation.TOGGLE_HISTORY]: {
         title: 'Toggle History',
-        description: 'Show or hide the translation history',
+        description: 'Press H to show or hide the translation history.',
     },
     [SCTranslation.TOGGLE_PHRASES]: {
         title: 'Toggle Phrases',
-        description: 'Show or hide the translation phrases',
+        description: 'Press P to show or hide the translation phrases.',
     },
     [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: {
         title: 'Toggle Speech to Text',
-        description: 'Start or stop converting speech to text',
+        description: 'Press Space to start or stop converting speech to text.',
     },
     [SCConversation.OPEN_EDIT_TRANSLATION]: {
         title: 'Open Edit Translation',
-        description: 'Open the edit translation dialog',
+        description: 'Press Ctrl + Alt + E to open the edit translation dialog.',
     },
     [SCConversation.TURN_ON_OFF_TRANSLATION]: {
         title: 'Turn On/Off Translation',
-        description: 'Turn on or off the translation',
+        description: 'Press Ctrl + Alt + T to turn on or off the translation.',
     },
     [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: {
         title: 'Turn On/Off Translation Preview',
-        description: 'Turn on or off the translation preview',
+        description: 'Press Ctrl + Alt + P to turn on or off the translation preview.',
     },
     [SCConversation.SAVE_EDIT_TRANSLATION]: {
         title: 'Save Edit Translation',
-        description: 'Save the edited translation',
+        description: 'Press Ctrl + Enter to save the edited translation.',
     },
     [SCConversation.CANCEL_EDIT_TRANSLATION]: {
         title: 'Cancel Edit Translation',
-        description: 'Cancel the edited translation',
+        description: 'Press Escape to cancel the edited translation.',
     },
     [SCCall.MAXIMIZE_MINIMIZE_CALL]: {
         title: 'Maximize/Minimize Call',
-        description: 'Maximize or minimize the call',
+        description: 'Press Shift + M to maximize or minimize the call.',
     },
     [SCCall.ADD_MEMBERS]: {
         title: 'Add Members',
-        description: 'Add members to the call',
+        description: 'Press A to add members to the call.',
     },
     [SCCall.START_STOP_SCREEN_SHARING]: {
         title: 'Start/Stop Screen Sharing',
-        description: 'Start or stop sharing your screen',
+        description: 'Press S to start or stop sharing your screen.',
     },
     [SCCall.TOGGLE_CAMERA]: {
         title: 'Toggle Camera',
-        description: 'Turn the camera on or off',
+        description: 'Press C to turn the camera on or off.',
     },
     [SCCall.TOGGLE_MICROPHONE]: {
         title: 'Toggle Microphone',
-        description: 'Turn the microphone on or off',
+        description: 'Press M to turn the microphone on or off.',
     },
     [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: {
         title: 'Temporary Microphone Toggle',
-        description: 'Temporarily turn the microphone on or off',
+        description: 'Press Space to temporarily turn the microphone on or off.',
     },
     [SCCall.TOGGLE_DISCUSSION]: {
         title: 'Toggle Discussion',
-        description: 'Open or close the discussion',
+        description: 'Press D to open or close the discussion.',
     },
     [SCCall.SWITCH_TO_GALLERY_VIEW]: {
         title: 'Switch to Gallery View',
-        description: 'Switch to gallery view',
+        description: 'Press G to switch to gallery view.',
     },
     [SCCall.START_STOP_SCREEN_DOODLE]: {
         title: 'Start/Stop Screen Doodle',
-        description: 'Start or stop screen doodle',
+        description: 'Press E to start or stop screen doodle.',
     },
     [SCCall.TOGGLE_LIVE_CAPTION]: {
         title: 'Toggle Live Caption',
-        description: 'Turn live caption on or off',
+        description: 'Press L to turn live caption on or off.',
     },
 };
+
