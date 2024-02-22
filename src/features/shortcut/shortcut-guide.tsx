@@ -33,7 +33,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
   title,
   shortcuts,
 }) => (
-  <div className="flex flex-col py-4">
+  <section className="flex flex-col py-4">
     <Typography variant="h2" className="text-2xl">
       {title}
     </Typography>
@@ -57,7 +57,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
         <Typography className="text-gray-500">{item.description}</Typography>
       </div>
     ))}
-  </div>
+  </section>
 );
 
 const translationShortcuts = generateShortcuts(SCTranslation);
