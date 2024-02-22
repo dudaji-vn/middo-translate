@@ -81,7 +81,7 @@ export const ModalChooseScreen = () => {
                         {sources.map((source: any) => {
                             return (
                                 <div key={source.id} 
-                                    className={cn('p-2 border rounded-2xl',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50')}
+                                    className={cn('p-2 border rounded-2xl cursor-pointer',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50')}
                                     onClick={()=>setSelectedSource(source)}>
                                     <div className='w-full rounded-xl overflow-hidden aspect-video'>
                                         <Image 
