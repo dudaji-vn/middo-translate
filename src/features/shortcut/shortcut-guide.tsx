@@ -40,7 +40,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
     {shortcuts.map((item, index) => (
       <div key={index}>
         <div className="flex flex-row items-baseline justify-between">
-          <Typography variant={'h3'} className="font-normal text-[1.2rem]">
+          <Typography variant={'h3'} className="text-[1.2rem] font-normal">
             {item.title}
           </Typography>
           <div className="mt-1 flex w-fit flex-row">
@@ -75,15 +75,16 @@ export default function ShortcutsGuide() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">
-        <div className=" max-w-screen-md space-y-5 divide-y px-8 [&_h3]:mt-4 [&_h3]:text-[1.25rem]">        <DialogTitle>
-          <Typography
-            variant="h1"
-            className="relative text-[1.65rem] font-bold"
-          >
-            <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" />
-            Shortcut
-          </Typography>
-        </DialogTitle>
+        <div className=" max-w-screen-md space-y-5 divide-y px-8 [&_h3]:mt-4 [&_h3]:text-[1.25rem]">
+          <DialogTitle>
+            <Typography
+              variant="h1"
+              className="relative text-[1.65rem] font-bold"
+            >
+              <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" />
+              Shortcut
+            </Typography>
+          </DialogTitle>
           <ShortcutSection
             title="Middo Translation"
             shortcuts={translationShortcuts}
