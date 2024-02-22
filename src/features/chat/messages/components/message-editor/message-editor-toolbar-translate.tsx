@@ -22,7 +22,6 @@ export const MessageEditorToolbarTranslateTool = (
 
   const { showTranslateOnType, toggleShowTranslateOnType } = useChatStore();
   return (
-    <>
       <TranslateTool
         showTool={!!showTranslateOnType && !!text && srcLang !== 'en'}
         checked={showTranslateOnType}
@@ -52,6 +51,5 @@ export const MessageEditorToolbarTranslateTool = (
           setSrcLang(detLang);
         }}
       />
-    </>
   );
 };

@@ -83,7 +83,7 @@ export const MessageEditorToolbar = forwardRef<
   return (
     <>
       <MessageEditorToolbarTranslateTool />
-      <div ref={ref} {...props} className="flex items-center">
+      <div ref={ref} {...props} className="flex items-center mb-2">
         <MessageEditorToolbarLangControl />
         {!disableMedia && (
           <Tooltip
