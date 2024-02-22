@@ -10,9 +10,9 @@ import { useSidebarTabs } from '../../hooks';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Typography } from '@/components/data-display';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface ChatSidebarHeaderProps {}
-const SHORTCUT_NEW_CONVERSATION = ['shift', 'n'];
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const {
     changeSide,
@@ -30,7 +30,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     changeSide('individual');
   }, [changeSide]);
 
-  useKeyboardShortcut([SHORTCUT_NEW_CONVERSATION], handleNewConversation);
+  useKeyboardShortcut([SHORTCUTS.NEW_CONVERSATION], handleNewConversation);
 
   const handleBack = useCallback(() => {
     removeParams([SPK_SEARCH, SPK_CHAT_TAB]);

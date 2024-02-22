@@ -14,6 +14,7 @@ import { ListLanguages } from '../list-languages';
 import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 const MAX_SELECTED_LANGUAGES = 3;
 
@@ -24,7 +25,6 @@ export interface LanguagesControlBarProps
   detect?: string;
   targetResult?: string;
 }
-const SHORTCUT_SWAPLANGUAGE= ['s'];
 
 export const LanguagesControlBar = forwardRef<
   HTMLDivElement,
@@ -88,7 +88,7 @@ export const LanguagesControlBar = forwardRef<
       setValue,
       targetResult,
     ]);
-    useKeyboardShortcut([SHORTCUT_SWAPLANGUAGE], handleSwapLanguage);
+    useKeyboardShortcut([SHORTCUTS.SWAP_LANGUAGES], handleSwapLanguage);
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');

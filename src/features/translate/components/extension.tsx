@@ -6,8 +6,6 @@ import Link from 'next/link';
 export interface ExtensionProps {}
 
 // TODO: Add shortcut to open history and phrases after the feature is implemented
-const SHORTCUT_HISTORY = ['h'];
-const SHORTCUT_PHRASES = ['p'];
 
 export const Extension = (props: ExtensionProps) => {
   return (

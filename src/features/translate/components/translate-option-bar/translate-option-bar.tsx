@@ -17,13 +17,13 @@ import { useSetParams } from '@/hooks/use-set-params';
 import { useTranslateStore } from '@/stores/translate.store';
 import { useWindowSize } from 'usehooks-ts';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   sourceLang?: string;
 }
 
-const SHORTCUT_SPEECH_TO_TEXT = [' '];
 export const TranslateOptionBar = forwardRef<
   HTMLDivElement,
   TranslateOptionBarProps
@@ -85,7 +85,7 @@ export const TranslateOptionBar = forwardRef<
       SpeechRecognition.stopListening();
     }, 500);
   };
-  useKeyboardShortcut([SHORTCUT_SPEECH_TO_TEXT], () =>
+  useKeyboardShortcut([SHORTCUTS.TOGGLE_SPEECH_TO_TEXT], () =>
     isListening ? handleStopListening() : handleStartListening(),
   );
 

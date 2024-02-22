@@ -13,6 +13,7 @@ import { useChatStore } from '@/features/chat/store';
 import { useMessageEditorText } from './message-editor-text-context';
 import { useState } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface MessageEditorToolbarLangControlProps {}
 
@@ -23,9 +24,8 @@ export const MessageEditorToolbarLangControl = (
   const { setSrcLang, detLang, srcLang } = useChatStore((s) => s);
   const [openSwicthLanguage, setOpenSwicthLanguage] = useState(false);
 
-  const SHORTCUT_TOGGLE_SWITCH_LANG = ['shift', 'l'];
 
-  useKeyboardShortcut([SHORTCUT_TOGGLE_SWITCH_LANG], () => {
+  useKeyboardShortcut([SHORTCUTS.SWITCH_INPUT_LANGUAGE], () => {
     setOpenSwicthLanguage(prev => !prev);
   });
 

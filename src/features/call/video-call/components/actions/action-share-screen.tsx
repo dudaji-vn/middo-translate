@@ -6,13 +6,13 @@ import React, { memo } from 'react';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
-const SHORTCUT_SHARING_SCREEN = ['s'];
 const ActionShareScreen = () => {
   const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen } = useVideoCallContext();
   const haveShareScreen = useHaveShareScreen();
-  useKeyboardShortcut([SHORTCUT_SHARING_SCREEN], handleShareScreen);
+  useKeyboardShortcut([SHORTCUTS.START_STOP_SCREEN_SHARING], handleShareScreen);
   return (
     <Tooltip
       title={isShareScreen ? 'Stop sharing screen' : 'Share screen'}

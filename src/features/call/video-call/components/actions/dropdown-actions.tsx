@@ -6,24 +6,19 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { CALL_TYPE } from '@/features/call/constant/call-type';
-import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { MoreVertical, UserPlus2 } from 'lucide-react';
 import ActionToggleCaption from './action-toggle-caption';
 import ActionDoodle from './action-doodle';
 import ActionToggleLayout from './action-toggle-layout';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useVideoCallContext } from '@/features/call/context/video-call-context';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
+import { SCCall, SHORTCUTS } from '@/types/shortcuts';
 
-enum SHORTCUT_TOGGLE_ACTIONS {
-  GALLERY = 'g',
-  DOODLE = 'e',
-  CAPTION = 'l',
-  ADD_MEMBER = 'a',
-}
+
 export default function DropdownActions() {
   const {
     room,
@@ -66,24 +61,27 @@ export default function DropdownActions() {
     }
   };
 
-  const actionShortcutKeysSet = Object.values(SHORTCUT_TOGGLE_ACTIONS).map(
-    (value) => [value],
-  );
+  const actionShortcutKeysSet = [
+    SHORTCUTS.SWITCH_TO_GALLERY_VIEW,
+    SHORTCUTS.START_STOP_SCREEN_DOODLE,
+    SHORTCUTS.TOGGLE_LIVE_CAPTION,
+    SHORTCUTS.ADD_MEMBERS
+  ]
   useKeyboardShortcut(actionShortcutKeysSet, (e) => {
     if (!e || !isFullScreen) return;
     const { key, shiftKey } = e;
     if (shiftKey) return;
     switch (key) {
-      case SHORTCUT_TOGGLE_ACTIONS.GALLERY:
+      case SCCall.SWITCH_TO_GALLERY_VIEW:
         setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
         break;
-      case SHORTCUT_TOGGLE_ACTIONS.DOODLE:
+      case SCCall.START_STOP_SCREEN_DOODLE:
         onDoodle();
         break;
-      case SHORTCUT_TOGGLE_ACTIONS.CAPTION:
+      case SCCall.TOGGLE_LIVE_CAPTION:
         setShowCaption(!isShowCaption);
         break;
-      case SHORTCUT_TOGGLE_ACTIONS.ADD_MEMBER:
+      case SCCall.ADD_MEMBERS:
         setModalAddUser(!isShowModalAddUser);
         break;
     }

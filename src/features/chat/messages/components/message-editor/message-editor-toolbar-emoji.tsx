@@ -12,10 +12,10 @@ import { useAppStore } from '@/stores/app.store';
 import { useMessageEditorText } from './message-editor-text-context';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { useState } from 'react';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface MessageEditorToolbarEmojiProps {}
 
-const SHORTCUT_OPEN_EMOJIS = ['shift', '<'];
 export const MessageEditorToolbarEmoji = (
   props: MessageEditorToolbarEmojiProps,
 ) => {
@@ -24,7 +24,7 @@ export const MessageEditorToolbarEmoji = (
 
   const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
     
-  useKeyboardShortcut([SHORTCUT_OPEN_EMOJIS], (e) => {
+  useKeyboardShortcut([SHORTCUTS.OPEN_EMOJI], (e) => {
     e?.preventDefault();
     setOpenEmojisPicker((prev) => !prev);
   });
