@@ -51,7 +51,7 @@ export const SHORTCUTS: Record<
     [SCConversation.SWITCH_INPUT_LANGUAGE]: ['shift', 'l'],
     [SCConversation.UPLOAD_FILES]: ['shift', 'u'],
     [SCConversation.START_STOP_SPEECH_TO_TEXT]: ['shift', ' '],
-    [SCConversation.OPEN_EMOJI]: ['shift', ','],
+    [SCConversation.OPEN_EMOJI]: ['shift', '<'],
 
     [SCTranslation.SWAP_LANGUAGES]: ['s'],
     [SCTranslation.TOGGLE_HISTORY]: ['h'],
