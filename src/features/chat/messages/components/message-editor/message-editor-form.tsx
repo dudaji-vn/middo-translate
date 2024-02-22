@@ -54,8 +54,8 @@ export const MessageEditorForm = forwardRef<
   return (
     <form
       {...props}
-      onSubmit={handleSubmit}
-      className="relative flex w-full flex-col gap-2"
+      onSubmit={handleSubmit}  id="message-editor"
+      className="relative flex w-full  flex-col gap-2"
     >
       {children}
     </form>

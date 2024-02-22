@@ -102,7 +102,7 @@ export const TranslateTool = ({
   return (
     <AnimatePresence mode="wait">
       {showTool && (
-        <div className="w-full outline-none">
+        <div className="w-full outline-none mb-2">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}

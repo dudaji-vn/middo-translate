@@ -100,7 +100,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     return (
       <MessageEditorTextProvider>
         <MessageEditorToolbar />
-        <MessageEditorForm id="message-editor" onFormSubmit={handleSubmit}>
+        <MessageEditorForm onFormSubmit={handleSubmit}>
           <div className="relative flex w-full items-center gap-2">
             <div className="flex-1 items-center gap-2 rounded-[1.5rem] border border-primary bg-card p-1 px-4 shadow-sm">
               <div className="flex min-h-9 flex-1">
