@@ -42,7 +42,7 @@ export const SHORTCUTS: Record<
     string[]
 > = {
     [SCConversation.NEW_CONVERSATION]: ['shift', 'n'],
-    [SCConversation.TOGGLE_CONVERSATION_SETTINGS]: ['shift', '?'],
+    [SCConversation.TOGGLE_CONVERSATION_SETTINGS]: ['/'],
     [SCConversation.SEARCH]: ['shift', 'f'],
     [SCConversation.SWITCH_TO_ALL_TAB]: ['shift', 'a'],
     [SCConversation.SWITCH_TO_GROUP_TAB]: ['shift', 'g'],
@@ -99,7 +99,7 @@ export const SHORTCUT_CONTENTS: Record<
     },
     [SCConversation.TOGGLE_CONVERSATION_SETTINGS]: {
         title: 'Toggle Conversation Settings',
-        description: 'Press Shift + ? to open or close conversation settings.',
+        description: 'Press / to open or close conversation settings.',
     },
     [SCConversation.SEARCH]: {
         title: 'Search',
