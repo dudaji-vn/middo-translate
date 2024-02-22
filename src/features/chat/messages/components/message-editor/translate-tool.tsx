@@ -8,6 +8,10 @@ import { Spinner } from '@/components/feedback';
 import { Switch } from '@/components/data-entry';
 import { cn } from '@/utils/cn';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import isEqual from 'lodash/isEqual';
+import { useMessageEditorText } from './message-editor-text-context';
 
 const TIMEOUT = 5000;
 export interface TranslateToolProps {
@@ -45,6 +49,7 @@ export const TranslateTool = ({
     10,
     isEditing,
   );
+  const { text } = useMessageEditorText();
   const closeEdit = () => setIsEditing(false);
   const handleCancel = () => {
     closeEdit();
@@ -69,6 +74,26 @@ export const TranslateTool = ({
     closeEdit();
     onConfirm?.();
   };
+  useKeyboardShortcut(
+    [
+      SHORTCUTS.OPEN_EDIT_TRANSLATION,
+      SHORTCUTS.SAVE_EDIT_TRANSLATION,
+      SHORTCUTS.CANCEL_EDIT_TRANSLATION,
+    ],
+    (e, matchedKeys) => {
+      if (!text?.length) return;
+      if (isEqual(matchedKeys, SHORTCUTS.OPEN_EDIT_TRANSLATION)) {
+        handleStartEdit();
+        return;
+      }
+      if (isEqual(matchedKeys, SHORTCUTS.SAVE_EDIT_TRANSLATION) && isEditing) {
+        handleConfirm();
+        return;
+      }
+      handleCancel();
+    },
+    true,
+  );
   useEffect(() => {
     if (!checked) {
       setIsEditing(false);

@@ -13,12 +13,14 @@ import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-tran
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useChatStore } from '@/features/chat/store';
+import isEqual from 'lodash/isEqual';
 
 export interface MessageEditorToolbarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   disableMedia?: boolean;
 }
-
+const QUICK_VIEW_SETTING_TIMEOUT = 600;
 export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
@@ -27,10 +29,36 @@ export const MessageEditorToolbar = forwardRef<
   const room = useVideoCallStore((state) => state.room);
   const [openSetting, setOpenSetting] = useState(false);
   const handleToggleSetting = () => {
-    console.log('openSetting', openSetting)
     setOpenSetting((prev) => !prev);
   };
-  useKeyboardShortcut([SHORTCUTS.TOGGLE_CONVERSATION_SETTINGS], handleToggleSetting);
+  const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
+    useChatStore();
+  useKeyboardShortcut(
+    [SHORTCUTS.TOGGLE_CONVERSATION_SETTINGS],
+    handleToggleSetting,
+  );
+  useKeyboardShortcut(
+    [
+      SHORTCUTS.TURN_ON_OFF_TRANSLATION,
+      SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW,
+    ],
+    (_, matchedKey) => {
+      if (!openSetting) {
+        handleToggleSetting();
+        setTimeout(() => {
+          setOpenSetting(false);
+        }, QUICK_VIEW_SETTING_TIMEOUT);
+      }
+      if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION)) {
+        toggleShowMiddleTranslation();
+        return;
+      }
+      if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW)) {
+        toggleShowTranslateOnType();
+      }
+    },
+    true,
+  );
   useEffect(() => {
     // enable submit form by enter
     const formRef = document.getElementById('message-editor');
@@ -57,14 +85,19 @@ export const MessageEditorToolbar = forwardRef<
       <MessageEditorToolbarTranslateTool />
       <div ref={ref} {...props} className="flex items-center">
         <MessageEditorToolbarLangControl />
-        {!disableMedia && <Tooltip title="Upload files" triggerItem={<MessageEditorToolbarFile />} />}
-        {!room && (
-          <Tooltip title="Speech-to-text" triggerItem={<MessageEditorToolbarMic />} />
+        {!disableMedia && (
+          <Tooltip
+            title="Upload files"
+            triggerItem={<MessageEditorToolbarFile />}
+          />
         )}
-        <Tooltip
-          title="Emojis"
-          triggerItem={<MessageEditorToolbarEmoji />}
-        />
+        {!room && (
+          <Tooltip
+            title="Speech-to-text"
+            triggerItem={<MessageEditorToolbarMic />}
+          />
+        )}
+        <Tooltip title="Emojis" triggerItem={<MessageEditorToolbarEmoji />} />
         <Tooltip
           title="Settings"
           triggerItem={

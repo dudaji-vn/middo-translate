@@ -8,7 +8,8 @@ type Key = "shift" | string;
 
 export const useKeyboardShortcut = (
   keysSet: Array<Key[]>,
-  callback: (event?: KeyboardEvent) => void
+  callback: (event?: KeyboardEvent, matchedKeys?: string[]) => void,
+  ignoreFocusingInputs?: boolean,
 ) => {
   const {
     isFocused
@@ -17,16 +18,23 @@ export const useKeyboardShortcut = (
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isFocused && allowShortcutListener &&
-        keysSet?.some((keys) =>
-          keys?.every(
+      if (!isFocused && (allowShortcutListener || ignoreFocusingInputs)
+      ) {
+        keysSet?.some((keys) => {
+          if (keys?.every(
             (key) =>
               (key.toLowerCase() === "shift" && event.shiftKey) ||
+              (key.toLowerCase() === "ctrl" && event.ctrlKey) ||
+              (key.toLowerCase() === "alt" && event.altKey) ||
               (typeof key === "string" && event.key.toLowerCase() === key.toLowerCase())
           )
+          ) {
+            event.preventDefault();
+            callback(event, keys);
+            return true;
+          }
+        }
         )
-      ) {
-        callback(event);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
