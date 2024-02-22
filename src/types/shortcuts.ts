@@ -17,6 +17,11 @@ export enum SCConversation {
     UPLOAD_FILES = "UPLOAD_FILES",
     START_STOP_SPEECH_TO_TEXT = "START_STOP_SPEECH_TO_TEXT",
     OPEN_EMOJI = "OPEN_EMOJI",
+    OPEN_EDIT_TRANSLATION = "OPEN_EDIT_TRANSLATION",
+    SAVE_EDIT_TRANSLATION = "SAVE_EDIT_TRANSLATION",
+    CANCEL_EDIT_TRANSLATION = "CANCEL_EDIT_TRANSLATION",
+    TURN_ON_OFF_TRANSLATION = "TURN_ON_OFF_TRANSLATION",
+    TURN_ON_OFF_TRANSLATION_PREVIEW = "TURN_ON_OFF_TRANSLATION_PREVIEW",
 }
 
 export enum SCCall {
@@ -49,6 +54,11 @@ export const SHORTCUTS: Record<SCConversation | SCTranslation | SCCall, string[]
     [SCTranslation.TOGGLE_HISTORY]: ['h'],
     [SCTranslation.TOGGLE_PHRASES]: ['p'],
     [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: [' '],    
+    [SCConversation.OPEN_EDIT_TRANSLATION]: ['dead'],
+    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['†'], // '†' is the ctrl + shift + t
+    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['π'], // 'π' is the ctrl + shift + p
+    [SCConversation.SAVE_EDIT_TRANSLATION]: ['ctrl', 'enter'],
+    [SCConversation.CANCEL_EDIT_TRANSLATION]: ['escape'],
 
     [SCCall.MAXIMIZE_MINIMIZE_CALL]: ['shift', 'm'],
     [SCCall.ADD_MEMBERS]: ['a'],
@@ -60,4 +70,6 @@ export const SHORTCUTS: Record<SCConversation | SCTranslation | SCCall, string[]
     [SCCall.SWITCH_TO_GALLERY_VIEW]: ['g'],
     [SCCall.START_STOP_SCREEN_DOODLE]: ['e'],
     [SCCall.TOGGLE_LIVE_CAPTION]: ['l'],
+    
 };
+
