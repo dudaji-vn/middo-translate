@@ -13,7 +13,7 @@ export default async function RootLayout({
       {/* <InitializeAuthStore user={profile as User} /> */}
       {children}
       <ShortcutsGuide />
-      <CallVideoModalContainer />??
+      <CallVideoModalContainer />
       {/* <GlobalError error='Error test'/> */}
     </MainLayout>
   );

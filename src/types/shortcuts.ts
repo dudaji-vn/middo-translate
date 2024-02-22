@@ -98,7 +98,7 @@ export const SHORTCUT_CONTENTS: Record<
         description: 'Press Shift + N to start a new conversation.',
     },
     [SCConversation.TOGGLE_CONVERSATION_SETTINGS]: {
-        title: 'Toggle Conversation Settings',
+        title: 'Turn On/Off Conversation Settings',
         description: 'Press / to open or close conversation settings.',
     },
     [SCConversation.SEARCH]: {
@@ -142,15 +142,15 @@ export const SHORTCUT_CONTENTS: Record<
         description: 'Press S to swap the source and target languages for translation.',
     },
     [SCTranslation.TOGGLE_HISTORY]: {
-        title: 'Toggle History',
+        title: 'Turn On/Off History',
         description: 'Press H to show or hide the translation history.',
     },
     [SCTranslation.TOGGLE_PHRASES]: {
-        title: 'Toggle Phrases',
+        title: 'Turn On/Off Phrases',
         description: 'Press P to show or hide the translation phrases.',
     },
     [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: {
-        title: 'Toggle Speech to Text',
+        title: 'Turn On/Off Speech to Text',
         description: 'Press Space to start or stop converting speech to text.',
     },
     [SCConversation.OPEN_EDIT_TRANSLATION]: {
@@ -186,19 +186,19 @@ export const SHORTCUT_CONTENTS: Record<
         description: 'Press S to start or stop sharing your screen.',
     },
     [SCCall.TOGGLE_CAMERA]: {
-        title: 'Toggle Camera',
+        title: 'Turn On/Off Camera',
         description: 'Press C to turn the camera on or off.',
     },
     [SCCall.TOGGLE_MICROPHONE]: {
-        title: 'Toggle Microphone',
+        title: 'Turn On/Off Microphone',
         description: 'Press M to turn the microphone on or off.',
     },
     [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: {
-        title: 'Temporary Microphone Toggle',
+        title: 'Temporary Turn On/Off Microphone',
         description: 'Press Space to temporarily turn the microphone on or off.',
     },
     [SCCall.TOGGLE_DISCUSSION]: {
-        title: 'Toggle Discussion',
+        title: 'Turn On/Off Discussion',
         description: 'Press D to open or close the discussion.',
     },
     [SCCall.SWITCH_TO_GALLERY_VIEW]: {
@@ -210,7 +210,7 @@ export const SHORTCUT_CONTENTS: Record<
         description: 'Press E to start or stop screen doodle.',
     },
     [SCCall.TOGGLE_LIVE_CAPTION]: {
-        title: 'Toggle Live Caption',
+        title: 'Turn On/Off Live Caption',
         description: 'Press L to turn live caption on or off.',
     },
 };

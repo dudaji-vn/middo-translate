@@ -78,8 +78,8 @@ export default function ShortcutsGuide() {
   if (!isClient) return null;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">
-        <DialogTitle>
+
+      <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">        <DialogTitle>
           <Typography variant="h1" className="text-md font-bold text-center">
             Shortcut Information
           </Typography>
