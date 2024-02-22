@@ -19,7 +19,6 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { PageLoading } from '@/components/feedback';
 import { cn } from '@/utils/cn';
 import { Extension } from '@/features/translate/components/extension';
-
 interface HomeProps {
   searchParams: {
     query?: string;
@@ -132,7 +131,6 @@ export default async function Home(props: HomeProps) {
               </TranslateResult>
             </CaptureZone>
             <Extension />
-
             <div className="mt-8 flex items-center justify-center gap-8">
               <TextCopy
                 sourceText={sourceText || sourceTranslateResult}
@@ -142,7 +140,6 @@ export default async function Home(props: HomeProps) {
                 sourceLanguage={sourceLanguage as string}
                 targetLanguage={targetLanguage as string}
               />
-
               <TranslateOptionBar sourceLang={sourceLanguage} />
               {(sourceText || sourceTranslateResult) && <ImgCopy />}
             </div>
