@@ -1,12 +1,7 @@
 'use client';
 
-
 import { Typography } from '@/components/data-display';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import {
   SCCall,
@@ -17,6 +12,7 @@ import {
   SPECIAL_KEYS_CONTENT,
   ShortcutInfo,
 } from '@/types/shortcuts';
+import { Info } from 'lucide-react';
 import React from 'react';
 
 type ShortcutSectionProps = {
@@ -43,11 +39,11 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
     </Typography>
     {shortcuts.map((item, index) => (
       <div key={index}>
-        <div className="flex flex-row items-end justify-between">
-          <Typography variant={'h3'} className="font-normal">
+        <div className="flex flex-row items-baseline justify-between">
+          <Typography variant={'h3'} className="font-normal text-[1.2rem]">
             {item.title}
           </Typography>
-          <div className="my-1 flex w-fit flex-row">
+          <div className="mt-1 flex w-fit flex-row">
             {item.shortcut?.map((key) => (
               <span
                 key={key}
@@ -74,17 +70,20 @@ export default function ShortcutsGuide() {
   React.useEffect(() => {
     setIsClient(true);
   }, []);
-  useKeyboardShortcut([['?']], () => setOpen((prev)=> !prev));
+  useKeyboardShortcut([['?']], () => setOpen((prev) => !prev));
   if (!isClient) return null;
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-
-      <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">        <DialogTitle>
-          <Typography variant="h1" className="text-md font-bold text-center">
+      <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">
+        <div className=" max-w-screen-md space-y-3 divide-y px-8 [&_h3]:mt-4 [&_h3]:text-[1.25rem]">        <DialogTitle>
+          <Typography
+            variant="h1"
+            className="relative text-[1.65rem] font-bold"
+          >
+            <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" />
             Shortcut
           </Typography>
         </DialogTitle>
-        <div className=" max-w-screen-md space-y-3 divide-y [&_h3]:mt-4 [&_h3]:text-[1.25rem] ">
           <ShortcutSection
             title="Middo Translation"
             shortcuts={translationShortcuts}
