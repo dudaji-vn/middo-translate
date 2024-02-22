@@ -55,8 +55,8 @@ export const SHORTCUTS: Record<SCConversation | SCTranslation | SCCall, string[]
     [SCTranslation.TOGGLE_PHRASES]: ['p'],
     [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: [' '],    
     [SCConversation.OPEN_EDIT_TRANSLATION]: ['dead'],
-    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['†'], // '†' is the ctrl + shift + t
-    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['π'], // 'π' is the ctrl + shift + p
+    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['†'], // '†' is the ctrl + alt + t
+    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['π'], // 'π' is the ctrl + alt + p
     [SCConversation.SAVE_EDIT_TRANSLATION]: ['ctrl', 'enter'],
     [SCConversation.CANCEL_EDIT_TRANSLATION]: ['escape'],
 
