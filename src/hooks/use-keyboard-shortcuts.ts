@@ -41,5 +41,5 @@ export const useKeyboardShortcut = (
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [keysSet, callback, isFocused]);
+  }, [keysSet, callback, isFocused, allowShortcutListener, ignoreFocusingInputs]);
 };
