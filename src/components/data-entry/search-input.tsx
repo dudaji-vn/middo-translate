@@ -58,6 +58,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             value={value}
             ref={inputRef}
             onBlur={() => setAllowShortcutListener(true)}
+            onFocus={() => setAllowShortcutListener(false)}
             type="text"
             {...props}
             onChange={(e) => {
