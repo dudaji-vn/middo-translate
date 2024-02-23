@@ -43,30 +43,34 @@ export const InputCropImage = forwardRef<
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [zoom, setZoom] = useState<number[]>([1]);
   const cropperRef = createRef<ReactCropperElement>();
-  const { files, removeFile, reset } =
-    useMediaUpload();
+  const { files, removeFile, reset } = useMediaUpload();
 
-  useEffect(() => {
-    if (!isEmpty(files?.[0])) processImageFiles(files[0]?.file);
-  }, [files]);
-
-  useEffect(() => {
-    if (open) {
+  useEffect(() => {  
+    if (!open) {
       reset();
       setErrorMessage('');
+      return;
     }
-  }, [open]);
+    if (!isEmpty(files?.[0])) processImageFiles(files[0]?.file);
+  }, [files, open]);
+
+
+
   const id = useId();
+  const removeDragData = () => {
+    if (files?.[0]) removeFile(files?.[0]);
+  };
 
   const processImageFiles = (file: File) => {
     const { type, size } = file || {};
-
     if (size > 1024 * 1024 * 3) {
       setErrorMessage('File size need to be less than 3MB');
+      removeDragData();
       return;
     }
     if (!ALLOWED_FILE_TYPES.includes(type)) {
       setErrorMessage('File type is not supported');
+      removeDragData();
       return;
     }
     const reader = new FileReader();
@@ -228,9 +232,7 @@ export const InputCropImage = forwardRef<
       </div>
       <div className="mt-6 flex items-center justify-end gap-3">
         <AlertDialogCancel
-          onClick={() => {
-            if (files[0]) removeFile(files[0]);
-          }}
+          onClick={removeDragData}
           className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
         >
           <p>Cancel</p>
