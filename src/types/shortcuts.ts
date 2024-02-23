@@ -52,16 +52,16 @@ export const SHORTCUTS: Record<
     [SCConversation.UPLOAD_FILES]: ['shift', 'u'],
     [SCConversation.START_STOP_SPEECH_TO_TEXT]: ['shift', ' '],
     [SCConversation.OPEN_EMOJI]: ['shift', '<'],
-
-    [SCTranslation.SWAP_LANGUAGES]: ['s'],
-    [SCTranslation.TOGGLE_HISTORY]: ['h'],
-    [SCTranslation.TOGGLE_PHRASES]: ['p'],
-    [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: [' '],
     [SCConversation.OPEN_EDIT_TRANSLATION]: ['dead'],
     [SCConversation.TURN_ON_OFF_TRANSLATION]: ['†'], // '†' is the ctrl + alt + t
     [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['π'], // 'π' is the ctrl + alt + p
     [SCConversation.SAVE_EDIT_TRANSLATION]: ['ctrl', 'enter'],
     [SCConversation.CANCEL_EDIT_TRANSLATION]: ['escape'],
+
+    [SCTranslation.SWAP_LANGUAGES]: ['s'],
+    [SCTranslation.TOGGLE_HISTORY]: ['h'],
+    [SCTranslation.TOGGLE_PHRASES]: ['p'],
+    [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: [' '],
 
     [SCCall.MAXIMIZE_MINIMIZE_CALL]: ['shift', 'm'],
     [SCCall.ADD_MEMBERS]: ['a'],
