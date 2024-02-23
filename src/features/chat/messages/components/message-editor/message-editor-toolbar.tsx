@@ -20,7 +20,6 @@ export interface MessageEditorToolbarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   disableMedia?: boolean;
 }
-const QUICK_VIEW_SETTING_TIMEOUT = 600;
 export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
@@ -43,12 +42,6 @@ export const MessageEditorToolbar = forwardRef<
       SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW,
     ],
     (_, matchedKey) => {
-      if (!openSetting) {
-        handleToggleSetting();
-        setTimeout(() => {
-          setOpenSetting(false);
-        }, QUICK_VIEW_SETTING_TIMEOUT);
-      }
       if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION)) {
         toggleShowMiddleTranslation();
         return;
