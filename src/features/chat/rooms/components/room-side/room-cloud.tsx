@@ -35,7 +35,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
       <AccordionItem value="item-1">
         <AccordionTrigger className="p-3">
           <div className="flex items-center gap-2">
-            <Package2 width={16} height={16} /> <span>Cloud shared</span>{' '}
+            <Package2 width={16} height={16} /> <span>Cloud shared</span>
             <span className="text-sm text-neutral-600">
               ({data?.count || 0})
             </span>

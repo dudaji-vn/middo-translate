@@ -221,7 +221,7 @@ const NotificationTranslation = ({ onClose }: { onClose?: () => void }) => {
   return (
     <div className="flex items-center justify-between rounded-xl bg-neutral-white p-3 shadow-2">
       <p>
-        EN - Translate tool is turn off, you can turn it on again in{' '}
+        EN - Translate tool is turn off, you can turn it on again in
         <span className="font-medium text-primary-500-main">
           Chat setting
           <Settings className="ml-1 inline-block" />

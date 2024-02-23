@@ -23,7 +23,7 @@ export const ToastNotification = ({
       <div className="flex w-full">
         <span>
           Are you sure? Without notifications, it’s much harder for your team to
-          reach you.{' '}
+          reach you.
           <TextUnderlineClickAble onClick={onEnable}>
             Enable notifications
           </TextUnderlineClickAble>
@@ -42,7 +42,7 @@ export const ToastNotification = ({
   return (
     <div className="flex w-full">
       <span>
-        Middo needs your permission to{' '}
+        Middo needs your permission to
         <TextUnderlineClickAble onClick={onEnable}>
           enable notifications
         </TextUnderlineClickAble>
