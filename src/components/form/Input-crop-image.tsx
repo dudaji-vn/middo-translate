@@ -229,7 +229,6 @@ export const InputCropImage = forwardRef<
       <div className="mt-6 flex items-center justify-end gap-3">
         <AlertDialogCancel
           onClick={() => {
-            console.log('files', files);
             if (files[0]) removeFile(files[0]);
           }}
           className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
