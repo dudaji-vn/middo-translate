@@ -231,3 +231,68 @@
     display: none !important;
   } */
 }
+
+.animation-up {
+  animation: up 0.5s linear;
+  -webkit-animation: up 0.5s linear;
+}
+@keyframes up {
+  0% {
+    transform: translateY(40%);
+    -webkit-transform: translateY(40%);
+    -moz-transform: translateY(40%);
+    -ms-transform: translateY(40%);
+    -o-transform: translateY(40%);
+  }
+  80% {
+    transform: translateY(-10%);
+    -webkit-transform: translateY(-10%);
+    -moz-transform: translateY(-10%);
+    -ms-transform: translateY(-10%);
+    -o-transform: translateY(-10%);
+  }
+  100% {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+  }
+}
+.animation-down {
+  animation: down 0.5s linear;
+  -webkit-animation: down 0.5s linear;
+}
+@keyframes down {
+  0% {
+    transform: translateY(-40%);
+    -webkit-transform: translateY(-40%);
+    -moz-transform: translateY(-40%);
+    -ms-transform: translateY(-40%);
+    -o-transform: translateY(-40%);
+  }
+  80% {
+    transform: translateY(10%);
+    -webkit-transform: translateY(10%);
+    -moz-transform: translateY(10%);
+    -ms-transform: translateY(10%);
+    -o-transform: translateY(10%);
+  }
+  100% {
+    transform: translateY(0);
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+  }
+}
+body {
+  scroll-behavior: smooth;
+}
+#solution {
+  scroll-margin: 76px;
+  scroll-behavior: smooth;
+}
+#about-us {
+  scroll-margin: 76px;
+}
