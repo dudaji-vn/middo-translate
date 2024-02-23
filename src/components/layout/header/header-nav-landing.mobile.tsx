@@ -1,0 +1,124 @@
+import { Button } from '@/components/actions';
+import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
+import { cn } from '@/utils/cn';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Menu, XIcon } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { forwardRef } from 'react';
+import { useBoolean } from 'usehooks-ts';
+import { NavItem } from './header.config';
+
+export interface HeaderNavMobileProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  navItems: NavItem[];
+}
+
+export const HeaderNavLandingMobile = forwardRef<
+  HTMLDivElement,
+  HeaderNavMobileProps
+>((props, ref) => {
+  const { toggle, value } = useBoolean(false);
+  const { navItems } = props;
+  const pathName = usePathname();
+
+  return (
+    <>
+      <Button.Icon onClick={toggle} color="primary" variant="ghost" size="sm">
+        {value ? <XIcon /> : <Menu />}
+      </Button.Icon>
+      <AnimatePresence>
+        {value && (
+          <MobileLandingNav
+            navItems={navItems}
+            toggleMenu={toggle}
+            pathName={pathName}
+          />
+        )}
+      </AnimatePresence>
+    </>
+  );
+});
+HeaderNavLandingMobile.displayName = 'HeaderNavLandingMobile';
+const MobileLandingNav = ({
+  pathName,
+  toggleMenu,
+  navItems,
+}: {
+  toggleMenu: () => void;
+  pathName: string | null;
+  navItems: NavItem[];
+}) => {
+  useDisableScrollWhenMount();
+  const handleScroll = (href: string) => {
+    const targetElement = document.getElementById(href);
+    if (!targetElement) {
+      return;
+    }
+    targetElement.scrollIntoView({ behavior: 'smooth' });
+  };
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{
+          opacity: 0,
+          transition: {
+            ease: 'easeInOut',
+            duration: 0.3,
+            delay: 0.1,
+          },
+        }}
+        className={cn(
+          'absolute left-0 top-[52px] z-50 flex w-full flex-col items-stretch overflow-hidden rounded-b-2xl  bg-background shadow-1',
+        )}
+      >
+        {navItems.map((item, index) => {
+          return (
+            <motion.div
+              onClick={toggleMenu}
+              className={cn(
+                'bg-background font-semibold active:bg-background-darker active:!text-shading md:!p-0 md:hover:text-secondary md:active:!bg-transparent',
+                pathName === item.href && '!bg-lighter text-primary',
+              )}
+              key={item.name}
+              initial={{ x: -80, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: (index + 1) * 0.1 }}
+              exit={{
+                opacity: 0,
+                x: -80,
+                transition: {
+                  ease: 'easeInOut',
+                  delay: 0.1,
+                },
+              }}
+            >
+              <div
+                onClick={() => handleScroll(item.href)}
+                className="block h-full w-full cursor-pointer px-[5vw] py-4"
+              >
+                {item.name}
+              </div>
+            </motion.div>
+          );
+        })}
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        exit={{
+          opacity: 0,
+          transition: {
+            ease: 'easeInOut',
+            duration: 0.3,
+            delay: 0.1,
+          },
+        }}
+        onClick={toggleMenu}
+        className="absolute bottom-0 left-0 right-0 top-[90px] z-20 h-[calc(100%_-_90px)] w-full bg-black/70"
+      />
+    </>
+  );
+};
