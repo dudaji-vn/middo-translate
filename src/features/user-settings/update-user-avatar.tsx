@@ -2,7 +2,6 @@
 
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogTrigger,
 } from '@/components/feedback';
@@ -19,6 +18,10 @@ import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
 import { uploadImage } from '@/utils/upload-img';
 import { useAuthStore } from '@/stores/auth.store';
+import {
+  MediaUploadDropzone,
+  MediaUploadProvider,
+} from '@/components/media-upload';
 
 export default function UpdateUserAvatar() {
   const [loading, setLoading] = useState(false);
@@ -60,29 +63,25 @@ export default function UpdateUserAvatar() {
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger>
           <div className="cursor-pointer transition-all hover:opacity-80">
-            <div className="inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0 transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-semibold text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:bg-primary-100 disabled:text-primary-200 rounded-full p-0 w-12 h-12">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-200 p-0 font-semibold text-primary ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:bg-primary-400 disabled:pointer-events-none disabled:bg-primary-100 disabled:text-primary-200 disabled:opacity-50 md:hover:bg-primary-300 md:active:bg-primary-400">
               <Camera />
             </div>
-
             <span className="mt-2 block text-center text-sm font-light">
               Avatar
             </span>
           </div>
         </AlertDialogTrigger>
-        <AlertDialogContent>
-          <form onSubmit={onSubmitForm}>
-            <h3 className="text-[24px]">Change avatar</h3>
-            <div>
-              <InputCropImage ref={inputCropImage} />
-            </div>
-            <div className="mt-6 flex items-center justify-end">
-              <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
-                <p>Cancel</p>
-              </AlertDialogCancel>
-              <Button shape="square" disabled={loading} type="submit">
-                Save
-              </Button>
-            </div>
+        <AlertDialogContent className="md:h-[80vh] md:max-w-[80vw] xl:max-w-[70vw]">
+          <form
+            onSubmit={onSubmitForm}
+            className="flex h-full w-full flex-col justify-between"
+          >
+            <MediaUploadProvider>
+              <MediaUploadDropzone>
+                <h3 className="text-[24px]">Change avatar</h3>
+                <InputCropImage ref={inputCropImage} isLoading={loading} open={open}/>
+              </MediaUploadDropzone>
+            </MediaUploadProvider>
           </form>
         </AlertDialogContent>
       </AlertDialog>
