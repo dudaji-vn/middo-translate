@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useId, useState } from 'react';
 
-interface InputFieldProps {
+export interface InputFieldProps {
   label?: string;
   subLabel?: string;
   placeholder?: string;
