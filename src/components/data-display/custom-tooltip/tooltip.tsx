@@ -4,6 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/data-display';
+import { useAppStore } from '@/stores/app.store';
 
 export type TooltipProps = {
   title: string;
@@ -14,12 +15,18 @@ export type TooltipProps = {
 };
 
 const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
-  ({ children, title, triggerItem, triggerProps, contentProps, ...rest }, ref) => {
+  (
+    { children, title, triggerItem, triggerProps, contentProps, ...rest },
+    ref,
+  ) => {
+    const { isMobile } = useAppStore();
     return (
       <ShadcnTooltip delayDuration={100} {...rest}>
-        <TooltipContent className="rounded-full" {...contentProps}>
-          <p>{title}</p>
-        </TooltipContent>
+        {!isMobile && (
+          <TooltipContent className="rounded-full" {...contentProps}>
+            <p>{title}</p>
+          </TooltipContent>
+        )}
         {children || (
           <TooltipTrigger {...triggerProps}>{triggerItem}</TooltipTrigger>
         )}
