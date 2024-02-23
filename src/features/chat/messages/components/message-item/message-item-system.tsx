@@ -27,7 +27,6 @@ export const MessageItemSystem = ({
             onClick={() => changeTab('pinned')}
             className="cursor-pointer text-sm text-primary active:text-primary-700 md:hover:text-primary-600"
           >
-            {' '}
             View
           </span>
         )}

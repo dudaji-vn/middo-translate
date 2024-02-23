@@ -39,7 +39,7 @@ export const MessageItemForward = ({
       <div className="order-neutral-100 ml-auto w-fit rounded-2xl border p-2">
         <div>
           <div className="text-sm">
-            <span className="italic text-neutral-400">Forward from</span>{' '}
+            <span className="italic text-neutral-400">Forward from</span>
             <Wrapper room={message.room!}>
               <span className="text-primary">{displayForwardFrom}</span>
             </Wrapper>

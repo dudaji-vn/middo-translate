@@ -120,7 +120,7 @@ export const RepliesBox = () => {
         <div className="relative flex justify-center">
           <div className="absolute top-1/2 h-[1px] w-[95%] bg-neutral-200 "></div>
           <div className="relative bg-white p-1 px-3 text-sm text-neutral-400">
-            {messages.length}{' '}
+            {messages.length}
             {messages.length > 1 ? 'discussions' : 'discussion'}
           </div>
         </div>

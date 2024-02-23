@@ -25,7 +25,7 @@ export const MessageEditorToolbarMic = (
     }
   }, [handleStartListening, setSrcLang, srcLang, userLanguage]);
 
-  useKeyboardShortcut([SHORTCUTS.TOGGLE_SPEECH_TO_TEXT], (e) =>{
+  useKeyboardShortcut([SHORTCUTS.START_STOP_SPEECH_TO_TEXT], (e) =>{
     listening ? handleStopListening() : onStartListening();
     e?.preventDefault();}
   );
