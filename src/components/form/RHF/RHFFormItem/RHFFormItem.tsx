@@ -6,7 +6,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { AlertCircleIcon } from 'lucide-react';
 import React from 'react';
 
 export type TRHFFormItemProps = {
@@ -32,7 +31,7 @@ function RHFFormItem({
     <FormItem className="space-y-2" {...formItemProps}>
       {formLabel && (
         <FormLabel
-        className="mb-2 ml-5 inline-block text-neutral-700 text-[1rem] font-normal"
+        className="mb-1 ml-5 inline-block text-neutral-900 text-[1rem] font-normal"
           {...formLabelProps}
         >
           {formLabel}
