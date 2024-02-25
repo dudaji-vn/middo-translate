@@ -23,13 +23,13 @@ export const useKeyboardShortcut = (
         keysSet?.some((keys) => {
           if (keys?.every(
             (key) =>
-              (key.toLowerCase() === "shift" && event.shiftKey) ||
-              (key.toLowerCase() === "ctrl" && event.ctrlKey) ||
-              (key.toLowerCase() === "alt" && event.altKey) ||
-              (typeof key === "string" && event.key.toLowerCase() === key.toLowerCase())
+              (key?.toLowerCase() === "shift" && event?.shiftKey) ||
+              (key?.toLowerCase() === "ctrl" && event?.ctrlKey) ||
+              (key?.toLowerCase() === "alt" && event?.altKey) ||
+              (typeof key === "string" && event?.key?.toLowerCase() === key?.toLowerCase())
           )
           ) {
-            event.preventDefault();
+            event?.preventDefault();
             callback(event, keys);
             return true;
           }

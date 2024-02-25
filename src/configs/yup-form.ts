@@ -1,5 +1,6 @@
 import * as yup from "yup"
 import { PASSWORD_PARTTERN } from "./regex-pattern"
+import { z } from "zod"
 
 export const LoginSchema = yup
     .object()
@@ -122,32 +123,38 @@ export const UpdateInforSchema = yup
     .required()
 
 
-export const ChangePasswordSchema = yup
-    .object()
-    .shape({
-        currentPassword: yup.string().required({
-            value: true,
-            message: "Please enter current password!"
-        }),
-        newPassword: yup.string().required({
-            value: true,
-            message: "Please enter password!"
-        }).min(8, {
-            value: 8,
-            message: "Password must be at least 8 characters!"
-        }).matches(
-            PASSWORD_PARTTERN,
-            "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!"
-        ).test('differentFromOldPassword', 'New password must differ from old password', function (value) {
-            const { currentPassword } = this.parent;
-            return value !== currentPassword;
-        }),
-        confirmPassword: yup.string().required({
-            value: true,
-            message: "Please enter confirm password!"
-        }).oneOf([yup.ref('newPassword')], {
-            value: true,
-            message: "Confirm password does not match!"
-        })
+export const changePasswordSchema  = z
+.object({
+  currentPassword: z.string().min(1, {
+    message: 'Please enter current password!',
+  }),
+  newPassword: z
+    .string()
+    .min(8, {
+      message: 'Password must be at least 8 characters!',
     })
-    .required()
+    .regex(PASSWORD_PARTTERN, {
+      message:
+        'Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!',
+    }),
+
+  confirmPassword: z.string().min(1, {
+    message: 'Please enter confirm password!',
+  }),
+})
+.refine((data) => data.newPassword === data.confirmPassword, {
+  message: 'Confirm password does not match!',
+  path: ['confirmPassword'],
+})
+.refine((data) => data.newPassword !== data.currentPassword, {
+  message: 'New password must be different from the current password!',
+  path: ['newPassword'],
+})
+.superRefine(({ currentPassword, newPassword }, ctx) => {
+  if (currentPassword === newPassword) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'The passwords did not match',
+    });
+  }
+});
