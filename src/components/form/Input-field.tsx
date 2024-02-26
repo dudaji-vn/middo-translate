@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn';
 import {
   AlertCircleIcon,
   CheckCircle2,
@@ -6,7 +7,7 @@ import {
 } from 'lucide-react';
 import { useId, useState } from 'react';
 
-interface InputFieldProps {
+export interface InputFieldProps {
   label?: string;
   subLabel?: string;
   placeholder?: string;
@@ -46,22 +47,17 @@ export const InputField = (props: InputFieldProps) => {
         </span>
       )}
       <div
-        className={`flex h-[50px] w-full items-center justify-start rounded-full border px-4 
-                ${errors ? 'border-error' : ''} 
-                ${
-                  type === 'password'
-                    ? isTouched && !errors
-                      ? 'pr-4'
-                      : 'pr-1'
-                    : ''
-                }  
-                ${isTouched && !errors ? 'border-green-500' : ''}`}
+        className={cn(
+          `flex h-[50px] w-full items-center justify-start rounded-full border px-4`,
+          type === 'password' ? (isTouched && !errors ? 'pr-4' : 'pr-1') : '',
+          isTouched && !errors ? 'border-green-500' : '',
+        )}
       >
         <input
           {...register}
           className="w-full px-1 ring-0 focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
           type={
-            type !== 'password' ? type : isShowPassword ? 'text' : 'password'
+            type === 'password' && isShowPassword ? 'text' : type || 'text'
           }
           id={id}
           spellCheck="false"
