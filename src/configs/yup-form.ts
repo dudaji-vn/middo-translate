@@ -109,7 +109,10 @@ export const CreateNewAccountSchema = yup
     .required()
 
 export const updateInforSchema = z.object({
-    name: z.string().min(1).max(60),
+    name: z.string().min(1,
+        {
+            message: 'Please enter name!',
+        }),
     language: z.string().min(1),
 });
 

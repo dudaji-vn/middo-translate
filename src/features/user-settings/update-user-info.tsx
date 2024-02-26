@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form } from '@/components/ui/form';
 import RHFInputField from '@/components/form/RHF/RHFInputField/RHFInputField';
 import { z } from 'zod';
@@ -47,7 +47,7 @@ export default function UpdateUserInfo() {
     setValue,
     formState: { errors, isValid },
   } = form;
-    const { name, language } = watch();
+  const { name, language } = watch();
   const submit = async (values: z.infer<typeof schema>) => {
     trigger();
     if (!isValid) return;
@@ -73,12 +73,18 @@ export default function UpdateUserInfo() {
       setValue('language', user.language);
     }
   };
-
   const onModalChange = () => {
     setOpen(!open);
     setValue('name', user.name);
     setValue('language', user.language);
   };
+
+
+  useEffect(() => {
+    if (name?.length >= 60) {
+      setValue('name', name.slice(0, 60));
+    }
+  }, [name,setValue]);
 
   return (
     <>
@@ -103,6 +109,18 @@ export default function UpdateUserInfo() {
                 formLabel="Name"
                 inputProps={{
                   placeholder: 'Enter your name',
+                  suffix: (
+                    <span className="text text-gray-400">{`${name?.length}/60`}</span>
+                  ),
+                  onKeyDown: (e) => {
+                    if (
+                      name.length >= 60 &&
+                      e.key !== 'Backspace' &&
+                      e.key !== 'Delete'
+                    ) {
+                      e.preventDefault();
+                    }
+                  },
                 }}
               />
               <InputSelectLanguage
