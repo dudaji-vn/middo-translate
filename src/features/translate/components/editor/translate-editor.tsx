@@ -16,6 +16,7 @@ import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 import { useTranslateStore } from '@/stores/translate.store';
+import useLocalStorage from '@/hooks/use-local-storage';
 
 export interface TranslateEditorProps {
   className?: string;
@@ -55,12 +56,15 @@ export const TranslateEditor = ({
   const debouncedValue = useDebounce<string>(value, 300);
   const pathname = usePathname();
   const { replace } = useRouter();
+  const [localText, setLocalText] = useLocalStorage('translate-query', value);
+  const router = useRouter();
 
   const { speak } = useTextToSpeech(languageCode, value);
 
   const isKeyboardOpen = useDetectKeyboardOpen();
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setLocalText(event.target.value);
     setValue(event.target.value);
   };
   useEffect(() => {
@@ -103,6 +107,11 @@ export const TranslateEditor = ({
   }, [isKeyboardOpen]);
 
   useEffect(() => {
+    console.log('searchParams.ge', searchParams?.get('query'));
+    if (!searchParams?.get('query') && localText?.length > 0) {
+      console.log('true', true)
+      router.push(`query=${localText}`);
+    }
     setValue(text);
     setIsLoading(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -174,7 +183,7 @@ export const TranslateEditor = ({
         value={value}
         onChange={handleChange}
         className={cn(
-          'inputTranslate translate-editor h-full   bg-transparent',
+          'inputTranslate translate-editor h-full bg-transparent',
           textStyles,
           !value && 'flex-1',
         )}
