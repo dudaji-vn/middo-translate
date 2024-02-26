@@ -23,7 +23,6 @@ import { Form } from '@/components/ui/form';
 import RHFInputField from '@/components/form/RHF/RHFInputField/RHFInputField';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { MAX_USER_NAME_LENGTH } from '@/configs/common';
 
 export default function UpdateUserInfo() {
   const [loading, setLoading] = useState(false);
@@ -41,6 +40,7 @@ export default function UpdateUserInfo() {
     resolver: zodResolver(schema),
   });
   const {
+    register,
     watch,
     handleSubmit,
     trigger,
@@ -81,8 +81,8 @@ export default function UpdateUserInfo() {
 
 
   useEffect(() => {
-    if (name?.length >= MAX_USER_NAME_LENGTH) {
-      setValue('name', name.slice(0, MAX_USER_NAME_LENGTH));
+    if (name?.length >= 60) {
+      setValue('name', name.slice(0, 60));
     }
   }, [name,setValue]);
 
@@ -110,11 +110,12 @@ export default function UpdateUserInfo() {
                 inputProps={{
                   placeholder: 'Enter your name',
                   suffix: (
-                    <span className="text text-gray-400">{`${name?.length}/${MAX_USER_NAME_LENGTH}`}</span>
+                    <span className="text text-gray-400">{`${name?.length}/60`}</span>
                   ),
                   onKeyDown: (e) => {
                     if (
                       name.length >= 60 &&
+                      e.key !== 'Backspace' &&
                       e.key !== 'Delete'
                     ) {
                       e.preventDefault();

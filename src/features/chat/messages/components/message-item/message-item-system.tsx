@@ -16,7 +16,7 @@ export const MessageItemSystem = ({
   } ${message?.content}`;
   return (
     <div className="mx-auto">
-      <span className="text-sm font-light text-neutral-500 line-clamp-1">
+      <span className="text-sm font-light text-neutral-500">
         {messageContent}
         {message.targetUsers?.map((user, index) => {
           return !index ? ' ' + user.name : ', ' + user.name;

@@ -8,14 +8,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/feedback';
-import { useEffect, useId, useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { Input } from '@/components/data-entry';
 import { Pen } from 'lucide-react';
 import { useChatBox } from '../../contexts';
 import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
-import { MAX_GROUP_NAME_LENGTH } from '@/configs/common';
 
 export interface RoomUpdateNameProps {}
 
@@ -36,11 +35,6 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
       },
     });
   };
-  useEffect(() => {
-    if (newName?.length > MAX_GROUP_NAME_LENGTH) {
-      setNewName(newName.slice(0, MAX_GROUP_NAME_LENGTH));
-    }
-  }, [newName]);
 
   return (
     <AlertDialog>
@@ -69,11 +63,6 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
             value={newName}
             ref={inputRef}
             name="name"
-            suffix={
-              <span className="text-neutral-500">
-                {`${newName?.length || 0}/${MAX_GROUP_NAME_LENGTH}`}
-              </span>
-            }
           />
         </form>
         <AlertDialogFooter>
