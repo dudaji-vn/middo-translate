@@ -46,7 +46,7 @@ export default function AccountSettings() {
             width={500}
             height={500}
             className="h-full w-full overflow-hidden rounded-full object-cover"
-          ></Image>
+          />
           {user?.language && (
             <div className="absolute bottom-0 left-1/2 mt-2 flex -translate-x-1/2 translate-y-1/2 items-center justify-center">
               <CircleFlag
@@ -60,7 +60,7 @@ export default function AccountSettings() {
             </div>
           )}
         </div>
-        <h2 className="mt-5 text-center text-base">
+        <h2 className="mt-5 text-center text-base px-4">
           {user?.name || 'Anonymous'}
         </h2>
         <p className="text-center text-base text-[#333]">{user?.email || ''}</p>

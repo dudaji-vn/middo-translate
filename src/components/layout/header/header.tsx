@@ -45,9 +45,8 @@ export const Header = (props: Props) => {
                   size="xs"
                   alt={user?.name || 'Anonymous'}
                 />
-
                 <div className="hidden items-center md:flex">
-                  <div className="text-sm font-medium">
+                  <div className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
                     {user?.name || 'Anonymous'}
                   </div>
                 </div>

@@ -25,7 +25,6 @@ export const useNotification = () => {
         const isSubscribed =
           await notificationApi.checkSubscription(currentToken);
         setIsSubscribed(isSubscribed);
-        console.log(isSubscribed);
       }
     } catch (error) {
       console.log(error);

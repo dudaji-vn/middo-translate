@@ -28,7 +28,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           </TooltipContent>
         )}
         {children || (
-          <TooltipTrigger {...triggerProps}>{triggerItem}</TooltipTrigger>
+          <TooltipTrigger type='button' {...triggerProps}>{triggerItem}</TooltipTrigger>
         )}
       </ShadcnTooltip>
     );

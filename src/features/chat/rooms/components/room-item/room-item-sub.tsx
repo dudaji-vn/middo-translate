@@ -111,7 +111,7 @@ export const ItemSub = ({
       case 'action':
         if (message.targetUsers && message.targetUsers.length > 0) {
           const targetUserNamesString = message.targetUsers
-            .map((user) => user.name)
+            .map((user) => user?.name?.length > 20 ? user?.name?.slice(0, 20) + '...' : user?.name)
             .join(', ');
           return `${message.content} ${targetUserNamesString}`;
         }
