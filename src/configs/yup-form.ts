@@ -108,45 +108,36 @@ export const CreateNewAccountSchema = yup
     })
     .required()
 
-export const UpdateInforSchema = yup
-    .object()
-    .shape({
-        name: yup.string().required({
-            value: true,
-            message: "Please enter name!"
+export const updateInforSchema = z.object({
+    name: z.string().min(1).max(60),
+    language: z.string().min(1),
+});
+
+
+export const changePasswordSchema = z
+    .object({
+        currentPassword: z.string().min(1, {
+            message: 'Please enter current password!',
         }),
-        language: yup.string().required({
-            value: true,
-            message: "Please choose language!"
+        newPassword: z
+            .string()
+            .min(8, {
+                message: 'Password must be at least 8 characters!',
+            })
+            .regex(PASSWORD_PARTTERN, {
+                message:
+                    'Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!',
+            }),
+
+        confirmPassword: z.string().min(1, {
+            message: 'Please enter confirm password!',
         }),
     })
-    .required()
-
-
-export const changePasswordSchema  = z
-.object({
-  currentPassword: z.string().min(1, {
-    message: 'Please enter current password!',
-  }),
-  newPassword: z
-    .string()
-    .min(8, {
-      message: 'Password must be at least 8 characters!',
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: 'Confirm password does not match!',
+        path: ['confirmPassword'],
     })
-    .regex(PASSWORD_PARTTERN, {
-      message:
-        'Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!',
-    }),
-
-  confirmPassword: z.string().min(1, {
-    message: 'Please enter confirm password!',
-  }),
-})
-.refine((data) => data.newPassword === data.confirmPassword, {
-  message: 'Confirm password does not match!',
-  path: ['confirmPassword'],
-})
-.refine((data) => data.newPassword !== data.currentPassword, {
-  message: 'New password must be different from the current password!',
-  path: ['newPassword'],
-})
+    .refine((data) => data.newPassword !== data.currentPassword, {
+        message: 'New password must be different from the current password!',
+        path: ['newPassword'],
+    })

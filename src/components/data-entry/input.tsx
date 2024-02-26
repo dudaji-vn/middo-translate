@@ -36,11 +36,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
           </div>
         )}
-        {isError && type !== 'password' && (
-          <div className="absolute right-5 top-1/2 flex -translate-y-1/2 items-center text-error">
-            <AlertCircleIcon className="h-5 w-5" />
-          </div>
-        )}
         {leftElement && (
           <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
             {leftElement}
