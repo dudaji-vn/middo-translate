@@ -150,11 +150,3 @@ export const changePasswordSchema  = z
   message: 'New password must be different from the current password!',
   path: ['newPassword'],
 })
-.superRefine(({ currentPassword, newPassword }, ctx) => {
-  if (currentPassword === newPassword) {
-    ctx.addIssue({
-      code: 'custom',
-      message: 'The passwords did not match',
-    });
-  }
-});
