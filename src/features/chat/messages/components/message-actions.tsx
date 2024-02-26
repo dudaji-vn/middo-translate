@@ -1,18 +1,30 @@
 import {
   CopyIcon,
   ForwardIcon,
+  MessageSquareQuote,
+  MessageSquareQuoteIcon,
   PinIcon,
+  PinOffIcon,
   ReplyIcon,
   TrashIcon,
 } from 'lucide-react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 
-import { Message } from '../types';
-import { MessageModalRemove } from './message-modal-remove';
+import { useClickReplyMessage } from '../hooks/use-click-reply-message';
 import { useCopyMessage } from '../hooks/use-copy-message';
-import { useTextCopy } from '@/hooks/use-text-copy';
+import { Message } from '../types';
+import { ForwardModal } from './forward-modal';
+import { MessageModalRemove } from './message-modal-remove';
+import { usePinMessage } from '../hooks/use-pin-message';
 
-type Action = 'remove' | 'pin' | 'reply' | 'copy' | 'forward' | 'none';
+type Action =
+  | 'remove'
+  | 'pin'
+  | 'reply'
+  | 'copy'
+  | 'forward'
+  | 'none'
+  | 'unpin';
 type ActionItem = {
   action: Action;
   label: string;
@@ -28,22 +40,24 @@ export const actionItems: ActionItem[] = [
   },
   {
     action: 'reply',
-    label: 'Reply',
-    icon: <ReplyIcon />,
-    disabled: true,
+    label: 'Discussion',
+    icon: <MessageSquareQuoteIcon />,
   },
 
   {
     action: 'forward',
     label: 'Forward',
     icon: <ForwardIcon />,
-    disabled: true,
   },
   {
     action: 'pin',
     label: 'Pin',
     icon: <PinIcon />,
-    disabled: true,
+  },
+  {
+    action: 'unpin',
+    label: 'Unpin',
+    icon: <PinOffIcon />,
   },
   {
     action: 'remove',
@@ -72,24 +86,53 @@ export const useMessageActions = () => {
   return context;
 };
 export const MessageActions = ({ children }: { children: React.ReactNode }) => {
-  const [id, setId] = useState<string>('');
+  const [message, setMessage] = useState<Message | null>(null);
   const [isMe, setIsMe] = useState<boolean>(false);
   const [action, setAction] = useState<Action>('none');
   const { copyMessage } = useCopyMessage();
+  const { onClickReplyMessage } = useClickReplyMessage();
+  const { pin } = usePinMessage();
   const onAction = ({ action, isMe, message }: OnActionParams) => {
-    if (action === 'copy') {
-      copyMessage(message);
-      return;
+    switch (action) {
+      case 'copy':
+        copyMessage(message);
+        break;
+      case 'reply':
+        onClickReplyMessage(message._id);
+        break;
+      case 'pin':
+        pin(message._id);
+        break;
+      case 'unpin':
+        pin(message._id);
+        break;
+      default:
+        setAction(action);
+        setMessage(message);
+        setIsMe(isMe);
+        break;
     }
-    setAction(action);
-    setId(message._id);
-    setIsMe(isMe);
   };
   const reset = () => {
     setAction('none');
     setIsMe(false);
-    setId('');
+    setMessage(null);
   };
+
+  const Modal = useMemo(() => {
+    if (!message) return null;
+    switch (action) {
+      case 'remove':
+        return (
+          <MessageModalRemove onClosed={reset} id={message._id} isMe={isMe} />
+        );
+      case 'forward':
+        return <ForwardModal message={message} onClosed={reset} />;
+
+      default:
+        return null;
+    }
+  }, [action, isMe, message]);
 
   return (
     <MessageActionsContext.Provider
@@ -98,9 +141,7 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
       }}
     >
       {children}
-      {action === 'remove' && (
-        <MessageModalRemove onClosed={reset} id={id} isMe={isMe} />
-      )}
+      {Modal}
     </MessageActionsContext.Provider>
   );
 };

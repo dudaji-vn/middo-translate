@@ -10,7 +10,6 @@ import { MessageItem } from '../message-item';
 import { MessageItemGroup } from '../message-group';
 import { Room } from '../../../rooms/types';
 import { User } from '@/features/users/types';
-import { formatTimeDisplay } from '../../../rooms/utils';
 
 import moment from 'moment';
 import { useAuthStore } from '@/stores/auth.store';
@@ -18,17 +17,25 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
+import { TimeDisplay } from '../time-display';
+import { cn } from '@/utils/cn';
+import { useMediaUpload } from '@/components/media-upload';
 
-const maxTimeDiff = 5; // 5 minutes
-const maxTimeGroupDiff = 10; // 10 minutes
-type MessageGroup = {
+export const MAX_TIME_DIFF = 5; // 5 minutes
+export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
+export type MessageGroup = {
   messages: Message[];
   lastMessage: Message;
 };
 export const MessageBox = ({ room }: { room: Room }) => {
   const currentUserId = useAuthStore((s) => s.user?._id);
-  const { hasNextPage, loadMoreMessages, messages, isFetching } =
-    useMessagesBox();
+  const {
+    hasNextPage,
+    loadMoreMessages,
+    messages,
+    isFetching,
+    pinnedMessages,
+  } = useMessagesBox();
 
   const { ref, isScrolled } = useScrollDistanceFromTop(0, true);
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -66,7 +73,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
         moment(message.createdAt),
         'minute',
       );
-      if (timeDiff > maxTimeDiff) {
+      if (timeDiff > MAX_TIME_DIFF) {
         acc.push({
           messages: [message],
           lastMessage: message,
@@ -120,14 +127,14 @@ export const MessageBox = ({ room }: { room: Room }) => {
   }, [currentUserId, messagesGroup, room.participants]);
 
   return (
-    <div className="relative flex h-full w-full flex-1 overflow-hidden">
+    <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
       <InfiniteScroll
         hasMore={hasNextPage || false}
         onLoadMore={loadMoreMessages}
         isFetching={isFetching}
         ref={ref}
         id="inbox-list"
-        className="bg-primary/5 flex w-full flex-1  flex-col-reverse gap-2 overflow-y-scroll px-3 pb-2 pt-6 md:px-5"
+        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2 overflow-y-scroll px-2 pb-2 md:px-5"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
@@ -136,7 +143,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
             messagesGroup[index + 1]?.messages[0].createdAt ?? moment(),
             'minute',
           );
-          const isShowTimeGroup = timeDiff > maxTimeGroupDiff;
+          const isShowTimeGroup = timeDiff > MAX_TIME_GROUP_DIFF;
           const isMe = group.lastMessage.sender._id === currentUserId;
           const isSystem =
             group.lastMessage.type === 'notification' ||
@@ -144,41 +151,52 @@ export const MessageBox = ({ room }: { room: Room }) => {
           return (
             <div key={group.lastMessage._id}>
               {isShowTimeGroup && (
-                <div className="my-2 flex items-center justify-center">
-                  <div className="flex items-center space-x-2">
-                    <div className="bg-primary/30 h-[1px] w-16" />
-                    <div className="text-sm font-light text-neutral-300">
-                      {formatTimeDisplay(group.lastMessage.createdAt!)}
-                    </div>
-                    <div className="bg-primary/30 h-[1px] w-16" />
-                  </div>
-                </div>
+                <TimeDisplay time={group.lastMessage.createdAt} />
               )}
               {!isMe && !isSystem && room.isGroup && (
-                <div className="mb-0.5 pl-11 text-xs text-neutral-600">
+                <div className="mb-0.5 pl-7 text-xs text-neutral-600">
                   <span>{group.lastMessage.sender.name}</span>
                 </div>
               )}
               <div className="flex w-full gap-1">
                 <MessageItemGroup>
-                  {group.messages.map((message) => (
-                    <MessageItem
-                      showAvatar={
-                        !isMe &&
-                        !isSystem &&
-                        message._id === group.messages[0]._id
-                      }
-                      key={message._id}
-                      message={message}
-                      sender={isMe ? 'me' : 'other'}
-                      readByUsers={usersReadMessageMap[message._id] ?? []}
-                    />
-                  ))}
+                  {group.messages.map((message) => {
+                    const pinnedBy = pinnedMessages?.find(
+                      (pinnedMessage) =>
+                        pinnedMessage.message._id === message._id,
+                    )?.pinnedBy;
+                    const newMessage = {
+                      ...message,
+                      isPinned: !!pinnedBy,
+                    };
+                    return (
+                      <MessageItem
+                        pinnedBy={pinnedBy}
+                        showAvatar={
+                          !isMe &&
+                          !isSystem &&
+                          message._id ===
+                            group.messages[group.messages.length - 1]._id
+                        }
+                        key={message._id}
+                        message={newMessage}
+                        sender={isMe ? 'me' : 'other'}
+                        readByUsers={usersReadMessageMap[message._id] ?? []}
+                      />
+                    );
+                  })}
                 </MessageItemGroup>
               </div>
             </div>
           );
         })}
+        {!hasNextPage && (
+          <TimeDisplay
+            time={
+              messagesGroup[messagesGroup.length - 1]?.messages[0].createdAt
+            }
+          />
+        )}
       </InfiniteScroll>
       {isScrolled && (
         <Button.Icon

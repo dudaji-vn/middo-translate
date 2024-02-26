@@ -1,24 +1,57 @@
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 
 import { Button } from '@/components/actions';
-import { FilePlus2 } from 'lucide-react';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { ChatSettingMenu } from '@/features/chat/components/chat-setting';
+import { Settings } from 'lucide-react';
+import { useMessageEditorText } from './message-editor-text-context';
 import { MessageEditorToolbarEmoji } from './message-editor-toolbar-emoji';
+import { MessageEditorToolbarFile } from './message-editor-toolbar-file';
 import { MessageEditorToolbarLangControl } from './message-editor-toolbar-lang-control';
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-translate';
-import { useMessageEditorMedia } from './message-editor-media-context';
-import { useMessageEditorText } from './message-editor-text-context';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { useChatStore } from '@/features/chat/store';
+import isEqual from 'lodash/isEqual';
 
 export interface MessageEditorToolbarProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
-
+  extends React.HTMLAttributes<HTMLDivElement> {
+  disableMedia?: boolean;
+}
 export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
->((props, ref) => {
+>(({ disableMedia = false, ...props }, ref) => {
   const { listening } = useMessageEditorText();
-  const { open } = useMessageEditorMedia();
-
+  const room = useVideoCallStore((state) => state.room);
+  const [openSetting, setOpenSetting] = useState(false);
+  const handleToggleSetting = () => {
+    setOpenSetting((prev) => !prev);
+  };
+  const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
+    useChatStore();
+  useKeyboardShortcut(
+    [SHORTCUTS.TOGGLE_CONVERSATION_SETTINGS],
+    handleToggleSetting,
+  );
+  useKeyboardShortcut(
+    [
+      SHORTCUTS.TURN_ON_OFF_TRANSLATION,
+      SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW,
+    ],
+    (_, matchedKey) => {
+      if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION)) {
+        toggleShowMiddleTranslation();
+        return;
+      }
+      if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW)) {
+        toggleShowTranslateOnType();
+      }
+    },
+    true,
+  );
   useEffect(() => {
     // enable submit form by enter
     const formRef = document.getElementById('message-editor');
@@ -43,13 +76,31 @@ export const MessageEditorToolbar = forwardRef<
   return (
     <>
       <MessageEditorToolbarTranslateTool />
-      <div ref={ref} {...props} className="flex items-center">
+      <div ref={ref} {...props} className="flex items-center mb-2">
         <MessageEditorToolbarLangControl />
-        <Button.Icon onClick={open} color="default" size="xs" variant="ghost">
-          <FilePlus2 />
-        </Button.Icon>
-        <MessageEditorToolbarMic />
-        <MessageEditorToolbarEmoji />
+        {!disableMedia && (
+          <Tooltip
+            title="Upload files"
+            triggerItem={<MessageEditorToolbarFile />}
+          />
+        )}
+        {!room && (
+          <Tooltip
+            title="Speech-to-text"
+            triggerItem={<MessageEditorToolbarMic />}
+          />
+        )}
+        <Tooltip title="Emojis" triggerItem={<MessageEditorToolbarEmoji />} />
+        <Tooltip
+          title="Settings"
+          triggerItem={
+            <ChatSettingMenu open={openSetting} onOpenChange={setOpenSetting}>
+              <Button.Icon color="default" size="xs" variant="ghost">
+                <Settings />
+              </Button.Icon>
+            </ChatSettingMenu>
+          }
+        />
       </div>
     </>
   );

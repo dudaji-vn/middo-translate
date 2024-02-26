@@ -33,9 +33,9 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
   return (
     <Accordion type="single" collapsible className="mt-8">
       <AccordionItem value="item-1">
-        <AccordionTrigger>
+        <AccordionTrigger className="p-3">
           <div className="flex items-center gap-2">
-            <Package2 width={16} height={16} /> <span>Cloud shared</span>{' '}
+            <Package2 width={16} height={16} /> <span>Cloud shared</span>
             <span className="text-sm text-neutral-600">
               ({data?.count || 0})
             </span>
@@ -46,7 +46,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
             <Button
               onClick={() => setCurrentTab('media')}
               startIcon={<ImageIcon className="h-4 w-4" />}
-              size="sm"
+              size="xs"
               shape="square"
               variant={currentTab === 'media' ? 'default' : 'ghost'}
               color={currentTab === 'media' ? 'secondary' : 'default'}
@@ -56,7 +56,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
             <Button
               onClick={() => setCurrentTab('file')}
               startIcon={<File className="h-4 w-4" />}
-              size="sm"
+              size="xs"
               shape="square"
               variant={currentTab === 'file' ? 'default' : 'ghost'}
               color={currentTab === 'file' ? 'secondary' : 'default'}

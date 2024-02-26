@@ -23,6 +23,10 @@ import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { messageVariants } from './variants';
 import { useBoolean } from 'usehooks-ts';
+import { MessageItemForward } from './message-item-forward';
+import { CallMessage } from './message-item-call';
+import { MessageItemReply } from './message-item-reply';
+import { MessageItemPinned } from './message-item-pinned';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -30,6 +34,9 @@ export interface MessageProps
   message: Message;
   readByUsers?: User[];
   showAvatar?: boolean;
+  showReply?: boolean;
+  direction?: 'bottom' | 'top';
+  pinnedBy?: User;
 }
 
 type MessageItemContextProps = {
@@ -53,7 +60,18 @@ export const useMessageItem = () => {
 
 export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
   (
-    { message, sender, order, className, readByUsers, showAvatar, ...props },
+    {
+      message,
+      sender,
+      order,
+      className,
+      readByUsers,
+      showAvatar,
+      direction,
+      showReply = true,
+      pinnedBy,
+      ...props
+    },
     ref,
   ) => {
     const isMe = sender === 'me';
@@ -75,17 +93,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       >
         <SeenTracker />
         {isSystemMessage ? (
-          <MessageItemSystem message={message} />
+          <MessageItemSystem message={message} isMe={isMe} />
         ) : (
           <>
-            <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
-            <div
-              className={cn(
-                'group relative flex flex-col',
-                isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
-                isPending && 'opacity-50',
-              )}
-            >
+            {direction === 'bottom' && (
+              <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
+            )}
+            <div className="group relative flex flex-col">
               <div
                 className={cn(
                   'relative flex',
@@ -95,14 +109,19 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               >
                 {showAvatar ? (
                   <Avatar
-                    className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0"
+                    className="mb-auto mr-1 mt-0.5  shrink-0"
                     src={message.sender.avatar}
                     alt={message.sender.name}
+                    size="xs"
                   />
                 ) : (
-                  <div className="mb-0.5 mr-1 mt-auto h-7 w-7 shrink-0" />
+                  <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
                 )}
-                <MessageItemWrapper>
+                <MessageItemWrapper
+                  setActive={setActive}
+                  isMe={isMe}
+                  message={message}
+                >
                   <div
                     {...props}
                     ref={ref}
@@ -123,6 +142,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                         active={isActive}
                       />
                     )}
+                    {message.type === 'call' && (
+                      <CallMessage
+                        position={isMe ? 'right' : 'left'}
+                        message={message}
+                        active={isActive}
+                      />
+                    )}
                     {message?.media && message.media.length > 0 && (
                       <Fragment>
                         {message.media[0].type === 'image' && (
@@ -137,13 +163,34 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                       </Fragment>
                     )}
                   </div>
+
                   {isPending && <PendingStatus />}
+                  {pinnedBy && (
+                    <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
+                  )}
+                  {message.forwardOf && (
+                    <MessageItemForward
+                      hasParent={!!message.content}
+                      message={message.forwardOf}
+                      isMe={isMe}
+                    />
+                  )}
+                  {message.hasChild && showReply && (
+                    <MessageItemReply isMe={isMe} messageId={message._id} />
+                  )}
                 </MessageItemWrapper>
               </div>
               {message?.reactions && message.reactions.length > 0 && (
                 <MessageItemReactionBar isMe={isMe} message={message} />
               )}
             </div>
+            {direction === 'top' && (
+              <ReadByUsers
+                readByUsers={readByUsers}
+                isMe={isMe}
+                className="mb-2 mt-0"
+              />
+            )}
           </>
         )}
       </MessageItemContext.Provider>

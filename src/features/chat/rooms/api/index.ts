@@ -14,6 +14,10 @@ import { uploadImage } from '@/utils/upload-img';
 
 const basePath = '/rooms';
 export const roomApi = {
+  async getRoom(roomId: string) {
+    const res: Response<Room> = await axios.get(`${basePath}/${roomId}`);
+    return res.data;
+  },
   async getRooms(params: CursorParams & { type: InboxType }) {
     const path = queryString.stringifyUrl({
       url: basePath,
@@ -136,6 +140,16 @@ export const roomApi = {
     const res: Response<{ count: number }> = await axios.get(
       `${basePath}/${roomId}/cloud/media/count`,
     );
+    return res.data;
+  },
+
+  async pin(roomId: string) {
+    const res: Response<Room> = await axios.post(`${basePath}/${roomId}/pin`);
+    return res.data;
+  },
+
+  async getPinned() {
+    const res: Response<Room[]> = await axios.get(`${basePath}/pin`);
     return res.data;
   },
 };

@@ -6,7 +6,6 @@ import {
 } from '@/features/chat/messages/components/message-editor';
 import { forwardRef, useEffect, useState } from 'react';
 
-import { FileWithUrl } from '@/hooks/use-select-files';
 import { Media } from '@/types';
 import { Message } from '@/features/chat/messages/types';
 import { createLocalMessage } from '@/features/chat/messages/utils';
@@ -14,9 +13,9 @@ import { messageApi } from '@/features/chat/messages/api';
 import { roomApi } from '@/features/chat/rooms/api';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts/chat-box-context';
-
-import { useMutation } from '@tanstack/react-query';
 import { useMessagesBox } from '@/features/chat/messages/components/message-box';
+import { useMutation } from '@tanstack/react-query';
+import { useMediaUpload } from '@/components/media-upload';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,8 +27,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     const currentUser = useAuthStore((s) => s.user);
     const { room, updateRoom } = useChatBox();
     const { addMessage } = useMessagesBox();
-
-    const [filesUploaded, setFilesUploaded] = useState<FileWithUrl[]>([]);
+    const { uploadedFiles } = useMediaUpload();
 
     const [localImageMessageWaiting, setLocalImageMessageWaiting] =
       useState<Message | null>(null);
@@ -38,7 +36,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       useState<Message[]>([]);
 
     const { mutateAsync } = useMutation({
-      mutationFn: messageApi.sendMessage,
+      mutationFn: messageApi.send,
     });
 
     const handleSendText = async (
@@ -76,7 +74,8 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         updateRoom(res);
       }
 
-      if (content) {
+      const trimContent = content.trim();
+      if (trimContent) {
         handleSendText(roomId, content, contentEnglish, language);
       }
 
@@ -102,17 +101,17 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     };
 
     useEffect(() => {
-      if (!localImageMessageWaiting || !filesUploaded.length) return;
+      if (!localImageMessageWaiting || !uploadedFiles.length) return;
       const localImages = localImageMessageWaiting.media;
       if (!localImages) return;
       const imagesUploaded: Media[] = localImages.map((item) => {
-        const file = filesUploaded.find((f) => f.url === item.url);
+        const file = uploadedFiles.find((f) => f.localUrl === item.url);
         if (file) {
           return {
             ...item,
-            url: file.upLoadedResponse?.secure_url || file.url,
-            width: file.upLoadedResponse?.width,
-            height: file.upLoadedResponse?.height,
+            url: file.metadata.secure_url || file.url,
+            width: file.metadata.width,
+            height: file.metadata.height,
           };
         }
         return item;
@@ -126,21 +125,21 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       setLocalImageMessageWaiting(null);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [localImageMessageWaiting, filesUploaded, room?._id]);
+    }, [localImageMessageWaiting, uploadedFiles, room?._id]);
 
     useEffect(() => {
-      if (!localDocumentMessagesWaiting.length || !filesUploaded.length) return;
+      if (!localDocumentMessagesWaiting.length || !uploadedFiles.length) return;
       const localDocumentMessages = localDocumentMessagesWaiting;
       const documentsUploaded: Media[][] = localDocumentMessages.map(
         (message) => {
           const localDocuments = message.media;
           if (!localDocuments) return [];
           const documentsUploaded: Media[] = localDocuments.map((item) => {
-            const file = filesUploaded.find((f) => f.url === item.url);
+            const file = uploadedFiles.find((f) => f.localUrl === item.url);
             if (file) {
               return {
                 ...item,
-                url: file.upLoadedResponse?.secure_url || file.url,
+                url: file.metadata.secure_url || file.url,
               };
             }
             return item;
@@ -161,14 +160,10 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       setLocalDocumentMessagesWaiting([]);
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [localDocumentMessagesWaiting, filesUploaded, room?._id]);
-
+    }, [localDocumentMessagesWaiting, uploadedFiles, room?._id]);
     return (
       <div className="w-full border-t p-2">
-        <MessageEditor
-          onSubmitValue={handleSubmit}
-          onFileUploaded={setFilesUploaded}
-        />
+        <MessageEditor scrollId="inbox-list" onSubmitValue={handleSubmit} />
       </div>
     );
   },

@@ -6,10 +6,10 @@ import { formatFileSize } from '../../utils';
 
 export interface DocumentProps {
   file: Media;
-  isMe: boolean;
+  isMe?: boolean;
 }
 
-export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
+export const DocumentMessage = ({ file, isMe = false }: DocumentProps) => {
   const extension = file.name?.split('.').pop();
   return (
     <a
@@ -17,7 +17,7 @@ export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
       target="_blank"
       href={file.url}
       className={cn(
-        'flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2',
+        'flex w-full items-center gap-2 overflow-hidden rounded-lg px-3 py-2',
         isMe ? 'bg-primary' : 'bg-background-darker',
       )}
     >
@@ -29,13 +29,17 @@ export const DocumentMessage = ({ file, isMe }: DocumentProps) => {
           radius={8}
         />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-hidden">
         <span
           title={file.name}
-          className={cn('text-sm font-semibold', isMe && 'text-background')}
+          className={cn(
+            'max-w-44 truncate text-sm font-semibold md:max-w-none',
+            isMe && 'text-background',
+          )}
         >
           {file.name}
         </span>
+
         <span
           className={cn('mt-1 text-xs', isMe ? 'text-background' : 'text-text')}
         >

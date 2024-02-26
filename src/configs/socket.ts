@@ -5,6 +5,14 @@ export const SOCKET_CONFIG = {
       SEND: 'message.send',
       UPDATE: 'message.update',
       DELETE: 'message.delete',
+      REPLY: {
+        NEW: 'message.reply.new',
+        JOIN: 'message.reply.join',
+        LEAVE: 'message.reply.leave',
+        UPDATE: 'message.reply.update',
+        REMOVE: 'message.reply.remove',
+      },
+      PIN: 'message.pin',
     },
     ROOM: {
       NEW: 'room.new',
@@ -24,6 +32,7 @@ export const SOCKET_CONFIG = {
     },
     CALL: {
       JOIN: 'call.join',
+      START: 'call.start',
       LEAVE: 'call.leave',
       LIST_PARTICIPANT: 'call.list',
       SEND_SIGNAL: 'call.send_signal',
@@ -47,6 +56,9 @@ export const SOCKET_CONFIG = {
       SEND_OLD_DOODLE_DATA: 'call.send_old_doodle_data',
       STARTING_NEW_CALL: 'call.starting_new_call',
       MEETING_END: 'call.meeting_end',
-    }
+      INVITE_TO_CALL: 'call.invite_to_call',
+      SEND_CAPTION: 'call.send_caption',
+      UPDATE: 'call.update',
+    },
   },
 };

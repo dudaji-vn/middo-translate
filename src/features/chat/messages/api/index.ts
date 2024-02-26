@@ -1,19 +1,25 @@
 import { Media, Response } from '@/types';
 
-import { Message } from '@/features/chat/messages/types';
+import { Message, PinMessage } from '@/features/chat/messages/types';
 import { axios } from '@/lib/axios';
 
 const basePath = '/messages';
+export type CreateMessage = {
+  roomId: string;
+  media?: Media[];
+  content: string;
+  contentEnglish?: string;
+  clientTempId: string;
+  language?: string;
+};
 export const messageApi = {
-  async sendMessage(data: {
-    roomId: string;
-    media?: Media[];
-    content: string;
-    contentEnglish?: string;
-    clientTempId: string;
-    language?: string;
-  }) {
+  async send(data: CreateMessage) {
     const res: Response<Message> = await axios.post(basePath, data);
+    return res.data;
+  },
+
+  async getOne(id: string) {
+    const res: Response<Message> = await axios.get(`${basePath}/${id}`);
     return res.data;
   },
 
@@ -34,6 +40,49 @@ export const messageApi = {
       {
         emoji,
       },
+    );
+    return res.data;
+  },
+
+  async forward(data: {
+    roomIds: string[];
+    forwardedMessageId: string;
+    message: Omit<CreateMessage, 'roomId' | 'clientTempId'>;
+  }) {
+    const { forwardedMessageId, ...sendData } = data;
+    const res: Response<Message> = await axios.post(
+      `${basePath}/${data.forwardedMessageId}/forward`,
+      sendData,
+    );
+    return res.data;
+  },
+
+  async reply(data: {
+    repliedMessageId: string;
+    message: Omit<CreateMessage, 'clientTempId'>;
+  }) {
+    const { repliedMessageId, message } = data;
+    const res: Response<Message> = await axios.post(
+      `${basePath}/${repliedMessageId}/reply`,
+      message,
+    );
+    return res.data;
+  },
+
+  async getReplies(id: string) {
+    const res: Response<Message[]> = await axios.get(
+      `${basePath}/${id}/replies`,
+    );
+    return res.data;
+  },
+
+  async pin(id: string) {
+    const res: Response<Message> = await axios.post(`${basePath}/${id}/pin`);
+    return res.data;
+  },
+  async getPinned(id: string) {
+    const res: Response<PinMessage[]> = await axios.get(
+      `${basePath}/pinned/${id}`,
     );
     return res.data;
   },

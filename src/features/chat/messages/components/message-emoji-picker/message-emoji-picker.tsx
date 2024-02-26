@@ -38,7 +38,7 @@ const defaultEmoji: Emoji[] = [
   },
   {
     name: 'smile',
-    value: '😀',
+    value: '🙂',
   },
 
   {
@@ -69,7 +69,6 @@ export const MessageEmojiPicker = forwardRef<
         <AnimatePresence>
           {defaultEmoji.map((emoji, index) => (
             <motion.div
-              // anition show emoji base on index
               initial={{ opacity: 0, translateY: 20, scale: 0 }}
               animate={{
                 opacity: 1,

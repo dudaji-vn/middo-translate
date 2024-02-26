@@ -17,7 +17,6 @@ export interface TextMessageProps extends VariantProps<typeof wrapperVariants> {
 export const TextMessage = ({
   position,
   active,
-  status,
   message,
 }: TextMessageProps) => {
   const showMiddleTranslation = useChatStore(
@@ -30,7 +29,10 @@ export const TextMessage = ({
       setContentDisplay(message.content);
       return;
     }
-    if (userLanguage === message.sender.language) return;
+    if (userLanguage === message.sender.language) {
+      setContentDisplay(message.content);
+      return;
+    }
     const translateContent = async () => {
       const translated = await translateText(
         message.content,

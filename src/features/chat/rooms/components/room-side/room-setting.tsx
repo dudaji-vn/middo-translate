@@ -1,12 +1,13 @@
 'use client';
 
-import { Bell, PinOff } from 'lucide-react';
+import { Bell, PinIcon } from 'lucide-react';
 
 import { Item } from '@/components/data-display';
 import { Room } from '@/features/chat/rooms/types';
 import { Switch } from '@/components/data-entry';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { useRoomActions } from '../room-actions';
+import { useState } from 'react';
 
 export interface RoomSettingProps {
   room: Room;
@@ -15,8 +16,9 @@ export interface RoomSettingProps {
 export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
   const { isMuted } = useIsMutedRoom(_room._id);
   const { onAction } = useRoomActions();
+  const [isPinned, setIsPinned] = useState(_room.isPinned);
   return (
-    <div className="mt-12 flex flex-col items-center gap-2">
+    <div className="mt-0 flex flex-col items-center gap-1">
       <Item
         className="rounded-b-[4px]"
         leftIcon={<Bell />}
@@ -27,7 +29,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
               if (checked) {
                 onAction('notify', _room._id);
               } else {
-                onAction('unnofity', _room._id);
+                onAction('unnotify', _room._id);
               }
             }}
           />
@@ -37,10 +39,18 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
       </Item>
       <Item
         className="rounded-t-[4px]"
-        leftIcon={<PinOff />}
-        right={<Switch />}
+        leftIcon={<PinIcon />}
+        right={
+          <Switch
+            checked={isPinned}
+            onCheckedChange={(checked) => {
+              onAction('pin', _room._id);
+              setIsPinned(checked);
+            }}
+          />
+        }
       >
-        Pin on top
+        Pin conversation
       </Item>
     </div>
   );

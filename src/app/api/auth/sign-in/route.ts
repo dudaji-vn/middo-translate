@@ -1,7 +1,5 @@
-import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/configs/store-key';
-
 import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
-import { cookies } from 'next/headers';
+import { setTokens } from '@/utils/cookies';
 
 export async function POST(request: Request) {
   const { email, password } = await request.json();
@@ -17,11 +15,9 @@ export async function POST(request: Request) {
     }),
   }).then((res) => res.json());
 
-  const { accessToken, refreshToken } = response?.data;
-
-  cookies().set(ACCESS_TOKEN_NAME, accessToken);
-  cookies().set(REFRESH_TOKEN_NAME, refreshToken);
-
+  const accessToken = response?.data?.accessToken;
+  const refreshToken = response?.data?.refreshToken;
+  setTokens({ accessToken, refreshToken });
   return Response.json({
     data: response.data,
   });

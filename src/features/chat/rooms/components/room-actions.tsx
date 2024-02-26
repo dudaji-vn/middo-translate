@@ -3,6 +3,7 @@ import {
   BellOffIcon,
   LogOut,
   PinIcon,
+  PinOffIcon,
   TrashIcon,
 } from 'lucide-react';
 import { createContext, useContext, useMemo, useState } from 'react';
@@ -10,14 +11,17 @@ import { createContext, useContext, useMemo, useState } from 'react';
 import { RoomModalDelete } from './room.modal-delete';
 import { RoomModalLeave } from './room.modal-leave';
 import { RoomModalNotification } from './room.modal-notification';
+import { usePinRoom } from '../hooks/use-pin-room';
 
 export type Action =
   | 'delete'
   | 'pin'
+  | 'unpin'
   | 'leave'
   | 'notify'
   | 'none'
-  | 'unnofity';
+  | 'unnotify';
+
 export type ActionItem = {
   action: Action;
   label: string;
@@ -42,10 +46,18 @@ export const useRoomActions = () => {
 export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const [id, setId] = useState<string>('');
   const [action, setAction] = useState<Action>('none');
+  const { mutate: pin } = usePinRoom();
   const onAction = (action: Action, id: string) => {
-    console.log(action, id);
-    setAction(action);
-    setId(id);
+    switch (action) {
+      case 'pin':
+      case 'unpin':
+        pin(id);
+        break;
+      default:
+        setAction(action);
+        setId(id);
+        break;
+    }
   };
   const reset = () => {
     setAction('none');
@@ -60,7 +72,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         return <RoomModalLeave onClosed={reset} id={id} />;
       case 'notify':
         return <RoomModalNotification onClosed={reset} id={id} type="turnOn" />;
-      case 'unnofity':
+      case 'unnotify':
         return (
           <RoomModalNotification onClosed={reset} id={id} type="turnOff" />
         );
@@ -75,7 +87,11 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         action: 'pin',
         label: 'Pin',
         icon: <PinIcon />,
-        disabled: true,
+      },
+      {
+        action: 'unpin',
+        label: 'Unpin',
+        icon: <PinOffIcon />,
       },
       {
         action: 'notify',
@@ -83,7 +99,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         icon: <BellIcon />,
       },
       {
-        action: 'unnofity',
+        action: 'unnotify',
         label: 'Off',
         icon: <BellOffIcon />,
       },

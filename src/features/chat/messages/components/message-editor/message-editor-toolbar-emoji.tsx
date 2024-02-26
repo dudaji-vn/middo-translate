@@ -10,6 +10,9 @@ import { Smile } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useMessageEditorText } from './message-editor-text-context';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { useState } from 'react';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface MessageEditorToolbarEmojiProps {}
 
@@ -19,8 +22,15 @@ export const MessageEditorToolbarEmoji = (
   const isMobile = useAppStore((state) => state.isMobile);
   const { text, setText, focusInput } = useMessageEditorText();
 
+  const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
+
+  useKeyboardShortcut([SHORTCUTS.OPEN_EMOJI], (e) => {
+    e?.preventDefault();
+    setOpenEmojisPicker((prev) => !prev);
+  });
+
   return (
-    <Popover>
+    <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
       <PopoverTrigger asChild>
         <Button.Icon variant="ghost" color="default" size="xs">
           <Smile />

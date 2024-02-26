@@ -1,19 +1,22 @@
 'use client';
 
-import { ArrowRightLeftIcon, Globe2Icon } from 'lucide-react';
-import { Select, SelectTrigger } from '@/components/data-entry';
-import { forwardRef, useEffect, useState } from 'react';
-import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
+import { ArrowRightLeftIcon } from 'lucide-react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 
-import { BackLayout } from '@/components/layout/back-layout';
 import { Button } from '@/components/actions';
-import { CircleFlag } from 'react-circle-flags';
+import { BackLayout } from '@/components/layout/back-layout';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { ListLanguages } from '../list-languages';
-import { cn } from '@/utils/cn';
-import { useAppStore } from '@/stores/app.store';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useTranslateStore } from '@/stores/translate.store';
+import { cn } from '@/utils/cn';
+import { LanguageSelect } from '../language-select';
+import { ListLanguages } from '../list-languages';
+import { useLanguageStore } from '../../stores/language.store';
+import { useAppStore } from '@/stores/app.store';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+
+const MAX_SELECTED_LANGUAGES = 3;
 
 export interface LanguagesControlBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -31,86 +34,104 @@ export const LanguagesControlBar = forwardRef<
     { targetResult, source: _source, target: _target, detect, ...props },
     ref,
   ) => {
-    const isMobile = useAppStore((state) => state.isMobile);
     const [currentSelect, setCurrentSelect] = useState<
       'source' | 'target' | 'none'
     >('none');
     const { searchParams, setParams } = useSetParams();
     const { setValue } = useTranslateStore();
-    const source = getCountryCode(searchParams?.get('source'), true);
-    const target = getCountryCode(
-      searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN,
-    );
+    const source = searchParams?.get('source');
+    const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
+    const isTablet = useAppStore((state) => state.isTablet);
+    const [isHydrated, setIsHydrated] = useState(false);
+    const {
+      recentlySourceUsed,
+      recentlyTargetUsed,
+      addRecentlyUsed,
+      lastSourceUsed,
+      lastTargetUsed,
+    } = useLanguageStore();
 
-    const [canClick, setCanClick] = useState(true);
+    const [clickable, setClickable] = useState(true);
 
-    const handleSwap = () => {
-      console.log(canClick);
-      if (!canClick) return;
-      if (!_source || !_target) return;
+    const handleSwapLanguage = useCallback(() => {
+      if (!clickable || !_target) return;
+      const sourceValue =
+        _source || recentlyTargetUsed.filter((item) => item !== _target)[0];
       const newParams = [
-        {
-          key: 'source',
-          value: _target,
-        },
+        { key: 'source', value: _target },
         {
           key: 'target',
-          value: _source,
+          value: sourceValue,
         },
       ];
+
+      addRecentlyUsed(_target, 'source');
+      addRecentlyUsed(sourceValue, 'target');
+
       if (targetResult) {
-        setCanClick(false);
+        setClickable(false);
         setTimeout(() => {
           setValue(targetResult);
-          setCanClick(true);
-        }, 500);
-        newParams.push({
-          key: 'query',
-          value: targetResult,
-        });
+          setClickable(true);
+        }, 300);
+        newParams.push({ key: 'query', value: targetResult });
       }
-      setParams(newParams);
-    };
 
-    const handleSelect = (code: string) => {
+      setParams(newParams);
+    }, [
+      _source,
+      _target,
+      addRecentlyUsed,
+      clickable,
+      recentlyTargetUsed,
+      setParams,
+      setValue,
+      targetResult,
+    ]);
+    useKeyboardShortcut([SHORTCUTS.SWAP_LANGUAGES], handleSwapLanguage);
+
+    const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');
-      if (currentSelect === 'source') {
-        if (code === searchParams?.get('target')) {
-          handleSwap();
+
+      const sourceValue = searchParams?.get('source');
+      const targetValue =
+        searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
+
+      if (type === 'source') {
+        if (code === targetValue) {
+          handleSwapLanguage();
           return;
         }
-        setParams([
-          {
-            key: 'source',
-            value: code,
-          },
-        ]);
-        return;
+        setParams([{ key: 'source', value: code }]);
+        addRecentlyUsed(code, type);
+      } else {
+        if (code === sourceValue) {
+          handleSwapLanguage();
+          return;
+        }
+        setParams([{ key: 'target', value: code }]);
+        addRecentlyUsed(code, type);
       }
-      if (code === searchParams?.get('source')) {
-        handleSwap();
-        return;
-      }
-      setParams([
-        {
-          key: 'target',
-          value: code,
-        },
-      ]);
     };
 
     useEffect(() => {
+      useLanguageStore.persist.rehydrate();
+      setIsHydrated(true);
+    }, []);
+
+    useEffect(() => {
+      if (!isHydrated) return;
       const newParams = [];
       if (!searchParams?.get('source')) {
         newParams.push({
           key: 'source',
-          value: 'auto',
+          value: lastSourceUsed,
         });
       }
       if (!searchParams?.get('target')) {
         newParams.push({
           key: 'target',
-          value: DEFAULT_LANGUAGES_CODE.EN,
+          value: lastTargetUsed,
         });
       }
 
@@ -125,62 +146,70 @@ export const LanguagesControlBar = forwardRef<
         setParams(newParams);
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchParams, detect]);
+    }, [searchParams, detect, isHydrated]);
 
     return (
-      <div
-        ref={ref}
-        {...props}
-        className={cn('flex w-full justify-center gap-5', props.className)}
-      >
-        <div className="flex flex-1 justify-end">
-          <Select>
-            <SelectTrigger
-              className="gap-2.5"
-              onClick={() => {
+      <>
+        <div
+          ref={ref}
+          {...props}
+          className={cn(
+            'flex w-full items-center justify-center gap-5 md:gap-0',
+            props.className,
+          )}
+        >
+          <div className="flex flex-1 justify-end overflow-hidden rounded-2xl border shadow-1 lg:justify-start lg:border-none lg:shadow-none">
+            <LanguageSelect
+              onChevronClick={() => {
                 setCurrentSelect('source');
               }}
-            >
-              {source && source !== 'auto' ? (
-                <>
-                  <CircleFlag countryCode={source} height={20} width={20} />
-                </>
-              ) : (
-                <>
-                  <Globe2Icon className="h-5 w-5 text-primary" />
-                  <>{!isMobile && 'Detect language'}</>
-                </>
-              )}
-              {!isMobile &&
-                getLanguageByCode(searchParams?.get('source') as string)?.name}
-            </SelectTrigger>
-          </Select>
-        </div>
+              languageCodes={
+                recentlySourceUsed?.slice(0, MAX_SELECTED_LANGUAGES) || []
+              }
+              currentCode={source || 'auto'}
+              onChange={(code) => {
+                if (isTablet) {
+                  setCurrentSelect('source');
+                  return;
+                }
+                handleSelect(code, 'source');
+              }}
+            />
+          </div>
 
-        <Button.Icon onClick={handleSwap} variant="ghost" color="default">
-          <ArrowRightLeftIcon className="text-text" />
-        </Button.Icon>
-        <div className="flex flex-1 justify-start">
-          <Select>
-            <SelectTrigger
-              className="gap-2.5"
-              onClick={() => {
+          <div className="flex w-5 items-center justify-center md:w-[88px]">
+            <Button.Icon
+              size="xs"
+              className="shrink-0"
+              disabled={source === 'auto'}
+              onClick={handleSwapLanguage}
+              variant="ghost"
+              color="default"
+            >
+              <ArrowRightLeftIcon className="text-text" />
+            </Button.Icon>
+          </div>
+          <div className="flex flex-1 justify-start overflow-hidden rounded-2xl border shadow-1 lg:border-none lg:shadow-none">
+            <LanguageSelect
+              onChange={(code) => {
+                if (isTablet) {
+                  setCurrentSelect('target');
+                  return;
+                }
+                handleSelect(code, 'target');
+              }}
+              languageCodes={
+                recentlyTargetUsed?.slice(0, MAX_SELECTED_LANGUAGES) || []
+              }
+              onChevronClick={() => {
                 setCurrentSelect('target');
               }}
-            >
-              <CircleFlag
-                countryCode={target as string}
-                height={20}
-                width={20}
-              />
-              {!isMobile &&
-                getLanguageByCode(searchParams?.get('target') as string)?.name}
-            </SelectTrigger>
-          </Select>
+              currentCode={target}
+            />
+          </div>
         </div>
-
         {currentSelect !== 'none' && (
-          <div className="fixed left-0 z-20 h-full w-full bg-background">
+          <div className="fixed left-0 top-[72px] z-20 h-full w-full bg-background">
             <BackLayout
               title="Select language"
               onBack={() => {
@@ -188,14 +217,23 @@ export const LanguagesControlBar = forwardRef<
               }}
             >
               <ListLanguages
+                type={currentSelect}
                 allowDetect={currentSelect === 'source'}
-                onSelected={handleSelect}
+                onSelected={
+                  currentSelect === 'source'
+                    ? (code) => {
+                        handleSelect(code, 'source');
+                      }
+                    : (code) => {
+                        handleSelect(code, 'target');
+                      }
+                }
                 selectedCode={searchParams?.get(currentSelect) as string}
               />
             </BackLayout>
           </div>
         )}
-      </div>
+      </>
     );
   },
 );

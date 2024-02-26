@@ -67,7 +67,7 @@ export const Header = (props: Props) => {
               >
                 <SettingsIcon />
                 Account setting
-              </Link>{' '}
+              </Link>
               <a
                 onClick={signOut}
                 className="flex cursor-pointer items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"

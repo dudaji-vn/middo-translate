@@ -1,6 +1,6 @@
 import { ROUTE_NAMES } from '@/configs/route-name';
 
-type NavItem = {
+export type NavItem = {
   name: string;
   href: string;
 };
@@ -13,10 +13,20 @@ const items: NavItem[] = [
     name: 'Conversation',
     href: ROUTE_NAMES.ONLINE_CONVERSATION,
   },
+  // {
+  //   name: 'Duel',
+  //   href: '#',
+  // },
+];
+const landingPageItems: NavItem[] = [
   {
-    name: 'Duel',
-    href: '#',
+    name: 'Solution',
+    href: 'solution',
+  },
+  {
+    name: 'About us',
+    href: 'about-us',
   },
 ];
 
-export { items as navItems };
+export { items as navItems, landingPageItems as navLandingPageItems };

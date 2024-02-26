@@ -2,15 +2,17 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeftIcon, PenSquareIcon, Settings } from 'lucide-react';
 import { SPK_CHAT_TAB, SPK_SEARCH } from '../../configs';
 import { SearchInput, SearchInputRef } from '@/components/data-entry';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { Button } from '@/components/actions';
 import { ChatSettingMenu } from '../chat-setting';
-import { Typography } from '@/components/data-display';
 import { useSidebarTabs } from '../../hooks';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { Typography } from '@/components/data-display';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface ChatSidebarHeaderProps {}
-
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const {
     changeSide,
@@ -24,28 +26,50 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const isSearch = currentSide === 'search';
   const searchInputRef = useRef<SearchInputRef>(null);
 
+  const handleNewConversation = useCallback(() => {
+    changeSide('individual');
+  }, [changeSide]);
+
+  useKeyboardShortcut([SHORTCUTS.NEW_CONVERSATION], handleNewConversation);
+
   const handleBack = useCallback(() => {
     removeParams([SPK_SEARCH, SPK_CHAT_TAB]);
     searchInputRef.current?.reset();
   }, [removeParams, searchInputRef]);
+
+  useEffect(() => {
+    if (searchParams?.get(SPK_SEARCH) === null) {
+      searchInputRef.current?.reset();
+    }
+  }, [searchParams]);
 
   return (
     <div className="w-full px-3 pt-3">
       <div className="mb-3 flex items-center justify-between">
         <Typography variant="h6">Conversation</Typography>
         <div className="flex gap-3">
-          <Button.Icon
-            onClick={() => changeSide('individual')}
-            color="default"
-            size="xs"
-          >
-            <PenSquareIcon />
-          </Button.Icon>
-          <ChatSettingMenu>
-            <Button.Icon color="default" size="xs">
-              <Settings />
-            </Button.Icon>
-          </ChatSettingMenu>
+          <Tooltip
+            title="New Conversation"
+            triggerItem={
+              <Button.Icon
+                onClick={handleNewConversation}
+                color="default"
+                size="xs"
+              >
+                <PenSquareIcon />
+              </Button.Icon>
+            }
+          ></Tooltip>
+          <Tooltip
+            title="Settings"
+            triggerItem={
+              <ChatSettingMenu>
+                <Button.Icon color="default" size="xs">
+                  <Settings />
+                </Button.Icon>
+              </ChatSettingMenu>
+            }
+          ></Tooltip>
         </div>
       </div>
       <div className="flex  items-center gap-1 ">

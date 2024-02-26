@@ -1,15 +1,13 @@
 'use client';
 
 import { Fragment, useEffect, useState } from 'react';
-import { getMessaging, getToken } from 'firebase/messaging';
 
+import { requestForToken } from '@/lib/firebase';
 import { BellIcon } from 'lucide-react';
-import { NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY } from '@/configs/env.public';
-import { ToastNotification } from './toast-notification';
-import { firebaseApp } from '@/lib/firebase';
-import { notificationApi } from '../api';
 import toast from 'react-hot-toast';
+import { notificationApi } from '../api';
 import { useNotification } from '../hooks/use-notification';
+import { ToastNotification } from './toast-notification';
 
 export interface FCMBackgroundProps {}
 
@@ -22,15 +20,12 @@ export const FCMBackground = (props: FCMBackgroundProps) => {
   const retrieveToken = async (): Promise<void> => {
     try {
       if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-        const messaging = getMessaging(firebaseApp);
         // Retrieve the notification permission status
         const permission = await Notification.requestPermission();
         setPermission(permission);
         // Check if permission is granted before retrieving the token
         if (permission === 'granted') {
-          const currentToken = await getToken(messaging, {
-            vapidKey: NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY,
-          });
+          const currentToken = await requestForToken();
           if (currentToken) {
             await notificationApi.subscribe(currentToken);
             setIsSubscribed(true);
@@ -75,6 +70,7 @@ export const FCMBackground = (props: FCMBackgroundProps) => {
         toast.dismiss(toastId);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isShowRequestPermission, toastId]);
 
   return <Fragment></Fragment>;

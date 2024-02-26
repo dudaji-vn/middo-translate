@@ -33,13 +33,25 @@ export const ItemSub = ({
   }, [message.readBy, message.sender._id, participants, currentUserId]);
 
   const preMessage = useMemo(() => {
-    const isMessageRemoved = message.status === 'removed';
     const isCurrentUserSender = message.sender._id === currentUserId;
+    if (message.type === 'call' && message.call?.endTime) {
+      return '';
+    }
+
+    if (
+      (message.type === 'call' ||
+        (message.type === 'action' && message.content.includes('pin'))) &&
+      !isCurrentUserSender
+    ) {
+      return `${message.sender.name} `;
+    }
     const isSystemMessage =
       message.type === 'notification' ||
       message.type === 'action' ||
       message.type === 'media' ||
-      message.status === 'removed';
+      message.status === 'removed' ||
+      (!message?.content && message.forwardOf) ||
+      message.type === 'call';
 
     let actor = '';
     if (isGroup) {
@@ -61,10 +73,13 @@ export const ItemSub = ({
     }
     return actor;
   }, [
-    message.status,
     message.sender._id,
     message.sender.name,
     message.type,
+    message.call?.endTime,
+    message.status,
+    message?.content,
+    message.forwardOf,
     currentUserId,
     isGroup,
   ]);
@@ -104,10 +119,13 @@ export const ItemSub = ({
       default:
         break;
     }
-
+    if (!message?.content && message.forwardOf) {
+      return `forwarded a message`;
+    }
     return message.content;
   }, [
     message.content,
+    message.forwardOf,
     message.media,
     message.status,
     message.targetUsers,
@@ -130,17 +148,17 @@ export const ItemSub = ({
         setContentDisplay(translated);
       };
       translateContent();
+    }
+    if (message.type === 'call') {
+      if (message?.call?.endTime) {
+        setContentDisplay('Call ended');
+      } else {
+        setContentDisplay('started a call');
+      }
     } else {
       setContentDisplay(content);
     }
-  }, [
-    userLanguage,
-    message.content,
-    message.sender.language,
-    message.type,
-    message.contentEnglish,
-    content,
-  ]);
+  }, [userLanguage, message, content]);
 
   return (
     <div className="flex items-center">
@@ -157,8 +175,8 @@ export const ItemSub = ({
         <div className="ml-auto flex items-center pl-2">
           <AvatarGroup
             avatarClassName="w-4 h-4"
-            className="text-[0.625rem]"
-            limit={2}
+            className="space-x-0.5 text-[0.625rem]"
+            limit={3}
           >
             {readByUsers.map((user) => (
               <Avatar key={user._id} alt={user.name} src={user.avatar} />

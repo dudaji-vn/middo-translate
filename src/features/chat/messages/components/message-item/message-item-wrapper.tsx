@@ -19,24 +19,47 @@ import { MessageEmojiPicker } from '../message-emoji-picker';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useBoolean } from 'usehooks-ts';
-import { useMessageItem } from '.';
+import { Message } from '../../types';
 
-export interface MessageItemWrapperProps {}
+export interface MessageItemWrapperProps {
+  isMe: boolean;
+  message: Message;
+  setActive: (active: boolean) => void;
+}
 
 export const MessageItemWrapper = (
   props: MessageItemWrapperProps & PropsWithChildren,
 ) => {
   const isMobile = useAppStore((state) => state.isMobile);
 
-  const { isMe, message } = useMessageItem();
+  const { isMe, message, setActive } = props;
 
   const { onAction } = useMessageActions();
 
   const items = useMemo(() => {
-    const itemFiltered: any[] = [];
-    actionItems.forEach((item) => {
-      if (item.action === 'copy' && message.type !== 'text') return;
-      itemFiltered.push({
+    return actionItems
+      .filter((item) => {
+        switch (item.action) {
+          case 'copy':
+            return message.type === 'text';
+          case 'forward':
+            return message.type !== 'call';
+          case 'pin':
+            if (message.isPinned) return false;
+            if (message.type === 'call') return false;
+            if (
+              message.forwardOf &&
+              (!message.content || !message.media?.length)
+            )
+              return false;
+            return true;
+          case 'unpin':
+            return message.isPinned;
+          default:
+            return true;
+        }
+      })
+      .map((item) => ({
         ...item,
         onAction: () =>
           onAction({
@@ -44,11 +67,8 @@ export const MessageItemWrapper = (
             message,
             isMe,
           }),
-      });
-    });
-    return itemFiltered;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isMe, message]);
+      }));
+  }, [isMe, message, onAction]);
 
   const Wrapper = useMemo(() => {
     if (message.status === 'removed') return RemovedWrapper;
@@ -58,20 +78,30 @@ export const MessageItemWrapper = (
 
   return (
     <div className="relative">
-      <Wrapper items={items}>{props.children}</Wrapper>
+      <Wrapper
+        setActive={setActive}
+        isMe={isMe}
+        message={message}
+        items={items}
+      >
+        {props.children}
+      </Wrapper>
     </div>
   );
 };
 
-export interface MessageItemMobileWrapperProps {
+export type MessageItemMobileWrapperProps = {
   items: any[];
-}
+} & MessageItemWrapperProps &
+  PropsWithChildren;
 
 const MobileWrapper = ({
   children,
   items,
-}: MessageItemMobileWrapperProps & PropsWithChildren) => {
-  const { message, isMe, setActive } = useMessageItem();
+  isMe,
+  message,
+  setActive,
+}: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
   return (
     <LongPressMenu
@@ -99,20 +129,27 @@ const MobileWrapper = ({
       {value && (
         <>
           <LongPressMenu.CloseTrigger className="fixed left-0 top-0 z-[99] h-screen w-screen" />
-          <div
-            className={cn(
-              'absolute -top-1 right-0 z-[999] w-fit -translate-y-full',
-              isMe ? 'right-0' : 'left-0',
-            )}
-          >
-            <MessageEmojiPicker
-              onEmojiClick={() => {
-                setFalse();
-                setActive(false);
-              }}
-              messageId={message._id}
-            />
-          </div>
+          <Popover open>
+            <PopoverTrigger asChild>
+              <div
+                className={cn(
+                  'absolute top-0 h-[1px] w-full -translate-y-[calc(100%_+_8px)]',
+                )}
+              ></div>
+            </PopoverTrigger>
+            <PopoverContent
+              align={isMe ? 'end' : 'start'}
+              className="w-fit -translate-y-full border-none bg-transparent p-0 shadow-none"
+            >
+              <MessageEmojiPicker
+                onEmojiClick={() => {
+                  setFalse();
+                  setActive(false);
+                }}
+                messageId={message._id}
+              />
+            </PopoverContent>
+          </Popover>
         </>
       )}
     </LongPressMenu>
@@ -122,10 +159,9 @@ const MobileWrapper = ({
 const DesktopWrapper = ({
   items,
   children,
-}: PropsWithChildren & {
-  items: any[];
-}) => {
-  const { isMe, message } = useMessageItem();
+  isMe,
+  message,
+}: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
 
   return (
@@ -193,9 +229,6 @@ const DesktopWrapper = ({
   );
 };
 
-const RemovedWrapper = ({
-  children,
-  items,
-}: PropsWithChildren & { items: any[] }) => {
+const RemovedWrapper = ({ children, items }: MessageItemMobileWrapperProps) => {
   return <>{children}</>;
 };

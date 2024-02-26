@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/actions';
 import { User } from '@/features/users/types';
 
+const MIN_GROUP_MEMBERS_EXCEPT_SELF = 2;
+
 export interface GroupCreateFooterProps {
   createLoading: boolean;
   selectedUsers: User[];
@@ -14,14 +16,15 @@ export const GroupCreateFooter = ({
 }: GroupCreateFooterProps) => {
   return (
     <AnimatePresence>
-      {selectedUsers.length > 1 && (
+      {selectedUsers.length > 0 && (
         <motion.div
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
-          className={'p-3 shadow-n-1'}
+          className={'mt-auto p-3 shadow-n-1'}
         >
           <Button
+            disabled={selectedUsers.length < MIN_GROUP_MEMBERS_EXCEPT_SELF}
             size="md"
             shape="square"
             loading={createLoading}

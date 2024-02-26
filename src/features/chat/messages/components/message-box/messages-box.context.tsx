@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { Message } from '@/features/chat/messages/types';
+import { Message, PinMessage } from '@/features/chat/messages/types';
 import { MessageActions } from '../message-actions';
 import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
 import { Room } from '@/features/chat/rooms/types';
@@ -18,10 +18,13 @@ import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth.store';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
+import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
+import { useParams } from 'next/navigation';
 
 interface MessagesBoxContextProps {
   room: Room;
   messages: Message[];
+  pinnedMessages: PinMessage[];
   loadMoreMessages: () => void;
   hasNextPage: boolean | undefined;
   refetchMessages: () => void;
@@ -58,6 +61,8 @@ export const MessagesBoxProvider = ({
       enabled: room.status !== 'temporary',
     },
   });
+  const params = useParams<{ id: string }>();
+  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id });
 
   const userId = useAuthStore((s) => s.user?._id);
 
@@ -79,11 +84,12 @@ export const MessagesBoxProvider = ({
       }) => {
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
-        const messageNotify = `${message.sender.name} to ${
-          message.room?.isGroup && message.room?.name
+        const targetText = message.room?.isGroup
+          ? message.room?.name
             ? message.room?.name
             : 'your group'
-        }: ${message.content} `;
+          : 'you';
+        const messageNotify = `${message.sender.name} to ${targetText}: ${message.content} `;
         setNotification(messageNotify);
       },
     );
@@ -121,6 +127,7 @@ export const MessagesBoxProvider = ({
   return (
     <MessagesBoxContext.Provider
       value={{
+        pinnedMessages: data ?? [],
         room,
         messages: items,
         loadMoreMessages: fetchNextPage,

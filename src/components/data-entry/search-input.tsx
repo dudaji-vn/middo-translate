@@ -12,6 +12,9 @@ import {
 import { SearchIcon, XCircleIcon } from 'lucide-react';
 
 import { cn } from '@/utils/cn';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
@@ -31,7 +34,12 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       onClear?.();
     }, [onClear]);
     const canClear = value !== '';
-
+    const { setAllowShortcutListener } = useShortcutListenStore();
+    useKeyboardShortcut([SHORTCUTS.SEARCH], (e) => {
+      setAllowShortcutListener(false);
+      e?.preventDefault();
+      inputRef.current?.focus();
+    });
     useImperativeHandle(
       ref,
       () => ({
@@ -49,6 +57,8 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
           <input
             value={value}
             ref={inputRef}
+            onBlur={() => setAllowShortcutListener(true)}
+            onFocus={() => setAllowShortcutListener(false)}
             type="text"
             {...props}
             onChange={(e) => {
@@ -67,7 +77,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
               <XCircleIcon className="h-5 w-5 opacity-60" />
             </button>
           ) : (
-            <div className="flex items-center bg-inherit">
+            <div className="flex h-11 w-11 items-center bg-inherit">
               <SearchButton disabled />
             </div>
           )}
