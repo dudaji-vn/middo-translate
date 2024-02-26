@@ -114,7 +114,7 @@ export default function UpdateUserInfo() {
                   ),
                   onKeyDown: (e) => {
                     if (
-                      name.length >= 60 &&
+                      name?.length >= 60 &&
                       e.key !== 'Backspace' &&
                       e.key !== 'Delete'
                     ) {
