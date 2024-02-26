@@ -72,16 +72,16 @@ export default function DropdownActions() {
     const { key, shiftKey } = e;
     if (shiftKey) return;
     switch (key) {
-      case SCCall.SWITCH_TO_GALLERY_VIEW:
+      case actionShortcutKeysSet[0][0]:
         setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
         break;
-      case SCCall.START_STOP_SCREEN_DOODLE:
+      case actionShortcutKeysSet[1][0]:
         onDoodle();
         break;
-      case SCCall.TOGGLE_LIVE_CAPTION:
+      case actionShortcutKeysSet[2][0]:
         setShowCaption(!isShowCaption);
         break;
-      case SCCall.ADD_MEMBERS:
+      case actionShortcutKeysSet[3][0]:
         setModalAddUser(!isShowModalAddUser);
         break;
     }
