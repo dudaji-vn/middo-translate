@@ -45,7 +45,7 @@ export default function UpdateUserInfo() {
     handleSubmit,
     trigger,
     setValue,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = form;
   const { name, language } = watch();
   const submit = async (values: z.infer<typeof schema>) => {
@@ -141,6 +141,7 @@ export default function UpdateUserInfo() {
                   disabled={
                     user.name == watch().name &&
                     user.language == watch().language
+                    || isSubmitting
                   }
                   type="submit"
                 >

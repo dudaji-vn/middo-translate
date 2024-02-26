@@ -113,9 +113,10 @@ export const updateInforSchema = z.object({
         {
             message: 'Please enter name!',
         }),
-    language: z.string().min(1),
+    language: z.string().min(1, {
+        message: 'Please choose language!'
+    })
 });
-
 
 export const changePasswordSchema = z
     .object({
