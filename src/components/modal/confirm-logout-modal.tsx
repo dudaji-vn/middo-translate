@@ -15,9 +15,11 @@ import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useNotificationStore } from '@/features/notification/store';
 import { useRouter } from 'next/navigation';
+
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
-  const { isShowConfirmLogout, setShowConfirmLogout } = useAppStore();
+
+  const { isShowConfirmLogout, setShowConfirmLogout, platform } = useAppStore();
   const resetNotification = useNotificationStore((state) => state.reset);
   const router = useRouter();
 
@@ -29,6 +31,9 @@ export const ConfirmLogoutModal = () => {
       toast.success('Sign out success!');
       const { deleteFCMToken } = await import('@/lib/firebase');
       await deleteFCMToken();
+      if (platform === 'mobile') {
+        router.push('/sign-out');
+      }
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }

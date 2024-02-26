@@ -5,6 +5,7 @@ export type AppState = {
   isTablet: boolean;
   loading: boolean;
   isShowConfirmLogout: boolean;
+  platform: 'web' | 'mobile';
 };
 
 export type AppActions = {
@@ -12,6 +13,7 @@ export type AppActions = {
   setLoading: (loading: boolean) => void;
   setShowConfirmLogout: (isShowConfirmLogout: boolean) => void;
   setTablet: (isTablet: boolean) => void;
+  setPlatform: (platform: 'web' | 'mobile') => void;
 };
 
 export const useAppStore = create<AppState & AppActions>()((set) => ({
@@ -19,9 +21,11 @@ export const useAppStore = create<AppState & AppActions>()((set) => ({
   isTablet: false,
   loading: false,
   isShowConfirmLogout: false,
+  platform: 'web',
   setMobile: (isMobile) => set(() => ({ isMobile })),
   setLoading: (loading) => set(() => ({ loading })),
   setTablet: (isTablet) => set(() => ({ isTablet })),
+  setPlatform: (platform) => set(() => ({ platform })),
   setShowConfirmLogout: (isShowConfirmLogout) =>
     set(() => ({ isShowConfirmLogout })),
 }));
