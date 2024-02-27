@@ -46,7 +46,7 @@ export const Header = (props: Props) => {
                   alt={user?.name || 'Anonymous'}
                 />
 
-                <div className="hidden items-center md:flex truncate max-w-[200px] line-clamp-1">
+                <div className="line-clamp-1 hidden max-w-[200px] items-center truncate md:flex">
                   <div className="text-sm font-medium">
                     {user?.name || 'Anonymous'}
                   </div>

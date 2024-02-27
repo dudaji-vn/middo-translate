@@ -32,7 +32,7 @@ export const ChatBoxHeader = () => {
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
-      <div className="ml-auto mr-3 flex items-center gap-1">
+      <div className="ml-auto mr-1 flex items-center gap-1">
         <VideoCall />
         <Tooltip title="Info" triggerItem={<ActionBar />} />
       </div>
@@ -93,14 +93,9 @@ const VideoCall = () => {
         color={isHaveMeeting ? 'primary' : 'secondary'}
         variant={isHaveMeeting ? 'default' : 'ghost'}
         className={`${isHaveMeeting ? '' : 'hidden'}`}
-        startIcon={
-          isHaveMeeting ? (
-            <PhoneCallIcon />
-          ) : (
-            <Phone />
-          )
-        }
-      >Join
+        startIcon={isHaveMeeting ? <PhoneCallIcon /> : <Phone />}
+      >
+        Join
       </Button>
     </div>
   );
