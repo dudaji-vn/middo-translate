@@ -1,4 +1,5 @@
 'use client';
+
 import { PinIcon } from 'lucide-react';
 import { forwardRef, useEffect } from 'react';
 import {
@@ -10,6 +11,7 @@ import { ViewPinButton } from '../view-pin-button';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useQueryClient } from '@tanstack/react-query';
+import { useRoomSidebarTabs } from '../room-side/room-side-tabs/room-side-tabs.hook';
 export interface PinnedBarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const PinnedBar = forwardRef<HTMLDivElement, PinnedBarProps>(
@@ -17,6 +19,8 @@ export const PinnedBar = forwardRef<HTMLDivElement, PinnedBarProps>(
     const roomId = useRoomId();
     const { data } = useGetPinnedMessages({ roomId });
     const queryClient = useQueryClient();
+    const { toggleTab, currentSide } = useRoomSidebarTabs();
+    const isShowPinned = currentSide === 'pinned';
     useEffect(() => {
       socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.PIN, () => {
         console.log([PIN_MESSAGE_KEY, roomId]);
@@ -32,7 +36,9 @@ export const PinnedBar = forwardRef<HTMLDivElement, PinnedBarProps>(
       <div
         ref={ref}
         {...props}
-        className="flex items-center border-b px-3 py-1"
+        className={
+          isShowPinned ? 'hidden' : 'flex items-center border-b px-3 py-1'
+        }
       >
         <PinIcon className="size-4 text-neutral-600" />
         <span className="ml-2 text-sm text-neutral-600">

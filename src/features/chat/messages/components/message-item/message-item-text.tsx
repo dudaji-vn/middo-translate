@@ -29,7 +29,7 @@ export const TextMessage = ({
       setContentDisplay(message.content);
       return;
     }
-    if (userLanguage === message.sender.language) {
+    if (message.language === message.sender.language) {
       setContentDisplay(message.content);
       return;
     }
@@ -39,6 +39,7 @@ export const TextMessage = ({
         message?.language || message.sender.language,
         userLanguage,
       );
+      console.log('translated', translated);
       setContentDisplay(translated);
     };
     translateContent();
