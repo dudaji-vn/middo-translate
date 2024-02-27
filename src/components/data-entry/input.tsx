@@ -18,7 +18,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type === 'password' && isShowPassword ? 'text' : type}
           className={cn(
-            'flex  w-full rounded-full border border-input bg-background px-5 py-[14px] text-base font-normal leading-none ring-offset-background file:bg-transparent placeholder:text-muted-foreground focus-within:border-primary focus-within:caret-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 pr-[3.75rem] ',
+            'flex  w-full rounded-xl border border-input bg-background px-5 py-[14px] text-base font-normal leading-none ring-offset-background file:bg-transparent placeholder:text-muted-foreground focus-within:border-primary focus-within:caret-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 pr-[3.75rem] ',
             className,
             isError && 'border-error focus-within:border-error',
           )}

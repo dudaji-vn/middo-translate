@@ -102,13 +102,14 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         <MessageEditorToolbar />
         <MessageEditorForm onFormSubmit={handleSubmit}>
           <div className="relative flex w-full items-center gap-2">
-            <div className="flex-1 items-center gap-2 rounded-[1.5rem] border border-primary bg-card p-1 px-4 shadow-sm">
-              <div className="flex min-h-9 flex-1">
+            <div className="flex-1 items-center gap-2 rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
+              <div className="flex min-h-9 pt-[6px] flex-1">
                 <TextInput ref={textInputRef} />
               </div>
               <MessageEditorMediaBar />
             </div>
-            <MessageEditorSubmitButton />
+            <MessageEditorSubmitButton  className='invisible' disabled/>
+            <MessageEditorSubmitButton  className='absolute right-0 bottom-[6px]'/>
           </div>
         </MessageEditorForm>
       </MessageEditorTextProvider>

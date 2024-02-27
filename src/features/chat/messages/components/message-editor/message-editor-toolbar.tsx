@@ -25,17 +25,9 @@ export const MessageEditorToolbar = forwardRef<
   MessageEditorToolbarProps
 >(({ disableMedia = false, ...props }, ref) => {
   const { listening } = useMessageEditorText();
-  const room = useVideoCallStore((state) => state.room);
-  const [openSetting, setOpenSetting] = useState(false);
-  const handleToggleSetting = () => {
-    setOpenSetting((prev) => !prev);
-  };
+
   const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
     useChatStore();
-  useKeyboardShortcut(
-    [SHORTCUTS.TOGGLE_CONVERSATION_SETTINGS],
-    handleToggleSetting,
-  );
   useKeyboardShortcut(
     [
       SHORTCUTS.TURN_ON_OFF_TRANSLATION,
@@ -77,30 +69,13 @@ export const MessageEditorToolbar = forwardRef<
     <>
       <MessageEditorToolbarTranslateTool />
       <div ref={ref} {...props} className="flex items-center mb-2">
-        <MessageEditorToolbarLangControl />
         {!disableMedia && (
           <Tooltip
             title="Upload files"
             triggerItem={<MessageEditorToolbarFile />}
           />
         )}
-        {!room && (
-          <Tooltip
-            title="Speech-to-text"
-            triggerItem={<MessageEditorToolbarMic />}
-          />
-        )}
         <Tooltip title="Emojis" triggerItem={<MessageEditorToolbarEmoji />} />
-        <Tooltip
-          title="Settings"
-          triggerItem={
-            <ChatSettingMenu open={openSetting} onOpenChange={setOpenSetting}>
-              <Button.Icon color="default" size="xs" variant="ghost">
-                <Settings />
-              </Button.Icon>
-            </ChatSettingMenu>
-          }
-        />
       </div>
     </>
   );

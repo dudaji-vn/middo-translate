@@ -110,11 +110,11 @@ export default function UpdateUserInfo() {
                 inputProps={{
                   placeholder: 'Enter your name',
                   suffix: (
-                    <span className="text text-gray-400">{`${name?.length}/60`}</span>
+                    <span className="text-sm text-gray-400">{`${name?.length}/60`}</span>
                   ),
                   onKeyDown: (e) => {
                     if (
-                      name.length >= 60 &&
+                      name?.length >= 60 &&
                       e.key !== 'Backspace' &&
                       e.key !== 'Delete'
                     ) {

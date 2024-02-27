@@ -55,6 +55,7 @@ const TextMessage = ({ message }: { message: Message }) => {
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
+    console.log('message', message)
     if (message.status === 'removed') {
       setContentDisplay(message.content);
       return;
@@ -71,11 +72,7 @@ const TextMessage = ({ message }: { message: Message }) => {
     translateContent();
   }, [
     userLanguage,
-    message.content,
-    message.sender.language,
-    message.contentEnglish,
-    message.status,
-    message.language,
+    message
   ]);
   return (
     <div className="flex flex-col">
