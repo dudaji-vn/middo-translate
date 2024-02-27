@@ -1,13 +1,13 @@
-import { Button } from '@/components/actions';
+import { Button, ButtonProps } from '@/components/actions';
 import { SendIcon } from 'lucide-react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
 
-export interface MessageEditorSubmitButtonProps {}
+
 
 export const MessageEditorSubmitButton = (
-  props: MessageEditorSubmitButtonProps,
+  props: ButtonProps
 ) => {
   const { text } = useMessageEditorText();
   const { files } = useMediaUpload();
@@ -16,7 +16,7 @@ export const MessageEditorSubmitButton = (
     return null;
   }
   return (
-    <Button.Icon type="submit" size="xs" color="primary">
+    <Button.Icon type="submit" size="xs" color="primary" {...props}>
       <SendIcon />
     </Button.Icon>
   );

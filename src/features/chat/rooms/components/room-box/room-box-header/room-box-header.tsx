@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/actions';
 import { useAuthStore } from '@/stores/auth.store';
-import { AlertCircleIcon, Phone } from 'lucide-react';
+import { AlertCircleIcon, Phone, PhoneCallIcon } from 'lucide-react';
 import { useCallback, useMemo } from 'react';
 import { useChatBox } from '../../../contexts';
 import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
@@ -46,8 +46,11 @@ const ActionBar = () => {
   const handleToggleInfo = useCallback(() => {
     toggleTab('info');
   }, [toggleTab]);
-  
-  useKeyboardShortcut([SHORTCUTS.VIEW_CONVERSATION_INFORMATION], handleToggleInfo);
+
+  useKeyboardShortcut(
+    [SHORTCUTS.VIEW_CONVERSATION_INFORMATION],
+    handleToggleInfo,
+  );
 
   return (
     <div>
@@ -86,12 +89,18 @@ const VideoCall = () => {
       <Button
         onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"
-        color={isHaveMeeting ? 'secondary' : 'primary'}
+        shape={'square'}
+        color={isHaveMeeting ? 'primary' : 'secondary'}
         variant={isHaveMeeting ? 'default' : 'ghost'}
         className={`${isHaveMeeting ? '' : 'hidden'}`}
-        startIcon={<Phone />}
-      >
-        Join call
+        startIcon={
+          isHaveMeeting ? (
+            <PhoneCallIcon />
+          ) : (
+            <Phone />
+          )
+        }
+      >Join
       </Button>
     </div>
   );

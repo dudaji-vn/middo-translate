@@ -84,12 +84,6 @@ export const MessageEditorToolbar = forwardRef<
             triggerItem={<MessageEditorToolbarFile />}
           />
         )}
-        {!room && (
-          <Tooltip
-            title="Speech-to-text"
-            triggerItem={<MessageEditorToolbarMic />}
-          />
-        )}
         <Tooltip title="Emojis" triggerItem={<MessageEditorToolbarEmoji />} />
         <Tooltip
           title="Settings"

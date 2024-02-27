@@ -52,8 +52,8 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
     );
 
     return (
-      <div className="relative w-full overflow-hidden rounded-full border bg-background transition-all">
-        <div className="flex h-11 pl-3 transition-all">
+      <div className="relative w-full overflow-hidden rounded-xl border bg-background transition-all">
+        <div className="flex h-11 pl-3 transition-all ">
           <input
             value={value}
             ref={inputRef}
@@ -65,7 +65,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
               props.onChange?.(e);
               setValue(e.target.value);
             }}
-            className={`w-full border-0 bg-inherit p-2 ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent ${props.className}`}
+            className={`w-full border-0 bg-inherit p-2  ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent ${props.className}`}
           />
           {canClear ? (
             <button
