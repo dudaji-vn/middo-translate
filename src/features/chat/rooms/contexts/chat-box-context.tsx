@@ -13,6 +13,8 @@ import { Room } from '@/features/chat/rooms/types';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { useRouter } from 'next/navigation';
+import { useNotificationStore } from '@/features/notification/store';
+import { usePlatformStore } from '@/features/platform/stores';
 
 interface ChatBoxContextProps {
   room: Room;
@@ -29,6 +31,8 @@ export const ChatBoxProvider = ({
   children,
   room: _room,
 }: PropsWithChildren<{ room: Room }>) => {
+  const notifyToken = usePlatformStore((state) => state.notifyToken);
+
   const [room, setRoom] = useState<Room>(_room);
   const updateRoom = useCallback((room: Partial<Room>) => {
     setRoom((old) => ({ ...old, ...room }));
@@ -52,11 +56,17 @@ export const ChatBoxProvider = ({
   );
 
   useEffect(() => {
-    socket.emit(SOCKET_CONFIG.EVENTS.CHAT.JOIN, room._id);
+    socket.emit(SOCKET_CONFIG.EVENTS.CHAT.JOIN, {
+      roomId: room._id,
+      notifyToken,
+    });
     return () => {
-      socket.emit(SOCKET_CONFIG.EVENTS.CHAT.LEAVE, room._id);
+      socket.emit(SOCKET_CONFIG.EVENTS.CHAT.LEAVE, {
+        roomId: room._id,
+        notifyToken,
+      });
     };
-  }, [room._id]);
+  }, [notifyToken, room._id]);
 
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.UPDATE, updateRoom);
