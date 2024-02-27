@@ -13,7 +13,6 @@ import { Room } from '@/features/chat/rooms/types';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { useRouter } from 'next/navigation';
-import { useNotificationStore } from '@/features/notification/store';
 import { usePlatformStore } from '@/features/platform/stores';
 
 interface ChatBoxContextProps {
