@@ -28,7 +28,7 @@ export const useChatStore = create<ChatState>()(
       rooIdInteract: null,
       setRoomIdInteract: (id) => set(() => ({ rooIdInteract: id })),
       srcLang: 'auto',
-      setSrcLang: (lang) => set(() => ({ srcLang: lang })),
+      setSrcLang: () => set(() => ({ srcLang: 'auto' })),
       detLang: '',
       setDetLang: (lang) => set(() => ({ detLang: lang })),
     }),
