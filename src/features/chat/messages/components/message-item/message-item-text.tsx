@@ -22,14 +22,21 @@ export const TextMessage = ({
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
-  const userLanguage = useAuthStore((state) => state.user?.language);
+  const { userLanguage, currentUserId } = useAuthStore((state) => ({
+    userLanguage: state.user?.language,
+    currentUserId: state.user?._id,
+  }));
+
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
     if (message.status === 'removed') {
       setContentDisplay(message.content);
       return;
     }
-    if (message.language === message.sender.language) {
+    if (
+      message.language === message.sender.language ||
+      message.sender._id === currentUserId
+    ) {
       setContentDisplay(message.content);
       return;
     }
@@ -39,7 +46,6 @@ export const TextMessage = ({
         message?.language || message.sender.language,
         userLanguage,
       );
-      console.log('translated', translated);
       setContentDisplay(translated);
     };
     translateContent();
@@ -58,7 +64,7 @@ export const TextMessage = ({
       )}
     >
       <span className={cn(textVariants({ position, status: message.status }))}>
-        {contentDisplay}
+        <Text value={contentDisplay} />
       </span>
       {message?.contentEnglish &&
         message.status !== 'removed' &&
@@ -78,7 +84,7 @@ export const TextMessage = ({
               )}
             >
               <Text
-                value={message.contentEnglish}
+                value={message.contentEnglish?.trim()}
                 className="text-start text-sm font-light"
               />
             </div>

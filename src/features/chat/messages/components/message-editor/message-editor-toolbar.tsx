@@ -3,7 +3,13 @@ import { forwardRef, useEffect, useState } from 'react';
 import { Button } from '@/components/actions';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { ChatSettingMenu } from '@/features/chat/components/chat-setting';
-import { Settings } from 'lucide-react';
+import {
+  ArrowRight,
+  ChevronRight,
+  ChevronRightSquare,
+  Plus,
+  Settings,
+} from 'lucide-react';
 import { useMessageEditorText } from './message-editor-text-context';
 import { MessageEditorToolbarEmoji } from './message-editor-toolbar-emoji';
 import { MessageEditorToolbarFile } from './message-editor-toolbar-file';
@@ -15,15 +21,18 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useChatStore } from '@/features/chat/store';
 import isEqual from 'lodash/isEqual';
+import { cn } from '@/utils/cn';
 
 export interface MessageEditorToolbarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   disableMedia?: boolean;
+  shrink?: boolean;
+  onExpand?: () => void;
 }
 export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
->(({ disableMedia = false, ...props }, ref) => {
+>(({ disableMedia = false, shrink = false, ...props }, ref) => {
   const { listening } = useMessageEditorText();
 
   const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
@@ -68,14 +77,30 @@ export const MessageEditorToolbar = forwardRef<
   return (
     <>
       <MessageEditorToolbarTranslateTool />
-      <div ref={ref} {...props} className="flex items-center mb-2">
-        {!disableMedia && (
-          <Tooltip
-            title="Upload files"
-            triggerItem={<MessageEditorToolbarFile />}
-          />
-        )}
-        <Tooltip title="Emojis" triggerItem={<MessageEditorToolbarEmoji />} />
+      <div ref={ref} {...props} className={cn('flex-rows flex items-end')}>
+          {shrink ? (
+            <Button.Icon
+              onClick={() => props.onExpand?.()}
+              variant="ghost"
+              size="xs"
+              color="default"
+              className='mb-1'
+            >
+              <ChevronRight className="h-5 w-5" />
+            </Button.Icon>
+          ) : (
+            <>
+              <Tooltip
+                title="Upload files"
+                triggerItem={<MessageEditorToolbarFile />}
+              />
+
+              <Tooltip
+                title="Emojis"
+                triggerItem={<MessageEditorToolbarEmoji />}
+              />
+            </>
+          )}
       </div>
     </>
   );
