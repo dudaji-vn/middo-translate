@@ -1,4 +1,5 @@
 import { Button } from '@/components/actions';
+import { ButtonProps } from '@/components/actions/button';
 import { Mic } from 'lucide-react';
 import { useChatStore } from '@/features/chat/store';
 import { useMessageEditorText } from './message-editor-text-context';
@@ -7,13 +8,10 @@ import { on } from 'events';
 import { useCallback } from 'react';
 import { SHORTCUTS } from '@/types/shortcuts';
 
-export interface MessageEditorToolbarMicProps {}
-
-export const MessageEditorToolbarMic = (
-  props: MessageEditorToolbarMicProps,
-) => {
+export const MessageEditorToolbarMic = (props: ButtonProps) => {
   const { listening, handleStopListening, handleStartListening, userLanguage } =
     useMessageEditorText();
+  console.log('listening', listening);
   const { setSrcLang, srcLang } = useChatStore((s) => s);
 
   const onStartListening = useCallback(() => {
@@ -25,10 +23,10 @@ export const MessageEditorToolbarMic = (
     }
   }, [handleStartListening, setSrcLang, srcLang, userLanguage]);
 
-  useKeyboardShortcut([SHORTCUTS.START_STOP_SPEECH_TO_TEXT], (e) =>{
+  useKeyboardShortcut([SHORTCUTS.START_STOP_SPEECH_TO_TEXT], (e) => {
     listening ? handleStopListening() : onStartListening();
-    e?.preventDefault();}
-  );
+    e?.preventDefault();
+  });
 
   return (
     <>
@@ -38,6 +36,7 @@ export const MessageEditorToolbarMic = (
           variant="ghost"
           size="xs"
           color="primary"
+          {...props}
         >
           <Mic />
         </Button.Icon>
@@ -47,6 +46,7 @@ export const MessageEditorToolbarMic = (
           variant="ghost"
           size="xs"
           color="default"
+          {...props}
         >
           <Mic />
         </Button.Icon>

@@ -5,7 +5,6 @@ import {
   TooltipTrigger,
 } from '@/components/data-display';
 import { useAppStore } from '@/stores/app.store';
-
 export type TooltipProps = {
   title: string;
   children?: React.ReactNode;
@@ -13,7 +12,6 @@ export type TooltipProps = {
   triggerProps?: React.ComponentProps<typeof TooltipTrigger>;
   contentProps?: React.ComponentProps<typeof TooltipContent>;
 };
-
 const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   (
     { children, title, triggerItem, triggerProps, contentProps, ...rest },
@@ -28,13 +26,13 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
           </TooltipContent>
         )}
         {children || (
-          <TooltipTrigger {...triggerProps}>{triggerItem}</TooltipTrigger>
+          <TooltipTrigger asChild {...triggerProps}>
+            <div>{triggerItem}</div>
+          </TooltipTrigger>
         )}
       </ShadcnTooltip>
     );
   },
 );
-
 Tooltip.displayName = 'Tooltip';
-
 export default Tooltip;

@@ -22,7 +22,7 @@ export const RoomItemComingCall = ({
         size="xs"
         shape="square"
       >
-        Join call
+        Join
       </Button>
     </div>
   );
