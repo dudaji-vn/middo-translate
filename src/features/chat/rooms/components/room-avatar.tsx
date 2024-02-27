@@ -139,7 +139,7 @@ const sizeByLengthAndIndex = (
     case 1:
       return maxSize;
     case 2:
-      return maxSize / 2;
+      return maxSize;
     case 3:
       return index === 0 ? maxSize : maxSize / 2;
     case 4:
