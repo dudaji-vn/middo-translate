@@ -14,7 +14,7 @@ export interface ChatLayoutProps {
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
     <Fragment>
-      <div className="flex">
+      <div className="flex flex-1 overflow-hidden">
         <ChatSidebar>
           <Inbox />
         </ChatSidebar>
