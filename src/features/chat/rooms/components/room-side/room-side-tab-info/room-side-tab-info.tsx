@@ -16,8 +16,13 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
   const { room } = useChatBox();
   return (
     <>
-      <div className="-mx-3 -mt-3 px-1 pt-2 md:hidden">
-        <Button.Icon onClick={changeToDefault} variant="ghost" color="default">
+      <div className="-mx-3 -mt-3 px-1 pt-1 md:hidden">
+        <Button.Icon
+          size="xs"
+          onClick={changeToDefault}
+          variant="ghost"
+          color="default"
+        >
           <ArrowLeftIcon />
         </Button.Icon>
       </div>

@@ -75,7 +75,7 @@ export const buttonVariants = cva(
 export const IconButtonVariants = cva('p-0', {
   variants: {
     size: {
-      xs: 'w-9 h-9',
+      xs: 'md:w-9 md:h-9 w-11 h-11',
       sm: 'w-11 h-11',
       md: 'w-12 h-12',
       lg: 'w-[60px] h-[60px]',
@@ -94,7 +94,7 @@ export const IconVariants = cva('inline-block', {
       default: '',
     },
     size: {
-      xs: 'w-4 h-4',
+      xs: 'md:w-4 md:h-4 w-5 h-5',
       sm: 'w-5 h-5',
       md: 'w-6 h-6',
       lg: 'w-7 h-7',
