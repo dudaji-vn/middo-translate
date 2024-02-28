@@ -138,7 +138,7 @@ export const InputCropImage = forwardRef<
             htmlFor={id}
             className="mb-6 mt-5 flex border-spacing-3 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary p-4 py-[70px] transition-all hover:bg-slate-50 md:h-5/6"
           >
-            <span className="rounded-full bg-blue-200 p-4">
+            <span className="rounded-full  p-4">
               <Upload width={24} height={24} className="stroke-primary" />
             </span>
             <span className="mt-[10px] font-normal">Upload Image</span>

@@ -3,7 +3,9 @@
 import {
   HTMLAttributes,
   forwardRef,
+  useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react';
@@ -16,11 +18,17 @@ import { Media } from '@/types';
 import { MessageEditorForm } from './message-editor-form';
 import { MessageEditorMediaBar } from './message-editor-media-bar';
 import { MessageEditorSubmitButton } from './message-editor-submit-button';
-import { MessageEditorTextProvider } from './message-editor-text-context';
+import {
+  MessageEditorTextProvider,
+} from './message-editor-text-context';
 import { MessageEditorToolbar } from './message-editor-toolbar';
 import { useChatStore } from '@/features/chat/store';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
+import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-translate';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import isEqual  from 'lodash/isEqual';
 
 type SubmitData = {
   content: string;
@@ -47,7 +55,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
     const isMobile = useAppStore((state) => state.isMobile);
-    const [shrinkToolbar, setShrinkToolbar] = useState(isMobile);
+    const [shrinkToolbar, setShrinkToolbar] = useState(false);
 
     const resetForm = (e: React.FormEvent<HTMLFormElement>) => {
       e?.currentTarget?.reset();
@@ -107,32 +115,53 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       },
     }));
 
+    const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
+      useChatStore();
+    useKeyboardShortcut(
+      [
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION,
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW,
+      ],
+      (_, matchedKey) => {
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION)) {
+          toggleShowMiddleTranslation();
+          return;
+        }
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW)) {
+          toggleShowTranslateOnType();
+        }
+      },
+      true,
+    );
+
     return (
       <MessageEditorTextProvider>
-        <div className={cn('relative flex flex-row items-end space-x-2')}>
+        <MessageEditorToolbarTranslateTool />
+        <div
+          className={cn('relative flex h-fit flex-row space-x-2 pr-2 ')}
+        >
           <MessageEditorToolbar
             shrink={shrinkToolbar}
             onExpand={() => {
               setShrinkToolbar(false);
-              textInputRef?.current?.style?.setProperty('height', '20px');
             }}
           />
           <MessageEditorForm onFormSubmit={handleSubmit}>
-            <div className="relative flex w-full items-center gap-2">
-              <div className="flex-1 items-center gap-2 rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
-                <div className="flex min-h-9 flex-1 pt-[6px]">
+            <div className="relative flex w-full flex-row items-end gap-2">
+              <div className="rounded-xl border border-primary bg-card p-1 px-3 shadow-sm w-full">
                   <TextInput
                     isToolbarShrink={shrinkToolbar}
                     ref={textInputRef}
-                    onKeyDown={() => {
-                      setShrinkToolbar(true);
+                    onFocus={() => {
+                      setShrinkToolbar(isMobile);
+                    }}
+                    onBlur={() => {
+                      setShrinkToolbar(false);
                     }}
                   />
-                </div>
                 <MessageEditorMediaBar />
               </div>
-              <MessageEditorSubmitButton className="invisible" disabled />
-              <MessageEditorSubmitButton className="absolute bottom-[6px] right-0" />
+              <MessageEditorSubmitButton  className='mb-[5px]'/>
             </div>
           </MessageEditorForm>
         </div>
