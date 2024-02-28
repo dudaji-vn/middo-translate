@@ -10,8 +10,15 @@ export interface CopyZoneClickProps
 export const CopyZoneClick = forwardRef<HTMLDivElement, CopyZoneClickProps>(
   ({ text, ...props }, ref) => {
     const { copy } = useTextCopy(text);
+
+    const handleClick = () => {
+      if (text) {
+        copy(text);
+      }
+    };
+    
     return (
-      <div onClick={copy.bind(null, text)} ref={ref} {...props}>
+      <div onClick={handleClick} ref={ref} {...props}>
         {props.children}
       </div>
     );
