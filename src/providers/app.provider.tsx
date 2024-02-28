@@ -7,7 +7,7 @@ import 'yet-another-react-lightbox/plugins/thumbnails.css';
 import BootstrapProvider from './bootstrap.provider';
 import { CommonComponent } from './common-component.provider';
 import { ModalProvider } from './modal.provider';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { ReactQueryProvider } from './react-query.provider';
 import { SideEffectProvider } from './side-effect.provider';
 import SocketProvider from './socket.provider';
@@ -36,7 +36,9 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
       <TooltipProvider>
         <ReactQueryProvider>{props.children}</ReactQueryProvider>
       </TooltipProvider>
-      <SideEffectProvider />
+      <Suspense>
+        <SideEffectProvider />
+      </Suspense>
       <ModalProvider />
     </>
   );
