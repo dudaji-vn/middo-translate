@@ -38,6 +38,7 @@ export const TextInput = forwardRef<
     buttonRef.current?.click();
   };
   const onInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    if(text.length === 0) return;
     if (e.currentTarget.scrollHeight < 100) {
       e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
     } else {
@@ -62,12 +63,12 @@ export const TextInput = forwardRef<
   );
   useEffect(() => {
     if (text.length === 0) {
-      inputRef.current?.style.setProperty('height', 'auto');
+      inputRef.current?.style.setProperty('height', '24px');
     }
   }, [text]);
 
   return (
-    <div className="relative flex  w-full h-auto min-h-[36px] flex-row items-center ">
+    <div className="relative flex  w-full  min-h-[36px] bg-red-300   flex-row items-center ">
       <button
         type="submit"
         className="invisible"
@@ -119,7 +120,7 @@ export const TextInput = forwardRef<
         placeholder={listening ? 'Listening...' : 'Type a message'}
         onPaste={handlePasteFile}
       />
-      <MessageEditorToolbarMic className="absolute bottom-0 -right-1" />
+      <MessageEditorToolbarMic className="absolute -bottom-1 -right-1" />
     </div>
   );
 });
