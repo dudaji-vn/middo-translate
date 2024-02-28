@@ -68,7 +68,7 @@ export const TextInput = forwardRef<
   }, [text]);
 
   return (
-    <div className="relative flex  w-full  min-h-[36px] bg-red-300   flex-row items-center ">
+    <div className="relative flex  w-full  min-h-[36px] flex-row items-center ">
       <button
         type="submit"
         className="invisible"
