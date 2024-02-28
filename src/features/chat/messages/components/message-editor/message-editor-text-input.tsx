@@ -89,7 +89,6 @@ export const TextInput = forwardRef<
           onFocus={() => setAllowShortcutListener(false)}
           onBlur={(e) => {
             setAllowShortcutListener(true);
-            console.log('e', e);
             e.currentTarget.style.height = '24px';
           }}
           onChange={(e) => {
