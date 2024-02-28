@@ -64,7 +64,7 @@ export const TextMessage = ({
       )}
     >
       <span className={cn(textVariants({ position, status: message.status }))}>
-        <Text value={contentDisplay} />
+        <Text value={contentDisplay?.trim()} />
       </span>
       {message?.contentEnglish &&
         message.status !== 'removed' &&
