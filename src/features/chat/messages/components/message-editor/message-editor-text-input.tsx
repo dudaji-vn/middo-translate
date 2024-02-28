@@ -1,20 +1,23 @@
-import { forwardRef, use, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
 import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
-import { m } from 'framer-motion';
+import { cn } from '@/utils/cn';
 
 export interface TextInputRef extends HTMLTextAreaElement {
   reset: () => void;
   focus: () => void;
+  onSubmit?: () => void;
 }
 
 export const TextInput = forwardRef<
   TextInputRef,
-  React.HTMLProps<HTMLTextAreaElement>
->((props, ref) => {
+  React.HTMLProps<HTMLTextAreaElement> & {
+    isToolbarShrink?: boolean;
+  }
+>(({ isToolbarShrink, ...props }, ref) => {
   const {
     text,
     setText,
@@ -31,7 +34,7 @@ export const TextInput = forwardRef<
   const buttonRef = useRef<HTMLButtonElement>(null);
   const triggerSubmit = () => {
     buttonRef.current?.click();
-  }
+  };
   const onInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
     if (e.currentTarget.scrollHeight < 100) {
       e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
@@ -64,7 +67,9 @@ export const TextInput = forwardRef<
   return (
     <>
       <div className="relative h-full flex-1 items-center">
-        <button type='submit' className='invisible'
+        <button
+          type="submit"
+          className="invisible"
           ref={buttonRef}
           onClick={triggerSubmit}
         />
@@ -73,7 +78,7 @@ export const TextInput = forwardRef<
           ref={inputRef}
           rows={1}
           onInput={onInput}
-          onKeyDown={(e) => {
+          onKeyUp={(e) => {
             if (e.key === 'Enter' && !e.shiftKey && text.length > 0) {
               e.preventDefault();
               triggerSubmit();
@@ -82,12 +87,19 @@ export const TextInput = forwardRef<
           {...props}
           value={text}
           onFocus={() => setAllowShortcutListener(false)}
-          onBlur={() => setAllowShortcutListener(true)}
+          onBlur={(e) => {
+            setAllowShortcutListener(true);
+            console.log('e', e);
+            e.currentTarget.style.height = '24px';
+          }}
           onChange={(e) => {
             setText(e.target.value);
             setMiddleText('');
           }}
-          className="h-full w-full bg-transparent outline-none "
+          className={cn(
+            ' w-11/12 sm:w-[96%]  bg-transparent outline-none',
+            !isToolbarShrink ? '  ' : '',
+          )}
           autoComplete="off"
           name="message"
           placeholder={listening ? 'Listening...' : 'Type a message'}

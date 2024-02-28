@@ -11,7 +11,6 @@ import { SHORTCUTS } from '@/types/shortcuts';
 export const MessageEditorToolbarMic = (props: ButtonProps) => {
   const { listening, handleStopListening, handleStartListening, userLanguage } =
     useMessageEditorText();
-  console.log('listening', listening);
   const { setSrcLang, srcLang } = useChatStore((s) => s);
 
   const onStartListening = useCallback(() => {
