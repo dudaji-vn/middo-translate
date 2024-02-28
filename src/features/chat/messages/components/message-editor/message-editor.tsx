@@ -29,6 +29,7 @@ import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-tran
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual  from 'lodash/isEqual';
+import { SendIcon } from 'lucide-react';
 
 type SubmitData = {
   content: string;
@@ -161,7 +162,8 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
                   />
                 <MessageEditorMediaBar />
               </div>
-              <MessageEditorSubmitButton  className='mb-[5px]'/>
+            <MessageEditorSubmitButton  className='invisible mb-[5px]' disabled/>
+            <MessageEditorSubmitButton  className='absolute -right-2 bottom-[5px]'/>
             </div>
           </MessageEditorForm>
         </div>
