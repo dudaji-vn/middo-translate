@@ -119,7 +119,7 @@ export const TextInput = forwardRef<
         placeholder={listening ? 'Listening...' : 'Type a message'}
         onPaste={handlePasteFile}
       />
-      <MessageEditorToolbarMic className="absolute right-0 bottom-0" />
+      <MessageEditorToolbarMic className="absolute bottom-0 right-0" />
     </div>
   );
 });
