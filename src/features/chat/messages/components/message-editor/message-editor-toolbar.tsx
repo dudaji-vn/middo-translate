@@ -23,7 +23,7 @@ export const MessageEditorToolbar = forwardRef<
 >(({ disableMedia = false, shrink = false, isMultiline, onExpand, ...props }, ref) => {
  
   return (
-      <div ref={ref} {...props} className={cn('flex-rows flex items-end pb-[5px]')}>
+      <div ref={ref} {...props} className={cn('flex-rows flex items-end')}>
           {shrink ? (
             <Button.Icon
               onClick={() => onExpand?.()}

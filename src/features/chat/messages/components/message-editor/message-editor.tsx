@@ -163,7 +163,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
                 <MessageEditorMediaBar />
               </div>
             <MessageEditorSubmitButton  className='invisible mb-[5px]' disabled/>
-            <MessageEditorSubmitButton  className='absolute -right-2 bottom-[5px]'/>
+            <MessageEditorSubmitButton  className='absolute -right-2 bottom-[1px]'/>
             </div>
           </MessageEditorForm>
         </div>
