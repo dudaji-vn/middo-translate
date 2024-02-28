@@ -20,13 +20,13 @@ export interface MessageEditorToolbarProps
 export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
->(({ disableMedia = false, shrink = false, isMultiline, ...props }, ref) => {
+>(({ disableMedia = false, shrink = false, isMultiline, onExpand, ...props }, ref) => {
  
   return (
       <div ref={ref} {...props} className={cn('flex-rows flex items-end pb-[5px]')}>
           {shrink ? (
             <Button.Icon
-              onClick={() => props.onExpand?.()}
+              onClick={() => onExpand?.()}
               variant="ghost"
               size="xs"
               color="default"

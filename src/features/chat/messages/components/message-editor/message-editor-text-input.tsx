@@ -67,7 +67,7 @@ export const TextInput = forwardRef<
   }, [text]);
 
   return (
-    <div className="relative flex  h-auto min-h-[38px] flex-row items-center ">
+    <div className="relative flex  w-full h-auto min-h-[36px] flex-row items-center ">
       <button
         type="submit"
         className="invisible"
@@ -119,7 +119,7 @@ export const TextInput = forwardRef<
         placeholder={listening ? 'Listening...' : 'Type a message'}
         onPaste={handlePasteFile}
       />
-      <MessageEditorToolbarMic className="absolute right-0 bottom-0" />
+      <MessageEditorToolbarMic className="absolute bottom-0 -right-1" />
     </div>
   );
 });
