@@ -78,7 +78,7 @@ export const TextInput = forwardRef<
           ref={inputRef}
           rows={1}
           onInput={onInput}
-          onKeyDown={(e) => {
+          onKeyUp={(e) => {
             if (e.key === 'Enter' && !e.shiftKey && text.length > 0) {
               e.preventDefault();
               triggerSubmit();
