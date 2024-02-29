@@ -49,7 +49,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
             </span>
           </div>
         )}
-        <div className="flex w-full flex-col divide-y divide-neutral-100  overflow-hidden">
+        <div className="flex w-full flex-col divide-y divide-neutral-100  overflow-x-hidden overflow-y-scroll">
           {data?.map((pin) => {
             const isMe = pin.pinnedBy._id === currentUserId;
             const message = {
@@ -61,7 +61,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                 key={pin._id}
                 className="group relative flex flex-col items-center p-3"
               >
-                <span className="ml-auto text-xs font-light text-neutral-800">
+                <span className="ml-auto text-xs font-light text-neutral-800 break-words">
                   Pinned by {isMe ? 'you' : pin.pinnedBy.name}
                 </span>
                 <div
