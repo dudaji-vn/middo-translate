@@ -15,7 +15,7 @@ export const RoomItemComingCall = ({
   const startVideoCall = useJoinCall();
   if (!isHaveMeeting) return null;
   return (
-    <div className="line-clamp-1 flex shrink-0 items-center pr-3">
+    <div className="line-clamp-1 flex shrink-0 items-center pr-3 h-full">
       <Button
         startIcon={<PhoneCallIcon />}
         onClick={() => startVideoCall(roomChatBox._id)}

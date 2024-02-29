@@ -17,7 +17,6 @@ export const SideEffectProvider = () => {
   const searchParams = useSearchParams();
   const platform = searchParams?.get(SPK_PLATFORM) || 'web';
   const notify = searchParams?.get(SPK_NOTIFY);
-  console.log('notify', notify);
   useEffect(() => {
     setMobile(isMobile);
     // eslint-disable-next-line react-hooks/exhaustive-deps

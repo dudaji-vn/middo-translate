@@ -107,7 +107,6 @@ export const MessagesBoxProvider = ({
     let intervalId: NodeJS.Timeout;
     if (notification && !isFocused) {
       intervalId = setInterval(() => {
-        console.log('notification');
         const defaultTitle = `Talk | ${NEXT_PUBLIC_NAME}`;
         document.title =
           document.title === `Talk | ${NEXT_PUBLIC_NAME}`
