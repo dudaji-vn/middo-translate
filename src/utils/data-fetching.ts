@@ -18,7 +18,6 @@ export async function fetchApi<T>(path: string, options?: RequestInit) {
       },
     });
     const data = await res.json();
-    console.log(data);
   }
   const res = await fetch(url, {
     ...options,

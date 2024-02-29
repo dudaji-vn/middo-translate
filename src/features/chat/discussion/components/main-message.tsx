@@ -55,7 +55,6 @@ const TextMessage = ({ message }: { message: Message }) => {
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
-    console.log('message', message)
     if (message.status === 'removed') {
       setContentDisplay(message.content);
       return;
