@@ -1,6 +1,7 @@
 'use client';
 import { Button } from '@/components/actions';
 import TextAnimation from '@/components/animations/text-animation';
+import { JayTextAnimation } from '@/components/jay-text-animation';
 import { HeaderNavLandingMobile } from '@/components/layout/header/header-nav-landing.mobile';
 import { navLandingPageItems } from '@/components/layout/header/header.config';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
@@ -93,33 +94,7 @@ export default function Landing() {
         }
 
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">
-          <TextAnimation
-            animateType="up"
-            element={
-              <h1 className="w-full text-center text-[32px] font-bold md:text-left md:text-[64px]" />
-            }
-            arrayText={[
-              'To break all',
-              'Phá vỡ mọi',
-              '모두 깨뜨리려면',
-              '去打破一切',
-              'Pour tout casser',
-            ]}
-          />
-          <TextAnimation
-            animateType="down"
-            element={
-              <h1 className="w-full text-center text-[32px] font-bold text-primary-500-main md:text-left md:text-[64px]" />
-            }
-            arrayText={[
-              'languages boundary',
-              'rào cản ngôn ngữ',
-              '언어 경계',
-              '语言边界',
-              'frontière des langues',
-            ]}
-          />
-
+          <JayTextAnimation />
           <p className="mt-8 text-center text-neutral-600 md:text-left">
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
