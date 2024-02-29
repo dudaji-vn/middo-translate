@@ -68,7 +68,13 @@ const ActionBar = () => {
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
+  const {
+    user,
+  } = useAuthStore();
+  const currentUserId = user?._id || '';
+  const isSelfChat = currentUserId && currentUserId === roomChatBox?.participants?.find((p) => p._id === currentUserId)?._id;
   const startVideoCall = useJoinCall();
+  if (isSelfChat) return null;
   return (
     <div>
       <Tooltip
