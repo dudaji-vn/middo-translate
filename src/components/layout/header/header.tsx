@@ -4,6 +4,7 @@ import { ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
 
@@ -39,7 +40,7 @@ export const Header = (props: Props) => {
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
             <DropdownMenuTrigger>
-              <div className="relative flex gap-2 rounded-xl bg-neutral-50 p-2 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
+              <div className="relative flex gap-2 rounded-xl bg-neutral-50 px-3 py-1 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
                 <Avatar
                   src={user.avatar || '/person.svg'}
                   size="xs"
@@ -47,7 +48,7 @@ export const Header = (props: Props) => {
                 />
 
                 <div className="line-clamp-1 hidden max-w-[200px] items-center truncate md:flex">
-                  <div className="text-sm font-medium truncate">
+                  <div className="truncate text-sm font-medium">
                     {user?.name || 'Anonymous'}
                   </div>
                 </div>
@@ -58,23 +59,19 @@ export const Header = (props: Props) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
               onClick={() => setOpenDropdown(false)}
             >
-              <Link
-                href={ROUTE_NAMES.ACCOUNT_SETTINGS}
-                className="flex items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
-              >
-                <SettingsIcon />
-                Account setting
+              <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
+                <DropdownMenuItem className="flex items-center">
+                  <SettingsIcon className="mr-2 size-4" />
+                  <span>Account setting</span>
+                </DropdownMenuItem>
               </Link>
-              <a
-                onClick={signOut}
-                className="flex cursor-pointer items-center gap-2 p-4 active:!bg-background-darker active:!text-shading md:hover:bg-[#fafafa] md:hover:text-primary"
-              >
-                <LogOutIcon />
-                Sign out
-              </a>
+
+              <DropdownMenuItem className="flex items-center">
+                <LogOutIcon className="mr-2 size-4" />
+                <span> Sign out</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
