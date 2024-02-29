@@ -14,7 +14,6 @@ import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
-import { useParams } from 'next/navigation';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
