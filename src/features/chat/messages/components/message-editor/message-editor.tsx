@@ -18,9 +18,7 @@ import { Media } from '@/types';
 import { MessageEditorForm } from './message-editor-form';
 import { MessageEditorMediaBar } from './message-editor-media-bar';
 import { MessageEditorSubmitButton } from './message-editor-submit-button';
-import {
-  MessageEditorTextProvider,
-} from './message-editor-text-context';
+import { MessageEditorTextProvider } from './message-editor-text-context';
 import { MessageEditorToolbar } from './message-editor-toolbar';
 import { useChatStore } from '@/features/chat/store';
 import { useAppStore } from '@/stores/app.store';
@@ -28,7 +26,7 @@ import { cn } from '@/utils/cn';
 import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-translate';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
-import isEqual  from 'lodash/isEqual';
+import isEqual from 'lodash/isEqual';
 import { SendIcon } from 'lucide-react';
 
 type SubmitData = {
@@ -56,6 +54,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
     const isMobile = useAppStore((state) => state.isMobile);
+    const [isMultiLine, setIsMultiLine] = useState(false);
     const [shrinkToolbar, setShrinkToolbar] = useState(false);
 
     const resetForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -138,10 +137,9 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     return (
       <MessageEditorTextProvider>
         <MessageEditorToolbarTranslateTool />
-        <div
-          className={cn('relative flex h-fit flex-row space-x-2 pr-2 ')}
-        >
+        <div className={cn('relative flex h-fit flex-row space-x-2 pr-2 ')}>
           <MessageEditorToolbar
+            isMultiline={isMultiLine}
             shrink={shrinkToolbar}
             onExpand={() => {
               setShrinkToolbar(false);
@@ -149,21 +147,28 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
           />
           <MessageEditorForm onFormSubmit={handleSubmit}>
             <div className="relative flex w-full flex-row items-end gap-2">
-              <div className="rounded-xl border border-primary bg-card p-1 px-3 shadow-sm w-full">
-                  <TextInput
-                    isToolbarShrink={shrinkToolbar}
-                    ref={textInputRef}
-                    onFocus={() => {
-                      setShrinkToolbar(isMobile);
-                    }}
-                    onBlur={() => {
-                      setShrinkToolbar(false);
-                    }}
-                  />
+              <div className="w-full rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
+                <TextInput
+                  isToolbarShrink={shrinkToolbar}
+                  isMultiline={isMultiLine}
+                  ref={textInputRef}
+                  onFocus={(e) => {
+                    setShrinkToolbar(isMobile);
+                  }}
+                  onBlur={() => {
+                    setShrinkToolbar(false);
+                  }}
+                  onKeyDown={(e) => {
+                    setIsMultiLine(e.currentTarget.scrollHeight > 24);
+                  }}
+                />
                 <MessageEditorMediaBar />
               </div>
-            <MessageEditorSubmitButton  className='invisible mb-[5px]' disabled/>
-            <MessageEditorSubmitButton  className='absolute -right-2 bottom-[1px]'/>
+              <MessageEditorSubmitButton
+                className="invisible mb-[5px]"
+                disabled
+              />
+              <MessageEditorSubmitButton className="absolute -right-2 bottom-[1px] md:bottom-[5px]" />
             </div>
           </MessageEditorForm>
         </div>
