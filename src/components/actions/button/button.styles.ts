@@ -94,7 +94,7 @@ export const IconVariants = cva('inline-block', {
       default: '',
     },
     size: {
-      xs: 'md:w-4 md:h-4 w-5 h-5',
+      xs: 'w-5 h-5',
       sm: 'w-5 h-5',
       md: 'w-6 h-6',
       lg: 'w-7 h-7',
