@@ -72,7 +72,7 @@ const VideoCall = () => {
     user,
   } = useAuthStore();
   const currentUserId = user?._id || '';
-  const isSelfChat = currentUserId && currentUserId === roomChatBox?.participants?.find((p) => p._id === currentUserId)?._id;
+  const isSelfChat = currentUserId && roomChatBox?.participants?.every((p) => p._id === currentUserId);
   const startVideoCall = useJoinCall();
   if (isSelfChat) return null;
   return (
