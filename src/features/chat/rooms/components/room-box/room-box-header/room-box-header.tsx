@@ -14,6 +14,7 @@ import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useParams } from 'next/navigation';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
@@ -68,7 +69,13 @@ const ActionBar = () => {
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
+  const {
+    user,
+  } = useAuthStore();
+  const currentUserId = user?._id || '';
+  const isSelfChat = currentUserId && currentUserId === roomChatBox?.participants?.find((p) => p._id === currentUserId)?._id;
   const startVideoCall = useJoinCall();
+  if (isSelfChat) return null;
   return (
     <div>
       <Tooltip
