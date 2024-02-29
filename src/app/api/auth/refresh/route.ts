@@ -13,7 +13,6 @@ export async function POST(request: Request) {
       Authorization: `Bearer ${refreshToken}`,
     },
   }).then((res) => res.json());
-  console.log(response);
 
   const acToken = response?.data?.accessToken;
   const rfToken = response?.data?.refreshToken;
