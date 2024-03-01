@@ -158,7 +158,7 @@ export const LanguagesControlBar = forwardRef<
             props.className,
           )}
         >
-          <div className="flex flex-1 justify-end overflow-hidden rounded-2xl border shadow-1 lg:justify-start lg:border-none lg:shadow-none">
+          <div className="flex flex-1 justify-end rounded-2xl lg:justify-start lg:overflow-hidden">
             <LanguageSelect
               onChevronClick={() => {
                 setCurrentSelect('source');
@@ -189,7 +189,7 @@ export const LanguagesControlBar = forwardRef<
               <ArrowRightLeftIcon className="text-text" />
             </Button.Icon>
           </div>
-          <div className="flex flex-1 justify-start overflow-hidden rounded-2xl border shadow-1 lg:border-none lg:shadow-none">
+          <div className="flex flex-1 justify-start rounded-2xl lg:overflow-hidden">
             <LanguageSelect
               onChange={(code) => {
                 if (isTablet) {
