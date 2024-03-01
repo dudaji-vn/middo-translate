@@ -51,53 +51,58 @@ export const SHORTCUTS: Record<
 > = {
 
     // Conversation  ===============================================
-    [SCConversation.NEW_CONVERSATION]: ['ctrl', 'n'],
-    [SCConversation.TOGGLE_CONVERSATION_SETTINGS]: ['ctrl', 'k'],
-    [SCConversation.SEARCH]: ['ctrl', 'f'],
-    [SCConversation.SWITCH_TO_ALL_TAB]: ['ctrl', 'a'],
-    [SCConversation.SWITCH_TO_GROUP_TAB]: ['ctrl', 'g'],
-    [SCConversation.VIEW_PINNED_MESSAGES]: ['ctrl', 'p'],
-    [SCConversation.VIEW_CONVERSATION_INFORMATION]: ['ctrl', 'i'],
-    [SCConversation.UPLOAD_FILES]: ['ctrl', 'u'],
-    [SCConversation.START_STOP_SPEECH_TO_TEXT]: ['ctrl', '/'],
-    [SCConversation.OPEN_EMOJI]: ['ctrl', '.'],
+    [SCConversation.NEW_CONVERSATION]: ['ctrl_or_alt', 'n'],
+    [SCConversation.TOGGLE_CONVERSATION_SETTINGS]: ['ctrl_or_alt', 'k'],
+    [SCConversation.SEARCH]: ['ctrl_or_alt', 'f'],
+    [SCConversation.SWITCH_TO_ALL_TAB]: ['ctrl_or_alt', 'a'],
+    [SCConversation.SWITCH_TO_GROUP_TAB]: ['ctrl_or_alt', 'g'],
+    [SCConversation.VIEW_PINNED_MESSAGES]: ['ctrl_or_alt', 'p'],
+    [SCConversation.VIEW_CONVERSATION_INFORMATION]: ['ctrl_or_alt', 'i'],
+    [SCConversation.UPLOAD_FILES]: ['ctrl_or_alt', 'u'],
+    [SCConversation.START_STOP_SPEECH_TO_TEXT]: ['ctrl_or_alt', '/'],
+    [SCConversation.OPEN_EMOJI]: ['ctrl_or_alt', '.'],
 
-    [SCConversation.OPEN_EDIT_TRANSLATION]: ['ctrl', 'o'], // 'dead' is the ctrl + alt + e
-    [SCConversation.SAVE_EDIT_TRANSLATION]: ['ctrl', 's'],
-    [SCConversation.CANCEL_EDIT_TRANSLATION]: ['escape'],
+    [SCConversation.OPEN_EDIT_TRANSLATION]: ['ctrl_or_alt', 'o'], // 'dead' is the ctrl + alt + e
+    [SCConversation.SAVE_EDIT_TRANSLATION]: ['ctrl_or_alt', 's'],
+    [SCConversation.CANCEL_EDIT_TRANSLATION]: ['esc'],
 
-    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['ctrl', '†'],
-    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['ctrl', ','],
+    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['ctrl_or_alt', '†'],
+    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['ctrl_or_alt', ','],
 
     // Translation  ===========================================
-    [SCTranslation.SWAP_LANGUAGES]: ['ctrl', 's'],
-    [SCTranslation.TOGGLE_HISTORY]: ['ctrl', 'h'],
-    [SCTranslation.TOGGLE_PHRASES]: ['ctrl', 'p'],
-    [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: ['ctrl', '/'],
-    [SCTranslation.EDIT_ESL_TRANSLATION]: ['ctrl', 'o'],
-    [SCTranslation.CONFIRM_ESL_TRANSLATED]: ['ctrl', 'k'],
-    [SCTranslation.TEXT_TO_SPEECH_INPUT]: ['ctrl', 'z'],
-    [SCTranslation.COPY_INPUT]: ['ctrl', 'x'],
-    [SCTranslation.TRANSLATED_TEXT_TO_SPEECH]: ['ctrl', '/'],
-    [SCTranslation.TRANSLATED_COPY]: ['ctrl', '.'],
-    [SCTranslation.COPY_ALL_TEXT]: ['ctrl', 'a'],
-    [SCTranslation.COPY_IMAGE]: ['ctrl', 'i'],
+    [SCTranslation.SWAP_LANGUAGES]: ['ctrl_or_alt', 's'],
+    [SCTranslation.TOGGLE_HISTORY]: ['ctrl_or_alt', 'h'],
+    [SCTranslation.TOGGLE_PHRASES]: ['ctrl_or_alt', 'p'],
+    [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: ['ctrl_or_alt', '/'],
+    [SCTranslation.EDIT_ESL_TRANSLATION]: ['ctrl_or_alt', 'o'],
+    [SCTranslation.CONFIRM_ESL_TRANSLATED]: ['ctrl_or_alt', 'k'],
+    [SCTranslation.TEXT_TO_SPEECH_INPUT]: ['ctrl_or_alt', 'z'],
+    [SCTranslation.COPY_INPUT]: ['ctrl_or_alt', 'x'],
+    [SCTranslation.TRANSLATED_TEXT_TO_SPEECH]: ['ctrl_or_alt', '/'],
+    [SCTranslation.TRANSLATED_COPY]: ['ctrl_or_alt', '.'],
+    [SCTranslation.COPY_ALL_TEXT]: ['ctrl_or_alt', 'a'],
+    [SCTranslation.COPY_IMAGE]: ['ctrl_or_alt', 'i'],
+
 
     // Call  ===============================================
-    [SCCall.MAXIMIZE_MINIMIZE_CALL]: ['ctrl', 'alt', 'm'], 
+    [SCCall.MAXIMIZE_MINIMIZE_CALL]: ['ctrl', 'alt', 'µ'],
     [SCCall.ADD_MEMBERS]: ['ctrl', 'alt', 'å'],
-    [SCCall.START_STOP_SCREEN_SHARING]: ['ctrl', 'alt', 's'],
-    [SCCall.TOGGLE_CAMERA]: ['ctrl', 'alt', 'c'],
-    [SCCall.TOGGLE_MICROPHONE]: ['ctrl', 'alt', 'm'],
-    [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: ['ctrl', 'alt', 'm'],
-    [SCCall.TOGGLE_DISCUSSION]: ['ctrl', 'alt', 'd'],
-    [SCCall.SWITCH_TO_GALLERY_VIEW]: ['ctrl', 'alt', 'g'],
-    [SCCall.START_STOP_SCREEN_DOODLE]: ['ctrl', 'alt', '/'],
-    [SCCall.TOGGLE_LIVE_CAPTION]: ['ctrl', 'alt', 'l'],
+    [SCCall.START_STOP_SCREEN_SHARING]: ['ctrl', 'alt', 'ß'],
+    [SCCall.TOGGLE_CAMERA]: ['ctrl', 'alt', 'ç'],
+    [SCCall.TOGGLE_MICROPHONE]: ['ctrl', 'alt', 'µ'],
+    [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: ['ctrl', 'alt', 'µ'],
+    [SCCall.TOGGLE_DISCUSSION]: ['ctrl', 'alt', '∂'],
+    [SCCall.SWITCH_TO_GALLERY_VIEW]: ['ctrl', 'alt', '©'],
+    [SCCall.START_STOP_SCREEN_DOODLE]: ['ctrl', 'alt', '÷'],
+    [SCCall.TOGGLE_LIVE_CAPTION]: ['ctrl', 'alt', '¬'],
 };
 
 
-export const MAPPED_SPECIAL_KEYS: Record<string, string> = {
+export const MAPPED_MAC_KEYS: Record<string, string> = {
+    'ctrl_or_alt': 'ctrl'
+};
+
+export const SPECIAL_KEYS: Record<string, string> = {
     'dead': 'e',
     '†': 't',
     'π': 'p',
@@ -110,6 +115,14 @@ export const MAPPED_SPECIAL_KEYS: Record<string, string> = {
     '©': 'g',
     '÷': '/',
     '¬': 'l',
+    'ctrl': 'Control',
+    'alt': 'Option',
+};
+
+
+export const MAPPED_WIN_KEYS: Record<string, string> = {
+    'ctrl_or_alt': 'alt',
+    ...SPECIAL_KEYS,
 };
 
 

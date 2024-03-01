@@ -29,7 +29,7 @@ export interface SearchInputRef extends HTMLInputElement {
 export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
   ({ btnDisabled, defaultValue, onClear, ...props }, ref) => {
     const [value, setValue] = useState(defaultValue || '');
-    const { changeSide } = useSidebarTabs();
+    const { changeSide, currentSide } = useSidebarTabs();
     const inputRef = useRef<HTMLInputElement>(null);
     const handleClear = useCallback(() => {
       setValue('');
@@ -39,8 +39,8 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
     useKeyboardShortcut(
       [SHORTCUTS.SEARCH, SHORTCUTS.NEW_CONVERSATION],
       (_, mathedKeys) => {
-        if (isEqual(mathedKeys, SHORTCUTS.SEARCH)) {
-        changeSide('individual');
+        if (isEqual(mathedKeys, SHORTCUTS.NEW_CONVERSATION)) {
+          changeSide('individual');
         }
         inputRef.current?.focus();
       },
@@ -64,6 +64,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             ref={inputRef}
             type="text"
             {...props}
+            autoFocus
             onChange={(e) => {
               props.onChange?.(e);
               setValue(e.target.value);
