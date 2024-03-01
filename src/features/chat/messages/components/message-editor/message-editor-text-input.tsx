@@ -17,11 +17,10 @@ export const TextInput = forwardRef<
   TextInputRef,
   React.HTMLProps<HTMLTextAreaElement> & {
     isToolbarShrink?: boolean;
-    isMultiline?: boolean;
   }
 >(
   (
-    { isToolbarShrink, onKeyDown, onBlur, onFocus, isMultiline, ...props },
+    { isToolbarShrink, onKeyDown, onBlur, onFocus, ...props },
     ref,
   ) => {
     const {
@@ -30,7 +29,6 @@ export const TextInput = forwardRef<
       setMiddleText,
       handleStopListening,
       listening,
-      inputDisabled,
     } = useMessageEditorText();
     const isMobile = useAppStore((state) => state.isMobile);
     const { setAllowShortcutListener } = useShortcutListenStore();

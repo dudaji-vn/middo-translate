@@ -52,7 +52,6 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
     const isMobile = useAppStore((state) => state.isMobile);
-    const [isMultiLine, setIsMultiLine] = useState(false);
     const [shrinkToolbar, setShrinkToolbar] = useState(false);
 
     const resetForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -135,20 +134,18 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     return (
       <MessageEditorTextProvider>
         <MessageEditorToolbarTranslateTool />
-        <div className={cn('relative flex h-fit flex-row space-x-2 pr-2 ')}>
+        <div className={cn('relative flex h-fit flex-row space-x-2')}>
           <MessageEditorToolbar
-            isMultiline={isMultiLine}
             shrink={shrinkToolbar}
             onExpand={() => {
               setShrinkToolbar(false);
             }}
           />
           <MessageEditorForm onFormSubmit={handleSubmit}>
-            <div className="relative flex w-full flex-row items-end gap-2">
+            <div className="relative flex w-full flex-row items-end">
               <div className="w-full rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
                 <TextInput
                   isToolbarShrink={shrinkToolbar}
-                  isMultiline={isMultiLine}
                   ref={textInputRef}
                   onFocus={(e) => {
                     setShrinkToolbar(isMobile);
@@ -156,17 +153,12 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
                   onBlur={() => {
                     setShrinkToolbar(false);
                   }}
-                  onKeyDown={(e) => {
-                    setIsMultiLine(e.currentTarget.scrollHeight > 24);
-                  }}
                 />
                 <MessageEditorMediaBar />
               </div>
-              <MessageEditorSubmitButton
-                className="invisible mb-[5px]"
-                disabled
-              />
-              <MessageEditorSubmitButton className="absolute -right-2 bottom-[1px] md:bottom-[5px]" />
+              <div className="relative h-full w-fit flex flex-row items-end pb-[1px] md:pb-[5px]">
+                <MessageEditorSubmitButton className='ml-2'/>
+              </div>
             </div>
           </MessageEditorForm>
         </div>

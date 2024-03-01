@@ -19,7 +19,7 @@ export const useKeyboardShortcut = (
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (!isFocused && (allowShortcutListener || ignoreFocusingInputs)
+      if ((allowShortcutListener || ignoreFocusingInputs) || ((isFocused || !allowShortcutListener ) &&  event?.ctrlKey )
       ) {
         keysSet?.some((keys) => {
           if (keys?.every(
