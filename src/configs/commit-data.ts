@@ -1,1 +1,1 @@
-export const COMMIT_SHA = '37749e8a470d9c47243fecc42371c16a13303da3'
+export const COMMIT_SHA = ''
