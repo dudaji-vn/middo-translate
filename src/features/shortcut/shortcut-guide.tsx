@@ -9,7 +9,7 @@ import {
   SCTranslation,
   SHORTCUTS,
   SHORTCUT_CONTENTS,
-  SPECIAL_KEYS_CONTENT,
+  MAPPED_SPECIAL_KEYS,
   ShortcutInfo,
 } from '@/types/shortcuts';
 import { Info } from 'lucide-react';
@@ -25,7 +25,7 @@ const generateShortcuts = (
   Object.values(shortcutType).map(
     (shortcut: SCConversation | SCTranslation | SCCall) => ({
       ...SHORTCUT_CONTENTS[shortcut],
-      shortcut: SPECIAL_KEYS_CONTENT[shortcut] || SHORTCUTS[shortcut],
+      shortcut: SHORTCUTS[shortcut],
     }),
   );
 
@@ -49,7 +49,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
                 key={key}
                 className="mx-1 my-1 inline-block min-h-10 cursor-default rounded-md bg-gray-100 px-4 py-2 text-base font-semibold capitalize text-gray-700 shadow-md dark:bg-gray-800 dark:text-gray-300"
               >
-                {key}
+                {MAPPED_SPECIAL_KEYS[key] || key}
               </span>
             ))}
           </div>
