@@ -68,7 +68,7 @@ export const Header = (props: Props) => {
                 </DropdownMenuItem>
               </Link>
 
-              <DropdownMenuItem className="flex items-center">
+              <DropdownMenuItem className="flex items-center" onClick={signOut}>
                 <LogOutIcon className="mr-2 size-4" />
                 <span> Sign out</span>
               </DropdownMenuItem>
