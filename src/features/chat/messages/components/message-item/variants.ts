@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const messageVariants = cva(
-  'w-fit relative overflow-hidden rounded-[20px] max-w-xl',
+  'w-fit relative overflow-hidden rounded-[20px]',
   {
     variants: {
       sender: {

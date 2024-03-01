@@ -25,7 +25,7 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
       {message.type !== 'call' && (
         <div className="flex items-center gap-2">
           <Avatar size="xs" src={sender.avatar} alt={sender.name} />
-          <span className="text-sm font-semibold">{sender.name}</span>
+          <span className="text-sm font-semibold break-words max-w-80">{sender.name}</span>
         </div>
       )}
       <div className={cn(message.type !== 'call' ? 'ml-8' : '')}>
@@ -71,11 +71,7 @@ const TextMessage = ({ message }: { message: Message }) => {
     translateContent();
   }, [
     userLanguage,
-    message.content,
-    message.sender.language,
-    message.contentEnglish,
-    message.status,
-    message.language,
+    message
   ]);
   return (
     <div className="flex flex-col">

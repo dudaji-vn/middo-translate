@@ -60,7 +60,7 @@ export default function AccountSettings() {
             </div>
           )}
         </div>
-        <h2 className="mt-5 text-center text-base">
+        <h2 className="mt-5 text-center text-base  w-full px-4 break-words">
           {user?.name || 'Anonymous'}
         </h2>
         <p className="text-center text-base text-[#333]">{user?.email || ''}</p>

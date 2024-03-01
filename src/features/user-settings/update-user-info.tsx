@@ -10,17 +10,19 @@ import {
 import { AlertError } from '@/components/alert/alert-error';
 import { Button } from '@/components/actions';
 import { Edit2Icon } from 'lucide-react';
-import { InputField } from '@/components/form/Input-field';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
 import { PageLoading } from '@/components/loading/page-loading';
 import { User } from '../users/types';
-import { UpdateInforSchema as schema } from '@/configs/yup-form';
+import { updateInforSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useEffect, useState } from 'react';
+import { Form } from '@/components/ui/form';
+import RHFInputField from '@/components/form/RHF/RHFInputField/RHFInputField';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function UpdateUserInfo() {
   const [loading, setLoading] = useState(false);
@@ -29,26 +31,26 @@ export default function UpdateUserInfo() {
   const [errorMessage, setErrorMessage] = useState('');
   const user = userData as User;
 
-  const {
-    register,
-    watch,
-    trigger,
-    setValue,
-    formState: { errors, isValid },
-  } = useForm({
+  const form = useForm({
     mode: 'onBlur',
     defaultValues: {
       name: user?.name || '',
       language: user?.language || '',
     },
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
   });
-
-  const submit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    trigger,
+    setValue,
+    formState: { errors, isValid, isSubmitting },
+  } = form;
+  const { name, language } = watch();
+  const submit = async (values: z.infer<typeof schema>) => {
     trigger();
     if (!isValid) return;
-    const { name, language } = watch();
     if (name == user?.name && language == user?.language) return;
     try {
       setLoading(true);
@@ -71,12 +73,18 @@ export default function UpdateUserInfo() {
       setValue('language', user.language);
     }
   };
-
   const onModalChange = () => {
     setOpen(!open);
     setValue('name', user.name);
     setValue('language', user.language);
   };
+
+
+  useEffect(() => {
+    if (name?.length >= 60) {
+      setValue('name', name.slice(0, 60));
+    }
+  }, [name,setValue]);
 
   return (
     <>
@@ -84,7 +92,7 @@ export default function UpdateUserInfo() {
       <AlertDialog open={open} onOpenChange={onModalChange}>
         <AlertDialogTrigger>
           <div className="cursor-pointer transition-all hover:opacity-80">
-            <div className="inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0 transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-semibold text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:bg-primary-100 disabled:text-primary-200 rounded-full p-0 w-12 h-12">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-200 p-0 font-semibold text-primary ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:bg-primary-400 disabled:pointer-events-none disabled:bg-primary-100 disabled:text-primary-200 disabled:opacity-50 md:hover:bg-primary-300 md:active:bg-primary-400">
               <Edit2Icon />
             </div>
             <span className="mt-2 block text-center text-sm font-light">
@@ -93,40 +101,55 @@ export default function UpdateUserInfo() {
           </div>
         </AlertDialogTrigger>
         <AlertDialogContent>
-          <form onSubmit={submit}>
-            <h3 className="text-[24px]">Edit profile</h3>
-            <InputField
-              label="Name"
-              type="text"
-              placeholder="Enter your name"
-              className="mt-4"
-              register={{ ...register('name') }}
-              errors={errors.name}
-            ></InputField>
-            <InputSelectLanguage
-              className="mt-5"
-              field="language"
-              setValue={setValue}
-              errors={errors.language}
-              trigger={trigger}
-              defaultValue={user.language || ''}
-            ></InputSelectLanguage>
-            <AlertError errorMessage={errorMessage}></AlertError>
-            <div className="mt-6 flex items-center justify-end">
-              <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
-                <p>Cancel</p>
-              </AlertDialogCancel>
-              <Button
-                shape="square"
-                disabled={
-                  user.name == watch().name && user.language == watch().language
-                }
-                type="submit"
-              >
-                Save
-              </Button>
-            </div>
-          </form>
+          <Form {...form}>
+            <form onSubmit={handleSubmit(submit)} className="space-y-4">
+              <h3 className="text-[24px]">Edit profile</h3>
+              <RHFInputField
+                name="name"
+                formLabel="Name"
+                inputProps={{
+                  placeholder: 'Enter your name',
+                  suffix: (
+                    <span className="text-sm text-gray-400">{`${name?.length}/60`}</span>
+                  ),
+                  onKeyDown: (e) => {
+                    if (
+                      name?.length >= 60 &&
+                      e.key !== 'Backspace' &&
+                      e.key !== 'Delete'
+                    ) {
+                      e.preventDefault();
+                    }
+                  },
+                }}
+              />
+              <InputSelectLanguage
+                className="mt-5"
+                field="language"
+                setValue={setValue}
+                errors={errors.language}
+                trigger={trigger}
+                defaultValue={user.language || ''}
+              />
+              <AlertError errorMessage={errorMessage}></AlertError>
+              <div className="mt-6 flex items-center justify-end">
+                <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
+                  <p>Cancel</p>
+                </AlertDialogCancel>
+                <Button
+                  shape="square"
+                  disabled={
+                    user.name == watch().name &&
+                    user.language == watch().language
+                    || isSubmitting
+                  }
+                  type="submit"
+                >
+                  Save
+                </Button>
+              </div>
+            </form>
+          </Form>
         </AlertDialogContent>
       </AlertDialog>
     </>

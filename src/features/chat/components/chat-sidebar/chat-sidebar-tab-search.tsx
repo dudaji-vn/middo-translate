@@ -25,7 +25,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
       users: User[];
     }>(searchApi.inboxes, 'chat-search', value || '');
     return (
-      <div className="absolute left-0 top-[106px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3">
+      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
         <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

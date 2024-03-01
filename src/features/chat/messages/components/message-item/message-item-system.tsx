@@ -11,14 +11,15 @@ export const MessageItemSystem = ({
   isMe,
 }: MessageItemSystemProps) => {
   const { changeTab } = useRoomSidebarTabs();
+  const messageContent = `${
+    isMe ? 'You' : message.sender.name
+  } ${message?.content}`;
   return (
     <div className="mx-auto">
       <span className="text-sm font-light text-neutral-500">
-        {isMe ? 'You' : message.sender.name}
-        {' ' + message.content}
-
+        {messageContent}
         {message.targetUsers?.map((user, index) => {
-          return index === 0 ? ' ' + user.name : ', ' + user.name;
+          return !index ? ' ' + user.name : ', ' + user.name;
         })}
       </span>
       {message.content.includes('pin') &&
@@ -27,7 +28,7 @@ export const MessageItemSystem = ({
             onClick={() => changeTab('pinned')}
             className="cursor-pointer text-sm text-primary active:text-primary-700 md:hover:text-primary-600"
           >
-            View
+            &nbsp;View
           </span>
         )}
     </div>

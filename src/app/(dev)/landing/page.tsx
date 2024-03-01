@@ -1,20 +1,23 @@
 'use client';
 import { Button } from '@/components/actions';
 import TextAnimation from '@/components/animations/text-animation';
+import { JayTextAnimation } from '@/components/jay-text-animation';
 import { HeaderNavLandingMobile } from '@/components/layout/header/header-nav-landing.mobile';
 import { navLandingPageItems } from '@/components/layout/header/header.config';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
-import { ArrowRightFromLine, Sparkles, StarIcon } from 'lucide-react';
+import { ArrowRightFromLine, Sparkles, StarIcon, Play } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function Landing() {
   const [isScrollDown, setScrollDown] = useState(false);
   const isMobile = useAppStore((state) => state.isMobile);
+  const videoRef = useRef<any>();
+  const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
   useEffect(() => {
     const changeClass = () => {
       const scrollValue = document.documentElement.scrollTop;
@@ -30,6 +33,14 @@ export default function Landing() {
       window.removeEventListener('scroll', changeClass);
     };
   }, []);
+  useEffect(() => {
+    if (!videoRef.current) {
+      return;
+    }
+    videoRef.current.addEventListener('play', () => {
+      setIsPlayVideo(true);
+    });
+  }, [videoRef.current]);
 
   const handleScroll = (href: string) => {
     const targetElement = document.getElementById(href);
@@ -82,44 +93,38 @@ export default function Landing() {
           </div>
         )}
       </div>
-      <div className=" h-fit w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
-        {
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src="/landing-page/group.png"
-            alt=""
-            className="object-contain md:w-[44%]"
-          />
-        }
+      <div className="h-fit w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
+        <div className="relative h-fit md:w-[44%] md:min-w-[44%]">
+          {!isPlayVideo && (
+            <div
+              onClick={() => {
+                if (videoRef.current) videoRef.current.play();
+              }}
+              className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer"
+            >
+              <div className="z-10 cursor-pointer rounded-full bg-white/60 p-3 hover:bg-primary-500-main/60">
+                <Play className="size-7" color="white" />
+              </div>
+            </div>
+          )}
+
+          <video
+            ref={videoRef}
+            className="video-intro w-full object-contain before:!bg-none"
+            width="100%"
+            height="auto"
+            controls
+            autoPlay
+            loop
+            poster="/landing-page/group.png"
+          >
+            <source src="/video/video-middo-intro.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
 
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">
-          <TextAnimation
-            animateType="up"
-            element={
-              <h1 className="w-full text-center text-[32px] font-bold md:text-left md:text-[64px]" />
-            }
-            arrayText={[
-              'To break all',
-              'Phá vỡ mọi',
-              '모두 깨뜨리려면',
-              '去打破一切',
-              'Pour tout casser',
-            ]}
-          />
-          <TextAnimation
-            animateType="down"
-            element={
-              <h1 className="w-full text-center text-[32px] font-bold text-primary-500-main md:text-left md:text-[64px]" />
-            }
-            arrayText={[
-              'languages boundary',
-              'rào cản ngôn ngữ',
-              '언어 경계',
-              '语言边界',
-              'frontière des langues',
-            ]}
-          />
-
+          <JayTextAnimation />
           <p className="mt-8 text-center text-neutral-600 md:text-left">
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}

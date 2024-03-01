@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeftIcon, PenSquareIcon, Settings } from 'lucide-react';
 import { SPK_CHAT_TAB, SPK_SEARCH } from '../../configs';
 import { SearchInput, SearchInputRef } from '@/components/data-entry';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { ChatSettingMenu } from '../chat-setting';
@@ -22,6 +22,14 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     removeParam,
     removeParams,
   } = useSidebarTabs();
+  const [openSetting, setOpenSetting] = useState(false);
+  const handleToggleSetting = () => {
+    setOpenSetting((prev) => !prev);
+  };
+  useKeyboardShortcut(
+    [SHORTCUTS.TOGGLE_CONVERSATION_SETTINGS],
+    handleToggleSetting,
+  );
   const searchValue = searchParams?.get(SPK_SEARCH);
   const isSearch = currentSide === 'search';
   const searchInputRef = useRef<SearchInputRef>(null);
@@ -63,7 +71,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           <Tooltip
             title="Settings"
             triggerItem={
-              <ChatSettingMenu>
+              <ChatSettingMenu open={openSetting} onOpenChange={setOpenSetting}>
                 <Button.Icon color="default" size="xs">
                   <Settings />
                 </Button.Icon>

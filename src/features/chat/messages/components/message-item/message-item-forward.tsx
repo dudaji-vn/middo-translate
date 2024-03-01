@@ -37,11 +37,10 @@ export const MessageItemForward = ({
         </div>
       )}
       <div className="order-neutral-100 ml-auto w-fit rounded-2xl border p-2">
-        <div>
           <div className="text-sm">
-            <span className="italic text-neutral-400">Forward from</span>
+            <span className="italic text-neutral-400">Forward from&nbsp;</span>
             <Wrapper room={message.room!}>
-              <span className="text-primary">{displayForwardFrom}</span>
+              <span className="text-primary max-md:inline-block break-all">{displayForwardFrom}</span>
             </Wrapper>
             <div className="mt-1">
               {message.content && <TextMessage message={message} />}
@@ -57,7 +56,6 @@ export const MessageItemForward = ({
               )}
             </div>
           </div>
-        </div>
       </div>
       {hasParent && isMe && (
         <div>

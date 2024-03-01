@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0  transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-semibold',
+  'inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0  transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-medium',
   {
     variants: {
       variant: {
@@ -75,7 +75,7 @@ export const buttonVariants = cva(
 export const IconButtonVariants = cva('p-0', {
   variants: {
     size: {
-      xs: 'w-9 h-9',
+      xs: 'md:w-9 md:h-9 w-11 h-11',
       sm: 'w-11 h-11',
       md: 'w-12 h-12',
       lg: 'w-[60px] h-[60px]',
@@ -89,7 +89,7 @@ export const IconButtonVariants = cva('p-0', {
 export const IconVariants = cva('inline-block', {
   variants: {
     type: {
-      left: 'mr-[0.625rem] -ml-1',
+      left: 'mr-[0.625rem]',
       right: 'ml-2',
       default: '',
     },

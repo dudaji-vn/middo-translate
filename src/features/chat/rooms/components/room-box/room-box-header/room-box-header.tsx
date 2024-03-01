@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/actions';
 import { useAuthStore } from '@/stores/auth.store';
-import { AlertCircleIcon, Phone } from 'lucide-react';
+import { AlertCircleIcon, Phone, PhoneCallIcon } from 'lucide-react';
 import { useCallback, useMemo } from 'react';
 import { useChatBox } from '../../../contexts';
 import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
@@ -32,7 +32,7 @@ export const ChatBoxHeader = () => {
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
-      <div className="ml-auto mr-3 flex items-center gap-1">
+      <div className="ml-auto mr-1 flex items-center gap-1">
         <VideoCall />
         <Tooltip title="Info" triggerItem={<ActionBar />} />
       </div>
@@ -46,8 +46,11 @@ const ActionBar = () => {
   const handleToggleInfo = useCallback(() => {
     toggleTab('info');
   }, [toggleTab]);
-  
-  useKeyboardShortcut([SHORTCUTS.VIEW_CONVERSATION_INFORMATION], handleToggleInfo);
+
+  useKeyboardShortcut(
+    [SHORTCUTS.VIEW_CONVERSATION_INFORMATION],
+    handleToggleInfo,
+  );
 
   return (
     <div>
@@ -65,7 +68,13 @@ const ActionBar = () => {
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
+  const {
+    user,
+  } = useAuthStore();
+  const currentUserId = user?._id || '';
+  const isSelfChat = currentUserId && roomChatBox?.participants?.every((p) => p._id === currentUserId);
   const startVideoCall = useJoinCall();
+  if (isSelfChat) return null;
   return (
     <div>
       <Tooltip
@@ -86,12 +95,13 @@ const VideoCall = () => {
       <Button
         onClick={() => startVideoCall(roomChatBox?._id)}
         size="xs"
-        color={isHaveMeeting ? 'secondary' : 'primary'}
+        shape={'square'}
+        color={isHaveMeeting ? 'primary' : 'secondary'}
         variant={isHaveMeeting ? 'default' : 'ghost'}
         className={`${isHaveMeeting ? '' : 'hidden'}`}
-        startIcon={<Phone />}
+        startIcon={isHaveMeeting ? <PhoneCallIcon /> : <Phone />}
       >
-        Join call
+        Join
       </Button>
     </div>
   );

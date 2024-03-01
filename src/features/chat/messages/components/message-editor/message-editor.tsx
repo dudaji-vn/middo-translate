@@ -1,6 +1,12 @@
 'use client';
 
-import { HTMLAttributes, forwardRef, useImperativeHandle, useRef } from 'react';
+import {
+  HTMLAttributes,
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { TextInput, TextInputRef } from './message-editor-text-input';
 import { detectLanguage, translateText } from '@/services/languages.service';
 
@@ -13,6 +19,13 @@ import { MessageEditorSubmitButton } from './message-editor-submit-button';
 import { MessageEditorTextProvider } from './message-editor-text-context';
 import { MessageEditorToolbar } from './message-editor-toolbar';
 import { useChatStore } from '@/features/chat/store';
+import { useAppStore } from '@/stores/app.store';
+import { cn } from '@/utils/cn';
+import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-translate';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import isEqual from 'lodash/isEqual';
+import { SendIcon } from 'lucide-react';
 
 type SubmitData = {
   content: string;
@@ -38,6 +51,8 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const textInputRef = useRef<TextInputRef>(null);
     const setSrcLang = useChatStore((s) => s.setSrcLang);
     const srcLang = useChatStore((s) => s.srcLang);
+    const isMobile = useAppStore((state) => state.isMobile);
+    const [shrinkToolbar, setShrinkToolbar] = useState(false);
 
     const resetForm = (e: React.FormEvent<HTMLFormElement>) => {
       e?.currentTarget?.reset();
@@ -97,20 +112,56 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       },
     }));
 
+    const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
+      useChatStore();
+    useKeyboardShortcut(
+      [
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION,
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW,
+      ],
+      (_, matchedKey) => {
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION)) {
+          toggleShowMiddleTranslation();
+          return;
+        }
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW)) {
+          toggleShowTranslateOnType();
+        }
+      },
+      true,
+    );
+
     return (
       <MessageEditorTextProvider>
-        <MessageEditorToolbar />
-        <MessageEditorForm onFormSubmit={handleSubmit}>
-          <div className="relative flex w-full items-center gap-2">
-            <div className="flex-1 items-center gap-2 rounded-[1.5rem] border border-primary bg-card p-1 px-4 shadow-sm">
-              <div className="flex min-h-9 flex-1">
-                <TextInput ref={textInputRef} />
+        <MessageEditorToolbarTranslateTool />
+        <div className={cn('relative flex h-fit flex-row space-x-2')}>
+          <MessageEditorToolbar
+            shrink={shrinkToolbar}
+            onExpand={() => {
+              setShrinkToolbar(false);
+            }}
+          />
+          <MessageEditorForm onFormSubmit={handleSubmit}>
+            <div className="relative flex w-full flex-row items-end">
+              <div className="w-full rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
+                <TextInput
+                  isToolbarShrink={shrinkToolbar}
+                  ref={textInputRef}
+                  onFocus={(e) => {
+                    setShrinkToolbar(isMobile);
+                  }}
+                  onBlur={() => {
+                    setShrinkToolbar(false);
+                  }}
+                />
+                <MessageEditorMediaBar />
               </div>
-              <MessageEditorMediaBar />
+              <div className="relative h-full w-fit flex flex-row items-end pb-[1px] md:pb-[5px]">
+                <MessageEditorSubmitButton className='ml-2'/>
+              </div>
             </div>
-            <MessageEditorSubmitButton />
-          </div>
-        </MessageEditorForm>
+          </MessageEditorForm>
+        </div>
       </MessageEditorTextProvider>
     );
   },

@@ -1,77 +1,138 @@
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
 import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
+import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
+import { cn } from '@/utils/cn';
+import { useAppStore } from '@/stores/app.store';
 
-export interface TextInputRef extends HTMLInputElement {
+export interface TextInputRef extends HTMLTextAreaElement {
   reset: () => void;
   focus: () => void;
+  onSubmit?: () => void;
 }
+
 export const TextInput = forwardRef<
   TextInputRef,
-  React.HTMLProps<HTMLInputElement>
->((props, ref) => {
-  const {
-    text,
-    setText,
-    setMiddleText,
-    handleStopListening,
-    listening,
-    inputDisabled,
-  } = useMessageEditorText();
-  const { setAllowShortcutListener } = useShortcutListenStore();
-
-  const { handlePasteFile, getInputProps } = useMediaUpload();
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  useImperativeHandle(
+  React.HTMLProps<HTMLTextAreaElement> & {
+    isToolbarShrink?: boolean;
+  }
+>(
+  (
+    { isToolbarShrink, onKeyDown, onBlur, onFocus, ...props },
     ref,
-    () => ({
-      ...(inputRef.current as HTMLInputElement),
-      reset: () => {
-        setText('');
-        setMiddleText('');
-        handleStopListening();
-      },
-      focus: () => {
-        inputRef.current?.focus();
-      },
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  ) => {
+    const {
+      text,
+      setText,
+      setMiddleText,
+      handleStopListening,
+      listening,
+    } = useMessageEditorText();
+    const isMobile = useAppStore((state) => state.isMobile);
+    const { setAllowShortcutListener } = useShortcutListenStore();
 
-  return (
-    <>
-      <div className="relative flex-1">
-        <input
+    const { handlePasteFile } = useMediaUpload();
+
+    const inputRef = useRef<HTMLTextAreaElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const triggerSubmit = () => {
+      buttonRef.current?.click();
+    };
+    const onInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+      if (text.length === 0) return;
+      if (e.currentTarget.scrollHeight < 100) {
+        e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+      } else {
+        e.currentTarget.style.height = '120px';
+      }
+    };
+    useImperativeHandle(
+      ref,
+      () => ({
+        ...(inputRef.current as HTMLTextAreaElement),
+        reset: () => {
+          setText('');
+          setMiddleText('');
+          handleStopListening();
+        },
+        focus: () => {
+          inputRef.current?.focus();
+        },
+      }),
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [],
+    );
+    useEffect(() => {
+      if (text.length === 0) {
+        inputRef.current?.style.setProperty('height', '24px');
+      }
+    }, [text]);
+
+    return (
+      <div
+        className={cn(
+          'relative flex  min-h-[36px]  w-full flex-row items-center',
+        )}
+      >
+        <button
+          type="submit"
+          className="invisible"
+          ref={buttonRef}
+          onClick={triggerSubmit}
+        />
+        <textarea
           id="message-editor-input"
           ref={inputRef}
+          rows={1}
+          onInput={onInput}
           {...props}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && !e.shiftKey && text.length > 0) {
+              e.preventDefault();
+              triggerSubmit();
+            }
+            onKeyDown?.(e);
+          }}
           value={text}
-          onFocus={() => setAllowShortcutListener(false)}
-          onBlur={() => setAllowShortcutListener(true)}
+          onFocus={(e) => {
+            if (listening) {
+              handleStopListening();
+            }
+            setAllowShortcutListener(false);
+            onFocus?.(e);
+            onInput(e);
+          }}
+          onBlur={(e) => {
+            setAllowShortcutListener(true);
+            if (isMobile) e.currentTarget.style.height = '24px';
+            onBlur?.(e);
+          }}
+          style={{
+            resize: 'none',
+          }}
           onChange={(e) => {
             setText(e.target.value);
             setMiddleText('');
           }}
-          className="h-full w-full bg-transparent outline-none"
+          className={cn(
+            ' w-[calc(100%-30px)] bg-transparent outline-none',
+            !isToolbarShrink && isMobile
+              ? 'line-clamp-1 truncate text-ellipsis'
+              : '',
+          )}
           autoComplete="off"
           name="message"
-          type="text"
           placeholder={listening ? 'Listening...' : 'Type a message'}
           onPaste={handlePasteFile}
         />
-        {listening && (
-          <div className="absolute left-0 top-0 h-full w-full"></div>
-        )}
+        <MessageEditorToolbarMic
+          className={'absolute  -bottom-1 -right-2 md:-bottom-0'}
+        />
       </div>
-      {inputDisabled && (
-        <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80"></div>
-      )}
-    </>
-  );
-});
+    );
+  },
+);
 
 TextInput.displayName = 'TextInput';
