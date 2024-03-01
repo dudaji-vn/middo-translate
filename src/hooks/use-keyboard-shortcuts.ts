@@ -16,7 +16,6 @@ export const useKeyboardShortcut = (
     isFocused
   } = useTranslateStore();
   const { allowShortcutListener } = useShortcutListenStore();
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((allowShortcutListener || ignoreFocusingInputs) || ((isFocused || !allowShortcutListener ) &&  event?.ctrlKey )

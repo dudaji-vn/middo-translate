@@ -11,21 +11,23 @@ import {
   SHORTCUTS,
   SHORTCUT_CONTENTS,
   MAPPED_SPECIAL_KEYS,
-  ShortcutInfo,
 } from '@/types/shortcuts';
 import { HelpCircle, Info } from 'lucide-react';
 import React from 'react';
 
 type ShortcutSectionProps = {
   title: string;
-  shortcuts: ShortcutInfo[];
+  shortcuts: Array<{
+    content: string;
+    shortcut: string[];
+  }>;
 };
 const generateShortcuts = (
   shortcutType: typeof SCConversation | typeof SCTranslation | typeof SCCall,
 ) =>
   Object.values(shortcutType).map(
     (shortcut: SCConversation | SCTranslation | SCCall) => ({
-      ...SHORTCUT_CONTENTS[shortcut],
+      content: SHORTCUT_CONTENTS[shortcut],
       shortcut: SHORTCUTS[shortcut],
     }),
   );
@@ -42,7 +44,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
       <div key={index}>
         <div className="flex flex-row items-baseline justify-between">
           <Typography variant={'h3'} className="text-[1.2rem] font-normal">
-            {item.title}
+            {item.content}
           </Typography>
           <div className="mt-1 flex w-fit flex-row">
             {item.shortcut?.map((key) => (
@@ -50,12 +52,11 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
                 key={key}
                 className="mx-1 my-1 inline-block min-h-10 cursor-default rounded-md bg-gray-100 px-4 py-2 text-base font-semibold capitalize text-gray-700 shadow-md dark:bg-gray-800 dark:text-gray-300"
               >
-                {MAPPED_SPECIAL_KEYS[key] || key}
+                {key}
               </span>
             ))}
           </div>
         </div>
-        <Typography className="text-gray-500">{item.description}</Typography>
       </div>
     ))}
   </section>
