@@ -1,4 +1,4 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { ChangeEvent, EventHandler, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
@@ -38,8 +38,8 @@ export const TextInput = forwardRef<
     const triggerSubmit = () => {
       buttonRef.current?.click();
     };
-    const onInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
-      if (text.length === 0) return;
+    const onScale: EventHandler<ChangeEvent<HTMLTextAreaElement>> = (e) => {
+      if (e.target?.value?.length === 0) return;
       if (e.currentTarget.scrollHeight < 100) {
         e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
       } else {
@@ -84,7 +84,7 @@ export const TextInput = forwardRef<
           id="message-editor-input"
           ref={inputRef}
           rows={1}
-          onInput={onInput}
+          onInput={onScale}
           {...props}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey && text.length > 0) {
@@ -99,7 +99,7 @@ export const TextInput = forwardRef<
               handleStopListening();
             }
             onFocus?.(e);
-            onInput(e);
+            onScale(e);
           }}
           onBlur={(e) => {
             if (isMobile) e.currentTarget.style.height = '24px';
@@ -109,6 +109,7 @@ export const TextInput = forwardRef<
             resize: 'none',
           }}
           onChange={(e) => {
+            onScale(e);
             setText(e.target.value);
             setMiddleText('');
           }}

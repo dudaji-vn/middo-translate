@@ -12,8 +12,6 @@ import { Globe2Icon } from 'lucide-react';
 import { useChatStore } from '@/features/chat/store';
 import { useMessageEditorText } from './message-editor-text-context';
 import { useState } from 'react';
-import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface MessageEditorToolbarLangControlProps {}
 
@@ -25,9 +23,6 @@ export const MessageEditorToolbarLangControl = (
   const [openSwicthLanguage, setOpenSwicthLanguage] = useState(false);
 
 
-  useKeyboardShortcut([SHORTCUTS.SWITCH_INPUT_LANGUAGE], () => {
-    setOpenSwicthLanguage(prev => !prev);
-  });
 
   return (
     <div>

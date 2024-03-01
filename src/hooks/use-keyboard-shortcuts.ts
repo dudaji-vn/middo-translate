@@ -3,9 +3,10 @@
 import { useShortcutListenStore } from "@/stores/shortcut-listen.store";
 import { useTranslateStore } from "@/stores/translate.store";
 import { MAPPED_SPECIAL_KEYS } from "@/types/shortcuts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type Key = "shift" | string;
+type OS = "MAC" | "WINDOWS";
 
 export const useKeyboardShortcut = (
   keysSet: Array<Key[]>,
@@ -16,9 +17,18 @@ export const useKeyboardShortcut = (
     isFocused
   } = useTranslateStore();
   const { allowShortcutListener } = useShortcutListenStore();
+  const [os, setOS] = useState('');
+
+  useEffect(() => {
+    const detectOS = () => {
+      const { userAgent } = window.navigator;
+      setOS(/Mac/.test(userAgent) ? "MAC" : "WINDOWS");
+    };
+    detectOS();
+  }, []);
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((allowShortcutListener || ignoreFocusingInputs) || ((isFocused || !allowShortcutListener ) &&  event?.ctrlKey )
+      if ((allowShortcutListener || ignoreFocusingInputs) || ((isFocused || !allowShortcutListener) && event?.ctrlKey)
       ) {
         keysSet?.some((keys) => {
           if (keys?.every(
