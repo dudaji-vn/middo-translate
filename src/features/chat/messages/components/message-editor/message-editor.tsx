@@ -3,9 +3,7 @@
 import {
   HTMLAttributes,
   forwardRef,
-  useEffect,
   useImperativeHandle,
-  useMemo,
   useRef,
   useState,
 } from 'react';

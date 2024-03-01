@@ -52,9 +52,10 @@ export const SHORTCUTS: Record<
     [SCConversation.UPLOAD_FILES]: ['shift', 'u'],
     [SCConversation.START_STOP_SPEECH_TO_TEXT]: ['shift', ' '],
     [SCConversation.OPEN_EMOJI]: ['<'],
-    [SCConversation.OPEN_EDIT_TRANSLATION]: ['dead'],
-    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['†'], // '†' is the ctrl + alt + t
-    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['π'], // 'π' is the ctrl + alt + p
+
+    [SCConversation.OPEN_EDIT_TRANSLATION]: ['ctrl', 'alt', 'dead'], // 'dead' is the ctrl + alt + e
+    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['ctrl', 'alt', '†'], // '†' is the ctrl + alt + t
+    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['ctrl', 'alt', 'π'], // 'π' is the ctrl + alt + p
     [SCConversation.SAVE_EDIT_TRANSLATION]: ['ctrl', 'enter'],
     [SCConversation.CANCEL_EDIT_TRANSLATION]: ['escape'],
 
@@ -74,13 +75,11 @@ export const SHORTCUTS: Record<
     [SCCall.START_STOP_SCREEN_DOODLE]: ['e'],
     [SCCall.TOGGLE_LIVE_CAPTION]: ['l'],
 };
-export const SPECIAL_KEYS_CONTENT: Record<string, string[]> = {
-    [SCTranslation.TOGGLE_SPEECH_TO_TEXT]: ['space'],
-    [SCConversation.OPEN_EDIT_TRANSLATION]: ['ctrl', 'alt', 'e'],
-    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['ctrl', 'alt', 't'],
-    [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['ctrl', 'alt', 'p'],
-    [SCConversation.START_STOP_SPEECH_TO_TEXT]: ['shift', 'space'],
-    [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: ['space'],
+export const MAPPED_SPECIAL_KEYS: Record<string, string> = {
+    'dead': 'e',
+    '†': 't',
+    'π': 'p',
+    ' ': 'space',
 };
 
 
