@@ -31,8 +31,6 @@ export const TextInput = forwardRef<
       listening,
     } = useMessageEditorText();
     const isMobile = useAppStore((state) => state.isMobile);
-    const { setAllowShortcutListener } = useShortcutListenStore();
-
     const { handlePasteFile } = useMediaUpload();
 
     const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -100,12 +98,10 @@ export const TextInput = forwardRef<
             if (listening) {
               handleStopListening();
             }
-            setAllowShortcutListener(false);
             onFocus?.(e);
             onInput(e);
           }}
           onBlur={(e) => {
-            setAllowShortcutListener(true);
             if (isMobile) e.currentTarget.style.height = '24px';
             onBlur?.(e);
           }}
