@@ -119,7 +119,7 @@ export const transferSpecialKey: (
 });
 
 export const MAPPED_WIN_KEYS: Record<string, string> = {
-  ...transferSpecialKey,
+  ...transferSpecialKey(),
   ctrl_or_alt: 'alt',
   ctrl: 'ctrl',
   alt: 'alt',
