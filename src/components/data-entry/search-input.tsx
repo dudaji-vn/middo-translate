@@ -15,7 +15,7 @@ import { cn } from '@/utils/cn';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useSidebarTabs } from '@/features/chat/hooks';
-import { isEqual } from 'lodash';
+import isEqual from 'lodash/isEqual';
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
