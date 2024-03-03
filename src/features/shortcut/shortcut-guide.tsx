@@ -2,6 +2,12 @@
 
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/data-display/accordion';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
@@ -16,13 +22,8 @@ import {
   SPECIAL_KEYS,
 } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@radix-ui/react-accordion';
-import { HelpCircle, Info, Plus } from 'lucide-react';
+
+import { HelpCircle, Info, Minus, Plus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 
@@ -50,21 +51,20 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
   isMacOS,
 }) => (
   <AccordionItem value={title}>
-    <AccordionTrigger className="flex h-11 w-full flex-row items-center  justify-between bg-neutral-50 px-2 py-1 ">
+    <AccordionTrigger className="flex h-11 w-full flex-row items-center justify-between  rounded-none !bg-neutral-50 p-2 py-1 ">
       <Typography
         variant="h4"
         className="text-base leading-[18px] text-neutral-600 "
       >
         {title}
       </Typography>
-      <Plus className="h-5 w-5 text-neutral-600 " />
-    </AccordionTrigger>{' '}
-    <AccordionContent>
+    </AccordionTrigger>
+    <AccordionContent className="accordion-up 0.2s py-0 ease-out">
       <div className="flex flex-col gap-0 divide-y divide-neutral-50">
         {shortcuts.map((item, index) => (
           <div
             key={index}
-            className="my-0 flex h-[50px] w-full flex-row items-center justify-between  px-2 py-1 "
+            className="my-0 flex h-[50px] w-full flex-row items-center justify-between  py-1 pl-2 pr-1 "
           >
             <Typography variant={'h5'} className="mt-0  text-base font-normal">
               {item.content}
@@ -81,7 +81,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
                       key={key}
                       className={cn(
                         'mx-1 my-1 inline-block h-[34px] min-h-10 w-[82px] cursor-default rounded-xl bg-neutral-50 p-[8px_12px] text-center text-base font-semibold capitalize text-neutral-800 shadow-1 ',
-                        isLast ? 'w-auto min-w-[40px] ' : '',
+                        isLast ? 'w-auto min-w-[40px]' : '',
                       )}
                     >
                       {SPECIAL_KEYS[osKey] || key}
@@ -105,7 +105,12 @@ const callShortcuts = generateShortcuts(SCCall);
 export default function ShortcutsGuide() {
   const [isClient, setIsClient] = React.useState(false);
   const pathname = usePathname();
-  const defaultValue = pathname===ROUTE_NAMES.ROOT ? 'Middo Translation' : (pathname?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) ? 'Middo Conversation' : 'Middo Call');
+  const defaultValue =
+    pathname === ROUTE_NAMES.ROOT
+      ? 'Middo Translation'
+      : pathname?.includes(ROUTE_NAMES.ONLINE_CONVERSATION)
+        ? 'Middo Conversation'
+        : 'Middo Call';
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     setIsClient(true);
@@ -117,16 +122,20 @@ export default function ShortcutsGuide() {
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[90vh] max-w-screen-md  overflow-y-scroll">
-          <div className=" max-w-screen-md  bg-white  px-8 [&_h3]:mt-4 [&_h3]:text-[1.25rem]">
-            <DialogTitle className="flex h-[48px] flex-row items-center justify-between py-4 pr-4">
-              <Typography variant="h4">
-                <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" />
-                Shortcut
-              </Typography>
-            </DialogTitle>
-
-            <Accordion type="single" collapsible className="w-full" defaultValue={defaultValue}>
+        <DialogContent className="h-fit  max-w-screen-md">
+          <DialogTitle className="flex h-[48px] flex-row items-center justify-between py-4 pr-2">
+            <Typography variant="h4">
+              <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" />
+              Shortcut
+            </Typography>
+          </DialogTitle>
+          <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-scroll bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
+            <Accordion
+              type="single"
+              collapsible
+              className="w-full transition-all duration-500 "
+              defaultValue={defaultValue}
+            >
               <ShortcutSection
                 isMacOS={isMacOS}
                 title="Middo Translation"
