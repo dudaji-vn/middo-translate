@@ -30,7 +30,7 @@ export const useKeyboardShortcut = (
     const handleKeyDown = (event: KeyboardEvent) => {
       if ((allowShortcutListener || ignoreFocusingInputs) || ((isFocused || !allowShortcutListener) && event?.ctrlKey)
       ) {
-    console.log('event.key', event.key)
+      console.log('event.key', event.key)
         keysSet?.some((keys) => {
           if (keys?.every(
             (key) => {
