@@ -7,6 +7,7 @@ import { RoomActions } from '../room-actions';
 import { useCallback, useState } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { isEqual } from 'lodash';
 
 export interface InboxProps {}
 export type InboxType = 'all' | 'group';
@@ -32,9 +33,10 @@ export const Inbox = (props: InboxProps) => {
 
   useKeyboardShortcut(
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
-    (e) => {
-      if (!e || !e.shiftKey) return;
-      setType(e.key.toLowerCase() === 'a' ? 'all' : 'group');
+    (_, mathedKeys) => {
+      setType(
+        isEqual(mathedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB) ? 'all' : 'group',
+      );
     },
   );
 

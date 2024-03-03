@@ -2,10 +2,11 @@
 
 import { useShortcutListenStore } from "@/stores/shortcut-listen.store";
 import { useTranslateStore } from "@/stores/translate.store";
-import { MAPPED_SPECIAL_KEYS } from "@/types/shortcuts";
-import { useEffect } from "react";
+import { MAPPED_MAC_KEYS, MAPPED_WIN_KEYS } from "@/types/shortcuts";
+import { useEffect, useState } from "react";
 
 type Key = "shift" | string;
+type OS = "MAC" | "WINDOWS";
 
 export const useKeyboardShortcut = (
   keysSet: Array<Key[]>,
@@ -16,21 +17,29 @@ export const useKeyboardShortcut = (
     isFocused
   } = useTranslateStore();
   const { allowShortcutListener } = useShortcutListenStore();
+  const [isMacOS, setIsMacOS] = useState(false);
 
   useEffect(() => {
+    const detectOS = () => {
+      const { userAgent } = window.navigator;
+      setIsMacOS(/Mac/.test(userAgent));
+    };
+    detectOS();
+  }, []);
+  useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if ((allowShortcutListener || ignoreFocusingInputs) || ((isFocused || !allowShortcutListener ) &&  event?.ctrlKey )
+      if ((allowShortcutListener || ignoreFocusingInputs) || ((isFocused || !allowShortcutListener) && event?.ctrlKey)
       ) {
+    console.log('event.key', event.key)
         keysSet?.some((keys) => {
           if (keys?.every(
             (key) => {
-              const specialKey = MAPPED_SPECIAL_KEYS[key];
-              const isMatched = (key?.toLowerCase() === "shift" && event?.shiftKey) ||
-                (key?.toLowerCase() === "ctrl" && event?.ctrlKey) ||
-                (key?.toLowerCase() === "alt" && event?.altKey) ||
-                (key?.toLowerCase() === "meta" && event?.metaKey) ||
-                (typeof key === "string" && event?.key?.toLowerCase() === key?.toLowerCase() ||
-                  typeof specialKey === "string" && event?.key?.toLowerCase() === specialKey?.toLowerCase());
+              const keyByOS = (isMacOS ? MAPPED_MAC_KEYS[key] : MAPPED_WIN_KEYS[key]) || key;
+              const isMatched = (keyByOS?.toLowerCase() === "shift" && event?.shiftKey) ||
+                (keyByOS?.toLowerCase() === "ctrl" && event?.ctrlKey) ||
+                (keyByOS?.toLowerCase() === "alt" && event?.altKey) ||
+                (keyByOS?.toLowerCase() === "meta" && event?.metaKey) ||
+                (typeof keyByOS === "string" && event?.key?.toLowerCase() === keyByOS?.toLowerCase());
               return isMatched;
             }
           )
@@ -47,5 +56,6 @@ export const useKeyboardShortcut = (
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [keysSet, callback, isFocused, allowShortcutListener, ignoreFocusingInputs]);
+  }, [keysSet, callback, isMacOS, isFocused, allowShortcutListener, ignoreFocusingInputs]);
+  return { isMacOS }
 };
