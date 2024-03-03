@@ -37,7 +37,6 @@ export enum SCCall {
     START_STOP_SCREEN_SHARING = 'START_STOP_SCREEN_SHARING',
     TOGGLE_CAMERA = 'TOGGLE_CAMERA',
     TOGGLE_MICROPHONE = 'TOGGLE_MICROPHONE',
-    TEMPORARY_MICROPHONE_TOGGLE = 'TEMPORARY_MICROPHONE_TOGGLE',
     TOGGLE_DISCUSSION = 'TOGGLE_DISCUSSION',
     SWITCH_TO_GALLERY_VIEW = 'SWITCH_TO_GALLERY_VIEW',
     START_STOP_SCREEN_DOODLE = 'START_STOP_SCREEN_DOODLE',
@@ -66,7 +65,7 @@ export const SHORTCUTS: Record<
     [SCConversation.SAVE_EDIT_TRANSLATION]: ['ctrl_or_alt', 's'],
     [SCConversation.CANCEL_EDIT_TRANSLATION]: ['esc'],
 
-    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['ctrl_or_alt', '†'],
+    [SCConversation.TURN_ON_OFF_TRANSLATION]: ['ctrl_or_alt', 't'],
     [SCConversation.TURN_ON_OFF_TRANSLATION_PREVIEW]: ['ctrl_or_alt', ','],
 
     // Translation  ===========================================
@@ -85,12 +84,11 @@ export const SHORTCUTS: Record<
 
 
     // Call  ===============================================
-    [SCCall.MAXIMIZE_MINIMIZE_CALL]: ['ctrl', 'alt', 'µ'],
+    [SCCall.MAXIMIZE_MINIMIZE_CALL]: ['ctrl', 'alt', 'Ω'],
     [SCCall.ADD_MEMBERS]: ['ctrl', 'alt', 'å'],
     [SCCall.START_STOP_SCREEN_SHARING]: ['ctrl', 'alt', 'ß'],
     [SCCall.TOGGLE_CAMERA]: ['ctrl', 'alt', 'ç'],
     [SCCall.TOGGLE_MICROPHONE]: ['ctrl', 'alt', 'µ'],
-    [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: ['ctrl', 'alt', 'µ'],
     [SCCall.TOGGLE_DISCUSSION]: ['ctrl', 'alt', '∂'],
     [SCCall.SWITCH_TO_GALLERY_VIEW]: ['ctrl', 'alt', '©'],
     [SCCall.START_STOP_SCREEN_DOODLE]: ['ctrl', 'alt', '÷'],
@@ -115,6 +113,7 @@ export const SPECIAL_KEYS: Record<string, string> = {
     '©': 'g',
     '÷': '/',
     '¬': 'l',
+    'Ω': 'z',
     'ctrl': 'Control',
     'alt': 'Option',
 };
@@ -159,7 +158,6 @@ export const SHORTCUT_CONTENTS: Record<SCConversation | SCTranslation | SCCall, 
     [SCCall.START_STOP_SCREEN_SHARING]: "Start/Stop Screen Sharing",
     [SCCall.TOGGLE_CAMERA]: "Turn On/Off Camera",
     [SCCall.TOGGLE_MICROPHONE]: "Turn On/Off Microphone",
-    [SCCall.TEMPORARY_MICROPHONE_TOGGLE]: "Temporary Microphone Toggle",
     [SCCall.TOGGLE_DISCUSSION]: "Show/Hide Discussion",
     [SCCall.SWITCH_TO_GALLERY_VIEW]: "Switch to Gallery View",
     [SCCall.START_STOP_SCREEN_DOODLE]: "Start/Stop Screen Doodle",

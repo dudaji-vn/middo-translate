@@ -41,6 +41,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       (_, mathedKeys) => {
         if (isEqual(mathedKeys, SHORTCUTS.NEW_CONVERSATION)) {
           changeSide('individual');
+          return;
         }
         inputRef.current?.focus();
       },
