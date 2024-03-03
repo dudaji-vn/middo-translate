@@ -9,7 +9,10 @@ import { CircleFlag } from 'react-circle-flags';
 import Highlighter from 'react-highlight-words';
 import { cn } from '@/utils/cn';
 import { useCompare } from '@/features/translate/context/compare';
-import { useMemo } from 'react';
+import { use, useMemo } from 'react';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { isEqual } from 'lodash';
 
 export interface TranslateMiddleProps {
   text: string;
@@ -50,6 +53,23 @@ export const TranslateMiddle = ({
       textToHighlight={text}
       unhighlightClassName={cn('', isMatch ? 'text-success' : '')}
     />
+  );
+
+  useKeyboardShortcut(
+    [
+      SHORTCUTS.EDIT_ESL_TRANSLATION,
+      SHORTCUTS.CONFIRM_ESL_TRANSLATED,
+    ],
+    (_, matched) => {
+      if (isEqual(matched, SHORTCUTS.EDIT_ESL_TRANSLATION)) {
+        editUnMatch();
+        return;
+      }
+      if (isEqual(matched, SHORTCUTS.CONFIRM_ESL_TRANSLATED)) {
+        acceptUnMatch();
+        return;
+      }
+    },
   );
 
   return (

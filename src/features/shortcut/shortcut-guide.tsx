@@ -19,7 +19,7 @@ import {
   SCTranslation,
   SHORTCUTS,
   SHORTCUT_CONTENTS,
-  SPECIAL_KEYS,
+  transferSpecialKey,
 } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
 
@@ -74,8 +74,8 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
               {item.shortcut?.map((key, index) => {
                 const isLast = index === item.shortcut.length - 1;
                 const osKey =
-                  (isMacOS ? MAPPED_MAC_KEYS[key] : MAPPED_WIN_KEYS[key]) ||
-                  key;
+                  (isMacOS ? MAPPED_MAC_KEYS[key] : MAPPED_WIN_KEYS[key]) || key;
+                const finalKey = transferSpecialKey(isMacOS)[osKey] || osKey;
                 return (
                   <>
                     <span
@@ -85,7 +85,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
                         isLast ? 'w-auto min-w-[40px]' : '',
                       )}
                     >
-                      {SPECIAL_KEYS[osKey] || key}
+                      {finalKey}
                     </span>
                     {!isLast && '+'}
                   </>
