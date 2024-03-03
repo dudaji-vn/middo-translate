@@ -9,6 +9,9 @@ import { cn } from '@/utils/cn';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useState } from 'react';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { isEqual } from 'lodash';
 
 export interface TranslateMiddleEditorProps {
   defaultText?: string;
@@ -49,6 +52,13 @@ export const TranslateMiddleEditor = ({
       },
     ]);
   };
+  useKeyboardShortcut([SHORTCUTS.EDIT_ESL_TRANSLATION, SHORTCUTS.CONFIRM_ESL_TRANSLATED], (e, matchedKeys) => {
+    if (isEqual(matchedKeys, SHORTCUTS.EDIT_ESL_TRANSLATION)) {
+      handleCancel();
+    } else if (isEqual(matchedKeys, SHORTCUTS.CONFIRM_ESL_TRANSLATED)) {
+      handleDone();
+    }
+  })
 
   return (
     <div className="translateTextWrapper relative flex items-stretch gap-3">
