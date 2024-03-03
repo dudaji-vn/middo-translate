@@ -26,6 +26,7 @@ import { cn } from '@/utils/cn';
 import { HelpCircle, Info, Minus, Plus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
+import { useVideoCallStore } from '../call/store/video-call.store';
 
 type ShortcutSectionProps = {
   title: string;
@@ -102,15 +103,17 @@ const translationShortcuts = generateShortcuts(SCTranslation);
 const conversationShortcuts = generateShortcuts(SCConversation);
 const callShortcuts = generateShortcuts(SCCall);
 
+type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
   const [isClient, setIsClient] = React.useState(false);
   const pathname = usePathname();
-  const defaultValue =
-    pathname === ROUTE_NAMES.ROOT
+  const { room } = useVideoCallStore();
+  const defaultValue: AccordionValue = room
+    ? 'Middo Call'
+    : pathname === ROUTE_NAMES.ROOT
       ? 'Middo Translation'
-      : pathname?.includes(ROUTE_NAMES.ONLINE_CONVERSATION)
-        ? 'Middo Conversation'
-        : 'Middo Call';
+      : 'Middo Conversation';
+
   const [open, setOpen] = React.useState(false);
   React.useEffect(() => {
     setIsClient(true);
