@@ -10,10 +10,19 @@ import { useMediaQuery } from 'usehooks-ts';
 export const SideEffectProvider = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(max-width: 1024px)');
-  const setMobile = useAppStore((state) => state.setMobile);
-  const setTablet = useAppStore((state) => state.setTablet);
-  const setPlatform = usePlatformStore((state) => state.setPlatform);
-  const setNotifyToken = usePlatformStore((state) => state.setNotifyToken);
+  const { setMobile, setTablet } = useAppStore((state) => {
+    return {
+      setMobile: state.setMobile,
+      setTablet: state.setTablet,
+    };
+  });
+  const { setNotifyToken, setPlatform } = usePlatformStore((state) => {
+    return {
+      setPlatform: state.setPlatform,
+      setNotifyToken: state.setNotifyToken,
+    };
+  });
+
   const searchParams = useSearchParams();
   const platform = searchParams?.get(SPK_PLATFORM) || 'web';
   const notify = searchParams?.get(SPK_NOTIFY);
