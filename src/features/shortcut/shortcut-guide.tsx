@@ -23,7 +23,7 @@ import {
 } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
 
-import { HelpCircle, Info, Minus, Plus } from 'lucide-react';
+import { HelpCircle, Info } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { useVideoCallStore } from '../call/store/video-call.store';
@@ -74,7 +74,8 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
               {item.shortcut?.map((key, index) => {
                 const isLast = index === item.shortcut.length - 1;
                 const osKey =
-                  (isMacOS ? MAPPED_MAC_KEYS[key] : MAPPED_WIN_KEYS[key]) || key;
+                  (isMacOS ? MAPPED_MAC_KEYS[key] : MAPPED_WIN_KEYS[key]) ||
+                  key;
                 const finalKey = transferSpecialKey(isMacOS)[osKey] || osKey;
                 return (
                   <>
@@ -102,7 +103,9 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
 const translationShortcuts = generateShortcuts(SCTranslation);
 const conversationShortcuts = generateShortcuts(SCConversation);
 const callShortcuts = generateShortcuts(SCCall);
-
+const SHORTCUTS_OPEN = [
+  ['ctrl', 'alt', 'shift'],
+];
 type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
   const [isClient, setIsClient] = React.useState(false);
@@ -118,7 +121,8 @@ export default function ShortcutsGuide() {
   React.useEffect(() => {
     setIsClient(true);
   }, []);
-  const { isMacOS } = useKeyboardShortcut([['?']], () =>
+
+  const { isMacOS } = useKeyboardShortcut(SHORTCUTS_OPEN, () =>
     setOpen((prev) => !prev),
   );
   if (!isClient) return null;
