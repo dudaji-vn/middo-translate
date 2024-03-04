@@ -68,7 +68,12 @@ export const LanguagesControlBar = forwardRef<
 
       addRecentlyUsed(_target, 'source');
       addRecentlyUsed(sourceValue, 'target');
-
+      if(isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
+        setParams(newParams);
+        return;
+      }
       if (targetResult) {
         setClickable(false);
         setTimeout(() => {
@@ -79,16 +84,7 @@ export const LanguagesControlBar = forwardRef<
       }
 
       setParams(newParams);
-    }, [
-      _source,
-      _target,
-      addRecentlyUsed,
-      clickable,
-      recentlyTargetUsed,
-      setParams,
-      setValue,
-      targetResult,
-    ]);
+    }, [_source, _target, addRecentlyUsed, clickable, isListening, recentlyTargetUsed, setParams, setValue, targetResult]);
     useKeyboardShortcut([SHORTCUTS.SWAP_LANGUAGES], handleSwapLanguage);
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
@@ -96,10 +92,7 @@ export const LanguagesControlBar = forwardRef<
       const sourceValue = searchParams?.get('source');
       const targetValue =
         searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
-      if(isListening) {
-        setValue('');
-        SpeechRecognition.stopListening();
-      }
+      
       if (type === 'source') {
         if (code === targetValue) {
           handleSwapLanguage();
@@ -114,6 +107,10 @@ export const LanguagesControlBar = forwardRef<
         }
         setParams([{ key: 'target', value: code }]);
         addRecentlyUsed(code, type);
+      }
+      if(isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
       }
       
     };
