@@ -15,6 +15,7 @@ import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import SpeechRecognition from 'react-speech-recognition';
 
 const MAX_SELECTED_LANGUAGES = 3;
 
@@ -38,7 +39,7 @@ export const LanguagesControlBar = forwardRef<
       'source' | 'target' | 'none'
     >('none');
     const { searchParams, setParams } = useSetParams();
-    const { setValue } = useTranslateStore();
+    const { setValue, isListening } = useTranslateStore();
     const source = searchParams?.get('source');
     const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
     const isTablet = useAppStore((state) => state.isTablet);
@@ -92,7 +93,6 @@ export const LanguagesControlBar = forwardRef<
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');
-
       const sourceValue = searchParams?.get('source');
       const targetValue =
         searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
@@ -111,6 +111,10 @@ export const LanguagesControlBar = forwardRef<
         }
         setParams([{ key: 'target', value: code }]);
         addRecentlyUsed(code, type);
+      }
+      if(isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
       }
     };
 
