@@ -5,6 +5,7 @@ import {
   InputHTMLAttributes,
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -46,6 +47,11 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
         inputRef.current?.focus();
       },
     );
+    useEffect(() => {
+      if (currentSide === 'individual') {
+        inputRef.current?.focus();
+      }
+    }, [currentSide]);
     useImperativeHandle(
       ref,
       () => ({
@@ -65,7 +71,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             ref={inputRef}
             type="text"
             {...props}
-            autoFocus
+            // autoFocus
             onChange={(e) => {
               props.onChange?.(e);
               setValue(e.target.value);

@@ -93,6 +93,9 @@ export const TranslateEditor = ({
   useKeyboardShortcut([SHORTCUTS.COPY_INPUT], () => {
     copy();
   });
+  useKeyboardShortcut([SHORTCUTS.TEXT_TO_SPEECH_INPUT], () => {
+    speak();
+  });
   useEffect(() => {
     if (sourceTranslateResult && !text) {
       setValue(sourceTranslateResult);
