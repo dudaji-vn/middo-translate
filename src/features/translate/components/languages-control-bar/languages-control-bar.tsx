@@ -96,7 +96,10 @@ export const LanguagesControlBar = forwardRef<
       const sourceValue = searchParams?.get('source');
       const targetValue =
         searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
-
+      if(isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
+      }
       if (type === 'source') {
         if (code === targetValue) {
           handleSwapLanguage();
@@ -112,10 +115,7 @@ export const LanguagesControlBar = forwardRef<
         setParams([{ key: 'target', value: code }]);
         addRecentlyUsed(code, type);
       }
-      if(isListening) {
-        setValue('');
-        SpeechRecognition.stopListening();
-      }
+      
     };
 
     useEffect(() => {
