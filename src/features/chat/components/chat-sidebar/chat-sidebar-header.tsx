@@ -103,6 +103,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             defaultValue={searchValue || ''}
             onFocus={() => changeSide('search')}
             btnDisabled
+            autoFocus={false}
             placeholder="Search people or groups"
             onChange={(e) => setParam(SPK_SEARCH, e.currentTarget.value)}
             onClear={() => {
