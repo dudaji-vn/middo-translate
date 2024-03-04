@@ -2,19 +2,15 @@
 
 import { Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
-import { HistoryIcon, Paintbrush } from 'lucide-react';
-import React, { forwardRef, use, useEffect } from 'react';
+import { HistoryIcon, Paintbrush, XIcon } from 'lucide-react';
+import React, { forwardRef, use, useEffect, useState } from 'react';
 import { useHistoryStore } from '@/features/translate/stores/history.store';
 import HistoryItem from './history-item';
+import { cn } from '@/utils/cn';
 
 export interface HistoryProps extends React.HTMLAttributes<HTMLDivElement> {
-  sourceLanguage?: string;
-  targetLanguage?: string;
-  sourceText?: string;
-  targetResult?: string;
-  sourceEnglishResult?: string;
-  targetEnglishResult?: string;
-  sourceTranslateResult?: string;
+  isSelected?: boolean;
+  onClose?: () => void;
 }
 export type THistoryData = {
   language: string;
@@ -28,64 +24,47 @@ export type THistoryItem = {
 export type THistoryListItems = THistoryItem[];
 
 const History = forwardRef<HTMLDivElement, HistoryProps>(
-  (
-    {
-      sourceEnglishResult,
-      targetEnglishResult,
-      sourceLanguage,
-      targetLanguage,
-      sourceText,
-      targetResult,
-      sourceTranslateResult,
-      ...props
-    },
-    ref,
-  ) => {
-    const { pushHistoryItem, historyListItems } = useHistoryStore();
-    useEffect(() => {
-      if (
-        sourceText &&
-        targetResult &&
-        sourceTranslateResult &&
-        sourceEnglishResult &&
-        targetEnglishResult &&
-        sourceLanguage &&
-        targetLanguage
-      ) {
-        pushHistoryItem({
-          src: {
-            language: sourceLanguage || '',
-            content: sourceText,
-            englishContent: sourceEnglishResult,
-          },
-          dest: {
-            language: targetLanguage || '',
-            content: targetResult,
-            englishContent: targetEnglishResult,
-          },
-        });
-      }
-    }, [
-      sourceText,
-      targetResult
+  ({ isSelected, className, onClose, ...props }, ref) => {
+    const [isClient, setIsClient] = useState(false);
+    const [historyListItems, clear] = useHistoryStore((state) => [
+      state.historyListItems,
+      state.clear,
     ]);
-
+    useEffect(() => {
+      setIsClient(true);
+    }, []);
+    if (!isClient) {
+      return null;
+    }
     return (
       <section
-        className="h-full space-y-4 !overflow-y-scroll [&_svg]:h-4 [&_svg]:w-4"
         ref={ref}
         {...props}
+        className={cn(
+          className,
+          isSelected
+            ? 'h-full w-full space-y-4 !overflow-y-scroll [&_svg]:h-4 [&_svg]:w-4'
+            : 'hidden',
+        )}
       >
-        <Typography className="flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main">
+        <Typography className="relative flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main">
           <HistoryIcon className="text-primary-500-main" />
           History
+          <Button.Icon
+            onClick={onClose}
+            variant={'ghost'}
+            size={'xs'}
+            className="absolute right-2 top-1"
+          >
+            <XIcon />
+          </Button.Icon>
         </Typography>
         <div className="flex h-[34px] w-full items-center justify-end gap-2 bg-background px-2 py-1 font-semibold">
           <Button
             variant={'ghost'}
             color={'default'}
-            size={'sm'}
-            onClick={() => {}}
+            size={'xs'}
+            onClick={clear}
             className="flex items-center gap-2 rounded-xl bg-neutral-50 text-neutral-700"
           >
             <Paintbrush />

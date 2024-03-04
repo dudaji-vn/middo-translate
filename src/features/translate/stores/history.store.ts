@@ -22,7 +22,8 @@ export const useHistoryStore = create<HistoryState>()(
       setHistoryListItems: (historyListItems) => set({ historyListItems }),
       pushHistoryItem: (historyItem) =>
         set((state) => ({
-          historyListItems: [...state.historyListItems, historyItem],
+          //  stack
+          historyListItems: [historyItem, ...state.historyListItems],
         })),
       removeHistoryItem: (item) =>
         set((state) => ({
