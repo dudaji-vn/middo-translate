@@ -104,8 +104,7 @@ const translationShortcuts = generateShortcuts(SCTranslation);
 const conversationShortcuts = generateShortcuts(SCConversation);
 const callShortcuts = generateShortcuts(SCCall);
 const SHORTCUTS_OPEN = [
-  ['÷', 'alt'],
-  ['?', 'alt'],
+  ['ctrl', 'alt', 'shift'],
 ];
 type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
