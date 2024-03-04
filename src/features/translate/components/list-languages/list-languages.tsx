@@ -71,7 +71,9 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
               {allowDetect && (
                 <Item
                   selected={selectedCode === 'auto'}
-                  rightElement={<Globe2Icon className="mr-2 h-5 w-5" />}
+                  rightElement={
+                    <Globe2Icon className="mr-2 h-5 w-5 text-primary" />
+                  }
                   language={{
                     code: 'auto',
                     name: 'Language detect',
