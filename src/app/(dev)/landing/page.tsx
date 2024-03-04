@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@/components/actions';
-import TextAnimation from '@/components/animations/text-animation';
 import { JayTextAnimation } from '@/components/jay-text-animation';
 import { HeaderNavLandingMobile } from '@/components/layout/header/header-nav-landing.mobile';
 import { navLandingPageItems } from '@/components/layout/header/header.config';
