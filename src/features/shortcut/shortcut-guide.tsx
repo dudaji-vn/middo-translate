@@ -23,7 +23,7 @@ import {
 } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
 
-import { HelpCircle, Info, Minus, Plus } from 'lucide-react';
+import { HelpCircle, Info } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { useVideoCallStore } from '../call/store/video-call.store';
