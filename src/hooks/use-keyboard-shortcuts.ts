@@ -6,7 +6,6 @@ import { MAPPED_MAC_KEYS, MAPPED_WIN_KEYS } from "@/types/shortcuts";
 import { useEffect, useState } from "react";
 
 type Key = "shift" | string;
-type OS = "MAC" | "WINDOWS";
 
 export const useKeyboardShortcut = (
   keysSet: Array<Key[]>,

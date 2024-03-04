@@ -162,7 +162,6 @@ export default function ShortcutsGuide() {
           </div>
         </DialogContent>
       </Dialog>
-      {/* floating button */}
       <Button.Icon
         className="fixed bottom-4 left-4 z-50 rounded-full bg-white p-2 shadow-md max-md:hidden dark:bg-gray-800"
         variant={'ghost'}
