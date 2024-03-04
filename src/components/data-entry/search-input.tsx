@@ -47,11 +47,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
         inputRef.current?.focus();
       },
     );
-    useEffect(() => {
-      if (currentSide === 'individual') {
-        inputRef.current?.focus();
-      }
-    }, [currentSide]);
+
     useImperativeHandle(
       ref,
       () => ({
@@ -70,8 +66,8 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             value={value}
             ref={inputRef}
             type="text"
+            autoFocus
             {...props}
-            // autoFocus
             onChange={(e) => {
               props.onChange?.(e);
               setValue(e.target.value);
