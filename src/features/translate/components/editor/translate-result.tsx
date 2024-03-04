@@ -35,6 +35,10 @@ export const TranslateResult = ({
   useKeyboardShortcut([SHORTCUTS.TRANSLATED_COPY], () => {
     copy();
   });
+  useKeyboardShortcut([SHORTCUTS.TRANSLATED_TEXT_TO_SPEECH], () => {
+    speak();
+  });
+  
   return (
     <TranslateEditorWrapper
       className={cn(
