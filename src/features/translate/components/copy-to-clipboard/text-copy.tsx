@@ -7,6 +7,8 @@ import { getCountryCode } from '@/utils/language-fn';
 import { useCompare } from '@/features/translate/context';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import { useTranslateStore } from '@/stores/translate.store';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface TextCopyProps extends React.HTMLAttributes<HTMLDivElement> {
   sourceText: string;
@@ -44,7 +46,11 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
       const textFormat = `${firstLine}\n${secondLine}\n${thirdLine}`;
       copy(textFormat);
     };
-
+    useKeyboardShortcut([SHORTCUTS.COPY_ALL_TEXT], () => {
+      if (isMatch && !isEnglishTranslate) {
+        handleCopy();
+      }
+    });
     if (!sourceText) return null;
 
     return (

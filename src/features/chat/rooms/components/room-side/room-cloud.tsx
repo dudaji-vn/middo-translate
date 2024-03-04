@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/data-display/accordion';
-import { File, ImageIcon, Package2 } from 'lucide-react';
+import { ChevronDown, File, ImageIcon, Package2 } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { Room } from '../../types';
@@ -33,7 +33,12 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
   return (
     <Accordion type="single" collapsible className="mt-8">
       <AccordionItem value="item-1">
-        <AccordionTrigger className="p-3">
+        <AccordionTrigger
+          className="p-3"
+          icon={
+            <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
+          }
+        >
           <div className="flex items-center gap-2">
             <Package2 width={16} height={16} /> <span>Cloud shared</span>
             <span className="text-sm text-neutral-600">

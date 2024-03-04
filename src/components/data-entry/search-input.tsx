@@ -5,6 +5,7 @@ import {
   InputHTMLAttributes,
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -13,8 +14,9 @@ import { SearchIcon, XCircleIcon } from 'lucide-react';
 
 import { cn } from '@/utils/cn';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useSidebarTabs } from '@/features/chat/hooks';
+import isEqual from 'lodash/isEqual';
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
@@ -28,18 +30,28 @@ export interface SearchInputRef extends HTMLInputElement {
 export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
   ({ btnDisabled, defaultValue, onClear, ...props }, ref) => {
     const [value, setValue] = useState(defaultValue || '');
+    const { changeSide, currentSide } = useSidebarTabs();
     const inputRef = useRef<HTMLInputElement>(null);
     const handleClear = useCallback(() => {
       setValue('');
       onClear?.();
     }, [onClear]);
     const canClear = value !== '';
-    const { setAllowShortcutListener } = useShortcutListenStore();
-    useKeyboardShortcut([SHORTCUTS.SEARCH], (e) => {
-      setAllowShortcutListener(false);
-      e?.preventDefault();
-      inputRef.current?.focus();
-    });
+    useKeyboardShortcut(
+      [SHORTCUTS.SEARCH, SHORTCUTS.NEW_CONVERSATION],
+      (_, mathedKeys) => {
+        if (isEqual(mathedKeys, SHORTCUTS.NEW_CONVERSATION)) {
+          changeSide('individual');
+          return;
+        }
+        inputRef.current?.focus();
+      },
+    );
+    useEffect(() => {
+      if (currentSide === 'individual') {
+        inputRef.current?.focus();
+      }
+    }, [currentSide]);
     useImperativeHandle(
       ref,
       () => ({
@@ -57,10 +69,9 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
           <input
             value={value}
             ref={inputRef}
-            onBlur={() => setAllowShortcutListener(true)}
-            onFocus={() => setAllowShortcutListener(false)}
             type="text"
             {...props}
+            // autoFocus
             onChange={(e) => {
               props.onChange?.(e);
               setValue(e.target.value);

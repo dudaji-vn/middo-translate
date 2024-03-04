@@ -15,6 +15,7 @@ import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import SpeechRecognition from 'react-speech-recognition';
 
 const MAX_SELECTED_LANGUAGES = 3;
 
@@ -38,7 +39,7 @@ export const LanguagesControlBar = forwardRef<
       'source' | 'target' | 'none'
     >('none');
     const { searchParams, setParams } = useSetParams();
-    const { setValue } = useTranslateStore();
+    const { setValue, isListening } = useTranslateStore();
     const source = searchParams?.get('source');
     const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
     const isTablet = useAppStore((state) => state.isTablet);
@@ -67,7 +68,12 @@ export const LanguagesControlBar = forwardRef<
 
       addRecentlyUsed(_target, 'source');
       addRecentlyUsed(sourceValue, 'target');
-
+      if(isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
+        setParams(newParams);
+        return;
+      }
       if (targetResult) {
         setClickable(false);
         setTimeout(() => {
@@ -78,25 +84,15 @@ export const LanguagesControlBar = forwardRef<
       }
 
       setParams(newParams);
-    }, [
-      _source,
-      _target,
-      addRecentlyUsed,
-      clickable,
-      recentlyTargetUsed,
-      setParams,
-      setValue,
-      targetResult,
-    ]);
+    }, [_source, _target, addRecentlyUsed, clickable, isListening, recentlyTargetUsed, setParams, setValue, targetResult]);
     useKeyboardShortcut([SHORTCUTS.SWAP_LANGUAGES], handleSwapLanguage);
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');
-
       const sourceValue = searchParams?.get('source');
       const targetValue =
         searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
-
+      
       if (type === 'source') {
         if (code === targetValue) {
           handleSwapLanguage();
@@ -112,6 +108,11 @@ export const LanguagesControlBar = forwardRef<
         setParams([{ key: 'target', value: code }]);
         addRecentlyUsed(code, type);
       }
+      if(isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
+      }
+      
     };
 
     useEffect(() => {
@@ -158,7 +159,7 @@ export const LanguagesControlBar = forwardRef<
             props.className,
           )}
         >
-          <div className="flex flex-1 justify-end overflow-hidden rounded-2xl border shadow-1 lg:justify-start lg:border-none lg:shadow-none">
+          <div className="flex flex-1 justify-end rounded-2xl lg:justify-start lg:overflow-hidden">
             <LanguageSelect
               onChevronClick={() => {
                 setCurrentSelect('source');
@@ -189,7 +190,7 @@ export const LanguagesControlBar = forwardRef<
               <ArrowRightLeftIcon className="text-text" />
             </Button.Icon>
           </div>
-          <div className="flex flex-1 justify-start overflow-hidden rounded-2xl border shadow-1 lg:border-none lg:shadow-none">
+          <div className="flex flex-1 justify-start rounded-2xl lg:overflow-hidden">
             <LanguageSelect
               onChange={(code) => {
                 if (isTablet) {

@@ -16,6 +16,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useState } from 'react';
+import { COMMIT_SHA } from '@/configs/commit-data';
 
 type Props = {};
 
@@ -35,6 +36,7 @@ export const Header = (props: Props) => {
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
+     {COMMIT_SHA && <span className='text-[0.6rem] text-gray-600 mt-2'>{`ver.${(COMMIT_SHA as string)?.slice(0,8) }`} </span>}
 
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication && user ? (
@@ -68,7 +70,7 @@ export const Header = (props: Props) => {
                 </DropdownMenuItem>
               </Link>
 
-              <DropdownMenuItem className="flex items-center">
+              <DropdownMenuItem className="flex items-center" onClick={signOut}>
                 <LogOutIcon className="mr-2 size-4" />
                 <span> Sign out</span>
               </DropdownMenuItem>

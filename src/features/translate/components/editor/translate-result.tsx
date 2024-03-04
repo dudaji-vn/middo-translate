@@ -10,6 +10,9 @@ import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 import { useTranslateStore } from '@/stores/translate.store';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { useTextCopy } from '@/hooks/use-text-copy';
 
 export interface TranslateResultProps {
   result: string;
@@ -28,6 +31,14 @@ export const TranslateResult = ({
   const { speak } = useTextToSpeech(languageCode, result);
   const isMobile = useAppStore((state) => state.isMobile);
   const array = result.split('\n');
+  const { copy } = useTextCopy(result);
+  useKeyboardShortcut([SHORTCUTS.TRANSLATED_COPY], () => {
+    copy();
+  });
+  useKeyboardShortcut([SHORTCUTS.TRANSLATED_TEXT_TO_SPEECH], () => {
+    speak();
+  });
+  
   return (
     <TranslateEditorWrapper
       className={cn(

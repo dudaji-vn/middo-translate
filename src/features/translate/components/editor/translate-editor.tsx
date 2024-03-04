@@ -16,6 +16,9 @@ import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
 import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 import { useTranslateStore } from '@/stores/translate.store';
+import { useTextCopy } from '@/hooks/use-text-copy';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 export interface TranslateEditorProps {
   className?: string;
@@ -86,7 +89,13 @@ export const TranslateEditor = ({
   }, [debouncedValue, isFocused, isListening]);
 
   const { textAreaRef } = useTextAreaResize(value);
-
+  const { copy } = useTextCopy(value);
+  useKeyboardShortcut([SHORTCUTS.COPY_INPUT], () => {
+    copy();
+  });
+  useKeyboardShortcut([SHORTCUTS.TEXT_TO_SPEECH_INPUT], () => {
+    speak();
+  });
   useEffect(() => {
     if (sourceTranslateResult && !text) {
       setValue(sourceTranslateResult);

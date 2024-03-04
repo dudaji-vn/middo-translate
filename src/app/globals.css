@@ -231,6 +231,12 @@
     display: none !important;
   } */
 }
+.video-intro::-webkit-media-controls-overlay-enclosure {
+  display: none !important;
+}
+.video-intro::-webkit-media-controls-panel {
+  background-image: none !important;
+}
 
 .animation-up {
   animation: up 0.5s linear;

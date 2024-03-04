@@ -16,7 +16,8 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useVideoCallContext } from '@/features/call/context/video-call-context';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
-import { SCCall, SHORTCUTS } from '@/types/shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import  isEqual from 'lodash/isEqual';
 
 
 export default function DropdownActions() {
@@ -67,23 +68,23 @@ export default function DropdownActions() {
     SHORTCUTS.TOGGLE_LIVE_CAPTION,
     SHORTCUTS.ADD_MEMBERS
   ]
-  useKeyboardShortcut(actionShortcutKeysSet, (e) => {
+  useKeyboardShortcut(actionShortcutKeysSet, (e, mathedKeys) => {
     if (!e || !isFullScreen) return;
-    const { key, shiftKey } = e;
-    if (shiftKey) return;
-    switch (key) {
-      case actionShortcutKeysSet[0][0]:
-        setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
-        break;
-      case actionShortcutKeysSet[1][0]:
-        onDoodle();
-        break;
-      case actionShortcutKeysSet[2][0]:
-        setShowCaption(!isShowCaption);
-        break;
-      case actionShortcutKeysSet[3][0]:
-        setModalAddUser(!isShowModalAddUser);
-        break;
+    if(isEqual(mathedKeys, SHORTCUTS.SWITCH_TO_GALLERY_VIEW)) {
+      setLayout(layout === VIDEOCALL_LAYOUTS.FOCUS_VIEW ? VIDEOCALL_LAYOUTS.GALLERY_VIEW : VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+      return;
+    }
+    if(isEqual(mathedKeys, SHORTCUTS.START_STOP_SCREEN_DOODLE)) {
+      onDoodle();
+      return;
+    }
+    if(isEqual(mathedKeys, SHORTCUTS.TOGGLE_LIVE_CAPTION)) {
+      setShowCaption(!isShowCaption);
+      return;
+    }
+    if(isEqual(mathedKeys, SHORTCUTS.ADD_MEMBERS)) {
+      setModalAddUser(!isShowModalAddUser);
+      return;
     }
   });
 
