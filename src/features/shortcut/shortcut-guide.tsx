@@ -119,7 +119,13 @@ export default function ShortcutsGuide() {
   React.useEffect(() => {
     setIsClient(true);
   }, []);
-  const { isMacOS } = useKeyboardShortcut([], () => {});
+  const { isMacOS } = useKeyboardShortcut(
+    [
+      ['÷', 'alt'],
+      ['?', 'alt'],
+    ],
+    () => setOpen((prev) => !prev),
+  );
   if (!isClient) return null;
   return (
     <>
@@ -157,6 +163,7 @@ export default function ShortcutsGuide() {
           </div>
         </DialogContent>
       </Dialog>
+      {/* floating button */}
       <Button.Icon
         className="fixed bottom-4 left-4 z-50 rounded-full bg-white p-2 shadow-md max-md:hidden dark:bg-gray-800"
         variant={'ghost'}
