@@ -103,7 +103,10 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
 const translationShortcuts = generateShortcuts(SCTranslation);
 const conversationShortcuts = generateShortcuts(SCConversation);
 const callShortcuts = generateShortcuts(SCCall);
-
+const SHORTCUTS_OPEN = [
+  ['÷', 'alt'],
+  ['?', 'alt'],
+];
 type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
   const [isClient, setIsClient] = React.useState(false);
@@ -119,12 +122,9 @@ export default function ShortcutsGuide() {
   React.useEffect(() => {
     setIsClient(true);
   }, []);
-  const { isMacOS } = useKeyboardShortcut(
-    [
-      ['÷', 'alt'],
-      ['?', 'alt'],
-    ],
-    () => setOpen((prev) => !prev),
+
+  const { isMacOS } = useKeyboardShortcut(SHORTCUTS_OPEN, () =>
+    setOpen((prev) => !prev),
   );
   if (!isClient) return null;
   return (
