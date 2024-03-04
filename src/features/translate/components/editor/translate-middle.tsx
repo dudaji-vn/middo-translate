@@ -9,7 +9,7 @@ import { CircleFlag } from 'react-circle-flags';
 import Highlighter from 'react-highlight-words';
 import { cn } from '@/utils/cn';
 import { useCompare } from '@/features/translate/context/compare';
-import { use, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
