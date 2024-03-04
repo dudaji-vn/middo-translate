@@ -62,7 +62,7 @@ export default function SignIn() {
       toast.success('Login success!');
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage('Invalid email or password')
     } finally {
       setLoading(false);
       // reset();
