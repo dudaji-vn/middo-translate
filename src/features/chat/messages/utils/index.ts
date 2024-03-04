@@ -18,7 +18,7 @@ export const createLocalMessage = ({
   media = [],
 }: CreateLocalMessageParams): Message => {
   return {
-    _id: self.crypto.randomUUID(),
+    _id: new Date().toISOString(),
     sender: sender!,
     content,
     contentEnglish,
