@@ -36,7 +36,7 @@ export const Header = (props: Props) => {
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
-      <span className='text-xs text-gray-600 mt-2'>{`ver.${COMMIT_SHA?.slice(0,8) }`} </span>
+      <span className='text-[0.6rem] text-gray-600 mt-2'>{`ver.${COMMIT_SHA?.slice(0,8) }`} </span>
 
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication && user ? (
