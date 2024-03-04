@@ -28,7 +28,7 @@ export const useHistoryStore = create<HistoryState>()(
       removeHistoryItem: (item) =>
         set((state) => ({
           historyListItems: state.historyListItems.filter(
-            (historyItem) => historyItem !== item,
+            (historyItem) => historyItem?.id && historyItem.id !== item?.id,
           ),
         })),
       clear: () => set({ historyListItems: [] }),

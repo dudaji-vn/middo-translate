@@ -22,21 +22,26 @@ const DisplayedItem = ({
   const flag = getCountryCode(languageCode);
   const language = getLanguageByCode(languageCode);
   return (
-    <div className="flex w-full flex-col gap-2">
-      <div className="relative  flex flex-row items-center justify-start gap-2 ">
-        <Typography className="text-sm items-center flex flex-row gap-2 text-[14px] font-light leading-[18px] text-neutral-400">
+    <div className="flex w-full flex-col">
+      <div className="flex flex-row items-center justify-between ">
+        <Typography className="flex flex-row items-center gap-2 text-[14px] text-sm font-light leading-[18px] text-neutral-400">
           <CircleFlag countryCode={flag as string} className="h-4 w-4" />
           {language?.name}
         </Typography>
-        {isSrc && (
-          <CopyZoneClick text={content} className="absolute -right-4 top-0">
-            <Button.Icon variant={'ghost'} color={'default'}>
-              <Copy />
-            </Button.Icon>
-          </CopyZoneClick>
-        )}
+        <CopyZoneClick text={content}>
+          <Button.Icon
+            variant={'ghost'}
+            size={'xs'}
+            color={'default'}
+            className={isSrc ? '' : 'hidden'}
+          >
+            <Copy />
+          </Button.Icon>
+        </CopyZoneClick>
       </div>
-      <Typography className="text-sm  w-11/12 break-words">{content}</Typography>
+      <Typography className="w-[90%]  break-words text-sm">
+        {content}
+      </Typography>
       {translation && (
         <div className="relative">
           <TriangleSmall
@@ -56,7 +61,18 @@ const DisplayedItem = ({
   );
 };
 
-const HistoryItem = ({ src, dest }: THistoryItem): JSX.Element => {
+const HistoryItem = ({
+  item,
+  onDeleteItem,
+}: {
+  item: THistoryItem;
+  onDeleteItem: (item: THistoryItem) => void;
+}): JSX.Element => {
+  const { src, dest } = item;
+  const onCopyAll = () => {
+    const text = `${src.content}\n${dest.content}`;
+    navigator.clipboard.writeText(text);
+  };
   if (!src || !dest) {
     return <></>;
   }
@@ -79,6 +95,7 @@ const HistoryItem = ({ src, dest }: THistoryItem): JSX.Element => {
         <Button.Icon
           variant={'default'}
           size={'xs'}
+          onClick={onCopyAll}
           className="bg-primary-200 text-primary-500-main"
         >
           <Layers className="!h-5 !w-5" />
@@ -86,6 +103,7 @@ const HistoryItem = ({ src, dest }: THistoryItem): JSX.Element => {
         <Button.Icon
           variant={'default'}
           size={'xs'}
+          onClick={() => onDeleteItem(item)}
           className="bg-primary-200 text-primary-500-main"
         >
           <Trash2 className="!h-5 !w-5" />

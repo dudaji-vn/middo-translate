@@ -18,6 +18,7 @@ export type THistoryData = {
   englishContent?: string;
 };
 export type THistoryItem = {
+  id: string;
   src: THistoryData;
   dest: THistoryData;
 };
@@ -26,9 +27,10 @@ export type THistoryListItems = THistoryItem[];
 const History = forwardRef<HTMLDivElement, HistoryProps>(
   ({ isSelected, className, onClose, ...props }, ref) => {
     const [isClient, setIsClient] = useState(false);
-    const [historyListItems, clear] = useHistoryStore((state) => [
+    const [historyListItems, clear, removeHistoryItem] = useHistoryStore((state) => [
       state.historyListItems,
       state.clear,
+      state.removeHistoryItem,
     ]);
     useEffect(() => {
       setIsClient(true);
@@ -36,6 +38,9 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
     if (!isClient) {
       return null;
     }
+    const onDeleteHistoryItem = (item: THistoryItem) => {
+      removeHistoryItem(item);
+    };
     return (
       <section
         ref={ref}
@@ -73,7 +78,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
         </div>
         <div className="flex w-full flex-col gap-8  px-2 ">
           {historyListItems?.map((item, index) => (
-            <HistoryItem key={index} src={item.src} dest={item.dest} />
+            <HistoryItem key={index} item={item} onDeleteItem={onDeleteHistoryItem}/>
           ))}
         </div>
       </section>

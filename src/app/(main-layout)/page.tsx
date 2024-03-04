@@ -80,6 +80,7 @@ export default async function Home(props: HomeProps) {
 
   const isShowMiddleTarget = targetEnglishResult && !isEnglishTranslate;
   const historyItem:THistoryItem = {
+    id: Date.now().toString(),
     src: {
       language: String(sourceLanguage),
       content: sourceText,
