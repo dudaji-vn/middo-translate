@@ -4,7 +4,7 @@ import { CopyIcon, Volume2Icon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { CopyZoneClick } from '@/components/actions';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
@@ -13,7 +13,6 @@ import { useTranslateStore } from '@/stores/translate.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useTextCopy } from '@/hooks/use-text-copy';
-
 export interface TranslateResultProps {
   result: string;
   languageCode?: string;
@@ -38,7 +37,7 @@ export const TranslateResult = ({
   useKeyboardShortcut([SHORTCUTS.TRANSLATED_TEXT_TO_SPEECH], () => {
     speak();
   });
-  
+
   return (
     <TranslateEditorWrapper
       className={cn(

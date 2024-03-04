@@ -19,6 +19,9 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { PageLoading } from '@/components/feedback';
 import { cn } from '@/utils/cn';
 import { Extension } from '@/features/translate/components/extension';
+
+import HomeTemplate, { TTranslationTab } from './_components/home-template';
+
 interface HomeProps {
   searchParams: {
     query?: string;
@@ -27,6 +30,7 @@ interface HomeProps {
     edit?: string;
     mquery?: string;
     detect?: string;
+    tab?: TTranslationTab;
   };
 }
 
@@ -34,6 +38,7 @@ export default async function Home(props: HomeProps) {
   const isEdit = props.searchParams.edit === 'true';
   const sourceText = props.searchParams.query || '';
   const middleText = props.searchParams.mquery || '';
+  const currentTab = props.searchParams.tab;
 
   const sourceLanguage =
     props.searchParams.source === 'auto'
@@ -77,79 +82,100 @@ export default async function Home(props: HomeProps) {
   const isShowMiddleTarget = targetEnglishResult && !isEnglishTranslate;
 
   return (
-    <main className="relative flex h-full w-full flex-col pt-5">
-      <PageLoading title="Loading">
-        <CompareProvider
-          text={sourceEnglishResult}
-          textCompare={targetEnglishResult}
+    <main className={'h-full overflow-y-hidden'}>
+      <PageLoading title="Loading" className="h-full">
+        <HomeTemplate
+          currentTab={currentTab}
+          historyProps={{
+            sourceLanguage,
+            targetLanguage,
+            sourceText,
+            targetResult,
+            sourceEnglishResult,
+            targetEnglishResult,
+            sourceTranslateResult,
+          }}
         >
-          <LanguagesControlBar
-            className="px-[5vw]"
-            source={sourceLanguage}
-            target={targetLanguage}
-            detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
-            targetResult={targetResult}
-          />
-          <CaptureProvider>
-            <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-3 md:flex-row md:justify-evenly md:gap-[88px]">
-              <TranslateEditor
-                disabled={isEdit}
-                isDetect={props.searchParams.source === 'auto'}
-                languageCode={sourceLanguage}
-                sourceTranslateResult={sourceTranslateResult}
-                className={cn(
-                  'flex flex-col md:flex-1',
-                  sourceText || sourceTranslateResult ? '' : 'min-h-[320px]',
-                )}
-              >
-                {isEdit ? (
-                  <TranslateMiddleEditor defaultText={sourceEnglishResult} />
-                ) : (
-                  <>
-                    {isShowMiddleSource && (
+          <div className="flex h-full w-full flex-col pt-5">
+            <CompareProvider
+              text={sourceEnglishResult}
+              textCompare={targetEnglishResult}
+            >
+              <LanguagesControlBar
+                className="px-[5vw]"
+                source={sourceLanguage}
+                target={targetLanguage}
+                detect={
+                  props.searchParams.source === 'auto' ? sourceLanguage : ''
+                }
+                targetResult={targetResult}
+              />
+              <CaptureProvider>
+                <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-3 md:flex-row md:justify-evenly md:gap-[88px]">
+                  <TranslateEditor
+                    disabled={isEdit}
+                    isDetect={props.searchParams.source === 'auto'}
+                    languageCode={sourceLanguage}
+                    sourceTranslateResult={sourceTranslateResult}
+                    className={cn(
+                      'flex flex-col md:flex-1',
+                      sourceText || sourceTranslateResult
+                        ? ''
+                        : 'min-h-[320px]',
+                    )}
+                  >
+                    {isEdit ? (
+                      <TranslateMiddleEditor
+                        defaultText={sourceEnglishResult}
+                      />
+                    ) : (
+                      <>
+                        {isShowMiddleSource && (
+                          <TranslateMiddle
+                            text={sourceEnglishResult}
+                            textCompare={targetEnglishResult}
+                          />
+                        )}
+                      </>
+                    )}
+                  </TranslateEditor>
+
+                  <TranslateResult
+                    result={targetResult}
+                    languageCode={targetLanguage}
+                  >
+                    {isShowMiddleTarget && (
                       <TranslateMiddle
-                        text={sourceEnglishResult}
-                        textCompare={targetEnglishResult}
+                        isEdit={isEdit}
+                        type="accept"
+                        text={targetEnglishResult}
+                        textCompare={sourceEnglishResult}
                       />
                     )}
-                  </>
-                )}
-              </TranslateEditor>
-
-              <TranslateResult
-                result={targetResult}
-                languageCode={targetLanguage}
-              >
-                {isShowMiddleTarget && (
-                  <TranslateMiddle
-                    isEdit={isEdit}
-                    type="accept"
-                    text={targetEnglishResult}
-                    textCompare={sourceEnglishResult}
+                  </TranslateResult>
+                </CaptureZone>
+                <Extension />
+                <div className="mt-8 flex items-center justify-center gap-8">
+                  <TextCopy
+                    sourceText={sourceText || sourceTranslateResult}
+                    targetText={targetResult}
+                    sourceEnglishText={sourceEnglishResult}
+                    targetEnglishText={targetEnglishResult}
+                    sourceLanguage={sourceLanguage as string}
+                    targetLanguage={targetLanguage as string}
                   />
-                )}
-              </TranslateResult>
-            </CaptureZone>
-            <Extension />
-            <div className="mt-8 flex items-center justify-center gap-8">
-              <TextCopy
-                sourceText={sourceText || sourceTranslateResult}
-                targetText={targetResult}
-                sourceEnglishText={sourceEnglishResult}
-                targetEnglishText={targetEnglishResult}
-                sourceLanguage={sourceLanguage as string}
-                targetLanguage={targetLanguage as string}
-              />
-              <TranslateOptionBar sourceLang={sourceLanguage} />
-              {(sourceText || sourceTranslateResult) && <ImgCopy />}
-            </div>
-          </CaptureProvider>
-        </CompareProvider>
+                  <TranslateOptionBar sourceLang={sourceLanguage} />
+                  {(sourceText || sourceTranslateResult) && <ImgCopy />}
+                </div>
+              </CaptureProvider>
+            </CompareProvider>
+          </div>
+          <DetectTranslateWay
+            sourceLanguage={sourceLanguage}
+            targetLanguage={targetLanguage}
+          />
+        </HomeTemplate>
       </PageLoading>
-      <DetectTranslateWay
-        sourceLanguage={sourceLanguage}
-        targetLanguage={targetLanguage}
-      />
     </main>
   );
 }
