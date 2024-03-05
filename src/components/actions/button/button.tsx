@@ -54,7 +54,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <Comp
         type="button"
         className={cn(
-          buttonVariants({ variant, size, className, color, shape }),
+          buttonVariants({ variant, size, color, shape, className }),
         )}
         ref={ref}
         disabled={disabled || loading}

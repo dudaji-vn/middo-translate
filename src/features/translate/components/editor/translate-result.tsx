@@ -42,7 +42,7 @@ export const TranslateResult = ({
 
   const pushHistoryItem = useHistoryStore((state) => state.pushHistoryItem);
 
-  const debouncedSavedResult = useDebounce<string>(result, 2000);
+  const debouncedSavedResult = useDebounce<string>(result, 1000);
   useEffect(() => {
     if (!isEmpty(historyItem) && debouncedSavedResult) {
       pushHistoryItem({

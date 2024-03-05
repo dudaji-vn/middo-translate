@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -9,7 +9,7 @@ import {
   useSearchParams,
 } from 'next/navigation';
 import History from './_components/history/history';
-import Phrase from './_components/phrase/phrase';
+import Phrases from './_components/phrases/phrases';
 
 export type TTranslationTab = 'history' | 'phrases';
 
@@ -36,17 +36,17 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
           'flex w-full flex-col divide-x max-md:gap-6 md:h-main-container-height md:flex-row',
         )}
       >
-        <div className={cn('h-fit w-full md:w-3/4')}>{children}</div>
+        <div className={cn('h-fit w-full md:w-2/3 xl:w-3/4')}>{children}</div>
         <AnimatePresence>
           <motion.div
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: 'spring', duration: 0.6 }}
             className={
-              'max-h  z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/4'
+              'max-h  z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto xl:w-1/4 md:w-1/3'
             }
           >
-            <Phrase
+            <Phrases
               isSelected={currentTab === 'phrases'}
               onClose={onCloseTab}
             />

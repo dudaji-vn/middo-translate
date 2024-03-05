@@ -4,6 +4,7 @@ import {
 } from '@/app/(main-layout)/_components/history/history';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { restoredState } from '@/utils/restore';
 
 export type HistoryState = {
   historyListItems: THistoryListItems;
@@ -11,32 +12,13 @@ export type HistoryState = {
   pushHistoryItem: (item: THistoryItem) => void;
   removeHistoryItem: (item: THistoryItem) => void;
   clear: () => void;
-  isHistoryListOpen: boolean;
-  setIsHistoryListOpen: (isHistoryListOpen: boolean) => void;
 };
-const restoredState = () => {
-  const isBrowser = typeof window !== 'undefined';
-  if (!isBrowser) {
-    return {};
-  }
-  const historyListItems = localStorage.getItem('history-storage');
-  try {
-    const parsedHistoryListItems = historyListItems
-      ? JSON.parse(historyListItems)
-      : [];
-    if (parsedHistoryListItems) {
-      return parsedHistoryListItems;
-    }
-  } catch (error) {
-    console.error('Error parsing history storage', error);
-  }
-  return {};
-};
+
 export const useHistoryStore = create<HistoryState>()(
   persist(
     (set) => ({
       historyListItems: [],
-      ...restoredState,
+      ...restoredState('history-storage'),
       setHistoryListItems: (historyListItems) => set({ historyListItems }),
       pushHistoryItem: (historyItem) =>
         set((state) => ({
@@ -50,8 +32,6 @@ export const useHistoryStore = create<HistoryState>()(
           ),
         })),
       clear: () => set({ historyListItems: [] }),
-      isHistoryListOpen: false,
-      setIsHistoryListOpen: (isHistoryListOpen) => set({ isHistoryListOpen }),
     }),
     {
       name: 'history-storage',
