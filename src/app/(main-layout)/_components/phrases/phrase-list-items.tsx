@@ -2,6 +2,7 @@ import { Button, ButtonProps } from '@/components/actions';
 import { Typography, TypographyProps } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { School } from 'lucide-react';
+import Image from 'next/image';
 import React, { ReactNode, forwardRef, useState } from 'react';
 
 export type TPhraseItem = {
@@ -32,21 +33,18 @@ const PhraseItem = ({
   return (
     <Button
       className={cn(
-        'w-fill relative grid h-[94px] w-full grid-cols-1 place-items-start gap-y-2 rounded-xl p-4 ',
-        isOpened ? ' border border-primary-500-main !shadow-lg' : 'bg-neutral-50/50',
-        `bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/phrases/phrase1.png')]`,
+        'w-fill relative grid h-[94px] w-full grid-cols-1 place-items-start gap-y-2 rounded-xl p-4  ',
+        isOpened ? ' border border-primary-500-main !shadow-lg' : '',
+        'z-50 bg-neutral-50/50 hover:!bg-transparent hover:shadow-lg',
       )}
+      style={{
+        backgroundPosition: 'right',
+      }}
       variant={'ghost'}
       {...props}
       onClick={onOpen}
     >
-      <span
-        {...iconWrapperProps}
-        className={cn(
-          iconWrapperProps?.className,
-          `rounded-full p-3 [&_svg]:text-white `,
-        )}
-      >
+      <span {...iconWrapperProps} className={cn(` [&_svg]:text-white `)}>
         {icon}
       </span>
       <Typography {...nameProps}>{name}</Typography>
@@ -69,19 +67,40 @@ const PhrasesListItems = forwardRef<
         'gap-3 p-4',
       )}
     >
-      {items?.map(({ name, icon, ...rest }) => {
+      {items?.map(({ name, icon, ...rest }, index) => {
         console.log('restProps', rest);
         return (
-          <PhraseItem
-            key={name}
-            icon={icon}
-            name={name}
-            {...rest}
-            isOpened={selectedItem == name}
-            onOpen={() => {
-              setSelectedItem(name);
-            }}
-          />
+          <div className="relative" key={name}>
+            <div
+              className={cn(
+                `absolute z-20 inset-0 bg-background bg-origin-content opacity-15`,
+              )}
+              style={{
+                background: `url('/phrases/phrase${index + 1}.svg')`,
+                backgroundPosition: `
+                right -45% bottom 10px
+                `,
+                backgroundSize: '45%',
+                backgroundRepeat: 'no-repeat',
+              }}
+            />
+            <PhraseItem
+              icon={
+                <Image
+                  src={`/phrases/phrase${index + 1}.svg`}
+                  width={34}
+                  height={34}
+                  alt={name}
+                />
+              }
+              name={name}
+              {...rest}
+              isOpened={selectedItem == name}
+              onOpen={() => {
+                setSelectedItem(name);
+              }}
+            />
+          </div>
         );
       })}
     </div>

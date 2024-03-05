@@ -17,14 +17,12 @@ type TDisplayedItem = {
   languageCode: string;
   content: string;
   middleTranslation?: string;
-  isSrc?: boolean;
   isShowMiddle: boolean;
 };
 const DisplayedItem = ({
   languageCode,
   content,
   middleTranslation,
-  isSrc,
   isShowMiddle = false,
 }: TDisplayedItem) => {
   const flag = getCountryCode(languageCode);
@@ -37,12 +35,7 @@ const DisplayedItem = ({
           {language?.name}
         </Typography>
         <CopyZoneClick text={content}>
-          <Button.Icon
-            variant={'ghost'}
-            size={'xs'}
-            color={'default'}
-            className={isSrc ? '' : 'hidden'}
-          >
+          <Button.Icon variant={'ghost'} size={'xs'} color={'default'}>
             <Copy />
           </Button.Icon>
         </CopyZoneClick>
@@ -91,7 +84,9 @@ const HistoryItem = ({
   const isEnglishTranslate =
     src.language === DEFAULT_LANGUAGES_CODE.EN ||
     dest.language === DEFAULT_LANGUAGES_CODE.EN;
-  const isShowMiddle = Boolean(!isEnglishTranslate && src.language && dest.language);
+  const isShowMiddle = Boolean(
+    !isEnglishTranslate && src.language && dest.language,
+  );
 
   return (
     <motion.div
@@ -110,7 +105,6 @@ const HistoryItem = ({
         content={src.content}
         middleTranslation={src.englishContent}
         isShowMiddle={isShowMiddle}
-        isSrc
       />
       <DisplayedItem
         languageCode={dest.language}
