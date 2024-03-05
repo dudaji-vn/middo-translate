@@ -12,6 +12,8 @@ import {
 import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
+import { useTextCopy } from '@/hooks/use-text-copy';
+import { getFlagEmoji } from '@/utils/get-flag-emoji';
 
 type TDisplayedItem = {
   languageCode: string;
@@ -72,9 +74,20 @@ const HistoryItem = ({
   index: number;
 }): JSX.Element => {
   const { src, dest } = item;
-  const onCopyAll = () => {
-    const text = `${src.content}\n${dest.content}`;
-    navigator.clipboard.writeText(text);
+  const { copy } = useTextCopy();
+  const allowCopyAll = Boolean(
+    dest.englishContent && src.content && dest.content,
+  );
+  const handleCopyAll = () => {
+    const firstLine = `${getFlagEmoji(
+      getCountryCode(src.language) as string,
+    )} ${src.content}`;
+    const secondLine = `${getFlagEmoji('gb')} ${dest.englishContent}`;
+    const thirdLine = `${getFlagEmoji(
+      getCountryCode(dest.language) as string,
+    )} ${dest.content}`;
+    const textFormat = `${firstLine}\n${secondLine}\n${thirdLine}`;
+    copy(textFormat);
   };
   const isPresent = useIsPresent();
   if (!src || !dest) {
@@ -117,8 +130,8 @@ const HistoryItem = ({
         <Button.Icon
           variant={'default'}
           size={'xs'}
-          onClick={onCopyAll}
-          className="bg-primary-200 text-primary-500-main"
+          onClick={handleCopyAll}
+          className={cn("bg-primary-200 text-primary-500-main", !allowCopyAll && 'invisible')}
         >
           <Layers className="!h-5 !w-5" />
         </Button.Icon>

@@ -17,6 +17,9 @@ import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useState } from 'react';
 import { COMMIT_SHA } from '@/configs/commit-data';
+import { useSearchParams } from 'next/navigation';
+import { TranslationTab } from '@/types/translationstab.type';
+import { cn } from '@/utils/cn';
 
 type Props = {};
 
@@ -29,14 +32,20 @@ export const Header = (props: Props) => {
   const signOut = async () => {
     setShowConfirmLogout(true);
   };
+  const searchParams = useSearchParams();
+  const shouldHideHeaderOnMobile = searchParams?.get('tab') === TranslationTab.PHRASES || searchParams?.get('tab') === TranslationTab.HISTORY;
 
   return (
-    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]">
+    <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]", shouldHideHeaderOnMobile && 'hidden')}>
       <HeaderNav />
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
-     {COMMIT_SHA && <span className='text-[0.6rem] text-gray-600 mt-2'>{`ver.${(COMMIT_SHA as string)?.slice(0,8) }`} </span>}
+      {COMMIT_SHA && (
+        <span className="mt-2 text-[0.6rem] text-gray-600">
+          {`ver.${(COMMIT_SHA as string)?.slice(0, 8)}`}{' '}
+        </span>
+      )}
 
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication && user ? (

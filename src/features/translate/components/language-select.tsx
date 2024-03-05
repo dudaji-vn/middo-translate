@@ -92,7 +92,7 @@ const LanguageItem = ({
         ) : (
           <Globe2Icon className="z-10 h-5 w-5 text-primary" />
         )}
-        <span className="z-10 truncate">{languageName}</span>
+        {<span className={cn("z-10 truncate", !active && 'hidden')}>{languageName}</span>}
       </div>
       <ChevronDownIcon className="z-10 size-5 text-neutral-600 lg:hidden" />
     </button>

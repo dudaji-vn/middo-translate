@@ -19,9 +19,9 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { cn } from '@/utils/cn';
 import { Extension } from '@/features/translate/components/extension';
 
-import { TTranslationTab } from './template';
 import { THistoryItem } from './_components/history/history';
 import { PageLoading } from '@/components/feedback';
+import { TranslationTab } from '@/types/translationstab.type';
 
 interface HomeProps {
   searchParams: {
@@ -31,7 +31,7 @@ interface HomeProps {
     edit?: string;
     mquery?: string;
     detect?: string;
-    tab?: TTranslationTab;
+    tab?: TranslationTab;
   };
 }
 
