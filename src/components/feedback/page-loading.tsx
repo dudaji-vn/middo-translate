@@ -24,7 +24,7 @@ export const PageLoading = forwardRef<HTMLDivElement, PageLoadingProps>(
             <p>{props.title}</p>
           </div>
         )}
-        <div className={isLoading ? 'hidden' : 'block'}>{props.children}</div>
+        <div className={isLoading ? 'hidden' : 'block'} {...props}>{props.children}</div>
       </>
     );
   },

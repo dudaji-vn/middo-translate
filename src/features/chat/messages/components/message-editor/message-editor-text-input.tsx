@@ -52,6 +52,7 @@ export const TextInput = forwardRef<
     const buttonRef = useRef<HTMLButtonElement>(null);
     const triggerSubmit = () => {
       buttonRef.current?.click();
+      setText('');
     };
     const onScale: EventHandler<ChangeEvent<HTMLTextAreaElement>> = (e) => {
       if (e.target?.value?.length === 0) return;

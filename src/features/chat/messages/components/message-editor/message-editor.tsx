@@ -11,7 +11,6 @@ import { TextInput, TextInputRef } from './message-editor-text-input';
 import { detectLanguage, translateText } from '@/services/languages.service';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { FileWithUrl } from '@/hooks/use-select-files';
 import { Media } from '@/types';
 import { MessageEditorForm } from './message-editor-form';
 import { MessageEditorMediaBar } from './message-editor-media-bar';
@@ -56,6 +55,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const [shrinkToolbar, setShrinkToolbar] = useState(false);
     const [inputDisabled, setInputDisabled] = useState(false);
 
+    const timer = useRef<number>(new Date().getTime());
     const resetForm = (e: React.FormEvent<HTMLFormElement>) => {
       e?.currentTarget?.reset();
       textInputRef?.current?.reset();
@@ -77,6 +77,11 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         documents: Media[];
       },
     ) => {
+      const currentTime = new Date().getTime();
+      if (currentTime - timer.current < 300) {
+        return;
+      }
+      timer.current = currentTime;
       resetForm(e);
       scrollToBottom();
       const formData = new FormData(e.currentTarget);

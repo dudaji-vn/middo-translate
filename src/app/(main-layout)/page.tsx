@@ -19,6 +19,10 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { PageLoading } from '@/components/feedback';
 import { cn } from '@/utils/cn';
 import { Extension } from '@/features/translate/components/extension';
+
+import HomeTemplate, { TTranslationTab } from './template';
+import { THistoryItem } from './_components/history/history';
+
 interface HomeProps {
   searchParams: {
     query?: string;
@@ -27,6 +31,7 @@ interface HomeProps {
     edit?: string;
     mquery?: string;
     detect?: string;
+    tab?: TTranslationTab;
   };
 }
 
@@ -34,7 +39,6 @@ export default async function Home(props: HomeProps) {
   const isEdit = props.searchParams.edit === 'true';
   const sourceText = props.searchParams.query || '';
   const middleText = props.searchParams.mquery || '';
-
   const sourceLanguage =
     props.searchParams.source === 'auto'
       ? props.searchParams.detect && middleText
@@ -75,10 +79,23 @@ export default async function Home(props: HomeProps) {
   const isShowMiddleSource = sourceEnglishResult && !isEnglishTranslate;
 
   const isShowMiddleTarget = targetEnglishResult && !isEnglishTranslate;
+  const historyItem:THistoryItem = {
+    id: Date.now().toString(),
+    src: {
+      language: String(sourceLanguage),
+      content: sourceText,
+      englishContent: sourceEnglishResult,
+    },
+    dest: {
+      language: String(targetLanguage),
+      content: targetResult,
+      englishContent: targetEnglishResult,
+    },
+  };
 
   return (
-    <main className="relative flex h-full w-full flex-col pt-5">
-      <PageLoading title="Loading">
+    <>
+      <div className="flex h-full w-full flex-col pt-5">
         <CompareProvider
           text={sourceEnglishResult}
           textCompare={targetEnglishResult}
@@ -115,10 +132,10 @@ export default async function Home(props: HomeProps) {
                   </>
                 )}
               </TranslateEditor>
-
               <TranslateResult
                 result={targetResult}
                 languageCode={targetLanguage}
+                historyItem={historyItem}
               >
                 {isShowMiddleTarget && (
                   <TranslateMiddle
@@ -145,11 +162,11 @@ export default async function Home(props: HomeProps) {
             </div>
           </CaptureProvider>
         </CompareProvider>
-      </PageLoading>
+      </div>
       <DetectTranslateWay
         sourceLanguage={sourceLanguage}
         targetLanguage={targetLanguage}
       />
-    </main>
+    </>
   );
 }
