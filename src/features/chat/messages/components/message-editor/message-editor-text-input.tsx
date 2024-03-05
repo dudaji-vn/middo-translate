@@ -88,8 +88,9 @@ export const TextInput = forwardRef<
           onInput={onScale}
           {...props}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey && text.length > 0) {
+            if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
+              if(text.length === 0) return;
               triggerSubmit();
             }
             onKeyDown?.(e);
