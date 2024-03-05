@@ -5,19 +5,27 @@ import { Copy, Layers, Trash2 } from 'lucide-react';
 import React from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { THistoryItem } from './history';
-import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
+import {
+  DEFAULT_LANGUAGES_CODE,
+  LANGUAGE_CODES_MAP,
+} from '@/configs/default-language';
+import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
+import { cn } from '@/utils/cn';
+
 type TDisplayedItem = {
   languageCode: string;
   content: string;
-  translation?: string;
+  middleTranslation?: string;
   isSrc?: boolean;
+  isShowMiddle: boolean;
 };
 const DisplayedItem = ({
   languageCode,
   content,
-  translation,
+  middleTranslation,
   isSrc,
+  isShowMiddle = false,
 }: TDisplayedItem) => {
   const flag = getCountryCode(languageCode);
   const language = getLanguageByCode(languageCode);
@@ -39,10 +47,10 @@ const DisplayedItem = ({
           </Button.Icon>
         </CopyZoneClick>
       </div>
-      <Typography className="w-[90%]  break-words text-sm">
+      <Typography className="w-[90%]  break-words text-sm ">
         {content}
       </Typography>
-      {translation && (
+      {isShowMiddle && middleTranslation && (
         <div className="relative">
           <TriangleSmall
             fill={'#e6e6e6'}
@@ -51,7 +59,7 @@ const DisplayedItem = ({
           />
           <div className="mb-1 mt-2 rounded-xl bg-neutral-100 p-1 px-3 text-neutral-600">
             <Text
-              value={translation}
+              value={middleTranslation}
               className="text-start text-sm font-light"
             />
           </div>
@@ -64,31 +72,51 @@ const DisplayedItem = ({
 const HistoryItem = ({
   item,
   onDeleteItem,
+  index,
 }: {
   item: THistoryItem;
   onDeleteItem: (item: THistoryItem) => void;
+  index: number;
 }): JSX.Element => {
   const { src, dest } = item;
   const onCopyAll = () => {
     const text = `${src.content}\n${dest.content}`;
     navigator.clipboard.writeText(text);
   };
+  const isPresent = useIsPresent();
   if (!src || !dest) {
     return <></>;
   }
 
+  const isEnglishTranslate =
+    src.language === DEFAULT_LANGUAGES_CODE.EN ||
+    dest.language === DEFAULT_LANGUAGES_CODE.EN;
+  const isShowMiddle = Boolean(!isEnglishTranslate && src.language && dest.language);
+
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-primary-200 p-2">
+    <motion.div
+      className={cn(
+        'flex flex-col gap-2 rounded-2xl border border-primary-200 p-2',
+        isPresent ? 'static' : 'absolute',
+      )}
+      key={item.id}
+      initial={{ opacity: 0, x: 100 }}
+      transition={{ type: 'spring', duration: 0.5 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 100 }}
+    >
       <DisplayedItem
         languageCode={src.language}
         content={src.content}
-        translation={src.content}
+        middleTranslation={src.englishContent}
+        isShowMiddle={isShowMiddle}
         isSrc
       />
       <DisplayedItem
         languageCode={dest.language}
         content={dest.content}
-        translation={dest.content}
+        middleTranslation={dest.englishContent}
+        isShowMiddle={isShowMiddle}
       />
 
       <div className="flex items-center justify-end gap-2">
@@ -109,7 +137,7 @@ const HistoryItem = ({
           <Trash2 className="!h-5 !w-5" />
         </Button.Icon>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
