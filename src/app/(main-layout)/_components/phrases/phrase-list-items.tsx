@@ -108,7 +108,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
             <div className="relative" key={name}>
               <div
                 className={cn(
-                  `absolute inset-0 z-20 bg-background bg-origin-content opacity-15`,
+                  `absolute inset-0  bg-background bg-origin-content opacity-15`,
                 )}
                 style={{
                   background: `url('/phrases/phrase${index + 1}.svg')`,
