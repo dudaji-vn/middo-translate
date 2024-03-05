@@ -69,7 +69,7 @@ export const TranslateResult = ({
         <div className="bottom-3 right-3 mt-3 flex justify-end gap-2">
           <TextToSpeechButton
             languageCode={languageCode}
-            value={result}
+            text={result}
             shortcut={SHORTCUTS.TRANSLATED_TEXT_TO_SPEECH}
           />
           <CopyZoneClick text={result}>
