@@ -2,7 +2,7 @@ import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { ArrowLeft, Star } from 'lucide-react';
 import React from 'react';
-import { phraseOptions } from './options';
+import { FAVORITE_OPTION_NAME, phraseOptions } from './options';
 import { useFavoritePhrasesStore } from '@/features/translate/stores/phrases.store';
 import { useTranslateStore } from '@/stores/translate.store';
 
@@ -12,7 +12,7 @@ export type PhraseItemViewOptionsProps = {
   onClose: () => void;
 };
 
-const FAVORITE_OPTION_NAME = 'Your list';
+
 
 const getFavoritePhrases = (favoritePhrases: Record<string, number[]>) => {
   let position: Array<{ optionName: string; index: number }> = [];

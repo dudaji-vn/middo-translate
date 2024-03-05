@@ -21,6 +21,6 @@ export const phraseOptions: Record<string, string[]> = {
   Travel: ['I like to visit [country name]'],
   Sport: ['I like to play [sport name]', 'I like to watch [sport name]'],
 };
-
+export const FAVORITE_OPTION_NAME = 'Your list';
 export const phraseOptionNames: string[] =
-  Object.keys(phraseOptions).concat('Your list');
+  Object.keys(phraseOptions).concat(FAVORITE_OPTION_NAME);
