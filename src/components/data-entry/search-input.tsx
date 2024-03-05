@@ -47,7 +47,6 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
         inputRef.current?.focus();
       },
     );
-
     useImperativeHandle(
       ref,
       () => ({
@@ -68,6 +67,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             type="text"
             autoFocus
             {...props}
+            // autoFocus
             onChange={(e) => {
               props.onChange?.(e);
               setValue(e.target.value);

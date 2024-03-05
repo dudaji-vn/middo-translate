@@ -91,7 +91,6 @@ export const TranslateEditor = ({
   useKeyboardShortcut([SHORTCUTS.COPY_INPUT], () => {
     copy();
   });
-
   useEffect(() => {
     if (sourceTranslateResult && !text) {
       setValue(sourceTranslateResult);

@@ -1,6 +1,6 @@
 'use client';
 
-import { CopyIcon, Volume2Icon } from 'lucide-react';
+import { CopyIcon } from 'lucide-react';
 
 import { Button } from '@/components/actions';
 import { CopyZoneClick } from '@/components/actions';
