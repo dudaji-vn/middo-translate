@@ -20,7 +20,10 @@ export type PhraseItemProps = {
 } & TPhraseItem;
 
 export interface PhraseListItemsProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  closeTip: () => void;
+  showTip: () => void;
+}
 
 const PhraseItem = ({
   name,
@@ -61,8 +64,13 @@ const PhraseItem = ({
 };
 
 const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
+<<<<<<< HEAD
   ({ className, ...props }, ref) => {
     const [hideTip, setHideTip] = useState(false);
+=======
+  ({ className, closeTip, showTip, ...props }, ref) => {
+    const rowsCount = Math.ceil(phraseOptionNames.length / 2);
+>>>>>>> adb94ef (feat: handle logic update favorite)
     const [selectedItem, setSelectedItem] = useState<{
       name: TPhraseItem['name'];
       icon: ReactNode;
