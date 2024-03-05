@@ -5,7 +5,10 @@ import { Copy, Layers, Trash2 } from 'lucide-react';
 import React from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { THistoryItem } from './history';
-import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
+import {
+  DEFAULT_LANGUAGES_CODE,
+  LANGUAGE_CODES_MAP,
+} from '@/configs/default-language';
 import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
@@ -13,14 +16,16 @@ import { cn } from '@/utils/cn';
 type TDisplayedItem = {
   languageCode: string;
   content: string;
-  translation?: string;
+  middleTranslation?: string;
   isSrc?: boolean;
+  isShowMiddle: boolean;
 };
 const DisplayedItem = ({
   languageCode,
   content,
-  translation,
+  middleTranslation,
   isSrc,
+  isShowMiddle = false,
 }: TDisplayedItem) => {
   const flag = getCountryCode(languageCode);
   const language = getLanguageByCode(languageCode);
@@ -42,10 +47,10 @@ const DisplayedItem = ({
           </Button.Icon>
         </CopyZoneClick>
       </div>
-      <Typography className="w-[90%]  break-words text-sm">
+      <Typography className="w-[90%]  break-words text-sm ">
         {content}
       </Typography>
-      {translation && (
+      {isShowMiddle && middleTranslation && (
         <div className="relative">
           <TriangleSmall
             fill={'#e6e6e6'}
@@ -54,7 +59,7 @@ const DisplayedItem = ({
           />
           <div className="mb-1 mt-2 rounded-xl bg-neutral-100 p-1 px-3 text-neutral-600">
             <Text
-              value={translation}
+              value={middleTranslation}
               className="text-start text-sm font-light"
             />
           </div>
@@ -83,6 +88,11 @@ const HistoryItem = ({
     return <></>;
   }
 
+  const isEnglishTranslate =
+    src.language === DEFAULT_LANGUAGES_CODE.EN ||
+    dest.language === DEFAULT_LANGUAGES_CODE.EN;
+  const isShowMiddle = Boolean(!isEnglishTranslate && src.language && dest.language);
+
   return (
     <motion.div
       className={cn(
@@ -90,21 +100,23 @@ const HistoryItem = ({
         isPresent ? 'static' : 'absolute',
       )}
       key={item.id}
-      initial={{ opacity: 0 , x: 100 }}
+      initial={{ opacity: 0, x: 100 }}
       transition={{ type: 'spring', duration: 0.5 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0 , x: 100 }}
+      exit={{ opacity: 0, x: 100 }}
     >
       <DisplayedItem
         languageCode={src.language}
         content={src.content}
-        translation={src.content}
+        middleTranslation={src.englishContent}
+        isShowMiddle={isShowMiddle}
         isSrc
       />
       <DisplayedItem
         languageCode={dest.language}
         content={dest.content}
-        translation={dest.content}
+        middleTranslation={dest.englishContent}
+        isShowMiddle={isShowMiddle}
       />
 
       <div className="flex items-center justify-end gap-2">
