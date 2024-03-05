@@ -49,7 +49,7 @@ const PhraseItemViewOptions = ({
     const optionCheckList = favoritePhrases[phraseName] || [];
     const isUnChecked = optionCheckList.includes(optionIndex);
     const newOptionCheckList = isUnChecked
-      ? optionCheckList.filter((index) => index !== optionIndex)
+      ? optionCheckList.filter((i) => i !== optionIndex)
       : [...optionCheckList, optionIndex];
     updateFavoritePhrases(phraseName, newOptionCheckList);
   };
