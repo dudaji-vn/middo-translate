@@ -7,7 +7,6 @@ import { Lightbulb, SparklesIcon, XIcon } from 'lucide-react';
 
 import React, { forwardRef } from 'react';
 import PhrasesListItems from './phrase-list-items';
-import { phrasesContents } from './content';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
@@ -19,7 +18,7 @@ export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
 const tipContent = `At here, you can select any topic to access our sample sentences for this situation. Or you could save your favorite sentences in “Your list" tab.`;
 
 const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
-  ({ isSelected, className, onClose, onTipClose, hideTip, ...props }, ref) => {
+  ({ isSelected, className, onClose, onTipClose, onShowTip, hideTip, ...props }, ref) => {
     return (
       <section
         ref={ref}
@@ -70,7 +69,7 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
             </Typography>
           </div>
         </div>
-        <PhrasesListItems items={phrasesContents} />
+        <PhrasesListItems closeTip={onTipClose} showTip={onShowTip}/>
       </section>
     );
   },

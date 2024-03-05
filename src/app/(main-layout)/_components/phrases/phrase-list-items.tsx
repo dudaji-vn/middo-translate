@@ -1,9 +1,10 @@
 import { Button, ButtonProps } from '@/components/actions';
 import { Typography, TypographyProps } from '@/components/data-display';
 import { cn } from '@/utils/cn';
-import { School } from 'lucide-react';
 import Image from 'next/image';
 import React, { ReactNode, forwardRef, useState } from 'react';
+import PhraseItemViewOptions from './phrase-item-view-options';
+import { phraseOptionNames } from './options';
 
 export type TPhraseItem = {
   name: string;
@@ -18,7 +19,10 @@ export type PhraseItemProps = {
 } & TPhraseItem;
 
 export interface PhraseListItemsProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  closeTip: () => void;
+  showTip: () => void;
+}
 
 const PhraseItem = ({
   name,
@@ -33,12 +37,13 @@ const PhraseItem = ({
   return (
     <Button
       className={cn(
-        'w-fill relative grid h-[94px] w-full grid-cols-1 place-items-start gap-y-2 rounded-xl p-4  ',
+        'w-fill relative grid h-[94px] w-full grid-cols-1 place-items-start gap-y-2 rounded-xl !p-3  ',
         isOpened ? ' border border-primary-500-main !shadow-lg' : '',
-        'z-50 bg-neutral-50/50 hover:!bg-transparent hover:shadow-lg',
+        'z-50 bg-neutral-50/50 hover:border hover:!border-primary-500-main hover:!bg-transparent',
       )}
       style={{
         backgroundPosition: 'right',
+        fontSize: '14px',
       }}
       variant={'ghost'}
       {...props}
@@ -47,65 +52,90 @@ const PhraseItem = ({
       <span {...iconWrapperProps} className={cn(` [&_svg]:text-white `)}>
         {icon}
       </span>
-      <Typography {...nameProps}>{name}</Typography>
+      <Typography
+        {...nameProps}
+        className="w-full text-left leading-normal md:text-[0.85em] lg:text-[0.95em] xl:text-[1.1em]"
+      >
+        {name}
+      </Typography>
     </Button>
   );
 };
 
-const PhrasesListItems = forwardRef<
-  HTMLDivElement,
-  PhraseListItemsProps & { items: TPhraseItem[] }
->(({ className, items, ...props }, ref) => {
-  const rowsCount = Math.ceil(items.length / 2);
-  const [selectedItem, setSelectedItem] = useState<TPhraseItem['name']>();
-  return (
-    <div
-      {...props}
-      className={cn(
-        className,
-        `grid grid-cols-2 grid-rows-[${rowsCount}]`,
-        'gap-3 p-4',
-      )}
-    >
-      {items?.map(({ name, icon, ...rest }, index) => {
-        console.log('restProps', rest);
-        return (
-          <div className="relative" key={name}>
-            <div
-              className={cn(
-                `absolute z-20 inset-0 bg-background bg-origin-content opacity-15`,
-              )}
-              style={{
-                background: `url('/phrases/phrase${index + 1}.svg')`,
-                backgroundPosition: `
+const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
+  ({ className, closeTip, showTip, ...props }, ref) => {
+    const rowsCount = Math.ceil(phraseOptionNames.length / 2);
+    const [selectedItem, setSelectedItem] = useState<{
+      name: TPhraseItem['name'];
+      icon: ReactNode;
+    }>();
+    const closeViewPhraseOptions = () => {
+      setSelectedItem(undefined);
+    }
+
+    if (selectedItem) {
+      closeTip();
+      return (
+        <PhraseItemViewOptions
+          phraseItemName={selectedItem.name}
+          icon={selectedItem.icon}
+          onClose={closeViewPhraseOptions}
+        />
+      );
+    }
+
+    return (
+      <div
+        {...props}
+        className={cn(
+          className,
+          `grid grid-cols-2 grid-rows-[${rowsCount}]`,
+          'gap-3 p-4',
+        )}
+      >
+        {phraseOptionNames?.map((name, index) => {
+          const icon = (
+            <Image
+              src={`/phrases/phrase${index + 1}.svg`}
+              width={34}
+              height={34}
+              alt={name}
+            />
+          );
+          return (
+            <div className="relative" key={name}>
+              <div
+                className={cn(
+                  `absolute inset-0 z-20 bg-background bg-origin-content opacity-15`,
+                )}
+                style={{
+                  background: `url('/phrases/phrase${index + 1}.svg')`,
+                  backgroundPosition: `
                 right -45% bottom 10px
                 `,
-                backgroundSize: '45%',
-                backgroundRepeat: 'no-repeat',
-              }}
-            />
-            <PhraseItem
-              icon={
-                <Image
-                  src={`/phrases/phrase${index + 1}.svg`}
-                  width={34}
-                  height={34}
-                  alt={name}
-                />
-              }
-              name={name}
-              {...rest}
-              isOpened={selectedItem == name}
-              onOpen={() => {
-                setSelectedItem(name);
-              }}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-});
+                  backgroundSize: '45%',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              />
+              <PhraseItem
+                icon={icon}
+                name={name}
+                isOpened={selectedItem == name}
+                onOpen={() => {
+                  setSelectedItem({
+                    name,
+                    icon,
+                  });
+                }}
+                onClose={closeViewPhraseOptions}
+              />
+            </div>
+          );
+        })}
+      </div>
+    );
+  },
+);
 PhrasesListItems.displayName = 'PhraseItem';
 PhraseItem.displayName = 'PhraseItem';
 export default PhrasesListItems;
