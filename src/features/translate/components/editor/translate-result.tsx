@@ -8,18 +8,15 @@ import React, { useEffect } from 'react';
 import { TranslateEditorWrapper } from './translate-editor-wrapper';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
-import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 import { useTranslateStore } from '@/stores/translate.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useTextCopy } from '@/hooks/use-text-copy';
-import {
-  THistoryData,
-  THistoryItem,
-} from '@/app/(main-layout)/_components/history/history';
+import { THistoryItem } from '@/app/(main-layout)/_components/history/history';
 import { useHistoryStore } from '../../stores/history.store';
 import { isEmpty } from 'lodash';
 import { useDebounce } from 'usehooks-ts';
+import { TextToSpeechButton } from '../text-to-speech-button';
 export interface TranslateResultProps {
   result: string;
   languageCode?: string;
@@ -36,16 +33,13 @@ export const TranslateResult = ({
 }: TranslateResultProps) => {
   const { textStyle } = useTranslateStore();
 
-  const { speak } = useTextToSpeech(languageCode, result);
   const isMobile = useAppStore((state) => state.isMobile);
   const array = result.split('\n');
   const { copy } = useTextCopy(result);
   useKeyboardShortcut([SHORTCUTS.TRANSLATED_COPY], () => {
     copy();
   });
-  useKeyboardShortcut([SHORTCUTS.TRANSLATED_TEXT_TO_SPEECH], () => {
-    speak();
-  });
+
   const pushHistoryItem = useHistoryStore((state) => state.pushHistoryItem);
 
   const debouncedSavedResult = useDebounce<string>(result, 2000);
@@ -60,7 +54,7 @@ export const TranslateResult = ({
       });
     }
   }, [debouncedSavedResult]);
-  
+
   return (
     <TranslateEditorWrapper
       className={cn(
@@ -73,15 +67,11 @@ export const TranslateResult = ({
       languageCode={languageCode}
       footerElement={
         <div className="bottom-3 right-3 mt-3 flex justify-end gap-2">
-          <Button.Icon
-            disabled={!result}
-            onClick={() => speak()}
-            variant="ghost"
-            color="primary"
-            size="xs"
-          >
-            <Volume2Icon />
-          </Button.Icon>
+          <TextToSpeechButton
+            languageCode={languageCode}
+            value={result}
+            shortcut={SHORTCUTS.TRANSLATED_TEXT_TO_SPEECH}
+          />
           <CopyZoneClick text={result}>
             <Button.Icon
               disabled={!result}

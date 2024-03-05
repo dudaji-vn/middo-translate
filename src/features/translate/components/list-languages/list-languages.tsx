@@ -63,6 +63,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search"
+            onClear={() => setSearch('')}
           />
         </div>
         <div className="flex flex-col overflow-y-auto md:flex-row md:flex-wrap">
