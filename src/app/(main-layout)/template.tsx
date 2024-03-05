@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useCallback } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -9,7 +9,7 @@ import {
   useSearchParams,
 } from 'next/navigation';
 import History from './_components/history/history';
-import Phrase from './_components/phrase/phrase';
+import Phrases from './_components/phrases/phrases';
 
 export type TTranslationTab = 'history' | 'phrases';
 
@@ -19,6 +19,7 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
   const currentTab = searchParams?.get('tab') as TTranslationTab;
   const { replace } = useRouter();
   const isValidTab = /phrases|history/.test(currentTab);
+  const [hideTip, setHideTip] = useState(false);
 
   const onCloseTab = useCallback(() => {
     const params = new URLSearchParams(searchParams as URLSearchParams);
@@ -46,9 +47,12 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
               'max-h  z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/4'
             }
           >
-            <Phrase
+            <Phrases
               isSelected={currentTab === 'phrases'}
               onClose={onCloseTab}
+              hideTip={hideTip}
+              onTipClose={() => setHideTip(true)}
+              onShowTip={() => setHideTip(false)}
             />
             <History
               isSelected={currentTab === 'history'}
