@@ -3,7 +3,7 @@
 import './style.css';
 
 import { ChangeEvent, useEffect } from 'react';
-import { CopyIcon, Volume2Icon, XCircleIcon } from 'lucide-react';
+import { CopyIcon, XCircleIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Button } from '@/components/actions';
@@ -14,11 +14,11 @@ import { useAdjustTextStyle } from '@/hooks/use-adjust-text-style';
 import { useDebounce } from 'usehooks-ts';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
 import { useTextAreaResize } from '@/hooks/use-text-area-resize';
-import { useTextToSpeech } from '@/hooks/use-text-to-speech';
 import { useTranslateStore } from '@/stores/translate.store';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { TextToSpeechButton } from '../text-to-speech-button';
 
 export interface TranslateEditorProps {
   className?: string;
@@ -59,8 +59,6 @@ export const TranslateEditor = ({
   const pathname = usePathname();
   const { replace } = useRouter();
 
-  const { speak } = useTextToSpeech(languageCode, value);
-
   const isKeyboardOpen = useDetectKeyboardOpen();
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
@@ -93,9 +91,7 @@ export const TranslateEditor = ({
   useKeyboardShortcut([SHORTCUTS.COPY_INPUT], () => {
     copy();
   });
-  useKeyboardShortcut([SHORTCUTS.TEXT_TO_SPEECH_INPUT], () => {
-    speak();
-  });
+
   useEffect(() => {
     if (sourceTranslateResult && !text) {
       setValue(sourceTranslateResult);
@@ -135,18 +131,11 @@ export const TranslateEditor = ({
       className={className}
       footerElement={
         <div className="bottom-3 right-3 mt-3 flex justify-end gap-2">
-          <Button.Icon
-            onClick={() => {
-              speak();
-            }}
-            disabled={!value}
-            variant="ghost"
-            color="primary"
-            size="xs"
-          >
-            <Volume2Icon />
-          </Button.Icon>
-
+          <TextToSpeechButton
+            languageCode={languageCode}
+            text={value}
+            shortcut={SHORTCUTS.TEXT_TO_SPEECH_INPUT}
+          />
           <CopyZoneClick text={value}>
             <Button.Icon
               disabled={!value}
