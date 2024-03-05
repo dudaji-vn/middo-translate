@@ -26,6 +26,7 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
 import { SendIcon } from 'lucide-react';
+import { useBoolean } from 'usehooks-ts';
 
 type SubmitData = {
   content: string;
@@ -53,6 +54,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const srcLang = useChatStore((s) => s.srcLang);
     const isMobile = useAppStore((state) => state.isMobile);
     const [shrinkToolbar, setShrinkToolbar] = useState(false);
+    const [inputDisabled, setInputDisabled] = useState(false);
 
     const resetForm = (e: React.FormEvent<HTMLFormElement>) => {
       e?.currentTarget?.reset();
@@ -145,6 +147,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
             <div className="relative flex w-full flex-row items-end">
               <div className="w-full rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
                 <TextInput
+                  onDisableStateChange={setInputDisabled}
                   isToolbarShrink={shrinkToolbar}
                   ref={textInputRef}
                   onFocus={(e) => {
@@ -156,11 +159,14 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
                 />
                 <MessageEditorMediaBar />
               </div>
-              <div className="relative h-full w-fit flex flex-row items-end pb-[1px] md:pb-[5px]">
-                <MessageEditorSubmitButton className='ml-2'/>
+              <div className="relative flex h-full w-fit flex-row items-end pb-[1px] md:pb-[5px]">
+                <MessageEditorSubmitButton className="ml-2" />
               </div>
             </div>
           </MessageEditorForm>
+          {inputDisabled && (
+            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80"></div>
+          )}
         </div>
       </MessageEditorTextProvider>
     );

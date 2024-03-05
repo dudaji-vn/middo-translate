@@ -1,8 +1,14 @@
-import { ChangeEvent, EventHandler, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import {
+  ChangeEvent,
+  EventHandler,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
-import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
@@ -17,10 +23,18 @@ export const TextInput = forwardRef<
   TextInputRef,
   React.HTMLProps<HTMLTextAreaElement> & {
     isToolbarShrink?: boolean;
+    onDisableStateChange?: (disabled: boolean) => void;
   }
 >(
   (
-    { isToolbarShrink, onKeyDown, onBlur, onFocus, ...props },
+    {
+      isToolbarShrink,
+      onKeyDown,
+      onBlur,
+      onDisableStateChange,
+      onFocus,
+      ...props
+    },
     ref,
   ) => {
     const {
@@ -29,6 +43,7 @@ export const TextInput = forwardRef<
       setMiddleText,
       handleStopListening,
       listening,
+      inputDisabled,
     } = useMessageEditorText();
     const isMobile = useAppStore((state) => state.isMobile);
     const { handlePasteFile } = useMediaUpload();
@@ -67,6 +82,11 @@ export const TextInput = forwardRef<
         inputRef.current?.style.setProperty('height', '24px');
       }
     }, [text]);
+
+    useEffect(() => {
+      onDisableStateChange?.(inputDisabled);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputDisabled]);
 
     return (
       <div
@@ -124,6 +144,7 @@ export const TextInput = forwardRef<
           placeholder={listening ? 'Listening...' : 'Type a message'}
           onPaste={handlePasteFile}
         />
+
         <MessageEditorToolbarMic
           className={'absolute  -bottom-1 -right-2 md:-bottom-0'}
         />
