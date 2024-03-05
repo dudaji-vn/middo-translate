@@ -18,6 +18,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
+import trim from 'lodash/trim';
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
@@ -51,13 +52,17 @@ export default function SignIn() {
     if (!isValid) return;
     try {
       setLoading(true);
-      const data = await loginService(watch());
+      const formData = {
+        email: trim(watch('email').toLocaleLowerCase()),
+        password: watch('password'),
+      }
+      const data = await loginService(formData);
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
       toast.success('Login success!');
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage('Invalid email or password')
     } finally {
       setLoading(false);
       // reset();

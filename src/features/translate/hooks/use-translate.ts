@@ -60,7 +60,7 @@ export const useTranslate = ({
 
   const middleTranslate = async (text: string) => {
     setIsLoading(true);
-    const sourceResult = await translateText(text, 'en', srcLang);
+    const sourceResult = await translateText(text, 'en', detLang);
     setText(sourceResult);
     setTranslatedText(text);
     setIsLoading(false);

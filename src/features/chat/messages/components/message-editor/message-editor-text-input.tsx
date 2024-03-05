@@ -1,8 +1,14 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import {
+  ChangeEvent,
+  EventHandler,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
-import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
@@ -17,10 +23,18 @@ export const TextInput = forwardRef<
   TextInputRef,
   React.HTMLProps<HTMLTextAreaElement> & {
     isToolbarShrink?: boolean;
+    onDisableStateChange?: (disabled: boolean) => void;
   }
 >(
   (
-    { isToolbarShrink, onKeyDown, onBlur, onFocus, ...props },
+    {
+      isToolbarShrink,
+      onKeyDown,
+      onBlur,
+      onDisableStateChange,
+      onFocus,
+      ...props
+    },
     ref,
   ) => {
     const {
@@ -29,19 +43,19 @@ export const TextInput = forwardRef<
       setMiddleText,
       handleStopListening,
       listening,
+      inputDisabled,
     } = useMessageEditorText();
     const isMobile = useAppStore((state) => state.isMobile);
-    const { setAllowShortcutListener } = useShortcutListenStore();
-
     const { handlePasteFile } = useMediaUpload();
 
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const triggerSubmit = () => {
       buttonRef.current?.click();
+      setText('');
     };
-    const onInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
-      if (text.length === 0) return;
+    const onScale: EventHandler<ChangeEvent<HTMLTextAreaElement>> = (e) => {
+      if (e.target?.value?.length === 0) return;
       if (e.currentTarget.scrollHeight < 100) {
         e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
       } else {
@@ -70,6 +84,11 @@ export const TextInput = forwardRef<
       }
     }, [text]);
 
+    useEffect(() => {
+      onDisableStateChange?.(inputDisabled);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputDisabled]);
+
     return (
       <div
         className={cn(
@@ -86,11 +105,12 @@ export const TextInput = forwardRef<
           id="message-editor-input"
           ref={inputRef}
           rows={1}
-          onInput={onInput}
+          onInput={onScale}
           {...props}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey && text.length > 0) {
+            if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
+              if(text.length === 0) return;
               triggerSubmit();
             }
             onKeyDown?.(e);
@@ -100,12 +120,10 @@ export const TextInput = forwardRef<
             if (listening) {
               handleStopListening();
             }
-            setAllowShortcutListener(false);
             onFocus?.(e);
-            onInput(e);
+            onScale(e);
           }}
           onBlur={(e) => {
-            setAllowShortcutListener(true);
             if (isMobile) e.currentTarget.style.height = '24px';
             onBlur?.(e);
           }}
@@ -113,6 +131,7 @@ export const TextInput = forwardRef<
             resize: 'none',
           }}
           onChange={(e) => {
+            onScale(e);
             setText(e.target.value);
             setMiddleText('');
           }}
@@ -127,6 +146,7 @@ export const TextInput = forwardRef<
           placeholder={listening ? 'Listening...' : 'Type a message'}
           onPaste={handlePasteFile}
         />
+
         <MessageEditorToolbarMic
           className={'absolute  -bottom-1 -right-2 md:-bottom-0'}
         />

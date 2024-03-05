@@ -28,7 +28,7 @@ export const ChatBoxHeader = () => {
       <div className="flex flex-1 items-center gap-2">
         <RoomAvatar isOnline room={room} size={36} />
         <div>
-          <p className="line-clamp-1 font-medium">{room.name}</p>
+          <p className="break-word-mt line-clamp-1 font-medium">{room.name}</p>
           <p className="text-sm font-light">Online</p>
         </div>
       </div>
@@ -68,11 +68,11 @@ const ActionBar = () => {
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
-  const {
-    user,
-  } = useAuthStore();
+  const { user } = useAuthStore();
   const currentUserId = user?._id || '';
-  const isSelfChat = currentUserId && roomChatBox?.participants?.every((p) => p._id === currentUserId);
+  const isSelfChat =
+    currentUserId &&
+    roomChatBox?.participants?.every((p) => p._id === currentUserId);
   const startVideoCall = useJoinCall();
   if (isSelfChat) return null;
   return (

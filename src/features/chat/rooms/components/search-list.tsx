@@ -1,6 +1,7 @@
 import { CheckIcon } from 'lucide-react';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
+import { useAuthStore } from '@/stores/auth.store';
 
 export interface SearchListProps {
   items: User[];
@@ -15,11 +16,13 @@ export const SearchList = ({
   selectedItems,
   itemClassName,
 }: SearchListProps) => {
+  const currentUserId = useAuthStore((state) => state.user?._id);
   if (!items?.length) return null;
   return (
     <div className="flex w-full flex-1 flex-col overflow-y-auto">
       {items?.map((user) => {
         const isChecked = !!selectedItems.find((u) => u._id === user._id);
+        if (currentUserId === user._id) return null;
         return (
           <UserItem
             key={user._id}

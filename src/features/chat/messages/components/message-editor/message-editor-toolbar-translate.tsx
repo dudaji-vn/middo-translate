@@ -22,34 +22,34 @@ export const MessageEditorToolbarTranslateTool = (
 
   const { showTranslateOnType, toggleShowTranslateOnType } = useChatStore();
   return (
-      <TranslateTool
-        showTool={!!showTranslateOnType && !!text && srcLang !== 'en'}
-        checked={showTranslateOnType}
-        onCheckedChange={toggleShowTranslateOnType}
-        content={translatedText}
-        isEditing={!!middleText}
-        middleText={middleText}
-        setMiddleText={setMiddleText}
-        loading={isTranslating}
-        onEditStateChange={(isEditing) => {
-          setInputDisabled(isEditing);
-          if (inputDisabled) {
-            focusInput();
-          }
-        }}
-        onCancel={() => {
-          setMiddleText('');
-          setInputDisabled(false);
-        }}
-        onConfirm={() => {
-          handleMiddleTranslate();
-          setInputDisabled(false);
-        }}
-        onEdit={() => {
-          setMiddleText(translatedText);
-          setInputDisabled(true);
-          setSrcLang(detLang);
-        }}
-      />
+    <TranslateTool
+      showTool={!!showTranslateOnType && !!text && srcLang !== 'en'}
+      checked={showTranslateOnType}
+      onCheckedChange={toggleShowTranslateOnType}
+      content={translatedText}
+      isEditing={!!middleText}
+      middleText={middleText}
+      setMiddleText={setMiddleText}
+      loading={isTranslating}
+      onEditStateChange={(isEditing) => {
+        setInputDisabled(isEditing);
+        if (inputDisabled) {
+          focusInput();
+        }
+      }}
+      onCancel={() => {
+        setMiddleText('');
+        setInputDisabled(false);
+      }}
+      onConfirm={() => {
+        handleMiddleTranslate();
+        setInputDisabled(false);
+      }}
+      onEdit={() => {
+        setMiddleText(translatedText);
+        setInputDisabled(true);
+        setSrcLang(detLang);
+      }}
+    />
   );
 };

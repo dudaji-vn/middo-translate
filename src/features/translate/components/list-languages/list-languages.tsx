@@ -63,6 +63,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search"
+            onClear={() => setSearch('')}
           />
         </div>
         <div className="flex flex-col overflow-y-auto md:flex-row md:flex-wrap">
@@ -71,7 +72,9 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
               {allowDetect && (
                 <Item
                   selected={selectedCode === 'auto'}
-                  rightElement={<Globe2Icon className="mr-2 h-5 w-5" />}
+                  rightElement={
+                    <Globe2Icon className="mr-2 h-5 w-5 text-primary" />
+                  }
                   language={{
                     code: 'auto',
                     name: 'Language detect',

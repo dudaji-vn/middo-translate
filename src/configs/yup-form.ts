@@ -5,7 +5,7 @@ import { z } from "zod"
 export const LoginSchema = yup
     .object()
     .shape({
-        email: yup.string().required({
+        email: yup.string().trim().required({
             value: true,
             message: "Please enter email address!"
         }).email({

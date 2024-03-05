@@ -102,7 +102,7 @@ export const TranslateTool = ({
   return (
     <AnimatePresence mode="wait">
       {showTool && (
-        <div className="w-full outline-none mb-2">
+        <div className="mb-2 w-full outline-none">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -145,7 +145,6 @@ export const TranslateTool = ({
                       ref={middleTextAreaRef}
                       className={cn(
                         'max-h-[160px] flex-1 resize-none outline-none',
-                        // !isEditing && 'hidden',
                       )}
                       value={middleText}
                       onChange={(e) => setMiddleText?.(e.target.value)}
@@ -156,7 +155,7 @@ export const TranslateTool = ({
                   <div className="mt-2 flex justify-end gap-2">
                     <Button
                       shape="square"
-                      size="md"
+                      size="xs"
                       onClick={handleCancel}
                       variant="ghost"
                       color="default"
@@ -165,7 +164,7 @@ export const TranslateTool = ({
                     </Button>
                     <Button
                       shape="square"
-                      size="md"
+                      size="xs"
                       type="button"
                       onClick={handleConfirm}
                       variant="default"
@@ -189,10 +188,12 @@ export const TranslateTool = ({
 
                 {!isEditing && (
                   <Button.Icon
+                    disabled={loading || !content}
                     type="button"
                     onClick={handleStartEdit}
                     variant="ghost"
                     color="default"
+                    size="xs"
                   >
                     <Pen />
                   </Button.Icon>

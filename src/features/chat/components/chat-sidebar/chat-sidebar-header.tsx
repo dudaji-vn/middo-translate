@@ -38,8 +38,6 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     changeSide('individual');
   }, [changeSide]);
 
-  useKeyboardShortcut([SHORTCUTS.NEW_CONVERSATION], handleNewConversation);
-
   const handleBack = useCallback(() => {
     removeParams([SPK_SEARCH, SPK_CHAT_TAB]);
     searchInputRef.current?.reset();
@@ -105,6 +103,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             defaultValue={searchValue || ''}
             onFocus={() => changeSide('search')}
             btnDisabled
+            autoFocus={false}
             placeholder="Search people or groups"
             onChange={(e) => setParam(SPK_SEARCH, e.currentTarget.value)}
             onClear={() => {
