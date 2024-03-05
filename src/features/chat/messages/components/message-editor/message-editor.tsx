@@ -24,8 +24,6 @@ import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-tran
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
-import { SendIcon } from 'lucide-react';
-import { useBoolean } from 'usehooks-ts';
 
 type SubmitData = {
   content: string;
