@@ -19,7 +19,6 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
   const currentTab = searchParams?.get('tab') as TTranslationTab;
   const { replace } = useRouter();
   const isValidTab = /phrases|history/.test(currentTab);
-  const [hideTip, setHideTip] = useState(false);
 
   const onCloseTab = useCallback(() => {
     const params = new URLSearchParams(searchParams as URLSearchParams);
@@ -50,9 +49,6 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
             <Phrases
               isSelected={currentTab === 'phrases'}
               onClose={onCloseTab}
-              hideTip={hideTip}
-              onTipClose={() => setHideTip(true)}
-              onShowTip={() => setHideTip(false)}
             />
             <History
               isSelected={currentTab === 'history'}

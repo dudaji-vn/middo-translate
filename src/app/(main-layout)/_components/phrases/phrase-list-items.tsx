@@ -5,6 +5,7 @@ import Image from 'next/image';
 import React, { ReactNode, forwardRef, useState } from 'react';
 import PhraseItemViewOptions from './phrase-item-view-options';
 import { phraseOptionNames } from './options';
+import PhraseTip from './phrase-tip';
 
 export type TPhraseItem = {
   name: string;
@@ -19,10 +20,7 @@ export type PhraseItemProps = {
 } & TPhraseItem;
 
 export interface PhraseListItemsProps
-  extends React.HTMLAttributes<HTMLDivElement> {
-  closeTip: () => void;
-  showTip: () => void;
-}
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
 const PhraseItem = ({
   name,
@@ -63,18 +61,17 @@ const PhraseItem = ({
 };
 
 const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
-  ({ className, closeTip, showTip, ...props }, ref) => {
-    const rowsCount = Math.ceil(phraseOptionNames.length / 2);
+  ({ className, ...props }, ref) => {
+    const [hideTip, setHideTip] = useState(false);
     const [selectedItem, setSelectedItem] = useState<{
       name: TPhraseItem['name'];
       icon: ReactNode;
     }>();
     const closeViewPhraseOptions = () => {
       setSelectedItem(undefined);
-    }
+    };
 
     if (selectedItem) {
-      closeTip();
       return (
         <PhraseItemViewOptions
           phraseItemName={selectedItem.name}
@@ -89,10 +86,15 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
         {...props}
         className={cn(
           className,
-          `grid grid-cols-2 grid-rows-[${rowsCount}]`,
-          'gap-3 p-4',
+          `grid-rows-auto grid grid-cols-2`,
+          'gap-3 px-4',
         )}
       >
+        <PhraseTip
+          className="col-span-2"
+          hideTip={hideTip}
+          closeTip={() => setHideTip(true)}
+        />
         {phraseOptionNames?.map((name, index) => {
           const icon = (
             <Image

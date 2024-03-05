@@ -4,6 +4,7 @@ import { ArrowLeft, Star } from 'lucide-react';
 import React from 'react';
 import { phraseOptions } from './options';
 import { useFavoritePhrasesStore } from '@/features/translate/stores/phrases.store';
+import { useTranslateStore } from '@/stores/translate.store';
 
 export type PhraseItemViewOptionsProps = {
   phraseItemName: string;
@@ -44,6 +45,8 @@ const PhraseItemViewOptions = ({
   const phraseItemOptions: string[] = isYourList
     ? yourList.texts
     : phraseOptions[phraseItemName] || [];
+
+  const { setValue, setIsFocused } = useTranslateStore();
 
   const handleFavorite = (phraseName: string, optionIndex: number) => {
     const optionCheckList = favoritePhrases[phraseName] || [];
@@ -89,11 +92,15 @@ const PhraseItemViewOptions = ({
           <div
             className="flex flex-row items-center justify-between rounded-xl bg-primary-100 p-3"
             key={`${phraseItemName}-${index}`}
+            onClick={() => {
+              setIsFocused(true);
+              setValue(option);
+            }}
           >
-            <Typography className="w-10/12 break-words font-semibold text-neutral-700">
+            <Typography className="w-10/12 break-words text-left font-semibold text-neutral-700">
               {before}
               {fillableText.length > 0 && (
-                <span className="text-left text-base font-light leading-[18px] tracking-normal text-neutral-500">
+                <span className="text-base font-light leading-[18px] tracking-normal text-neutral-500">
                   &#91;{fillableText}&#93;
                 </span>
               )}
@@ -103,7 +110,9 @@ const PhraseItemViewOptions = ({
               variant={'ghost'}
               size={'xs'}
               color={'default'}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
                 if (isYourList) {
                   handleRemoveFavorite(index);
                   return;
