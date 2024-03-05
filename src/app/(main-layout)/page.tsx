@@ -16,11 +16,10 @@ import { detectLanguage, translateText } from '@/services/languages.service';
 
 import { CompareProvider } from '@/features/translate/context';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { PageLoading } from '@/components/feedback';
 import { cn } from '@/utils/cn';
 import { Extension } from '@/features/translate/components/extension';
 
-import HomeTemplate, { TTranslationTab } from './template';
+import { TTranslationTab } from './template';
 import { THistoryItem } from './_components/history/history';
 
 interface HomeProps {
