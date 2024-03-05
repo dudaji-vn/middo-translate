@@ -2,12 +2,13 @@
 
 import { Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
-import { HistoryIcon, Paintbrush, XIcon } from 'lucide-react';
+import { ArrowLeft, HistoryIcon, Paintbrush, XIcon } from 'lucide-react';
 import React, { forwardRef, useEffect, useState } from 'react';
 import { useHistoryStore } from '@/features/translate/stores/history.store';
 import HistoryItem from './history-item';
 import { cn } from '@/utils/cn';
-import { AnimatePresence, motion } from 'framer-motion';
+import isEmpty from 'lodash/isEmpty';
+
 
 export interface HistoryProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
@@ -51,16 +52,24 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
             : 'hidden',
         )}
       >
-        <Typography className="relative flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main">
+        <Typography
+          className={cn(
+            'relative flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main',
+            'max-md:justify-center',
+          )}
+        >
           <HistoryIcon className="text-primary-500-main" />
           History
           <Button.Icon
             onClick={onClose}
             variant={'ghost'}
             size={'xs'}
-            className="absolute right-2 top-1"
+            className={cn(
+              'absolute top-0 text-neutral-600 max-md:left-2 md:right-2 md:top-1',
+            )}
           >
-            <XIcon />
+            <XIcon className="max-md:hidden" />
+            <ArrowLeft className="md:hidden" />
           </Button.Icon>
         </Typography>
         <div className="flex h-[34px] w-full items-center justify-end gap-2 bg-background px-2 py-1 font-semibold">
@@ -68,7 +77,10 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
             variant={'ghost'}
             color={'default'}
             size={'xs'}
-            onClick={clear}
+            onClick={() => {
+              onClose?.();
+              clear();
+            }}
             className="flex items-center gap-2 rounded-xl bg-neutral-50 text-neutral-700"
           >
             <Paintbrush />

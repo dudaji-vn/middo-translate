@@ -3,9 +3,9 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
-import {SparklesIcon, XIcon } from 'lucide-react';
+import { ArrowLeft, SparklesIcon, XIcon } from 'lucide-react';
 
-import React, { forwardRef, } from 'react';
+import React, { forwardRef } from 'react';
 import PhrasesListItems from './phrase-list-items';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,16 +26,24 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
             : 'hidden',
         )}
       >
-        <Typography className="relative flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main">
+        <Typography
+          className={cn(
+            'relative flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main max-md:justify-center',
+            'max-md:justify-center',
+          )}
+        >
           <SparklesIcon className="text-primary-500-main" />
           Phrases
           <Button.Icon
             onClick={onClose}
             variant={'ghost'}
             size={'xs'}
-            className="absolute right-2 top-1 text-neutral-600"
+            className={cn(
+              'absolute top-0 text-neutral-600 max-md:left-2 md:right-2 md:top-1',
+            )}
           >
-            <XIcon />
+            <XIcon className="max-md:hidden" />
+            <ArrowLeft className="md:hidden" />
           </Button.Icon>
         </Typography>
 
