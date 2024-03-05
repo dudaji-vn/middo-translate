@@ -15,6 +15,7 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
   const currentTab = 'phrases';
   const { replace } = useRouter();
   const isValidTab = /phrases|history/.test(currentTab);
+  const [hideTip, setHideTip] = useState(false);
 
   // const onCloseTab = useCallback(() => {
   //   const params = new URLSearchParams(searchParams as URLSearchParams);
