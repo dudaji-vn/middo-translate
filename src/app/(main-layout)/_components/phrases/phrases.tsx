@@ -6,6 +6,8 @@ import { cn } from '@/utils/cn';
 import { Lightbulb, SparklesIcon, XIcon } from 'lucide-react';
 
 import React, { forwardRef } from 'react';
+import PhrasesListItems from './phrase-list-items';
+import { phrasesContents } from './content';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
@@ -68,6 +70,7 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
             </Typography>
           </div>
         </div>
+        <PhrasesListItems items={phrasesContents} />
       </section>
     );
   },
