@@ -14,11 +14,29 @@ export type HistoryState = {
   isHistoryListOpen: boolean;
   setIsHistoryListOpen: (isHistoryListOpen: boolean) => void;
 };
-
+const restoredState = () => {
+  const isBrowser = typeof window !== 'undefined';
+  if (!isBrowser) {
+    return {};
+  }
+  const historyListItems = localStorage.getItem('history-storage');
+  try {
+    const parsedHistoryListItems = historyListItems
+      ? JSON.parse(historyListItems)
+      : [];
+    if (parsedHistoryListItems) {
+      return parsedHistoryListItems;
+    }
+  } catch (error) {
+    console.error('Error parsing history storage', error);
+  }
+  return {};
+};
 export const useHistoryStore = create<HistoryState>()(
   persist(
     (set) => ({
       historyListItems: [],
+      ...restoredState,
       setHistoryListItems: (historyListItems) => set({ historyListItems }),
       pushHistoryItem: (historyItem) =>
         set((state) => ({
@@ -28,7 +46,7 @@ export const useHistoryStore = create<HistoryState>()(
       removeHistoryItem: (item) =>
         set((state) => ({
           historyListItems: state.historyListItems.filter(
-            (historyItem) => historyItem?.id && historyItem.id !== item?.id,
+            (historyItem) => historyItem && historyItem?.id !== item?.id,
           ),
         })),
       clear: () => set({ historyListItems: [] }),

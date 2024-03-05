@@ -6,7 +6,10 @@ import React from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { THistoryItem } from './history';
 import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
+import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
+import { cn } from '@/utils/cn';
+
 type TDisplayedItem = {
   languageCode: string;
   content: string;
@@ -64,21 +67,34 @@ const DisplayedItem = ({
 const HistoryItem = ({
   item,
   onDeleteItem,
+  index,
 }: {
   item: THistoryItem;
   onDeleteItem: (item: THistoryItem) => void;
+  index: number;
 }): JSX.Element => {
   const { src, dest } = item;
   const onCopyAll = () => {
     const text = `${src.content}\n${dest.content}`;
     navigator.clipboard.writeText(text);
   };
+  const isPresent = useIsPresent();
   if (!src || !dest) {
     return <></>;
   }
 
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-primary-200 p-2">
+    <motion.div
+      className={cn(
+        'flex flex-col gap-2 rounded-2xl border border-primary-200 p-2',
+        isPresent ? 'static' : 'absolute',
+      )}
+      key={item.id}
+      initial={{ opacity: 0 , x: 100 }}
+      transition={{ type: 'spring', duration: 0.5 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0 , x: 100 }}
+    >
       <DisplayedItem
         languageCode={src.language}
         content={src.content}
@@ -109,7 +125,7 @@ const HistoryItem = ({
           <Trash2 className="!h-5 !w-5" />
         </Button.Icon>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

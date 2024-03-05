@@ -5,6 +5,7 @@ import Phrase, { PhraseProps } from './_components/phrase/phrase';
 import History, { HistoryProps } from './_components/history/history';
 import { cn } from '@/utils/cn';
 import { PageLoading } from '@/components/feedback';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   useParams,
   usePathname,
@@ -45,7 +46,12 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
           )}
         >
           <div className={cn('h-fit w-full md:w-3/4')}>{children}</div>
-          <div
+          <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: 'spring', duration: 0.6 }}
+          
             className={
               'max-h  z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/4'
             }
@@ -58,7 +64,8 @@ const HomeTemplate = ({ children }: { children: ReactNode }) => {
               isSelected={currentTab === 'history'}
               onClose={onCloseTab}
             />
-          </div>
+          </motion.div>
+          </AnimatePresence>
         </div>
       </PageLoading>
     </main>
