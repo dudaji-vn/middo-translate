@@ -5,7 +5,7 @@ import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { ArrowLeft, SparklesIcon, XIcon } from 'lucide-react';
 
-import React, { forwardRef, } from 'react';
+import React, { forwardRef } from 'react';
 import PhrasesListItems from './phrase-list-items';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {

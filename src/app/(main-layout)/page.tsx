@@ -21,6 +21,7 @@ import { Extension } from '@/features/translate/components/extension';
 
 import { THistoryItem } from './_components/history/history';
 import { PageLoading } from '@/components/feedback';
+import { TranslationTab } from '@/types/translationstab.type';
 
 interface HomeProps {
   searchParams: {
