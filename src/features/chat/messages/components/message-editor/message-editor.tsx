@@ -24,6 +24,7 @@ import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-tran
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
+import { useMediaUpload } from '@/components/media-upload';
 
 type SubmitData = {
   content: string;
@@ -160,7 +161,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
                     setShrinkToolbar(false);
                   }}
                 />
-                <MessageEditorMediaBar />
+                <MessageEditorMediaBar inputRef={textInputRef} />
               </div>
               <div className="relative flex h-full w-fit flex-row items-end pb-[1px] md:pb-[5px]">
                 <MessageEditorSubmitButton className="ml-2" />
