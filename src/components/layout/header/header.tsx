@@ -17,8 +17,6 @@ import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useState } from 'react';
 import { COMMIT_SHA } from '@/configs/commit-data';
-import { useSearchParams } from 'next/navigation';
-import { TranslationTab } from '@/types/translationstab.type';
 import { cn } from '@/utils/cn';
 
 type Props = {};
@@ -32,11 +30,9 @@ export const Header = (props: Props) => {
   const signOut = async () => {
     setShowConfirmLogout(true);
   };
-  const searchParams = useSearchParams();
-  const shouldHideHeaderOnMobile = searchParams?.get('tab') === TranslationTab.PHRASES || searchParams?.get('tab') === TranslationTab.HISTORY;
-
+  
   return (
-    <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]", shouldHideHeaderOnMobile && 'max-md:hidden')}>
+    <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]")}>
       <HeaderNav />
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
