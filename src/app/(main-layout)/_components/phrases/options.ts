@@ -1,14 +1,14 @@
 export const phraseOptions: Record<string, string[]> = {
   'About yourself': [
-    "Hello. I'm #name#. I just started today. It’s so nice to meet you!",
-    `I'm #Your Age# years old and currently reside in #Your Location#.`,
-    `I have a passion for #Your Interests/Hobbies#, which include #Specific Activities#.`,
-    `I graduated from #Your Educational Background# with a degree in #Your Field of Study#.`,
-    `Professionally, I have experience in #Your Work Experience/Industry#.`,
-    `In my free time, I enjoy #Your Other Hobbies/Activities#, as they bring me joy and relaxation.`,
-    `I am a firm believer in #Your Values/Beliefs#, and I strive to live by them every day.`,
+    "Hello. I'm [name]. I just started today. It’s so nice to meet you!",
+    `I'm [Your Age] years old and currently reside in [Your Location].`,
+    `I have a passion for [Your Interests/Hobbies], which include [Specific Activities].`,
+    `I graduated from [Your Educational Background] with a degree in [Your Field of Study].`,
+    `Professionally, I have experience in [Your Work Experience/Industry].`,
+    `In my free time, I enjoy [Your Other Hobbies/Activities], as they bring me joy and relaxation.`,
+    `I am a firm believer in [Your Values/Beliefs], and I strive to live by them every day.`,
     `I love meeting new people and learning about different cultures, as it broadens my perspective.`,
-    `One of my goals is to #Your Aspirations/Goals#, as I find it fulfilling and meaningful.`,
+    `One of my goals is to [Your Aspirations/Goals], as I find it fulfilling and meaningful.`,
     `I’m excited to be here and look forward to engaging in meaningful conversations and learning from others.`,
   ],
   'Family & Friends': [

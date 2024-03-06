@@ -45,7 +45,8 @@ export const TranslateResult = ({
 console.log('result', result)
   const {pushWithNoDuplicate} = useHistoryStore();
 
-  const debouncedSavedResult = useDebounce<string>(result, 700);
+  const debouncedSavedResult = useDebounce<string>(result, 1000);
+  const debounedMatched = useDebounce<boolean>(isMatch, 1000);
   useEffect(() => {
     if (
       !isEmpty(historyItem) &&

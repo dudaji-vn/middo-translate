@@ -82,11 +82,12 @@ const PhraseItemViewOptions = ({
         </Typography>
       </div>
       {phraseItemOptions.map((option, index) => {
-        const splitedTexts = option.split('#');
+        const simplifiedText = option.replaceAll('[', '#').replaceAll(']', '#')
+        const splitedTexts = simplifiedText.split('#');
         const isFavorite = favoritePhrases[phraseItemName]?.includes(index);
         return (
           <div
-            className={cn("flex flex-row items-center cursor-pointer hover:bg-primary-200   justify-between rounded-xl bg-primary-100 p-3", selectedIndex === index ? '!bg-primary-500-main' : '')}
+            className={cn("flex flex-row items-center cursor-pointer hover:bg-primary-200   justify-between rounded-xl bg-primary-100 p-3", selectedIndex === index ? '!bg-primary-300' : '')}
             key={`${phraseItemName}-${index}`}
             onClick={() => {
               setSelectedIndex(index);
