@@ -5,10 +5,8 @@ import { TranslationTab } from '@/types/translationstab.type';
 import { cn } from '@/utils/cn';
 import { HistoryIcon, SparklesIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect,  useState } from 'react';
 import { useHistoryStore } from '../stores/history.store';
-import { useDebounce } from 'usehooks-ts';
-
 export interface ExtensionProps { }
 
 // TODO: Add shortcut to open history and phrases after the feature is implemented
@@ -16,7 +14,6 @@ export interface ExtensionProps { }
 export const Extension = (props: ExtensionProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { push } = useRouter();
   const { replace } = useRouter();
   const { historyListItems } = useHistoryStore();
   const [showHistory, setShowHistory] = useState(false);

@@ -83,6 +83,7 @@ const PhraseItemViewOptions = ({
     setTranslateEditorInputValue(translated);
   }
   useEffect(() => {
+    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex]) return;
     handlePhraseOptionClick(selectedIndex, phraseItemOptions[selectedIndex])
   }, [currentInputLanguage]);
   return (
