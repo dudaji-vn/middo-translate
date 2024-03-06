@@ -36,7 +36,7 @@ export const Header = (props: Props) => {
   const shouldHideHeaderOnMobile = searchParams?.get('tab') === TranslationTab.PHRASES || searchParams?.get('tab') === TranslationTab.HISTORY;
 
   return (
-    <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]", shouldHideHeaderOnMobile && 'hidden')}>
+    <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]", shouldHideHeaderOnMobile && 'max-md:hidden')}>
       <HeaderNav />
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />

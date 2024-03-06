@@ -13,7 +13,6 @@ export type PhraseItemViewOptionsProps = {
 };
 
 
-
 const getFavoritePhrases = (favoritePhrases: Record<string, number[]>) => {
   let position: Array<{ optionName: string; index: number }> = [];
   const texts = Object.entries(phraseOptions).reduce<string[]>(
