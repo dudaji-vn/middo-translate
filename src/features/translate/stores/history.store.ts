@@ -11,6 +11,7 @@ export type HistoryState = {
   setHistoryListItems: (historyListItems: THistoryListItems) => void;
   pushHistoryItem: (item: THistoryItem) => void;
   removeHistoryItem: (item: THistoryItem) => void;
+  pushWithNoDuplicate: (newItem: THistoryItem) => void;
   clear: () => void;
 };
 
@@ -25,6 +26,30 @@ export const useHistoryStore = create<HistoryState>()(
           //  stack
           historyListItems: [historyItem, ...state.historyListItems],
         })),
+      pushWithNoDuplicate: (newItem) =>
+        set((state) => {
+          const lastItem = state.historyListItems?.[0];
+          if( lastItem?.src?.content.includes(newItem.src.content)) {
+            return state;
+          }
+          const existingItemIndex = state.historyListItems?.findIndex((item) => {
+            const str1 = item.src.content;
+            const str2 = newItem.src.content;
+            return str2.toLowerCase()?.trim()?.includes(str1?.toLowerCase()?.trim());// || str1?.toLowerCase()?.trim()?.includes(str2?.toLowerCase()?.trim());
+          });
+
+          if (existingItemIndex !== -1) {
+            const newHistoryList = [...state.historyListItems];
+            newHistoryList.splice(existingItemIndex, 1);
+            newHistoryList.unshift(newItem);
+            return { historyListItems: newHistoryList };
+          } else {
+            return {
+              historyListItems: [newItem, ...state.historyListItems],
+            };
+          }
+        }),
+
       removeHistoryItem: (item) =>
         set((state) => ({
           historyListItems: state.historyListItems.filter(

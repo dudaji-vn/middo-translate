@@ -5,6 +5,7 @@ import React from 'react';
 import { FAVORITE_OPTION_NAME, phraseOptions } from './options';
 import { useFavoritePhrasesStore } from '@/features/translate/stores/phrases.store';
 import { useTranslateStore } from '@/stores/translate.store';
+import { cn } from '@/utils/cn';
 
 export type PhraseItemViewOptionsProps = {
   phraseItemName: string;
@@ -46,6 +47,7 @@ const PhraseItemViewOptions = ({
     : phraseOptions[phraseItemName] || [];
 
   const { setValue, setIsFocused } = useTranslateStore();
+  const [selectedIndex, setSelectedIndex] = React.useState<number>(-1);
 
   const handleFavorite = (phraseName: string, optionIndex: number) => {
     const optionCheckList = favoritePhrases[phraseName] || [];
@@ -80,30 +82,33 @@ const PhraseItemViewOptions = ({
         </Typography>
       </div>
       {phraseItemOptions.map((option, index) => {
-        const fillableText = option.substring(
-          option.indexOf('[') + 1,
-          option.lastIndexOf(']'),
-        );
-        const before = option.substring(0, option.indexOf('['));
-        const after = option.substring(option.lastIndexOf(']') + 1);
+        const simplifiedText = option.replaceAll('[', '#').replaceAll(']', '#')
+        const splitedTexts = simplifiedText.split('#');
         const isFavorite = favoritePhrases[phraseItemName]?.includes(index);
         return (
           <div
-            className="flex flex-row items-center justify-between rounded-xl bg-primary-100 p-3"
+            className={cn("flex flex-row items-center cursor-pointer hover:bg-primary-200   justify-between rounded-xl bg-primary-100 p-3", selectedIndex === index ? '!bg-primary-300' : '')}
             key={`${phraseItemName}-${index}`}
             onClick={() => {
+              setSelectedIndex(index);
               setIsFocused(true);
               setValue(option);
             }}
           >
-            <Typography className="w-10/12 break-words text-left font-semibold text-neutral-700">
-              {before}
+            <Typography className={cn("w-10/12 break-words text-left font-semibold text-neutral-700", selectedIndex === index ? ' text-white' : '',)}>
+              {splitedTexts.map((text, idx) => {
+                const isFillable = idx % 2 === 1;
+                return <span key={idx} className={cn(isFillable && "text-base font-light leading-[18px] tracking-normal ", selectedIndex === index ? 'text-white' : '')}>
+                  {isFillable ? `[${text}]` : text}
+                </span>
+
+              })}
+              {/* {before}
               {fillableText.length > 0 && (
-                <span className="text-base font-light leading-[18px] tracking-normal text-neutral-500">
-                  &#91;{fillableText}&#93;
+                <span className={cn("text-base font-light leading-[18px] tracking-normal ", selectedIndex === index ? '!bg-primary-500-main text-white' : '')}>
                 </span>
               )}
-              {after}
+              {after} */}
             </Typography>
             <Button.Icon
               variant={'ghost'}

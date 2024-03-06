@@ -32,6 +32,7 @@ interface HomeProps {
     edit?: string;
     mquery?: string;
     detect?: string;
+    tab?: string;
   };
 }
 
@@ -107,6 +108,7 @@ export default async function Home(props: HomeProps) {
             target={targetLanguage}
             detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
             targetResult={targetResult}
+            tab={props.searchParams?.tab as TranslationTab}
           />
           <CaptureProvider>
             <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-3 md:flex-row md:justify-evenly md:gap-[88px]">

@@ -42,12 +42,12 @@ export const TranslateResult = ({
   useKeyboardShortcut([SHORTCUTS.TRANSLATED_COPY], () => {
     copy();
   });
+console.log('result', result)
+  const {pushWithNoDuplicate} = useHistoryStore();
 
-  const pushHistoryItem = useHistoryStore((state) => state.pushHistoryItem);
-
-  const debouncedSavedResult = useDebounce<string>(result, 1400);
+  const debouncedSavedResult = useDebounce<string>(result, 1000);
+  const debounedMatched = useDebounce<boolean>(isMatch, 1000);
   useEffect(() => {
-    console.log('isMatch', isMatch);
     if (
       !isEmpty(historyItem) &&
       debouncedSavedResult &&
@@ -55,12 +55,13 @@ export const TranslateResult = ({
         historyItem.dest.language === DEFAULT_LANGUAGES_CODE.EN ||
         historyItem.dest.language === DEFAULT_LANGUAGES_CODE.EN)
     ) {
-      pushHistoryItem({
+      pushWithNoDuplicate({
         ...historyItem,
         dest: {
           ...historyItem.dest,
           content: debouncedSavedResult,
         },
+        id: new Date().getTime().toString(),
       });
     }
   }, [debouncedSavedResult, isMatch]);
