@@ -1,16 +1,19 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { ArrowLeft, Star } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FAVORITE_OPTION_NAME, phraseOptions } from './options';
 import { useFavoritePhrasesStore } from '@/features/translate/stores/phrases.store';
 import { useTranslateStore } from '@/stores/translate.store';
 import { cn } from '@/utils/cn';
+import { translateText } from '@/services/languages.service';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 
 export type PhraseItemViewOptionsProps = {
   phraseItemName: string;
   icon: React.ReactNode;
   onClose: () => void;
+  currentInputLanguage: string;
 };
 
 
@@ -36,6 +39,7 @@ const getFavoritePhrases = (favoritePhrases: Record<string, number[]>) => {
 
 const PhraseItemViewOptions = ({
   phraseItemName,
+  currentInputLanguage,
   icon,
   onClose,
 }: PhraseItemViewOptionsProps) => {
@@ -46,7 +50,11 @@ const PhraseItemViewOptions = ({
     ? yourList.texts
     : phraseOptions[phraseItemName] || [];
 
-  const { setValue, setIsFocused } = useTranslateStore();
+  const {
+    setValue: setTranslateEditorInputValue,
+    setIsFocused,
+    isEnglishTranslate,
+  } = useTranslateStore();
   const [selectedIndex, setSelectedIndex] = React.useState<number>(-1);
 
   const handleFavorite = (phraseName: string, optionIndex: number) => {
@@ -63,7 +71,20 @@ const PhraseItemViewOptions = ({
     const newOptionCheckList = optionCheckList.filter((i) => i !== index);
     updateFavoritePhrases(optionName, newOptionCheckList);
   };
-
+  const handlePhraseOptionClick = async (index: number, option: string) => {
+    console.log('currentInputLanguage', currentInputLanguage)
+    const translated = isEnglishTranslate || currentInputLanguage == 'auto' ? option : await translateText(
+      option,
+      DEFAULT_LANGUAGES_CODE.EN,
+      currentInputLanguage
+    );
+    setSelectedIndex(index);
+    setIsFocused(true);
+    setTranslateEditorInputValue(translated);
+  }
+  useEffect(() => {
+    handlePhraseOptionClick(selectedIndex, phraseItemOptions[selectedIndex])
+  }, [currentInputLanguage]);
   return (
     <div className="flex h-full w-full flex-col gap-3 px-3">
       <div className=" flex w-full flex-row items-center justify-start gap-2 ">
@@ -89,11 +110,7 @@ const PhraseItemViewOptions = ({
           <div
             className={cn("flex flex-row items-center cursor-pointer hover:bg-primary-200   justify-between rounded-xl bg-primary-100 p-3", selectedIndex === index ? '!bg-primary-300' : '')}
             key={`${phraseItemName}-${index}`}
-            onClick={() => {
-              setSelectedIndex(index);
-              setIsFocused(true);
-              setValue(option);
-            }}
+            onClick={(e) => handlePhraseOptionClick(index, option)}
           >
             <Typography className={cn("w-10/12 break-words text-left font-semibold text-neutral-700", selectedIndex === index ? ' text-white' : '',)}>
               {splitedTexts.map((text, idx) => {
@@ -103,12 +120,6 @@ const PhraseItemViewOptions = ({
                 </span>
 
               })}
-              {/* {before}
-              {fillableText.length > 0 && (
-                <span className={cn("text-base font-light leading-[18px] tracking-normal ", selectedIndex === index ? '!bg-primary-500-main text-white' : '')}>
-                </span>
-              )}
-              {after} */}
             </Typography>
             <Button.Icon
               variant={'ghost'}

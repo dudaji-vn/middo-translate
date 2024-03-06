@@ -19,7 +19,6 @@ export const Extension = (props: ExtensionProps) => {
   const { push } = useRouter();
   const { replace } = useRouter();
   const { historyListItems } = useHistoryStore();
-  console.log('historyListItems', historyListItems)
   const [showHistory, setShowHistory] = useState(false);
   const params = new URLSearchParams(searchParams as URLSearchParams);
   const tab = searchParams?.get('tab');

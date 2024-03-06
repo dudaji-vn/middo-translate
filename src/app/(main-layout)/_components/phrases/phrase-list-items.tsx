@@ -20,7 +20,9 @@ export type PhraseItemProps = {
 } & TPhraseItem;
 
 export interface PhraseListItemsProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  currentInputLanguage: string;
+  }
 
 const PhraseItem = ({
   name,
@@ -61,7 +63,7 @@ const PhraseItem = ({
 };
 
 const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
-  ({ className, ...props }, ref) => {
+  ({ className,currentInputLanguage, ...props }, ref) => {
     const [hideTip, setHideTip] = useState(false);
     const [selectedItem, setSelectedItem] = useState<{
       name: TPhraseItem['name'];
@@ -77,6 +79,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
           phraseItemName={selectedItem.name}
           icon={selectedItem.icon}
           onClose={closeViewPhraseOptions}
+          currentInputLanguage={currentInputLanguage}
         />
       );
     }
