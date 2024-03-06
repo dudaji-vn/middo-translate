@@ -1,7 +1,4 @@
 'use client';
-
-import { Button } from '@/components/actions';
-import { ArrowLeft, PinIcon } from 'lucide-react';
 import { forwardRef } from 'react';
 import { RoomActions } from '../room-actions';
 import { RoomSideTabInfo } from './room-side-tab-info';
