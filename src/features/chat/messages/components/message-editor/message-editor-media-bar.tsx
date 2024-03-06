@@ -5,11 +5,24 @@ import { PlusCircleIcon, XIcon } from 'lucide-react';
 import { Button } from '@/components/actions';
 import Image from 'next/image';
 import { useMediaUpload } from '@/components/media-upload';
+import { useEffect } from 'react';
+import { TextInputRef } from './message-editor-text-input';
 
-export interface MessageEditorMediaBarProps {}
+export interface MessageEditorMediaBarProps {
+  inputRef?: React.RefObject<TextInputRef>;
+}
 
-export const MessageEditorMediaBar = (props: MessageEditorMediaBarProps) => {
+export const MessageEditorMediaBar = ({
+  inputRef,
+}: MessageEditorMediaBarProps) => {
   const { files, removeFile, open } = useMediaUpload();
+
+  useEffect(() => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+    }
+  }, [files, inputRef]);
+
   return (
     <AnimatePresence>
       {files.length > 0 && (
