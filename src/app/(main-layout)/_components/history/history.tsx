@@ -48,13 +48,13 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
         className={cn(
           className,
           isSelected
-            ? 'h-full w-full space-y-4 !overflow-y-scroll [&_svg]:h-4 [&_svg]:w-4'
+            ? 'h-full w-full space-y-4 !overflow-y-auto [&_svg]:h-4 [&_svg]:w-4'
             : 'hidden',
         )}
       >
         <Typography
           className={cn(
-            'relative flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main',
+            'relative flex  h-11 w-full flex-row items-center gap-2 border-b px-2 pr-1 py-1 text-left font-semibold text-primary-500-main',
             'max-md:justify-center',
           )}
         >

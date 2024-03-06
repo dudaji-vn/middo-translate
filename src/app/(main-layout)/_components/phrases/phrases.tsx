@@ -22,7 +22,7 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
         className={cn(
           className,
           isSelected
-            ? 'h-full w-full space-y-2 !overflow-y-scroll [&_svg]:h-4 [&_svg]:w-4'
+            ? 'h-full w-full space-y-2 !overflow-y-auto [&_svg]:h-4 [&_svg]:w-4 scroll-m-0 scroll-p-0'
             : 'hidden',
         )}
       >

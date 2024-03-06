@@ -11,11 +11,13 @@ export interface LanguageSelectProps {
   languageCodes: string[];
   onChevronClick?: () => void;
   onChange?: (code: string) => void;
+  shrinkAble?: boolean;
 }
 
 export const LanguageSelect = ({
   onChevronClick,
   currentCode,
+  shrinkAble,
   languageCodes = [],
   onChange,
 }: LanguageSelectProps) => {
@@ -25,6 +27,7 @@ export const LanguageSelect = ({
       <div className="flex h-full w-full gap-2 rounded-2xl font-semibold lg:w-fit lg:bg-neutral-50 lg:p-1">
         {languageCodes.map((code) => (
           <LanguageItem
+            shrinkAble={shrinkAble}
             layoutId={id}
             key={code}
             onClick={() => {
@@ -52,10 +55,12 @@ const LanguageItem = ({
   code,
   className,
   onClick,
+  shrinkAble,
   layoutId,
 }: {
   code: string;
   active?: boolean;
+  shrinkAble?: boolean;
   className?: string;
   onClick?: () => void;
   layoutId?: string;
@@ -92,7 +97,7 @@ const LanguageItem = ({
         ) : (
           <Globe2Icon className="z-10 h-5 w-5 text-primary" />
         )}
-        {<span className={cn("z-10 truncate", !active && 'hidden')}>{languageName}</span>}
+        {<span className={cn("z-10 truncate", shrinkAble && !active && 'hidden')}>{languageName}</span>}
       </div>
       <ChevronDownIcon className="z-10 size-5 text-neutral-600 lg:hidden" />
     </button>

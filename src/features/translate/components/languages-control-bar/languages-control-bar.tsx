@@ -16,6 +16,7 @@ import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import SpeechRecognition from 'react-speech-recognition';
+import { TranslationTab } from '@/types/translationstab.type';
 
 const MAX_SELECTED_LANGUAGES = 3;
 
@@ -25,6 +26,7 @@ export interface LanguagesControlBarProps
   target?: string;
   detect?: string;
   targetResult?: string;
+  tab?: string;
 }
 
 export const LanguagesControlBar = forwardRef<
@@ -32,7 +34,7 @@ export const LanguagesControlBar = forwardRef<
   LanguagesControlBarProps
 >(
   (
-    { targetResult, source: _source, target: _target, detect, ...props },
+    { targetResult, source: _source, target: _target, detect, tab, ...props },
     ref,
   ) => {
     const [currentSelect, setCurrentSelect] = useState<
@@ -51,7 +53,7 @@ export const LanguagesControlBar = forwardRef<
       lastSourceUsed,
       lastTargetUsed,
     } = useLanguageStore();
-
+    const shrinkAble = tab === TranslationTab.PHRASES || tab === TranslationTab.HISTORY;
     const [clickable, setClickable] = useState(true);
 
     const handleSwapLanguage = useCallback(() => {
@@ -170,6 +172,7 @@ export const LanguagesControlBar = forwardRef<
         >
           <div className="flex flex-1 justify-end rounded-2xl lg:justify-start lg:overflow-hidden">
             <LanguageSelect
+              shrinkAble={shrinkAble}
               onChevronClick={() => {
                 setCurrentSelect('source');
               }}
@@ -201,6 +204,7 @@ export const LanguagesControlBar = forwardRef<
           </div>
           <div className="flex flex-1 justify-start rounded-2xl lg:overflow-hidden">
             <LanguageSelect
+              shrinkAble={shrinkAble}
               onChange={(code) => {
                 if (isTablet) {
                   setCurrentSelect('target');
@@ -232,11 +236,11 @@ export const LanguagesControlBar = forwardRef<
                 onSelected={
                   currentSelect === 'source'
                     ? (code) => {
-                        handleSelect(code, 'source');
-                      }
+                      handleSelect(code, 'source');
+                    }
                     : (code) => {
-                        handleSelect(code, 'target');
-                      }
+                      handleSelect(code, 'target');
+                    }
                 }
                 selectedCode={searchParams?.get(currentSelect) as string}
               />
