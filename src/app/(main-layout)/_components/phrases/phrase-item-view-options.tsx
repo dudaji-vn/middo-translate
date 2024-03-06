@@ -1,6 +1,6 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
-import { ArrowLeft, Star } from 'lucide-react';
+import { ArrowLeft, LoaderIcon, Star } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { FAVORITE_OPTION_NAME, phraseOptions } from './options';
 import { useFavoritePhrasesStore } from '@/features/translate/stores/phrases.store';
@@ -8,11 +8,15 @@ import { useTranslateStore } from '@/stores/translate.store';
 import { cn } from '@/utils/cn';
 import { translateText } from '@/services/languages.service';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { useAppStore } from '@/stores/app.store';
+import { LoadingIcon } from 'yet-another-react-lightbox';
+import { SvgSpinnersGooeyBalls1 } from '@/components/icons';
 
 export type PhraseItemViewOptionsProps = {
   phraseItemName: string;
   icon: React.ReactNode;
   onClose: () => void;
+  onCloseAll?: () => void;
   currentInputLanguage: string;
 };
 
@@ -56,6 +60,9 @@ const PhraseItemViewOptions = ({
     isEnglishTranslate,
   } = useTranslateStore();
   const [selectedIndex, setSelectedIndex] = React.useState<number>(-1);
+  const isMobile = useAppStore((state) => state.isMobile);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
 
   const handleFavorite = (phraseName: string, optionIndex: number) => {
     const optionCheckList = favoritePhrases[phraseName] || [];
@@ -72,7 +79,6 @@ const PhraseItemViewOptions = ({
     updateFavoritePhrases(optionName, newOptionCheckList);
   };
   const handlePhraseOptionClick = async (index: number, option: string) => {
-    console.log('currentInputLanguage', currentInputLanguage)
     const translated = isEnglishTranslate || currentInputLanguage == 'auto' ? option : await translateText(
       option,
       DEFAULT_LANGUAGES_CODE.EN,
@@ -80,13 +86,24 @@ const PhraseItemViewOptions = ({
     );
     setSelectedIndex(index);
     setIsFocused(true);
+    if (isMobile) setIsLoading(true);
     setTranslateEditorInputValue(translated);
   }
   useEffect(() => {
+    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex]) return;
     handlePhraseOptionClick(selectedIndex, phraseItemOptions[selectedIndex])
   }, [currentInputLanguage]);
-  return (
-    <div className="flex h-full w-full flex-col gap-3 px-3">
+
+  return (<div className="flex h-full w-full flex-col gap-3 px-3">
+       {isLoading && (
+          <div
+            className={cn(
+              'fixed bottom-0 left-0 right-0 top-0 z-[999] flex items-center justify-center bg-black/20',
+            )}
+          >
+            <SvgSpinnersGooeyBalls1 className="h-[32px] w-[32px] text-primary" />
+          </div>
+        )}
       <div className=" flex w-full flex-row items-center justify-start gap-2 ">
         <Button.Icon
           variant={'ghost'}
