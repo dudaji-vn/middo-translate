@@ -22,6 +22,7 @@ import { Extension } from '@/features/translate/components/extension';
 import { THistoryItem } from './_components/history/history';
 import { PageLoading } from '@/components/feedback';
 import { TranslationTab } from '@/types/translationstab.type';
+import HomeTemplate from './_components/home-template';
 
 interface HomeProps {
   searchParams: {
@@ -93,7 +94,7 @@ export default async function Home(props: HomeProps) {
   };
 
   return (
-    <>
+    <HomeTemplate searchParams={props.searchParams}>
       <PageLoading title="Loading" className="h-full" />
       <div className="flex h-full w-full flex-col pt-5">
         <CompareProvider
@@ -167,6 +168,6 @@ export default async function Home(props: HomeProps) {
         sourceLanguage={sourceLanguage}
         targetLanguage={targetLanguage}
       />
-    </>
+    </HomeTemplate>
   );
 }
