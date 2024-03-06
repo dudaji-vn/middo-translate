@@ -19,7 +19,6 @@ export default function useHandleStreamMyVideo() {
     const { room: call, clearStateVideoCall } = useVideoCallStore();
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
-        const streamConfig = getStreamConfig(DEFAULT_USER_CALL_STATE.isTurnOnCamera, DEFAULT_USER_CALL_STATE.isTurnOnMic)
         setLoadingVideo(true);
         // Start get streaming
         getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic})
@@ -49,7 +48,7 @@ export default function useHandleStreamMyVideo() {
             setMyStream(undefined);
             resetParticipants();
         };
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, call._id, call.roomId, setMyStream, setShareScreen, setShareScreenStream, user, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, setLoadingVideo]);
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic]);
 
     // Add my stream to all participants
     useEffect(()=>{
