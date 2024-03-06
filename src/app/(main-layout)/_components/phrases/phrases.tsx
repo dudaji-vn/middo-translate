@@ -11,10 +11,11 @@ import PhrasesListItems from './phrase-list-items';
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
   onClose?: () => void;
+  currentInputLanguage: string;
 }
 
 const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
-  ({ isSelected, className, onClose, ...props }, ref) => {
+  ({ isSelected, currentInputLanguage, className, onClose, ...props }, ref) => {
     return (
       <section
         ref={ref}
@@ -47,7 +48,7 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
           </Button.Icon>
         </Typography>
 
-        <PhrasesListItems />
+        <PhrasesListItems  currentInputLanguage={currentInputLanguage || 'auto'} />
       </section>
     );
   },

@@ -10,6 +10,7 @@ import Phrases from './phrases/phrases';
 const HomeTemplate = ({ children , searchParams}: { children: ReactNode, searchParams: any }) => {
   const pathname = usePathname();
   const currentTab = searchParams?.['tab'];
+  const currentInputLanguage = searchParams?.['source'] || 'auto';
   const { replace } = useRouter();
   const isValidTab = /phrases|history/.test(currentTab);
 
@@ -45,6 +46,7 @@ const HomeTemplate = ({ children , searchParams}: { children: ReactNode, searchP
             <Phrases
               isSelected={currentTab === 'phrases'}
               onClose={onCloseTab}
+              currentInputLanguage={currentInputLanguage}
             />
             <History
             isSelected={currentTab === 'history'}
