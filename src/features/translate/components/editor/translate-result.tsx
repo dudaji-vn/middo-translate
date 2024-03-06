@@ -42,16 +42,16 @@ export const TranslateResult = ({
   useKeyboardShortcut([SHORTCUTS.TRANSLATED_COPY], () => {
     copy();
   });
-console.log('result', result)
   const {pushWithNoDuplicate} = useHistoryStore();
 
   const debouncedSavedResult = useDebounce<string>(result, 1000);
   const debounedMatched = useDebounce<boolean>(isMatch, 1000);
+  
   useEffect(() => {
     if (
       !isEmpty(historyItem) &&
       debouncedSavedResult &&
-      (isMatch ||
+      (debounedMatched ||
         historyItem.dest.language === DEFAULT_LANGUAGES_CODE.EN ||
         historyItem.dest.language === DEFAULT_LANGUAGES_CODE.EN)
     ) {
@@ -64,7 +64,7 @@ console.log('result', result)
         id: new Date().getTime().toString(),
       });
     }
-  }, [debouncedSavedResult, isMatch]);
+  }, [debouncedSavedResult, debounedMatched]);
 
   return (
     <TranslateEditorWrapper

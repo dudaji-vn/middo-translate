@@ -28,15 +28,12 @@ export const useHistoryStore = create<HistoryState>()(
         })),
       pushWithNoDuplicate: (newItem) =>
         set((state) => {
-          const lastItem = state.historyListItems?.[0];
-          if( lastItem?.src?.content.includes(newItem.src.content)) {
-            return state;
-          }
           const existingItemIndex = state.historyListItems?.findIndex((item) => {
-            const str1 = item.src.content;
-            const str2 = newItem.src.content;
-            return str2.toLowerCase()?.trim()?.includes(str1?.toLowerCase()?.trim());// || str1?.toLowerCase()?.trim()?.includes(str2?.toLowerCase()?.trim());
+            const old = item.src.content;
+            const newStr = newItem.src.content;
+            return newStr?.toLowerCase()?.trim()?.includes(old?.toLowerCase()?.trim());// || str1?.toLowerCase()?.trim()?.includes(str2?.toLowerCase()?.trim());
           });
+          console.log('existingItemIndex', existingItemIndex);
 
           if (existingItemIndex !== -1) {
             const newHistoryList = [...state.historyListItems];
