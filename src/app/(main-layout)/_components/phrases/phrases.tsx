@@ -10,7 +10,7 @@ import PhrasesListItems from './phrase-list-items';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   currentInputLanguage: string;
 }
 

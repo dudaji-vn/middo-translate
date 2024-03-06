@@ -22,7 +22,7 @@ export type PhraseItemProps = {
 export interface PhraseListItemsProps
   extends React.HTMLAttributes<HTMLDivElement> {
   currentInputLanguage: string;
-  }
+}
 
 const PhraseItem = ({
   name,
@@ -63,7 +63,7 @@ const PhraseItem = ({
 };
 
 const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
-  ({ className,currentInputLanguage, ...props }, ref) => {
+  ({ className, currentInputLanguage, ...props }, ref) => {
     const [hideTip, setHideTip] = useState(false);
     const [selectedItem, setSelectedItem] = useState<{
       name: TPhraseItem['name'];
