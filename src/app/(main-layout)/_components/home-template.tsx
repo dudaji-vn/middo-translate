@@ -42,7 +42,8 @@ const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchP
           transition={{ type: 'spring', duration: 0.6 }}
           className={cn(
             'max-h z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/3 xl:w-1/4',
-            'absolute inset-0 h-dvh '
+            'absolute inset-0 h-dvh ',
+            isValidTab ? '' :'hidden'
           )
           }
         >

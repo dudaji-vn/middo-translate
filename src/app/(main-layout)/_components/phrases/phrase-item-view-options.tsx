@@ -57,6 +57,7 @@ const PhraseItemViewOptions = ({
     : phraseOptions[phraseItemName] || [];
   const {
     setValue: setTranslateEditorInputValue,
+    value: currentInputVlue,
   } = useTranslateStore();
   const isMobile = useAppStore((state) => state.isMobile);
   const router = useRouter();
@@ -90,9 +91,10 @@ const PhraseItemViewOptions = ({
     router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile ? '' : '&tab=phrases'}`);
   }
   useEffect(() => {
-    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex]) return;
+    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex] || currentInputVlue.trim().length ===0 ) return;
     handlePhraseOptionClick(selectedIndex, phraseItemOptions[selectedIndex])
   }, [currentInputLanguage]);
+  
   useEffect(() => {
     setIsLoading(false);
   }, [searchParams]);
