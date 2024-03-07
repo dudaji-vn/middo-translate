@@ -12,9 +12,12 @@ import { addInfoUserService } from '@/services/auth.service';
 import { CreateNewAccountSchema as schema } from '@/configs/yup-form';
 import { uploadImage } from '@/utils/upload-img';
 import { useAuthStore } from '@/stores/auth.store';
-import { useForm } from 'react-hook-form';
+import { Form, useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
+import RHFInputField from '@/components/form/RHF/RHFInputField/RHFInputField';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function CreateNewAccount() {
   const [loading, setLoading] = useState(false);
@@ -33,30 +36,37 @@ export default function CreateNewAccount() {
     }
   }, [router, user]);
 
-  const {
-    register,
-    setValue,
-    watch,
-    trigger,
-    formState: { errors, isValid },
-  } = useForm({
+  const form = useForm({
     mode: 'onBlur',
     defaultValues: {
       name: '',
       avatar: undefined,
       language: '',
     },
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
   });
 
-  const handleSubmitForm = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    setValue,
+    watch,
+    trigger,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = form;
+  
+  const { avatar, name, language } = watch();
+
+  const submit = async (values: any) => {
+    // e.preventDefault();
     trigger();
     if (!isValid) return;
-    const { avatar, name, language } = watch();
     try {
       setLoading(true);
-      let img = await uploadImage(avatar as File);
+      let img = {secure_url: ''};
+      if(avatar) {
+        img = await uploadImage(avatar as File);
+      }
       let res = await addInfoUserService({
         avatar: img.secure_url,
         name,
@@ -71,6 +81,11 @@ export default function CreateNewAccount() {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (name?.length >= 60) {
+      setValue('name', name.slice(0, 60));
+    }
+  }, [name,setValue]);
 
   return (
     <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
@@ -79,32 +94,54 @@ export default function CreateNewAccount() {
         <h4 className="relative mb-8 pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
           Create new account
         </h4>
-        <form onSubmit={handleSubmitForm}>
-          <InputImage
-            className="mx-auto"
-            register={{ ...register('avatar') }}
-            errors={errors.avatar}
-            setValue={setValue}
-            field="avatar"
-          ></InputImage>
-          <InputField
-            className="mt-5"
-            label="Name"
-            placeholder="Enter your name"
-            register={{ ...register('name') }}
-            errors={errors.name}
-            type="text"
-          />
-          <InputSelectLanguage
-            className="mt-5"
-            field="language"
-            setValue={setValue}
-            errors={errors.language}
-            trigger={trigger}
-          ></InputSelectLanguage>
-          <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
-          <Button type="submit">Create</Button>
-        </form>
+        <Form {...form}>
+          <form onSubmit={handleSubmit(submit)}>
+            <InputImage
+              className="mx-auto"
+              register={{ ...register('avatar') }}
+              errors={errors.avatar}
+              setValue={setValue}
+              field="avatar"
+            ></InputImage>
+            <RHFInputField
+                  name="name"
+                  formLabel="Name"
+                  inputProps={{
+                    placeholder: 'Enter your name',
+                    suffix: (
+                      <span className="text-sm text-gray-400">{`${name?.length}/60`}</span>
+                    ),
+                    onKeyDown: (e) => {
+                      if (
+                        name?.length >= 60 &&
+                        e.key !== 'Backspace' &&
+                        e.key !== 'Delete'
+                      ) {
+                        e.preventDefault();
+                      }
+                    },
+                  }}
+                />
+            {/* <InputField
+              className="mt-5"
+              label="Name"
+              placeholder="Enter your name"
+              register={{ ...register('name') }}
+              errors={errors.name}
+              type="text"
+            /> */}
+            <InputSelectLanguage
+              className="mt-5"
+              field="language"
+              setValue={setValue}
+              errors={errors.language}
+              trigger={trigger}
+            ></InputSelectLanguage>
+            <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
+            <Button type="submit">Create</Button>
+          </form>
+        </Form>
+
       </div>
     </div>
   );
