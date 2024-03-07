@@ -88,7 +88,7 @@ const PhraseItemViewOptions = ({
     );
     setSelectedIndex(index);
     setTranslateEditorInputValue(translated);
-    router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile ? '' : '&tab=phrases'}`);
+    router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile || searchParams?.tab!=='phrases' ? '' : '&tab=phrases'}`);
   }
   useEffect(() => {
     if (selectedIndex === -1 || !phraseItemOptions[selectedIndex] || currentInputVlue.trim().length ===0 ) return;
