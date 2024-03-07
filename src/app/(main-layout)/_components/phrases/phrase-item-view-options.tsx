@@ -57,6 +57,7 @@ const PhraseItemViewOptions = ({
     : phraseOptions[phraseItemName] || [];
   const {
     setValue: setTranslateEditorInputValue,
+    value: currentInputVlue,
   } = useTranslateStore();
   const isMobile = useAppStore((state) => state.isMobile);
   const router = useRouter();
@@ -79,21 +80,21 @@ const PhraseItemViewOptions = ({
   const currentInputLanguage = searchParams?.['source'] || 'auto';
   const currentOutputLanguage = searchParams?.['target'];
   const handlePhraseOptionClick = async (index: number, option: string) => {
-    console.log('CLICK!!!!!!!')
+    setIsLoading(true);
     const translated = currentInputLanguage === DEFAULT_LANGUAGES_CODE.EN || currentInputLanguage == 'auto' ? option : await translateText(
       option,
       DEFAULT_LANGUAGES_CODE.EN,
       currentInputLanguage
     );
     setSelectedIndex(index);
-    setIsLoading(true);
     setTranslateEditorInputValue(translated);
-    router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile ? '' : '&tab=phrases'}`);
+    router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile || searchParams?.tab!=='phrases' ? '' : '&tab=phrases'}`);
   }
   useEffect(() => {
-    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex]) return;
+    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex] || currentInputVlue.trim().length ===0 ) return;
     handlePhraseOptionClick(selectedIndex, phraseItemOptions[selectedIndex])
   }, [currentInputLanguage]);
+  
   useEffect(() => {
     setIsLoading(false);
   }, [searchParams]);

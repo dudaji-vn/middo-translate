@@ -34,9 +34,6 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
             variant={'ghost'}
             size={'xs'}
             color={'default'}
-            className={cn(
-              's'
-            )}
           >
             <XIcon className="max-md:hidden" />
             <ArrowLeft className="md:hidden" />
