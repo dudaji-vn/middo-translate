@@ -7,11 +7,16 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import { useHistoryStore } from '@/features/translate/stores/history.store';
 import HistoryItem from './history-item';
 import { cn } from '@/utils/cn';
-import isEmpty from 'lodash/isEmpty';
+import { useAppStore } from '@/stores/app.store';
+import { SvgSpinnersGooeyBalls1 } from '@/components/icons';
+import { usePathname, useRouter } from 'next/navigation';
+import { isEqual } from 'lodash';
+import { SearchParams } from '../../page';
 
 
 export interface HistoryProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
+  searchParams:SearchParams;
   onClose?: () => void;
 }
 export type THistoryData = {
@@ -27,20 +32,41 @@ export type THistoryItem = {
 export type THistoryListItems = THistoryItem[];
 
 const History = forwardRef<HTMLDivElement, HistoryProps>(
-  ({ isSelected, className, onClose, ...props }, ref) => {
+  ({ isSelected, searchParams, className, onClose, ...props }, ref) => {
     const [isClient, setIsClient] = useState(false);
+    const router = useRouter();
+    const pathname = usePathname();
     const [historyListItems, clear, removeHistoryItem] = useHistoryStore(
       (state) => [state.historyListItems, state.clear, state.removeHistoryItem],
     );
+
+    const isMobile = useAppStore((state) => state.isMobile);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
     useEffect(() => {
       setIsClient(true);
     }, []);
+    useEffect(() => {
+      setIsLoading(false);
+    }, [searchParams]);
+
     if (!isClient) {
       return null;
     }
     const onDeleteHistoryItem = (item: THistoryItem) => {
       removeHistoryItem(item);
     };
+    const handleHistoryClick = async ({ dest, src }: THistoryItem) => {
+      const newParams = {
+        query: src.content.trim(),
+        source: src.language,
+        target: dest.language,
+        ...isMobile ? {} : { tab: 'history' }
+      };
+      if (!isEqual(searchParams, newParams) && isMobile) {
+        setIsLoading(true);
+      }
+      router.replace(`${pathname}?${new URLSearchParams(newParams).toString()}`);
+    }
     return (
       <section
         ref={ref}
@@ -52,9 +78,18 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
             : 'hidden',
         )}
       >
+        {isLoading && (
+          <div
+            className={cn(
+              'fixed bottom-0 left-0 right-0 top-0 z-[999] flex items-center justify-center bg-black/20',
+            )}
+          >
+            <SvgSpinnersGooeyBalls1 className="h-[32px] w-[32px] text-primary" />
+          </div>
+        )}
         <Typography
           className={cn(
-            'relative flex  h-11 w-full flex-row items-center gap-2 border-b px-2 pr-1 py-1 text-left font-semibold text-primary-500-main',
+            'relative flex  h-11 w-full flex-row items-center gap-2 border-b px-3 pr-1 py-1 text-left font-semibold text-primary-500-main',
             'max-md:justify-center',
           )}
         >
@@ -72,7 +107,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
             <ArrowLeft className="md:hidden" />
           </Button.Icon>
         </Typography>
-        <div className="flex h-[34px] w-full items-center justify-end gap-2 bg-background px-2 py-1 font-semibold">
+        <div className="flex h-[34px] w-full items-center justify-end gap-2 bg-background px-3 py-1 font-semibold">
           <Button
             variant={'ghost'}
             color={'default'}
@@ -87,9 +122,10 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
             Clear all
           </Button>
         </div>
-        <div className="flex w-full flex-col gap-8  px-2 ">
+        <div className="flex w-full flex-col gap-8  px-3 pb-8">
           {historyListItems?.map((item, index) => (
             <HistoryItem
+              onClick={() => { handleHistoryClick(item); }}
               key={index}
               item={item}
               index={index}

@@ -55,13 +55,13 @@ export const Extension = (props: ExtensionProps) => {
       <Button
         shape="square"
         color="default"
+        disabled={!showHistory}
         size="xs"
         startIcon={<HistoryIcon />}
         onClick={onClickHistory}
         className={cn(
           'rounded-2xl',
           isHightlighted(TranslationTab.HISTORY),
-          showHistory ? 'block' : 'hidden',
         )}
       >
         History

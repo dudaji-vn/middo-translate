@@ -7,9 +7,8 @@ import { CircleFlag } from 'react-circle-flags';
 import { THistoryItem } from './history';
 import {
   DEFAULT_LANGUAGES_CODE,
-  LANGUAGE_CODES_MAP,
 } from '@/configs/default-language';
-import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
+import { motion, useIsPresent } from 'framer-motion';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
 import { useTextCopy } from '@/hooks/use-text-copy';
@@ -68,9 +67,11 @@ const HistoryItem = ({
   item,
   onDeleteItem,
   index,
+  onClick
 }: {
   item: THistoryItem;
   onDeleteItem: (item: THistoryItem) => void;
+  onClick: () => void;
   index: number;
 }): JSX.Element => {
   const { src, dest } = item;
@@ -104,9 +105,11 @@ const HistoryItem = ({
   return (
     <motion.div
       className={cn(
-        'flex flex-col gap-2 rounded-2xl border border-primary-200 p-2',
+        'flex flex-col gap-2 rounded-2xl border border-primary-200 p-2 cursor-pointer',
         isPresent ? 'static' : 'absolute',
+
       )}
+      onClick={onClick}
       key={item.id}
       initial={{ opacity: 0, y: 100 }}
       transition={{ type: 'spring', duration: 0.1 }}
@@ -130,10 +133,11 @@ const HistoryItem = ({
         <Button.Icon
           variant={'default'}
           size={'xs'}
+          disabled={isEnglishTranslate}
           onClick={handleCopyAll}
           className={cn("bg-primary-200 text-primary-500-main", !allowCopyAll && 'invisible')}
         >
-          <Layers className="!h-5 !w-5" />
+          <Layers />
         </Button.Icon>
         <Button.Icon
           variant={'default'}
@@ -141,7 +145,7 @@ const HistoryItem = ({
           onClick={() => onDeleteItem(item)}
           className="bg-primary-200 text-primary-500-main"
         >
-          <Trash2 className="!h-5 !w-5" />
+          <Trash2 />
         </Button.Icon>
       </div>
     </motion.div>

@@ -37,9 +37,9 @@ const PhraseItem = ({
   return (
     <Button
       className={cn(
-        'w-fill relative grid h-[94px] w-full grid-cols-1 place-items-start gap-y-2 rounded-xl !p-3  ',
+        'w-fill relative flex-col justify-start  h-full w-full  items-start border border-neutral-50/50 flex place-items-start gap-y-2 rounded-xl !p-3  ',
         isOpened ? ' border border-primary-500-main !shadow-lg' : '',
-        'z-50 bg-neutral-50/50 hover:border hover:!border-primary-500-main hover:!bg-transparent',
+        'z-50 bg-neutral-50/50 hover:border md:hover:!border-primary-500-main hover:!bg-transparent',
       )}
       style={{
         backgroundPosition: 'right',
@@ -49,7 +49,7 @@ const PhraseItem = ({
       {...props}
       onClick={onOpen}
     >
-      <span {...iconWrapperProps} className={cn(` [&_svg]:text-white `)}>
+      <span {...iconWrapperProps} className={cn(` [&_svg]:text-white`)}>
         {icon}
       </span>
       <Typography
@@ -90,7 +90,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
         className={cn(
           className,
           `grid-rows-auto grid grid-cols-2`,
-          'gap-3 px-4',
+          'gap-3 px-3',
         )}
       >
         <PhraseTip

@@ -24,16 +24,17 @@ import { PageLoading } from '@/components/feedback';
 import { TranslationTab } from '@/types/translationstab.type';
 import HomeTemplate from './_components/home-template';
 
+export interface SearchParams {
+  query?: string;
+  source?: string;
+  target?: string;
+  edit?: string;
+  mquery?: string;
+  detect?: string;
+  tab?: string;
+}
 interface HomeProps {
-  searchParams: {
-    query?: string;
-    source?: string;
-    target?: string;
-    edit?: string;
-    mquery?: string;
-    detect?: string;
-    tab?: string;
-  };
+  searchParams: SearchParams;
 }
 
 export default async function Home(props: HomeProps) {
