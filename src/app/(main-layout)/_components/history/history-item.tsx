@@ -43,7 +43,10 @@ const DisplayedItem = ({
           />
         </div>
         <CopyZoneClick text={content}>
-          <Button.Icon variant={'ghost'} size={'xs'} color={'default'}>
+          <Button.Icon onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+          }} variant={'ghost'} size={'xs'} color={'default'}>
             <Copy />
           </Button.Icon>
         </CopyZoneClick>
@@ -140,18 +143,27 @@ const HistoryItem = ({
       <div className="flex items-center justify-end gap-2 bg-primary-100 py-2 rounded-b-xl">
         <Button.Icon
           variant={'default'}
+          color={'secondary'}
           size={'xs'}
           disabled={isEnglishTranslate}
-          onClick={handleCopyAll}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleCopyAll();
+          }}
           className={cn("bg-primary-200  text-primary-500-main", !allowCopyAll && 'invisible')}
         >
           <Layers />
         </Button.Icon>
         <Button.Icon
           variant={'default'}
+          color={'secondary'}
           size={'xs'}
-          onClick={() => onDeleteItem(item)}
-          className="bg-primary-200 text-primary-500-main"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onDeleteItem(item)
+          }}
         >
           <Trash2 />
         </Button.Icon>

@@ -24,47 +24,42 @@ const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchP
   }, [searchParams, replace, pathname]);
 
   useEffect(() => {
-    if(isMobile && isValidTab) {
+    if (isMobile && isValidTab) {
       onCloseTab();
     }
   }, [query])
 
-  if (!isValidTab) {
-    return <main className={'h-full'}>{children}</main>;
-  }
+
   return (
-    <main className={'h-full '}>
-      <div
-        className={cn(
-          'flex w-full flex-col divide-x max-md:gap-6 md:h-main-container-height md:flex-row',
-        )}
-      >
-        <div className={cn('h-fit w-full md:w-3/4')}>{children}</div>
-        <AnimatePresence>
-          <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ type: 'spring', duration: 0.6 }}
-            className={cn(
-              'max-h z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/3 xl:w-1/4'
-              ,
-              'absolute inset-0 h-dvh '
-            )
-            }
-          >
-            <Phrases
-              isSelected={currentTab === 'phrases'}
-              onClose={onCloseTab}
-              searchParams={searchParams}
-            />
-            <History
-              isSelected={currentTab === 'history'}
-              onClose={onCloseTab}
-              searchParams={searchParams}
-            />
-          </motion.div>
-        </AnimatePresence>
-      </div>
+    <main className={cn(isValidTab ?
+      'flex w-full flex-col divide-x max-md:gap-6 md:h-main-container-height md:flex-row' : 'h-full'
+    )}>
+      <div className={isValidTab ? 'h-fit w-full md:w-3/4' : 'h-full'}>{children}</div>
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ type: 'spring', duration: 0.6 }}
+          className={cn(
+            'max-h z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/3 xl:w-1/4'
+            ,
+            'absolute inset-0 h-dvh '
+          )
+          }
+        >
+          <Phrases
+            isSelected={currentTab === 'phrases'}
+            onClose={onCloseTab}
+            searchParams={searchParams}
+          />
+          <History
+            isSelected={currentTab === 'history'}
+            onClose={onCloseTab}
+            searchParams={searchParams}
+          />
+        </motion.div>
+      </AnimatePresence>
+
     </main>
   );
 };

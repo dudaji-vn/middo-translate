@@ -79,14 +79,13 @@ const PhraseItemViewOptions = ({
   const currentInputLanguage = searchParams?.['source'] || 'auto';
   const currentOutputLanguage = searchParams?.['target'];
   const handlePhraseOptionClick = async (index: number, option: string) => {
-    console.log('CLICK!!!!!!!')
+    setIsLoading(true);
     const translated = currentInputLanguage === DEFAULT_LANGUAGES_CODE.EN || currentInputLanguage == 'auto' ? option : await translateText(
       option,
       DEFAULT_LANGUAGES_CODE.EN,
       currentInputLanguage
     );
     setSelectedIndex(index);
-    setIsLoading(true);
     setTranslateEditorInputValue(translated);
     router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile ? '' : '&tab=phrases'}`);
   }
