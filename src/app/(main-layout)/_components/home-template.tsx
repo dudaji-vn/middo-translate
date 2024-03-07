@@ -7,12 +7,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import History from './history/history';
 import Phrases from './phrases/phrases';
 import { useAppStore } from '@/stores/app.store';
+import { SearchParams } from '../page';
 
-const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchParams: any }) => {
+const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchParams: SearchParams }) => {
   const pathname = usePathname();
-  const currentTab = searchParams?.['tab'];
+  const currentTab = searchParams?.['tab'] || '';
   const query = searchParams?.['query'];
-  const currentInputLanguage = searchParams?.['source'] || 'auto';
   const { replace } = useRouter();
   const isMobile = useAppStore((state) => state.isMobile);
   const isValidTab = /phrases|history/.test(currentTab);
@@ -48,18 +48,19 @@ const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchP
             className={cn(
               'max-h z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/3 xl:w-1/4'
               ,
-              'absolute left-0 top-0 h-dvh '
+              'absolute inset-0 h-dvh '
             )
             }
           >
             <Phrases
               isSelected={currentTab === 'phrases'}
               onClose={onCloseTab}
-              currentInputLanguage={currentInputLanguage}
+              searchParams={searchParams}
             />
             <History
               isSelected={currentTab === 'history'}
               onClose={onCloseTab}
+              searchParams={searchParams}
             />
           </motion.div>
         </AnimatePresence>

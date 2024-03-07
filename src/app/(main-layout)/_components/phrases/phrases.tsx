@@ -7,15 +7,16 @@ import { ArrowLeft, SparklesIcon, XIcon } from 'lucide-react';
 
 import React, { forwardRef } from 'react';
 import PhrasesListItems from './phrase-list-items';
+import { SearchParams } from '../../page';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
   onClose: () => void;
-  currentInputLanguage: string;
+  searchParams: SearchParams;
 }
 
 const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
-  ({ isSelected, currentInputLanguage, className, onClose, ...props }, ref) => {
+  ({ isSelected, searchParams, className, onClose, ...props }, ref) => {
     return (
       <section
         ref={ref}
@@ -27,28 +28,31 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
             : 'hidden',
         )}
       >
-        <Typography
-          className={cn(
-            'relative flex h-11 w-full flex-row items-center gap-2 border-b px-2 py-1 text-left font-semibold text-primary-500-main max-md:justify-center',
-            'max-md:justify-center',
-          )}
-        >
-          <SparklesIcon className="text-primary-500-main" />
-          Phrases
+        <div className=' flex w-full flex-row items-center md:flex-row-reverse border-b p-1 md:pl-3'>
           <Button.Icon
             onClick={onClose}
             variant={'ghost'}
             size={'xs'}
+            color={'default'}
             className={cn(
-              'absolute top-0 text-neutral-600 max-md:left-2 md:right-2 md:top-1',
+              's'
             )}
           >
             <XIcon className="max-md:hidden" />
             <ArrowLeft className="md:hidden" />
           </Button.Icon>
-        </Typography>
-
-        <PhrasesListItems  currentInputLanguage={currentInputLanguage || 'auto'} />
+          <Typography
+            className={cn(
+              'flex w-full flex-row items-center gap-2  pl-1 pr-2 py-1 text-left font-semibold text-primary-500-main max-md:justify-center',
+              'max-md:justify-center',
+            )}
+          >
+            <SparklesIcon className="text-primary-500-main" />
+            Phrases
+          </Typography>
+          <Button.Icon className='invisible md:hidden' />
+        </div>
+        <PhrasesListItems searchParams={searchParams} />
       </section>
     );
   },
