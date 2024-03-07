@@ -20,8 +20,6 @@ export type PhraseItemViewOptionsProps = {
   onCloseAll?: () => void;
   searchParams: SearchParams;
 };
-// mobile: px-5, neeus co button thi pl or lr = 1, mobile back-phráe = x 
-
 const getFavoritePhrases = (favoritePhrases: Record<string, number[]>) => {
   let position: Array<{ optionName: string; index: number }> = [];
   const texts = Object.entries(phraseOptions).reduce<string[]>(
@@ -88,13 +86,13 @@ const PhraseItemViewOptions = ({
     );
     setSelectedIndex(index);
     setTranslateEditorInputValue(translated);
-    router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile || searchParams?.tab!=='phrases' ? '' : '&tab=phrases'}`);
+    router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile || !searchParams?.tab ? '' : `&tab=${searchParams?.tab}`}`);
   }
   useEffect(() => {
-    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex] || currentInputVlue.trim().length ===0 ) return;
+    if (selectedIndex === -1 || !phraseItemOptions[selectedIndex] || currentInputVlue.trim().length === 0) return;
     handlePhraseOptionClick(selectedIndex, phraseItemOptions[selectedIndex])
   }, [currentInputLanguage]);
-  
+
   useEffect(() => {
     setIsLoading(false);
   }, [searchParams]);
