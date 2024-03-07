@@ -13,7 +13,6 @@ const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchP
   const pathname = usePathname();
   const currentTab = searchParams?.['tab'] || '';
   const query = searchParams?.['query'];
-  const currentInputLanguage = searchParams?.['source'] || 'auto';
   const { replace } = useRouter();
   const isMobile = useAppStore((state) => state.isMobile);
   const isValidTab = /phrases|history/.test(currentTab);
@@ -56,7 +55,7 @@ const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchP
             <Phrases
               isSelected={currentTab === 'phrases'}
               onClose={onCloseTab}
-              currentInputLanguage={currentInputLanguage}
+              searchParams={searchParams}
             />
             <History
               isSelected={currentTab === 'history'}

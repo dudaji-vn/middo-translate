@@ -6,6 +6,7 @@ import React, { ReactNode, forwardRef, useState } from 'react';
 import PhraseItemViewOptions from './phrase-item-view-options';
 import { phraseOptionNames } from './options';
 import PhraseTip from './phrase-tip';
+import { SearchParams } from '../../page';
 
 export type TPhraseItem = {
   name: string;
@@ -21,7 +22,7 @@ export type PhraseItemProps = {
 
 export interface PhraseListItemsProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  currentInputLanguage: string;
+  searchParams: SearchParams;
 }
 
 const PhraseItem = ({
@@ -63,12 +64,14 @@ const PhraseItem = ({
 };
 
 const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
-  ({ className, currentInputLanguage, ...props }, ref) => {
+  ({ className, searchParams, ...props }, ref) => {
     const [hideTip, setHideTip] = useState(false);
     const [selectedItem, setSelectedItem] = useState<{
       name: TPhraseItem['name'];
       icon: ReactNode;
     }>();
+
+
     const closeViewPhraseOptions = () => {
       setSelectedItem(undefined);
     };

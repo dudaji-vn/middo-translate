@@ -9,10 +9,8 @@ import { cn } from '@/utils/cn';
 import { translateText } from '@/services/languages.service';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { useAppStore } from '@/stores/app.store';
-import { LoadingIcon } from 'yet-another-react-lightbox';
 import { SvgSpinnersGooeyBalls1 } from '@/components/icons';
 import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/dist/client/components/navigation';
 
 export type PhraseItemViewOptionsProps = {
   phraseItemName: string;
@@ -58,16 +56,11 @@ const PhraseItemViewOptions = ({
     : phraseOptions[phraseItemName] || [];
   const {
     setValue: setTranslateEditorInputValue,
-    setIsFocused,
-    isEnglishTranslate,
   } = useTranslateStore();
   const isMobile = useAppStore((state) => state.isMobile);
+  const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
-
-  const router = useRouter();
-  const pathname = usePathname();
-  
   const handleFavorite = (phraseName: string, optionIndex: number) => {
     const optionCheckList = favoritePhrases[phraseName] || [];
     const isUnChecked = optionCheckList.includes(optionIndex);
@@ -89,9 +82,9 @@ const PhraseItemViewOptions = ({
       currentInputLanguage
     );
     setSelectedIndex(index);
-    setIsFocused(true);
     if (isMobile) setIsLoading(true);
     setTranslateEditorInputValue(translated);
+    router.replace(`/?query=${translated}&source=${currentInputLanguage}`);
   }
   useEffect(() => {
     if (selectedIndex === -1 || !phraseItemOptions[selectedIndex]) return;
@@ -108,7 +101,7 @@ const PhraseItemViewOptions = ({
         <SvgSpinnersGooeyBalls1 className="h-[32px] w-[32px] text-primary" />
       </div>
     )}
-    <div className="flex w-full items-center gap-3 flex-row-reverse justify-between pl-5 -mr-4">
+    <div className="flex w-full items-center gap-3 flex-row-reverse md:flex-row justify-between md:justify-start max-md:pl-5 -mr-4">
       <Button.Icon
         variant={'ghost'}
         size={'xs'}
@@ -120,7 +113,7 @@ const PhraseItemViewOptions = ({
         <XIcon className="md:hidden" />
       </Button.Icon>
       <Typography className="break-words font-semibold text-neutral-700  flex flex-row items-center gap-2">
-      {icon}
+        {icon}
         {phraseItemName}
       </Typography>
     </div>

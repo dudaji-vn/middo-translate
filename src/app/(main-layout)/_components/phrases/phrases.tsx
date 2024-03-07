@@ -7,15 +7,16 @@ import { ArrowLeft, SparklesIcon, XIcon } from 'lucide-react';
 
 import React, { forwardRef } from 'react';
 import PhrasesListItems from './phrase-list-items';
+import { SearchParams } from '../../page';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
   onClose: () => void;
-  currentInputLanguage: string;
+  searchParams: SearchParams;
 }
 
 const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
-  ({ isSelected, currentInputLanguage, className, onClose, ...props }, ref) => {
+  ({ isSelected, searchParams, className, onClose, ...props }, ref) => {
     return (
       <section
         ref={ref}
@@ -46,12 +47,12 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
               'max-md:justify-center',
             )}
           >
-          <SparklesIcon className="text-primary-500-main" />
+            <SparklesIcon className="text-primary-500-main" />
             Phrases
           </Typography>
-          <Button.Icon className='invisible md:hidden'/>
+          <Button.Icon className='invisible md:hidden' />
         </div>
-        <PhrasesListItems currentInputLanguage={currentInputLanguage || 'auto'} />
+        <PhrasesListItems searchParams={searchParams} />
       </section>
     );
   },

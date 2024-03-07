@@ -3,7 +3,7 @@
 import { Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
 import { ArrowLeft, HistoryIcon, Paintbrush, XIcon } from 'lucide-react';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, use, useEffect, useState } from 'react';
 import { useHistoryStore } from '@/features/translate/stores/history.store';
 import HistoryItem from './history-item';
 import { cn } from '@/utils/cn';
@@ -12,11 +12,12 @@ import { SvgSpinnersGooeyBalls1 } from '@/components/icons';
 import { usePathname, useRouter } from 'next/navigation';
 import { isEqual } from 'lodash';
 import { SearchParams } from '../../page';
+import { useTranslateStore } from '@/stores/translate.store';
 
 
 export interface HistoryProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
-  searchParams:SearchParams;
+  searchParams: SearchParams;
   onClose?: () => void;
 }
 export type THistoryData = {
@@ -35,7 +36,9 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
   ({ isSelected, searchParams, className, onClose, ...props }, ref) => {
     const [isClient, setIsClient] = useState(false);
     const router = useRouter();
-    const pathname = usePathname();
+    const {
+      setValue: setTranslateEditorInputValue,
+    } = useTranslateStore();
     const [historyListItems, clear, removeHistoryItem] = useHistoryStore(
       (state) => [state.historyListItems, state.clear, state.removeHistoryItem],
     );
@@ -57,15 +60,16 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
     };
     const handleHistoryClick = async ({ dest, src }: THistoryItem) => {
       const newParams = {
-        query: src.content.trim(),
         source: src.language,
         target: dest.language,
+        query: src.content.trim(),
         ...isMobile ? {} : { tab: 'history' }
       };
-      if (!isEqual(searchParams, newParams) && isMobile) {
+      if (!isEqual(searchParams, newParams)) {
         setIsLoading(true);
       }
-      router.replace(`${pathname}?${new URLSearchParams(newParams).toString()}`);
+      router.replace(`/?${new URLSearchParams(newParams).toString()}`);
+      setTranslateEditorInputValue(src.content.trim());
     }
     return (
       <section
@@ -99,6 +103,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
             onClick={onClose}
             variant={'ghost'}
             size={'xs'}
+            color={'default'}
             className={cn(
               'absolute top-0 text-neutral-600 max-md:left-2 md:right-2 md:top-1',
             )}
