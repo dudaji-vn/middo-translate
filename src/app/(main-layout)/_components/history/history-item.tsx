@@ -29,7 +29,6 @@ const DisplayedItem = ({
 }: TDisplayedItem) => {
   const flag = getCountryCode(languageCode);
   const language = getLanguageByCode(languageCode);
-  console.log('content', content)
   return (
     <div {...props} className={cn("flex w-full flex-col py-[6px] ", props.className)}>
       <div className="flex flex-row items-start justify-between ">

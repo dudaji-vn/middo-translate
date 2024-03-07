@@ -33,7 +33,6 @@ export const useHistoryStore = create<HistoryState>()(
             const newStr = newItem.src.content;
             return newStr?.toLowerCase()?.trim()?.includes(old?.toLowerCase()?.trim());// || str1?.toLowerCase()?.trim()?.includes(str2?.toLowerCase()?.trim());
           });
-          console.log('existingItemIndex', existingItemIndex);
 
           if (existingItemIndex !== -1) {
             const newHistoryList = [...state.historyListItems];

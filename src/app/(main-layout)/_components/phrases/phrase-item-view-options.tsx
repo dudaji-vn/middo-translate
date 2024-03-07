@@ -1,7 +1,7 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { ArrowLeft, LoaderIcon, Star, XIcon } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import { FAVORITE_OPTION_NAME, phraseOptions } from './options';
 import { useFavoritePhrasesStore } from '@/features/translate/stores/phrases.store';
 import { useTranslateStore } from '@/stores/translate.store';
@@ -11,13 +11,14 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { useAppStore } from '@/stores/app.store';
 import { SvgSpinnersGooeyBalls1 } from '@/components/icons';
 import { useRouter } from 'next/navigation';
+import { SearchParams } from '../../page';
 
 export type PhraseItemViewOptionsProps = {
   phraseItemName: string;
   icon: React.ReactNode;
   onClose: () => void;
   onCloseAll?: () => void;
-  currentInputLanguage: string;
+  searchParams: SearchParams;
 };
 // mobile: px-5, neeus co button thi pl or lr = 1, mobile back-phráe = x 
 
@@ -43,7 +44,7 @@ const getFavoritePhrases = (favoritePhrases: Record<string, number[]>) => {
 
 const PhraseItemViewOptions = ({
   phraseItemName,
-  currentInputLanguage,
+  searchParams,
   icon,
   onClose,
 }: PhraseItemViewOptionsProps) => {
@@ -75,21 +76,27 @@ const PhraseItemViewOptions = ({
     const newOptionCheckList = optionCheckList.filter((i) => i !== index);
     updateFavoritePhrases(optionName, newOptionCheckList);
   };
+  const currentInputLanguage = searchParams?.['source'] || 'auto';
+  const currentOutputLanguage = searchParams?.['target'];
   const handlePhraseOptionClick = async (index: number, option: string) => {
+    console.log('CLICK!!!!!!!')
     const translated = currentInputLanguage === DEFAULT_LANGUAGES_CODE.EN || currentInputLanguage == 'auto' ? option : await translateText(
       option,
       DEFAULT_LANGUAGES_CODE.EN,
       currentInputLanguage
     );
     setSelectedIndex(index);
-    if (isMobile) setIsLoading(true);
+    setIsLoading(true);
     setTranslateEditorInputValue(translated);
-    router.replace(`/?query=${translated}&source=${currentInputLanguage}`);
+    router.replace(`/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${isMobile ? '' : '&tab=phrases'}`);
   }
   useEffect(() => {
     if (selectedIndex === -1 || !phraseItemOptions[selectedIndex]) return;
     handlePhraseOptionClick(selectedIndex, phraseItemOptions[selectedIndex])
   }, [currentInputLanguage]);
+  useEffect(() => {
+    setIsLoading(false);
+  }, [searchParams]);
 
   return (<div className="flex h-full w-full flex-col gap-3 px-3 max-md:pl-0">
     {isLoading && (
@@ -101,7 +108,7 @@ const PhraseItemViewOptions = ({
         <SvgSpinnersGooeyBalls1 className="h-[32px] w-[32px] text-primary" />
       </div>
     )}
-    <div className="flex w-full items-center gap-3 flex-row-reverse md:flex-row justify-between md:justify-start max-md:pl-5 -mr-4">
+    <div className="flex w-full items-center gap-3 flex-row-reverse md:flex-row justify-between md:justify-start max-md:pl-5  md:gap-1 -mr-4">
       <Button.Icon
         variant={'ghost'}
         size={'xs'}
@@ -109,7 +116,7 @@ const PhraseItemViewOptions = ({
         className="[&_svg]:text-neutral-800 m-0 "
         onClick={onClose}
       >
-        <ArrowLeft className="max-md:hidden"/>
+        <ArrowLeft className="max-md:hidden" />
         <XIcon className="md:hidden" />
       </Button.Icon>
       <Typography className="break-words font-semibold text-neutral-700  flex flex-row items-center gap-2">

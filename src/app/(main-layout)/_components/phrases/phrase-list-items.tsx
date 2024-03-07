@@ -82,7 +82,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
           phraseItemName={selectedItem.name}
           icon={selectedItem.icon}
           onClose={closeViewPhraseOptions}
-          currentInputLanguage={currentInputLanguage}
+          searchParams={searchParams}
         />
       );
     }
