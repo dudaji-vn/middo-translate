@@ -7,6 +7,7 @@ import PhraseItemViewOptions from './phrase-item-view-options';
 import { phraseOptionNames } from './options';
 import PhraseTip from './phrase-tip';
 import { SearchParams } from '../../page';
+import filter from 'lodash/filter';
 
 export type TPhraseItem = {
   name: string;
@@ -102,9 +103,10 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
           closeTip={() => setHideTip(true)}
         />
         {phraseOptionNames?.map((name, index) => {
+          const imgNameFile = filter(name, char => /[a-zA-Z]/.test(char)).join('').toLowerCase();
           const icon = (
             <Image
-              src={`/phrases/phrase${index + 1}.svg`}
+              src={`/phrases/${imgNameFile}.svg`}
               width={34}
               height={34}
               alt={name}
@@ -117,7 +119,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
                   `absolute inset-0  bg-background bg-origin-content opacity-15 rounded-xl`,
                 )}
                 style={{
-                  background: `url('/phrases/phrase${index + 1}.svg')`,
+                  background: `url('/phrases/${imgNameFile}.svg')`,
                   backgroundPosition: `
                 right -26% bottom 2px
                 `,
