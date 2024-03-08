@@ -11,7 +11,6 @@ const SocketProvider = () => {
     if (!user?._id) {
       return;
     }
-    socket.connect();
     function onConnect() {
       if (user?._id) {
         socket.emit('client.join', user._id);
@@ -24,6 +23,8 @@ const SocketProvider = () => {
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
+    socket.connect();
+
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);

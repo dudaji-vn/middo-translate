@@ -8,6 +8,9 @@ import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import useFitRatio from '@/features/call/hooks/use-fit-ratio';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemAvatar from './components/video-item-avatar';
+import { DoodleArea } from '../doodle/doodle-area';
+import useGetVideoSize from '../doodle/hooks/use-get-video-size';
+import { DoodleShareScreen } from '../doodle/doodle-share-screen';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -18,7 +21,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const { isTalk } = useAudioLevel(streamVideo);
   const { isLoadingVideo } = useMyVideoCallStore();
   useFitRatio(videoRef, parentRef);
-
+  const {width, height} = useGetVideoSize({videoRef});
   const fullScreenVideo = () => {
     if (!videoRef.current) return;
     // Check is full screen video
@@ -47,6 +50,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       videoRefTmp.removeEventListener('pause', handleDisablePauseVideo);
     };
   }, [streamVideo]);
+
   return (
     <section
       ref={parentRef}
@@ -74,19 +78,19 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         controls={false}
       ></video>
       {/* Overlay black gradient from bottom to top */}
-      {isTurnOnCamera && (
+      {/* {isTurnOnCamera  && (
         <div className="absolute bottom-0 left-0 right-0 top-1/2 hidden items-end justify-end bg-gradient-to-t p-3 transition-all md:flex md:hover:from-black/70">
           <Maximize
             className="h-5 w-5 cursor-pointer stroke-white"
             onClick={fullScreenVideo}
           />
         </div>
-      )}
+      )} */}
 
       {/* Overlay name */}
       <VideoItemAvatar size='lg' participant={participant} isTurnOnCamera={isTurnOnCamera}/>
 
-      {/*  */}
+      {/* Overlay name */}
       <div className="absolute bottom-1 left-1 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white z-10">
         <span className="relative truncate leading-snug">
           {participant?.isMe ? 'You' : participant?.user?.name || ''}
@@ -98,6 +102,10 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       <VideoItemLoading isLoading={isLoadingVideo} isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
 
       {/* Doodle */}
+      {/* {participant?.isShareScreen && participant?.isElectron &&  */}
+      {participant?.isShareScreen && 
+        <DoodleShareScreen width={width} height={height}/>
+      }
     </section>
   );
 };

@@ -16,6 +16,8 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useState } from 'react';
+import { COMMIT_SHA } from '@/configs/commit-data';
+import { cn } from '@/utils/cn';
 
 type Props = {};
 
@@ -28,13 +30,18 @@ export const Header = (props: Props) => {
   const signOut = async () => {
     setShowConfirmLogout(true);
   };
-
+  
   return (
-    <div className="z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]">
+    <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]")}>
       <HeaderNav />
       <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
+      {COMMIT_SHA && (
+        <span className="mt-2 text-[0.6rem] text-gray-600">
+          {`ver.${(COMMIT_SHA as string)?.slice(0, 8)}`}{' '}
+        </span>
+      )}
 
       <div className="flex flex-1 items-center justify-end">
         {isAuthentication && user ? (

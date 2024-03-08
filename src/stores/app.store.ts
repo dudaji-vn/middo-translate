@@ -6,6 +6,7 @@ export type AppState = {
   loading: boolean;
   isShowConfirmLogout: boolean;
   platform: 'web' | 'mobile';
+  currentAudio?: HTMLAudioElement;
 };
 
 export type AppActions = {
@@ -14,6 +15,7 @@ export type AppActions = {
   setShowConfirmLogout: (isShowConfirmLogout: boolean) => void;
   setTablet: (isTablet: boolean) => void;
   setPlatform: (platform: 'web' | 'mobile') => void;
+  setCurrentAudio: (audio: HTMLAudioElement) => void;
 };
 
 export const useAppStore = create<AppState & AppActions>()((set) => ({
@@ -28,4 +30,5 @@ export const useAppStore = create<AppState & AppActions>()((set) => ({
   setPlatform: (platform) => set(() => ({ platform })),
   setShowConfirmLogout: (isShowConfirmLogout) =>
     set(() => ({ isShowConfirmLogout })),
+  setCurrentAudio: (currentAudio) => set(() => ({ currentAudio })),
 }));

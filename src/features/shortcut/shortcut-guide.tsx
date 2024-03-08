@@ -23,7 +23,7 @@ import {
 } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
 
-import { HelpCircle, Info, Minus, Plus } from 'lucide-react';
+import { HelpCircle, Info } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { useVideoCallStore } from '../call/store/video-call.store';
@@ -104,8 +104,7 @@ const translationShortcuts = generateShortcuts(SCTranslation);
 const conversationShortcuts = generateShortcuts(SCConversation);
 const callShortcuts = generateShortcuts(SCCall);
 const SHORTCUTS_OPEN = [
-  ['÷', 'alt'],
-  ['?', 'alt'],
+  ['ctrl', 'alt', 'shift'],
 ];
 type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {

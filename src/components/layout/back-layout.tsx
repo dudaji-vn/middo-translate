@@ -27,6 +27,7 @@ export const BackLayout = forwardRef<HTMLDivElement, BackLayoutProps>(
           <Button.Icon
             size="xs"
             color="default"
+            variant="ghost"
             onClick={
               onBack ||
               (() => {

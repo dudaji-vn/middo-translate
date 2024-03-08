@@ -74,10 +74,10 @@ export const SHORTCUTS: Record<
 
   [SCTranslation.EDIT_ESL_TRANSLATION]: ['ctrl_or_alt', 'o'],
   [SCTranslation.CONFIRM_ESL_TRANSLATED]: ['ctrl_or_alt', 'k'],
-  
+
   [SCTranslation.TEXT_TO_SPEECH_INPUT]: ['ctrl_or_alt', 'z'],
   [SCTranslation.COPY_INPUT]: ['ctrl_or_alt', 'x'],
-  [SCTranslation.TRANSLATED_TEXT_TO_SPEECH]: ['ctrl_or_alt', '/'],
+  [SCTranslation.TRANSLATED_TEXT_TO_SPEECH]: ['ctrl_or_alt', ','],
   [SCTranslation.TRANSLATED_COPY]: ['ctrl_or_alt', '.'],
   [SCTranslation.COPY_ALL_TEXT]: ['ctrl_or_alt', 'a'],
   [SCTranslation.COPY_IMAGE]: ['ctrl_or_alt', 'i'],

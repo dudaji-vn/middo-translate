@@ -15,6 +15,8 @@ import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import SpeechRecognition from 'react-speech-recognition';
+import { TranslationTab } from '@/types/translationstab.type';
 
 const MAX_SELECTED_LANGUAGES = 3;
 
@@ -24,6 +26,7 @@ export interface LanguagesControlBarProps
   target?: string;
   detect?: string;
   targetResult?: string;
+  tab?: string;
 }
 
 export const LanguagesControlBar = forwardRef<
@@ -31,14 +34,14 @@ export const LanguagesControlBar = forwardRef<
   LanguagesControlBarProps
 >(
   (
-    { targetResult, source: _source, target: _target, detect, ...props },
+    { targetResult, source: _source, target: _target, detect, tab, ...props },
     ref,
   ) => {
     const [currentSelect, setCurrentSelect] = useState<
       'source' | 'target' | 'none'
     >('none');
     const { searchParams, setParams } = useSetParams();
-    const { setValue } = useTranslateStore();
+    const { setValue, isListening } = useTranslateStore();
     const source = searchParams?.get('source');
     const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
     const isTablet = useAppStore((state) => state.isTablet);
@@ -50,7 +53,7 @@ export const LanguagesControlBar = forwardRef<
       lastSourceUsed,
       lastTargetUsed,
     } = useLanguageStore();
-
+    const shrinkAble = tab === TranslationTab.PHRASES || tab === TranslationTab.HISTORY;
     const [clickable, setClickable] = useState(true);
 
     const handleSwapLanguage = useCallback(() => {
@@ -67,13 +70,18 @@ export const LanguagesControlBar = forwardRef<
 
       addRecentlyUsed(_target, 'source');
       addRecentlyUsed(sourceValue, 'target');
-
+      if (isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
+        setParams(newParams);
+        return;
+      }
       if (targetResult) {
         setClickable(false);
         setTimeout(() => {
           setValue(targetResult);
           setClickable(true);
-        }, 300);
+        }, 500); // delay to prevent flickering
         newParams.push({ key: 'query', value: targetResult });
       }
 
@@ -83,6 +91,7 @@ export const LanguagesControlBar = forwardRef<
       _target,
       addRecentlyUsed,
       clickable,
+      isListening,
       recentlyTargetUsed,
       setParams,
       setValue,
@@ -92,7 +101,6 @@ export const LanguagesControlBar = forwardRef<
 
     const handleSelect = (code: string, type: 'source' | 'target') => {
       setCurrentSelect('none');
-
       const sourceValue = searchParams?.get('source');
       const targetValue =
         searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
@@ -111,6 +119,10 @@ export const LanguagesControlBar = forwardRef<
         }
         setParams([{ key: 'target', value: code }]);
         addRecentlyUsed(code, type);
+      }
+      if (isListening) {
+        setValue('');
+        SpeechRecognition.stopListening();
       }
     };
 
@@ -160,6 +172,7 @@ export const LanguagesControlBar = forwardRef<
         >
           <div className="flex flex-1 justify-end rounded-2xl lg:justify-start lg:overflow-hidden">
             <LanguageSelect
+              shrinkAble={shrinkAble}
               onChevronClick={() => {
                 setCurrentSelect('source');
               }}
@@ -191,6 +204,7 @@ export const LanguagesControlBar = forwardRef<
           </div>
           <div className="flex flex-1 justify-start rounded-2xl lg:overflow-hidden">
             <LanguageSelect
+              shrinkAble={shrinkAble}
               onChange={(code) => {
                 if (isTablet) {
                   setCurrentSelect('target');
@@ -222,11 +236,11 @@ export const LanguagesControlBar = forwardRef<
                 onSelected={
                   currentSelect === 'source'
                     ? (code) => {
-                        handleSelect(code, 'source');
-                      }
+                      handleSelect(code, 'source');
+                    }
                     : (code) => {
-                        handleSelect(code, 'target');
-                      }
+                      handleSelect(code, 'target');
+                    }
                 }
                 selectedCode={searchParams?.get(currentSelect) as string}
               />

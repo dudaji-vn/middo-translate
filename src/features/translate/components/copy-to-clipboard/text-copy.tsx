@@ -9,6 +9,7 @@ import { useTextCopy } from '@/hooks/use-text-copy';
 import { useTranslateStore } from '@/stores/translate.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { getFlagEmoji } from '@/utils/get-flag-emoji';
 
 export interface TextCopyProps extends React.HTMLAttributes<HTMLDivElement> {
   sourceText: string;
@@ -69,11 +70,3 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
   },
 );
 TextCopy.displayName = 'TextCopy';
-
-function getFlagEmoji(countryCode: string) {
-  const codePoints = countryCode
-    .toUpperCase()
-    .split('')
-    .map((char) => 127397 + char.charCodeAt(0));
-  return String.fromCodePoint(...codePoints);
-}

@@ -14,12 +14,11 @@ import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { useRouter } from 'next/navigation';
 import { usePlatformStore } from '@/features/platform/stores';
+import { useNetworkStatus } from '@/utils/use-network-status';
 
 interface ChatBoxContextProps {
   room: Room;
   updateRoom: (room: Partial<Room>) => void;
-  showSide: boolean;
-  toggleSide: () => void;
 }
 
 export const ChatBoxContext = createContext<ChatBoxContextProps>(
@@ -31,17 +30,13 @@ export const ChatBoxProvider = ({
   room: _room,
 }: PropsWithChildren<{ room: Room }>) => {
   const notifyToken = usePlatformStore((state) => state.notifyToken);
+  const { isOnline } = useNetworkStatus();
 
   const [room, setRoom] = useState<Room>(_room);
   const updateRoom = useCallback((room: Partial<Room>) => {
     setRoom((old) => ({ ...old, ...room }));
   }, []);
   const router = useRouter();
-
-  const [showSide, setShowSide] = useState(false);
-  const toggleSide = useCallback(() => {
-    setShowSide((old) => !old);
-  }, []);
 
   // socket events
 
@@ -53,19 +48,21 @@ export const ChatBoxProvider = ({
     },
     [room._id, router],
   );
-
   useEffect(() => {
-    socket.emit(SOCKET_CONFIG.EVENTS.CHAT.JOIN, {
-      roomId: room._id,
-      notifyToken,
-    });
+    if (isOnline) {
+      socket.emit(SOCKET_CONFIG.EVENTS.CHAT.JOIN, {
+        roomId: room._id,
+        notifyToken,
+      });
+    }
+
     return () => {
       socket.emit(SOCKET_CONFIG.EVENTS.CHAT.LEAVE, {
         roomId: room._id,
         notifyToken,
       });
     };
-  }, [notifyToken, room._id]);
+  }, [notifyToken, room._id, isOnline]);
 
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.UPDATE, updateRoom);
@@ -79,7 +76,7 @@ export const ChatBoxProvider = ({
   }, [handleForceLeaveRoom, room._id, updateRoom]);
 
   return (
-    <ChatBoxContext.Provider value={{ room, updateRoom, showSide, toggleSide }}>
+    <ChatBoxContext.Provider value={{ room, updateRoom }}>
       {children}
     </ChatBoxContext.Provider>
   );

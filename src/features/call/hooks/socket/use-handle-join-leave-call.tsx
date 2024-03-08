@@ -78,7 +78,8 @@ export default function useHandleJoinLeaveCall() {
             setTurnOnCamera(DEFAULT_USER_CALL_STATE.isTurnOnCamera)
             setTurnOnMic(DEFAULT_USER_CALL_STATE.isTurnOnMic)
         };
-    }, [addParticipant, room._id, room.roomId, setTurnOnCamera, setTurnOnMic, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [addParticipant, room._id, room.roomId, setTurnOnCamera, setTurnOnMic, user?._id]);
 
 
     // Add Me To list participant

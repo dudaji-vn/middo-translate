@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
+import trim from 'lodash/trim';
 interface DataResponseToken {
   token: string;
   refresh_token: string;
@@ -31,6 +32,7 @@ interface SignInProps {
     refresh_token?: string;
   };
 }
+
 export default function SignIn(props: SignInProps) {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -65,13 +67,17 @@ export default function SignIn(props: SignInProps) {
     if (!isValid) return;
     try {
       setLoading(true);
-      const data = await loginService(watch());
+      const formData = {
+        email: trim(watch('email').toLocaleLowerCase()),
+        password: watch('password'),
+      }
+      const data = await loginService(formData);
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
       toast.success('Login success!');
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage('Invalid email or password')
     } finally {
       setLoading(false);
       // reset();

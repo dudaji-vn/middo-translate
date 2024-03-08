@@ -5,6 +5,7 @@ import {
   InputHTMLAttributes,
   forwardRef,
   useCallback,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -64,8 +65,9 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             value={value}
             ref={inputRef}
             type="text"
-            {...props}
             autoFocus
+            {...props}
+            // autoFocus
             onChange={(e) => {
               props.onChange?.(e);
               setValue(e.target.value);

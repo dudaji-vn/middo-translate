@@ -16,25 +16,31 @@ import { detectLanguage, translateText } from '@/services/languages.service';
 
 import { CompareProvider } from '@/features/translate/context';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { PageLoading } from '@/components/feedback';
 import { cn } from '@/utils/cn';
 import { Extension } from '@/features/translate/components/extension';
+
+import { THistoryItem } from './_components/history/history';
+import { PageLoading } from '@/components/feedback';
+import { TranslationTab } from '@/types/translationstab.type';
+import HomeTemplate from './_components/home-template';
+
+export interface SearchParams {
+  query?: string;
+  source?: string;
+  target?: string;
+  edit?: string;
+  mquery?: string;
+  detect?: string;
+  tab?: string;
+}
 interface HomeProps {
-  searchParams: {
-    query?: string;
-    source?: string;
-    target?: string;
-    edit?: string;
-    mquery?: string;
-    detect?: string;
-  };
+  searchParams: SearchParams;
 }
 
 export default async function Home(props: HomeProps) {
   const isEdit = props.searchParams.edit === 'true';
   const sourceText = props.searchParams.query || '';
   const middleText = props.searchParams.mquery || '';
-
   const sourceLanguage =
     props.searchParams.source === 'auto'
       ? props.searchParams.detect && middleText
@@ -75,10 +81,24 @@ export default async function Home(props: HomeProps) {
   const isShowMiddleSource = sourceEnglishResult && !isEnglishTranslate;
 
   const isShowMiddleTarget = targetEnglishResult && !isEnglishTranslate;
+  const historyItem: THistoryItem = {
+    id: Date.now().toString(),
+    src: {
+      language: String(sourceLanguage),
+      content: sourceText,
+      englishContent: sourceEnglishResult,
+    },
+    dest: {
+      language: String(targetLanguage),
+      content: targetResult,
+      englishContent: targetEnglishResult,
+    },
+  };
 
   return (
-    <main className="relative flex h-full w-full flex-col pt-5">
-      <PageLoading title="Loading">
+    <HomeTemplate searchParams={props.searchParams}>
+      <PageLoading title="Loading" className="h-full" />
+      <div className="flex h-full w-full flex-col pt-5">
         <CompareProvider
           text={sourceEnglishResult}
           textCompare={targetEnglishResult}
@@ -89,6 +109,7 @@ export default async function Home(props: HomeProps) {
             target={targetLanguage}
             detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
             targetResult={targetResult}
+            tab={props.searchParams?.tab as TranslationTab}
           />
           <CaptureProvider>
             <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-3 md:flex-row md:justify-evenly md:gap-[88px]">
@@ -115,10 +136,10 @@ export default async function Home(props: HomeProps) {
                   </>
                 )}
               </TranslateEditor>
-
               <TranslateResult
                 result={targetResult}
                 languageCode={targetLanguage}
+                historyItem={historyItem}
               >
                 {isShowMiddleTarget && (
                   <TranslateMiddle
@@ -145,11 +166,11 @@ export default async function Home(props: HomeProps) {
             </div>
           </CaptureProvider>
         </CompareProvider>
-      </PageLoading>
+      </div>
       <DetectTranslateWay
         sourceLanguage={sourceLanguage}
         targetLanguage={targetLanguage}
       />
-    </main>
+    </HomeTemplate>
   );
 }

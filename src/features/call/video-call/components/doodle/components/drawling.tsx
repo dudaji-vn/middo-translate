@@ -28,7 +28,6 @@ const Drawling = forwardRef<ReactSketchCanvasRef, DrawlingProps>((props, ref) =>
             return;
         }
         timer.current = newTimer;
-
         // Send doodle
         const image = await ref.current?.exportImage('png');
         if (!image) return;

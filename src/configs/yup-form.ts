@@ -5,7 +5,7 @@ import { z } from "zod"
 export const LoginSchema = yup
     .object()
     .shape({
-        email: yup.string().required({
+        email: yup.string().trim().required({
             value: true,
             message: "Please enter email address!"
         }).email({
@@ -87,26 +87,21 @@ export const ResetPasswordSchema = yup
     })
     .required()
 
-export const CreateNewAccountSchema = yup
-    .object()
-    .shape({
-        name: yup.string().required({
-            value: true,
-            message: "Please enter name!"
+export const CreateNewAccountSchema = z.object({
+    name: z.string().min(1, {
+        message: 'Please enter name!'
+    }),
+    avatar: z.any()
+        .refine((value: any) => value?.length > 0 || value?.size > 0, {
+            message: 'Please choose your avatar'
+        })
+        .refine((value: any) => value?.size < 3000000, {
+            message: 'File size must be less than 3MB'
         }),
-        avatar: yup.mixed()
-            .test('required', 'Please choose your avatar', (value: any) => {
-                return value.length > 0 || value.size > 0;
-            })
-            .test('fileSize', 'File size must be less than 3MB', (value: any) => {
-                return value?.size < 3000000;
-            }),
-        language: yup.string().required({
-            value: true,
-            message: "Please choose language!"
-        }),
+    language: z.string().min(1, {
+        message: 'Please choose language!'
     })
-    .required()
+}).optional();
 
 export const updateInforSchema = z.object({
     name: z.string().min(1,

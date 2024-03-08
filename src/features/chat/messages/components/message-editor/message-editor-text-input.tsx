@@ -1,8 +1,14 @@
-import { ChangeEvent, EventHandler, forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import {
+  ChangeEvent,
+  EventHandler,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from 'react';
 
 import { useMessageEditorText } from './message-editor-text-context';
 import { useMediaUpload } from '@/components/media-upload';
-import { useShortcutListenStore } from '@/stores/shortcut-listen.store';
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
@@ -17,10 +23,18 @@ export const TextInput = forwardRef<
   TextInputRef,
   React.HTMLProps<HTMLTextAreaElement> & {
     isToolbarShrink?: boolean;
+    onDisableStateChange?: (disabled: boolean) => void;
   }
 >(
   (
-    { isToolbarShrink, onKeyDown, onBlur, onFocus, ...props },
+    {
+      isToolbarShrink,
+      onKeyDown,
+      onBlur,
+      onDisableStateChange,
+      onFocus,
+      ...props
+    },
     ref,
   ) => {
     const {
@@ -29,6 +43,7 @@ export const TextInput = forwardRef<
       setMiddleText,
       handleStopListening,
       listening,
+      inputDisabled,
     } = useMessageEditorText();
     const isMobile = useAppStore((state) => state.isMobile);
     const { handlePasteFile } = useMediaUpload();
@@ -37,6 +52,7 @@ export const TextInput = forwardRef<
     const buttonRef = useRef<HTMLButtonElement>(null);
     const triggerSubmit = () => {
       buttonRef.current?.click();
+      setText('');
     };
     const onScale: EventHandler<ChangeEvent<HTMLTextAreaElement>> = (e) => {
       if (e.target?.value?.length === 0) return;
@@ -68,6 +84,11 @@ export const TextInput = forwardRef<
       }
     }, [text]);
 
+    useEffect(() => {
+      onDisableStateChange?.(inputDisabled);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [inputDisabled]);
+
     return (
       <div
         className={cn(
@@ -87,7 +108,7 @@ export const TextInput = forwardRef<
           onInput={onScale}
           {...props}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey && text.length > 0) {
+            if (e.key === 'Enter' && !e.shiftKey) {
               e.preventDefault();
               triggerSubmit();
             }
@@ -124,6 +145,7 @@ export const TextInput = forwardRef<
           placeholder={listening ? 'Listening...' : 'Type a message'}
           onPaste={handlePasteFile}
         />
+
         <MessageEditorToolbarMic
           className={'absolute  -bottom-1 -right-2 md:-bottom-0'}
         />
