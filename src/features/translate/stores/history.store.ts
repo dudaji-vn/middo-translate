@@ -31,7 +31,7 @@ export const useHistoryStore = create<HistoryState>()(
           const existingItemIndex = state.historyListItems?.findIndex((item) => {
             const oldStr = item.src.content;
             const newStr = newItem.src.content;
-            const isContentsEqual = oldStr?.toLowerCase()?.trim() === newStr?.toLowerCase()?.trim();
+            const isContentsEqual = newStr?.toLowerCase()?.trim()?.includes(oldStr?.toLowerCase()?.trim());
             const isLanguagesEqual = item.src.language === newItem.src.language && item.dest.language === newItem.dest.language;
             return isContentsEqual && isLanguagesEqual;
           });

@@ -24,7 +24,7 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
         className={cn(
           className,
           isSelected
-            ? 'max-md:h-fit md:h-full  bg-red-300 pb-5 !overflow-y-auto   w-full space-y-2  [&_svg]:h-4 [&_svg]:w-4 scroll-m-0 scroll-p-0'
+            ? 'max-md:h-fit md:h-full  pb-5 !overflow-y-auto   w-full space-y-2  [&_svg]:h-4 [&_svg]:w-4 scroll-m-0 scroll-p-0'
             : 'hidden',
         )}
       >
