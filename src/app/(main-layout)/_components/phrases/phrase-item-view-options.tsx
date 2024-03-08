@@ -86,7 +86,7 @@ const PhraseItemViewOptions = ({
     );
     setSelectedIndex(index);
     setTranslateEditorInputValue(translated);
-    if(translated === searchParams?.query) {
+    if (translated === searchParams?.query) {
       setIsLoading(false);
       return;
     }
@@ -102,7 +102,7 @@ const PhraseItemViewOptions = ({
     setIsLoading(false);
   }, [searchParams]);
 
-  return (<div className="flex h-full w-full flex-col gap-3 px-3 max-md:pl-0">
+  return (<div className="flex pb-5 h-fit w-full flex-col gap-3 px-3 max-md:pl-0">
     {isLoading && (
       <div
         className={cn(
@@ -128,47 +128,49 @@ const PhraseItemViewOptions = ({
         {phraseItemName}
       </Typography>
     </div>
-    {phraseItemOptions.map((option, index) => {
-      const simplifiedText = option.replaceAll('[', '#').replaceAll(']', '#')
-      const splitedTexts = simplifiedText.split('#');
-      const isFavorite = favoritePhrases[phraseItemName]?.includes(index);
-      return (
-        <div
-          className={cn("max-md:ml-3 flex flex-row items-center cursor-pointer hover:bg-primary-200   justify-between rounded-xl bg-primary-100 p-3", selectedIndex === index ? '!bg-primary-300' : '')}
-          key={`${phraseItemName}-${index}`}
-          onClick={(e) => handlePhraseOptionClick(index, option)}
-        >
-          <Typography className={cn("w-10/12 break-words text-left font-semibold text-neutral-700", selectedIndex === index ? '' : '',)}>
-            {splitedTexts.map((text, idx) => {
-              const isFillable = idx % 2 === 1;
-              return <span key={idx} className={cn(isFillable && "text-base font-light leading-[18px] tracking-normal ", selectedIndex === index ? '' : '')}>
-                {isFillable ? `[${text}]` : text}
-              </span>
-            })}
-          </Typography>
-          <Button.Icon
-            variant={'ghost'}
-            size={'xs'}
-            color={'default'}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              if (isYourList) {
-                handleRemoveFavorite(index);
-                return;
-              }
-              handleFavorite(phraseItemName, index);
-            }}
+    <div className="flex flex-col gap-3 w-full overflow-y-auto">
+      {phraseItemOptions.map((option, index) => {
+        const simplifiedText = option.replaceAll('[', '#').replaceAll(']', '#')
+        const splitedTexts = simplifiedText.split('#');
+        const isFavorite = favoritePhrases[phraseItemName]?.includes(index);
+        return (
+          <div
+            className={cn(" max-md:ml-3 flex flex-row items-center cursor-pointer hover:bg-primary-200   justify-between rounded-xl bg-primary-100 p-3", selectedIndex === index ? '!bg-primary-300' : '')}
+            key={`${phraseItemName}-${index}`}
+            onClick={(e) => handlePhraseOptionClick(index, option)}
           >
-            {isFavorite || isYourList ? (
-              <Star fill={'#3D88ED'} stroke={'#3D88ED'} />
-            ) : (
-              <Star />
-            )}
-          </Button.Icon>
-        </div>
-      );
-    })}
+            <Typography className={cn("w-10/12 break-words text-left font-semibold text-neutral-700", selectedIndex === index ? '' : '',)}>
+              {splitedTexts.map((text, idx) => {
+                const isFillable = idx % 2 === 1;
+                return <span key={idx} className={cn(isFillable && "text-base font-light leading-[18px] tracking-normal ", selectedIndex === index ? '' : '')}>
+                  {isFillable ? `[${text}]` : text}
+                </span>
+              })}
+            </Typography>
+            <Button.Icon
+              variant={'ghost'}
+              size={'xs'}
+              color={'default'}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (isYourList) {
+                  handleRemoveFavorite(index);
+                  return;
+                }
+                handleFavorite(phraseItemName, index);
+              }}
+            >
+              {isFavorite || isYourList ? (
+                <Star fill={'#3D88ED'} stroke={'#3D88ED'} />
+              ) : (
+                <Star />
+              )}
+            </Button.Icon>
+          </div>
+        );
+      })}
+    </div>
   </div>
   );
 };

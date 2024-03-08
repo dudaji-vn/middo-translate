@@ -34,16 +34,16 @@ const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchP
     <main className={cn(isValidTab ?
       'flex w-full flex-col divide-x max-md:gap-6 md:h-main-container-height md:flex-row' : 'h-full'
     )}>
-      <div className={isValidTab ? 'h-fit w-full md:w-3/4' : 'h-full'}>{children}</div>
+      <div className={isValidTab ? 'h-fit w-full md:w-3/4 max-md:invisible' : 'h-full'}>{children}</div>
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ type: 'spring', duration: 0.6 }}
+          transition={{ type: 'spring', duration: 1 }}
           className={cn(
             'max-h z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/3 xl:w-1/4',
-            'absolute inset-0 h-dvh ',
-            isValidTab ? '' :'hidden'
+            'absolute inset-0 h-dvh',
+            isValidTab ? 'max-md:h-screen h-full' :'hidden'
           )
           }
         >

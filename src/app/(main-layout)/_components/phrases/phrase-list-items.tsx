@@ -93,7 +93,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
         {...props}
         className={cn(
           className,
-          `grid-rows-auto grid grid-cols-2`,
+          `grid-rows-auto grid pb-5 grid-cols-2 max-md:pb-5`,
           'gap-3 px-3',
         )}
       >

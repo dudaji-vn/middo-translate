@@ -29,11 +29,12 @@ export const useHistoryStore = create<HistoryState>()(
       pushWithNoDuplicate: (newItem) =>
         set((state) => {
           const existingItemIndex = state.historyListItems?.findIndex((item) => {
-            const old = item.src.content;
+            const oldStr = item.src.content;
             const newStr = newItem.src.content;
-            return newStr?.toLowerCase()?.trim()?.includes(old?.toLowerCase()?.trim());// || str1?.toLowerCase()?.trim()?.includes(str2?.toLowerCase()?.trim());
+            const isContentsEqual = newStr?.toLowerCase()?.trim()?.includes(oldStr?.toLowerCase()?.trim());
+            const isLanguagesEqual = item.src.language === newItem.src.language && item.dest.language === newItem.dest.language;
+            return isContentsEqual && isLanguagesEqual;
           });
-
           if (existingItemIndex !== -1) {
             const newHistoryList = [...state.historyListItems];
             newHistoryList.splice(existingItemIndex, 1);

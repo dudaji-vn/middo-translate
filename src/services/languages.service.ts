@@ -27,10 +27,13 @@ export async function translateText(text: string, from?: string, to?: string) {
   const response = await fetch(
     `${NEXT_PUBLIC_URL}/api/languages/translate-cache?query=${textEncoded}&from=${from}&to=${to}`,
   );
-
-  const json = await response.json();
-
-  return json.data;
+  try {
+    const json = await response.json();
+    return json.data;
+  } catch (error) {
+    console.error('Error in translateText', error);
+    return '';
+  }
 }
 
 export async function detectLanguage(text: string) {

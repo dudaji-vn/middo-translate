@@ -45,14 +45,14 @@ export const TranslateResult = ({
   const {pushWithNoDuplicate} = useHistoryStore();
 
   const debouncedSavedResult = useDebounce<string>(result, 1000);
-  const debounedMatched = useDebounce<boolean>(isMatch, 1000);
+  const debounedMatched = useDebounce<boolean>(isMatch, 100);
   
   useEffect(() => {
     if (
       !isEmpty(historyItem) &&
-      debouncedSavedResult &&
+      debouncedSavedResult?.length &&
       (debounedMatched ||
-        historyItem.dest.language === DEFAULT_LANGUAGES_CODE.EN ||
+        historyItem.src.language === DEFAULT_LANGUAGES_CODE.EN ||
         historyItem.dest.language === DEFAULT_LANGUAGES_CODE.EN)
     ) {
       pushWithNoDuplicate({
