@@ -44,7 +44,8 @@ export default function useHandleShareScreen() {
                 peer,
             });
         });
-    }, [addPeerShareScreen, shareScreenStream, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [addPeerShareScreen, shareScreenStream, user?._id])
 
     const sendShareScreenStream = useCallback((socketId: string) => {
         if (!shareScreenStream) return;
@@ -58,7 +59,8 @@ export default function useHandleShareScreen() {
             id: socketId,
             peer,
         });
-    }, [addPeerShareScreen, shareScreenStream, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [addPeerShareScreen, shareScreenStream, user?._id])
 
     useEffect(() => {
         if (!shareScreenStream) return;
@@ -145,7 +147,8 @@ export default function useHandleShareScreen() {
             }
         }
 
-    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user?._id])
 
     useEffect(() => {
         if(!shareScreenStream) return;
