@@ -17,7 +17,7 @@ const createCanvas = (parent) => {
     win.setParentWindow(parent)
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })
     win.setIgnoreMouseEvents(true, { forward: true })
-
+    win.setBackgroundColor('#00000001')
     win.loadFile('canvas.html')
     win.maximize()
     win.show()

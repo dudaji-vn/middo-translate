@@ -63,6 +63,7 @@ export default function useHandleCreatePeerConnection() {
             peer,
             user: payload.user,
             isShareScreen: payload.isShareScreen,
+            isElectron: payload?.isElectron || false,
         };
         if (payload.isShareScreen) {
             setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);

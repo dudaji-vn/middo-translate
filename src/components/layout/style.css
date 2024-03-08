@@ -1,7 +1,7 @@
 .bodyContainer {
   color: #333;
   padding-bottom: 40px;
-  height: calc(100dvh - 52px);
+  height: calc(100vh - 52px);
   max-width: 1440px;
 }
 .pageNavigationBar {

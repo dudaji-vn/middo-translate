@@ -29,3 +29,5 @@ export const NEXT_PUBLIC_FCM_PUBLIC_VAPID_KEY = process.env
 
 export const NEXT_PUBLIC_SENTRY_DSN = process.env
   .NEXT_PUBLIC_SENTRY_DSN as string;
+
+export const NEXT_PUBLIC_GOOGLE_SPEECH_TO_TEXT_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_SPEECH_TO_TEXT_API_KEY as string;

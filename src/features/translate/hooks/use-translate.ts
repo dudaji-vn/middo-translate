@@ -1,11 +1,11 @@
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from 'react-speech-recognition';
 import { detectLanguage, translateText } from '@/services/languages.service';
 import { useEffect, useState } from 'react';
 
 import { useDebounce } from 'usehooks-ts';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
+import { useAuthStore } from '@/stores/auth.store';
+import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 
 export const useTranslate = ({
   srcLang: _srcLang,
@@ -27,7 +27,7 @@ export const useTranslate = ({
   const [translatedText, setTranslatedText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [middleText, setMiddleText] = useState('');
-
+  const { user } = useAuthStore();
   const debounceValue = useDebounce(text, 500);
   const room = useVideoCallStore((state) => state.room);
   const canNotListen = !!room;
@@ -72,20 +72,21 @@ export const useTranslate = ({
     }
   };
 
-  const { listening, interimTranscript } = useSpeechRecognition();
+  const {listening, interimTranscript, startSpeechToText, stopSpeechToText, resetTranscript} = useSpeechRecognizer(
+    SUPPORTED_VOICE_MAP[user?.language as keyof typeof SUPPORTED_VOICE_MAP]
+  );
 
   const handleStartListening = (lang?: string) => {
     if (canNotListen) return;
     setText('');
-    SpeechRecognition.startListening({
-      language: lang || srcLang,
-      continuous: listenMode === 'continuous',
-      interimResults: true,
-    });
+    startSpeechToText();
   };
 
   const handleStopListening = () => {
-    SpeechRecognition.stopListening();
+    if(listening) {
+      stopSpeechToText();
+      resetTranscript();
+    }
   };
 
   useEffect(() => {

@@ -11,18 +11,32 @@ import Link from 'next/link';
 import { Button as MyButton } from '@/components/actions/button';
 import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { loginService } from '@/services/auth.service';
+import { getCookieService, loginService, saveCookieService } from '@/services/auth.service';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
-
-export default function SignIn() {
+import { useElectron } from '@/hooks/use-electron';
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
+interface DataResponseToken {
+  token: string;
+  refresh_token: string;
+}
+interface SignInProps {
+  searchParams: {
+    type?: string;
+    token?: string;
+    refresh_token?: string;
+  };
+}
+export default function SignIn(props: SignInProps) {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
+  const {isElectron, ipcRenderer} = useElectron();
+  const { type, token, refresh_token } = props.searchParams;
   const {
     register,
     watch,
@@ -64,15 +78,57 @@ export default function SignIn() {
     }
   };
 
+  const handleLoginGoogle = async () => {
+    ipcRenderer.send(ELECTRON_EVENTS.GOOGLE_LOGIN);
+  }
+
+  useEffect(()=>{
+    if(type == "desktop" && !isAuthentication) {
+      localStorage.setItem('type', type);
+      router.push('/api/auth/google');
+    } else {
+      localStorage.removeItem('type');
+    }
+  }, [isAuthentication, router, type])
+
+  useEffect(() => {
+    if(token && refresh_token) {
+      window.location.href = `middo://token?token=${token}&refresh_token=${refresh_token}`
+    }
+  }, [token, refresh_token]);
+
+  useEffect(() => {
+    if (isElectron && ipcRenderer) {
+      ipcRenderer.on(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, (data: DataResponseToken)=>{
+        const { token, refresh_token } = data
+        saveCookieService({token, refresh_token})
+        .then(_=> {
+          window.location.reload();
+        })
+        .catch(err=>console.log(err))
+      })
+    }
+  }, [ipcRenderer, isElectron]);
+
   useEffect(() => {
     if (isAuthentication) {
       if (!userData?.avatar && !userData?.name && !userData?.language) {
         router.push(ROUTE_NAMES.CREATE_ACCOUNT);
-      } else {
+      } else if(isElectron){
         router.push(ROUTE_NAMES.ROOT);
+      } else {
+        getCookieService()
+        .then(res=> {
+          const {data} = res;
+          const { accessToken , refreshToken} = data;
+          if(accessToken && refreshToken) {
+            window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`
+          }
+        })
+        .catch(err=>console.log(err))
       }
     }
-  }, [isAuthentication, router, userData]);
+  }, [isAuthentication, isElectron, refresh_token, router, token, userData?.avatar, userData?.language, userData?.name]);
 
   if (isAuthentication && userData) return null;
 
@@ -124,11 +180,17 @@ export default function SignIn() {
           </div>
           <div className="flex items-center justify-center gap-5">
             <p>Or log in with</p>
-            <Link href="/api/auth/google">
+            {isElectron ? (
+              <MyButton.Icon color="default" onClick={handleLoginGoogle}>
+                <GoogleIcon />
+              </MyButton.Icon>
+            ) : (
+              <Link href="/api/auth/google">
               <MyButton.Icon color="default">
                 <GoogleIcon />
               </MyButton.Icon>
             </Link>
+            )}
           </div>
         </div>
       </div>
