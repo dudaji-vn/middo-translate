@@ -17,6 +17,7 @@ import InviteTooltip from './invite-tooltip';
 import DropdownActions from './actions/dropdown-actions';
 import processingStream from '../../utils/processing-stream';
 import getUserStream from '../../utils/get-user-stream';
+import ActionDraw from './actions/action-draw';
 
 export default function VideoCallActions() {
   const {
@@ -105,6 +106,7 @@ export default function VideoCallActions() {
       <div className="flex w-full justify-center gap-6">
         <DropdownActions />
         <ActionChat />
+        <ActionDraw />
         <ActionAddMembers />
         <ActionShareScreen />
         <ActionToggleCamera handleChangeCameraOrMic={handleChangeCameraOrMic} />

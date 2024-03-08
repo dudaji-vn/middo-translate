@@ -6,4 +6,5 @@ export default interface ParticipantInVideoCall {
     isShareScreen?: boolean;
     socketId: string;
     pin?: boolean;
+    isElectron?: boolean;
 }

@@ -18,7 +18,6 @@ const VideoCallContext = createContext<VideoCallContextProps>(
 );
 
 export const VideoCallProvider = ({ children }: PropsWithChildren) => {
-
   const { handleStartDoodle } = useHandleDoodle();
   const { handleShareScreen } = useHandleShareScreen();
   useHandleJoinLeaveCall();

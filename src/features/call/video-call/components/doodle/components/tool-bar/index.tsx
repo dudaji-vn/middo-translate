@@ -11,6 +11,7 @@ interface ToolbarProps {
   handleUndo: () => void;
   handleStopDoodle: () => void;
   isEraser: boolean;
+  isShowStop?: boolean;
 }
 
 const Toolbar = (props: ToolbarProps) => {
@@ -19,8 +20,10 @@ const Toolbar = (props: ToolbarProps) => {
     toggleEraser,
     handleUndo,
     handleStopDoodle,
-    isEraser
+    isEraser,
+    isShowStop = true,
   } = props;
+
   const constraintsRef = useRef(null);
   const controls = useDragControls();
   const [isShowColor, setShowColor] = useState(false);
