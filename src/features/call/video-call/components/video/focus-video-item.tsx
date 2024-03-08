@@ -51,8 +51,6 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
     };
   }, [streamVideo]);
 
-  console.error({participant})
-
   return (
     <section
       ref={parentRef}
