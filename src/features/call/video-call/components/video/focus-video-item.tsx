@@ -102,8 +102,8 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       <VideoItemLoading isLoading={isLoadingVideo} isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
 
       {/* Doodle */}
-      {/* {participant?.isShareScreen && participant?.isElectron &&  */}
-      {participant?.isShareScreen && 
+      {participant?.isShareScreen && participant?.isElectron && 
+      // {participant?.isShareScreen && 
         <DoodleShareScreen width={width} height={height}/>
       }
     </section>
