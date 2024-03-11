@@ -65,8 +65,8 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & TB
           </div>
         </div>
         <div>
-          <pre className='bg-neutral-50 rounded-[20px] p-3'>
-            <code className='text-neutral-600 text-sm'>
+          <pre className='bg-neutral-50 rounded-[20px] w-full overflow-x-auto'>
+            <code className='text-neutral-600 text-sm' lang='javascript'>
               {code}
             </code>
           </pre>

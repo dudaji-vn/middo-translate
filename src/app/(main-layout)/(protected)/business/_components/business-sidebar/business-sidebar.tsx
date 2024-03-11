@@ -52,12 +52,12 @@ const BusinessSidebarContent = ({ shrink, onSelectChange, selectedItem, notifica
                 return (
                     <Button shape={'square'} variant={'ghost'} color={'default'} key={index} className={cn("flex w-full justify-start flex-row items-center text-left rounded-none p-5 gap-2 [&_svg]:w-5 [&_svg]:h-5 transition-all hover:bg-primary-300 duration-200",
                         isSelected ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white' : 'hover:bg-primary-300',
-                        'transition-all duration-100 '
+                        
                     )}
                         onClick={() => onSelectChange({ icon, title })}
                     >
                         {icon}
-                        <Typography className={cn(shrink ? 'md:w-0 md:invisible' : ' transition-all capitalize duration-200', isSelected ? 'text-white ' : 'text-neutral-600')}>
+                        <Typography className={cn(shrink ? 'md:invisible  transition ease-in-out scale-y-0 w-0 duration-200' : 'transition ease-in-out duration-300 capitalize', isSelected ? 'text-white ' : 'text-neutral-600')}>
                             {title}
                         </Typography>
                         {notifications?.[title] && notifications[title] > 0 && (
@@ -92,9 +92,9 @@ const BusinessSidebar = () => {
     }
 
     return (
-        <Sheet open={!isMobile} modal={false}>
-            <div className="h-full w-full relative max-md:hidden" onMouseEnter={openSheet} >
-                <SheetContent side={'left'} className="w-fit bottom-0 top-[51px] p-0 ">
+        <Sheet open={!isMobile} modal={false} >
+            <div className={cn("h-full w-full relative max-md:hidden",  )}onMouseEnter={openSheet}  >
+                <SheetContent side={'left'} className="w-fit bottom-0 top-[51px] p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
                     <div className="h-full  w-full" onMouseLeave={closeSheet}>
                         <BusinessSidebarContent shrink={!open} selectedItem={sellected} onSelectChange={onSelectedChange} />
                     </div>

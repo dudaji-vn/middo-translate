@@ -27,12 +27,12 @@ const mockData: TBusinessExtensionData[] = [
 const SettingPage = () => {
     const isEmpty = mockData.length === 0;
     return (
-        <div>
-            <section className=' w-full py-8 px-[60px] space-y-5'>
+        <div className=' max-md:w-screen px-[60px] max-md:px-3'>
+            <section className=' w-full py-8 space-y-5'>
                 <BusinessTip />
                 <Typography variant='h1' className='text-2xl text-neutral-800 font-semibold'>Conversation Extension</Typography>
             </section>
-            <section className='w-full px-[60px] flex flex-col'>
+            <section className='w-full flex flex-col'>
                 {mockData?.map((data, index) => {
                     return (
                         <BusinessExtension key={index} {...data} />
