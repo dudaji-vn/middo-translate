@@ -25,20 +25,13 @@ interface DataResponseToken {
   token: string;
   refresh_token: string;
 }
-interface SignInProps {
-  searchParams: {
-    type?: string;
-    token?: string;
-    refresh_token?: string;
-  };
-}
 
-export default function SignIn(props: SignInProps) {
+export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const {isElectron, ipcRenderer} = useElectron();
-  const { type, token, refresh_token } = props.searchParams;
+
   const {
     register,
     watch,
@@ -88,21 +81,6 @@ export default function SignIn(props: SignInProps) {
     ipcRenderer.send(ELECTRON_EVENTS.GOOGLE_LOGIN);
   }
 
-  useEffect(()=>{
-    if(type == "desktop" && !isAuthentication) {
-      localStorage.setItem('type', type);
-      router.push('/api/auth/google');
-    } else {
-      localStorage.removeItem('type');
-    }
-  }, [isAuthentication, router, type])
-
-  useEffect(() => {
-    if(token && refresh_token) {
-      window.location.href = `middo://token?token=${token}&refresh_token=${refresh_token}`
-    }
-  }, [token, refresh_token]);
-
   useEffect(() => {
     if (isElectron && ipcRenderer) {
       ipcRenderer.on(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, (data: DataResponseToken)=>{
@@ -120,21 +98,11 @@ export default function SignIn(props: SignInProps) {
     if (isAuthentication) {
       if (!userData?.avatar && !userData?.name && !userData?.language) {
         router.push(ROUTE_NAMES.CREATE_ACCOUNT);
-      } else if(isElectron){
-        router.push(ROUTE_NAMES.ROOT);
       } else {
-        getCookieService()
-        .then(res=> {
-          const {data} = res;
-          const { accessToken , refreshToken} = data;
-          if(accessToken && refreshToken) {
-            window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`
-          }
-        })
-        .catch(err=>console.log(err))
+        router.push(ROUTE_NAMES.ROOT);
       }
     }
-  }, [isAuthentication, isElectron, refresh_token, router, token, userData?.avatar, userData?.language, userData?.name]);
+  }, [isAuthentication, router, userData?.avatar, userData?.language, userData?.name]);
 
   if (isAuthentication && userData) return null;
 

@@ -22,18 +22,6 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const { isLoadingVideo } = useMyVideoCallStore();
   useFitRatio(videoRef, parentRef);
   const {width, height} = useGetVideoSize({videoRef});
-  const fullScreenVideo = () => {
-    if (!videoRef.current) return;
-    // Check is full screen video
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-      return;
-    }
-    if (videoRef.current.requestFullscreen) {
-      videoRef.current.requestFullscreen();
-    }
-  };
-
   // Disable pause video when fullscreen
   useEffect(() => {
     if (!videoRef.current) return;
@@ -102,8 +90,8 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       <VideoItemLoading isLoading={isLoadingVideo} isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
 
       {/* Doodle */}
-      {/* {participant?.isShareScreen && participant?.isElectron &&  */}
-      {participant?.isShareScreen && 
+      {participant?.isShareScreen && participant?.isElectron && 
+      // {participant?.isShareScreen && 
         <DoodleShareScreen width={width} height={height}/>
       }
     </section>

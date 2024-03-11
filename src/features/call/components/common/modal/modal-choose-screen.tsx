@@ -52,10 +52,10 @@ export const ModalChooseScreen = () => {
                   mandatory: {
                     chromeMediaSource: "desktop",
                     chromeMediaSourceId: selectedSource.id,
-                    minWidth: 1280,
-                    maxWidth: 1280,
-                    minHeight: 720,
-                    maxHeight: 720,
+                    // minWidth: 1280,
+                    // maxWidth: 1280,
+                    // minHeight: 720,
+                    // maxHeight: 720,
                   },
                 },
               });
@@ -70,8 +70,8 @@ export const ModalChooseScreen = () => {
             addParticipant(shareScreen);
             setShareScreen(true);
             setShareScreenStream(stream);
-            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);      
-            ipcRenderer.send(ELECTRON_EVENTS.SHARE_SCREEN_SUCCESS, stream);      
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id); 
+            ipcRenderer.send(ELECTRON_EVENTS.SHARE_SCREEN_SUCCESS);      
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
                 toast.error('Device not supported for sharing screen');

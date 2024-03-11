@@ -6,6 +6,7 @@ export const ROUTE_NAMES = {
   FORGOT_PASSWORD: '/forgot-password',
   CREATE_ACCOUNT: '/create-account',
   ACCOUNT_SETTINGS: '/account-settings',
+  LOGIN_GOOGLE_ELECTRON: '/login-google-electron',
   RESET_PASSWORD_SENDED: '/reset-password-sended',
   ONLINE_CONVERSATION: '/talk',
   ONLINE_CONVERSATION_CREATE: '/online-conversation/create',
