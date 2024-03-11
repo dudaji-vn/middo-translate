@@ -31,3 +31,9 @@ export const addInfoUserService = (data: any) => {
 export const signOutService = () => {
   return get('/auth/sign-out');
 };
+export const saveCookieService = (data: {token: string, refresh_token: string}) => {
+  return post('/auth/save-cookie', data);
+}
+export const getCookieService = () => {
+  return get('/auth/get-cookie');
+}

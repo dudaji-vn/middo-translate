@@ -11,19 +11,27 @@ import Link from 'next/link';
 import { Button as MyButton } from '@/components/actions/button';
 import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { loginService } from '@/services/auth.service';
+import { getCookieService, loginService, saveCookieService } from '@/services/auth.service';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useElectron } from '@/hooks/use-electron';
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import trim from 'lodash/trim';
+interface DataResponseToken {
+  token: string;
+  refresh_token: string;
+}
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
+  const {isElectron, ipcRenderer} = useElectron();
+
   const {
     register,
     watch,
@@ -69,6 +77,23 @@ export default function SignIn() {
     }
   };
 
+  const handleLoginGoogle = async () => {
+    ipcRenderer.send(ELECTRON_EVENTS.GOOGLE_LOGIN);
+  }
+
+  useEffect(() => {
+    if (isElectron && ipcRenderer) {
+      ipcRenderer.on(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, (data: DataResponseToken)=>{
+        const { token, refresh_token } = data
+        saveCookieService({token, refresh_token})
+        .then(_=> {
+          window.location.reload();
+        })
+        .catch(err=>console.log(err))
+      })
+    }
+  }, [ipcRenderer, isElectron]);
+
   useEffect(() => {
     if (isAuthentication) {
       if (!userData?.avatar && !userData?.name && !userData?.language) {
@@ -77,7 +102,7 @@ export default function SignIn() {
         router.push(ROUTE_NAMES.ROOT);
       }
     }
-  }, [isAuthentication, router, userData]);
+  }, [isAuthentication, router, userData?.avatar, userData?.language, userData?.name]);
 
   if (isAuthentication && userData) return null;
 
@@ -129,11 +154,17 @@ export default function SignIn() {
           </div>
           <div className="flex items-center justify-center gap-5">
             <p>Or log in with</p>
-            <Link href="/api/auth/google">
+            {isElectron ? (
+              <MyButton.Icon color="default" onClick={handleLoginGoogle}>
+                <GoogleIcon />
+              </MyButton.Icon>
+            ) : (
+              <Link href="/api/auth/google">
               <MyButton.Icon color="default">
                 <GoogleIcon />
               </MyButton.Icon>
             </Link>
+            )}
           </div>
         </div>
       </div>

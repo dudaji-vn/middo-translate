@@ -10,13 +10,15 @@ import { IStartDoodlePayload } from "../../interfaces/socket/doodle.interface";
 import { useAuthStore } from "@/stores/auth.store";
 import { Ban, Brush } from "lucide-react";
 import { useMyVideoCallStore } from "../../store/me.store";
+import { useElectron } from "@/hooks/use-electron";
+import { ELECTRON_EVENTS } from "@/configs/electron-events";
 
 export default function useHandleDoodle() {
     const { setDoodle, setDoodleImage, setDrawing, setLayout, setPinDoodle, setMeDoodle } = useVideoCallStore();
     const { participants } = useParticipantVideoCallStore();
     const { user } = useAuthStore();
     const { setMyOldDoodle } = useMyVideoCallStore();
-
+    const {isElectron, ipcRenderer} = useElectron();
     const doodleStart = useCallback((payload: IStartDoodlePayload) => {
         toast.success(payload.name + ' is start doodle', {icon: <Brush size={20} />});
         setDoodle(true);
@@ -46,6 +48,20 @@ export default function useHandleDoodle() {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE);
         };
     }, [doodleEnd, doodleStart]);
+
+    // Listen event doodle share screen
+    const doodleShareScreen = useCallback((payload: { image: string; user: any })=>{
+        if(isElectron) {
+            ipcRenderer.send(ELECTRON_EVENTS.SEND_DOODLE_SHARE_SCREEN, payload);
+        }
+    }, [ipcRenderer, isElectron])
+
+    useEffect(() => {
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.SEND_DOODLE_SHARE_SCREEN, doodleShareScreen);
+        return () => {
+            socket.off(SOCKET_CONFIG.EVENTS.CALL.SEND_DOODLE_SHARE_SCREEN);
+        };
+    }, [doodleShareScreen]);
 
     const handleStartDoodle = useCallback(async () => {
         let videoEl = document.querySelector('.focus-view video') as HTMLVideoElement;

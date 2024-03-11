@@ -5,4 +5,5 @@ export interface IJoinCallPayload {
     callerId: string;
     user: any;
     isShareScreen: boolean;
+    isElectron?: boolean;
 }

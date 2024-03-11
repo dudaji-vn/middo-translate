@@ -54,6 +54,7 @@ export const SOCKET_CONFIG = {
       DRAW_DOODLE: 'call.draw_doodle',
       REQUEST_GET_OLD_DOODLE_DATA: 'call.request_get_old_doodle_data',
       SEND_OLD_DOODLE_DATA: 'call.send_old_doodle_data',
+      SEND_DOODLE_SHARE_SCREEN: 'call.send_doodle_share_screen',
       STARTING_NEW_CALL: 'call.starting_new_call',
       MEETING_END: 'call.meeting_end',
       INVITE_TO_CALL: 'call.invite_to_call',

@@ -1,12 +1,12 @@
 
 import { useEffect } from "react";
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { SUPPORTED_VOICE_MAP } from "@/configs/default-language";
 import { useAuthStore } from "@/stores/auth.store";
+import useSpeechRecognizer from "@/hooks/use-speech-recognizer";
 
 const useExtractTextFromStream = (stream?: MediaStream) => {
-    const { resetTranscript, finalTranscript, interimTranscript } = useSpeechRecognition(); 
     const { user } = useAuthStore();
+    const { startSpeechToText, stopSpeechToText, finalTranscript, resetTranscript } = useSpeechRecognizer(SUPPORTED_VOICE_MAP[(user?.language || 'auto') as keyof typeof SUPPORTED_VOICE_MAP]);
     useEffect(() => {
         if (!stream) return;
         if (!stream.getAudioTracks().length) return;
@@ -33,17 +33,13 @@ const useExtractTextFromStream = (stream?: MediaStream) => {
             if (rms > 0.2 && !starting) {
                 starting = true;
                 startNoSound = null;
-                SpeechRecognition.startListening({ 
-                    continuous: true,
-                    language: SUPPORTED_VOICE_MAP[(user?.language || 'auto') as keyof typeof SUPPORTED_VOICE_MAP],
-                    interimResults: true
-                });
+                startSpeechToText()
             } else if (rms <= 0.2 && starting) {
                 if(!startNoSound) startNoSound = new Date();
                 timer = new Date();
                 if((timer.getTime() - startNoSound.getTime()) > 1000) {
                     starting = false;
-                    SpeechRecognition.stopListening();
+                    stopSpeechToText();
                     resetTranscript();
                 }
             }
@@ -55,7 +51,7 @@ const useExtractTextFromStream = (stream?: MediaStream) => {
             scriptProcessor.disconnect();
         };
         
-    }, [stream, resetTranscript, user?.language]);
+    }, [startSpeechToText, stopSpeechToText, stream]);
 
 
     return {
