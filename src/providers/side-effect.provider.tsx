@@ -67,8 +67,6 @@ export const SideEffectProvider = () => {
         setData({
           user,
         });
-      } else {
-        console.log('hidden');
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);

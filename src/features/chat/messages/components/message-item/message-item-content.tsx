@@ -1,24 +1,25 @@
-import { textVariants, wrapperVariants } from './message-item-text.style';
+import {
+  textMiddleVariants,
+  textVariants,
+  wrapperMiddleVariants,
+  wrapperVariants,
+} from './message-item-text.style';
 import { useEffect, useState } from 'react';
 
 import { Message } from '../../types';
-import { Text } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatStore } from '@/features/chat/store';
+import { RichTextView } from '@/components/rich-text-view';
 
-export interface TextMessageProps extends VariantProps<typeof wrapperVariants> {
+export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
 }
 
-export const TextMessage = ({
-  position,
-  active,
-  message,
-}: TextMessageProps) => {
+export const Content = ({ position, active, message }: ContentProps) => {
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
@@ -46,6 +47,7 @@ export const TextMessage = ({
         message?.language || message.sender.language,
         userLanguage,
       );
+
       setContentDisplay(translated);
     };
     translateContent();
@@ -66,7 +68,7 @@ export const TextMessage = ({
       )}
     >
       <span className={cn(textVariants({ position, status: message.status }))}>
-        <Text value={contentDisplay?.trim()} />
+        <RichTextView content={contentDisplay} />
       </span>
       {message?.contentEnglish &&
         message.status !== 'removed' &&
@@ -79,16 +81,23 @@ export const TextMessage = ({
             />
             <div
               className={cn(
-                'mb-1 mt-2 rounded-xl p-1 px-3',
-                position === 'right'
-                  ? 'bg-primary-400 text-background'
-                  : 'bg-neutral-100 text-neutral-600',
+                wrapperMiddleVariants({
+                  position,
+                  active,
+                  status: message.status,
+                }),
               )}
             >
-              <Text
-                value={message.contentEnglish?.trim()}
-                className="text-start text-sm font-light"
-              />
+              <p
+                className={cn(
+                  textMiddleVariants({ position, status: message.status }),
+                )}
+              >
+                <RichTextView
+                  editorStyle="font-light text-sm"
+                  content={message.contentEnglish}
+                />
+              </p>
             </div>
           </div>
         )}
