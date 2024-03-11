@@ -7,6 +7,7 @@ import { navItems } from './header.config';
 import { useAppStore } from '@/stores/app.store';
 import { usePathname } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { cn } from '@/utils/cn';
 
 export interface HeaderNavProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -21,7 +22,7 @@ export const HeaderNav = forwardRef<HTMLDivElement, HeaderNavProps>(
         : pathName?.includes(href);
 
     return (
-      <div className="flex-1">
+      <div {...props} className={cn("flex-1", props.className)}>
         {isMobile ? (
           <HeaderNavMobile />
         ) : (

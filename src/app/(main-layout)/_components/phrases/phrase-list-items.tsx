@@ -5,9 +5,9 @@ import Image from 'next/image';
 import React, { ReactNode, forwardRef, useState } from 'react';
 import PhraseItemViewOptions from './phrase-item-view-options';
 import { phraseOptionNames } from './options';
-import PhraseTip from './phrase-tip';
 import { SearchParams } from '../../page';
 import filter from 'lodash/filter';
+import Tip from '@/components/data-display/tip/tip';
 
 export type TPhraseItem = {
   name: string;
@@ -97,11 +97,13 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
           'gap-3 px-3',
         )}
       >
-        <PhraseTip
+
+        <Tip
+          tipTitle='Welcome to phrases'
           className="col-span-2"
           hideTip={hideTip}
-          closeTip={() => setHideTip(true)}
-        />
+          tipContent={`At here, you can select any topic to access our sample sentences for this situation. Or you could save your favorite sentences in “Your list" tab.`}
+          closeTip={() => setHideTip(true)} />
         {phraseOptionNames?.map((name, index) => {
           const imgNameFile = filter(name, char => /[a-zA-Z]/.test(char)).join('').toLowerCase();
           const icon = (

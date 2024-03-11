@@ -8,7 +8,7 @@ import { PropsWithChildren } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 
-interface ChatSidebarProps {}
+interface ChatSidebarProps { }
 
 export const ChatSidebar = ({
   children,
@@ -21,7 +21,6 @@ export const ChatSidebar = ({
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
 
   const showSide = !isMobile || !isInRoom;
-
   return (
     <>
       {showSide && (

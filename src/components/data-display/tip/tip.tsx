@@ -4,9 +4,10 @@ import { cn } from '@/utils/cn';
 import { Lightbulb, XIcon } from 'lucide-react';
 import React from 'react';
 
-const tipContent = `At here, you can select any topic to access our sample sentences for this situation. Or you could save your favorite sentences in “Your list" tab.`;
 
-const PhraseTip = ({hideTip, closeTip,...props}: React.HTMLAttributes<HTMLDivElement> &{hideTip: boolean,
+const Tip = ({hideTip, closeTip, tipContent, tipTitle,...props}: React.HTMLAttributes<HTMLDivElement> &{hideTip: boolean,
+    tipContent: string,
+    tipTitle: string,
 closeTip: () => void
 }) => {
 
@@ -24,7 +25,7 @@ closeTip: () => void
         <div className="flex w-full flex-row justify-between">
           <Typography className="font-open-sans flex items-center gap-1 text-left text-base font-medium leading-5 tracking-normal text-neutral-600">
             <Lightbulb />
-            Welcome to phrases
+            {tipTitle}
           </Typography>
           <Button.Icon
             onClick={closeTip}
@@ -44,4 +45,4 @@ closeTip: () => void
   );
 };
 
-export default PhraseTip;
+export default Tip;
