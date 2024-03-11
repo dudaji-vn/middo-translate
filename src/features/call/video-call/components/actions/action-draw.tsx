@@ -31,7 +31,6 @@ export default function ActionDraw({}: {}) {
       !participantShareScreen?.isElectron
     );
   }, [haveShareScreen, isFullScreen, isPinShareScreen, layout, participantShareScreen?.isElectron]);
-
   if(isDoodleDisabled) return null;
   return (
     <Tooltip
