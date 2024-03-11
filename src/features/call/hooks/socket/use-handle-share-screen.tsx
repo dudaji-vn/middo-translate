@@ -10,13 +10,15 @@ import { createPeer } from "../../utils/peer-action.util";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { MonitorX } from "lucide-react";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { useElectron } from "@/hooks/use-electron";
+import { ELECTRON_EVENTS } from "@/configs/electron-events";
 
 export default function useHandleShareScreen() {
     const { room, setLayout, setChooseScreen } = useVideoCallStore();
     const { participants, removeParticipantShareScreen, peerShareScreen, clearPeerShareScreen, addParticipant, addPeerShareScreen } = useParticipantVideoCallStore();
     const { shareScreenStream, setShareScreen, isShareScreen, setShareScreenStream } = useMyVideoCallStore();
     const { user } = useAuthStore();
-
+    const {isElectron, ipcRenderer} = useElectron();
     const removeShareScreen = useCallback((socketId: string) => {
         const item = participants.find((p: ParticipantInVideoCall) => p.socketId === socketId && p.isShareScreen);
         if (item) {
@@ -36,7 +38,7 @@ export default function useHandleShareScreen() {
             if (!socket.id) return;
             const peer = createPeer();
             peer.on("signal", (signal) => {
-                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true })
+                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true, isElectron: true })
             });
             peer.addStream(shareScreenStream);
             addPeerShareScreen({
@@ -44,7 +46,8 @@ export default function useHandleShareScreen() {
                 peer,
             });
         });
-    }, [addPeerShareScreen, shareScreenStream, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [addPeerShareScreen, shareScreenStream, user?._id])
 
     const sendShareScreenStream = useCallback((socketId: string) => {
         if (!shareScreenStream) return;
@@ -58,7 +61,8 @@ export default function useHandleShareScreen() {
             id: socketId,
             peer,
         });
-    }, [addPeerShareScreen, shareScreenStream, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [addPeerShareScreen, shareScreenStream, user?._id])
 
     useEffect(() => {
         if (!shareScreenStream) return;
@@ -106,7 +110,8 @@ export default function useHandleShareScreen() {
             peer.peer.destroy();
         });
         clearPeerShareScreen();
-    },[clearPeerShareScreen, peerShareScreen, removeParticipantShareScreen, setShareScreen, shareScreenStream])
+        ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
+    },[clearPeerShareScreen, ipcRenderer, peerShareScreen, removeParticipantShareScreen, setShareScreen, shareScreenStream])
 
     const handleShareScreen = useCallback(async ()=>{
         // if (participants.some((participant) => participant.isShareScreen)) return;
@@ -120,9 +125,9 @@ export default function useHandleShareScreen() {
             return;
         }
         try {
-            const isElectron = navigator.userAgent.toLowerCase().indexOf(' electron/') > -1;
             if(isElectron) {
                 setChooseScreen(true);
+                ipcRenderer.send(ELECTRON_EVENTS.GET_SCREEN_SOURCE);
                 return;
             }
 
@@ -145,7 +150,8 @@ export default function useHandleShareScreen() {
             }
         }
 
-    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user?._id])
 
     useEffect(() => {
         if(!shareScreenStream) return;

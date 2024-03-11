@@ -29,6 +29,7 @@ closeTip: () => void
           <Button.Icon
             onClick={closeTip}
             variant={'ghost'}
+            color={'default'}
             size={'xs'}
             className="text-neutral-600"
           >

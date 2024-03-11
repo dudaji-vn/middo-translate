@@ -19,6 +19,8 @@ import { useAuthStore } from '@/stores/auth.store';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import toast from 'react-hot-toast';
+import { useElectron } from '@/hooks/use-electron';
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
 interface MediaSource {
     id: string;
     thumbnail: string;
@@ -32,40 +34,51 @@ export const ModalChooseScreen = () => {
     const { addParticipant } = useParticipantVideoCallStore();
     const { setShareScreen, setShareScreenStream} = useMyVideoCallStore();
     const { room } = useVideoCallStore();
-
+    const { ipcRenderer } = useElectron();
+    
     useEffect(() => {
-        if (!navigator?.mediaDevices?.getAllSources || !showChooseScreen) return;
-        const getAllSource = async () => {
-            const sources = await navigator.mediaDevices.getAllSources();
+        if (!ipcRenderer) return;
+        ipcRenderer.on(ELECTRON_EVENTS.GET_SCREEN_SOURCE, (sources: MediaSource[]) => {
             setSources(sources);
-        }
+        });
+    }, [ipcRenderer]);
 
-        getAllSource();
-    }, [showChooseScreen]);
-
-    const handleShareScreen =useCallback(async ()=>{
+    const handleShareScreen = useCallback(async ()=>{
         try {
             if (!socket.id || !selectedSource) return;
-            //@ts-ignore
-            let stream: MediaStream = await navigator.mediaDevices.getDisplayMedia(selectedSource.id)
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: {
+                  mandatory: {
+                    chromeMediaSource: "desktop",
+                    chromeMediaSourceId: selectedSource.id,
+                    // minWidth: 1280,
+                    // maxWidth: 1280,
+                    // minHeight: 720,
+                    // maxHeight: 720,
+                  },
+                },
+              });
             const shareScreen = {
                 stream,
                 user: user,
                 isMe: true,
                 isShareScreen: true,
                 socketId: socket.id,
+                isElectron: true,
             };
             addParticipant(shareScreen);
             setShareScreen(true);
             setShareScreenStream(stream);
-            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id); 
+            ipcRenderer.send(ELECTRON_EVENTS.SHARE_SCREEN_SUCCESS);      
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
                 toast.error('Device not supported for sharing screen');
             }
         }
         setChooseScreen(false)
-    }, [addParticipant, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, user])
+    }, [addParticipant, ipcRenderer, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, user])
 
     return (
         <AlertDialog open={showChooseScreen} onOpenChange={() => setChooseScreen(false)}>

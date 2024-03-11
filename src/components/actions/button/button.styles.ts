@@ -72,7 +72,7 @@ export const buttonVariants = cva(
     },
   },
 );
-export const IconButtonVariants = cva('p-0', {
+export const IconButtonVariants = cva('p-0 shrink-0', {
   variants: {
     size: {
       xs: 'md:w-9 md:h-9 w-11 h-11',

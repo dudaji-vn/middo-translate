@@ -6,6 +6,8 @@ import React, { ReactNode, forwardRef, useState } from 'react';
 import PhraseItemViewOptions from './phrase-item-view-options';
 import { phraseOptionNames } from './options';
 import PhraseTip from './phrase-tip';
+import { SearchParams } from '../../page';
+import filter from 'lodash/filter';
 
 export type TPhraseItem = {
   name: string;
@@ -21,7 +23,7 @@ export type PhraseItemProps = {
 
 export interface PhraseListItemsProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  currentInputLanguage: string;
+  searchParams: SearchParams;
 }
 
 const PhraseItem = ({
@@ -37,9 +39,9 @@ const PhraseItem = ({
   return (
     <Button
       className={cn(
-        'w-fill relative grid h-[94px] w-full grid-cols-1 place-items-start gap-y-2 rounded-xl !p-3  ',
+        'w-fill relative flex-col justify-start  h-full w-full  items-start border border-neutral-50/50 flex place-items-start gap-y-2 rounded-xl !p-3  ',
         isOpened ? ' border border-primary-500-main !shadow-lg' : '',
-        'z-50 bg-neutral-50/50 hover:border hover:!border-primary-500-main hover:!bg-transparent',
+        'z-50 bg-neutral-50/50 hover:border md:hover:!border-primary-500-main hover:!bg-transparent',
       )}
       style={{
         backgroundPosition: 'right',
@@ -49,7 +51,7 @@ const PhraseItem = ({
       {...props}
       onClick={onOpen}
     >
-      <span {...iconWrapperProps} className={cn(` [&_svg]:text-white `)}>
+      <span {...iconWrapperProps} className={cn(` [&_svg]:text-white`)}>
         {icon}
       </span>
       <Typography
@@ -63,12 +65,14 @@ const PhraseItem = ({
 };
 
 const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
-  ({ className, currentInputLanguage, ...props }, ref) => {
+  ({ className, searchParams, ...props }, ref) => {
     const [hideTip, setHideTip] = useState(false);
     const [selectedItem, setSelectedItem] = useState<{
       name: TPhraseItem['name'];
       icon: ReactNode;
     }>();
+
+
     const closeViewPhraseOptions = () => {
       setSelectedItem(undefined);
     };
@@ -79,7 +83,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
           phraseItemName={selectedItem.name}
           icon={selectedItem.icon}
           onClose={closeViewPhraseOptions}
-          currentInputLanguage={currentInputLanguage}
+          searchParams={searchParams}
         />
       );
     }
@@ -89,8 +93,8 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
         {...props}
         className={cn(
           className,
-          `grid-rows-auto grid grid-cols-2`,
-          'gap-3 px-4',
+          `grid-rows-auto grid pb-5 grid-cols-2 max-md:pb-5`,
+          'gap-3 px-3',
         )}
       >
         <PhraseTip
@@ -99,9 +103,10 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
           closeTip={() => setHideTip(true)}
         />
         {phraseOptionNames?.map((name, index) => {
+          const imgNameFile = filter(name, char => /[a-zA-Z]/.test(char)).join('').toLowerCase();
           const icon = (
             <Image
-              src={`/phrases/phrase${index + 1}.svg`}
+              src={`/phrases/${imgNameFile}.svg`}
               width={34}
               height={34}
               alt={name}
@@ -111,14 +116,14 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
             <div className="relative" key={name}>
               <div
                 className={cn(
-                  `absolute inset-0  bg-background bg-origin-content opacity-15`,
+                  `absolute inset-0  bg-background bg-origin-content opacity-15 rounded-xl`,
                 )}
                 style={{
-                  background: `url('/phrases/phrase${index + 1}.svg')`,
+                  background: `url('/phrases/${imgNameFile}.svg')`,
                   backgroundPosition: `
-                right -45% bottom 10px
+                right -26% bottom 2px
                 `,
-                  backgroundSize: '45%',
+                  backgroundSize: '35%',
                   backgroundRepeat: 'no-repeat',
                 }}
               />
