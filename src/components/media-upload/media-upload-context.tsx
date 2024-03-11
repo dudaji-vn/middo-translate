@@ -20,6 +20,7 @@ interface MediaUploadContextProps extends DropzoneState {
   handlePasteFile: (
     e: React.ClipboardEvent<HTMLTextAreaElement | HTMLInputElement>,
   ) => void;
+  handleClipboardEvent: (e: ClipboardEvent) => void;
   reset: () => void;
 }
 
@@ -89,6 +90,29 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
       handleReject(rejectedFiles);
     }
   };
+  const handleClipboardEvent = (e: ClipboardEvent) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    const files: File[] = [];
+    const rejectedFiles: File[] = [];
+    Array.from(items).forEach((item) => {
+      if (item.kind === 'file') {
+        const file = item.getAsFile();
+        if (file) {
+          if (file.size > MAX_FILE_SIZE * 1024 * 1024) {
+            rejectedFiles.push(file);
+          } else files.push(file);
+        }
+      }
+    });
+    if (files.length > 0) {
+      handleAccept(files);
+    }
+
+    if (rejectedFiles.length > 0) {
+      handleReject(rejectedFiles);
+    }
+  };
 
   const dropzoneState = useDropzone({
     onDropAccepted: handleAccept,
@@ -122,6 +146,7 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
         uploadedFiles,
         removeFile,
         handlePasteFile,
+        handleClipboardEvent,
         reset,
         ...dropzoneState,
       }}

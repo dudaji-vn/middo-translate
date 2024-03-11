@@ -27,6 +27,7 @@ import { MessageItemForward } from './message-item-forward';
 import { CallMessage } from './message-item-call';
 import { MessageItemReply } from './message-item-reply';
 import { MessageItemPinned } from './message-item-pinned';
+import { Content } from './message-item-content';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -136,7 +137,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     )}
                   >
                     {message.content && (
-                      <TextMessage
+                      <Content
                         position={isMe ? 'right' : 'left'}
                         message={message}
                         active={isActive}

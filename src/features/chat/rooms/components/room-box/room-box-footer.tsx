@@ -3,7 +3,7 @@
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '@/features/chat/messages/components/message-editor';
+} from '@/features/chat/messages/components/message-editor-v2';
 import { forwardRef, useEffect, useState } from 'react';
 
 import { Media } from '@/types';
