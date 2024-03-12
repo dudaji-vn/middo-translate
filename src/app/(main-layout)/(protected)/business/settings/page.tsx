@@ -32,7 +32,6 @@ const getExtension = async (): Promise<TBusinessExtensionData | undefined> => {
 // server-side page
 const SettingPage = async () => {
     const businessExtension = await getExtension();
-    console.log('businessExtension', businessExtension)
     const isEmpty = !businessExtension;
     return (
         <div className=' max-md:w-screen px-[60px] max-md:px-3'>

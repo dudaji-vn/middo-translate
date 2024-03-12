@@ -21,6 +21,7 @@ import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { useParams } from 'next/navigation';
 import { convert } from 'html-to-text';
+import { anounymousRoomAPI } from '@/features/chat/anonymous-messages/anonymous-message.service';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -43,7 +44,13 @@ export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
 export const MessagesBoxProvider = ({
   children,
   room,
-}: PropsWithChildren<{ room: Room }>) => {
+  isAnonymous,
+  guestId
+}: PropsWithChildren<{
+  room: Room,
+  isAnonymous?: boolean,
+  guestId?: string
+}>) => {
   const key = ['messages', room._id];
   const {
     isFetching,
@@ -56,14 +63,18 @@ export const MessagesBoxProvider = ({
     replaceItem,
   } = useCursorPaginationQuery<Message>({
     queryKey: key,
-    queryFn: ({ pageParam }) =>
-      roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 }),
+    queryFn: ({ pageParam }) => {
+      if (isAnonymous) {
+        return anounymousRoomAPI.getMessages(room._id, { cursor: pageParam, limit: 16, userId: guestId as string });
+      }
+      return roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 })
+    },
     config: {
       enabled: room.status !== 'temporary',
     },
   });
   const params = useParams<{ id: string }>();
-  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id });
+  const { data } = isAnonymous ? { data: [] } : useGetPinnedMessages({ roomId: params?.id || room._id });
 
   const userId = useAuthStore((s) => s.user?._id);
 
@@ -133,7 +144,7 @@ export const MessagesBoxProvider = ({
         messages: items,
         loadMoreMessages: fetchNextPage,
         hasNextPage: hasNextPage,
-        refetchMessages: () => {},
+        refetchMessages: () => { },
         addMessage: addItem,
         replaceMessage: replaceItem,
         updateMessage: updateItem,
@@ -147,6 +158,7 @@ export const MessagesBoxProvider = ({
 };
 
 export const useMessagesBox = () => {
+
   const context = useContext(MessagesBoxContext);
   if (!context) {
     throw new Error('useMessagesBox must be used within MessagesBoxProvider');
