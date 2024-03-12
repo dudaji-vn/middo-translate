@@ -32,6 +32,7 @@ type TFormValues = {
   custom: {
     language: string;
     firstMessage: string;
+    firstMessageEnglish: string;
     color: string;
   };
 
@@ -55,9 +56,11 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
     defaultValues: {
       addingDomain: '',
       domains: [],
+      // TODO: remove mock data
       custom: {
-        language: '',
-        firstMessage: '',
+        language: 'vi',
+        firstMessage: 'Thử nghiệm',
+        firstMessageEnglish: 'Test',
         color: '',
       },
     },
@@ -84,6 +87,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
       setValue('custom', {
         language: initialData.language,
         firstMessage: initialData.firstMessage,
+        firstMessageEnglish: initialData.firstMessageEnglish,
         color: initialData.color,
       });
     }

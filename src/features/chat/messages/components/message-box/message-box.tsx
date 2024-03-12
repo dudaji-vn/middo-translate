@@ -27,8 +27,12 @@ export type MessageGroup = {
   messages: Message[];
   lastMessage: Message;
 };
-export const MessageBox = ({ room }: { room: Room }) => {
-  const currentUserId = useAuthStore((s) => s.user?._id);
+export const MessageBox = ({ room, isAnonymous, guestId }: {
+  room: Room, 
+  isAnonymous?: boolean,
+  guestId?: string;
+}) => {
+  const currentUserId = useAuthStore((s) => s.user?._id || guestId);
   const {
     hasNextPage,
     loadMoreMessages,
@@ -171,12 +175,13 @@ export const MessageBox = ({ room }: { room: Room }) => {
                     };
                     return (
                       <MessageItem
+                        guestId={guestId}
                         pinnedBy={pinnedBy}
                         showAvatar={
                           !isMe &&
                           !isSystem &&
                           message._id ===
-                            group.messages[group.messages.length - 1]._id
+                          group.messages[group.messages.length - 1]._id
                         }
                         key={message._id}
                         message={newMessage}

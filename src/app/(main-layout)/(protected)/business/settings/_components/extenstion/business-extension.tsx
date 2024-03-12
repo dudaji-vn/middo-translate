@@ -18,6 +18,7 @@ export type TBusinessExtensionData = {
   color: string;
   language: string;
   firstMessage: string;
+  firstMessageEnglish: string;
   id: string;
 };
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
