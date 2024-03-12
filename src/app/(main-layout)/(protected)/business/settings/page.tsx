@@ -9,7 +9,6 @@ import { cookies } from 'next/headers';
 // server-side fetching
 const getExtension = async (): Promise<TBusinessExtensionData | undefined> => {
     const cookieStore = cookies();
-    console.log('cookieStore', cookieStore.get('access_token'))
     try {
         const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/my-business',
             {
@@ -42,7 +41,6 @@ const SettingPage = async () => {
                 <Typography variant='h1' className='text-2xl text-neutral-800 font-semibold'>Conversation Extension</Typography>
             </section>
             <section className='w-full flex flex-col'>
-               <BusinessExtension data={businessExtension} name='Middo Extension'/>
                 {isEmpty && (<div className='w-full flex flex-col items-center gap-2'>
                     <Image src='/empty-extentions.png' width={200} height={156} alt='empty-extentions' className='mx-auto my-3' />
                     <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
@@ -51,8 +49,10 @@ const SettingPage = async () => {
                     <Typography className='text-neutral-600'>
                         Create a conversation extension with the help of ready-made theme or define a unique one on your own
                     </Typography>
-                   
+
                 </div>)}
+                <BusinessExtension data={businessExtension} name='Middo Extension' />
+
             </section>
         </div>
     )

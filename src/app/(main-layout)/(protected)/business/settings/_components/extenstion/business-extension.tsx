@@ -109,7 +109,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
           open: true,
           isEditing: false,
         })
-      }} className={isEmpty ? 'mt-4' : 'hidden'} >
+      }} className={isEmpty ? 'mt-4 w-fit mx-auto' : 'hidden'} >
         <Plus className="h-4 w-4" />
         <Typography className="ml-2 text-white">
           Create Extension
