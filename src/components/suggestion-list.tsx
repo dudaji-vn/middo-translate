@@ -67,14 +67,14 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
     props.items.map;
 
     return props.items.length > 0 ? (
-      <div className="rounded-xl border bg-white p-1 shadow-1">
+      <div className="max-w-96 overflow-hidden rounded-xl border bg-white p-1 shadow-1">
         <ul className="space-y-1">
           {props.items.map((item, index) => (
             <li
               key={item.id}
               onMouseDown={() => selectItem(index)}
               className={cn(
-                'flex cursor-pointer items-center gap-1 rounded-lg px-3 py-2 ',
+                'flex cursor-pointer items-center gap-1  rounded-lg px-3 py-2 ',
                 selectedIndex === index
                   ? 'bg-primary text-white'
                   : 'hover:bg-primary-200',
@@ -87,7 +87,7 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
                   className="h-6 w-6 rounded-full"
                 />
               )}
-              {item.label}
+              <span className="truncate"> {item.label}</span>
             </li>
           ))}
         </ul>

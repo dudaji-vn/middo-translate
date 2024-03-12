@@ -36,8 +36,8 @@ export const MessageItemLinks = ({
   return (
     <div
       className={cn(
-        'space-y-1 border-primary px-1 pt-0.5',
-        isMe ? 'border-r-2' : 'border-l-2',
+        'flex flex-col space-y-1 border-primary px-1 pt-0.5',
+        isMe ? 'items-end border-r-2' : 'items-start border-l-2',
       )}
     >
       {links.map((link, index) => (
