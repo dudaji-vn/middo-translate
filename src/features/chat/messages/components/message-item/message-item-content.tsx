@@ -14,6 +14,7 @@ import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatStore } from '@/features/chat/store';
 import { RichTextView } from '@/components/rich-text-view';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -67,12 +68,13 @@ export const Content = ({ position, active, message }: ContentProps) => {
         wrapperVariants({ active, position, status: message.status }),
       )}
     >
-      <span className={cn(textVariants({ position, status: message.status }))}>
+      <div className={cn(textVariants({ position, status: message.status }))}>
         <RichTextView content={contentDisplay} />
-      </span>
+      </div>
       {message?.contentEnglish &&
         message.status !== 'removed' &&
-        showMiddleTranslation && (
+        showMiddleTranslation &&
+        message.language !== DEFAULT_LANGUAGES_CODE.EN && (
           <div className="relative mt-2">
             <TriangleSmall
               fill={position === 'right' ? '#72a5e9' : '#e6e6e6'}
@@ -88,7 +90,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
                 }),
               )}
             >
-              <p
+              <div
                 className={cn(
                   textMiddleVariants({ position, status: message.status }),
                 )}
@@ -97,7 +99,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
                   editorStyle="font-light text-sm"
                   content={message.contentEnglish}
                 />
-              </p>
+              </div>
             </div>
           </div>
         )}

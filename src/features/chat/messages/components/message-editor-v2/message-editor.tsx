@@ -1,29 +1,27 @@
 'use client';
 
-import {
+import React, {
   HTMLAttributes,
   PropsWithChildren,
   createContext,
   forwardRef,
-  useCallback,
   useContext,
-  useId,
-  useRef,
-  useState,
 } from 'react';
 
-import { Media } from '@/types';
-import { MediaSlot } from './media-slot';
-import { MessageEditorToolbarTranslateTool } from './translate-preview';
-import { SendButton } from './send-button';
-import { Toolbar } from './toolbar';
-import { RichTextInput } from './rich-text-input';
-import { Editor } from '@tiptap/react';
-import { MicToggleButton, MicToggleButtonRef } from './mic-toggle-button';
-import { useMediaUpload } from '@/components/media-upload';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { useAuthStore } from '@/stores/auth.store';
+import { detectLanguage, translateText } from '@/services/languages.service';
+import { Media } from '@/types';
+import { Editor } from '@tiptap/react';
 import { BackgroundTranslation } from '../background-translation';
+import { MainInput } from './main-input';
+import { MediaSlot } from './media-slot';
+import { MentionButton } from './mention-button';
+import { MicToggleButton } from './mic-toggle-button';
+import { SendButton } from './send-button';
+import { Toolbar, ToolbarRef } from './toolbar';
+import { TranslationHelper } from './translation-helper';
+import { useEditorState } from './use-editor-state';
+import { User } from '@sentry/nextjs';
 
 type SubmitData = {
   content: string;
@@ -38,6 +36,7 @@ export interface MessageEditorProps
   onSubmitValue?: (data: SubmitData) => void;
   disabledMedia?: boolean;
   scrollId?: string;
+  userMentions?: User[];
 }
 
 export interface MessageEditorRef extends HTMLAttributes<HTMLDivElement> {
@@ -59,6 +58,10 @@ type MessageEditorContextProps = {
   contentEnglish: string;
   setSrcLang: (lang: string) => void;
   srcLang: string;
+  translating: boolean;
+  setTranslating: (translating: boolean) => void;
+  toolbarRef?: React.RefObject<ToolbarRef>;
+  userMentions: User[];
 };
 
 export const MessageEditorContext = createContext<MessageEditorContextProps>(
@@ -75,31 +78,45 @@ export const useMessageEditor = () => {
   return context;
 };
 export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
-  ({ onSubmitValue, disabledMedia, scrollId, ...props }, ref) => {
-    const id = useId();
-    const { files, reset } = useMediaUpload();
-    const [shrinkToolbar, setShrinkToolbar] = useState(false);
-    const [inputDisabled, setInputDisabled] = useState(false);
-    const [content, setContent] = useState('');
-    const [isContentEmpty, setIsContentEmpty] = useState(true);
-    const [richText, setRichText] = useState<Editor | null>(null);
-    const micToggleButtonRef = useRef<MicToggleButtonRef>(null);
-    const [contentEnglish, setContentEnglish] = useState('');
-    const userLang = useAuthStore((state) => state.user?.language);
-    const [srcLang, setSrcLang] = useState(
-      userLang || DEFAULT_LANGUAGES_CODE.EN,
-    );
+  (
+    { onSubmitValue, disabledMedia, scrollId, userMentions = [], ...props },
+    ref,
+  ) => {
+    const {
+      content,
+      contentEnglish,
+      files,
+      id,
+      inputDisabled,
+      isContentEmpty,
+      micToggleButtonRef,
+      richText,
+      srcLang,
+      translating,
+      toolbarRef,
+      reset,
+      setContent,
+      setContentEnglish,
+      setIsContentEmpty,
+      setRichText,
+      setSrcLang,
+      setTranslating,
+      setInputDisabled,
+      setTextContent,
+    } = useEditorState();
 
-    const resetEditor = () => {
-      micToggleButtonRef.current?.stop();
-      richText?.commands.clearContent();
-      setContent('');
-      setIsContentEmpty(true);
-      reset();
-    };
     const handleSubmit = async () => {
       const images: Media[] = [];
       const documents: Media[] = [];
+      let lang = srcLang;
+      if (!lang) {
+        lang = await detectLanguage(content);
+      }
+      let english = contentEnglish;
+      if (!english) {
+        english = await translateText(content, lang, DEFAULT_LANGUAGES_CODE.EN);
+        console.log('english', english);
+      }
       for (const file of files) {
         if (file.file.type.startsWith('image')) {
           images.push({
@@ -123,22 +140,11 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         content,
         images,
         documents,
-        contentEnglish,
+        contentEnglish: english,
         language: srcLang,
       });
-      resetEditor();
+      reset();
     };
-
-    const setTextContent = useCallback(
-      (text: string) => {
-        richText?.commands.clearContent();
-        richText?.commands.insertContent({
-          type: 'text',
-          text: text,
-        });
-      },
-      [richText],
-    );
 
     return (
       <MessageEditorContext.Provider
@@ -158,19 +164,19 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
           setRichText,
           handleSubmit,
           setTextContent,
+          translating,
+          setTranslating,
+          toolbarRef,
+          userMentions,
         }}
       >
-        <MessageEditorToolbarTranslateTool />
+        <TranslationHelper />
         <div id={id} className="relative flex h-fit flex-row space-x-2">
-          <Toolbar
-            shrink={shrinkToolbar}
-            onExpand={() => {
-              setShrinkToolbar(false);
-            }}
-          />
+          <Toolbar ref={toolbarRef} />
           <InputWrapper>
             <div className="flex">
-              <RichTextInput className="max-h-[200px] w-full overflow-y-auto pt-1" />
+              <MainInput />
+              <MentionButton />
               <MicToggleButton
                 ref={micToggleButtonRef}
                 className="-mr-2 shrink-0 self-end"

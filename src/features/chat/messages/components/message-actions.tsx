@@ -16,6 +16,7 @@ import { Message } from '../types';
 import { ForwardModal } from './forward-modal';
 import { MessageModalRemove } from './message-modal-remove';
 import { usePinMessage } from '../hooks/use-pin-message';
+import { convert } from 'html-to-text';
 
 type Action =
   | 'remove'

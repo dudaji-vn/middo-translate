@@ -12,12 +12,15 @@ type RichTextViewProps = {
   editorStyle?: string;
 };
 
-export const RichTextView = ({ content, editorStyle }: RichTextViewProps) => {
+export const RichTextView = ({
+  content,
+  editorStyle = '',
+}: RichTextViewProps) => {
   const editor = useEditor({
     editable: false,
     editorProps: {
       attributes: {
-        class: `prose editorView max-w-none w-full focus:outline-none text-current ${editorStyle}`,
+        class: `prose editor-view prose-strong:text-current max-w-none w-full focus:outline-none text-current text-sm ${editorStyle}`,
       },
     },
     content,
@@ -42,6 +45,7 @@ export const RichTextView = ({ content, editorStyle }: RichTextViewProps) => {
           return [
             'a',
             {
+              target: '_self',
               class: 'mention',
               'data-type': 'mention',
               'data-id': node.attrs.id,

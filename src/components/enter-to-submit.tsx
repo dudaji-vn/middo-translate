@@ -23,13 +23,27 @@ export const EnterToSubmit = Extension.create({
         if (mentionState.active) {
           return false;
         }
-        if (editor.isActive('mention')) {
-          return false;
-        }
         const { onSubmit } = this.options as EnterToSubmitOptions;
         onSubmit({ editor: editor as Editor });
         editor.commands.clearContent();
         return true;
+      },
+      'Shift-Enter': () => {
+        const editor = this.editor;
+
+        const bulletList = editor.isActive('bulletList');
+        if (bulletList) {
+          editor.chain().focus().splitListItem('listItem').run();
+          return true;
+        } else {
+          this.editor.commands.first(({ commands }) => [
+            () => commands.newlineInCode(),
+            () => commands.createParagraphNear(),
+            () => commands.liftEmptyBlock(),
+            () => commands.splitBlock(),
+          ]);
+          return true;
+        }
       },
     };
   },

@@ -26,7 +26,7 @@ export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
         <div
           ref={ref}
           {...props}
-          className="absolute left-0 top-0 z-50 h-vh w-screen overflow-y-auto border-l bg-background p-3 pb-0 md:relative md:z-auto md:h-auto md:w-[26.5rem]"
+          className="absolute left-0 top-0 z-50 h-dvh w-screen overflow-y-auto border-l bg-background p-3 pb-0 md:relative md:z-auto md:h-auto md:w-[26.5rem]"
         >
           {tabsMap[currentSide]}
         </div>

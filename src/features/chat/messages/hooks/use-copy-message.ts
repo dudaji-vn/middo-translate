@@ -2,6 +2,7 @@ import { Message } from '../types';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useTextCopy } from '@/hooks/use-text-copy';
+import { convert } from 'html-to-text';
 
 export const useCopyMessage = () => {
   const userLanguage = useAuthStore((state) => state.user?.language);
@@ -12,7 +13,8 @@ export const useCopyMessage = () => {
       message?.language || message.sender.language,
       userLanguage,
     );
-    copy(translated);
+    const plaintext = convert(translated);
+    copy(plaintext);
   };
 
   return { copyMessage };
