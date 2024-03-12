@@ -261,9 +261,11 @@
 .editorView .mention {
   @apply text-current hover:underline hover:opacity-90;
 }
-
+.tiptap ul {
+  @apply mt-0;
+}
 .editorView .link {
-  @apply text-current underline hover:opacity-90;
+  @apply font-normal text-current underline hover:opacity-90;
 }
 
 @keyframes up {

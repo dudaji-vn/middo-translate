@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { ChevronRight } from 'lucide-react';
@@ -8,23 +8,43 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 import { cn } from '@/utils/cn';
 
+export interface ToolbarRef extends HTMLDivElement {
+  expand: () => void;
+  collapse: () => void;
+}
+
 export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
   disableMedia?: boolean;
-  shrink?: boolean;
-  onExpand?: () => void;
   isMultiline?: boolean;
 }
-export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(
-  ({ disableMedia = false, shrink = false, onExpand, ...props }, ref) => {
+export const Toolbar = forwardRef<ToolbarRef, ToolbarProps>(
+  ({ disableMedia = false, ...props }, ref) => {
+    const [isExpanded, setIsExpanded] = useState(true);
+    const divRef = useRef<HTMLDivElement>(null);
+    const expand = () => {
+      setIsExpanded(true);
+    };
+    const collapse = () => {
+      setIsExpanded(false);
+    };
+    useImperativeHandle(
+      ref,
+      () => ({
+        ...(divRef.current as HTMLDivElement),
+        expand,
+        collapse,
+      }),
+      [],
+    );
     return (
       <div
-        ref={ref}
+        ref={divRef}
         {...props}
-        className={cn('flex-rows flex  items-end  pb-[5px] max-md:pb-[1px]')}
+        className={cn('flex-rows flex  items-end  pb-[5px]')}
       >
-        {shrink ? (
+        {!isExpanded ? (
           <Button.Icon
-            onClick={() => onExpand?.()}
+            onClick={expand}
             variant="ghost"
             size="xs"
             color="default"

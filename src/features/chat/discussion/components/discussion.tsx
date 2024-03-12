@@ -11,7 +11,6 @@ import {
   MediaUploadDropzone,
   MediaUploadProvider,
 } from '@/components/media-upload';
-import { FilePlus2Icon } from 'lucide-react';
 
 type Props = {
   messageId: string;

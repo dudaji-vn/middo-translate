@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '../../messages/components/message-editor';
+} from '../../messages/components/message-editor-v2';
 import { messageApi } from '../../messages/api';
 import { useDiscussion } from './discussion';
 import { createLocalMessage } from '../../messages/utils';
@@ -144,9 +144,14 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     setLocalDocumentMessagesWaiting([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localDocumentMessagesWaiting, uploadedFiles]);
+
+  const room = message.room;
   return (
     <div className="border-t p-2">
-      <MessageEditor onSubmitValue={handleSubmit} />
+      <MessageEditor
+        userMentions={room?.isGroup ? room.participants : []}
+        onSubmitValue={handleSubmit}
+      />
     </div>
   );
 };

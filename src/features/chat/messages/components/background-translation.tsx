@@ -7,22 +7,45 @@ import { useMessageEditor } from './message-editor-v2';
 export interface BackgroundTranslationProps {}
 
 export const BackgroundTranslation = ({}: BackgroundTranslationProps) => {
-  const { setContentEnglish, content, setSrcLang } = useMessageEditor();
-  const debouncedValue = useDebounce<string>(content, 100);
+  const {
+    setContentEnglish,
+    content,
+    setSrcLang,
+    isContentEmpty,
+    setTranslating,
+  } = useMessageEditor();
+  const debouncedValue = useDebounce<string>(content, 500); // increase debounce time to decrease cost
   useEffect(() => {
     const handleChange = async (content: string) => {
-      const detectedLang = await detectLanguage(content);
-      setSrcLang(detectedLang);
-      const contentEnglish = await translateText(
-        content,
-        detectedLang,
-        DEFAULT_LANGUAGES_CODE.EN,
-      );
-      setContentEnglish(contentEnglish);
+      setTranslating(true);
+      try {
+        const detectedLang = await detectLanguage(content);
+        setSrcLang(detectedLang);
+        if (isContentEmpty) {
+          setContentEnglish('');
+          setTranslating(false);
+          return;
+        }
+        const contentEnglish = await translateText(
+          content,
+          detectedLang,
+          DEFAULT_LANGUAGES_CODE.EN,
+        );
+        setContentEnglish(contentEnglish);
+      } catch (error) {
+        console.log('error', error);
+      }
+      setTranslating(false);
     };
 
     handleChange(debouncedValue);
-  }, [debouncedValue, setContentEnglish, setSrcLang]);
+  }, [
+    debouncedValue,
+    isContentEmpty,
+    setContentEnglish,
+    setSrcLang,
+    setTranslating,
+  ]);
 
   return <></>;
 };

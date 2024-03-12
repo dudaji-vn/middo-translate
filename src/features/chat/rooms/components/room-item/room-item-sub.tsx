@@ -1,5 +1,5 @@
 import { Avatar, AvatarGroup } from '@/components/data-display/avatar';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { Message } from '@/features/chat/messages/types';
 import { Typography } from '@/components/data-display';
@@ -7,9 +7,9 @@ import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { getReadByUsers } from '@/features/chat/utils';
 import { translateText } from '@/services/languages.service';
-import { useHtmlToText } from '@/hooks/use-html-to-text';
+import { convert } from 'html-to-text';
 
-export const ItemSub = ({
+const ItemSub = ({
   message,
   participants,
   isGroup,
@@ -23,8 +23,14 @@ export const ItemSub = ({
   const currentUserId = currentUser?._id;
   const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
-  const messageContent = useHtmlToText(message.content);
-  const englishContent = useHtmlToText(message.contentEnglish ?? '');
+  const messageContent = useMemo(
+    () => convert(message.content),
+    [message.content],
+  );
+  const englishContent = useMemo(() => {
+    return convert(message.contentEnglish ?? '');
+  }, [message.contentEnglish]);
+
   const readByUsers = useMemo(() => {
     return getReadByUsers({
       readBy: message.readBy ?? [],
@@ -190,3 +196,6 @@ export const ItemSub = ({
     </div>
   );
 };
+const MemoizedItemSub = memo(ItemSub);
+
+export { MemoizedItemSub as ItemSub };
