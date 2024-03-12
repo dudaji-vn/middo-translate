@@ -32,7 +32,7 @@ export const ModalChooseScreen = () => {
     const [sources, setSources] = useState<MediaSource[]>([]);
     const { user } = useAuthStore();
     const { addParticipant } = useParticipantVideoCallStore();
-    const { setShareScreen, setShareScreenStream} = useMyVideoCallStore();
+    const { setShareScreen, setShareScreenStream, isTurnOnMic, isTurnOnCamera} = useMyVideoCallStore();
     const { room } = useVideoCallStore();
     const { ipcRenderer } = useElectron();
     
@@ -71,14 +71,17 @@ export const ModalChooseScreen = () => {
             setShareScreen(true);
             setShareScreenStream(stream);
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id); 
-            ipcRenderer.send(ELECTRON_EVENTS.SHARE_SCREEN_SUCCESS);      
+            ipcRenderer.send(ELECTRON_EVENTS.SHARE_SCREEN_SUCCESS, {
+                mic: isTurnOnMic,
+                camera: isTurnOnCamera,
+            });      
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
                 toast.error('Device not supported for sharing screen');
             }
         }
         setChooseScreen(false)
-    }, [addParticipant, ipcRenderer, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, user])
+    }, [addParticipant, ipcRenderer, isTurnOnCamera, isTurnOnMic, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, user])
 
     return (
         <AlertDialog open={showChooseScreen} onOpenChange={() => setChooseScreen(false)}>
