@@ -234,26 +234,26 @@
   video::-webkit-media-controls-overlay-enclosure {
     display: none !important;
   }
-
-  .mention {
-    @apply font-semibold text-primary no-underline;
-  }
-
-  .editor-view .mention {
-    @apply text-current hover:underline hover:opacity-90;
-  }
-  .tiptap ul {
-    @apply mt-0;
-  }
-  .editor-view .link {
-    @apply font-normal text-current underline hover:opacity-90;
-  }
 }
 .video-intro::-webkit-media-controls-overlay-enclosure {
   display: none !important;
 }
 .video-intro::-webkit-media-controls-panel {
   background-image: none !important;
+}
+
+.mention {
+  @apply font-semibold text-primary no-underline;
+}
+
+.editor-view .mention {
+  @apply text-current hover:underline hover:opacity-90;
+}
+.tiptap ul {
+  @apply my-1;
+}
+.editor-view .link {
+  @apply font-normal text-current underline hover:opacity-90;
 }
 
 .animation-up {
