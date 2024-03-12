@@ -18,6 +18,7 @@ import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
+  setLinks?: (links: string[]) => void;
 }
 
 export const Content = ({ position, active, message }: ContentProps) => {

@@ -44,6 +44,7 @@
     "@tiptap/suggestion": "^2.2.4",
     "@types/lodash": "^4.14.202",
     "axios": "^1.6.2",
+    "cheerio": "^1.0.0-rc.12",
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^1.41.0",
     "clsx": "^2.0.0",

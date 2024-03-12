@@ -16,6 +16,7 @@ import { useChatBox } from '../../contexts/chat-box-context';
 import { useMessagesBox } from '@/features/chat/messages/components/message-box';
 import { useMutation } from '@tanstack/react-query';
 import { useMediaUpload } from '@/components/media-upload';
+import { LinkPreview } from '@/components/data-display/link-preview';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
