@@ -125,7 +125,7 @@ export const createExtensionSchema = z.object({
     custom: z.object({
         language: z.string().optional(),
         firstMessage: z.string().optional(),
-        theme: z.string().optional(),
+        color: z.string().optional(),
     }).optional(),
 })
 

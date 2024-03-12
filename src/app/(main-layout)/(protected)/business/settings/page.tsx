@@ -4,28 +4,37 @@ import { Typography } from '@/components/data-display'
 import Image from 'next/image';
 import BusinessExtension, { TBusinessExtensionData } from './_components/extenstion/business-extension';
 import CreateExtensionModal from './_components/extention-modals/create-extension-modal';
+import { cookies } from 'next/headers';
 
-const mockData: TBusinessExtensionData[] = [
-    // {
-    //     id: '0',
-    //     name: 'Middo Conversation Extension',
-    //     createdAt: '23 Mar 2024',
-    //     deletedAt: '23 Mar 2024',
-    //     code: `<!- Past this code into your website ->
-    //         <script>
-    //         (function() {
-    //             var middo = document.createElement('script');
-    //             middo.type = 'text/javascript';
-    //             })();
-    //    </script>
-    //   `
-    // },
-];
-
-
-const SettingPage = () => {
-    const businessExtension = mockData;
-    const isEmpty = businessExtension.length === 0;
+// server-side fetching
+const getExtension = async (): Promise<TBusinessExtensionData | undefined> => {
+    const cookieStore = cookies();
+    console.log('cookieStore', cookieStore.get('access_token'))
+    try {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/my-business',
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${cookieStore.get('access_token')?.value}`
+                }
+            })
+        const data = await response.json()
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+        return data?.data;
+    }
+    catch (error) {
+        console.error('Error in getExtension', error)
+        return undefined;
+    }
+}
+// server-side page
+const SettingPage = async () => {
+    const businessExtension = await getExtension();
+    console.log('businessExtension', businessExtension)
+    const isEmpty = !businessExtension;
     return (
         <div className=' max-md:w-screen px-[60px] max-md:px-3'>
             <section className=' w-full py-8 space-y-5'>
@@ -33,11 +42,7 @@ const SettingPage = () => {
                 <Typography variant='h1' className='text-2xl text-neutral-800 font-semibold'>Conversation Extension</Typography>
             </section>
             <section className='w-full flex flex-col'>
-                {businessExtension?.map((data, index) => {
-                    return (
-                        <BusinessExtension key={index} {...data} />
-                    )
-                })}
+               <BusinessExtension data={businessExtension} name='Middo Extension'/>
                 {isEmpty && (<div className='w-full flex flex-col items-center gap-2'>
                     <Image src='/empty-extentions.png' width={200} height={156} alt='empty-extentions' className='mx-auto my-3' />
                     <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
@@ -46,7 +51,7 @@ const SettingPage = () => {
                     <Typography className='text-neutral-600'>
                         Create a conversation extension with the help of ready-made theme or define a unique one on your own
                     </Typography>
-                    <CreateExtensionModal   />
+                   
                 </div>)}
             </section>
         </div>
