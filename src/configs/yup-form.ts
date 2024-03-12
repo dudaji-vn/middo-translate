@@ -1,5 +1,5 @@
 import * as yup from "yup"
-import { PASSWORD_PARTTERN } from "./regex-pattern"
+import { DOMAIN_PATTERN, PASSWORD_PARTTERN } from "./regex-pattern"
 import { z } from "zod"
 
 export const LoginSchema = yup
@@ -112,6 +112,23 @@ export const updateInforSchema = z.object({
         message: 'Please choose language!'
     })
 });
+export const createExtensionSchema = z.object({
+    addingDomain: z.string().refine(value => {
+        if (value === '') return true;
+        return DOMAIN_PATTERN.test(value);
+    }, {
+        message: 'Please enter a valid domain or leave it empty.',
+    }).optional(),
+    domains : z.array(z.string()).nonempty({
+        message: 'Please enter at least one domain!',
+    }),
+    custom: z.object({
+        language: z.string().optional(),
+        firstMessage: z.string().optional(),
+        theme: z.string().optional(),
+    }).optional(),
+})
+
 
 export const changePasswordSchema = z
     .object({

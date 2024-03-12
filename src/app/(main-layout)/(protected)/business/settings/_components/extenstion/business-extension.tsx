@@ -1,0 +1,80 @@
+import { Button } from '@/components/actions';
+import { Typography } from '@/components/data-display';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { PenIcon, Trash2 } from 'lucide-react';
+import Image from 'next/image';
+import React, { forwardRef } from 'react'
+
+export type TBusinessExtensionData = {
+  name: string;
+  createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  code: string;
+  id: string;
+};
+export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
+
+}
+
+
+const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & TBusinessExtensionData>(
+  ({ createdAt, updatedAt, code, id, name, ...props }, ref) => {
+    return (
+      <div className='w-full flex flex-col rounded-[20px] border p-5 gap-3' {...props}>
+        <div className='flex flex-row justify-between items-center'>
+          <div className='flex flex-row  items-center justify-start'>
+            <Image src="/notify-logo.png" width={64} height={'66'} alt={name} className='rounded-[20px] opacity-30' />
+            <Typography className='text-[1rem] flex flex-col' >
+              <span className='font-semibold'>{name}</span>
+              <span className='text-neutral-600'>{`Created on: ${createdAt}`}</span>
+            </Typography>
+          </div>
+          <div className='flex flex-row gap-2 items-center'>
+            <Tooltip
+              title={'Edit'}
+              contentProps={{
+                className: 'text-neutral-800',
+              }}
+              triggerItem={
+                <Button.Icon
+                  size="xs"
+                  variant="ghost"
+                  color="default"
+                >
+                  <PenIcon />
+                </Button.Icon>
+              }
+            />
+            <Tooltip
+              title={'Delete'}
+              contentProps={{
+                className: 'text-neutral-800',
+              }}
+              triggerItem={
+                <Button.Icon
+                  size="xs"
+                  variant="default"
+                  color="error"
+                >
+                  <Trash2 />
+                </Button.Icon>
+              } />
+
+
+          </div>
+        </div>
+        <div>
+          <pre className='bg-neutral-50 rounded-[20px] w-full overflow-x-auto'>
+            <code className='text-neutral-600 text-sm' lang='javascript'>
+              {code}
+            </code>
+          </pre>
+        </div>
+      </div>
+    )
+  })
+
+BusinessExtension.displayName = 'BusinessExtension';
+
+export default BusinessExtension
