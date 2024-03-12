@@ -3,7 +3,7 @@
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '@/features/chat/messages/components/message-editor';
+} from '@/features/chat/messages/components/message-editor-v2';
 import { forwardRef, useEffect, useState } from 'react';
 
 import { Media } from '@/types';
@@ -163,7 +163,11 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     }, [localDocumentMessagesWaiting, uploadedFiles, room?._id]);
     return (
       <div className="w-full border-t p-2">
-        <MessageEditor scrollId="inbox-list" onSubmitValue={handleSubmit} />
+        <MessageEditor
+          userMentions={room.isGroup ? room.participants : []}
+          scrollId="inbox-list"
+          onSubmitValue={handleSubmit}
+        />
       </div>
     );
   },

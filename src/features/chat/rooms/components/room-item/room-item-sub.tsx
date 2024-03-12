@@ -1,5 +1,5 @@
 import { Avatar, AvatarGroup } from '@/components/data-display/avatar';
-import { useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import { Message } from '@/features/chat/messages/types';
 import { Typography } from '@/components/data-display';
@@ -7,8 +7,9 @@ import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { getReadByUsers } from '@/features/chat/utils';
 import { translateText } from '@/services/languages.service';
+import { convert } from 'html-to-text';
 
-export const ItemSub = ({
+const ItemSub = ({
   message,
   participants,
   isGroup,
@@ -22,6 +23,14 @@ export const ItemSub = ({
   const currentUserId = currentUser?._id;
   const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
+  const messageContent = useMemo(
+    () => convert(message.content),
+    [message.content],
+  );
+  const englishContent = useMemo(() => {
+    return convert(message.contentEnglish ?? '');
+  }, [message.contentEnglish]);
+
   const readByUsers = useMemo(() => {
     return getReadByUsers({
       readBy: message.readBy ?? [],
@@ -40,7 +49,7 @@ export const ItemSub = ({
 
     if (
       (message.type === 'call' ||
-        (message.type === 'action' && message.content.includes('pin'))) &&
+        (message.type === 'action' && messageContent.includes('pin'))) &&
       !isCurrentUserSender
     ) {
       return `${message.sender.name} `;
@@ -50,7 +59,7 @@ export const ItemSub = ({
       message.type === 'action' ||
       message.type === 'media' ||
       message.status === 'removed' ||
-      (!message?.content && message.forwardOf) ||
+      (!messageContent && message.forwardOf) ||
       message.type === 'call';
 
     let actor = '';
@@ -78,7 +87,7 @@ export const ItemSub = ({
     message.type,
     message.call?.endTime,
     message.status,
-    message?.content,
+    messageContent,
     message.forwardOf,
     currentUserId,
     isGroup,
@@ -113,18 +122,18 @@ export const ItemSub = ({
           const targetUserNamesString = message.targetUsers
             .map((user) => user.name)
             .join(', ');
-          return `${message.content} ${targetUserNamesString}`;
+          return `${messageContent} ${targetUserNamesString}`;
         }
         break;
       default:
         break;
     }
-    if (!message?.content && message.forwardOf) {
+    if (!messageContent && message.forwardOf) {
       return `forwarded a message`;
     }
-    return message.content;
+    return messageContent;
   }, [
-    message.content,
+    messageContent,
     message.forwardOf,
     message.media,
     message.status,
@@ -141,7 +150,7 @@ export const ItemSub = ({
       }
       const translateContent = async () => {
         const translated = await translateText(
-          message.contentEnglish || message.content,
+          englishContent || messageContent,
           message.sender.language,
           userLanguage,
         );
@@ -158,7 +167,7 @@ export const ItemSub = ({
     } else {
       setContentDisplay(content);
     }
-  }, [userLanguage, message, content]);
+  }, [userLanguage, message, content, messageContent, englishContent]);
 
   return (
     <div className="flex items-center">
@@ -187,3 +196,6 @@ export const ItemSub = ({
     </div>
   );
 };
+const MemoizedItemSub = memo(ItemSub);
+
+export { MemoizedItemSub as ItemSub };

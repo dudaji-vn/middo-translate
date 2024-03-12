@@ -20,6 +20,7 @@ import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { useParams } from 'next/navigation';
+import { convert } from 'html-to-text';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -89,7 +90,8 @@ export const MessagesBoxProvider = ({
             ? message.room?.name
             : 'your group'
           : 'you';
-        const messageNotify = `${message.sender.name} to ${targetText}: ${message.content} `;
+        const content = convert(message.content);
+        const messageNotify = `${message.sender.name} to ${targetText}: ${content} `;
         setNotification(messageNotify);
       },
     );

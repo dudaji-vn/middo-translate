@@ -92,7 +92,7 @@ export const TextInput = forwardRef<
     return (
       <div
         className={cn(
-          'relative flex  min-h-[36px]  w-full flex-row items-center',
+          'relative flex  min-h-[36px] w-full flex-row items-center',
         )}
       >
         <button

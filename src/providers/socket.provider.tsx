@@ -8,11 +8,9 @@ import { useAuthStore } from '@/stores/auth.store';
 const SocketProvider = () => {
   const user = useAuthStore((state) => state.user);
   useEffect(() => {
-    if (!user?._id) {
-      return;
-    }
     function onConnect() {
       if (user?._id) {
+        console.log('connected');
         socket.emit('client.join', user._id);
       }
     }

@@ -1,11 +1,12 @@
 'use client';
 
-import { ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
+import { Blocks, ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Typography,
 } from '@/components/data-display';
 
 import { Avatar } from '@/components/data-display';
@@ -18,28 +19,32 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useState } from 'react';
 import { COMMIT_SHA } from '@/configs/commit-data';
 import { cn } from '@/utils/cn';
+import { useParams, usePathname } from 'next/navigation';
 
 type Props = {};
 
 export const Header = (props: Props) => {
   const [isOpenDropdown, setOpenDropdown] = useState(false);
   const { isAuthentication, user } = useAuthStore();
+  const pathname = usePathname();
+  const isBusiness = pathname?.includes('/business');
   const setShowConfirmLogout = useAppStore(
     (state) => state.setShowConfirmLogout,
   );
   const signOut = async () => {
     setShowConfirmLogout(true);
   };
-  
+
   return (
     <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]")}>
-      <HeaderNav />
-      <Link href={ROUTE_NAMES.ROOT} className="block w-[60px]">
+      <HeaderNav className={isBusiness ? 'hidden' : ''} />
+      <Link href={ROUTE_NAMES.ROOT} className={cn("block w-[60px] mx-auto", isBusiness ? 'flex divide-x-[2px] flex-row items-center gap-2 divide-neutral-900': '')}>
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
+        {isBusiness && <Typography className='flex flex-row items-center pl-2 text-primary-500-main font-semibold'> <Blocks /> Extension</Typography>}
       </Link>
       {COMMIT_SHA && (
         <span className="mt-2 text-[0.6rem] text-gray-600">
-          {`ver.${(COMMIT_SHA as string)?.slice(0, 8)}`}{' '}
+          {`ver.${(COMMIT_SHA as string)?.slice(0, 8)}`}
         </span>
       )}
 

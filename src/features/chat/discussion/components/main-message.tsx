@@ -1,5 +1,6 @@
-import { Avatar, Text } from '@/components/data-display';
+import { Avatar } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
+import { RichTextView } from '@/components/rich-text-view';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
@@ -25,7 +26,9 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
       {message.type !== 'call' && (
         <div className="flex items-center gap-2">
           <Avatar size="xs" src={sender.avatar} alt={sender.name} />
-          <span className="text-sm font-semibold break-words max-w-80">{sender.name}</span>
+          <span className="max-w-80 break-words text-sm font-semibold">
+            {sender.name}
+          </span>
         </div>
       )}
       <div className={cn(message.type !== 'call' ? 'ml-8' : '')}>
@@ -69,13 +72,10 @@ const TextMessage = ({ message }: { message: Message }) => {
       setContentDisplay(translated);
     };
     translateContent();
-  }, [
-    userLanguage,
-    message
-  ]);
+  }, [userLanguage, message]);
   return (
     <div className="flex flex-col">
-      <span className="text-sm font-normal">{contentDisplay}</span>
+      <RichTextView content={contentDisplay} />
       {message?.contentEnglish &&
         message.status !== 'removed' &&
         showMiddleTranslation && (
@@ -86,10 +86,7 @@ const TextMessage = ({ message }: { message: Message }) => {
               className="absolute left-4 top-0 -translate-y-full"
             />
             <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
-              <Text
-                value={message.contentEnglish}
-                className="text-start text-sm font-light"
-              />
+              <RichTextView content={message.contentEnglish} />
             </div>
           </div>
         )}

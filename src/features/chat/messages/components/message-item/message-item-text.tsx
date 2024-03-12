@@ -56,6 +56,8 @@ export const TextMessage = ({
     message.contentEnglish,
     message.status,
     message.language,
+    message.sender._id,
+    currentUserId,
   ]);
   return (
     <div

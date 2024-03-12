@@ -1,3 +1,5 @@
+'use client'
+
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeftIcon, PenSquareIcon, Settings } from 'lucide-react';
 import { SPK_CHAT_TAB, SPK_SEARCH } from '../../configs';
@@ -101,7 +103,9 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           <SearchInput
             ref={searchInputRef}
             defaultValue={searchValue || ''}
-            onFocus={() => changeSide('search')}
+            onFocus={() => {
+              if (currentSide !== 'search') changeSide('search');
+            }}
             btnDisabled
             autoFocus={false}
             placeholder="Search people or groups"

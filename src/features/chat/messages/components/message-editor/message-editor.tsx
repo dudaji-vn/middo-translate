@@ -24,7 +24,6 @@ import { MessageEditorToolbarTranslateTool } from './message-editor-toolbar-tran
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
-import { useMediaUpload } from '@/components/media-upload';
 
 type SubmitData = {
   content: string;
