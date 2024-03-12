@@ -36,12 +36,18 @@ export const ModalChooseScreen = () => {
     const { room } = useVideoCallStore();
     const { ipcRenderer } = useElectron();
     
+    const setSourceList = useCallback((sources: MediaSource[]) => {
+        setSources(sources);
+    }, [])
+
     useEffect(() => {
         if (!ipcRenderer) return;
-        ipcRenderer.on(ELECTRON_EVENTS.GET_SCREEN_SOURCE, (sources: MediaSource[]) => {
-            setSources(sources);
-        });
-    }, [ipcRenderer]);
+        ipcRenderer.on(ELECTRON_EVENTS.GET_SCREEN_SOURCE, setSourceList);
+        return () => {
+            if (!ipcRenderer) return;
+            ipcRenderer.off(ELECTRON_EVENTS.GET_SCREEN_SOURCE, setSourceList);
+        };
+    }, [ipcRenderer, setSourceList]);
 
     const handleShareScreen = useCallback(async ()=>{
         try {

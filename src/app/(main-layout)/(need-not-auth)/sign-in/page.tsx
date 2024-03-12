@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { AlertError } from '@/components/alert/alert-error';
 import { Button } from '@/components/form/button';
@@ -11,7 +11,11 @@ import Link from 'next/link';
 import { Button as MyButton } from '@/components/actions/button';
 import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { getCookieService, loginService, saveCookieService } from '@/services/auth.service';
+import {
+  getCookieService,
+  loginService,
+  saveCookieService,
+} from '@/services/auth.service';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/stores/auth.store';
@@ -30,7 +34,7 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
-  const {isElectron, ipcRenderer} = useElectron();
+  const { isElectron, ipcRenderer } = useElectron();
 
   const {
     register,
@@ -63,14 +67,14 @@ export default function SignIn() {
       const formData = {
         email: trim(watch('email').toLocaleLowerCase()),
         password: watch('password'),
-      }
+      };
       const data = await loginService(formData);
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
       toast.success('Login success!');
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage('Invalid email or password')
+      setErrorMessage('Invalid email or password');
     } finally {
       setLoading(false);
       // reset();
@@ -79,20 +83,27 @@ export default function SignIn() {
 
   const handleLoginGoogle = async () => {
     ipcRenderer.send(ELECTRON_EVENTS.GOOGLE_LOGIN);
-  }
+  };
+
+  const saveCookie = useCallback((data: DataResponseToken) => {
+    const { token, refresh_token } = data;
+    saveCookieService({ token, refresh_token })
+      .then((_) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     if (isElectron && ipcRenderer) {
-      ipcRenderer.on(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, (data: DataResponseToken)=>{
-        const { token, refresh_token } = data
-        saveCookieService({token, refresh_token})
-        .then(_=> {
-          window.location.reload();
-        })
-        .catch(err=>console.log(err))
-      })
+      ipcRenderer.on(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, saveCookie);
     }
-  }, [ipcRenderer, isElectron]);
+    return () => {
+      if (isElectron && ipcRenderer) {
+        ipcRenderer.off(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, saveCookie);
+      }
+    };
+  }, [ipcRenderer, isElectron, saveCookie]);
 
   useEffect(() => {
     if (isAuthentication) {
@@ -102,7 +113,13 @@ export default function SignIn() {
         router.push(ROUTE_NAMES.ROOT);
       }
     }
-  }, [isAuthentication, router, userData?.avatar, userData?.language, userData?.name]);
+  }, [
+    isAuthentication,
+    router,
+    userData?.avatar,
+    userData?.language,
+    userData?.name,
+  ]);
 
   if (isAuthentication && userData) return null;
 
@@ -160,10 +177,10 @@ export default function SignIn() {
               </MyButton.Icon>
             ) : (
               <Link href="/api/auth/google">
-              <MyButton.Icon color="default">
-                <GoogleIcon />
-              </MyButton.Icon>
-            </Link>
+                <MyButton.Icon color="default">
+                  <GoogleIcon />
+                </MyButton.Icon>
+              </Link>
             )}
           </div>
         </div>

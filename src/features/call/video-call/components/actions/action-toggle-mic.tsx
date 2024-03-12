@@ -29,6 +29,10 @@ const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
   useEffect(() => {
     if(!isElectron || !ipcRenderer) return;
     ipcRenderer.on(ELECTRON_EVENTS.TOGGLE_MIC, onToggleMic);
+    return () => {
+      if(!isElectron || !ipcRenderer) return;
+      ipcRenderer.off(ELECTRON_EVENTS.TOGGLE_MIC, onToggleMic)
+    }
   }, [ipcRenderer, isElectron, onToggleMic])
 
   return (

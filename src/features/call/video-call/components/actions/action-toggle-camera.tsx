@@ -31,6 +31,10 @@ const ActionToggleCamera = ({
   useEffect(() => {
     if(!isElectron || !ipcRenderer) return;
     ipcRenderer.on(ELECTRON_EVENTS.TOGGLE_CAMERA, onToggleCamera);
+    return () => {
+      if(!isElectron || !ipcRenderer) return;
+      ipcRenderer.off(ELECTRON_EVENTS.TOGGLE_CAMERA, onToggleCamera)
+    }
   }, [ipcRenderer, isElectron, onToggleCamera])
 
   return (
