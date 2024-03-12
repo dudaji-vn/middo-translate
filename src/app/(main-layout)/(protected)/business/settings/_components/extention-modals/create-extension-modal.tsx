@@ -14,7 +14,7 @@ import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { Info, Plus, Trash2 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -48,7 +48,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const [isClient, setIsClient] = React.useState(false);
   const pathname = usePathname();
   const [accordionValue, setAccordionValue] = React.useState<AccordionValue>('add domain');
-
+  const router = useRouter();
 
   const form = useForm<TFormValues>({
     mode: 'onChange',
@@ -100,6 +100,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
       toast.success('Create extension success!');
       setOpen(false);
       reset()
+      router.refresh();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
