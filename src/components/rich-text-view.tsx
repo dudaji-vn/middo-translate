@@ -1,7 +1,7 @@
 'use client';
 import '@/components/tiptap/styles.css';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Mention from '@tiptap/extension-mention';
 import { ROUTE_NAMES } from '@/configs/route-name';
@@ -10,11 +10,13 @@ import { useEffect } from 'react';
 type RichTextViewProps = {
   content: string;
   editorStyle?: string;
+  onCreated?: (editor: Editor) => void;
 };
 
 export const RichTextView = ({
   content,
   editorStyle = '',
+  onCreated,
 }: RichTextViewProps) => {
   const editor = useEditor({
     editable: false,
@@ -62,6 +64,8 @@ export const RichTextView = ({
   useEffect(() => {
     if (!editor) return;
     editor.commands.setContent(content);
+    onCreated?.(editor);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [content, editor]);
 
   return <EditorContent editor={editor} />;

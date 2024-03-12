@@ -6,7 +6,6 @@ import {
   forwardRef,
   useContext,
 } from 'react';
-
 import { Avatar } from '@/components/data-display';
 import { DocumentMessage } from './message-item-document';
 import { ImageGallery } from './message-item-image-gallery';
@@ -17,7 +16,6 @@ import { MessageItemWrapper } from './message-item-wrapper';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { SeenTracker } from './message-item-seen-tracker';
-import { TextMessage } from './message-item-text';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
@@ -28,6 +26,7 @@ import { CallMessage } from './message-item-call';
 import { MessageItemReply } from './message-item-reply';
 import { MessageItemPinned } from './message-item-pinned';
 import { Content } from './message-item-content';
+import { MessageItemLinks } from './message-item-links';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -150,6 +149,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                         active={isActive}
                       />
                     )}
+
                     {message?.media && message.media.length > 0 && (
                       <Fragment>
                         {message.media[0].type === 'image' && (
@@ -164,6 +164,10 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                       </Fragment>
                     )}
                   </div>
+
+                  {message?.content && (
+                    <MessageItemLinks isMe={isMe} message={message} />
+                  )}
 
                   {isPending && <PendingStatus />}
                   {pinnedBy && (
