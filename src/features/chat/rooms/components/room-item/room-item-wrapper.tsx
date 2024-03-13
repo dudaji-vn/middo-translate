@@ -3,10 +3,12 @@ import { PropsWithChildren } from 'react';
 import { cn } from '@/utils/cn';
 import { useRoomItem } from './room-item';
 
-export interface RoomItemWrapperProps {}
+export interface RoomItemWrapperProps {
+  isBusinessRoom?: boolean;
+}
 
 export const RoomItemWrapper = (
-  props: RoomItemWrapperProps & PropsWithChildren,
+  { isBusinessRoom, ...props }: RoomItemWrapperProps & PropsWithChildren,
 ) => {
   const { data, isActive, onClick, disabledRedirect } = useRoomItem();
 

@@ -23,12 +23,14 @@ import {
 
 interface InboxListProps {
   type: InboxType;
+  businessId?: string;
 }
 
 const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
-  ({ type }: InboxListProps, ref) => {
+  ({ type, businessId }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
+
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
@@ -128,6 +130,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                 data={room}
                 isActive={currentRoomId === room._id}
                 currentRoomId={currentRoomId as string}
+                businessId={businessId}
               />
             ))}
           </InfiniteScroll>

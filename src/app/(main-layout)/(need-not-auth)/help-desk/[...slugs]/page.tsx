@@ -1,30 +1,13 @@
-import {
-  ChatBoxFooter,
-  RoomSide,
-} from '@/features/chat/rooms/components';
 
-import { ChatBoxProvider } from '@/features/chat/rooms/contexts';
-import {
-  MessageBox,
-  MessagesBoxProvider,
-} from '@/features/chat/messages/components/message-box';
-
-
-import {
-  MediaUploadDropzone,
-  MediaUploadProvider,
-} from '@/components/media-upload';
 import StartAConversation from './_components/start-conversation/start-a-conversation';
 import { notFound } from 'next/navigation';
 import { businessAPI } from '@/features/chat/business/business.service';
+import HelpDeskConversation from './_components/help-desk-conversation/help-desk-conversation';
 
-
-
-const HelpDeskConversationPage = async ({ params: { slugs } }: {
+const HelpDeskConversationPage = async ({ params: { slugs }, ...props }: {
   params: {
     slugs: string[];
   };
-  searchParams: any;
 }) => {
   const [businessId, roomId, anonymousUserId] = slugs;
   const businessData = await businessAPI.getBusinessInfomation(businessId);
@@ -39,28 +22,13 @@ const HelpDeskConversationPage = async ({ params: { slugs } }: {
     )
   }
   const room = await businessAPI.getChatRoom(roomId, anonymousUserId);
+  console.log('room, anonymousId', room, roomId, anonymousUserId)
   if (!room || !room?._id || !anonymousUserId) {
     notFound();
   }
   const anonymousUser = room.participants.find((p: { _id: string }) => p._id === anonymousUserId);
   return (
-    <div className="w-full">
-      <ChatBoxProvider room={room}>
-        <div className="flex h-full">
-          <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
-            <MediaUploadProvider>
-              <MediaUploadDropzone>
-                <MessagesBoxProvider room={room} guestId={anonymousUserId} isAnonymous>
-                  <MessageBox room={room} isAnonymous guestId={anonymousUserId} />
-                  <ChatBoxFooter isAnonymous guest={anonymousUser} />
-                </MessagesBoxProvider>
-              </MediaUploadDropzone>
-            </MediaUploadProvider>
-          </div>
-          <RoomSide />
-        </div>
-      </ChatBoxProvider>
-    </div>
+    <HelpDeskConversation params={{ slugs }} anonymousUser={anonymousUser} room={room} {...props}  isAnonymousPage />
   );
 };
 

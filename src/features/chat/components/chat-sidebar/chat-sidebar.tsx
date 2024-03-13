@@ -4,11 +4,15 @@ import { useParams, usePathname } from 'next/navigation';
 
 import ChatSidebarHeader from './chat-sidebar-header';
 import { ChatSidebarTabs } from './chat-sidebar-tabs';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, ReactNode } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
+import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 
-interface ChatSidebarProps { }
+
+interface ChatSidebarProps {
+  children: ReactNode
+}
 
 export const ChatSidebar = ({
   children,
@@ -16,7 +20,6 @@ export const ChatSidebar = ({
   const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
   const params = useParams();
-  const isBusinessConversation = pathName?.includes(ROUTE_NAMES.BUSINESS_CONVERSATION);
 
   const isInRoom =
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
@@ -28,11 +31,8 @@ export const ChatSidebar = ({
         <div className="relative flex h-main-container-height w-full min-w-[320px] flex-col overflow-hidden border-r md:w-[26.5rem]">
           <ChatSidebarHeader />
           {/* TODO: UPDATE THIS */}
-          {isBusinessConversation ?
-            <div>
-              THIS IS SIDEBAR FOR BUSINESS
-            </div> : <ChatSidebarTabs>{children}</ChatSidebarTabs>
-          }
+          <ChatSidebarTabs>{children}</ChatSidebarTabs>
+          
         </div>
       )}
 

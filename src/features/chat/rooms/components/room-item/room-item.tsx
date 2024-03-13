@@ -18,6 +18,8 @@ import { RoomItemComingCall } from './room-item-coming-call';
 import { cn } from '@/utils/cn';
 import { PinIcon } from 'lucide-react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { Avatar } from '@/components/data-display';
+import { useParams } from 'next/navigation';
 
 export interface RoomItemProps {
   data: Room;
@@ -31,6 +33,7 @@ export interface RoomItemProps {
   rightElement?: JSX.Element;
   disabledRedirect?: boolean;
   className?: string;
+  businessId?: string;
 }
 
 const RoomItemContext = createContext<
@@ -55,18 +58,23 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     rightElement,
     disabledRedirect,
     className,
+    businessId,
   } = props;
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
-
+  const params = useParams();
+  const conversationType = params?.conversationType;
+  const isBusinessRoom = !!businessId && !!conversationType;
   const room = useMemo(
-    () => generateRoomDisplay(_data, currentUserId, !disabledRedirect),
-    [_data, currentUserId, disabledRedirect],
+    () => generateRoomDisplay(_data, currentUserId, !disabledRedirect, isBusinessRoom ? `/business/${conversationType}/${businessId}/${_data._id}` : null)
+    ,
+    [_data, currentUserId, disabledRedirect, isBusinessRoom, businessId, conversationType],
   );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
 
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
+    room.link === `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${businessId}/${conversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
@@ -97,8 +105,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             disabledAction,
           }}
         >
-          <RoomItemWrapper>
-            <ItemAvatar room={room} isMuted={isMuted} />
+          <RoomItemWrapper >
+            {isBusinessRoom ? <Avatar src={'/anonymous.png'} alt='anonymous-avt' /> : <ItemAvatar room={room} isMuted={isMuted} />}
             <div className="w-full">
               <RoomItemHead
                 isRead={isRead}
