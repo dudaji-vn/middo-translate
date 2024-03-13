@@ -9,6 +9,7 @@ import React, { forwardRef, useCallback } from 'react'
 import { generateExtensionCode } from '../extention-modals/genrerateExtensionCode';
 import { cn } from '@/utils/cn';
 import CreateExtensionModal from '../extention-modals/create-extension-modal';
+import { useTextCopy } from '@/hooks/use-text-copy';
 
 export type TBusinessExtensionData = {
   createdAt: string;
@@ -19,7 +20,7 @@ export type TBusinessExtensionData = {
   language: string;
   firstMessage: string;
   firstMessageEnglish: string;
-  id: string;
+  _id: string;
 };
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
 
@@ -27,12 +28,12 @@ export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElem
 
 
 const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { data?: TBusinessExtensionData } & { name: string }>(
-  ({ data, id, name, ...props }, ref) => {
+  ({ data, name, ...props }, ref) => {
     const [modalState, setModalState] = React.useState<{
       open: boolean;
       isEditing: boolean;
       data?: TBusinessExtensionData;
-    
+
     }>({
       open: false,
       isEditing: false,
@@ -44,6 +45,8 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
         open,
       }));
     }, []);
+    const code = generateExtensionCode(`${process.env.NEXT_PUBLIC_URL}/help-desk/${data?._id}`)
+    const { copy } = useTextCopy(code);
     const isEmpty = !data;
     return (<>
       <div className={cn('w-full flex flex-col rounded-[20px] border p-5 gap-3', isEmpty && 'hidden')}{...props}>
@@ -97,9 +100,10 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
           </div>
         </div>
         <div>
-          <pre className='bg-neutral-50 rounded-[20px] w-full overflow-x-auto'>
+          <pre className='bg-neutral-50 rounded-[20px] max-h-96 overflow-y-auto w-full overflow-x-auto'
+            onClick={() => copy()}>
             <code className='text-neutral-600 text-sm' lang='javascript'>
-              {generateExtensionCode()}
+              {code}
             </code>
           </pre>
         </div>

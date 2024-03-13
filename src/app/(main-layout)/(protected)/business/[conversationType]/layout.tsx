@@ -9,7 +9,7 @@ const BusinessConversationLayout = ({ children }: { children: ReactNode }) => {
             <ChatSidebar>
                 <Inbox />
             </ChatSidebar>
-            <ChatMain>{children}</ChatMain>
+            {children}
         </div>
     )
 }
