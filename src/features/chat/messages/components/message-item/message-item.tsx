@@ -38,6 +38,7 @@ export interface MessageProps
   direction?: 'bottom' | 'top';
   pinnedBy?: User;
   discussionDisabled?: boolean;
+  guestId?: string;
 }
 
 type MessageItemContextProps = {
@@ -65,6 +66,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       message,
       sender,
       order,
+      guestId,
       className,
       readByUsers,
       showAvatar,
@@ -93,7 +95,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           setActive,
         }}
       >
-        <SeenTracker />
+        <SeenTracker guestId={guestId} />
         {isSystemMessage ? (
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (

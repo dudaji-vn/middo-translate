@@ -22,6 +22,7 @@ import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned
 import { useParams } from 'next/navigation';
 import { convert } from 'html-to-text';
 import { useQueryClient } from '@tanstack/react-query';
+import { anounymousMesssagesAPI } from '@/features/chat/business/anonymous-message.service';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -44,7 +45,13 @@ export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
 export const MessagesBoxProvider = ({
   children,
   room,
-}: PropsWithChildren<{ room: Room }>) => {
+  isAnonymous,
+  guestId,
+}: PropsWithChildren<{
+  room: Room;
+  isAnonymous?: boolean;
+  guestId?: string;
+}>) => {
   const key = ['messages', room._id];
   const queryClient = useQueryClient();
   const {
@@ -58,8 +65,16 @@ export const MessagesBoxProvider = ({
     replaceItem,
   } = useCursorPaginationQuery<Message>({
     queryKey: key,
-    queryFn: ({ pageParam }) =>
-      roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 }),
+    queryFn: ({ pageParam }) => {
+      if (isAnonymous) {
+        return anounymousMesssagesAPI.getMessages(room._id, {
+          cursor: pageParam,
+          limit: 16,
+          userId: guestId as string,
+        });
+      }
+      return roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 });
+    },
     config: {
       enabled: room.status !== 'temporary',
     },
@@ -72,7 +87,6 @@ export const MessagesBoxProvider = ({
   const [notification, setNotification] = useState<string>('');
 
   const isFocused = useHasFocus();
-
   // socket event
 
   useEffect(() => {
@@ -107,7 +121,7 @@ export const MessagesBoxProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replaceItem, room._id, updateItem, userId]);
+  }, [replaceItem, room._id, updateItem, userId, guestId]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
