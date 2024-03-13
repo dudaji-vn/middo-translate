@@ -9,15 +9,16 @@ import { useMutation } from '@tanstack/react-query';
 
 export interface SeenTrackProps {
   onSeen?: () => void;
+  guestId?: string;
 }
 
-export const SeenTracker = ({ onSeen }: SeenTrackProps) => {
+export const SeenTracker = ({ onSeen, guestId }: SeenTrackProps) => {
   const { message } = useMessageItem();
-  const userId = useAuthStore((state) => state!.user!._id);
-  const isRead = message.readBy?.includes(userId);
-
+  const storeUserId = useAuthStore((state) => state?.user?._id);
+  const userId = storeUserId || guestId;
+  const isRead = message.readBy?.includes(userId!);
   const { mutate } = useMutation({
-    mutationFn: messageApi.seen,
+    mutationFn: storeUserId ? messageApi.seen : messageApi.seenAnonymous,
   });
 
   if (isRead || message.status === 'pending') {

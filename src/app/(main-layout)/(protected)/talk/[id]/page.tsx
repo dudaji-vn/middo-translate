@@ -36,7 +36,6 @@ const ChatBoxPage = async (props: {
   if (!room) {
     return <div>Not Found</div>;
   }
-
   return (
     <ChatBoxProvider room={room}>
       <div className="flex h-full">

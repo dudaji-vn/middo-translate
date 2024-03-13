@@ -7,3 +7,4 @@ const BusinessConversation = ({params:  {conversationType}}: {params: {conversat
 }
 
 export default BusinessConversation
+

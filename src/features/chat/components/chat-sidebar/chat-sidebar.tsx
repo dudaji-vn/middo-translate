@@ -16,6 +16,7 @@ export const ChatSidebar = ({
   const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
   const params = useParams();
+  const isBusinessConversation = pathName?.includes(ROUTE_NAMES.BUSINESS_CONVERSATION);
 
   const isInRoom =
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
@@ -26,9 +27,15 @@ export const ChatSidebar = ({
       {showSide && (
         <div className="relative flex h-main-container-height w-full min-w-[320px] flex-col overflow-hidden border-r md:w-[26.5rem]">
           <ChatSidebarHeader />
-          <ChatSidebarTabs>{children}</ChatSidebarTabs>
+          {/* TODO: UPDATE THIS */}
+          {isBusinessConversation ?
+            <div>
+              THIS IS SIDEBAR FOR BUSINESS
+            </div> : <ChatSidebarTabs>{children}</ChatSidebarTabs>
+          }
         </div>
       )}
+
     </>
   );
 };

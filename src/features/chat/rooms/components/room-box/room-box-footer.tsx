@@ -17,27 +17,33 @@ import { useMessagesBox } from '@/features/chat/messages/components/message-box'
 import { useMutation } from '@tanstack/react-query';
 import { useMediaUpload } from '@/components/media-upload';
 import { LinkPreview } from '@/components/data-display/link-preview';
+import { useRouter } from 'next/navigation';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
   leftElement?: React.ReactNode;
+  isAnonymous?: boolean;
+  guest?: {
+    _id: string;
+    name: string;
+  }
 }
 
 export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
-  ({ ...props }, ref) => {
+  ({ isAnonymous, guest, ...props }, ref) => {
     const currentUser = useAuthStore((s) => s.user);
     const { room, updateRoom } = useChatBox();
     const { addMessage } = useMessagesBox();
     const { uploadedFiles } = useMediaUpload();
+    const router = useRouter();
 
     const [localImageMessageWaiting, setLocalImageMessageWaiting] =
       useState<Message | null>(null);
 
     const [localDocumentMessagesWaiting, setLocalDocumentMessagesWaiting] =
       useState<Message[]>([]);
-
     const { mutateAsync } = useMutation({
-      mutationFn: messageApi.send,
+      mutationFn: isAnonymous ? messageApi.sendAnonymousMessage : messageApi.send,
     });
 
     const handleSendText = async (
@@ -46,21 +52,24 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       contentEnglish?: string,
       language?: string,
     ) => {
+      if (!currentUser && !guest) return;
       const localMessage = createLocalMessage({
-        sender: currentUser!,
+        sender: currentUser! || guest!,
         content,
         contentEnglish,
         language,
       });
 
       addMessage(localMessage);
-      mutateAsync({
+      const payload = {
         content,
         contentEnglish,
         roomId,
         clientTempId: localMessage._id,
         language,
-      });
+        ...(isAnonymous && { userId: currentUser?._id || guest?._id, })
+      };
+      mutateAsync(payload);
     };
 
     const handleSubmit = async (data: MessageEditorSubmitData) => {

@@ -3,36 +3,13 @@ import BusinessTip from '../_components/business-tip/business-tip'
 import { Typography } from '@/components/data-display'
 import Image from 'next/image';
 import BusinessExtension, { TBusinessExtensionData } from './_components/extenstion/business-extension';
-import CreateExtensionModal from './_components/extention-modals/create-extension-modal';
-import { cookies } from 'next/headers';
 
-// server-side fetching
-const getExtension = async (): Promise<TBusinessExtensionData | undefined> => {
-    const cookieStore = cookies();
-    try {
-        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/my-business',
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${cookieStore.get('access_token')?.value}`
-                }
-            })
-        const data = await response.json()
-        if (!response.ok) {
-            throw new Error(data.message)
-        }
-        return data?.data;
-    }
-    catch (error) {
-        console.error('Error in getExtension', error)
-        return undefined;
-    }
-}
+import { businessAPI } from '@/features/chat/business/business.service';
+
+
 // server-side page
 const SettingPage = async () => {
-    const businessExtension = await getExtension();
-    console.log('businessExtension', businessExtension)
+    const businessExtension = await businessAPI.getExtension();
     const isEmpty = !businessExtension;
     return (
         <div className=' max-md:w-screen px-[60px] max-md:px-3'>
