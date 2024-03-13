@@ -5,7 +5,7 @@ import React, { ReactNode } from 'react'
 
 const BusinessConversationLayout = ({ children }: { children: ReactNode }) => {
     return (
-        <div className="flex">
+        <div className="flex w-full">
             <ChatSidebar>
                 <Inbox />
             </ChatSidebar>

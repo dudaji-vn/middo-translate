@@ -45,7 +45,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
         open,
       }));
     }, []);
-    const code = generateExtensionCode(`${process.env.NEXT_PUBLIC_URL}/help-desk/${data?._id}`)
+    const code = generateExtensionCode(`/help-desk/${data?._id}`)
     const { copy } = useTextCopy(code);
     const isEmpty = !data;
     return (<>

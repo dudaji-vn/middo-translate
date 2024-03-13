@@ -54,7 +54,7 @@ const StartAConversation = ({ businessData }: {
     }
     return (
         <div className='h-full w-full flex flex-col items-center justify-end'>
-            <Button variant={'default'} color={'primary'} onClick={createAGuestConversation} disabled={isLoading} >
+            <Button className='h-11' variant={'default'} color={'primary'} shape={'square'} onClick={createAGuestConversation} disabled={isLoading} >
                 Start a conversation
             </Button>
         </div>

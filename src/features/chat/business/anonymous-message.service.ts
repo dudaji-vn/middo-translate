@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CursorPagination,
   CursorParams,
@@ -5,7 +7,7 @@ import {
   Response,
 } from '@/types';
 
-import { Message } from '@/features/chat/messages/types';
+import { Message, PinMessage } from '@/features/chat/messages/types';
 import queryString from 'query-string';
 import { Room } from '../rooms/types';
 import axios from 'axios';
@@ -67,6 +69,10 @@ class AnounymousMesssagesAPI {
     const res: Response<ListResponse<Message, CursorPagination>> =
       await axios.get(path);
     return res.data;
+  }
+  // TODO: remove this method or ask backend to implement
+  async getPinned(roomId: string): Promise<PinMessage[]> {
+    return [];
   }
 }
 const anounymousMesssagesAPI = new AnounymousMesssagesAPI();

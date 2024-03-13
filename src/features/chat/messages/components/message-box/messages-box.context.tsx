@@ -74,7 +74,7 @@ export const MessagesBoxProvider = ({
     },
   });
   const params = useParams<{ id: string }>();
-  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id });
+  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id, isAnonymous });
 
   const userId = useAuthStore((s) => s.user?._id);
 
@@ -92,7 +92,7 @@ export const MessagesBoxProvider = ({
       }: {
         message: Message;
         clientTempId: string;
-      }) => {      
+      }) => {
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
         const targetText = message.room?.isGroup

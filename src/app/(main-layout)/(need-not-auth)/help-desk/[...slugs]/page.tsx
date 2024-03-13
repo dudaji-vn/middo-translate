@@ -33,7 +33,9 @@ const HelpDeskConversationPage = async ({ params: { slugs } }: {
   }
   if (!roomId) {
     return (
-      <StartAConversation businessData={businessData} />
+      <div className="w-full pb-4">
+        <StartAConversation businessData={businessData} />
+      </div>
     )
   }
   const room = await businessAPI.getChatRoom(roomId, anonymousUserId);
@@ -42,7 +44,7 @@ const HelpDeskConversationPage = async ({ params: { slugs } }: {
   }
   const anonymousUser = room.participants.find((p: { _id: string }) => p._id === anonymousUserId);
   return (
-    <div className="w-full h-full">
+    <div className="w-full">
       <ChatBoxProvider room={room}>
         <div className="flex h-full">
           <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
