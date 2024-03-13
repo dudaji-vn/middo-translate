@@ -24,7 +24,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     useState<Message[]>([]);
 
   const { message, addReply } = useDiscussion();
-  const { mutate } = useMutation({
+  const { mutateAsync } = useMutation({
     mutationFn: messageApi.reply,
   });
   const handleSendText = async (
@@ -39,7 +39,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       language,
     });
     addReply(localMessage);
-    mutate({
+    mutateAsync({
       repliedMessageId: message._id,
       message: {
         content,
@@ -79,38 +79,41 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     }
   };
 
-  useEffect(() => {
-    if (!localImageMessageWaiting || !uploadedFiles.length) return;
-    const localImages = localImageMessageWaiting.media;
-    if (!localImages) return;
-    const imagesUploaded: Media[] = localImages.map((item) => {
-      const file = uploadedFiles.find((f) => f.localUrl === item.url);
-      if (file) {
-        return {
-          ...item,
-          url: file.metadata.secure_url || file.url,
-          width: file.metadata.width,
-          height: file.metadata.height,
-        };
-      }
-      return item;
-    });
-    mutate({
-      repliedMessageId: message._id,
-      message: {
-        roomId: message?.room?._id!,
-        contentEnglish: '',
-        language: '',
-        content: '',
-        media: imagesUploaded,
-      },
-    });
-    setLocalImageMessageWaiting(null);
+  useEffect(
+    () => {
+      if (!localImageMessageWaiting || !uploadedFiles.length) return;
+      const localImages = localImageMessageWaiting.media;
+      if (!localImages) return;
+      const imagesUploaded: Media[] = localImages.map((item) => {
+        const file = uploadedFiles.find((f) => f.localUrl === item.url);
+        if (file) {
+          return {
+            ...item,
+            url: file.metadata.secure_url || file.url,
+            width: file.metadata.width,
+            height: file.metadata.height,
+          };
+        }
+        return item;
+      });
+      mutateAsync({
+        repliedMessageId: message._id,
+        message: {
+          content: '',
+          roomId: message?.room?._id!,
+
+          media: imagesUploaded,
+        },
+      });
+      setLocalImageMessageWaiting(null);
+    },
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localImageMessageWaiting, message._id, message?.room?._id]);
+    [localImageMessageWaiting, uploadedFiles, message.room?._id],
+  );
 
   useEffect(() => {
-    if (!localDocumentMessagesWaiting.length || uploadedFiles.length) return;
+    if (!localDocumentMessagesWaiting.length || !uploadedFiles.length) return;
     const localDocumentMessages = localDocumentMessagesWaiting;
     const documentsUploaded: Media[][] = localDocumentMessages.map(
       (message) => {
@@ -130,8 +133,8 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       },
     );
     Promise.all(
-      localDocumentMessages.map(async (message, index) => {
-        mutate({
+      localDocumentMessages.map(async (docMessage, index) => {
+        mutateAsync({
           repliedMessageId: message._id,
           message: {
             content: '',
@@ -142,8 +145,9 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       }),
     );
     setLocalDocumentMessagesWaiting([]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localDocumentMessagesWaiting, uploadedFiles]);
+  }, [localDocumentMessagesWaiting, uploadedFiles, message.room?._id]);
 
   const room = message.room;
   return (
