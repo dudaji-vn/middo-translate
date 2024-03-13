@@ -31,7 +31,7 @@ export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
           className={cn(
             'flex-1',
             isMobile
-              ? 'absolute left-0 top-0 z-50 h-screen w-screen'
+              ? 'absolute left-0 top-0 z-50 h-dvh w-screen'
               : 'h-main-container-height',
           )}
         >
