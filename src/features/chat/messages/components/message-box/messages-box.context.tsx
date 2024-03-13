@@ -81,7 +81,6 @@ export const MessagesBoxProvider = ({
   const [notification, setNotification] = useState<string>('');
 
   const isFocused = useHasFocus();
-
   // socket event
 
   useEffect(() => {
@@ -93,7 +92,7 @@ export const MessagesBoxProvider = ({
       }: {
         message: Message;
         clientTempId: string;
-      }) => {
+      }) => {      
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
         const targetText = message.room?.isGroup
@@ -114,7 +113,7 @@ export const MessagesBoxProvider = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
-  }, [replaceItem, room._id, updateItem, userId]);
+  }, [replaceItem, room._id, updateItem, userId, guestId]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;

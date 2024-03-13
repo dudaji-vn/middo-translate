@@ -17,7 +17,6 @@ export const SeenTracker = ({ onSeen, guestId }: SeenTrackProps) => {
   const storeUserId = useAuthStore((state) => state?.user?._id);
   const userId = storeUserId || guestId;
   const isRead = message.readBy?.includes(userId!);
-  console.log('storedId', storeUserId)
   const { mutate } = useMutation({
     mutationFn: storeUserId ? messageApi.seen : messageApi.seenAnonymous,
   });

@@ -69,9 +69,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         language,
         ...(isAnonymous && { userId: currentUser?._id || guest?._id, })
       };
-      mutateAsync(payload).then(() => {
-
-      });
+      mutateAsync(payload);
     };
 
     const handleSubmit = async (data: MessageEditorSubmitData) => {
