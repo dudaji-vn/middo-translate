@@ -247,8 +247,25 @@
 }
 
 .editor-view .mention {
-  @apply text-current hover:underline hover:opacity-90;
+  @apply rounded-md  p-0.5 px-1 text-current hover:opacity-90;
 }
+
+.editor-view .mention.left {
+  @apply bg-primary-200 text-primary;
+}
+
+.editor-view .mention.right {
+  @apply bg-primary-600;
+}
+
+/* .editor-view .mention.me {
+  @apply bg-yellow-500/50;
+} */
+
+.editor-view .mention.left.me {
+  @apply text-neutral-900;
+}
+
 .tiptap ul {
   @apply my-1;
 }

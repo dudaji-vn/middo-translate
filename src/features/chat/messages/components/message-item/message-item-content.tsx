@@ -38,6 +38,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
     }
     if (
       message.language === message.sender.language ||
+      message.language === userLanguage ||
       message.sender._id === currentUserId
     ) {
       setContentDisplay(message.content);
@@ -70,7 +71,10 @@ export const Content = ({ position, active, message }: ContentProps) => {
       )}
     >
       <div className={cn(textVariants({ position, status: message.status }))}>
-        <RichTextView content={contentDisplay} />
+        <RichTextView
+          mentionClassName={position === 'right' ? 'right' : 'left'}
+          content={contentDisplay}
+        />
       </div>
       {message?.contentEnglish &&
         message.status !== 'removed' &&
@@ -97,6 +101,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
                 )}
               >
                 <RichTextView
+                  mentionClassName={position === 'right' ? 'right' : 'left'}
                   editorStyle="font-light text-sm"
                   content={message.contentEnglish}
                 />

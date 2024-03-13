@@ -27,9 +27,18 @@ export const mentionSuggestionOptions = (
   _items: MentionSuggestion[],
 ): MentionOptions['suggestion'] => {
   return {
-    items: async ({ query }): Promise<MentionSuggestion[]> =>
-      Promise.resolve(
-        _items
+    items: async ({ query }): Promise<MentionSuggestion[]> => {
+      // add "all" option
+      const items = [
+        {
+          label: 'Everyone',
+          id: 'everyone',
+          image: '',
+        },
+        ..._items,
+      ];
+      return Promise.resolve(
+        items
           .map((item) => ({
             label: item.label,
             id: item.id,
@@ -39,7 +48,8 @@ export const mentionSuggestionOptions = (
             item.label.toLowerCase().startsWith(query.toLowerCase()),
           )
           .slice(0, 5),
-      ),
+      );
+    },
 
     render: () => {
       let component: ReactRenderer<SuggestionListRef> | undefined;

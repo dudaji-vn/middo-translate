@@ -21,6 +21,7 @@ import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { useParams } from 'next/navigation';
 import { convert } from 'html-to-text';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -45,6 +46,7 @@ export const MessagesBoxProvider = ({
   room,
 }: PropsWithChildren<{ room: Room }>) => {
   const key = ['messages', room._id];
+  const queryClient = useQueryClient();
   const {
     isFetching,
     items,
@@ -97,12 +99,14 @@ export const MessagesBoxProvider = ({
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
       updateItem(message);
+      queryClient.invalidateQueries(['message', message._id]);
     });
 
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [replaceItem, room._id, updateItem, userId]);
 
   useEffect(() => {

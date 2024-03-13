@@ -75,7 +75,7 @@ const TextMessage = ({ message }: { message: Message }) => {
   }, [userLanguage, message]);
   return (
     <div className="flex flex-col">
-      <RichTextView content={contentDisplay} />
+      <RichTextView mentionClassName="left" content={contentDisplay} />
       {message?.contentEnglish &&
         message.status !== 'removed' &&
         showMiddleTranslation && (
@@ -86,7 +86,10 @@ const TextMessage = ({ message }: { message: Message }) => {
               className="absolute left-4 top-0 -translate-y-full"
             />
             <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
-              <RichTextView content={message.contentEnglish} />
+              <RichTextView
+                mentionClassName="left"
+                content={message.contentEnglish}
+              />
             </div>
           </div>
         )}

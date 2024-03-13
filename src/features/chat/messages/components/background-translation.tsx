@@ -14,7 +14,7 @@ export const BackgroundTranslation = ({}: BackgroundTranslationProps) => {
     isContentEmpty,
     setTranslating,
   } = useMessageEditor();
-  const debouncedValue = useDebounce<string>(content, 500); // increase debounce time to decrease cost
+  const debouncedValue = useDebounce<string>(content, 100); // increase debounce time to decrease cost
   useEffect(() => {
     const handleChange = async (content: string) => {
       setTranslating(true);

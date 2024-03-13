@@ -37,6 +37,7 @@ export interface MessageProps
   showReply?: boolean;
   direction?: 'bottom' | 'top';
   pinnedBy?: User;
+  discussionDisabled?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -70,6 +71,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       direction,
       showReply = true,
       pinnedBy,
+      discussionDisabled,
       ...props
     },
     ref,
@@ -118,6 +120,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
                 )}
                 <MessageItemWrapper
+                  discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
                   message={message}

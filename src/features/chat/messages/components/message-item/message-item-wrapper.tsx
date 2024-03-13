@@ -25,6 +25,7 @@ export interface MessageItemWrapperProps {
   isMe: boolean;
   message: Message;
   setActive: (active: boolean) => void;
+  discussionDisabled?: boolean;
 }
 
 export const MessageItemWrapper = (
@@ -32,7 +33,7 @@ export const MessageItemWrapper = (
 ) => {
   const isMobile = useAppStore((state) => state.isMobile);
 
-  const { isMe, message, setActive } = props;
+  const { isMe, message, setActive, discussionDisabled } = props;
 
   const { onAction } = useMessageActions();
 
@@ -55,6 +56,8 @@ export const MessageItemWrapper = (
             return true;
           case 'unpin':
             return message.isPinned;
+          case 'reply':
+            return !discussionDisabled;
           default:
             return true;
         }

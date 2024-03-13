@@ -58,6 +58,14 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       [],
     );
 
+    useEffect(() => {
+      if (props.autoFocus === undefined || props.autoFocus) {
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 200);
+      }
+    }, [props.autoFocus]);
+
     return (
       <div className="relative w-full overflow-hidden rounded-xl border bg-background transition-all">
         <div className="flex h-11 pl-3 transition-all ">
@@ -65,9 +73,13 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             value={value}
             ref={inputRef}
             type="text"
-            autoFocus
             {...props}
-            // autoFocus
+            onFocus={(e) => {
+              props.onFocus?.(e);
+              setTimeout(() => {
+                inputRef.current?.focus();
+              }, 200);
+            }}
             onChange={(e) => {
               props.onChange?.(e);
               setValue(e.target.value);

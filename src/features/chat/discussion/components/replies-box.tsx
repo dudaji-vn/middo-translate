@@ -158,6 +158,7 @@ export const RepliesBox = () => {
                 <MessageItemGroup direction="top" className="flex-col">
                   {group.messages.map((message) => (
                     <MessageItem
+                      discussionDisabled
                       showReply={false}
                       showAvatar={
                         !isMe &&

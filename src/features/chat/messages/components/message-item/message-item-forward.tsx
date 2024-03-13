@@ -10,6 +10,7 @@ import { Text } from '@/components/data-display';
 import { Room } from '@/features/chat/rooms/types';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { RichTextView } from '@/components/rich-text-view';
 
 export interface MessageItemForwardProps {
   message: Message;
@@ -37,25 +38,27 @@ export const MessageItemForward = ({
         </div>
       )}
       <div className="order-neutral-100 ml-auto w-fit rounded-2xl border p-2">
-          <div className="text-sm">
-            <span className="italic text-neutral-400">Forward from&nbsp;</span>
-            <Wrapper room={message.room!}>
-              <span className="text-primary max-md:inline-block break-all">{displayForwardFrom}</span>
-            </Wrapper>
-            <div className="mt-1">
-              {message.content && <TextMessage message={message} />}
-              {message?.media && message.media.length > 0 && (
-                <Fragment>
-                  {message.media[0].type === 'image' && (
-                    <ImageGallery images={message.media} />
-                  )}
-                  {message.media[0].type === 'document' && (
-                    <DocumentMessage file={message.media[0]} />
-                  )}
-                </Fragment>
-              )}
-            </div>
+        <div className="text-sm">
+          <span className="italic text-neutral-400">Forward from&nbsp;</span>
+          <Wrapper room={message.room!}>
+            <span className="break-all text-primary max-md:inline-block">
+              {displayForwardFrom}
+            </span>
+          </Wrapper>
+          <div className="mt-1">
+            {message.content && <TextMessage message={message} />}
+            {message?.media && message.media.length > 0 && (
+              <div className="w-fit">
+                {message.media[0].type === 'image' && (
+                  <ImageGallery images={message.media} />
+                )}
+                {message.media[0].type === 'document' && (
+                  <DocumentMessage file={message.media[0]} />
+                )}
+              </div>
+            )}
           </div>
+        </div>
       </div>
       {hasParent && isMe && (
         <div>
@@ -93,7 +96,7 @@ const TextMessage = ({ message }: { message: Message }) => {
   ]);
   return (
     <div>
-      <span className="text-neutral-600">{contentDisplay}</span>
+      <RichTextView content={contentDisplay} />
       {message?.contentEnglish &&
         message.status !== 'removed' &&
         showMiddleTranslation && (
@@ -104,10 +107,7 @@ const TextMessage = ({ message }: { message: Message }) => {
               className="absolute left-4 top-0 -translate-y-full"
             />
             <div className={'mb-1 mt-2 rounded-xl bg-neutral-50 p-1 px-3'}>
-              <Text
-                value={message.contentEnglish}
-                className="text-start text-sm font-light text-neutral-600"
-              />
+              <RichTextView content={message.contentEnglish} />
             </div>
           </div>
         )}
