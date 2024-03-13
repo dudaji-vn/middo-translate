@@ -1,6 +1,5 @@
 'use client'
 
-import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension'
 import { Button } from '@/components/actions'
 import { startAGuestConversationService } from '@/services/extension.service'
 import { useAuthStore } from '@/stores/auth.store'
@@ -45,7 +44,7 @@ const StartAConversation = ({ businessData }: {
                 console.log('res.data', res.data)
                 const roomId = res.data.roomId;
                 const user = res.data.user;
-                setData({user})
+                // setData({user})
                 router.push(`/help-desk/${businessData._id}/${roomId}/${user._id}`)
             })
         } catch (error) {

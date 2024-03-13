@@ -1,6 +1,5 @@
 import {
   ChatBoxFooter,
-  ChatBoxHeader,
   RoomSide,
 } from '@/features/chat/rooms/components';
 
@@ -10,69 +9,25 @@ import {
   MessagesBoxProvider,
 } from '@/features/chat/messages/components/message-box';
 
-import { Response } from '@/types';
-import { Room } from '@/features/chat/rooms/types';
-import { fetchApi } from '@/utils/data-fetching';
-import { PinnedBar } from '@/features/chat/rooms/components/pin-message-bar';
+
 import {
   MediaUploadDropzone,
   MediaUploadProvider,
 } from '@/components/media-upload';
-import { cookies } from 'next/headers';
-import { Button } from '@/components/actions';
 import StartAConversation from './_components/start-conversation/start-a-conversation';
 import { notFound } from 'next/navigation';
+import { businessAPI } from '@/features/chat/business/business.service';
 
-async function getChatRoom(roomId: string, anonymousUserId: string) {
-  try {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/rooms/anonymous/${roomId}?userId=${anonymousUserId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-    const data = await response.json()
-    if (!response.ok) {
-      throw new Error(data.message)
-    }
-    return data?.data;
-  }
-  catch (error) {
-    console.error('Error in get business info :>>', error)
-    return undefined;
-  }
-}
 
-const getBusinessInfomation = async (businessId: string): Promise<Room | undefined> => {
-  try {
-    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/business/' + businessId,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-    const data = await response.json()
-    if (!response.ok) {
-      throw new Error(data.message)
-    }
-    return data?.data;
-  }
-  catch (error) {
-    console.error('Error in get business info', error)
-    return undefined;
-  }
-}
 
-const ChatBoxPage = async ({ params: { slugs } }: {
+const HelpDeskConversationPage = async ({ params: { slugs } }: {
   params: {
     slugs: string[];
   };
   searchParams: any;
 }) => {
   const [businessId, roomId, anonymousUserId] = slugs;
-  const businessData = await getBusinessInfomation(businessId);
+  const businessData = await businessAPI.getBusinessInfomation(businessId);
   if (!businessData) {
     return <div>Not Found</div>;
   }
@@ -81,13 +36,13 @@ const ChatBoxPage = async ({ params: { slugs } }: {
       <StartAConversation businessData={businessData} />
     )
   }
-  const room = await getChatRoom(roomId, anonymousUserId);
+  const room = await businessAPI.getChatRoom(roomId, anonymousUserId);
   if (!room || !room?._id || !anonymousUserId) {
     notFound();
   }
   const anonymousUser = room.participants.find((p: { _id: string }) => p._id === anonymousUserId);
   return (
-    <div className="w-full container h-full">
+    <div className="w-full h-full">
       <ChatBoxProvider room={room}>
         <div className="flex h-full">
           <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
@@ -107,4 +62,4 @@ const ChatBoxPage = async ({ params: { slugs } }: {
   );
 };
 
-export default ChatBoxPage;
+export default HelpDeskConversationPage;

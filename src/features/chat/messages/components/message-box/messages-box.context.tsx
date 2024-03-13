@@ -21,7 +21,7 @@ import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { useParams } from 'next/navigation';
 import { convert } from 'html-to-text';
-import { anounymousRoomAPI } from '@/features/chat/anonymous-messages/anonymous-message.service';
+import { anounymousMesssagesAPI } from '@/features/chat/business/anonymous-message.service';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -65,7 +65,7 @@ export const MessagesBoxProvider = ({
     queryKey: key,
     queryFn: ({ pageParam }) => {
       if (isAnonymous) {
-        return anounymousRoomAPI.getMessages(room._id, { cursor: pageParam, limit: 16, userId: guestId as string });
+        return anounymousMesssagesAPI.getMessages(room._id, { cursor: pageParam, limit: 16, userId: guestId as string });
       }
       return roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 })
     },

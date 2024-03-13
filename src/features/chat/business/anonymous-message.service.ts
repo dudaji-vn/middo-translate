@@ -7,13 +7,10 @@ import {
 
 import { Message } from '@/features/chat/messages/types';
 import queryString from 'query-string';
-import { uploadImage } from '@/utils/upload-img';
 import { Room } from '../rooms/types';
-import { InboxType } from '../rooms/components/inbox/inbox';
 import axios from 'axios';
-import { CreateMessage } from '../messages/api';
 
-class AnounymousRoomAPI {
+class AnounymousMesssagesAPI {
   private basePath: string;
 
   constructor(basePath: string = '/api/rooms/anonymous') {
@@ -32,7 +29,6 @@ class AnounymousRoomAPI {
       await axios.get(path);
     return res.data.data;
   }
-
 
   async getRoom(roomId: string, userId: string): Promise<Room> {
     const res: Response<Room> = await axios.get(
@@ -73,6 +69,6 @@ class AnounymousRoomAPI {
     return res.data;
   }
 }
-const anounymousRoomAPI = new AnounymousRoomAPI();
+const anounymousMesssagesAPI = new AnounymousMesssagesAPI();
 
-export { anounymousRoomAPI, AnounymousRoomAPI };
+export { anounymousMesssagesAPI, AnounymousMesssagesAPI };
