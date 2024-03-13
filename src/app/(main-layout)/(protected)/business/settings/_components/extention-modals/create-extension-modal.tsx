@@ -59,8 +59,8 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
       // TODO: remove mock data
       custom: {
         language: 'vi',
-        firstMessage: 'Thử nghiệm',
-        firstMessageEnglish: 'Test',
+        firstMessage: 'Xin chào, tôi có thể giúp gì cho bạn?',
+        firstMessageEnglish: 'Hello, how can I help you?',
         color: '',
       },
     },

@@ -23,8 +23,10 @@ export type TStartAConversation = {
 
 const StartAConversation = ({ businessData }: {
     businessData: {
-        _id: string
-
+        _id: string,
+        firstMessage: string,
+        firstMessageEnglish: string,
+        language: string,
     }
 }) => {
     const router = useRouter()
@@ -39,8 +41,8 @@ const StartAConversation = ({ businessData }: {
                 businessId: businessData._id,
                 name: 'HUYEN',
                 language: 'vi',
-                email: 'thanhhuyenkk122222@gmail.com'
-            }).then((res) => { 
+                email: 'mockemail@gmockk.com'
+            }).then((res) => {
                 console.log('res.data', res.data)
                 const roomId = res.data.roomId;
                 const user = res.data.user;
@@ -53,8 +55,14 @@ const StartAConversation = ({ businessData }: {
         setIsLoading(false)
     }
     return (
-        <div className='h-full w-full flex flex-col items-center justify-end'>
-            <Button className='h-11' variant={'default'} color={'primary'} shape={'square'} onClick={createAGuestConversation} disabled={isLoading} >
+        <div className='h-full w-full flex flex-col justify-between py-3 px-4'>
+            <div className='w-fit overflow-hidden p-4 rounded-[20px] mr-auto bg-primary-500-main text-white relative rounded-bl-lg'>
+                {businessData.firstMessage}
+                <div className='text-left bg-primary-400 rounded-xl px-3 py-1'>
+                    {businessData.firstMessageEnglish}
+                </div>
+            </div>
+            <Button className='h-11  w-2/3 md:max-w-48 mx-auto min-w-fit' variant={'default'} color={'primary'} shape={'square'} onClick={createAGuestConversation} disabled={isLoading} >
                 Start a conversation
             </Button>
         </div>
