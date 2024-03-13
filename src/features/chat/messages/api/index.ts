@@ -115,6 +115,7 @@ export const messageApi = {
     return res.data;
   },
   async getPinned(id: string) {
+    // TODO: ask BE for anonymous pined message or remove getting this from anonymous
     const res: Response<PinMessage[]> = await axiosWithInterceptor.get(
       `${basePath}/pinned/${id}`,
     );
