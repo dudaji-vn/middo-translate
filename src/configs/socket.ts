@@ -61,5 +61,11 @@ export const SOCKET_CONFIG = {
       SEND_CAPTION: 'call.send_caption',
       UPDATE: 'call.update',
     },
+    SPEECH_TO_TEXT: {
+      START: 'speech_to_text.start',
+      STOP: 'speech_to_text.stop',
+      SEND_AUDIO: 'speech_to_text.send_audio',
+      RECEIVE_AUDIO_TEXT: 'speech_to_text.receive_audio_text'
+    }
   },
 };
