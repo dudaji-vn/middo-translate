@@ -1,5 +1,3 @@
-import axios from 'axios';
-import { axios as axiosWithInterceptor } from '@/lib/axios';
 
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 import { cookies } from 'next/headers';

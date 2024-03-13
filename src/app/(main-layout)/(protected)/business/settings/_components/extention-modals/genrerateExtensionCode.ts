@@ -1,15 +1,13 @@
-export const generateExtensionCode = () => {
-    // TODO: Implement the code generation logic
+const mock = `http://192.168.1.20:3000`;
+export const generateExtensionCode = (url: string) => {
+  const path = mock || process.env.NEXT_PUBLIC_URL;
   return `
-    <script>
-    window.onload = function() {
-      var notify = new Notify({
-        language: 'en',
-        firstMessage: 'Hello there! 👋🏼\n\nHow can we help you today?',
-        theme: 'light',
-      });
-      notify.init();
-    }
-    </script>
-    `;
+  <script src="${path}/chat-widget.js"></script>
+  </script>
+  <script>
+      window.onload = function () {
+          ChatWidget.init(\`${path}${url}\`);
+      };
+  </script>
+  `;
 };

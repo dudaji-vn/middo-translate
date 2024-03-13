@@ -59,8 +59,8 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
       // TODO: remove mock data
       custom: {
         language: 'vi',
-        firstMessage: 'Thử nghiệm',
-        firstMessageEnglish: 'Test',
+        firstMessage: 'Xin chào, tôi có thể giúp gì cho bạn?',
+        firstMessageEnglish: 'Hello, how can I help you?',
         color: '',
       },
     },
@@ -219,7 +219,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   </Typography>
                   <pre className='bg-neutral-50 rounded-[20px] w-full overflow-x-auto'>
                     <code className='text-neutral-600 text-sm p-2' lang='javascript'>
-                      {generateExtensionCode()}
+                      {generateExtensionCode(`/help-desk/65f0075f2d3c6a722364d0c1/`)}
                     </code>
                   </pre>
 

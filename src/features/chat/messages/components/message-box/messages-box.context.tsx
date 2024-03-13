@@ -80,7 +80,7 @@ export const MessagesBoxProvider = ({
     },
   });
   const params = useParams<{ id: string }>();
-  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id });
+  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id, isAnonymous });
 
   const userId = useAuthStore((s) => s.user?._id);
 

@@ -1,10 +1,18 @@
+import { anounymousMesssagesAPI } from '../../business/anonymous-message.service';
 import { messageApi } from '../../messages/api';
 import { useQuery } from '@tanstack/react-query';
 export const PIN_MESSAGE_KEY = 'pinned';
-export const useGetPinnedMessages = ({ roomId }: { roomId?: string }) => {
+export const useGetPinnedMessages = ({
+  roomId,
+  isAnonymous,
+}: {
+  roomId?: string;
+  isAnonymous?: boolean;
+}) => {
+
   return useQuery({
     queryKey: [PIN_MESSAGE_KEY, roomId],
-    queryFn: () => messageApi.getPinned(roomId!),
+    queryFn: () => isAnonymous ? anounymousMesssagesAPI.getPinned(roomId!) :messageApi.getPinned(roomId!),
     enabled: !!roomId,
   });
 };
