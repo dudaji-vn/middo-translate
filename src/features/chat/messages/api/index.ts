@@ -94,6 +94,7 @@ export const messageApi = {
     message: Omit<CreateMessage, 'clientTempId'>;
   }) {
     const { repliedMessageId, message } = data;
+    console.log('repliedMessageId', repliedMessageId, 'message', message);
     const res: Response<Message> = await axiosWithInterceptor.post(
       `${basePath}/${repliedMessageId}/reply`,
       message,
