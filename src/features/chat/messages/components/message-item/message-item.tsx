@@ -30,13 +30,14 @@ import { MessageItemLinks } from './message-item-links';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof messageVariants> {
+    VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
   showAvatar?: boolean;
   showReply?: boolean;
   direction?: 'bottom' | 'top';
   pinnedBy?: User;
+  discussionDisabled?: boolean;
   guestId?: string;
 }
 
@@ -64,7 +65,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     {
       message,
       sender,
-      order, 
+      order,
       guestId,
       className,
       readByUsers,
@@ -72,6 +73,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       direction,
       showReply = true,
       pinnedBy,
+      discussionDisabled,
       ...props
     },
     ref,
@@ -93,7 +95,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           setActive,
         }}
       >
-        <SeenTracker guestId={guestId}/>
+        <SeenTracker guestId={guestId} />
         {isSystemMessage ? (
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (
@@ -120,6 +122,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
                 )}
                 <MessageItemWrapper
+                  discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
                   message={message}

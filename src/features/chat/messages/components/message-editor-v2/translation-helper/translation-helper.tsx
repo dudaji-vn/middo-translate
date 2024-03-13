@@ -127,7 +127,10 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                   <>
                     <div className="flex-1">
                       {contentEnglish ? (
-                        <RichTextView content={contentEnglish} />
+                        <RichTextView
+                          mentionClassName="left"
+                          content={contentEnglish}
+                        />
                       ) : (
                         <p className="italic text-neutral-300">
                           Stop typing to see translation...

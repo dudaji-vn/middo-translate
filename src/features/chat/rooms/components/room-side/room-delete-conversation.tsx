@@ -42,7 +42,8 @@ export const RoomDeleteConversation = ({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete conversation ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Once you delete your copy of this conversation, it cannot be undone.
+            You will lose all of your messages and files. Others still can see
+            your messages. Are you sure to delete?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

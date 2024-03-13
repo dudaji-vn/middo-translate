@@ -83,7 +83,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         className,
       )}
     >
-      <Wrapper room={room} isMuted={isMuted} >
+      <Wrapper room={room} isMuted={isMuted}>
         <RoomItemContext.Provider
           value={{
             data: room,
@@ -93,6 +93,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             showTime,
             onClick,
             isMuted,
+            disabledRedirect,
+            disabledAction,
           }}
         >
           <RoomItemWrapper>

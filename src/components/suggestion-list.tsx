@@ -4,6 +4,7 @@ import type { MentionSuggestion } from './mention-suggestion-options';
 import { Avatar } from './data-display';
 
 import { cn } from '@/utils/cn';
+import { Users2Icon } from 'lucide-react';
 
 export type SuggestionListRef = {
   onKeyDown: NonNullable<
@@ -80,12 +81,16 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
                   : 'hover:bg-primary-200',
               )}
             >
-              {item.image && (
+              {item?.image ? (
                 <Avatar
                   src={item.image}
                   alt={item.label}
                   className="h-6 w-6 rounded-full"
                 />
+              ) : (
+                <div className="flex size-6 items-center justify-center p-1">
+                  <Users2Icon />
+                </div>
               )}
               <span className="truncate"> {item.label}</span>
             </li>

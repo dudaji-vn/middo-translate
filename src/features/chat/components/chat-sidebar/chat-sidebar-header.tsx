@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeftIcon, PenSquareIcon, Settings } from 'lucide-react';
@@ -98,23 +98,23 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               </Button.Icon>
             </motion.div>
           )}
+          <motion.div key="search-input-main" className="w-full transition-all">
+            <SearchInput
+              ref={searchInputRef}
+              defaultValue={searchValue || ''}
+              onFocus={() => {
+                if (currentSide !== 'search') changeSide('search');
+              }}
+              btnDisabled
+              autoFocus={false}
+              placeholder="Search people or groups"
+              onChange={(e) => setParam(SPK_SEARCH, e.currentTarget.value)}
+              onClear={() => {
+                removeParam(SPK_SEARCH);
+              }}
+            />
+          </motion.div>
         </AnimatePresence>
-        <div className="w-full transition-all">
-          <SearchInput
-            ref={searchInputRef}
-            defaultValue={searchValue || ''}
-            onFocus={() => {
-              if (currentSide !== 'search') changeSide('search');
-            }}
-            btnDisabled
-            autoFocus={false}
-            placeholder="Search people or groups"
-            onChange={(e) => setParam(SPK_SEARCH, e.currentTarget.value)}
-            onClear={() => {
-              removeParam(SPK_SEARCH);
-            }}
-          />
-        </div>
       </div>
     </div>
   );

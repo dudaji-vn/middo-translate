@@ -9,8 +9,7 @@ import {
   AlertDialogTitle,
 } from '@/components/feedback';
 
-import { roomApi } from '../api';
-import { useMutation } from '@tanstack/react-query';
+import { useDeleteConversation } from '../hooks/use-delete-conversation';
 
 export interface RoomModalDeleteProps {
   id: string;
@@ -18,9 +17,7 @@ export interface RoomModalDeleteProps {
 }
 
 export const RoomModalDelete = (props: RoomModalDeleteProps) => {
-  const { mutateAsync } = useMutation({
-    mutationFn: roomApi.deleteRoom,
-  });
+  const { mutateAsync } = useDeleteConversation();
   return (
     <AlertDialog
       defaultOpen

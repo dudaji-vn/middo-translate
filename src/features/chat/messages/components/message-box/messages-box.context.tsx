@@ -21,6 +21,7 @@ import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { useParams } from 'next/navigation';
 import { convert } from 'html-to-text';
+import { useQueryClient } from '@tanstack/react-query';
 import { anounymousMesssagesAPI } from '@/features/chat/business/anonymous-message.service';
 
 interface MessagesBoxContextProps {
@@ -45,13 +46,14 @@ export const MessagesBoxProvider = ({
   children,
   room,
   isAnonymous,
-  guestId
+  guestId,
 }: PropsWithChildren<{
-  room: Room,
-  isAnonymous?: boolean,
-  guestId?: string
+  room: Room;
+  isAnonymous?: boolean;
+  guestId?: string;
 }>) => {
   const key = ['messages', room._id];
+  const queryClient = useQueryClient();
   const {
     isFetching,
     items,
@@ -65,9 +67,13 @@ export const MessagesBoxProvider = ({
     queryKey: key,
     queryFn: ({ pageParam }) => {
       if (isAnonymous) {
-        return anounymousMesssagesAPI.getMessages(room._id, { cursor: pageParam, limit: 16, userId: guestId as string });
+        return anounymousMesssagesAPI.getMessages(room._id, {
+          cursor: pageParam,
+          limit: 16,
+          userId: guestId as string,
+        });
       }
-      return roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 })
+      return roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 });
     },
     config: {
       enabled: room.status !== 'temporary',
@@ -92,7 +98,7 @@ export const MessagesBoxProvider = ({
       }: {
         message: Message;
         clientTempId: string;
-      }) => {      
+      }) => {
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
         const targetText = message.room?.isGroup
@@ -107,12 +113,14 @@ export const MessagesBoxProvider = ({
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
       updateItem(message);
+      queryClient.invalidateQueries(['message', message._id]);
     });
 
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [replaceItem, room._id, updateItem, userId, guestId]);
 
   useEffect(() => {
@@ -143,7 +151,7 @@ export const MessagesBoxProvider = ({
         messages: items,
         loadMoreMessages: fetchNextPage,
         hasNextPage: hasNextPage,
-        refetchMessages: () => { },
+        refetchMessages: () => {},
         addMessage: addItem,
         replaceMessage: replaceItem,
         updateMessage: updateItem,
@@ -157,7 +165,6 @@ export const MessagesBoxProvider = ({
 };
 
 export const useMessagesBox = () => {
-
   const context = useContext(MessagesBoxContext);
   if (!context) {
     throw new Error('useMessagesBox must be used within MessagesBoxProvider');
