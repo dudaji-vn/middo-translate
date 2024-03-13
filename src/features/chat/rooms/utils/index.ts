@@ -6,8 +6,10 @@ export function generateRoomDisplay(
   room: Room,
   currentUserId: User['_id'],
   inCludeLink?: boolean,
+  overidePath?: string | null,
 ) {
   const { participants, isGroup, name } = room;
+  const link = inCludeLink ? (overidePath || `/talk/${room._id}`) : '';
   if (isGroup) {
     if (!name) {
       room.name = participants
@@ -15,7 +17,7 @@ export function generateRoomDisplay(
         .join(', ');
     }
 
-    room.link = inCludeLink ? `/talk/${room._id}` : '';
+    room.link = link;
     return room;
   }
   let [participant] = participants.filter(
@@ -29,7 +31,7 @@ export function generateRoomDisplay(
     ...room,
     name: participant.name,
     avatar: participant.avatar,
-    link: inCludeLink ? `/talk/${room._id}` : '',
+    link: inCludeLink ? link : '',
   };
 }
 

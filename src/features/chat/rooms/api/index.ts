@@ -151,9 +151,9 @@ export const roomApi = {
   async getPinned() {
     const res: Response<Room[]> = await axios.get(`${basePath}/pin`);
     return res.data;
-  },  
+  },
   async getPinnedAnonynousRooms() {
     // TODO: implement this when has BE or remove it
     return [];
-  }
+  },
 };
