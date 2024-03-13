@@ -1,61 +1,37 @@
 import { NEXT_PUBLIC_GOOGLE_SPEECH_TO_TEXT_API_KEY } from '@/configs/env.public';
 import useSpeechToText from 'react-hook-speech-to-text';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { useElectron } from './use-electron';
 export default function useSpeechRecognizer(
     language?: string
 ) {
     const { isElectron } = useElectron();
+    let { isRecording, interimResult, results, setResults, startSpeechToText, stopSpeechToText } = useSpeechToText({
+        continuous: true,
+        crossBrowser: true,
+        useLegacyResults: false,
+        // timeout: 200,
+        googleApiKey: NEXT_PUBLIC_GOOGLE_SPEECH_TO_TEXT_API_KEY,
+        googleCloudRecognitionConfig: {
+            languageCode: language || 'en-US'
+        },
+        useOnlyGoogleCloud: isElectron ? true : false,
+    });
     
-    // let { error, isRecording, interimResult, results, setResults, startSpeechToText, stopSpeechToText } = useSpeechToText({
-    //     continuous: true,
-    //     crossBrowser: true,
-    //     useLegacyResults: false,
-    //     // timeout: 200,
-    //     googleApiKey: NEXT_PUBLIC_GOOGLE_SPEECH_TO_TEXT_API_KEY,
-    //     googleCloudRecognitionConfig: {
-    //         languageCode: language || 'en-US'
-    //     },
-    //     useOnlyGoogleCloud: isElectron ? true : false,
-    // });
+    let finalTranscript = results.map((result) => {
+        if (typeof result === 'string') return result;
+        return result.transcript;
+    }).join(' ');
 
-    const {
-        transcript,
-        listening,
-        interimTranscript,
-        finalTranscript,
-        resetTranscript,
-        browserSupportsSpeechRecognition
-    } = useSpeechRecognition()
-    
-    // let finalTranscript = results.map((result) => {
-    //     if (typeof result === 'string') return result;
-    //     return result.transcript;
-    // }).join(' ');
-
-    // let interimTranscript = interimResult;
-    // if(!interimTranscript && results.length > 0) {
-    //     interimTranscript = finalTranscript
-    // }
-
-    // const resetTranscript = () => {
-    //     setResults([])
-    // }
-    const setResults = () => {}
-    const startSpeechToText = () => { 
-        SpeechRecognition.startListening({ 
-            continuous: true,
-            language: language || 'en-US' 
-        });
+    let interimTranscript = interimResult;
+    if(!interimTranscript && results.length > 0) {
+        interimTranscript = finalTranscript
     }
 
-    const stopSpeechToText = () => {
-        SpeechRecognition.stopListening();
+    const resetTranscript = () => {
+        setResults([])
     }
-
-
     return {
-        error: null, listening, interimTranscript, finalTranscript, startSpeechToText, stopSpeechToText,resetTranscript,
+        error: null, listening: isRecording, interimTranscript, finalTranscript, startSpeechToText, stopSpeechToText,resetTranscript,
         setResults
     };
 }

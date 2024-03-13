@@ -1,7 +1,8 @@
 import React from 'react';
-import CaptionSection from './caption';
+import dynamic from 'next/dynamic';
 import ChatThread from './chat-thread';
 import VideoCallLayout from './layouts';
+const CaptionSection = dynamic(() => import('./caption'), { ssr: false });
 
 export default function VideoCallContent() {
   return (

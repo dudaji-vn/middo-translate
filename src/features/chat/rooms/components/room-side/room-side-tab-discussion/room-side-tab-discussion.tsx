@@ -1,5 +1,6 @@
 import { Button } from '@/components/actions';
-import Discussion from '@/features/chat/discussion/components/discussion';
+import dynamic from 'next/dynamic';
+const Discussion = dynamic(() => import('@/features/chat/discussion/components/discussion'));
 import { useClickReplyMessage } from '@/features/chat/messages/hooks/use-click-reply-message';
 import {
   MessageSquare,
