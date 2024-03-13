@@ -51,7 +51,7 @@ const useExtractTextFromStream = (stream?: MediaStream) => {
             scriptProcessor.disconnect();
         };
         
-    }, [startSpeechToText, stopSpeechToText, stream]);
+    }, [resetTranscript, startSpeechToText, stopSpeechToText, stream]);
 
 
     return {

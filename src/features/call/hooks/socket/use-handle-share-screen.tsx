@@ -38,7 +38,7 @@ export default function useHandleShareScreen() {
             if (!socket.id) return;
             const peer = createPeer();
             peer.on("signal", (signal) => {
-                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true, isElectron: true })
+                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
             });
             peer.addStream(shareScreenStream);
             addPeerShareScreen({
@@ -47,14 +47,14 @@ export default function useHandleShareScreen() {
             });
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [addPeerShareScreen, shareScreenStream, user?._id])
+    }, [addPeerShareScreen, shareScreenStream, user?._id, isElectron])
 
     const sendShareScreenStream = useCallback((socketId: string) => {
         if (!shareScreenStream) return;
         if (!socket.id || socketId === socket.id) return;
         const peer = createPeer();
         peer.on("signal", (signal) => {
-            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: socketId, user, callerId: socket.id, signal, isShareScreen: true })
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: socketId, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
         });
         peer.addStream(shareScreenStream);
         addPeerShareScreen({
@@ -62,7 +62,7 @@ export default function useHandleShareScreen() {
             peer,
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [addPeerShareScreen, shareScreenStream, user?._id])
+    }, [addPeerShareScreen, shareScreenStream, user?._id, isElectron])
 
     useEffect(() => {
         if (!shareScreenStream) return;
@@ -110,8 +110,10 @@ export default function useHandleShareScreen() {
             peer.peer.destroy();
         });
         clearPeerShareScreen();
-        ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
-    },[clearPeerShareScreen, ipcRenderer, peerShareScreen, removeParticipantShareScreen, setShareScreen, shareScreenStream])
+        if(isElectron && ipcRenderer) {
+            ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
+        }
+    },[clearPeerShareScreen, ipcRenderer, isElectron, peerShareScreen, removeParticipantShareScreen, setShareScreen, shareScreenStream])
 
     const handleShareScreen = useCallback(async ()=>{
         // if (participants.some((participant) => participant.isShareScreen)) return;
@@ -120,17 +122,16 @@ export default function useHandleShareScreen() {
             return;
         }
         const navigator = window.navigator as any;
+        if(isElectron) {
+            setChooseScreen(true);
+            ipcRenderer.send(ELECTRON_EVENTS.GET_SCREEN_SOURCE);
+            return;
+        }
         if (!navigator.mediaDevices.getDisplayMedia) {
             toast.error('Device not support share screen');
             return;
         }
         try {
-            if(isElectron) {
-                setChooseScreen(true);
-                ipcRenderer.send(ELECTRON_EVENTS.GET_SCREEN_SOURCE);
-                return;
-            }
-
             let stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 15 }, audio: true })
             if (!socket.id) return;
             const shareScreen = {
@@ -151,7 +152,7 @@ export default function useHandleShareScreen() {
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user?._id])
+    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user?._id, isElectron])
 
     useEffect(() => {
         if(!shareScreenStream) return;
@@ -172,6 +173,9 @@ export default function useHandleShareScreen() {
             }
         }
     }, [shareScreenStream, stopShareScreen])
+
+    
+
     return {
         handleShareScreen,
         stopShareScreen
