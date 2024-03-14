@@ -4,6 +4,7 @@ import { FCMBackground } from '@/features/notification/components';
 import { Fragment } from 'react';
 import { Inbox } from '@/features/chat/rooms/components';
 import { Metadata } from 'next';
+import { FCMElectron } from '@/features/notification/components/fcm-electron';
 export const metadata: Metadata = {
   title: 'Talk',
 };
@@ -20,7 +21,8 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
         </ChatSidebar>
         <ChatMain>{children}</ChatMain>
       </div>
-      {/* <FCMBackground /> */}
+      <FCMBackground />
+      <FCMElectron />
     </Fragment>
   );
 };
