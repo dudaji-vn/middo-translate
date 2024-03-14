@@ -198,7 +198,7 @@ MessageEditor.displayName = 'MessageEditor';
 
 const InputWrapper = ({ children }: PropsWithChildren) => {
   return (
-    <div className="min-h-[46px] w-full rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
+    <div className="flex min-h-[46px] w-full flex-col rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
       {children}
     </div>
   );
