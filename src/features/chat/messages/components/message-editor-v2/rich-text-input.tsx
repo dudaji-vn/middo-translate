@@ -95,8 +95,8 @@ export const RichTextInput = ({
         },
       }),
       Emoji.configure({
-        emojis: gitHubEmojis,
         enableEmoticons: true,
+        emojis: gitHubEmojis,
       }),
     ],
     onUpdate: ({ editor }) => {

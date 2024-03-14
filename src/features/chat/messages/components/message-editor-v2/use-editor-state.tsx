@@ -1,6 +1,4 @@
 import { useMediaUpload } from '@/components/media-upload';
-import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { useAuthStore } from '@/stores/auth.store';
 import { Editor } from '@tiptap/react';
 import { useCallback, useId, useRef, useState } from 'react';
 import { MicToggleButtonRef } from './mic-toggle-button';
@@ -8,7 +6,6 @@ import { ToolbarRef } from './toolbar';
 
 export const useEditorState = () => {
   const { files, reset } = useMediaUpload();
-  const userLang = useAuthStore((state) => state.user?.language);
 
   const id = useId();
 
@@ -18,9 +15,7 @@ export const useEditorState = () => {
 
   const [content, setContent] = useState<string>('');
   const [contentEnglish, setContentEnglish] = useState<string>('');
-  const [srcLang, setSrcLang] = useState<string>(
-    userLang || DEFAULT_LANGUAGES_CODE.EN,
-  );
+  const [srcLang, setSrcLang] = useState<string | null>(null);
   const [richText, setRichText] = useState<Editor | null>(null);
 
   const micToggleButtonRef = useRef<MicToggleButtonRef>(null);
@@ -32,6 +27,7 @@ export const useEditorState = () => {
     setIsContentEmpty(true);
     reset();
     setContentEnglish('');
+    setSrcLang(null);
   };
   const setTextContent = useCallback(
     (text: string) => {

@@ -46,8 +46,7 @@ export const mentionSuggestionOptions = (
           }))
           .filter((item) =>
             item.label.toLowerCase().startsWith(query.toLowerCase()),
-          )
-          .slice(0, 5),
+          ),
       );
     },
 
