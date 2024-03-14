@@ -45,7 +45,6 @@ export const RichTextInput = ({
     },
     autofocus: autoFocus ? 'end' : false,
     onCreate: ({ editor }) => {
-      console.log('editor created');
       onCreated?.(editor as Editor);
     },
     onBlur: ({ editor }) => {

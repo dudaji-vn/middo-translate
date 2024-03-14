@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Room } from '../../rooms/types';
 import { RoomItem } from '../../rooms/components/room-item';
-import { SPK_SEARCH } from '../../configs';
 import { Section } from '@/components/data-display/section';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
@@ -11,19 +10,18 @@ import { searchApi } from '@/features/search/api';
 
 import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
 import { useQuerySearch } from '@/hooks/use-query-search';
-import { useSearchParams } from 'next/navigation';
+import { useSearchStore } from '@/features/search/store/search.store';
 
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
-    const searchParams = useSearchParams();
-    const value = searchParams?.get(SPK_SEARCH);
+    const searchValue = useSearchStore((state) => state.searchValue);
     const { data: recData } = useGetRoomsRecChat();
-    const { data } = useQuerySearch<{
+    const { data, isLoading } = useQuerySearch<{
       rooms: Room[];
       users: User[];
-    }>(searchApi.inboxes, 'chat-search', value || '');
+    }>(searchApi.inboxes, 'chat-search', searchValue || '');
     return (
       <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
         <motion.div
@@ -56,7 +54,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
               </Section>
             </div>
           )}
-          {recData && recData.length > 0 && !data && (
+          {recData && recData.length > 0 && !searchValue && !data && (
             <Section label="Suggestion">
               {recData?.map((room) => {
                 return (

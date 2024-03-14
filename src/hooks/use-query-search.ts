@@ -10,7 +10,7 @@ export function useQuerySearch<T>(
     queryFn: (): T => searchApi({ q: searchTerm }),
     enabled: !!searchTerm,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    // keepPreviousData: true,
+    keepPreviousData: true,
   });
 
   return {
