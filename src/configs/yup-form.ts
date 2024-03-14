@@ -115,10 +115,9 @@ export const updateInforSchema = z.object({
 export const createExtensionSchema = z.object({
     addingDomain: z.string().refine(value => {
         if (value === '') return true;
-        // return DOMAIN_PATTERN.test(value);
-        return true;
+        return DOMAIN_PATTERN.test(value);
     }, {
-        message: 'Please enter a valid domain or leave it empty.',
+        message: 'Please enter a valid domain.',
     }).optional(),
     domains : z.array(z.string()).nonempty({
         message: 'Please enter at least one domain!',

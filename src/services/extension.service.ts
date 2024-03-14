@@ -13,7 +13,6 @@ export const getExtensionService = () => {
   return get('/help-desk/my-business');
 };
 
-
 export const startAGuestConversationService = (data: {
   businessId: string;
   name: string;
