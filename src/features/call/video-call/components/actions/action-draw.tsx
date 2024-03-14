@@ -22,15 +22,21 @@ export default function ActionDraw({}: {}) {
   const participantShareScreen = useMemo(() => {
     return participants.find((p) => p.isShareScreen);
   }, [participants]);
+
+  const participantPin = useMemo(() => {
+    return participants.find((p) => p.pin);
+  }, [participants]);
+
   const isDoodleDisabled = useMemo(() => {
     return (
       !haveShareScreen ||
       !isFullScreen ||
       !isPinShareScreen ||
       layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW ||
-      !participantShareScreen?.isElectron
+      !participantShareScreen?.isElectron ||
+      !participantPin?.isShareScreen
     );
-  }, [haveShareScreen, isFullScreen, isPinShareScreen, layout, participantShareScreen?.isElectron]);
+  }, [haveShareScreen, isFullScreen, isPinShareScreen, layout, participantPin?.isShareScreen, participantShareScreen?.isElectron]);
   if(isDoodleDisabled) return null;
   return (
     <Tooltip
