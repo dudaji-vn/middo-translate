@@ -121,7 +121,7 @@ export const RepliesBox = () => {
           <div className="absolute top-1/2 h-[1px] w-[95%] bg-neutral-200 "></div>
           <div className="relative bg-white p-1 px-3 text-sm text-neutral-400">
             {messages.length}
-            {messages.length > 1 ? 'discussions' : 'discussion'}
+            {messages.length > 1 ? ' discussions' : ' discussion'}
           </div>
         </div>
       )}
@@ -156,21 +156,23 @@ export const RepliesBox = () => {
               )}
               <div className="flex w-full gap-1">
                 <MessageItemGroup direction="top" className="flex-col">
-                  {group.messages.map((message) => (
-                    <MessageItem
-                      discussionDisabled
-                      showReply={false}
-                      showAvatar={
-                        !isMe &&
-                        !isSystem &&
-                        message._id === group.messages[0]._id
-                      }
-                      key={message._id}
-                      message={message}
-                      sender={isMe ? 'me' : 'other'}
-                      readByUsers={usersReadMessageMap[message._id] ?? []}
-                    />
-                  ))}
+                  {group.messages.map((message) => {
+                    return (
+                      <MessageItem
+                        discussionDisabled
+                        showReply={false}
+                        showAvatar={
+                          !isMe &&
+                          !isSystem &&
+                          message._id === group.messages[0]._id
+                        }
+                        key={message._id}
+                        message={message}
+                        sender={isMe ? 'me' : 'other'}
+                        readByUsers={usersReadMessageMap[message._id] ?? []}
+                      />
+                    );
+                  })}
                 </MessageItemGroup>
               </div>
             </div>

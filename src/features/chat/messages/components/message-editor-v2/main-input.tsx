@@ -27,6 +27,14 @@ export const MainInput = (props: MainInputProps) => {
     }),
   );
 
+  if (suggestions.length !== 0) {
+    suggestions.unshift({
+      label: 'Everyone',
+      id: 'everyone',
+      image: '',
+    });
+  }
+
   return (
     <Suspense>
       <RichTextInput

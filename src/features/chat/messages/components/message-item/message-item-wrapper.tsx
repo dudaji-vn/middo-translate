@@ -46,6 +46,7 @@ export const MessageItemWrapper = (
           case 'forward':
             return message.type !== 'call';
           case 'pin':
+            if (discussionDisabled) return false;
             if (message.isPinned) return false;
             if (message.type === 'call') return false;
             if (
