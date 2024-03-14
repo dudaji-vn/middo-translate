@@ -57,7 +57,7 @@ type MessageEditorContextProps = {
   setContentEnglish: (content: string) => void;
   contentEnglish: string;
   setSrcLang: (lang: string) => void;
-  srcLang: string;
+  srcLang: string | null;
   translating: boolean;
   setTranslating: (translating: boolean) => void;
   toolbarRef?: React.RefObject<ToolbarRef>;
@@ -141,7 +141,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         images,
         documents,
         contentEnglish: english,
-        language: srcLang,
+        language: lang,
       });
       reset();
     };

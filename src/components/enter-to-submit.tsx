@@ -30,7 +30,6 @@ export const EnterToSubmit = Extension.create({
       },
       'Shift-Enter': () => {
         const editor = this.editor;
-
         const bulletList = editor.isActive('bulletList');
         if (bulletList) {
           editor.chain().focus().splitListItem('listItem').run();

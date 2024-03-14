@@ -52,14 +52,17 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
     const translated = await translateText(
       content,
       DEFAULT_LANGUAGES_CODE.EN,
-      srcLang,
+      srcLang!,
     );
     setIsEditing(false);
     setInputDisabled(false);
     richText?.commands.setContent(translated);
     setContentEnglish(content);
   };
-  const showHelper = showTranslateOnType && !isContentEmpty;
+  const showHelper =
+    showTranslateOnType &&
+    !isContentEmpty &&
+    srcLang !== DEFAULT_LANGUAGES_CODE.EN;
 
   return (
     <AnimatePresence mode="wait">
@@ -96,7 +99,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                       <RichTextInput
                         autoFocus
                         onCreated={(editor) => setEditor(editor)}
-                        className="w-full"
+                        className="max-h-[200px] w-full overflow-y-auto"
                         initialContent={contentEnglish}
                         suggestions={suggestions}
                       />
@@ -125,7 +128,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                   </div>
                 ) : (
                   <>
-                    <div className="flex-1">
+                    <div className="max-h-[200px] flex-1 overflow-y-auto">
                       {contentEnglish ? (
                         <RichTextView
                           mentionClassName="left"

@@ -76,7 +76,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       socket.on(
         SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
-          console.log('update room', payload);
           updateRoom({ _id: payload.roomId, ...payload.data });
         },
       );
