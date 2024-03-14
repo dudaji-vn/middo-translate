@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Message } from '../../types';
 import { ImageGallery } from './message-item-image-gallery';
 import { DocumentMessage } from './message-item-document';
@@ -6,7 +6,6 @@ import { useChatStore } from '@/features/chat/store';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import { Text } from '@/components/data-display';
 import { Room } from '@/features/chat/rooms/types';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
@@ -23,6 +22,7 @@ export const MessageItemForward = ({
   hasParent,
   isMe,
 }: MessageItemForwardProps) => {
+  const mediaRef = useRef<HTMLDivElement>(null);
   const displayForwardFrom = useMemo(() => {
     let text = message?.sender?.name;
     if (message.room?.isGroup) {
@@ -38,7 +38,12 @@ export const MessageItemForward = ({
         </div>
       )}
       <div className="order-neutral-100 ml-auto w-fit rounded-2xl border p-2">
-        <div className="text-sm">
+        <div
+          style={{
+            width: mediaRef.current?.clientWidth,
+          }}
+          className="overflow-hidden text-sm"
+        >
           <span className="italic text-neutral-400">Forward from&nbsp;</span>
           <Wrapper room={message.room!}>
             <span className="break-all text-primary max-md:inline-block">
@@ -48,7 +53,7 @@ export const MessageItemForward = ({
           <div className="mt-1">
             {message.content && <TextMessage message={message} />}
             {message?.media && message.media.length > 0 && (
-              <div className="w-fit">
+              <div ref={mediaRef} className="w-fit">
                 {message.media[0].type === 'image' && (
                   <ImageGallery images={message.media} />
                 )}
@@ -95,7 +100,7 @@ const TextMessage = ({ message }: { message: Message }) => {
     message.language,
   ]);
   return (
-    <div>
+    <div className="p-1">
       <RichTextView content={contentDisplay} />
       {message?.contentEnglish &&
         message.status !== 'removed' &&

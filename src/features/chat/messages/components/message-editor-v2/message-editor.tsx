@@ -115,7 +115,6 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       let english = contentEnglish;
       if (!english) {
         english = await translateText(content, lang, DEFAULT_LANGUAGES_CODE.EN);
-        console.log('english', english);
       }
       for (const file of files) {
         if (file.file.type.startsWith('image')) {

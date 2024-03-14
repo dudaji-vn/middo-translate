@@ -38,6 +38,14 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
     }),
   );
 
+  if (suggestions.length !== 0) {
+    suggestions.unshift({
+      label: 'Everyone',
+      id: 'everyone',
+      image: '',
+    });
+  }
+
   const handleStartEdit = () => {
     richText?.commands.blur();
     setIsEditing(true);

@@ -26,7 +26,7 @@ export interface ChatBoxFooterProps
   guest?: {
     _id: string;
     name: string;
-  }
+  };
 }
 
 export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
@@ -43,7 +43,9 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     const [localDocumentMessagesWaiting, setLocalDocumentMessagesWaiting] =
       useState<Message[]>([]);
     const { mutateAsync } = useMutation({
-      mutationFn: isAnonymous ? messageApi.sendAnonymousMessage : messageApi.send,
+      mutationFn: isAnonymous
+        ? messageApi.sendAnonymousMessage
+        : messageApi.send,
     });
 
     const handleSendText = async (
@@ -61,15 +63,16 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       });
 
       addMessage(localMessage);
-      const payload = {
-        content,
-        contentEnglish,
-        roomId,
-        clientTempId: localMessage._id,
-        language,
-        ...(isAnonymous && { userId: currentUser?._id || guest?._id, })
-      };
-      mutateAsync(payload);
+      console.log('localMessage', localMessage);
+      // const payload = {
+      //   content,
+      //   contentEnglish,
+      //   roomId,
+      //   clientTempId: localMessage._id,
+      //   language,
+      //   ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
+      // };
+      // mutateAsync(payload);
     };
 
     const handleSubmit = async (data: MessageEditorSubmitData) => {
