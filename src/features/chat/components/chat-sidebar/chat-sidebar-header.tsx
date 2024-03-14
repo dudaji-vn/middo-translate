@@ -14,6 +14,8 @@ import { Typography } from '@/components/data-display';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useSearchStore } from '@/features/search/store/search.store';
+import { useParams } from 'next/navigation';
+import { PK_BUSINESS_CONVERSATIONS, isBusinessConversation } from '@/types/business.type';
 
 export interface ChatSidebarHeaderProps {}
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
@@ -28,7 +30,9 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     [SHORTCUTS.TOGGLE_CONVERSATION_SETTINGS],
     handleToggleSetting,
   );
+  const params = useParams();
   const isSearch = currentSide === 'search';
+  const isBusiness = isBusinessConversation(params?.[PK_BUSINESS_CONVERSATIONS])
   const searchInputRef = useRef<SearchInputRef>(null);
 
   const handleNewConversation = useCallback(() => {
@@ -51,6 +55,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               <Button.Icon
                 onClick={handleNewConversation}
                 color="default"
+                className={isBusiness ? 'hidden' : ''}
                 size="xs"
               >
                 <PenSquareIcon />

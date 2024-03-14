@@ -2,17 +2,16 @@ import React from 'react'
 import BusinessTip from '../_components/business-tip/business-tip'
 import { Typography } from '@/components/data-display'
 import Image from 'next/image';
-import BusinessExtension, { TBusinessExtensionData } from './_components/extenstion/business-extension';
+import BusinessExtension from './_components/extenstion/business-extension';
 
 import { businessAPI } from '@/features/chat/business/business.service';
 
 
-// server-side page
 const SettingPage = async () => {
     const businessExtension = await businessAPI.getExtension();
     const isEmpty = !businessExtension;
     return (
-        <div className=' max-md:w-screen px-[60px] max-md:px-3'>
+        <div className=' max-md:w-screen px-[60px] max-md:px-3 w-full'>
             <section className=' w-full py-8 space-y-5'>
                 <BusinessTip />
                 <Typography variant='h1' className='text-2xl text-neutral-800 font-semibold'>Conversation Extension</Typography>

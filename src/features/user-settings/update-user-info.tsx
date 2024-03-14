@@ -20,7 +20,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { Form } from '@/components/ui/form';
-import RHFInputField from '@/components/form/RHF/RHFInputField/RHFInputField';
+import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 

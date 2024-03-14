@@ -15,7 +15,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
-import RHFInputField from '@/components/form/RHF/RHFInputField/RHFInputField';
+import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { AlertError } from '@/components/alert/alert-error';
 import { changePasswordSchema } from '@/configs/yup-form';
 
