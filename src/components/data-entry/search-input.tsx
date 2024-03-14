@@ -26,6 +26,7 @@ interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 export interface SearchInputRef extends HTMLInputElement {
   reset: () => void;
+  focus: () => void;
 }
 export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
   ({ btnDisabled, defaultValue, onClear, ...props }, ref) => {
@@ -51,6 +52,9 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       ref,
       () => ({
         ...(inputRef.current as HTMLInputElement),
+        focus: () => {
+          inputRef.current?.focus();
+        },
         reset: () => {
           setValue('');
         },

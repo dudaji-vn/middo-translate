@@ -247,7 +247,7 @@
 }
 
 .editor-view .mention {
-  @apply rounded-md  p-0.5 px-1 text-current hover:opacity-90;
+  @apply rounded-md  p-0.5 px-2 text-current hover:opacity-90;
 }
 
 .editor-view .mention.left {
