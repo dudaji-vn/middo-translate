@@ -20,7 +20,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
         </ChatSidebar>
         <ChatMain>{children}</ChatMain>
       </div>
-      {/* <FCMBackground /> */}
+      <FCMBackground />
     </Fragment>
   );
 };

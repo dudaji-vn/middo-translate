@@ -36,7 +36,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   }, [changeSide]);
 
   const handleBack = useCallback(() => {
-    removeParams([SPK_SEARCH, SPK_CHAT_TAB]);
+    removeParams([SPK_CHAT_TAB]);
     searchInputRef.current?.reset();
   }, [removeParams, searchInputRef]);
 
