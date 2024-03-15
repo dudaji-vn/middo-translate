@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { generateExtensionCode } from './genrerateExtensionCode';
+import { generateExtensionCode } from '@/utils/genrerateExtensionCode';
 import { CreateExtensionSectionWrapper } from './sections/create-extension-section-wrapper';
 import { createExtensionService } from '@/services/extension.service';
 import toast from 'react-hot-toast';

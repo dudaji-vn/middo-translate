@@ -6,7 +6,7 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { CopyIcon, PenIcon, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import React, { forwardRef, useCallback } from 'react'
-import { generateExtensionCode } from '../extention-modals/genrerateExtensionCode';
+import { generateExtensionCode } from '@/utils/genrerateExtensionCode';
 import { cn } from '@/utils/cn';
 import CreateExtensionModal from '../extention-modals/create-extension-modal';
 import { useTextCopy } from '@/hooks/use-text-copy';
