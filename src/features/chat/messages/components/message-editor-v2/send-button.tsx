@@ -6,7 +6,7 @@ import { useMessageEditor } from '.';
 export const SendButton = (props: ButtonProps) => {
   const { handleSubmit, editorId, richText } = useMessageEditor();
   const { files } = useMediaUpload();
-  const isContentEmpty = !richText?.state.doc.textContent.trim().length;
+  const isContentEmpty = !richText?.getText().trim().length;
   const disabled = isContentEmpty && files.length === 0;
   if (disabled) {
     return null;

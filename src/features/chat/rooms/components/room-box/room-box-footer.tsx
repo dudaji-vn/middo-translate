@@ -16,8 +16,6 @@ import { useChatBox } from '../../contexts/chat-box-context';
 import { useMessagesBox } from '@/features/chat/messages/components/message-box';
 import { useMutation } from '@tanstack/react-query';
 import { useMediaUpload } from '@/components/media-upload';
-import { LinkPreview } from '@/components/data-display/link-preview';
-import { useRouter } from 'next/navigation';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -35,7 +33,6 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     const { room, updateRoom } = useChatBox();
     const { addMessage } = useMessagesBox();
     const { uploadedFiles } = useMediaUpload();
-    const router = useRouter();
 
     const [localImageMessageWaiting, setLocalImageMessageWaiting] =
       useState<Message | null>(null);
@@ -48,12 +45,19 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         : messageApi.send,
     });
 
-    const handleSendText = async (
-      roomId: string,
-      content: string,
-      contentEnglish?: string,
-      language?: string,
-    ) => {
+    const handleSendText = async ({
+      roomId,
+      content,
+      contentEnglish,
+      language,
+      mentions,
+    }: {
+      roomId: string;
+      content: string;
+      contentEnglish: string;
+      language: string;
+      mentions: string[];
+    }) => {
       if (!currentUser && !guest) return;
       const localMessage = createLocalMessage({
         sender: currentUser! || guest!,
@@ -63,20 +67,21 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       });
 
       addMessage(localMessage);
-      console.log('localMessage', localMessage);
-      // const payload = {
-      //   content,
-      //   contentEnglish,
-      //   roomId,
-      //   clientTempId: localMessage._id,
-      //   language,
-      //   ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
-      // };
-      // mutateAsync(payload);
+      const payload = {
+        content,
+        contentEnglish,
+        roomId,
+        clientTempId: localMessage._id,
+        language,
+        mentions,
+        ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
+      };
+      mutateAsync(payload);
     };
 
     const handleSubmit = async (data: MessageEditorSubmitData) => {
-      const { content, images, documents, contentEnglish, language } = data;
+      const { content, images, documents, contentEnglish, language, mentions } =
+        data;
       let roomId = room._id;
 
       if (room.status === 'temporary') {
@@ -89,7 +94,13 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
       const trimContent = content.trim();
       if (trimContent) {
-        handleSendText(roomId, content, contentEnglish, language);
+        handleSendText({
+          roomId,
+          content: trimContent,
+          contentEnglish,
+          language: language || 'en',
+          mentions: mentions || [],
+        });
       }
 
       if (images.length) {

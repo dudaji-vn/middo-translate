@@ -42,6 +42,7 @@ export type Message = {
   call?: Call;
   hasChild?: boolean;
   isPinned?: boolean;
+  mentions?: User[];
 } & BaseEntity;
 
 export type PinMessage = {

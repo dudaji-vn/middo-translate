@@ -22,6 +22,7 @@ import { Toolbar, ToolbarRef } from './toolbar';
 import { TranslationHelper } from './translation-helper';
 import { useEditorState } from './use-editor-state';
 import { User } from '@sentry/nextjs';
+import { getMentionIdsFromHtml } from '@/utils/get-mention-ids-from-html';
 
 type SubmitData = {
   content: string;
@@ -29,6 +30,7 @@ type SubmitData = {
   documents: Media[];
   contentEnglish: string;
   language?: string;
+  mentions?: string[];
 };
 
 export interface MessageEditorProps
@@ -108,6 +110,8 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const handleSubmit = async () => {
       const images: Media[] = [];
       const documents: Media[] = [];
+      const mentions = getMentionIdsFromHtml(content);
+      console.log('mentions', mentions);
       let lang = srcLang;
       if (!lang) {
         lang = await detectLanguage(content);
@@ -141,6 +145,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         documents,
         contentEnglish: english,
         language: lang,
+        mentions: mentions,
       });
       reset();
     };
