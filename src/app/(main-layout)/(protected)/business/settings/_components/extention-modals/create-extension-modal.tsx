@@ -153,7 +153,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="h-fit  max-w-screen-xl"
+        <DialogContent className="h-fit  max-w-screen-xl md:max-w-screen-md"
           onInteractOutside={(e) => {
             e.preventDefault();
           }}
@@ -166,7 +166,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   {title}
                 </Typography>
               </DialogTitle>
-              <div className=" max-h-[calc(85vh-48px)] max-w-screen-xl overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
+              <div className=" max-h-[calc(85vh-48px)] max-w-screen-xl md:max-w-screen-md overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
                 <Accordion
                   type="single"
                   collapsible
