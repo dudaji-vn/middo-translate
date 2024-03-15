@@ -145,6 +145,13 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         language: lang,
         mentions: mentions,
       });
+      // scroll to bottom
+      const messageBox = document.getElementById(scrollId || '');
+      setTimeout(() => {
+        messageBox?.scrollTo({
+          top: messageBox.scrollHeight,
+        });
+      }, 1);
       reset();
     };
 
