@@ -174,7 +174,15 @@ export default function useHandleShareScreen() {
         }
     }, [shareScreenStream, stopShareScreen])
 
-    
+    useEffect(() => {
+        if(!isElectron || !ipcRenderer) return;
+        ipcRenderer.on(ELECTRON_EVENTS.STOP_SHARE, stopShareScreen);
+
+        return () => {
+            if(!isElectron || !ipcRenderer) return;
+            ipcRenderer.off(ELECTRON_EVENTS.STOP_SHARE, stopShareScreen);
+        }
+      }, [ipcRenderer, isElectron, stopShareScreen])
 
     return {
         handleShareScreen,
