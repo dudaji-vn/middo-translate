@@ -15,11 +15,15 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useChatStore } from '@/features/chat/store';
+import { cn } from '@/utils/cn';
+import { useBusiness } from '@/hooks/use-business';
 
-export const ChatBoxHeader = () => {
+export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room: _room } = useChatBox();
   const currentUser = useAuthStore((s) => s.user)!;
   const onlineList = useChatStore((state) => state.onlineList);
+  const { isBusiness } = useBusiness();
+  const allowCall = !isBusiness;
   const room = useMemo(
     () => generateRoomDisplay(_room, currentUser._id, true),
     [_room, currentUser],
@@ -32,7 +36,7 @@ export const ChatBoxHeader = () => {
   const isOnline = participants.some((user) => onlineList.includes(user._id));
 
   return (
-    <div className="flex w-full items-center border-b  px-1 py-1 md:px-3">
+    <div {...props} className={cn("flex w-full items-center border-b  px-1 py-1 md:px-3", props.className)}>
       <RoomBoxHeaderNavigation />
       <div className="flex flex-1 items-center gap-2">
         <RoomAvatar showStatus isOnline={isOnline} room={room} size={36} />
@@ -42,7 +46,7 @@ export const ChatBoxHeader = () => {
         </div>
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">
-        <VideoCall />
+        {allowCall && <VideoCall />}
         <Tooltip title="Info" triggerItem={<ActionBar />} />
       </div>
     </div>

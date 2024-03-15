@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeftIcon, PenSquareIcon, Settings } from 'lucide-react';
+import { ArrowLeftIcon, Menu, PenSquareIcon, Settings } from 'lucide-react';
 import { SPK_CHAT_TAB, SPK_SEARCH } from '../../configs';
 import { SearchInput, SearchInputRef } from '@/components/data-entry';
 import { useCallback, useRef, useState } from 'react';
@@ -14,15 +14,17 @@ import { Typography } from '@/components/data-display';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useSearchStore } from '@/features/search/store/search.store';
-import { useParams } from 'next/navigation';
-import { PK_BUSINESS_CONVERSATIONS, isBusinessConversation } from '@/types/business.type';
+import { useSidebarStore } from '@/stores/sidebar.store';
+import { cn } from '@/utils/cn';
+import { useBusiness } from '@/hooks/use-business';
 
-export interface ChatSidebarHeaderProps {}
+export interface ChatSidebarHeaderProps { }
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const { changeSide, currentSide, removeParam, removeParams } =
     useSidebarTabs();
   const [openSetting, setOpenSetting] = useState(false);
   const { searchValue, setSearchValue } = useSearchStore();
+  const { openSidebar, setOpenSidebar } = useSidebarStore();
   const handleToggleSetting = () => {
     setOpenSetting((prev) => !prev);
   };
@@ -30,9 +32,8 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     [SHORTCUTS.TOGGLE_CONVERSATION_SETTINGS],
     handleToggleSetting,
   );
-  const params = useParams();
   const isSearch = currentSide === 'search';
-  const isBusiness = isBusinessConversation(params?.[PK_BUSINESS_CONVERSATIONS])
+  const { isBusiness } = useBusiness();
   const searchInputRef = useRef<SearchInputRef>(null);
 
   const handleNewConversation = useCallback(() => {
@@ -44,9 +45,19 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     searchInputRef.current?.reset();
   }, [removeParams, searchInputRef]);
 
+
   return (
     <div className="w-full px-3 pt-3">
       <div className="mb-3 flex items-center justify-between">
+        <Button.Icon
+          onClick={() => setOpenSidebar(!openSidebar, true)}
+          color="default"
+          size="xs"
+          variant={'ghost'}
+          className={cn('md:hidden', isBusiness ? '' : 'md:hidden')}
+        >
+          <Menu />
+        </Button.Icon>
         <Typography variant="h6">Conversation</Typography>
         <div className="flex gap-3">
           <Tooltip

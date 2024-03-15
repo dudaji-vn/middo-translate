@@ -1,13 +1,14 @@
 'use client'
 
-import { Button } from "@/components/actions"
+import { Button, ButtonProps } from "@/components/actions"
 import { Typography } from "@/components/data-display"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/navigation"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetOverlay, SheetTitle, SheetTrigger } from "@/components/navigation"
 import { useAppStore } from "@/stores/app.store"
+import { useSidebarStore } from "@/stores/sidebar.store"
 import { cn } from "@/utils/cn"
 import { Archive, CheckSquare, LineChartIcon, MessageSquare, Settings } from "lucide-react"
 import { useParams, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { ReactElement, use, useEffect, useState } from "react"
 
 interface SidebarContent {
     title: string
@@ -36,6 +37,10 @@ const sidebarContents = [
         icon: <Settings />,
     },
 ]
+const sidebarContentMeappedStyles: Record<string, ButtonProps['className']> = {
+    settings: 'max-md:hidden',
+}
+
 const BusinessSidebarContent = ({ shrink, onSelectChange, selectedItem, notifications }: {
     shrink: boolean
     selectedItem?: {
@@ -52,7 +57,7 @@ const BusinessSidebarContent = ({ shrink, onSelectChange, selectedItem, notifica
                 return (
                     <Button shape={'square'} variant={'ghost'} color={'default'} key={index} className={cn("flex w-full justify-start flex-row items-center text-left rounded-none p-5 gap-2 [&_svg]:w-5 [&_svg]:h-5 transition-all hover:bg-primary-300 duration-200",
                         isSelected ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white' : 'hover:bg-primary-300',
-                        
+                        sidebarContentMeappedStyles[title] || ''
                     )}
                         onClick={() => onSelectChange({ icon, title })}
                     >
@@ -76,27 +81,32 @@ const BusinessSidebarContent = ({ shrink, onSelectChange, selectedItem, notifica
 
 const BusinessSidebar = () => {
     const { isMobile } = useAppStore()
-    const [open, setOpen] = useState(false);
+    const { openSidebar, setOpenSidebar, expand, setExpandSidebar } = useSidebarStore();
     const params = useParams()
     const [sellected, setSellected] = useState<SidebarContent | undefined>(sidebarContents.find(item => item.title === params?.conversationType) || undefined);
     const router = useRouter();
-    const openSheet = () => {
-        setOpen(true);
+    const expandSheet = () => {
+        setExpandSidebar(true);
     }
-    const closeSheet = () => {
-        setOpen(false);
+    const shinkSheet = () => {
+        setExpandSidebar(false);
     }
     const onSelectedChange = (item: { title: string, icon: React.ReactNode }) => {
         setSellected(item)
         router.push('/business/' + item.title)
     }
-
+    useEffect(() => {
+        setOpenSidebar(!isMobile, false);
+    }, [params]);
+    useEffect(() => {
+    }, [openSidebar])
     return (
-        <Sheet open={!isMobile} modal={false} >
-            <div className={cn("h-full w-full relative max-md:hidden",  )}onMouseEnter={openSheet}  >
-                <SheetContent side={'left'} className="w-fit bottom-0 top-[51px] p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
-                    <div className="h-full  w-full" onMouseLeave={closeSheet}>
-                        <BusinessSidebarContent shrink={!open} selectedItem={sellected} onSelectChange={onSelectedChange} />
+        <Sheet open={isMobile ? openSidebar : true} modal={isMobile} onOpenChange={setOpenSidebar} >
+            <div className={cn("h-full w-full relative max-md:hidden",)}
+                onMouseEnter={expandSheet}>
+                <SheetContent overlayProps={{ className: ' top-[51px] ' }} side={'left'} className="w-fit  top-[51px]  bottom-0 p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+                    <div className="h-full  w-full" onMouseLeave={shinkSheet}>
+                        <BusinessSidebarContent shrink={!expand} selectedItem={sellected} onSelectChange={onSelectedChange} />
                     </div>
                 </SheetContent>
             </div>

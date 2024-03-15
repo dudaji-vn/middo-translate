@@ -7,10 +7,9 @@ import { RoomActions } from '../room-actions';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
-import { usePathname } from 'next/navigation';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 import { useState } from 'react';
+import { useBusiness } from '@/hooks/use-business';
 
 export interface InboxProps {
   businessData?: TBusinessExtensionData;
@@ -45,9 +44,8 @@ const normalInboxTabs = [inboxTabMap.all, inboxTabMap.group];
 const businessInboxTabs = [inboxTabMap['help-desk'], inboxTabMap['unread-help-desk']];
 
 export const Inbox = ({ businessData }: InboxProps) => {
-  const pathname = usePathname();
-  const isBusinessConversation = pathname?.includes(ROUTE_NAMES.BUSINESS_CONVERSATION);
-  const tabs = isBusinessConversation ? businessInboxTabs : normalInboxTabs;
+  const { isBusiness } = useBusiness()
+  const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
   const [type, setType] = useState<InboxType>(tabs[0].value);
 
   useKeyboardShortcut(

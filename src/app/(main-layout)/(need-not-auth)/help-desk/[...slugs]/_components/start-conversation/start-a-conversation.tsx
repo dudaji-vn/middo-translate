@@ -33,7 +33,6 @@ const StartAConversation = ({ businessData }: {
     const [isLoading, setIsLoading] = useState(false)
     const { setData } = useAuthStore()
     const createAGuestConversation = async () => {
-        console.log('create a guest conversation')
         setIsLoading(true)
         try {
             // TODO: correct payload, remove mock data
@@ -43,7 +42,6 @@ const StartAConversation = ({ businessData }: {
                 language: 'vi',
                 email: 'mockemail@gmockk.com'
             }).then((res) => {
-                console.log('res.data', res.data)
                 const roomId = res.data.roomId;
                 const user = res.data.user;
                 // setData({user})

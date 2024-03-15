@@ -8,12 +8,19 @@ import { RoomMember } from '../room-member';
 import { RoomSetting } from '../room-setting';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useRoomSidebarTabs } from '../room-side-tabs/room-side-tabs.hook';
+import { useBusiness } from '@/hooks/use-business';
+import useClient from '@/hooks/use-client';
 
-export interface RoomSideTabInfoProps {}
+export interface RoomSideTabInfoProps { }
 
-export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
+export const RoomSideTabInfo = ({ }: RoomSideTabInfoProps) => {
   const { changeToDefault } = useRoomSidebarTabs();
+  const { isBusiness } = useBusiness();
+  const isClient = useClient()
   const { room } = useChatBox();
+
+  if (!isClient) return null;
+
   return (
     <>
       <div className="-mx-3 -mt-3 px-1 pt-1 md:hidden">
@@ -29,7 +36,7 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
       <div className="pb-2">
         <RoomInfo room={room} />
         <div className="my-8">
-          <RoomSetting room={room} />
+         {!isBusiness && <RoomSetting room={room} />}
           {room.isGroup && (
             <RoomMember members={room.participants} adminId={room.admin?._id} />
           )}

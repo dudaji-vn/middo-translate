@@ -1,5 +1,8 @@
+'use client'
+
 import {
     ChatBoxFooter,
+    ChatBoxHeader,
     RoomSide,
 } from '@/features/chat/rooms/components';
 
@@ -16,8 +19,10 @@ import {
 } from '@/components/media-upload';
 import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
+import { useEffect, useState } from 'react';
+import useClient from '@/hooks/use-client';
 
-const HelpDeskConversation = async ({ room, anonymousUser, isAnonymousPage, params: { slugs } }: {
+const HelpDeskConversation = ({ room, anonymousUser, isAnonymousPage }: {
     room: Room;
     anonymousUser?: User;
     isAnonymousPage?: boolean;
@@ -25,11 +30,14 @@ const HelpDeskConversation = async ({ room, anonymousUser, isAnonymousPage, para
         slugs: string[];
     };
 }) => {
+    const isClient = useClient()
+    if (!isClient) return null;
     return (
-        <div className="w-full">
+        <div className="w-full max-md:h-main-container-height">
             <ChatBoxProvider room={room}>
                 <div className="flex h-full">
                     <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
+                        {!isAnonymousPage && <ChatBoxHeader  />}
                         <MediaUploadProvider>
                             <MediaUploadDropzone>
                                 <MessagesBoxProvider room={room} guestId={anonymousUser?._id} isAnonymous={isAnonymousPage}>

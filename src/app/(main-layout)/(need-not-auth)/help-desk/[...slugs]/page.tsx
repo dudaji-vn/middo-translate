@@ -22,7 +22,6 @@ const HelpDeskConversationPage = async ({ params: { slugs }, ...props }: {
     )
   }
   const room = await businessAPI.getChatRoom(roomId, anonymousUserId);
-  console.log('room, anonymousId', room, roomId, anonymousUserId)
   if (!room || !room?._id || !anonymousUserId) {
     notFound();
   }
