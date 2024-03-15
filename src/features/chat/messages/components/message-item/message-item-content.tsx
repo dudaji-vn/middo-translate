@@ -71,6 +71,12 @@ export const Content = ({ position, active, message }: ContentProps) => {
     >
       <div className={cn(textVariants({ position, status: message.status }))}>
         <RichTextView
+          mentions={
+            message?.mentions?.map((mention) => ({
+              id: mention._id,
+              label: mention.name,
+            })) || []
+          }
           mentionClassName={position === 'right' ? 'right' : 'left'}
           content={contentDisplay}
         />

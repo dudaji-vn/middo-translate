@@ -8,11 +8,13 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import Link from '@tiptap/extension-link';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/stores/auth.store';
+import { MentionSuggestion } from './mention-suggestion-options';
 type RichTextViewProps = {
   content: string;
   editorStyle?: string;
   onCreated?: (editor: Editor) => void;
   mentionClassName?: string;
+  mentions?: MentionSuggestion[];
 };
 
 export const RichTextView = ({
@@ -20,6 +22,7 @@ export const RichTextView = ({
   editorStyle = '',
   onCreated,
   mentionClassName = '',
+  mentions = [],
 }: RichTextViewProps) => {
   const userId = useAuthStore((state) => state.user?._id);
   const editor = useEditor({
@@ -49,6 +52,15 @@ export const RichTextView = ({
         renderHTML(props) {
           const { node } = props;
           const extendClass = node.attrs.id === userId ? 'me' : '';
+          let label = node.attrs.label;
+
+          if (mentions.length > 0) {
+            const mention = mentions.find(
+              (mention) => mention.id === node.attrs.id,
+            );
+            label = mention?.label || label;
+          }
+
           return [
             'a',
             {
@@ -59,7 +71,7 @@ export const RichTextView = ({
               href: `${ROUTE_NAMES.ONLINE_CONVERSATION}/${node.attrs.id}`,
             },
 
-            `@${node.attrs.label}`,
+            `@${label}`,
           ];
         },
       }),

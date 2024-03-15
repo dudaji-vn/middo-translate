@@ -1,9 +1,8 @@
-import { MentionSuggestion } from '@/components/mention-suggestion-options';
-import { RichTextInput } from './rich-text-input';
-import { useMessageEditor } from '.';
-import { useAppStore } from '@/stores/app.store';
 import { useMediaUpload } from '@/components/media-upload';
-import { Suspense } from 'react';
+import { MentionSuggestion } from '@/components/mention-suggestion-options';
+import { useAppStore } from '@/stores/app.store';
+import { useMessageEditor } from '.';
+import { RichTextInput } from './rich-text-input';
 
 export interface MainInputProps {}
 
@@ -36,30 +35,26 @@ export const MainInput = (props: MainInputProps) => {
   }
 
   return (
-    <Suspense>
-      <RichTextInput
-        autoFocus={false}
-        suggestions={suggestions}
-        onClipboardEvent={handleClipboardEvent}
-        className="max-h-[200px] w-full overflow-y-auto pt-2 md:pt-1"
-        onCreated={setRichText}
-        onChange={(editor) => {
-          setContent(editor.getHTML());
-          setIsContentEmpty(editor.isEmpty);
-        }}
-        onSubmit={() => {
-          const submitButton = document.getElementById(
-            'send-button-' + editorId,
-          );
-          submitButton?.click();
-        }}
-        onFocus={() => {
-          if (isMobile) toolbarRef?.current?.collapse();
-        }}
-        onBlur={() => {
-          toolbarRef?.current?.expand();
-        }}
-      />
-    </Suspense>
+    <RichTextInput
+      autoFocus={false}
+      suggestions={suggestions}
+      onClipboardEvent={handleClipboardEvent}
+      className="max-h-[200px] w-full overflow-y-auto pt-2 md:pt-1"
+      onCreated={setRichText}
+      onChange={(editor) => {
+        setContent(editor.getHTML());
+        setIsContentEmpty(editor.isEmpty);
+      }}
+      onSubmit={() => {
+        const submitButton = document.getElementById('send-button-' + editorId);
+        submitButton?.click();
+      }}
+      onFocus={() => {
+        if (isMobile) toolbarRef?.current?.collapse();
+      }}
+      onBlur={() => {
+        toolbarRef?.current?.expand();
+      }}
+    />
   );
 };

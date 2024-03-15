@@ -15,9 +15,11 @@ export type CreateMessage = {
   contentEnglish?: string;
   clientTempId: string;
   language?: string;
+  mentions?: string[];
 };
 export const messageApi = {
   async send(data: CreateMessage) {
+    console.log('data', data);
     const res: Response<Message> = await axiosWithInterceptor.post(
       basePath,
       data,
