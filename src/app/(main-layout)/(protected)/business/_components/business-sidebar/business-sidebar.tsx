@@ -99,7 +99,6 @@ const BusinessSidebar = () => {
         setOpenSidebar(!isMobile, false);
     }, [params]);
     useEffect(() => {
-        console.log('openSidebar', openSidebar)
     }, [openSidebar])
     return (
         <Sheet open={isMobile ? openSidebar : true} modal={isMobile} onOpenChange={setOpenSidebar} >
