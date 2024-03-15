@@ -19,7 +19,6 @@ export default function useSpeechRecognizer(language?: string) {
   const processorRef = useRef<any>();
   const audioContextRef = useRef<any>();
   const audioInputRef = useRef<any>();
-
   const {
     interimTranscript: interimTranscriptBrowser,
     listening: listeningBrowser,
@@ -28,7 +27,8 @@ export default function useSpeechRecognizer(language?: string) {
 
   const receiveAudioText = useCallback(
     (data: WordRecognized) => {
-      const transcript = data.text;
+      // remove /n in data.text
+      const transcript = data.text.replace(/\n/g, '');
       const isFinal = data.isFinal;
       if (isFinal) {
         setHistory((old) => [...old, transcript]);
@@ -108,6 +108,7 @@ export default function useSpeechRecognizer(language?: string) {
   }, [isElectron]);
 
   const startSpeechToText = async () => {
+    resetTranscript();
     if (isElectron) {
       socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.START, language);
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -121,6 +122,7 @@ export default function useSpeechRecognizer(language?: string) {
       });
       setStream(stream);
       setListening(true);
+      
     } else {
       SpeechRecognition.startListening({
         continuous: true,
