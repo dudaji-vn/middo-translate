@@ -80,7 +80,7 @@ const TextMessage = ({ message }: { message: Message }) => {
         showMiddleTranslation && (
           <div className="relative mt-2">
             <TriangleSmall
-              fill="#e6e6e6"
+              fill="#f2f2f2"
               position="top"
               className="absolute left-4 top-0 -translate-y-full"
             />
