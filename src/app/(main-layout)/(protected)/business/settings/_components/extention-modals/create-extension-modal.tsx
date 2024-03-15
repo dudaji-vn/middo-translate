@@ -5,25 +5,32 @@ import { Typography } from '@/components/data-display';
 import {
   Accordion,
 } from '@/components/data-display/accordion';
-import RHFInputField from '@/components/form/RHF/RHFInputField/RHFInputField';
+import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
-import { Form } from '@/components/ui/form';
+import { Form, FormLabel } from '@/components/ui/form';
 import { createExtensionSchema } from '@/configs/yup-form';
 
 import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Info, Plus, Trash2 } from 'lucide-react';
+import { Circle, CircleIcon, Copy, CopyIcon, Info, Plus, Trash2 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { generateExtensionCode } from './genrerateExtensionCode';
-import { CreateExtensionSectionWrapper } from './create-exstension-sections/create-extension-section-wrapper';
+import { CreateExtensionSectionWrapper } from './sections/create-extension-section-wrapper';
 import { createExtensionService } from '@/services/extension.service';
 import toast from 'react-hot-toast';
 import { TBusinessExtensionData } from '../extenstion/business-extension';
 import { isEmpty } from 'lodash';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Spinner } from '@/components/feedback';
+import { useTextCopy } from '@/hooks/use-text-copy';
+import CustomThemeOptions from './sections/custom-theme-options';
+import { TThemeOption, DEFAULT_THEME } from './sections/options';
+import CustomFirstMessageOptions from './sections/custom-first-message-options';
+import PluginChatPreview from './sections/plugin-chat-preview';
 
 
 type TFormValues = {
@@ -47,8 +54,9 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   onOpenChange: (open: boolean) => void;
 }) {
   const [isClient, setIsClient] = React.useState(false);
-  const pathname = usePathname();
   const [accordionValue, setAccordionValue] = React.useState<AccordionValue>('add domain');
+  const [extensionId, setExtensionId] = React.useState<string>();
+  const { copy } = useTextCopy();
   const router = useRouter();
 
   const form = useForm<TFormValues>({
@@ -56,12 +64,11 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
     defaultValues: {
       addingDomain: '',
       domains: [],
-      // TODO: remove mock data
       custom: {
         language: 'vi',
         firstMessage: 'Xin chào, tôi có thể giúp gì cho bạn?',
         firstMessageEnglish: 'Hello, how can I help you?',
-        color: '',
+        color: DEFAULT_THEME,
       },
     },
     resolver: zodResolver(createExtensionSchema),
@@ -88,7 +95,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
         language: initialData.language,
         firstMessage: initialData.firstMessage,
         firstMessageEnglish: initialData.firstMessageEnglish,
-        color: initialData.color,
+        color: initialData.color || DEFAULT_THEME,
       });
     }
   }, [initialData, open]);
@@ -100,10 +107,14 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
       ...values.custom,
     };
     try {
-      await createExtensionService(payload);
-      toast.success('Create extension success!');
-      setOpen(false);
-      reset()
+      createExtensionService(payload).then((res) => {
+        setExtensionId(res.data._id);
+        toast.success('Create extension success!');
+        setAccordionValue('copy & paste code');
+      }).catch((err) => {
+        toast.error(err?.response?.data?.message || 'Create extension failed!');
+        setAccordionValue('custom extension');
+      })
       router.refresh();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
@@ -112,11 +123,11 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const addDomain = () => {
     if (!addingDomain || domains?.includes(addingDomain)) return;
     const newDomains = Array.from(new Set([...domains, addingDomain]));
-
     setValue('domains', newDomains);
     setValue('addingDomain', '');
     trigger('domains');
   }
+
   const removeDomain = (domain: string) => {
     setValue('domains', domains.filter((d) => d !== domain));
     trigger('domains');
@@ -126,7 +137,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   return (
 
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="h-fit  max-w-screen-md">
+      <DialogContent className="h-fit  max-w-screen-xl">
         <Form {...form}>
           <form onSubmit={handleSubmit(submit)}>
             <DialogTitle className="flex h-[48px] flex-row items-center justify-between py-4 pr-2">
@@ -135,23 +146,26 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                 {title}
               </Typography>
             </DialogTitle>
-            <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-scroll bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
+            <div className=" max-h-[calc(85vh-48px)] max-w-screen-xl overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
               <Accordion
                 type="single"
                 collapsible
                 value={accordionValue}
-                className="w-full transition-all duration-500 flex flex-col gap-2 justify-center"
+                className="w-full transition-all duration-500 flex flex-col justify-center"
                 onValueChange={(value) => setAccordionValue(value as AccordionValue)}
               >
                 <CreateExtensionSectionWrapper
-                  title="add domain"
+                  value="add domain"
                   isDone={domains?.length > 0}
-                  onNextStep={() => { setAccordionValue('custom extension') }}
+                  onNextStep={() => {
+                    trigger('domains');
+                    if (isValid) setAccordionValue('custom extension')
+                  }}
                 >
                   <Typography variant="h5" className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
                     Add all domains that you would like the extension to appear on
                   </Typography>
-                  <div className='flex flex-row items-start gap-4 w-full justify-between'>
+                  <div className='flex flex-row items-start w-full justify-between'>
                     <RHFInputField
                       name='addingDomain'
                       inputProps={{
@@ -169,7 +183,8 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                       type="button"
                       className='h-10'
                       onClick={addDomain}
-                      disabled={Boolean(errors.addingDomain)}
+                      disabled={Boolean(errors.addingDomain) || isSubmitting}
+
                     >
                       <Plus className="h-4 w-4 mr-1" />
                       Add
@@ -193,6 +208,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                           type="button"
                           size={'xs'}
                           onClick={() => removeDomain(domain)}
+                          disabled={isSubmitting}
                         >
                           <Trash2 />
                         </Button>
@@ -200,51 +216,69 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                     );
                   })
                   }
-                  <Typography className="inline-block py-3 text-red-500 text-[1rem] font-normal">{domainsErrMessage}</Typography>
                 </CreateExtensionSectionWrapper>
-
+                <Typography className={domainsErrMessage && !isValid ? "inline-block py-1 text-red-500 text-[1rem] font-normal" : 'hidden'}>{domainsErrMessage}</Typography>
                 <CreateExtensionSectionWrapper
-                  title="custom extension"
+                  value="custom extension"
                   isDone={true}
-                  onNextStep={() => { setAccordionValue('copy & paste code') }}
+                  nextStepType='submit'
+                  nextStepProps={{
+                    disabled: !isValid,
+                    loading: isSubmitting,
+                  }}
+                  accordionContentProps={{
+                    className: 'px-0'
+                  }}
                 >
-                  updating...
+                  <div className='flex flex-row divide-x divide-neutral-50 px-4 border-x border-b border-neutral-50 '>
+                    <div className='w-1/3 divide-y divide-neutral-50'>
+                      <div className='flex flex-col gap-3 p-3'>
+                        <FormLabel
+                          className="mb-1 inline-block text-neutral-900 text-[1rem] font-semibold"
+                        >
+                          Starting message
+                        </FormLabel>
+                        <CustomFirstMessageOptions
+                          firstMessage={watch('custom.firstMessage')}
+                          onFirstMessageChange={(message) => {
+                            setValue('custom.firstMessage', message);
+                          }}
+                        />
+                      </div>
+                      <CustomThemeOptions selectedColor={watch('custom.color')} onChange={(color: TThemeOption['hex']) => {
+                        setValue('custom.color', color);
+                      }} />
+                    </div>
+                    <PluginChatPreview className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} />
+                  </div>
                 </CreateExtensionSectionWrapper>
-
                 <CreateExtensionSectionWrapper
-                  title="copy & paste code"
+                  value="copy & paste code"
                 >
                   <Typography className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
                     Copy and paste the code below into your website
                   </Typography>
-                  <pre className='bg-neutral-50 rounded-[20px] w-full overflow-x-auto'>
-                    <code className='text-neutral-600 text-sm p-2' lang='javascript'>
-                      {generateExtensionCode(`/help-desk/65f0075f2d3c6a722364d0c1/`)}
-                    </code>
-                  </pre>
-
+                  <div className="relative w-full bg-neutral-50  max-h-60 text-neutral-600 text-sm rounded-lg overflow-auto">
+                    <Button.Icon
+                      variant="ghost"
+                      size={'xs'}
+                      type="button"
+                      className='text-neutral-400 absolute right-4 top-1'
+                      onClick={() => {
+                        navigator.clipboard.writeText(generateExtensionCode(`/help-desk/${extensionId}`));
+                        toast.success('Copied to clipboard');
+                      }}
+                    ><CopyIcon />
+                    </Button.Icon>
+                    <pre className="bg-transparent  text-neutral-600 text-sm rounded-lg overflow-auto px-2 whitespace-pre-wrap pr-7">
+                      <code className='text-neutral-600 text-sm p-2' lang='javascript'>
+                        {generateExtensionCode(`/help-desk/${extensionId}`)}
+                      </code>
+                    </pre>
+                  </div>
                 </CreateExtensionSectionWrapper>
+                {isSubmitting && <Spinner className='my-2 mx-auto text-primary-200' />}
               </Accordion>
-            </div>
-            <div className="flex justify-end gap-4 p-4">
-              <Button
-                variant="ghost"
-                color="default"
-                shape="square"
-                type='button'
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="default"
-                color="primary"
-                shape="square"
-                type="submit"
-                disabled={isSubmitting || !isValid}
-              >
-                Save & Close
-              </Button>
             </div>
           </form>
         </Form>

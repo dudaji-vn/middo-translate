@@ -57,7 +57,7 @@ type MessageEditorContextProps = {
   setContentEnglish: (content: string) => void;
   contentEnglish: string;
   setSrcLang: (lang: string) => void;
-  srcLang: string;
+  srcLang: string | null;
   translating: boolean;
   setTranslating: (translating: boolean) => void;
   toolbarRef?: React.RefObject<ToolbarRef>;
@@ -115,7 +115,6 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       let english = contentEnglish;
       if (!english) {
         english = await translateText(content, lang, DEFAULT_LANGUAGES_CODE.EN);
-        console.log('english', english);
       }
       for (const file of files) {
         if (file.file.type.startsWith('image')) {
@@ -141,7 +140,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         images,
         documents,
         contentEnglish: english,
-        language: srcLang,
+        language: lang,
       });
       reset();
     };
@@ -198,7 +197,7 @@ MessageEditor.displayName = 'MessageEditor';
 
 const InputWrapper = ({ children }: PropsWithChildren) => {
   return (
-    <div className="min-h-[46px] w-full rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
+    <div className="flex min-h-[46px] w-full flex-col rounded-xl border border-primary bg-card p-1 px-3 shadow-sm">
       {children}
     </div>
   );

@@ -16,83 +16,42 @@ interface DrawlingShareScreenProps {
 const DrawlingShareScreen = forwardRef<ReactSketchCanvasRef, DrawlingShareScreenProps>((props, ref) => {
     const { width, height, color, className } = props;
     const { user } = useAuthStore();
-    const ctxRef = useRef(null);
-    const [drawings, setDrawings] = useState([]); // Array to store drawings with timestamps
-    const [isDrawing, setIsDrawing] = useState(false);
-
-    useEffect(() => {
-        const canvas = ref.current;
-        const ctx = canvas.getContext("2d");
-        ctx.lineCap = "round";
-        ctx.lineJoin = "round";
-        ctx.globalAlpha = 0.5;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = Math.max(width / 160, 2);
-        ctxRef.current = ctx;
-    }, [color, ref, width]);
-
-    const startDrawing = (e) => {
-        ctxRef.current.beginPath();
-        ctxRef.current.moveTo(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY
-        );
-        setIsDrawing(true);
-    };
-
-    const endDrawing = () => {
-        ctxRef.current.closePath();
-        setIsDrawing(false);
-        const newDrawings = [...drawings, { path: ctxRef.current, timestamp: Date.now() }];
-        setDrawings(newDrawings);
-    };
-
-    const draw = (e) => {
-        if (!isDrawing) {
+    const timer = useRef(new Date().getTime());
+    const timeout = useRef();
+    const handleChangeCanvas = async () => {
+        if (!ref || !ref.current) return;
+        if (!ref?.current) return;
+        // check debounce
+        const newTimer = new Date().getTime();
+        if (newTimer - timer.current < 100) {
             return;
         }
-        ctxRef.current.lineTo(
-            e.nativeEvent.offsetX,
-            e.nativeEvent.offsetY
-        );
-        ctxRef.current.stroke();
-    };
-    
-    useEffect(() => {
-        const clearOldestDrawing = setInterval(() => {
-            const currentTime = Date.now();
-            const newDrawings = drawings.filter(draw => currentTime - draw.timestamp < 3000); 
-            setDrawings(newDrawings);
-        }, 1000); // Check every second
-        return () => clearInterval(clearOldestDrawing);
-    }, [drawings]);
-
-    useEffect(() => {
-        // Clear canvas and redraw all stored drawings
-        const canvas = ref.current;
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        drawings.forEach(draw => {
-            ctx.save();
-            draw.path.stroke();
-            ctx.restore();
-        });
-    }, [drawings, ref]);
-
-    useEffect(() => {
-        const canvas = ref.current;
-        const image = canvas.toDataURL("image/png");
+        timer.current = newTimer;
+        if(timeout.current) {
+            clearTimeout(timeout.current);
+        }
+        // Send doodle
+        const image = await ref.current?.exportImage('png');
+        if (!image) return;
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_DOODLE_SHARE_SCREEN, { image, user });
-    }, [drawings, ref, user]);
+        timeout.current = setTimeout(() => {
+            ref.current?.clearCanvas();
+        }, 3000);
+    }
     return (
-        <canvas
+        <ReactSketchCanvas
             ref={ref}
-            width={width}
-            height={height}
+            strokeWidth={Math.max(width / 160, 2)}
+            style={{ width: `${width}px`, height: `${height}px` }}
+            strokeColor={color}
+            eraserWidth={10}
+            withTimestamp={true}
+            canvasColor="transparent"
+            onChange={handleChangeCanvas}
+            // onStroke={handleSavePath}
+            // className={twMerge('absolute bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 z-10 bg-transparent', isDrawing ? 'cursor-drawing' : '', isEraser ? 'cursor-eraser' : '',
+            // !isDrawing && !isEraser && 'cursor-auto pointer-events-none')}
             className={className}
-            onMouseDown={startDrawing}
-            onMouseUp={endDrawing}
-            onMouseMove={draw}
         />
     );
 });

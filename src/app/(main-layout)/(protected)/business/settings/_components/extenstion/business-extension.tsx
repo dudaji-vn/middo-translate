@@ -3,7 +3,7 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
-import { PenIcon, Plus, Trash2 } from 'lucide-react';
+import { CopyIcon, PenIcon, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import React, { forwardRef, useCallback } from 'react'
 import { generateExtensionCode } from '../extention-modals/genrerateExtensionCode';
@@ -99,10 +99,19 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
 
           </div>
         </div>
-        <div>
-          <pre className='bg-neutral-50 rounded-[20px] max-h-96 overflow-y-auto w-full overflow-x-auto'
-            onClick={() => copy()}>
-            <code className='text-neutral-600 text-sm' lang='javascript'>
+        <div className="relative w-full bg-neutral-50  min-h-fit text-neutral-600 text-sm rounded-xl">
+          <Button.Icon
+            variant="ghost"
+            size={'xs'}
+            type="button"
+            className='text-neutral-400 absolute right-4 top-1'
+            onClick={() => {
+              copy();
+            }}
+          ><CopyIcon />
+          </Button.Icon>
+          <pre onClick={()=>copy()} className="bg-transparent  text-neutral-600 text-sm rounded-lg overflow-auto px-2 whitespace-pre-wrap pr-7">
+            <code className='text-neutral-600 text-sm p-2' lang='javascript'>
               {code}
             </code>
           </pre>

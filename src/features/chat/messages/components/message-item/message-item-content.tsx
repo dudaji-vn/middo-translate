@@ -36,8 +36,8 @@ export const Content = ({ position, active, message }: ContentProps) => {
       setContentDisplay(message.content);
       return;
     }
+
     if (
-      message.language === message.sender.language ||
       message.language === userLanguage ||
       message.sender._id === currentUserId
     ) {
@@ -50,7 +50,6 @@ export const Content = ({ position, active, message }: ContentProps) => {
         message?.language || message.sender.language,
         userLanguage,
       );
-
       setContentDisplay(translated);
     };
     translateContent();

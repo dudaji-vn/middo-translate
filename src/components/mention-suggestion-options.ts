@@ -28,17 +28,8 @@ export const mentionSuggestionOptions = (
 ): MentionOptions['suggestion'] => {
   return {
     items: async ({ query }): Promise<MentionSuggestion[]> => {
-      // add "all" option
-      const items = [
-        {
-          label: 'Everyone',
-          id: 'everyone',
-          image: '',
-        },
-        ..._items,
-      ];
       return Promise.resolve(
-        items
+        _items
           .map((item) => ({
             label: item.label,
             id: item.id,
@@ -46,8 +37,7 @@ export const mentionSuggestionOptions = (
           }))
           .filter((item) =>
             item.label.toLowerCase().startsWith(query.toLowerCase()),
-          )
-          .slice(0, 5),
+          ),
       );
     },
 

@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { notificationApi } from '../api';
 import { useNotification } from '../hooks/use-notification';
 import { ToastNotification } from './toast-notification';
+import { useElectron } from '@/hooks/use-electron';
 
 export interface FCMBackgroundProps {}
 

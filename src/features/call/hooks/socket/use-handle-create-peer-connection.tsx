@@ -12,7 +12,7 @@ import { IJoinCallPayload } from "../../interfaces/socket/join.interface";
 import { MonitorUpIcon, LogIn } from "lucide-react";
 
 export default function useHandleCreatePeerConnection() {
-    const { setDoodle, setDoodleImage, setLayout, isPinDoodle } = useVideoCallStore();
+    const { setDoodle, setDoodleImage, setLayout, isPinDoodle, setPinShareScreen } = useVideoCallStore();
     const { participants, addParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
     const { myStream } = useMyVideoCallStore();
     
@@ -70,6 +70,7 @@ export default function useHandleCreatePeerConnection() {
             const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
             if (!isHavePin && !isPinDoodle) {
                 setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+                setPinShareScreen(true);
                 newUser.pin = true;
             }
             toast.success(`${payload.user.name} is sharing screen`, {icon: <MonitorUpIcon size={20}/>});
@@ -77,7 +78,7 @@ export default function useHandleCreatePeerConnection() {
             toast.success(`${payload.user.name} joined meeting`, {icon: <LogIn size={20}/>});
         }
         addParticipant(newUser);
-    },[addParticipant, isPinDoodle, myStream, participants, setLayout, updatePeerParticipant])
+    },[addParticipant, isPinDoodle, myStream, participants, setLayout, setPinShareScreen, updatePeerParticipant])
 
     
     // useEffect when myStream change
