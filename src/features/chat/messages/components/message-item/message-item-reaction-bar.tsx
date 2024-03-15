@@ -192,7 +192,7 @@ const ReactionItem = (props: {
       className="flex h-5 items-center justify-center rounded-full border border-neutral-50 bg-white shadow-1"
     >
       <Tooltip>
-        <TooltipContent>
+        <TooltipContent className="rounded-2xl">
           {reactions.map((reaction) => (
             <div key={reaction.user._id} className="flex items-center">
               <span className="mx-[2px] text-sm">

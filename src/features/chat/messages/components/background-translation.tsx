@@ -13,13 +13,14 @@ export const BackgroundTranslation = ({}: BackgroundTranslationProps) => {
     setSrcLang,
     isContentEmpty,
     setTranslating,
+    richText,
   } = useMessageEditor();
   const debouncedValue = useDebounce<string>(content, 100); // increase debounce time to decrease cost
   useEffect(() => {
     const handleChange = async (content: string) => {
       setTranslating(true);
       try {
-        const detectedLang = await detectLanguage(content);
+        const detectedLang = await detectLanguage(richText?.getText() || '');
         setSrcLang(detectedLang);
         if (isContentEmpty) {
           setContentEnglish('');
@@ -33,7 +34,7 @@ export const BackgroundTranslation = ({}: BackgroundTranslationProps) => {
         );
         setContentEnglish(contentEnglish);
       } catch (error) {
-        console.log('error', error);
+        console.log('error 😀', error);
       }
       setTranslating(false);
     };
@@ -42,6 +43,7 @@ export const BackgroundTranslation = ({}: BackgroundTranslationProps) => {
   }, [
     debouncedValue,
     isContentEmpty,
+    richText,
     setContentEnglish,
     setSrcLang,
     setTranslating,
