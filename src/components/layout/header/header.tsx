@@ -11,20 +11,13 @@ import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
 import HeaderProfile from './header-profile';
-import { usePathname } from 'next/navigation';
+import { useBusiness } from '@/hooks/use-business';
 
 type Props = {};
 
-enum EPageType {
-  BUSINESS = 'business',
-  HELP_DESK = 'help-desk',
-}
-const pageTypes = Object.values(EPageType);
 
 export const Header = (props: Props) => {
-  const pathname = usePathname();
-  const isBusiness = pathname?.includes(pageTypes[0])
-  const isHelpDesk = pathname?.includes(pageTypes[1])
+  const { isBusiness, isHelpDesk } = useBusiness();
   const hideNavigation = isBusiness || isHelpDesk
 
 
@@ -32,7 +25,7 @@ export const Header = (props: Props) => {
     <div className={cn("z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]",
       isHelpDesk ? 'flex-row justify-start w-full' : '')}>
       <HeaderNav className={hideNavigation ? 'hidden' : ''} />
-        <Typography className={isHelpDesk ? ' text-neutral-600 text-xs min-w-14' : 'hidden'}>Power by</Typography>
+      <Typography className={isHelpDesk ? ' text-neutral-600 text-xs min-w-14' : 'hidden'}>Power by</Typography>
       <Link href={ROUTE_NAMES.ROOT} className={cn("block w-[60px] mx-auto",
         isBusiness ? 'flex divide-x-[2px] flex-row items-center gap-2 divide-neutral-900' : '',
         isHelpDesk ? 'flex flex-row mx-0 justify-start items-center' : '')}>

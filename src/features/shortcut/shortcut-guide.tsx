@@ -27,6 +27,7 @@ import { HelpCircle, Info } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { useVideoCallStore } from '../call/store/video-call.store';
+import useClient from '@/hooks/use-client';
 
 type ShortcutSectionProps = {
   title: string;
@@ -108,7 +109,7 @@ const SHORTCUTS_OPEN = [
 ];
 type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
-  const [isClient, setIsClient] = React.useState(false);
+  const isClient = useClient()
   const pathname = usePathname();
   const { room } = useVideoCallStore();
   const defaultValue: AccordionValue = room
@@ -118,9 +119,7 @@ export default function ShortcutsGuide() {
       : 'Middo Conversation';
 
   const [open, setOpen] = React.useState(false);
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
+
 
   const { isMacOS } = useKeyboardShortcut(SHORTCUTS_OPEN, () =>
     setOpen((prev) => !prev),

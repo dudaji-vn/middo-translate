@@ -32,6 +32,7 @@ import { TThemeOption, DEFAULT_THEME } from './sections/options';
 import CustomFirstMessageOptions from './sections/custom-first-message-options';
 import PluginChatPreview from './sections/plugin-chat-preview';
 import { ConfirmmAlertModal } from '@/components/modal/confirm-alert-modal';
+import useClient from '@/hooks/use-client';
 
 
 type TFormValues = {
@@ -54,7 +55,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   title?: string;
   onOpenChange: (open: boolean) => void;
 }) {
-  const [isClient, setIsClient] = React.useState(false);
+  const isClient = useClient()
   const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
   const [accordionValue, setAccordionValue] = React.useState<AccordionValue>('add domain');
   const [extensionId, setExtensionId] = React.useState<string>();
@@ -86,9 +87,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const domains: Array<string> = watch('domains');
   const addingDomain: string = watch('addingDomain');
   const domainsErrMessage = errors?.domains?.message;
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
+
   useEffect(() => {
     if (!open && initialData) { reset(); return }
     if (!isEmpty(initialData)) {

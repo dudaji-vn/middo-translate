@@ -8,6 +8,8 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
+import { PK_BUSINESS_CONVERSATIONS } from '@/types/business.type';
+import { useBusiness } from '@/hooks/use-business';
 
 
 interface ChatSidebarProps {
@@ -20,11 +22,11 @@ export const ChatSidebar = ({
   const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
   const params = useParams();
-
+  const { isOnBusinessChat } = useBusiness();
   const isInRoom =
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
 
-  const showSide = !isMobile || !isInRoom;
+  const showSide = (!isMobile || !isInRoom) && (!isOnBusinessChat || !isMobile);
   return (
     <>
       {showSide && (
@@ -32,7 +34,6 @@ export const ChatSidebar = ({
           <ChatSidebarHeader />
           {/* TODO: UPDATE THIS */}
           <ChatSidebarTabs>{children}</ChatSidebarTabs>
-          
         </div>
       )}
 

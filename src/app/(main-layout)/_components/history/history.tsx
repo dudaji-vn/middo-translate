@@ -13,6 +13,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { isEqual } from 'lodash';
 import { SearchParams } from '../../page';
 import { useTranslateStore } from '@/stores/translate.store';
+import useClient from '@/hooks/use-client';
 
 
 export interface HistoryProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -34,7 +35,7 @@ export type THistoryListItems = THistoryItem[];
 
 const History = forwardRef<HTMLDivElement, HistoryProps>(
   ({ isSelected, searchParams, className, onClose, ...props }, ref) => {
-    const [isClient, setIsClient] = useState(false);
+    const isClient = useClient()
     const router = useRouter();
     const {
       setValue: setTranslateEditorInputValue,
@@ -45,9 +46,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
 
     const isMobile = useAppStore((state) => state.isMobile);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    useEffect(() => {
-      setIsClient(true);
-    }, []);
+
     useEffect(() => {
       setIsLoading(false);
     }, [searchParams]);
