@@ -61,7 +61,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                 key={pin._id}
                 className="group relative flex flex-col items-center p-3"
               >
-                <span className="ml-auto text-xs font-light text-neutral-800 break-words">
+                <span className="break-word-mt  ml-auto text-xs font-light text-neutral-800">
                   Pinned by {isMe ? 'you' : pin.pinnedBy.name}
                 </span>
                 <div

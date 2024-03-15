@@ -49,7 +49,6 @@ type MessageEditorContextProps = {
   content: string;
   setContent: (content: string) => void;
   isContentEmpty: boolean;
-  setIsContentEmpty: (isEmpty: boolean) => void;
   inputDisabled: boolean;
   setInputDisabled: (disabled: boolean) => void;
   richText: Editor | null;
@@ -99,7 +98,6 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       reset,
       setContent,
       setContentEnglish,
-      setIsContentEmpty,
       setRichText,
       setSrcLang,
       setTranslating,
@@ -111,15 +109,15 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       const images: Media[] = [];
       const documents: Media[] = [];
       const mentions = getMentionIdsFromHtml(content);
-      console.log('mentions', mentions);
-      let lang = srcLang;
-      if (!lang) {
+
+      let lang = '';
+      let english = '';
+
+      if (!isContentEmpty) {
         lang = await detectLanguage(content);
-      }
-      let english = contentEnglish;
-      if (!english) {
         english = await translateText(content, lang, DEFAULT_LANGUAGES_CODE.EN);
       }
+
       for (const file of files) {
         if (file.file.type.startsWith('image')) {
           images.push({
@@ -163,7 +161,6 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
           inputDisabled,
           setInputDisabled,
           setContent,
-          setIsContentEmpty,
           richText,
           setRichText,
           handleSubmit,

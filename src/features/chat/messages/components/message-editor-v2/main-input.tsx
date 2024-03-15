@@ -10,14 +10,8 @@ export const MainInput = (props: MainInputProps) => {
   const isMobile = useAppStore((state) => state.isMobile);
 
   const { handleClipboardEvent } = useMediaUpload();
-  const {
-    setRichText,
-    editorId,
-    setContent,
-    setIsContentEmpty,
-    toolbarRef,
-    userMentions,
-  } = useMessageEditor();
+  const { setRichText, editorId, setContent, toolbarRef, userMentions } =
+    useMessageEditor();
   const suggestions = userMentions.map(
     (participant): MentionSuggestion => ({
       id: participant._id,
@@ -43,7 +37,6 @@ export const MainInput = (props: MainInputProps) => {
       onCreated={setRichText}
       onChange={(editor) => {
         setContent(editor.getHTML());
-        setIsContentEmpty(editor.isEmpty);
       }}
       onSubmit={() => {
         const submitButton = document.getElementById('send-button-' + editorId);

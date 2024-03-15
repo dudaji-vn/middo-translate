@@ -11,12 +11,11 @@ export const useEditorState = () => {
 
   const [translating, setTranslating] = useState<boolean>(false);
   const [inputDisabled, setInputDisabled] = useState<boolean>(false);
-  const [isContentEmpty, setIsContentEmpty] = useState<boolean>(true);
-
   const [content, setContent] = useState<string>('');
   const [contentEnglish, setContentEnglish] = useState<string>('');
   const [srcLang, setSrcLang] = useState<string | null>(null);
   const [richText, setRichText] = useState<Editor | null>(null);
+  const isContentEmpty = (richText?.getText()?.trim() || '').length === 0;
 
   const micToggleButtonRef = useRef<MicToggleButtonRef>(null);
   const toolbarRef = useRef<ToolbarRef>(null);
@@ -24,7 +23,6 @@ export const useEditorState = () => {
     micToggleButtonRef.current?.stop();
     richText?.commands.clearContent();
     setContent('');
-    setIsContentEmpty(true);
     reset();
     setContentEnglish('');
     setSrcLang(null);
@@ -49,7 +47,6 @@ export const useEditorState = () => {
     inputDisabled,
     setInputDisabled,
     isContentEmpty,
-    setIsContentEmpty,
     content,
     setContent,
     contentEnglish,
