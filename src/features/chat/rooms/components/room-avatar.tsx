@@ -36,10 +36,13 @@ const avatarStylePositionMapByLengthAndIndex: Record<
 export const RoomAvatar = ({
   room,
   size = 36,
+  isOnline,
+  showStatus = false,
 }: {
   room: Room;
   isOnline?: boolean;
   size?: number;
+  showStatus?: boolean;
 }) => {
   const avatars = useMemo(() => {
     const participants = room.participants;
@@ -114,6 +117,7 @@ export const RoomAvatar = ({
             />
           );
         })}
+
         {avatars.length > MAX_AVATAR_COUNT && (
           <div
             className={cn(
@@ -126,6 +130,16 @@ export const RoomAvatar = ({
           </div>
         )}
       </div>
+      {showStatus && (
+        <div className="absolute -bottom-0.5 -right-0.5 z-50 h-3.5 w-3.5 rounded-full bg-white p-[2px]">
+          <div
+            className={cn(
+              'h-full w-full rounded-full',
+              isOnline ? 'bg-success' : 'bg-neutral-200',
+            )}
+          />
+        </div>
+      )}
     </div>
   );
 };

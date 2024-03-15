@@ -7,6 +7,7 @@ export type InboxSides = 'default' | 'settings' | 'new-message' | 'new-group';
 export type RoomStatus = 'active' | 'temporary' | 'deleted' | 'cannot_message';
 export type Room = {
   name?: string;
+  subtitle?: string;
   avatar?: string;
   participants: User[];
   lastMessage?: Message;

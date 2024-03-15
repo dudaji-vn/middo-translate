@@ -14,22 +14,31 @@ import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useChatStore } from '@/features/chat/store';
 
 export const ChatBoxHeader = () => {
   const { room: _room } = useChatBox();
-  const currentUserId = useAuthStore((s) => s.user?._id) || '';
+  const currentUser = useAuthStore((s) => s.user)!;
+  const onlineList = useChatStore((state) => state.onlineList);
   const room = useMemo(
-    () => generateRoomDisplay(_room, currentUserId, true),
-    [_room, currentUserId],
+    () => generateRoomDisplay(_room, currentUser._id, true),
+    [_room, currentUser],
   );
+
+  const participants = room.participants.filter(
+    (user) => user._id !== currentUser._id,
+  );
+  if (participants.length === 0) participants.push(currentUser); // if no participants, is a self chat
+  const isOnline = participants.some((user) => onlineList.includes(user._id));
+
   return (
     <div className="flex w-full items-center border-b  px-1 py-1 md:px-3">
       <RoomBoxHeaderNavigation />
       <div className="flex flex-1 items-center gap-2">
-        <RoomAvatar isOnline room={room} size={36} />
+        <RoomAvatar showStatus isOnline={isOnline} room={room} size={36} />
         <div>
           <p className="break-word-mt line-clamp-1 font-medium">{room.name}</p>
-          <p className="text-sm font-light">Online</p>
+          <p className="text-sm font-light">{room.subtitle}</p>
         </div>
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">

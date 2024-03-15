@@ -1,5 +1,10 @@
 export const SOCKET_CONFIG = {
   EVENTS: {
+    CLIENT: {
+      JOIN: 'client.join',
+      LEAVE: 'client.leave',
+      LIST: 'client.list',
+    },
     MESSAGE: {
       NEW: 'message.new',
       SEND: 'message.send',
@@ -65,7 +70,7 @@ export const SOCKET_CONFIG = {
       START: 'speech_to_text.start',
       STOP: 'speech_to_text.stop',
       SEND_AUDIO: 'speech_to_text.send_audio',
-      RECEIVE_AUDIO_TEXT: 'speech_to_text.receive_audio_text'
-    }
+      RECEIVE_AUDIO_TEXT: 'speech_to_text.receive_audio_text',
+    },
   },
 };

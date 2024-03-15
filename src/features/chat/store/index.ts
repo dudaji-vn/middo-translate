@@ -12,6 +12,8 @@ export type ChatState = {
   setSrcLang: (lang: string) => void;
   detLang: string;
   setDetLang: (lang: string) => void;
+  onlineList: string[];
+  setOnlineList: (list: string[]) => void;
 };
 
 export const useChatStore = create<ChatState>()(
@@ -31,6 +33,8 @@ export const useChatStore = create<ChatState>()(
       setSrcLang: () => set(() => ({ srcLang: 'auto' })),
       detLang: '',
       setDetLang: (lang) => set(() => ({ detLang: lang })),
+      onlineList: [],
+      setOnlineList: (list) => set(() => ({ onlineList: list })),
     }),
     {
       name: 'chat-storage',
