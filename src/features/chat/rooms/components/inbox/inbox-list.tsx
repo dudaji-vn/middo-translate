@@ -20,6 +20,7 @@ import {
   USE_GET_PINNED_ROOMS_KEY,
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
+import { useChatStore } from '@/features/chat/store';
 
 interface InboxListProps {
   type: InboxType;
@@ -35,6 +36,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
     const key = useMemo(() => ['rooms', type], [type]);
+    const onlineList = useChatStore((state) => state.onlineList);
 
     const {
       items: rooms,
@@ -123,15 +125,24 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               rooms={pinnedRooms}
               currentRoomId={currentRoomId as string}
             />
-            {rooms.map((room) => (
-              <RoomItem
-                key={room._id}
-                data={room}
-                isActive={currentRoomId === room._id}
-                currentRoomId={currentRoomId as string}
-                businessId={businessId}
-              />
-            ))}
+            {rooms.map((room) => {
+              const participants = room.participants.filter(
+                (user) => user._id !== currentUser._id,
+              );
+              const isOnline = participants.some((user) =>
+                onlineList.includes(user._id),
+              );
+              return (
+                <RoomItem
+                  isOnline={isOnline}
+                  key={room._id}
+                  data={room}
+                  isActive={currentRoomId === room._id}
+                  currentRoomId={currentRoomId as string}
+                  businessId={businessId}
+                />
+              );
+            })}
           </InfiniteScroll>
         </div>
       </div>
