@@ -21,17 +21,16 @@ export interface MainMessageProps {
 
 export const MainMessage = ({ message, className }: MainMessageProps) => {
   const sender = message.sender;
+
   return (
     <div className={cn('flex flex-col', className)}>
-      {message.type !== 'call' && (
-        <div className="flex items-center gap-2">
-          <Avatar size="xs" src={sender.avatar} alt={sender.name} />
-          <span className="max-w-80 break-words text-sm font-semibold">
-            {sender.name}
-          </span>
-        </div>
-      )}
-      <div className={cn(message.type !== 'call' ? 'ml-8' : '')}>
+      <div className="flex items-center gap-2">
+        <Avatar size="xs" src={sender.avatar} alt={sender.name} />
+        <span className="max-w-80 break-words text-sm font-semibold">
+          {sender.name}
+        </span>
+      </div>
+      <div className="ml-8 mt-1">
         {message.content && <TextMessage message={message} />}
         {message?.media && message.media.length > 0 && (
           <Fragment>
@@ -98,7 +97,7 @@ const TextMessage = ({ message }: { message: Message }) => {
 };
 
 const CallMessage = ({ message }: { message: Message }) => {
-  const { call, sender } = message;
+  const { call } = message;
   const { content, icon, subContent } = useMemo((): {
     content: string;
     icon: React.ReactNode;
@@ -117,10 +116,10 @@ const CallMessage = ({ message }: { message: Message }) => {
       };
     }
     return {
-      content: sender.name + ' has started a call',
+      content: 'started a call',
       icon: <PhoneCallIcon className="mr-2 inline-block h-4 w-4" />,
     };
-  }, [call?.createdAt, call?.endTime, sender.name]);
+  }, [call?.createdAt, call?.endTime]);
   return (
     <div>
       <div>
