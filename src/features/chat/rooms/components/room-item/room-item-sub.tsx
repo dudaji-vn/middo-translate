@@ -67,7 +67,7 @@ const ItemSub = ({
       if (isCurrentUserSender) {
         actor = 'You';
       } else {
-        actor = message.sender.name.split(' ')[0];
+        actor = message.sender.name;
       }
     } else if (isCurrentUserSender) {
       actor = 'You';

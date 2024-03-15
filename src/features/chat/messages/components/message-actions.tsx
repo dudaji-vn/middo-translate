@@ -41,7 +41,7 @@ export const actionItems: ActionItem[] = [
   },
   {
     action: 'reply',
-    label: 'Discussion',
+    label: 'Reply in Discussion',
     icon: <MessageSquareQuoteIcon />,
   },
 
