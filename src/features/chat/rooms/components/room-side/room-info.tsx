@@ -11,19 +11,24 @@ import { RoomUpdateName } from './room-update-name';
 import { Spinner } from '@/components/feedback';
 import { generateRoomDisplay } from '../../utils';
 import { useAuthStore } from '@/stores/auth.store';
+import GuestInformation from './guest-information';
+import { isEmpty } from 'lodash';
+import { User } from '@/features/users/types';
 
 export interface RoomInfoProps {
   room: Room;
+  isGuest?: boolean;
 }
 
-export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
+export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
   const user = useAuthStore((state) => state.user);
 
-  const { room, language } = useMemo(() => {
+  const { room, language, anonymousUser } = useMemo(() => {
     const room = generateRoomDisplay(_room, user?._id || '', true);
     const others = room.participants.filter(
       (member) => member._id !== user?._id,
     );
+    console.log('others', others)
     const languageCode =
       others.length > 0 ? others[0].language : user?.language;
     const languageName = getLanguageByCode(languageCode || 'en')?.name;
@@ -33,14 +38,16 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
       code: languageCode,
       countryCode,
     };
+    const anonymousUser: User | null = isGuest ? others[0] : null;
     return {
       room,
       language,
+      anonymousUser,
     };
   }, [_room, user?._id, user?.language]);
   const [loading, setLoading] = useState(false);
 
-  return (
+  return (<>
     <div className="flex flex-col items-center">
       <div className="relative">
         <RoomAvatar room={room} size={96} />
@@ -70,5 +77,7 @@ export const RoomInfo = ({ room: _room }: RoomInfoProps) => {
         </div>
       )}
     </div>
+    {!isEmpty(anonymousUser) && <GuestInformation {...anonymousUser}/>}
+  </>
   );
 };

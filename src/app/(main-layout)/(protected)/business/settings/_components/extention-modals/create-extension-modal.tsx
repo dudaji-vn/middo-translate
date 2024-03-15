@@ -31,7 +31,7 @@ import CustomThemeOptions from './sections/custom-theme-options';
 import { TThemeOption, DEFAULT_THEME } from './sections/options';
 import CustomFirstMessageOptions from './sections/custom-first-message-options';
 import PluginChatPreview from './sections/plugin-chat-preview';
-import { ConfirmmAlertModal } from '@/components/modal/confirm-alert-modal';
+import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import useClient from '@/hooks/use-client';
 
 
@@ -303,7 +303,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
           </Form>
 
         </DialogContent>
-        <ConfirmmAlertModal
+        <ConfirmAlertModal
           title="You didn't save your changes"
           description="Are you sure you want to leave?"
           open={openConfirmDialog}
