@@ -10,6 +10,7 @@ import { generateExtensionCode } from '../extention-modals/genrerateExtensionCod
 import { cn } from '@/utils/cn';
 import CreateExtensionModal from '../extention-modals/create-extension-modal';
 import { useTextCopy } from '@/hooks/use-text-copy';
+import moment from 'moment';
 
 export type TBusinessExtensionData = {
   createdAt: string;
@@ -55,7 +56,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
             <Image src="/notify-logo.png" width={64} height={'66'} alt={name} className='rounded-[20px] opacity-30' />
             <Typography className='text-[1rem] flex flex-col' >
               <span className='font-semibold'>{name}</span>
-              <span className='text-neutral-600'>{`Created on: ${data?.updatedAt}`}</span>
+              <span className='text-neutral-600'>{`Created on: ${moment(data?.createdAt).format('DD/MM/YYYY HH:mm')}`}</span>
             </Typography>
           </div>
           <div className='flex flex-row gap-2 items-center'>
@@ -110,7 +111,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
             }}
           ><CopyIcon />
           </Button.Icon>
-          <pre onClick={()=>copy()} className="bg-transparent  text-neutral-600 text-sm rounded-lg overflow-auto px-2 whitespace-pre-wrap pr-7">
+          <pre onClick={() => copy()} className="bg-transparent  text-neutral-600 text-sm rounded-lg overflow-auto px-2 whitespace-pre-wrap pr-7">
             <code className='text-neutral-600 text-sm p-2' lang='javascript'>
               {code}
             </code>
