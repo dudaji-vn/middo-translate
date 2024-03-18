@@ -1,8 +1,9 @@
 'use client'
 
+import { PreviewCustomMessages } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/preview-custom-messages'
 import { Button } from '@/components/actions'
+import { User } from '@/features/users/types'
 import { startAGuestConversationService } from '@/services/extension.service'
-import { useAuthStore } from '@/stores/auth.store'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 
@@ -27,11 +28,12 @@ const StartAConversation = ({ businessData }: {
         firstMessage: string,
         firstMessageEnglish: string,
         language: string,
+        user: User
     }
 }) => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
-    const { setData } = useAuthStore()
+    const { user: owner } = businessData || {};
     const createAGuestConversation = async () => {
         setIsLoading(true)
         try {
@@ -54,12 +56,7 @@ const StartAConversation = ({ businessData }: {
     }
     return (
         <div className='h-full w-full flex flex-col justify-between py-3 px-4'>
-            <div className='w-fit overflow-hidden p-4 rounded-[20px] mr-auto bg-primary-500-main text-white relative rounded-bl-lg'>
-                {businessData.firstMessage}
-                <div className='text-left bg-primary-400 rounded-xl px-3 py-1'>
-                    {businessData.firstMessageEnglish}
-                </div>
-            </div>
+            <PreviewCustomMessages sender={owner} content={businessData.firstMessage} />
             <Button className='h-11  w-2/3 md:max-w-48 mx-auto min-w-fit' variant={'default'} color={'primary'} shape={'square'} onClick={createAGuestConversation} disabled={isLoading} >
                 Start a conversation
             </Button>
