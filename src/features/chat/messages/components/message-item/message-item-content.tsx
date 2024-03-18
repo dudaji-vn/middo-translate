@@ -63,6 +63,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
     message.sender._id,
     currentUserId,
   ]);
+  const isMe = message.sender._id === currentUserId;
   return (
     <div
       className={cn(
@@ -84,7 +85,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
       {message?.contentEnglish &&
         message.status !== 'removed' &&
         showMiddleTranslation &&
-        message.language !== DEFAULT_LANGUAGES_CODE.EN && (
+        !(message.language === DEFAULT_LANGUAGES_CODE.EN && isMe) && (
           <div className="relative mt-2">
             <TriangleSmall
               fill={position === 'right' ? '#72a5e9' : '#e6e6e6'}

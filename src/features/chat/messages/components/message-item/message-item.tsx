@@ -27,6 +27,7 @@ import { MessageItemReply } from './message-item-reply';
 import { MessageItemPinned } from './message-item-pinned';
 import { Content } from './message-item-content';
 import { MessageItemLinks } from './message-item-links';
+import { MessageItemVideo } from './message-item-video';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -165,6 +166,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                             isMe={isMe}
                             file={message.media[0]}
                           />
+                        )}
+                        {message.media[0].type === 'video' && (
+                          <MessageItemVideo file={message.media[0]} />
                         )}
                       </Fragment>
                     )}
