@@ -10,7 +10,6 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { useRoomSidebarTabs } from '../room-side-tabs/room-side-tabs.hook';
 import { useBusiness } from '@/hooks/use-business';
 import useClient from '@/hooks/use-client';
-
 export interface RoomSideTabInfoProps { }
 
 export const RoomSideTabInfo = ({ }: RoomSideTabInfoProps) => {
@@ -34,9 +33,9 @@ export const RoomSideTabInfo = ({ }: RoomSideTabInfoProps) => {
         </Button.Icon>
       </div>
       <div className="pb-2">
-        <RoomInfo room={room} />
-        <div className="my-8">
-         {!isBusiness && <RoomSetting room={room} />}
+        <RoomInfo room={room} isGuest={isBusiness} />
+        <div className={isBusiness? "mb-8" :"my-8"}>
+          {!isBusiness && <RoomSetting room={room} />}
           {room.isGroup && (
             <RoomMember members={room.participants} adminId={room.admin?._id} />
           )}

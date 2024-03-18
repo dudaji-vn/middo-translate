@@ -1,4 +1,4 @@
-import { AlertDialogContentProps, AlertDialogProps, AlertDialogTitleProps } from '@radix-ui/react-alert-dialog';
+import { AlertDialogActionProps, AlertDialogCancelProps, AlertDialogContentProps, AlertDialogProps, AlertDialogTitleProps } from '@radix-ui/react-alert-dialog';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -10,60 +10,82 @@ import {
     AlertDialogTitle,
 } from '../feedback';
 import { cn } from '@/utils/cn';
+import useClient from '@/hooks/use-client';
 
 
-export const ConfirmmAlertModal = ({
-    open, onOpenChange,
-    title = `You didn't save your changes`,
+export const ConfirmAlertModal = ({
+    header,
+    title,
     description,
-    onConfirm,
-    onCancel,
+    open,
+    onOpenChange,
+    onConfirm = () => { },
+    onCancel = () => { },
     dialogContentProps,
     headerProps,
     descriptionProps,
+    titleProps,
     footerProps,
     actionProps,
     cancelProps,
     dialogProps,
+    children,
+    footer,
 }: {
     open: boolean,
     onOpenChange: (open: boolean) => void,
-    title: string | React.ReactNode,
-    description: string | React.ReactNode,
-    onConfirm: () => void,
-    onCancel: () => void,
+    onConfirm?: () => void,
+    onCancel?: () => void,
+    title?: string | React.ReactNode,
+    description?: string | React.ReactNode,
     dialogProps?: Omit<AlertDialogProps, 'open' | 'onOpenChange'>,
     dialogContentProps?: AlertDialogContentProps,
     headerProps?: React.HTMLAttributes<HTMLDivElement>,
     descriptionProps?: React.HTMLAttributes<HTMLParagraphElement>,
-    actionProps?: React.HTMLAttributes<HTMLButtonElement>,
-    cancelProps?: Omit<React.HTMLAttributes<HTMLButtonElement>, 'onClick'>,
+    titleProps?: React.HTMLAttributes<HTMLParagraphElement>,
+    actionProps?: AlertDialogActionProps,
+    cancelProps?: AlertDialogCancelProps,
     footerProps?: React.HTMLAttributes<HTMLDivElement>,
+    children?: React.ReactNode,
+    header?: React.ReactNode,
+    footer?: React.ReactNode,
 } & AlertDialogProps) => {
+    const isClient = useClient();
+
+    if (!isClient) return null;
 
     return (
         <AlertDialog open={open} onOpenChange={onOpenChange} {...dialogProps}>
             <AlertDialogContent {...dialogContentProps}>
                 <AlertDialogHeader {...headerProps}>
-                    <AlertDialogTitle>
-                        {title}
-                    </AlertDialogTitle>
-                    <AlertDialogDescription {...descriptionProps}>
-                        {description}
-                    </AlertDialogDescription>
+                    {header || <>
+                        <AlertDialogTitle {...titleProps}>
+                            {title}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription {...descriptionProps}>
+                            {description}
+                        </AlertDialogDescription>
+                    </>}
                 </AlertDialogHeader>
+                {children}
                 <AlertDialogFooter {...footerProps} >
-                    <AlertDialogCancel {...cancelProps} className={cn("sm:mr-3", cancelProps?.className)} onClick={onCancel} >
-                        Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                        {...actionProps}
-                        className={cn('bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter',
-                            actionProps?.className)}
-                        onClick={onConfirm}
-                    >
-                        Yes
-                    </AlertDialogAction>
+                    {footer || <>
+                        <AlertDialogCancel
+                            {...cancelProps}
+                            onClick={(e) => { onCancel(); cancelProps?.onClick?.(e) }}
+                            className={cn("sm:mr-3", cancelProps?.className)}
+                        >
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            {...actionProps}
+                            onClick={(e) => { onConfirm(); actionProps?.onClick?.(e) }}
+                            className={cn('bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter',
+                                actionProps?.className)}
+                        >
+                            Yes
+                        </AlertDialogAction>
+                    </>}
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog >
