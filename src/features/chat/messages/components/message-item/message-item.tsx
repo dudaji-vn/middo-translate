@@ -83,7 +83,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const mediaLength = message.media?.length || 0;
     const isSystemMessage =
       message.type === 'notification' || message.type === 'action';
-    console.log('message????', message)
     const { value: isActive, setValue: setActive } = useBoolean(false);
 
     return (
