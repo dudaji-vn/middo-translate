@@ -30,7 +30,7 @@ import { MessageItemLinks } from './message-item-links';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof messageVariants> {
+  VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
   showAvatar?: boolean;
@@ -83,7 +83,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const mediaLength = message.media?.length || 0;
     const isSystemMessage =
       message.type === 'notification' || message.type === 'action';
-
+    console.log('message????', message)
     const { value: isActive, setValue: setActive } = useBoolean(false);
 
     return (
