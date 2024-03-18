@@ -11,17 +11,25 @@ import { searchApi } from '@/features/search/api';
 import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
 import { useQuerySearch } from '@/hooks/use-query-search';
 import { useSearchStore } from '@/features/search/store/search.store';
+import { useBusiness } from '@/hooks/use-business';
+export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> { }
 
-export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
+
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchValue = useSearchStore((state) => state.searchValue);
     const { data: recData } = useGetRoomsRecChat();
+    const { isBusiness, businessConversationType } = useBusiness();
+    const redirectPath = (isBusiness ? `/business/${businessConversationType || ''}` : '/talk/')
+
     const { data, isLoading } = useQuerySearch<{
       rooms: Room[];
       users: User[];
-    }>(searchApi.inboxes, 'chat-search', searchValue || '');
+    }>(searchApi.inboxes, 'chat-search', searchValue || '', isBusiness ? 'help-desk' : undefined);
+    console.log('data?.users', data?.users)
+    console.log('datroooms', data?.rooms)
+    console.log('datarec', recData)
     return (
       <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
         <motion.div
@@ -31,12 +39,14 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
           className="w-full bg-neutral-white"
         >
           {data?.users && data.users.length > 0 && (
-            <Section label="People">
-              {data?.users?.map((user) => (
-                <Link key={user?._id} href={`/talk/${user?._id}`}>
-                  <UserItem user={user} />
-                </Link>
-              ))}
+            <Section label={isBusiness ? "Guests" : "People"}>
+              {data?.users?.map((user) => {
+                return (
+                  <Link key={user?._id} href={redirectPath + user?._id}>
+                    <UserItem user={user} />
+                  </Link>
+                )
+              })}
             </Section>
           )}
           {data?.rooms && data.rooms.length > 0 && (
@@ -70,7 +80,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
             </Section>
           )}
         </motion.div>
-      </div>
+      </div >
     );
   },
 );
