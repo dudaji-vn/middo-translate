@@ -30,18 +30,6 @@ export const extentionsCustomThemeOptions: TThemeOption[] = [
   {
     hex: '#3AB27D',
   },
-  {
-    hex: '#4FBB4F',
-  },
-  {
-    hex: '#F9C80E',
-  },
-  {
-    hex: '#F8A000',
-  },
-  {
-    hex: '#F37121',
-  },
 ];
 
 export type TExtensionFirstMessage = Pick<

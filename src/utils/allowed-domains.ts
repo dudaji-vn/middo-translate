@@ -5,5 +5,6 @@ export const isAllowedDomain = ({
   refer?: string | null;
   allowedDomains?: string[];
 }) => {
-  return allowedDomains?.some((domain) => refer?.startsWith(domain)) || false;
+  return allowedDomains?.some((domain) => {
+    return refer?.startsWith(domain)}) || false;
 };
