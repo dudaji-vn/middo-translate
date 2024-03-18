@@ -1,4 +1,4 @@
-
+'use client';
 import { ROUTE_NAMES } from '@/configs/route-name'
 import { cn } from '@/utils/cn'
 import Image from 'next/image'
@@ -17,9 +17,13 @@ import {
 import { Avatar } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store'
 import { useAppStore } from '@/stores/app.store'
+import { InputSelectLanguage } from '@/components/form/input-select-language'
+import HeaderSelectLanguage from './header-select-language'
+import { useTranslation } from 'react-i18next'
 const HeaderProfile = ({ className, ...props }:
     HtmlHTMLAttributes<HTMLDivElement>
 ) => {
+    const {t} = useTranslation("common");
     const [isOpenDropdown, setOpenDropdown] = useState(false);
     const { isAuthentication, user } = useAuthStore();
     const setShowConfirmLogout = useAppStore(
@@ -57,13 +61,13 @@ const HeaderProfile = ({ className, ...props }:
                         <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
                             <DropdownMenuItem className="flex items-center">
                                 <SettingsIcon className="mr-2 size-4" />
-                                <span>Account setting</span>
+                                <span>{t('HEADER.ACCOUNT_SETTING')}</span>
                             </DropdownMenuItem>
                         </Link>
 
                         <DropdownMenuItem className="flex items-center" onClick={signOut}>
                             <LogOutIcon className="mr-2 size-4" />
-                            <span> Sign out</span>
+                            <span> {t('HEADER.SIGN_OUT')}</span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -90,6 +94,7 @@ const HeaderProfile = ({ className, ...props }:
                     </span>
                 </Link>
             )}
+            <HeaderSelectLanguage className='ml-2'/>
         </div>
     )
 }

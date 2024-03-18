@@ -23,6 +23,7 @@ import { Form } from '@/components/ui/form';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
 
 export default function UpdateUserInfo() {
   const [loading, setLoading] = useState(false);
@@ -30,14 +31,23 @@ export default function UpdateUserInfo() {
   const { user: userData, setData: setDataAuth } = useAuthStore();
   const [errorMessage, setErrorMessage] = useState('');
   const user = userData as User;
-
+  const {t} = useTranslation("common");
   const form = useForm({
     mode: 'onBlur',
     defaultValues: {
       name: user?.name || '',
       language: user?.language || '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(z
+      .object({
+        name: z.string().min(1, {
+          message: t('MESSAGE.ERRORS.REQUIRED'),
+        }),
+        language: z.string().min(1, {
+          message: t('MESSAGE.ERRORS.REQUIRED'),
+        }),
+      })
+      .optional()),
   });
   const {
     register,
@@ -62,7 +72,7 @@ export default function UpdateUserInfo() {
           language: res.data.language,
         },
       });
-      toast.success('Update info success!');
+      toast.success(t('MESSAGE.SUCCESS.PROFILE_UPDATED'));
       setErrorMessage('');
       setOpen(false);
     } catch (err: any) {
@@ -96,19 +106,19 @@ export default function UpdateUserInfo() {
               <Edit2Icon />
             </div>
             <span className="mt-2 block text-center text-sm font-light">
-              Profile
+              {t('ACCOUNT_SETTING.PROFILE')}
             </span>
           </div>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <Form {...form}>
             <form onSubmit={handleSubmit(submit)} className="space-y-4">
-              <h3 className="text-[24px]">Edit profile</h3>
+              <h3 className="text-[24px]">{t('ACCOUNT_SETTING.EDIT_PROFILE')}</h3>
               <RHFInputField
                 name="name"
-                formLabel="Name"
+                formLabel={t('COMMON.NAME')}
                 inputProps={{
-                  placeholder: 'Enter your name',
+                  placeholder: t('COMMON.NAME_PLACEHOLDER'),
                   suffix: (
                     <span className="text-sm text-gray-400">{`${name?.length}/60`}</span>
                   ),
@@ -134,7 +144,7 @@ export default function UpdateUserInfo() {
               <AlertError errorMessage={errorMessage}></AlertError>
               <div className="mt-6 flex items-center justify-end">
                 <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
-                  <p>Cancel</p>
+                  <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>
                 <Button
                   shape="square"
@@ -145,7 +155,7 @@ export default function UpdateUserInfo() {
                   }
                   type="submit"
                 >
-                  Save
+                  {t('COMMON.SAVE')}
                 </Button>
               </div>
             </form>

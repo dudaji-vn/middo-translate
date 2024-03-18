@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export const NavItem = ({
   item,
@@ -11,6 +12,7 @@ export const NavItem = ({
   };
   isActive?: boolean;
 }) => {
+  const {t} = useTranslation('common');
   return (
     <Link
       href={item.href}
@@ -19,7 +21,7 @@ export const NavItem = ({
         isActive ? '!text-primary' : 'active:!text-primary-700',
       )}
     >
-      {item.name}
+      {t(item.name)}
     </Link>
   );
 };

@@ -22,13 +22,14 @@ import {
   MediaUploadDropzone,
   MediaUploadProvider,
 } from '@/components/media-upload';
+import { useTranslation } from 'react-i18next';
 
 export default function UpdateUserAvatar() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const { user, setData: setDataAuth } = useAuthStore();
   const inputCropImage = useRef<InputCropImageRef>(null);
-
+  const {t} = useTranslation("common");
   const onSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     const file = inputCropImage.current?.getCropData();
@@ -67,7 +68,7 @@ export default function UpdateUserAvatar() {
               <Camera />
             </div>
             <span className="mt-2 block text-center text-sm font-light">
-              Avatar
+              {t('ACCOUNT_SETTING.AVATAR')}
             </span>
           </div>
         </AlertDialogTrigger>
@@ -78,7 +79,7 @@ export default function UpdateUserAvatar() {
           >
             <MediaUploadProvider>
               <MediaUploadDropzone>
-                <h3 className="text-[24px]">Change avatar</h3>
+                <h3 className="text-[24px]">{t('ACCOUNT_SETTING.CHANGE_AVATAR')}</h3>
                 <InputCropImage ref={inputCropImage} isLoading={loading} open={open}/>
               </MediaUploadDropzone>
             </MediaUploadProvider>

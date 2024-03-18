@@ -9,6 +9,7 @@ import { Country } from '@/types/country.type';
 import { cn } from '@/utils/cn';
 import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
+import { useTranslation } from 'react-i18next';
 
 export interface ListLanguagesProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -154,6 +155,7 @@ const Item = ({
   onClick?: () => void;
   rightElement?: React.ReactNode;
 }) => {
+  const {t} = useTranslation('common');
   return (
     <button
       disabled={selected}
@@ -166,7 +168,7 @@ const Item = ({
     >
       {rightElement}
       <span className={cn(selected && 'font-semibold text-primary')}>
-        {language.name}
+        {t('LANGUAGE.' + language.name)}
       </span>
       {selected && <CheckCircle2Icon className="ml-auto h-5 w-5 " />}
     </button>

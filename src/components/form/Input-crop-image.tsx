@@ -17,6 +17,7 @@ import { cn } from '@/utils/cn';
 import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
 import { Button } from '@/components/actions';
 import isEmpty from 'lodash/isEmpty';
+import { useTranslation } from 'react-i18next';
 
 interface InputCropImageProps {
   isLoading?: boolean;
@@ -54,7 +55,7 @@ export const InputCropImage = forwardRef<
     if (!isEmpty(files?.[0])) processImageFiles(files[0]?.file);
   }, [files, open]);
 
-
+  const {t} = useTranslation("common");
 
   const id = useId();
   const removeDragData = () => {
@@ -64,12 +65,12 @@ export const InputCropImage = forwardRef<
   const processImageFiles = (file: File) => {
     const { type, size } = file || {};
     if (size > 1024 * 1024 * 3) {
-      setErrorMessage('File size need to be less than 3MB');
+      setErrorMessage(t('MESSAGE.ERRORS.FILE_SIZE', {val: '3MB'}));
       removeDragData();
       return;
     }
     if (!ALLOWED_FILE_TYPES.includes(type)) {
-      setErrorMessage('File type is not supported');
+      setErrorMessage(t('MESSAGE.ERRORS.FILE_NOT_SUPPORTED'));
       removeDragData();
       return;
     }
@@ -141,7 +142,7 @@ export const InputCropImage = forwardRef<
             <span className="rounded-full  p-4">
               <Upload width={24} height={24} className="stroke-primary" />
             </span>
-            <span className="mt-[10px] font-normal">Upload Image</span>
+            <span className="mt-[10px] font-normal">{t("COMMON.UPLOAD_IMAGE")}</span>
           </label>
         )}
         <input
@@ -235,10 +236,10 @@ export const InputCropImage = forwardRef<
           onClick={removeDragData}
           className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
         >
-          <p>Cancel</p>
+          <p>{t("COMMON.CANCEL")}</p>
         </AlertDialogCancel>
         <Button shape="square" disabled={isLoading} type="submit">
-          Save
+          {t("COMMON.SAVE")}
         </Button>
       </div>
     </>
