@@ -28,11 +28,12 @@ import isEqual from 'lodash/isEqual';
 import { Spinner } from '@/components/feedback';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import CustomThemeOptions from './sections/custom-theme-options';
-import { TThemeOption, DEFAULT_THEME } from './sections/options';
+import { TThemeOption, DEFAULT_THEME, DEFAULT_FIRST_MESSAGE } from './sections/options';
 import CustomFirstMessageOptions from './sections/custom-first-message-options';
 import PluginChatPreview from './sections/plugin-chat-preview';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import useClient from '@/hooks/use-client';
+import { useAuthStore } from '@/stores/auth.store';
 
 
 type TFormValues = {
@@ -59,6 +60,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
   const [accordionValue, setAccordionValue] = React.useState<AccordionValue>('add domain');
   const [submitedData, setSubmitedData] = React.useState<TFormValues>();
+  const currentUser = useAuthStore((s) => s.user);
   const [extensionId, setExtensionId] = React.useState<string>();
   const { copy } = useTextCopy();
   const router = useRouter();
@@ -69,14 +71,15 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
       addingDomain: '',
       domains: [],
       custom: {
-        language: 'vi',
-        firstMessage: 'Xin chào, tôi có thể giúp gì cho bạn?',
-        firstMessageEnglish: 'Hello, how can I help you?',
+        language: currentUser?.language,
+        firstMessage: DEFAULT_FIRST_MESSAGE.content,
+        firstMessageEnglish: DEFAULT_FIRST_MESSAGE.contentEnglish,
         color: DEFAULT_THEME,
       },
     },
     resolver: zodResolver(createExtensionSchema),
   });
+
   const {
     watch,
     handleSubmit,
@@ -85,6 +88,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
     setValue,
     formState: { errors, isValid, isSubmitting, },
   } = form;
+  
   const domains: Array<string> = watch('domains');
   const addingDomain: string = watch('addingDomain');
   const domainsErrMessage = errors?.domains?.message;

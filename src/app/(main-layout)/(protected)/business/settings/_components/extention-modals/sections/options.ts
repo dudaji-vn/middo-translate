@@ -50,7 +50,7 @@ export type TExtensionFirstMessage = Pick<
 >;
 
 export const DEFAULT_FIRST_MESSAGE: TExtensionFirstMessage = {
-  content: 'Xin chào, tôi có thể giúp gì cho bạn?',
+  content: 'Hello, how can I help you?',
   contentEnglish: 'Hello, how can I help you?',
   language: 'vi',
 };

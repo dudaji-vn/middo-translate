@@ -11,11 +11,11 @@ import { useDebounce } from "usehooks-ts";
 
 const DEBOUNCED_TRANSLATE_TIME = 800;
 
-export const PreviewCustomMessages = ({ sender, content = '', englishContent }: {
+export const PreviewCustomMessages = ({ sender, content = '', englishContent, ...props }: {
     sender?: User | null,
     content?: string,
     englishContent?: string
-}) => {
+} & React.HTMLAttributes<HTMLDivElement>) => {
 
     const [translatedContent, setTranslatedContent] = React.useState<string>(englishContent || '')
     const [isTranslating, setIsTranslating] = React.useState<boolean>(false)
@@ -35,7 +35,7 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent }: 
         })
     }, [debouncedContent])
 
-    return <div className="">
+    return <div {...props}>
         <TimeDisplay time={new Date().toLocaleDateString()} />
         <div className="w-full gap-1  pb-8 relative  flex pr-11 md:pr-20">
             <div className="overflow-hidden relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
