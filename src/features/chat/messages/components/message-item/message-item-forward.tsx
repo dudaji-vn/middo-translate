@@ -10,6 +10,7 @@ import { Room } from '@/features/chat/rooms/types';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { RichTextView } from '@/components/rich-text-view';
+import { MessageItemVideo } from './message-item-video';
 
 export interface MessageItemForwardProps {
   message: Message;
@@ -59,6 +60,9 @@ export const MessageItemForward = ({
                 )}
                 {message.media[0].type === 'document' && (
                   <DocumentMessage file={message.media[0]} />
+                )}
+                {message.media[0].type === 'video' && (
+                  <MessageItemVideo file={message.media[0]} />
                 )}
               </div>
             )}

@@ -110,10 +110,10 @@ const ItemSub = ({
               return `sent ${message.media.length} photo${
                 message.media.length > 1 ? 's' : ''
               }`;
-            case 'document':
-              return 'sent file';
+            case 'video':
+              return 'sent a video';
             default:
-              break;
+              return `sent a file`;
           }
         }
         break;
