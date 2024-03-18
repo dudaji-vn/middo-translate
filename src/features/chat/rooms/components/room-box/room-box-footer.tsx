@@ -39,6 +39,11 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
     const [localDocumentMessagesWaiting, setLocalDocumentMessagesWaiting] =
       useState<Message[]>([]);
+
+    const [localVideoMessageWaiting, setLocalVideoMessageWaiting] = useState<
+      Message[]
+    >([]);
+
     const { mutateAsync } = useMutation({
       mutationFn: isAnonymous
         ? messageApi.sendAnonymousMessage
@@ -80,8 +85,15 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     };
 
     const handleSubmit = async (data: MessageEditorSubmitData) => {
-      const { content, images, documents, contentEnglish, language, mentions } =
-        data;
+      const {
+        content,
+        images,
+        documents,
+        contentEnglish,
+        language,
+        mentions,
+        videos,
+      } = data;
       let roomId = room._id;
 
       if (room.status === 'temporary') {
@@ -121,6 +133,18 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           return localDocumentMessage;
         });
         setLocalDocumentMessagesWaiting(localDocumentMessages);
+      }
+
+      if (videos.length) {
+        const localVideoMessages = videos.map((video) => {
+          const localVideoMessage = createLocalMessage({
+            sender: currentUser!,
+            media: [video],
+          });
+          addMessage(localVideoMessage);
+          return localVideoMessage;
+        });
+        setLocalVideoMessageWaiting(localVideoMessages);
       }
     };
 
@@ -185,6 +209,44 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [localDocumentMessagesWaiting, uploadedFiles, room?._id]);
+    useEffect(() => {
+      console.log(
+        localVideoMessageWaiting,
+        uploadedFiles,
+        'localVideoMessageWaiting',
+      );
+      if (!localVideoMessageWaiting.length || !uploadedFiles.length) return;
+      const localVideoMessages = localVideoMessageWaiting;
+      const videosUploaded: Media[][] = localVideoMessages.map((message) => {
+        const localVideos = message.media;
+
+        if (!localVideos) return [];
+        const VideosUploaded: Media[] = localVideos.map((item) => {
+          const file = uploadedFiles.find((f) => f.localUrl === item.url);
+          if (file) {
+            return {
+              ...item,
+              url: file.metadata.secure_url || file.url,
+            };
+          }
+          return item;
+        });
+        return VideosUploaded;
+      });
+      Promise.all(
+        localVideoMessages.map(async (message, index) => {
+          mutateAsync({
+            content: '',
+            roomId: room._id,
+            clientTempId: message._id,
+            media: videosUploaded[index],
+          });
+        }),
+      );
+      setLocalVideoMessageWaiting([]);
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [localVideoMessageWaiting, uploadedFiles, room?._id]);
     return (
       <div className="w-full border-t p-2">
         <MessageEditor

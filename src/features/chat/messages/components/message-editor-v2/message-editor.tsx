@@ -27,6 +27,7 @@ import { getMentionIdsFromHtml } from '@/utils/get-mention-ids-from-html';
 type SubmitData = {
   content: string;
   images: Media[];
+  videos: Media[];
   documents: Media[];
   contentEnglish: string;
   language?: string;
@@ -108,6 +109,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
     const handleSubmit = async () => {
       const images: Media[] = [];
       const documents: Media[] = [];
+      const videos: Media[] = [];
       const mentions = getMentionIdsFromHtml(content);
 
       let lang = '';
@@ -119,22 +121,33 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       }
 
       for (const file of files) {
-        if (file.file.type.startsWith('image')) {
-          images.push({
-            url: file.url,
-            type: 'image',
-            file: file.file,
-            name: file.file.name,
-            size: file.file.size,
-          });
-        } else {
-          documents.push({
-            url: file.url,
-            type: 'document',
-            file: file.file,
-            name: file.file.name,
-            size: file.file.size,
-          });
+        switch (file.file.type.split('/')[0]) {
+          case 'image':
+            images.push({
+              url: file.url,
+              type: 'image',
+              file: file.file,
+              name: file.file.name,
+              size: file.file.size,
+            });
+            break;
+          case 'video':
+            videos.push({
+              url: file.url,
+              type: 'video',
+              file: file.file,
+              name: file.file.name,
+              size: file.file.size,
+            });
+            break;
+          default:
+            documents.push({
+              url: file.url,
+              type: 'document',
+              file: file.file,
+              name: file.file.name,
+              size: file.file.size,
+            });
         }
       }
       onSubmitValue?.({
@@ -144,6 +157,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         contentEnglish: english,
         language: lang,
         mentions: mentions,
+        videos,
       });
       // scroll to bottom
       const messageBox = document.getElementById(scrollId || '');
