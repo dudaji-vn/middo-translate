@@ -1,4 +1,4 @@
-import { Message } from "@/features/chat/messages/types";
+import { Message } from '@/features/chat/messages/types';
 
 export interface TThemeOption {
   hex: string;
@@ -24,12 +24,33 @@ export const extentionsCustomThemeOptions: TThemeOption[] = [
   {
     hex: '#3D88ED',
   },
+  {
+    hex: '#3A9E9F',
+  },
+  {
+    hex: '#3AB27D',
+  },
+  {
+    hex: '#4FBB4F',
+  },
+  {
+    hex: '#F9C80E',
+  },
+  {
+    hex: '#F8A000',
+  },
+  {
+    hex: '#F37121',
+  },
 ];
 
-export type TExtensionFirstMessage = Pick<Message, 'content' | 'contentEnglish' | 'language'>;
+export type TExtensionFirstMessage = Pick<
+  Message,
+  'content' | 'contentEnglish' | 'language'
+>;
 
 export const DEFAULT_FIRST_MESSAGE: TExtensionFirstMessage = {
-  content: 'Xin chào, tôi có thể giúp gì cho bạn?',
+  content: 'Hello, how can I help you?',
   contentEnglish: 'Hello, how can I help you?',
   language: 'vi',
-}
+};

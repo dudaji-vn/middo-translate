@@ -15,9 +15,8 @@ export type CustomFirstMessageOptionsProps = {
 type TRadioOptions = 'default' | 'custom';
 
 const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...props }: CustomFirstMessageOptionsProps & RadioGroupProps) => {
-    const [checked, setChecked] = React.useState<TRadioOptions>('default');
+    const [checked, setChecked] = React.useState<TRadioOptions>(firstMessage?.length && firstMessage === DEFAULT_FIRST_MESSAGE.content ? 'default' : 'custom');
     const [previousText, setPreviousText] = React.useState<string>('')
-
     return (
         <RadioGroup
             {...props}
@@ -30,8 +29,7 @@ const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...prop
                 }
                 else onFirstMessageChange(previousText);
             }}
-            defaultValue={'default'}
-
+            value={checked}
         >
             <div className="flex items-center space-x-2">
                 <RadioGroupItem value="default" id="r1" iconProps={{ className: 'h-full w-full' }} className='border-neutral-200 ring-neutral-200' >

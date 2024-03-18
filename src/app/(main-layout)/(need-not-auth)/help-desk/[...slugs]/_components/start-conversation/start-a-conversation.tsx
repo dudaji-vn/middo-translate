@@ -57,7 +57,14 @@ const StartAConversation = ({ businessData }: {
     return (
         <div className='h-full w-full flex flex-col justify-between py-3 px-4'>
             <PreviewCustomMessages sender={owner} content={businessData.firstMessage} />
-            <Button className='h-11  w-2/3 md:max-w-48 mx-auto min-w-fit' variant={'default'} color={'primary'} shape={'square'} onClick={createAGuestConversation} disabled={isLoading} >
+            <Button
+                className='h-11  w-2/3 md:max-w-48 mx-auto min-w-fit'
+                variant={'default'}
+                color={'primary'}
+                shape={'square'}
+                onClick={createAGuestConversation}
+                disabled={isLoading}
+            >
                 Start a conversation
             </Button>
         </div>
