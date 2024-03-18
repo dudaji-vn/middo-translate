@@ -7,8 +7,8 @@ import { useAppStore } from "@/stores/app.store"
 import { useSidebarStore } from "@/stores/sidebar.store"
 import { cn } from "@/utils/cn"
 import { Archive, CheckSquare, LineChartIcon, MessageSquare, Settings } from "lucide-react"
-import { useParams, useRouter } from "next/navigation"
-import { ReactElement, use, useEffect, useState } from "react"
+import { useParams, usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 interface SidebarContent {
     title: string
@@ -83,7 +83,8 @@ const BusinessSidebar = () => {
     const { isMobile } = useAppStore()
     const { openSidebar, setOpenSidebar, expand, setExpandSidebar } = useSidebarStore();
     const params = useParams()
-    const [sellected, setSellected] = useState<SidebarContent | undefined>(sidebarContents.find(item => item.title === params?.conversationType) || undefined);
+    const pathname = usePathname();
+    const [sellected, setSellected] = useState<SidebarContent | undefined>(sidebarContents.find(item => pathname?.includes(`/${item.title}`)) || undefined);
     const router = useRouter();
     const expandSheet = () => {
         setExpandSidebar(true);
@@ -92,19 +93,20 @@ const BusinessSidebar = () => {
         setExpandSidebar(false);
     }
     const onSelectedChange = (item: { title: string, icon: React.ReactNode }) => {
-        setSellected(item)
         router.push('/business/' + item.title)
     }
     useEffect(() => {
         setOpenSidebar(!isMobile, false);
+        setSellected(sidebarContents.find(item => pathname?.includes(`/${item.title}`)) || undefined)
     }, [params]);
+
     useEffect(() => {
     }, [openSidebar])
     return (
         <Sheet open={isMobile ? openSidebar : true} modal={isMobile} onOpenChange={setOpenSidebar} >
             <div className={cn("h-full w-full relative max-md:hidden",)}
                 onMouseEnter={expandSheet}>
-                <SheetContent overlayProps={{ className: ' top-[51px] ' }} side={'left'} className="w-fit  top-[51px]  bottom-0 p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+                <SheetContent overlayProps={{ className: ' top-[51px]' }} side={'left'} className="w-fit  top-[51px]  bottom-0 p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
                     <div className="h-full  w-full" onMouseLeave={shinkSheet}>
                         <BusinessSidebarContent shrink={!expand} selectedItem={sellected} onSelectChange={onSelectedChange} />
                     </div>

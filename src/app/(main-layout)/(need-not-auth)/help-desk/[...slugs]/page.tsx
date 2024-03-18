@@ -18,7 +18,8 @@ const HelpDeskConversationPage = async ({ params: { slugs }, ...props }: {
   }
   const headersList = headers();
   const referer = headersList.get('referer');
-  const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: businessData.allowedDomains });
+  const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: businessData.domains });
+  console.log('allowedDomains',businessData.domains)
 
   if (!isAllowed) {
     notFound();

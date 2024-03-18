@@ -17,7 +17,7 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent }: 
     englishContent?: string
 }) => {
 
-    const [translatedContent, setTranslatedContent] = React.useState<string>('')
+    const [translatedContent, setTranslatedContent] = React.useState<string>(englishContent || '')
     const [isTranslating, setIsTranslating] = React.useState<boolean>(false)
     const debouncedContent = useDebounce(content, DEBOUNCED_TRANSLATE_TIME);
     const isTyping = useMemo(() => debouncedContent !== content, [debouncedContent, content]);

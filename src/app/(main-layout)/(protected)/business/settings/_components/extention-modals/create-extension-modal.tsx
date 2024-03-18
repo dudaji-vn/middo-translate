@@ -58,6 +58,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const isClient = useClient()
   const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
   const [accordionValue, setAccordionValue] = React.useState<AccordionValue>('add domain');
+  const [submitedData , setSubmitedData] = React.useState<TFormValues>();
   const [extensionId, setExtensionId] = React.useState<string>();
   const { copy } = useTextCopy();
   const router = useRouter();
@@ -82,7 +83,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
     trigger,
     reset,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid, isSubmitting, },
   } = form;
   const domains: Array<string> = watch('domains');
   const addingDomain: string = watch('addingDomain');
@@ -112,6 +113,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
         setExtensionId(res.data._id);
         toast.success('Create extension success!');
         setAccordionValue('copy & paste code');
+        setSubmitedData(values);
       }).catch((err) => {
         toast.error(err?.response?.data?.message || 'Create extension failed!');
         setAccordionValue('custom extension');
@@ -132,17 +134,19 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const removeDomain = (domain: string) => {
     setValue('domains', domains.filter((d) => d !== domain));
     trigger('domains');
-  }
+  }    
+  const initialCustom = {
+    language: initialData?.language,
+    firstMessage: initialData?.firstMessage,
+    firstMessageEnglish: initialData?.firstMessageEnglish,
+    color: initialData?.color || DEFAULT_THEME,
+  };
   const onOpenChange = (open: boolean) => {
     const currentFormData = form.getValues();
-    const initialCustom = {
-      language: initialData?.language,
-      firstMessage: initialData?.firstMessage,
-      firstMessageEnglish: initialData?.firstMessageEnglish,
-      color: initialData?.color || DEFAULT_THEME,
-    };
+    const isSubmited = isEqual(currentFormData, submitedData);
+    console.log('submitedData, currentFormData', submitedData, currentFormData)
     const isChanged = !isEqual(currentFormData.domains, initialData?.domains) || !isEqual(currentFormData.custom, initialCustom);
-    if (!open && !isEmpty(initialData) && isChanged) {
+    if (!open && !isEmpty(initialData) && isChanged && !isSubmited) {
       setOpenConfirmDialog(true);
       return;
     }
@@ -284,8 +288,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                         type="button"
                         className='text-neutral-400 absolute right-4 top-1'
                         onClick={() => {
-                          navigator.clipboard.writeText(generateExtensionCode(`/help-desk/${extensionId}`));
-                          toast.success('Copied to clipboard');
+                          copy(generateExtensionCode(`/help-desk/${extensionId}`));
                         }}
                       ><CopyIcon />
                       </Button.Icon>
