@@ -35,9 +35,9 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent }: 
         })
     }, [debouncedContent])
 
-    return <div >
+    return <div className="">
         <TimeDisplay time={new Date().toLocaleDateString()} />
-        <div className="w-full gap-1  pb-10 relative  flex pr-11 md:pr-20">
+        <div className="w-full gap-1  pb-8 relative  flex pr-11 md:pr-20">
             <div className="overflow-hidden relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
                 <Avatar src={String(sender?.avatar)} alt={String(sender?.name)} size="xs" />
             </div>
@@ -47,7 +47,7 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent }: 
                     <div className="px-3 py-2 bg-neutral-50 break-word-mt text-start tiptap prose editor-view prose-strong:text-current max-w-none w-full focus:outline-none text-current text-sm">
                         {content}
                     </div>
-                    <div className={(translatedContent || englishContent) ? "relative mt-2 min-w-10" : 'hidden'}>
+                    <div className={"relative mt-2 min-w-10"}>
                         <TriangleSmall
                             fill={'#e6e6e6'}
                             position="top"

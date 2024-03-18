@@ -19,7 +19,7 @@ const CustomThemeOptions = ({
       >
         Theme
       </FormLabel>
-      <div className='flex flex-row gap-3'>
+      <div className='grid md:grid-cols-6 grid-cols-4 xl:grid-cols-10  lg:grid-cols-8 grid-flow-row '>
         {extentionsCustomThemeOptions.map((color, index) => {
           const isSelect = selectedColor === color.hex;
           return (

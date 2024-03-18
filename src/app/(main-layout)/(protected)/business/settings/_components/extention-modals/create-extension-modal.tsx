@@ -58,7 +58,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const isClient = useClient()
   const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
   const [accordionValue, setAccordionValue] = React.useState<AccordionValue>('add domain');
-  const [submitedData , setSubmitedData] = React.useState<TFormValues>();
+  const [submitedData, setSubmitedData] = React.useState<TFormValues>();
   const [extensionId, setExtensionId] = React.useState<string>();
   const { copy } = useTextCopy();
   const router = useRouter();
@@ -134,7 +134,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const removeDomain = (domain: string) => {
     setValue('domains', domains.filter((d) => d !== domain));
     trigger('domains');
-  }    
+  }
   const initialCustom = {
     language: initialData?.language,
     firstMessage: initialData?.firstMessage,
@@ -156,7 +156,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="h-fit  max-w-screen-xl md:max-w-screen-md"
+        <DialogContent className="h-fit  max-w-screen-md md:max-w-screen-xl"
           onInteractOutside={(e) => {
             e.preventDefault();
           }}
@@ -169,7 +169,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   {title}
                 </Typography>
               </DialogTitle>
-              <div className=" max-h-[calc(85vh-48px)] max-w-screen-xl md:max-w-screen-md overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
+              <div className=" max-h-[calc(85vh-48px)] max-w-screen-md md:max-w-screen-xl overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
                 <Accordion
                   type="single"
                   collapsible
@@ -253,7 +253,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                       className: 'px-0'
                     }}
                   >
-                    <div className='flex flex-row divide-x divide-neutral-50 px-4 border-x border-b border-neutral-50 '>
+                    <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>
                       <div className='w-1/3 divide-y divide-neutral-50'>
                         <div className='flex flex-col gap-3 p-3'>
                           <FormLabel
@@ -272,7 +272,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                           setValue('custom.color', color);
                         }} />
                       </div>
-                      <PluginChatPreview className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} />
+                      <PluginChatPreview className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} color={watch('custom.color')} />
                     </div>
                   </CreateExtensionSectionWrapper>
                   <CreateExtensionSectionWrapper
@@ -313,8 +313,8 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
           onOpenChange={setOpenConfirmDialog}
           onConfirm={() => {
             setOpen(false);
-            reset();
             setOpenConfirmDialog(false);
+            reset();
           }}
           onCancel={() => { setOpenConfirmDialog(false) }}
         />
