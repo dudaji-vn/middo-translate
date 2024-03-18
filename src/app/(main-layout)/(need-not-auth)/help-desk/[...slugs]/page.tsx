@@ -3,6 +3,8 @@ import StartAConversation from './_components/start-conversation/start-a-convers
 import { notFound } from 'next/navigation';
 import { businessAPI } from '@/features/chat/business/business.service';
 import HelpDeskConversation from './_components/help-desk-conversation/help-desk-conversation';
+import { headers } from 'next/headers';
+import { isAllowedDomain } from '@/utils/allowed-domains';
 
 const HelpDeskConversationPage = async ({ params: { slugs }, ...props }: {
   params: {
@@ -14,6 +16,14 @@ const HelpDeskConversationPage = async ({ params: { slugs }, ...props }: {
   if (!businessData) {
     return <div>Not Found</div>;
   }
+  const headersList = headers();
+  const referer = headersList.get('referer');
+  const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: businessData.allowedDomains });
+
+  if (!isAllowed) {
+    notFound();
+  }
+
   if (!roomId) {
     return (
       <div className="w-full pb-4">

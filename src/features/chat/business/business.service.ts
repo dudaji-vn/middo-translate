@@ -64,6 +64,7 @@ class BusinessAPI {
           headers: {
             'Content-Type': 'application/json',
           },
+          cache: 'no-cache',
         },
       );
       const data = await response.json();
