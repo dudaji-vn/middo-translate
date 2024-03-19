@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { InboxType } from '../inbox/inbox';
 import { RoomItem } from '../room-item';
 import { Room } from '../../types';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface PinnedRoomProps {
   currentRoomId?: string;
@@ -10,13 +12,17 @@ export interface PinnedRoomProps {
 }
 
 export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
+  const { businessData } = useBusinessExtensionStore();
+  const {isBusiness } = useBusinessNavigationData();
   const filteredRooms = useMemo(() => {
     if (!rooms) return [];
+    const showHelpDeskRooms = isBusiness && businessData?._id && type ==='help-desk';
     return rooms.filter((room) => {
-      if (type === 'all') return true;
-      else if (type === 'group') return room.isGroup;
+      if (showHelpDeskRooms) return room.isHelpDesk;
+      if (type === 'all') return  !room.isHelpDesk;
+      if (type === 'group') return room.isGroup;
     });
-  }, [rooms, type]);
+  }, [rooms, type, businessData, isBusiness]);
 
   if (!filteredRooms || !filteredRooms.length) return null;
   return (
@@ -27,6 +33,7 @@ export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
           data={room}
           isActive={currentRoomId === room._id}
           currentRoomId={currentRoomId as string}
+          businessId={businessData?._id}
         />
       ))}
       <div className="my-1 border-t"></div>
