@@ -30,7 +30,7 @@ export const MediaSlot = () => {
           >
             <PlusCircleIcon />
           </Button.Icon>
-          <div className="flex w-[200px] flex-1 flex-row-reverse  justify-end gap-2">
+          <div className="flex w-[10px] flex-1 flex-row-reverse  justify-end gap-2">
             <AnimatePresence>
               {files.map((file) => {
                 return (
