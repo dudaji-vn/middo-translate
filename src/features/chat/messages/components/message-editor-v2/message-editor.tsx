@@ -40,6 +40,8 @@ export interface MessageEditorProps
   disabledMedia?: boolean;
   scrollId?: string;
   userMentions?: User[];
+  onTyping?: (isTyping: boolean) => void;
+  onStoppedTyping?: (isTyping: boolean) => void;
 }
 
 export interface MessageEditorRef extends HTMLAttributes<HTMLDivElement> {
@@ -64,6 +66,8 @@ type MessageEditorContextProps = {
   setTranslating: (translating: boolean) => void;
   toolbarRef?: React.RefObject<ToolbarRef>;
   userMentions: User[];
+  onTyping: (isTyping: boolean) => void;
+  onStoppedTyping: (isTyping: boolean) => void;
 };
 
 export const MessageEditorContext = createContext<MessageEditorContextProps>(
@@ -81,7 +85,15 @@ export const useMessageEditor = () => {
 };
 export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
   (
-    { onSubmitValue, disabledMedia, scrollId, userMentions = [], ...props },
+    {
+      onSubmitValue,
+      disabledMedia,
+      scrollId,
+      userMentions = [],
+      onStoppedTyping,
+      onTyping,
+      ...props
+    },
     ref,
   ) => {
     const {
@@ -191,6 +203,8 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
           setTranslating,
           toolbarRef,
           userMentions,
+          onStoppedTyping: onStoppedTyping || (() => {}),
+          onTyping: onTyping || (() => {}),
         }}
       >
         <TranslationHelper />
