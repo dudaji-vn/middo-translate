@@ -1,6 +1,8 @@
 import {
+  ArchiveIcon,
   BellIcon,
   BellOffIcon,
+  CheckSquare,
   LogOut,
   PinIcon,
   PinOffIcon,
@@ -12,6 +14,8 @@ import { RoomModalDelete } from './room.modal-delete';
 import { RoomModalLeave } from './room.modal-leave';
 import { RoomModalNotification } from './room.modal-notification';
 import { usePinRoom } from '../hooks/use-pin-room';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { RoomModalChangeStatus } from './room.modal-change-status';
 
 export type Action =
   | 'delete'
@@ -20,7 +24,11 @@ export type Action =
   | 'leave'
   | 'notify'
   | 'none'
-  | 'unnotify';
+  | 'unnotify'
+  | 'archive'
+  | 'unarchive'
+  | 'complete'
+  ;
 
 export type ActionItem = {
   action: Action;
@@ -76,6 +84,10 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         return (
           <RoomModalNotification onClosed={reset} id={id} type="turnOff" />
         );
+      case 'archive':
+      case 'unarchive':
+      case 'complete':
+        return <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />;
       default:
         return null;
     }
@@ -115,6 +127,21 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         icon: <TrashIcon />,
         color: 'error',
       },
+      {
+        action: 'archive',
+        label: 'Archive',
+        icon: <ArchiveIcon />,
+      },
+      {
+        action: 'unarchive',
+        label: 'Unarchive',
+        icon: <ArchiveIcon />,
+      },
+      {
+        action: 'complete',
+        label: 'Complete',
+        icon: <CheckSquare />,
+      }
     ];
   }, []);
 

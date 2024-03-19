@@ -1,4 +1,4 @@
-import { ActionItem, useRoomActions } from '../room-actions';
+import { Action, ActionItem, useRoomActions } from '../room-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +13,8 @@ import { MoreVertical } from 'lucide-react';
 import { Room } from '../../types';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
-
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { EBusinessConversationKeys } from '@/types/business.type';
 export interface RoomItemActionWrapperProps
   extends React.HTMLAttributes<HTMLDivElement> {
   room: Room;
@@ -23,6 +24,20 @@ export interface RoomItemActionWrapperProps
 type Item = Omit<ActionItem, 'onAction'> & {
   onAction: () => void;
 };
+const BUSINESS_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
+  conversations: ['archive', 'complete', 'notify', 'unnotify', 'pin', 'unpin'],
+  archived: ['unarchive', 'delete'],
+  completed: ['delete'],
+};
+const TALK_ALLOWED_ACTIONS: Action[] = ['notify', 'unnotify', 'pin', 'unpin', 'leave', 'delete', 'none'];
+
+const checkAllowedActions = (isBusinessRoom: boolean, businessConversationType: string, action: Action, currentStatus: Room['status']) => {
+  if (currentStatus === 'completed') return BUSINESS_ALLOWED_ACTIONS.completed.includes(action);
+  if (currentStatus === 'archived') return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
+  if (isBusinessRoom) return BUSINESS_ALLOWED_ACTIONS[businessConversationType as EBusinessConversationKeys]?.includes(action);
+  return TALK_ALLOWED_ACTIONS.includes(action);
+}
+
 
 export const RoomItemActionWrapper = forwardRef<
   HTMLDivElement,
@@ -30,23 +45,32 @@ export const RoomItemActionWrapper = forwardRef<
 >(({ room, isMuted, children }, ref) => {
   const isMobile = useAppStore((state) => state.isMobile);
   const Wrapper = isMobile ? MobileWrapper : DesktopWrapper;
+  const { isBusiness, businessConversationType } = useBusinessNavigationData();
   const { onAction, actionItems } = useRoomActions();
   const items = useMemo(() => {
     return actionItems
       .filter((item) => {
+        const isAllowed = checkAllowedActions(Boolean(isBusiness), String(businessConversationType), item.action, room.status);
+  
         switch (item.action) {
           case 'notify':
-            return isMuted;
+            return isAllowed && isMuted;
           case 'unnotify':
-            return !isMuted;
+            return isAllowed && !isMuted;
           case 'pin':
-            return !room.isPinned;
+            return isAllowed && !room.isPinned;
           case 'unpin':
-            return room.isPinned;
+            return isAllowed && room.isPinned;
           case 'leave':
-            return room.isGroup;
+            return isAllowed && room.isGroup;
+          case 'archive':
+            return isAllowed && room.status === 'active';
+          case 'unarchive':
+            return isAllowed && room.status === 'archived';
+          case 'complete':
+            return isAllowed && room.status === 'active';
           default:
-            return true;
+            return isAllowed;
         }
       })
       .map((item) => ({
