@@ -31,7 +31,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
     userLanguage: state.user?.language,
     currentUserId: state.user?._id,
   }));
-  console.log('message.content', message.content)
+
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
     if (message.status === 'removed') {
@@ -41,8 +41,8 @@ export const Content = ({ position, active, message }: ContentProps) => {
 
     if (
       message.language === userLanguage ||
-      message.sender._id === currentUserId
-      || isHelpDesk
+      message.sender._id === currentUserId ||
+      isHelpDesk
     ) {
       setContentDisplay(message.content);
       return;

@@ -16,11 +16,13 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import useStore from '@/stores/use-store';
 import { PinnedRoom } from '../pinned-room';
 import { useQueryClient } from '@tanstack/react-query';
+import { isEmpty } from 'lodash';
 import {
   USE_GET_PINNED_ROOMS_KEY,
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/store';
+import { useInboxRouter } from './use-inbox-router';
 
 interface InboxListProps {
   type: InboxType;
@@ -52,6 +54,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       queryFn: ({ pageParam }) =>
         roomApi.getRooms({ cursor: pageParam, limit: 10, type }),
     });
+    useInboxRouter({ rooms });
+
     const { rooms: pinnedRooms } = useGetPinnedRooms();
 
     const queryClient = useQueryClient();
@@ -64,7 +68,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const deleteRoom = (roomId: string) => {
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
-
       removeItem(roomId);
     };
 

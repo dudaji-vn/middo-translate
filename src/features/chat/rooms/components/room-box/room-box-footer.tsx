@@ -210,11 +210,6 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [localDocumentMessagesWaiting, uploadedFiles, room?._id]);
     useEffect(() => {
-      console.log(
-        localVideoMessageWaiting,
-        uploadedFiles,
-        'localVideoMessageWaiting',
-      );
       if (!localVideoMessageWaiting.length || !uploadedFiles.length) return;
       const localVideoMessages = localVideoMessageWaiting;
       const videosUploaded: Media[][] = localVideoMessages.map((message) => {
