@@ -12,6 +12,7 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 export interface InboxProps {
 }
 export type InboxType = 'all' | 'group' | 'help-desk' | 'unread-help-desk';
+
 export const inboxTabMap: Record<
   InboxType,
   {
@@ -72,7 +73,7 @@ export const Inbox = (props: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
-          <InboxList type={type}/>
+          <InboxList type={type} />
         </div>
       </div>
     </RoomActions>

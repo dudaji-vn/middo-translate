@@ -9,6 +9,11 @@ export enum EPageType {
   BUSINESS = 'business',
   HELP_DESK = 'help-desk',
 }
+const MAPPED_INBOX_STATUS = {
+  [EBusinessConversationKeys.Conversations]: null,
+  [EBusinessConversationKeys.Completed]: 'completed',
+  [EBusinessConversationKeys.Archived]: 'archived',
+};
 export const useBusinessNavigationData = () => {
   const params = useParams();
   const pathname = usePathname();
@@ -28,8 +33,6 @@ export const useBusinessNavigationData = () => {
     ? params?.[PK_BUSINESS_CONVERSATIONS]
     : null;
 
-
-
   return {
     isBusiness,
     isHelpDesk,
@@ -41,6 +44,9 @@ export const useBusinessNavigationData = () => {
     guestId,
     anonymousId,
     businessConversationType,
-    
+    inboxStatus:
+      MAPPED_INBOX_STATUS[
+        (businessConversationType || '') as EBusinessConversationKeys
+      ],
   };
 };
