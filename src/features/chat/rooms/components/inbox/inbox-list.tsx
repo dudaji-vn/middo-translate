@@ -16,7 +16,6 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import useStore from '@/stores/use-store';
 import { PinnedRoom } from '../pinned-room';
 import { useQueryClient } from '@tanstack/react-query';
-import { isEmpty } from 'lodash';
 import {
   USE_GET_PINNED_ROOMS_KEY,
   useGetPinnedRooms,
@@ -54,15 +53,15 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       queryFn: ({ pageParam }) =>
         roomApi.getRooms({ cursor: pageParam, limit: 10, type }),
     });
+
     useInboxRouter({ rooms });
 
-    const { rooms: pinnedRooms } = useGetPinnedRooms();
+    const { rooms: pinnedRooms, refetch: refetchPinned } = useGetPinnedRooms();
 
     const queryClient = useQueryClient();
 
     const updateRoom = (room: Partial<Room> & { _id: string }) => {
       refetch();
-      // updateItem(room);
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
     };
 
@@ -77,20 +76,19 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     };
 
     useEffect(() => {
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.NEW, addItem);
+      socket.on(SOCKET_CONFIG.EVENTS.INBOX.NEW, addItem);
       socket.on(
-        SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
+        SOCKET_CONFIG.EVENTS.INBOX.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
           updateRoom({ _id: payload.roomId, ...payload.data });
         },
       );
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, deleteRoom);
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, leaveRoom);
+      socket.on(SOCKET_CONFIG.EVENTS.INBOX.DELETE, deleteRoom);
+      // socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, leaveRoom);
       return () => {
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.UPDATE);
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.DELETE);
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.LEAVE);
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.NEW);
+        socket.off(SOCKET_CONFIG.EVENTS.INBOX.UPDATE);
+        socket.off(SOCKET_CONFIG.EVENTS.INBOX.DELETE);
+        socket.off(SOCKET_CONFIG.EVENTS.INBOX.NEW);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
