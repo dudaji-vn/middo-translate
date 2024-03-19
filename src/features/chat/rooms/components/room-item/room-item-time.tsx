@@ -12,7 +12,7 @@ export const RoomItemTime = forwardRef<HTMLSpanElement, RoomItemTimeProps>(
     const time = useMemo(() => {
       if (date) {
         if (moment(date).isSame(moment(), 'day')) {
-          return moment(date).format('HH:mm A');
+          return moment(date).format('LT');
         } else {
           return moment(date).format('YYYY/MM/DD');
         }

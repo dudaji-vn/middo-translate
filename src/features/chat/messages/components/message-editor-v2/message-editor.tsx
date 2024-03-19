@@ -110,6 +110,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       const images: Media[] = [];
       const documents: Media[] = [];
       const videos: Media[] = [];
+      const content = richText?.getHTML() || '';
       const mentions = getMentionIdsFromHtml(content);
 
       let lang = '';
