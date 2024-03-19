@@ -24,9 +24,7 @@ export const useBusiness = () => {
   const businessRoomId = isOnBusinessChat ? businessSlugs?.[0] : null;
   const guestId = isUserChattingWithGuest ? businessSlugs?.[1] : null;
   const anonymousId = isOnHelpDeskChat ? businessSlugs?.[2] : null;
-  const businessConversationType = isBusiness
-    ?businessSlugs[1]
-    : (null as EBusinessConversationKeys | null);
+
 
   return {
     isBusiness,
@@ -38,6 +36,6 @@ export const useBusiness = () => {
     businessRoomId,
     guestId,
     anonymousId,
-    businessConversationType,
+    
   };
 };
