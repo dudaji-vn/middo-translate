@@ -77,5 +77,11 @@ export const SOCKET_CONFIG = {
       SEND_AUDIO: 'speech_to_text.send_audio',
       RECEIVE_AUDIO_TEXT: 'speech_to_text.receive_audio_text',
     },
+    TYPING: {
+      UPDATE: {
+        SERVER: 'typing.update.server',
+        CLIENT: 'typing.update.client',
+      },
+    },
   },
 };

@@ -20,6 +20,7 @@ import {
 } from '@/components/media-upload';
 import { redirect } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { RoomTyping } from '@/features/chat/rooms/components/room-box/room-typing';
 
 async function getChatRoom(id: string) {
   const data = await fetchApi<Response<Room>>(`/rooms/${id}`);
@@ -48,6 +49,7 @@ const ChatBoxPage = async (props: {
             <MediaUploadDropzone>
               <MessagesBoxProvider room={room}>
                 <MessageBox room={room} />
+                <RoomTyping />
                 <ChatBoxFooter />
               </MessagesBoxProvider>
             </MediaUploadDropzone>
