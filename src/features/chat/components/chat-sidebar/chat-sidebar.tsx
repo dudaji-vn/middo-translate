@@ -4,11 +4,12 @@ import { useParams, usePathname } from 'next/navigation';
 
 import ChatSidebarHeader from './chat-sidebar-header';
 import { ChatSidebarTabs } from './chat-sidebar-tabs';
-import { PropsWithChildren, ReactNode } from 'react';
+import { PropsWithChildren, ReactNode, useEffect } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
 
 
 interface ChatSidebarProps {
@@ -24,10 +25,18 @@ export const ChatSidebar = ({
   const pathName = usePathname();
   const params = useParams();
   const { isOnBusinessChat } = useBusinessNavigationData();
+  const { setBusinessExtension } = useBusinessExtensionStore();
   const isInRoom =
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
 
   const showSide = (!isMobile || !isInRoom) && (!isOnBusinessChat || !isMobile);
+
+  useEffect(() => {
+    if (businessData) {
+      setBusinessExtension(businessData);
+    }
+  }, [businessData]);
+
   return (
     <>
       {showSide && (
