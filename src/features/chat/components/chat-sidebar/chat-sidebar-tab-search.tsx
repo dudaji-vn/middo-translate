@@ -21,8 +21,8 @@ export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> { }
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchValue = useSearchStore((state) => state.searchValue);
-    const { data: recData } = useGetRoomsRecChat();
     const { isBusiness } = useBusinessNavigationData();
+    const { data: recData } = useGetRoomsRecChat(isBusiness ? 'help-desk' : undefined);
     const { businessData } = useBusinessExtensionStore()
     const searchType = isBusiness ? 'help-desk' : undefined;
 
