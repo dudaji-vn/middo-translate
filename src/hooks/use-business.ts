@@ -1,9 +1,8 @@
 'use client';
 
 import {
-  EBusinessConversation,
+  EBusinessConversationKeys,
   PK_BUSINESS_CONVERSATIONS,
-  isBusinessConversation,
 } from '@/types/business.type';
 import { useParams, usePathname } from 'next/navigation';
 export enum EPageType {
@@ -13,9 +12,7 @@ export enum EPageType {
 export const useBusiness = () => {
   const params = useParams();
   const pathname = usePathname();
-  const isBusiness = isBusinessConversation(
-    params?.[PK_BUSINESS_CONVERSATIONS],
-  );
+  const isBusiness = pathname?.includes(EPageType.BUSINESS);
 
   const businessSlugs = params?.slugs || [];
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
@@ -29,7 +26,7 @@ export const useBusiness = () => {
   const anonymousId = isOnHelpDeskChat ? businessSlugs?.[2] : null;
   const businessConversationType = isBusiness
     ?businessSlugs[1]
-    : (null as EBusinessConversation | null);
+    : (null as EBusinessConversationKeys | null);
 
   return {
     isBusiness,
