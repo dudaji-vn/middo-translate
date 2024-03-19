@@ -19,7 +19,7 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { AlertError } from '@/components/alert/alert-error';
 import { changePasswordSchema } from '@/configs/yup-form';
 import { useTranslation } from 'react-i18next';
-import { PASSWORD_PARTTERN } from '@/configs/regex-pattern';
+import { PASSWORD_PATTERN } from '@/configs/regex-pattern';
 
 export default function UpdateUserPassword() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -29,27 +29,27 @@ export default function UpdateUserPassword() {
     resolver: zodResolver(z
       .object({
         currentPassword: z.string().min(1, {
-          message: t('MESSAGE.ERRORS.REQUIRED'),
+          message: t('MESSAGE.ERROR.REQUIRED'),
         }),
         newPassword: z
           .string()
           .min(8, {
-            message: t('MESSAGE.ERRORS.MIN_LENGTH', {num: 8, field: t('COMMON.PASSWORD')}),
+            message: t('MESSAGE.ERROR.MIN_LENGTH', {num: 8, field: t('COMMON.PASSWORD')}),
           })
-          .regex(PASSWORD_PARTTERN, {
-            message:t('MESSAGE.ERRORS.PASSWORD_PATTERN'),
+          .regex(PASSWORD_PATTERN, {
+            message:t('MESSAGE.ERROR.PASSWORD_PATTERN'),
           }),
     
         confirmPassword: z.string().min(1, {
-          message: t('MESSAGE.ERRORS.REQUIRED'),
+          message: t('MESSAGE.ERROR.REQUIRED'),
         }),
       })
       .refine((data) => data.newPassword === data.confirmPassword, {
-        message: t('MESSAGE.ERRORS.PASSWORD_NOT_MATCH'),
+        message: t('MESSAGE.ERROR.PASSWORD_NOT_MATCH'),
         path: ['confirmPassword'],
       })
       .refine((data) => data.newPassword !== data.currentPassword, {
-        message: t('MESSAGE.ERRORS.PASSWORD_THE_SAME'),
+        message: t('MESSAGE.ERROR.PASSWORD_THE_SAME'),
         path: ['newPassword'],
       })),
     mode: 'onBlur',

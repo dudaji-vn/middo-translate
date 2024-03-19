@@ -8,6 +8,7 @@ import { cn } from '@/utils/cn';
 import { getReadByUsers } from '@/features/chat/utils';
 import { translateText } from '@/services/languages.service';
 import { convert } from 'html-to-text';
+import { useTranslation } from 'react-i18next';
 
 const ItemSub = ({
   message,
@@ -23,6 +24,7 @@ const ItemSub = ({
   const currentUserId = currentUser?._id;
   const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
+  const {t} = useTranslation("common");
   const messageContent = useMemo(
     () => convert(message.content),
     [message.content],
@@ -65,12 +67,12 @@ const ItemSub = ({
     let actor = '';
     if (isGroup) {
       if (isCurrentUserSender) {
-        actor = 'You';
+        actor = t('CONVERSATION.YOU');
       } else {
         actor = message.sender.name;
       }
     } else if (isCurrentUserSender) {
-      actor = 'You';
+      actor = t('CONVERSATION.YOU');
     }
 
     if (isSystemMessage) {
@@ -91,12 +93,13 @@ const ItemSub = ({
     message.forwardOf,
     currentUserId,
     isGroup,
+    t
   ]);
 
   const content = useMemo(() => {
     switch (message.status) {
       case 'removed':
-        return 'unsent a message';
+        return t('CONVERSATION.REMOVED_A_MESSAGE');
       default:
         break;
     }
@@ -107,11 +110,9 @@ const ItemSub = ({
           const mediaType = message.media[0]?.type;
           switch (mediaType) {
             case 'image':
-              return `sent ${message.media.length} photo${
-                message.media.length > 1 ? 's' : ''
-              }`;
+              return message.media.length > 1 ? t('CONVERSATION.SEND_PHOTOS', {num: message.media.length}) : t('CONVERSATION.SEND_PHOTO');
             case 'document':
-              return 'sent file';
+              return t('CONVERSATION.SEND_FILE');
             default:
               break;
           }
@@ -129,7 +130,7 @@ const ItemSub = ({
         break;
     }
     if (!messageContent && message.forwardOf) {
-      return `forwarded a message`;
+      return t('CONVERSATION.FORWARDED_MESSAGE');
     }
     return messageContent;
   }, [
@@ -139,6 +140,7 @@ const ItemSub = ({
     message.status,
     message.targetUsers,
     message.type,
+    t
   ]);
 
   const [contentDisplay, setContentDisplay] = useState(content);
@@ -157,17 +159,49 @@ const ItemSub = ({
         setContentDisplay(translated);
       };
       translateContent();
+      return;
     }
+
     if (message.type === 'call') {
       if (message?.call?.endTime) {
-        setContentDisplay('Call ended');
+        setContentDisplay(t('CONVERSATION.CALL_ENDED'));
       } else {
-        setContentDisplay('started a call');
+        setContentDisplay(t('CONVERSATION.STARTED_CALL'));
       }
-    } else {
-      setContentDisplay(content);
+      return;
+    } 
+
+    if (message.type === 'action') {
+      if(message.content.includes('unpin')) {
+        setContentDisplay(t('CONVERSATION.UNPINNED_A_MESSAGE', {name: ''}))
+        return;
+      }
+
+      if(message.content.includes('pin')) {
+        setContentDisplay(t('CONVERSATION.PINNED_A_MESSAGE', {name: ''}))
+        return;
+      }
+  
+      if(message.content.includes('created group')) {
+        setContentDisplay(t('CONVERSATION.CREATED_GROUP', {name: ''}))
+        return;
+      }
+  
+      if(message.content.includes('added')) {
+        const targetUserNamesString = message?.targetUsers?.map((user) => user.name).join(', ');
+        setContentDisplay(t('CONVERSATION.ADDED', {name: ''}) + " " + targetUserNamesString)
+        return;
+      }
+  
+      if(message.content.includes('removed')) {
+        const targetUserNamesString = message?.targetUsers?.map((user) => user.name).join(', ');
+        setContentDisplay(t('CONVERSATION.REMOVED', {name: ''})+ " " + targetUserNamesString)
+        return;
+      }
     }
-  }, [userLanguage, message, content, messageContent, englishContent]);
+
+    setContentDisplay(content);
+  }, [userLanguage, message, content, messageContent, englishContent, t]);
 
   return (
     <div className="flex items-center">

@@ -6,6 +6,7 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
+import { useTranslation } from 'react-i18next';
 
 export default function ActionDraw({}: {}) {
   const {
@@ -16,6 +17,7 @@ export default function ActionDraw({}: {}) {
     isFullScreen,
   } = useVideoCallStore();
   const haveShareScreen = useHaveShareScreen();
+  const {t} = useTranslation('common')
   const participants = useParticipantVideoCallStore(
     (state) => state.participants,
   );
@@ -40,7 +42,7 @@ export default function ActionDraw({}: {}) {
   if(isDoodleDisabled) return null;
   return (
     <Tooltip
-      title={'Doodle'}
+      title={t('TOOL_TIP.DOODLE')}
       triggerItem={
         <Button.Icon
           variant="default"

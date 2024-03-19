@@ -15,6 +15,7 @@ import { Input } from '@/components/data-entry';
 import { Pen } from 'lucide-react';
 import { useChatBox } from '../../contexts';
 import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomUpdateNameProps {}
 
@@ -24,6 +25,7 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const { mutate } = useUpdateRoomInfo();
+  const {t} = useTranslation('common')
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -55,7 +57,7 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Change group name</AlertDialogTitle>
+          <AlertDialogTitle>{t('CONVERSATION.CHANGE_GROUP_NAME')}</AlertDialogTitle>
         </AlertDialogHeader>
         <form id={id} onSubmit={handleSubmit}>
           <Input
@@ -72,7 +74,7 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
             }}
             className="mr-4"
           >
-            Cancel
+            {t('COMMON.CANCEL')}
           </AlertDialogCancel>
           <AlertDialogAction
             disabled={
@@ -82,7 +84,7 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
             form={id}
             type="submit"
           >
-            Update
+            {t('COMMON.UPDATE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

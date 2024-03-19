@@ -26,7 +26,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
     const searchRef = useRef<any>(null);
     const { recentlySourceUsed, recentlyTargetUsed, addRecentlyUsed } =
       useLanguageStore();
-
+    const {t} = useTranslation('common');
     const recentlyUsed = useMemo(() => {
       {
         return Array.from(
@@ -63,7 +63,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             ref={searchRef}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search"
+            placeholder={t('COMMON.SEARCH')}
             onClear={() => setSearch('')}
           />
         </div>
@@ -86,7 +86,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
 
               {recentlyUsed.length > 0 && isMobile && (
                 <>
-                  <Title>Recently used</Title>
+                  <Title>{t('COMMON.RECENTLY_USED')}</Title>
                   {recentlyUsed.map((code) => {
                     const language = SUPPORTED_LANGUAGES.find(
                       (item) => item.code === code,
@@ -107,7 +107,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                   })}
                 </>
               )}
-              <Title>All languages</Title>
+              <Title>{t('COMMON.ALL_LANGUAGE')}</Title>
               {SUPPORTED_LANGUAGES.map((language) => (
                 <Item
                   onClick={handleSelected.bind(null, language.code)}

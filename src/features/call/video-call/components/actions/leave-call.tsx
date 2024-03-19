@@ -4,15 +4,17 @@ import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { Phone, Video, VideoOff } from 'lucide-react';
 import React, { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ActionLeaveCall = () => {
   const { setConfirmLeave } = useVideoCallStore();
+  const {t} = useTranslation('common')
   const handleLeave = () => {
     setConfirmLeave(true);
   };
   return (
     <Tooltip
-      title={'Leave call'}
+      title={t('TOOL_TIP.LEAVE_CALL')}
       triggerItem={
         <Button.Icon
           variant="default"

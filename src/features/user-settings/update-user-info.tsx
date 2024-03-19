@@ -41,10 +41,10 @@ export default function UpdateUserInfo() {
     resolver: zodResolver(z
       .object({
         name: z.string().min(1, {
-          message: t('MESSAGE.ERRORS.REQUIRED'),
+          message: t('MESSAGE.ERROR.REQUIRED'),
         }),
         language: z.string().min(1, {
-          message: t('MESSAGE.ERRORS.REQUIRED'),
+          message: t('MESSAGE.ERROR.REQUIRED'),
         }),
       })
       .optional()),

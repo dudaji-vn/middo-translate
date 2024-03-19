@@ -85,33 +85,33 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
     return [
       {
         action: 'pin',
-        label: 'Pin',
+        label: "CONVERSATION.PIN",
         icon: <PinIcon />,
       },
       {
         action: 'unpin',
-        label: 'Unpin',
+        label: "CONVERSATION.UNPIN",
         icon: <PinOffIcon />,
       },
       {
         action: 'notify',
-        label: 'On',
+        label: "CONVERSATION.ON",
         icon: <BellIcon />,
       },
       {
         action: 'unnotify',
-        label: 'Off',
+        label: "CONVERSATION.OFF",
         icon: <BellOffIcon />,
       },
       {
         action: 'leave',
-        label: 'Leave',
+        label: "COMMON.LEAVE",
         icon: <LogOut />,
       },
 
       {
         action: 'delete',
-        label: 'Delete',
+        label: "COMMON.DELETE",
         icon: <TrashIcon />,
         color: 'error',
       },

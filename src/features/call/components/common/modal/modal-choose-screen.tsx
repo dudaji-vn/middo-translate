@@ -21,6 +21,7 @@ import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import toast from 'react-hot-toast';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
+import { useTranslation } from 'react-i18next';
 interface MediaSource {
     id: string;
     thumbnail: string;
@@ -35,7 +36,7 @@ export const ModalChooseScreen = () => {
     const { setShareScreen, setShareScreenStream, isTurnOnMic, isTurnOnCamera} = useMyVideoCallStore();
     const { room } = useVideoCallStore();
     const { ipcRenderer } = useElectron();
-    
+    const {t} = useTranslation('common');
     const setSourceList = useCallback((sources: MediaSource[]) => {
         setSources(sources);
     }, [])
@@ -83,21 +84,21 @@ export const ModalChooseScreen = () => {
             });      
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
-                toast.error('Device not supported for sharing screen');
+                toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             }
         }
         setChooseScreen(false)
-    }, [addParticipant, ipcRenderer, isTurnOnCamera, isTurnOnMic, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, user])
+    }, [addParticipant, ipcRenderer, isTurnOnCamera, isTurnOnMic, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, t, user])
 
     return (
         <AlertDialog open={showChooseScreen} onOpenChange={() => setChooseScreen(false)}>
             <AlertDialogContent className="min-w-[80%]" >
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Sharing Screen
+                        {t('MODAL.SHARE_SCREEN.TITLE')}
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        This application will be able to see the contents of your screen.
+                        {t('MODAL.SHARE_SCREEN.DESCRIPTION')}
                     </AlertDialogDescription>
                     <div className='grid grid-cols-4 gap-3 mt-3'>
                         {sources.map((source: any) => {
@@ -120,14 +121,14 @@ export const ModalChooseScreen = () => {
                     </div>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+                    <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
                     <AlertDialogAction
                         type="submit"
                         className="bg-primary text-background active:!bg-primary-darker md:hover:bg-primary-lighter"
                         disabled={!selectedSource}
                         onClick={handleShareScreen}
                     >
-                        Share
+                        {t('COMMON.SHARE')}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

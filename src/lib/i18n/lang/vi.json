@@ -3,35 +3,76 @@
         "INPUT_YOUR_TEXT_HERE": "Nhập văn bản của bạn ở đây",
         "PLEASE_SPEAK": "Xin hãy nói",
         "CLEAR_ALL": "Xóa tất cả",
-        "NAME": "Tên",
-        "NAME_PLACEHOLDER": "Nhập tên của bạn",
-        "LANGUAGE": "Ngôn ngữ",
-        "LANGUAGE_PLACEHOLDER": "Chọn ngôn ngữ của bạn",
         "CANCEL": "Hủy",
         "SAVE": "Lưu",
+        "CONFIRM": "Xác nhận",
+        "CREATE": "Tạo",
+        "ADD": "Thêm",
+        "SHARE": "Chia sẻ",
+        "LEAVE": "Rời khỏi",
+        "REJECT": "Từ chối",
+        "ACCEPT": "Chấp nhận",
+        "DECLINE": "Từ chối",
+        "ACCEPT_CALL" : "Nghe máy",
+        "DELETE": "Xoá",
+        "STOP": "Dừng",
+        "REPLACE": "Thay thế",
+        "UPDATE": "Cập nhật",
+        "ALL": "Tất cả",
+        "GROUP": "Nhóm",
+        "UNREAD": "Chưa đọc",
+        "SWITCH": "Chuyển",
+        "SEARCH": "Tìm kiếm",
+        "VIEW": "Xem",
+        "REMOVE": "Xoá",
+        "CLEAR": "Xóa",
+        "SAVE_CHANGE": "Lưu thay đổi",
         "UPLOAD_IMAGE": "Tải ảnh lên",
+        "SUGGESTION": "Gợi ý",
+        "SHOW_MORE": "Xem thêm",
+        "CLOSE": "Đóng",
+        "FORWARD": "Chuyển tiếp",
+        "SIGN_OUT": "Đăng xuất",
+        "NAME": "Tên",
+        "NAME_PLACEHOLDER": "Nhập tên của bạn",
+        "EMAIL": "Email",
+        "EMAIL_PLACEHOLDER": "Nhập email của bạn",
+        "LANGUAGE": "Ngôn ngữ",
+        "LANGUAGE_PLACEHOLDER": "Chọn ngôn ngữ của bạn",
         "PASSWORD": "Mật khẩu",
+        "PASSWORD_PLACEHOLDER": "Nhập mật khẩu của bạn",
         "CURRENT_PASSWORD": "Mật khẩu hiện tại",
         "CURRENT_PASSWORD_PLACEHOLDER": "Nhập mật khẩu hiện tại của bạn",
         "NEW_PASSWORD": "Mật khẩu mới",
         "NEW_PASSWORD_PLACEHOLDER": "Nhập mật khẩu mới của bạn",
         "CONFIRM_PASSWORD": "Xác nhận mật khẩu",
         "CONFIRM_PASSWORD_PLACEHOLDER": "Nhập lại mật khẩu mới của bạn",
-        "SIGN_OUT": "Đăng xuất"
+        "SELECT_LANGUAGE": "Chọn ngôn ngữ",
+        "RECENTLY_USED": "Gần đây",
+        "ALL_LANGUAGES": "Tất cả ngôn ngữ",
+        "LISTENING": "Đang nghe...",
+        "TYPE_A_MESSAGE": "Nhập tin nhắn"
     },
     "MESSAGE": {
-        "ERRORS": {
+        "ERROR": {
             "FILE_SIZE": "Kích thước file phải nhỏ hơn {{val}}",
             "FILE_NOT_SUPPORTED": "File không được hỗ trợ!",
             "MIN_LENGTH": "{{field}} phải có ít nhất {{num}} ký tự!",
-            "REQUIRED": "Trường bắt buộc!",
+            "REQUIRED": "Vui lòng điền vào trường này!",
             "PASSWORD_PATTERN": "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường và 1 số!",
             "PASSWORD_NOT_MATCH": "Mật khẩu không khớp!",
-            "PASSWORD_THE_SAME": "Mật khẩu mới phải khác mật khẩu hiện tại!"
+            "PASSWORD_THE_SAME": "Mật khẩu mới phải khác mật khẩu hiện tại!",
+            "INVALID_EMAIL": "Vui lòng nhập địa chỉ email hợp lệ!",
+            "INVALID_ACCOUNT": "Email hoặc mật khẩu không hợp lệ!",
+            "DEVICE_NOT_SUPPORTED": "Thiết bị của bạn không hỗ trợ chức năng này!",
+            "NO_ACCESS_MEDIA": "Không thể truy cập vào máy ảnh hoặc microphone của bạn!"
         },
         "SUCCESS": {
             "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",
-            "AVATAR_UPDATED": "Hình đại diện của bạn đã được cập nhật thành công!"
+            "AVATAR_UPDATED": "Hình đại diện của bạn đã được cập nhật thành công!",
+            "LOGIN_SUCCESS": "Đăng nhập thành công!",
+            "CHANGE_PASSWORD": "Mật khẩu của bạn đã được thay đổi thành công",
+            "RESEND_EMAIL": "Một liên kết xác minh mới đã được gửi đến email cuả bạn!"
         }
     },
     "HEADER": {
@@ -116,10 +157,230 @@
         "EDIT_PROFILE": "Chỉnh sửa hồ sơ",
         "CHANGE_AVATAR": "Thay đổi hình đại diện"
     },
+    "SIGN_IN": {
+        "TITLE": "Đăng nhập",
+        "FORGOT_PASSWORD": "Quên mật khẩu?",
+        "NO_ACCOUNT": "Chưa có tài khoản?",
+        "SIGN_UP_HERE": "Đăng ký tại đây",
+        "SOCIAL_LOGIN": "Hoặc đăng nhập với"
+    },
+    "SIGN_UP": {
+        "TITLE": "Đăng ký",
+        "PASSWORD_DES": "Tối thiểu 8 ký tự, bao gồm ít nhất 1 chữ cái viết hoa"
+    },
+    "FORGOT_PASSWORD": {
+        "TITLE": "Quên mật khẩu",
+        "DESCRIPTION": "Chúng tôi sẽ gửi một liên kết qua email của bạn để giúp bạn đặt lại mật khẩu của mình"
+    },
+    "CHANGE_PASSWORD": {
+        "TITLE": "Đổi mật khẩu"
+    },
+    "RESET_PASSWORD_SENDED": {
+        "TITLE": "Đặt lại mật khẩu",
+        "MESSAGE": "Một liên kết đặt lại mật khẩu đã được gửi đến"
+    },
+    "SIGN_UP_SUCCESS": {
+        "TITLE": "Xác minh địa chỉ email của bạn",
+        "MESSAGE": "Một liên kết đã được gửi đến <strong>{{email}}</strong> vì bạn đã sử dụng nó làm phương thức đăng nhập của mình. <br /> <br /> Vui lòng xác minh địa chỉ email này để hoàn tất việc đăng ký tài khoản Middo của bạn.",
+        "RESEND": "Gửi lại",
+        "RESEND_AFTER": "Gửi lại sau {{time}} giây"
+    },
+    "VERIFY": {
+        "SUCCESS": {
+            "TITLE": "Xác minh thành công",
+            "MESSAGE": "Email của bạn đã được xác minh. Bây giờ bạn có thể đăng nhập với email đã đăng ký để sử dụng tất cả các tính năng của Middo",
+            "GOTO_SIGN_IN": "Đi đến trang đăng nhập"
+        },
+        "EXPIRED": {
+            "TITLE": "Liên kết xác minh đã hết hạn",
+            "MESSAGE": "Liên kết xác minh email của bạn đã hết hạn. Vui lòng đăng ký lại để nhận liên kết xác minh mới.",
+            "GOTO_SIGN_UP": "Đi đến trang đăng ký"
+        }
+    },
+    "CREATE_ACCOUNT": {
+        "TITLE": "Tạo tài khoản mới"
+    },
+    "CONVERSATION": {
+        "TITLE": "Hội thoại",
+        "NEW": "Hội thoại mới",
+        "SEARCH": "Tìm kiếm người hoặc nhóm",
+        "PICK_MESSAGE": "Chọn một hội thoại để bắt đầu trò chuyện",
+        "PINNED_MESSAGES": "Tin nhắn đã ghim",
+        "NO_PIN": "Không có tin nhắn nào được ghim",
+        "PINED_BY": "Được ghim bởi {{name}}",
+        "PINNED": "Đã ghim",
+        "PINED_MESSAGE": "{{num}} tin nhắn đã được ghim",
+        "PINED_MESSAGES": "{{num}} tin nhắn đã được ghim",
+        "MESSAGE": "tin nhắn",
+        "MESSAGES": "tin nhắn",
+        "VIEW": "Xem",
+        "TO": "Đến",
+        "NEW_GROUP_CHAT": "Tạo nhóm trò chuyện",
+        "GROUP_CHAT": "Nhóm trò chuyện",
+        "TYPE_A_MESSAGE": "Nhập tin nhắn",
+        "COPY": "Sao chép",
+        "GROUP_NAME_PLACEHOLDER": "Nhập tên nhóm (tùy chọn)",
+        "REPLY_IN_DISCUSSION": "Trả lời trong Thảo luận",
+        "FORWARD": "Chuyển tiếp",
+        "PIN": "Ghim",
+        "LEAVE": "Rời khỏi",
+        "ON": "Bật",
+        "OFF": "Tắt",
+        "UNPIN": "Bỏ ghim",
+        "REMOVE": "Gỡ",
+        "DISCUSSION": "Thảo luận",
+        "NOTIFICATION": "Thông báo",
+        "PIN_CONVERSATION": "Ghim hội thoại",
+        "ADMIN": "Quản trị viên",
+        "MEMBERS": "Thành viên",
+        "SHOW_ALL": "Xem tất cả",
+        "HIDE": "Ẩn",
+        "CLOUD_SHARED": "Phương tiện & Tệp",
+        "MEDIA": "Phương tiện",
+        "FILE": "Tệp tin",
+        "LEAVE_GROUP": "Rời nhóm",
+        "DELETE": "Xoá hội thoại",
+        "START": "Bắt đầu hội thoại",
+        "JOIN": "Tham gia",
+        "CHANGE_GROUP_AVATAR": "Thay đổi hình đại diện nhóm",
+        "CHANGE_GROUP_NAME": "Thay đổi tên nhóm",
+        "TITLE_DISCUSSION_CALL": "Thảo luận được tạo tự động bởi Cuộc gọi Middo",
+        "CONTENT_DISCUSSION_CALL": "Tất cả những tin nhắn, tệp và đường dẫn được gửi trong cuộc thảo luận này sẽ được lưu lại trong cuộc hội thoại của nhóm. Các thành viên có thể truy cập vào chúng ngay cả khi cuộc họp đã kết thúc",
+        "GALERY_VIEW": "Xem dạng lưới",
+        "SCREEN_DOODLE": "Vẽ theo màn hình",
+        "ADD_MEMBER": "Thêm thành viên",
+        "CAPTION": "Phụ đề",
+        "NOTICE": "Chú ý",
+        "NOTICE_CONTENT": "Thành viên trong nhóm sẽ không nhận được thông báo về cuộc gọi này cho đến khi bạn mời họ tham gia",
+        "INVITE": "Mời",
+        "YOU": "Bạn",
+        "TRANSLATED_TOOL": "Dịch thuật",
+        "MESSAGE_TRANSLATE": "Dịch tin nhắn",
+        "EMOJI": "Biểu tượng cảm xúc",
+        "MESSAGE_REACTION": "Cảm xúc về tin nhắn",
+        "CALL_END_AT": "Cuộc gọi kết thúc lúc {{time}}",
+        "CALL_END": "Cuộc gọi đã kết thúc",
+        "CALL_ENDED": "Cuộc gọi đã kết thúc",
+        "STARTED_CALL": "đã bắt đầu cuộc gọi",
+        "TRANSLATE_TOOL": "Công cụ dịch",
+        "TRANSLATE_TOOL_OFF": "Công cụ dịch đã tắt, bạn có thể bật lại nó trong",
+        "STOP_TYPE": "Dừng gõ để xem dịch...",
+        "CHAT_SETTING": "Cài đặt trò chuyện",
+        "EXPAND": "Bấm để mở rộng",
+        "SCREEN": "Màn hình",
+        "CALLING": "<strong>{{name}}</strong> đang gọi...",
+        "UNSEND_A_MESSAGE": "Tin nhắn đã bị gỡ",
+        "REMOVED_A_MESSAGE": "đã gỡ một tin nhắn",
+        "SEND_PHOTO": "đã gửi 1 ảnh",
+        "SEND_PHOTOS": "đã gửi {{num}} ảnh",
+        "SEND_FILE": "Tệp đính kèm",
+        "FORWARD_MESSAGE": "Chuyển tiếp tin nhắn",
+        "FORWARD_FROM": "Chuyển tiếp từ",
+        "FORWARD_FROM_CHANNEL": "trong {{name}}",
+        "A_GROUP": "một nhóm",
+        "PINNED_A_MESSAGE": "{{name}} đã ghim một tin nhắn",
+        "UNPINNED_A_MESSAGE": "{{name}} đã bỏ ghim một tin nhắn",
+        "CREATED_GROUP": "{{name}} đã tạo nhóm",
+        "ADDED": "{{name}} đã thêm",
+        "REMOVED": "{{name}} đã xoá",
+        "SENDING": "Đang gửi"
+    },
+    "NOTIFICATION": {
+        "MESSAGE": "Middo cần quyền của bạn để ",
+        "WITHOUT_NOTIFICATIONS": "Bạn có chắc chắn không? Nếu không có thông báo, việc liên lạc với đồng đội của bạn sẽ khó khăn hơn nhiều.",
+        "ENABLE": "Bật thông báo",
+        "LATER": "Tôi sẽ làm sau",
+        "DENY": "Không hỏi lại"
+    },
+    "TOOL_TIP": {
+        "NEW_CONVERSATION": "Hội thoại mới",
+        "SETTINGS": "Cài đặt",
+        "START_CALL": "Bắt đầu cuộc gọi",
+        "LEAVE_CALL": "Rời khỏi cuộc gọi",
+        "INFO": "Thông tin",
+        "ATTACHMENT": "Tải tệp lên",
+        "EMOJI": "Biểu tượng cảm xúc",
+        "CLOSE_DISCUSSION": "Đóng thảo luận",
+        "HIDE_CHAT": "Ẩn trò chuyện",
+        "SHOW_CHAT": "Hiện trò chuyện",
+        "ADD_MEMBER": "Thêm thành viên",
+        "DOODLE": "Vẽ",
+        "SHARE_SCREEN": "Chia sẻ màn hình",
+        "STOP_SHARE_SCREEN": "Dừng chia sẻ màn hình",
+        "TURN_ON_CAMERA": "Bật camera",
+        "TURN_OFF_CAMERA": "Tắt camera",
+        "TURN_ON_MICROPHONE": "Bật microphone",
+        "TURN_OFF_MICROPHONE": "Tắt microphone",
+        "MINIMIZE": "Thu nhỏ",
+        "MAXIMIZE": "Phóng to"
+    },
     "MODAL": {
         "SIGN_OUT": {
             "TITLE": "Bạn có muốn đăng xuất không?",
             "DESCRIPTION": "Bạn sẽ đăng xuất khỏi ứng dụng và cần đăng nhập lại."
+        },
+        "ADD_USER": {
+            "TITLE": "Thêm thành viên"
+        },
+        "SHARE_SCREEN": {
+            "TITLE": "Chia sẻ màn hình",
+            "DESCRIPTION": "Ứng dụng này sẽ có thể xem nội dung màn hình của bạn."
+        },
+        "LEAVE_CALL": {
+            "TITLE": "Rời khỏi cuộc gọi",
+            "DESCRIPTION": "Bạn sẽ rời khỏi cuộc gọi này và người khác vẫn tiếp tục. Bạn có chắc chắn muốn rời khỏi?"
+        },
+        "REQUEST_JOIN_ROOM": {
+            "TITLE": "{{name}} muốn tham gia cuộc gọi này",
+            "DESCRIPTION": "Người dùng này không ở trong cuộc gọi này. Bạn có muốn chấp nhận người dùng này tham gia cuộc gọi này không?"
+        },
+        "STOP_DOODLE": {
+            "TITLE": "Dừng vẽ",
+            "DESCRIPTION": "Những gì người khác đã vẽ sẽ bị xóa? Bạn có chắc chắn muốn dừng vẽ không?"
+        },
+        "CLEAR_DOODLE": {
+            "TITLE": "Xóa vẽ?",
+            "DESCRIPTION": "Vẽ của bạn sẽ bị xóa và không thể hoàn tác. Bạn có chắc chắn muốn xóa vẽ không?"
+        },
+        "SWITCH_ROOM": {
+            "TITLE": "Chuyển phòng",
+            "DESCRIPTION": "Bạn sẽ chuyển sang phòng <strong>{{name}}</strong>"
+        },
+        "DELETE_CONVERSATION": {
+            "TITLE": "Xoá hội thoại",
+            "DESCRIPTION": "Bạn sẽ mất tất cả tin nhắn và tệp của mình. Người khác vẫn có thể xem tin nhắn của bạn. Bạn có chắc chắn muốn xoá không?"
+        },
+        "LEAVE_GROUP": {
+            "TITLE": "Rời nhóm",
+            "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của nhóm này nữa. Bạn có chắc chắn muốn rời nhóm không?"
+        },
+        "LEAVE_ROOM": {
+            "TITLE": "Rời phòng",
+            "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của phòng này nữa. Bạn có chắc chắn muốn rời phòng không?"
+        },
+        "NOTIFICATION": {
+            "ON": {
+                "TITLE": "Bật thông báo",
+                "DESCRIPTION": "Bạn sẽ nhận được thông báo khi có tin nhắn mới"
+            },
+            "OFF": {
+                "TITLE": "Tắt thông báo",
+                "DESCRIPTION": "Bạn sẽ không nhận được thông báo khi có tin nhắn mới"
+            }
+        },
+        "REMOVE_MESSAGE": {
+            "TITLE": "Gỡ tin nhắn",
+            "FOR_YOU": {
+                "TITLE": "Bạn",
+                "DESCRIPTION": "Tin nhắn này sẽ bị gỡ trên phía bạn. Người khác trong cuộc trò chuyện này vẫn có thể xem nó."
+            },
+            "FOR_ALL": {
+                "TITLE": "Tất cả mọi người",
+                "DESCRIPTION": "Tin nhắn này sẽ bị gỡ trên phía tất cả mọi người trong cuộc trò chuyện này. Tin nhắn có thể đã được xem hoặc chuyển tiếp. Tin nhắn bị gỡ vẫn có thể bị báo cáo."
+            }
+        },
+        "FORWARD_MESSAGE": {
+            "TITLE": "Chuyển tiếp tin nhắn đến"
         }
     }
 }

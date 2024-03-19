@@ -22,6 +22,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useBoolean } from 'usehooks-ts';
 import { useReactMessage } from '../../hooks';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface MessageItemReactionBarProps {
   message: Message;
@@ -33,6 +34,7 @@ export const MessageItemReactionBar = ({
   isMe,
 }: MessageItemReactionBarProps) => {
   const reactions = message.reactions || [];
+  const {t} = useTranslation('common')
   const reactionsByEmoji = reactions.reduce(
     (acc: Record<string, Reaction[]>, reaction) => {
       const { emoji } = reaction;
@@ -78,7 +80,7 @@ export const MessageItemReactionBar = ({
       <AlertDialog open={value} onOpenChange={setValue}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Message reactions?</AlertDialogTitle>
+            <AlertDialogTitle>{t('CONVERSATION.MESSAGE_REACTION')}</AlertDialogTitle>
           </AlertDialogHeader>
           <Tabs value={tabValue} className="w-full px-3">
             <TabsList className="justify-start">
@@ -87,7 +89,7 @@ export const MessageItemReactionBar = ({
                 onClick={() => setTabValue('all')}
                 className="w-16 !rounded-none"
               >
-                All
+                {t('COMMON.ALL')}
               </TabsTrigger>
               {Object.values(reactions).map((react) => {
                 return (
@@ -172,7 +174,7 @@ export const MessageItemReactionBar = ({
             )}
           </div>
           <AlertDialogFooter>
-            <AlertDialogAction>Close</AlertDialogAction>
+            <AlertDialogAction>{t('COMMON.CLOSE')}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -185,6 +187,7 @@ const ReactionItem = (props: {
   onClick?: () => void;
 }) => {
   const { reactions } = props;
+  const {t} = useTranslation('common')
   const user = useAuthStore((state) => state.user);
   return (
     <div
@@ -196,7 +199,7 @@ const ReactionItem = (props: {
           {reactions.map((reaction) => (
             <div key={reaction.user._id} className="flex items-center">
               <span className="mx-[2px] text-sm">
-                {reaction.user._id === user?._id ? 'You' : reaction.user.name}
+                {reaction.user._id === user?._id ? t('CONVERSATION.YOU') : reaction.user.name}
               </span>
             </div>
           ))}

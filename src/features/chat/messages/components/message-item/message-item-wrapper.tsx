@@ -20,6 +20,7 @@ import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useBoolean } from 'usehooks-ts';
 import { Message } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
@@ -107,6 +108,7 @@ const MobileWrapper = ({
   setActive,
 }: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
+  const {t} = useTranslation('common')
   return (
     <LongPressMenu
       isOpen={value}
@@ -121,7 +123,7 @@ const MobileWrapper = ({
         {items.map((item) => (
           <LongPressMenu.Item
             key={item.action}
-            title={item.label}
+            title={t(item.label)}
             color={item.color === 'error' ? 'error' : 'default'}
             onClick={item.onAction}
           >
@@ -167,7 +169,7 @@ const DesktopWrapper = ({
   message,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
-
+  const {t} = useTranslation('common')
   return (
     <>
       {children}
@@ -198,7 +200,7 @@ const DesktopWrapper = ({
                 })}
 
                 <span className={cn(item.color && `text-${item.color}`)}>
-                  {item.label}
+                  {t(item.label)}
                 </span>
               </DropdownMenuItem>
             ))}

@@ -9,6 +9,7 @@ import Mention from '@tiptap/extension-mention';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { useTranslation } from 'react-i18next';
 export interface RichTextInputProps {
   className?: string;
   onClipboardEvent?: (e: ClipboardEvent) => void;
@@ -34,6 +35,7 @@ export const RichTextInput = ({
   onFocus,
   suggestions = [],
 }: RichTextInputProps) => {
+  const {t} = useTranslation('common')
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -56,7 +58,7 @@ export const RichTextInput = ({
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: 'Type a message',
+        placeholder: t('CONVERSATION.TYPE_A_MESSAGE'),
       }),
       Link.configure({
         validate: (href) => /^https?:\/\//.test(href),

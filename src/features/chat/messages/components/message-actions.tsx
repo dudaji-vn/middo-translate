@@ -36,33 +36,33 @@ type ActionItem = {
 export const actionItems: ActionItem[] = [
   {
     action: 'copy',
-    label: 'Copy',
+    label: 'CONVERSATION.COPY',
     icon: <CopyIcon />,
   },
   {
     action: 'reply',
-    label: 'Reply in Discussion',
+    label: 'CONVERSATION.REPLY_IN_DISCUSSION',
     icon: <MessageSquareQuoteIcon />,
   },
 
   {
     action: 'forward',
-    label: 'Forward',
+    label: 'CONVERSATION.FORWARD',
     icon: <ForwardIcon />,
   },
   {
     action: 'pin',
-    label: 'Pin',
+    label: 'CONVERSATION.PIN',
     icon: <PinIcon />,
   },
   {
     action: 'unpin',
-    label: 'Unpin',
+    label: 'CONVERSATION.UNPIN',
     icon: <PinOffIcon />,
   },
   {
     action: 'remove',
-    label: 'Remove',
+    label: 'CONVERSATION.REMOVE',
     icon: <TrashIcon />,
     color: 'error',
   },

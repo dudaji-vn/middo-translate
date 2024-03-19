@@ -90,7 +90,7 @@ const HeaderProfile = ({ className, ...props }:
                             'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
                         }
                     >
-                        Sign in
+                        {t('HEADER.SIGN_IN')}
                     </span>
                 </Link>
             )}

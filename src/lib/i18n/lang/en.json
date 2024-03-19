@@ -3,35 +3,41 @@
         "INPUT_YOUR_TEXT_HERE": "Input your text here",
         "PLEASE_SPEAK": "Please speak",
         "CLEAR_ALL": "Clear all",
-        "NAME": "Name",
-        "NAME_PLACEHOLDER": "Enter your name",
-        "LANGUAGE": "Language",
-        "LANGUAGE_PLACEHOLDER": "Select your native language",
         "CANCEL": "Cancel",
         "SAVE": "Save",
         "UPLOAD_IMAGE": "Upload Image",
+        "SIGN_OUT":"Sign Out",
+        "NAME": "Name",
+        "NAME_PLACEHOLDER": "Enter your name",
+        "EMAIL": "Email",
+        "EMAIL_PLACEHOLDER": "Enter your email",
+        "LANGUAGE": "Language",
+        "LANGUAGE_PLACEHOLDER": "Select your native language",
         "PASSWORD": "Password",
+        "PASSWORD_PLACEHOLDER": "Enter your password",
         "CURRENT_PASSWORD": "Current Password",
         "CURRENT_PASSWORD_PLACEHOLDER": "Enter your current password",
         "NEW_PASSWORD": "New Password",
         "NEW_PASSWORD_PLACEHOLDER": "Enter your new password",
         "CONFIRM_PASSWORD": "Confirm Password",
-        "CONFIRM_PASSWORD_PLACEHOLDER": "Enter your confirm password",
-        "SIGN_OUT":"Sign Out"
+        "CONFIRM_PASSWORD_PLACEHOLDER": "Enter your confirm password"
     },
     "MESSAGE": {
-        "ERRORS": {
+        "ERROR": {
             "FILE_SIZE": "File size must be less than {{val}}",
             "FILE_NOT_SUPPORTED": "File type not supported!",
             "MIN_LENGTH": "{{field}} must be at least {{num}} characters!",
             "REQUIRED": "Required field!",
             "PASSWORD_PATTERN": "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!",
             "PASSWORD_NOT_MATCH": "Password does not match!",
-            "PASSWORD_THE_SAME": "New password must be different from the current password!"
+            "PASSWORD_THE_SAME": "New password must be different from the current password!",
+            "INVALID_EMAIL": "Please enter a valid email address!",
+            "INVALID_ACCOUNT": "Invalid email or password!"
         },
         "SUCCESS": {
             "PROFILE_UPDATED": "Profile updated successfully!",
-            "AVATAR_UPDATED": "Avatar updated successfully!"
+            "AVATAR_UPDATED": "Avatar updated successfully!",
+            "LOGIN_SUCCESS": "Login successfully!"
         }
     },
     "HEADER": {
@@ -115,6 +121,17 @@
         "SIGN_OUT": "Sign Out",
         "EDIT_PROFILE": "Edit Profile",
         "CHANGE_AVATAR": "Change Avatar"
+    },
+    "SIGN_IN": {
+        "TITLE": "Sign in",
+        "FORGOT_PASSWORD": "Forgot password?",
+        "NO_ACCOUNT": "Not have account yet?",
+        "SIGN_UP_HERE": "Sign up here",
+        "SOCIAL_LOGIN": "Or sign in with"
+    },
+    "SIGN_UP": {
+        "TITLE": "Sign Up",
+        "PASSWORD_DES": "At least 8 characters, including 1 capitalize letter."
     },
     "MODAL": {
         "SIGN_OUT": {

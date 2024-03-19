@@ -11,6 +11,7 @@ import VideoItemAvatar from './components/video-item-avatar';
 import { DoodleArea } from '../doodle/doodle-area';
 import useGetVideoSize from '../doodle/hooks/use-get-video-size';
 import { DoodleShareScreen } from '../doodle/doodle-share-screen';
+import { useTranslation } from 'react-i18next';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -23,6 +24,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   useFitRatio(videoRef, parentRef);
   const {width, height} = useGetVideoSize({videoRef});
   // Disable pause video when fullscreen
+  const {t} = useTranslation('common')
   useEffect(() => {
     if (!videoRef.current) return;
     let videoRefTmp = videoRef.current;
@@ -81,8 +83,8 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       {/* Overlay name */}
       <div className="absolute bottom-1 left-1 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white z-10">
         <span className="relative truncate leading-snug">
-          {participant?.isMe ? 'You' : participant?.user?.name || ''}
-          {participant?.isShareScreen ? '  (Screen)' : ''}
+          {participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
+          {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
         </span>
       </div>
 

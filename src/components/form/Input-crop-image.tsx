@@ -65,12 +65,12 @@ export const InputCropImage = forwardRef<
   const processImageFiles = (file: File) => {
     const { type, size } = file || {};
     if (size > 1024 * 1024 * 3) {
-      setErrorMessage(t('MESSAGE.ERRORS.FILE_SIZE', {val: '3MB'}));
+      setErrorMessage(t('MESSAGE.ERROR.FILE_SIZE', {val: '3MB'}));
       removeDragData();
       return;
     }
     if (!ALLOWED_FILE_TYPES.includes(type)) {
-      setErrorMessage(t('MESSAGE.ERRORS.FILE_NOT_SUPPORTED'));
+      setErrorMessage(t('MESSAGE.ERROR.FILE_NOT_SUPPORTED'));
       removeDragData();
       return;
     }

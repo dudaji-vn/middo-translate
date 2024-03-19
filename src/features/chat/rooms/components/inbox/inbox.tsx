@@ -10,6 +10,7 @@ import { isEqual } from 'lodash';
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 import { useState } from 'react';
 import { useBusiness } from '@/hooks/use-business';
+import { useTranslation } from 'react-i18next';
 
 export interface InboxProps {
   businessData?: TBusinessExtensionData;
@@ -23,19 +24,19 @@ export const inboxTabMap: Record<
   }
 > = {
   all: {
-    label: 'All',
+    label: 'COMMON.ALL',
     value: 'all',
   },
   group: {
-    label: 'Group',
+    label: 'COMMON.GROUP',
     value: 'group',
   },
   'help-desk': {
-    label: 'All',
+    label: 'COMMON.ALL',
     value: 'help-desk',
   },
   'unread-help-desk': {
-    label: 'Unread',
+    label: 'COMMON.UNREAD',
     value: 'unread-help-desk',
   },
 };
@@ -47,7 +48,7 @@ export const Inbox = ({ businessData }: InboxProps) => {
   const { isBusiness } = useBusiness()
   const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
   const [type, setType] = useState<InboxType>(tabs[0].value);
-
+  const {t} = useTranslation('common');
   useKeyboardShortcut(
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
     (_, mathedKeys) => {
@@ -70,7 +71,7 @@ export const Inbox = ({ businessData }: InboxProps) => {
                   onClick={() => setType(tab.value)}
                   className="!rounded-none"
                 >
-                  {tab.label}
+                  {t(tab.label)}
                 </TabsTrigger>
               ))}
             </TabsList>

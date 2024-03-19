@@ -13,6 +13,7 @@ import { MoreVertical } from 'lucide-react';
 import { Room } from '../../types';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomItemActionWrapperProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -99,6 +100,7 @@ const DesktopWrapper = ({
   RoomItemActionWrapperProps & {
     items: Item[];
   }) => {
+  const {t} = useTranslation('common');
   return (
     <div className="group relative flex-1">
       {children}
@@ -127,7 +129,7 @@ const DesktopWrapper = ({
                   className: cn('mr-2', item.color && `text-${item.color}`),
                 })}
                 <span className={cn(item.color && `text-${item.color}`)}>
-                  {item.label}
+                  {t(item.label)}
                 </span>
               </DropdownMenuItem>
             ))}

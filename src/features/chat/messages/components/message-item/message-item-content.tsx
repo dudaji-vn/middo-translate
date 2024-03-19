@@ -16,6 +16,7 @@ import { useChatStore } from '@/features/chat/store';
 import { RichTextView } from '@/components/rich-text-view';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { useBusiness } from '@/hooks/use-business';
+import { useTranslation } from 'react-i18next';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -26,6 +27,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
+  const {t} = useTranslation('common');
   const { isHelpDesk } = useBusiness();
   const { userLanguage, currentUserId } = useAuthStore((state) => ({
     userLanguage: state.user?.language,
@@ -35,7 +37,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
     if (message.status === 'removed') {
-      setContentDisplay(message.content);
+      setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
       return;
     }
 

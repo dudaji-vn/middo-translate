@@ -26,6 +26,7 @@ import { Message } from '../../types';
 import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
 import { Section } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
+import { useTranslation } from 'react-i18next';
 
 export interface ForwardModalProps {
   onClosed?: () => void;
@@ -38,7 +39,7 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
     users: User[];
   }>(searchApi.inboxes, 'forward');
   const { data: recData } = useGetRoomsRecChat();
-
+  const {t} = useTranslation('common')
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const { mutate } = useMutation({
@@ -111,18 +112,18 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
     <AlertDialog defaultOpen>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Forward to</AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.FORWARD_MESSAGE.TITLE')}</AlertDialogTitle>
         </AlertDialogHeader>
         <Select onSelectChange={setSelectedIds} items={items || []}>
           <SearchInput
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search for people or groups"
+            placeholder={t('CONVERSATION.SEARCH')}
           />
           <Select.Listed />
           <div className="-mx-5 max-h-[200px] overflow-y-auto border-b">
             <Select.List />
             {recData && recData.length > 0 && !data && (
-              <Section label="Recently" labelClassName="pl-2.5">
+              <Section label={t('COMMON.RECENTLY_USED')} labelClassName="pl-2.5">
                 {recData?.map((room) => {
                   if (!room.isGroup) {
                     let user = currentUser;
@@ -154,14 +155,14 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
         </form>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onClosed} className="mr-4">
-            Cancel
+            {t('COMMON.CANCEL')}
           </AlertDialogCancel>
           <AlertDialogAction
             disabled={selectedIds.length === 0}
             form={id}
             type="submit"
           >
-            Forward
+            {t('COMMON.FORWARD')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

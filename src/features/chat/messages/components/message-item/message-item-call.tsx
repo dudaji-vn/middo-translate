@@ -11,6 +11,7 @@ import 'moment-precise-range-plugin';
 import { convertToTimeReadable } from '@/utils/time';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import { useTranslation } from 'react-i18next';
 
 export interface TextMessageProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -23,6 +24,7 @@ export const CallMessage = ({
 }: TextMessageProps) => {
   const { call: _call } = message;
   const [call, setCall] = useState(_call);
+  const {t} = useTranslation('common')
   const { content, icon, subContent } = useMemo((): {
     content: string;
     icon: React.ReactNode;
@@ -30,7 +32,7 @@ export const CallMessage = ({
   } => {
     if (call?.endTime) {
       return {
-        content: 'Call end at ' + moment(call.endTime).format('HH:mm'),
+        content: t('CONVERSATION.CALL_END_AT', {time: moment(call.endTime).format('HH:mm')}),
         subContent: convertToTimeReadable(
           call.createdAt as string,
           call.endTime,
@@ -41,10 +43,10 @@ export const CallMessage = ({
       };
     }
     return {
-      content: 'Started a call',
+      content: t('CONVERSATION.STARTED_CALL'),
       icon: <PhoneCall className="mr-2 inline-block h-4 w-4" />,
     };
-  }, [call]);
+  }, [call, t]);
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.UPDATE, (call) => {
       if (call._id === _call?._id) {
