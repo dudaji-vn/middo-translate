@@ -27,7 +27,7 @@ export const MessageItemLinks = ({
       }
       return acc;
     }, []);
-    return result;
+    return result.slice(0, 5); // limit to 5 links
   }, [htmlContent]);
   if (links.length === 0 || failedCount === links.length) {
     return null;

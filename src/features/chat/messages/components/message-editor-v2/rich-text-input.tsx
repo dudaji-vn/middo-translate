@@ -36,6 +36,9 @@ export const RichTextInput = ({
 }: RichTextInputProps) => {
   const editor = useEditor({
     editorProps: {
+      transformPastedHTML(html) {
+        return html.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1');
+      },
       attributes: {
         class: 'prose max-w-none w-full focus:outline-none',
       },
