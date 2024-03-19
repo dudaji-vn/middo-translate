@@ -22,21 +22,24 @@ import {
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/store';
 import { useInboxRouter } from './use-inbox-router';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { PK_BUSINESS_CONVERSATIONS } from '@/types/business.type';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 interface InboxListProps {
   type: InboxType;
-  businessId?: string;
 }
 
 const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
-  ({ type, businessId }: InboxListProps, ref) => {
+  ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
-
+    const { inboxStatus: status } = useBusinessNavigationData();
+    const { businessData } = useBusinessExtensionStore();
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
-    const key = useMemo(() => ['rooms', type], [type]);
+    const key = useMemo(() => ['rooms', type, status], [type, status]);
     const onlineList = useChatStore((state) => state.onlineList);
 
     const {
@@ -51,7 +54,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
-        roomApi.getRooms({ cursor: pageParam, limit: 10, type }),
+        roomApi.getRooms({ cursor: pageParam, limit: 10, type, status}),
     });
 
     useInboxRouter({ rooms });
@@ -140,7 +143,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   data={room}
                   isActive={currentRoomId === room._id}
                   currentRoomId={currentRoomId as string}
-                  businessId={businessId}
+                  businessId={businessData?._id}
                 />
               );
             })}

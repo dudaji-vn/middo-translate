@@ -16,7 +16,7 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { useSearchStore } from '@/features/search/store/search.store';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import { cn } from '@/utils/cn';
-import { useBusiness } from '@/hooks/use-business';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface ChatSidebarHeaderProps { }
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
@@ -33,7 +33,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     handleToggleSetting,
   );
   const isSearch = currentSide === 'search';
-  const { isBusiness } = useBusiness();
+  const { isBusiness } = useBusinessNavigationData();
   const searchInputRef = useRef<SearchInputRef>(null);
 
   const handleNewConversation = useCallback(() => {

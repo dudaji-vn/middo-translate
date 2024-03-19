@@ -9,7 +9,12 @@ export enum EPageType {
   BUSINESS = 'business',
   HELP_DESK = 'help-desk',
 }
-export const useBusiness = () => {
+const MAPPED_INBOX_STATUS = {
+  [EBusinessConversationKeys.Conversations]: null,
+  [EBusinessConversationKeys.Completed]: 'completed',
+  [EBusinessConversationKeys.Archived]: 'archived',
+};
+export const useBusinessNavigationData = () => {
   const params = useParams();
   const pathname = usePathname();
   const isBusiness = pathname?.includes(EPageType.BUSINESS);
@@ -25,8 +30,8 @@ export const useBusiness = () => {
   const guestId = isUserChattingWithGuest ? businessSlugs?.[1] : null;
   const anonymousId = isOnHelpDeskChat ? businessSlugs?.[2] : null;
   const businessConversationType = isBusiness
-    ?businessSlugs[1]
-    : (null as EBusinessConversationKeys | null);
+    ? params?.[PK_BUSINESS_CONVERSATIONS]
+    : null;
 
   return {
     isBusiness,
@@ -39,5 +44,9 @@ export const useBusiness = () => {
     guestId,
     anonymousId,
     businessConversationType,
+    inboxStatus:
+      MAPPED_INBOX_STATUS[
+        (businessConversationType || '') as EBusinessConversationKeys
+      ],
   };
 };
