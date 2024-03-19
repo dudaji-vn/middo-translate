@@ -20,7 +20,7 @@ import { PinIcon } from 'lucide-react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Avatar } from '@/components/data-display';
 import { useParams } from 'next/navigation';
-import { useBusiness } from '@/hooks/use-business';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface RoomItemProps {
   data: Room;
@@ -70,7 +70,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const isBusinessExtensionAvailable = !!businessId;
   const room = useMemo(
     () => {
-      const businessRedirectPath =  isBusinessExtensionAvailable ? `/business/${conversationType}/${businessId}/${_data._id}` : `/business/${conversationType}/`;
+      const businessRedirectPath =  isBusinessExtensionAvailable ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${businessId}/${_data._id}` : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
       return generateRoomDisplay(
         _data,
         currentUserId,

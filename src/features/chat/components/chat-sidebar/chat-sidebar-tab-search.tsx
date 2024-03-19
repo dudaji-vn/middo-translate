@@ -11,7 +11,7 @@ import { searchApi } from '@/features/search/api';
 import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
 import { useQuerySearch } from '@/hooks/use-query-search';
 import { useSearchStore } from '@/features/search/store/search.store';
-import { useBusiness } from '@/hooks/use-business';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 
@@ -20,16 +20,18 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchValue = useSearchStore((state) => state.searchValue);
     const { data: recData } = useGetRoomsRecChat();
-    const { isBusiness, businessConversationType } = useBusiness();
-    const redirectPath = (isBusiness ? `/business/${businessConversationType || ''}` : '/talk/')
+    const { isBusiness, businessConversationType } = useBusinessNavigationData();
+    const searchType = isBusiness ? 'help-desk' : undefined;
 
     const { data, isLoading } = useQuerySearch<{
       rooms: Room[];
       users: User[];
-    }>(searchApi.inboxes, 'chat-search', searchValue || '', isBusiness ? 'help-desk' : undefined);
+    }>(searchApi.inboxes, 'chat-search', searchValue || '', searchType);
     console.log('data?.users', data?.users)
     console.log('datroooms', data?.rooms)
     console.log('datarec', recData)
+
+    const redirectPath =  '/talk/';
     return (
       <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
         <motion.div

@@ -11,13 +11,13 @@ import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
 import HeaderProfile from './header-profile';
-import { useBusiness } from '@/hooks/use-business';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 type Props = {};
 
 
 export const Header = (props: Props) => {
-  const { isBusiness, isHelpDesk } = useBusiness();
+  const { isBusiness, isHelpDesk } = useBusinessNavigationData();
   const hideNavigation = isBusiness || isHelpDesk
 
 

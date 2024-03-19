@@ -16,13 +16,13 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useChatStore } from '@/features/chat/store';
 import { cn } from '@/utils/cn';
-import { useBusiness } from '@/hooks/use-business';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room: _room } = useChatBox();
   const currentUser = useAuthStore((s) => s.user)!;
   const onlineList = useChatStore((state) => state.onlineList);
-  const { isBusiness } = useBusiness();
+  const { isBusiness } = useBusinessNavigationData();
   const allowCall = !isBusiness;
   const room = useMemo(
     () => generateRoomDisplay(_room, currentUser._id, true),

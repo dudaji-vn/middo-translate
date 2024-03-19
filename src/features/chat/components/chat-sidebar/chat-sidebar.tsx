@@ -8,21 +8,22 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
-import { PK_BUSINESS_CONVERSATIONS } from '@/types/business.type';
-import { useBusiness } from '@/hooks/use-business';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 
 interface ChatSidebarProps {
-  children: ReactNode
+  children: ReactNode;
+  businessData?: TBusinessExtensionData
 }
 
 export const ChatSidebar = ({
   children,
+  businessData,
 }: ChatSidebarProps & PropsWithChildren) => {
   const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
   const params = useParams();
-  const { isOnBusinessChat } = useBusiness();
+  const { isOnBusinessChat } = useBusinessNavigationData();
   const isInRoom =
     pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
 

@@ -9,7 +9,7 @@ export enum EPageType {
   BUSINESS = 'business',
   HELP_DESK = 'help-desk',
 }
-export const useBusiness = () => {
+export const useBusinessNavigationData = () => {
   const params = useParams();
   const pathname = usePathname();
   const isBusiness = pathname?.includes(EPageType.BUSINESS);
@@ -24,6 +24,10 @@ export const useBusiness = () => {
   const businessRoomId = isOnBusinessChat ? businessSlugs?.[0] : null;
   const guestId = isUserChattingWithGuest ? businessSlugs?.[1] : null;
   const anonymousId = isOnHelpDeskChat ? businessSlugs?.[2] : null;
+  const businessConversationType = isBusiness
+    ? params?.[PK_BUSINESS_CONVERSATIONS]
+    : null;
+
 
 
   return {
@@ -36,6 +40,7 @@ export const useBusiness = () => {
     businessRoomId,
     guestId,
     anonymousId,
+    businessConversationType,
     
   };
 };

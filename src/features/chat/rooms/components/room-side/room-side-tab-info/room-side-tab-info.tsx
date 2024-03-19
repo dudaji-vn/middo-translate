@@ -8,13 +8,13 @@ import { RoomMember } from '../room-member';
 import { RoomSetting } from '../room-setting';
 import { ArrowLeftIcon } from 'lucide-react';
 import { useRoomSidebarTabs } from '../room-side-tabs/room-side-tabs.hook';
-import { useBusiness } from '@/hooks/use-business';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import useClient from '@/hooks/use-client';
 export interface RoomSideTabInfoProps { }
 
 export const RoomSideTabInfo = ({ }: RoomSideTabInfoProps) => {
   const { changeToDefault } = useRoomSidebarTabs();
-  const { isBusiness } = useBusiness();
+  const { isBusiness } = useBusinessNavigationData();
   const isClient = useClient()
   const { room } = useChatBox();
 

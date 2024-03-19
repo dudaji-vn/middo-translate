@@ -8,7 +8,7 @@ const BusinessConversationLayout = async ({ children }: { children: ReactNode })
     const businessData = await businessAPI.getMyBusiness()
     return (
         <div className="flex w-full">
-            <ChatSidebar  >
+            <ChatSidebar  businessData={businessData}>
                 <Inbox  businessData={businessData}/>
             </ChatSidebar>
             {children}
