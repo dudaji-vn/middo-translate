@@ -8,6 +8,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
+    Spinner,
 } from '../feedback';
 import { cn } from '@/utils/cn';
 import useClient from '@/hooks/use-client';
@@ -31,6 +32,7 @@ export const ConfirmAlertModal = ({
     dialogProps,
     children,
     footer,
+    isLoading,
 }: {
     open?: boolean,
     onOpenChange?: (open: boolean) => void,
@@ -49,6 +51,7 @@ export const ConfirmAlertModal = ({
     children?: React.ReactNode,
     header?: React.ReactNode,
     footer?: React.ReactNode,
+    isLoading?: boolean,
 } & AlertDialogProps) => {
     const isClient = useClient();
 
@@ -71,6 +74,7 @@ export const ConfirmAlertModal = ({
                 <AlertDialogFooter {...footerProps} >
                     {footer || <>
                         <AlertDialogCancel
+                            disabled={isLoading}
                             {...cancelProps}
                             onClick={(e) => { onCancel(); cancelProps?.onClick?.(e) }}
                             className={cn("sm:mr-3", cancelProps?.className)}
@@ -78,12 +82,14 @@ export const ConfirmAlertModal = ({
                             Cancel
                         </AlertDialogCancel>
                         <AlertDialogAction
+                            disabled={isLoading}
                             {...actionProps}
                             onClick={(e) => { onConfirm(); actionProps?.onClick?.(e) }}
                             className={cn('bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter',
                                 actionProps?.className)}
                         >
                             Yes
+                            {isLoading && <Spinner size='sm' className='text-white ml-2' />}
                         </AlertDialogAction>
                     </>}
                 </AlertDialogFooter>

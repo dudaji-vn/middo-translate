@@ -26,10 +26,11 @@ export interface MessageItemWrapperProps {
   message: Message;
   setActive: (active: boolean) => void;
   discussionDisabled?: boolean;
+  disabledAllActions?: boolean;
 }
 
 export const MessageItemWrapper = (
-  props: MessageItemWrapperProps & PropsWithChildren,
+  { disabledAllActions, ...props }: MessageItemWrapperProps & PropsWithChildren,
 ) => {
   const isMobile = useAppStore((state) => state.isMobile);
 
@@ -79,6 +80,11 @@ export const MessageItemWrapper = (
     if (isMobile) return MobileWrapper;
     return DesktopWrapper;
   }, [isMobile, message.status]);
+
+  
+  if (disabledAllActions) {
+    return <div className="relative">{props.children}</div>;
+  }
 
   return (
     <div className="relative">

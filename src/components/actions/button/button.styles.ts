@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const buttonVariants = cva(
-  'inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0  transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-50 font-medium',
+  'inline-flex items-center justify-center ring-offset-background focus-visible:outline-none focus-visible:ring-0  transition-all focus-visible:ring-offset-0 disabled:pointer-events-none disabled:opacity-75 font-medium',
   {
     variants: {
       variant: {
@@ -13,9 +13,9 @@ export const buttonVariants = cva(
         default:
           'bg-neutral-50 text-neutral-700 md:hover:bg-neutral-100 active:bg-neutral-200 md:active:bg-neutral-200 dark:bg-gray-700  dark:hover:bg-gray-800',
         primary:
-          'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 ',
+          'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:opacity-75  ',
         secondary:
-          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:bg-primary-100 disabled:text-primary-200',
+          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-75 ',
         success:
           'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
         error:
