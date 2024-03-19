@@ -30,6 +30,11 @@ export const SOCKET_CONFIG = {
       UPDATE: 'room.update',
       DELETE: 'room.delete',
     },
+    INBOX: {
+      NEW: 'inbox.new',
+      UPDATE: 'inbox.update',
+      DELETE: 'inbox.delete',
+    },
     CHAT: {
       JOIN: 'chat.join',
       NEW_JOIN: 'chat.newJoin',
