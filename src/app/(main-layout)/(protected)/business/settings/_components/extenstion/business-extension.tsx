@@ -11,6 +11,9 @@ import { cn } from '@/utils/cn';
 import CreateExtensionModal from '../extention-modals/create-extension-modal';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import moment from 'moment';
+import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
+import { deleteExtensionService } from '@/services/extension.service';
+import toast from 'react-hot-toast';
 
 export type TBusinessExtensionData = {
   createdAt: string;
@@ -46,6 +49,15 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
         open,
       }));
     }, []);
+    const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
+    const onDeleteExtension = async () => {
+      deleteExtensionService().then(() => {
+        toast.success('Extension deleted successfully');
+      }).catch(() => {
+        toast.error('Failed to delete extension');
+      });
+      setOpenConfirmDialog(false);
+    };
     const code = generateExtensionCode(`/help-desk/${data?._id}`)
     const { copy } = useTextCopy(code);
     const isEmpty = !data;
@@ -90,6 +102,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
               triggerItem={
                 <Button.Icon
                   size="xs"
+                  onClick={() => setOpenConfirmDialog(true)}
                   variant="default"
                   color="error"
                 >
@@ -119,6 +132,14 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
         </div>
       </div>
       <CreateExtensionModal initialData={modalState.data} open={modalState.open} title={modalState?.isEditing ? 'Edit Extension' : 'Create Extension'} onOpenChange={onOpenModalChange} />
+      <ConfirmAlertModal
+        title="Delete Extension"
+        description="Are you sure you want to delete this extension?"
+        open={openConfirmDialog}
+        onOpenChange={setOpenConfirmDialog}
+        onConfirm={onDeleteExtension}
+        onCancel={() => { setOpenConfirmDialog(false) }}
+      />
       <Button variant={'default'} color={'primary'} shape={'square'} onClick={() => {
         setModalState({
           open: true,
