@@ -1,5 +1,6 @@
 import {
-  ArchiveIcon,
+  Archive,
+  ArchiveX,
   BellIcon,
   BellOffIcon,
   CheckSquare,
@@ -14,7 +15,6 @@ import { RoomModalDelete } from './room.modal-delete';
 import { RoomModalLeave } from './room.modal-leave';
 import { RoomModalNotification } from './room.modal-notification';
 import { usePinRoom } from '../hooks/use-pin-room';
-import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { RoomModalChangeStatus } from './room.modal-change-status';
 
 export type Action =
@@ -130,12 +130,12 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
       {
         action: 'archive',
         label: 'Archive',
-        icon: <ArchiveIcon />,
+        icon: <Archive />,
       },
       {
         action: 'unarchive',
         label: 'Unarchive',
-        icon: <ArchiveIcon />,
+        icon: <ArchiveX />,
       },
       {
         action: 'complete',
