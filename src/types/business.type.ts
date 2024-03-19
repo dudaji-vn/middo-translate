@@ -1,4 +1,4 @@
-export enum EBusinessConversation {
+export enum EBusinessConversationKeys {
   Conversations = 'conversations',
   Archived = 'archived',
   Completed = 'completed',
@@ -6,17 +6,17 @@ export enum EBusinessConversation {
 
 export const isBusinessConversation = (
   value?: string | string[] | null | undefined,
-): value is EBusinessConversation => {
+): value is EBusinessConversationKeys => {
   if (typeof value === 'string') {
-    return Object.values(EBusinessConversation).includes(
-      value as EBusinessConversation,
+    return Object.values(EBusinessConversationKeys).includes(
+      value as EBusinessConversationKeys,
     );
   } else if (Array.isArray(value)) {
     return value.every(
       (val) =>
         typeof val === 'string' &&
-        Object.values(EBusinessConversation).includes(
-          val as EBusinessConversation,
+        Object.values(EBusinessConversationKeys).includes(
+          val as EBusinessConversationKeys,
         ),
     );
   } else {
@@ -25,7 +25,7 @@ export const isBusinessConversation = (
 };
 
 export const PK_BUSINESS_CONVERSATIONS = 'conversationType';
-export enum EBUSINESS_SIDEBAR_KEYS {
+export enum EBusinessSidebarKeys {
   Conversations = 'conversations',
   Archived = 'archived',
   Completed = 'completed',
