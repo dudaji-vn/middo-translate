@@ -184,6 +184,7 @@ export const MessageBox = ({
                     };
                     return (
                       <MessageItem
+                        disabledAllActions={isAnonymous || room.status === 'archived' || room.status === 'completed'}
                         guestId={guestId}
                         pinnedBy={pinnedBy}
                         showAvatar={

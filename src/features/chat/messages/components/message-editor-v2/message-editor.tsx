@@ -23,6 +23,7 @@ import { TranslationHelper } from './translation-helper';
 import { useEditorState } from './use-editor-state';
 import { User } from '@sentry/nextjs';
 import { getMentionIdsFromHtml } from '@/utils/get-mention-ids-from-html';
+import { Typography } from '@/components/data-display';
 
 type SubmitData = {
   content: string;
@@ -42,6 +43,8 @@ export interface MessageEditorProps
   userMentions?: User[];
   onTyping?: (isTyping: boolean) => void;
   onStoppedTyping?: (isTyping: boolean) => void;
+  disabled?: boolean;
+  disabledMessage?: string;
 }
 
 export interface MessageEditorRef extends HTMLAttributes<HTMLDivElement> {
@@ -92,6 +95,8 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       userMentions = [],
       onStoppedTyping,
       onTyping,
+      disabled,
+      disabledMessage,
       ...props
     },
     ref,
@@ -208,7 +213,10 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         }}
       >
         <TranslationHelper />
-        <div id={id} className="relative flex h-fit flex-row space-x-2">
+        <Typography className={disabled ? 'text-center rounded-lg text-primary-500-main font-light bg-neutral-50 py-4' : "hidden"} variant='h5'>
+          {disabledMessage}
+        </Typography>
+        <div id={id} className={disabled ? 'hidden' : "relative flex h-fit flex-row space-x-2"}>
           <Toolbar ref={toolbarRef} />
           <InputWrapper>
             <div className="flex">
@@ -227,7 +235,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
           )}
         </div>
         <BackgroundTranslation />
-      </MessageEditorContext.Provider>
+      </MessageEditorContext.Provider >
     );
   },
 );

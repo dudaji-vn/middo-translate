@@ -263,6 +263,12 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           userMentions={room.isGroup ? room.participants : []}
           scrollId="inbox-list"
           onSubmitValue={handleSubmit}
+          disabled={room.status === 'archived' || room.status === 'completed'}
+          disabledMessage={
+            room.status === 'archived'
+              ? 'This conversation is archived'
+              : 'This conversation is completed'
+          }
         />
       </div>
     );

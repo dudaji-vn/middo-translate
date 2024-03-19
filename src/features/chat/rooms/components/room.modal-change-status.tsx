@@ -4,6 +4,10 @@ import { useChangeStatusConversation } from '../hooks/use-change-status-conversa
 import { useMemo, useState } from 'react';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { AlertDialogActionProps } from '@radix-ui/react-alert-dialog';
+import { useRouter } from 'next/navigation';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import toast from 'react-hot-toast';
 
 
 export interface RoomModalChangeStatusProps {
@@ -23,17 +27,29 @@ const actionVariants: Record<string, AlertDialogActionProps['className']> = {
 }
 
 export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalChangeStatusProps) => {
-  const { mutateAsync } = useChangeStatusConversation();
+  const { mutateAsync, isLoading } = useChangeStatusConversation();
   const [open, setOpen] = useState(true);
+  const { businessConversationType } = useBusinessNavigationData();
+  const router = useRouter();
   const {
     modalTitle,
     modalDescription,
   } = useMemo(() => {
+    setOpen(true);
     return {
       modalTitle: `${actionName} Conversation`,
       modalDescription: `Are you sure to ${actionName} this conversation?`,
     }
   }, [actionName, id]);
+  const onConfirm = async () => {
+    mutateAsync({ roomId: id, status: MAPPED_ACTION_STATUS[actionName] }).then(() => {
+      router.push(`${ROUTE_NAMES.BUSINESS_CONVERSATION}/${businessConversationType}`);
+    }).catch(() => {
+      toast.error(`Failed to ${actionName} conversation!`);
+    }).finally(() => {
+      setOpen(false);
+    });
+  }
 
   if (!MAPPED_ACTION_STATUS[actionName]) return null;
   return (
@@ -41,15 +57,13 @@ export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalCha
       title={modalTitle}
       description={modalDescription}
       open={open}
-      onConfirm={() => {
-        mutateAsync({ roomId: id, status: MAPPED_ACTION_STATUS[actionName] });
-        setOpen(false);
-      }}
+      onConfirm={onConfirm}
       titleProps={{ className: 'capitalize' }}
       onCancel={() => { onClosed?.(); }}
       actionProps={{
         className: actionVariants[actionName] || '',
       }}
+      isLoading={isLoading}
     />
   );
 };
