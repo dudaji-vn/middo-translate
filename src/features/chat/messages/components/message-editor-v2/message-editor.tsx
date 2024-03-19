@@ -127,7 +127,8 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       const images: Media[] = [];
       const documents: Media[] = [];
       const videos: Media[] = [];
-      const content = richText?.getHTML() || '';
+      let content = richText?.getHTML() || '';
+      if (isContentEmpty) content = '';
       const mentions = getMentionIdsFromHtml(content);
 
       let lang = '';
@@ -213,10 +214,22 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         }}
       >
         <TranslationHelper />
-        <Typography className={disabled ? 'text-center rounded-lg text-primary-500-main font-light bg-neutral-50 py-4' : "hidden"} variant='h5'>
+        <Typography
+          className={
+            disabled
+              ? 'rounded-lg bg-neutral-50 py-4 text-center font-light text-primary-500-main'
+              : 'hidden'
+          }
+          variant="h5"
+        >
           {disabledMessage}
         </Typography>
-        <div id={id} className={disabled ? 'hidden' : "relative flex h-fit flex-row space-x-2"}>
+        <div
+          id={id}
+          className={
+            disabled ? 'hidden' : 'relative flex h-fit flex-row space-x-2'
+          }
+        >
           <Toolbar ref={toolbarRef} />
           <InputWrapper>
             <div className="flex">
@@ -235,7 +248,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
           )}
         </div>
         <BackgroundTranslation />
-      </MessageEditorContext.Provider >
+      </MessageEditorContext.Provider>
     );
   },
 );
