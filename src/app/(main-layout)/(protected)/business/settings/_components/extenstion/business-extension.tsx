@@ -14,6 +14,7 @@ import moment from 'moment';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { deleteExtensionService } from '@/services/extension.service';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 export type TBusinessExtensionData = {
   createdAt: string;
@@ -43,6 +44,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
       isEditing: false,
       data,
     });
+    const router = useRouter();
     const onOpenModalChange = useCallback((open: boolean) => {
       setModalState((prev) => ({
         ...prev,
@@ -53,6 +55,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
     const onDeleteExtension = async () => {
       deleteExtensionService().then(() => {
         toast.success('Extension deleted successfully');
+        router.refresh();  
       }).catch(() => {
         toast.error('Failed to delete extension');
       });
