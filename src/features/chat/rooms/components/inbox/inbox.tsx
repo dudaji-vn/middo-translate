@@ -7,12 +7,9 @@ import { RoomActions } from '../room-actions';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
-import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 import { useState } from 'react';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-
 export interface InboxProps {
-  businessData?: TBusinessExtensionData;
 }
 export type InboxType = 'all' | 'group' | 'help-desk' | 'unread-help-desk';
 export const inboxTabMap: Record<
@@ -43,8 +40,8 @@ export const inboxTabMap: Record<
 const normalInboxTabs = [inboxTabMap.all, inboxTabMap.group];
 const businessInboxTabs = [inboxTabMap['help-desk'], inboxTabMap['unread-help-desk']];
 
-export const Inbox = ({ businessData }: InboxProps) => {
-  const { isBusiness } = useBusinessNavigationData()
+export const Inbox = (props: InboxProps) => {
+  const { isBusiness } = useBusinessNavigationData();
   const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
   const [type, setType] = useState<InboxType>(tabs[0].value);
 
@@ -75,7 +72,7 @@ export const Inbox = ({ businessData }: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
-          <InboxList type={type} businessId={businessData?._id} />
+          <InboxList type={type}/>
         </div>
       </div>
     </RoomActions>

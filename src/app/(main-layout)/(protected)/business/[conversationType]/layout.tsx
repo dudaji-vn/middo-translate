@@ -9,7 +9,7 @@ const BusinessConversationLayout = async ({ children }: { children: ReactNode })
     return (
         <div className="flex w-full">
             <ChatSidebar  businessData={businessData}>
-                <Inbox  businessData={businessData}/>
+                <Inbox  />
             </ChatSidebar>
             {children}
         </div>

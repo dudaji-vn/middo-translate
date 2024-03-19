@@ -23,17 +23,17 @@ import {
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/store';
 import { useInboxRouter } from './use-inbox-router';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
 
 interface InboxListProps {
   type: InboxType;
-  businessId?: string;
 }
 
 const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
-  ({ type, businessId }: InboxListProps, ref) => {
+  ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
-
+    const { businessData } = useBusinessExtensionStore();
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
@@ -142,7 +142,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   data={room}
                   isActive={currentRoomId === room._id}
                   currentRoomId={currentRoomId as string}
-                  businessId={businessId}
+                  businessId={businessData?._id}
                 />
               );
             })}
