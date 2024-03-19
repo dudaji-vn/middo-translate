@@ -20,9 +20,9 @@ const HelpDeskConversationPage = async ({ params: { slugs }, ...props }: {
   const referer = headersList.get('referer');
   const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: businessData.domains });
 
-  if (!isAllowed) {
-    notFound();
-  }
+  // if (!isAllowed) {
+  //   notFound();
+  // }
 
   if (!roomId) {
     return (

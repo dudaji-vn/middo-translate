@@ -16,6 +16,7 @@ export type Room = {
   link?: string;
   status: RoomStatus;
   admin: User;
+  isHelpDesk?: boolean;
   isSetName: boolean;
   isPinned?: boolean;
 } & BaseEntity;
