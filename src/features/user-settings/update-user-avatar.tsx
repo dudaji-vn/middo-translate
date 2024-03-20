@@ -34,14 +34,14 @@ export default function UpdateUserAvatar() {
     e.preventDefault();
     const file = inputCropImage.current?.getCropData();
     if (!file) {
-      toast.error('Please choose image!');
+      toast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
       return;
     }
     try {
       setLoading(true);
       let image = await uploadImage(file);
       let imgUrl = image.secure_url;
-      if (!imgUrl) throw new Error('Upload image failed!');
+      if (!imgUrl) throw new Error(t('MESSAGE.ERROR.UPLOAD_IMAGE'));
       let res = await updateInfoUserService({ avatar: imgUrl });
       setDataAuth({
         user: {
@@ -49,7 +49,7 @@ export default function UpdateUserAvatar() {
           avatar: res.data.avatar,
         },
       });
-      toast.success('Update avatar success!');
+      toast.success(t('MESSAGE.SUCCESS.UPDATED_AVATAR'));
       setOpen(false);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);

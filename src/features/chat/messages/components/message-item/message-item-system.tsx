@@ -23,8 +23,23 @@ export const MessageItemSystem = ({
       return t('CONVERSATION.UNPINNED_A_MESSAGE', {name: isMe ? t('CONVERSATION.YOU') : message.sender.name})
     }
 
-    if(message.content.includes('created group')) {
+    if(message.content.includes('has created group')) {
       return t('CONVERSATION.CREATED_GROUP', {name: isMe ? t('CONVERSATION.YOU') : message.sender.name})
+    }
+
+    if(message.content.includes('left group')) {
+      return t('CONVERSATION.LEFT_GROUP', {name: isMe ? t('CONVERSATION.YOU') : message.sender.name})
+    }
+
+    if(message.content.includes('change group name to')) {
+      return t('CONVERSATION.CHANGED_GROUP_NAME', {
+        name: isMe ? t('CONVERSATION.YOU') : message.sender.name,
+        newName: message.content.split('change group name to')[1]
+      })
+    }
+
+    if(message.content.includes('change group avatar')) {
+      return t('CONVERSATION.CHANGED_GROUP_AVATAR', {name: isMe ? t('CONVERSATION.YOU') : message.sender.name})
     }
 
     if(message.content.includes('added')) {

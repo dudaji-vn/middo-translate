@@ -67,6 +67,8 @@ export const Content = ({ position, active, message }: ContentProps) => {
     message.language,
     message.sender._id,
     currentUserId,
+    t,
+    isHelpDesk,
   ]);
   const isMe = message.sender._id === currentUserId;
   return (

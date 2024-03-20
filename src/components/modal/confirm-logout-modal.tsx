@@ -29,7 +29,7 @@ export const ConfirmLogoutModal = () => {
       await signOutService();
       setDataAuth({ user: null, isAuthentication: false });
       resetNotification();
-      toast.success('Sign out success!');
+      toast.success(t('MESSAGE.SUCCESS.SIGN_OUT'));
       const { deleteFCMToken } = await import('@/lib/firebase');
       await deleteFCMToken();
       if (platform === 'mobile') {

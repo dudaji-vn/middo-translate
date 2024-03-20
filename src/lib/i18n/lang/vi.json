@@ -13,7 +13,7 @@
         "REJECT": "Từ chối",
         "ACCEPT": "Chấp nhận",
         "DECLINE": "Từ chối",
-        "ACCEPT_CALL" : "Nghe máy",
+        "ACCEPT_CALL": "Nghe máy",
         "DELETE": "Xoá",
         "STOP": "Dừng",
         "REPLACE": "Thay thế",
@@ -65,14 +65,35 @@
             "INVALID_EMAIL": "Vui lòng nhập địa chỉ email hợp lệ!",
             "INVALID_ACCOUNT": "Email hoặc mật khẩu không hợp lệ!",
             "DEVICE_NOT_SUPPORTED": "Thiết bị của bạn không hỗ trợ chức năng này!",
-            "NO_ACCESS_MEDIA": "Không thể truy cập vào máy ảnh hoặc microphone của bạn!"
+            "NO_ACCESS_MEDIA": "Không thể truy cập vào máy ảnh hoặc microphone của bạn!",
+            "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File quá lớn hoặc không được hỗ trợ!",
+            "UPDATE_ROOM": "Không thể cập nhật thông tin phòng!",
+            "JOIN_ROOM": "Không thể tham gia cuộc gọi!",
+            "NOT_SELECTED_LANGUAGE": "Vui lòng chọn ngôn ngữ!",
+            "NOT_CHOOSE_IMAGE": "Vui lòng chọn ảnh!",
+            "UPLOAD_IMAGE": "Tải ảnh lên không thành công!",
+            "CONTENT_TOO_LARGE": "Nội dung quá lớn không thể dịch!"
         },
         "SUCCESS": {
             "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",
             "AVATAR_UPDATED": "Hình đại diện của bạn đã được cập nhật thành công!",
             "LOGIN_SUCCESS": "Đăng nhập thành công!",
             "CHANGE_PASSWORD": "Mật khẩu của bạn đã được thay đổi thành công",
-            "RESEND_EMAIL": "Một liên kết xác minh mới đã được gửi đến email cuả bạn!"
+            "RESEND_EMAIL": "Một liên kết xác minh mới đã được gửi đến email cuả bạn!",
+            "LOGIN": "Đăng nhập thành công!",
+            "IMAGE_COPIED": "Ảnh đã được sao chép!",
+            "SIGN_OUT": "Đăng xuất thành công!",
+            "SHARE_SCREEN": "{{name}} đã chia sẻ màn hình của mình",
+            "JOIN_MEETING": "{{name}} đã tham gia cuộc gọi",
+            "LEFT_MEETING": "{{name}} đã rời cuộc gọi",
+            "START_DOODLE": "{{name}} đã bắt đầu vẽ",
+            "STOP_DOODLE": "{{name}} đã dừng vẽ",
+            "STOP_SHARE_SCREEN": "{{name}} đã dừng chia sẻ màn hình",
+            "ROOM_INFO_UPDATED": "Thông tin phòng đã được cập nhật",
+            "LEAVE_ROOM": "Bạn đã rời phòng",
+            "UPDATED_AVATAR": "Hình đại diện của bạn đã được cập nhật",
+            "PASSWORD_CHANGED": "Mật khẩu của bạn đã được cập nhật",
+            "COPIED": "Đã sao chép vào bộ nhớ tạm"
         }
     },
     "HEADER": {
@@ -281,6 +302,9 @@
         "PINNED_A_MESSAGE": "{{name}} đã ghim một tin nhắn",
         "UNPINNED_A_MESSAGE": "{{name}} đã bỏ ghim một tin nhắn",
         "CREATED_GROUP": "{{name}} đã tạo nhóm",
+        "LEFT_GROUP": "{{name}} đã rời nhóm",
+        "CHANGED_GROUP_NAME": "{{name}} đã đổi tên nhóm thành {{newName}}",
+        "CHANGED_GROUP_AVATAR": "{{name}} đã thay đổi hình đại diện nhóm",
         "ADDED": "{{name}} đã thêm",
         "REMOVED": "{{name}} đã xoá",
         "SENDING": "Đang gửi"
@@ -382,5 +406,49 @@
         "FORWARD_MESSAGE": {
             "TITLE": "Chuyển tiếp tin nhắn đến"
         }
+    },
+    "SHORTCUT": {
+        "TITLE": "Phím tắt",
+        "TABS": {
+            "CONVERSATION": "Middo Trò chuyện",
+            "TRANSLATION": "Middo Dịch thuật",
+            "CALL": "Middo Cuộc gọi"
+        },
+        "SWAP_LANGUAGES": "Chuyển đổi ngôn ngữ",
+        "TOGGLE_HISTORY": "Hiển thị/Ẩn lịch sử dịch",
+        "TOGGLE_PHRASES": "Mở/Đóng các cụm từ",
+        "TOGGLE_SPEECH_TO_TEXT": "Bật/Tắt chuyển âm thành văn bản",
+        "EDIT_ESL_TRANSLATION": "Chỉnh sửa dịch ESL",
+        "CONFIRM_ESL_TRANSLATED": "Xác nhận dịch ESL đã chỉnh sửa",
+        "TEXT_TO_SPEECH_INPUT": "Đầu vào văn bản thành giọng nói",
+        "COPY_INPUT": "Sao chép đầu vào",
+        "TRANSLATED_TEXT_TO_SPEECH": "Dịch văn bản thành giọng nói",
+        "TRANSLATED_COPY": "Sao chép đã dịch",
+        "COPY_ALL_TEXT": "Sao chép toàn bộ văn bản",
+        "COPY_IMAGE": "Sao chép hình ảnh",
+        "NEW_CONVERSATION": "Cuộc trò chuyện mới",
+        "TOGGLE_CONVERSATION_SETTINGS": "Hiển thị/Ẩn cài đặt cuộc trò chuyện",
+        "SEARCH": "Tìm kiếm",
+        "SWITCH_TO_ALL_TAB": "Chuyển sang tab 'Tất cả'",
+        "SWITCH_TO_GROUP_TAB": "Chuyển sang tab 'Nhóm'",
+        "VIEW_PINNED_MESSAGES": "Xem tin nhắn đã ghim",
+        "VIEW_CONVERSATION_INFORMATION": "Xem thông tin cuộc trò chuyện",
+        "UPLOAD_FILES": "Tải lên tệp",
+        "START_STOP_SPEECH_TO_TEXT": "Bắt đầu/Dừng chuyển âm thành văn bản",
+        "OPEN_EMOJI": "Mở biểu tượng cảm xúc",
+        "OPEN_EDIT_TRANSLATION": "Mở chỉnh sửa dịch",
+        "SAVE_EDIT_TRANSLATION": "Lưu chỉnh sửa dịch",
+        "CANCEL_EDIT_TRANSLATION": "Hủy chỉnh sửa dịch",
+        "TURN_ON_OFF_TRANSLATION": "Bật/Tắt dịch",
+        "TURN_ON_OFF_TRANSLATION_PREVIEW": "Bật/Tắt xem trước dịch",
+        "MAXIMIZE_MINIMIZE_CALL": "Phóng to/Thu nhỏ cuộc gọi",
+        "ADD_MEMBERS": "Thêm thành viên để tham gia",
+        "START_STOP_SCREEN_SHARING": "Bắt đầu/Dừng chia sẻ màn hình",
+        "TOGGLE_CAMERA": "Bật/Tắt camera",
+        "TOGGLE_MICROPHONE": "Bật/Tắt microphone",
+        "TOGGLE_DISCUSSION": "Hiển thị/Ẩn thảo luận",
+        "SWITCH_TO_GALLERY_VIEW": "Chuyển sang chế độ xem Gallery",
+        "START_STOP_SCREEN_DOODLE": "Bắt đầu/Dừng vẽ trên màn hình",
+        "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
     }
 }

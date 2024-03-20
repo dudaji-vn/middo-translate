@@ -11,12 +11,13 @@ import ParticipantInVideoCall from "../../interfaces/participant";
 import { createPeer } from "../../utils/peer-action.util";
 import processingStream from "../../utils/processing-stream";
 import getUserStream from "../../utils/get-user-stream";
+import { useTranslation } from "react-i18next";
 
 export default function useHandleStreamMyVideo() {
-    const { user } = useAuthStore();
     const { myStream, setMyStream, setShareScreenStream, setShareScreen, setTurnOnCamera, setTurnOnMic, setLoadingVideo } = useMyVideoCallStore();
     const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
-    const { room: call, clearStateVideoCall } = useVideoCallStore();
+    const { clearStateVideoCall } = useVideoCallStore();
+    const {t} = useTranslation('common');
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
         setLoadingVideo(true);
@@ -32,7 +33,7 @@ export default function useHandleStreamMyVideo() {
             setTurnOnMic(false);
             setLoadingVideo(false);
             console.log(err)
-            toast.error("Can not access to your camera and mic!")
+            toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         })
 
         return () => {

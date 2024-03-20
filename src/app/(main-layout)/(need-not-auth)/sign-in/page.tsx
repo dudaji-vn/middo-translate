@@ -91,7 +91,7 @@ export default function SignIn() {
       const data = await loginService(formData);
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
-      toast.success('Login success!');
+      toast.success(t('MESSAGE.SUCCESS.LOGIN'));
       setErrorMessage('');
     } catch (err: any) {
       setErrorMessage( t('MESSAGE.ERROR.INVALID_ACCOUNT'));

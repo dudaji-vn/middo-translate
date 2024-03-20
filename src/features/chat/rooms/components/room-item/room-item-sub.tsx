@@ -182,11 +182,29 @@ const ItemSub = ({
         return;
       }
   
-      if(message.content.includes('created group')) {
+      if(message.content.includes('has created group')) {
         setContentDisplay(t('CONVERSATION.CREATED_GROUP', {name: ''}))
         return;
       }
+
+      if(message.content.includes('left group')) {
+        setContentDisplay(t('CONVERSATION.LEFT_GROUP', {name: ''}))
+        return;
+      }
   
+      if(message.content.includes('change group name to')) {
+        setContentDisplay(t('CONVERSATION.CHANGED_GROUP_NAME', {
+          name: '',
+          newName: message.content.split('group name to')[1]
+        }))
+        return;
+      }
+
+      if(message.content.includes('change group avatar')) {
+        setContentDisplay(t('CONVERSATION.CHANGED_GROUP_AVATAR', {name: ''}))
+        return;
+      }
+
       if(message.content.includes('added')) {
         const targetUserNamesString = message?.targetUsers?.map((user) => user.name).join(', ');
         setContentDisplay(t('CONVERSATION.ADDED', {name: ''}) + " " + targetUserNamesString)

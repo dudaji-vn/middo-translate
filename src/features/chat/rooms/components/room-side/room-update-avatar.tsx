@@ -50,7 +50,7 @@ export const RoomUpdateAvatar = ({
       // call api to update avatar, tomorrow
     },
     onDropRejected: () => {
-      toast.error('File is too large or not supported!');
+      toast.error(t('MESSAGE.ERROR.FILE_TOO_LARGE_OR_NOT_SUPPORT'));
     },
   });
 

@@ -78,7 +78,7 @@ export default function UpdateUserPassword() {
     const { confirmPassword, ...payload } = values;
     try {
       await changePasswordUserService(payload);
-      toast.success('Your password has been changed!');
+      toast.success(t('MESSAGE.SUCCESS.PASSWORD_CHANGED'));
       setOpen(false);
       setErrorMessage('');
     } catch (err: any) {
