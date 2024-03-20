@@ -1858,6 +1858,18 @@
     "@tanstack/query-core" "4.36.1"
     use-sync-external-store "^1.2.0"
 
+"@tanstack/react-table@^8.14.0":
+  version "8.14.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.14.0.tgz#3a55b11cce39b7670549800b888b74c029dae375"
+  integrity sha512-l9iwO99oz/azy5RT5VkVRsHHuy7o//fiXgLxzl3fad8qf7Bj+9ihsfmE6Q+BNjH4wHbxZkahwxtb3ngGq9FQxA==
+  dependencies:
+    "@tanstack/table-core" "8.14.0"
+
+"@tanstack/table-core@8.14.0":
+  version "8.14.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.14.0.tgz#4c9fe8b74949bb0ffe4ac8b1937beaff1f3a19de"
+  integrity sha512-wDhpKJahGHWhmRt4RxtV3pES63CoeadljGWS/xeS9OJr1HBl2NB+OO44ht3sxDH5j5TRDAbQzC0NvSlsUfn7lQ==
+
 "@tiptap-pro/extension-emoji@^2.7.5":
   version "2.7.5"
   resolved "https://registry.tiptap.dev/@tiptap-pro%2fextension-emoji/-/extension-emoji-2.7.5.tgz#292e552e7742cfbfebca7acf80320b21284db89b"
