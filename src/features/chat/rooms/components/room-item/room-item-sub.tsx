@@ -25,7 +25,7 @@ const ItemSub = ({
   const currentUserId = currentUser?._id;
   const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
-  const {t} = useTranslation("common");
+  const { t } = useTranslation("common");
   const messageContent = useMemo(
     () => convert(message.content),
     [message.content],
@@ -111,7 +111,7 @@ const ItemSub = ({
           const mediaType = message.media[0]?.type;
           switch (mediaType) {
             case 'image':
-              return message.media.length > 1 ? t('CONVERSATION.SEND_PHOTOS', {num: message.media.length}) : t('CONVERSATION.SEND_PHOTO');
+              return message.media.length > 1 ? t('CONVERSATION.SEND_PHOTOS', { num: message.media.length }) : t('CONVERSATION.SEND_PHOTO');
             case 'document':
               return t('CONVERSATION.SEND_FILE');
             case 'video':
@@ -177,52 +177,57 @@ const ItemSub = ({
         setContentDisplay(t('CONVERSATION.STARTED_CALL'));
       }
       return;
-    } 
+    }
 
     if (message.type === 'action') {
-      if(message.content.includes('unpin')) {
-        setContentDisplay(t('CONVERSATION.UNPINNED_A_MESSAGE', {name: ''}))
-        return;
-      }
-
-      if(message.content.includes('pin')) {
-        setContentDisplay(t('CONVERSATION.PINNED_A_MESSAGE', {name: ''}))
-        return;
-      }
-  
-      if(message.content.includes('has created group')) {
-        setContentDisplay(t('CONVERSATION.CREATED_GROUP', {name: ''}))
-        return;
-      }
-
-      if(message.content.includes('left group')) {
-        setContentDisplay(t('CONVERSATION.LEFT_GROUP', {name: ''}))
-        return;
-      }
-  
-      if(message.content.includes('change group name to')) {
-        setContentDisplay(t('CONVERSATION.CHANGED_GROUP_NAME', {
-          name: '',
-          newName: message.content.split('group name to')[1]
-        }))
-        return;
-      }
-
-      if(message.content.includes('change group avatar')) {
-        setContentDisplay(t('CONVERSATION.CHANGED_GROUP_AVATAR', {name: ''}))
-        return;
-      }
-
-      if(message.content.includes('added')) {
-        const targetUserNamesString = message?.targetUsers?.map((user) => user.name).join(', ');
-        setContentDisplay(t('CONVERSATION.ADDED', {name: ''}) + " " + targetUserNamesString)
-        return;
-      }
-  
-      if(message.content.includes('removed')) {
-        const targetUserNamesString = message?.targetUsers?.map((user) => user.name).join(', ');
-        setContentDisplay(t('CONVERSATION.REMOVED', {name: ''})+ " " + targetUserNamesString)
-        return;
+      const targetUserNamesString = message?.targetUsers?.map((user) => user.name).join(', ');
+      switch (message.action) {
+        case 'addUser':
+          setContentDisplay(t('CONVERSATION.ADDED', {
+            name: "",
+            members: targetUserNamesString
+          }))
+          return;
+        case 'removeUser':
+          setContentDisplay(t('CONVERSATION.REMOVED', {
+            name: "",
+            members: targetUserNamesString
+          }))
+          return;
+        case 'leaveGroup':
+          setContentDisplay(t('CONVERSATION.LEFT_GROUP', {
+            name: ""
+          }))
+          return;
+        case 'pinMessage':
+          setContentDisplay(t('CONVERSATION.PINNED_A_MESSAGE', {
+            name: ""
+          }))
+          return;
+        case 'unpinMessage':
+          setContentDisplay(t('CONVERSATION.UNPINNED_A_MESSAGE', {
+            name: ""
+          }))
+          return;
+        case 'updateGroupName':
+          setContentDisplay(t('CONVERSATION.CHANGED_GROUP_NAME', {
+            name: "",
+            newName: message.content
+          }))
+          return;
+        case 'updateGroupAvatar':
+          setContentDisplay(t('CONVERSATION.CHANGED_GROUP_AVATAR', {
+            name: ""
+          }))
+          return;
+        case 'removeGroupName':
+          setContentDisplay(t('CONVERSATION.REMOVED_GROUP_NAME', {
+            name: ""
+          }))
+          return;
+        default:
+          setContentDisplay(message.content);
+          return;
       }
     }
 

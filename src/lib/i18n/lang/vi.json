@@ -305,8 +305,9 @@
         "LEFT_GROUP": "{{name}} đã rời nhóm",
         "CHANGED_GROUP_NAME": "{{name}} đã đổi tên nhóm thành {{newName}}",
         "CHANGED_GROUP_AVATAR": "{{name}} đã thay đổi hình đại diện nhóm",
-        "ADDED": "{{name}} đã thêm",
-        "REMOVED": "{{name}} đã xoá",
+        "ADDED": "{{name}} đã thêm {{members}}",
+        "REMOVED": "{{name}} đã xoá {{members}}",
+        "REMOVED_GROUP_NAME": "{{name}} đã xoá tên nhóm",
         "SENDING": "Đang gửi"
     },
     "NOTIFICATION": {

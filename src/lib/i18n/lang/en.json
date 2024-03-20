@@ -305,8 +305,9 @@
         "LEFT_GROUP": "{{name}} left the group",
         "CHANGED_GROUP_NAME": "{{name}} changed the group name to {{newName}}",
         "CHANGED_GROUP_AVATAR": "{{name}} changed the group avatar",
-        "ADDED": "{{name}} added",
-        "REMOVED": "{{name}} removed",
+        "ADDED": "{{name}} added {{members}}",
+        "REMOVED": "{{name}} removed {{members}}",
+        "REMOVED_GROUP_NAME": "{{name}} removed the group name",
         "SENDING": "Sending"
     },
     "NOTIFICATION": {

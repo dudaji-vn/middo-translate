@@ -305,8 +305,9 @@
         "LEFT_GROUP": "{{name}}님이 그룹 나감",
         "CHANGED_GROUP_NAME": "{{name}}가 그룹명을 {{newName}}로 변경했습니다.",
         "CHANGED_GROUP_AVATAR": "{{name}}가 그룹 아바타를 변경했습니다.",
-        "ADDED": "{{name}}님이 추가됨",
-        "REMOVED": "{{name}}님이 제거됨",
+        "ADDED": "{{name}}님이 {{members}}님을 추가했습니다.",
+        "REMOVED": "{{name}}님이 {{members}}님을 삭제했습니다.",
+        "REMOVED_GROUP_NAME": "{{name}}님이 그룹 이름을 삭제했습니다.",
         "SENDING": "전송 중"
     },
     "NOTIFICATION": {
