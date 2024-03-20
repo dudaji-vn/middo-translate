@@ -1,5 +1,25 @@
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 import { cookies } from 'next/headers';
+
+export type AnalyticsFilterDate = {
+  fromDate: string;
+  toDate: string;
+};
+export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
+export  const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
+export type AnalyticsOptions = {
+  type: AnalyticsType;
+} & (
+  | {
+      type: 'custom';
+      custom: AnalyticsFilterDate;
+    }
+  | {
+      type: Exclude<'last-week' | 'last-month' | 'last-year', 'custom'>;
+      custom?: never;
+    }
+);
+
 class BusinessAPI {
   private basePath: string;
 
@@ -94,6 +114,40 @@ class BusinessAPI {
       return data?.data;
     } catch (error) {
       console.error('Error in get My business info', error);
+      return undefined;
+    }
+  }
+  async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
+    try {
+      if (!analyticsType.includes(type)) {
+        throw new Error('Invalid analytics type');
+      }
+      if (type === 'custom' && !custom) {
+        throw new Error('Invalid from date and to date');
+      }
+      const query = new URLSearchParams({
+        type,
+        ...(custom && {
+          fromDate: custom.fromDate,
+          toDate: custom.toDate,
+        }),
+      }).toString();
+      const path = `${this.basePath}/help-desk/analytics?${query}`;
+      const cookieStore = cookies();
+      const response = await fetch(path, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      return data?.data;
+    } catch (error) {
+      console.error('Error in get analytics', error);
       return undefined;
     }
   }

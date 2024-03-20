@@ -2,16 +2,15 @@
 import { ROUTE_NAMES } from '@/configs/route-name'
 import { cn } from '@/utils/cn'
 import Image from 'next/image'
-import Link, { LinkProps } from 'next/link'
+import Link from 'next/link'
 import React, { HtmlHTMLAttributes, ReactElement, useState } from 'react'
 
-import { Blocks, ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
+import { ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-    Typography,
 } from '@/components/data-display';
 
 import { Avatar } from '@/components/data-display';
@@ -85,7 +84,6 @@ const HeaderProfile = ({ className, ...props }:
                         width={500}
                         height={500}
                     />
-
                     <span
                         className={
                             'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
