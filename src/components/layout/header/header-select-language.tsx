@@ -40,9 +40,8 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
     value: '',
     title: '',
   });
-  // const {} = useTranslation('common');
   // import change language function
-  const { i18n } = useTranslation('common')
+  const { i18n, t } = useTranslation('common')
   const handleSelectChange = useCallback(
     (value: any) => {
       let itemSelected = I18N_SUPPORTED_LANGUAGES?.find(
@@ -106,15 +105,15 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
                 <SelectItem
                   value={option.value}
                   key={option.value}
-                  className=""
+                  className="px-3"
                 >
                   <CircleFlag
                     countryCode={LANGUAGE_CODES_MAP[
                       option.value as keyof typeof LANGUAGE_CODES_MAP
                     ].toLowerCase()}
-                    className="mr-2 inline-block h-5 w-5"
+                    className="mr-2 inline-block h-5"
                   />
-                  <span>{option.title}</span>
+                  <span className="pr-4">{t('LANGUAGE.'+option.title)}</span>
                 </SelectItem>
               );
             })}

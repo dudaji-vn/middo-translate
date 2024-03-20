@@ -424,7 +424,7 @@
         "TEXT_TO_SPEECH_INPUT": "Đầu vào văn bản thành giọng nói",
         "COPY_INPUT": "Sao chép đầu vào",
         "TRANSLATED_TEXT_TO_SPEECH": "Dịch văn bản thành giọng nói",
-        "TRANSLATED_COPY": "Sao chép đã dịch",
+        "TRANSLATED_COPY": "Sao chép kết quả dịch",
         "COPY_ALL_TEXT": "Sao chép toàn bộ văn bản",
         "COPY_IMAGE": "Sao chép hình ảnh",
         "NEW_CONVERSATION": "Cuộc trò chuyện mới",
@@ -448,7 +448,7 @@
         "TOGGLE_CAMERA": "Bật/Tắt camera",
         "TOGGLE_MICROPHONE": "Bật/Tắt microphone",
         "TOGGLE_DISCUSSION": "Hiển thị/Ẩn thảo luận",
-        "SWITCH_TO_GALLERY_VIEW": "Chuyển sang chế độ xem Gallery",
+        "SWITCH_TO_GALLERY_VIEW": "Chuyển sang chế độ xem lưới",
         "START_STOP_SCREEN_DOODLE": "Bắt đầu/Dừng vẽ trên màn hình",
         "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
     }
