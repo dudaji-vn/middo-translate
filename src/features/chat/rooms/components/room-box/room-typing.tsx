@@ -41,15 +41,25 @@ export const RoomTyping = (props: RoomTypingProps) => {
     };
   }, [currentUserId, participants, room._id]);
   if (usersTyping.length === 0) return null;
+  const isMoreThanOne = usersTyping.length > 1;
+  const actor = isMoreThanOne
+    ? `${usersTyping.length} people`
+    : usersTyping[0].name;
+  const verb = isMoreThanOne ? 'are' : 'is';
   return (
     <div className="flex p-1 pl-3 text-sm text-neutral-600">
-      {usersTyping.map((user, index) => (
-        <div key={user._id} className="font-semibold">
-          {user.name}
-          {index !== usersTyping.length - 1 ? ', ' : ''}
-        </div>
-      ))}
-      <span>&nbsp;is typing ...</span>
+      <span>
+        <span className="font-semibold">{actor}</span> {verb}&nbsp;
+      </span>
+      <span>
+        {' '}
+        typing{' '}
+        <div className="inline-flex space-x-[1.5px]">
+          <div className="h-1 w-1 animate-bounce rounded-full bg-neutral-500 [animation-delay:-0.2s]"></div>
+          <div className="h-1 w-1 animate-bounce rounded-full bg-neutral-500 [animation-delay:-0.1s]"></div>
+          <div className="h-1 w-1 animate-bounce rounded-full bg-neutral-500"></div>
+        </div>{' '}
+      </span>
     </div>
   );
 };
