@@ -225,6 +225,11 @@ const ItemSub = ({
             name: ""
           }))
           return;
+        case 'createGroup':
+          setContentDisplay(t('CONVERSATION.CREATED_GROUP', {
+            name: "",
+          }))
+          return;
         default:
           setContentDisplay(message.content);
           return;
