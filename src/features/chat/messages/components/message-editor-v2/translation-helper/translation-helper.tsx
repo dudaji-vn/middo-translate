@@ -9,7 +9,7 @@ import { translateText } from '@/services/languages.service';
 import { Editor } from '@tiptap/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PenIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { useMessageEditor } from '..';
 import { RichTextInput } from '../rich-text-input';
@@ -73,6 +73,13 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
     !isContentEmpty &&
     srcLang !== DEFAULT_LANGUAGES_CODE.EN;
 
+  const confirmButtonId = useId();
+
+  const handleEnter = () => {
+    const confirmButton = document.getElementById(confirmButtonId);
+    confirmButton?.click();
+  };
+
   return (
     <AnimatePresence mode="wait">
       {showHelper && (
@@ -107,6 +114,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                     >
                       <RichTextInput
                         autoFocus
+                        onSubmit={handleEnter}
                         onCreated={(editor) => setEditor(editor)}
                         className="max-h-[200px] w-full overflow-y-auto"
                         initialContent={contentEnglish}
@@ -124,6 +132,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                         {t('COMMON.CANCEL')}
                       </Button>
                       <Button
+                        id={confirmButtonId}
                         shape="square"
                         size="xs"
                         type="button"

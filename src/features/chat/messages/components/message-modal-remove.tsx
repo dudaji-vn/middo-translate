@@ -27,8 +27,8 @@ export const MessageModalRemove = ({
   const { mutate } = useMutation({
     mutationFn: messageApi.remove,
   });
-  const {t} = useTranslation('common')
-  const [removeType, setRemoveType] = useState<'all' | 'me'>('me');
+  const { t } = useTranslation('common');
+  const [removeType, setRemoveType] = useState<'all' | 'me'>('all');
   const handleSubmit = () => {
     if (!isMe) {
       mutate({
@@ -52,7 +52,7 @@ export const MessageModalRemove = ({
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("MODAL.REMOVE_MESSAGE.TITLE")}</AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.REMOVE_MESSAGE.TITLE')}</AlertDialogTitle>
         </AlertDialogHeader>
         <RadioGroup
           value={removeType}
@@ -68,34 +68,38 @@ export const MessageModalRemove = ({
                     value="all"
                     id="option-two"
                   />
-                  <Label htmlFor="option-two">{t("MODAL.REMOVE_MESSAGE.FOR_ALL.TITLE")}</Label>
+                  <Label htmlFor="option-two">
+                    {t('MODAL.REMOVE_MESSAGE.FOR_ALL.TITLE')}
+                  </Label>
                 </div>
                 <div className="mt-1 pl-6 text-sm text-neutral-600">
-                  {t("MODAL.REMOVE_MESSAGE.FOR_ALL.DESCRIPTION")}
+                  {t('MODAL.REMOVE_MESSAGE.FOR_ALL.DESCRIPTION')}
                 </div>
               </div>
               <div>
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="me" id="option-one" />
-                  <Label htmlFor="option-one">{t("MODAL.REMOVE_MESSAGE.FOR_YOU.TITLE")}</Label>
+                  <Label htmlFor="option-one">
+                    {t('MODAL.REMOVE_MESSAGE.FOR_YOU.TITLE')}
+                  </Label>
                 </div>
                 <div className="mt-1 pl-6 text-sm text-neutral-600">
-                {t("MODAL.REMOVE_MESSAGE.FOR_YOU.DESCRIPTION")}
+                  {t('MODAL.REMOVE_MESSAGE.FOR_YOU.DESCRIPTION')}
                 </div>
               </div>
             </>
           )}
           {!isMe && (
             <div className="text-sm text-neutral-600">
-              {t("MODAL.REMOVE_MESSAGE.FOR_YOU.DESCRIPTION")}
+              {t('MODAL.REMOVE_MESSAGE.FOR_YOU.DESCRIPTION')}
             </div>
           )}
         </RadioGroup>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>{t("COMMON.CANCEL")}</AlertDialogCancel>
+          <AlertDialogCancel>{t('COMMON.CANCEL')}</AlertDialogCancel>
           <AlertDialogAction type="submit" onClick={handleSubmit} color="error">
-          {t("COMMON.DELETE")}
+            {t('COMMON.DELETE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
