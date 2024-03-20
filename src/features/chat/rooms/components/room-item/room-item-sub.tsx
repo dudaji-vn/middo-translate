@@ -8,6 +8,7 @@ import { cn } from '@/utils/cn';
 import { getReadByUsers } from '@/features/chat/utils';
 import { translateText } from '@/services/languages.service';
 import { convert } from 'html-to-text';
+import { generateSystemMessageContent } from '@/features/chat/messages/utils';
 
 const ItemSub = ({
   message,
@@ -118,13 +119,17 @@ const ItemSub = ({
         }
         break;
       case 'action':
+        let targetUserNamesString = '';
         if (message.targetUsers && message.targetUsers.length > 0) {
-          const targetUserNamesString = message.targetUsers
+          targetUserNamesString = message.targetUsers
             .map((user) => user.name)
             .join(', ');
-          return `${messageContent} ${targetUserNamesString}`;
         }
-        break;
+        return `${generateSystemMessageContent({
+          action: message.action,
+          content: messageContent,
+        })} ${targetUserNamesString}`;
+
       default:
         break;
     }
@@ -134,6 +139,7 @@ const ItemSub = ({
     return messageContent;
   }, [
     messageContent,
+    message.action,
     message.forwardOf,
     message.media,
     message.status,

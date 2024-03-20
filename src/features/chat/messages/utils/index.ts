@@ -39,3 +39,32 @@ export const formatFileSize = (size: number) => {
   }
   return `${size.toFixed(2)} ${units[index]}`;
 };
+
+export const generateSystemMessageContent = ({
+  action,
+  content,
+}: {
+  action: Message['action'];
+  content?: Message['content'];
+}) => {
+  switch (action) {
+    case 'addUser':
+      return ` added`;
+    case 'removeUser':
+      return ` removed`;
+    case 'leaveGroup':
+      return ` left the group`;
+    case 'pinMessage':
+      return ` pinned a message`;
+    case 'unpinMessage':
+      return ` unpinned a message`;
+    case 'updateGroupName':
+      return ` changed the group name to ${content}`;
+    case 'updateGroupAvatar':
+      return ` updated the group avatar`;
+    case 'removeGroupName':
+      return ` removed the group name`;
+    default:
+      return '';
+  }
+};
