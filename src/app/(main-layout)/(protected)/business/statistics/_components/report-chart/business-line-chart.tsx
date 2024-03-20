@@ -12,7 +12,6 @@ import { StatisticData } from "@/types/business-statistic.type"
 export function BusinessLineChart({
   data
 }: { data: StatisticData['chart'] }) {
-  console.log('data', data)
   const claryfiedData = data.map((item, index) => {
     return {
       "Time": item.label,
@@ -29,9 +28,9 @@ export function BusinessLineChart({
               data={claryfiedData}
               margin={{
                 top: 5,
-                right: 10,
+                right: 0,
                 left: 0,
-                bottom: 0,
+                bottom: 5,
               }}
 
             >

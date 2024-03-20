@@ -148,7 +148,6 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const onOpenChange = (open: boolean) => {
     const currentFormData = form.getValues();
     const isSubmited = isEqual(currentFormData, submitedData);
-    console.log('submitedData, currentFormData', submitedData, currentFormData)
     const isChanged = !isEqual(currentFormData.domains, initialData?.domains) || !isEqual(currentFormData.custom, initialCustom);
     if (!open && !isEmpty(initialData) && isChanged && !isSubmited) {
       setOpenConfirmDialog(true);

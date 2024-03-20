@@ -13,21 +13,24 @@ const StatisticPage = async ({
 }: {
   searchParams: {
     type: string
-    custom: {
-      fromDate: string
-      toDate: string
-    }
+    fromDate: string
+    toDate: string
+
     search: string
   }
 }) => {
   const {
     type,
-    custom,
+    fromDate,
+    toDate,
     search
   } = searchParams;
   const params = type === 'custom' ? {
     type,
-    custom,
+    custom: {
+      fromDate,
+      toDate
+    },
     search
   } : {
     type,

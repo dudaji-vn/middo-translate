@@ -66,7 +66,6 @@ const cardContents = [
 const ReportCards = ({ data }: { data: StatisticData }) => {
     const isClient = useClient();
     if (!data && !isClient) return null;
-    console.log('data', data)
 
     return (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
