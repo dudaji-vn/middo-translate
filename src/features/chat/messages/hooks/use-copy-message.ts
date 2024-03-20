@@ -8,13 +8,15 @@ export const useCopyMessage = () => {
   const userLanguage = useAuthStore((state) => state.user?.language);
   const { copy } = useTextCopy();
   const copyMessage = async (message: Message) => {
+    const plaintext = convert(message.content, {
+      selectors: [{ selector: 'a', options: { ignoreHref: true } }],
+    });
     const translated = await translateText(
-      message.content,
+      plaintext,
       message?.language || message.sender.language,
       userLanguage,
     );
-    const plaintext = convert(translated);
-    copy(plaintext);
+    copy(translated);
   };
 
   return { copyMessage };

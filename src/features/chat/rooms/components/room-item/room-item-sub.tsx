@@ -25,9 +25,12 @@ const ItemSub = ({
   const currentUserId = currentUser?._id;
   const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const messageContent = useMemo(
-    () => convert(message.content),
+    () =>
+      convert(message.content, {
+        selectors: [{ selector: 'a', options: { ignoreHref: true } }],
+      }),
     [message.content],
   );
   const englishContent = useMemo(() => {
@@ -94,7 +97,7 @@ const ItemSub = ({
     message.forwardOf,
     currentUserId,
     isGroup,
-    t
+    t,
   ]);
 
   const content = useMemo(() => {
@@ -111,13 +114,15 @@ const ItemSub = ({
           const mediaType = message.media[0]?.type;
           switch (mediaType) {
             case 'image':
-              return message.media.length > 1 ? t('CONVERSATION.SEND_PHOTOS', { num: message.media.length }) : t('CONVERSATION.SEND_PHOTO');
+              return message.media.length > 1
+                ? t('CONVERSATION.SEND_PHOTOS', { num: message.media.length })
+                : t('CONVERSATION.SEND_PHOTO');
             case 'document':
               return t('CONVERSATION.SEND_FILE');
             case 'video':
               return 'sent a video';
             default:
-              return t('CONVERSATION.SEND_FILE');;
+              return t('CONVERSATION.SEND_FILE');
           }
         }
         break;
@@ -148,7 +153,7 @@ const ItemSub = ({
     message.status,
     message.targetUsers,
     message.type,
-    t
+    t,
   ]);
 
   const [contentDisplay, setContentDisplay] = useState(content);
@@ -180,55 +185,75 @@ const ItemSub = ({
     }
 
     if (message.type === 'action') {
-      const targetUserNamesString = message?.targetUsers?.map((user) => user.name).join(', ');
+      const targetUserNamesString = message?.targetUsers
+        ?.map((user) => user.name)
+        .join(', ');
       switch (message.action) {
         case 'addUser':
-          setContentDisplay(t('CONVERSATION.ADDED', {
-            name: "",
-            members: targetUserNamesString
-          }))
+          setContentDisplay(
+            t('CONVERSATION.ADDED', {
+              name: '',
+              members: targetUserNamesString,
+            }),
+          );
           return;
         case 'removeUser':
-          setContentDisplay(t('CONVERSATION.REMOVED', {
-            name: "",
-            members: targetUserNamesString
-          }))
+          setContentDisplay(
+            t('CONVERSATION.REMOVED', {
+              name: '',
+              members: targetUserNamesString,
+            }),
+          );
           return;
         case 'leaveGroup':
-          setContentDisplay(t('CONVERSATION.LEFT_GROUP', {
-            name: ""
-          }))
+          setContentDisplay(
+            t('CONVERSATION.LEFT_GROUP', {
+              name: '',
+            }),
+          );
           return;
         case 'pinMessage':
-          setContentDisplay(t('CONVERSATION.PINNED_A_MESSAGE', {
-            name: ""
-          }))
+          setContentDisplay(
+            t('CONVERSATION.PINNED_A_MESSAGE', {
+              name: '',
+            }),
+          );
           return;
         case 'unpinMessage':
-          setContentDisplay(t('CONVERSATION.UNPINNED_A_MESSAGE', {
-            name: ""
-          }))
+          setContentDisplay(
+            t('CONVERSATION.UNPINNED_A_MESSAGE', {
+              name: '',
+            }),
+          );
           return;
         case 'updateGroupName':
-          setContentDisplay(t('CONVERSATION.CHANGED_GROUP_NAME', {
-            name: "",
-            newName: message.content
-          }))
+          setContentDisplay(
+            t('CONVERSATION.CHANGED_GROUP_NAME', {
+              name: '',
+              newName: message.content,
+            }),
+          );
           return;
         case 'updateGroupAvatar':
-          setContentDisplay(t('CONVERSATION.CHANGED_GROUP_AVATAR', {
-            name: ""
-          }))
+          setContentDisplay(
+            t('CONVERSATION.CHANGED_GROUP_AVATAR', {
+              name: '',
+            }),
+          );
           return;
         case 'removeGroupName':
-          setContentDisplay(t('CONVERSATION.REMOVED_GROUP_NAME', {
-            name: ""
-          }))
+          setContentDisplay(
+            t('CONVERSATION.REMOVED_GROUP_NAME', {
+              name: '',
+            }),
+          );
           return;
         case 'createGroup':
-          setContentDisplay(t('CONVERSATION.CREATED_GROUP', {
-            name: "",
-          }))
+          setContentDisplay(
+            t('CONVERSATION.CREATED_GROUP', {
+              name: '',
+            }),
+          );
           return;
         default:
           setContentDisplay(message.content);
