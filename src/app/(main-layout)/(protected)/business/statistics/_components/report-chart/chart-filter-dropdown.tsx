@@ -40,18 +40,18 @@ const generateHref = (type: AnalyticsType, custom: { fromDate: string, toDate: s
     return null;
 
 }
-
-const ChartFilterDropdown = ({
-    searchParams,
-    ...props
-}: {
+export type ChartFilterDropdownProps = {
     searchParams: {
         type: string
         fromDate: string
         toDate: string
         search: string
     }
-}) => {
+}
+const ChartFilterDropdown = ({
+    searchParams,
+    ...props
+}: ChartFilterDropdownProps) => {
     const {
         type,
         fromDate,

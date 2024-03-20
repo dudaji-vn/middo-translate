@@ -6,7 +6,7 @@ export type AnalyticsFilterDate = {
   toDate: string;
 };
 export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
-export  const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
+export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
 export type AnalyticsOptions = {
   type: AnalyticsType;
 } & (
@@ -151,6 +151,29 @@ class BusinessAPI {
       return undefined;
     }
   }
+
+  async getMyClients({ search = '' }: { search: string }) {
+    const cookieStore = cookies();
+    const path = `${this.basePath}/help-desk/my-clients?q=${search || ''}`;
+    try {
+      const response = await fetch(path, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
+        },
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      return data?.data;
+    } catch (error) {
+      console.error('Error in get My clients', error);
+      return [];
+    }
+  }
+
 }
 const businessAPI = new BusinessAPI();
 
