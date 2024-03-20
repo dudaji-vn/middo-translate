@@ -22,7 +22,8 @@ export type ActionTypes =
   | 'unpinMessage'
   | 'updateGroupName'
   | 'updateGroupAvatar'
-  | 'removeGroupName';
+  | 'removeGroupName'
+  | 'createGroup';
 
 export type Reaction = {
   emoji: string;

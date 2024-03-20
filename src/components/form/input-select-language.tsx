@@ -15,6 +15,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import { CircleFlag } from 'react-circle-flags';
 import Image from 'next/image';
 import { useFieldArray } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { SelectProps } from '@radix-ui/react-select';
 
 interface InputSelectLanguageProps {
@@ -39,7 +40,7 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
     title: '',
   });
   const { errors, className, setValue, field, trigger, defaultValue } = props;
-
+  const {t} = useTranslation("common");
   const languageOptions = useMemo(() => {
     return SUPPORTED_LANGUAGES.map((language) => {
       return {
@@ -70,12 +71,12 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
   return (
     <div className={className}>
       <label className="mb-2 ml-5 inline-block" htmlFor={id} {...labelProps}>
-        Language
+        {t('COMMON.LANGUAGE')}
       </label>
       <Select onValueChange={handleSelectChange} {...selectProps}>
         <SelectTrigger className="flex w-full px-5">
           {!valueSelect?.value && (
-            <span className="opacity-60">Select your native language</span>
+            <span className="opacity-60">{t('COMMON.LANGUAGE_PLACEHOLDER')}</span>
           )}
           {valueSelect?.value && (
             <>
@@ -85,7 +86,7 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
                 ].toLowerCase()}
                 className="mr-2 inline-block h-5 w-5"
               />
-              <span className="flex-1 text-left">{valueSelect.title}</span>
+              <span className="flex-1 text-left">{t('LANGUAGE.' + valueSelect.title)}</span>
             </>
           )}
         </SelectTrigger>
@@ -104,7 +105,7 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
                     ].toLowerCase()}
                     className="mr-2 inline-block h-5 w-5"
                   />
-                  <span>{option.title}</span>
+                  <span>{t('LANGUAGE.' + option.title)}</span>
                 </SelectItem>
               );
             })}

@@ -12,6 +12,7 @@ import { uploadImage } from '@/utils/upload-img';
 import { useChatBox } from '../../contexts';
 import { useDropzone } from 'react-dropzone';
 import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomUpdateAvatarProps {
   initialAvatar?: string;
@@ -26,6 +27,7 @@ export const RoomUpdateAvatar = ({
 }: RoomUpdateAvatarProps) => {
   const { mutateAsync } = useUpdateRoomInfo();
   const { room } = useChatBox();
+  const {t} = useTranslation('common')
   const { getInputProps, open, inputRef } = useDropzone({
     noClick: true,
     multiple: false,
@@ -48,7 +50,7 @@ export const RoomUpdateAvatar = ({
       // call api to update avatar, tomorrow
     },
     onDropRejected: () => {
-      toast.error('File is too large or not supported!');
+      toast.error(t('MESSAGE.ERROR.FILE_TOO_LARGE_OR_NOT_SUPPORT'));
     },
   });
 
@@ -71,11 +73,11 @@ export const RoomUpdateAvatar = ({
             align="center"
             className="w-[280px] rounded-xl p-0"
           >
-            <div className="px-3 py-2 font-semibold">Change group avatar</div>
+            <div className="px-3 py-2 font-semibold">{t('CONVERSATION.CHANGE_GROUP_AVATAR')}</div>
             <DropdownMenuItem className="h-12" onClick={open}>
-              Replace
+              {t('COMMON.REPLACE')}
             </DropdownMenuItem>
-            <DropdownMenuItem className="h-12">Remove</DropdownMenuItem>
+            <DropdownMenuItem className="h-12">{t('COMMON.REMOVE')}</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (

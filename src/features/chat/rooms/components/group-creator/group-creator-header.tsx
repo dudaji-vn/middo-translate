@@ -13,6 +13,7 @@ import { SelectedList } from '../selected-list';
 import { User } from '@/features/users/types';
 import { useDropzone } from 'react-dropzone';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface GroupCreateHeaderProps {
   handleCreateGroup: (data: {
@@ -32,7 +33,7 @@ export const GroupCreateHeader = ({
   handleUnSelectUser,
 }: GroupCreateHeaderProps) => {
   const [preview, setPreview] = useState<string | undefined>();
-
+  const {t} = useTranslation('common');
   const { getInputProps, open, acceptedFiles, inputRef } = useDropzone({
     noClick: true,
     multiple: false,
@@ -82,9 +83,9 @@ export const GroupCreateHeader = ({
               align="start"
               className="w-[280px] rounded-xl p-0"
             >
-              <div className="px-3 py-2 font-semibold">Change group avatar</div>
+              <div className="px-3 py-2 font-semibold">{t('CONVERSATION.CHANGE_GROUP_AVATAR')}</div>
               <DropdownMenuItem className="h-12" onClick={open}>
-                Replace
+                {t('COMMON.REPLACE')}
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="h-12"
@@ -92,7 +93,7 @@ export const GroupCreateHeader = ({
                   setPreview(undefined);
                 }}
               >
-                Remove
+                {t('COMMON.REMOVE')}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -118,7 +119,7 @@ export const GroupCreateHeader = ({
         )}
 
         <input
-          placeholder="Group name (optional)"
+          placeholder={t('CONVERSATION.GROUP_NAME_PLACEHOLDER')}
           name="name"
           className="flex-1 border-none px-0 outline-none ring-0 focus:border-none focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
         />
@@ -129,7 +130,7 @@ export const GroupCreateHeader = ({
           onChange={(e) =>
             setSearchTerm(e.currentTarget.value.toLocaleLowerCase())
           }
-          placeholder="Search"
+          placeholder={t('COMMON.SEARCH')}
         />
         <SelectedList items={selectedUsers} onItemClick={handleUnSelectUser} />
       </div>

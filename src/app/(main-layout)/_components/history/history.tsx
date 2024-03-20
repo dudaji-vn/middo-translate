@@ -14,6 +14,7 @@ import { isEqual } from 'lodash';
 import { SearchParams } from '../../page';
 import { useTranslateStore } from '@/stores/translate.store';
 import useClient from '@/hooks/use-client';
+import { useTranslation } from 'react-i18next';
 
 
 export interface HistoryProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -46,7 +47,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
 
     const isMobile = useAppStore((state) => state.isMobile);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
+    const { t } = useTranslation('common');
     useEffect(() => {
       setIsLoading(false);
     }, [searchParams]);
@@ -97,7 +98,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
           )}
         >
           <HistoryIcon className="text-primary-500-main" />
-          History
+          {t('TRANSLATION.HISTORY')}
           <Button.Icon
             onClick={onClose}
             variant={'ghost'}
@@ -123,7 +124,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
             className="flex items-center gap-2 rounded-xl bg-neutral-50 text-neutral-700"
           >
             <Paintbrush />
-            Clear all
+            {t('COMMON.CLEAR_ALL')}
           </Button>
         </div>
         <div className="flex w-full flex-col gap-8  px-3 pb-8">

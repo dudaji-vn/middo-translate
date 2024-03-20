@@ -16,6 +16,7 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { useSearchStore } from '@/features/search/store/search.store';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface ChatSidebarHeaderProps { }
@@ -25,6 +26,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const [openSetting, setOpenSetting] = useState(false);
   const { searchValue, setSearchValue } = useSearchStore();
   const { openSidebar, setOpenSidebar } = useSidebarStore();
+  const {t} = useTranslation('common')
   const handleToggleSetting = () => {
     setOpenSetting((prev) => !prev);
   };
@@ -58,10 +60,10 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
         >
           <Menu />
         </Button.Icon>
-        <Typography variant="h6">Conversation</Typography>
+        <Typography variant="h6">{t('CONVERSATION.TITLE')}</Typography>
         <div className="flex gap-3">
           <Tooltip
-            title="New Conversation"
+            title={t('TOOL_TIP.NEW_CONVERSATION')}
             triggerItem={
               <Button.Icon
                 onClick={handleNewConversation}
@@ -74,7 +76,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             }
           ></Tooltip>
           <Tooltip
-            title="Settings"
+            title={t('TOOL_TIP.SETTINGS')}
             triggerItem={
               <ChatSettingMenu open={openSetting} onOpenChange={setOpenSetting}>
                 <Button.Icon color="default" size="xs">
@@ -112,7 +114,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
                 if (currentSide !== 'search') changeSide('search');
               }}
               btnDisabled
-              placeholder="Search people or groups"
+              placeholder={t('CONVERSATION.SEARCH')}
               onChange={(e) => {
                 setSearchValue(e.target.value);
               }}

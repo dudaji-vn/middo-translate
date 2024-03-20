@@ -7,6 +7,7 @@ import { AttachmentButton } from './attachment-button';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export interface ToolbarRef extends HTMLDivElement {
   expand: () => void;
@@ -19,6 +20,7 @@ export interface ToolbarProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 export const Toolbar = forwardRef<ToolbarRef, ToolbarProps>(
   ({ disableMedia = false, ...props }, ref) => {
+    const {t} = useTranslation('common')
     const [isExpanded, setIsExpanded] = useState(true);
     const divRef = useRef<HTMLDivElement>(null);
     const expand = () => {
@@ -53,8 +55,8 @@ export const Toolbar = forwardRef<ToolbarRef, ToolbarProps>(
           </Button.Icon>
         ) : (
           <>
-            <Tooltip title="Upload files" triggerItem={<AttachmentButton />} />
-            <Tooltip title="Emojis" triggerItem={<EmojiToggleButton />} />
+            <Tooltip title={t('TOOL_TIP.ATTACHMENT')} triggerItem={<AttachmentButton />} />
+            <Tooltip title={t('TOOL_TIP.EMOJI')} triggerItem={<EmojiToggleButton />} />
           </>
         )}
       </div>

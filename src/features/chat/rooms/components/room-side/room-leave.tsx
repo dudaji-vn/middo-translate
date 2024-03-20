@@ -13,6 +13,7 @@ import {
 import { Button } from '@/components/actions';
 import { LogOut } from 'lucide-react';
 import { useLeaveRoom } from '../../hooks/use-leave-room';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomLeaveProps {
   roomId: string;
@@ -20,6 +21,7 @@ export interface RoomLeaveProps {
 
 export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
   const { mutate } = useLeaveRoom();
+  const {t} = useTranslation('common');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -30,19 +32,18 @@ export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
           size="md"
           className="mb-1 w-full rounded-b-[4px]"
         >
-          Leave group
+          {t('MODAL.LEAVE_ROOM.TITLE')}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Leave this group?</AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.LEAVE_ROOM.TITLE')}?</AlertDialogTitle>
           <AlertDialogDescription>
-            You will lose all of your messages and files in this room. Are you
-            sure you want to leave this room?
+          {t('MODAL.LEAVE_ROOM.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
@@ -50,7 +51,7 @@ export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
               mutate(roomId);
             }}
           >
-            Leave
+            {t('COMMON.LEAVE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

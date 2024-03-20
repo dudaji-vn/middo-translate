@@ -12,15 +12,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { USE_IS_MUTED_ROOM_QUERY_KEY } from '../hooks/use-is-muted-room';
 import { notificationApi } from '@/features/notification/api';
+import { useTranslation } from 'react-i18next';
 
 const modalContentMap = {
   turnOn: {
-    title: 'Turn on notifications',
-    description: 'You will receive notifications for new messages.',
+    title: 'MODAL.NOTIFICATION.ON.TITLE',
+    description: 'MODAL.NOTIFICATION.ON.DESCRIPTION',
   },
   turnOff: {
-    title: 'Turn off notifications',
-    description: 'You will not receive notifications for new messages.',
+    title: 'MODAL.NOTIFICATION.OFF.TITLE',
+    description: 'MODAL.NOTIFICATION.OFF.DESCRIPTION',
   },
 };
 
@@ -38,6 +39,7 @@ export const RoomModalNotification = (props: RoomModalNotificationProps) => {
       queryClient.invalidateQueries([USE_IS_MUTED_ROOM_QUERY_KEY, props.id]);
     },
   });
+  const {t} = useTranslation('common')
   return (
     <AlertDialog
       defaultOpen
@@ -50,21 +52,21 @@ export const RoomModalNotification = (props: RoomModalNotificationProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {modalContentMap[props.type].title}
+            {t(modalContentMap[props.type].title)}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {modalContentMap[props.type].description}
+            {t(modalContentMap[props.type].description)}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             onClick={() => {
               mutateAsync(props.id);
             }}
           >
-            {props.type === 'turnOn' ? 'Turn on' : 'Turn off'}
+            {props.type === 'turnOn' ? t('MODAL.NOTIFICATION.ON.TITLE') : t('MODAL.NOTIFICATION.OFF.TITLE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

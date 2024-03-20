@@ -8,6 +8,7 @@ import { ArrowLeft, SparklesIcon, XIcon } from 'lucide-react';
 import React, { forwardRef } from 'react';
 import PhrasesListItems from './phrase-list-items';
 import { SearchParams } from '../../page';
+import { useTranslation } from 'react-i18next';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
@@ -17,6 +18,7 @@ export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
   ({ isSelected, searchParams, className, onClose, ...props }, ref) => {
+    const {t} = useTranslation('common');
     return (
       <section
         ref={ref}
@@ -45,7 +47,7 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
             )}
           >
             <SparklesIcon className="text-primary-500-main" />
-            Phrases
+            {t('TRANSLATION.PHRASES')}
           </Typography>
           <Button.Icon className='invisible md:hidden' />
         </div>

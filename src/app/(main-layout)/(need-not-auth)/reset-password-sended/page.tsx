@@ -1,8 +1,7 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-
-import { Button } from '@/components/form/button';
 import Image from 'next/image';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRouter } from 'next/navigation';
@@ -10,13 +9,13 @@ import { useRouter } from 'next/navigation';
 export default function ResetPasswordSended() {
   const router = useRouter();
   const [email, setEmail] = useState('');
-
+  const {t} = useTranslation('common')
   useEffect(() => {
-    let emailLocalstorage = localStorage.getItem('email_reset_password') || '';
-    if (!emailLocalstorage) {
+    let emailLocalStorage = localStorage.getItem('email_reset_password') || '';
+    if (!emailLocalStorage) {
       router.push(ROUTE_NAMES.SIGN_IN);
     }
-    setEmail(emailLocalstorage);
+    setEmail(emailLocalStorage);
     localStorage.removeItem('email_reset_password');
   }, [router]);
 
@@ -32,10 +31,10 @@ export default function ResetPasswordSended() {
           ></Image>
         </div>
         <p className="mt-8 text-center text-[22px] font-medium text-primary">
-          Reset password
+          {t('RESET_PASSWORD_SENDED.TITLE')}
         </p>
         <p className="mt-5 text-center">
-          An reset password link has been sent to <strong>{email}</strong>
+          {t('RESET_PASSWORD_SENDED.MESSAGE')} <strong>{email}</strong>
         </p>
         {/* <Button tag='a' href={ROUTE_NAMES.SIGN_IN}>Go to sign in</Button> */}
       </div>

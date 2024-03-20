@@ -11,6 +11,7 @@ import { useVideoCallStore } from '../../store/video-call.store';
 import { useMyVideoCallStore } from '../../store/me.store';
 import useExtractTextFromStream from '../../hooks/use-extract-text-from-stream';
 import CaptionInterface from '../../interfaces/caption.interface';
+import { useTranslation } from 'react-i18next';
 
 export default function CaptionSection() {
   const {
@@ -26,7 +27,7 @@ export default function CaptionSection() {
   const captionListRef = useRef<HTMLDivElement>(null);
   const { transcript } = useExtractTextFromStream(myStream);
   const [isScroll, setScroll] = useState(false);
-
+  const {t} = useTranslation('common')
   const scrollToBottom = useCallback(
     (isForceScroll = false) => {
       if (isScroll && !isForceScroll) return;
@@ -114,7 +115,7 @@ export default function CaptionSection() {
     <section>
       <div className="flex items-center justify-center gap-2 bg-neutral-50 p-1 pl-3 text-primary">
         <ScanText className="h-4 w-4" />
-        <span className="flex-1">Caption</span>
+        <span className="flex-1">{t('CONVERSATION.CAPTION')}</span>
         <Button.Icon
           onClick={() => setShowCaption(false)}
           size="sm"

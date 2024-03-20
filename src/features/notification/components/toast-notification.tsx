@@ -1,5 +1,6 @@
 import { XIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface ToastNotificationProps {
   onEnable: () => void;
@@ -13,7 +14,7 @@ export const ToastNotification = ({
   onDeny,
 }: ToastNotificationProps) => {
   const [isDismissed, setIsDismissed] = useState(false);
-
+  const {t} = useTranslation('common')
   const handleDismiss = () => {
     setIsDismissed(true);
   };
@@ -22,18 +23,17 @@ export const ToastNotification = ({
     return (
       <div className="flex w-full">
         <span>
-          Are you sure? Without notifications, it’s much harder for your team to
-          reach you.&nbsp;
+          {t('NOTIFICATION.WITHOUT_NOTIFICATIONS')}&nbsp;
           <TextUnderlineClickAble onClick={onEnable}>
-            Enable notifications
+            {t('NOTIFICATION.ENABLE')}
           </TextUnderlineClickAble>
           <span className="mx-2">/</span>
           <TextUnderlineClickAble onClick={onDismiss}>
-            I&apos;ll do this later
+            {t('NOTIFICATION.LATER')}
           </TextUnderlineClickAble>
           <span className="mx-2">/</span>
           <TextUnderlineClickAble onClick={onDeny}>
-            Don&apos;t ask again
+            {t('NOTIFICATION.DENY')}
           </TextUnderlineClickAble>
         </span>
         <span></span>
@@ -42,9 +42,9 @@ export const ToastNotification = ({
   return (
     <div className="flex w-full">
       <span>
-        {`Middo needs your permission to `}
+        {t('NOTIFICATION.MESSAGE')}&nbsp;
         <TextUnderlineClickAble onClick={onEnable}>
-          enable notifications
+        {t('NOTIFICATION.ENABLE')}
         </TextUnderlineClickAble>
       </span>
       <button onClick={handleDismiss} className="ml-3">

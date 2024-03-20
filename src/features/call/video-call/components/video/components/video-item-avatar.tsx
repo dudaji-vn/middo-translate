@@ -5,6 +5,7 @@ import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface VideoItemAvatarProps {
     participant?: ParticipantInVideoCall;
@@ -14,6 +15,7 @@ interface VideoItemAvatarProps {
 export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamera}: VideoItemAvatarProps) {
     const { isFullScreen, layout } = useVideoCallStore();
     const isGalleryView = layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW
+    const {t} = useTranslation('common')
   return (
     <div
       className={cn(
@@ -38,8 +40,8 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
       </div>
       {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
         <span className="relative mt-2 block w-full truncate px-1 text-center leading-snug">
-          {participant?.isMe ? 'You' : participant?.user?.name || ''}
-          {participant?.isShareScreen ? '  (Screen)' : ''}
+          {participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
+          {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
         </span>
       )}
     </div>

@@ -12,6 +12,7 @@ import { MonitorX } from "lucide-react";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
+import { useTranslation } from "react-i18next";
 
 export default function useHandleShareScreen() {
     const { room, setLayout, setChooseScreen } = useVideoCallStore();
@@ -19,18 +20,19 @@ export default function useHandleShareScreen() {
     const { shareScreenStream, setShareScreen, isShareScreen, setShareScreenStream } = useMyVideoCallStore();
     const { user } = useAuthStore();
     const {isElectron, ipcRenderer} = useElectron();
+    const {t} = useTranslation('common');
     const removeShareScreen = useCallback((socketId: string) => {
         const item = participants.find((p: ParticipantInVideoCall) => p.socketId === socketId && p.isShareScreen);
         if (item) {
             item.peer.destroy();
             removeParticipantShareScreen(socketId);
-            toast.success(`${item.user.name} stopped sharing screen`, { icon: <MonitorX size={20} /> })
+            toast.success(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
         }
         if(item?.pin) {
             setShareScreen(false);
             setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
         }
-    }, [participants, removeParticipantShareScreen, setLayout, setShareScreen])
+    }, [participants, removeParticipantShareScreen, setLayout, setShareScreen, t])
 
     const createPeerShareScreenConnection = useCallback((users: any[]) => {
         if (!shareScreenStream) return;
@@ -128,7 +130,7 @@ export default function useHandleShareScreen() {
             return;
         }
         if (!navigator.mediaDevices.getDisplayMedia) {
-            toast.error('Device not support share screen');
+            toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             return;
         }
         try {
@@ -147,7 +149,7 @@ export default function useHandleShareScreen() {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
-              toast.error('Device not supported for sharing screen');
+              toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             }
         }
 

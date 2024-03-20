@@ -10,11 +10,13 @@ import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '../api';
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 export const useJoinCall = () => {
   const { user } = useAuthStore();
   const { setRoom, room, setTempRoom, clearRequestCall } = useVideoCallStore();
   const router = useRouter();
+  const {t} = useTranslation('common')
   const { room: roomChatBox, updateRoom } = useChatBox();
   const createRoomMeeting = useCallback(async () => {
     const res = await roomApi.createRoom({
@@ -37,7 +39,7 @@ export const useJoinCall = () => {
         return;
       }
       if (data.status !== STATUS.JOIN_SUCCESS) {
-        toast.error('Error when join room');
+        toast.error(t('MESSAGE.ERROR.JOIN_ROOM'));
         return;
       }
       clearRequestCall();

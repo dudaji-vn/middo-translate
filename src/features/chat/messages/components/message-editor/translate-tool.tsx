@@ -12,6 +12,7 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
 import { useMessageEditorText } from './message-editor-text-context';
+import { useTranslation } from 'react-i18next';
 
 const TIMEOUT = 5000;
 export interface TranslateToolProps {
@@ -51,6 +52,7 @@ export const TranslateTool = ({
   );
   const { text } = useMessageEditorText();
   const closeEdit = () => setIsEditing(false);
+  const {t} = useTranslation('common')
   const handleCancel = () => {
     closeEdit();
     onCancel?.();
@@ -114,7 +116,7 @@ export const TranslateTool = ({
               <div className="flex items-center gap-3 p-3">
                 <CircleFlag countryCode="gb" height="20" width="20" />
                 <span className="text-sm font-medium text-neutral-600">
-                  EN - Translate tool
+                  EN - {t('CONVERSATION.TRANSLATE_TOOL')}
                 </span>
                 {loading && <Spinner className="h-4 w-4 text-primary" />}
 
@@ -149,7 +151,7 @@ export const TranslateTool = ({
                       value={middleText}
                       onChange={(e) => setMiddleText?.(e.target.value)}
                       name="messageEnglish"
-                      placeholder="Type a message"
+                      placeholder={t('CONVERSATION.TYPE_A_MESSAGE')}
                     />
                   </div>
                   <div className="mt-2 flex justify-end gap-2">
@@ -160,7 +162,7 @@ export const TranslateTool = ({
                       variant="ghost"
                       color="default"
                     >
-                      Cancel
+                      {t('COMMON.CANCEL')}
                     </Button>
                     <Button
                       shape="square"
@@ -170,7 +172,7 @@ export const TranslateTool = ({
                       variant="default"
                       color="primary"
                     >
-                      Save change
+                      {t('COMMON.SAVE_CHANGE')}
                     </Button>
                   </div>
                 </div>
@@ -180,7 +182,7 @@ export const TranslateTool = ({
                       <p className="text-neutral-600">{content}</p>
                     ) : (
                       <p className="italic text-neutral-300">
-                        Stop typing to see translation...
+                        {t('CONVERSATION.STOP_TYPE')}
                       </p>
                     )}
                   </div>
@@ -219,12 +221,13 @@ export const TranslateTool = ({
 };
 
 const NotificationTranslation = ({ onClose }: { onClose?: () => void }) => {
+  const {t} = useTranslation('common')
   return (
     <div className="flex items-center justify-between rounded-xl bg-neutral-white p-3 shadow-2">
       <p>
-        EN - Translate tool is turn off, you can turn it on again in
+        {t('CONVERSATION.TRANSLATE_TOOL_OFF')}
         <span className="font-medium text-primary-500-main">
-          Chat setting
+          {t('CONVERSATION.CHAT_SETTING')}
           <Settings className="ml-1 inline-block" />
         </span>
       </p>
@@ -235,7 +238,7 @@ const NotificationTranslation = ({ onClose }: { onClose?: () => void }) => {
         variant="ghost"
         color="default"
       >
-        Close
+        {t('COMMON.CLOSE')}
       </Button>
     </div>
   );

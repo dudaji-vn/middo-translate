@@ -1,5 +1,6 @@
 'use client';
 
+import * as yup from 'yup';
 import { AlertError } from '@/components/alert/alert-error';
 import { Button } from '@/components/form/button';
 import { InputField } from '@/components/form/Input-field';
@@ -12,11 +13,13 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslation } from 'react-i18next';
+import { PASSWORD_PATTERN } from '@/configs/regex-pattern';
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  const {t} = useTranslation("common");
   const router = useRouter();
   const {
     register,
@@ -31,7 +34,44 @@ export default function SignUp() {
       password: '',
       confirmPassword: '',
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(yup
+      .object()
+      .shape({
+        email: yup
+          .string()
+          .required({
+            value: true,
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .email({
+            value: true,
+            message: t('MESSAGE.ERROR.INVALID_EMAIL'),
+          }),
+        password: yup
+          .string()
+          .required({
+            value: true,
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .min(8, {
+            value: 8,
+            message: t('MESSAGE.ERROR.MIN_LENGTH', {num: 8}),
+          })
+          .matches(
+            PASSWORD_PATTERN, t('MESSAGE.ERROR.PASSWORD_PATTERN'),
+          ),
+        confirmPassword: yup
+          .string()
+          .required({
+            value: true,
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .oneOf([yup.ref('password')], {
+            value: true,
+            message: t('MESSAGE.ERROR.PASSWORD_NOT_MATCH'),
+          }),
+      })
+      .required()),
   });
 
   const handleSubmitForm = async (e: React.FormEvent) => {
@@ -61,7 +101,7 @@ export default function SignUp() {
           <div className="flex w-full items-stretch justify-start gap-3">
             <div className="h-full w-1 rounded-full bg-primary"></div>
             <h3 className="relative pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
-              Sign up
+              {t('SIGN_UP.TITLE')}
             </h3>
           </div>
           <AlertError errorMessage={errorMessage}></AlertError>
@@ -71,8 +111,8 @@ export default function SignUp() {
           >
             <InputField
               className="mt-4"
-              label="Email"
-              placeholder="Enter your email"
+              label={t('COMMON.EMAIL')}
+              placeholder={t('COMMON.EMAIL_PLACEHOLDER')}
               register={{ ...register('email') }}
               errors={errors.email}
               isTouched={touchedFields.email}
@@ -80,9 +120,9 @@ export default function SignUp() {
             />
             <InputField
               className="mt-4"
-              label="Password"
-              subLabel="At least 8 characters, including 1 capitalize letter."
-              placeholder="Enter your password"
+              label={t('COMMON.PASSWORD')}
+              subLabel={t('SIGN_UP.PASSWORD_DES')}
+              placeholder={t('COMMON.PASSWORD_PLACEHOLDER')}
               register={{ ...register('password') }}
               errors={errors.password}
               isTouched={touchedFields.password}
@@ -90,21 +130,21 @@ export default function SignUp() {
             />
             <InputField
               className="mt-4"
-              label="Confirm Password"
-              placeholder="Confirm your password"
+              label={t('COMMON.CONFIRM_PASSWORD')}
+              placeholder={t('COMMON.CONFIRM_PASSWORD_PLACEHOLDER')}
               register={{ ...register('confirmPassword') }}
               errors={errors.confirmPassword}
               isTouched={touchedFields.confirmPassword}
               type="password"
             />
-            <Button type="submit">Sign up</Button>
+            <Button type="submit">{t('SIGN_UP.TITLE')}</Button>
           </form>
           <div className="mt-8 flex justify-center">
             <Link
               href={ROUTE_NAMES.SIGN_IN}
               className="w-fit-content mx-auto inline-block active:text-primary md:hover:font-medium"
             >
-              Cancel
+              {t('COMMON.CANCEL')}
             </Link>
           </div>
         </div>

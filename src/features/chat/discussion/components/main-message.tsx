@@ -13,6 +13,7 @@ import { ImageGallery } from '../../messages/components/message-item/message-ite
 import { textVariants } from '../../messages/components/message-item/message-item-text.style';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
+import { useTranslation } from 'react-i18next';
 
 export interface MainMessageProps {
   message: Message;
@@ -54,11 +55,12 @@ const TextMessage = ({ message }: { message: Message }) => {
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
+  const {t} = useTranslation('common');
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
     if (message.status === 'removed') {
-      setContentDisplay(message.content);
+      setContentDisplay(t('CONVERSATION.REMOVED_A_MESSAGE'));
       return;
     }
     if (userLanguage === message.sender.language) return;
@@ -71,7 +73,7 @@ const TextMessage = ({ message }: { message: Message }) => {
       setContentDisplay(translated);
     };
     translateContent();
-  }, [userLanguage, message]);
+  }, [userLanguage, message, t]);
   return (
     <div className="flex flex-col">
       <RichTextView mentionClassName="left" content={contentDisplay} />
@@ -98,6 +100,7 @@ const TextMessage = ({ message }: { message: Message }) => {
 
 const CallMessage = ({ message }: { message: Message }) => {
   const { call } = message;
+  const {t} = useTranslation('common');
   const { content, icon, subContent } = useMemo((): {
     content: string;
     icon: React.ReactNode;
@@ -105,7 +108,7 @@ const CallMessage = ({ message }: { message: Message }) => {
   } => {
     if (call?.endTime) {
       return {
-        content: 'Call end at ' + moment(call.endTime).format('HH:mm'),
+        content: t('CONVERSATION.CALL_END_AT', {time: moment(call.endTime).format('HH:mm')}),
         subContent: convertToTimeReadable(
           call.createdAt as string,
           call.endTime,
@@ -116,10 +119,10 @@ const CallMessage = ({ message }: { message: Message }) => {
       };
     }
     return {
-      content: 'started a call',
+      content: t('CONVERSATION.STARTED_CALL'),
       icon: <PhoneCallIcon className="mr-2 inline-block h-4 w-4" />,
     };
-  }, [call?.createdAt, call?.endTime]);
+  }, [call?.createdAt, call?.endTime, t]);
   return (
     <div>
       <div>

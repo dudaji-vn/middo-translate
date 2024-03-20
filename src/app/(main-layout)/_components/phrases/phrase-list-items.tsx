@@ -8,6 +8,7 @@ import { phraseOptionNames } from './options';
 import { SearchParams } from '../../page';
 import filter from 'lodash/filter';
 import Tip from '@/components/data-display/tip/tip';
+import { useTranslation } from 'react-i18next';
 
 export type TPhraseItem = {
   name: string;
@@ -72,7 +73,7 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
       icon: ReactNode;
     }>();
 
-
+    const {t} = useTranslation('common');
     const closeViewPhraseOptions = () => {
       setSelectedItem(undefined);
     };
@@ -99,10 +100,10 @@ const PhrasesListItems = forwardRef<HTMLDivElement, PhraseListItemsProps>(
       >
 
         <Tip
-          tipTitle='Welcome to phrases'
+          tipTitle={t('TRANSLATION.PHRASES_WELCOME')}
           className="col-span-2"
           hideTip={hideTip}
-          tipContent={`At here, you can select any topic to access our sample sentences for this situation. Or you could save your favorite sentences in “Your list" tab.`}
+          tipContent={t('TRANSLATION.PHRASES_DESCRIPTION')}
           closeTip={() => setHideTip(true)} />
         {phraseOptionNames?.map((name, index) => {
           const imgNameFile = filter(name, char => /[a-zA-Z]/.test(char)).join('').toLowerCase();

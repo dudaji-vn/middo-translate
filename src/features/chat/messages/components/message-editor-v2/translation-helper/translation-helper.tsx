@@ -13,6 +13,7 @@ import { useState } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { useMessageEditor } from '..';
 import { RichTextInput } from '../rich-text-input';
+import { useTranslation } from 'react-i18next';
 export interface TranslationHelperProps {}
 
 export const TranslationHelper = (props: TranslationHelperProps) => {
@@ -29,7 +30,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
     setContentEnglish,
     userMentions,
   } = useMessageEditor();
-
+  const { t } = useTranslation('common');
   const suggestions = userMentions.map(
     (participant): MentionSuggestion => ({
       id: participant._id,
@@ -87,7 +88,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
               <div className="flex items-center gap-3 p-3">
                 <CircleFlag countryCode="gb" height="20" width="20" />
                 <span className="text-sm font-medium text-neutral-600">
-                  EN - Translate tool
+                  EN - {t('CONVERSATION.TRANSLATE_TOOL')}
                 </span>
                 {translating && <Spinner className="h-4 w-4 text-primary" />}
                 <Switch
@@ -120,7 +121,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                         variant="ghost"
                         color="default"
                       >
-                        Cancel
+                        {t('COMMON.CANCEL')}
                       </Button>
                       <Button
                         shape="square"
@@ -130,7 +131,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                         variant="default"
                         color="primary"
                       >
-                        Save change
+                        {t('COMMON.SAVE_CHANGE')}
                       </Button>
                     </div>
                   </div>
@@ -144,7 +145,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                         />
                       ) : (
                         <p className="italic text-neutral-300">
-                          Stop typing to see translation...
+                          {t('CONVERSATION.STOP_TYPE')}
                         </p>
                       )}
                     </div>

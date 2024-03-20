@@ -5,6 +5,7 @@ import { ChevronDownIcon, Globe2Icon } from 'lucide-react';
 import { PropsWithChildren, useId } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export interface LanguageSelectProps {
   currentCode?: string;
@@ -65,7 +66,8 @@ const LanguageItem = ({
   onClick?: () => void;
   layoutId?: string;
 } & PropsWithChildren) => {
-  const languageName = getCountryNameByCode(code as string) || 'Detect';
+  const languageName = getCountryNameByCode(code as string) || 'Language detect';
+  const {t} = useTranslation('common');
   return (
     <button
       onClick={onClick}
@@ -97,7 +99,7 @@ const LanguageItem = ({
         ) : (
           <Globe2Icon className="z-10 h-5 w-5 text-primary" />
         )}
-        {<span className={cn("z-10 truncate", shrinkAble && !active && 'hidden')}>{languageName}</span>}
+        {<span className={cn("z-10 truncate", shrinkAble && !active && 'hidden')}>{t('LANGUAGE.' + languageName)}</span>}
       </div>
       <ChevronDownIcon className="z-10 size-5 text-neutral-600 lg:hidden" />
     </button>

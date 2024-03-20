@@ -11,6 +11,7 @@ import {
 
 import { roomApi } from '../api';
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomModalLeaveProps {
   id: string;
@@ -21,6 +22,7 @@ export const RoomModalLeave = (props: RoomModalLeaveProps) => {
   const { mutateAsync } = useMutation({
     mutationFn: roomApi.leaveRoom,
   });
+  const {t} = useTranslation('common')
   return (
     <AlertDialog
       defaultOpen
@@ -32,21 +34,20 @@ export const RoomModalLeave = (props: RoomModalLeaveProps) => {
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Leave group?</AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.LEAVE_GROUP.TITLE')}</AlertDialogTitle>
           <AlertDialogDescription>
-            You will lose all of your messages and files. Others still can see
-            your messages. Are you sure to leave?
+            {t('MODAL.LEAVE_GROUP.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             onClick={() => {
               mutateAsync(props.id);
             }}
           >
-            Leave
+            {t('COMMON.LEAVE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

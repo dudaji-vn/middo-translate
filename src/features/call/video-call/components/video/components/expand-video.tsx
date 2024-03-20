@@ -5,6 +5,7 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
 import { Fullscreen } from 'lucide-react';
 import React, { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 interface ExpandVideoProps {
   isGalleryView?: boolean;
   participant: ParticipantInVideoCall;
@@ -12,6 +13,7 @@ interface ExpandVideoProps {
 const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
   const { isFullScreen, setFullScreen, setLayout, setPinShareScreen, setPinDoodle} = useVideoCallStore();
   const { pinParticipant } = useParticipantVideoCallStore();
+  const {t} = useTranslation('common')
   const expandVideoItem = () => {
     if (!isFullScreen) setFullScreen(true);
     setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
@@ -29,7 +31,7 @@ const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
     >
       {isGalleryView && isFullScreen && <Fullscreen className="h-4 w-4" />}
       {isFullScreen && isGalleryView && (
-        <p className="text-center">Click to expand</p>
+        <p className="text-center">{t('CONVERSATION.EXPAND')}</p>
       )}
     </div>
   );

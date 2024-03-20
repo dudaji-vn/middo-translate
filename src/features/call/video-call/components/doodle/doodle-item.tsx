@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { cn } from '@/utils/cn';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { useTranslation } from 'react-i18next';
 interface DoodleItemProps {}
 const DoodleItem = ({}: DoodleItemProps) => {
   const { doodleImage } = useVideoCallStore();
@@ -14,6 +15,7 @@ const DoodleItem = ({}: DoodleItemProps) => {
     setLayout,
     isPinDoodle,
   } = useVideoCallStore();
+  const {t} = useTranslation('common')
   const expandDoodle = () => {
     if (!isFullScreen) setFullScreen(true);
     setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
@@ -41,13 +43,13 @@ const DoodleItem = ({}: DoodleItemProps) => {
         >
           <Fullscreen className="h-6 w-6" />
           {isFullScreen && layout !== VIDEOCALL_LAYOUTS.FOCUS_VIEW && (
-            <p className="text-center">Click to expand</p>
+            <p className="text-center"> {t('CONVERSATION.EXPAND')}</p>
           )}
         </div>
         {!isPinDoodle && <div className="pointer-events-none absolute bottom-1 w-full px-1">
           <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
             <p className="truncate px-1 text-sm leading-snug text-white">
-              Doodle
+              {t('CONVERSATION.DOODLE')}
             </p>
           </div>
         </div>}
@@ -60,7 +62,7 @@ const DoodleItem = ({}: DoodleItemProps) => {
               'opacity-100',
           )}
         >
-          <p className="truncate text-sm leading-snug text-white">Doodle</p>
+          <p className="truncate text-sm leading-snug text-white">{t('CONVERSATION.DOODLE')}</p>
         </div>
       </div>
     </section>

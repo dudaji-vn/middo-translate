@@ -10,6 +10,7 @@ import { Room } from '@/features/chat/rooms/types';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { RichTextView } from '@/components/rich-text-view';
+import { useTranslation } from 'react-i18next';
 import { MessageItemVideo } from './message-item-video';
 
 export interface MessageItemForwardProps {
@@ -24,13 +25,14 @@ export const MessageItemForward = ({
   isMe,
 }: MessageItemForwardProps) => {
   const mediaRef = useRef<HTMLDivElement>(null);
+  const {t} = useTranslation('common');
   const displayForwardFrom = useMemo(() => {
-    let text = message?.sender?.name;
+    let text = " " + message?.sender?.name + " ";
     if (message.room?.isGroup) {
-      text += ` in ${message.room?.name || 'a group'}`;
+      text += t('CONVERSATION.FORWARD_FROM_CHANNEL', {name: message.room?.name || t('CONVERSATION.A_GROUP')});
     }
     return text;
-  }, [message]);
+  }, [message, t]);
   return (
     <div className="my-1 flex h-fit gap-1">
       {hasParent && !isMe && (
@@ -45,7 +47,7 @@ export const MessageItemForward = ({
           }}
           className="overflow-hidden text-sm"
         >
-          <span className="italic text-neutral-400">Forward from&nbsp;</span>
+          <span className="italic text-neutral-400">{t('CONVERSATION.FORWARD_FROM')}&nbsp;</span>
           <Wrapper room={message.room!}>
             <span className="break-all text-primary max-md:inline-block">
               {displayForwardFrom}

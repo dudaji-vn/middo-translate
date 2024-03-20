@@ -17,6 +17,7 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import SpeechRecognition from 'react-speech-recognition';
 import { TranslationTab } from '@/types/translationstab.type';
+import { useTranslation } from 'react-i18next';
 
 const MAX_SELECTED_LANGUAGES = 3;
 
@@ -46,6 +47,7 @@ export const LanguagesControlBar = forwardRef<
     const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
     const isTablet = useAppStore((state) => state.isTablet);
     const [isHydrated, setIsHydrated] = useState(false);
+    const {t} = useTranslation('common');
     const {
       recentlySourceUsed,
       recentlyTargetUsed,
@@ -225,7 +227,7 @@ export const LanguagesControlBar = forwardRef<
         {currentSelect !== 'none' && (
           <div className="fixed left-0 top-[72px] z-20 h-full w-full bg-background">
             <BackLayout
-              title="Select language"
+              title={t('COMMON.SELECT_LANGUAGE')}
               onBack={() => {
                 setCurrentSelect('none');
               }}

@@ -8,6 +8,7 @@ import { CircleFlag } from 'react-circle-flags';
 import { Globe2Icon } from 'lucide-react';
 import { Triangle } from '@/components/icons';
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export interface TranslateEditorWrapperProps {
   prefixLanguage?: string;
@@ -35,6 +36,7 @@ export const TranslateEditorWrapper = ({
   footerElement,
 }: TranslateEditorWrapperProps) => {
   const language = getLanguageByCode(languageCode);
+  const {t} = useTranslation('common');
   return (
     <div
       className={cn(
@@ -67,10 +69,10 @@ export const TranslateEditorWrapper = ({
           {prefixLanguage && <span>{prefixLanguage} - </span>}
           {language?.name ? (
             <span>
-              {isDetect ? `Detected: ${language.name}` : language.name}
+              {isDetect ? `${t('LANGUAGE.Detected')}: ${t('LANGUAGE.' + language.name)}` : t('LANGUAGE.' + language.name)}
             </span>
           ) : (
-            <span>Detect language</span>
+            <span>{t('LANGUAGE.DETECT_LANGUAGE')}</span>
           )}
         </div>
       </div>

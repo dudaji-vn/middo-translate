@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { use, useCallback, useEffect, useMemo, useState } from 'react';
 import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
@@ -11,6 +11,7 @@ import { useParticipantVideoCallStore } from '../../../store/participant.store';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { SearchInput } from '@/components/data-entry';
+import { useTranslation } from 'react-i18next';
 
 export const ModalAddUser = () => {
 
@@ -18,6 +19,7 @@ export const ModalAddUser = () => {
     const [members, setMembers] = useState<User[]>([]);
     const [membersApi, setMembersApi] = useState<User[]>([]);
     const { participants } = useParticipantVideoCallStore();
+    const {t} = useTranslation("common");
     useEffect(() => {
         if (!room || !room.roomId) return;
         const fetchMembersInGroup = async () => {
@@ -79,11 +81,11 @@ export const ModalAddUser = () => {
             <AlertDialog open={isShowModalAddUser} onOpenChange={() => setModalAddUser(false)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>Invite to Call</AlertDialogTitle>
+                        <AlertDialogTitle>{t('MODAL.ADD_USER.TITLE')}</AlertDialogTitle>
                         <div className={cn(selectedUsers.length > 0 && 'border-b pb-4')}>
                             <SearchInput
                                 onChange={handleChangeSearch}
-                                placeholder="Search"
+                                placeholder={t('COMMON.SEARCH')}
                             />
                             <SelectedList
                                 items={selectedUsers}
@@ -100,12 +102,12 @@ export const ModalAddUser = () => {
                         </div>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel className="mr-4">Cancel</AlertDialogCancel>
+                        <AlertDialogCancel className="mr-4">{t('COMMON.CANCEL')}</AlertDialogCancel>
                         <AlertDialogAction
                             disabled={selectedUsers.length === 0}
                             onClick={handleSubmit}
                         >
-                            Add
+                            {t('COMMON.ADD')}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

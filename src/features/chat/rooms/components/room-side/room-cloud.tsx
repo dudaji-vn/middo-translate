@@ -13,6 +13,7 @@ import { RoomMedia } from './room-media';
 import { roomApi } from '../../api';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomCloudProps {
   room: Room;
@@ -29,7 +30,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
     queryKey: ['cloud-count'],
     queryFn: () => roomApi.getCloudCount(room._id),
   });
-
+  const {t} = useTranslation('common');
   return (
     <Accordion type="single" collapsible className="mt-8">
       <AccordionItem value="item-1">
@@ -40,7 +41,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
           }
         >
           <div className="flex items-center gap-2">
-            <Package2 width={16} height={16} /> <span>Cloud shared</span>
+            <Package2 width={16} height={16} /> <span>{t('CONVERSATION.CLOUD_SHARED')}</span>
             <span className="text-sm text-neutral-600">
               ({data?.count || 0})
             </span>
@@ -56,7 +57,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
               variant={currentTab === 'media' ? 'default' : 'ghost'}
               color={currentTab === 'media' ? 'secondary' : 'default'}
             >
-              Media ({data?.mediaCount || 0})
+              {t('CONVERSATION.MEDIA')} ({data?.mediaCount || 0})
             </Button>
             <Button
               onClick={() => setCurrentTab('file')}
@@ -66,7 +67,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
               variant={currentTab === 'file' ? 'default' : 'ghost'}
               color={currentTab === 'file' ? 'secondary' : 'default'}
             >
-              File ({data?.fileCount || 0})
+              {t('CONVERSATION.FILE')} ({data?.fileCount || 0})
             </Button>
           </div>
           <div className="mt-3">{ComponentMap[currentTab]}</div>

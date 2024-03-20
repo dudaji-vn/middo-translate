@@ -7,6 +7,7 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { Mic, MicOff } from 'lucide-react';
 import React, { memo, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ActionToggleMicProps {
   handleChangeCameraOrMic: (params: {
@@ -23,7 +24,7 @@ const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
       audio: !isTurnOnMic,
     });
   }, [handleChangeCameraOrMic, isTurnOnMic, setTurnOnMic])
-
+  const {t} = useTranslation('common')
   useKeyboardShortcut([SHORTCUTS.TOGGLE_MICROPHONE], onToggleMic);
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
       onClick={onToggleMic}
     >
       <Tooltip
-        title={isTurnOnMic ? 'Turn off mic' : 'Turn on mic'}
+        title={isTurnOnMic ? t('TOOL_TIP.TURN_OFF_MICROPHONE') : t('TOOL_TIP.TURN_ON_MICROPHONE')}
         contentProps={{ className: 'text-black font-normal ' }}
         triggerItem={isTurnOnMic ? <Mic /> : <MicOff />}
       />
