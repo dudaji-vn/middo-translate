@@ -28,11 +28,12 @@ import isEqual from 'lodash/isEqual';
 import { Spinner } from '@/components/feedback';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import CustomThemeOptions from './sections/custom-theme-options';
-import { TThemeOption, DEFAULT_THEME } from './sections/options';
+import { TThemeOption, DEFAULT_THEME, DEFAULT_FIRST_MESSAGE } from './sections/options';
 import CustomFirstMessageOptions from './sections/custom-first-message-options';
 import PluginChatPreview from './sections/plugin-chat-preview';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import useClient from '@/hooks/use-client';
+import { useAuthStore } from '@/stores/auth.store';
 
 
 type TFormValues = {
@@ -58,6 +59,8 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const isClient = useClient()
   const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
   const [accordionValue, setAccordionValue] = React.useState<AccordionValue>('add domain');
+  const [submitedData, setSubmitedData] = React.useState<TFormValues>();
+  const currentUser = useAuthStore((s) => s.user);
   const [extensionId, setExtensionId] = React.useState<string>();
   const { copy } = useTextCopy();
   const router = useRouter();
@@ -68,22 +71,24 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
       addingDomain: '',
       domains: [],
       custom: {
-        language: 'vi',
-        firstMessage: 'Xin chào, tôi có thể giúp gì cho bạn?',
-        firstMessageEnglish: 'Hello, how can I help you?',
+        language: currentUser?.language,
+        firstMessage: DEFAULT_FIRST_MESSAGE.content,
+        firstMessageEnglish: DEFAULT_FIRST_MESSAGE.contentEnglish,
         color: DEFAULT_THEME,
       },
     },
     resolver: zodResolver(createExtensionSchema),
   });
+
   const {
     watch,
     handleSubmit,
     trigger,
     reset,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid, isSubmitting, },
   } = form;
+  
   const domains: Array<string> = watch('domains');
   const addingDomain: string = watch('addingDomain');
   const domainsErrMessage = errors?.domains?.message;
@@ -112,6 +117,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
         setExtensionId(res.data._id);
         toast.success('Create extension success!');
         setAccordionValue('copy & paste code');
+        setSubmitedData(values);
       }).catch((err) => {
         toast.error(err?.response?.data?.message || 'Create extension failed!');
         setAccordionValue('custom extension');
@@ -133,16 +139,18 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
     setValue('domains', domains.filter((d) => d !== domain));
     trigger('domains');
   }
+  const initialCustom = {
+    language: initialData?.language,
+    firstMessage: initialData?.firstMessage,
+    firstMessageEnglish: initialData?.firstMessageEnglish,
+    color: initialData?.color || DEFAULT_THEME,
+  };
   const onOpenChange = (open: boolean) => {
     const currentFormData = form.getValues();
-    const initialCustom = {
-      language: initialData?.language,
-      firstMessage: initialData?.firstMessage,
-      firstMessageEnglish: initialData?.firstMessageEnglish,
-      color: initialData?.color || DEFAULT_THEME,
-    };
+    const isSubmited = isEqual(currentFormData, submitedData);
+    console.log('submitedData, currentFormData', submitedData, currentFormData)
     const isChanged = !isEqual(currentFormData.domains, initialData?.domains) || !isEqual(currentFormData.custom, initialCustom);
-    if (!open && !isEmpty(initialData) && isChanged) {
+    if (!open && !isEmpty(initialData) && isChanged && !isSubmited) {
       setOpenConfirmDialog(true);
       return;
     }
@@ -152,7 +160,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="h-fit  max-w-screen-xl md:max-w-screen-md"
+        <DialogContent className="h-fit  max-w-screen-md md:max-w-screen-xl"
           onInteractOutside={(e) => {
             e.preventDefault();
           }}
@@ -165,7 +173,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   {title}
                 </Typography>
               </DialogTitle>
-              <div className=" max-h-[calc(85vh-48px)] max-w-screen-xl md:max-w-screen-md overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
+              <div className=" max-h-[calc(85vh-48px)] max-w-screen-md md:max-w-screen-xl overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
                 <Accordion
                   type="single"
                   collapsible
@@ -249,7 +257,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                       className: 'px-0'
                     }}
                   >
-                    <div className='flex flex-row divide-x divide-neutral-50 px-4 border-x border-b border-neutral-50 '>
+                    <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>
                       <div className='w-1/3 divide-y divide-neutral-50'>
                         <div className='flex flex-col gap-3 p-3'>
                           <FormLabel
@@ -268,7 +276,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                           setValue('custom.color', color);
                         }} />
                       </div>
-                      <PluginChatPreview className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} />
+                      <PluginChatPreview className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} color={watch('custom.color')} />
                     </div>
                   </CreateExtensionSectionWrapper>
                   <CreateExtensionSectionWrapper
@@ -284,8 +292,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                         type="button"
                         className='text-neutral-400 absolute right-4 top-1'
                         onClick={() => {
-                          navigator.clipboard.writeText(generateExtensionCode(`/help-desk/${extensionId}`));
-                          toast.success('Copied to clipboard');
+                          copy(generateExtensionCode(`/help-desk/${extensionId}`));
                         }}
                       ><CopyIcon />
                       </Button.Icon>
@@ -310,8 +317,8 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
           onOpenChange={setOpenConfirmDialog}
           onConfirm={() => {
             setOpen(false);
-            reset();
             setOpenConfirmDialog(false);
+            reset();
           }}
           onCancel={() => { setOpenConfirmDialog(false) }}
         />

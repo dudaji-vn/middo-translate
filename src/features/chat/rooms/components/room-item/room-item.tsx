@@ -21,6 +21,7 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Avatar } from '@/components/data-display';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface RoomItemProps {
   data: Room;
@@ -69,23 +70,24 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const conversationType = params?.conversationType;
   const isBusinessRoom = !!businessId && !!conversationType;
   const {t} = useTranslation('common');
+  const isBusinessExtensionAvailable = !!businessId;
   const room = useMemo(
-    () =>
-      generateRoomDisplay(
+    () => {
+      const businessRedirectPath =  isBusinessExtensionAvailable ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${businessId}/${_data._id}` : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
+      return generateRoomDisplay(
         _data,
         currentUserId,
         !disabledRedirect,
-        isBusinessRoom
-          ? `/business/${conversationType}/${businessId}/${_data._id}`
-          : null,
-      ),
+        Boolean(conversationType) ? businessRedirectPath : null
+      )
+    },
     [
       _data,
       currentUserId,
       disabledRedirect,
-      isBusinessRoom,
       businessId,
       conversationType,
+      isBusinessExtensionAvailable,
     ],
   );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
@@ -93,7 +95,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
-      `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${businessId}/${conversationType}/${currentRoomId}` ||
+    `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${businessId}/${conversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
@@ -125,7 +127,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           }}
         >
           <RoomItemWrapper>
-            {isBusinessRoom ? (
+            {!!conversationType ? (
               <Avatar src={'/anonymous.png'} alt="anonymous-avt" />
             ) : (
               <ItemAvatar isOnline={isOnline} room={room} isMuted={isMuted} />

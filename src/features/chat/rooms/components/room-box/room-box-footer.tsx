@@ -16,6 +16,8 @@ import { useChatBox } from '../../contexts/chat-box-context';
 import { useMessagesBox } from '@/features/chat/messages/components/message-box';
 import { useMutation } from '@tanstack/react-query';
 import { useMediaUpload } from '@/components/media-upload';
+import socket from '@/lib/socket-io';
+import { SOCKET_CONFIG } from '@/configs/socket';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -210,11 +212,6 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [localDocumentMessagesWaiting, uploadedFiles, room?._id]);
     useEffect(() => {
-      console.log(
-        localVideoMessageWaiting,
-        uploadedFiles,
-        'localVideoMessageWaiting',
-      );
       if (!localVideoMessageWaiting.length || !uploadedFiles.length) return;
       const localVideoMessages = localVideoMessageWaiting;
       const videosUploaded: Media[][] = localVideoMessages.map((message) => {
@@ -247,12 +244,31 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [localVideoMessageWaiting, uploadedFiles, room?._id]);
+
     return (
       <div className="w-full border-t p-2">
         <MessageEditor
+          onTyping={(isTyping) => {
+            socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {
+              roomId: room._id,
+              isTyping,
+            });
+          }}
+          onStoppedTyping={(isTyping) => {
+            socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {
+              roomId: room._id,
+              isTyping,
+            });
+          }}
           userMentions={room.isGroup ? room.participants : []}
           scrollId="inbox-list"
           onSubmitValue={handleSubmit}
+          disabled={room.status === 'archived' || room.status === 'completed'}
+          disabledMessage={
+            room.status === 'archived'
+              ? 'This conversation is archived'
+              : 'This conversation is completed'
+          }
         />
       </div>
     );

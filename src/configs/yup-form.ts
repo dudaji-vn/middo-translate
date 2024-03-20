@@ -166,12 +166,22 @@ export const createExtensionSchema = z.object({
     .optional(),
 });
 
+export const createGuestInfoSchema = z.object({
+  name: z.string().min(1, {}),
+  email: z.string().email({
+    message: 'Please enter a valid email address!',
+  }),
+  language: z.string().min(1, {
+    message: 'Please choose language!',
+  }),
+});
 export const updateGuestInfoSchema = z.object({
   phoneNumber: z
     .string()
     .regex(PHONE_PATTERN, {
       message: 'Phone number must be 9-12 digits.',
-    }).optional(),
+    })
+    .optional(),
 });
 
 export const changePasswordSchema = z

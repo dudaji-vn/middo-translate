@@ -22,7 +22,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const { isTalk } = useAudioLevel(streamVideo);
   const { isLoadingVideo } = useMyVideoCallStore();
   useFitRatio(videoRef, parentRef);
-  const {width, height} = useGetVideoSize({videoRef});
+  const { width, height } = useGetVideoSize({ videoRef });
   // Disable pause video when fullscreen
   const {t} = useTranslation('common')
   useEffect(() => {
@@ -59,7 +59,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       <video
         ref={videoRef}
         className={twMerge(
-          'relative h-full w-full object-contain',
+          'disable relative h-full w-full object-contain',
           isTurnOnCamera ? '' : 'hidden',
         )}
         autoPlay
@@ -78,10 +78,14 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       )} */}
 
       {/* Overlay name */}
-      <VideoItemAvatar size='lg' participant={participant} isTurnOnCamera={isTurnOnCamera}/>
+      <VideoItemAvatar
+        size="lg"
+        participant={participant}
+        isTurnOnCamera={isTurnOnCamera}
+      />
 
       {/* Overlay name */}
-      <div className="absolute bottom-1 left-1 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white z-10">
+      <div className="absolute bottom-1 left-1 z-10 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
         <span className="relative truncate leading-snug">
           {participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
           {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
@@ -89,13 +93,17 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       </div>
 
       {/* Video Loading */}
-      <VideoItemLoading isLoading={isLoadingVideo} isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
+      <VideoItemLoading
+        isLoading={isLoadingVideo}
+        isMe={participant?.isMe}
+        isShareScreen={participant?.isShareScreen}
+      />
 
       {/* Doodle */}
-      {participant?.isShareScreen && participant?.isElectron && 
-      // {participant?.isShareScreen && 
-        <DoodleShareScreen width={width} height={height}/>
-      }
+      {participant?.isShareScreen && participant?.isElectron && (
+        // {participant?.isShareScreen &&
+        <DoodleShareScreen width={width} height={height} />
+      )}
     </section>
   );
 };

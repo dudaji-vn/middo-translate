@@ -8,9 +8,9 @@ export const useGetUsersRecChat = () => {
   });
 };
 
-export const useGetRoomsRecChat = () => {
+export const useGetRoomsRecChat = (type?: string) => {
   return useQuery({
     queryKey: ['rooms-rec-chat'],
-    queryFn: recommendationApi.rooms,
+    queryFn: () => recommendationApi.rooms(type),
   });
 };

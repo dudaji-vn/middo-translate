@@ -13,9 +13,9 @@ export const recommendationApi = {
     const res: Response<User[]> = await axios.get(path);
     return res.data;
   },
-  async rooms() {
+  async rooms(type?: string) {
     const path = queryString.stringifyUrl({
-      url: `${basePath}/chat`,
+      url: `${basePath}/chat` + (type ? `?type=${type}` : ''),
     });
     const res: Response<Room[]> = await axios.get(path);
     return res.data;

@@ -13,6 +13,17 @@ export type MessageType =
   | 'action'
   | 'forward';
 
+export type ActionTypes =
+  | 'none'
+  | 'addUser'
+  | 'removeUser'
+  | 'leaveGroup'
+  | 'pinMessage'
+  | 'unpinMessage'
+  | 'updateGroupName'
+  | 'updateGroupAvatar'
+  | 'removeGroupName';
+
 export type Reaction = {
   emoji: string;
   user: User;
@@ -43,6 +54,7 @@ export type Message = {
   hasChild?: boolean;
   isPinned?: boolean;
   mentions?: User[];
+  action?: ActionTypes;
 } & BaseEntity;
 
 export type PinMessage = {

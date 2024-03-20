@@ -22,8 +22,12 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
 
   const [localDocumentMessagesWaiting, setLocalDocumentMessagesWaiting] =
     useState<Message[]>([]);
+  const [localVideoMessageWaiting, setLocalVideoMessageWaiting] = useState<
+    Message[]
+  >([]);
 
   const { message, addReply } = useDiscussion();
+  const roomId = message?.room?._id;
   const { mutateAsync } = useMutation({
     mutationFn: messageApi.reply,
   });
@@ -50,7 +54,8 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     });
   };
   const handleSubmit = async (data: MessageEditorSubmitData) => {
-    const { content, images, documents, contentEnglish, language } = data;
+    const { content, images, documents, contentEnglish, language, videos } =
+      data;
 
     const trimContent = content.trim();
 
@@ -77,6 +82,18 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       });
       setLocalDocumentMessagesWaiting(localDocumentMessages);
     }
+
+    if (videos.length) {
+      const localVideoMessages = videos.map((video) => {
+        const localVideoMessage = createLocalMessage({
+          sender: currentUser!,
+          media: [video],
+        });
+        addReply(localVideoMessage);
+        return localVideoMessage;
+      });
+      setLocalVideoMessageWaiting(localVideoMessages);
+    }
   };
 
   useEffect(
@@ -100,7 +117,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
         repliedMessageId: message._id,
         message: {
           content: '',
-          roomId: message?.room?._id!,
+          roomId: roomId!,
 
           media: imagesUploaded,
         },
@@ -109,7 +126,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     },
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [localImageMessageWaiting, uploadedFiles, message.room?._id],
+    [localImageMessageWaiting, uploadedFiles, roomId],
   );
 
   useEffect(() => {
@@ -138,7 +155,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
           repliedMessageId: message._id,
           message: {
             content: '',
-            roomId: message?.room?._id!,
+            roomId: roomId!,
             media: documentsUploaded[index],
           },
         });
@@ -147,7 +164,43 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     setLocalDocumentMessagesWaiting([]);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localDocumentMessagesWaiting, uploadedFiles, message.room?._id]);
+  }, [localDocumentMessagesWaiting, uploadedFiles, roomId]);
+
+  useEffect(() => {
+    if (!localVideoMessageWaiting.length || !uploadedFiles.length) return;
+    const localVideoMessages = localVideoMessageWaiting;
+    const videosUploaded: Media[][] = localVideoMessages.map((message) => {
+      const localVideos = message.media;
+
+      if (!localVideos) return [];
+      const VideosUploaded: Media[] = localVideos.map((item) => {
+        const file = uploadedFiles.find((f) => f.localUrl === item.url);
+        if (file) {
+          return {
+            ...item,
+            url: file.metadata.secure_url || file.url,
+          };
+        }
+        return item;
+      });
+      return VideosUploaded;
+    });
+    Promise.all(
+      localVideoMessages.map(async (videoMessage, index) => {
+        mutateAsync({
+          repliedMessageId: message._id,
+          message: {
+            content: '',
+            roomId: roomId!,
+            media: videosUploaded[index],
+          },
+        });
+      }),
+    );
+    setLocalVideoMessageWaiting([]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localVideoMessageWaiting, uploadedFiles, roomId]);
 
   const room = message.room;
   return (

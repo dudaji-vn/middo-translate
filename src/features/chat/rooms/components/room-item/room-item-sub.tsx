@@ -9,6 +9,7 @@ import { getReadByUsers } from '@/features/chat/utils';
 import { translateText } from '@/services/languages.service';
 import { convert } from 'html-to-text';
 import { useTranslation } from 'react-i18next';
+import { generateSystemMessageContent } from '@/features/chat/messages/utils';
 
 const ItemSub = ({
   message,
@@ -113,19 +114,25 @@ const ItemSub = ({
               return message.media.length > 1 ? t('CONVERSATION.SEND_PHOTOS', {num: message.media.length}) : t('CONVERSATION.SEND_PHOTO');
             case 'document':
               return t('CONVERSATION.SEND_FILE');
+            case 'video':
+              return 'sent a video';
             default:
-              break;
+              return t('CONVERSATION.SEND_FILE');;
           }
         }
         break;
       case 'action':
+        let targetUserNamesString = '';
         if (message.targetUsers && message.targetUsers.length > 0) {
-          const targetUserNamesString = message.targetUsers
+          targetUserNamesString = message.targetUsers
             .map((user) => user.name)
             .join(', ');
-          return `${messageContent} ${targetUserNamesString}`;
         }
-        break;
+        return `${generateSystemMessageContent({
+          action: message.action,
+          content: messageContent,
+        })} ${targetUserNamesString}`;
+
       default:
         break;
     }
@@ -135,6 +142,7 @@ const ItemSub = ({
     return messageContent;
   }, [
     messageContent,
+    message.action,
     message.forwardOf,
     message.media,
     message.status,

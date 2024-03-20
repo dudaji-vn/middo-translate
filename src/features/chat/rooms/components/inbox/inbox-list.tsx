@@ -21,21 +21,25 @@ import {
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/store';
+import { useInboxRouter } from './use-inbox-router';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { PK_BUSINESS_CONVERSATIONS } from '@/types/business.type';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 interface InboxListProps {
   type: InboxType;
-  businessId?: string;
 }
 
 const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
-  ({ type, businessId }: InboxListProps, ref) => {
+  ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
-
+    const { inboxStatus: status } = useBusinessNavigationData();
+    const { businessData } = useBusinessExtensionStore();
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
-    const key = useMemo(() => ['rooms', type], [type]);
+    const key = useMemo(() => ['rooms', type, status], [type, status]);
     const onlineList = useChatStore((state) => state.onlineList);
 
     const {
@@ -50,21 +54,22 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
-        roomApi.getRooms({ cursor: pageParam, limit: 10, type }),
+        roomApi.getRooms({ cursor: pageParam, limit: 10, type, status}),
     });
-    const { rooms: pinnedRooms } = useGetPinnedRooms();
+
+    useInboxRouter({ rooms });
+
+    const { rooms: pinnedRooms, refetch: refetchPinned } = useGetPinnedRooms();
 
     const queryClient = useQueryClient();
 
     const updateRoom = (room: Partial<Room> & { _id: string }) => {
       refetch();
-      // updateItem(room);
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
     };
 
     const deleteRoom = (roomId: string) => {
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
-
       removeItem(roomId);
     };
 
@@ -74,20 +79,19 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     };
 
     useEffect(() => {
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.NEW, addItem);
+      socket.on(SOCKET_CONFIG.EVENTS.INBOX.NEW, addItem);
       socket.on(
-        SOCKET_CONFIG.EVENTS.ROOM.UPDATE,
+        SOCKET_CONFIG.EVENTS.INBOX.UPDATE,
         (payload: { roomId: string; data: Partial<Room> }) => {
           updateRoom({ _id: payload.roomId, ...payload.data });
         },
       );
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, deleteRoom);
-      socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, leaveRoom);
+      socket.on(SOCKET_CONFIG.EVENTS.INBOX.DELETE, deleteRoom);
+      // socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, leaveRoom);
       return () => {
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.UPDATE);
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.DELETE);
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.LEAVE);
-        socket.off(SOCKET_CONFIG.EVENTS.ROOM.NEW);
+        socket.off(SOCKET_CONFIG.EVENTS.INBOX.UPDATE);
+        socket.off(SOCKET_CONFIG.EVENTS.INBOX.DELETE);
+        socket.off(SOCKET_CONFIG.EVENTS.INBOX.NEW);
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -139,7 +143,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   data={room}
                   isActive={currentRoomId === room._id}
                   currentRoomId={currentRoomId as string}
-                  businessId={businessId}
+                  businessId={businessData?._id}
                 />
               );
             })}

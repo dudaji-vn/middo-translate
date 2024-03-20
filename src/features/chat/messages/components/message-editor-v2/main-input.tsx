@@ -6,12 +6,21 @@ import { RichTextInput } from './rich-text-input';
 
 export interface MainInputProps {}
 
+let isTyping = false;
+
 export const MainInput = (props: MainInputProps) => {
   const isMobile = useAppStore((state) => state.isMobile);
 
   const { handleClipboardEvent } = useMediaUpload();
-  const { setRichText, editorId, setContent, toolbarRef, userMentions } =
-    useMessageEditor();
+  const {
+    setRichText,
+    editorId,
+    setContent,
+    toolbarRef,
+    userMentions,
+    onStoppedTyping,
+    onTyping,
+  } = useMessageEditor();
   const suggestions = userMentions.map(
     (participant): MentionSuggestion => ({
       id: participant._id,
@@ -37,6 +46,18 @@ export const MainInput = (props: MainInputProps) => {
       onCreated={setRichText}
       onChange={(editor) => {
         setContent(editor.getHTML());
+      }}
+      onTyping={(value) => {
+        if (!isTyping) {
+          onTyping?.(value);
+        }
+        isTyping = true;
+      }}
+      onStoppedTyping={(value) => {
+        if (isTyping) {
+          onStoppedTyping?.(value);
+        }
+        isTyping = false;
       }}
       onSubmit={() => {
         const submitButton = document.getElementById('send-button-' + editorId);

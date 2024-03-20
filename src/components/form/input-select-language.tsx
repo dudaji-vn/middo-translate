@@ -16,6 +16,7 @@ import { CircleFlag } from 'react-circle-flags';
 import Image from 'next/image';
 import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { SelectProps } from '@radix-ui/react-select';
 
 interface InputSelectLanguageProps {
   className?: string;
@@ -25,12 +26,14 @@ interface InputSelectLanguageProps {
   field?: string;
   trigger?: any;
   defaultValue?: string;
+  labelProps?: React.HtmlHTMLAttributes<HTMLLabelElement>;
+  selectProps?: SelectProps;
 }
 interface InputSelect {
   value: string;
   title: string;
 }
-export const InputSelectLanguage = (props: InputSelectLanguageProps) => {
+export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: InputSelectLanguageProps) => {
   const id = useId();
   const [valueSelect, setValueSelect] = useState<InputSelect>({
     value: '',
@@ -67,10 +70,10 @@ export const InputSelectLanguage = (props: InputSelectLanguageProps) => {
 
   return (
     <div className={className}>
-      <label className="mb-2 ml-5 inline-block" htmlFor={id}>
+      <label className="mb-2 ml-5 inline-block" htmlFor={id} {...labelProps}>
         {t('COMMON.LANGUAGE')}
       </label>
-      <Select onValueChange={handleSelectChange}>
+      <Select onValueChange={handleSelectChange} {...selectProps}>
         <SelectTrigger className="flex w-full px-5">
           {!valueSelect?.value && (
             <span className="opacity-60">{t('COMMON.LANGUAGE_PLACEHOLDER')}</span>

@@ -26,10 +26,7 @@ const tabMap: Record<
   individual: {
     component: <IndividualTab />,
   },
-  unread: {
-    // TODO: Update this
-    component: <div>Business unread</div>,
-  },
+
 };
 
 

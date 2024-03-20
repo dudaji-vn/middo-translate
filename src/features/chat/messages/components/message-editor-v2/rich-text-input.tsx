@@ -10,6 +10,8 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useTranslation } from 'react-i18next';
+
+let typingTimeout: any = null;
 export interface RichTextInputProps {
   className?: string;
   onClipboardEvent?: (e: ClipboardEvent) => void;
@@ -21,6 +23,8 @@ export interface RichTextInputProps {
   onBlur?: (editor?: Editor) => void;
   onFocus?: (editor?: Editor) => void;
   suggestions?: MentionSuggestion[];
+  onTyping?: (isTyping: boolean) => void;
+  onStoppedTyping?: (isTyping: boolean) => void;
 }
 
 export const RichTextInput = ({
@@ -33,11 +37,16 @@ export const RichTextInput = ({
   autoFocus = false,
   onBlur,
   onFocus,
+  onTyping,
+  onStoppedTyping,
   suggestions = [],
 }: RichTextInputProps) => {
   const {t} = useTranslation('common')
   const editor = useEditor({
     editorProps: {
+      transformPastedHTML(html) {
+        return html.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1');
+      },
       attributes: {
         class: 'prose max-w-none w-full focus:outline-none',
       },
@@ -45,6 +54,7 @@ export const RichTextInput = ({
         onClipboardEvent?.(e);
       },
     },
+
     autofocus: autoFocus ? 'end' : false,
     onCreate: ({ editor }) => {
       onCreated?.(editor as Editor);
@@ -103,6 +113,16 @@ export const RichTextInput = ({
     ],
     onUpdate: ({ editor }) => {
       onChange?.(editor as Editor);
+      if (editor.getText().length > 0) {
+        onTyping?.(true);
+        clearTimeout(typingTimeout);
+        typingTimeout = setTimeout(() => {
+          onStoppedTyping?.(false);
+        }, 1000); // Adjust timeout as needed
+      } else {
+        onStoppedTyping?.(false);
+        clearTimeout(typingTimeout);
+      }
     },
     content: initialContent,
   });

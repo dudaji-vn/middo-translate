@@ -30,6 +30,11 @@ export const SOCKET_CONFIG = {
       UPDATE: 'room.update',
       DELETE: 'room.delete',
     },
+    INBOX: {
+      NEW: 'inbox.new',
+      UPDATE: 'inbox.update',
+      DELETE: 'inbox.delete',
+    },
     CHAT: {
       JOIN: 'chat.join',
       NEW_JOIN: 'chat.newJoin',
@@ -71,6 +76,12 @@ export const SOCKET_CONFIG = {
       STOP: 'speech_to_text.stop',
       SEND_AUDIO: 'speech_to_text.send_audio',
       RECEIVE_AUDIO_TEXT: 'speech_to_text.receive_audio_text',
+    },
+    TYPING: {
+      UPDATE: {
+        SERVER: 'typing.update.server',
+        CLIENT: 'typing.update.client',
+      },
     },
   },
 };

@@ -28,7 +28,6 @@ const SettingPage = async () => {
 
                 </div>)}
                 <BusinessExtension data={businessExtension} name='Middo Extension' />
-
             </section>
         </div>
     )

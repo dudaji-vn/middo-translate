@@ -31,7 +31,7 @@ import { MessageItemVideo } from './message-item-video';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof messageVariants> {
+    VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
   showAvatar?: boolean;
@@ -40,6 +40,7 @@ export interface MessageProps
   pinnedBy?: User;
   discussionDisabled?: boolean;
   guestId?: string;
+  disabledAllActions?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -74,6 +75,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       direction,
       showReply = true,
       pinnedBy,
+      disabledAllActions,
       discussionDisabled,
       ...props
     },
@@ -82,9 +84,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isMe = sender === 'me';
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
-    const isSystemMessage =
-      message.type === 'notification' || message.type === 'action';
-    console.log('message????', message)
+    const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
 
     return (
@@ -123,6 +123,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
                 )}
                 <MessageItemWrapper
+                  disabledAllActions={disabledAllActions}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
