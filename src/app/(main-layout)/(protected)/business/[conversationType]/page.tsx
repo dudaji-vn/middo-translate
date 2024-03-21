@@ -1,11 +1,6 @@
 import React from 'react'
+import ChatPage from '../../talk/page'
 
-const BusinessConversation = ({ params: { conversationType } }: { params: { conversationType: string } }) => {
-  return (
-    <div className='max-md:hidden'>
-      Select a conversation
-    </div>
-  )
-}
+const BusinessConversation = ChatPage
 export default BusinessConversation
 
