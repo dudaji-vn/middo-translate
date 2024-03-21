@@ -67,7 +67,6 @@ const StatisticPage = async ({
   if (!statiscticData) {
     throw new Error(EStatisticErrors.NO_ANALYSTIC_DATA);
   }
-<<<<<<< HEAD
   const pagination = {
     limit: limit || DEFAULT_CLIENTS_PAGINATION.limit,
     currentPage: currentPage || DEFAULT_CLIENTS_PAGINATION.currentPage
@@ -79,10 +78,6 @@ const StatisticPage = async ({
       items: formatClientData(res.items)
     }
   });
-=======
-
-  const clientsData = await businessAPI.getMyClients({ search }).then(formatClientData);
->>>>>>> 7d83db7 (Merge pull request #381 from dudaji-vn/feat/handle-errors)
 
 
   return (
