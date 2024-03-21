@@ -120,7 +120,7 @@ const ItemSub = ({
             case 'document':
               return t('CONVERSATION.SEND_FILE');
             case 'video':
-              return 'sent a video';
+              return t('CONVERSATION.SEND_VIDEO');
             default:
               return t('CONVERSATION.SEND_FILE');
           }

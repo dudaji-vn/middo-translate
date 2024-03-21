@@ -111,6 +111,7 @@
     },
     "LANGUAGE": {
         "Detected": "Detected",
+        "DETECT_LANGUAGE": "Detect language",
         "DETECTED_LANGUAGE": "Detected language",
         "Language detect": "Language detect",
         "Afrikaans": "Afrikaans",
@@ -295,6 +296,7 @@
         "SEND_PHOTO": "sent a photo",
         "SEND_PHOTOS": "sent {{num}} photos",
         "SEND_FILE": "Sent file",
+        "SEND_VIDEO": "sent a video",
         "FORWARD_MESSAGE": "Forward message",
         "FORWARD_FROM": "Forwarded from",
         "FORWARD_FROM_CHANNEL": "in {{name}}",
@@ -308,7 +310,10 @@
         "ADDED": "{{name}} added {{members}}",
         "REMOVED": "{{name}} removed {{members}}",
         "REMOVED_GROUP_NAME": "{{name}} removed the group name",
-        "SENDING": "Sending"
+        "SENDING": "Sending",
+        "REPLY": "{{num}} Reply",
+        "REPLIES": "{{num}} Replies",
+        "FORWARDED_MESSAGE": "forwarded a message"
     },
     "NOTIFICATION": {
         "MESSAGE": "Middo needs your permission to ",
