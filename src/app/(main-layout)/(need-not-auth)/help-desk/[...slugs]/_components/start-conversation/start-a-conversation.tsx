@@ -51,7 +51,7 @@ const StartAConversation = ({ businessData }: {
         setOpen(true);
     }
     const methods = useForm({
-        mode: 'onBlur',
+        mode: 'onChange',
         defaultValues: {
             name: '',
             email: '',
