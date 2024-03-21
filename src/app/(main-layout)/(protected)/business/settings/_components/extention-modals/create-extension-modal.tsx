@@ -88,7 +88,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
     setValue,
     formState: { errors, isValid, isSubmitting, },
   } = form;
-  
+
   const domains: Array<string> = watch('domains');
   const addingDomain: string = watch('addingDomain');
   const domainsErrMessage = errors?.domains?.message;
@@ -179,7 +179,10 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   collapsible
                   value={accordionValue}
                   className="w-full transition-all duration-500 flex flex-col justify-center"
-                  onValueChange={(value) => setAccordionValue(value as AccordionValue)}
+                  onValueChange={(value) => {
+                    setAccordionValue(value as AccordionValue)
+                  }
+                  }
                 >
                   <CreateExtensionSectionWrapper
                     value="add domain"
@@ -255,6 +258,9 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                     }}
                     accordionContentProps={{
                       className: 'px-0'
+                    }}
+                    onTriggerClick={() => {
+                      trigger('domains');
                     }}
                   >
                     <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>

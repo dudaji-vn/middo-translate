@@ -86,7 +86,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const mediaLength = message.media?.length || 0;
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
-
     return (
       <MessageItemContext.Provider
         value={{
