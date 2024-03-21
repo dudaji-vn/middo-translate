@@ -129,6 +129,7 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       const videos: Media[] = [];
       let content = richText?.getHTML() || '';
       if (isContentEmpty) content = '';
+      content = cleanHTML(content);
       const mentions = getMentionIdsFromHtml(content);
 
       let lang = '';
@@ -263,3 +264,39 @@ const InputWrapper = ({ children }: PropsWithChildren) => {
 };
 
 export type { SubmitData as MessageEditorSubmitData };
+
+function cleanHTML(htmlString: string) {
+  // Create a temporary div element
+  var tempDiv = document.createElement('div');
+  // Set the innerHTML of the div to the provided htmlString
+  tempDiv.innerHTML = htmlString.trim();
+
+  // Select all <p> elements
+  var paragraphs = tempDiv.querySelectorAll('p');
+
+  // Loop through the paragraphs to find the first and last non-empty ones
+  var start = 0;
+  var end = paragraphs.length - 1;
+  while (
+    start < paragraphs.length &&
+    paragraphs[start].innerHTML.trim() === ''
+  ) {
+    start++;
+  }
+  while (end >= 0 && paragraphs[end].innerHTML.trim() === '') {
+    end--;
+  }
+
+  // Create a new div to store the cleaned HTML
+  var cleanedDiv = document.createElement('div');
+  // Append only the selected paragraphs to the new div
+  for (var i = start; i <= end; i++) {
+    cleanedDiv.appendChild(paragraphs[i].cloneNode(true));
+  }
+
+  // Convert the cleaned div back to string
+  var cleanedHTML = cleanedDiv.innerHTML;
+
+  // Remove any additional leading/trailing whitespace and return
+  return cleanedHTML.trim();
+}

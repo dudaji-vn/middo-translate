@@ -141,6 +141,7 @@ const ItemSub = ({
       default:
         break;
     }
+
     if (!messageContent && message.forwardOf) {
       return t('CONVERSATION.FORWARDED_MESSAGE');
     }
@@ -158,7 +159,11 @@ const ItemSub = ({
 
   const [contentDisplay, setContentDisplay] = useState(content);
   useEffect(() => {
-    if (message.type === 'text') {
+    if (
+      message.type === 'text' &&
+      message.status !== 'removed' &&
+      !message.forwardOf
+    ) {
       if (userLanguage === message.sender.language) {
         setContentDisplay(content);
         return;
@@ -263,7 +268,6 @@ const ItemSub = ({
 
     setContentDisplay(content);
   }, [userLanguage, message, content, messageContent, englishContent, t]);
-
   return (
     <div className="flex items-center">
       <Typography
