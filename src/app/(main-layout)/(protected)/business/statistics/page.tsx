@@ -24,7 +24,10 @@ const formatClientData = (data: Client[]) => {
   }) || [];
 }
 
-
+export const DEFAULT_CLIENTS_PAGINATION = {
+  limit: 50,
+  currentPage: 1
+}
 const StatisticPage = async ({
   searchParams
 }: {
@@ -32,7 +35,8 @@ const StatisticPage = async ({
     type: string
     fromDate: string
     toDate: string
-
+    limit: number,
+    currentPage: number,
     search: string
   }
 }) => {
@@ -40,6 +44,8 @@ const StatisticPage = async ({
     type,
     fromDate,
     toDate,
+    limit,
+    currentPage,
     search
   } = searchParams;
   const params = type === 'custom' ? {
@@ -61,8 +67,17 @@ const StatisticPage = async ({
   if (!statiscticData) {
     throw new Error(EStatisticErrors.NO_ANALYSTIC_DATA);
   }
+  const pagination = {
+    limit: limit || DEFAULT_CLIENTS_PAGINATION.limit,
+    currentPage: currentPage || DEFAULT_CLIENTS_PAGINATION.currentPage
+  }
 
-  const clientsData = await businessAPI.getMyClients({ search }).then(formatClientData);
+  const clientsData = await businessAPI.getMyClients({ search, ...pagination }).then((res) => {
+    return {
+      ...res,
+      items: formatClientData(res.items)
+    }
+  });
 
 
   return (
@@ -89,7 +104,7 @@ const StatisticPage = async ({
             <DownloadButton />
           </div>
         </div>
-        <DataTable columns={columns} data={clientsData} />
+        <DataTable columns={columns} data={clientsData.items} />
       </section>
     </main>
   )
