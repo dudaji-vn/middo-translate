@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next'
 const HeaderProfile = ({ className, ...props }:
     HtmlHTMLAttributes<HTMLDivElement>
 ) => {
-    const {t} = useTranslation("common");
+    const { t } = useTranslation("common");
     const [isOpenDropdown, setOpenDropdown] = useState(false);
     const { isAuthentication, user } = useAuthStore();
     const setShowConfirmLogout = useAppStore(
@@ -33,7 +33,7 @@ const HeaderProfile = ({ className, ...props }:
     };
     return (
         <div className={cn("flex flex-1 items-center justify-end", className)} {...props}>
-            <HeaderSelectLanguage className='mr-2'/>
+            <HeaderSelectLanguage className='mr-2' />
             {isAuthentication && user ? (
                 <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
                     <DropdownMenuTrigger>
@@ -62,6 +62,12 @@ const HeaderProfile = ({ className, ...props }:
                             <DropdownMenuItem className="flex items-center">
                                 <SettingsIcon className="mr-2 size-4" />
                                 <span>{t('HEADER.ACCOUNT_SETTING')}</span>
+                            </DropdownMenuItem>
+                        </Link>                        
+                        <Link href={ROUTE_NAMES.BUSINESS_CONVERSATION}>
+                            <DropdownMenuItem className="flex items-center">
+                                <SettingsIcon className="mr-2 size-4" />
+                                <span>{t('HEADER.MIDDO_EXTENSION')}</span>
                             </DropdownMenuItem>
                         </Link>
 
