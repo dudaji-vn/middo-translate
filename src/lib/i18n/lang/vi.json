@@ -223,6 +223,8 @@
         "TITLE": "Tạo tài khoản mới"
     },
     "CONVERSATION": {
+        "WELCOME_TITLE": "Chào mừng bạn đến với trò chuyện Middo!",
+        "WELCOME_CONTENT": "Bắt đầu một cuộc trò chuyện với đồng đội của bạn hoặc nhóm. Bạn cũng có thể tạo một nhóm trò chuyện để thảo luận và chia sẻ tệp.",
         "TITLE": "Hội thoại",
         "NEW": "Hội thoại mới",
         "SEARCH": "Tìm kiếm người hoặc nhóm",

@@ -223,6 +223,8 @@
         "TITLE": "새 계정 생성"
     },
     "CONVERSATION": {
+        "WELCOME_TITLE": "Middo 대화에 오신 것을 환영합니다!",
+        "WELCOME_CONTENT": "팀 또는 그룹과 대화를 시작하세요. 또한 토론하고 파일을 공유하기 위해 그룹 채팅을 생성할 수 있습니다.",
         "TITLE": "대화",
         "NEW": "새 대화",
         "SEARCH": "사람 또는 그룹 찾기",

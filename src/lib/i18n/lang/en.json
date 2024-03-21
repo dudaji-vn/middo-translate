@@ -223,6 +223,8 @@
         "TITLE": "Create a New Account"
     },
     "CONVERSATION": {
+        "WELCOME_TITLE": "Welcome to Middo conversation!", 
+        "WELCOME_CONTENT": "Start a conversation with your team or group. You can also create a group chat to discuss and share files.",
         "TITLE": "Conversation",
         "NEW": "New conversation",
         "SEARCH": "Search for people or groups",
