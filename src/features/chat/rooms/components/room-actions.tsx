@@ -1,6 +1,9 @@
 import {
+  Archive,
+  ArchiveX,
   BellIcon,
   BellOffIcon,
+  CheckSquare,
   LogOut,
   PinIcon,
   PinOffIcon,
@@ -12,6 +15,7 @@ import { RoomModalDelete } from './room.modal-delete';
 import { RoomModalLeave } from './room.modal-leave';
 import { RoomModalNotification } from './room.modal-notification';
 import { usePinRoom } from '../hooks/use-pin-room';
+import { RoomModalChangeStatus } from './room.modal-change-status';
 
 export type Action =
   | 'delete'
@@ -20,7 +24,11 @@ export type Action =
   | 'leave'
   | 'notify'
   | 'none'
-  | 'unnotify';
+  | 'unnotify'
+  | 'archive'
+  | 'unarchive'
+  | 'complete'
+  ;
 
 export type ActionItem = {
   action: Action;
@@ -76,6 +84,10 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         return (
           <RoomModalNotification onClosed={reset} id={id} type="turnOff" />
         );
+      case 'archive':
+      case 'unarchive':
+      case 'complete':
+        return <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />;
       default:
         return null;
     }
@@ -85,36 +97,51 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
     return [
       {
         action: 'pin',
-        label: 'Pin',
+        label: "CONVERSATION.PIN",
         icon: <PinIcon />,
       },
       {
         action: 'unpin',
-        label: 'Unpin',
+        label: "CONVERSATION.UNPIN",
         icon: <PinOffIcon />,
       },
       {
         action: 'notify',
-        label: 'On',
+        label: "CONVERSATION.ON",
         icon: <BellIcon />,
       },
       {
         action: 'unnotify',
-        label: 'Off',
+        label: "CONVERSATION.OFF",
         icon: <BellOffIcon />,
       },
       {
         action: 'leave',
-        label: 'Leave',
+        label: "COMMON.LEAVE",
         icon: <LogOut />,
       },
 
       {
         action: 'delete',
-        label: 'Delete',
+        label: "COMMON.DELETE",
         icon: <TrashIcon />,
         color: 'error',
       },
+      {
+        action: 'archive',
+        label: 'Archive',
+        icon: <Archive />,
+      },
+      {
+        action: 'unarchive',
+        label: 'Unarchive',
+        icon: <ArchiveX />,
+      },
+      {
+        action: 'complete',
+        label: 'Complete',
+        icon: <CheckSquare />,
+      }
     ];
   }, []);
 

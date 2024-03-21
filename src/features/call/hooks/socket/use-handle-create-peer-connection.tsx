@@ -10,11 +10,13 @@ import { useMyVideoCallStore } from "../../store/me.store";
 import { addPeer, createPeer } from "../../utils/peer-action.util";
 import { IJoinCallPayload } from "../../interfaces/socket/join.interface";
 import { MonitorUpIcon, LogIn } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function useHandleCreatePeerConnection() {
-    const { setDoodle, setDoodleImage, setLayout, isPinDoodle } = useVideoCallStore();
+    const { setDoodle, setDoodleImage, setLayout, isPinDoodle, setPinShareScreen } = useVideoCallStore();
     const { participants, addParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
     const { myStream } = useMyVideoCallStore();
+    const {t} = useTranslation('common')
     
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
     const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: any[], doodleImage: string}) => {
@@ -63,20 +65,22 @@ export default function useHandleCreatePeerConnection() {
             peer,
             user: payload.user,
             isShareScreen: payload.isShareScreen,
+            isElectron: payload?.isElectron || false,
         };
         if (payload.isShareScreen) {
             setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
             const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
             if (!isHavePin && !isPinDoodle) {
                 setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+                setPinShareScreen(true);
                 newUser.pin = true;
             }
-            toast.success(`${payload.user.name} is sharing screen`, {icon: <MonitorUpIcon size={20}/>});
+            toast.success(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name: payload.user.name}), {icon: <MonitorUpIcon size={20}/>});
         } else {
-            toast.success(`${payload.user.name} joined meeting`, {icon: <LogIn size={20}/>});
+            toast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
         }
         addParticipant(newUser);
-    },[addParticipant, isPinDoodle, myStream, participants, setLayout, updatePeerParticipant])
+    },[addParticipant, isPinDoodle, myStream, participants, setLayout, setPinShareScreen, updatePeerParticipant, t])
 
     
     // useEffect when myStream change

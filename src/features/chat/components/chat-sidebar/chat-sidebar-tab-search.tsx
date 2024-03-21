@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Room } from '../../rooms/types';
 import { RoomItem } from '../../rooms/components/room-item';
-import { SPK_SEARCH } from '../../configs';
 import { Section } from '@/components/data-display/section';
 import { User } from '@/features/users/types';
 import { UserItem } from '@/features/users/components';
@@ -11,19 +10,27 @@ import { searchApi } from '@/features/search/api';
 
 import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
 import { useQuerySearch } from '@/hooks/use-query-search';
-import { useSearchParams } from 'next/navigation';
+import { useSearchStore } from '@/features/search/store/search.store';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { ROUTE_NAMES } from '@/configs/route-name';
+export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> { }
 
-export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
+
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
-    const searchParams = useSearchParams();
-    const value = searchParams?.get(SPK_SEARCH);
-    const { data: recData } = useGetRoomsRecChat();
+    const searchValue = useSearchStore((state) => state.searchValue);
+    const { isBusiness } = useBusinessNavigationData();
+    const { data: recData } = useGetRoomsRecChat(isBusiness ? 'help-desk' : undefined);
+    const { businessData } = useBusinessExtensionStore()
+    const searchType = isBusiness ? 'help-desk' : undefined;
+
     const { data } = useQuerySearch<{
       rooms: Room[];
       users: User[];
-    }>(searchApi.inboxes, 'chat-search', value || '');
+    }>(searchApi.inboxes, 'chat-search', searchValue || '', searchType);
+
     return (
       <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
         <motion.div
@@ -34,18 +41,21 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
         >
           {data?.users && data.users.length > 0 && (
             <Section label="People">
-              {data?.users?.map((user) => (
-                <Link key={user?._id} href={`/talk/${user?._id}`}>
-                  <UserItem user={user} />
-                </Link>
-              ))}
+              {data?.users?.map((user) => {
+                return (
+                  <Link key={user?._id} href={ROUTE_NAMES.ONLINE_CONVERSATION + '/' + user?._id}>
+                    <UserItem user={user} />
+                  </Link>
+                )
+              })}
             </Section>
           )}
           {data?.rooms && data.rooms.length > 0 && (
             <div className="mt-5">
-              <Section label="Groups">
+              <Section label={isBusiness ? "Guests" : "Groups"}>
                 {data?.rooms.map((room) => (
                   <RoomItem
+                    businessId={businessData?._id}
                     disabledAction
                     key={room._id}
                     data={room}
@@ -56,23 +66,25 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
               </Section>
             </div>
           )}
-          {recData && recData.length > 0 && !data && (
+          {recData && recData.length > 0 && !searchValue && !data && (
             <Section label="Suggestion">
               {recData?.map((room) => {
                 return (
                   <RoomItem
+                    businessId={businessData?._id}
                     disabledAction
                     key={room._id}
                     data={room}
                     showMembersName
                     showTime={false}
+
                   />
                 );
               })}
             </Section>
           )}
         </motion.div>
-      </div>
+      </div >
     );
   },
 );

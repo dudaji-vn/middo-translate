@@ -14,6 +14,7 @@ import { Button } from '@/components/actions';
 import { Trash2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useDeleteConversation } from '../../hooks/use-delete-conversation';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomDeleteConversationProps {
   roomId: string;
@@ -25,6 +26,7 @@ export const RoomDeleteConversation = ({
   roomId,
 }: RoomDeleteConversationProps) => {
   const { mutate } = useDeleteConversation();
+  const {t} = useTranslation('common');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -35,18 +37,18 @@ export const RoomDeleteConversation = ({
           size="md"
           className={cn('w-full ', isGroup ? 'rounded-t-[4px]' : '-mt-4')}
         >
-          <span className="text-error-400-main">Delete conversation</span>
+          <span className="text-error-400-main">{t('MODAL.DELETE_CONVERSATION.TITLE')}</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete conversation ?</AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.DELETE_CONVERSATION.TITLE')} ?</AlertDialogTitle>
           <AlertDialogDescription>
-            Once you delete your copy of this conversation, it cannot be undone.
+          {t('MODAL.DELETE_CONVERSATION.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
@@ -54,7 +56,7 @@ export const RoomDeleteConversation = ({
               mutate(roomId);
             }}
           >
-            Delete
+            {t('COMMON.DELETE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -19,6 +19,7 @@ import {
   SCTranslation,
   SHORTCUTS,
   SHORTCUT_CONTENTS,
+  SHORTCUT_KEYS,
   transferSpecialKey,
 } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
@@ -27,6 +28,8 @@ import { HelpCircle, Info } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import React from 'react';
 import { useVideoCallStore } from '../call/store/video-call.store';
+import useClient from '@/hooks/use-client';
+import { useTranslation } from 'react-i18next';
 
 type ShortcutSectionProps = {
   title: string;
@@ -34,6 +37,7 @@ type ShortcutSectionProps = {
   shortcuts: Array<{
     content: string;
     shortcut: string[];
+    key: string;
   }>;
 };
 const generateShortcuts = (
@@ -42,6 +46,7 @@ const generateShortcuts = (
   Object.values(shortcutType).map(
     (shortcut: SCConversation | SCTranslation | SCCall) => ({
       content: SHORTCUT_CONTENTS[shortcut],
+      key: SHORTCUT_KEYS[shortcut],
       shortcut: SHORTCUTS[shortcut],
     }),
   );
@@ -50,8 +55,9 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
   title,
   shortcuts,
   isMacOS,
-}) => (
-  <AccordionItem value={title}>
+}) => {
+  const {t} = useTranslation('common');
+  return <AccordionItem value={title}>
     <AccordionTrigger className="flex h-11 w-full flex-row items-center justify-between  rounded-none !bg-neutral-50 p-2 py-1 ">
       <Typography
         variant="h4"
@@ -68,7 +74,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
             className="my-0 flex h-[50px] w-full flex-row items-center justify-between  py-1 pl-2 pr-1 "
           >
             <Typography variant={'h5'} className="mt-0  text-base font-normal">
-              {item.content}
+              {t(item.key)}
             </Typography>
             <div className="my-1 mt-1 flex w-fit flex-row items-center gap-4">
               {item.shortcut?.map((key, index) => {
@@ -98,7 +104,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
       </div>
     </AccordionContent>
   </AccordionItem>
-);
+};
 
 const translationShortcuts = generateShortcuts(SCTranslation);
 const conversationShortcuts = generateShortcuts(SCConversation);
@@ -108,19 +114,17 @@ const SHORTCUTS_OPEN = [
 ];
 type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
-  const [isClient, setIsClient] = React.useState(false);
+  const isClient = useClient()
   const pathname = usePathname();
   const { room } = useVideoCallStore();
-  const defaultValue: AccordionValue = room
-    ? 'Middo Call'
+  const {t} = useTranslation('common');
+  const defaultValue: string = room
+    ? t('SHORTCUT.TABS.CALL')
     : pathname === ROUTE_NAMES.ROOT
-      ? 'Middo Translation'
-      : 'Middo Conversation';
+      ? t('SHORTCUT.TABS.TRANSLATION')
+      : t('SHORTCUT.TABS.CONVERSATION');
 
   const [open, setOpen] = React.useState(false);
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const { isMacOS } = useKeyboardShortcut(SHORTCUTS_OPEN, () =>
     setOpen((prev) => !prev),
@@ -133,7 +137,7 @@ export default function ShortcutsGuide() {
           <DialogTitle className="flex h-[48px] flex-row items-center justify-between py-4 pr-2">
             <Typography variant="h4">
               <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" />
-              Shortcut
+              {t('SHORTCUT.TITLE')}
             </Typography>
           </DialogTitle>
           <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-scroll bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
@@ -145,17 +149,17 @@ export default function ShortcutsGuide() {
             >
               <ShortcutSection
                 isMacOS={isMacOS}
-                title="Middo Translation"
+                title={t('SHORTCUT.TABS.TRANSLATION')}
                 shortcuts={translationShortcuts}
               />
               <ShortcutSection
                 isMacOS={isMacOS}
-                title="Middo Conversation"
+                title={t('SHORTCUT.TABS.CONVERSATION')}
                 shortcuts={conversationShortcuts}
               />
               <ShortcutSection
                 isMacOS={isMacOS}
-                title="Middo Call"
+                title={t('SHORTCUT.TABS.CALL')}
                 shortcuts={callShortcuts}
               />
             </Accordion>

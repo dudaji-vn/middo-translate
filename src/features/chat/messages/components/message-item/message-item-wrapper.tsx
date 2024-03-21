@@ -20,19 +20,22 @@ import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
 import { useBoolean } from 'usehooks-ts';
 import { Message } from '../../types';
+import { useTranslation } from 'react-i18next';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
   message: Message;
   setActive: (active: boolean) => void;
+  discussionDisabled?: boolean;
+  disabledAllActions?: boolean;
 }
 
 export const MessageItemWrapper = (
-  props: MessageItemWrapperProps & PropsWithChildren,
+  { disabledAllActions, ...props }: MessageItemWrapperProps & PropsWithChildren,
 ) => {
   const isMobile = useAppStore((state) => state.isMobile);
 
-  const { isMe, message, setActive } = props;
+  const { isMe, message, setActive, discussionDisabled } = props;
 
   const { onAction } = useMessageActions();
 
@@ -45,6 +48,7 @@ export const MessageItemWrapper = (
           case 'forward':
             return message.type !== 'call';
           case 'pin':
+            if (discussionDisabled) return false;
             if (message.isPinned) return false;
             if (message.type === 'call') return false;
             if (
@@ -55,6 +59,8 @@ export const MessageItemWrapper = (
             return true;
           case 'unpin':
             return message.isPinned;
+          case 'reply':
+            return !discussionDisabled;
           default:
             return true;
         }
@@ -75,6 +81,11 @@ export const MessageItemWrapper = (
     if (isMobile) return MobileWrapper;
     return DesktopWrapper;
   }, [isMobile, message.status]);
+
+  
+  if (disabledAllActions) {
+    return <div className="relative">{props.children}</div>;
+  }
 
   return (
     <div className="relative">
@@ -103,6 +114,7 @@ const MobileWrapper = ({
   setActive,
 }: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
+  const {t} = useTranslation('common')
   return (
     <LongPressMenu
       isOpen={value}
@@ -117,7 +129,7 @@ const MobileWrapper = ({
         {items.map((item) => (
           <LongPressMenu.Item
             key={item.action}
-            title={item.label}
+            title={t(item.label)}
             color={item.color === 'error' ? 'error' : 'default'}
             onClick={item.onAction}
           >
@@ -163,7 +175,7 @@ const DesktopWrapper = ({
   message,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
-
+  const {t} = useTranslation('common')
   return (
     <>
       {children}
@@ -194,7 +206,7 @@ const DesktopWrapper = ({
                 })}
 
                 <span className={cn(item.color && `text-${item.color}`)}>
-                  {item.label}
+                  {t(item.label)}
                 </span>
               </DropdownMenuItem>
             ))}

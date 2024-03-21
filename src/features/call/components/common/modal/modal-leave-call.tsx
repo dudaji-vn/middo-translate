@@ -10,11 +10,15 @@ import {
 } from '@/components/feedback';
 import { useVideoCallStore } from '../../../store/video-call.store';
 import { useParticipantVideoCallStore } from '../../../store/participant.store';
+import { useElectron } from '@/hooks/use-electron';
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
+import { useTranslation } from 'react-i18next';
 
 export const ConfirmLeaveRoomModal = () => {
   const { confirmLeave, setConfirmLeave, setRoom, room } = useVideoCallStore();
   const { participants, removeParticipant } = useParticipantVideoCallStore();
-
+  const { isElectron, ipcRenderer } = useElectron();
+  const {t} = useTranslation('common');
   const handleLeave = async () => {
     setConfirmLeave(false);
     participants.forEach((participant) => {
@@ -24,6 +28,9 @@ export const ConfirmLeaveRoomModal = () => {
       removeParticipant(participant.socketId);
     });
     setRoom(null);
+    if(isElectron) {
+      ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
+    }
   };
 
   const closeModal = () => {
@@ -35,22 +42,22 @@ export const ConfirmLeaveRoomModal = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Leave call?
+            {t('MODAL.LEAVE_CALL.TITLE')}
           </AlertDialogTitle>
           <AlertDialogDescription>
             <span>
-              You will leave this call and other still continue. Are you sure to leave?
+              {t('MODAL.LEAVE_CALL.DESCRIPTION')}
             </span>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
             onClick={handleLeave}
           >
-            Leave
+            {t('COMMON.LEAVE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

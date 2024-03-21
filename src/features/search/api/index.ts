@@ -17,6 +17,17 @@ export const searchApi = {
       users: User[];
     }> = await axios.get(path);
     return res.data;
+  },  
+  async businessInboxes(params: SearchParams) {
+    const path = queryString.stringifyUrl({
+      url: `${basePath}/inboxes`,
+      query: params,
+    });
+    const res: Response<{
+      rooms: Room[];
+      users: User[];
+    }> = await axios.get(path);
+    return res.data;
   },
   async users(params: SearchParams) {
     const path = queryString.stringifyUrl({

@@ -2,9 +2,6 @@
 
 import './style.css';
 
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from 'react-speech-recognition';
 import { forwardRef, useEffect } from 'react';
 
 import { Button } from '@/components/actions';
@@ -18,6 +15,8 @@ import { useTranslateStore } from '@/stores/translate.store';
 import { useWindowSize } from 'usehooks-ts';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
+import { useTranslation } from 'react-i18next';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -30,9 +29,9 @@ export const TranslateOptionBar = forwardRef<
 >(({ sourceLang, ...props }, ref) => {
   const { width } = useWindowSize();
   const isMobile = width < 768;
-  const { listening, interimTranscript, finalTranscript } =
-    useSpeechRecognition();
+  let { listening, interimTranscript, startSpeechToText, stopSpeechToText, finalTranscript, resetTranscript } = useSpeechRecognizer(SUPPORTED_VOICE_MAP[sourceLang as keyof typeof SUPPORTED_VOICE_MAP]);
   const { setParam, removeParam } = useSetParams();
+  const {t} = useTranslation('common');
   const { setValue, isListening, setIsListening, isFocused } =
     useTranslateStore((state) => {
       return {
@@ -54,26 +53,16 @@ export const TranslateOptionBar = forwardRef<
 
   const handleStartListening = async () => {
     if (!ableListen) {
-      toast.error('Please select a language to listen');
+      toast.error(t('MESSAGE.ERROR.NOT_SELECTED_LANGUAGE'));
       return;
     }
 
     // request permission
     await navigator.mediaDevices.getUserMedia({ audio: true });
-    const isAllowed = SpeechRecognition.browserSupportsSpeechRecognition();
-    if (!isAllowed) {
-      toast.error('Your browser is not supported');
-      return;
-    }
     setValue('');
     removeParam('query');
     setIsListening(true);
-    SpeechRecognition.startListening({
-      language:
-        SUPPORTED_VOICE_MAP[sourceLang as keyof typeof SUPPORTED_VOICE_MAP],
-      continuous: !isMobile,
-      interimResults: true,
-    });
+    startSpeechToText();
   };
   const handleStopListening = () => {
     setIsListening(false);
@@ -81,9 +70,10 @@ export const TranslateOptionBar = forwardRef<
       setParam('query', interimTranscript);
       setValue(interimTranscript);
     }
-    setTimeout(() => {
-      SpeechRecognition.stopListening();
-    }, 500);
+    try {
+      stopSpeechToText();
+      resetTranscript();
+    } catch {}
   };
   useKeyboardShortcut([SHORTCUTS.TOGGLE_SPEECH_TO_TEXT], () =>
     isListening ? handleStopListening() : handleStartListening(),

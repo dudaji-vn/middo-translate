@@ -7,4 +7,5 @@ export type User = {
   email: string;
   language: string;
   status: UserStatus;
+  phoneNumber?: string;
 } & BaseEntity;

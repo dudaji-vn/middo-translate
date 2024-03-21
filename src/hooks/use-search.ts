@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
 export function useSearch<T>(searchApi: Function, queryKey: string) {
+  
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { data } = useQuery({
     queryKey: ['search' + queryKey, { q: searchTerm }],

@@ -18,6 +18,10 @@ import { RoomItemComingCall } from './room-item-coming-call';
 import { cn } from '@/utils/cn';
 import { PinIcon } from 'lucide-react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { Avatar } from '@/components/data-display';
+import { useParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface RoomItemProps {
   data: Room;
@@ -31,6 +35,8 @@ export interface RoomItemProps {
   rightElement?: JSX.Element;
   disabledRedirect?: boolean;
   className?: string;
+  businessId?: string;
+  isOnline?: boolean;
 }
 
 const RoomItemContext = createContext<
@@ -55,18 +61,41 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     rightElement,
     disabledRedirect,
     className,
+    businessId,
+    isOnline,
   } = props;
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
-
+  const params = useParams();
+  const conversationType = params?.conversationType;
+  const isBusinessRoom = !!businessId && !!conversationType;
+  const {t} = useTranslation('common');
+  const isBusinessExtensionAvailable = !!businessId;
   const room = useMemo(
-    () => generateRoomDisplay(_data, currentUserId, !disabledRedirect),
-    [_data, currentUserId, disabledRedirect],
+    () => {
+      const businessRedirectPath =  isBusinessExtensionAvailable ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${businessId}/${_data._id}` : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
+      return generateRoomDisplay(
+        _data,
+        currentUserId,
+        !disabledRedirect,
+        Boolean(conversationType) ? businessRedirectPath : null
+      )
+    },
+    [
+      _data,
+      currentUserId,
+      disabledRedirect,
+      businessId,
+      conversationType,
+      isBusinessExtensionAvailable,
+    ],
   );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
 
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
+    room.link ===
+    `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${businessId}/${conversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
@@ -83,7 +112,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         className,
       )}
     >
-      <Wrapper room={room} isMuted={isMuted} >
+      <Wrapper room={room} isMuted={isMuted}>
         <RoomItemContext.Provider
           value={{
             data: room,
@@ -93,10 +122,16 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             showTime,
             onClick,
             isMuted,
+            disabledRedirect,
+            disabledAction,
           }}
         >
           <RoomItemWrapper>
-            <ItemAvatar room={room} isMuted={isMuted} />
+            {!!conversationType ? (
+              <Avatar src={'/anonymous.png'} alt="anonymous-avt" />
+            ) : (
+              <ItemAvatar isOnline={isOnline} room={room} isMuted={isMuted} />
+            )}
             <div className="w-full">
               <RoomItemHead
                 isRead={isRead}
@@ -141,7 +176,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         </div>
       )}
       <Tooltip
-        title="Join call"
+        title={t('CONVERSATION.JOIN')}
         triggerItem={<RoomItemComingCall roomChatBox={room} />}
       />
     </div>

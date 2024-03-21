@@ -16,6 +16,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts';
 import { useRemoveMember } from '../../hooks/use-remove-members';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomMemberProps {
   members: User[];
@@ -29,7 +30,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
   const userId = useAuthStore((state) => state.user?._id);
   const [showMembers, setShowMembers] = useState(INITIAL_SHOW_MEMBERS);
   const isShowAll = showMembers === members?.length;
-
+  const {t} = useTranslation('common')
   const isAdmin = userId === adminId;
   const handleShowAll = () => {
     setShowMembers(members?.length || 0);
@@ -53,7 +54,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
     <div className="mt-8">
       <div className="flex items-center justify-between gap-2.5 border-b p-1 pl-3">
         <div className="flex items-center gap-2">
-          <Users2 width={16} height={16} /> <span>Member</span>
+          <Users2 width={16} height={16} /> <span>{t('CONVERSATION.MEMBERS')}</span>
           <span className="text-sm text-neutral-600">({members?.length})</span>
         </div>
         <RoomAddMember />
@@ -61,9 +62,9 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
       <div>
         {membersToShow?.map((member) => {
           const isCurrentUser = member._id === userId;
-          let subContent = member._id === adminId ? 'Admin' : 'Member';
+          let subContent = member._id === adminId ? t('CONVERSATION.ADMIN') : t('CONVERSATION.MEMBERS');
 
-          if (isCurrentUser) subContent += ' (You)';
+          if (isCurrentUser) subContent += ` (${t('CONVERSATION.YOU')})`;
 
           return (
             <div key={member._id} className="flex items-center justify-between">
@@ -91,14 +92,14 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
                             });
                           }}
                         >
-                          <span>Remove</span>
+                          <span>{t('COMMON.REMOVE')}</span>
                         </DropdownMenuItem>
                       )}
                       <DropdownMenuItem asChild>
                         <Link
                           href={`${ROUTE_NAMES.ONLINE_CONVERSATION}/${member._id}`}
                         >
-                          <span>Start conversation</span>
+                          <span>{t('CONVERSATION.START')}</span>
                         </Link>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -117,7 +118,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
           size="md"
           className="w-full"
         >
-          <span className="text-primary-500-main"> Show all</span>
+          <span className="text-primary-500-main">{t('CONVERSATION.SHOW_ALL')} </span>
         </Button>
       )}
       {isShowAll && INITIAL_SHOW_MEMBERS < membersToShow.length && (
@@ -128,7 +129,7 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
           size="md"
           className="w-full"
         >
-          <span className="text-primary-500-main">Hide</span>
+          <span className="text-primary-500-main">{t('CONVERSATION.HIDE')}</span>
         </Button>
       )}
     </div>

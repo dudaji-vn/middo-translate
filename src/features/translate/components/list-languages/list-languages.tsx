@@ -9,6 +9,7 @@ import { Country } from '@/types/country.type';
 import { cn } from '@/utils/cn';
 import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
+import { useTranslation } from 'react-i18next';
 
 export interface ListLanguagesProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,7 +26,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
     const searchRef = useRef<any>(null);
     const { recentlySourceUsed, recentlyTargetUsed, addRecentlyUsed } =
       useLanguageStore();
-
+    const {t} = useTranslation('common');
     const recentlyUsed = useMemo(() => {
       {
         return Array.from(
@@ -62,7 +63,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
             ref={searchRef}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search"
+            placeholder={t('COMMON.SEARCH')}
             onClear={() => setSearch('')}
           />
         </div>
@@ -85,7 +86,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
 
               {recentlyUsed.length > 0 && isMobile && (
                 <>
-                  <Title>Recently used</Title>
+                  <Title>{t('COMMON.RECENTLY_USED')}</Title>
                   {recentlyUsed.map((code) => {
                     const language = SUPPORTED_LANGUAGES.find(
                       (item) => item.code === code,
@@ -106,7 +107,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                   })}
                 </>
               )}
-              <Title>All languages</Title>
+              <Title>{t('COMMON.ALL_LANGUAGE')}</Title>
               {SUPPORTED_LANGUAGES.map((language) => (
                 <Item
                   onClick={handleSelected.bind(null, language.code)}
@@ -154,6 +155,7 @@ const Item = ({
   onClick?: () => void;
   rightElement?: React.ReactNode;
 }) => {
+  const {t} = useTranslation('common');
   return (
     <button
       disabled={selected}
@@ -166,7 +168,7 @@ const Item = ({
     >
       {rightElement}
       <span className={cn(selected && 'font-semibold text-primary')}>
-        {language.name}
+        {t('LANGUAGE.' + language.name)}
       </span>
       {selected && <CheckCircle2Icon className="ml-auto h-5 w-5 " />}
     </button>

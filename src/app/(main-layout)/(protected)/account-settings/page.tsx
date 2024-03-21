@@ -12,13 +12,14 @@ import UpdateUserPassword from '@/features/user-settings/update-user-password';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
   const setShowConfirmLogout = useAppStore(
     (state) => state.setShowConfirmLogout,
   );
-
+  const {t} = useTranslation("common");
   const signOut = () => {
     setShowConfirmLogout(true);
   };
@@ -34,7 +35,7 @@ export default function AccountSettings() {
         >
           <ArrowLeft />
         </Button.Icon>
-        <span className="font-semibold">Account setting</span>
+        <span className="font-semibold">{t('ACCOUNT_SETTING.HEADING')}</span>
       </div>
 
       <div className="mx-auto w-full rounded-3xl py-5 pb-0 md:max-w-[500px] md:overflow-hidden md:shadow-2">
@@ -78,7 +79,7 @@ export default function AccountSettings() {
           onClick={signOut}
           className="w-full rounded-none"
         >
-          Sign out
+          {t('ACCOUNT_SETTING.SIGN_OUT')}
         </Button>
       </div>
     </div>

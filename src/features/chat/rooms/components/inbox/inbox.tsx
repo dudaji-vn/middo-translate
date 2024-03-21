@@ -4,13 +4,17 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 
 import InboxList from './inbox-list';
 import { RoomActions } from '../room-actions';
-import { useCallback, useState } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-export interface InboxProps {}
-export type InboxType = 'all' | 'group';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+export interface InboxProps {
+}
+export type InboxType = 'all' | 'group' | 'help-desk' | 'unread-help-desk';
+
 export const inboxTabMap: Record<
   InboxType,
   {
@@ -19,23 +23,36 @@ export const inboxTabMap: Record<
   }
 > = {
   all: {
-    label: 'All',
+    label: 'COMMON.ALL',
     value: 'all',
   },
   group: {
-    label: 'Group',
+    label: 'COMMON.GROUP',
     value: 'group',
+  },
+  'help-desk': {
+    label: 'COMMON.ALL',
+    value: 'help-desk',
+  },
+  'unread-help-desk': {
+    label: 'COMMON.UNREAD',
+    value: 'unread-help-desk',
   },
 };
 
-export const Inbox = (props: InboxProps) => {
-  const [type, setType] = useState<InboxType>('all');
+const normalInboxTabs = [inboxTabMap.all, inboxTabMap.group];
+const businessInboxTabs = [inboxTabMap['help-desk'], inboxTabMap['unread-help-desk']];
 
+export const Inbox = (props: InboxProps) => {
+  const { isBusiness } = useBusinessNavigationData();
+  const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
+  const [type, setType] = useState<InboxType>(tabs[0].value);
+  const {t} = useTranslation('common');
   useKeyboardShortcut(
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
     (_, mathedKeys) => {
       setType(
-        isEqual(mathedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB) ? 'all' : 'group',
+        isEqual(mathedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB) ? tabs[0].value : tabs[1].value,
       );
     },
   );
@@ -46,14 +63,14 @@ export const Inbox = (props: InboxProps) => {
         <div className="flex h-full flex-1 flex-col overflow-hidden">
           <Tabs defaultValue="all" value={type} className="w-full">
             <TabsList>
-              {Object.values(inboxTabMap).map((tab) => (
+              {Object.values(tabs).map((tab) => (
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
                   onClick={() => setType(tab.value)}
                   className="!rounded-none"
                 >
-                  {tab.label}
+                  {t(tab.label)}
                 </TabsTrigger>
               ))}
             </TabsList>

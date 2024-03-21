@@ -18,6 +18,9 @@ import {
   MediaUploadDropzone,
   MediaUploadProvider,
 } from '@/components/media-upload';
+import { redirect } from 'next/navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { RoomTyping } from '@/features/chat/rooms/components/room-box/room-typing';
 
 async function getChatRoom(id: string) {
   const data = await fetchApi<Response<Room>>(`/rooms/${id}`);
@@ -34,9 +37,8 @@ const ChatBoxPage = async (props: {
 }) => {
   const room = await getChatRoom(props.params.id);
   if (!room) {
-    return <div>Not Found</div>;
+    return redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
   }
-
   return (
     <ChatBoxProvider room={room}>
       <div className="flex h-full">
@@ -47,6 +49,7 @@ const ChatBoxPage = async (props: {
             <MediaUploadDropzone>
               <MessagesBoxProvider room={room}>
                 <MessageBox room={room} />
+                <RoomTyping />
                 <ChatBoxFooter />
               </MessagesBoxProvider>
             </MediaUploadDropzone>

@@ -21,16 +21,20 @@ import { Extension } from '@/features/translate/components/extension';
 
 import { THistoryItem } from './_components/history/history';
 import { PageLoading } from '@/components/feedback';
+import { TranslationTab } from '@/types/translationstab.type';
+import HomeTemplate from './_components/home-template';
 
+export interface SearchParams {
+  query?: string;
+  source?: string;
+  target?: string;
+  edit?: string;
+  mquery?: string;
+  detect?: string;
+  tab?: string;
+}
 interface HomeProps {
-  searchParams: {
-    query?: string;
-    source?: string;
-    target?: string;
-    edit?: string;
-    mquery?: string;
-    detect?: string;
-  };
+  searchParams: SearchParams;
 }
 
 export default async function Home(props: HomeProps) {
@@ -92,7 +96,7 @@ export default async function Home(props: HomeProps) {
   };
 
   return (
-    <>
+    <HomeTemplate searchParams={props.searchParams}>
       <PageLoading title="Loading" className="h-full" />
       <div className="flex h-full w-full flex-col pt-5">
         <CompareProvider
@@ -105,6 +109,7 @@ export default async function Home(props: HomeProps) {
             target={targetLanguage}
             detect={props.searchParams.source === 'auto' ? sourceLanguage : ''}
             targetResult={targetResult}
+            tab={props.searchParams?.tab as TranslationTab}
           />
           <CaptureProvider>
             <CaptureZone className="flex h-full w-full flex-col gap-5 px-[5vw] py-3 md:flex-row md:justify-evenly md:gap-[88px]">
@@ -166,6 +171,6 @@ export default async function Home(props: HomeProps) {
         sourceLanguage={sourceLanguage}
         targetLanguage={targetLanguage}
       />
-    </>
+    </HomeTemplate>
   );
 }

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '../../messages/components/message-editor';
+} from '../../messages/components/message-editor-v2';
 import { messageApi } from '../../messages/api';
 import { useDiscussion } from './discussion';
 import { createLocalMessage } from '../../messages/utils';
@@ -22,9 +22,13 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
 
   const [localDocumentMessagesWaiting, setLocalDocumentMessagesWaiting] =
     useState<Message[]>([]);
+  const [localVideoMessageWaiting, setLocalVideoMessageWaiting] = useState<
+    Message[]
+  >([]);
 
   const { message, addReply } = useDiscussion();
-  const { mutate } = useMutation({
+  const roomId = message?.room?._id;
+  const { mutateAsync } = useMutation({
     mutationFn: messageApi.reply,
   });
   const handleSendText = async (
@@ -39,7 +43,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       language,
     });
     addReply(localMessage);
-    mutate({
+    mutateAsync({
       repliedMessageId: message._id,
       message: {
         content,
@@ -50,7 +54,8 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     });
   };
   const handleSubmit = async (data: MessageEditorSubmitData) => {
-    const { content, images, documents, contentEnglish, language } = data;
+    const { content, images, documents, contentEnglish, language, videos } =
+      data;
 
     const trimContent = content.trim();
 
@@ -77,40 +82,55 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       });
       setLocalDocumentMessagesWaiting(localDocumentMessages);
     }
+
+    if (videos.length) {
+      const localVideoMessages = videos.map((video) => {
+        const localVideoMessage = createLocalMessage({
+          sender: currentUser!,
+          media: [video],
+        });
+        addReply(localVideoMessage);
+        return localVideoMessage;
+      });
+      setLocalVideoMessageWaiting(localVideoMessages);
+    }
   };
 
-  useEffect(() => {
-    if (!localImageMessageWaiting || !uploadedFiles.length) return;
-    const localImages = localImageMessageWaiting.media;
-    if (!localImages) return;
-    const imagesUploaded: Media[] = localImages.map((item) => {
-      const file = uploadedFiles.find((f) => f.localUrl === item.url);
-      if (file) {
-        return {
-          ...item,
-          url: file.metadata.secure_url || file.url,
-          width: file.metadata.width,
-          height: file.metadata.height,
-        };
-      }
-      return item;
-    });
-    mutate({
-      repliedMessageId: message._id,
-      message: {
-        roomId: message?.room?._id!,
-        contentEnglish: '',
-        language: '',
-        content: '',
-        media: imagesUploaded,
-      },
-    });
-    setLocalImageMessageWaiting(null);
+  useEffect(
+    () => {
+      if (!localImageMessageWaiting || !uploadedFiles.length) return;
+      const localImages = localImageMessageWaiting.media;
+      if (!localImages) return;
+      const imagesUploaded: Media[] = localImages.map((item) => {
+        const file = uploadedFiles.find((f) => f.localUrl === item.url);
+        if (file) {
+          return {
+            ...item,
+            url: file.metadata.secure_url || file.url,
+            width: file.metadata.width,
+            height: file.metadata.height,
+          };
+        }
+        return item;
+      });
+      mutateAsync({
+        repliedMessageId: message._id,
+        message: {
+          content: '',
+          roomId: roomId!,
+
+          media: imagesUploaded,
+        },
+      });
+      setLocalImageMessageWaiting(null);
+    },
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localImageMessageWaiting, message._id, message?.room?._id]);
+    [localImageMessageWaiting, uploadedFiles, roomId],
+  );
 
   useEffect(() => {
-    if (!localDocumentMessagesWaiting.length || uploadedFiles.length) return;
+    if (!localDocumentMessagesWaiting.length || !uploadedFiles.length) return;
     const localDocumentMessages = localDocumentMessagesWaiting;
     const documentsUploaded: Media[][] = localDocumentMessages.map(
       (message) => {
@@ -130,23 +150,65 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       },
     );
     Promise.all(
-      localDocumentMessages.map(async (message, index) => {
-        mutate({
+      localDocumentMessages.map(async (docMessage, index) => {
+        mutateAsync({
           repliedMessageId: message._id,
           message: {
             content: '',
-            roomId: message?.room?._id!,
+            roomId: roomId!,
             media: documentsUploaded[index],
           },
         });
       }),
     );
     setLocalDocumentMessagesWaiting([]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [localDocumentMessagesWaiting, uploadedFiles]);
+  }, [localDocumentMessagesWaiting, uploadedFiles, roomId]);
+
+  useEffect(() => {
+    if (!localVideoMessageWaiting.length || !uploadedFiles.length) return;
+    const localVideoMessages = localVideoMessageWaiting;
+    const videosUploaded: Media[][] = localVideoMessages.map((message) => {
+      const localVideos = message.media;
+
+      if (!localVideos) return [];
+      const VideosUploaded: Media[] = localVideos.map((item) => {
+        const file = uploadedFiles.find((f) => f.localUrl === item.url);
+        if (file) {
+          return {
+            ...item,
+            url: file.metadata.secure_url || file.url,
+          };
+        }
+        return item;
+      });
+      return VideosUploaded;
+    });
+    Promise.all(
+      localVideoMessages.map(async (videoMessage, index) => {
+        mutateAsync({
+          repliedMessageId: message._id,
+          message: {
+            content: '',
+            roomId: roomId!,
+            media: videosUploaded[index],
+          },
+        });
+      }),
+    );
+    setLocalVideoMessageWaiting([]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [localVideoMessageWaiting, uploadedFiles, roomId]);
+
+  const room = message.room;
   return (
     <div className="border-t p-2">
-      <MessageEditor onSubmitValue={handleSubmit} />
+      <MessageEditor
+        userMentions={room?.isGroup ? room.participants : []}
+        onSubmitValue={handleSubmit}
+      />
     </div>
   );
 };

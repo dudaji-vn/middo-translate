@@ -20,6 +20,9 @@ import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { useParams } from 'next/navigation';
+import { convert } from 'html-to-text';
+import { useQueryClient } from '@tanstack/react-query';
+import { anounymousMesssagesAPI } from '@/features/chat/business/anonymous-message.service';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -42,8 +45,15 @@ export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
 export const MessagesBoxProvider = ({
   children,
   room,
-}: PropsWithChildren<{ room: Room }>) => {
+  isAnonymous,
+  guestId,
+}: PropsWithChildren<{
+  room: Room;
+  isAnonymous?: boolean;
+  guestId?: string;
+}>) => {
   const key = ['messages', room._id];
+  const queryClient = useQueryClient();
   const {
     isFetching,
     items,
@@ -55,21 +65,28 @@ export const MessagesBoxProvider = ({
     replaceItem,
   } = useCursorPaginationQuery<Message>({
     queryKey: key,
-    queryFn: ({ pageParam }) =>
-      roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 }),
+    queryFn: ({ pageParam }) => {
+      if (isAnonymous) {
+        return anounymousMesssagesAPI.getMessages(room._id, {
+          cursor: pageParam,
+          limit: 16,
+          userId: guestId as string,
+        });
+      }
+      return roomApi.getMessages(room._id, { cursor: pageParam, limit: 16 });
+    },
     config: {
       enabled: room.status !== 'temporary',
     },
   });
   const params = useParams<{ id: string }>();
-  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id });
+  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id, isAnonymous });
 
   const userId = useAuthStore((s) => s.user?._id);
 
   const [notification, setNotification] = useState<string>('');
 
   const isFocused = useHasFocus();
-
   // socket event
 
   useEffect(() => {
@@ -89,19 +106,22 @@ export const MessagesBoxProvider = ({
             ? message.room?.name
             : 'your group'
           : 'you';
-        const messageNotify = `${message.sender.name} to ${targetText}: ${message.content} `;
+        const content = convert(message.content);
+        const messageNotify = `${message.sender.name} to ${targetText}: ${content} `;
         setNotification(messageNotify);
       },
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
       updateItem(message);
+      queryClient.invalidateQueries(['message', message._id]);
     });
 
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
-  }, [replaceItem, room._id, updateItem, userId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [replaceItem, room._id, updateItem, userId, guestId]);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;

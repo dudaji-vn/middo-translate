@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
+import { useCallback, useEffect, useState } from 'react';
+import * as yup from 'yup';
 import { AlertError } from '@/components/alert/alert-error';
 import { Button } from '@/components/form/button';
 import { GoogleIcon } from '@/components/icons';
@@ -11,19 +11,32 @@ import Link from 'next/link';
 import { Button as MyButton } from '@/components/actions/button';
 import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { loginService } from '@/services/auth.service';
+import {
+  getCookieService,
+  loginService,
+  saveCookieService,
+} from '@/services/auth.service';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useElectron } from '@/hooks/use-electron';
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import trim from 'lodash/trim';
+import { useTranslation } from 'react-i18next';
+interface DataResponseToken {
+  token: string;
+  refresh_token: string;
+}
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
+  const { isElectron, ipcRenderer } = useElectron();
+  const {t} = useTranslation("common");
   const {
     register,
     watch,
@@ -36,7 +49,26 @@ export default function SignIn() {
       email: '',
       password: '',
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(yup
+      .object()
+      .shape({
+        email: yup
+          .string()
+          .trim()
+          .required({
+            value: true,
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .email({
+            value: true,
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          }),
+        password: yup.string().required({
+          value: true,
+          message: t('MESSAGE.ERROR.REQUIRED'),
+        }),
+      })
+      .required()),
   });
 
   const {
@@ -55,19 +87,43 @@ export default function SignIn() {
       const formData = {
         email: trim(watch('email').toLocaleLowerCase()),
         password: watch('password'),
-      }
+      };
       const data = await loginService(formData);
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
-      toast.success('Login success!');
+      toast.success(t('MESSAGE.SUCCESS.LOGIN'));
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage('Invalid email or password')
+      setErrorMessage( t('MESSAGE.ERROR.INVALID_ACCOUNT'));
     } finally {
       setLoading(false);
       // reset();
     }
   };
+
+  const handleLoginGoogle = async () => {
+    ipcRenderer.send(ELECTRON_EVENTS.GOOGLE_LOGIN);
+  };
+
+  const saveCookie = useCallback((data: DataResponseToken) => {
+    const { token, refresh_token } = data;
+    saveCookieService({ token, refresh_token })
+      .then((_) => {
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    if (isElectron && ipcRenderer) {
+      ipcRenderer.on(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, saveCookie);
+    }
+    return () => {
+      if (isElectron && ipcRenderer) {
+        ipcRenderer.off(ELECTRON_EVENTS.GOOGLE_LOGIN_SUCCESS, saveCookie);
+      }
+    };
+  }, [ipcRenderer, isElectron, saveCookie]);
 
   useEffect(() => {
     if (isAuthentication) {
@@ -77,7 +133,13 @@ export default function SignIn() {
         router.push(ROUTE_NAMES.ROOT);
       }
     }
-  }, [isAuthentication, router, userData]);
+  }, [
+    isAuthentication,
+    router,
+    userData?.avatar,
+    userData?.language,
+    userData?.name,
+  ]);
 
   if (isAuthentication && userData) return null;
 
@@ -87,7 +149,7 @@ export default function SignIn() {
       <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
         <div className="w-full bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
           <h4 className="text-center text-[26px] font-bold text-primary">
-            Sign in
+            {t('SIGN_IN.TITLE')}
           </h4>
 
           <form
@@ -96,14 +158,14 @@ export default function SignIn() {
           >
             <InputField
               className="mt-8"
-              placeholder="Enter your email"
+              placeholder={t('COMMON.EMAIL_PLACEHOLDER')}
               register={{ ...register('email') }}
               errors={errors.email}
               type="text"
             />
             <InputField
               className="mt-4"
-              placeholder="Enter your password"
+              placeholder={t('COMMON.PASSWORD_PLACEHOLDER')}
               register={{ ...register('password') }}
               errors={errors.password}
               type="password"
@@ -112,28 +174,34 @@ export default function SignIn() {
               className="color-[#333] ml-auto mt-3 inline-block italic hover:underline"
               href={ROUTE_NAMES.FORGOT_PASSWORD}
             >
-              Forgot password?
+              {t('SIGN_IN.FORGOT_PASSWORD')}
             </Link>
             <AlertError errorMessage={errorMessage}></AlertError>
-            <Button type="submit">Sign in</Button>
+            <Button type="submit">{t('SIGN_IN.TITLE')}</Button>
           </form>
           <div className="mx-auto my-10 h-[1px] w-[120px] bg-[#ccc]"></div>
-          <p className="mb-5 text-center text-[#333]">Not have account yet?</p>
+          <p className="mb-5 text-center text-[#333]">{t('SIGN_IN.NO_ACCOUNT')}</p>
           <div className="mb-10 flex justify-center">
             <Link
               className="hover:after:opacity-1 relative font-medium text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-primary after:opacity-0 after:content-['']"
               href={ROUTE_NAMES.SIGN_UP}
             >
-              Sign up here
+              {t('SIGN_IN.SIGN_UP_HERE')}
             </Link>
           </div>
           <div className="flex items-center justify-center gap-5">
-            <p>Or log in with</p>
-            <Link href="/api/auth/google">
-              <MyButton.Icon color="default">
+            <p>{t('SIGN_IN.SOCIAL_LOGIN')}</p>
+            {isElectron ? (
+              <MyButton.Icon color="default" onClick={handleLoginGoogle}>
                 <GoogleIcon />
               </MyButton.Icon>
-            </Link>
+            ) : (
+              <Link href="/api/auth/google">
+                <MyButton.Icon color="default">
+                  <GoogleIcon />
+                </MyButton.Icon>
+              </Link>
+            )}
           </div>
         </div>
       </div>

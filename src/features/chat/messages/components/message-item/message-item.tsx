@@ -6,7 +6,6 @@ import {
   forwardRef,
   useContext,
 } from 'react';
-
 import { Avatar } from '@/components/data-display';
 import { DocumentMessage } from './message-item-document';
 import { ImageGallery } from './message-item-image-gallery';
@@ -17,7 +16,6 @@ import { MessageItemWrapper } from './message-item-wrapper';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { SeenTracker } from './message-item-seen-tracker';
-import { TextMessage } from './message-item-text';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { cn } from '@/utils/cn';
@@ -27,6 +25,9 @@ import { MessageItemForward } from './message-item-forward';
 import { CallMessage } from './message-item-call';
 import { MessageItemReply } from './message-item-reply';
 import { MessageItemPinned } from './message-item-pinned';
+import { Content } from './message-item-content';
+import { MessageItemLinks } from './message-item-links';
+import { MessageItemVideo } from './message-item-video';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -37,6 +38,9 @@ export interface MessageProps
   showReply?: boolean;
   direction?: 'bottom' | 'top';
   pinnedBy?: User;
+  discussionDisabled?: boolean;
+  guestId?: string;
+  disabledAllActions?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -64,12 +68,15 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       message,
       sender,
       order,
+      guestId,
       className,
       readByUsers,
       showAvatar,
       direction,
       showReply = true,
       pinnedBy,
+      disabledAllActions,
+      discussionDisabled,
       ...props
     },
     ref,
@@ -77,9 +84,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isMe = sender === 'me';
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
-    const isSystemMessage =
-      message.type === 'notification' || message.type === 'action';
-
+    const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
 
     return (
@@ -91,7 +96,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           setActive,
         }}
       >
-        <SeenTracker />
+        <SeenTracker guestId={guestId} />
         {isSystemMessage ? (
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (
@@ -118,6 +123,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
                 )}
                 <MessageItemWrapper
+                  disabledAllActions={disabledAllActions}
+                  discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
                   message={message}
@@ -136,7 +143,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     )}
                   >
                     {message.content && (
-                      <TextMessage
+                      <Content
                         position={isMe ? 'right' : 'left'}
                         message={message}
                         active={isActive}
@@ -149,6 +156,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                         active={isActive}
                       />
                     )}
+
                     {message?.media && message.media.length > 0 && (
                       <Fragment>
                         {message.media[0].type === 'image' && (
@@ -160,9 +168,16 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                             file={message.media[0]}
                           />
                         )}
+                        {message.media[0].type === 'video' && (
+                          <MessageItemVideo file={message.media[0]} />
+                        )}
                       </Fragment>
                     )}
                   </div>
+
+                  {message?.content && (
+                    <MessageItemLinks isMe={isMe} message={message} />
+                  )}
 
                   {isPending && <PendingStatus />}
                   {pinnedBy && (

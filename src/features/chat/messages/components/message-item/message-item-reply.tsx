@@ -56,9 +56,6 @@ export const MessageItemReply = ({
             className="h-4 w-4"
           />
         ))}
-        {/* <div className="flex size-4 items-center justify-center rounded-full bg-black/70">
-          <span className="text-xs font-light text-white">+1</span>
-        </div> */}
         <div className="px-1">
           <span className="text-sm text-primary">
             {messages?.length} {messages?.length > 1 ? 'replies' : 'reply'}

@@ -8,6 +8,10 @@ import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import useFitRatio from '@/features/call/hooks/use-fit-ratio';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemAvatar from './components/video-item-avatar';
+import { DoodleArea } from '../doodle/doodle-area';
+import useGetVideoSize from '../doodle/hooks/use-get-video-size';
+import { DoodleShareScreen } from '../doodle/doodle-share-screen';
+import { useTranslation } from 'react-i18next';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -18,20 +22,9 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const { isTalk } = useAudioLevel(streamVideo);
   const { isLoadingVideo } = useMyVideoCallStore();
   useFitRatio(videoRef, parentRef);
-
-  const fullScreenVideo = () => {
-    if (!videoRef.current) return;
-    // Check is full screen video
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-      return;
-    }
-    if (videoRef.current.requestFullscreen) {
-      videoRef.current.requestFullscreen();
-    }
-  };
-
+  const { width, height } = useGetVideoSize({ videoRef });
   // Disable pause video when fullscreen
+  const {t} = useTranslation('common')
   useEffect(() => {
     if (!videoRef.current) return;
     let videoRefTmp = videoRef.current;
@@ -47,6 +40,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       videoRefTmp.removeEventListener('pause', handleDisablePauseVideo);
     };
   }, [streamVideo]);
+
   return (
     <section
       ref={parentRef}
@@ -65,7 +59,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       <video
         ref={videoRef}
         className={twMerge(
-          'relative h-full w-full object-contain',
+          'disable relative h-full w-full object-contain',
           isTurnOnCamera ? '' : 'hidden',
         )}
         autoPlay
@@ -74,28 +68,42 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         controls={false}
       ></video>
       {/* Overlay black gradient from bottom to top */}
-      {isTurnOnCamera && (
+      {/* {isTurnOnCamera  && (
         <div className="absolute bottom-0 left-0 right-0 top-1/2 hidden items-end justify-end bg-gradient-to-t p-3 transition-all md:flex md:hover:from-black/70">
           <Maximize
             className="h-5 w-5 cursor-pointer stroke-white"
             onClick={fullScreenVideo}
           />
         </div>
-      )}
+      )} */}
 
       {/* Overlay name */}
-      <VideoItemAvatar size='lg' participant={participant} isTurnOnCamera={isTurnOnCamera}/>
+      <VideoItemAvatar
+        size="lg"
+        participant={participant}
+        isTurnOnCamera={isTurnOnCamera}
+      />
 
-      {/*  */}
-      <div className="absolute bottom-1 left-1 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white z-10">
+      {/* Overlay name */}
+      <div className="absolute bottom-1 left-1 z-10 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
         <span className="relative truncate leading-snug">
-          {participant?.isMe ? 'You' : participant?.user?.name || ''}
-          {participant?.isShareScreen ? '  (Screen)' : ''}
+          {participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
+          {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
         </span>
       </div>
 
       {/* Video Loading */}
-      <VideoItemLoading isLoading={isLoadingVideo} isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
+      <VideoItemLoading
+        isLoading={isLoadingVideo}
+        isMe={participant?.isMe}
+        isShareScreen={participant?.isShareScreen}
+      />
+
+      {/* Doodle */}
+      {participant?.isShareScreen && participant?.isElectron && (
+        // {participant?.isShareScreen &&
+        <DoodleShareScreen width={width} height={height} />
+      )}
     </section>
   );
 };

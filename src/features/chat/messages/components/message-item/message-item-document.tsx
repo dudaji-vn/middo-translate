@@ -33,7 +33,7 @@ export const DocumentMessage = ({ file, isMe = false }: DocumentProps) => {
         <span
           title={file.name}
           className={cn(
-            'max-w-44 truncate text-sm font-semibold md:max-w-none',
+            'max-w-44 truncate break-all text-sm font-semibold',
             isMe && 'text-background',
           )}
         >

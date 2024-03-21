@@ -1,11 +1,11 @@
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from 'react-speech-recognition';
 import { useEffect, useState } from 'react';
 
-import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { DEFAULT_LANGUAGES_CODE, SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { translateText } from '@/services/languages.service';
 import { useDebounce } from 'usehooks-ts';
+import { useMessageEditorText } from '@/features/chat/messages/components/message-editor/message-editor-text-context';
+import useSpeechRecognizer from './use-speech-recognizer';
+import { useAuthStore } from '@/stores/auth.store';
 
 export const useTranslate = ({
   sourceLanguage,
@@ -28,6 +28,8 @@ export const useTranslate = ({
   const [middleText, setMiddleText] = useState('');
 
   const debounceValue = useDebounce(text, 500);
+
+  const { user } = useAuthStore();
 
   useEffect(() => {
     if (!translateOnType) return;
@@ -116,19 +118,18 @@ export const useTranslate = ({
     }
   };
 
-  const { listening, interimTranscript } = useSpeechRecognition();
 
-  const handleStartListening = () => {
+  const {listening, interimTranscript, startSpeechToText, stopSpeechToText} = useSpeechRecognizer(
+    SUPPORTED_VOICE_MAP[user?.language as keyof typeof SUPPORTED_VOICE_MAP]
+  );
+
+  const handleStartListening = (lang?: string) => {
     setText('');
-    SpeechRecognition.startListening({
-      language: sourceLanguage,
-      continuous: listenMode === 'continuous',
-      interimResults: true,
-    });
+    startSpeechToText();
   };
 
   const handleStopListening = () => {
-    SpeechRecognition.stopListening();
+    stopSpeechToText();
   };
 
   useEffect(() => {

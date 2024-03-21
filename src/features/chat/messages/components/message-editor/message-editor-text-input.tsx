@@ -12,6 +12,7 @@ import { useMediaUpload } from '@/components/media-upload';
 import { MessageEditorToolbarMic } from './message-editor-toolbar-mic';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
+import { useTranslation } from 'react-i18next';
 
 export interface TextInputRef extends HTMLTextAreaElement {
   reset: () => void;
@@ -47,7 +48,7 @@ export const TextInput = forwardRef<
     } = useMessageEditorText();
     const isMobile = useAppStore((state) => state.isMobile);
     const { handlePasteFile } = useMediaUpload();
-
+    const {t} = useTranslation('common')
     const inputRef = useRef<HTMLTextAreaElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
     const triggerSubmit = () => {
@@ -92,7 +93,7 @@ export const TextInput = forwardRef<
     return (
       <div
         className={cn(
-          'relative flex  min-h-[36px]  w-full flex-row items-center',
+          'relative flex  min-h-[36px] w-full flex-row items-center',
         )}
       >
         <button
@@ -142,7 +143,7 @@ export const TextInput = forwardRef<
           )}
           autoComplete="off"
           name="message"
-          placeholder={listening ? 'Listening...' : 'Type a message'}
+          placeholder={listening ? t('COMMON.LISTENING') : t('COMMON.TYPE_A_MESSAGE')}
           onPaste={handlePasteFile}
         />
 

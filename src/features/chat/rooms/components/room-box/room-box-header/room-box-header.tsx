@@ -14,27 +14,42 @@ import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useChatStore } from '@/features/chat/store';
+import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
-export const ChatBoxHeader = () => {
+export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room: _room } = useChatBox();
-  const currentUserId = useAuthStore((s) => s.user?._id) || '';
+  const currentUser = useAuthStore((s) => s.user)!;
+  const onlineList = useChatStore((state) => state.onlineList);
+  const {t} = useTranslation('common')
+  const { isBusiness } = useBusinessNavigationData();
+  const allowCall = !isBusiness;
   const room = useMemo(
-    () => generateRoomDisplay(_room, currentUserId, true),
-    [_room, currentUserId],
+    () => generateRoomDisplay(_room, currentUser._id, true),
+    [_room, currentUser],
   );
+
+  const participants = room.participants.filter(
+    (user) => user._id !== currentUser._id,
+  );
+  if (participants.length === 0) participants.push(currentUser); // if no participants, is a self chat
+  const isOnline = participants.some((user) => onlineList.includes(user._id));
+
   return (
-    <div className="flex w-full items-center border-b  px-1 py-1 md:px-3">
+    <div {...props} className={cn("flex w-full items-center border-b  px-1 py-1 md:px-3", props.className)}>
       <RoomBoxHeaderNavigation />
       <div className="flex flex-1 items-center gap-2">
-        <RoomAvatar isOnline room={room} size={36} />
+        <RoomAvatar showStatus isOnline={isOnline} room={room} size={36} />
         <div>
           <p className="break-word-mt line-clamp-1 font-medium">{room.name}</p>
-          <p className="text-sm font-light">Online</p>
+          <p className="text-sm font-light">{room.subtitle == 'Group' ? t('COMMON.GROUP') : room.subtitle }</p>
         </div>
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">
-        <VideoCall />
-        <Tooltip title="Info" triggerItem={<ActionBar />} />
+        {allowCall && <VideoCall />}
+        <Tooltip title={t('TOOL_TIP.INFO')} triggerItem={<ActionBar />} />
       </div>
     </div>
   );
@@ -70,6 +85,7 @@ const VideoCall = () => {
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
   const { user } = useAuthStore();
   const currentUserId = user?._id || '';
+  const {t} = useTranslation('common')
   const isSelfChat =
     currentUserId &&
     roomChatBox?.participants?.every((p) => p._id === currentUserId);
@@ -78,7 +94,7 @@ const VideoCall = () => {
   return (
     <div>
       <Tooltip
-        title="Start Middo Call"
+        title={t('TOOL_TIP.START_CALL')}
         triggerItem={
           <Button.Icon
             onClick={() => startVideoCall(roomChatBox?._id)}
@@ -88,7 +104,7 @@ const VideoCall = () => {
             className={`${isHaveMeeting ? 'hidden' : ''}`}
           >
             <Phone />
-            {isHaveMeeting && 'Join call'}
+            {isHaveMeeting && t('CONVERSATION.JOIN')}
           </Button.Icon>
         }
       />
@@ -101,7 +117,7 @@ const VideoCall = () => {
         className={`${isHaveMeeting ? '' : 'hidden'}`}
         startIcon={isHaveMeeting ? <PhoneCallIcon /> : <Phone />}
       >
-        Join
+        {t('CONVERSATION.JOIN')}
       </Button>
     </div>
   );

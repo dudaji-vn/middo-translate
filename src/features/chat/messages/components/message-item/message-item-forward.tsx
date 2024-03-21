@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Message } from '../../types';
 import { ImageGallery } from './message-item-image-gallery';
 import { DocumentMessage } from './message-item-document';
@@ -6,10 +6,12 @@ import { useChatStore } from '@/features/chat/store';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import { Text } from '@/components/data-display';
 import { Room } from '@/features/chat/rooms/types';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { RichTextView } from '@/components/rich-text-view';
+import { useTranslation } from 'react-i18next';
+import { MessageItemVideo } from './message-item-video';
 
 export interface MessageItemForwardProps {
   message: Message;
@@ -22,13 +24,15 @@ export const MessageItemForward = ({
   hasParent,
   isMe,
 }: MessageItemForwardProps) => {
+  const mediaRef = useRef<HTMLDivElement>(null);
+  const {t} = useTranslation('common');
   const displayForwardFrom = useMemo(() => {
-    let text = message?.sender?.name;
+    let text = " " + message?.sender?.name + " ";
     if (message.room?.isGroup) {
-      text += ` in ${message.room?.name || 'a group'}`;
+      text += t('CONVERSATION.FORWARD_FROM_CHANNEL', {name: message.room?.name || t('CONVERSATION.A_GROUP')});
     }
     return text;
-  }, [message]);
+  }, [message, t]);
   return (
     <div className="my-1 flex h-fit gap-1">
       {hasParent && !isMe && (
@@ -37,25 +41,35 @@ export const MessageItemForward = ({
         </div>
       )}
       <div className="order-neutral-100 ml-auto w-fit rounded-2xl border p-2">
-          <div className="text-sm">
-            <span className="italic text-neutral-400">Forward from&nbsp;</span>
-            <Wrapper room={message.room!}>
-              <span className="text-primary max-md:inline-block break-all">{displayForwardFrom}</span>
-            </Wrapper>
-            <div className="mt-1">
-              {message.content && <TextMessage message={message} />}
-              {message?.media && message.media.length > 0 && (
-                <Fragment>
-                  {message.media[0].type === 'image' && (
-                    <ImageGallery images={message.media} />
-                  )}
-                  {message.media[0].type === 'document' && (
-                    <DocumentMessage file={message.media[0]} />
-                  )}
-                </Fragment>
-              )}
-            </div>
+        <div
+          style={{
+            width: mediaRef.current?.clientWidth,
+          }}
+          className="overflow-hidden text-sm"
+        >
+          <span className="italic text-neutral-400">{t('CONVERSATION.FORWARD_FROM')}&nbsp;</span>
+          <Wrapper room={message.room!}>
+            <span className="break-all text-primary max-md:inline-block">
+              {displayForwardFrom}
+            </span>
+          </Wrapper>
+          <div className="mt-1">
+            {message.content && <TextMessage message={message} />}
+            {message?.media && message.media.length > 0 && (
+              <div ref={mediaRef} className="w-fit">
+                {message.media[0].type === 'image' && (
+                  <ImageGallery images={message.media} />
+                )}
+                {message.media[0].type === 'document' && (
+                  <DocumentMessage file={message.media[0]} />
+                )}
+                {message.media[0].type === 'video' && (
+                  <MessageItemVideo file={message.media[0]} />
+                )}
+              </div>
+            )}
           </div>
+        </div>
       </div>
       {hasParent && isMe && (
         <div>
@@ -92,8 +106,8 @@ const TextMessage = ({ message }: { message: Message }) => {
     message.language,
   ]);
   return (
-    <div>
-      <span className="text-neutral-600">{contentDisplay}</span>
+    <div className="p-1">
+      <RichTextView content={contentDisplay} />
       {message?.contentEnglish &&
         message.status !== 'removed' &&
         showMiddleTranslation && (
@@ -104,10 +118,7 @@ const TextMessage = ({ message }: { message: Message }) => {
               className="absolute left-4 top-0 -translate-y-full"
             />
             <div className={'mb-1 mt-2 rounded-xl bg-neutral-50 p-1 px-3'}>
-              <Text
-                value={message.contentEnglish}
-                className="text-start text-sm font-light text-neutral-600"
-              />
+              <RichTextView content={message.contentEnglish} />
             </div>
           </div>
         )}

@@ -1,5 +1,10 @@
 export const SOCKET_CONFIG = {
   EVENTS: {
+    CLIENT: {
+      JOIN: 'client.join',
+      LEAVE: 'client.leave',
+      LIST: 'client.list',
+    },
     MESSAGE: {
       NEW: 'message.new',
       SEND: 'message.send',
@@ -24,6 +29,11 @@ export const SOCKET_CONFIG = {
       },
       UPDATE: 'room.update',
       DELETE: 'room.delete',
+    },
+    INBOX: {
+      NEW: 'inbox.new',
+      UPDATE: 'inbox.update',
+      DELETE: 'inbox.delete',
     },
     CHAT: {
       JOIN: 'chat.join',
@@ -54,11 +64,24 @@ export const SOCKET_CONFIG = {
       DRAW_DOODLE: 'call.draw_doodle',
       REQUEST_GET_OLD_DOODLE_DATA: 'call.request_get_old_doodle_data',
       SEND_OLD_DOODLE_DATA: 'call.send_old_doodle_data',
+      SEND_DOODLE_SHARE_SCREEN: 'call.send_doodle_share_screen',
       STARTING_NEW_CALL: 'call.starting_new_call',
       MEETING_END: 'call.meeting_end',
       INVITE_TO_CALL: 'call.invite_to_call',
       SEND_CAPTION: 'call.send_caption',
       UPDATE: 'call.update',
+    },
+    SPEECH_TO_TEXT: {
+      START: 'speech_to_text.start',
+      STOP: 'speech_to_text.stop',
+      SEND_AUDIO: 'speech_to_text.send_audio',
+      RECEIVE_AUDIO_TEXT: 'speech_to_text.receive_audio_text',
+    },
+    TYPING: {
+      UPDATE: {
+        SERVER: 'typing.update.server',
+        CLIENT: 'typing.update.client',
+      },
     },
   },
 };

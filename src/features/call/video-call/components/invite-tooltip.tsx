@@ -4,11 +4,13 @@ import { CALL_TYPE } from '../../constant/call-type';
 import { useVideoCallStore } from '../../store/video-call.store';
 import { Lightbulb, UserPlus2Icon, X } from 'lucide-react';
 import { Button } from '@/components/actions';
+import { useTranslation } from 'react-i18next';
 
 export default function InviteTooltip() {
   const { participants } = useParticipantVideoCallStore();
   const { room, isFullScreen, setModalAddUser } = useVideoCallStore();
   const [isShowInvite, setShowInvite] = useState(true);
+  const {t} = useTranslation('common')
   useEffect(() => {
     let numParticipant = participants.length;
     if (numParticipant > 1 && isShowInvite) setShowInvite(false);
@@ -24,15 +26,14 @@ export default function InviteTooltip() {
             <div className="mt-auto rounded-xl bg-neutral-50 p-2">
               <div className="flex items-center text-neutral-600">
                 <Lightbulb className="h-4 w-4 text-neutral-400" />
-                <p className="ml-1 flex-1">Notice</p>
+                <p className="ml-1 flex-1">{t('CONVERSATION.NOTICE')}</p>
                 <X
                   className="h-4 w-4 cursor-pointer text-neutral-400"
                   onClick={() => setShowInvite(false)}
                 />
               </div>
               <p className="mt-2 text-sm font-light text-neutral-400">
-                Memeber in group will not receive any in coming call alert till
-                you invite them to join
+                {t('CONVERSATION.NOTICE_CONTENT')}
               </p>
             </div>
             <Button
@@ -44,7 +45,7 @@ export default function InviteTooltip() {
               shape="square"
               startIcon={<UserPlus2Icon />}
             >
-              Invite
+              {t('CONVERSATION.INVITE')}
             </Button>
           </div>
         )}

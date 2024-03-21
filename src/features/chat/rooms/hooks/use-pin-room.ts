@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { roomApi } from '../api';
-import { InboxType } from '../components/inbox/inbox';
+import { inboxTabMap } from '../components/inbox/inbox';
 
 export const usePinRoom = () => {
   const queryClient = useQueryClient();
@@ -8,17 +8,18 @@ export const usePinRoom = () => {
     mutationFn: roomApi.pin,
     onSuccess: () => {
       queryClient.invalidateQueries(['rooms', 'pinned']);
-      queryClient.invalidateQueries(['rooms', 'all' as InboxType]);
-      queryClient.invalidateQueries(['rooms', 'group' as InboxType]);
+      Object.keys(inboxTabMap).forEach((tab) => {
+        queryClient.invalidateQueries(['rooms', tab]);
+      });
     },
   });
 };
 
 export const USE_GET_PINNED_ROOMS_KEY = ['rooms', 'pinned'];
-export const useGetPinnedRooms = () => {
+export const useGetPinnedRooms = (isAnonymous?: boolean) => {
   const { data, ...rest } = useQuery(
     USE_GET_PINNED_ROOMS_KEY,
-    roomApi.getPinned,
+    isAnonymous ? roomApi.getPinnedAnonynousRooms : roomApi.getPinned,
   );
   return { rooms: data, ...rest };
 };

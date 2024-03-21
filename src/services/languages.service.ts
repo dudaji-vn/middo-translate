@@ -5,6 +5,7 @@ import {
 
 import { Country } from '@/types/country.type';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
+import toast from 'react-hot-toast';
 
 export async function getSupportLanguages() {
   const response = await fetch(`${NEXT_PUBLIC_URL}/api/languages`);
@@ -27,24 +28,31 @@ export async function translateText(text: string, from?: string, to?: string) {
   const response = await fetch(
     `${NEXT_PUBLIC_URL}/api/languages/translate-cache?query=${textEncoded}&from=${from}&to=${to}`,
   );
-
-  const json = await response.json();
-
-  return json.data;
+  try {
+    const json = await response.json();
+    return json.data;
+  } catch (error) {
+    toast.error("Content is too long, can't translate");
+    return '';
+  }
 }
 
 export async function detectLanguage(text: string) {
-  if (!text) return '';
-
-  const response = await fetch(
-    `${NEXT_PUBLIC_URL}/api/languages/detect?query=${text}`,
-  );
-  const json = await response.json();
-  const language = json.data.language as string;
-  const isSupported = SUPPORTED_LANGUAGES.some(
-    (lang) => lang.code === language,
-  );
-  return isSupported ? language : DEFAULT_LANGUAGES_CODE.EN;
+  try {
+    if (!text) return '';
+    const response = await fetch(
+      `${NEXT_PUBLIC_URL}/api/languages/detect?query=${text}`,
+    );
+    const json = await response.json();
+    const language = json.data.language as string;
+    const isSupported = SUPPORTED_LANGUAGES.some(
+      (lang) => lang.code === language,
+    );
+    return isSupported ? language : DEFAULT_LANGUAGES_CODE.EN;
+  } catch (error) {
+    console.error('Error in detectLanguage', error);
+    return DEFAULT_LANGUAGES_CODE.EN;
+  }
 }
 
 export async function translateWithDetection(text: string, to: string) {

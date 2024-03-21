@@ -1,5 +1,6 @@
-import { Avatar, Text } from '@/components/data-display';
+import { Avatar } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
+import { RichTextView } from '@/components/rich-text-view';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
@@ -12,6 +13,7 @@ import { ImageGallery } from '../../messages/components/message-item/message-ite
 import { textVariants } from '../../messages/components/message-item/message-item-text.style';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
+import { useTranslation } from 'react-i18next';
 
 export interface MainMessageProps {
   message: Message;
@@ -20,15 +22,16 @@ export interface MainMessageProps {
 
 export const MainMessage = ({ message, className }: MainMessageProps) => {
   const sender = message.sender;
+
   return (
     <div className={cn('flex flex-col', className)}>
-      {message.type !== 'call' && (
-        <div className="flex items-center gap-2">
-          <Avatar size="xs" src={sender.avatar} alt={sender.name} />
-          <span className="text-sm font-semibold break-words max-w-80">{sender.name}</span>
-        </div>
-      )}
-      <div className={cn(message.type !== 'call' ? 'ml-8' : '')}>
+      <div className="flex items-center gap-2">
+        <Avatar size="xs" src={sender.avatar} alt={sender.name} />
+        <span className="max-w-80 break-words text-sm font-semibold">
+          {sender.name}
+        </span>
+      </div>
+      <div className="ml-8 mt-1">
         {message.content && <TextMessage message={message} />}
         {message?.media && message.media.length > 0 && (
           <Fragment>
@@ -52,11 +55,12 @@ const TextMessage = ({ message }: { message: Message }) => {
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
+  const {t} = useTranslation('common');
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
     if (message.status === 'removed') {
-      setContentDisplay(message.content);
+      setContentDisplay(t('CONVERSATION.REMOVED_A_MESSAGE'));
       return;
     }
     if (userLanguage === message.sender.language) return;
@@ -69,26 +73,23 @@ const TextMessage = ({ message }: { message: Message }) => {
       setContentDisplay(translated);
     };
     translateContent();
-  }, [
-    userLanguage,
-    message
-  ]);
+  }, [userLanguage, message, t]);
   return (
     <div className="flex flex-col">
-      <span className="text-sm font-normal">{contentDisplay}</span>
+      <RichTextView mentionClassName="left" content={contentDisplay} />
       {message?.contentEnglish &&
         message.status !== 'removed' &&
         showMiddleTranslation && (
           <div className="relative mt-2">
             <TriangleSmall
-              fill="#e6e6e6"
+              fill="#f2f2f2"
               position="top"
               className="absolute left-4 top-0 -translate-y-full"
             />
             <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
-              <Text
-                value={message.contentEnglish}
-                className="text-start text-sm font-light"
+              <RichTextView
+                mentionClassName="left"
+                content={message.contentEnglish}
               />
             </div>
           </div>
@@ -98,7 +99,8 @@ const TextMessage = ({ message }: { message: Message }) => {
 };
 
 const CallMessage = ({ message }: { message: Message }) => {
-  const { call, sender } = message;
+  const { call } = message;
+  const {t} = useTranslation('common');
   const { content, icon, subContent } = useMemo((): {
     content: string;
     icon: React.ReactNode;
@@ -106,7 +108,7 @@ const CallMessage = ({ message }: { message: Message }) => {
   } => {
     if (call?.endTime) {
       return {
-        content: 'Call end at ' + moment(call.endTime).format('HH:mm'),
+        content: t('CONVERSATION.CALL_END_AT', {time: moment(call.endTime).format('HH:mm')}),
         subContent: convertToTimeReadable(
           call.createdAt as string,
           call.endTime,
@@ -117,10 +119,10 @@ const CallMessage = ({ message }: { message: Message }) => {
       };
     }
     return {
-      content: sender.name + ' has started a call',
+      content: t('CONVERSATION.STARTED_CALL'),
       icon: <PhoneCallIcon className="mr-2 inline-block h-4 w-4" />,
     };
-  }, [call?.createdAt, call?.endTime, sender.name]);
+  }, [call?.createdAt, call?.endTime, t]);
   return (
     <div>
       <div>

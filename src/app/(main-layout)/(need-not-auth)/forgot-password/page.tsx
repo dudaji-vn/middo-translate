@@ -1,5 +1,5 @@
 'use client';
-
+import * as yup from 'yup';
 import { AlertError } from '@/components/alert/alert-error';
 import { Button } from '@/components/form/button';
 import { InputField } from '@/components/form/Input-field';
@@ -7,17 +7,17 @@ import Link from 'next/link';
 import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { forgotPasswordService } from '@/services/auth.service';
-import { ForgotPasswordSchema as schema } from '@/configs/yup-form';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useTranslation } from 'react-i18next';
 
 export default function ForgotPassword() {
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
+  const {t} = useTranslation('common')
   const {
     register,
     watch,
@@ -28,7 +28,21 @@ export default function ForgotPassword() {
     defaultValues: {
       email: '',
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(yup
+      .object()
+      .shape({
+        email: yup
+          .string()
+          .required({
+            value: true,
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .email({
+            value: true,
+            message: t('MESSAGE.ERROR.INVALID_EMAIL'),
+          }),
+      })
+      .required()),
   });
 
   const handleSubmitForm = async (e: React.FormEvent) => {
@@ -54,30 +68,29 @@ export default function ForgotPassword() {
       {loading && <PageLoading />}
       <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
         <h4 className="relative mb-5 pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
-          Forgot password
+          {t('FORGOT_PASSWORD.TITLE')}
         </h4>
         <p>
-          We&apos;ll send a link through your provided email to help you reset
-          your password
+          {t('FORGOT_PASSWORD.DESCRIPTION')}
         </p>
         <form onSubmit={handleSubmitForm}>
           <InputField
             className="mt-8"
-            label="Email"
-            placeholder="Enter your email"
+            label={t('COMMON.EMAIL')}
+            placeholder={t('COMMON.EMAIL_PLACEHOLDER')}
             register={{ ...register('email') }}
             errors={errors.email}
             type="text"
           />
           <AlertError errorMessage={errorMessage}></AlertError>
-          <Button type="submit">Confirm</Button>
+          <Button type="submit">{t('COMMON.CONFIRM')}</Button>
         </form>
         <div className="mt-8 flex justify-center">
           <Link
             href={ROUTE_NAMES.SIGN_IN}
             className="w-fit-content mx-auto inline-block active:text-primary md:hover:font-medium"
           >
-            Cancel
+            {t('COMMON.CANCEL')}
           </Link>
         </div>
       </div>

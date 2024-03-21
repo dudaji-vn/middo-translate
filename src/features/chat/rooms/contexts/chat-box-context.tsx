@@ -42,9 +42,8 @@ export const ChatBoxProvider = ({
 
   const handleForceLeaveRoom = useCallback(
     (roomId: string) => {
-      if (roomId === room._id) {
-        router.push('/talk');
-      }
+      if (roomId !== room._id) return;
+      router.replace('/talk');
     },
     [room._id, router],
   );

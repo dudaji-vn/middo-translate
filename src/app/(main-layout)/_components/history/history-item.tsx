@@ -7,61 +7,67 @@ import { CircleFlag } from 'react-circle-flags';
 import { THistoryItem } from './history';
 import {
   DEFAULT_LANGUAGES_CODE,
-  LANGUAGE_CODES_MAP,
 } from '@/configs/default-language';
-import { motion, AnimatePresence, useIsPresent } from 'framer-motion';
+import { motion, useIsPresent } from 'framer-motion';
 import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
+import { useTextCopy } from '@/hooks/use-text-copy';
+import { getFlagEmoji } from '@/utils/get-flag-emoji';
+import { useTranslation } from 'react-i18next';
 
 type TDisplayedItem = {
   languageCode: string;
   content: string;
   middleTranslation?: string;
-  isSrc?: boolean;
   isShowMiddle: boolean;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 const DisplayedItem = ({
   languageCode,
   content,
   middleTranslation,
-  isSrc,
   isShowMiddle = false,
+  ...props
 }: TDisplayedItem) => {
   const flag = getCountryCode(languageCode);
   const language = getLanguageByCode(languageCode);
+  const {t} = useTranslation('common');
   return (
-    <div className="flex w-full flex-col">
-      <div className="flex flex-row items-center justify-between ">
-        <Typography className="flex flex-row items-center gap-2 text-[14px] text-sm font-light leading-[18px] text-neutral-400">
-          <CircleFlag countryCode={flag as string} className="h-4 w-4" />
-          {language?.name}
-        </Typography>
+    <div {...props} className={cn("flex w-full flex-col py-[6px] ", props.className)}>
+      <div className="flex flex-row items-start justify-between ">
+        <div className='flex-col'>
+          <Typography className="flex flex-row items-center gap-2 text-[14px] text-sm font-light leading-[18px] text-neutral-400">
+            <CircleFlag countryCode={flag as string} className="h-4 w-4" />
+            {t('LANGUAGE.' + language?.name)}
+          </Typography>
+          <Text
+            value={content}
+            className=" break-words text-sm font-normal text-neutral-800 leading-[18px] px-1"
+          />
+        </div>
         <CopyZoneClick text={content}>
-          <Button.Icon
-            variant={'ghost'}
-            size={'xs'}
-            color={'default'}
-            className={isSrc ? '' : 'hidden'}
-          >
+          <Button.Icon onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+          }} variant={'ghost'} size={'xs'} color={'default'}>
             <Copy />
           </Button.Icon>
         </CopyZoneClick>
       </div>
-      <Typography className="w-[90%]  break-words text-sm ">
-        {content}
-      </Typography>
       {isShowMiddle && middleTranslation && (
         <div className="relative">
           <TriangleSmall
-            fill={'#e6e6e6'}
+            fill={'#f2f2f2'}
             position="top"
             className="absolute left-4 top-[18px]  -translate-y-full"
           />
-          <div className="mb-1 mt-2 rounded-xl bg-neutral-100 p-1 px-3 text-neutral-600">
-            <Text
-              value={middleTranslation}
-              className="text-start text-sm font-light"
-            />
+          <div className="mb-1 mt-2 rounded-xl bg-neutral-50 p-3 text-neutral-600 flex gap-2 flex-row items-start">
+            <CircleFlag countryCode={'uk'} className="h-5 w-5 mt-1" />
+            <div>
+              <Text
+                value={middleTranslation}
+                className="text-start text-sm font-light"
+              />
+            </div>
           </div>
         </div>
       )}
@@ -73,15 +79,28 @@ const HistoryItem = ({
   item,
   onDeleteItem,
   index,
+  onClick
 }: {
   item: THistoryItem;
   onDeleteItem: (item: THistoryItem) => void;
+  onClick: () => void;
   index: number;
 }): JSX.Element => {
   const { src, dest } = item;
-  const onCopyAll = () => {
-    const text = `${src.content}\n${dest.content}`;
-    navigator.clipboard.writeText(text);
+  const { copy } = useTextCopy();
+  const allowCopyAll = Boolean(
+    dest.englishContent && src.content && dest.content,
+  );
+  const handleCopyAll = () => {
+    const firstLine = `${getFlagEmoji(
+      getCountryCode(src.language) as string,
+    )} ${src.content}`;
+    const secondLine = `${getFlagEmoji('gb')} ${dest.englishContent}`;
+    const thirdLine = `${getFlagEmoji(
+      getCountryCode(dest.language) as string,
+    )} ${dest.content}`;
+    const textFormat = `${firstLine}\n${secondLine}\n${thirdLine}`;
+    copy(textFormat);
   };
   const isPresent = useIsPresent();
   if (!src || !dest) {
@@ -91,26 +110,30 @@ const HistoryItem = ({
   const isEnglishTranslate =
     src.language === DEFAULT_LANGUAGES_CODE.EN ||
     dest.language === DEFAULT_LANGUAGES_CODE.EN;
-  const isShowMiddle = Boolean(!isEnglishTranslate && src.language && dest.language);
+  const isShowMiddle = Boolean(
+    !isEnglishTranslate && src.language && dest.language,
+  );
 
   return (
     <motion.div
       className={cn(
-        'flex flex-col gap-2 rounded-2xl border border-primary-200 p-2',
+        'flex flex-col bg-white rounded-2xl border cursor-pointer overflow-hidden border-primary-200 [&>*]:p-3 s',
         isPresent ? 'static' : 'absolute',
+
       )}
+      onClick={onClick}
       key={item.id}
-      initial={{ opacity: 0, x: 100 }}
-      transition={{ type: 'spring', duration: 0.5 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 100 }}
+      initial={{ opacity: 0, y: 100 }}
+      transition={{ type: 'spring', duration: 0.1 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 100 }}
     >
       <DisplayedItem
         languageCode={src.language}
         content={src.content}
         middleTranslation={src.englishContent}
         isShowMiddle={isShowMiddle}
-        isSrc
+        className="border-b  border-neutral-50 "
       />
       <DisplayedItem
         languageCode={dest.language}
@@ -119,22 +142,32 @@ const HistoryItem = ({
         isShowMiddle={isShowMiddle}
       />
 
-      <div className="flex items-center justify-end gap-2">
+      <div className="flex items-center justify-end gap-2 bg-primary-100 py-2 rounded-b-xl">
         <Button.Icon
           variant={'default'}
+          color={'secondary'}
           size={'xs'}
-          onClick={onCopyAll}
-          className="bg-primary-200 text-primary-500-main"
+          disabled={isEnglishTranslate}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleCopyAll();
+          }}
+          className={cn("bg-primary-200  text-primary-500-main", !allowCopyAll && 'invisible')}
         >
-          <Layers className="!h-5 !w-5" />
+          <Layers />
         </Button.Icon>
         <Button.Icon
           variant={'default'}
+          color={'secondary'}
           size={'xs'}
-          onClick={() => onDeleteItem(item)}
-          className="bg-primary-200 text-primary-500-main"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onDeleteItem(item)
+          }}
         >
-          <Trash2 className="!h-5 !w-5" />
+          <Trash2 />
         </Button.Icon>
       </div>
     </motion.div>

@@ -25,6 +25,7 @@ import { useGetPinnedMessages } from '../../../hooks/use-get-pinned-messages';
 import { useRoomId } from '../../../hooks/use-roomId';
 import { RoomSideTabLayout } from './room-side-tab-layout';
 import { useRoomSidebarTabs } from './room-side-tabs.hook';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomSideTabPinnedProps {}
 
@@ -33,11 +34,11 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
   const { data } = useGetPinnedMessages({ roomId });
   const currentUserId = useAuthStore((state) => state.user?._id);
   const { changeToDefault } = useRoomSidebarTabs();
-
+  const { t } = useTranslation('common');
   return (
     <MessageActions>
       <RoomSideTabLayout
-        title="Pinned messages"
+        title={t('CONVERSATION.PINNED_MESSAGES')}
         icon={<PinIcon />}
         onBack={changeToDefault}
       >
@@ -45,11 +46,11 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
           <div className="flex h-full flex-col items-center  justify-center bg-white/80 backdrop-blur-lg">
             <MessageSquareDashedIcon className="mb-4 size-16 text-[#c5dcfa]" />
             <span className="w-[72%] text-center text-sm font-light">
-              There are no pinned messages yet. Pin a message to show it here.
+            {t('CONVERSATION.NO_PIN')}
             </span>
           </div>
         )}
-        <div className="flex w-full flex-col divide-y divide-neutral-100  overflow-x-hidden overflow-y-scroll">
+        <div className="flex w-full flex-col divide-y divide-neutral-100 overflow-x-hidden  overflow-y-scroll pb-3">
           {data?.map((pin) => {
             const isMe = pin.pinnedBy._id === currentUserId;
             const message = {
@@ -61,8 +62,8 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                 key={pin._id}
                 className="group relative flex flex-col items-center p-3"
               >
-                <span className="ml-auto text-xs font-light text-neutral-800 break-words">
-                  Pinned by {isMe ? 'you' : pin.pinnedBy.name}
+                <span className="break-word-mt  ml-auto text-xs font-light text-neutral-800">
+                  {t('CONVERSATION.PINED_BY', {name: isMe ? t('CONVERSATION.YOU') : pin.pinnedBy.name})}
                 </span>
                 <div
                   key={pin._id}
@@ -82,7 +83,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
 
 const Menu = ({ isMe, message }: { isMe: boolean; message: Message }) => {
   const { onAction } = useMessageActions();
-
+  const { t } = useTranslation('common');
   const items = useMemo(() => {
     return actionItems
       .filter((item) => {
@@ -135,7 +136,7 @@ const Menu = ({ isMe, message }: { isMe: boolean; message: Message }) => {
             })}
 
             <span className={cn(item.color && `text-${item.color}`)}>
-              {item.label}
+              {t(item.label)}
             </span>
           </DropdownMenuItem>
         ))}

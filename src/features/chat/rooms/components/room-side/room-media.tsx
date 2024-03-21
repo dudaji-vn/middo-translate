@@ -7,6 +7,7 @@ import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomMediaProps {}
 
@@ -14,6 +15,7 @@ export const RoomMedia = () => {
   const { room } = useChatBox();
   const roomId = room._id;
   const roomStatus = room.status;
+  const {t} = useTranslation('common');
   const { items, hasNextPage, fetchNextPage } =
     useCursorPaginationQuery<Message>({
       queryKey: ['media', roomId],
@@ -62,7 +64,7 @@ export const RoomMedia = () => {
           size="lg"
           className="w-full"
         >
-          <span className="text-primary-500-main">Show more</span>
+          <span className="text-primary-500-main">{t('COMMON.SHOW_MORE')}</span>
         </Button>
       )}
     </>

@@ -5,17 +5,20 @@ import { ChevronDownIcon, Globe2Icon } from 'lucide-react';
 import { PropsWithChildren, useId } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export interface LanguageSelectProps {
   currentCode?: string;
   languageCodes: string[];
   onChevronClick?: () => void;
   onChange?: (code: string) => void;
+  shrinkAble?: boolean;
 }
 
 export const LanguageSelect = ({
   onChevronClick,
   currentCode,
+  shrinkAble,
   languageCodes = [],
   onChange,
 }: LanguageSelectProps) => {
@@ -25,6 +28,7 @@ export const LanguageSelect = ({
       <div className="flex h-full w-full gap-2 rounded-2xl font-semibold lg:w-fit lg:bg-neutral-50 lg:p-1">
         {languageCodes.map((code) => (
           <LanguageItem
+            shrinkAble={shrinkAble}
             layoutId={id}
             key={code}
             onClick={() => {
@@ -52,15 +56,18 @@ const LanguageItem = ({
   code,
   className,
   onClick,
+  shrinkAble,
   layoutId,
 }: {
   code: string;
   active?: boolean;
+  shrinkAble?: boolean;
   className?: string;
   onClick?: () => void;
   layoutId?: string;
 } & PropsWithChildren) => {
-  const languageName = getCountryNameByCode(code as string) || 'Detect';
+  const languageName = getCountryNameByCode(code as string) || 'Language detect';
+  const {t} = useTranslation('common');
   return (
     <button
       onClick={onClick}
@@ -92,7 +99,7 @@ const LanguageItem = ({
         ) : (
           <Globe2Icon className="z-10 h-5 w-5 text-primary" />
         )}
-        <span className="z-10 truncate">{languageName}</span>
+        {<span className={cn("z-10 truncate", shrinkAble && !active && 'hidden')}>{t('LANGUAGE.' + languageName)}</span>}
       </div>
       <ChevronDownIcon className="z-10 size-5 text-neutral-600 lg:hidden" />
     </button>

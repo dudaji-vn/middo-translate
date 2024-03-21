@@ -19,7 +19,7 @@ module.exports = {
       height: {
         header: 'var(--header-height, 60px)',
 
-        'main-container-height': 'calc(100dvh - var(--header-height, 60px))',
+        'main-container-height': 'calc(100vh - var(--header-height, 60px))',
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -160,5 +160,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],
 };

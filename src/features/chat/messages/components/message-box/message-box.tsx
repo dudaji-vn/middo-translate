@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { ArrowDownIcon } from 'lucide-react';
 import { Button } from '@/components/actions/button';
@@ -19,16 +19,22 @@ import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
 import { TimeDisplay } from '../time-display';
 import { cn } from '@/utils/cn';
-import { useMediaUpload } from '@/components/media-upload';
-
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 export type MessageGroup = {
   messages: Message[];
   lastMessage: Message;
 };
-export const MessageBox = ({ room }: { room: Room }) => {
-  const currentUserId = useAuthStore((s) => s.user?._id);
+export const MessageBox = ({
+  room,
+  isAnonymous,
+  guestId,
+}: {
+  room: Room;
+  isAnonymous?: boolean;
+  guestId?: string;
+}) => {
+  const currentUserId = useAuthStore((s) => s.user?._id || guestId);
   const {
     hasNextPage,
     loadMoreMessages,
@@ -40,6 +46,13 @@ export const MessageBox = ({ room }: { room: Room }) => {
   const { ref, isScrolled } = useScrollDistanceFromTop(0, true);
   const bottomRef = useRef<HTMLDivElement>(null);
   const { scrollIntoView } = useScrollIntoView(bottomRef);
+
+  const [participants, setParticipants] = useState(room.participants);
+
+  useEffect(() => {
+    setParticipants(room.participants);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [room.participants.length]);
 
   const messagesGroup = useMemo(() => {
     const data = messages?.reduce((acc, message) => {
@@ -97,7 +110,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
           alreadyShow = message.readBy ?? [];
           usersReadMessageMap[message._id] = [];
           message.readBy?.forEach((userId) => {
-            const user = room.participants.find(
+            const user = participants.find(
               (u) => u._id === userId && u._id !== currentUserId,
             );
             if (user) {
@@ -107,7 +120,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
         } else {
           message.readBy?.forEach((userId) => {
             if (!alreadyShow.includes(userId)) {
-              const user = room.participants.find(
+              const user = participants.find(
                 (u) => u._id === userId && u._id !== currentUserId,
               );
               if (user) {
@@ -124,7 +137,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
     });
 
     return usersReadMessageMap;
-  }, [currentUserId, messagesGroup, room.participants]);
+  }, [currentUserId, messagesGroup, participants]);
 
   return (
     <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
@@ -154,7 +167,7 @@ export const MessageBox = ({ room }: { room: Room }) => {
                 <TimeDisplay time={group.lastMessage.createdAt} />
               )}
               {!isMe && !isSystem && room.isGroup && (
-                <div className="mb-0.5 pl-7 text-xs text-neutral-600">
+                <div className="break-word-mt mb-0.5 pl-7 text-xs text-neutral-600">
                   <span>{group.lastMessage.sender.name}</span>
                 </div>
               )}
@@ -171,6 +184,8 @@ export const MessageBox = ({ room }: { room: Room }) => {
                     };
                     return (
                       <MessageItem
+                        disabledAllActions={isAnonymous || room.isHelpDesk}
+                        guestId={guestId}
                         pinnedBy={pinnedBy}
                         showAvatar={
                           !isMe &&

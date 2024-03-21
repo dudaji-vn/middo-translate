@@ -9,6 +9,7 @@ import { cn } from '@/utils/cn';
 import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatStore } from '@/features/chat/store';
+import { useTranslation } from 'react-i18next';
 
 export interface TextMessageProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -22,6 +23,7 @@ export const TextMessage = ({
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
+  const {t} = useTranslation('common');
   const { userLanguage, currentUserId } = useAuthStore((state) => ({
     userLanguage: state.user?.language,
     currentUserId: state.user?._id,
@@ -30,7 +32,7 @@ export const TextMessage = ({
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
     if (message.status === 'removed') {
-      setContentDisplay(message.content);
+      setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
       return;
     }
     if (
@@ -56,6 +58,9 @@ export const TextMessage = ({
     message.contentEnglish,
     message.status,
     message.language,
+    message.sender._id,
+    currentUserId,
+    t
   ]);
   return (
     <div

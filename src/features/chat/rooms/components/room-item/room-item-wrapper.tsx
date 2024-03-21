@@ -2,14 +2,15 @@ import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 import { cn } from '@/utils/cn';
 import { useRoomItem } from './room-item';
-import { RoomItemComingCall } from './room-item-coming-call';
 
-export interface RoomItemWrapperProps {}
+export interface RoomItemWrapperProps {
+  isBusinessRoom?: boolean;
+}
 
 export const RoomItemWrapper = (
-  props: RoomItemWrapperProps & PropsWithChildren,
+  { isBusinessRoom, ...props }: RoomItemWrapperProps & PropsWithChildren,
 ) => {
-  const { data, isActive, onClick } = useRoomItem();
+  const { data, isActive, onClick, disabledRedirect } = useRoomItem();
 
   return (
     <div
@@ -18,13 +19,19 @@ export const RoomItemWrapper = (
         isActive ? 'bg-background-darker' : 'bg-transparent hover:bg-[#fafafa]',
       )}
     >
-      <Link
-        onClick={onClick}
-        href={data.link || ''}
-        className="flex w-full items-center gap-3"
-      >
-        {props.children}
-      </Link>
+      {disabledRedirect ? (
+        <div onClick={onClick} className="flex w-full items-center gap-3">
+          {props.children}
+        </div>
+      ) : (
+        <Link
+          onClick={onClick}
+          href={data.link || ''}
+          className="flex w-full items-center gap-3"
+        >
+          {props.children}
+        </Link>
+      )}
     </div>
   );
 };

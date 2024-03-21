@@ -17,6 +17,8 @@ import { useHistoryStore } from '../../stores/history.store';
 import { isEmpty } from 'lodash';
 import { useDebounce } from 'usehooks-ts';
 import { TextToSpeechButton } from '../text-to-speech-button';
+import { useCompare } from '../../context';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 export interface TranslateResultProps {
   result: string;
   languageCode?: string;
@@ -35,25 +37,34 @@ export const TranslateResult = ({
 
   const isMobile = useAppStore((state) => state.isMobile);
   const array = result.split('\n');
+  const { isMatch } = useCompare();
   const { copy } = useTextCopy(result);
   useKeyboardShortcut([SHORTCUTS.TRANSLATED_COPY], () => {
     copy();
   });
+  const {pushWithNoDuplicate} = useHistoryStore();
 
-  const pushHistoryItem = useHistoryStore((state) => state.pushHistoryItem);
-
-  const debouncedSavedResult = useDebounce<string>(result, 2000);
+  const debouncedSavedResult = useDebounce<string>(result, 500);
+  const debounedMatched = useDebounce<boolean>(isMatch, 500);
+  
   useEffect(() => {
-    if (!isEmpty(historyItem) && debouncedSavedResult) {
-      pushHistoryItem({
+    if (
+      !isEmpty(historyItem) &&
+      debouncedSavedResult?.length &&
+      (debounedMatched ||
+        historyItem.src.language === DEFAULT_LANGUAGES_CODE.EN ||
+        historyItem.dest.language === DEFAULT_LANGUAGES_CODE.EN)
+    ) {
+      pushWithNoDuplicate({
         ...historyItem,
         dest: {
           ...historyItem.dest,
           content: debouncedSavedResult,
         },
+        id: new Date().getTime().toString(),
       });
     }
-  }, [debouncedSavedResult]);
+  }, [debouncedSavedResult, debounedMatched]);
 
   return (
     <TranslateEditorWrapper
