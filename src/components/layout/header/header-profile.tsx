@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { HtmlHTMLAttributes, ReactElement, useState } from 'react'
 
-import { ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
+import { Blocks, ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -66,7 +66,7 @@ const HeaderProfile = ({ className, ...props }:
                         </Link>                        
                         <Link href={ROUTE_NAMES.BUSINESS_CONVERSATION}>
                             <DropdownMenuItem className="flex items-center">
-                                <SettingsIcon className="mr-2 size-4" />
+                                <Blocks className="mr-2 size-4" />
                                 <span>{t('HEADER.MIDDO_EXTENSION')}</span>
                             </DropdownMenuItem>
                         </Link>
