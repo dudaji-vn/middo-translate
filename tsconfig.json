@@ -28,6 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/configs/env.private.ts"
-  ],
+, "src/app/(main-layout)/(protected)/business/statistics/error.tsx"  ],
   "exclude": ["node_modules"]
 }
