@@ -41,7 +41,7 @@ const HelpDeskConversation = ({ room,  anonymousUser, isAnonymousPage }: {
     if (!isClient) return null;
 
     return (
-        <div className="w-full max-md:h-main-container-height">
+        <div className="w-full h-main-container-height">
             <ChatBoxProvider room={room}>
                 <div className="flex h-full">
                     <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
