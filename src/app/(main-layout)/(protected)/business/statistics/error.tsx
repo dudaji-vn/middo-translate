@@ -9,6 +9,7 @@ export enum EStatisticErrors {
 }
 
 export default function CustomError({ error }: { error: Error }) {
+  
   if (error.message == EStatisticErrors.NO_ANALYSTIC_DATA)
     return <div className='m-auto py-10'>
       <Typography variant='h4' className='mb-5'>No data found</Typography>
@@ -26,6 +27,7 @@ export default function CustomError({ error }: { error: Error }) {
       </Link>
     </div>
 
+  console.error('Statistic error', error);
   return <div className='m-auto py-10'>
     <Typography variant='h4' className='mb-5'>An error occurred</Typography>
     <Typography className='mb-5'>Please try again later. </Typography>
