@@ -19,10 +19,11 @@ import {
 } from '@/components/media-upload';
 import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useClient from '@/hooks/use-client';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
 
-const HelpDeskConversation = ({ room, anonymousUser, isAnonymousPage }: {
+const HelpDeskConversation = ({ room,  anonymousUser, isAnonymousPage }: {
     room: Room;
     anonymousUser?: User;
     isAnonymousPage?: boolean;
@@ -30,14 +31,21 @@ const HelpDeskConversation = ({ room, anonymousUser, isAnonymousPage }: {
         slugs: string[];
     };
 }) => {
+    const { setRoom } = useBusinessExtensionStore();
     const isClient = useClient()
+    useEffect(() => {
+        if (room) {
+            setRoom(room);
+        }
+    }, [])
     if (!isClient) return null;
+
     return (
         <div className="w-full max-md:h-main-container-height">
             <ChatBoxProvider room={room}>
                 <div className="flex h-full">
                     <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
-                        {!isAnonymousPage && <ChatBoxHeader  />}
+                        {!isAnonymousPage && <ChatBoxHeader />}
                         <MediaUploadProvider>
                             <MediaUploadDropzone>
                                 <MessagesBoxProvider room={room} guestId={anonymousUser?._id} isAnonymous={isAnonymousPage}>
