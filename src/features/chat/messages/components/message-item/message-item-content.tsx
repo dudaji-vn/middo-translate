@@ -47,7 +47,6 @@ export const Content = ({ position, active, message }: ContentProps) => {
       return;
     }
     if (position === 'left') {
-      console.log(` message=> `, room?.participants);
     }
     if (
       message.language === userLanguage ||
