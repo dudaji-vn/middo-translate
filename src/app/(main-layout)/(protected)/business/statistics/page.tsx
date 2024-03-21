@@ -2,8 +2,7 @@ import { Typography } from '@/components/data-display'
 import React from 'react'
 import { BusinessLineChart } from './_components/report-chart/business-line-chart'
 import ReportCards from './_components/report-cards/report-cards'
-import { businessAPI, type AnalyticsType, AnalyticsOptions } from '@/features/chat/business/business.service'
-import Link from 'next/link'
+import { businessAPI, AnalyticsOptions } from '@/features/chat/business/business.service'
 import { StatisticData } from '@/types/business-statistic.type'
 import ChartFilterDropdown from './_components/report-chart/chart-filter-dropdown'
 import TableSearch from './_components/clients-table/table-search'
@@ -11,6 +10,8 @@ import { Client, clientsColumns as columns } from './_components/clients-table/c
 import { DataTable } from '@/components/ui/data-table'
 import DownloadButton from './_components/clients-table/download-button'
 import moment from 'moment'
+import { notFound } from 'next/navigation'
+import { EStatisticErrors } from './error'
 
 
 const formatClientData = (data: Client[]) => {
@@ -23,7 +24,10 @@ const formatClientData = (data: Client[]) => {
   }) || [];
 }
 
-
+export const DEFAULT_CLIENTS_PAGINATION = {
+  limit: 50,
+  currentPage: 1
+}
 const StatisticPage = async ({
   searchParams
 }: {
@@ -31,7 +35,8 @@ const StatisticPage = async ({
     type: string
     fromDate: string
     toDate: string
-
+    limit: number,
+    currentPage: number,
     search: string
   }
 }) => {
@@ -39,6 +44,8 @@ const StatisticPage = async ({
     type,
     fromDate,
     toDate,
+    limit,
+    currentPage,
     search
   } = searchParams;
   const params = type === 'custom' ? {
@@ -52,17 +59,27 @@ const StatisticPage = async ({
     type,
     search
   }
-  const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
-  const clientsData = await businessAPI.getMyClients({ search }).then(formatClientData);
-
-  if (!statiscticData) {
-    return <div className='m-auto py-10'>
-      OPPS! Some thing went wrong!
-      <Link href="/business/statistics" className='underline text-primary-500-main'>
-        Go back
-      </Link>
-    </div>
+  const businessData = await businessAPI.getMyBusiness();
+  if (!businessData) {
+    notFound();
   }
+  const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
+  if (!statiscticData) {
+    throw new Error(EStatisticErrors.NO_ANALYSTIC_DATA);
+  }
+  const pagination = {
+    limit: limit || DEFAULT_CLIENTS_PAGINATION.limit,
+    currentPage: currentPage || DEFAULT_CLIENTS_PAGINATION.currentPage
+  }
+
+  const clientsData = await businessAPI.getMyClients({ search, ...pagination }).then((res) => {
+    return {
+      ...res,
+      items: formatClientData(res.items)
+    }
+  });
+
+
   return (
     <main className='flex flex-col gap-4 w-full p-4'>
       <section className='space-y-4'>
@@ -76,18 +93,18 @@ const StatisticPage = async ({
         <BusinessLineChart data={statiscticData.chart} />
       </section>
       <section className='space-y-4 w-full'>
-        <div className="flex flex-row items-center gap-4  font-medium w-full ">
-          <span className="text-base col-span-1 font-normal  text-primary-500-main">
+        <div className="md:grid-cols-[10%_70%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
+          <span className="text-base font-normal max-md:col-span-6 text-primary-500-main">
             Clients List
           </span>
-          <div className='w-9/12'>
-            <TableSearch className=' w-full' searchParams={searchParams} />
+          <div className='max-md:col-span-5'>
+            <TableSearch className='py-2 w-full' searchParams={searchParams} />
           </div>
-          <div className='w-2/12'>
+          <div className='max-md:col-span-1'>
             <DownloadButton />
           </div>
         </div>
-        <DataTable columns={columns} data={clientsData} />
+        <DataTable columns={columns} data={clientsData.items} />
       </section>
     </main>
   )

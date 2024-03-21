@@ -1,4 +1,6 @@
 import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
+import { Client } from '@/app/(main-layout)/(protected)/business/statistics/_components/clients-table/clients-columns';
+import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/page';
 import { cookies } from 'next/headers';
 
 export type AnalyticsFilterDate = {
@@ -152,9 +154,20 @@ class BusinessAPI {
     }
   }
 
-  async getMyClients({ search = '' }: { search: string }) {
+  async getMyClients({
+    search = '',
+    limit = DEFAULT_CLIENTS_PAGINATION.limit,
+    currentPage = DEFAULT_CLIENTS_PAGINATION.currentPage,
+  }: {
+    search: string;
+    limit?: number;
+    currentPage?: number;
+  }): Promise<{
+    items: Client[];
+    totalPage: number;
+  }> {
     const cookieStore = cookies();
-    const path = `${this.basePath}/help-desk/my-clients?q=${search || ''}`;
+    const path = `${this.basePath}/help-desk/my-clients?q=${search}&limit=${limit}&page=${currentPage}`;
     try {
       const response = await fetch(path, {
         method: 'GET',
@@ -170,10 +183,12 @@ class BusinessAPI {
       return data?.data;
     } catch (error) {
       console.error('Error in get My clients', error);
-      return [];
+      return {
+        items: [],
+        totalPage: 0,
+      };
     }
   }
-
 }
 const businessAPI = new BusinessAPI();
 

@@ -28,6 +28,23 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
   self.addEventListener('notificationclick', (event) => {
     event.notification.close();
-    event.waitUntil(clients.openWindow(event.notification.data.url));
+    // event.waitUntil(clients.openWindow(event.notification.data.url));
+    // open recent tab
+    event.waitUntil(
+      clients
+        .matchAll({ type: 'window', includeUncontrolled: true })
+        .then((clientList) => {
+          for (let i = 0; i < clientList.length; i += 1) {
+            const client = clientList[i];
+            if ('focus' in client) {
+              return client.focus();
+            }
+          }
+          if (clients.openWindow) {
+            return clients.openWindow(event.notification.data.url);
+          }
+          return null;
+        }),
+    );
   });
 });

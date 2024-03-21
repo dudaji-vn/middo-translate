@@ -96,6 +96,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   useEffect(() => {
     if (!open && initialData) { reset(); return }
     if (!isEmpty(initialData)) {
+      setExtensionId(initialData._id);
       setValue('domains', initialData.domains);
       setValue('custom', {
         language: initialData.language,
@@ -280,6 +281,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   </CreateExtensionSectionWrapper>
                   <CreateExtensionSectionWrapper
                     value="copy & paste code"
+                    disabledTrigger={!extensionId}
                   >
                     <Typography className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
                       Copy and paste the code below into your website
