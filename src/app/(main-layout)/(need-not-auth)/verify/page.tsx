@@ -8,12 +8,13 @@ import { Button } from '@/components/form/button';
 import Image from 'next/image';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { verifyEmailService } from '@/services/auth.service';
+import { useTranslation } from 'react-i18next';
 
 export default function Verify() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [statusVerify, setStatusVerify] = useState(''); // success, expired
-
+  const {t} = useTranslation('common')
   useEffect(() => {
     const token = searchParams?.get('token');
     if (!token) {
@@ -46,14 +47,13 @@ export default function Verify() {
             ></Image>
           </div>
           <p className="mt-8 text-center text-[22px] font-medium text-primary">
-            Email verified!
+            {t('VERIFY.SUCCESS.TITLE')}
           </p>
           <p className="mt-5 text-center">
-            Your email has been verified. Now you can sign in with registered
-            email to use all Middo’s features
+            {t('VERIFY.SUCCESS.MESSAGE')}
           </p>
           <Button tag="a" href={ROUTE_NAMES.SIGN_IN}>
-            Go to sign in
+            {t('VERIFY.SUCCESS.GOTO_SIGN_IN')}
           </Button>
         </div>
       </div>
@@ -73,14 +73,13 @@ export default function Verify() {
             ></Image>
           </div>
           <p className="mt-8 text-center text-[22px] font-medium text-primary">
-            Link expired!
+          {t('VERIFY.EXPIRED.TITLE')}
           </p>
           <p className="mt-5 text-center">
-            Your email verification link has expired. Please sign up again to
-            get a new verification link.
+          {t('VERIFY.EXPIRED.MESSAGE')}
           </p>
           <Button tag="a" href={ROUTE_NAMES.SIGN_UP}>
-            Go to sign up
+          {t('VERIFY.EXPIRED.GOTO_SIGN_UP')}
           </Button>
         </div>
       </div>

@@ -4,9 +4,11 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { LayoutGrid } from 'lucide-react';
 import React, { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ActionToggleLayout = () =>  {
   const { layout, setLayout } = useVideoCallStore();
+  const {t} = useTranslation('common')
   const changeLayout = () => {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
   };
@@ -16,7 +18,7 @@ const ActionToggleLayout = () =>  {
       onClick={changeLayout}
     >
       <LayoutGrid />
-      <span className="ml-2">Galery View</span>
+      <span className="ml-2">{t('CONVERSATION.GALERY_VIEW')}</span>
     </DropdownMenuItem>
   );
 }

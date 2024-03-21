@@ -11,13 +11,14 @@ import { LogOutIcon } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
+import { useTranslation } from "react-i18next";
 
 export default function useHandleJoinLeaveCall() {
     const { removeParticipant, participants, peerShareScreen, removePeerShareScreen, addParticipant } = useParticipantVideoCallStore();
     const { room } = useVideoCallStore();
     const { myStream, setTurnOnCamera, setTurnOnMic } = useMyVideoCallStore();
     const { user } = useAuthStore();
-
+    const {t} = useTranslation('common');
     const removeUserLeavedRoom = useCallback((socketId: string) => {
         // use filter because when user share screen leave, need remove both user and share screen
         const items = participants.filter((p: any) => p.socketId === socketId);
@@ -26,7 +27,7 @@ export default function useHandleJoinLeaveCall() {
             removeParticipant(socketId);
         });
         if (items[0]?.user?.name) {
-            toast.success(`${items[0].user.name} left meeting`, { icon: <LogOutIcon size={20} /> });
+            toast.success(t('MESSAGE.SUCCESS.LEFT_MEETING', {name: items[0].user.name}), { icon: <LogOutIcon size={20} /> });
         }
 
         // Remove peer share screen

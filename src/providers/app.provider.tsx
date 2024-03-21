@@ -14,12 +14,14 @@ import SocketProvider from './socket.provider';
 import { Toaster } from 'react-hot-toast';
 import { TooltipProvider } from '@/components/data-display/tooltip';
 import ElectronProvider from './electron.provider';
-
+import {I18nextProvider} from "react-i18next";
+import i18next from '@/lib/i18n/config';
 type Props = {};
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
   return (
     <>
+    <I18nextProvider i18n={i18next}>
       <Toaster
         toastOptions={{
           error: {
@@ -42,6 +44,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
         <SideEffectProvider />
       </Suspense>
       <ModalProvider />
+    </I18nextProvider>
     </>
   );
 };

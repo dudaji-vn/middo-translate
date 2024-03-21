@@ -9,23 +9,22 @@ import { InputSelectLanguage } from '@/components/form/input-select-language';
 import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { addInfoUserService } from '@/services/auth.service';
-import { CreateNewAccountSchema as schema } from '@/configs/yup-form';
 import { uploadImage } from '@/utils/upload-img';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { useRouter } from 'next/navigation';
-import { yupResolver } from '@hookform/resolvers/yup';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'react-i18next';
 
 export default function CreateNewAccount() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState('');
   const { user, setData: setDataAuthStore } = useAuthStore();
-
+  const {t} = useTranslation("common");
   useEffect(() => {
     if (
       user?.avatar &&
@@ -44,7 +43,24 @@ export default function CreateNewAccount() {
       avatar: undefined,
       language: '',
     },
-    resolver: zodResolver(schema),
+    resolver: zodResolver(z
+      .object({
+        name: z.string().min(1, {
+          message: t('MESSAGE.ERROR.REQUIRED'),
+        }),
+        avatar: z
+          .any()
+          .refine((value: any) => value?.length > 0 || value?.size > 0, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .refine((value: any) => value?.size < 3000000, {
+            message: t('MESSAGE.ERROR.FILE_SIZE', {val: '3MB'}),
+          }),
+        language: z.string().min(1, {
+          message: t('MESSAGE.ERROR.REQUIRED'),
+        }),
+      })
+      .optional()),
   });
 
   const {
@@ -93,7 +109,7 @@ export default function CreateNewAccount() {
       {loading && <PageLoading />}
       <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
         <h4 className="relative mb-8 pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
-          Create new account
+          {t('CREATE_ACCOUNT.TITLE')}
         </h4>
         <Form {...form}>
           <form onSubmit={handleSubmit(submit)}>
@@ -106,9 +122,9 @@ export default function CreateNewAccount() {
             ></InputImage>
             <RHFInputField
                   name="name"
-                  formLabel="Name"
+                  formLabel={t('COMMON.NAME')}
                   inputProps={{
-                    placeholder: 'Enter your name',
+                    placeholder: t('COMMON.NAME_PLACEHOLDER'),
                     suffix: (
                       <span className="text-sm text-gray-400">{`${name?.length}/60`}</span>
                     ),
@@ -139,7 +155,7 @@ export default function CreateNewAccount() {
               trigger={trigger}
             ></InputSelectLanguage>
             <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
-            <Button type="submit">Create</Button>
+            <Button type="submit">{t('COMMON.CREATE')}</Button>
           </form>
         </Form>
 

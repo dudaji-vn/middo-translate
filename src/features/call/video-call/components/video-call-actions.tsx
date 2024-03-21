@@ -18,6 +18,7 @@ import DropdownActions from './actions/dropdown-actions';
 import processingStream from '../../utils/processing-stream';
 import getUserStream from '../../utils/get-user-stream';
 import ActionDraw from './actions/action-draw';
+import { useTranslation } from 'react-i18next';
 
 export default function VideoCallActions() {
   const {
@@ -31,7 +32,7 @@ export default function VideoCallActions() {
   const { participants, setStreamForParticipant } =
     useParticipantVideoCallStore();
   const { setLoadingVideo } = useMyVideoCallStore();
-
+  const {t} = useTranslation('common')
   const handleChangeCameraOrMic = ({
     video,
     audio,
@@ -94,7 +95,7 @@ export default function VideoCallActions() {
         setLoadingVideo(false);
       })
       .catch(() => {
-        toast.error('Can not access to your camera or mic');
+        toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         setTurnOnCamera(false);
         setTurnOnMic(false);
         setLoadingVideo(false);

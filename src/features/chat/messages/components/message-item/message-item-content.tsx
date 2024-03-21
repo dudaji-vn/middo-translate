@@ -4,7 +4,7 @@ import {
   wrapperMiddleVariants,
   wrapperVariants,
 } from './message-item-text.style';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { Message } from '../../types';
 import { TriangleSmall } from '@/components/icons/triangle-small';
@@ -15,7 +15,9 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useChatStore } from '@/features/chat/store';
 import { RichTextView } from '@/components/rich-text-view';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -26,23 +28,30 @@ export const Content = ({ position, active, message }: ContentProps) => {
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
+  const { t } = useTranslation('common');
   const { isHelpDesk } = useBusinessNavigationData();
+  const { room } = useBusinessExtensionStore();
   const { userLanguage, currentUserId } = useAuthStore((state) => ({
     userLanguage: state.user?.language,
     currentUserId: state.user?._id,
   }));
 
+  const receiverLanguage = useMemo(() => {
+    return  isHelpDesk ? room?.participants?.find((p) => p.status === 'anonymous')?.language : userLanguage;
+  }, [room, isHelpDesk, userLanguage]);
+
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
     if (message.status === 'removed') {
-      setContentDisplay(message.content);
+      setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
       return;
     }
-
+    if (position === 'left') {
+    }
     if (
       message.language === userLanguage ||
       message.sender._id === currentUserId ||
-      isHelpDesk
+      isHelpDesk && position === 'right'
     ) {
       setContentDisplay(message.content);
       return;
@@ -51,13 +60,13 @@ export const Content = ({ position, active, message }: ContentProps) => {
       const translated = await translateText(
         message.content,
         message?.language || message.sender.language,
-        userLanguage,
+        receiverLanguage
       );
       setContentDisplay(translated);
     };
     translateContent();
   }, [
-    userLanguage,
+    receiverLanguage,
     message.content,
     message.sender.language,
     message.contentEnglish,
@@ -65,6 +74,8 @@ export const Content = ({ position, active, message }: ContentProps) => {
     message.language,
     message.sender._id,
     currentUserId,
+    t,
+    isHelpDesk,
   ]);
   const isMe = message.sender._id === currentUserId;
   return (

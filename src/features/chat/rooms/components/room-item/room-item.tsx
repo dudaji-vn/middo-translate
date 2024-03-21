@@ -20,6 +20,7 @@ import { PinIcon } from 'lucide-react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Avatar } from '@/components/data-display';
 import { useParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface RoomItemProps {
@@ -67,6 +68,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const currentUserId = currentUser?._id;
   const params = useParams();
   const conversationType = params?.conversationType;
+  const isBusinessRoom = !!businessId && !!conversationType;
+  const {t} = useTranslation('common');
   const isBusinessExtensionAvailable = !!businessId;
   const room = useMemo(
     () => {
@@ -173,7 +176,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         </div>
       )}
       <Tooltip
-        title="Join call"
+        title={t('CONVERSATION.JOIN')}
         triggerItem={<RoomItemComingCall roomChatBox={room} />}
       />
     </div>

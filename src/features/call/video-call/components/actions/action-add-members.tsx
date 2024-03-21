@@ -6,18 +6,19 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { UserPlus2 } from 'lucide-react';
 import React, { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ActionAddMembers = () => {
   const { room, isFullScreen, setModalAddUser, isShowModalAddUser } =
     useVideoCallStore();
-
+  const {t} = useTranslation('common')
   useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
     setModalAddUser(!isShowModalAddUser);
   });
 
   return (
     <Tooltip
-      title={'Add members'}
+      title={t('TOOL_TIP.ADD_MEMBER')}
       triggerItem={
         <Button.Icon
           variant="default"

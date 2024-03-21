@@ -157,7 +157,7 @@ export const MessageBox = ({
             'minute',
           );
           const isShowTimeGroup = timeDiff > MAX_TIME_GROUP_DIFF;
-          const isMe = group.lastMessage.sender._id === currentUserId;
+          const isMe = group.lastMessage.sender?._id === currentUserId && currentUserId;
           const isSystem =
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';
@@ -184,7 +184,7 @@ export const MessageBox = ({
                     };
                     return (
                       <MessageItem
-                        disabledAllActions={isAnonymous || room.status === 'archived' || room.status === 'completed'}
+                        disabledAllActions={isAnonymous || room.isHelpDesk}
                         guestId={guestId}
                         pinnedBy={pinnedBy}
                         showAvatar={

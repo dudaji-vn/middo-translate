@@ -7,6 +7,7 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { Video, VideoOff } from 'lucide-react';
 import React, { memo, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface ActionToggleCameraProps {
   handleChangeCameraOrMic: (params: {
@@ -25,7 +26,7 @@ const ActionToggleCamera = ({
       video: !isTurnOnCamera,
     });
   }, [handleChangeCameraOrMic, isTurnOnCamera, setTurnOnCamera]);
-
+  const {t} = useTranslation('common')
   useKeyboardShortcut([SHORTCUTS.TOGGLE_CAMERA], onToggleCamera);
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const ActionToggleCamera = ({
 
   return (
     <Tooltip
-      title={isTurnOnCamera ? 'Turn off camera' : 'Turn on camera'}
+      title={isTurnOnCamera ? t('TOOL_TIP.TURN_OFF_CAMERA') : t('TOOL_TIP.TURN_ON_CAMERA') }
       triggerItem={
         <Button.Icon
           variant="default"

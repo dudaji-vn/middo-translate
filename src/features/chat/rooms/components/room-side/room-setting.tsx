@@ -8,6 +8,7 @@ import { Switch } from '@/components/data-entry';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { useRoomActions } from '../room-actions';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomSettingProps {
   room: Room;
@@ -17,7 +18,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
   const { isMuted } = useIsMutedRoom(_room._id);
   const { onAction } = useRoomActions();
   const [isPinned, setIsPinned] = useState(_room.isPinned);
-  
+  const {t} = useTranslation('common')
   return (
     <div className="mt-0 flex flex-col items-center gap-1">
       <Item
@@ -36,7 +37,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
           />
         }
       >
-        <span> Notification</span>
+        <span> {t('CONVERSATION.NOTIFICATION')}</span>
       </Item>
       <Item
         className="rounded-t-[4px]"
@@ -51,7 +52,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
           />
         }
       >
-        Pin conversation
+        {t('CONVERSATION.PIN_CONVERSATION')}
       </Item>
     </div>
   );

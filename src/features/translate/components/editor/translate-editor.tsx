@@ -19,6 +19,7 @@ import { useTextCopy } from '@/hooks/use-text-copy';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { TextToSpeechButton } from '../text-to-speech-button';
+import { useTranslation } from 'react-i18next';
 
 export interface TranslateEditorProps {
   className?: string;
@@ -50,7 +51,7 @@ export const TranslateEditor = ({
     setTextStyle,
   } = useTranslateStore();
   const textStyles = useAdjustTextStyle(value);
-
+  const {t} = useTranslation('common');
   useEffect(() => {
     setTextStyle(textStyles);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -175,7 +176,7 @@ export const TranslateEditor = ({
           textStyles,
           !value && 'flex-1',
         )}
-        placeholder={isListening ? 'Please speak' : 'Input your text here'}
+        placeholder={isListening ? t('COMMON.PLEASE_SPEAK') : t('COMMON.INPUT_YOUR_TEXT_HERE')}
       />
     </TranslateEditorWrapper>
   );

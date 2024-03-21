@@ -88,7 +88,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
     setValue,
     formState: { errors, isValid, isSubmitting, },
   } = form;
-  
+
   const domains: Array<string> = watch('domains');
   const addingDomain: string = watch('addingDomain');
   const domainsErrMessage = errors?.domains?.message;
@@ -96,6 +96,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   useEffect(() => {
     if (!open && initialData) { reset(); return }
     if (!isEmpty(initialData)) {
+      setExtensionId(initialData._id);
       setValue('domains', initialData.domains);
       setValue('custom', {
         language: initialData.language,
@@ -148,7 +149,6 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const onOpenChange = (open: boolean) => {
     const currentFormData = form.getValues();
     const isSubmited = isEqual(currentFormData, submitedData);
-    console.log('submitedData, currentFormData', submitedData, currentFormData)
     const isChanged = !isEqual(currentFormData.domains, initialData?.domains) || !isEqual(currentFormData.custom, initialCustom);
     if (!open && !isEmpty(initialData) && isChanged && !isSubmited) {
       setOpenConfirmDialog(true);
@@ -179,7 +179,10 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   collapsible
                   value={accordionValue}
                   className="w-full transition-all duration-500 flex flex-col justify-center"
-                  onValueChange={(value) => setAccordionValue(value as AccordionValue)}
+                  onValueChange={(value) => {
+                    setAccordionValue(value as AccordionValue)
+                  }
+                  }
                 >
                   <CreateExtensionSectionWrapper
                     value="add domain"
@@ -256,6 +259,9 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                     accordionContentProps={{
                       className: 'px-0'
                     }}
+                    onTriggerClick={() => {
+                      trigger('domains');
+                    }}
                   >
                     <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>
                       <div className='w-1/3 divide-y divide-neutral-50'>
@@ -281,6 +287,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   </CreateExtensionSectionWrapper>
                   <CreateExtensionSectionWrapper
                     value="copy & paste code"
+                    disabledTrigger={!extensionId}
                   >
                     <Typography className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
                       Copy and paste the code below into your website

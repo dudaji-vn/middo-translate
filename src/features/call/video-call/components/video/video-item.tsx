@@ -10,6 +10,7 @@ import VideoItemAvatar from './components/video-item-avatar';
 import ExpandVideo from './components/expand-video';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemText from './components/video-item-text';
+import { useTranslation } from 'react-i18next';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -23,6 +24,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const { isLoadingVideo } = useMyVideoCallStore();
   const { isTalk } = useAudioLevel(streamVideo);
   const { isFullScreen } = useVideoCallStore();
+  const {t} = useTranslation('common')
 
   return (
     <section

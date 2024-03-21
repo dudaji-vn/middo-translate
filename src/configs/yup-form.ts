@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import {
   DOMAIN_PATTERN,
-  PASSWORD_PARTTERN,
+  PASSWORD_PATTERN,
   PHONE_PATTERN,
 } from './regex-pattern';
 import { z } from 'zod';
@@ -51,7 +51,7 @@ export const RegisterSchema = yup
         message: 'Password must be at least 8 characters!',
       })
       .matches(
-        PASSWORD_PARTTERN,
+        PASSWORD_PATTERN,
         'Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!',
       ),
     confirmPassword: yup
@@ -97,7 +97,7 @@ export const ResetPasswordSchema = yup
         message: 'Password must be at least 8 characters!',
       })
       .matches(
-        PASSWORD_PARTTERN,
+        PASSWORD_PATTERN,
         'Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!',
       ),
     confirmPassword: yup
@@ -167,7 +167,9 @@ export const createExtensionSchema = z.object({
 });
 
 export const createGuestInfoSchema = z.object({
-  name: z.string().min(1, {}),
+  name: z.string().min(1, {}).max(50, {
+    message: 'Name must be less than 50 characters!',
+  }),
   email: z.string().email({
     message: 'Please enter a valid email address!',
   }),
@@ -194,7 +196,7 @@ export const changePasswordSchema = z
       .min(8, {
         message: 'Password must be at least 8 characters!',
       })
-      .regex(PASSWORD_PARTTERN, {
+      .regex(PASSWORD_PATTERN, {
         message:
           'Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!',
       }),

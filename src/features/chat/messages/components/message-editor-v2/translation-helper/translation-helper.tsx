@@ -9,10 +9,11 @@ import { translateText } from '@/services/languages.service';
 import { Editor } from '@tiptap/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PenIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { useMessageEditor } from '..';
 import { RichTextInput } from '../rich-text-input';
+import { useTranslation } from 'react-i18next';
 export interface TranslationHelperProps {}
 
 export const TranslationHelper = (props: TranslationHelperProps) => {
@@ -29,7 +30,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
     setContentEnglish,
     userMentions,
   } = useMessageEditor();
-
+  const { t } = useTranslation('common');
   const suggestions = userMentions.map(
     (participant): MentionSuggestion => ({
       id: participant._id,
@@ -72,6 +73,13 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
     !isContentEmpty &&
     srcLang !== DEFAULT_LANGUAGES_CODE.EN;
 
+  const confirmButtonId = useId();
+
+  const handleEnter = () => {
+    const confirmButton = document.getElementById(confirmButtonId);
+    confirmButton?.click();
+  };
+
   return (
     <AnimatePresence mode="wait">
       {showHelper && (
@@ -87,7 +95,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
               <div className="flex items-center gap-3 p-3">
                 <CircleFlag countryCode="gb" height="20" width="20" />
                 <span className="text-sm font-medium text-neutral-600">
-                  EN - Translate tool
+                  EN - {t('CONVERSATION.TRANSLATE_TOOL')}
                 </span>
                 {translating && <Spinner className="h-4 w-4 text-primary" />}
                 <Switch
@@ -106,6 +114,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                     >
                       <RichTextInput
                         autoFocus
+                        onSubmit={handleEnter}
                         onCreated={(editor) => setEditor(editor)}
                         className="max-h-[200px] w-full overflow-y-auto"
                         initialContent={contentEnglish}
@@ -120,9 +129,10 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                         variant="ghost"
                         color="default"
                       >
-                        Cancel
+                        {t('COMMON.CANCEL')}
                       </Button>
                       <Button
+                        id={confirmButtonId}
                         shape="square"
                         size="xs"
                         type="button"
@@ -130,7 +140,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                         variant="default"
                         color="primary"
                       >
-                        Save change
+                        {t('COMMON.SAVE_CHANGE')}
                       </Button>
                     </div>
                   </div>
@@ -144,7 +154,7 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
                         />
                       ) : (
                         <p className="italic text-neutral-300">
-                          Stop typing to see translation...
+                          {t('CONVERSATION.STOP_TYPE')}
                         </p>
                       )}
                     </div>

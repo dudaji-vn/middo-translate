@@ -9,6 +9,7 @@ import { MessageEditorToolbarFile } from './message-editor-toolbar-file';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export interface MessageEditorToolbarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,6 +22,7 @@ export const MessageEditorToolbar = forwardRef<
   HTMLDivElement,
   MessageEditorToolbarProps
 >(({ disableMedia = false, shrink = false, onExpand, ...props }, ref) => {
+  const {t} = useTranslation('common')
   return (
       <div ref={ref} {...props} className={cn('flex-rows flex  items-end  max-md:pb-[1px] pb-[5px]')}>
           {shrink ? (
@@ -35,12 +37,12 @@ export const MessageEditorToolbar = forwardRef<
           ) : (
             <>
               <Tooltip
-                title="Upload files"
+                title={t('TOOL_TIP.ATTACHMENT')}
                 triggerItem={<MessageEditorToolbarFile />}
               />
 
               <Tooltip
-                title="Emojis"
+                title={t('TOOL_TIP.EMOJI')}
                 triggerItem={<MessageEditorToolbarEmoji />}
               />
             </>

@@ -119,7 +119,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
       if (images.length) {
         const localImageMessage = createLocalMessage({
-          sender: currentUser!,
+          sender: currentUser! || guest!,
           media: images,
         });
         addMessage(localImageMessage);
@@ -128,7 +128,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       if (documents.length) {
         const localDocumentMessages = documents.map((doc) => {
           const localDocumentMessage = createLocalMessage({
-            sender: currentUser!,
+            sender: currentUser! || guest!,
             media: [doc],
           });
           addMessage(localDocumentMessage);
@@ -140,7 +140,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       if (videos.length) {
         const localVideoMessages = videos.map((video) => {
           const localVideoMessage = createLocalMessage({
-            sender: currentUser!,
+            sender: currentUser! || guest!,
             media: [video],
           });
           addMessage(localVideoMessage);
@@ -171,6 +171,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         roomId: room._id,
         clientTempId: localImageMessageWaiting._id,
         media: imagesUploaded,
+        ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
       });
       setLocalImageMessageWaiting(null);
 
@@ -204,6 +205,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
             roomId: room._id,
             clientTempId: message._id,
             media: documentsUploaded[index],
+            ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
           });
         }),
       );
@@ -237,6 +239,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
             roomId: room._id,
             clientTempId: message._id,
             media: videosUploaded[index],
+            ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
           });
         }),
       );
@@ -263,12 +266,6 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           userMentions={room.isGroup ? room.participants : []}
           scrollId="inbox-list"
           onSubmitValue={handleSubmit}
-          disabled={room.status === 'archived' || room.status === 'completed'}
-          disabledMessage={
-            room.status === 'archived'
-              ? 'This conversation is archived'
-              : 'This conversation is completed'
-          }
         />
       </div>
     );

@@ -10,6 +10,7 @@ import {
 } from '@/components/feedback';
 
 import { useDeleteConversation } from '../hooks/use-delete-conversation';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomModalDeleteProps {
   id: string;
@@ -18,6 +19,7 @@ export interface RoomModalDeleteProps {
 
 export const RoomModalDelete = (props: RoomModalDeleteProps) => {
   const { mutateAsync } = useDeleteConversation();
+  const {t} = useTranslation('common')
   return (
     <AlertDialog
       defaultOpen
@@ -29,14 +31,13 @@ export const RoomModalDelete = (props: RoomModalDeleteProps) => {
     >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete conversation?</AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.DELETE_CONVERSATION.TITLE')}</AlertDialogTitle>
           <AlertDialogDescription>
-            You will lose all of your messages and files. Others still can see
-            your messages. Are you sure to delete?
+          {t('MODAL.DELETE_CONVERSATION.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
@@ -44,7 +45,7 @@ export const RoomModalDelete = (props: RoomModalDeleteProps) => {
               mutateAsync(props.id);
             }}
           >
-            Delete
+            {t('COMMON.DELETE')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

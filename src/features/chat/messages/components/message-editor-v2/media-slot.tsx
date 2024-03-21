@@ -76,7 +76,14 @@ const MediaItem = ({ file }: { file: SelectedFile }) => {
             className="rounded-lg object-cover"
           />
         );
-      case 'document':
+      case 'video':
+        return (
+          <div className="relative h-full">
+            <video src={file.url} className="h-full w-full" />
+            <PlayCircleIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white" />
+          </div>
+        );
+      default:
         return (
           <div className="flex h-full w-full items-center justify-center rounded-xl border">
             <div className="flex p-2">
@@ -98,15 +105,6 @@ const MediaItem = ({ file }: { file: SelectedFile }) => {
             </div>
           </div>
         );
-      case 'video':
-        return (
-          <div className="relative h-full">
-            <video src={file.url} className="h-full w-full" />
-            <PlayCircleIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white" />
-          </div>
-        );
-      default:
-        return null;
     }
   }, [file]);
   return ItemComp;

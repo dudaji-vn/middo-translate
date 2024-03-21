@@ -22,6 +22,7 @@ import { useAddMembers } from '../../hooks/use-add-members';
 import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts';
 import { useSearch } from '@/hooks/use-search';
+import { useTranslation } from 'react-i18next';
 
 export interface RoomAddMemberProps {}
 
@@ -34,6 +35,7 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const { mutate } = useAddMembers();
   const user = useAuthStore((state) => state.user);
+  const {t} = useTranslation('common');
   const filteredUsers = useMemo(() => {
     return data?.filter((u) => {
       if (u._id === user?._id) return false;
@@ -76,11 +78,11 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Add member</AlertDialogTitle>
+            <AlertDialogTitle>{t('MODAL.ADD_USER.TITLE')}</AlertDialogTitle>
             <div className={cn(selectedUsers.length > 0 && 'border-b pb-4')}>
               <SearchInput
                 onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search"
+                placeholder={t('COMMON.SEARCH')}
                 autoFocus
               />
               <SelectedList
@@ -98,12 +100,12 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
             </div>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="mr-4">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="mr-4">{t('COMMON.CANCEL')}</AlertDialogCancel>
             <AlertDialogAction
               disabled={selectedUsers.length === 0}
               onClick={handleSubmit}
             >
-              Add
+              {t('COMMON.ADD')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

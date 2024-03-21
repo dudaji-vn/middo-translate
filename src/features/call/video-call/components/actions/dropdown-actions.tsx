@@ -18,6 +18,7 @@ import { useVideoCallContext } from '@/features/call/context/video-call-context'
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import { SHORTCUTS } from '@/types/shortcuts';
 import  isEqual from 'lodash/isEqual';
+import { useTranslation } from 'react-i18next';
 
 
 export default function DropdownActions() {
@@ -48,7 +49,7 @@ export default function DropdownActions() {
       layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW
     );
   }, [haveShareScreen, isFullScreen, isPinShareScreen, layout]);
-
+  const {t} = useTranslation('common')
   const onDoodle = () => {
     if (!isDoodle && isMeDoole) return;
     // Start doodle
@@ -106,7 +107,7 @@ export default function DropdownActions() {
         {room.type === CALL_TYPE.GROUP && (
           <DropdownMenuItem onClick={() => setModalAddUser(true)}>
             <UserPlus2 />
-            <span className="ml-2">Add member</span>
+            <span className="ml-2">{t('CONVERSATION.ADD_MEMBER')}</span>
           </DropdownMenuItem>
         )}
         <ActionToggleCaption />

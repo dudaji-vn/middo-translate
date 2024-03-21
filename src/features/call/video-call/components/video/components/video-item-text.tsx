@@ -3,11 +3,13 @@ import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 interface VideoItemTextProps {
   participant?: ParticipantInVideoCall;
 }
 export default function VideoItemText({ participant }: VideoItemTextProps) {
   const { isPinDoodle, layout, isFullScreen } = useVideoCallStore();
+  const {t} = useTranslation('common')
   if (!participant) return null;
   return (
     <>
@@ -23,8 +25,8 @@ export default function VideoItemText({ participant }: VideoItemTextProps) {
         )}
       >
         <p className="truncate px-1 text-sm leading-snug text-white">
-          {participant.isMe ? 'You' : participant?.user?.name || ''}
-          {participant?.isShareScreen ? '  (Screen)' : ''}
+          {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
+          {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
         </p>
       </div>
       {/* Text Bottom */}
@@ -32,8 +34,8 @@ export default function VideoItemText({ participant }: VideoItemTextProps) {
         <div className="pointer-events-none absolute bottom-1 z-10 w-full px-1">
           <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
             <p className="truncate px-1 text-sm leading-snug text-white">
-              {participant.isMe ? 'You' : participant?.user?.name || ''}
-              {participant?.isShareScreen ? '  (Screen)' : ''}
+              {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
+              {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
             </p>
           </div>
         </div>

@@ -1,25 +1,28 @@
-
+'use client';
 import { ROUTE_NAMES } from '@/configs/route-name'
 import { cn } from '@/utils/cn'
 import Image from 'next/image'
-import Link, { LinkProps } from 'next/link'
+import Link from 'next/link'
 import React, { HtmlHTMLAttributes, ReactElement, useState } from 'react'
 
-import { Blocks, ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
+import { ChevronDownIcon, LogOutIcon, SettingsIcon } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-    Typography,
 } from '@/components/data-display';
 
 import { Avatar } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store'
 import { useAppStore } from '@/stores/app.store'
+import { InputSelectLanguage } from '@/components/form/input-select-language'
+import HeaderSelectLanguage from './header-select-language'
+import { useTranslation } from 'react-i18next'
 const HeaderProfile = ({ className, ...props }:
     HtmlHTMLAttributes<HTMLDivElement>
 ) => {
+    const { t } = useTranslation("common");
     const [isOpenDropdown, setOpenDropdown] = useState(false);
     const { isAuthentication, user } = useAuthStore();
     const setShowConfirmLogout = useAppStore(
@@ -30,6 +33,7 @@ const HeaderProfile = ({ className, ...props }:
     };
     return (
         <div className={cn("flex flex-1 items-center justify-end", className)} {...props}>
+            <HeaderSelectLanguage className='mr-2' />
             {isAuthentication && user ? (
                 <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
                     <DropdownMenuTrigger>
@@ -57,13 +61,19 @@ const HeaderProfile = ({ className, ...props }:
                         <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
                             <DropdownMenuItem className="flex items-center">
                                 <SettingsIcon className="mr-2 size-4" />
-                                <span>Account setting</span>
+                                <span>{t('HEADER.ACCOUNT_SETTING')}</span>
+                            </DropdownMenuItem>
+                        </Link>                        
+                        <Link href={ROUTE_NAMES.BUSINESS_CONVERSATION}>
+                            <DropdownMenuItem className="flex items-center">
+                                <SettingsIcon className="mr-2 size-4" />
+                                <span>{t('HEADER.MIDDO_EXTENSION')}</span>
                             </DropdownMenuItem>
                         </Link>
 
                         <DropdownMenuItem className="flex items-center" onClick={signOut}>
                             <LogOutIcon className="mr-2 size-4" />
-                            <span> Sign out</span>
+                            <span> {t('HEADER.SIGN_OUT')}</span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
@@ -80,13 +90,12 @@ const HeaderProfile = ({ className, ...props }:
                         width={500}
                         height={500}
                     />
-
                     <span
                         className={
                             'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
                         }
                     >
-                        Sign in
+                        {t('HEADER.SIGN_IN')}
                     </span>
                 </Link>
             )}

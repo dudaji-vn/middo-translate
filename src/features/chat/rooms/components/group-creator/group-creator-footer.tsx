@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button } from '@/components/actions';
 import { User } from '@/features/users/types';
+import { useTranslation } from 'react-i18next';
 
 const MIN_GROUP_MEMBERS_EXCEPT_SELF = 2;
 
@@ -14,6 +15,7 @@ export const GroupCreateFooter = ({
   createLoading,
   selectedUsers,
 }: GroupCreateFooterProps) => {
+  const {t} = useTranslation('common')
   return (
     <AnimatePresence>
       {selectedUsers.length > 0 && (
@@ -32,7 +34,7 @@ export const GroupCreateFooter = ({
             type="submit"
             className="w-full"
           >
-            Create
+            {t('COMMON.CREATE')}
           </Button>
         </motion.div>
       )}

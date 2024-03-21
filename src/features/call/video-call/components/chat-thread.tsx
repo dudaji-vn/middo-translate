@@ -8,6 +8,7 @@ const Discussion = dynamic(() => import('@/features/chat/discussion/components/d
 import { useAppStore } from '@/stores/app.store';
 import { useVideoCallStore } from '../../store/video-call.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { useTranslation } from 'react-i18next';
 
 export default function ChatThread({ className }: { className?: string }) {
   const {
@@ -19,7 +20,7 @@ export default function ChatThread({ className }: { className?: string }) {
     setMessageId,
   } = useVideoCallStore();
   const isMobile = useAppStore((state) => state.isMobile);
-
+  const {t} = useTranslation('common')
   const [isShowAlert, setShowAlert] = useState(true);
   useEffect(() => {
     if (messageId) return;
@@ -45,10 +46,10 @@ export default function ChatThread({ className }: { className?: string }) {
       <div className="flex h-full w-full flex-col border-l border-neutral-50">
         <div className="flex h-[53px] w-full items-center gap-2 border-b p-3 font-semibold text-primary">
           <MessageSquareQuote className="size-4" />
-          <span>Discussion</span>
+          <span>{t('CONVERSATION.DISCUSSION')}</span>
           <div className="ml-auto">
             <Tooltip
-              title={'Close Discussion'}
+              title={t('TOOL_TIP.CLOSE_DISCUSSION')}
               contentProps={{
                 className: 'text-neutral-800',
               }}
@@ -72,7 +73,7 @@ export default function ChatThread({ className }: { className?: string }) {
                 <div className="flex items-center text-neutral-600">
                   <Lightbulb className="h-4 w-4 text-neutral-400" />
                   <p className="ml-1 flex-1">
-                    Discussion created by Middo Call
+                    {t('CONVERSATION.TITLE_DISCUSSION_CALL')}
                   </p>
                   <X
                     className="h-4 w-4 cursor-pointer text-neutral-400"
@@ -80,9 +81,7 @@ export default function ChatThread({ className }: { className?: string }) {
                   />
                 </div>
                 <p className="mt-2 text-sm font-light text-neutral-400">
-                  Every messages, files and links were sent in this discussion
-                  have been saved in this group’s conversation. Members can
-                  access it even after the call is done.
+                {t('CONVERSATION.CONTENT_DISCUSSION_CALL')}
                 </p>
               </div>
             </div>

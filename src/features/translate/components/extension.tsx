@@ -7,6 +7,7 @@ import { HistoryIcon, SparklesIcon } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect,  useState } from 'react';
 import { useHistoryStore } from '../stores/history.store';
+import { useTranslation } from 'react-i18next';
 export interface ExtensionProps { }
 
 // TODO: Add shortcut to open history and phrases after the feature is implemented
@@ -18,6 +19,7 @@ export const Extension = (props: ExtensionProps) => {
   const { historyListItems } = useHistoryStore();
   const [showHistory, setShowHistory] = useState(false);
   const params = new URLSearchParams(searchParams as URLSearchParams);
+  const {t} = useTranslation('common');
   const tab = searchParams?.get('tab');
   const onCloseTab = useCallback(() => {
     params.delete('tab');
@@ -64,7 +66,7 @@ export const Extension = (props: ExtensionProps) => {
           isHightlighted(TranslationTab.HISTORY),
         )}
       >
-        History
+        {t('TRANSLATION.HISTORY')}
       </Button>
       <Button
         shape="square"
@@ -74,7 +76,7 @@ export const Extension = (props: ExtensionProps) => {
         onClick={onClickPhrases}
         className={cn('rounded-2xl', isHightlighted(TranslationTab.PHRASES))}
       >
-        Phrases
+        {t('TRANSLATION.PHRASES')}
       </Button>
     </div>
   );

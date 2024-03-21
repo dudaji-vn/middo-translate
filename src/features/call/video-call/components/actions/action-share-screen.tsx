@@ -7,15 +7,17 @@ import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useTranslation } from 'react-i18next';
 
 const ActionShareScreen = () => {
   const { isShareScreen } = useMyVideoCallStore();
   const { handleShareScreen } = useVideoCallContext();
   const haveShareScreen = useHaveShareScreen();
+  const {t} = useTranslation('common')
   useKeyboardShortcut([SHORTCUTS.START_STOP_SCREEN_SHARING], handleShareScreen);
   return (
     <Tooltip
-      title={isShareScreen ? 'Stop sharing screen' : 'Share screen'}
+      title={isShareScreen ? t('TOOL_TIP.STOP_SHARE_SCREEN') : t('TOOL_TIP.SHARE_SCREEN')}
       triggerItem={
         <Button.Icon
           variant="default"

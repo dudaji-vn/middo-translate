@@ -5,11 +5,12 @@ import { Phone, PhoneOff } from 'lucide-react';
 import { useVideoCallStore } from '../../store/video-call.store';
 import { useAppStore } from '@/stores/app.store';
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ReceiveVideoCallActions = () => {
   const { requestCall, removeRequestCall, setRoom } = useVideoCallStore();
   const isMobile = useAppStore((state) => state.isMobile);
-
+  const {t} = useTranslation('common')
   const declineCall = () => {
     removeRequestCall();
   };
@@ -28,7 +29,7 @@ const ReceiveVideoCallActions = () => {
         startIcon={<PhoneOff className="m-0 md:mr-1" />}
         className="p-7 md:flex-1 md:px-3 md:py-2"
       >
-        <span className="hidden md:inline-block">Decline</span>
+        <span className="hidden md:inline-block">{t('COMMON.DECLINE')}</span>
       </Button>
       <Button
         onClick={acceptCall}
@@ -39,7 +40,7 @@ const ReceiveVideoCallActions = () => {
         startIcon={<Phone className="m-0 md:mr-1" />}
         className="p-7 md:flex-1 md:px-3 md:py-2"
       >
-        <span className="hidden md:inline-block">Accept</span>
+        <span className="hidden md:inline-block">{t('COMMON.ACCEPT_CALL')}</span>
       </Button>
     </div>
   );

@@ -5,11 +5,13 @@ import { SOCKET_CONFIG } from '@/configs/socket';
 import { useVideoCallStore } from '../../../store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
+import { useTranslation } from 'react-i18next';
 
 export const ConfirmStopDoodle = () => {
     const { confirmStopDoodle, setConfirmStopDoodle, setDoodle, setDoodleImage, setDrawing, setMeDoodle } = useVideoCallStore();
     const { user } = useAuthStore();
     const { setMyOldDoodle } = useMyVideoCallStore();
+    const {t} = useTranslation('common');
     const handleStop = () => {
         setMeDoodle(false);
         setMyOldDoodle(null)
@@ -21,22 +23,20 @@ export const ConfirmStopDoodle = () => {
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
-                        Stop doodle?
+                        {t('MODAL.STOP_DOODLE.TITLE')}
                     </AlertDialogTitle>
                     <AlertDialogDescription>
-                        <span>
-                            Other&apos;s drew will be wiped away? Are you sure to stop doodle?
-                        </span>
+                        <span>{t('MODAL.STOP_DOODLE.DESCRIPTION')}</span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                    <AlertDialogCancel className="sm:mr-3">Cancel</AlertDialogCancel>
+                    <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
                     <AlertDialogAction
                         type="submit"
                         className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
                         onClick={handleStop}
                     >
-                        Stop
+                        {t('COMMON.STOP')}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

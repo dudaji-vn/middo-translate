@@ -13,6 +13,7 @@ import { getCountryCode, getLanguageByCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import { getFlagEmoji } from '@/utils/get-flag-emoji';
+import { useTranslation } from 'react-i18next';
 
 type TDisplayedItem = {
   languageCode: string;
@@ -29,13 +30,14 @@ const DisplayedItem = ({
 }: TDisplayedItem) => {
   const flag = getCountryCode(languageCode);
   const language = getLanguageByCode(languageCode);
+  const {t} = useTranslation('common');
   return (
     <div {...props} className={cn("flex w-full flex-col py-[6px] ", props.className)}>
       <div className="flex flex-row items-start justify-between ">
         <div className='flex-col'>
           <Typography className="flex flex-row items-center gap-2 text-[14px] text-sm font-light leading-[18px] text-neutral-400">
             <CircleFlag countryCode={flag as string} className="h-4 w-4" />
-            {language?.name}
+            {t('LANGUAGE.' + language?.name)}
           </Typography>
           <Text
             value={content}

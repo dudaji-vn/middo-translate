@@ -3,13 +3,14 @@ import { useRoomSidebarTabs } from './room-side/room-side-tabs/room-side-tabs.ho
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { useCallback } from 'react';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useTranslation } from 'react-i18next';
 
 export interface ViewPinButtonProps {}
 
 export const ViewPinButton = (props: ViewPinButtonProps) => {
   const { toggleTab, currentSide } = useRoomSidebarTabs();
   const isShowPinned = currentSide === 'pinned';
-
+  const {t} = useTranslation('common');
   const viewPinnedMessages = useCallback(() => {
     toggleTab('pinned');
   }, [toggleTab]);
@@ -25,7 +26,7 @@ export const ViewPinButton = (props: ViewPinButtonProps) => {
       variant={isShowPinned ? 'default' : 'ghost'}
       className={'ml-auto'}
     >
-      View
+      {t('COMMON.VIEW')}
     </Button>
   );
 };

@@ -11,11 +11,13 @@ import { useAppStore } from '@/stores/app.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { useTranslation } from 'react-i18next';
 
 const ActionChat = () => {
   const [newCount, setNewCount] = useState(0);
   const { isFullScreen, isShowChat, setShowChat, messageId } =
     useVideoCallStore();
+  const {t} = useTranslation('common')
   const isMobile = useAppStore((state) => state.isMobile);
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -49,7 +51,7 @@ const ActionChat = () => {
   return (
     <div className={cn('relative', !isFullScreen && 'hidden')}>
       <Tooltip
-        title={isShowChat ? 'Hide chat' : 'Show chat'}
+        title={isShowChat ? t('TOOL_TIP.HIDE_CHAT') : t('TOOL_TIP.SHOW_CHAT')}
         triggerItem={
           <Button.Icon
             variant="default"

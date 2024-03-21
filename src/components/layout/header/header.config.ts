@@ -6,11 +6,11 @@ export type NavItem = {
 };
 const items: NavItem[] = [
   {
-    name: 'Translation',
+    name: 'HEADER.TRANSLATION',
     href: ROUTE_NAMES.ROOT,
   },
   {
-    name: 'Conversation',
+    name: 'HEADER.CONVERSATION',
     href: ROUTE_NAMES.ONLINE_CONVERSATION,
   },
 ];
