@@ -7,7 +7,7 @@ import { Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'
 import { InputSelectLanguage } from '@/components/form/input-select-language'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/navigation'
-import { Form } from '@/components/ui/form'
+import { Form, FormMessage } from '@/components/ui/form'
 import { createGuestInfoSchema } from '@/configs/yup-form'
 import { User } from '@/features/users/types'
 import useClient from '@/hooks/use-client'
@@ -55,7 +55,7 @@ const StartAConversation = ({ businessData }: {
         defaultValues: {
             name: '',
             email: '',
-            language: businessData.language,
+            language: '',
         },
         resolver: zodResolver(createGuestInfoSchema),
     });
