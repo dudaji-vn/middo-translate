@@ -5,6 +5,7 @@ import { User } from '@/features/users/types';
 import { Avatar } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { useClickReplyMessage } from '../../hooks/use-click-reply-message';
+import { useTranslation } from 'react-i18next';
 
 export interface MessageItemReplyProps {
   messageId: string;
@@ -20,6 +21,7 @@ export const MessageItemReply = ({
     queryFn: () => messageApi.getReplies(messageId),
     enabled: !!messageId,
   });
+  const {t} = useTranslation('common');
   const { onClickReplyMessage } = useClickReplyMessage();
   const uniqueUsers = useMemo(() => {
     if (!messages) return [];
@@ -58,7 +60,7 @@ export const MessageItemReply = ({
         ))}
         <div className="px-1">
           <span className="text-sm text-primary">
-            {messages?.length} {messages?.length > 1 ? 'replies' : 'reply'}
+          {messages.length > 1 ? t('CONVERSATION.REPLIES', {num: messages.length}) : t('CONVERSATION.REPLY', {num: messages.length})}
           </span>
         </div>
       </div>
