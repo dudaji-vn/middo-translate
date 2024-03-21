@@ -56,7 +56,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           color="default"
           size="xs"
           variant={'ghost'}
-          className={cn('md:hidden', isBusiness ? '' : 'md:hidden')}
+          className={cn('md:hidden', isBusiness ?'md:hidden': 'hidden')}
         >
           <Menu />
         </Button.Icon>
