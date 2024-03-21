@@ -26,7 +26,7 @@ export const Header = (props: Props) => {
       isHelpDesk ? 'flex-row justify-start w-full' : '')}>
       <HeaderNav className={hideNavigation ? 'hidden' : ''} />
       <Typography className={isHelpDesk ? ' text-neutral-600 text-xs min-w-14' : 'hidden'}>Power by</Typography>
-      <Link href={ROUTE_NAMES.ROOT} className={cn("block w-[60px] mx-auto",
+      <Link href={isHelpDesk ? '#' : ROUTE_NAMES.ROOT} className={cn("block w-[60px] mx-auto",
         isBusiness ? 'flex divide-x-[2px] flex-row items-center gap-2 divide-neutral-900' : '',
         isHelpDesk ? 'flex flex-row mx-0 justify-start items-center' : '')}>
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
