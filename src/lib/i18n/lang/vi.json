@@ -111,6 +111,7 @@
     },
     "LANGUAGE": {
         "Detected": "Phát hiện",
+        "DETECT_LANGUAGE": "Phát hiện ngôn ngữ",
         "DETECTED_LANGUAGE": "Ngôn ngữ phát hiện",
         "Language detect": "Phát hiện ngôn ngữ",
         "Afrikaans": "Afrikaans",
@@ -295,6 +296,7 @@
         "SEND_PHOTO": "đã gửi 1 ảnh",
         "SEND_PHOTOS": "đã gửi {{num}} ảnh",
         "SEND_FILE": "Tệp đính kèm",
+        "SEND_VIDEO": "đã gửi 1 video",
         "FORWARD_MESSAGE": "Chuyển tiếp tin nhắn",
         "FORWARD_FROM": "Chuyển tiếp từ",
         "FORWARD_FROM_CHANNEL": "trong {{name}}",
@@ -308,7 +310,10 @@
         "ADDED": "{{name}} đã thêm {{members}}",
         "REMOVED": "{{name}} đã xoá {{members}}",
         "REMOVED_GROUP_NAME": "{{name}} đã xoá tên nhóm",
-        "SENDING": "Đang gửi"
+        "SENDING": "Đang gửi",
+        "REPLY": "{{num}} phản hồi",
+        "REPLIES": "{{num}} phản hồi",
+        "FORWARDED_MESSAGE": "đã chuyển tiếp một tin nhắn"
     },
     "NOTIFICATION": {
         "MESSAGE": "Middo cần quyền của bạn để ",

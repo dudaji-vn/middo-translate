@@ -14,12 +14,14 @@ import { MessageItem } from '../../messages/components/message-item';
 import { useDiscussion } from './discussion';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../rooms/api';
+import { useTranslation } from 'react-i18next';
 
 export interface RepliesBoxProps {}
 
 export const RepliesBox = () => {
   const { replies: messages, message } = useDiscussion();
   const currentUserId = useAuthStore((s) => s.user?._id);
+  const {t} = useTranslation('common');
   const { data: room } = useQuery({
     queryKey: ['room', message.room?._id],
     queryFn: () => roomApi.getRoom(message.room?._id!),
@@ -120,8 +122,7 @@ export const RepliesBox = () => {
         <div className="relative flex justify-center">
           <div className="absolute top-1/2 h-[1px] w-[95%] bg-neutral-200 "></div>
           <div className="relative bg-white p-1 px-3 text-sm text-neutral-400">
-            {messages.length}
-            {messages.length > 1 ? ' replies' : ' reply'}
+            {messages.length > 1 ? t('CONVERSATION.REPLIES', {num: messages.length}) : t('CONVERSATION.REPLY', {num: messages.length})}
           </div>
         </div>
       )}

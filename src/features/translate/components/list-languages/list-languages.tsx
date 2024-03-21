@@ -107,7 +107,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
                   })}
                 </>
               )}
-              <Title>{t('COMMON.ALL_LANGUAGE')}</Title>
+              <Title>{t('COMMON.ALL_LANGUAGES')}</Title>
               {SUPPORTED_LANGUAGES.map((language) => (
                 <Item
                   onClick={handleSelected.bind(null, language.code)}
