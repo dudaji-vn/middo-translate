@@ -19,7 +19,7 @@ export type CreateMessage = {
 };
 export const messageApi = {
   async send(data: CreateMessage) {
-    console.log('data', data);
+    console.log('data send message: ', data);
     const res: Response<Message> = await axiosWithInterceptor.post(
       basePath,
       data,
@@ -28,7 +28,8 @@ export const messageApi = {
   },
 
   async sendAnonymousMessage(data: CreateMessage) {
-    const res: Response<{ data: Message }> = await axios.post(
+    const res: Response<{ data: Message }> = await axiosWithInterceptor.post(
+
       anonymousBasePath + '/messages/help-desk',
       data,
     );

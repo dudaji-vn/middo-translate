@@ -157,7 +157,7 @@ export const MessageBox = ({
             'minute',
           );
           const isShowTimeGroup = timeDiff > MAX_TIME_GROUP_DIFF;
-          const isMe = group.lastMessage.sender._id === currentUserId;
+          const isMe = group.lastMessage.sender?._id === currentUserId && currentUserId;
           const isSystem =
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';
