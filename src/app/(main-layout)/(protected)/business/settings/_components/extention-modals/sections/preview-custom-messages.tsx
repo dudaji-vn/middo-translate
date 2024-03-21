@@ -38,11 +38,11 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent, ..
     return <div {...props}>
         <TimeDisplay time={new Date().toLocaleDateString()} />
         <div className="w-full gap-1  pb-8 relative  flex pr-11 md:pr-20">
-            <div className="overflow-hidden relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
-                <Avatar src={String(sender?.avatar)} alt={String(sender?.name)} size="xs" />
+            <div className="overflow-hidden  relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
+                <Avatar src={String(sender?.avatar)} alt={String(sender?.email)} size="xs" />
             </div>
             <div className="relative space-y-2">
-                <Typography className='p-1 text-sm leading-[18px] font-light text-neutral-600'>{sender?.name}</Typography>
+                <p className='p-1 break-words text-sm leading-[18px] font-light text-neutral-600'>{sender?.name}</p>
                 <div className="w-fit min-w-10 bg-neutral-50 px-2 py-1 relative overflow-hidden rounded-[20px]">
                     <div className="px-3 py-2 bg-neutral-50 break-word-mt text-start tiptap prose editor-view prose-strong:text-current max-w-none w-full focus:outline-none text-current text-sm">
                         {content}

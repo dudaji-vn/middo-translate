@@ -37,7 +37,7 @@ const HelpDeskConversationPage = async ({ params: { slugs }, ...props }: {
   }
   const anonymousUser = room.participants.find((p: { _id: string }) => p._id === anonymousUserId);
   return (
-    <HelpDeskConversation params={{ slugs }} anonymousUser={anonymousUser} room={room} {...props}  isAnonymousPage />
+    <HelpDeskConversation params={{ slugs }} anonymousUser={anonymousUser} room={room} {...props} isAnonymousPage />
   );
 };
 

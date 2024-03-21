@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts';
 
-const DEBOUNCED_TIME = 500;
+const DEBOUNCED_TIME = 300;
 const TableSearch = ({ searchParams, ...props }: InputProps & {
     searchParams: {
         type: string

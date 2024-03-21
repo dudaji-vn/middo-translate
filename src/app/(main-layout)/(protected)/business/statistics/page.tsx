@@ -93,7 +93,7 @@ const StatisticPage = async ({
         <BusinessLineChart data={statiscticData.chart} />
       </section>
       <section className='space-y-4 w-full'>
-        <div className="md:grid-cols-[10%_70%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
+        <div className="md:grid-cols-[20%_50%_30%] xl:grid-cols-[10%_70%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
           <span className="text-base font-normal max-md:col-span-6 text-primary-500-main">
             Clients List
           </span>
