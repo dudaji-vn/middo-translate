@@ -25,6 +25,7 @@ import { useInboxRouter } from './use-inbox-router';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { PK_BUSINESS_CONVERSATIONS } from '@/types/business.type';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useTranslation } from 'react-i18next';
 
 interface InboxListProps {
   type: InboxType;
@@ -38,7 +39,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const { businessData } = useBusinessExtensionStore();
     const currentRoomId = params?.id;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
-
+    const {t} = useTranslation('common');
     const key = useMemo(() => ['rooms', type, status], [type, status]);
     const onlineList = useChatStore((state) => state.onlineList);
 
@@ -100,9 +101,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!rooms.length && !isLoading && !pinnedRooms?.length) {
       return (
         <div className="mt-10 bg-card px-4 text-center">
-          <Typography variant="h3">Welcome to Middo conversation!</Typography>
+          <Typography variant="h3">{t('CONVERSATION.WELCOME_TITLE')}</Typography>
           <Typography variant="muted" className="mt-3 block opacity-60">
-            Press button belows to start a conversation
+            {t('CONVERSATION.WELCOME_CONTENT')}
           </Typography>
         </div>
       );

@@ -14,6 +14,7 @@ import { useSearchStore } from '@/features/search/store/search.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useTranslation } from 'react-i18next';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 
@@ -25,7 +26,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     const { data: recData } = useGetRoomsRecChat(isBusiness ? 'help-desk' : undefined);
     const { businessData } = useBusinessExtensionStore()
     const searchType = isBusiness ? 'help-desk' : undefined;
-
+    const {t} = useTranslation('common');
     const { data } = useQuerySearch<{
       rooms: Room[];
       users: User[];
@@ -40,7 +41,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
           className="w-full bg-neutral-white"
         >
           {data?.users && data.users.length > 0 && (
-            <Section label="People">
+            <Section label={t('CONVERSATION.PEOPLE')}>
               {data?.users?.map((user) => {
                 return (
                   <Link key={user?._id} href={ROUTE_NAMES.ONLINE_CONVERSATION + '/' + user?._id}>
@@ -67,7 +68,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
             </div>
           )}
           {recData && recData.length > 0 && !searchValue && !data && (
-            <Section label="Suggestion">
+            <Section label={t('COMMON.SUGGESTION')}>
               {recData?.map((room) => {
                 return (
                   <RoomItem

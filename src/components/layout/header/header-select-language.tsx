@@ -105,7 +105,7 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
                 <SelectItem
                   value={option.value}
                   key={option.value}
-                  className="px-3"
+                  className={cn("px-3", option.value === valueSelect.value && '!bg-primary !text-white')}
                 >
                   <CircleFlag
                     countryCode={LANGUAGE_CODES_MAP[
