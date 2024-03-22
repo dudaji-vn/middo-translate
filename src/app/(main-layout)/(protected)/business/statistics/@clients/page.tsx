@@ -42,7 +42,6 @@ const page = async ({ searchParams }: any) => {
   })
 
   return (
-
       <div className="rounded-md p-0 w-full overflow-x-auto">
         <DataTable columns={columns} data={clientsData.items} />
       </div>

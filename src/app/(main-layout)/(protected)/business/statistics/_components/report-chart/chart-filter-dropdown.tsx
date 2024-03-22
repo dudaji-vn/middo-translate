@@ -1,10 +1,10 @@
 'use client'
 
 import { Button } from '@/components/actions'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display'
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal'
 import { Calendar } from '@/components/ui/calendar'
 import { cn } from '@/utils/cn'
-import { Arrow, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { addDays, format } from 'date-fns'
 import { CalendarIcon, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
@@ -107,13 +107,13 @@ const ChartFilterDropdown = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 align="end"
-                className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
+                className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3 "
                 onClick={() => setOpenDropdown(false)}
             >
                 {Object.entries(filterOptions).map(([key, value]) => {
                     const href = generateHref(key as AnalyticsType, { fromDate, toDate }, search) || '#';
                     if (key === 'custom')
-                        return <DropdownMenuItem className="block px-4 py-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-500  outline-none" onClick={() => {
+                        return <DropdownMenuItem className=" rounded-none  block px-4 py-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-500  outline-none" onClick={() => {
                             setOpenDatePickerModal(true)
                         }}>
                             Custom
@@ -123,12 +123,12 @@ const ChartFilterDropdown = ({
                             key={key}
                             href={href}
                             className={cn(
-                                'block px-4 py-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-500',
+                                'block text-neutral-400 ',
                                 {
                                     'bg-neutral-100 text-neutral-500': type === key
                                 }
                             )}
-                        >  <DropdownMenuItem className="flex items-center outline-none">
+                        >  <DropdownMenuItem className="flex rounded-none items-center outline-none">
                                 {value}
                             </DropdownMenuItem>
                         </Link>
