@@ -136,6 +136,7 @@ const StartAConversation = ({ businessData }: {
                         type={'button'}
                         onClick={showForm}
                         disabled={isSubmitting}
+                        loading={isSubmitting}
                         style={{ backgroundColor: businessData?.color || DEFAULT_THEME }}
                     >
                         Click to start a conversation
