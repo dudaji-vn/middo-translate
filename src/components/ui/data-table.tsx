@@ -19,11 +19,21 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  cellProps?: React.TdHTMLAttributes<HTMLTableCellElement>
+  rowProps?: React.TdHTMLAttributes<HTMLTableRowElement>
+  headerProps?:  React.HTMLAttributes<HTMLTableSectionElement>
+  bodyProps?:  React.HTMLAttributes<HTMLTableSectionElement>
+  tableProps?:  React.HTMLAttributes<HTMLTableElement>
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  cellProps,
+  headerProps,
+  bodyProps,
+  rowProps,
+  tableProps,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
