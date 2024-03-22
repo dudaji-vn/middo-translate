@@ -5,7 +5,7 @@ import { StatisticData } from '@/types/business-statistic.type'
 import { AnalyticsOptions, businessAPI } from '@/features/chat/business/business.service'
 
 
-const page = async ({  params}: any) => {
+const StatiscticReport = async ({  params}: any) => {
   const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
   if (!statiscticData) {
     throw new Error("NO_ANALYSTIC_DATA");
@@ -18,4 +18,4 @@ const page = async ({  params}: any) => {
   )
 }
 
-export default page
+export default StatiscticReport
