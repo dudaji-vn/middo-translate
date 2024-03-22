@@ -139,6 +139,7 @@ class BusinessAPI {
     }
   }
   async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
+    const cookieStore = cookies();
     try {
       if (!analyticsType.includes(type)) {
         throw new Error('Invalid analytics type');
@@ -154,7 +155,6 @@ class BusinessAPI {
         }),
       }).toString();
       const path = `${this.basePath}/help-desk/analytics?${query}`;
-      const cookieStore = cookies();
       const response = await fetch(path, {
         method: 'GET',
         headers: {

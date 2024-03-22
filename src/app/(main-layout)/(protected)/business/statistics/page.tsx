@@ -12,7 +12,7 @@ const StatisticPage = async () => {
   if (!businessData) {
     notFound();
   }
-  return null
+  return <></>
 }
 
 export default StatisticPage
