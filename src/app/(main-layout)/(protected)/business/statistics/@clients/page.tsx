@@ -21,7 +21,7 @@ const formatClientData = (data: Client[]) => {
     };
   }) || [];
 }
-const limitOptions = [5, 50, 75, 100];
+const limitOptions = [25, 50, 75, 100];
 export const DEFAULT_CLIENTS_PAGINATION = {
   limit: limitOptions[0],
   currentPage: 1

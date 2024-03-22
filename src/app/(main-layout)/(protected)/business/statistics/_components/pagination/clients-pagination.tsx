@@ -10,9 +10,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React from 'react'
 
-const SelectPerpage = () => {
-    return 
-}
 
 const ClientsPagination = ({ pagination, limitOptions }: {
     limitOptions: number[],
@@ -30,7 +27,6 @@ const ClientsPagination = ({ pagination, limitOptions }: {
     const searchParams = useSearchParams()
 
     const onPageChange = (page: number) => {
-
         const current = new URLSearchParams(Array.from(searchParams?.entries() || []));
         current.set('currentPage', String(page));
         router.push(`/business/statistics?${current.toString()}`)
@@ -38,9 +34,9 @@ const ClientsPagination = ({ pagination, limitOptions }: {
 
     return (
         <div className="flex items-center justify-center space-x-2 py-4">
-
             <Pagination>
-                <PaginationContent className='gap-3'>  <div className='flex flex-row items-center'>
+                <PaginationContent className='gap-3'>  
+                <div className='flex flex-row items-center'>
                     <p>Rows per page: {pagination.limit}</p>
                 </div>
                     <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => onPageChange(pagination.previousPage)} disabled={!pagination.canPreviousPage}>
