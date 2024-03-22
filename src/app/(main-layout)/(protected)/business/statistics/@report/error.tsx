@@ -1,6 +1,5 @@
 "use client"
 
-import { Typography } from "@/components/data-display";
 import Link from "next/link";
 
 export enum EStatisticErrors {
