@@ -15,6 +15,7 @@ import {
   getToken,
   onMessage,
 } from 'firebase/messaging';
+import addNotification from 'react-push-notification';
 
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
@@ -69,10 +70,24 @@ export const deleteFCMToken = async () => {
 
 export const onMessageListener = () =>
   new Promise((resolve) => {
-    // onMessage(messaging, (payload) => {
-    //   toast.success(payload.data?.body || 'New message received!', {
-    //     position: 'top-right',
-    //   });
-    //   resolve(payload);
-    // });
+    if (!messaging) {
+      messaging = getMessaging(app);
+    }
+    onMessage(messaging, (payload) => {
+      const notifyUrl = payload?.data?.url || '';
+      const currentUrl = window.location.href;
+      if (notifyUrl && currentUrl.includes(notifyUrl)) {
+        return;
+      }
+      addNotification({
+        title: payload?.data?.title || '',
+        message: payload?.data?.body || '',
+        native: true,
+        silent: false,
+        onClick: () => {
+          window && window.open(notifyUrl, '_self');
+        },
+      });
+      resolve(payload);
+    });
   });

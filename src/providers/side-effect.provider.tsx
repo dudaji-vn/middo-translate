@@ -41,6 +41,9 @@ export const SideEffectProvider = () => {
 
   useEffect(() => {
     const handleMessage = async () => {
+      if (!navigator.serviceWorker) {
+        return;
+      }
       const { onMessageListener } = await import('@/lib/firebase');
       onMessageListener();
     };
