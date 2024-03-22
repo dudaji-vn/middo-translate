@@ -61,19 +61,16 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     rightElement,
     disabledRedirect,
     className,
-    businessId,
     isOnline,
   } = props;
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
   const params = useParams();
   const conversationType = params?.conversationType;
-  const isBusinessRoom = !!businessId && !!conversationType;
   const {t} = useTranslation('common');
-  const isBusinessExtensionAvailable = !!businessId;
   const room = useMemo(
     () => {
-      const businessRedirectPath =  isBusinessExtensionAvailable ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${businessId}/${_data._id}` : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
+      const businessRedirectPath = conversationType  ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${_data._id}` : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
       return generateRoomDisplay(
         _data,
         currentUserId,
@@ -85,9 +82,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
       _data,
       currentUserId,
       disabledRedirect,
-      businessId,
       conversationType,
-      isBusinessExtensionAvailable,
     ],
   );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
@@ -95,7 +90,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
-    `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${businessId}/${conversationType}/${currentRoomId}` ||
+    `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
