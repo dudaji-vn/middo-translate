@@ -1,4 +1,5 @@
 
+import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/@clients/page';
 import { cookies } from 'next/headers';
 
 export type Client = {
@@ -8,10 +9,7 @@ export type Client = {
   email: string
   name: string
 }
-export const DEFAULT_CLIENTS_PAGINATION = {
-  limit: 50,
-  currentPage: 1
-}
+
 export type AnalyticsFilterDate = {
   fromDate: string;
   toDate: string;

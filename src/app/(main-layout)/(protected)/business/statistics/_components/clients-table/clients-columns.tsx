@@ -3,7 +3,6 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Client } from "../../@clients/page"
 
-
 export const clientsColumns: ColumnDef<Client>[] = [
     {
         accessorKey: "name",

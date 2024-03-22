@@ -83,13 +83,14 @@ const ChartFilterDropdown = ({
         from: fromDate ? new Date(fromDate) : addDays(new Date(), -7),
         to: toDate ? new Date(toDate) : new Date(),
     })
+
+  const current = new URLSearchParams(Array.from(searchParams?.entries() || []));
+
     const onConfirmRangeFilter = () => {
-        const href = `/business/statistics?${new URLSearchParams({
-            type: 'custom',
-            fromDate: format(date?.from || new Date(), 'yyyy-MM-dd'),
-            toDate: format(date?.to || new Date(), 'yyyy-MM-dd'),
-            search: search || ''
-        }).toString()}`
+        current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
+        current.set('toDate', format(date?.to || new Date(), 'yyyy-MM-dd'));
+        current.set('type', 'custom');
+        const href = `/business/statistics?${current.toString()}`
         router.push(href)
         setOpenDatePickerModal(false)
     }
