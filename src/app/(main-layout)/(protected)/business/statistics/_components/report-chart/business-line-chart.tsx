@@ -34,7 +34,7 @@ export function BusinessLineChart({
               }}
 
             >
-              <XAxis dataKey="Time" />
+              <XAxis dataKey="Time" padding={'gap'} className="py-4" />
               <YAxis  axisLine={false}  tickLine={false} />
               <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
               <Tooltip />
@@ -42,10 +42,6 @@ export function BusinessLineChart({
                 type="monotone"
                 strokeWidth={2}
                 dataKey="New Clients"
-                label={{
-                  position: "top",
-                  className: "text-primary-500-main",
-                }}
                 activeDot={{
                   r: 8,
                   className: "fill-primary-500-main stroke-primary-500-main w-[1rem] h-[1rem]",
