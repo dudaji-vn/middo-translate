@@ -1,8 +1,17 @@
-import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
-import { Client } from '@/app/(main-layout)/(protected)/business/statistics/_components/clients-table/clients-columns';
-import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/page';
+
 import { cookies } from 'next/headers';
 
+export type Client = {
+  firstConnectDate: string
+  lastConnectDate: string
+  _id: string
+  email: string
+  name: string
+}
+export const DEFAULT_CLIENTS_PAGINATION = {
+  limit: 50,
+  currentPage: 1
+}
 export type AnalyticsFilterDate = {
   fromDate: string;
   toDate: string;
@@ -21,7 +30,17 @@ export type AnalyticsOptions = {
       custom?: never;
     }
 );
-
+export type TBusinessExtensionData = {
+  createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  domains: string[];
+  color: string;
+  language: string;
+  firstMessage: string;
+  firstMessageEnglish: string;
+  _id: string;
+};
 class BusinessAPI {
   private basePath: string;
 
