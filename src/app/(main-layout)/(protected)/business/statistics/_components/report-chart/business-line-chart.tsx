@@ -27,10 +27,10 @@ export function BusinessLineChart({
             <LineChart
               data={claryfiedData}
               margin={{
-                top: 5,
+                top: 15,
                 right: 0,
                 left: 0,
-                bottom: 5,
+                bottom: 15,
               }}
 
             >
@@ -42,6 +42,10 @@ export function BusinessLineChart({
                 type="monotone"
                 strokeWidth={2}
                 dataKey="New Clients"
+                label={{
+                  position: "top",
+                  className: "text-primary-500-main",
+                }}
                 activeDot={{
                   r: 8,
                   className: "fill-primary-500-main stroke-primary-500-main w-[1rem] h-[1rem]",

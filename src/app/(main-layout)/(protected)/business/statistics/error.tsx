@@ -12,20 +12,16 @@ export default function CustomError({ error }: { error: Error }) {
   
   if (error.message == EStatisticErrors.NO_ANALYSTIC_DATA)
     return <div className='m-auto py-10'>
-      <Typography variant='h4' className='mb-5'>No data found</Typography>
-      <Typography className='mb-5'>Some data is missing. Please try again later. </Typography>
-      <Link href="/business/settings" className='underline text-primary-500-main'>
-        Go to settings
-      </Link>
+      <Typography variant='h4' className='mb-5'>No analystic data found</Typography>
     </div>
   if (error.message == EStatisticErrors.NEXT_NOT_FOUND)
-    return <div className='m-auto py-10'>
-      <Typography variant='h4' className='mb-5'>No extension found</Typography>
-      <Typography className='mb-5'>You need to create a business to see statistics. </Typography>
-      <Link href="/business/settings" className='underline text-primary-500-main'>
-        Go to settings
-      </Link>
-    </div>
+  return <div className='m-auto py-10'>
+    <Typography variant='h4' className='mb-5'>No extension found</Typography>
+    <Typography className='mb-5'>You need to create a business to see statistics. </Typography>
+    <Link href="/business/settings" className='underline text-primary-500-main'>
+      Go to settings
+    </Link>
+  </div>
 
   console.error('Statistic error', error);
   return <div className='m-auto py-10'>
