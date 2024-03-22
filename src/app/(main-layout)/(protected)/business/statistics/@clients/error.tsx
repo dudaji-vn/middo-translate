@@ -15,9 +15,10 @@ export default function CustomError({ error }: { error: Error }) {
 
   console.error('Statistic error', error);
   return <div className='w-full px-6 bg-neutral-50 py-5'>
-    <p className='w-full text-center'>An error occurred. </p>
-    <Link href="/business" className='underline text-primary-500-main'>
-      Go back
-    </Link>
+    <p className='w-full text-center'>An error occurred.
+      <Link href="/business" className='underline text-primary-500-main'>
+        Go back
+      </Link>
+      </p>
   </div>
 }

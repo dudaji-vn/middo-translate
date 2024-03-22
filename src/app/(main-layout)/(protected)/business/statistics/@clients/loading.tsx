@@ -6,7 +6,7 @@ const loading = () => {
   return (
     <div
       className={cn(
-        'absolute inset-0 py-4 z-[999] flex items-center justify-center bg-black/20',
+        'absolute inset-0 py-20 h-24 z-[999] flex items-center justify-cente',
       )}
     >
       <Spinner size={'md'} className='m-auto text-primary-500-main' />
