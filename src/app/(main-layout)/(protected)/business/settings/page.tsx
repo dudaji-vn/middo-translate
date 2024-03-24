@@ -4,7 +4,7 @@ import { Typography } from '@/components/data-display'
 import Image from 'next/image';
 import BusinessExtension from './_components/extenstion/business-extension';
 
-import { businessAPI } from '@/features/chat/business/business.service';
+import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 
 
 const SettingPage = async () => {

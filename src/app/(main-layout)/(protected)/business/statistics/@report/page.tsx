@@ -2,7 +2,7 @@ import React from 'react'
 import ReportCards from '../_components/report-cards/report-cards'
 import { BusinessLineChart } from '../_components/report-chart/business-line-chart'
 import { StatisticData } from '@/types/business-statistic.type'
-import { AnalyticsOptions, businessAPI } from '@/features/chat/business/business.service'
+import { businessAPI } from '@/features/chat/help-desk/api/business.service'
 
 
 const StatiscticReport = async ({  params}: any) => {

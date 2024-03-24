@@ -9,7 +9,7 @@ import {
 
 import { Message, PinMessage } from '@/features/chat/messages/types';
 import queryString from 'query-string';
-import { Room } from '../rooms/types';
+import { Room } from '../../rooms/types';
 import axios from 'axios';
 
 class AnounymousMesssagesAPI {

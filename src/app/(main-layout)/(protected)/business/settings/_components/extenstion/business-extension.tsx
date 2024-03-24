@@ -15,7 +15,7 @@ import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { deleteExtensionService } from '@/services/extension.service';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-import { TBusinessExtensionData } from '@/features/chat/business/business.service';
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 
 
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {

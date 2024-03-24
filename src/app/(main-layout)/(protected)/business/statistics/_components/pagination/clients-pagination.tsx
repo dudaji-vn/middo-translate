@@ -7,44 +7,39 @@ import {
     PaginationContent,
 } from "@/components/ui/pagination"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 
-
-const ClientsPagination = ({ pagination, limitOptions }: {
+export type ClientPagination = {
+    totalPage: number,
+    limit: number,
+    currentPage: number, 
+    nextPage: number | null,
+    previousPage: number | null,
+    canNextPage: boolean,
+    canPreviousPage: boolean
+}
+const ClientsPagination = ({ pagination, limitOptions, onLimitChange, onPageChange }: {
     limitOptions: number[],
-    pagination: {
-        totalPage: number,
-        limit: number,
-        currentPage: number,
-        nextPage: number,
-        previousPage: number,
-        canNextPage: boolean,
-        canPreviousPage: boolean
-    }
+    onPageChange: (page: number) => void,
+    onLimitChange: (limit: number) => void,
+    pagination: ClientPagination
 }) => {
-    const router = useRouter();
-    const searchParams = useSearchParams()
-
-    const onPageChange = (page: number) => {
-        const current = new URLSearchParams(Array.from(searchParams?.entries() || []));
-        current.set('currentPage', String(page));
-        router.push(`/business/statistics?${current.toString()}`)
-    }
+    const { limit, currentPage, nextPage, previousPage, canNextPage, canPreviousPage } = pagination;
 
     return (
         <div className="flex items-center justify-center space-x-2 py-4">
             <Pagination>
-                <PaginationContent className='gap-3'>  
-                <div className='flex flex-row items-center'>
-                    <p>Rows per page: {pagination.limit}</p>
-                </div>
-                    <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => onPageChange(pagination.previousPage)} disabled={!pagination.canPreviousPage}>
+                <PaginationContent className='gap-3'>
+                    <div className='flex flex-row items-center'>
+                        <p>Rows per page: {limit}</p>
+                    </div>
+                    <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() =>  previousPage && onPageChange(previousPage)} disabled={!canPreviousPage}>
                         <ChevronLeft className="h-4 w-4" />
                         <span>Previous</span>
                     </Button>
                     <MiddlePaginationButtons pagination={pagination} onPageChange={onPageChange} />
-                    <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => onPageChange(pagination.nextPage)} disabled={!pagination.canNextPage}>
+                    <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => nextPage && onPageChange(nextPage)} disabled={!canNextPage}>
                         <span>Next</span>
                         <ChevronRight className="h-4 w-4" />
                     </Button>

@@ -9,7 +9,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
-import { TBusinessExtensionData } from '../../business/business.service';
+import { TBusinessExtensionData } from '../../help-desk/api/business.service';
 
 
 interface ChatSidebarProps {

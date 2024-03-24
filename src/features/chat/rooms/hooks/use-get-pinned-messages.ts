@@ -1,4 +1,4 @@
-import { anounymousMesssagesAPI } from '../../business/anonymous-message.service';
+import { anounymousMesssagesAPI } from '../../help-desk/api/anonymous-message.service';
 import { messageApi } from '../../messages/api';
 import { useQuery } from '@tanstack/react-query';
 export const PIN_MESSAGE_KEY = 'pinned';
