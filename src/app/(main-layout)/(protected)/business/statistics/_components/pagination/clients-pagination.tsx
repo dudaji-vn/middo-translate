@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/actions'
 import { MiddlePaginationButtons } from '@/components/actions/pagination/middle-pagination'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/data-display'
 import {
     Pagination,
     PaginationContent,
@@ -13,7 +14,7 @@ import React from 'react'
 export type ClientPagination = {
     totalPage: number,
     limit: number,
-    currentPage: number, 
+    currentPage: number,
     nextPage: number | null,
     previousPage: number | null,
     canNextPage: boolean,
@@ -31,10 +32,19 @@ const ClientsPagination = ({ pagination, limitOptions, onLimitChange, onPageChan
         <div className="flex items-center justify-center space-x-2 py-4">
             <Pagination>
                 <PaginationContent className='gap-3'>
-                    <div className='flex flex-row items-center'>
-                        <p>Rows per page: {limit}</p>
-                    </div>
-                    <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() =>  previousPage && onPageChange(previousPage)} disabled={!canPreviousPage}>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <DropdownMenuLabel className='font-normal'>Items per page: <span className='font-medium'>{limit}</span></DropdownMenuLabel>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            {limitOptions.map(option => (
+                                <DropdownMenuItem key={option} onSelect={() => onLimitChange(option)}>
+                                    {option}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => previousPage && onPageChange(previousPage)} disabled={!canPreviousPage}>
                         <ChevronLeft className="h-4 w-4" />
                         <span>Previous</span>
                     </Button>
