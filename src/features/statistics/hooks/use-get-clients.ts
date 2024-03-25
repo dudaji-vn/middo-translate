@@ -26,7 +26,11 @@ export const useGetClients = ({
             });
             return response.data;
         } catch (error) {
-            throw new Error(`Error fetching clients: ${(error as Error).message}`);
+            console.error(`Error fetching clients: ${(error as Error).message}`);
+            return {
+                items: [],
+                totalPage: 0,
+            }
         }
     },
     enabled: true,
