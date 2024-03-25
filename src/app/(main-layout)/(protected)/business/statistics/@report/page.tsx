@@ -1,9 +1,9 @@
 import React from 'react'
-import ReportCards from '../_components/report-cards/report-cards'
-import { BusinessLineChart } from '../_components/report-chart/business-line-chart'
+import Report from '../_components/report/report'
+import { BusinessLineChart } from '../_components/report/report-chart/business-line-chart'
 import { StatisticData } from '@/types/business-statistic.type'
 import { businessAPI } from '@/features/chat/help-desk/api/business.service'
-import { AnalyticsOptions } from '../_components/report-chart/chart-filter-dropdown'
+import { AnalyticsOptions } from '../_components/report/report-chart/chart-filter-dropdown'
 
 
 const StatiscticReport = async ({ params }: { params: AnalyticsOptions }) => {
@@ -11,10 +11,10 @@ const StatiscticReport = async ({ params }: { params: AnalyticsOptions }) => {
   if (!statiscticData) {
     throw new Error("NO_ANALYSTIC_DATA");
   }
+  await new Promise((resolve) => setTimeout(resolve, 10000));
   return (
     <>
-      <ReportCards data={statiscticData} />
-      <BusinessLineChart data={statiscticData.chart} />
+      <Report data={statiscticData} />
     </>
   )
 }

@@ -1,6 +1,6 @@
 import { Typography } from '@/components/data-display'
 import React from 'react'
-import ChartFilterDropdown from './_components/report-chart/chart-filter-dropdown'
+import ChartFilterDropdown from './_components/report/report-chart/chart-filter-dropdown'
 
 const StatisticLayout = ({ report, clients, children }: {
     report: JSX.Element,
