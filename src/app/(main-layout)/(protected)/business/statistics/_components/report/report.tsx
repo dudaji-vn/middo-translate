@@ -10,8 +10,7 @@ import useClient from '@/hooks/use-client';
 import { ceil } from 'lodash';
 import { cn } from '@/utils/cn';
 import { BusinessLineChart } from './report-chart/business-line-chart';
-
-const ESP = 0.0001;
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 const StarRating = ({ value }: { value: number }) => {
     const fillCount = ceil(value || 0);
@@ -19,7 +18,8 @@ const StarRating = ({ value }: { value: number }) => {
     return (
         <div className="flex flex-row items-baseline justify-between space-x-2">
             {Array(ceil(fillCount)).fill(0).map((_, index) => {
-                const isHalf = Math.abs(value - (index) - 0.5) < ESP;
+                const diff = value*1.0 - (index)*1.0
+                const isHalf = diff > 0 && diff < 1.0;
                 return (
                     isHalf ?
                         <div key={index} className='relative w-fit'>
@@ -42,6 +42,12 @@ const Percentage = ({ value }: { value: number }) => {
             {`${value}%`}
         </Typography>
     );
+}
+const tooltipContent = {
+    client: 'The number of new clients in the picked time range',
+    completedConversation: 'The number of conversations that have been completed in the picked time range',
+    responseChat: 'The average response time of the chat in the picked time range',
+    averageRating: 'The average rating of the customer in the picked time range',
 }
 
 const cardContents: Array<{
@@ -103,17 +109,21 @@ const Report = ({ data }: { data: StatisticData }) => {
                             className={cn("gap-2 p-5 borderrounded-[12px] border-solid hover:border-primary-300 cursor-pointer transition-all duration-300 ease-in-out",
                                 name === chartKey && 'border-primary-500-main shadow-[2px_6px_16px_2px_#1616161A]')}
                             onClick={() => {
-                                    handleChartKeyChange(name);
+                                handleChartKeyChange(name);
                             }}>
                             <CardHeader className='flex p-0 flex-row justify-between items-center text-neutral-600'>
                                 <CardTitle className='text-base font-normal leading-[18px]'>{title}</CardTitle>
-                                <Button.Icon
-                                    variant="ghost"
-                                    size={'xs'}
-                                    type="button"
-                                    className='text-neutral-400'
-                                ><Info size={10} />
-                                </Button.Icon>
+                                <Tooltip
+                                    title={tooltipContent[name]}
+                                    contentProps={{
+                                        className: 'text-neutral-800',
+                                    }}
+                                    triggerItem={
+                                        <div className='text-neutral-300 hover:bg-neutral-50 rounded-full w-fit h-fit p-2'>
+                                            <Info size={20} className=''/>
+                                        </div>
+                                    }
+                                />
                             </CardHeader>
                             <CardContent className='p-0'>
                                 <div className="flex flex-row items-end justify-between space-x-4 min-h-[48px]">

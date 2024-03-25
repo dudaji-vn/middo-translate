@@ -37,7 +37,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
   }));
 
   const receiverLanguage = useMemo(() => {
-    return  isHelpDesk ? room?.participants?.find((p) => p.status === 'anonymous')?.language : userLanguage;
+    return isHelpDesk ? room?.participants?.find((p) => p.status === 'anonymous')?.language : userLanguage;
   }, [room, isHelpDesk, userLanguage]);
 
   const [contentDisplay, setContentDisplay] = useState(message.content);
@@ -46,10 +46,8 @@ export const Content = ({ position, active, message }: ContentProps) => {
       setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
       return;
     }
-    if (position === 'left') {
-    }
     if (
-      message.language === userLanguage ||
+      (!isHelpDesk && message.language === userLanguage) ||
       message.sender._id === currentUserId ||
       isHelpDesk && position === 'right'
     ) {
