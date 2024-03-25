@@ -66,13 +66,14 @@ const LanguageItem = ({
   onClick?: () => void;
   layoutId?: string;
 } & PropsWithChildren) => {
-  const languageName = getCountryNameByCode(code as string) || 'Language detect';
-  const {t} = useTranslation('common');
+  const languageName =
+    getCountryNameByCode(code as string) || 'Language detect';
+  const { t } = useTranslation('common');
   return (
     <button
       onClick={onClick}
       className={cn(
-        'relative flex h-full w-full items-center justify-center gap-2 rounded-xl px-2 py-3 lg:w-fit lg:justify-center lg:px-3',
+        'relative flex h-full w-full items-center justify-between gap-2 rounded-xl px-2 py-3 lg:w-fit lg:justify-center lg:px-3',
         active ? 'text-primary ' : 'hidden text-neutral-700 lg:flex',
         className,
       )}
@@ -97,9 +98,15 @@ const LanguageItem = ({
             />
           </div>
         ) : (
-          <Globe2Icon className="z-10 h-5 w-5 text-primary" />
+          <Globe2Icon className="size-5 h-5 w-5 shrink-0 text-primary" />
         )}
-        {<span className={cn("z-10 truncate", shrinkAble && !active && 'hidden')}>{t('LANGUAGE.' + languageName)}</span>}
+        {
+          <span
+            className={cn('z-10 truncate', shrinkAble && !active && 'hidden')}
+          >
+            {t('LANGUAGE.' + languageName)}
+          </span>
+        }
       </div>
       <ChevronDownIcon className="z-10 size-5 text-neutral-600 lg:hidden" />
     </button>
