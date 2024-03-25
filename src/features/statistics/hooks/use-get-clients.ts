@@ -21,7 +21,7 @@ export const useGetClients = ({
                 params: {
                     q: search,
                     limit,
-                    page: currentPage,
+                    currentPage: currentPage,
                 },
             });
             return response.data;

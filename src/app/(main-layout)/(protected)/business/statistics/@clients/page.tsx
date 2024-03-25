@@ -9,6 +9,7 @@ import ClientsPagination, { ClientPagination } from '../_components/clients-tabl
 import { useGetClients } from '@/features/statistics/hooks/use-get-clients';
 import TableSearch from '../_components/clients-table/table-search';
 import DownloadButton from '../_components/clients-table/download-button';
+import { getClientsTablePerpage, setClientsTablePerpage } from '@/utils/local-storage';
 
 export type Client = Pick<User, "_id" | "email" | "name" | "phoneNumber"> & {
   firstConnectDate: string;
@@ -31,7 +32,7 @@ export const DEFAULT_CLIENTS_PAGINATION = {
 }
 const Page = () => {
   const [currentPage, setCurrentPage] = useState(DEFAULT_CLIENTS_PAGINATION.currentPage);
-  const [limit, setLimit] = useState(DEFAULT_CLIENTS_PAGINATION.limit);
+  const [limit, setLimit] = useState(getClientsTablePerpage());
   const [search, setSearch] = useState('')
   const { data, isLoading, isError } = useGetClients({
     ...DEFAULT_CLIENTS_PAGINATION,
@@ -54,6 +55,7 @@ const Page = () => {
 
   const onLimitChange = (limit: number) => {
     setLimit(limit);
+    setClientsTablePerpage(limit);
     setCurrentPage(1);
   }
   const onPageChange = (page: number) => {

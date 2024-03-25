@@ -184,7 +184,7 @@ class BusinessAPI {
     totalPage: number;
   }> {
     const cookieStore = cookies();
-    const path = `${this.basePath}/help-desk/my-clients?q=${search}&limit=${limit}&page=${currentPage}`;
+    const path = `${this.basePath}/help-desk/my-clients?q=${search}&limit=${limit}&currentPage=${currentPage}`;
     try {
       const response = await fetch(path, {
         method: 'GET',
