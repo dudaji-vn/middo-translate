@@ -1,24 +1,31 @@
 
 'use client'
 
-import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Typography } from "@/components/data-display"
-import { StatisticData } from "@/types/business-statistic.type"
+import { Card, CardContent } from "@/components/ui/card"
+import { MAPPED_CHARTS_INFO_KEY, StatisticData, TChartKey } from "@/types/business-statistic.type"
+import { useMemo } from "react";
 
 
 export function BusinessLineChart({
-  data
-}: { data: StatisticData['chart'] }) {
-  const claryfiedData = data.map((item, index) => {
-    return {
-      "Time": item.label,
-      "New Clients": item.value,
+  chartData,
+  keyData,
+}: { chartData: StatisticData['chart'], keyData: TChartKey }) {
+  const data = chartData[keyData];
+  const { label: chartLabel, value: chartDataKey } = MAPPED_CHARTS_INFO_KEY[keyData];
+  const claryfiedData = useMemo(() => {
+    if (!data) {
+      console.error('No data for chart');
+      return [];
     }
-  })
+    return data.map((item) => ({
+      [chartLabel]: item.label,
+      [chartDataKey]: item.value,
+    }))
 
+  }, [data, keyData])
   return (
     <Card className="border-none p-0">
       <CardContent className="p-0">
@@ -35,13 +42,13 @@ export function BusinessLineChart({
 
             >
               <XAxis dataKey="Time" padding={'gap'} className="py-4" />
-              <YAxis  axisLine={false}  tickLine={false} />
+              <YAxis axisLine={false} tickLine={false} />
               <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
               <Tooltip />
               <Line
                 type="monotone"
                 strokeWidth={2}
-                dataKey="New Clients"
+                dataKey={chartDataKey}
                 activeDot={{
                   r: 8,
                   className: "fill-primary-500-main stroke-primary-500-main w-[1rem] h-[1rem]",
