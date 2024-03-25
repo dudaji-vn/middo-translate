@@ -76,7 +76,13 @@ const Page = () => {
           <TableSearch className='py-2 w-full' onSearch={onSearchChange} search={search} />
         </div>
         <div className='max-md:col-span-1'>
-          <DownloadButton data={items} />
+          <DownloadButton data={items} colInfo={[
+            { name: "Name", width: 20 },
+            { name: "Email", width: 30 },
+            { name: "Phone Number", width: 15 },
+            { name: "First Connect Date", width: 20 },
+            { name: "Last Connect Date", width: 20 },
+          ]} />
         </div>
       </div>
       <div className="rounded-md p-0 w-full overflow-x-auto">
