@@ -9,9 +9,11 @@ import { InputSelectLanguage } from '@/components/form/input-select-language'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/navigation'
 import { Form, FormMessage } from '@/components/ui/form'
 import { createGuestInfoSchema } from '@/configs/yup-form'
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service'
 import { User } from '@/features/users/types'
 import useClient from '@/hooks/use-client'
 import { startAGuestConversationService } from '@/services/extension.service'
+import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -33,15 +35,9 @@ export type TStartAConversation = {
     email: string
 }
 
-const StartAConversation = ({ businessData }: {
-    businessData: {
-        _id: string,
-        firstMessage: string,
-        firstMessageEnglish: string,
-        language: string,
-        user: User
-        color: string
-    }
+const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
+    isAfterDoneAnCOnversation?: boolean
+    businessData: TBusinessExtensionData
 }) => {
     const router = useRouter()
     const isClient = useClient();
@@ -82,8 +78,12 @@ const StartAConversation = ({ businessData }: {
         }
     }
     return (
-        <div className='h-full w-full flex flex-col justify-between py-3 px-4'>
-            <PreviewCustomMessages sender={owner} content={businessData.firstMessage} />
+        <div className={cn('h-full w-full flex flex-col justify-between py-3 px-4', isAfterDoneAnCOnversation && 'max-h-60 my-auto')}>
+            {isAfterDoneAnCOnversation ? <div className="max-w-screen-md m-auto flex flex-col gap-8 items-center">
+                <Typography variant={'h2'} className="text-2xl">Thank you!</Typography>
+                <Typography >Your rating has been sent successfully</Typography>
+            </div> :
+                <PreviewCustomMessages sender={owner} content={businessData.firstMessage} />}
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetContent side='bottom' className={open ? 'w-full  bg-white max-md:rounded-t-2xl shadow-sm' : 'hidden'}>
                     <Form {...methods}>
@@ -139,7 +139,7 @@ const StartAConversation = ({ businessData }: {
                         loading={isSubmitting}
                         style={{ backgroundColor: businessData?.color || DEFAULT_THEME }}
                     >
-                        Click to start a conversation
+                        {isAfterDoneAnCOnversation ? "Click to start a new conversation!" : "Click to start a conversation"}
                     </Button>
                 </SheetTrigger>
             </Sheet>

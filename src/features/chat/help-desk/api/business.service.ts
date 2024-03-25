@@ -1,14 +1,14 @@
-
 import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/@clients/page';
+import { User } from '@/features/users/types';
 import { cookies } from 'next/headers';
 
 export type Client = {
-  firstConnectDate: string
-  lastConnectDate: string
-  _id: string
-  email: string
-  name: string
-}
+  firstConnectDate: string;
+  lastConnectDate: string;
+  _id: string;
+  email: string;
+  name: string;
+};
 
 export type AnalyticsFilterDate = {
   fromDate: string;
@@ -33,6 +33,7 @@ export type TBusinessExtensionData = {
   updatedAt?: string;
   deletedAt?: string;
   domains: string[];
+  user?: User;
   color: string;
   language: string;
   firstMessage: string;
@@ -206,6 +207,38 @@ class BusinessAPI {
       };
     }
   }
+  rateConversation = async ({
+    star,
+    businessId,
+    userId,
+  }: {
+    star: number;
+    businessId: string;
+    userId: string;
+  }) => {
+    const rawFormData = {
+      userId,
+      businessId,
+      star,
+    };
+    try {
+      const path = `${this.basePath}/help-desk/rating`;
+      const response = await fetch(path, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rawFormData),
+      });
+      const data = await response.json();
+      console.log('response', data)
+      if (!response.ok) {
+        throw new Error('Error in rate conversation');
+      }
+    } catch (error) {
+      console.error('Error in rate conversation', error);
+    }
+  };
 }
 const businessAPI = new BusinessAPI();
 

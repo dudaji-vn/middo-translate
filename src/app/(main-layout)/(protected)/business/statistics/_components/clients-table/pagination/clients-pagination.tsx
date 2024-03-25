@@ -8,7 +8,6 @@ import {
     PaginationContent,
 } from "@/components/ui/pagination"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export type ClientPagination = {
@@ -26,11 +25,11 @@ const ClientsPagination = ({ pagination, limitOptions, onLimitChange, onPageChan
     onLimitChange: (limit: number) => void,
     pagination: ClientPagination
 }) => {
-    const { limit, currentPage, nextPage, previousPage, canNextPage, canPreviousPage } = pagination;
+    const { limit, nextPage, previousPage, canNextPage, canPreviousPage } = pagination;
 
     return (
-        <div className="flex items-center justify-center space-x-2 py-4">
-            <Pagination>
+        <div className="flex items-center justify-center space-x-2 py-4 w-full">
+            <Pagination className='w-full'>
                 <PaginationContent className='gap-3'>
                     <DropdownMenu>
                         <DropdownMenuTrigger>
@@ -48,9 +47,7 @@ const ClientsPagination = ({ pagination, limitOptions, onLimitChange, onPageChan
                         <ChevronLeft className="h-4 w-4" />
                         <span className='max-md:hidden'>Previous</span>
                     </Button>
-                    <MiddlePaginationButtons pagination={pagination} onPageChange={onPageChange} itemProps={{
-                        className: 'max-md:hidden',
-                    }} />
+                    <MiddlePaginationButtons className='gap-1 flex items-center max-md:hidden' pagination={pagination} onPageChange={onPageChange} />
                     <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => nextPage && onPageChange(nextPage)} disabled={!canNextPage}>
                         <span className='max-md:hidden'>Next</span>
                         <ChevronRight className="h-4 w-4" />
