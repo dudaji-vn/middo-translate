@@ -13,6 +13,7 @@ import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.s
 import { User } from '@/features/users/types'
 import useClient from '@/hooks/use-client'
 import { startAGuestConversationService } from '@/services/extension.service'
+import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
@@ -77,11 +78,11 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
         }
     }
     return (
-        <div className='h-full w-full flex flex-col justify-between py-3 px-4'>
-            {isAfterDoneAnCOnversation ? <>
-            <Typography variant={'h2'} className="text-2xl">Thank you for your feedback!</Typography>
-            <Typography >We appreciate your feedback and we are always here to help you!</Typography>
-            </>:
+        <div className={cn('h-full w-full flex flex-col justify-between py-3 px-4', isAfterDoneAnCOnversation && 'max-h-60 my-auto')}>
+            {isAfterDoneAnCOnversation ? <div className="max-w-screen-md m-auto flex flex-col gap-8 items-center">
+                <Typography variant={'h2'} className="text-2xl">Thank you!</Typography>
+                <Typography >Your rating has been sent successfully</Typography>
+            </div> :
                 <PreviewCustomMessages sender={owner} content={businessData.firstMessage} />}
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetContent side='bottom' className={open ? 'w-full  bg-white max-md:rounded-t-2xl shadow-sm' : 'hidden'}>
@@ -138,7 +139,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
                         loading={isSubmitting}
                         style={{ backgroundColor: businessData?.color || DEFAULT_THEME }}
                     >
-                        Click to start a conversation
+                        {isAfterDoneAnCOnversation ? "Click to start a new conversation!" : "Click to start a conversation"}
                     </Button>
                 </SheetTrigger>
             </Sheet>

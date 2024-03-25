@@ -8,7 +8,6 @@ import {
     PaginationContent,
 } from "@/components/ui/pagination"
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import React from 'react'
 
 export type ClientPagination = {
