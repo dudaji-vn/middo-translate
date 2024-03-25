@@ -17,7 +17,7 @@ export const MessageItemSystem = ({
   const messageContent = useGenerateSystemMessageContent(message, isMe);
   return (
     <div className="mx-auto">
-      <span className="break-word-mt text-sm font-light text-neutral-500">
+      <span className="break-word-mt flex justify-center text-center text-sm font-light text-neutral-500">
         {messageContent}
       </span>
       {message.action === 'pinMessage' && (

@@ -63,10 +63,20 @@ export const MessageBox = ({
         });
         return acc;
       }
+      if (message.type === 'action' || message.type === 'notification') {
+        acc.push({
+          messages: [message],
+          lastMessage: message,
+        });
+        return acc;
+      }
       const lastGroup = acc[acc.length - 1];
       const lastMessage = lastGroup.lastMessage;
       // if last message is notification
-      if (lastMessage.type === 'notification') {
+      if (
+        lastMessage.type === 'notification' ||
+        lastMessage.type === 'action'
+      ) {
         acc.push({
           messages: [message],
           lastMessage: message,
@@ -157,7 +167,8 @@ export const MessageBox = ({
             'minute',
           );
           const isShowTimeGroup = timeDiff > MAX_TIME_GROUP_DIFF;
-          const isMe = group.lastMessage.sender?._id === currentUserId && currentUserId;
+          const isMe =
+            group.lastMessage.sender?._id === currentUserId && currentUserId;
           const isSystem =
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';

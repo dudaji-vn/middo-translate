@@ -21,7 +21,7 @@ export interface RepliesBoxProps {}
 export const RepliesBox = () => {
   const { replies: messages, message } = useDiscussion();
   const currentUserId = useAuthStore((s) => s.user?._id);
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const { data: room } = useQuery({
     queryKey: ['room', message.room?._id],
     queryFn: () => roomApi.getRoom(message.room?._id!),
@@ -122,7 +122,9 @@ export const RepliesBox = () => {
         <div className="relative flex justify-center">
           <div className="absolute top-1/2 h-[1px] w-[95%] bg-neutral-200 "></div>
           <div className="relative bg-white p-1 px-3 text-sm text-neutral-400">
-            {messages.length > 1 ? t('CONVERSATION.REPLIES', {num: messages.length}) : t('CONVERSATION.REPLY', {num: messages.length})}
+            {messages.length > 1
+              ? t('CONVERSATION.REPLIES', { num: messages.length })
+              : t('CONVERSATION.REPLY', { num: messages.length })}
           </div>
         </div>
       )}
@@ -151,7 +153,7 @@ export const RepliesBox = () => {
                 </div>
               )}
               {!isMe && !isSystem && room?.isGroup && (
-                <div className="mb-0.5 pl-8 text-xs text-neutral-600">
+                <div className="break-word-mt mb-0.5 pl-8 text-xs text-neutral-600">
                   <span>{group.lastMessage.sender.name}</span>
                 </div>
               )}
