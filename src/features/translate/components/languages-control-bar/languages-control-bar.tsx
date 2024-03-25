@@ -47,7 +47,7 @@ export const LanguagesControlBar = forwardRef<
     const target = searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
     const isTablet = useAppStore((state) => state.isTablet);
     const [isHydrated, setIsHydrated] = useState(false);
-    const {t} = useTranslation('common');
+    const { t } = useTranslation('common');
     const {
       recentlySourceUsed,
       recentlyTargetUsed,
@@ -55,7 +55,8 @@ export const LanguagesControlBar = forwardRef<
       lastSourceUsed,
       lastTargetUsed,
     } = useLanguageStore();
-    const shrinkAble = tab === TranslationTab.PHRASES || tab === TranslationTab.HISTORY;
+    const shrinkAble =
+      tab === TranslationTab.PHRASES || tab === TranslationTab.HISTORY;
     const [clickable, setClickable] = useState(true);
 
     const handleSwapLanguage = useCallback(() => {
@@ -172,7 +173,7 @@ export const LanguagesControlBar = forwardRef<
             props.className,
           )}
         >
-          <div className="flex flex-1 justify-end rounded-2xl lg:justify-start lg:overflow-hidden">
+          <div className="flex flex-1 justify-end overflow-hidden md:rounded-2xl lg:justify-start lg:overflow-hidden">
             <LanguageSelect
               shrinkAble={shrinkAble}
               onChevronClick={() => {
@@ -238,11 +239,11 @@ export const LanguagesControlBar = forwardRef<
                 onSelected={
                   currentSelect === 'source'
                     ? (code) => {
-                      handleSelect(code, 'source');
-                    }
+                        handleSelect(code, 'source');
+                      }
                     : (code) => {
-                      handleSelect(code, 'target');
-                    }
+                        handleSelect(code, 'target');
+                      }
                 }
                 selectedCode={searchParams?.get(currentSelect) as string}
               />
