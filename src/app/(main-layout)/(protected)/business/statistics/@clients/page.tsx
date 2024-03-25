@@ -15,7 +15,7 @@ export type Client = Pick<User, "_id" | "email" | "name" | "phoneNumber"> & {
   lastConnectDate: string;
 };
 
-const limitOptions = [25, 50, 75, 100];
+const limitOptions = [5, 25, 75, 100];
 
 const formatClientData = (data: Client[]) => {
   return data?.map((client) => ({

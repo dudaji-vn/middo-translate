@@ -8,7 +8,7 @@ const SkeletonCard = () => {
     <Card className="gap-2 p-5 border rounded-[12px] border-solid animate-pulse">
       <CardHeader className='flex p-0 flex-row justify-between items-center text-neutral-600'>
         <CardTitle className='text-base font-normal leading-[18px]'>
-          <Skeleton className="h-5 w-1/2 mb-1" />
+          <Skeleton className="h-5 w-2/3 mb-1" />
         </CardTitle>
         <Skeleton className="h-5 w-5" />
       </CardHeader>
