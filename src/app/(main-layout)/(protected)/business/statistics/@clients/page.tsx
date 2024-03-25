@@ -73,10 +73,10 @@ const Page = () => {
           Clients List
         </span>
         <div className='max-md:col-span-5'>
-          <TableSearch className='py-2 w-full' onSearch={onSearchChange} search={search}/>
+          <TableSearch className='py-2 w-full' onSearch={onSearchChange} search={search} />
         </div>
         <div className='max-md:col-span-1'>
-          <DownloadButton />
+          <DownloadButton data={items} />
         </div>
       </div>
       <div className="rounded-md p-0 w-full overflow-x-auto">

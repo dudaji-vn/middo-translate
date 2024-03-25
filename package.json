@@ -54,6 +54,7 @@
     "copy-image-clipboard": "^2.1.2",
     "date-fns": "^3.6.0",
     "emoji-picker-react": "^4.5.16",
+    "exceljs": "^4.4.0",
     "firebase": "^10.7.1",
     "framer-motion": "^10.16.5",
     "html-to-image": "^1.11.11",
