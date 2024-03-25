@@ -1,5 +1,5 @@
 
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { headers } from 'next/headers';
 import { isAllowedDomain } from '@/utils/allowed-domains';
@@ -20,9 +20,9 @@ const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ..
     const referer = headersList.get('referer');
     const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: businessData.domains });
 
-    // if (!isAllowed) {
+    if (!isAllowed) {
     //   notFound();
-    // }
+    }
     return (
         <div className="w-full pb-4">
             <StartAConversation businessData={businessData} />
