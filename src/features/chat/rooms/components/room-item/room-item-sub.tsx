@@ -34,7 +34,9 @@ const ItemSub = ({
     [message.content],
   );
   const englishContent = useMemo(() => {
-    return convert(message.contentEnglish ?? '');
+    return convert(message.contentEnglish ?? '', {
+      selectors: [{ selector: 'a', options: { ignoreHref: true } }],
+    });
   }, [message.contentEnglish]);
 
   const readByUsers = useMemo(() => {

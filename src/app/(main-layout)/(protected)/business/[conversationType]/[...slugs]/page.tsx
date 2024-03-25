@@ -1,5 +1,6 @@
-import HelpDeskConversation from "@/app/(main-layout)/(need-not-auth)/help-desk/[...slugs]/_components/help-desk-conversation/help-desk-conversation"
-import { businessAPI } from "@/features/chat/business/business.service";
+import HelpDeskConversation from "@/app/(main-layout)/(need-not-auth)/help-desk/[businessId]/[...slugs]/_components/help-desk-conversation/help-desk-conversation"
+import { businessAPI } from "@/features/chat/help-desk/api/business.service";
+
 import { notFound } from "next/navigation";
 
 const BusinessConversationPage = async ({ params: { slugs }, ...props }: {
@@ -7,11 +8,7 @@ const BusinessConversationPage = async ({ params: { slugs }, ...props }: {
         slugs: string[];
     }
 }) => {
-    const [businessId, roomId, anonymousUserId] = slugs;
-    const businessData = await businessAPI.getBusinessInfomation(businessId);
-    if (!businessData) {
-        return <div>Not Found</div>;
-    }
+    const [roomId, anonymousUserId] = slugs;
     const room = await businessAPI.getChatRoom(roomId);
     if (!room || !room?._id) {
         notFound();

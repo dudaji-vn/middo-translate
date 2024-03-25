@@ -1,4 +1,5 @@
-import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
+
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { Room } from '@/features/chat/rooms/types';
 import { create } from 'zustand';
 

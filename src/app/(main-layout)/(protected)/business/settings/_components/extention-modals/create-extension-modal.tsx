@@ -22,7 +22,6 @@ import { generateExtensionCode } from '@/utils/genrerateExtensionCode';
 import { CreateExtensionSectionWrapper } from './sections/create-extension-section-wrapper';
 import { createExtensionService } from '@/services/extension.service';
 import toast from 'react-hot-toast';
-import { TBusinessExtensionData } from '../extenstion/business-extension';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import { Spinner } from '@/components/feedback';
@@ -34,6 +33,7 @@ import PluginChatPreview from './sections/plugin-chat-preview';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import useClient from '@/hooks/use-client';
 import { useAuthStore } from '@/stores/auth.store';
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 
 
 type TFormValues = {

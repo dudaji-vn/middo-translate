@@ -1,12 +1,7 @@
 "use client"
 
-import { User } from "@/features/users/types"
 import { ColumnDef } from "@tanstack/react-table"
-
-export type Client = Pick<User, "_id" | "email" | "name" | "phoneNumber"> & {
-    firstConnectDate: string
-    lastConnectDate: string
-}
+import { Client } from "../../@clients/page"
 
 export const clientsColumns: ColumnDef<Client>[] = [
     {

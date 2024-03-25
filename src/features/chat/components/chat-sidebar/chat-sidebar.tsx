@@ -7,9 +7,9 @@ import { ChatSidebarTabs } from './chat-sidebar-tabs';
 import { PropsWithChildren, ReactNode, useEffect } from 'react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
-import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { TBusinessExtensionData } from '../../help-desk/api/business.service';
 
 
 interface ChatSidebarProps {

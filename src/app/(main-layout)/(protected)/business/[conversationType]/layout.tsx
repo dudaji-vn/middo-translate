@@ -1,5 +1,6 @@
-import { businessAPI } from '@/features/chat/business/business.service'
+
 import { ChatSidebar } from '@/features/chat/components/chat-sidebar'
+import { businessAPI } from '@/features/chat/help-desk/api/business.service'
 import { Inbox } from '@/features/chat/rooms/components'
 import { EBusinessConversationKeys } from '@/types/business.type'
 import { notFound } from 'next/navigation'

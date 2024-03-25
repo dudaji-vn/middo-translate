@@ -19,11 +19,16 @@ const StarRating = ({ value }: { value: number }) => {
             {Array(ceil(fillCount)).fill(0).map((_, index) => {
                 const isHalf = Math.abs(value - (index) - 0.5) < ESP;
                 return (
-                    isHalf ? <StarHalf key={index} size={20} fill='#FFD700' stroke='#FFD700' /> : <Star key={index} size={20} fill='#FFD700' stroke='#FFD700' />
+                    isHalf ?
+                        <div key={index} className='relative w-fit'>
+                            <StarHalf size={24} fill='#FFD700' stroke='#FFD700' className='absolute inset-0' />
+                            <Star size={24} fill='#f2f2f2' stroke='#f2f2f2' />
+                        </div>
+                        : <Star key={index} size={24} fill='#FFD700' stroke='#FFD700' />
                 )
             })}
             {Array(emptyCount).fill(0).map((_, index) => (
-                <Star key={index} size={20} className='invisible' />
+                <Star key={index} size={24} fill='#f2f2f2' stroke='#f2f2f2' />
             ))}
         </div>
     );

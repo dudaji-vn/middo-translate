@@ -1,18 +1,35 @@
 'use client'
 
 import { Button } from '@/components/actions'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display'
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal'
 import { Calendar } from '@/components/ui/calendar'
-import { AnalyticsOptions, AnalyticsType, } from '@/features/chat/business/business.service'
 import { cn } from '@/utils/cn'
-import { Arrow, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
 import { addDays, format } from 'date-fns'
 import { CalendarIcon, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { DateRange } from 'react-day-picker'
 
+
+export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
+export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
+export type AnalyticsOptions = {
+    type: AnalyticsType;
+} & (
+        | {
+            type: 'custom';
+            custom: {
+                fromDate: string;
+                toDate: string;
+            };
+        }
+        | {
+            type: Exclude<'last-week' | 'last-month' | 'last-year', 'custom'>;
+            custom?: never;
+        }
+    );
 const filterOptions: Record<AnalyticsOptions['type'], string> = {
     'custom': 'Custom',
     'last-month': 'Last month',
@@ -41,23 +58,23 @@ const generateHref = (type: AnalyticsType, custom: { fromDate: string, toDate: s
 
 }
 export type ChartFilterDropdownProps = {
-    searchParams: {
-        type: string
-        fromDate: string
-        toDate: string
-        search: string
-    }
+    // searchParams: {
+    //     type: string
+    //     fromDate: string
+    //     toDate: string
+    //     search: string
+    // }
 }
 const ChartFilterDropdown = ({
-    searchParams,
+    // searchParams,
     ...props
 }: ChartFilterDropdownProps) => {
-    const {
-        type,
-        fromDate,
-        toDate,
-        search
-    } = searchParams;
+    const searchParams = useSearchParams()
+    const type = searchParams?.get('type')
+    const fromDate = searchParams?.get('fromDate') || ''
+    const toDate = searchParams?.get('toDate') || ''
+    const search = searchParams?.get('search') || ''
+
     const [openDropdown, setOpenDropdown] = useState(false);
     const [openDatePickerModal, setOpenDatePickerModal] = useState(false);
     const router = useRouter()
@@ -66,13 +83,14 @@ const ChartFilterDropdown = ({
         from: fromDate ? new Date(fromDate) : addDays(new Date(), -7),
         to: toDate ? new Date(toDate) : new Date(),
     })
+
+  const current = new URLSearchParams(Array.from(searchParams?.entries() || []));
+
     const onConfirmRangeFilter = () => {
-        const href = `/business/statistics?${new URLSearchParams({
-            type: 'custom',
-            fromDate: format(date?.from || new Date(), 'yyyy-MM-dd'),
-            toDate: format(date?.to || new Date(), 'yyyy-MM-dd'),
-            search: search || ''
-        }).toString()}`
+        current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
+        current.set('toDate', format(date?.to || new Date(), 'yyyy-MM-dd'));
+        current.set('type', 'custom');
+        const href = `/business/statistics?${current.toString()}`
         router.push(href)
         setOpenDatePickerModal(false)
     }
@@ -90,13 +108,13 @@ const ChartFilterDropdown = ({
             </DropdownMenuTrigger>
             <DropdownMenuContent
                 align="end"
-                className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3"
+                className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3 "
                 onClick={() => setOpenDropdown(false)}
             >
                 {Object.entries(filterOptions).map(([key, value]) => {
                     const href = generateHref(key as AnalyticsType, { fromDate, toDate }, search) || '#';
                     if (key === 'custom')
-                        return <DropdownMenuItem className="block px-4 py-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-500  outline-none" onClick={() => {
+                        return <DropdownMenuItem className=" rounded-none  block px-4 py-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-500  outline-none" onClick={() => {
                             setOpenDatePickerModal(true)
                         }}>
                             Custom
@@ -106,17 +124,16 @@ const ChartFilterDropdown = ({
                             key={key}
                             href={href}
                             className={cn(
-                                'block px-4 py-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-500',
+                                'block text-neutral-400 ',
                                 {
                                     'bg-neutral-100 text-neutral-500': type === key
                                 }
                             )}
-                        >  <DropdownMenuItem className="flex items-center outline-none">
+                        >  <DropdownMenuItem className="flex rounded-none items-center outline-none">
                                 {value}
                             </DropdownMenuItem>
                         </Link>
                     )
-
                 })}
 
             </DropdownMenuContent>
@@ -129,7 +146,7 @@ const ChartFilterDropdown = ({
             open={openDatePickerModal}
             onOpenChange={setOpenDatePickerModal}
             dialogContentProps={{
-                className: 'w-full max-w-screen-md'
+                className: 'w-full md:max-w-screen-md max-md:w-full max-md:h-[90vh] overflow-y-auto'
             }}
             footerProps={{
                 className: 'hidden'

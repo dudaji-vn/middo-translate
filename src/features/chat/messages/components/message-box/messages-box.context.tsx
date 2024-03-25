@@ -22,7 +22,7 @@ import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned
 import { useParams } from 'next/navigation';
 import { convert } from 'html-to-text';
 import { useQueryClient } from '@tanstack/react-query';
-import { anounymousMesssagesAPI } from '@/features/chat/business/anonymous-message.service';
+import { anounymousMesssagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 
 interface MessagesBoxContextProps {
   room: Room;

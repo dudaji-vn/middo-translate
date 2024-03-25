@@ -9,6 +9,7 @@ import { navItems } from './header.config';
 import { useBoolean } from 'usehooks-ts';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 export interface HeaderNavMobileProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -38,6 +39,7 @@ const MobileNav = ({
   toggleMenu: () => void;
   pathName: string | null;
 }) => {
+  const {t} = useTranslation('common');
   useDisableScrollWhenMount();
   return (
     <>
@@ -81,7 +83,7 @@ const MobileNav = ({
                 className="block h-full w-full px-[5vw] py-4"
                 href={item.href}
               >
-                {item.name}
+                {t(item.name)}
               </Link>
             </motion.div>
           );

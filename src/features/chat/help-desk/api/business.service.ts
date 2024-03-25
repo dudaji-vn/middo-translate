@@ -1,7 +1,14 @@
-import { TBusinessExtensionData } from '@/app/(main-layout)/(protected)/business/settings/_components/extenstion/business-extension';
-import { Client } from '@/app/(main-layout)/(protected)/business/statistics/_components/clients-table/clients-columns';
-import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/page';
+
+import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/@clients/page';
 import { cookies } from 'next/headers';
+
+export type Client = {
+  firstConnectDate: string
+  lastConnectDate: string
+  _id: string
+  email: string
+  name: string
+}
 
 export type AnalyticsFilterDate = {
   fromDate: string;
@@ -21,7 +28,17 @@ export type AnalyticsOptions = {
       custom?: never;
     }
 );
-
+export type TBusinessExtensionData = {
+  createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  domains: string[];
+  color: string;
+  language: string;
+  firstMessage: string;
+  firstMessageEnglish: string;
+  _id: string;
+};
 class BusinessAPI {
   private basePath: string;
 
@@ -120,6 +137,7 @@ class BusinessAPI {
     }
   }
   async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
+    const cookieStore = cookies();
     try {
       if (!analyticsType.includes(type)) {
         throw new Error('Invalid analytics type');
@@ -135,7 +153,6 @@ class BusinessAPI {
         }),
       }).toString();
       const path = `${this.basePath}/help-desk/analytics?${query}`;
-      const cookieStore = cookies();
       const response = await fetch(path, {
         method: 'GET',
         headers: {

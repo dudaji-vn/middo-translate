@@ -1,37 +1,25 @@
 'use client'
 
 import { Input, InputProps } from '@/components/data-entry'
-import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react'
 import { useDebounce } from 'usehooks-ts';
 
 const DEBOUNCED_TIME = 300;
-const TableSearch = ({ searchParams, ...props }: InputProps & {
-    searchParams: {
-        type: string
-        fromDate: string
-        toDate: string
-        search: string
-    }
+const TableSearch = ({ onSearch, search, ...props }: InputProps & {
+    onSearch: (text: string) => void
+    search: string
 }) => {
-    const [search, setSearch] = React.useState('');
-    const debouncedSearch = useDebounce(search, DEBOUNCED_TIME);
-    const pathname = usePathname();
-    const router = useRouter();
+    const [searchValue, setSearchValue] = React.useState(search || '');
+    const debouncedSearch = useDebounce(searchValue, DEBOUNCED_TIME);
+
 
     useEffect(() => {
-        const params = new URLSearchParams(searchParams);
-        if (debouncedSearch) {
-            params.set('search', debouncedSearch);
-        } else {
-            params.delete('search');
-        }
-        router.push(`${pathname}?${params.toString()}`);
+        onSearch(debouncedSearch)
     }, [debouncedSearch]);
 
     return (
-        <Input placeholder='Search' value={search} onChange={(e) => {
-            setSearch(e.target.value);
+        <Input placeholder='Search' value={searchValue} onChange={(e) => {
+            setSearchValue(e.target.value);
         }} {...props} />
     )
 }

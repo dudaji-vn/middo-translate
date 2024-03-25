@@ -1,8 +1,6 @@
 import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/room-side-tabs/room-side-tabs.hook';
 import { Message } from '../../types';
 import { useTranslation } from 'react-i18next';
-import { useMemo } from 'react';
-import { generateSystemMessageContent } from '../../utils';
 import useGenerateSystemMessageContent from '../../hooks/use-generate-system-message-content';
 
 export interface MessageItemSystemProps {
@@ -15,8 +13,8 @@ export const MessageItemSystem = ({
   isMe,
 }: MessageItemSystemProps) => {
   const { changeTab } = useRoomSidebarTabs();
-  const {t} = useTranslation('common')
-  const messageContent = useGenerateSystemMessageContent(message, isMe)
+  const { t } = useTranslation('common');
+  const messageContent = useGenerateSystemMessageContent(message, isMe);
   return (
     <div className="mx-auto">
       <span className="break-word-mt flex justify-center text-center text-sm font-light text-neutral-500">

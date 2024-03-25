@@ -27,14 +27,14 @@ export function BusinessLineChart({
             <LineChart
               data={claryfiedData}
               margin={{
-                top: 5,
+                top: 15,
                 right: 0,
                 left: 0,
-                bottom: 5,
+                bottom: 15,
               }}
 
             >
-              <XAxis dataKey="Time" />
+              <XAxis dataKey="Time" padding={'gap'} className="py-4" />
               <YAxis  axisLine={false}  tickLine={false} />
               <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
               <Tooltip />

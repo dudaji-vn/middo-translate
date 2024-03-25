@@ -42,7 +42,7 @@ export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
           <SearchInput
             className="flex-1"
             onChange={handleSearch}
-            placeholder="Search"
+            placeholder={t('CONVERSATION.SEARCH')}
           />
         </div>
         <div className="p-3">
