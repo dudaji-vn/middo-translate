@@ -8,7 +8,7 @@ const PaginationButton = ({ page, isActive, onClick }: {
 
 }) => (
     <PaginationItem>
-        <Button.Icon size={'xs'} className='' onClick={() => onClick(page)} variant={isActive ? 'outline' : 'ghost'}>
+        <Button.Icon size={'xs'} className='max-md:hidden' onClick={() => onClick(page)} variant={isActive ? 'outline' : 'ghost'}>
             {page}
         </Button.Icon>
     </PaginationItem>

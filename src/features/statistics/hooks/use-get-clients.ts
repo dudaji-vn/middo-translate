@@ -24,7 +24,6 @@ export const useGetClients = ({
                     page: currentPage,
                 },
             });
-            console.log('data ?? >>', response.data)
             return response.data;
         } catch (error) {
             throw new Error(`Error fetching clients: ${(error as Error).message}`);

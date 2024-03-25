@@ -46,11 +46,11 @@ const ClientsPagination = ({ pagination, limitOptions, onLimitChange, onPageChan
                     </DropdownMenu>
                     <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => previousPage && onPageChange(previousPage)} disabled={!canPreviousPage}>
                         <ChevronLeft className="h-4 w-4" />
-                        <span>Previous</span>
+                        <span className='max-md:hidden'>Previous</span>
                     </Button>
                     <MiddlePaginationButtons pagination={pagination} onPageChange={onPageChange} />
                     <Button className='py-2' shape={'square'} variant={'ghost'} onClick={() => nextPage && onPageChange(nextPage)} disabled={!canNextPage}>
-                        <span>Next</span>
+                        <span className='max-md:hidden'>Next</span>
                         <ChevronRight className="h-4 w-4" />
                     </Button>
                 </PaginationContent>

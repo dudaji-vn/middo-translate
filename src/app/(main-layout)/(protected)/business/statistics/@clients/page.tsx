@@ -7,6 +7,8 @@ import moment from 'moment';
 import { User } from '@/features/users/types';
 import ClientsPagination, { ClientPagination } from '../_components/pagination/clients-pagination';
 import { useGetClients } from '@/features/statistics/hooks/use-get-clients';
+import TableSearch from '../_components/clients-table/table-search';
+import DownloadButton from '../_components/clients-table/download-button';
 
 export type Client = Pick<User, "_id" | "email" | "name" | "phoneNumber"> & {
   firstConnectDate: string;
@@ -30,9 +32,11 @@ export const DEFAULT_CLIENTS_PAGINATION = {
 const Page = () => {
   const [currentPage, setCurrentPage] = useState(DEFAULT_CLIENTS_PAGINATION.currentPage);
   const [limit, setLimit] = useState(DEFAULT_CLIENTS_PAGINATION.limit);
+  const [search, setSearch] = useState('')
   const { data, isLoading, isError } = useGetClients({
     ...DEFAULT_CLIENTS_PAGINATION,
     currentPage,
+    search,
     limit
   });
   const items = formatClientData(data?.items || []);
@@ -55,24 +59,45 @@ const Page = () => {
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   }
-
+  const onSearchChange = (search: string) => {
+    setSearch(search)
+  }
   if (isError) {
     throw new Error('Error fetching clients');
   }
 
   return (
-    <div className="rounded-md p-0 w-full overflow-x-auto">
-      <DataTable columns={columns} data={items}
-        cellProps={{
-          className: 'max-w-[200px] h-auto break-words'
-        }} 
-        loading={isLoading}
-        skeletonsRows={limit}
+    <section className='space-y-4 w-full relative'>
+      <div className="md:grid-cols-[20%_50%_30%] xl:grid-cols-[10%_70%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
+        <span className="text-base font-normal max-md:col-span-6 text-primary-500-main">
+          Clients List
+        </span>
+        <div className='max-md:col-span-5'>
+          <TableSearch className='py-2 w-full' onSearch={onSearchChange} search={search} />
+        </div>
+        <div className='max-md:col-span-1'>
+          <DownloadButton data={items} colInfo={[
+            { name: "Name", width: 20 },
+            { name: "Email", width: 30 },
+            { name: "Phone Number", width: 15 },
+            { name: "First Connect Date", width: 20 },
+            { name: "Last Connect Date", width: 20 },
+          ]} />
+        </div>
+      </div>
+      <div className="rounded-md p-0 w-full overflow-x-auto">
+        <DataTable columns={columns} data={items}
+          cellProps={{
+            className: 'max-w-[200px] h-auto break-words'
+          }}
+          loading={isLoading}
+          skeletonsRows={limit}
         />
-      <ClientsPagination pagination={pagination} limitOptions={limitOptions}
-        onPageChange={onPageChange} onLimitChange={onLimitChange}
-      />
-    </div>
+        <ClientsPagination pagination={pagination} limitOptions={limitOptions}
+          onPageChange={onPageChange} onLimitChange={onLimitChange}
+        />
+      </div>
+    </section>
   );
 };
 
