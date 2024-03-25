@@ -11,7 +11,6 @@ const StatiscticReport = async ({ params }: { params: AnalyticsOptions }) => {
   if (!statiscticData) {
     throw new Error("NO_ANALYSTIC_DATA");
   }
-  await new Promise((resolve) => setTimeout(resolve, 10000));
   return (
     <>
       <Report data={statiscticData} />
