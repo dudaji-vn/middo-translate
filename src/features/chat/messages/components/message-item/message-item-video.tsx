@@ -12,7 +12,7 @@ export const MessageItemVideo = ({ file }: MessageItemVideoProps) => {
       onDoubleClick={() => {
         videoRef.current?.requestFullscreen();
       }}
-      className="group relative h-fit w-[320px] overflow-hidden rounded-lg bg-neutral-50"
+      className="group relative h-fit w-[280px] overflow-hidden rounded-lg bg-neutral-50"
     >
       <video
         ref={videoRef}
