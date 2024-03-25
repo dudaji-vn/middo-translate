@@ -1,11 +1,11 @@
 
 import { notFound, redirect } from 'next/navigation';
-import { businessAPI } from '@/features/chat/business/business.service';
+import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { headers } from 'next/headers';
 import { isAllowedDomain } from '@/utils/allowed-domains';
 import StartAConversation from './[...slugs]/_components/start-conversation/start-a-conversation';
 
-const HelpDeskConversationPage = async ({ params: { slugs, businessId }, ...props }: {
+const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ...props }: {
     params: {
         businessId: string;
         slugs: string[];
@@ -31,4 +31,4 @@ const HelpDeskConversationPage = async ({ params: { slugs, businessId }, ...prop
 
 };
 
-export default HelpDeskConversationPage;
+export default HelpDeskStartConversationPage;

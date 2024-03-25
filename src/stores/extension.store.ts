@@ -1,5 +1,5 @@
 
-import { TBusinessExtensionData } from '@/features/chat/business/business.service';
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { Room } from '@/features/chat/rooms/types';
 import { create } from 'zustand';
 

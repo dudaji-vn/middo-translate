@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { cn } from "@/utils/cn"
-import { Button } from "../actions"
+import { Skeleton } from "./skeleton"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -28,8 +28,26 @@ interface DataTableProps<TData, TValue> {
   bodyProps?: React.HTMLAttributes<HTMLTableSectionElement>
   tableProps?: React.HTMLAttributes<HTMLTableElement>
   tableHeadProps?: React.ThHTMLAttributes<HTMLTableCellElement>
+  loading?: boolean
+  skeletonsRows?: number
+}
+interface SkeletonRowProps {
+  columns: number;
+  cellProps?: React.TdHTMLAttributes<HTMLTableCellElement>;
+  rowProps?: React.TdHTMLAttributes<HTMLTableRowElement>;
 }
 
+const SkeletonRow: React.FC<SkeletonRowProps> = ({ columns, cellProps, rowProps }) => {
+  return (
+    <TableRow {...rowProps}>
+      {[...Array(columns)].map((_, index) => (
+        <TableCell key={index} {...cellProps}>
+            <Skeleton className="h-full w-11/12 rounded-full" />
+        </TableCell>
+      ))}
+    </TableRow>
+  );
+};
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -39,6 +57,8 @@ export function DataTable<TData, TValue>({
   rowProps,
   tableProps,
   tableHeadProps,
+  loading,
+  skeletonsRows,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -67,27 +87,32 @@ export function DataTable<TData, TValue>({
         ))}
       </TableHeader>
       <TableBody {...bodyProps}>
-        {table.getRowModel().rows?.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.id}
-              data-state={row.getIsSelected() && "selected"}
-              className="border-none"
-              {...rowProps}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}  {...cellProps}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
+        {loading ? ( Array.from({ length: skeletonsRows || 5 }).map((_, index) => (
+            <SkeletonRow key={index} columns={columns.length} cellProps={cellProps} rowProps={rowProps} />
           ))
         ) : (
-          <TableRow className="border-none" {...rowProps}>
-            <TableCell colSpan={columns.length} className="h-24 text-center" {...cellProps}>
-              No results.
-            </TableCell>
-          </TableRow>
+          table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+                className="border-none"
+                {...rowProps}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id} {...cellProps}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow className="border-none" {...rowProps}>
+              <TableCell colSpan={columns.length} className="h-24 text-center" {...cellProps}>
+                No results.
+              </TableCell>
+            </TableRow>
+          )
         )}
       </TableBody>
     </Table>

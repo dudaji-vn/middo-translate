@@ -1,6 +1,4 @@
-
-import { businessAPI } from '@/features/chat/business/business.service'
-
+import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { notFound } from 'next/navigation'
 export enum EStatisticErrors {
   NO_ANALYSTIC_DATA = "NO_ANALYSTIC_DATA",

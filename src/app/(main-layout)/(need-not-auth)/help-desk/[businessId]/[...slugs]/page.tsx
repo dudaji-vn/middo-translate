@@ -1,7 +1,7 @@
 
 import { notFound } from 'next/navigation';
-import { businessAPI } from '@/features/chat/business/business.service';
 import HelpDeskConversation from './_components/help-desk-conversation/help-desk-conversation';
+import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 
 
 const HelpDeskConversationPage = async ({ params: { slugs, }, ...props }: {

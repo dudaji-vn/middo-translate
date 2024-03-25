@@ -2,7 +2,7 @@ import { Spinner } from '@/components/feedback'
 import { cn } from '@/utils/cn'
 import React from 'react'
 
-const loading = () => {
+const ClientsLoading = () => {
   return (
     <div
       className={cn(
@@ -13,4 +13,4 @@ const loading = () => {
     </div>
   )
 }
-export default loading
+export default ClientsLoading

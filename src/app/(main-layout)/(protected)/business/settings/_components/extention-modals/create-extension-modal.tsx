@@ -33,7 +33,7 @@ import PluginChatPreview from './sections/plugin-chat-preview';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import useClient from '@/hooks/use-client';
 import { useAuthStore } from '@/stores/auth.store';
-import { TBusinessExtensionData } from '@/features/chat/business/business.service';
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 
 
 type TFormValues = {

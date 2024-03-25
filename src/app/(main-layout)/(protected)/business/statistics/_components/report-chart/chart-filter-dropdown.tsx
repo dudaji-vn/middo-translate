@@ -146,7 +146,7 @@ const ChartFilterDropdown = ({
             open={openDatePickerModal}
             onOpenChange={setOpenDatePickerModal}
             dialogContentProps={{
-                className: 'w-full max-w-screen-md'
+                className: 'w-full md:max-w-screen-md max-md:w-full max-md:h-[90vh] overflow-y-auto'
             }}
             footerProps={{
                 className: 'hidden'
