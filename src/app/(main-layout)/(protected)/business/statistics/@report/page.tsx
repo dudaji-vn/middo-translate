@@ -6,8 +6,8 @@ import { businessAPI } from '@/features/chat/help-desk/api/business.service'
 import { AnalyticsOptions } from '../_components/report-chart/chart-filter-dropdown'
 
 
-const StatiscticReport = async ({  params}: any) => {
-  const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
+const StatiscticReport = async ({ params }: { params: AnalyticsOptions }) => {
+  const statiscticData: StatisticData = await businessAPI.getAnalytics(params);
   if (!statiscticData) {
     throw new Error("NO_ANALYSTIC_DATA");
   }
