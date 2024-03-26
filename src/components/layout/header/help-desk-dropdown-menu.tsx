@@ -5,33 +5,34 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { Minus } from 'lucide-react'
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { use, useMemo } from 'react'
 
 const HelpDeskDropdownMenu = () => {
 
     const { isOnHelpDeskChat } = useBusinessNavigationData();
     const params = useParams();
+    const roomId = params?.slugs?.[0] || '';
+    const pathname = usePathname();
+    console.log('pathname', pathname, roomId)
     const router = useRouter();
     const items = useMemo(() => {
-        if (isOnHelpDeskChat) 
         return [{
             name: 'Mute',
             onClick: () => {
                 // TODO: implement this
             }
-        }];
-        return [
-            {
-                name: 'Complete',
-                onClick: () => {
-                    if (params?.businessId && params?.userId)
-                        router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params.businessId}/rate/${params.userId}`)
-                }
-            },
+        },
+        {
+            name: 'Complete',
+            onClick: () => {
+                const next = String(pathname?.replace(roomId, 'rate'))
+                router.replace(next)
 
-        ]
-    }, [isOnHelpDeskChat, params?.businessId, params?.userId]);
+            },
+        }]
+    }, [params?.businessId, params?.userId]);
+    if (!isOnHelpDeskChat) return null;
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>

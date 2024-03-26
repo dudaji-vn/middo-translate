@@ -39,10 +39,10 @@ const StarRating = ({ onRate, businessData }: {
 
     }
     return (<>
-        <form action={action} className="max-w-screen-md m-auto flex flex-col gap-8 items-center">
+        <form action={action} className="max-w-screen-md w-full px-6 m-auto flex flex-col gap-8 items-center">
             <Typography variant={'h2'} className="text-2xl">Rate us!</Typography>
             <Typography >Please spend your time to let us know your experience with this conversation</Typography>
-            <div className='flex items-center gap-3'>
+            <div className='flex items-center md:gap-3 gap-1'>
                 {Array(5).fill(0).map((_, index) => (
                     <button
                         key={index}
