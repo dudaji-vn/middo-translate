@@ -18,6 +18,7 @@ import { useSidebarStore } from '@/stores/sidebar.store';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useParams, usePathname } from 'next/navigation';
 
 export interface ChatSidebarHeaderProps { }
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
@@ -26,7 +27,8 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const [openSetting, setOpenSetting] = useState(false);
   const { searchValue, setSearchValue } = useSearchStore();
   const { openSidebar, setOpenSidebar } = useSidebarStore();
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common')
+  const pathname = usePathname();
   const handleToggleSetting = () => {
     setOpenSetting((prev) => !prev);
   };
@@ -47,6 +49,17 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     searchInputRef.current?.reset();
   }, [removeParams, searchInputRef]);
 
+  if (pathname?.includes('statistics')) {
+    return <Button.Icon
+      onClick={() => setOpenSidebar(!openSidebar, true)}
+      color="default"
+      size="xs"
+      variant={'ghost'}
+      className={cn('md:hidden', isBusiness ? 'md:hidden' : 'hidden')}
+    >
+      <Menu />
+    </Button.Icon>
+  }
 
   return (
     <div className="w-full px-3 pt-3">
@@ -56,7 +69,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           color="default"
           size="xs"
           variant={'ghost'}
-          className={cn('md:hidden', isBusiness ?'md:hidden': 'hidden')}
+          className={cn('md:hidden', isBusiness ? 'md:hidden' : 'hidden')}
         >
           <Menu />
         </Button.Icon>
@@ -87,7 +100,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           ></Tooltip>
         </div>
       </div>
-      <div className="flex items-center gap-1 ">
+      <div className={cn("flex items-center gap-1 ", pathname?.includes('statistics') && "hidden")}>
         <AnimatePresence>
           {isSearch && (
             <motion.div
