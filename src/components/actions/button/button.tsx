@@ -66,7 +66,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
               {startIcon}
             </Icon>
           )}
-          {loading ? <Spinner size={size} /> : <>{children}</>}
+          {loading ? <Spinner size={size} className='text-white' /> : <>{children}</>}
           {endIcon && <Icon type="right">{endIcon}</Icon>}
         </>
       </Comp>
