@@ -65,7 +65,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
         return null
     const submit = async (values: z.infer<typeof createGuestInfoSchema>) => {
         try {
-            startAGuestConversationService({
+            await startAGuestConversationService({
                 businessId: businessData._id,
                 ...values
             }).then((res) => {
@@ -120,6 +120,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
                                 type={'submit'}
                                 shape={'square'}
                                 disabled={isSubmitting}
+                                loading={isSubmitting}
                                 style={{ backgroundColor: businessData?.color || DEFAULT_THEME }}
                             >
                                 Start Conversation
