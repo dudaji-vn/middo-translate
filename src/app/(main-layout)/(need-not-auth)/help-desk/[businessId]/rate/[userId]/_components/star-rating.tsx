@@ -87,7 +87,7 @@ const StarRating = ({ onRate, businessData }: {
             >
                 Send Rating
             </Button>
-            <Link href={`${ROUTE_NAMES.BUSINESS_CONVERSATION}/${params?.businessId}`} >
+            <Link href={`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`} >
                 Skip
             </Link>
         </form></>
