@@ -1,5 +1,6 @@
-import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/@clients/page';
+
 import { User } from '@/features/users/types';
+import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { cookies } from 'next/headers';
 
 export type Client = {

@@ -1,5 +1,6 @@
-import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/@clients/page';
+
 import { ACCEPT_DIFF_RESULT, LIMIT_CLIENTS_TABLE } from '@/configs/store-key';
+import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 
 export const getAcceptDiffResult = () => {
   const diffResult = localStorage.getItem(ACCEPT_DIFF_RESULT);
