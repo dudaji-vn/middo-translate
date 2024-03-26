@@ -33,7 +33,7 @@ export const extentionsCustomThemeOptions: TThemeOption[] = [
   },
   {
     name: 'lemon',
-    hex: '#a6ff00',
+    hex: '#e3df00',
   },
 ];
 

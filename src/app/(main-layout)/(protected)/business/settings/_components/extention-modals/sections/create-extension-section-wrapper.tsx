@@ -18,6 +18,7 @@ export type CreateExtensionSectionWrapperProps = {
     accordionContentProps?: AccordionContentProps;
     disabledTrigger?: boolean;
     onTriggerClick?: () => void;
+    nextStepText?: string;
 };
 export const CreateExtensionSectionWrapper: React.FC<CreateExtensionSectionWrapperProps & AccordionItemProps> = ({
     value,
@@ -29,6 +30,7 @@ export const CreateExtensionSectionWrapper: React.FC<CreateExtensionSectionWrapp
     accordionContentProps,
     disabledTrigger = false,
     onTriggerClick,
+    nextStepText = 'Next step',
     ...props
 }) => (
     <AccordionItem {...props} value={value} className='py-0 my-0'>
@@ -52,7 +54,7 @@ export const CreateExtensionSectionWrapper: React.FC<CreateExtensionSectionWrapp
                 {...nextStepProps}
                 onClick={onNextStep}
             >
-                Next step
+                {nextStepText}
             </Button>
         </AccordionContent>
     </AccordionItem>

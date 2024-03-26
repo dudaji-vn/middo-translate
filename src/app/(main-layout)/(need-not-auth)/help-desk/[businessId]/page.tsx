@@ -5,7 +5,6 @@ import { headers } from 'next/headers';
 import { isAllowedDomain } from '@/utils/allowed-domains';
 import StartAConversation from './[...slugs]/_components/start-conversation/start-a-conversation';
 import { cn } from '@/utils/cn';
-import { DEFAULT_THEME, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/options';
 
 const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ...props }: {
     params: {
@@ -24,12 +23,8 @@ const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ..
     if (!isAllowed) {
         //   notFound();
     }
-    const theme = extentionsCustomThemeOptions.find((item) => item.name === businessData.color || item.hex === businessData.color) || extentionsCustomThemeOptions[0];
-    console.log('businessData==>', businessData)
     return (
-        <div className={cn("w-full pb-4 ", theme.name)}>
             <StartAConversation businessData={businessData} />
-        </div>
     )
 
 };

@@ -262,6 +262,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                     onTriggerClick={() => {
                       trigger('domains');
                     }}
+                    nextStepText={initialData ? 'Save & Generate code' : 'Next step'}
                   >
                     <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>
                       <div className='w-1/3 divide-y divide-neutral-50'>

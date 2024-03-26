@@ -15,6 +15,7 @@ export function BusinessLineChart({
 }: { chartData: StatisticData['chart'], keyData: TChartKey }) {
   const data = chartData[keyData];
   const { label: chartLabel, value: chartDataKey } = MAPPED_CHARTS_INFO_KEY[keyData];
+  console.log('chartLabel', chartLabel)
   const claryfiedData = useMemo(() => {
     if (!data) {
       console.error('No data for chart');
@@ -41,7 +42,7 @@ export function BusinessLineChart({
               }}
 
             >
-              <XAxis dataKey="Time" padding={'gap'} className="py-4" />
+              <XAxis dataKey={chartLabel} padding={'gap'} className="py-4" />
               <YAxis axisLine={false} tickLine={false} />
               <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
               <Tooltip />

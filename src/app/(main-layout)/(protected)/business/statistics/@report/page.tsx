@@ -12,9 +12,7 @@ const StatiscticReport = async ({ params }: { params: AnalyticsOptions }) => {
     throw new Error("NO_ANALYSTIC_DATA");
   }
   return (
-    <>
-      <Report data={statiscticData} />
-    </>
+    <Report data={statiscticData} />
   )
 }
 

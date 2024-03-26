@@ -3,6 +3,7 @@ import { TThemeOption, DEFAULT_THEME, extentionsCustomThemeOptions } from './opt
 import { Button } from '@/components/actions';
 import { Check, CircleIcon } from 'lucide-react';
 import { FormLabel } from '@/components/ui/form';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 export type CustomThemeColorProps = {
   selectedColor: TThemeOption['hex'] | null;
@@ -22,17 +23,23 @@ const CustomThemeOptions = ({
       <div className='grid md:grid-cols-6 grid-cols-4 xl:grid-cols-10  lg:grid-cols-8 grid-flow-row '>
         {extentionsCustomThemeOptions.map((color, index) => {
           const isSelect = selectedColor === color.hex;
-          return (
-            <Button.Icon
-              key={color.hex}
-              variant="ghost"
-              type="button"
-              className='!w-fit !h-fit relative'
-              onClick={() => selectedColor === color.hex ? onChange(DEFAULT_THEME) : onChange(color.hex)}
-            >
-              <CircleIcon className='w-6 h-6' stroke={selectedColor === color.hex ? 'var(--color-primary)' : 'var(--color-neutral-500)'} fill={color.hex} />
-              <Check stroke='white' className={`absolute top-1 left-1 w-4 h-4 ${isSelect ? 'block' : 'hidden'}`} />
-            </Button.Icon>
+          return (<Tooltip
+            title={color.name}
+            key={color.hex}
+            contentProps={{
+              className: 'text-neutral-800 capitalize',
+            }}
+            triggerItem={
+              <Button.Icon
+                variant="ghost"
+                type="button"
+                className='!w-fit !h-fit relative'
+                onClick={() => selectedColor === color.hex ? onChange(DEFAULT_THEME) : onChange(color.hex)}
+              >
+                <CircleIcon className='w-6 h-6' stroke={selectedColor === color.hex ? 'var(--color-primary)' : 'var(--color-neutral-500)'} fill={color.hex} />
+                <Check stroke='white' className={`absolute top-1 left-1 w-4 h-4 ${isSelect ? 'block' : 'hidden'}`} />
+              </Button.Icon>
+            } />
           )
         })}
       </div>

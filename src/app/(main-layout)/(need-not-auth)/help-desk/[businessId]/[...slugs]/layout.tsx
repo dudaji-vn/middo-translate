@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 
-const HelpDeskConversationLayout = ({ children }: { children: ReactNode }) => {
+const LayoutHelpDesk = ({ children }: { children: ReactNode }) => {
 
     return (
         <div className="flex w-full h-main-container-height md:max-w-7xl mx-auto shadow-md">
@@ -8,4 +8,5 @@ const HelpDeskConversationLayout = ({ children }: { children: ReactNode }) => {
         </div>
     )
 }
-export default HelpDeskConversationLayout
+
+export default LayoutHelpDesk
