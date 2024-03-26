@@ -1,5 +1,6 @@
-import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/@clients/page';
+
 import { axios } from '@/lib/axios';
+import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { useQuery } from '@tanstack/react-query';
 
 export const GET_CLIENTS_KEY = 'get-my-clients';

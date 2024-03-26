@@ -10,13 +10,12 @@ import { useGetClients } from '@/features/statistics/hooks/use-get-clients';
 import TableSearch from '../_components/clients-table/table-search';
 import DownloadButton from '../_components/clients-table/download-button';
 import { getClientsTablePerpage, setClientsTablePerpage } from '@/utils/local-storage';
+import { DEFAULT_CLIENTS_PAGINATION, ROWS_PER_PAGE_OPTIONS } from '@/types/business-statistic.type';
 
 export type Client = Pick<User, "_id" | "email" | "name" | "phoneNumber"> & {
   firstConnectDate: string;
   lastConnectDate: string;
 };
-
-const limitOptions = [5, 25, 75, 100];
 
 const formatClientData = (data: Client[]) => {
   return data?.map((client) => ({
@@ -25,11 +24,7 @@ const formatClientData = (data: Client[]) => {
     lastConnectDate: moment(client.lastConnectDate).format('DD/MM/YYYY'),
   })) || [];
 };
-export const DEFAULT_CLIENTS_PAGINATION = {
-  limit: limitOptions[0],
-  currentPage: 1,
-  search: '',
-}
+
 const Page = () => {
   const [currentPage, setCurrentPage] = useState(DEFAULT_CLIENTS_PAGINATION.currentPage);
   const [limit, setLimit] = useState(getClientsTablePerpage());
@@ -95,7 +90,7 @@ const Page = () => {
           loading={isLoading}
           skeletonsRows={limit}
         />
-        <ClientsPagination pagination={pagination} limitOptions={limitOptions}
+        <ClientsPagination pagination={pagination} limitOptions={ROWS_PER_PAGE_OPTIONS}
           onPageChange={onPageChange} onLimitChange={onLimitChange}
         />
       </div>
