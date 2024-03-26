@@ -2,33 +2,38 @@ import { Message } from '@/features/chat/messages/types';
 
 export interface TThemeOption {
   hex: string;
+  name: string;
 }
 
-export const DEFAULT_THEME = '#3D88ED';
+export const DEFAULT_THEME = '#3D88ED'
 export const extentionsCustomThemeOptions: TThemeOption[] = [
   {
-    hex: '#EF3B36',
-  },
-  {
-    hex: '#E11D59',
-  },
-  {
-    hex: '#8E23A3',
-  },
-  {
-    hex: '#5A33AA',
-  },
-  {
-    hex: '#3649A8',
-  },
-  {
+    name: 'default',
     hex: '#3D88ED',
   },
   {
-    hex: '#3A9E9F',
+    name: 'halloween',
+    hex: '#ff5e00',
   },
   {
-    hex: '#3AB27D',
+    name: 'rose',
+    hex: '#ff005e',
+  },
+  {
+    name: 'violet',
+    hex: '#5e00ff',
+  },
+  {
+    name: 'sky',
+    hex: '#00b3ff',
+  },
+  {
+    name: 'forest',
+    hex: '#139e70',
+  },
+  {
+    name: 'lemon',
+    hex: '#a6ff00',
   },
 ];
 

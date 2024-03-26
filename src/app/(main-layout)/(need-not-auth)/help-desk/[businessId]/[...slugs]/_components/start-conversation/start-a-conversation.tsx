@@ -1,6 +1,6 @@
 'use client'
 
-import { DEFAULT_THEME } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/options'
+import { DEFAULT_THEME, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/options'
 import { PreviewCustomMessages } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/preview-custom-messages'
 import { Button } from '@/components/actions'
 import { Typography } from '@/components/data-display'
@@ -42,6 +42,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
     const router = useRouter()
     const isClient = useClient();
     const { user: owner } = businessData || {};
+    const theme = extentionsCustomThemeOptions.find((item) => item.name === businessData.color || item.hex === businessData.color) || extentionsCustomThemeOptions[0];
     const [open, setOpen] = useState(false);
     const showForm = () => {
         setOpen(true);
@@ -71,7 +72,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
             }).then((res) => {
                 const roomId = res.data.roomId;
                 const user = res.data.user;
-                router.push(`/help-desk/${businessData._id}/${roomId}/${user._id}`)
+                router.push(`/help-desk/${businessData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
             })
         } catch (error) {
             console.error('Error in create a guest conversation', error)
@@ -115,13 +116,14 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
                                 labelProps={{ className: 'ml-0 mb-2' }}
                             />
                             <Button
-                                className='h-11  w-full'
                                 variant={'default'}
                                 type={'submit'}
                                 shape={'square'}
                                 disabled={isSubmitting}
+                                color={'primary'}
                                 loading={isSubmitting}
-                                style={{ backgroundColor: businessData?.color || DEFAULT_THEME }}
+                                className='h-11  w-full '
+                                style={{ backgroundColor: theme.hex }}
                             >
                                 Start Conversation
                             </Button>
@@ -138,7 +140,9 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
                         onClick={showForm}
                         disabled={isSubmitting}
                         loading={isSubmitting}
-                        style={{ backgroundColor: businessData?.color || DEFAULT_THEME }}
+                        // style={{
+                        //     backgroundColor: theme.hex
+                        // }}
                     >
                         {isAfterDoneAnCOnversation ? "Click to start a new conversation!" : "Click to start a conversation"}
                     </Button>
