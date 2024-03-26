@@ -106,9 +106,9 @@
   .halloween {
     --primary: #ff5e00;
     --primary-100: #ffd9b3;
-    --primary-200: #ffbf80;
-    --primary-300: #ffa64d;
-    --primary-400: #ff8c1a;
+    --primary-200: #ffc993;
+    --primary-300: #ffb56b;
+    --primary-400: #fca752;
     --primary-500-main: #ff5e00;
     --primary-600: #e65300;
     --primary-700: #cc4900;
@@ -118,10 +118,10 @@
 
   .rose {
     --primary: #ff005e;
-    --primary-100: #ff99b3;
-    --primary-200: #ff6680;
-    --primary-300: #ff335d;
-    --primary-400: #ff0040;
+    --primary-100: #fea9be;
+    --primary-200: #ff7f94;
+    --primary-300: #ff6584;
+    --primary-400: #fd7189ce;
     --primary-500-main: #ff005e;
     --primary-600: #e6004e;
     --primary-700: #cc0040;
