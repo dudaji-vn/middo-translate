@@ -3,7 +3,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Typography } from '@/components/data-display';
-import { Button } from '@/components/actions';
 import { ArrowDown, ArrowUp, Info, Star, StarHalf } from 'lucide-react';
 import { StatisticData, TChartKey } from '@/types/business-statistic.type';
 import useClient from '@/hooks/use-client';
@@ -35,11 +34,11 @@ const StarRating = ({ value }: { value: number }) => {
         </div>
     );
 };
-const Percentage = ({ value }: { value: number }) => {
+const Percentage = ({ value = 0 }: { value: number }) => {
     return (
         <Typography variant={'h6'} className={cn('text-base font-normal flex flex-row items-center', value > 0 ? 'text-success-700' : 'text-error-400-main')} >
             {value > 0 ? <ArrowUp size={15} /> : <ArrowDown size={15} />}
-            {`${value}%`}
+            {`${value.toFixed(1)}%`}
         </Typography>
     );
 }
@@ -78,6 +77,7 @@ const cardContents: Array<{
             name: 'averageRating',
             title: "Customer rating",
             renderDetail: (value: number) => <StarRating value={value} />,
+            renderPercentage: (value: number) => <Percentage value={value} />,
         }
     ];
 

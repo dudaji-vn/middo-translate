@@ -79,7 +79,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
         }
     }
     return (
-        <div className={cn('h-full w-full flex flex-col justify-between py-3 px-4', isAfterDoneAnCOnversation && 'max-h-60 my-auto')}>
+        <div className={cn('h-full w-full flex flex-col justify-between py-3 px-4', isAfterDoneAnCOnversation ? 'max-h-60 my-auto' : 'pb-5 h-main-container-height')}>
             {isAfterDoneAnCOnversation ? <div className="max-w-screen-md m-auto flex flex-col gap-8 items-center">
                 <Typography variant={'h2'} className="text-2xl">Thank you!</Typography>
                 <Typography >Your rating has been sent successfully</Typography>

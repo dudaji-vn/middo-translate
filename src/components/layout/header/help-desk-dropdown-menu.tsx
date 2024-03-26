@@ -19,6 +19,7 @@ const HelpDeskDropdownMenu = () => {
         return [{
             name: 'Complete',
             onClick: () => {
+                console.log('first', `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${userId}`)
                 if (!userId) return;
                 router.replace(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${userId}`)
 
