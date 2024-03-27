@@ -21,7 +21,7 @@ export interface RoomModalDeleteProps {
 }
 
 export const RoomModalDelete = (props: RoomModalDeleteProps) => {
-  const { isBusiness, isOnBusinessChat } = useBusinessNavigationData();
+  const { isBusiness, isOnBusinessChat, businessRoomId, businessConversationType } = useBusinessNavigationData();
   const { mutateAsync } = useDeleteConversation();
   const router = useRouter();
   const { t } = useTranslation('common')
@@ -30,13 +30,13 @@ export const RoomModalDelete = (props: RoomModalDeleteProps) => {
     try {
       if (isBusiness) {
         await roomApi.deleteAllMessages(props.id);
+        props.onClosed?.();
+        if (isOnBusinessChat && businessRoomId === props.id)
+          router.push(`/business/${businessConversationType}`);
+        return;
       }
-      else { 
-        await mutateAsync(props.id); 
-      }
+      await mutateAsync(props.id);
       props.onClosed?.();
-      if (isOnBusinessChat)
-        router.back();
     } catch (error) {
       console.error(error);
     }

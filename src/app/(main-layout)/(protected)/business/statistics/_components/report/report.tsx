@@ -42,9 +42,9 @@ const Percentage = ({ value = 0, suffix = '%', prefix }: { value: number | strin
     }, [value, prefix]);
     const displayValue = typeof value === 'number' ? value.toFixed(1) : value;
     return (
-        <Typography variant={'h6'} className={cn('text-base font-normal flex flex-row items-center', typeof value === 'number' ? (value >= 0 ? 'text-success-700' : 'text-error-400-main') : 'text-neutral-600')} >
+        <Typography variant={'h6'} className={cn('text-base font-normal flex flex-row  items-center', typeof value === 'number' ? (value >= 0 ? 'text-success-700' : 'text-error-400-main') : 'text-neutral-600')} >
             {prefixComp}
-            {`${displayValue}`}<span>{suffix}</span>
+            {`${displayValue}`}<span className='ml-[2px]'>{suffix}</span>
         </Typography>
     );
 }
@@ -83,7 +83,7 @@ const cardContents: Array<{
             name: 'averageRating',
             title: "Customer rating",
             renderDetail: (value: number) => <StarRating value={value} />,
-            renderPercentage: (value: string) => <Percentage suffix={''} prefix={''} value={value} />,
+            renderPercentage: (value: string) => <Percentage suffix={'ratings'} prefix={''} value={value} />,
         }
     ];
 
@@ -107,7 +107,6 @@ const Report = ({ data }: { data: StatisticData }) => {
                     if (name === 'responseChat') {
                         detailValue = data.responseChat?.averageTime;
                     }
-                    // percentage = '12.45/2334'
                     return (
                         <Card
                             key={index}
