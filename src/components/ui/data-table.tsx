@@ -42,7 +42,7 @@ const SkeletonRow: React.FC<SkeletonRowProps> = ({ columns, cellProps, rowProps 
     <TableRow {...rowProps}>
       {[...Array(columns)].map((_, index) => (
         <TableCell key={index} {...cellProps}>
-            <Skeleton className="h-full w-11/12 rounded-full" />
+            <Skeleton className="h-full min-h-[25px] w-11/12 rounded-none" />
         </TableCell>
       ))}
     </TableRow>
