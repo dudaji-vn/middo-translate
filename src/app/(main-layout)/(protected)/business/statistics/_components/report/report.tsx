@@ -42,10 +42,10 @@ const Percentage = ({ value = 0, suffix = '%', prefix }: { value: number | strin
     }, [value, prefix]);
     const displayValue = typeof value === 'number' ? value.toFixed(1) : value;
     return (
-        <Typography variant={'h6'} className={cn('text-base font-normal flex flex-row  items-center', typeof value === 'number' ? (value >= 0 ? 'text-success-700' : 'text-error-400-main') : 'text-neutral-600')} >
+        <p className={cn('text-base font-normal flex flex-row  items-center', typeof value === 'number' ? (value >= 0 ? 'text-success-700' : 'text-error-400-main') : 'text-neutral-600')} >
             {prefixComp}
             {`${displayValue}`}<span className='ml-[2px]'>{suffix}</span>
-        </Typography>
+        </p>
     );
 }
 const tooltipContent = {
@@ -98,7 +98,7 @@ const Report = ({ data }: { data: StatisticData }) => {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2  2xl:grid-cols-4">
                 {cardContents.map(({ name, renderDetail, title, renderPercentage }, index) => {
                     // @ts-ignore
                     let detailValue = data[name]?.count || 0;
@@ -130,7 +130,7 @@ const Report = ({ data }: { data: StatisticData }) => {
                                 />
                             </CardHeader>
                             <CardContent className='p-0'>
-                                <div className="flex flex-row items-end justify-between space-x-4 min-h-[48px]">
+                                <div className="flex flex-row  items-end justify-between space-x-4 min-h-[48px]">
                                     {renderDetail && renderDetail(detailValue)}
                                     {renderPercentage && renderPercentage(percentage)}
                                 </div>
