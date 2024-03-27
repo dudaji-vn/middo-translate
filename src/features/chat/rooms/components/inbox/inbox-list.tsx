@@ -35,9 +35,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
   ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
-    const { inboxStatus: status } = useBusinessNavigationData();
+    const { inboxStatus: status, businessRoomId } = useBusinessNavigationData();
     const { businessData } = useBusinessExtensionStore();
-    const currentRoomId = params?.id;
+    const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
     const {t} = useTranslation('common');
     const key = useMemo(() => ['rooms', type, status], [type, status]);
