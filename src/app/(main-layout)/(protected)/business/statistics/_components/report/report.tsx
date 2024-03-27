@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react';
+import React, { ReactNode, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Typography } from '@/components/data-display';
 import { ArrowDown, ArrowUp, Info, Star, StarHalf } from 'lucide-react';
@@ -10,6 +10,7 @@ import { ceil } from 'lodash';
 import { cn } from '@/utils/cn';
 import { BusinessLineChart } from './report-chart/business-line-chart';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { number } from 'yup';
 
 const StarRating = ({ value }: { value: number }) => {
     const fillCount = ceil(value || 0);
@@ -17,7 +18,7 @@ const StarRating = ({ value }: { value: number }) => {
     return (
         <div className="flex flex-row items-baseline justify-between space-x-2">
             {Array(ceil(fillCount)).fill(0).map((_, index) => {
-                const diff = value*1.0 - (index)*1.0
+                const diff = value * 1.0 - (index) * 1.0
                 const isHalf = diff > 0 && diff < 1.0;
                 return (
                     isHalf ?
@@ -34,11 +35,16 @@ const StarRating = ({ value }: { value: number }) => {
         </div>
     );
 };
-const Percentage = ({ value = 0 }: { value: number }) => {
+const Percentage = ({ value = 0, suffix = '%', prefix }: { value: number | string, suffix?: String | ReactNode, prefix?: String | ReactNode }) => {
+    const prefixComp = useMemo(() => {
+        if (typeof value !== 'number') return null;
+        return typeof prefix !== 'undefined' ? prefix : value > 0 ? <ArrowUp size={15} /> : <ArrowDown size={15} />
+    }, [value, prefix]);
+    const displayValue = typeof value === 'number' ? value.toFixed(1) : value;
     return (
-        <Typography variant={'h6'} className={cn('text-base font-normal flex flex-row items-center', value > 0 ? 'text-success-700' : 'text-error-400-main')} >
-            {value > 0 ? <ArrowUp size={15} /> : <ArrowDown size={15} />}
-            {`${value.toFixed(1)}%`}
+        <Typography variant={'h6'} className={cn('text-base font-normal flex flex-row items-center', typeof value === 'number' ? (value >= 0 ? 'text-success-700' : 'text-error-400-main') : 'text-neutral-600')} >
+            {prefixComp}
+            {`${displayValue}`}<span>{suffix}</span>
         </Typography>
     );
 }
@@ -53,7 +59,7 @@ const cardContents: Array<{
     name: TChartKey;
     title: string;
     renderDetail?: (value: number) => JSX.Element;
-    renderPercentage?: (value: number) => JSX.Element;
+    renderPercentage?: (value: any) => JSX.Element;
 }> = [
         {
             name: 'client',
@@ -77,7 +83,7 @@ const cardContents: Array<{
             name: 'averageRating',
             title: "Customer rating",
             renderDetail: (value: number) => <StarRating value={value} />,
-            renderPercentage: (value: number) => <Percentage value={value} />,
+            renderPercentage: (value: string) => <Percentage suffix={''} prefix={''} value={value} />,
         }
     ];
 
@@ -88,21 +94,20 @@ const Report = ({ data }: { data: StatisticData }) => {
     const handleChartKeyChange = (key: TChartKey) => {
         setChartKey(key);
     }
+    console.log('data-report', data)
 
     return (
         <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                 {cardContents.map(({ name, renderDetail, title, renderPercentage }, index) => {
                     // @ts-ignore
-                    let detailValue = data[name]?.count;
+                    let detailValue = data[name]?.count || 0;
                     // @ts-ignore
-                    let percentage = data[name]?.rate;
+                    let percentage = data[name]?.rate || 0;
                     if (name === 'responseChat') {
                         detailValue = data.responseChat?.averageTime;
                     }
-                    if (name === 'averageRating') {
-                        percentage = data.averageRating
-                    }
+                    // percentage = '12.45/2334'
                     return (
                         <Card
                             key={index}
@@ -120,7 +125,7 @@ const Report = ({ data }: { data: StatisticData }) => {
                                     }}
                                     triggerItem={
                                         <div className='text-neutral-300 hover:bg-neutral-50 rounded-full w-fit h-fit p-2'>
-                                            <Info size={20} className=''/>
+                                            <Info size={20} className='' />
                                         </div>
                                     }
                                 />
