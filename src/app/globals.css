@@ -143,10 +143,11 @@
   }
 
   .sky {
+    --primary: #00b3ff;
     --primary-100: #cceeff;
     --primary-200: #99ddff;
-    --primary-300: #66ccff;
-    --primary-400: #33bbff;
+    --primary-300: #72d0ff;
+    --primary-400: #5bc8ff;
     --primary-500-main: #00b3ff;
     --primary-600: #009fd2;
     --primary-700: #008bab;
