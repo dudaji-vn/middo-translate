@@ -52,7 +52,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
       });
       setOpenConfirmDialog(false);
     };
-    const code = generateExtensionCode(`/help-desk/${data?._id}`)
+    const code = generateExtensionCode(`/help-desk/${data?._id}`, data?.color )
     const { copy } = useTextCopy(code);
     const isEmpty = !data;
     return (<>
