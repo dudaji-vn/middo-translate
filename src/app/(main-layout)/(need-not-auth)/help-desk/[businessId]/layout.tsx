@@ -1,5 +1,6 @@
 import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/options';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
+import { cn } from '@/utils/cn';
 import { notFound } from 'next/navigation';
 import React, { ReactNode } from 'react'
 
@@ -17,7 +18,7 @@ const HelpDeskConversationLayout = async ({ children, params: { businessId } }: 
     const theme = extentionsCustomThemeOptions.find((item) => item.name === businessData.color || item.hex === businessData.color) || extentionsCustomThemeOptions[0];
 
     return (
-        <div className={theme.name}>
+        <div className={cn(theme.name, 'h-main-container-height')}>
             {children}
         </div>
     )
