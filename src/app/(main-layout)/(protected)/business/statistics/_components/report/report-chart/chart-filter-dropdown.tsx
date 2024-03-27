@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useState } from 'react'
 import { DateRange } from 'react-day-picker'
+import { useTranslation } from 'react-i18next'
 
 
 export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
@@ -58,12 +59,6 @@ const generateHref = (type: AnalyticsType, custom: { fromDate: string, toDate: s
 
 }
 export type ChartFilterDropdownProps = {
-    // searchParams: {
-    //     type: string
-    //     fromDate: string
-    //     toDate: string
-    //     search: string
-    // }
 }
 const ChartFilterDropdown = ({
     // searchParams,
@@ -79,12 +74,13 @@ const ChartFilterDropdown = ({
     const [openDatePickerModal, setOpenDatePickerModal] = useState(false);
     const router = useRouter()
 
+    const {t} = useTranslation('common')
     const [date, setDate] = React.useState<DateRange | undefined>({
         from: fromDate ? new Date(fromDate) : addDays(new Date(), -7),
         to: toDate ? new Date(toDate) : new Date(),
     })
 
-  const current = new URLSearchParams(Array.from(searchParams?.entries() || []));
+    const current = new URLSearchParams(Array.from(searchParams?.entries() || []));
 
     const onConfirmRangeFilter = () => {
         current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
@@ -97,6 +93,9 @@ const ChartFilterDropdown = ({
 
 
     return (<>
+        <span className="text-base font-normal">
+            {t('BUSINESS.REPORT')}
+        </span>
         <DropdownMenu onOpenChange={setOpenDropdown} open={openDropdown}>
             <DropdownMenuTrigger asChild onClick={() => {
                 setOpenDropdown(prev => !prev)

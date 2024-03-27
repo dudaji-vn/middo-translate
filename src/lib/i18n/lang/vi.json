@@ -15,6 +15,9 @@
         "DECLINE": "Từ chối",
         "ACCEPT_CALL": "Nghe máy",
         "DELETE": "Xoá",
+        "ARCHIVE": "Lưu trữ",
+        "UNARCHIVE": "Khôi phục",
+        "COMPLETED": "Hoàn thành",
         "STOP": "Dừng",
         "REPLACE": "Thay thế",
         "UPDATE": "Cập nhật",
@@ -37,6 +40,8 @@
         "NAME_PLACEHOLDER": "Nhập tên của bạn",
         "EMAIL": "Email",
         "EMAIL_PLACEHOLDER": "Nhập email của bạn",
+        "PHONE": "Số điện thoại",
+        "PHONE_PLACEHOLDER": "Nhập số điện thoại của bạn",
         "LANGUAGE": "Ngôn ngữ",
         "LANGUAGE_PLACEHOLDER": "Chọn ngôn ngữ của bạn",
         "PASSWORD": "Mật khẩu",
@@ -460,5 +465,20 @@
         "SWITCH_TO_GALLERY_VIEW": "Chuyển sang chế độ xem lưới",
         "START_STOP_SCREEN_DOODLE": "Bắt đầu/Dừng vẽ trên màn hình",
         "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
+    },
+    "BUSINESS": {
+        "CONVERSATIONS": "Cuộc trò chuyện",
+        "COMPLETED": "Hoàn thành",
+        "ARCHIVED": "Lưu trữ",
+        "STATISTICS": "Thống kê",
+        "SETTINGS": "Cài đặt",
+        "REPORT": "Báo cáo",
+        "CLIENT_LIST": "Danh sách khách hàng",
+        "CHART": {
+            "CLIENT": "Khách hàng mới",
+            "AVERAGERATING": "Đánh giá khách hàng",
+            "COMPLETEDCONVERSATION": "Cuộc trò chuyện hoàn thành",
+            "RESPONSECHAT": "Thời gian phản hồi trung bình"
+        }
     }
 }

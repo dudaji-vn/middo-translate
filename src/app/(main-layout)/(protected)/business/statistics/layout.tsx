@@ -12,9 +12,6 @@ const StatisticLayout = ({ report, clients, children }: {
             {children}
             <section className='space-y-4 w-full relative'>
                 <Typography className=" flex flex-row items-center justify-between space-y-0  text-primary-500-main font-medium">
-                    <span className="text-base font-normal">
-                        Report
-                    </span>
                     <ChartFilterDropdown />
                 </Typography>
                 {report}

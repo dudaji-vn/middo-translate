@@ -11,6 +11,7 @@ import TableSearch from '../_components/clients-table/table-search';
 import DownloadButton from '../_components/clients-table/download-button';
 import { getClientsTablePerpage, setClientsTablePerpage } from '@/utils/local-storage';
 import { DEFAULT_CLIENTS_PAGINATION, ROWS_PER_PAGE_OPTIONS } from '@/types/business-statistic.type';
+import { useTranslation } from 'react-i18next';
 
 export type Client = Pick<User, "_id" | "email" | "name" | "phoneNumber"> & {
   firstConnectDate: string;
@@ -63,11 +64,12 @@ const Page = () => {
     throw new Error('Error fetching clients');
   }
 
+  const { t } = useTranslation('common');
   return (
     <section className='space-y-4 w-full relative'>
-      <div className="md:grid-cols-[20%_50%_30%] xl:grid-cols-[10%_70%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
+      <div className="md:grid-cols-[20%_50%_30%] xl:grid-cols-[30%_50%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
         <span className="text-base font-normal max-md:col-span-6 text-primary-500-main">
-          Clients List
+          {t('BUSINESS.CLIENT_LIST')}
         </span>
         <div className='max-md:col-span-5'>
           <TableSearch className='py-2 w-full' onSearch={onSearchChange} search={search} />

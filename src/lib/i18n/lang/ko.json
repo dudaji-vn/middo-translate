@@ -15,6 +15,9 @@
         "DECLINE": "거부",
         "ACCEPT_CALL": "전화 받기",
         "DELETE": "삭제",
+        "ARCHIVE": "보관됨",
+        "UNARCHIVE": "보관 취소",
+        "COMPLETE": "완료됨",
         "STOP": "중지",
         "REPLACE": "교체",
         "UPDATE": "업데이트",
@@ -37,6 +40,8 @@
         "NAME_PLACEHOLDER": "이름을 입력하세요",
         "EMAIL": "이메일",
         "EMAIL_PLACEHOLDER": "이메일을 입력하세요",
+        "PHONE": "전화번호",
+        "PHONE_PLACEHOLDER": "전화번호를 입력하세요",
         "LANGUAGE": "언어",
         "LANGUAGE_PLACEHOLDER": "언어 선택",
         "PASSWORD": "비밀번호",
@@ -460,5 +465,20 @@
         "SWITCH_TO_GALLERY_VIEW": "갤러리 보기로 전환",
         "START_STOP_SCREEN_DOODLE": "화면 드로잉 시작/정지",
         "TOGGLE_LIVE_CAPTION": "라이브 자막 보기/숨기기"
+    },
+    "BUSINESS": {
+        "CONVERSATIONS": "대화",
+        "COMPLETED": "완료됨",
+        "ARCHIVED": "보관됨",
+        "STATISTICS": "통계",
+        "SETTINGS": "설정",
+        "REPORT": "보고서",
+        "CLIENT_LIST": "고객 목록",
+        "CHART": {
+            "CLIENT": "신규 고객",
+            "AVERAGERATING": "고객 평가",
+            "COMPLETEDCONVERSATION": "완료된 대화",
+            "RESPONSECHAT": "평균 응답 시간"
+        }
     }
 }

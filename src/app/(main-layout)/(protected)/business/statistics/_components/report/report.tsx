@@ -10,7 +10,7 @@ import { ceil } from 'lodash';
 import { cn } from '@/utils/cn';
 import { BusinessLineChart } from './report-chart/business-line-chart';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
-import { number } from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const StarRating = ({ value }: { value: number }) => {
     const fillCount = ceil(value || 0);
@@ -89,12 +89,12 @@ const cardContents: Array<{
 
 const Report = ({ data }: { data: StatisticData }) => {
     const isClient = useClient();
+    const {t} = useTranslation('common')
     const [chartKey, setChartKey] = React.useState<TChartKey>('client');
     if (!data && !isClient) return null;
     const handleChartKeyChange = (key: TChartKey) => {
         setChartKey(key);
     }
-    console.log('data-report', data)
 
     return (
         <>
@@ -107,6 +107,7 @@ const Report = ({ data }: { data: StatisticData }) => {
                     if (name === 'responseChat') {
                         detailValue = data.responseChat?.averageTime;
                     }
+                    const displayTitle = t(`BUSINESS.CHART.${name.toUpperCase()}`)
                     return (
                         <Card
                             key={index}
@@ -116,7 +117,7 @@ const Report = ({ data }: { data: StatisticData }) => {
                                 handleChartKeyChange(name);
                             }}>
                             <CardHeader className='flex p-0 flex-row justify-between items-center text-neutral-600'>
-                                <CardTitle className='text-base font-normal leading-[18px]'>{title}</CardTitle>
+                                <CardTitle className='text-base font-normal leading-[18px]'>{displayTitle}</CardTitle>
                                 <Tooltip
                                     title={tooltipContent[name]}
                                     contentProps={{
