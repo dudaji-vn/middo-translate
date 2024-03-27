@@ -9,7 +9,7 @@ const StatiscticReport = async ({ searchParams }: {
   searchParams: { type: AnalyticsOptions['type'], fromDate: string, toDate: string, search: string }
 }) => {
   const { type, fromDate, toDate } = searchParams;
-  const params = type === 'custom' ? { custom: { fromDate, toDate }, type } : { type };
+  const params = type === 'custom' ? { custom: { fromDate, toDate, }, type } : { type };
   const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
   if (!statiscticData) {
     throw new Error("NO_ANALYSTIC_DATA");
