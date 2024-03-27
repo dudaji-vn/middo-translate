@@ -12,20 +12,18 @@ const HelpDeskDropdownMenu = () => {
 
     const { isOnHelpDeskChat } = useBusinessNavigationData();
     const params = useParams();
-    const roomId = params?.slugs?.[0] || '';
     const userId = params?.slugs?.[1];
     const router = useRouter();
     const items = useMemo(() => {
         return [{
             name: 'Complete',
             onClick: () => {
-                console.log('first', `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${userId}`)
                 if (!userId) return;
                 router.replace(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${userId}`)
 
             },
         }]
-    }, [params?.businessId, params?.userId]);
+    }, [params, userId]);
     if (!isOnHelpDeskChat) return null;
     return (
         <DropdownMenu>

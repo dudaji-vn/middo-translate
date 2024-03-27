@@ -23,9 +23,7 @@ const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ..
     if (!isAllowed) {
           notFound();
     }
-    return (
-            <StartAConversation businessData={businessData} />
-    )
+    return (<StartAConversation businessData={businessData} />)
 
 };
 

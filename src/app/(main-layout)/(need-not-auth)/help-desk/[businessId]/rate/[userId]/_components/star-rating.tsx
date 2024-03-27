@@ -38,59 +38,65 @@ const StarRating = ({ onRate, businessData }: {
         else router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`)
 
     }
-    return (<>
-        <form action={action} className="max-w-screen-md w-full px-6 m-auto flex flex-col gap-8 items-center">
-            <Typography variant={'h2'} className="text-2xl">Rate us!</Typography>
-            <Typography >Please spend your time to let us know your experience with this conversation</Typography>
-            <div className='flex items-center md:gap-3 gap-1'>
-                {Array(5).fill(0).map((_, index) => (
-                    <button
+    return (<form action={action} className={cn("max-w-screen-md w-full h-full px-6 m-auto flex flex-col gap-4 items-center py-10")}>
+        <Typography variant={'h2'} className="text-2xl">Rate us!</Typography>
+        <Typography >Please spend your time to let us know your experience with this conversation</Typography>
+        <div className='flex items-center md:gap-3 gap-1 py-4'>
+            {Array(5).fill(0).map((_, index) => (
+                <button
+                    key={index}
+                    className={cn("bg-transparent p-2 hover:-translate-y-[2px] hover:scale-110  duration-300 transition-all ",
+                        index + 1 <= star && 'scale-scale-110',
+                        index + 1 > hoverStar && hoverStar !== 0 && 'scale-100')}
+                    type="button"
+                    onClick={() => onRateStar(index + 1)}
+                    onMouseEnter={() => setHoverStar(index + 1)}
+                    onMouseLeave={() => setHoverStar(0)}
+                >
+                    <Star
                         key={index}
-                        className={cn("bg-transparent p-2 hover:-translate-y-[2px] hover:scale-110  duration-300 transition-all ",
-                            index + 1 <= star && 'scale-scale-110',
-                            index + 1 > hoverStar && hoverStar !== 0 && 'scale-100')}
-                        type="button"
-                        onClick={() => onRateStar(index + 1)}
-                        onMouseEnter={() => setHoverStar(index + 1)}
-                        onMouseLeave={() => setHoverStar(0)}
-                    >
-                        <Star
-                            key={index}
-                            size={30}
-                            fill='#f0f0f0'
-                            stroke='#f0f0f0'
-                            className={cn(" hover:stroke-yellow-300 hover:fill-yellow-300  duration-500 transition-all", index + 1 <= star && 'fill-yellow-300 stroke-yellow-300',
-                                index + 1 > hoverStar && hoverStar !== 0 && ' opacity-75',
-                                index + 1 <= hoverStar && hoverStar !== 0 && 'fill-yellow-300 stroke-yellow-300'
-                            )}
-                            style={{
-                                transitionDelay: index + 1 <= star || star === 0 ? `${index * 20}ms` : `0ms !important`,
-                            }}
-                        />
-                    </button>
-                ))}
-            </div>
-            <Button
-                type="submit"
-                variant="default"
-                className="w-full"
-                shape={'square'}
-                disabled={star === 0}
-                onClick={() => {
-                    setLoading(true)
-                    onRate(star).then(() => {
-                        setLoading(false)
-                        setDone(true)
-                    })
-                }}
-                loading={loading}
-            >
-                Send Rating
-            </Button>
-            <Link href={`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`} >
-                Skip
-            </Link>
-        </form></>
+                        size={30}
+                        fill='#f0f0f0'
+                        stroke='#f0f0f0'
+                        className={cn(" hover:stroke-yellow-300 hover:fill-yellow-300  duration-500 transition-all", index + 1 <= star && 'fill-yellow-300 stroke-yellow-300',
+                            index + 1 > hoverStar && hoverStar !== 0 && ' opacity-75',
+                            index + 1 <= hoverStar && hoverStar !== 0 && 'fill-yellow-300 stroke-yellow-300'
+                        )}
+                        style={{
+                            transitionDelay: index + 1 <= star || star === 0 ? `${index * 20}ms` : `0ms !important`,
+                        }}
+                    />
+                </button>
+            ))}
+        </div>
+        <Button
+            type="submit"
+            variant="default"
+            className="w-full"
+            shape={'square'}
+            disabled={star === 0}
+            onClick={() => {
+                setLoading(true)
+                onRate(star).then(() => {
+                    setLoading(false)
+                    setDone(true)
+                })
+            }}
+            loading={loading}
+        >
+            Send Rating
+        </Button>
+        <Link href={`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`} >
+        <Button
+            variant="ghost"
+            className="w-full hover:text-primary-700"
+            shape={'square'}
+            loading={loading}
+        >
+            Skip
+        </Button>
+        </Link>
+    </form>
     );
 };
 export default StarRating
