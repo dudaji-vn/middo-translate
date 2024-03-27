@@ -1,4 +1,3 @@
-
 import { User } from '@/features/users/types';
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { cookies } from 'next/headers';
@@ -155,6 +154,7 @@ class BusinessAPI {
         }),
       }).toString();
       const path = `${this.basePath}/help-desk/analytics?${query}`;
+      console.log('type-path', type, path);
       const response = await fetch(path, {
         method: 'GET',
         headers: {
@@ -232,7 +232,7 @@ class BusinessAPI {
         body: JSON.stringify(rawFormData),
       });
       const data = await response.json();
-      console.log('response', data)
+      console.log('response', data);
       if (!response.ok) {
         throw new Error('Error in rate conversation');
       }
