@@ -15,6 +15,9 @@
         "DECLINE": "Decline",
         "ACCEPT_CALL": "Accept Call",
         "DELETE": "Delete",
+        "ARCHIVE": "Archive",
+        "UNARCHIVE": "Unarchive",
+        "COMPLETE": "Complete",
         "STOP": "Stop",
         "REPLACE": "Replace",
         "UPDATE": "Update",
@@ -37,6 +40,8 @@
         "NAME_PLACEHOLDER": "Enter your name",
         "EMAIL": "Email",
         "EMAIL_PLACEHOLDER": "Enter your email",
+        "PHONE": "Phone number",
+        "PHONE_PLACEHOLDER": "Enter your phone number",
         "LANGUAGE": "Language",
         "LANGUAGE_PLACEHOLDER": "Choose your language",
         "PASSWORD": "Password",
@@ -224,7 +229,7 @@
         "TITLE": "Create a New Account"
     },
     "CONVERSATION": {
-        "WELCOME_TITLE": "Welcome to Middo conversation!", 
+        "WELCOME_TITLE": "Welcome to Middo conversation!",
         "WELCOME_CONTENT": "Start a conversation with your team or group. You can also create a group chat to discuss and share files.",
         "TITLE": "Conversation",
         "PEOPLE": "People",
@@ -460,5 +465,20 @@
         "SWITCH_TO_GALLERY_VIEW": "Switch to Gallery View",
         "START_STOP_SCREEN_DOODLE": "Start/Stop Screen Doodle",
         "TOGGLE_LIVE_CAPTION": "Show/Hide Live Caption"
+    },
+    "BUSINESS": {
+        "CONVERSATIONS": "Conversations",
+        "COMPLETED": "Completed",
+        "ARCHIVED": "Archived",
+        "STATISTICS": "Statistics",
+        "SETTINGS": "Settings",
+        "REPORT": "Report",
+        "CLIENT_LIST": "Clients List",
+        "CHART": {
+            "CLIENT": "New Clients",
+            "AVERAGERATING": "Customer Rating",
+            "COMPLETEDCONVERSATION": "Completed Conversations",
+            "RESPONSECHAT": "Average Response Time"
+        }
     }
 }

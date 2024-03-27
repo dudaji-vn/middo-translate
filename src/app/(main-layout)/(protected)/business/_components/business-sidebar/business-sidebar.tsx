@@ -9,6 +9,7 @@ import { cn } from "@/utils/cn"
 import { Archive, CheckSquare, LineChartIcon, MessageSquare, Settings } from "lucide-react"
 import { useParams, usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 
 interface SidebarContent {
     title: string
@@ -50,10 +51,13 @@ const BusinessSidebarContent = ({ shrink, onSelectChange, selectedItem, notifica
     onSelectChange: (item: { title: string, icon: React.ReactNode }) => void,
     notifications?: { [key: string]: number }
 }) => {
+
+    const { t } = useTranslation('common');
     return (
         <div className="flex flex-col items-start w-fit justify-start">
             {sidebarContents.map(({ icon, title }, index) => {
                 const isSelected = selectedItem?.title === title;
+                const displayTitle = shrink ? title : t(`business.${title}`.toUpperCase());
                 return (
                     <Button shape={'square'} variant={'ghost'} color={'default'} key={index} className={cn("flex w-full justify-start flex-row items-center text-left rounded-none p-5 gap-2 [&_svg]:w-5 [&_svg]:h-5 transition-all hover:bg-primary-300 duration-200",
                         isSelected ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white' : 'hover:bg-primary-300',
@@ -62,8 +66,8 @@ const BusinessSidebarContent = ({ shrink, onSelectChange, selectedItem, notifica
                         onClick={() => onSelectChange({ icon, title })}
                     >
                         {icon}
-                        <Typography className={cn(shrink ? 'md:invisible  transition ease-in-out scale-y-0 w-0 duration-200' : 'transition ease-in-out duration-300 capitalize', isSelected ? 'text-white ' : 'text-neutral-600')}>
-                            {title}
+                        <Typography className={cn(shrink ? 'md:invisible  transition ease-in-out scale-y-0 w-0 duration-100' : 'transition ease-in-out duration-300 min-w-[100px] capitalize', isSelected ? 'text-white ' : 'text-neutral-600')}>
+                            {displayTitle}
                         </Typography>
                         {notifications?.[title] && notifications[title] > 0 && (
                             <div className="w-3 h-3 bg-primary-500-main rounded-full flex justify-center items-center">
