@@ -32,7 +32,7 @@ export const useBusinessNavigationData = () => {
   const businessConversationType = isBusiness
     ? params?.[PK_BUSINESS_CONVERSATIONS]
     : null;
-  const businessRoomId = isOnBusinessChat ? businessSlugs?.[1] : null;
+  const businessRoomId = isOnBusinessChat ? businessSlugs?.[0] : null;
   return {
     isBusiness,
     isHelpDesk,
