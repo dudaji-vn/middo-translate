@@ -300,13 +300,13 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                         type="button"
                         className='text-neutral-400 absolute right-4 top-1'
                         onClick={() => {
-                          copy(generateExtensionCode(`/help-desk/${extensionId}`));
+                          copy(generateExtensionCode(`/help-desk/${extensionId}`, watch('custom.color')));
                         }}
                       ><CopyIcon />
                       </Button.Icon>
                       <pre className="bg-transparent  text-neutral-600 text-sm rounded-lg overflow-auto px-2 whitespace-pre-wrap pr-7">
                         <code className='text-neutral-600 text-sm p-2' lang='javascript'>
-                          {generateExtensionCode(`/help-desk/${extensionId}`)}
+                          {generateExtensionCode(`/help-desk/${extensionId}`, watch('custom.color'))}
                         </code>
                       </pre>
                     </div>
