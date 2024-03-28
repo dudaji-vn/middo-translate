@@ -287,7 +287,10 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                           setValue('custom.color', color);
                         }} />
                       </div>
-                      <PluginChatPreview className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} color={watch('custom.color')} />
+                      <PluginChatPreview onTranslatedChange={(text) => {
+                        setValue('custom.firstMessageEnglish', text);
+                      }} 
+                      className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} color={watch('custom.color')} />
                     </div>
                   </CreateExtensionSectionWrapper>
                   <CreateExtensionSectionWrapper
