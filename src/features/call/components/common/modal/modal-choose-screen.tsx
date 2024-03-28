@@ -100,7 +100,7 @@ export const ModalChooseScreen = () => {
                     <AlertDialogDescription>
                         {t('MODAL.SHARE_SCREEN.DESCRIPTION')}
                     </AlertDialogDescription>
-                    <div className='grid grid-cols-4 gap-3 mt-3'>
+                    <div className='grid grid-cols-4 gap-3 mt-3 max-h-[60vh] overflow-auto'>
                         {sources.map((source: any) => {
                             return (
                                 <div key={source.id} 

@@ -1,7 +1,13 @@
 import { Button } from '@/components/actions';
 import { Mic } from 'lucide-react';
 
-import { forwardRef, useCallback, useEffect, useImperativeHandle } from 'react';
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
@@ -22,12 +28,19 @@ export const MicToggleButton = forwardRef<
   MicToggleButtonProps
 >((props, ref) => {
   const { setTextContent } = useMessageEditor();
-  const { listening, interimTranscript } = useSpeechRecognition();
+  const [transcribing, setTranscribing] = useState(false);
+  const enableTranscribing = () => setTranscribing(true);
+  const disableTranscribing = () => setTranscribing(false);
+
+  const { listening, interimTranscript } = useSpeechRecognition({
+    transcribing: transcribing,
+  });
 
   const lang =
     useAuthStore((s) => s.user?.language) ?? DEFAULT_LANGUAGES_CODE.EN;
 
   const handleStartListening = () => {
+    enableTranscribing();
     SpeechRecognition.startListening({
       language: lang,
       continuous: true,
@@ -36,6 +49,7 @@ export const MicToggleButton = forwardRef<
   };
 
   const handleStopListening = useCallback(() => {
+    disableTranscribing();
     if (listening) {
       SpeechRecognition.stopListening();
     }
@@ -65,7 +79,7 @@ export const MicToggleButton = forwardRef<
       onClick={handleToggleListening}
       variant="ghost"
       size="xs"
-      color={listening ? 'primary' : 'default'}
+      color={listening && transcribing ? 'primary' : 'default'}
       {...props}
     >
       <Mic />

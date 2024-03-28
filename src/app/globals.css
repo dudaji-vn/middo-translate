@@ -195,7 +195,9 @@
   body {
     @apply bg-background text-foreground;
   }
-
+  button {
+    @apply !outline-none;
+  }
   h1 {
     @apply text-[32px] font-semibold;
   }

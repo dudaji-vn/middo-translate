@@ -33,7 +33,7 @@ export const GroupCreateHeader = ({
   handleUnSelectUser,
 }: GroupCreateHeaderProps) => {
   const [preview, setPreview] = useState<string | undefined>();
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const { getInputProps, open, acceptedFiles, inputRef } = useDropzone({
     noClick: true,
     multiple: false,
@@ -57,7 +57,7 @@ export const GroupCreateHeader = ({
       avatarFile = acceptedFiles[0];
     }
     handleCreateGroup({
-      name,
+      name: name.trim(),
       participants,
       avatarFile,
     });
@@ -83,7 +83,9 @@ export const GroupCreateHeader = ({
               align="start"
               className="w-[280px] rounded-xl p-0"
             >
-              <div className="px-3 py-2 font-semibold">{t('CONVERSATION.CHANGE_GROUP_AVATAR')}</div>
+              <div className="px-3 py-2 font-semibold">
+                {t('CONVERSATION.CHANGE_GROUP_AVATAR')}
+              </div>
               <DropdownMenuItem className="h-12" onClick={open}>
                 {t('COMMON.REPLACE')}
               </DropdownMenuItem>
