@@ -8,19 +8,12 @@ import {
   LANGUAGE_CODES_MAP,
   SUPPORTED_VOICE_MAP,
 } from '@/configs/default-language';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import I18N_SUPPORTED_LANGUAGES from '@/lib/i18n/support_language';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
-import Image from 'next/image';
-import Link, { LinkProps } from 'next/link';
 import React, {
-  HtmlHTMLAttributes,
-  ReactElement,
   useCallback,
   useEffect,
-  useId,
-  useMemo,
   useState,
 } from 'react';
 import { CircleFlag } from 'react-circle-flags';
@@ -82,9 +75,9 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
     i18n.changeLanguage(lang)
   }, [handleSelectChange, i18n, setLanguage]);
   return (
-    <div className={cn(className)}>
+    <div className={cn(className, 'overflow-hidden rounded-xl')}>
       <Select onValueChange={handleSelectChange}>
-        <SelectTrigger className="flex w-full rounded-xl px-2 py-2">
+        <SelectTrigger className="flex w-full rounded-xl px-2 py-2 bg-neutral-50">
           {!valueSelect?.value && <span className="opacity-60"></span>}
           {valueSelect?.value && (
             <>
@@ -92,13 +85,13 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
                 countryCode={LANGUAGE_CODES_MAP[
                   valueSelect.value as keyof typeof LANGUAGE_CODES_MAP
                 ].toLowerCase()}
-                className="mr-2 inline-block h-5 w-5"
+                className="mr-2 inline-block h-5 w-5 rounded-full overflow-hidden"
               />
               {/* <span className="flex-1 text-left">{valueSelect.title}</span> */}
             </>
           )}
         </SelectTrigger>
-        <SelectContent className="max-h-[300px] overflow-y-auto">
+        <SelectContent className="max-h-[300px] overflow-y-auto" position="popper" align='end'>
           {I18N_SUPPORTED_LANGUAGES?.length > 0 &&
             I18N_SUPPORTED_LANGUAGES?.map((option: any) => {
               return (

@@ -33,7 +33,6 @@ const HeaderProfile = ({ className, ...props }:
     };
     return (
         <div className={cn("flex flex-1 items-center justify-end", className)} {...props}>
-            <HeaderSelectLanguage className='mr-2' />
             {isAuthentication && user ? (
                 <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
                     <DropdownMenuTrigger>
@@ -99,6 +98,7 @@ const HeaderProfile = ({ className, ...props }:
                     </span>
                 </Link>
             )}
+            <HeaderSelectLanguage className='ml-2' />
         </div>
     )
 }
