@@ -63,19 +63,25 @@ const Page = () => {
   if (isError) {
     throw new Error('Error fetching clients');
   }
-
   const { t } = useTranslation('common');
+  const exportdata = items.map((item) => ({
+    Name: item.name,
+    Email: item.email,
+    "Phone Number": item.phoneNumber,
+    "First Connect Date": item.firstConnectDate,
+    "Last Connect Date": item.lastConnectDate,
+  }))
   return (
     <section className='space-y-4 w-full relative'>
-      <div className="md:grid-cols-[20%_50%_30%] xl:grid-cols-[30%_50%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
+      <div className="md:grid-cols-[15%_55%_30%] xl:grid-cols-[20%_60%_20%] grid-cols-6 grid items-center gap-4  font-medium w-full ">
         <span className="text-base font-normal max-md:col-span-6 text-primary-500-main">
           {t('BUSINESS.CLIENT_LIST')}
         </span>
         <div className='max-md:col-span-5'>
-          <TableSearch className='py-2 w-full' onSearch={onSearchChange} search={search} />
+          <TableSearch className='py-2 min-h-12 w-full' onSearch={onSearchChange} search={search} />
         </div>
         <div className='max-md:col-span-1'>
-          <DownloadButton data={items} colInfo={[
+          <DownloadButton data={exportdata} colInfo={[
             { name: "Name", width: 20 },
             { name: "Email", width: 30 },
             { name: "Phone Number", width: 15 },

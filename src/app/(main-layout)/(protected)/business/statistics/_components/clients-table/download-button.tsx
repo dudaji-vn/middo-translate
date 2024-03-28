@@ -24,7 +24,12 @@ const DownloadButton = ({ data, colInfo }: { data: any, colInfo: Array<{ name: s
         <Button onClick={() =>
             exportDataToExcel()
         }
-            className="w-fit relative cursor-pointer z-20 flex flex-row items-center text-primary-500-main  gap-2 rounded-xl bg-primary-200 px-3 py-1 active:!bg-primary-200 active:!text-shading md:hover:bg-neutral-100">
+            size={'md'}
+            shape={'square'}
+            color={'secondary'}
+            className='max-md:h-12 max-md:w-16 max-md:p-2'
+            // className="w-fit relative cursor-pointer z-20 flex flex-row items-center text-primary-500-main  gap-2 rounded-xl bg-primary-200 px-3 py-1 active:!bg-primary-200 active:!text-shading md:hover:bg-neutral-100"
+            >
             <FileDown className="w-5 h-5 max-md:my-[6px] mx-1" />
             <span className='max-md:hidden'>Export as CSV</span>
         </Button>

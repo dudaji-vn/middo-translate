@@ -36,7 +36,7 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent, ..
     }, [debouncedContent])
 
     return <div {...props}>
-        <TimeDisplay time={new Date().toLocaleDateString()} />
+        <TimeDisplay time={new Date().toString()} />
         <div className="w-full gap-1  pb-8 relative  flex pr-11 md:pr-20">
             <div className="overflow-hidden  relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
                 <Avatar src={String(sender?.avatar)} alt={String(sender?.email)} size="xs" />
