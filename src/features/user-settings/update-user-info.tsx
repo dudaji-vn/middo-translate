@@ -31,23 +31,25 @@ export default function UpdateUserInfo() {
   const { user: userData, setData: setDataAuth } = useAuthStore();
   const [errorMessage, setErrorMessage] = useState('');
   const user = userData as User;
-  const {t} = useTranslation("common");
+  const { t } = useTranslation('common');
   const form = useForm({
     mode: 'onBlur',
     defaultValues: {
       name: user?.name || '',
       language: user?.language || '',
     },
-    resolver: zodResolver(z
-      .object({
-        name: z.string().min(1, {
-          message: t('MESSAGE.ERROR.REQUIRED'),
-        }),
-        language: z.string().min(1, {
-          message: t('MESSAGE.ERROR.REQUIRED'),
-        }),
-      })
-      .optional()),
+    resolver: zodResolver(
+      z
+        .object({
+          name: z.string().min(1, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          }),
+          language: z.string().min(1, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          }),
+        })
+        .optional(),
+    ),
   });
   const {
     register,
@@ -64,7 +66,7 @@ export default function UpdateUserInfo() {
     if (name == user?.name && language == user?.language) return;
     try {
       setLoading(true);
-      let res = await updateInfoUserService({ name, language });
+      let res = await updateInfoUserService({ name: name.trim(), language });
       setDataAuth({
         user: {
           ...user,
@@ -89,12 +91,11 @@ export default function UpdateUserInfo() {
     setValue('language', user.language);
   };
 
-
   useEffect(() => {
     if (name?.length >= 60) {
       setValue('name', name.slice(0, 60));
     }
-  }, [name,setValue]);
+  }, [name, setValue]);
 
   return (
     <>
@@ -113,7 +114,9 @@ export default function UpdateUserInfo() {
         <AlertDialogContent>
           <Form {...form}>
             <form onSubmit={handleSubmit(submit)} className="space-y-4">
-              <h3 className="text-[24px]">{t('ACCOUNT_SETTING.EDIT_PROFILE')}</h3>
+              <h3 className="text-[24px]">
+                {t('ACCOUNT_SETTING.EDIT_PROFILE')}
+              </h3>
               <RHFInputField
                 name="name"
                 formLabel={t('COMMON.NAME')}
@@ -149,9 +152,9 @@ export default function UpdateUserInfo() {
                 <Button
                   shape="square"
                   disabled={
-                    user.name == watch().name &&
-                    user.language == watch().language
-                    || isSubmitting
+                    (user.name == watch().name &&
+                      user.language == watch().language) ||
+                    isSubmitting
                   }
                   type="submit"
                 >

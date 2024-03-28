@@ -25,7 +25,7 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
   const { mutate } = useUpdateRoomInfo();
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
@@ -33,7 +33,7 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
     mutate({
       roomId: room._id,
       data: {
-        name,
+        name: name.trim(),
       },
     });
   };
@@ -57,7 +57,9 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t('CONVERSATION.CHANGE_GROUP_NAME')}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t('CONVERSATION.CHANGE_GROUP_NAME')}
+          </AlertDialogTitle>
         </AlertDialogHeader>
         <form id={id} onSubmit={handleSubmit}>
           <Input

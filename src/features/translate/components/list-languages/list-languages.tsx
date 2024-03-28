@@ -26,7 +26,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
     const searchRef = useRef<any>(null);
     const { recentlySourceUsed, recentlyTargetUsed, addRecentlyUsed } =
       useLanguageStore();
-    const {t} = useTranslation('common');
+    const { t } = useTranslation('common');
     const recentlyUsed = useMemo(() => {
       {
         return Array.from(
@@ -41,7 +41,10 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
     };
     const filterLanguages = SUPPORTED_LANGUAGES.filter((language) => {
       if (search === '') return true;
-      return language.name.toLowerCase().includes(search.toLowerCase());
+      // combine wit i18n
+      return (t('LANGUAGE.' + language.name) as string)
+        .toLowerCase()
+        .includes(search.toLowerCase());
     });
 
     useEffect(() => {
@@ -58,7 +61,7 @@ export const ListLanguages = forwardRef<HTMLDivElement, ListLanguagesProps>(
 
     return (
       <div ref={ref} {...props} className="flex h-full flex-col">
-        <div className="px-5 py-5 pt-0 md:mx-auto md:w-[480px] ">
+        <div className="px-5 py-5 pt-0 md:mx-auto md:w-[480px]">
           <SearchInput
             ref={searchRef}
             value={search}
@@ -155,7 +158,7 @@ const Item = ({
   onClick?: () => void;
   rightElement?: React.ReactNode;
 }) => {
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   return (
     <button
       disabled={selected}

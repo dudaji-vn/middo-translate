@@ -28,8 +28,6 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
   self.addEventListener('notificationclick', (event) => {
     event.notification.close();
-    // event.waitUntil(clients.openWindow(event.notification.data.url));
-    // open recent tab
     event.waitUntil(
       clients
         .matchAll({ type: 'window', includeUncontrolled: true })
@@ -37,11 +35,18 @@ messaging.onBackgroundMessage((payload) => {
           for (let i = 0; i < clientList.length; i += 1) {
             const client = clientList[i];
             if ('focus' in client) {
-              return client.focus();
+              client.focus();
+              if (event.notification.data && event.notification.data.url) {
+                return client.navigate(event.notification.data.url); // Navigate to the URL after focusing
+              }
             }
           }
-          if (clients.openWindow) {
-            return clients.openWindow(event.notification.data.url);
+          if (
+            clients.openWindow &&
+            event.notification.data &&
+            event.notification.data.url
+          ) {
+            return clients.openWindow(event.notification.data.url); // Open a new window if no existing window is found
           }
           return null;
         }),
