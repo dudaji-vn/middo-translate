@@ -15,7 +15,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { CopyIcon, Info, Plus, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { use, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { generateExtensionCode } from '@/utils/genrerateExtensionCode';
@@ -94,6 +94,9 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
   const domainsErrMessage = errors?.domains?.message;
 
   useEffect(() => {
+    if (open) {
+      setAccordionValue('add domain');
+    }
     if (!open && initialData) { reset(); return }
     if (!isEmpty(initialData)) {
       setExtensionId(initialData._id);
@@ -181,8 +184,7 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   className="w-full transition-all duration-500 flex flex-col justify-center"
                   onValueChange={(value) => {
                     setAccordionValue(value as AccordionValue)
-                  }
-                  }
+                  }}
                 >
                   <CreateExtensionSectionWrapper
                     value="add domain"
@@ -191,24 +193,26 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                       trigger('domains');
                       if (isValid) setAccordionValue('custom extension')
                     }}
+                    nextStepProps={{
+                      disabled: isSubmitting || !isEmpty(initialData) && isEqual(watch('domains'), initialData?.domains)
+                    }}
                   >
                     <Typography variant="h5" className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
                       Add all domains that you would like the extension to appear on
                     </Typography>
-                    <div className='flex flex-row items-start w-full justify-between'>
+                    <div className='flex flex-row gap-3 items-start w-full justify-between'>
                       <RHFInputField
                         name='addingDomain'
                         inputProps={{
                           placeholder: 'https://example.com',
-                          className: 'h-10',
+                          className: 'h-10'
                         }}
                         formItemProps={{
-                          className: 'w-5/6',
+                          className: 'w-full',
                         }}
                       />
                       <Button
-                        variant="ghost"
-                        color="default"
+                        color="secondary"
                         shape="square"
                         type="button"
                         className='h-10'
@@ -288,7 +292,15 @@ export default function CreateExtensionModal({ open, initialData, title = 'Creat
                   </CreateExtensionSectionWrapper>
                   <CreateExtensionSectionWrapper
                     value="copy & paste code"
-                    disabledTrigger={!extensionId}
+                    // disabledTrigger={!extensionId}
+                    nextStepText='Copy code & close'
+                    onNextStep={() => {
+                      copy(generateExtensionCode(`/help-desk/${extensionId}`, watch('custom.color')));
+                      setOpen(false);
+                      reset();
+                    }}
+                    isDone={!!extensionId}
+
                   >
                     <Typography className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
                       Copy and paste the code below into your website

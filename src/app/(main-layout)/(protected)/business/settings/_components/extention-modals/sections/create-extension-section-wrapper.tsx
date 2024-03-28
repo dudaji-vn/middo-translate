@@ -47,9 +47,9 @@ export const CreateExtensionSectionWrapper: React.FC<CreateExtensionSectionWrapp
             <Button
                 variant="default"
                 color="primary"
-                size={'xs'}
+                size={'lg'}
                 shape={'square'}
-                className={isDone ? "w-fit ml-auto mt-2" : 'hidden'}
+                className={isDone ?  "ml-auto mt-4" : 'hidden'}
                 type={nextStepType}
                 {...nextStepProps}
                 onClick={onNextStep}
