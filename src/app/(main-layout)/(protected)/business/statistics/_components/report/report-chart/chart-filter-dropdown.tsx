@@ -32,10 +32,10 @@ export type AnalyticsOptions = {
         }
     );
 const filterOptions: Record<AnalyticsOptions['type'], string> = {
-    'custom': 'Custom',
-    'last-month': 'Last month',
     'last-week': 'Last week',
+    'last-month': 'Last month',
     'last-year': 'Last year',
+    'custom': 'Custom',
 }
 const defaultOption = 'last-week'
 const generateHref = (type: AnalyticsType, custom: { fromDate: string, toDate: string }, search: string) => {
