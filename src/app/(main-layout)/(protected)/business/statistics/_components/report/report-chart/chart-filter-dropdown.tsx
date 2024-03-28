@@ -9,7 +9,7 @@ import { addDays, format } from 'date-fns'
 import { CalendarIcon, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useTranslation } from 'react-i18next'
 
@@ -91,6 +91,12 @@ const ChartFilterDropdown = ({
         setOpenDatePickerModal(false)
     }
 
+    const displayCurentFilterValue = useMemo(() => {
+        if (type === 'custom') {
+            return `${format(date?.from || new Date(), 'yyyy/MM/dd')} - ${format(date?.to || new Date(), 'yyyy/MM/dd')}`
+        }
+        return filterOptions[(type || defaultOption) as AnalyticsType]
+    }, [type, date])
 
     return (<>
         <span className="text-base font-normal">
@@ -100,8 +106,8 @@ const ChartFilterDropdown = ({
             <DropdownMenuTrigger asChild onClick={() => {
                 setOpenDropdown(prev => !prev)
             }}>
-                <div className="relative flex flex-row items-center text-neutral-800  gap-2 rounded-xl bg-neutral-50 px-3 py-1 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
-                    <span>{filterOptions[(type || defaultOption) as AnalyticsType]}</span>
+                <div className="relative flex flex-row items-center text-neutral-800  gap-2 rounded-xl bg-neutral-50 px-3 py-2 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
+                    <span className='text-neutral-800'>{displayCurentFilterValue}</span>
                     <ChevronDown className="w-4 h-4" />
                 </div>
             </DropdownMenuTrigger>
@@ -113,7 +119,7 @@ const ChartFilterDropdown = ({
                 {Object.entries(filterOptions).map(([key, value]) => {
                     const href = generateHref(key as AnalyticsType, { fromDate, toDate }, search) || '#';
                     if (key === 'custom')
-                        return <DropdownMenuItem className=" rounded-none  block px-4 py-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-500  outline-none" onClick={() => {
+                        return <DropdownMenuItem className=" rounded-none  py-2 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-500  outline-none" onClick={() => {
                             setOpenDatePickerModal(true)
                         }}>
                             Custom
@@ -123,9 +129,9 @@ const ChartFilterDropdown = ({
                             key={key}
                             href={href}
                             className={cn(
-                                'block text-neutral-400 ',
+                                'block text-neutral-700 ',
                                 {
-                                    'bg-neutral-100 text-neutral-500': type === key
+                                    'bg-neutral-100 text-neutral-900': type === key
                                 }
                             )}
                         >  <DropdownMenuItem className="flex rounded-none items-center outline-none">

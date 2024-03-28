@@ -18,7 +18,7 @@ const TableSearch = ({ onSearch, search, ...props }: InputProps & {
     }, [debouncedSearch]);
 
     return (
-        <Input placeholder='Search' value={searchValue} onChange={(e) => {
+        <Input  placeholder='Search' value={searchValue} onChange={(e) => {
             setSearchValue(e.target.value);
         }} {...props} />
     )

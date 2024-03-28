@@ -4,7 +4,7 @@ import { Button } from '@/components/actions'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display'
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { LogOut, Minus } from 'lucide-react'
+import { LogOut, Menu } from 'lucide-react'
 import { useParams, useRouter } from 'next/navigation';
 import React, { useMemo } from 'react'
 
@@ -29,8 +29,8 @@ const HelpDeskDropdownMenu = () => {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <Button.Icon variant={'ghost'} size={'xs'}>
-                    <Minus />
+                <Button.Icon variant={'ghost'} size={'xs'} className='text-neutral-300'>
+                    <Menu size={20} />
                 </Button.Icon>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

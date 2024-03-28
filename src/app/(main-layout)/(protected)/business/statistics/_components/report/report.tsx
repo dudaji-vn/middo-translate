@@ -83,7 +83,7 @@ const cardContents: Array<{
             name: 'averageRating',
             title: "Customer rating",
             renderDetail: (value: number) => <StarRating value={value} />,
-            renderPercentage: (value: string) => <Percentage suffix={'ratings'} prefix={''} value={value} />,
+            // renderPercentage: (value: string) => <Percentage suffix={'ratings'} prefix={''} value={value} />,
         }
     ];
 
@@ -98,7 +98,7 @@ const Report = ({ data }: { data: StatisticData }) => {
 
     return (
         <>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2  2xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-4">
                 {cardContents.map(({ name, renderDetail, title, renderPercentage }, index) => {
                     // @ts-ignore
                     let detailValue = data[name]?.count || 0;
