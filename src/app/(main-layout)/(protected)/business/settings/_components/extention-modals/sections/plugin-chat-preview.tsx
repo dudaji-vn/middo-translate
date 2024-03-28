@@ -13,6 +13,7 @@ export type PluginChatPreviewProps = {
     content: string;
     language: string;
     color?: string;
+    onTranslatedChange?: (translated: string) => void;
 
 } & React.HTMLAttributes<HTMLDivElement>
 
@@ -45,8 +46,9 @@ const devices: Array<{ name: TPreviewDevice, icon: ReactNode }> = [
 ];
 
 
-const PluginChatPreview = ({ className, content, language, color, ...props }: PluginChatPreviewProps) => {
-    const [selectedDevice, setSelectedDevice] = React.useState<TPreviewDevice>('desktop')
+const PluginChatPreview = ({ className, content, language, color,onTranslatedChange, ...props }: PluginChatPreviewProps) => {
+    const [selectedDevice, setSelectedDevice] = React.useState<TPreviewDevice>('desktop');
+    
     const currentUser = useAuthStore((s) => s.user);
     const themeColor = color || DEFAULT_THEME;
     const isMobile = selectedDevice === 'mobile';
@@ -86,7 +88,7 @@ const PluginChatPreview = ({ className, content, language, color, ...props }: Pl
                         <Minus className='w-4 h-4' />
                     </div>
                     <div className={'p-4'}>
-                        <PreviewCustomMessages sender={currentUser} content={content} className="overflow-y-auto max-h-[320px]" />
+                        <PreviewCustomMessages onTranlatedChange={onTranslatedChange} sender={currentUser} content={content} className="overflow-y-auto max-h-[320px]" />
                         <Button
                             variant={'default'}
                             shape={'square'}

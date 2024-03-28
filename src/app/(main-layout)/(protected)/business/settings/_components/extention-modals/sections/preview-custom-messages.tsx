@@ -11,10 +11,11 @@ import { useDebounce } from "usehooks-ts";
 
 const DEBOUNCED_TRANSLATE_TIME = 800;
 
-export const PreviewCustomMessages = ({ sender, content = '', englishContent, ...props }: {
+export const PreviewCustomMessages = ({ sender, content = '', englishContent, onTranlatedChange, ...props }: {
     sender?: User | null,
     content?: string,
     englishContent?: string
+    onTranlatedChange?: (translated: string) => void
 } & React.HTMLAttributes<HTMLDivElement>) => {
 
     const [translatedContent, setTranslatedContent] = React.useState<string>(englishContent || '')
@@ -29,7 +30,8 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent, ..
         }
         setIsTranslating(true);
         translateWithDetection(debouncedContent, DEFAULT_LANGUAGES_CODE.EN).then((res) => {
-            setTranslatedContent(typeof res === 'string' ? res : res.translatedText)
+            setTranslatedContent(typeof res === 'string' ? res : res?.translatedText || '');
+            onTranlatedChange && onTranlatedChange(typeof res === 'string' ? res : res?.translatedText || '');
         }).finally(() => {
             setIsTranslating(false);
         })
