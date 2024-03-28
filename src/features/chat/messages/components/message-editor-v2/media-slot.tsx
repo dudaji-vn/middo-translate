@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { SelectedFile, useMediaUpload } from '@/components/media-upload';
 import { useEffect, useMemo } from 'react';
 import { useMessageEditor } from '.';
-type FileTypes = 'image' | 'document' | 'video';
 
 export const MediaSlot = () => {
   const { files, removeFile, open } = useMediaUpload();
@@ -98,7 +97,7 @@ const MediaItem = ({ file }: { file: SelectedFile }) => {
             <div className="absolute bottom-0 left-0  w-full rounded-b-md bg-black/50 p-1">
               <span
                 title={file.file.name}
-                className="line-clamp-1 text-xs text-primary-foreground"
+                className="line-clamp-1 text-xs text-white"
               >
                 {file.file.name}
               </span>
