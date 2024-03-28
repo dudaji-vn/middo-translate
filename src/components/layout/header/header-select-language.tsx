@@ -1,3 +1,4 @@
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display';
 import {
   Select,
   SelectContent,
@@ -11,6 +12,7 @@ import {
 import I18N_SUPPORTED_LANGUAGES from '@/lib/i18n/support_language';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
+import { ChevronDownIcon } from 'lucide-react';
 import React, {
   useCallback,
   useEffect,
@@ -29,6 +31,7 @@ interface InputSelectLanguageProps {
 
 const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
   const { language, setLanguage } = useAppStore();
+  const [isOpenDropdown, setOpenDropdown] = useState(false);
   const [valueSelect, setValueSelect] = useState<InputSelect>({
     value: '',
     title: '',
@@ -44,6 +47,7 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
       localStorage.setItem('i18nLng', value);
       setLanguage(value);
       i18n.changeLanguage(value)
+      setOpenDropdown(false);
     },
     [i18n, setLanguage],
   );
@@ -75,43 +79,45 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
     i18n.changeLanguage(lang)
   }, [handleSelectChange, i18n, setLanguage]);
   return (
-    <div className={cn(className, 'overflow-hidden rounded-xl')}>
-      <Select onValueChange={handleSelectChange}>
-        <SelectTrigger className="flex w-full rounded-xl px-2 py-2 bg-neutral-50">
-          {!valueSelect?.value && <span className="opacity-60"></span>}
-          {valueSelect?.value && (
+    <div className={cn(className)}>
+      <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
+        <DropdownMenuTrigger>
+        <div className="relative flex gap-1 rounded-xl bg-neutral-50 px-3 py-1 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100 items-center">
+        {valueSelect?.value && (
             <>
               <CircleFlag
                 countryCode={LANGUAGE_CODES_MAP[
                   valueSelect.value as keyof typeof LANGUAGE_CODES_MAP
                 ].toLowerCase()}
-                className="mr-2 inline-block h-5 w-5 rounded-full overflow-hidden"
+                className="inline-block h-5 w-5 rounded-full overflow-hidden"
               />
-              {/* <span className="flex-1 text-left">{valueSelect.title}</span> */}
+              <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
+                <ChevronDownIcon className="opacity-60" />
+              </div>
             </>
           )}
-        </SelectTrigger>
-        <SelectContent className="max-h-[300px] overflow-y-auto" position="popper" align='end'>
+        </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+            align="end"
+            onClick={() => setOpenDropdown(false)}
+        >
           {I18N_SUPPORTED_LANGUAGES?.length > 0 &&
-            I18N_SUPPORTED_LANGUAGES?.map((option: any) => {
+            I18N_SUPPORTED_LANGUAGES?.map((option: InputSelect) => {
               return (
-                <SelectItem
-                  value={option.value}
-                  key={option.value}
-                  className={cn("px-3", option.value === valueSelect.value && '!bg-primary !text-white')}
-                >
-                  <CircleFlag
+                <DropdownMenuItem className={cn("flex items-center", option.value == valueSelect.value ? '!bg-primary !text-white' : '')} onClick={()=>handleSelectChange(option.value)} key={option.value}>
+                    <CircleFlag
                     countryCode={LANGUAGE_CODES_MAP[
                       option.value as keyof typeof LANGUAGE_CODES_MAP
                     ].toLowerCase()}
-                    className="mr-2 inline-block h-5"
+                    className="mr-2 inline-block h-5 rounded-full overflow-hidden"
                   />
-                  <span className="pr-4">{t('LANGUAGE.'+option.title)}</span>
-                </SelectItem>
+                    <span className="pr-4">{t('LANGUAGE.'+option.title)}</span>
+                </DropdownMenuItem>
               );
             })}
-        </SelectContent>
-      </Select>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
