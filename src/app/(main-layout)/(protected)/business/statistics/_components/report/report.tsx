@@ -11,6 +11,9 @@ import { cn } from '@/utils/cn';
 import { BusinessLineChart } from './report-chart/business-line-chart';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
+import { accurateHumanize } from '@/utils/moment';
+
 
 const StarRating = ({ value }: { value: number }) => {
     const fillCount = ceil(value || 0);
@@ -55,6 +58,8 @@ const tooltipContent = {
     averageRating: 'The average rating of the customer in the picked time range',
 }
 
+
+
 const cardContents: Array<{
     name: TChartKey;
     title: string;
@@ -76,26 +81,29 @@ const cardContents: Array<{
         {
             name: 'responseChat',
             title: "Response time",
-            renderDetail: (value: number) => <Typography variant={'h6'} className='text-[2rem]'>{value}</Typography>,
+            renderDetail: (value: number) => {
+                const displayTime = accurateHumanize(moment.duration(value, 'milliseconds'), 1).accuratedTime || '0';
+                return <Typography variant={'h6'} className='text-[2rem]'>{displayTime}</Typography>
+            },
             renderPercentage: (value: number) => <Percentage value={value} />,
         },
         {
             name: 'averageRating',
             title: "Customer rating",
             renderDetail: (value: number) => <StarRating value={value} />,
-            // renderPercentage: (value: string) => <Percentage suffix={'ratings'} prefix={''} value={value} />,
+            // renderPercentage: (value: string) => <Percentage suffix={''} prefix={''} value={value} />,
         }
     ];
 
 const Report = ({ data }: { data: StatisticData }) => {
     const isClient = useClient();
-    const {t} = useTranslation('common')
+    const { t } = useTranslation('common')
     const [chartKey, setChartKey] = React.useState<TChartKey>('client');
     if (!data && !isClient) return null;
     const handleChartKeyChange = (key: TChartKey) => {
         setChartKey(key);
     }
-
+console.log('data', data)
     return (
         <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-4">
@@ -140,7 +148,7 @@ const Report = ({ data }: { data: StatisticData }) => {
                     );
                 })}
             </div>
-            <BusinessLineChart chartData={data.chart} keyData={chartKey} />
+            <BusinessLineChart reportData={data} keyData={chartKey} />
         </>
     );
 };
