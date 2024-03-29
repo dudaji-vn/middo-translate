@@ -480,5 +480,13 @@
             "COMPLETEDCONVERSATION": "완료된 대화",
             "RESPONSECHAT": "평균 응답 시간"
         }
+    },
+    "DESKTOP_LOGIN": {
+        "TITLE_LOADING": "리디렉션 중",
+        "DESCRIPTION_LOADING": "잠시 기다려주세요. 로그인 페이지로 리디렉션 중입니다",
+        "TITLE_LOGIN_SUCCESS": "로그인 성공",
+        "DESCRIPTION_LOGIN_SUCCESS": "앱을 열려면 아래 버튼을 클릭하세요",
+        "OPEN_MIDDO": "Middo 열기",
+        "BACK_TO_HOME": "홈으로 돌아가기"
     }
 }

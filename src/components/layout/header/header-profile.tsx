@@ -91,7 +91,7 @@ const HeaderProfile = ({
       ) : (
         <Link
           href={ROUTE_NAMES.SIGN_IN}
-          className="group flex size-9 items-center rounded-full bg-neutral-50 p-1 active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl md:p-2 md:px-4 md:hover:bg-neutral-100"
+          className="group flex size-9 items-center rounded-full bg-neutral-50 p-1 active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl md:p-1 md:px-4 md:hover:bg-neutral-100"
         >
           <Image
             src="/hero_avatar.png"

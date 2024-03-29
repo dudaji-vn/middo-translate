@@ -1,3 +1,4 @@
+import DataRequestSetCookie from '@/types/set-cookie-data.interface';
 import { get, patch, post, put } from './api.service';
 
 import { AuthData } from '@/types';
@@ -31,9 +32,9 @@ export const addInfoUserService = (data: any) => {
 export const signOutService = () => {
   return get('/auth/sign-out');
 };
-export const saveCookieService = (data: {token: string, refresh_token: string}) => {
-  return post('/auth/save-cookie', data);
+export const setCookieService = (data: DataRequestSetCookie[]) => {
+  return post('/auth/set-cookie', data);
 }
-export const getCookieService = () => {
-  return get('/auth/get-cookie');
+export const getCookieService = (keys: string[]) => {
+  return post('/auth/get-cookie', { keys });
 }

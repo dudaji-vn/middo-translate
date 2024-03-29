@@ -14,7 +14,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import {
   getCookieService,
   loginService,
-  saveCookieService,
+  setCookieService,
 } from '@/services/auth.service';
 import { LoginSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
@@ -26,6 +26,7 @@ import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import trim from 'lodash/trim';
 import { useTranslation } from 'react-i18next';
+import DataRequestSetCookie from '@/types/set-cookie-data.interface';
 interface DataResponseToken {
   token: string;
   refresh_token: string;
@@ -107,7 +108,11 @@ export default function SignIn() {
 
   const saveCookie = useCallback((data: DataResponseToken) => {
     const { token, refresh_token } = data;
-    saveCookieService({ token, refresh_token })
+    const setCookieData: DataRequestSetCookie[] = [
+      {key: 'access_token', value: token},
+      {key: 'refresh_token', value: refresh_token},
+    ]
+    setCookieService(setCookieData)
       .then((_) => {
         window.location.reload();
       })
