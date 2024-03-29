@@ -6,6 +6,7 @@ import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
 import httpProxy from 'http-proxy';
 import { Tokens } from '@/types';
 import { getTokenMaxAge } from '@/utils/jwt';
+import { jwtDecode } from 'jwt-decode';
 
 export const config = {
   api: {
@@ -23,7 +24,17 @@ export default function handler(
     const cookies = new Cookies(req, res);
     let accessToken = cookies.get(ACCESS_TOKEN_NAME) || '';
     let refreshToken = cookies.get(REFRESH_TOKEN_NAME) || '';
-    if (!accessToken && refreshToken) {
+    let isInvalidAccessToken = false;
+    if (!accessToken) {
+      isInvalidAccessToken = true;
+    } else {
+      const decodedAccessToken = jwtDecode(accessToken);
+      const currentTime = Date.now() / 1000;
+      if (decodedAccessToken.exp! < currentTime) {
+        isInvalidAccessToken = true;
+      }
+    }
+    if (isInvalidAccessToken && refreshToken) {
       const res = await fetch(`${NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
         method: 'POST',
         headers: {

@@ -22,11 +22,13 @@ export default function handler(
       httpOnly: true,
       sameSite: 'lax',
       expires: new Date(Date.now()),
+      maxAge: 0,
     });
     cookies.set(REFRESH_TOKEN_NAME, '', {
       httpOnly: true,
       sameSite: 'lax',
       expires: new Date(Date.now()),
+      maxAge: 0,
     });
     res.status(200).json({
       message: 'success',
