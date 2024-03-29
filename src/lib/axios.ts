@@ -6,19 +6,19 @@ const instance = axios.create({
   baseURL: NEXT_PUBLIC_URL + '/api',
 });
 
-// Add a request interceptor
-instance.interceptors.request.use(
-  function (request) {
-    const token = localStorage.getItem(ACCESS_TOKEN_NAME);
-    if (token) {
-      request.headers.Authorization = "Bearer " + token;
-    }
-    return request;
-  },
-  function (error) {
-    return Promise.reject(error);
-  },
-);
+// // Add a request interceptor
+// instance.interceptors.request.use(
+//   function (request) {
+//     const token = localStorage.getItem(ACCESS_TOKEN_NAME);
+//     if (token) {
+//       request.headers.Authorization = 'Bearer ' + token;
+//     }
+//     return request;
+//   },
+//   function (error) {
+//     return Promise.reject(error);
+//   },
+// );
 
 // Add a response interceptor
 instance.interceptors.response.use(
@@ -26,7 +26,6 @@ instance.interceptors.response.use(
     return response.data;
   },
   function (error) {
-    
     if (error.response.status === 401) {
       console.log('🚀 ~ file: axios-config.ts:29 ~ Unauthorized');
     } else {
