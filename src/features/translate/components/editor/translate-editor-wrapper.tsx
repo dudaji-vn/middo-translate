@@ -57,11 +57,13 @@ export const TranslateEditorWrapper = ({
       )}
       <div className="detectLanguageWrapper">
         {language && !isDetect ? (
-          <CircleFlag
-            className="countryCircleIcon"
-            countryCode={getCountryCode(language.code) as string}
-            height="35"
-          />
+          <div className="size-5 overflow-hidden rounded-full">
+            <CircleFlag
+              className="countryCircleIcon"
+              countryCode={getCountryCode(language.code) as string}
+              height="35"
+            />
+          </div>
         ) : (
           <Globe2Icon className="countryCircleIcon font-light text-primary" />
         )}

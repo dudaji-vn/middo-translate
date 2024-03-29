@@ -480,5 +480,13 @@
             "COMPLETEDCONVERSATION": "Completed Conversations",
             "RESPONSECHAT": "Average Response Time"
         }
+    },
+    "DESKTOP_LOGIN": {
+        "TITLE_LOADING": "Redirecting",
+        "DESCRIPTION_LOADING": "Please wait a moment, we are redirecting you to the login page",
+        "TITLE_LOGIN_SUCCESS": "Login successful",
+        "DESCRIPTION_LOGIN_SUCCESS": "Click the button below to open the app",
+        "OPEN_MIDDO": "Open Middo",
+        "BACK_TO_HOME": "Back to home"
     }
 }

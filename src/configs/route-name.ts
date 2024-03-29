@@ -15,4 +15,5 @@ export const ROUTE_NAMES = {
   ONLINE_CONVERSATION_NOT_FOUND: '/online-conversation/not-found',
   BUSINESS_CONVERSATION: '/business',
   HELPDESK_CONVERSATION: '/help-desk',
+  DESKTOP_LOGIN: '/login-google-electron',
 };
