@@ -14,6 +14,9 @@ import { CircleFlag } from 'react-circle-flags';
 import { useMessageEditor } from '..';
 import { RichTextInput } from '../rich-text-input';
 import { useTranslation } from 'react-i18next';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { isEqual } from 'lodash';
 export interface TranslationHelperProps {}
 
 export const TranslationHelper = (props: TranslationHelperProps) => {
@@ -79,6 +82,27 @@ export const TranslationHelper = (props: TranslationHelperProps) => {
     const confirmButton = document.getElementById(confirmButtonId);
     confirmButton?.click();
   };
+
+  useKeyboardShortcut(
+    [
+      SHORTCUTS.OPEN_EDIT_TRANSLATION,
+      SHORTCUTS.SAVE_EDIT_TRANSLATION,
+      SHORTCUTS.CANCEL_EDIT_TRANSLATION,
+    ],
+    (e, matchedKeys) => {
+      if (!contentEnglish?.length) return;
+      if (isEqual(matchedKeys, SHORTCUTS.OPEN_EDIT_TRANSLATION)) {
+        handleStartEdit();
+        return;
+      }
+      if (isEqual(matchedKeys, SHORTCUTS.SAVE_EDIT_TRANSLATION) && isEditing) {
+        handleConfirm();
+        return;
+      }
+      handleCancel();
+    },
+    true,
+  );
 
   return (
     <AnimatePresence mode="wait">
