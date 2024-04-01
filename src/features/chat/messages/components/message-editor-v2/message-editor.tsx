@@ -24,6 +24,10 @@ import { useEditorState } from './use-editor-state';
 import { User } from '@sentry/nextjs';
 import { getMentionIdsFromHtml } from '@/utils/get-mention-ids-from-html';
 import { Typography } from '@/components/data-display';
+import { useChatStore } from '@/features/chat/store';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { isEqual } from 'lodash';
 
 type SubmitData = {
   content: string;
@@ -188,6 +192,25 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       }, 1);
       reset();
     };
+
+    const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
+      useChatStore();
+    useKeyboardShortcut(
+      [
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION,
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW,
+      ],
+      (_, matchedKey) => {
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION)) {
+          toggleShowMiddleTranslation();
+          return;
+        }
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW)) {
+          toggleShowTranslateOnType();
+        }
+      },
+      true,
+    );
 
     return (
       <MessageEditorContext.Provider

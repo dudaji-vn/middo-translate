@@ -52,7 +52,9 @@ export const MicToggleButton = forwardRef<
     disableTranscribing();
     if (listening) {
       SpeechRecognition.stopListening();
+      setTextContent('');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listening]);
 
   const handleToggleListening = () => {
