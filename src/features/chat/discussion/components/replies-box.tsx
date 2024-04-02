@@ -15,6 +15,7 @@ import { useDiscussion } from './discussion';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../rooms/api';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/cn';
 
 export interface RepliesBoxProps {}
 
@@ -179,7 +180,12 @@ export const RepliesBox = () => {
                 </MessageItemGroup>
               </div>
               {!isSystem && (
-                <span className="block text-end text-sm font-light text-neutral-300">
+                <span
+                  className={cn(
+                    'block  text-sm font-light text-neutral-300',
+                    isMe ? 'text-end' : 'text-start',
+                  )}
+                >
                   {formatTimeDisplay(group.messages[0].createdAt!)}
                 </span>
               )}
