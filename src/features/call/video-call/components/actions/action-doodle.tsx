@@ -2,7 +2,7 @@ import { DropdownMenuItem } from '@/components/data-display';
 import { Brush } from 'lucide-react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
+import IconScreenCapture from './components/icon-screen-capture';
 export default function ActionDoodle({
   disabled = false,
   onDoodle,
@@ -10,11 +10,12 @@ export default function ActionDoodle({
   disabled?: boolean;
   onDoodle: () => void;
 }) {
+
   const {t} = useTranslation('common')
   return (
     <DropdownMenuItem disabled={disabled} onClick={onDoodle}>
-      <Brush />
-      <span className="ml-2">{t('CONVERSATION.SCREEN_DOODLE')}</span>
+      <IconScreenCapture />
+      <span className="ml-2">{t('CONVERSATION.SCREEN_CAPTURE')}</span>
     </DropdownMenuItem>
   );
 }
