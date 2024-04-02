@@ -215,7 +215,12 @@ export const MessageBox = ({
                 </MessageItemGroup>
               </div>
               {!isSystem && (
-                <span className="block text-end text-sm font-light text-neutral-300">
+                <span
+                  className={cn(
+                    'block  text-sm font-light text-neutral-300',
+                    isMe ? 'text-end' : 'text-start',
+                  )}
+                >
                   {formatTimeDisplay(group.messages[0].createdAt!)}
                 </span>
               )}
