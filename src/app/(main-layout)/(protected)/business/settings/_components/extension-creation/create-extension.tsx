@@ -27,9 +27,10 @@ import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.s
 import { DEFAULT_FIRST_MESSAGE, DEFAULT_THEME, TThemeOption } from './sections/options';
 import CustomFirstMessageOptions from './sections/custom-first-message-options';
 import PluginChatPreview from './sections/plugin-chat-preview';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
+import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import CustomExtension from './sections/custom-extension';
-import CreateExtensionHeader from './sections/create-extension-header';
+import CreateExtensionHeader, { createExtensionSteps } from './sections/create-extension-header';
+import StepWrapper from './sections/step-wrapper';
 
 
 type TFormValues = {
@@ -44,7 +45,8 @@ type TFormValues = {
 
 }
 
-type TabValue = 'add domain' | 'starting message' | 'custom extension' | 'copy & paste code'
+
+
 
 export default function CreateExtension({ open, initialData, title = 'Create Extension' }: {
   open: boolean;
@@ -52,7 +54,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   title?: string;
 }) {
   const isClient = useClient()
-  const [tabValue, setTabValue] = React.useState<TabValue>('add domain');
+  const [tabValue, setTabValue] = React.useState<number>(0);
   const [submitedData, setSubmitedData] = React.useState<TFormValues>();
   const currentUser = useAuthStore((s) => s.user);
   const [extensionId, setExtensionId] = React.useState<string>();
@@ -89,7 +91,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
 
   useEffect(() => {
     if (open) {
-      setTabValue('add domain');
+      setTabValue(0);
     }
     if (!open && initialData) { reset(); return }
     if (!isEmpty(initialData)) {
@@ -114,11 +116,11 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
       createExtensionService(payload).then((res) => {
         setExtensionId(res.data._id);
         toast.success('Create extension success!');
-        setTabValue('copy & paste code');
+        setTabValue(3);
         setSubmitedData(values);
       }).catch((err) => {
         toast.error(err?.response?.data?.message || 'Create extension failed!');
-        setTabValue('custom extension');
+        setTabValue(2);
       })
       router.refresh();
     } catch (err: any) {
@@ -148,9 +150,9 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
-        <Tabs defaultValue='add domains' className="w-full bg-primary-100">
-          <CreateExtensionHeader />
-          <TabsContent value="add domains" className="p-4 bg-white">
+        <Tabs value={tabValue?.toString()} className="w-full bg-primary-100">
+          <CreateExtensionHeader step={tabValue} onStepChange={setTabValue} />
+          <StepWrapper value="0" >
             <Typography variant="h5" className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
               Add all domains that you would like the extension to appear on
             </Typography>
@@ -205,8 +207,8 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
             })
             }
             <Typography className={domainsErrMessage && !isValid ? "inline-block py-1 text-red-500 text-[1rem] font-normal" : 'hidden'}>{domainsErrMessage}</Typography>
-          </TabsContent>
-          <TabsContent value="starting message" className="p-4 bg-white">
+          </StepWrapper>
+          <StepWrapper value="1" >
             <div className='flex flex-col gap-3 p-3'>
               <FormLabel
                 className="mb-1 inline-block text-neutral-900 text-[1rem] font-semibold"
@@ -220,8 +222,8 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
                 }}
               />
             </div>
-          </TabsContent>
-          <TabsContent value="custom extension">
+          </StepWrapper>
+          <StepWrapper value="2">
             <div className=" max-h-[calc(85vh-48px)] max-w-screen-md md:max-w-screen-xl overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
               <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>
                 <div className='w-1/3  flex flex-col p-4 gap-3'>
@@ -238,8 +240,8 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
                   className='w-2/3' content={watch('custom.firstMessage')} language={watch('custom.language')} color={watch('custom.color')} />
               </div>
             </div>
-          </TabsContent>
-          <TabsContent value="copy & paste code" className="p-4 bg-white">
+          </StepWrapper>
+          <StepWrapper value="3" >
             <Typography className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
               Copy and paste the code below into your website
             </Typography>
@@ -261,7 +263,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
               </pre>
             </div>
             {isSubmitting && <Spinner className='my-2 mx-auto text-primary-200' />}
-          </TabsContent>
+          </StepWrapper>
         </Tabs>
       </form>
     </Form>
