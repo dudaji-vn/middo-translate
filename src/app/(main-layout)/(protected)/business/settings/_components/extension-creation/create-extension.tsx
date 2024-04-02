@@ -29,6 +29,7 @@ import CustomFirstMessageOptions from './sections/custom-first-message-options';
 import PluginChatPreview from './sections/plugin-chat-preview';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
 import CustomExtension from './sections/custom-extension';
+import CreateExtensionHeader from './sections/create-extension-header';
 
 
 type TFormValues = {
@@ -147,14 +148,9 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
-        <Tabs defaultValue='add domains' className="w-full">
-          <TabsList>
-            <TabsTrigger value="add domains">Adding Domain</TabsTrigger>
-            <TabsTrigger value="starting message">Starting Message</TabsTrigger>
-            <TabsTrigger value="custom extension">Custom Extension</TabsTrigger>
-            <TabsTrigger value="copy & paste code">Copy & Paste Code</TabsTrigger>
-          </TabsList>
-          <TabsContent value="add domains" className="p-4">
+        <Tabs defaultValue='add domains' className="w-full bg-primary-100">
+          <CreateExtensionHeader />
+          <TabsContent value="add domains" className="p-4 bg-white">
             <Typography variant="h5" className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
               Add all domains that you would like the extension to appear on
             </Typography>
@@ -210,7 +206,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
             }
             <Typography className={domainsErrMessage && !isValid ? "inline-block py-1 text-red-500 text-[1rem] font-normal" : 'hidden'}>{domainsErrMessage}</Typography>
           </TabsContent>
-          <TabsContent value="starting message" className="p-4">
+          <TabsContent value="starting message" className="p-4 bg-white">
             <div className='flex flex-col gap-3 p-3'>
               <FormLabel
                 className="mb-1 inline-block text-neutral-900 text-[1rem] font-semibold"
@@ -225,7 +221,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
               />
             </div>
           </TabsContent>
-          <TabsContent value="custom extension" >
+          <TabsContent value="custom extension">
             <div className=" max-h-[calc(85vh-48px)] max-w-screen-md md:max-w-screen-xl overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
               <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>
                 <div className='w-1/3  flex flex-col p-4 gap-3'>
@@ -243,7 +239,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
               </div>
             </div>
           </TabsContent>
-          <TabsContent value="copy & paste code" className="p-4">
+          <TabsContent value="copy & paste code" className="p-4 bg-white">
             <Typography className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
               Copy and paste the code below into your website
             </Typography>

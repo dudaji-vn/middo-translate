@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 
 import { cn } from '@/utils/cn';
+import { cva } from 'class-variance-authority';
 
 const Tabs = TabsPrimitive.Root;
 
@@ -22,14 +23,23 @@ const TabsList = React.forwardRef<
 ));
 TabsList.displayName = TabsPrimitive.List.displayName;
 
+const tabsTriggerVariants = cva('', {
+  variants: {
+    variant: {
+      default: 'border-b-1 relative inline-flex w-full items-center justify-center whitespace-nowrap rounded-none border-b border-transparent px-3 py-4 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:font-semibold data-[state=active]:text-foreground *:data-[state=active]:block md:hover:border-primary',
+      unset: '',
+    },
+  }
+});
+
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & { variant?: 'default' | 'unset' }
+>(({ className, variant = 'default', ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      'border-b-1 relative inline-flex w-full items-center justify-center whitespace-nowrap rounded-none border-b border-transparent px-3 py-4 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:font-semibold data-[state=active]:text-foreground *:data-[state=active]:block md:hover:border-primary',
+      tabsTriggerVariants({ variant }),
       className,
     )}
     {...props}

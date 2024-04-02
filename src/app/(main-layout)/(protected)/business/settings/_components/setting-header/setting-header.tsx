@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigatio
 
 import React from 'react'
 
-type ModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
+export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
     variants: {
         modal: {
@@ -20,25 +20,13 @@ const headerVariants = cva('w-full flex flex-row', {
             'create-extension': ' hidden',
             'edit-company': 'hidden'
         },
-        navigation: {
-            default: 'hidden',
-            'create-extension': 'w-full py-2 flex flex-row gap-3',
-            'edit-extension': 'w-full py-2 flex flex-row gap-3',
-            'edit-company': 'w-full py-2 flex flex-row gap-3'
-        },
     }
 });
-
-const mappedTitle = {
-    'edit-extension': 'Edit Extension',
-    'create-extension': 'Create Extension',
-    'edit-company': 'Edit Company'
-}
 
 const SettingHeader = ({ data }: { data: any }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const modalType: ModalType = searchParams?.get('modal') as ModalType;
+    const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
     const isEmpty = !data;
     return (<>
         <section className={cn('bg-white w-full p-10 flex flex-row gap-3', headerVariants({ modal: modalType }))}>
@@ -53,20 +41,6 @@ const SettingHeader = ({ data }: { data: any }) => {
                 </div>
             </div>
         </section>
-        <section className={cn('w-full flex flex-row items-center', headerVariants({ navigation: modalType || 'default' }))}>
-            <Button.Icon
-                onClick={() => {
-                    router.back();
-                }}
-                variant={'ghost'}
-                size={'xs'}
-                color={'default'}
-                className='text-neutral-600'
-            >
-                <ArrowLeft className="" />
-            </Button.Icon>
-            <Typography className='text-neutral-600 capitalize'>{mappedTitle[modalType || 'create-extension']}</Typography>
-        </section>  
          <section className={(modalType || !modalType && !isEmpty) ? 'hidden' : 'w-full flex flex-col items-center'}>
             <Tabs defaultValue='members' className="w-full">
                 <div className='w-full bg-white transition-all duration-300'>
