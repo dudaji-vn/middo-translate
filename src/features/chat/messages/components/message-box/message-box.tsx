@@ -19,6 +19,7 @@ import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
 import { TimeDisplay } from '../time-display';
 import { cn } from '@/utils/cn';
+import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 export type MessageGroup = {
@@ -213,6 +214,11 @@ export const MessageBox = ({
                   })}
                 </MessageItemGroup>
               </div>
+              {!isSystem && (
+                <span className="block text-end text-sm font-light text-neutral-300">
+                  {formatTimeDisplay(group.messages[0].createdAt!)}
+                </span>
+              )}
             </div>
           );
         })}

@@ -44,6 +44,7 @@ export default function handler(
       });
       const data: Tokens = await res.json();
       accessToken = data.accessToken;
+      refreshToken = data.refreshToken;
       cookies.set(ACCESS_TOKEN_NAME, accessToken, {
         maxAge: getTokenMaxAge(accessToken),
       });

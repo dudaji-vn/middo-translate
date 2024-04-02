@@ -178,6 +178,11 @@ export const RepliesBox = () => {
                   })}
                 </MessageItemGroup>
               </div>
+              {!isSystem && (
+                <span className="block text-end text-sm font-light text-neutral-300">
+                  {formatTimeDisplay(group.messages[0].createdAt!)}
+                </span>
+              )}
             </div>
           );
         })}
