@@ -184,6 +184,7 @@ export const RepliesBox = () => {
                   className={cn(
                     'block  text-sm font-light text-neutral-300',
                     isMe ? 'text-end' : 'text-start',
+                    room?.isGroup && 'pl-7',
                   )}
                 >
                   {formatTimeDisplay(group.messages[0].createdAt!)}
