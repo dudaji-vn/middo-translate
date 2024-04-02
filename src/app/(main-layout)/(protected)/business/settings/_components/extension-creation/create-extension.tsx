@@ -10,7 +10,7 @@ import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { CopyIcon, Info, Plus, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -56,6 +56,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   const isClient = useClient()
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [submitedData, setSubmitedData] = React.useState<TFormValues>();
+  const pathname = usePathname() || '';
   const currentUser = useAuthStore((s) => s.user);
   const [extensionId, setExtensionId] = React.useState<string>();
   const { copy } = useTextCopy();
@@ -90,10 +91,11 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   const domainsErrMessage = errors?.domains?.message;
 
   useEffect(() => {
+    reset();
     if (open) {
       setTabValue(0);
     }
-    if (!open && initialData) { reset(); return }
+    if (!open && initialData) { return }
     if (!isEmpty(initialData)) {
       setExtensionId(initialData._id);
       setValue('domains', initialData.domains);
@@ -118,6 +120,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         toast.success('Create extension success!');
         setTabValue(3);
         setSubmitedData(values);
+        router.push(pathname);
       }).catch((err) => {
         toast.error(err?.response?.data?.message || 'Create extension failed!');
         setTabValue(2);

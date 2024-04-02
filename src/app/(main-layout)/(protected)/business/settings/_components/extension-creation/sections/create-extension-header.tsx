@@ -54,7 +54,7 @@ export const createExtensionSteps = [
 ]
 
 const CreateExtensionHeader = ({
-    step,
+    step = 0,
     onStepChange,
 }: {
     step: number,
@@ -69,17 +69,19 @@ const CreateExtensionHeader = ({
     }
     const { trigger, watch, formState: {
         errors,
+        isValid
     } } = useFormContext();
     const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
-    const currentValue = watch(createExtensionSteps[step].nameField);
-   useEffect(() => {
-    if (currentError) {
-        trigger(createExtensionSteps[step].nameField).then((value) => setCurrentError(!value));
-    }
-   }, [currentValue])
+    const currentValue = watch(createExtensionSteps[step]?.nameField);
+    useEffect(() => {
+        if (currentError) {
+            trigger(createExtensionSteps[step]?.nameField).then((value) => setCurrentError(!value));
+        }
+    }, [currentValue])
+    const canSubmit = isValid && step === createExtensionSteps.length - 1;
 
     return (
-        <section className={cn('w-full flex flex-row items-center createExtensionSteps-center gap-3 bg-primary-100', headerVariants({ navigation: modalType || 'default' }))}>
+        <section className={cn('w-full px-4 flex flex-row items-center createExtensionSteps-center gap-3 bg-primary-100', headerVariants({ navigation: modalType || 'default' }))}>
             <Button.Icon
                 onClick={() => {
                     router.back();
@@ -99,7 +101,7 @@ const CreateExtensionHeader = ({
                     const isActive = step === index;
                     let isDone = step > index
                     const isAfterCurrent = step < index;
-                    const disabled = createExtensionSteps[step].requiredFields.some((field) => errors[field]) && step < index;
+                    const disabled = createExtensionSteps[step]?.requiredFields.some((field) => errors[field]) && step < index;
                     let stepContent = isDone ? <Check className='text-white p-1' /> : <p className='!w-6'>{index + 1}</p>;
                     const isError = currentError && step === index;
                     if (isError) {
@@ -115,13 +117,13 @@ const CreateExtensionHeader = ({
                                     return;
                                 }
                                 if (index > step) {
-                                    trigger(createExtensionSteps[step].nameField).then((value) => {
+                                    trigger(createExtensionSteps[step]?.nameField).then((value) => {
                                         if (!value) {
                                             setCurrentError(true);
                                         }
                                     });
                                 }
-                                Promise.all(createExtensionSteps[step].requiredFields.map((field) => {
+                                Promise.all(createExtensionSteps[step]?.requiredFields.map((field) => {
                                     return trigger(field);
                                 })).then((values) => {
                                     if (values.every((value) => value)) {
@@ -157,6 +159,14 @@ const CreateExtensionHeader = ({
                     )
                 })}
             </TabsList>
+            <Button
+                type='submit'
+                size={'sm'}
+                color={'primary'}
+                disabled={!canSubmit}
+                shape={'square'}
+                className={canSubmit ? 'h-11' : 'hidden'}
+            >Save</Button>
         </section>
     )
 }
