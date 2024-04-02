@@ -45,12 +45,6 @@ export const createExtensionSteps = [
         requiredFields: ['domains', 'custom.firstMessage', 'custom.language', 'custom.firstMessageEnglish'],
 
     },
-    // {
-    //     title: 'Copy & Paste Code',
-    //     value: 3,
-    //     nameField: 'code',
-    //     requiredFields: ['domains', 'custom.firstMessage', 'custom.language', 'custom.firstMessageEnglish', 'custom.color'],
-    // }
 ]
 
 const CreateExtensionHeader = ({

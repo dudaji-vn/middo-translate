@@ -1,7 +1,11 @@
+'use client';
+
 import { FormLabel } from '@/components/ui/form';
 import React from 'react'
 import CustomFirstMessageOptions from '../sections/custom-first-message-options';
 import { useFormContext } from 'react-hook-form';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
+import Flow from './script-chat-flow/flow';
 
 const StartingMessageStep = () => {
     const { trigger, watch, setValue, formState: {
@@ -17,12 +21,23 @@ const StartingMessageStep = () => {
             >
                 Starting message
             </FormLabel>
-            <CustomFirstMessageOptions
-                firstMessage={watch('custom.firstMessage')}
-                onFirstMessageChange={(message) => {
-                    setValue('custom.firstMessage', message);
-                }}
-            />
+            <Tabs defaultValue='default'>
+                <TabsList className='border-none bg-neutral-50 px-2 py-1 gap-1 rounded-[8px]'>
+                    <TabsTrigger value='default' variant='button'>Plain text</TabsTrigger>
+                    <TabsTrigger value='custom' variant='button'>Script</TabsTrigger>
+                </TabsList>
+                <TabsContent value='default'>
+                    <CustomFirstMessageOptions
+                        firstMessage={watch('custom.firstMessage')}
+                        onFirstMessageChange={(message) => {
+                            setValue('custom.firstMessage', message);
+                        }}
+                    />
+                </TabsContent>
+                <TabsContent value='custom' className='w-full h-screen'>
+                    <Flow />
+                </TabsContent>
+            </Tabs>
         </div>
     )
 }

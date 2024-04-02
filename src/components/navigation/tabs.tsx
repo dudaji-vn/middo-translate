@@ -28,13 +28,14 @@ const tabsTriggerVariants = cva('', {
     variant: {
       default: 'border-b-1 relative inline-flex w-full items-center justify-center whitespace-nowrap rounded-none border-b border-transparent px-3 py-4 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:font-semibold data-[state=active]:text-foreground *:data-[state=active]:block md:hover:border-primary',
       unset: '',
+      button: 'border-none  hover:bg-neutral-100 hover:text-neutral-700 relative inline-flex w-full items-center justify-center whitespace-nowrap rounded-none  px-3 py-2 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none text-neutral-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-neutral-800  bg-transparent  data-[state=active]:bg-white  *:data-[state=active]:block  !rounded-[4px]',
     },
   }
 });
 
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & { variant?: 'default' | 'unset' }
+  React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger> & { variant?: 'default' | 'button' | 'unset' }
 >(({ className, variant = 'default', ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
@@ -45,7 +46,9 @@ const TabsTrigger = React.forwardRef<
     {...props}
   >
     {props.children}
-    <div className="absolute -bottom-[1px] left-0 hidden h-1 w-full bg-primary "></div>
+    <div className={cn(
+      variant === 'button' && 'hidden',
+      variant === 'default' && "absolute -bottom-[1px] left-0 hidden h-1 w-full bg-primary ")}></div>
   </TabsPrimitive.Trigger>
 ));
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName;
