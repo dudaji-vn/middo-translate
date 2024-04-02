@@ -89,7 +89,8 @@ const CreateExtensionHeader = ({
     const { trigger, watch, formState: {
         errors,
         isValid,
-        isSubmitting
+        isSubmitting,
+        isSubmitSuccessful
     } } = useFormContext();
     const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
     const currentValue = watch(createExtensionSteps[step]?.nameField);
@@ -120,7 +121,7 @@ const CreateExtensionHeader = ({
                 <div style={{ width: `${stepPercentage}%` }} className='absolute  h-[50%] !z-10 top-0 left-0 border-b-[2px] border-b-success-200 transition-all duration-1000' ></div>
                 {createExtensionSteps.map((item, index) => {
                     const isActive = step === index;
-                    let isDone = step > index
+                    let isDone = step > index || isSubmitting || isSubmitSuccessful; 
                     const isAfterCurrent = step < index;
                     const disabled = createExtensionSteps[step]?.requiredFields.some((field) => errors[field]) && step < index;
                     let stepContent = isDone ? <Check className='text-white p-1' /> : <p className='!w-6'>{index + 1}</p>;
@@ -171,7 +172,7 @@ const CreateExtensionHeader = ({
                     }
                 }}
                 color={canSubmit || canNext ? 'primary' : 'secondary'}
-                disabled={!canSubmit && !canNext || isSubmitting}
+                disabled={!canSubmit && !canNext || isSubmitting || isSubmitSuccessful}
                 loading={isSubmitting}
                 shape={'square'}
                 className={cn('h-11')}

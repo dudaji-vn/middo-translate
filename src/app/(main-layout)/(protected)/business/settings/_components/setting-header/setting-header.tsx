@@ -37,7 +37,7 @@ const SettingHeader = ({ data }: { data: any }) => {
                 <Typography className='text-neutral-600'>10 member</Typography>
                 <div className='pt-1'>
                     {/* <Link href='/business/settings?modal=edit-company'> */}
-                    <Button color={'secondary'} className='flex flex-row gap-2' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
+                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
                     {/* </Link> */}
                 </div>
             </div>
