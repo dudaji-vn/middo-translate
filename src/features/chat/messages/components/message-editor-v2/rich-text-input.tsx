@@ -41,7 +41,7 @@ export const RichTextInput = ({
   onStoppedTyping,
   suggestions = [],
 }: RichTextInputProps) => {
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const editor = useEditor({
     editorProps: {
       transformPastedHTML(html) {

@@ -4,23 +4,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import React, { PropsWithChildren, cloneElement, useMemo } from 'react';
+import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
+import { PropsWithChildren, cloneElement, useMemo } from 'react';
 import { actionItems, useMessageActions } from '../message-actions';
 
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
-import { MessageEmojiPicker } from '../message-emoji-picker';
-import { cn } from '@/utils/cn';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useAppStore } from '@/stores/app.store';
+import { cn } from '@/utils/cn';
+import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import { useBoolean } from 'usehooks-ts';
 import { Message } from '../../types';
-import { useTranslation } from 'react-i18next';
+import { MessageEmojiPicker } from '../message-emoji-picker';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
@@ -30,11 +32,11 @@ export interface MessageItemWrapperProps {
   disabledAllActions?: boolean;
 }
 
-export const MessageItemWrapper = (
-  { disabledAllActions, ...props }: MessageItemWrapperProps & PropsWithChildren,
-) => {
+export const MessageItemWrapper = ({
+  disabledAllActions,
+  ...props
+}: MessageItemWrapperProps & PropsWithChildren) => {
   const isMobile = useAppStore((state) => state.isMobile);
-
   const { isMe, message, setActive, discussionDisabled } = props;
 
   const { onAction } = useMessageActions();
@@ -82,7 +84,6 @@ export const MessageItemWrapper = (
     return DesktopWrapper;
   }, [isMobile, message.status]);
 
-  
   if (disabledAllActions) {
     return <div className="relative">{props.children}</div>;
   }
@@ -114,7 +115,7 @@ const MobileWrapper = ({
   setActive,
 }: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   return (
     <LongPressMenu
       isOpen={value}
@@ -175,10 +176,11 @@ const DesktopWrapper = ({
   message,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
+  const formattedDate = moment(message.createdAt).format('lll');
   return (
     <>
-      {children}
+      <Tooltip triggerItem={children} title={formattedDate} />
       <div
         className={cn(
           'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:flex',

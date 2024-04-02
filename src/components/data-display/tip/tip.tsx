@@ -4,13 +4,18 @@ import { cn } from '@/utils/cn';
 import { Lightbulb, XIcon } from 'lucide-react';
 import React from 'react';
 
-
-const Tip = ({hideTip, closeTip, tipContent, tipTitle,...props}: React.HTMLAttributes<HTMLDivElement> &{hideTip: boolean,
-    tipContent: string,
-    tipTitle: string,
-closeTip: () => void
+const Tip = ({
+  hideTip,
+  closeTip,
+  tipContent,
+  tipTitle,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  hideTip: boolean;
+  tipContent: string;
+  tipTitle: string;
+  closeTip: () => void;
 }) => {
-
   return (
     <div
       {...props}
@@ -37,7 +42,7 @@ closeTip: () => void
             <XIcon />
           </Button.Icon>
         </div>
-        <Typography className="flex flex-row items-center gap-2 text-[14px] text-sm font-light leading-[18px] text-neutral-400">
+        <Typography className="flex flex-row items-center gap-2 text-start text-[14px] text-sm font-light leading-[18px] text-neutral-400">
           {tipContent}
         </Typography>
       </div>

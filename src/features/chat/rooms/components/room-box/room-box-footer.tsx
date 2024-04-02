@@ -6,18 +6,18 @@ import {
 } from '@/features/chat/messages/components/message-editor-v2';
 import { forwardRef, useEffect, useState } from 'react';
 
-import { Media } from '@/types';
+import { useMediaUpload } from '@/components/media-upload';
+import { SOCKET_CONFIG } from '@/configs/socket';
+import { messageApi } from '@/features/chat/messages/api';
+import { useMessagesBox } from '@/features/chat/messages/components/message-box';
 import { Message } from '@/features/chat/messages/types';
 import { createLocalMessage } from '@/features/chat/messages/utils';
-import { messageApi } from '@/features/chat/messages/api';
 import { roomApi } from '@/features/chat/rooms/api';
-import { useAuthStore } from '@/stores/auth.store';
-import { useChatBox } from '../../contexts/chat-box-context';
-import { useMessagesBox } from '@/features/chat/messages/components/message-box';
-import { useMutation } from '@tanstack/react-query';
-import { useMediaUpload } from '@/components/media-upload';
 import socket from '@/lib/socket-io';
-import { SOCKET_CONFIG } from '@/configs/socket';
+import { useAuthStore } from '@/stores/auth.store';
+import { Media } from '@/types';
+import { useMutation } from '@tanstack/react-query';
+import { useChatBox } from '../../contexts/chat-box-context';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -249,7 +249,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     }, [localVideoMessageWaiting, uploadedFiles, room?._id]);
 
     return (
-      <div className="w-full border-t p-2">
+      <div className="relative w-full border-t p-2">
         <MessageEditor
           onTyping={(isTyping) => {
             socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {

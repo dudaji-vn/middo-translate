@@ -80,7 +80,10 @@ export const MessagesBoxProvider = ({
     },
   });
   const params = useParams<{ id: string }>();
-  const { data } = useGetPinnedMessages({ roomId: params?.id || room._id, isAnonymous });
+  const { data } = useGetPinnedMessages({
+    roomId: params?.id || room._id,
+    isAnonymous,
+  });
 
   const userId = useAuthStore((s) => s.user?._id);
 
@@ -112,6 +115,13 @@ export const MessagesBoxProvider = ({
       },
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
+      queryClient.invalidateQueries(['message', message._id]);
+      if (message.hasChild) {
+        queryClient.invalidateQueries(['message-replies', message._id]);
+      }
+    });
+    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
+      console.log('update message', message);
       updateItem(message);
       queryClient.invalidateQueries(['message', message._id]);
     });
