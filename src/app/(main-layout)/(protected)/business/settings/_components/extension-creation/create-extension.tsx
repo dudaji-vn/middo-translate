@@ -57,7 +57,6 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   const [tabValue, setTabValue] = React.useState<number>(0);
   const pathname = usePathname() || '';
   const currentUser = useAuthStore((s) => s.user);
-  const [extensionId, setExtensionId] = React.useState<string>();
   const router = useRouter();
 
   const form = useForm<TFormValues>({
@@ -92,13 +91,12 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
     console.log('initialData', initialData)
     if (open) {
       setTabValue(0);
-    } 
-    if(!open) {
+    }
+    if (!open) {
       reset();
       return;
     }
     if (!isEmpty(initialData)) {
-      setExtensionId(initialData._id);
       setValue('domains', initialData.domains);
       setValue('custom', {
         language: initialData.language,
@@ -116,10 +114,9 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
       ...values.custom,
     };
     try {
-      createExtensionService(payload).then((res) => {
-        setExtensionId(res.data._id);
-        toast.success('Create extension success!');
+      await createExtensionService(payload).then((res) => {
         router.push(pathname);
+        toast.success('Create extension success!');
       }).catch((err) => {
         toast.error(err?.response?.data?.message || 'Create extension failed!');
       })
@@ -140,12 +137,6 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
     setValue('domains', domains.filter((d) => d !== domain));
     trigger('domains');
   }
-  const initialCustom = {
-    language: initialData?.language,
-    firstMessage: initialData?.firstMessage,
-    firstMessageEnglish: initialData?.firstMessageEnglish,
-    color: initialData?.color || DEFAULT_THEME,
-  };
 
   if (!isClient || !open) return null;
   return (
@@ -225,7 +216,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
             </div>
           </StepWrapper>
           <StepWrapper value="2">
-            <div className=" max-h-[calc(85vh-48px)] max-w-screen-md md:max-w-screen-xl overflow-y-scroll bg-white [&_h3]:text-[1.25rem]">
+            <div className=" max-w-screen-md md:max-w-screen-xl  bg-white [&_h3]:text-[1.25rem]">
               <div className='flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 '>
                 <div className='w-1/3  flex flex-col p-4 gap-3'>
                   <Typography variant="h5" className="font-semibold text-neutral-900 text-[1rem]">Custom style</Typography>

@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
 
 import React from 'react'
+import BusinessExtension from '../extenstion/business-extension'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -41,7 +42,7 @@ const SettingHeader = ({ data }: { data: any }) => {
                 </div>
             </div>
         </section>
-         <section className={(modalType || !modalType && !isEmpty) ? 'hidden' : 'w-full flex flex-col items-center'}>
+        <section className={(modalType) ? 'hidden' : 'w-full flex flex-col items-center'}>
             <Tabs defaultValue='members' className="w-full">
                 <div className='w-full bg-white transition-all duration-300'>
                     <TabsList className='lg:max-w-fit'>
@@ -62,7 +63,7 @@ const SettingHeader = ({ data }: { data: any }) => {
                             Create a conversation extension with the help of ready-made theme or define a unique one on your own
                         </Typography>
                     </div>
-                    <Link href='/business/settings?modal=create-extension'>
+                    <Link href='/business/settings?modal=create-extension' className={isEmpty ? '' : 'hidden'}>
                         <Button variant={'default'} color={'primary'} shape={'square'} className={'mt-4 w-fit mx-auto'} >
                             <Plus className="h-4 w-4" />
                             <Typography className="ml-2 text-white">
@@ -70,6 +71,8 @@ const SettingHeader = ({ data }: { data: any }) => {
                             </Typography>
                         </Button>
                     </Link>
+                    <BusinessExtension data={data} name='Middo Conversation Extension' />
+
                 </TabsContent>
             </Tabs >
         </section>

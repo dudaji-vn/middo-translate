@@ -61,15 +61,35 @@ const CreateExtensionHeader = ({
     onStepChange: (value: number) => void
 }) => {
     const searchParams = useSearchParams();
-    const [currentError, setCurrentError] = useState(false);
+    const [currentError, setCurrentError] = useState<boolean>();
     const router = useRouter();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
-    const handleStepChange = (value: number) => {
-        onStepChange(value);
+    const handleStepChange = async (index: number) => {
+        if (step === index) return;
+        setCurrentError(false);
+        if (index < step) {
+            onStepChange(index);
+            return;
+        }
+        if (index > step) {
+            await trigger(createExtensionSteps[step]?.nameField).then((value) => {
+                if (!value) {
+                    setCurrentError(true);
+                }
+            });
+        }
+        Promise.all(createExtensionSteps[step]?.requiredFields.map((field) => {
+            return trigger(field);
+        })).then((values) => {
+            if (values.every((value) => value)) {
+                onStepChange(index);
+            }
+        })
     }
     const { trigger, watch, formState: {
         errors,
-        isValid
+        isValid,
+        isSubmitting
     } } = useFormContext();
     const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
     const currentValue = watch(createExtensionSteps[step]?.nameField);
@@ -79,6 +99,7 @@ const CreateExtensionHeader = ({
         }
     }, [currentValue])
     const canSubmit = isValid && step === createExtensionSteps.length - 1;
+    const canNext = step < createExtensionSteps.length - 1 && !currentError
 
     return (
         <section className={cn('w-full px-4 flex flex-row items-center createExtensionSteps-center gap-3 bg-primary-100', headerVariants({ navigation: modalType || 'default' }))}>
@@ -110,26 +131,7 @@ const CreateExtensionHeader = ({
                     return (
                         <TabsTrigger variant='unset' value={String(item.value)} key={index}
                             onClick={() => {
-                                if (step === index) return;
-                                setCurrentError(false);
-                                if (index < step) {
-                                    handleStepChange(index);
-                                    return;
-                                }
-                                if (index > step) {
-                                    trigger(createExtensionSteps[step]?.nameField).then((value) => {
-                                        if (!value) {
-                                            setCurrentError(true);
-                                        }
-                                    });
-                                }
-                                Promise.all(createExtensionSteps[step]?.requiredFields.map((field) => {
-                                    return trigger(field);
-                                })).then((values) => {
-                                    if (values.every((value) => value)) {
-                                        handleStepChange(index);
-                                    }
-                                })
+                                handleStepChange(index);
                             }}
                             className='z-20'
                             disabled={disabled}
@@ -160,13 +162,22 @@ const CreateExtensionHeader = ({
                 })}
             </TabsList>
             <Button
-                type='submit'
+                type={canSubmit ? 'submit' : 'button'}
                 size={'sm'}
-                color={'primary'}
-                disabled={!canSubmit}
+                onClick={(e) => {
+                    if (canNext) {
+                        e.preventDefault();
+                        handleStepChange(step + 1);
+                    }
+                }}
+                color={canSubmit || canNext ? 'primary' : 'secondary'}
+                disabled={!canSubmit && !canNext || isSubmitting}
+                loading={isSubmitting}
                 shape={'square'}
-                className={canSubmit ? 'h-11' : 'h-11 opacity-75'}
-            >Save</Button>
+                className={cn('h-11')}
+            >
+                {canSubmit ? 'Save' : 'Next'}
+            </Button>
         </section>
     )
 }

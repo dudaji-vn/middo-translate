@@ -51,6 +51,9 @@ const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...prop
             </div>
             <RHFTextAreaField
                 name={'custom.firstMessage'}
+                formItemProps={{
+                    className: checked === 'custom' ? '' : 'hidden',
+                }}
                 textareaProps={{
                     placeholder: 'Type your custom first message',
                     disabled: checked !== 'custom',

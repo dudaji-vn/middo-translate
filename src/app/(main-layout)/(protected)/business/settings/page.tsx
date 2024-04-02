@@ -19,7 +19,6 @@ const SettingPage = async ({ searchParams }: {
         <div className='max-md:w-screen max-md:px-1 w-full bg-primary-100 h-full'>
             <SettingHeader data={businessExtension} />
             <div className='w-full bg-white'>
-                {!modatType && <BusinessExtension data={businessExtension} name='Middo Extension' />}
                 <CreateExtension open={Boolean(modatType === 'create-extension' || modatType === 'edit-extension' && businessExtension)} initialData={businessExtension} />
             </div>
         </div>
