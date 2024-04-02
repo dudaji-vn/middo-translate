@@ -12,7 +12,7 @@ export default function IconScreenCapture() {
       <g clip-path="url(#clip0_4595_27579)">
         <mask
           id="mask0_4595_27579"
-          style="mask-type:luminance"
+          // style="mask-type:luminance"
           maskUnits="userSpaceOnUse"
           x="0"
           y="0"
