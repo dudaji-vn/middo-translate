@@ -42,7 +42,7 @@ export type TBusinessExtensionData = {
 };
 class BusinessAPI {
   private basePath: string;
-
+  
   constructor(basePath: string = process.env.NEXT_PUBLIC_API_URL + '/api') {
     this.basePath = basePath;
   }

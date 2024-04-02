@@ -55,11 +55,9 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
 }) {
   const isClient = useClient()
   const [tabValue, setTabValue] = React.useState<number>(0);
-  const [submitedData, setSubmitedData] = React.useState<TFormValues>();
   const pathname = usePathname() || '';
   const currentUser = useAuthStore((s) => s.user);
   const [extensionId, setExtensionId] = React.useState<string>();
-  const { copy } = useTextCopy();
   const router = useRouter();
 
   const form = useForm<TFormValues>({
@@ -91,11 +89,14 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   const domainsErrMessage = errors?.domains?.message;
 
   useEffect(() => {
-    reset();
+    console.log('initialData', initialData)
     if (open) {
       setTabValue(0);
+    } 
+    if(!open) {
+      reset();
+      return;
     }
-    if (!open && initialData) { return }
     if (!isEmpty(initialData)) {
       setExtensionId(initialData._id);
       setValue('domains', initialData.domains);
@@ -118,12 +119,9 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
       createExtensionService(payload).then((res) => {
         setExtensionId(res.data._id);
         toast.success('Create extension success!');
-        setTabValue(3);
-        setSubmitedData(values);
         router.push(pathname);
       }).catch((err) => {
         toast.error(err?.response?.data?.message || 'Create extension failed!');
-        setTabValue(2);
       })
       router.refresh();
     } catch (err: any) {
@@ -244,29 +242,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
               </div>
             </div>
           </StepWrapper>
-          <StepWrapper value="3" >
-            <Typography className="inline-block py-3 text-neutral-600 text-[1rem] font-normal">
-              Copy and paste the code below into your website
-            </Typography>
-            <div className="relative w-full bg-neutral-50  max-h-60 text-neutral-600 text-sm rounded-lg overflow-auto">
-              <Button.Icon
-                variant="ghost"
-                size={'xs'}
-                type="button"
-                className='text-neutral-400 absolute right-4 top-1'
-                onClick={() => {
-                  copy(generateExtensionCode(`/help-desk/${extensionId}`, watch('custom.color')));
-                }}
-              ><CopyIcon />
-              </Button.Icon>
-              <pre className="bg-transparent  text-neutral-600 text-sm rounded-lg overflow-auto px-2 whitespace-pre-wrap pr-7">
-                <code className='text-neutral-600 text-sm p-2' lang='javascript'>
-                  {generateExtensionCode(`/help-desk/${extensionId}`, watch('custom.color'))}
-                </code>
-              </pre>
-            </div>
-            {isSubmitting && <Spinner className='my-2 mx-auto text-primary-200' />}
-          </StepWrapper>
+
         </Tabs>
       </form>
     </Form>

@@ -165,7 +165,7 @@ const CreateExtensionHeader = ({
                 color={'primary'}
                 disabled={!canSubmit}
                 shape={'square'}
-                className={canSubmit ? 'h-11' : 'hidden'}
+                className={canSubmit ? 'h-11' : 'h-11 opacity-75'}
             >Save</Button>
         </section>
     )
