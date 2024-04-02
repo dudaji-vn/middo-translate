@@ -18,14 +18,13 @@ interface ActionToggleCameraProps {
 const ActionToggleCamera = ({
   handleChangeCameraOrMic,
 }: ActionToggleCameraProps) => {
-  const { isTurnOnCamera, setTurnOnCamera } = useMyVideoCallStore();
+  const { isTurnOnCamera, isLoadingStream } = useMyVideoCallStore();
   const {isElectron, ipcRenderer} = useElectron();
   const onToggleCamera = useCallback(() => {
-    setTurnOnCamera(!isTurnOnCamera);
     handleChangeCameraOrMic({
       video: !isTurnOnCamera,
     });
-  }, [handleChangeCameraOrMic, isTurnOnCamera, setTurnOnCamera]);
+  }, [handleChangeCameraOrMic, isTurnOnCamera]);
   const {t} = useTranslation('common')
   useKeyboardShortcut([SHORTCUTS.TOGGLE_CAMERA], onToggleCamera);
 
@@ -39,19 +38,19 @@ const ActionToggleCamera = ({
   }, [ipcRenderer, isElectron, onToggleCamera])
 
   return (
-    <Tooltip
-      title={isTurnOnCamera ? t('TOOL_TIP.TURN_OFF_CAMERA') : t('TOOL_TIP.TURN_ON_CAMERA') }
-      triggerItem={
-        <Button.Icon
-          variant="default"
-          size="xs"
-          color={isTurnOnCamera ? 'primary' : 'default'}
-          onClick={onToggleCamera}
-        >
-          {isTurnOnCamera ? <Video /> : <VideoOff />}
-        </Button.Icon>
-      }
-    />
+    <Button.Icon
+        variant="default"
+        size="xs"
+        color={isTurnOnCamera ? 'primary' : 'default'}
+        disabled={isLoadingStream}
+        onClick={onToggleCamera}
+    >
+      <Tooltip
+        title={isTurnOnCamera ? t('TOOL_TIP.TURN_OFF_CAMERA') : t('TOOL_TIP.TURN_ON_CAMERA')}
+        contentProps={{ className: 'text-black font-normal ' }}
+        triggerItem={isTurnOnCamera ? <Video /> : <VideoOff />}
+      />
+    </Button.Icon>
   );
 };
 

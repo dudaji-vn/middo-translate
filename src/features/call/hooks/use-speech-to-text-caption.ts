@@ -1,35 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from 'react-speech-recognition';
 interface WordRecognized {
   isFinal: boolean;
   text: string;
 }
-export default function useSpeechRecognizer(language?: string) {
-  const [listening, setListening] = useState(false);
-  const [interimTranscript, setInterimTranscript] = useState<string>('');
+export default function useSpeechToTextCaption(language?: string) {
   const [finalTranscript, setFinalTranscript] = useState<string>('');
   const [stream, setStream] = useState<MediaStream>();
-  const [history, setHistory] = useState<string[]>([]);
   const processorRef = useRef<any>();
   const audioContextRef = useRef<any>();
   const audioInputRef = useRef<any>();
-  
-  const receiveAudioText = useCallback(
-    (data: WordRecognized) => {
-      // remove /n in data.text
-      const transcript = data.text.replace(/\n/g, '');
-      const isFinal = data.isFinal;
-      if (isFinal) {
-        setHistory((old) => [...old, transcript]);
-      }
-      setInterimTranscript((history.join(' ') + transcript));
-    },
-    [history],
-  );
+  const receiveAudioText = useCallback((data: WordRecognized) => {
+    // remove /n in data.text
+    const transcript = data.text.replace(/\n/g, '');
+    const isFinal = data.isFinal;
+    if (isFinal) {
+      setFinalTranscript(transcript);
+    }
+  }, []);
 
   useEffect(() => {
-    if(!listening) return;
     socket.on(
       SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.RECEIVE_AUDIO_TEXT,
       receiveAudioText,
@@ -40,7 +34,7 @@ export default function useSpeechRecognizer(language?: string) {
         receiveAudioText,
       );
     };
-  }, [listening, receiveAudioText]);
+  }, [receiveAudioText]);
 
   useEffect(() => {
     const init = async () => {
@@ -91,62 +85,27 @@ export default function useSpeechRecognizer(language?: string) {
   }, [stream]);
 
   useEffect(() => {
+    const init = async () => {
+      socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.START, language);
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          deviceId: 'default',
+          sampleRate: 16000,
+          sampleSize: 16,
+          channelCount: 1,
+        },
+        video: false,
+      });
+      setStream(stream);
+    };
+    init();
     return () => {
       socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
     };
-  }, []);
-
-  const resetTranscript = useCallback(() => {
-    setInterimTranscript('');
-    setFinalTranscript('');
-    setHistory([]);
-  }, []);
-
-  const startSpeechToText = useCallback(async () => {
-    resetTranscript();
-    socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.START, language);
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: {
-        deviceId: 'default',
-        sampleRate: 16000,
-        sampleSize: 16,
-        channelCount: 1,
-      },
-      video: false,
-    });
-    setStream(stream);
-    setListening(true);
-  }, [language, resetTranscript]);
-
-  const stopSpeechToText = useCallback(() => {
-    socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
-    processorRef.current?.disconnect();
-    audioInputRef.current?.disconnect();
-    audioContextRef.current?.close();
-    setListening(false);
-    // stop stream if needed
-    if (stream) {
-      stream.getTracks().forEach((track) => {
-        track.stop();
-      });
-    }
-    setStream(undefined);
-    socket.off(
-      SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.RECEIVE_AUDIO_TEXT,
-      receiveAudioText,
-    );
-    setFinalTranscript(history.join(' ') || interimTranscript);
-    
-  }, [history, interimTranscript, receiveAudioText, stream]);
-
-  
-
+  }, [language]);
+ 
+ 
   return {
-    listening: listening,
-    interimTranscript: interimTranscript,
-    finalTranscript: finalTranscript,
-    startSpeechToText,
-    stopSpeechToText,
-    resetTranscript: resetTranscript,
+    transcript: finalTranscript,
   };
 }

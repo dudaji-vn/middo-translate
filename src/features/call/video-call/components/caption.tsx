@@ -12,6 +12,8 @@ import { useMyVideoCallStore } from '../../store/me.store';
 import useExtractTextFromStream from '../../hooks/use-extract-text-from-stream';
 import CaptionInterface from '../../interfaces/caption.interface';
 import { useTranslation } from 'react-i18next';
+import useSpeechToTextCaption from '../../hooks/use-speech-to-text-caption';
+import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 
 export default function CaptionSection() {
   const {
@@ -25,7 +27,7 @@ export default function CaptionSection() {
   const { user } = useAuthStore();
   const { myStream } = useMyVideoCallStore();
   const captionListRef = useRef<HTMLDivElement>(null);
-  const { transcript } = useExtractTextFromStream(myStream);
+  const { transcript } = useSpeechToTextCaption(SUPPORTED_VOICE_MAP[(user?.language || 'auto') as keyof typeof SUPPORTED_VOICE_MAP]);
   const [isScroll, setScroll] = useState(false);
   const {t} = useTranslation('common')
   const scrollToBottom = useCallback(

@@ -13,9 +13,10 @@ import SpeechRecognition, {
 } from 'react-speech-recognition';
 import { useMessageEditor } from '.';
 import { useAuthStore } from '@/stores/auth.store';
-import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { DEFAULT_LANGUAGES_CODE, SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
 export interface MicToggleButtonProps {
   className?: string;
 }
@@ -27,33 +28,26 @@ export const MicToggleButton = forwardRef<
   MicToggleButtonRef,
   MicToggleButtonProps
 >((props, ref) => {
+  const lang =
+  useAuthStore((s) => s.user?.language) ?? DEFAULT_LANGUAGES_CODE.EN;
   const { setTextContent } = useMessageEditor();
   const [transcribing, setTranscribing] = useState(false);
   const enableTranscribing = () => setTranscribing(true);
   const disableTranscribing = () => setTranscribing(false);
 
-  const { listening, interimTranscript } = useSpeechRecognition({
-    transcribing: transcribing,
-  });
-
-  const lang =
-    useAuthStore((s) => s.user?.language) ?? DEFAULT_LANGUAGES_CODE.EN;
+  const {listening, interimTranscript, startSpeechToText, stopSpeechToText } = useSpeechRecognizer(SUPPORTED_VOICE_MAP[(lang || 'auto') as keyof typeof SUPPORTED_VOICE_MAP]);
 
   const handleStartListening = () => {
     enableTranscribing();
-    SpeechRecognition.startListening({
-      language: lang,
-      continuous: true,
-      interimResults: true,
-    });
+    startSpeechToText();
   };
 
   const handleStopListening = useCallback(() => {
     disableTranscribing();
     if (listening) {
-      SpeechRecognition.stopListening();
+      stopSpeechToText()
     }
-  }, [listening]);
+  }, [listening, stopSpeechToText]);
 
   const handleToggleListening = () => {
     listening ? handleStopListening() : handleStartListening();
