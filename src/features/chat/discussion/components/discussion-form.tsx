@@ -31,11 +31,17 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
   const { mutateAsync } = useMutation({
     mutationFn: messageApi.reply,
   });
-  const handleSendText = async (
-    content: string,
-    contentEnglish?: string,
-    language?: string,
-  ) => {
+  const handleSendText = async ({
+    content,
+    contentEnglish,
+    language,
+    mentions,
+  }: {
+    content: string;
+    contentEnglish: string;
+    language?: string;
+    mentions?: string[];
+  }) => {
     const localMessage = createLocalMessage({
       sender: currentUser!,
       content,
@@ -50,17 +56,30 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
         contentEnglish,
         language,
         roomId: message?.room?._id!,
+        mentions,
       },
     });
   };
   const handleSubmit = async (data: MessageEditorSubmitData) => {
-    const { content, images, documents, contentEnglish, language, videos } =
-      data;
+    const {
+      content,
+      images,
+      documents,
+      contentEnglish,
+      language,
+      videos,
+      mentions,
+    } = data;
 
     const trimContent = content.trim();
 
     if (trimContent) {
-      handleSendText(content, contentEnglish, language);
+      handleSendText({
+        content: trimContent,
+        contentEnglish: contentEnglish.trim(),
+        language,
+        mentions,
+      });
     }
 
     if (images.length) {
