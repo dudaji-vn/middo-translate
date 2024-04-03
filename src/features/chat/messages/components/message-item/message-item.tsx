@@ -203,7 +203,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               {showTime && (
                 <span
                   className={cn(
-                    'block  text-sm font-light text-neutral-300',
+                    'block  text-xs font-light text-neutral-500',
                     isMe ? 'text-end' : 'pl-7 text-start',
                   )}
                 >

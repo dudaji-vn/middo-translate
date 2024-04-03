@@ -39,10 +39,10 @@ export const MainInput = (props: MainInputProps) => {
 
   return (
     <RichTextInput
+      className="max-h-[200px] w-full overflow-y-auto pt-2 md:pt-1"
       autoFocus={false}
       suggestions={suggestions}
       onClipboardEvent={handleClipboardEvent}
-      className="max-h-[200px] w-full overflow-y-auto pt-2 md:pt-1"
       onCreated={setRichText}
       onChange={(editor) => {
         setContent(editor.getHTML());
@@ -63,12 +63,12 @@ export const MainInput = (props: MainInputProps) => {
         const submitButton = document.getElementById('send-button-' + editorId);
         submitButton?.click();
       }}
-      onFocus={() => {
-        if (isMobile) toolbarRef?.current?.collapse();
-      }}
-      onBlur={() => {
-        toolbarRef?.current?.expand();
-      }}
+      // onFocus={() => {
+      //   if (isMobile) toolbarRef?.current?.collapse();
+      // }}
+      // onBlur={() => {
+      //   toolbarRef?.current?.expand();
+      // }}
     />
   );
 };

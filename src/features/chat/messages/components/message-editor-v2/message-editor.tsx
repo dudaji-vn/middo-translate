@@ -28,6 +28,7 @@ import { useChatStore } from '@/features/chat/store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
+import { useAppStore } from '@/stores/app.store';
 
 type SubmitData = {
   content: string;
@@ -126,6 +127,8 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       setInputDisabled,
       setTextContent,
     } = useEditorState();
+
+    const isMobile = useAppStore((state) => state.isMobile);
 
     const handleSubmit = async () => {
       const images: Media[] = [];
@@ -247,13 +250,14 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         >
           {disabledMessage}
         </Typography>
+        {isMobile && <Toolbar ref={toolbarRef} />}
         <div
           id={id}
           className={
             disabled ? 'hidden' : 'relative flex h-fit flex-row space-x-2'
           }
         >
-          <Toolbar ref={toolbarRef} />
+          {!isMobile && <Toolbar ref={toolbarRef} />}
           <InputWrapper>
             <div className="flex">
               <MainInput />
