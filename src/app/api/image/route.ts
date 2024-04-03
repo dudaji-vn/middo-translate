@@ -13,9 +13,10 @@ export async function GET(request: Request) {
   try {
     const res = await fetch(url);
     const blob = await res.blob();
+    const contentType = res.headers.get('content-type');
     return new Response(blob, {
       headers: {
-        'Content-Type': 'image/jpeg',
+        'Content-Type': contentType || 'image/png',
       },
     });
   } catch (_error) {
