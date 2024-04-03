@@ -117,11 +117,15 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
-        <Tabs value={tabValue?.toString()} className="w-full bg-primary-100">
+        <Tabs value={tabValue?.toString()} className="w-full bg-primary-100"
+          defaultValue={tabValue.toString()}
+          onValueChange={(value) => {
+            setTabValue(parseInt(value));
+          }}>
           <CreateExtensionHeader step={tabValue} onStepChange={setTabValue} />
           <StepWrapper value="0" >
             <AddingDomainsStep />
-           </StepWrapper>
+          </StepWrapper>
           <StepWrapper value="1" >
             <StartingMessageStep />
           </StepWrapper>

@@ -34,7 +34,7 @@ const StartingMessageStep = () => {
                         }}
                     />
                 </TabsContent>
-                <TabsContent value='custom' className='w-full h-screen'>
+                <TabsContent value='custom' className='w-full h-[60vh]'>
                     <Flow />
                 </TabsContent>
             </Tabs>
