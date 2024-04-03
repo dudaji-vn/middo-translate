@@ -5,13 +5,13 @@ import {
 } from '@/components/data-display/popover';
 
 import { Button } from '@/components/actions';
-import EmojiPicker from 'emoji-picker-react';
-import { Smile } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { useState } from 'react';
+import { useAppStore } from '@/stores/app.store';
 import { SHORTCUTS } from '@/types/shortcuts';
+import { cn } from '@/utils/cn';
+import Picker from '@emoji-mart/react';
+import { Smile } from 'lucide-react';
+import { useState } from 'react';
 import { useMessageEditor } from '.';
 
 export interface EmojiToggleButtonProps {}
@@ -43,16 +43,13 @@ export const EmojiToggleButton = (props: EmojiToggleButtonProps) => {
           isMobile && 'w-screen px-3',
         )}
       >
-        <EmojiPicker
-          skinTonesDisabled
-          previewConfig={{ showPreview: false }}
-          lazyLoadEmojis
-          searchDisabled
-          autoFocusSearch={false}
-          width={isMobile ? '100%' : ''}
-          onEmojiClick={(emojiObj) => {
-            richText?.commands.insertContent(emojiObj.emoji);
+        <Picker
+          theme="light"
+          onEmojiSelect={(emoji: any) => {
+            richText?.commands.insertContent(emoji.native);
           }}
+          skinTonePosition="none"
+          previewPosition="none"
         />
       </PopoverContent>
     </Popover>
