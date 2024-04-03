@@ -3,7 +3,10 @@ import axios from 'axios';
 import { load } from 'cheerio';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+
   const url = searchParams.get('q') || '';
+  console.log('🚀 ~ GET ~ url:', url);
+
   if (!url) {
     return Response.json({
       data: {
@@ -12,34 +15,32 @@ export async function GET(request: Request) {
     });
   }
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
+      },
+    });
     const html = response.data;
 
     const $ = load(html);
 
     const title = $('head title').text();
     const description = $('meta[name="description"]').attr('content');
-
     const image =
       $('meta[property="og:image"]').attr('content') ||
       $('img').first().attr('src');
     let favicon =
       $('link[rel="icon"]').attr('href') ||
       $('link[rel="shortcut icon"]').attr('href');
+    const opURL = $('meta[property="og:url"]').attr('content') || url;
 
-    if (favicon && !favicon.startsWith('http')) {
-      if (!favicon.startsWith('/')) {
-        // Assuming relative path
-        let baseURL = window.location.origin;
-        favicon = new URL(favicon, baseURL).href;
-      } else {
-        // Assuming root-relative path
-        let baseURL = window.location.origin;
-        favicon = new URL(favicon, baseURL).href;
-      }
-    }
-    if (!favicon) {
-      const rootURL = new URL(url);
+    if (
+      !favicon ||
+      !favicon.startsWith('http') ||
+      !favicon.startsWith('https')
+    ) {
+      const rootURL = new URL(opURL);
       favicon = `${rootURL.origin}/favicon.ico`;
     }
 
@@ -60,6 +61,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
+    console.log('🚀 ~ GET ~ error:', error);
     return Response.json(
       {},
       {
