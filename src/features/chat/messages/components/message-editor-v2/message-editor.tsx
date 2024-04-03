@@ -133,7 +133,6 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       const videos: Media[] = [];
       let content = richText?.getHTML() || '';
       if (isContentEmpty) content = '';
-      content = cleanHTML(content);
       const mentions = getMentionIdsFromHtml(content);
 
       let lang = '';

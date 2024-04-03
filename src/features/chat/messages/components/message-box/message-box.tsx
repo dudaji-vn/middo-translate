@@ -209,22 +209,14 @@ export const MessageBox = ({
                         message={newMessage}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}
+                        showTime={
+                          message._id === group.messages[0]._id && !isSystem
+                        }
                       />
                     );
                   })}
                 </MessageItemGroup>
               </div>
-              {!isSystem && (
-                <span
-                  className={cn(
-                    'block  text-sm font-light text-neutral-300',
-                    isMe ? 'text-end' : 'text-start',
-                    room.isGroup && 'pl-7',
-                  )}
-                >
-                  {formatTimeDisplay(group.messages[0].createdAt!)}
-                </span>
-              )}
             </div>
           );
         })}
