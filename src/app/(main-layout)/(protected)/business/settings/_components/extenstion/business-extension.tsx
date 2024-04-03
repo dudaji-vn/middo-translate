@@ -3,12 +3,11 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
-import { CopyIcon, PenIcon, Plus, Trash2 } from 'lucide-react';
+import { CopyIcon, Link, MessageSquare, MessagesSquare, PenIcon, Plus, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import React, { forwardRef, useCallback } from 'react'
 import { generateExtensionCode } from '@/utils/genrerateExtensionCode';
 import { cn } from '@/utils/cn';
-import CreateExtensionModal from '../extention-modals/create-extension-modal';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import moment from 'moment';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
@@ -16,6 +15,7 @@ import { deleteExtensionService } from '@/services/extension.service';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
+import { Card } from '@/components/ui/card';
 
 
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,44 +25,30 @@ export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElem
 
 const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { data?: TBusinessExtensionData } & { name: string }>(
   ({ data, name, ...props }, ref) => {
-    const [modalState, setModalState] = React.useState<{
-      open: boolean;
-      isEditing: boolean;
-      data?: TBusinessExtensionData;
-
-    }>({
-      open: false,
-      isEditing: false,
-      data,
-    });
     const router = useRouter();
-    const onOpenModalChange = useCallback((open: boolean) => {
-      setModalState((prev) => ({
-        ...prev,
-        open,
-      }));
-    }, []);
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const onDeleteExtension = async () => {
       deleteExtensionService().then(() => {
         toast.success('Extension deleted successfully');
-        router.refresh();  
+        router.refresh();
       }).catch(() => {
         toast.error('Failed to delete extension');
       });
       setOpenConfirmDialog(false);
     };
-    const code = generateExtensionCode(`/help-desk/${data?._id}`, data?.color )
+    const code = generateExtensionCode(`/help-desk/${data?._id}`, data?.color)
     const { copy } = useTextCopy(code);
     const isEmpty = !data;
     return (<>
-      <div className={cn('w-full flex flex-col rounded-[20px] border p-5 gap-3', isEmpty && 'hidden')}{...props}>
+      <div className={cn('w-full flex flex-col rounded-[20px] bg-white border border-neutral-50 p-5 gap-3', isEmpty && 'hidden')}{...props}>
         <div className='flex flex-row justify-between items-center'>
-          <div className='flex flex-row  items-center justify-start'>
-            <Image src="/notify-logo.png" width={64} height={'66'} alt={name} className='rounded-[20px] opacity-30' />
-            <Typography className='text-[1rem] flex flex-col' >
-              <span className='font-semibold'>{name}</span>
-              <span className='text-neutral-600'>{`Created on: ${moment(data?.createdAt).format('DD/MM/YYYY HH:mm')}`}</span>
+          <div className='flex flex-row  items-center justify-start gap-3'>
+            <div className='p-4 w-fit  rounded-full bg-white text-primary-500-main shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] relative'>
+              <MessagesSquare className={`w-8 h-8`} />
+            </div>
+            <Typography className='text-[1rem] flex flex-col gap-1' >
+              <span className='font-semibold text-primary-500-main leading-[18px]'>{name}</span>
+              <span className='text-neutral-600 font-normal text-base leading-[18px]'>{`Created on: ${moment(data?.createdAt).format('DD/MM/YYYY HH:mm')}`}</span>
             </Typography>
           </div>
           <div className='flex flex-row gap-2 items-center'>
@@ -77,11 +63,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
                   variant="ghost"
                   color="default"
                   onClick={() => {
-                    setModalState({
-                      open: true,
-                      isEditing: true,
-                      data,
-                    })
+                    router.push('/business/settings?modal=edit-extension')
                   }}
                 >
                   <PenIcon />
@@ -103,11 +85,9 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
                   <Trash2 />
                 </Button.Icon>
               } />
-
-
           </div>
         </div>
-        <div className="relative w-full bg-neutral-50  min-h-fit text-neutral-600 text-sm rounded-xl">
+        <div className="relative w-full bg-[#fafafa]  min-h-fit text-neutral-600 text-sm rounded-xl">
           <Button.Icon
             variant="ghost"
             size={'xs'}
@@ -125,7 +105,6 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
           </pre>
         </div>
       </div>
-      <CreateExtensionModal initialData={modalState.data} open={modalState.open} title={modalState?.isEditing ? 'Edit Extension' : 'Create Extension'} onOpenChange={onOpenModalChange} />
       <ConfirmAlertModal
         title="Delete Extension"
         description="Are you sure you want to delete this extension?"
@@ -134,18 +113,6 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
         onConfirm={onDeleteExtension}
         onCancel={() => { setOpenConfirmDialog(false) }}
       />
-      <Button variant={'default'} color={'primary'} shape={'square'} onClick={() => {
-        setModalState({
-          open: true,
-          isEditing: false,
-        })
-      }} className={isEmpty ? 'mt-4 w-fit mx-auto' : 'hidden'} >
-        <Plus className="h-4 w-4" />
-        <Typography className="ml-2 text-white">
-          Create Extension
-        </Typography>
-      </Button>
-
     </>)
   })
 
