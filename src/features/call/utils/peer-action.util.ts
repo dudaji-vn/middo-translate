@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Peer, { SignalData } from 'simple-peer';
 
 const peerConfigurations = {
@@ -13,21 +12,23 @@ const peerConfigurations = {
   ],
 };
 
-export const createPeer = () => {
+export const createPeer = (stream?: MediaStream) => {
+  const obj: {stream?: MediaStream} = {}
+  if(stream) obj['stream'] = stream;
   const peer = new Peer({
     initiator: true,
     trickle: false,
     config: peerConfigurations,
+    ...obj
   });
   return peer;
 };
-export const addPeer = (signal: SignalData) => {
+export const addPeer = () => {
   const peer = new Peer({
     initiator: false,
     trickle: true,
     config: peerConfigurations,
   });
-  peer.signal(signal);
   return peer;
 };
 

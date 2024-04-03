@@ -68,11 +68,11 @@ export default function useHandleJoinLeaveCall() {
 
     useEffect(() => {
         // Emit event join room when component mount
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
-            callId: room?._id,
-            user,
-            roomId: room.roomId,
-        });
+        // socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
+        //     callId: room?._id,
+        //     user,
+        //     roomId: room.roomId,
+        // });
 
         return () => {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE);

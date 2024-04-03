@@ -38,11 +38,10 @@ export default function useHandleShareScreen() {
         if (!shareScreenStream) return;
         users.forEach((u: { id: string; user: any }) => {
             if (!socket.id) return;
-            const peer = createPeer();
+            const peer = createPeer(shareScreenStream);
             peer.on("signal", (signal) => {
                 socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
             });
-            peer.addStream(shareScreenStream);
             addPeerShareScreen({
                 id: u.id,
                 peer,
@@ -54,11 +53,10 @@ export default function useHandleShareScreen() {
     const sendShareScreenStream = useCallback((socketId: string) => {
         if (!shareScreenStream) return;
         if (!socket.id || socketId === socket.id) return;
-        const peer = createPeer();
+        const peer = createPeer(shareScreenStream);
         peer.on("signal", (signal) => {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: socketId, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
         });
-        peer.addStream(shareScreenStream);
         addPeerShareScreen({
             id: socketId,
             peer,

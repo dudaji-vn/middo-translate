@@ -19,6 +19,7 @@ import getUserStream from '../../utils/get-user-stream';
 import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
 import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
+import ParticipantInVideoCall from '../../interfaces/participant';
 interface MediaStreamInterface {
   video?: boolean;
   audio?: boolean;
@@ -90,6 +91,11 @@ export default function VideoCallActions() {
         setLoadingVideo(false);
         setTurnOnCamera(video);
         setTurnOnMic(audio);
+        // participants.forEach((participant: ParticipantInVideoCall) => {
+        //   if (participant.peer) {
+        //     participant.peer.addStream(myVideoStream);
+        //   }
+        // });
       })
       .catch(() => {
         toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
