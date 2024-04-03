@@ -9,11 +9,11 @@ const I18N_SUPPORTED_LANGUAGES : InputSelect[] = [
     },
     {
         value: 'ko',
-        title: 'Korean'
+        title: '한국어'
     },
     {
         value: 'vi',
-        title: 'Vietnamese'
+        title: 'Việt Nam'
     },
 ];
 export default I18N_SUPPORTED_LANGUAGES;

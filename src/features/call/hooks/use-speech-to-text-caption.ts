@@ -4,6 +4,7 @@ import { SOCKET_CONFIG } from '@/configs/socket';
 import SpeechRecognition, {
   useSpeechRecognition,
 } from 'react-speech-recognition';
+import { useMyVideoCallStore } from '../store/me.store';
 interface WordRecognized {
   isFinal: boolean;
   text: string;
@@ -11,6 +12,8 @@ interface WordRecognized {
 export default function useSpeechToTextCaption(language?: string) {
   const [finalTranscript, setFinalTranscript] = useState<string>('');
   const [stream, setStream] = useState<MediaStream>();
+  const [isListening, setIsListening] = useState(false);
+  const {isTurnOnMic} = useMyVideoCallStore();
   const processorRef = useRef<any>();
   const audioContextRef = useRef<any>();
   const audioInputRef = useRef<any>();
@@ -23,7 +26,45 @@ export default function useSpeechToTextCaption(language?: string) {
     }
   }, []);
 
+  const startListen = useCallback(async ()=>{
+    setIsListening(true);
+    socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.START, language);
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        deviceId: 'default',
+        sampleRate: 16000,
+        sampleSize: 16,
+        channelCount: 1,
+      },
+      video: false,
+    });
+    setStream(stream);
+  }, [language])
+ 
+
+  const stopListen = useCallback(()=>{
+    setIsListening(false);
+    socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
+    if (stream) {
+      stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
+    processorRef.current?.disconnect();
+    audioInputRef.current?.disconnect();
+    audioContextRef.current?.close();
+  }, [stream])
+
   useEffect(() => {
+    if(isTurnOnMic && !isListening) {
+      startListen();
+    } else if(!isTurnOnMic && isListening) {
+      stopListen();
+    }
+  }, [isListening, isTurnOnMic, startListen, stopListen]);
+
+  useEffect(() => {
+    if(!isListening) return;
     socket.on(
       SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.RECEIVE_AUDIO_TEXT,
       receiveAudioText,
@@ -34,7 +75,7 @@ export default function useSpeechToTextCaption(language?: string) {
         receiveAudioText,
       );
     };
-  }, [receiveAudioText]);
+  }, [isListening, receiveAudioText]);
 
   useEffect(() => {
     const init = async () => {
@@ -84,27 +125,9 @@ export default function useSpeechToTextCaption(language?: string) {
     };
   }, [stream]);
 
-  useEffect(() => {
-    const init = async () => {
-      socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.START, language);
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          deviceId: 'default',
-          sampleRate: 16000,
-          sampleSize: 16,
-          channelCount: 1,
-        },
-        video: false,
-      });
-      setStream(stream);
-    };
-    init();
-    return () => {
-      socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
-    };
-  }, [language]);
- 
- 
+  
+
+
   return {
     transcript: finalTranscript,
   };

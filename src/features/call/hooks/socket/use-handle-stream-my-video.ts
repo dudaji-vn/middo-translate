@@ -49,7 +49,7 @@ export default function useHandleStreamMyVideo() {
             setMyStream(undefined);
             resetParticipants();
         };
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic]);
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t]);
 
     // Add my stream to all participants
     useEffect(()=>{

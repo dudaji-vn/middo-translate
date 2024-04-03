@@ -112,7 +112,7 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
                     ].toLowerCase()}
                     className="mr-2 inline-block h-5 rounded-full overflow-hidden"
                   />
-                    <span className="pr-4">{t('LANGUAGE.'+option.title)}</span>
+                    <span className="pr-4">{option.title}</span>
                 </DropdownMenuItem>
               );
             })}
