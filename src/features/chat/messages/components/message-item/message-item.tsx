@@ -28,6 +28,7 @@ import { MessageItemPinned } from './message-item-pinned';
 import { Content } from './message-item-content';
 import { MessageItemLinks } from './message-item-links';
 import { MessageItemVideo } from './message-item-video';
+import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -41,6 +42,7 @@ export interface MessageProps
   discussionDisabled?: boolean;
   guestId?: string;
   disabledAllActions?: boolean;
+  showTime?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -77,6 +79,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       pinnedBy,
       disabledAllActions,
       discussionDisabled,
+      showTime,
       ...props
     },
     ref,
@@ -196,6 +199,16 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               </div>
               {message?.reactions && message.reactions.length > 0 && (
                 <MessageItemReactionBar isMe={isMe} message={message} />
+              )}
+              {showTime && (
+                <span
+                  className={cn(
+                    'block  text-sm font-light text-neutral-300',
+                    isMe ? 'text-end' : 'pl-7 text-start',
+                  )}
+                >
+                  {formatTimeDisplay(message.createdAt!)}
+                </span>
               )}
             </div>
             {direction === 'top' && (

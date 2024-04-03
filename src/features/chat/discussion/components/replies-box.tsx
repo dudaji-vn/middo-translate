@@ -174,22 +174,16 @@ export const RepliesBox = () => {
                         message={message}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}
+                        showTime={
+                          !isSystem &&
+                          message._id ===
+                            group.messages[group.messages.length - 1]._id
+                        }
                       />
                     );
                   })}
                 </MessageItemGroup>
               </div>
-              {!isSystem && (
-                <span
-                  className={cn(
-                    'block  text-sm font-light text-neutral-300',
-                    isMe ? 'text-end' : 'text-start',
-                    room?.isGroup && 'pl-7',
-                  )}
-                >
-                  {formatTimeDisplay(group.messages[0].createdAt!)}
-                </span>
-              )}
             </div>
           );
         })}
