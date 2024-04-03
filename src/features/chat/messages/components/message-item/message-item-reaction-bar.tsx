@@ -34,7 +34,7 @@ export const MessageItemReactionBar = ({
   isMe,
 }: MessageItemReactionBarProps) => {
   const reactions = message.reactions || [];
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const reactionsByEmoji = reactions.reduce(
     (acc: Record<string, Reaction[]>, reaction) => {
       const { emoji } = reaction;
@@ -54,6 +54,8 @@ export const MessageItemReactionBar = ({
   const { setValue, value } = useBoolean(false);
 
   const { mutate } = useReactMessage();
+
+  const keys = Object.keys(reactionsByEmoji);
 
   return (
     <div
@@ -80,7 +82,9 @@ export const MessageItemReactionBar = ({
       <AlertDialog open={value} onOpenChange={setValue}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{t('CONVERSATION.MESSAGE_REACTION')}</AlertDialogTitle>
+            <AlertDialogTitle>
+              {t('CONVERSATION.MESSAGE_REACTION')}
+            </AlertDialogTitle>
           </AlertDialogHeader>
           <Tabs value={tabValue} className="w-full px-3">
             <TabsList className="justify-start">
@@ -91,10 +95,11 @@ export const MessageItemReactionBar = ({
               >
                 {t('COMMON.ALL')}
               </TabsTrigger>
-              {Object.values(reactions).map((react) => {
+              {keys.map((key) => {
+                const react = reactionsByEmoji[key][0];
                 return (
                   <TabsTrigger
-                    key={react.emoji}
+                    key={key}
                     value={react.emoji}
                     onClick={() => setTabValue(react.emoji)}
                     className="max-h-[53px] w-16 !rounded-none"
@@ -187,19 +192,21 @@ const ReactionItem = (props: {
   onClick?: () => void;
 }) => {
   const { reactions } = props;
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const user = useAuthStore((state) => state.user);
   return (
     <div
       onClick={props.onClick}
-      className="flex h-5 items-center justify-center rounded-full border border-neutral-50 bg-white shadow-1"
+      className="flex h-5 cursor-pointer items-center justify-center rounded-full border border-neutral-50 bg-white shadow-1"
     >
       <Tooltip>
         <TooltipContent className="rounded-2xl">
           {reactions.map((reaction) => (
             <div key={reaction.user._id} className="flex items-center">
               <span className="mx-[2px] text-sm">
-                {reaction.user._id === user?._id ? t('CONVERSATION.YOU') : reaction.user.name}
+                {reaction.user._id === user?._id
+                  ? t('CONVERSATION.YOU')
+                  : reaction.user.name}
               </span>
             </div>
           ))}
