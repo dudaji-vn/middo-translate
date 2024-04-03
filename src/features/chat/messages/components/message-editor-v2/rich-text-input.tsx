@@ -3,7 +3,6 @@ import {
   MentionSuggestion,
   mentionSuggestionOptions,
 } from '@/components/mention-suggestion-options';
-import { usePlatformStore } from '@/features/platform/stores';
 import { useAppStore } from '@/stores/app.store';
 import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji';
 import Link from '@tiptap/extension-link';
@@ -45,7 +44,7 @@ const RichTextInput = ({
   suggestions = [],
 }: RichTextInputProps) => {
   const { t } = useTranslation('common');
-  const isMobile = usePlatformStore((state) => state.platform === 'mobile');
+  const isMobile = useAppStore((s) => s.isMobile);
   const editor = useEditor({
     editorProps: {
       transformPastedHTML(html) {

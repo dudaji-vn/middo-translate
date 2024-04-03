@@ -19,6 +19,7 @@ export async function GET(request: Request) {
 
     const title = $('head title').text();
     const description = $('meta[name="description"]').attr('content');
+
     const image =
       $('meta[property="og:image"]').attr('content') ||
       $('img').first().attr('src');
@@ -27,8 +28,27 @@ export async function GET(request: Request) {
       $('link[rel="shortcut icon"]').attr('href');
 
     if (favicon && !favicon.startsWith('http')) {
-      favicon = new URL(favicon, url).href;
+      if (!favicon.startsWith('/')) {
+        // Assuming relative path
+        let baseURL = window.location.origin;
+        favicon = new URL(favicon, baseURL).href;
+      } else {
+        // Assuming root-relative path
+        let baseURL = window.location.origin;
+        favicon = new URL(favicon, baseURL).href;
+      }
     }
+    if (!favicon) {
+      const rootURL = new URL(url);
+      favicon = `${rootURL.origin}/favicon.ico`;
+    }
+
+    console.log({
+      title,
+      description,
+      image,
+      favicon,
+    });
 
     return Response.json({
       data: {
