@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigatio
 
 import React from 'react'
 import BusinessExtension from '../extenstion/business-extension'
+import NestedFlow from '../extension-creation/steps/script-chat-flow/nested-flow'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -76,6 +77,7 @@ const SettingHeader = ({ data }: { data: any }) => {
                 </TabsContent>
             </Tabs >
         </section>
+
     </>
     )
 }

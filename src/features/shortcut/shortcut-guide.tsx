@@ -30,6 +30,7 @@ import React from 'react';
 import { useVideoCallStore } from '../call/store/video-call.store';
 import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
+import { VersionModal } from '../version-deploy/version-modal';
 
 type ShortcutSectionProps = {
   title: string;
@@ -56,68 +57,71 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
   shortcuts,
   isMacOS,
 }) => {
-  const {t} = useTranslation('common');
-  return <AccordionItem value={title}>
-    <AccordionTrigger className="flex h-11 w-full flex-row items-center justify-between  rounded-none !bg-neutral-50 p-2 py-1 ">
-      <Typography
-        variant="h4"
-        className="text-base leading-[18px] text-neutral-600 "
-      >
-        {title}
-      </Typography>
-    </AccordionTrigger>
-    <AccordionContent className="accordion-up 0.2s py-0 ease-out">
-      <div className="flex flex-col gap-0 divide-y divide-neutral-50">
-        {shortcuts.map((item, index) => (
-          <div
-            key={index}
-            className="my-0 flex h-[50px] w-full flex-row items-center justify-between  py-1 pl-2 pr-1 "
-          >
-            <Typography variant={'h5'} className="mt-0  text-base font-normal">
-              {t(item.key)}
-            </Typography>
-            <div className="my-1 mt-1 flex w-fit flex-row items-center gap-4">
-              {item.shortcut?.map((key, index) => {
-                const isLast = index === item.shortcut.length - 1;
-                const osKey =
-                  (isMacOS ? MAPPED_MAC_KEYS[key] : MAPPED_WIN_KEYS[key]) ||
-                  key;
-                const finalKey = transferSpecialKey(isMacOS)[osKey] || osKey;
-                return (
-                  <>
-                    <span
-                      key={key}
-                      className={cn(
-                        'mx-1 my-1 inline-block h-[34px] min-h-10 w-[82px] cursor-default rounded-xl bg-neutral-50 p-[8px_12px] text-center text-base font-semibold capitalize text-neutral-800 shadow-1 ',
-                        isLast ? 'w-auto min-w-[40px]' : '',
-                      )}
-                    >
-                      {finalKey}
-                    </span>
-                    {!isLast && '+'}
-                  </>
-                );
-              })}
+  const { t } = useTranslation('common');
+  return (
+    <AccordionItem value={title}>
+      <AccordionTrigger className="flex h-11 w-full flex-row items-center justify-between  rounded-none !bg-neutral-50 p-2 py-1 ">
+        <Typography
+          variant="h4"
+          className="text-base leading-[18px] text-neutral-600 "
+        >
+          {title}
+        </Typography>
+      </AccordionTrigger>
+      <AccordionContent className="accordion-up 0.2s py-0 ease-out">
+        <div className="flex flex-col gap-0 divide-y divide-neutral-50">
+          {shortcuts.map((item, index) => (
+            <div
+              key={index}
+              className="my-0 flex h-[50px] w-full flex-row items-center justify-between  py-1 pl-2 pr-1 "
+            >
+              <Typography
+                variant={'h5'}
+                className="mt-0  text-base font-normal"
+              >
+                {t(item.key)}
+              </Typography>
+              <div className="my-1 mt-1 flex w-fit flex-row items-center gap-4">
+                {item.shortcut?.map((key, index) => {
+                  const isLast = index === item.shortcut.length - 1;
+                  const osKey =
+                    (isMacOS ? MAPPED_MAC_KEYS[key] : MAPPED_WIN_KEYS[key]) ||
+                    key;
+                  const finalKey = transferSpecialKey(isMacOS)[osKey] || osKey;
+                  return (
+                    <>
+                      <span
+                        key={key}
+                        className={cn(
+                          'mx-1 my-1 inline-block h-[34px] min-h-10 w-[82px] cursor-default rounded-xl bg-neutral-50 p-[8px_12px] text-center text-base font-semibold capitalize text-neutral-800 shadow-1 ',
+                          isLast ? 'w-auto min-w-[40px]' : '',
+                        )}
+                      >
+                        {finalKey}
+                      </span>
+                      {!isLast && '+'}
+                    </>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
-    </AccordionContent>
-  </AccordionItem>
+          ))}
+        </div>
+      </AccordionContent>
+    </AccordionItem>
+  );
 };
 
 const translationShortcuts = generateShortcuts(SCTranslation);
 const conversationShortcuts = generateShortcuts(SCConversation);
 const callShortcuts = generateShortcuts(SCCall);
-const SHORTCUTS_OPEN = [
-  ['ctrl', 'alt', 'shift'],
-];
+const SHORTCUTS_OPEN = [['ctrl', 'alt', 'shift']];
 type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
-  const isClient = useClient()
+  const isClient = useClient();
   const pathname = usePathname();
   const { room } = useVideoCallStore();
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const defaultValue: string = room
     ? t('SHORTCUT.TABS.CALL')
     : pathname === ROUTE_NAMES.ROOT
@@ -164,9 +168,16 @@ export default function ShortcutsGuide() {
               />
             </Accordion>
           </div>
+          <VersionModal
+            trigger={
+              <div className="font-bold text-neutral-300 underline transition-all hover:text-neutral-500">
+                Version
+              </div>
+            }
+          />
         </DialogContent>
       </Dialog>
-      {/* floating button */}
+
       <Button.Icon
         className="fixed bottom-4 left-4 z-50 rounded-full bg-white p-2 shadow-md max-md:hidden dark:bg-gray-800"
         variant={'ghost'}
