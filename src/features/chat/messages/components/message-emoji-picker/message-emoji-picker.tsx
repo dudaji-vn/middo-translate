@@ -1,19 +1,19 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/data-display/popover';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/data-display';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/data-display/popover';
+import Picker from '@emoji-mart/react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { Button } from '@/components/actions';
-import EmojiPicker from 'emoji-picker-react';
-import { PlusIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { PlusIcon } from 'lucide-react';
 import { forwardRef } from 'react';
 import { useReactMessage } from '../../hooks';
 
@@ -112,17 +112,13 @@ export const MessageEmojiPicker = forwardRef<
           alignOffset={-12}
           className={cn('-mt-12 w-fit border-none !bg-transparent p-0 shadow')}
         >
-          <EmojiPicker
-            skinTonesDisabled
-            previewConfig={{ showPreview: false }}
-            lazyLoadEmojis
-            searchDisabled
-            autoFocusSearch={false}
-            height={320}
-            width={300}
-            onEmojiClick={(emojiObj) => {
-              handleEmojiClick(emojiObj.emoji);
+          <Picker
+            theme="light"
+            onEmojiSelect={(emoji: any) => {
+              handleEmojiClick(emoji.native);
             }}
+            skinTonePosition="none"
+            previewPosition="none"
           />
         </PopoverContent>
       </div>

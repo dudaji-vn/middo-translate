@@ -3,7 +3,10 @@ import axios from 'axios';
 import { load } from 'cheerio';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+
   const url = searchParams.get('q') || '';
+  console.log('🚀 ~ GET ~ url:', url);
+
   if (!url) {
     return Response.json({
       data: {
@@ -12,7 +15,12 @@ export async function GET(request: Request) {
     });
   }
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.100 Safari/537.36',
+      },
+    });
     const html = response.data;
 
     const $ = load(html);
@@ -25,10 +33,23 @@ export async function GET(request: Request) {
     let favicon =
       $('link[rel="icon"]').attr('href') ||
       $('link[rel="shortcut icon"]').attr('href');
+    const opURL = $('meta[property="og:url"]').attr('content') || url;
 
-    if (favicon && !favicon.startsWith('http')) {
-      favicon = new URL(favicon, url).href;
+    if (
+      !favicon ||
+      !favicon.startsWith('http') ||
+      !favicon.startsWith('https')
+    ) {
+      const rootURL = new URL(opURL);
+      favicon = `${rootURL.origin}/favicon.ico`;
     }
+
+    console.log({
+      title,
+      description,
+      image,
+      favicon,
+    });
 
     return Response.json({
       data: {
@@ -40,6 +61,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
+    console.log('🚀 ~ GET ~ error:', error);
     return Response.json(
       {},
       {

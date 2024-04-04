@@ -46,8 +46,9 @@ export const MicToggleButton = forwardRef<
     disableTranscribing();
     if (listening) {
       stopSpeechToText()
+      setTextContent('');
     }
-  }, [listening, stopSpeechToText]);
+  }, [listening, setTextContent, stopSpeechToText]);
 
   const handleToggleListening = () => {
     listening ? handleStopListening() : handleStartListening();

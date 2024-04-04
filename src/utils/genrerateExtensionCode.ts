@@ -1,4 +1,4 @@
-import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/options';
+import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options';
 
 export const generateExtensionCode = (url: string, theme?: string) => {
   const path = process.env.NEXT_PUBLIC_URL;

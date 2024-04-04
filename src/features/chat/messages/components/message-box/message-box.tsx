@@ -19,6 +19,7 @@ import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
 import { TimeDisplay } from '../time-display';
 import { cn } from '@/utils/cn';
+import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 export type MessageGroup = {
@@ -208,6 +209,9 @@ export const MessageBox = ({
                         message={newMessage}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}
+                        showTime={
+                          message._id === group.messages[0]._id && !isSystem
+                        }
                       />
                     );
                   })}

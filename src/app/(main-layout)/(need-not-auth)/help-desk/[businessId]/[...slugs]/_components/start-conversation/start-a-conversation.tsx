@@ -1,7 +1,7 @@
 'use client'
 
-import { DEFAULT_THEME, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/options'
-import { PreviewCustomMessages } from '@/app/(main-layout)/(protected)/business/settings/_components/extention-modals/sections/preview-custom-messages'
+import { DEFAULT_THEME, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options'
+import { PreviewCustomMessages } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/preview-custom-messages'
 import { Button } from '@/components/actions'
 import { Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'

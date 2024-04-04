@@ -8,6 +8,7 @@ export async function GET(request: Request, response: Response) {
   const { searchParams } = new URL(request.url);
   const accessToken = searchParams.get('access_token') || '';
   const refreshToken = searchParams.get('refresh_token') || '';
+  console.log('accessToken', accessToken);
   setTokens({ accessToken, refreshToken });
   const type = cookies().get('login-type')?.value || '';
   cookies().set('login-type', '', { expires: new Date(0) });

@@ -15,6 +15,7 @@ import { useDiscussion } from './discussion';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../rooms/api';
 import { useTranslation } from 'react-i18next';
+import { cn } from '@/utils/cn';
 
 export interface RepliesBoxProps {}
 
@@ -173,6 +174,11 @@ export const RepliesBox = () => {
                         message={message}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}
+                        showTime={
+                          !isSystem &&
+                          message._id ===
+                            group.messages[group.messages.length - 1]._id
+                        }
                       />
                     );
                   })}

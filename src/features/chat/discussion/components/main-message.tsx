@@ -14,6 +14,7 @@ import { textVariants } from '../../messages/components/message-item/message-ite
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
 import { useTranslation } from 'react-i18next';
+import { formatTimeDisplay } from '../../rooms/utils';
 
 export interface MainMessageProps {
   message: Message;
@@ -30,8 +31,12 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
         <span className="max-w-80 break-words text-sm font-semibold">
           {sender.name}
         </span>
+
+        <span className=" text-sm text-neutral-500">
+          | {moment(message.createdAt).format('lll')}
+        </span>
       </div>
-      <div className="ml-8 mt-1">
+      <div className="ml-2 mt-1">
         {message.content && <TextMessage message={message} />}
         {message?.media && message.media.length > 0 && (
           <Fragment>
@@ -55,7 +60,7 @@ const TextMessage = ({ message }: { message: Message }) => {
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
@@ -100,7 +105,7 @@ const TextMessage = ({ message }: { message: Message }) => {
 
 const CallMessage = ({ message }: { message: Message }) => {
   const { call } = message;
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const { content, icon, subContent } = useMemo((): {
     content: string;
     icon: React.ReactNode;
@@ -108,7 +113,9 @@ const CallMessage = ({ message }: { message: Message }) => {
   } => {
     if (call?.endTime) {
       return {
-        content: t('CONVERSATION.CALL_END_AT', {time: moment(call.endTime).format('HH:mm')}),
+        content: t('CONVERSATION.CALL_END_AT', {
+          time: moment(call.endTime).format('HH:mm'),
+        }),
         subContent: convertToTimeReadable(
           call.createdAt as string,
           call.endTime,

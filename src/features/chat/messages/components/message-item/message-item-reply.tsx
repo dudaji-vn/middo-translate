@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { messageApi } from '../../api';
-import { useMemo } from 'react';
+import { use, useEffect, useMemo } from 'react';
 import { User } from '@/features/users/types';
 import { Avatar } from '@/components/data-display';
 import { cn } from '@/utils/cn';
@@ -21,7 +21,7 @@ export const MessageItemReply = ({
     queryFn: () => messageApi.getReplies(messageId),
     enabled: !!messageId,
   });
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const { onClickReplyMessage } = useClickReplyMessage();
   const uniqueUsers = useMemo(() => {
     if (!messages) return [];
@@ -34,6 +34,7 @@ export const MessageItemReply = ({
   }, [messages]);
 
   if (!messages?.length) return null;
+
   return (
     <div
       onClick={(e) => {
@@ -60,7 +61,9 @@ export const MessageItemReply = ({
         ))}
         <div className="px-1">
           <span className="text-sm text-primary">
-          {messages.length > 1 ? t('CONVERSATION.REPLIES', {num: messages.length}) : t('CONVERSATION.REPLY', {num: messages.length})}
+            {messages.length > 1
+              ? t('CONVERSATION.REPLIES', { num: messages.length })
+              : t('CONVERSATION.REPLY', { num: messages.length })}
           </span>
         </div>
       </div>

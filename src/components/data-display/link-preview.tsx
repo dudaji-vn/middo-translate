@@ -25,11 +25,13 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       }
     },
   });
+
   const previewData = data?.data.data as {
     title: string;
     description: string;
     url: string;
     favicon: string;
+    image?: string;
   } | null;
 
   useEffect(() => {
@@ -51,7 +53,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       className="block w-full max-w-lg rounded-2xl border p-2 hover:opacity-90"
     >
       <div className="flex items-center gap-1">
-        <div className="size-4">
+        <div className="size-4 shrink-0">
           <Image
             quality={100}
             src={previewData?.favicon}
@@ -67,6 +69,17 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       <p className="line-clamp-1 text-sm text-neutral-600">
         {previewData?.description}
       </p>
+      {previewData.image && (
+        <div className="mt-3 overflow-hidden rounded-lg border">
+          <Image
+            quality={100}
+            src={previewData.image}
+            width={500}
+            height={500}
+            alt={previewData.title}
+          />
+        </div>
+      )}
     </Link>
   );
 };

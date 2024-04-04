@@ -24,6 +24,11 @@ import { useEditorState } from './use-editor-state';
 import { User } from '@sentry/nextjs';
 import { getMentionIdsFromHtml } from '@/utils/get-mention-ids-from-html';
 import { Typography } from '@/components/data-display';
+import { useChatStore } from '@/features/chat/store';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { isEqual } from 'lodash';
+import { useAppStore } from '@/stores/app.store';
 
 type SubmitData = {
   content: string;
@@ -123,13 +128,14 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       setTextContent,
     } = useEditorState();
 
+    const isMobile = useAppStore((state) => state.isMobile);
+
     const handleSubmit = async () => {
       const images: Media[] = [];
       const documents: Media[] = [];
       const videos: Media[] = [];
       let content = richText?.getHTML() || '';
       if (isContentEmpty) content = '';
-      content = cleanHTML(content);
       const mentions = getMentionIdsFromHtml(content);
 
       let lang = '';
@@ -189,6 +195,25 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
       reset();
     };
 
+    const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
+      useChatStore();
+    useKeyboardShortcut(
+      [
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION,
+        SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW,
+      ],
+      (_, matchedKey) => {
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION)) {
+          toggleShowMiddleTranslation();
+          return;
+        }
+        if (isEqual(matchedKey, SHORTCUTS.TURN_ON_OFF_TRANSLATION_PREVIEW)) {
+          toggleShowTranslateOnType();
+        }
+      },
+      true,
+    );
+
     return (
       <MessageEditorContext.Provider
         value={{
@@ -225,13 +250,14 @@ export const MessageEditor = forwardRef<MessageEditorRef, MessageEditorProps>(
         >
           {disabledMessage}
         </Typography>
+        {isMobile && <Toolbar ref={toolbarRef} />}
         <div
           id={id}
           className={
             disabled ? 'hidden' : 'relative flex h-fit flex-row space-x-2'
           }
         >
-          <Toolbar ref={toolbarRef} />
+          {!isMobile && <Toolbar ref={toolbarRef} />}
           <InputWrapper>
             <div className="flex">
               <MainInput />

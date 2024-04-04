@@ -18,12 +18,13 @@ import { useChatStore } from '@/features/chat/store';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { RoomAddMember } from '../../room-side/room-add-member';
 
 export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room: _room } = useChatBox();
   const currentUser = useAuthStore((s) => s.user)!;
   const onlineList = useChatStore((state) => state.onlineList);
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const { isBusiness } = useBusinessNavigationData();
   const { toggleTab } = useRoomSidebarTabs();
   const allowCall = !isBusiness;
@@ -43,7 +44,13 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const isOnline = participants.some((user) => onlineList.includes(user._id));
 
   return (
-    <div {...props} className={cn("flex w-full items-center border-b  px-1 py-1 md:px-3", props.className)}>
+    <div
+      {...props}
+      className={cn(
+        'flex w-full items-center border-b  px-1 py-1 md:px-3',
+        props.className,
+      )}
+    >
       <RoomBoxHeaderNavigation />
       <div className="flex flex-1 items-center gap-2">
         <div className="flex gap-2 items-center md:cursor-pointer"  onClick={handleToggleInfo}>
@@ -56,6 +63,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">
         {allowCall && <VideoCall />}
+        {room.isGroup && <RoomAddMember />}
         <Tooltip title={t('TOOL_TIP.INFO')} triggerItem={<ActionBar />} />
       </div>
     </div>
@@ -75,7 +83,7 @@ const ActionBar = () => {
   );
 
   return (
-    <div>
+    <div className="flex">
       <Button.Icon
         onClick={handleToggleInfo}
         size="xs"
@@ -92,7 +100,7 @@ const VideoCall = () => {
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
   const { user } = useAuthStore();
   const currentUserId = user?._id || '';
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const isSelfChat =
     currentUserId &&
     roomChatBox?.participants?.every((p) => p._id === currentUserId);

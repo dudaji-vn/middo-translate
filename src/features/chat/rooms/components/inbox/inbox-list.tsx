@@ -1,31 +1,29 @@
 import { forwardRef, memo, useEffect, useMemo } from 'react';
 
-import { InboxType } from './inbox';
 import { InfiniteScroll } from '@/components/infinity-scroll';
-import { Room } from '../../types';
-import { RoomItem } from '../room-item';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { Typography } from '@/components/data-display';
-import { cn } from '@/utils/cn';
 import { roomApi } from '@/features/chat/rooms/api';
-import socket from '@/lib/socket-io';
-import { useAuthStore } from '@/stores/auth.store';
-import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
-import { useParams } from 'next/navigation';
-import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
-import useStore from '@/stores/use-store';
-import { PinnedRoom } from '../pinned-room';
-import { useQueryClient } from '@tanstack/react-query';
 import {
   USE_GET_PINNED_ROOMS_KEY,
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/store';
-import { useInboxRouter } from './use-inbox-router';
-import { useBusinessExtensionStore } from '@/stores/extension.store';
-import { PK_BUSINESS_CONVERSATIONS } from '@/types/business.type';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { useTranslation } from 'react-i18next';
+import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
+import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
+import socket from '@/lib/socket-io';
+import { useAuthStore } from '@/stores/auth.store';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
+import useStore from '@/stores/use-store';
+import { cn } from '@/utils/cn';
+import { useQueryClient } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import { Room } from '../../types';
+import { PinnedRoom } from '../pinned-room';
+import { RoomItem } from '../room-item';
+import { EmptyInbox } from './empty-inbox';
+import { InboxType } from './inbox';
+import { useInboxRouter } from './use-inbox-router';
 
 interface InboxListProps {
   type: InboxType;
@@ -39,7 +37,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const { businessData } = useBusinessExtensionStore();
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
-    const {t} = useTranslation('common');
+
     const key = useMemo(() => ['rooms', type, status], [type, status]);
     const onlineList = useChatStore((state) => state.onlineList);
 
@@ -55,7 +53,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
-        roomApi.getRooms({ cursor: pageParam, limit: 10, type, status}),
+        roomApi.getRooms({ cursor: pageParam, limit: 10, type, status }),
     });
 
     useInboxRouter({ rooms });
@@ -88,7 +86,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         },
       );
       socket.on(SOCKET_CONFIG.EVENTS.INBOX.DELETE, deleteRoom);
-      // socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, leaveRoom);
       return () => {
         socket.off(SOCKET_CONFIG.EVENTS.INBOX.UPDATE);
         socket.off(SOCKET_CONFIG.EVENTS.INBOX.DELETE);
@@ -99,14 +96,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     if (!currentUser) return null;
     if (!rooms.length && !isLoading && !pinnedRooms?.length) {
-      return (
-        <div className="mt-10 bg-card px-4 text-center">
-          <Typography variant="h3">{t('CONVERSATION.WELCOME_TITLE')}</Typography>
-          <Typography variant="muted" className="mt-3 block opacity-60">
-            {t('CONVERSATION.WELCOME_CONTENT')}
-          </Typography>
-        </div>
-      );
+      return <EmptyInbox type={type} />;
     }
 
     return (

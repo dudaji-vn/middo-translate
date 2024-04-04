@@ -3,12 +3,14 @@ import {
   MentionSuggestion,
   mentionSuggestionOptions,
 } from '@/components/mention-suggestion-options';
+import { useAppStore } from '@/stores/app.store';
 import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji';
 import Link from '@tiptap/extension-link';
 import Mention from '@tiptap/extension-mention';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 let typingTimeout: any = null;
@@ -27,7 +29,7 @@ export interface RichTextInputProps {
   onStoppedTyping?: (isTyping: boolean) => void;
 }
 
-export const RichTextInput = ({
+const RichTextInput = ({
   className,
   onClipboardEvent,
   onCreated,
@@ -41,7 +43,8 @@ export const RichTextInput = ({
   onStoppedTyping,
   suggestions = [],
 }: RichTextInputProps) => {
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
+  const isMobile = useAppStore((s) => s.isMobile);
   const editor = useEditor({
     editorProps: {
       transformPastedHTML(html) {
@@ -101,11 +104,16 @@ export const RichTextInput = ({
         },
         suggestion: mentionSuggestionOptions(suggestions ?? []),
       }),
-      EnterToSubmit.configure({
-        onSubmit: () => {
-          onSubmit?.();
-        },
-      }),
+      // if not mobile, enable enter to submit
+
+      isMobile
+        ? (null as any)
+        : EnterToSubmit.configure({
+            onSubmit: () => {
+              onSubmit?.();
+            },
+          }),
+      ,
       Emoji.configure({
         enableEmoticons: true,
         emojis: gitHubEmojis,
@@ -128,3 +136,7 @@ export const RichTextInput = ({
   });
   return <EditorContent className={className} editor={editor} />;
 };
+
+const RichTextInputMemo = React.memo(RichTextInput);
+
+export { RichTextInputMemo as RichTextInput };
