@@ -97,6 +97,7 @@ const MobileWrapper = ({
   RoomItemActionWrapperProps & {
     items: Item[];
   }) => {
+    const {t} = useTranslation('common');
   return (
     <LongPressMenu>
       <LongPressMenu.Trigger className="w-full">
@@ -106,7 +107,7 @@ const MobileWrapper = ({
         {items.map((item) => (
           <LongPressMenu.Item
             key={item.action}
-            title={item.label}
+            title={t(item.label)}
             color={item.color === 'error' ? 'error' : 'default'}
             onClick={item.onAction}
           >

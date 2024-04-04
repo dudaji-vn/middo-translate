@@ -14,7 +14,7 @@ export default function VideoCall() {
   return (
     <CallDragable
       className={cn(
-        'h-fit min-h-[185px]',
+        'h-fit min-h-[200px]',
         isFullScreen && 'fixed inset-0 !h-full !w-full !left-0 !bottom-0 !rounded-none md:rounded-none !translate-x-0 !translate-y-0'
       )}
     >

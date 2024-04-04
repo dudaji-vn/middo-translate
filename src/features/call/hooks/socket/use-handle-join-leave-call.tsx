@@ -16,10 +16,11 @@ import { useTranslation } from "react-i18next";
 export default function useHandleJoinLeaveCall() {
     const { removeParticipant, participants, peerShareScreen, removePeerShareScreen, addParticipant } = useParticipantVideoCallStore();
     const { room } = useVideoCallStore();
-    const { myStream, setTurnOnCamera, setTurnOnMic } = useMyVideoCallStore();
+    const { myStream } = useMyVideoCallStore();
     const { user } = useAuthStore();
     const {t} = useTranslation('common');
     const removeUserLeavedRoom = useCallback((socketId: string) => {
+        if(socketId === socket.id) return;
         // use filter because when user share screen leave, need remove both user and share screen
         const items = participants.filter((p: any) => p.socketId === socketId);
         items.forEach((item: any) => {
@@ -38,7 +39,7 @@ export default function useHandleJoinLeaveCall() {
             itemShareScreen.peer.destroy();
             removePeerShareScreen(socketId);
         }
-    }, [participants, peerShareScreen, removeParticipant, removePeerShareScreen])
+    }, [participants, peerShareScreen, removeParticipant, removePeerShareScreen, t])
 
     const saveSignal = useCallback((payload: IReturnSignal) => {
         const participant = participants.find((p: ParticipantInVideoCall) =>
@@ -67,23 +68,20 @@ export default function useHandleJoinLeaveCall() {
 
     useEffect(() => {
         // Emit event join room when component mount
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
-            callId: room?._id,
-            user,
-            roomId: room.roomId,
-        });
-        // Emit event leave room when component unmount
+        // socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
+        //     callId: room?._id,
+        //     user,
+        //     roomId: room.roomId,
+        // });
+
         return () => {
-            socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE, room._id);
-            SpeechRecognition.stopListening();
-            setTurnOnCamera(DEFAULT_USER_CALL_STATE.isTurnOnCamera)
-            setTurnOnMic(DEFAULT_USER_CALL_STATE.isTurnOnMic)
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [addParticipant, room._id, room.roomId, setTurnOnCamera, setTurnOnMic, user?._id]);
+    }, [room._id, room.roomId, user?._id]);
 
 
-    // Add Me To list participant
+    // // Add Me To list participant
     useEffect(() => {
         const isHaveMe = participants.some((p: ParticipantInVideoCall) => p.isMe);
         if (!isHaveMe) {

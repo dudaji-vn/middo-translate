@@ -1,16 +1,11 @@
-import { useElectron } from './use-electron';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from 'react-speech-recognition';
 interface WordRecognized {
   isFinal: boolean;
   text: string;
 }
 export default function useSpeechRecognizer(language?: string) {
-  const { isElectron } = useElectron();
   const [listening, setListening] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState<string>('');
   const [finalTranscript, setFinalTranscript] = useState<string>('');
@@ -19,12 +14,7 @@ export default function useSpeechRecognizer(language?: string) {
   const processorRef = useRef<any>();
   const audioContextRef = useRef<any>();
   const audioInputRef = useRef<any>();
-  const {
-    interimTranscript: interimTranscriptBrowser,
-    listening: listeningBrowser,
-    finalTranscript: finalTranscriptBrowser,
-  } = useSpeechRecognition();
-
+  
   const receiveAudioText = useCallback(
     (data: WordRecognized) => {
       // remove /n in data.text
@@ -33,14 +23,13 @@ export default function useSpeechRecognizer(language?: string) {
       if (isFinal) {
         setHistory((old) => [...old, transcript]);
       }
-      const completedTranscript = history.join(' ') + transcript;
-      setFinalTranscript(completedTranscript);
-      setInterimTranscript(completedTranscript);
+      setInterimTranscript((history.join(' ') + transcript));
     },
     [history],
   );
 
   useEffect(() => {
+    if(!listening) return;
     socket.on(
       SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.RECEIVE_AUDIO_TEXT,
       receiveAudioText,
@@ -51,11 +40,11 @@ export default function useSpeechRecognizer(language?: string) {
         receiveAudioText,
       );
     };
-  }, [receiveAudioText]);
+  }, [listening, receiveAudioText]);
 
   useEffect(() => {
     const init = async () => {
-      if (!stream || !isElectron) return;
+      if (!stream) return;
       audioContextRef.current = new window.AudioContext();
 
       await audioContextRef.current.audioWorklet.addModule(
@@ -85,7 +74,7 @@ export default function useSpeechRecognizer(language?: string) {
       };
     };
     init();
-  }, [isElectron, stream]);
+  }, [stream]);
 
   useEffect(() => {
     // Stop stream when component unmount
@@ -103,67 +92,61 @@ export default function useSpeechRecognizer(language?: string) {
 
   useEffect(() => {
     return () => {
-      if (isElectron) socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
-    };
-  }, [isElectron]);
-
-  const startSpeechToText = async () => {
-    resetTranscript();
-    if (isElectron) {
-      socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.START, language);
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          deviceId: 'default',
-          sampleRate: 16000,
-          sampleSize: 16,
-          channelCount: 1,
-        },
-        video: false,
-      });
-      setStream(stream);
-      setListening(true);
-      
-    } else {
-      SpeechRecognition.startListening({
-        continuous: true,
-        language: language,
-      });
-    }
-  };
-
-  const stopSpeechToText = () => {
-    if (isElectron) {
       socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
-      processorRef.current?.disconnect();
-      audioInputRef.current?.disconnect();
-      audioContextRef.current?.close();
-      setListening(false);
-      // stop stream if needed
-      if (stream) {
-        stream.getTracks().forEach((track) => {
-          track.stop();
-        });
-      }
-      setStream(undefined);
-    } else {
-      SpeechRecognition.stopListening();
-    }
-  };
+    };
+  }, []);
 
-  const resetTranscript = () => {
+  const resetTranscript = useCallback(() => {
     setInterimTranscript('');
     setFinalTranscript('');
     setHistory([]);
-  };
+  }, []);
+
+  const startSpeechToText = useCallback(async () => {
+    resetTranscript();
+    socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.START, language);
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        deviceId: 'default',
+        sampleRate: 16000,
+        sampleSize: 16,
+        channelCount: 1,
+      },
+      video: false,
+    });
+    setStream(stream);
+    setListening(true);
+  }, [language, resetTranscript]);
+
+  const stopSpeechToText = useCallback(() => {
+    socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
+    processorRef.current?.disconnect();
+    audioInputRef.current?.disconnect();
+    audioContextRef.current?.close();
+    setListening(false);
+    // stop stream if needed
+    if (stream) {
+      stream.getTracks().forEach((track) => {
+        track.stop();
+      });
+    }
+    setStream(undefined);
+    socket.off(
+      SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.RECEIVE_AUDIO_TEXT,
+      receiveAudioText,
+    );
+    setFinalTranscript(history.join(' ') || interimTranscript);
+    
+  }, [history, interimTranscript, receiveAudioText, stream]);
+
+  
 
   return {
-    listening: isElectron ? listening : listeningBrowser,
-    interimTranscript: isElectron
-      ? interimTranscript
-      : interimTranscriptBrowser,
-    finalTranscript: isElectron ? finalTranscript : finalTranscriptBrowser,
+    listening: listening,
+    interimTranscript: interimTranscript,
+    finalTranscript: finalTranscript,
     startSpeechToText,
     stopSpeechToText,
-    resetTranscript,
+    resetTranscript: resetTranscript,
   };
 }

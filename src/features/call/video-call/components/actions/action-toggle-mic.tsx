@@ -16,14 +16,13 @@ interface ActionToggleMicProps {
   }) => void;
 }
 const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
-  const { isTurnOnMic, setTurnOnMic } = useMyVideoCallStore();
+  const { isTurnOnMic, isLoadingStream } = useMyVideoCallStore();
   const {isElectron, ipcRenderer} = useElectron();
   const onToggleMic = useCallback(() => {
-    setTurnOnMic(!isTurnOnMic);
     handleChangeCameraOrMic({
       audio: !isTurnOnMic,
     });
-  }, [handleChangeCameraOrMic, isTurnOnMic, setTurnOnMic])
+  }, [handleChangeCameraOrMic, isTurnOnMic])
   const {t} = useTranslation('common')
   useKeyboardShortcut([SHORTCUTS.TOGGLE_MICROPHONE], onToggleMic);
 
@@ -41,6 +40,7 @@ const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
       variant="default"
       size="xs"
       color={isTurnOnMic ? 'primary' : 'default'}
+      disabled={isLoadingStream}
       onClick={onToggleMic}
     >
       <Tooltip

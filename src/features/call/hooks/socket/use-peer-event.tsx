@@ -24,6 +24,7 @@ export default function usePeerEvent() {
       (participant: ParticipantInVideoCall, index: number) => {
         if (!participant.peer) return;
         const receiveStreamListener = (stream: any) => {
+          console.log('receiveStreamListener', stream);
           setStreamForParticipant(
             stream,
             participant.socketId,
@@ -31,6 +32,7 @@ export default function usePeerEvent() {
           );
         };
         const errorListener = (error: Error) => {
+          console.log('errorListener', error);
           participant.peer.destroy();
           setStreamForParticipant(
             new MediaStream(),
@@ -39,9 +41,11 @@ export default function usePeerEvent() {
           );
         };
         const closeListener = () => {
+          console.log('closeListener');
           participant.peer.destroy();
         };
         const signalListener = (signal: SignalData) => {
+          console.log('signalListener', signal);
           switch (signal.type) {
             case 'offer':
               socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, {
@@ -62,10 +66,7 @@ export default function usePeerEvent() {
               });
               break;
             case 'transceiverRequest':
-              const peer = createPeer();
-              if (myStream) {
-                peer.addStream(myStream);
-              }
+              const peer = createPeer(myStream);
               updatePeerParticipant(peer, participant.socketId);
               break;
             case 'renegotiate':

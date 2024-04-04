@@ -85,7 +85,7 @@ export const useTranslate = ({
   const handleStopListening = () => {
     if(listening) {
       stopSpeechToText();
-      resetTranscript();
+      // resetTranscript();
     }
   };
 
