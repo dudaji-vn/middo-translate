@@ -324,7 +324,14 @@
     "SENDING": "Sending",
     "REPLY": "{{num}} Reply",
     "REPLIES": "{{num}} Replies",
-    "FORWARDED_MESSAGE": "forwarded a message"
+    "FORWARDED_MESSAGE": "forwarded a message",
+    "EMPTY_WELCOME_TITLE": "Welcome to Conversation!",
+    "EMPTY_WELCOME_ITEM_1_TITLE": "1. E.S.L Translation support",
+    "EMPTY_WELCOME_ITEM_1_DESCRIPTION": "All-in-one conversation platform that integrated Middo translation that could help you have unlimited connections with everyone around the world.",
+    "EMPTY_WELCOME_ITEM_2_TITLE": "2. Middo Call",
+    "EMPTY_WELCOME_ITEM_2_DESCRIPTION": "Middo Call is one of the most fantastic feature of Middo Conversation that could support your work more easily.",
+    "EMPTY_WELCOME_ITEM_3_TITLE": "3. Translate tool",
+    "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation."
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",

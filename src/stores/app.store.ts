@@ -8,6 +8,7 @@ export type AppState = {
   platform: 'web' | 'mobile';
   currentAudio?: HTMLAudioElement;
   language: string;
+  pingEmptyInbox?: boolean;
 };
 
 export type AppActions = {
@@ -18,6 +19,7 @@ export type AppActions = {
   setPlatform: (platform: 'web' | 'mobile') => void;
   setCurrentAudio: (audio: HTMLAudioElement) => void;
   setLanguage: (language: string) => void;
+  setPingEmptyInbox: (pingEmptyInbox: boolean) => void;
 };
 
 export const useAppStore = create<AppState & AppActions>()((set) => ({
@@ -27,6 +29,8 @@ export const useAppStore = create<AppState & AppActions>()((set) => ({
   isShowConfirmLogout: false,
   platform: 'web',
   language: 'en',
+  pingEmptyInbox: false,
+  setPingEmptyInbox: (pingEmptyInbox) => set(() => ({ pingEmptyInbox })),
   setMobile: (isMobile) => set(() => ({ isMobile })),
   setLoading: (loading) => set(() => ({ loading })),
   setTablet: (isTablet) => set(() => ({ isTablet })),
