@@ -95,6 +95,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     }, []);
 
     if (!currentUser) return null;
+
     if (!rooms.length && !isLoading && !pinnedRooms?.length) {
       return <EmptyInbox type={type} />;
     }

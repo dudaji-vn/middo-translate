@@ -324,7 +324,14 @@
     "SENDING": "Đang gửi",
     "REPLY": "{{num}} phản hồi",
     "REPLIES": "{{num}} phản hồi",
-    "FORWARDED_MESSAGE": "đã chuyển tiếp một tin nhắn"
+    "FORWARDED_MESSAGE": "đã chuyển tiếp một tin nhắn",
+    "EMPTY_WELCOME_TITLE": "Chào mừng đến với Cuộc trò chuyện!",
+    "EMPTY_WELCOME_ITEM_1_TITLE": "1. Hỗ trợ dịch E.S.L",
+    "EMPTY_WELCOME_ITEM_1_DESCRIPTION": "Nền tảng trò chuyện all-in-one tích hợp tính năng dịch Middo giúp bạn kết nối không giới hạn với mọi người trên toàn thế giới.",
+    "EMPTY_WELCOME_ITEM_2_TITLE": "2. Cuộc gọi Middo",
+    "EMPTY_WELCOME_ITEM_2_DESCRIPTION": "Cuộc gọi Middo là một trong những tính năng tuyệt vời nhất của Cuộc trò chuyện Middo giúp bạn làm việc dễ dàng hơn.",
+    "EMPTY_WELCOME_ITEM_3_TITLE": "3. Công cụ dịch",
+    "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện."
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",
@@ -396,19 +403,19 @@
       "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của nhóm này nữa. Bạn có chắc chắn muốn rời nhóm không?"
     },
     "VERIFY": {
-        "SUCCESS": {
-            "TITLE": "Xác minh thành công",
-            "MESSAGE": "Email của bạn đã được xác minh. Bây giờ bạn có thể đăng nhập với email đã đăng ký để sử dụng tất cả các tính năng của Middo",
-            "GOTO_SIGN_IN": "Đi đến trang đăng nhập"
-        },
-        "EXPIRED": {
-            "TITLE": "Liên kết xác minh đã hết hạn",
-            "MESSAGE": "Liên kết xác minh email của bạn đã hết hạn. Vui lòng đăng ký lại để nhận liên kết xác minh mới.",
-            "GOTO_SIGN_UP": "Đi đến trang đăng ký"
-        }
+      "SUCCESS": {
+        "TITLE": "Xác minh thành công",
+        "MESSAGE": "Email của bạn đã được xác minh. Bây giờ bạn có thể đăng nhập với email đã đăng ký để sử dụng tất cả các tính năng của Middo",
+        "GOTO_SIGN_IN": "Đi đến trang đăng nhập"
+      },
+      "EXPIRED": {
+        "TITLE": "Liên kết xác minh đã hết hạn",
+        "MESSAGE": "Liên kết xác minh email của bạn đã hết hạn. Vui lòng đăng ký lại để nhận liên kết xác minh mới.",
+        "GOTO_SIGN_UP": "Đi đến trang đăng ký"
+      }
     },
     "CREATE_ACCOUNT": {
-        "TITLE": "Tạo tài khoản mới"
+      "TITLE": "Tạo tài khoản mới"
     },
     "LEAVE_ROOM": {
       "TITLE": "Rời phòng",

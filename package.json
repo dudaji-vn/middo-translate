@@ -55,6 +55,7 @@
     "cookies": "^0.8.0",
     "copy-image-clipboard": "^2.1.2",
     "date-fns": "^3.6.0",
+    "embla-carousel-react": "^8.0.1",
     "emoji-mart": "^5.5.2",
     "emoji-picker-react": "^4.5.16",
     "exceljs": "^4.4.0",
