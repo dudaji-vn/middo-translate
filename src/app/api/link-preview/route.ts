@@ -41,7 +41,13 @@ export async function GET(request: Request) {
       !favicon.startsWith('https')
     ) {
       const rootURL = new URL(opURL);
-      favicon = `${rootURL.origin}/favicon.ico`;
+      if (favicon) {
+        if (favicon.startsWith('./')) favicon = favicon.replace(/^\.\//, '/');
+        console.log('🚀 ~ GET ~ favicon', favicon);
+        favicon = `${rootURL.origin}${favicon}`;
+      } else {
+        favicon = `${rootURL.origin}/favicon.ico`;
+      }
     }
 
     console.log({

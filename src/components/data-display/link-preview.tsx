@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface LinkPreviewProps {
   url: string;
@@ -10,6 +10,7 @@ export interface LinkPreviewProps {
 }
 
 export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
+  const [isImageError, setIsImageError] = useState(false);
   const { data, isError, isFetched } = useQuery({
     queryKey: ['link-preview', _url],
     queryFn: async () => {
@@ -69,14 +70,17 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       <p className="line-clamp-1 text-sm text-neutral-600">
         {previewData?.description}
       </p>
-      {previewData.image && (
-        <div className="mt-3 overflow-hidden rounded-lg border">
+      {!isImageError && previewData.image && (
+        <div className="mt-3  max-w-64 overflow-hidden rounded-lg border md:max-w-none">
           <Image
             quality={100}
             src={previewData.image}
             width={500}
             height={500}
             alt={previewData.title}
+            onError={(e) => {
+              setIsImageError(true);
+            }}
           />
         </div>
       )}

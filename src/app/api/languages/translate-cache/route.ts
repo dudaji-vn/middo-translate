@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const response = await fetch(
     `${NEXT_PUBLIC_URL}/api/languages/translate?${searchParamsString}`,
     {
-      cache: 'force-cache',
+      cache: 'no-cache',
     },
   );
   const json = await response.json();
