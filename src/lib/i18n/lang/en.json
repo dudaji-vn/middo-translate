@@ -396,19 +396,19 @@
       "DESCRIPTION": "You will no longer be able to view messages from this group. Are you sure you want to leave?"
     },
     "VERIFY": {
-        "SUCCESS": {
-            "TITLE": "Verification Successful",
-            "MESSAGE": "Your email has been verified. You can now sign in with the registered email to use all the features of Middo.",
-            "GOTO_SIGN_IN": "Go to Sign In page"
-        },
-        "EXPIRED": {
-            "TITLE": "Verification Link Expired",
-            "MESSAGE": "Your email verification link has expired. Please sign up again to receive a new verification link.",
-            "GOTO_SIGN_UP": "Go to Sign Up page"
-        }
+      "SUCCESS": {
+        "TITLE": "Verification Successful",
+        "MESSAGE": "Your email has been verified. You can now sign in with the registered email to use all the features of Middo.",
+        "GOTO_SIGN_IN": "Go to Sign In page"
+      },
+      "EXPIRED": {
+        "TITLE": "Verification Link Expired",
+        "MESSAGE": "Your email verification link has expired. Please sign up again to receive a new verification link.",
+        "GOTO_SIGN_UP": "Go to Sign Up page"
+      }
     },
     "CREATE_ACCOUNT": {
-        "TITLE": "Create a New Account"
+      "TITLE": "Create a New Account"
     },
     "LEAVE_ROOM": {
       "TITLE": "Leave Room",
@@ -440,7 +440,7 @@
     }
   },
   "SHORTCUT": {
-    "TITLE": "Short cut",
+    "TITLE": "Shortcut",
     "TABS": {
       "CONVERSATION": "Middo Chat",
       "TRANSLATION": "Middo Translation",
