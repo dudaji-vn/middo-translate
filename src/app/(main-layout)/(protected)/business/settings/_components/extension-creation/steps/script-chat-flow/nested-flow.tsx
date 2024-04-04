@@ -197,6 +197,7 @@ const NestedFlow = () => {
                 onConnect={onConnect}
                 onEdgesDelete={onEdgeDelete}
                 onNodesDelete={onNodesDelete}
+                // @ts-ignore
                 nodeTypes={nodeTypes}
                 fitView
             >
