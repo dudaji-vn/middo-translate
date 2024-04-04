@@ -1,44 +1,55 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
-  addEdge,
-  Background,
-  useNodesState,
-  useEdgesState,
-  MiniMap,
-  Controls,
-  Node,
+    addEdge,
+    Background,
+    useNodesState,
+    useEdgesState,
+    MiniMap,
+    Controls,
+    Node,
+    NodeChange,
+    EdgeChange,
+    Edge,
+    Connection,
+    BackgroundVariant,
+    applyNodeChanges,
+    applyEdgeChanges,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { nodeTypes } from './custom-node';
 import { useChatFlowStore } from '@/stores/chat-flow.store';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Form } from '@/components/ui/form';
 
-export type FlowItemType = 'button' | 'message' | 'root';
-
-export type NodeData = {
-  content?: string;
-  label?: string;
-  img?: string;
-};
+const schemaFlow = z.object({
+    nodes: z.array(z.object({
+        id: z.string(), type: z.string(), data: z.object({
+            label: z.string(),
+            content: z.string(), img: z.string()
+        }), position: z.object({
+            x: z.number(), y: z.number()
+        })
+    })),
+    edges: z.array(z.object({ id: z.string(), source: z.string(), target: z.string(), label: z.string() })),
+})
+export type FlowItemType = 'button' | 'message' | 'root' | 'container';
 
 export type FlowNode = Node<{
-  content?: string;
-  label?: string;
-  img?: string;
-}>;
+    content?: string;
+    label?: string;
+    img?: string;
+}> & {
+    type: FlowItemType;
+}
 const initialNodes: FlowNode[] = [
-  {
-    id: '1',
-    type: 'input',
-    data: { label: 'Start conversation' },
-    position: { x: 0, y: -100 },
-    className: 'light',
-    // type: 'root'
-  },
-  {
-    id: '2',
-    data: {
-      label: 'Actions',
-      content: 'Xin chao, toi co the giup gi cho ban?',
+    {
+        id: '1',
+        data: { label: 'Start conversation', },
+        position: { x: 0, y: -100 },
+        className: 'light',
+        type: 'root'
     },
     type: 'container',
     position: { x: 100, y: 0 },
@@ -101,37 +112,60 @@ const initialEdges = [
 ];
 
 const NestedFlow = () => {
-  const [nodes, setNodes, onNodesChange] =
-    useNodesState<NodeData>(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-  const { setNodes: saveNodes } = useChatFlowStore();
 
-  // useEffect(() => {
-  //     saveNodes(nodes);
-  // }, [nodes]);
+    // const [nodes, setNodes] = useState(initialNodes);
+    // const [edges, setEdges] = useState(initialEdges);
+    const control = useForm({
+        mode: 'onBlur',
+        defaultValues: {
+            nodes: initialNodes,
+            edges: initialEdges,
+        },
+        resolver: zodResolver(schemaFlow),
+    });
 
-  // const onConnect = useCallback((connection) => {
-  //     setEdges((eds) => addEdge(connection, eds));
-  // }, []);
+    const { setValue, watch } = control;
+    const watchNodes = watch('nodes');
+    const watchEdges = watch('edges');
 
-  return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      // onConnect={onConnect}
-      // onElementsRemove={onElementsRemove}
+    const onNodesChange = useCallback(
+        (changes: NodeChange[]) => {
+            // @ts-ignore
+            setValue('nodes', applyNodeChanges(changes, watchNodes));
+        },
+        [setValue, watchNodes]
+    );
+    const onEdgesChange = useCallback(
+        (changes: EdgeChange[]) => {
+            // @ts-ignore
+            setValue('edges', applyEdgeChanges(changes, watchEdges));
 
-      nodeTypes={nodeTypes}
-      className="react-flow-subflows-example"
-      fitView
-    >
-      <MiniMap />
-      <Controls />
-      <Background />
-    </ReactFlow>
-  );
+        },
+        [setValue, watchEdges]
+    );
+    const onConnect = useCallback(
+        (connection: Edge | Connection) => {
+            // @ts-ignore
+            setValue('edges', addEdge(connection, watchEdges));
+        },
+        [setValue, watchEdges]
+    );
+
+    return (
+
+        <Form {...control} >
+            <ReactFlow
+                nodes={watchNodes}
+                edges={watchEdges}
+                onNodesChange={onNodesChange}
+                onEdgesChange={onEdgesChange}
+                onConnect={onConnect}
+                nodeTypes={nodeTypes}
+                fitView
+            >
+                <Background gap={16} variant={BackgroundVariant.Dots} className='bg-white outline-none' />
+            </ReactFlow></Form>
+    );
 };
 
 export default NestedFlow;

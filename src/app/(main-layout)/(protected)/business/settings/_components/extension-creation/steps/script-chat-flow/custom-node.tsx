@@ -17,16 +17,10 @@ import { cn } from '@/utils/cn';
 import { MessageEditorTextProvider } from '@/features/chat/messages/components/message-editor/message-editor-text-context';
 import { MessageEditorToolbar } from '@/features/chat/messages/components/message-editor/message-editor-toolbar';
 import { TextInput } from '@/features/chat/messages/components/message-editor/message-editor-text-input';
+import { FlowNode } from './nested-flow';
+import { useFormContext } from 'react-hook-form';
 
-export type FlowItemType = 'button' | 'message' | 'root';
 
-export type FlowNode = Node<{
-    type: FlowItemType;
-    content: string;
-    img?: string;
-}> & {
-    childrens?: FlowNode[];
-};
 
 function MessageNode({ data, isConnectable }: { data: any; isConnectable: boolean }) {
     const onChange = useCallback((evt: any) => {
@@ -65,13 +59,27 @@ function MessageNode({ data, isConnectable }: { data: any; isConnectable: boolea
         </div>
     );
 }
-function ButtonNode({ data, isConnectable }: { data: FlowNode['data']; isConnectable: boolean }) {
+function ButtonNode(node: { data: FlowNode['data']; isConnectable: boolean }) {
+    const { data, isConnectable } = node;
     const { content, img } = data;
+
+    const { watch, setValue } = useFormContext();
+    const nodes = watch('nodes');
+    const edges = watch('edges');
+
+
+    const onCLick = () => {
+        console.log('nodes', nodes);
+        console.log('edges', edges);
+
+    }
     return (
         <div className="button-node">
             {/* <Handle type="target" position={Position.Left} isConnectable={isConnectable} /> */}
-            <div>
-                <Button size={'xs'} className='h-10'>{content}</Button>
+            <div>   
+                <Button size={'xs'} className='h-10' onClick={onCLick}>
+                    {content}
+                </Button>
             </div>
             <Handle type="source" position={Position.Right} isConnectable={isConnectable} />
         </div>
