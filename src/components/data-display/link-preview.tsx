@@ -55,13 +55,13 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
     >
       <div className="flex items-center gap-1">
         <div className="size-4 shrink-0">
-          <Image
+          {/* <Image
             quality={100}
             src={previewData?.favicon}
             width={500}
             height={500}
             alt={previewData?.title}
-          />
+          /> */}
         </div>
         <h6 className="line-clamp-1 text-sm font-bold text-primary">
           {previewData?.title}
@@ -72,7 +72,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       </p>
       {!isImageError && previewData.image && (
         <div className="mt-3  max-w-64 overflow-hidden rounded-lg border md:max-w-none">
-          <Image
+          {/* <Image
             quality={100}
             src={previewData.image}
             width={500}
@@ -81,7 +81,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
             onError={(e) => {
               setIsImageError(true);
             }}
-          />
+          /> */}
         </div>
       )}
     </Link>
