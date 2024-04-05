@@ -2,21 +2,15 @@ import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
     addEdge,
     Background,
-    useNodesState,
-    useEdgesState,
-    MiniMap,
-    Controls,
     Node,
     NodeChange,
     EdgeChange,
     Edge,
     Connection,
     BackgroundVariant,
-    applyNodeChanges,
-    applyEdgeChanges,
-    getIncomers,
-    getOutgoers,
     getConnectedEdges,
+    applyEdgeChanges,
+    applyNodeChanges,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { nodeTypes } from './custom-node';
@@ -26,22 +20,35 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import toast from 'react-hot-toast';
+import { Button } from '@/components/actions';
+import { Eye } from 'lucide-react';
+import { isEmpty } from 'lodash';
 
 const schemaFlow = z.object({
     nodes: z.array(z.object({
-        id: z.string(), type: z.string(), data: z.object({
-            label: z.string(),
-            content: z.string(), img: z.string()
-        }), position: z.object({
+        id: z.string(),
+        type: z.string(),
+        data: z.object({
+            label: z.string().optional(),
+            content: z.string().min(1, {
+                message: 'Please enter message!',
+            }),
+            img: z.string().optional(),
+        }),
+        position: z.object({
             x: z.number(), y: z.number()
         })
     })),
     edges: z.array(z.object({ id: z.string(), source: z.string(), target: z.string(), label: z.string() })),
+    flowErrors: z.array(z.object({ id: z.string(), message: z.string() }))
 })
-export type FlowItemType = 'button' | 'message' | 'root' | 'container';
+
+type FormDataErrors = z.infer<typeof schemaFlow>['flowErrors'];
+
+export type FlowItemType = 'button' | 'message' | 'root' | 'container' | 'option';
 
 export type FlowNode = Node<{
-    content?: string;
+    content: string;
     label?: string;
     img?: string;
 }> & {
@@ -50,159 +57,188 @@ export type FlowNode = Node<{
 const initialNodes: FlowNode[] = [
     {
         id: '1',
-        data: { label: 'Start conversation', },
-        position: { x: 0, y: -100 },
+        data: { label: 'Start conversation', content: 'start conversation' },
+        position: { x: 0, y: 0 },
         className: 'light',
         type: 'root'
     },
     {
         id: '2',
         data: {
-            label: 'Actions',
-            content: "Hello, How can I help you? ",
+            label: 'option',
+            content: 'Option',
         },
-        type: 'container',
-        position: { x: 100, y: 0 },
+        type: 'option',
+        position: { x: 200, y: 6 },
         className: 'light',
-        draggable: false,
-        // style: { backgroundColor: 'rgba(255, 0, 0, 0.2)', width: 400, height: 900 },
     },
-    // {
-    //     id: '2-1',
-    //     data: { content: "Hello, How can I help you? ", },
-    //     position: { x: 0, y: 100 },
-    //     className: 'light',
-    //     parentNode: '2',
-    //     type: 'message',
-    //     extent: 'parent'
-    // },
-
-    // {
-    //     id: '4b',
-    //     data: { content: "Gap quan ly", },
-    //     position: { x: 15, y: 125 },
-    //     className: 'light',
-    //     parentNode: '2',
-    //     extent: 'parent',
-    //     type: 'button'
-    // },
-    // {
-    //     id: '4c',
-    //     data: { content: "Gap nhan vien", },
-    //     position: { x: 15, y: 195 },
-    //     className: 'light',
-    //     parentNode: '2',
-    //     extent: 'parent',
-    //     type: 'button'
-    // }, {
-    //     id: '4b1',
-    //     data: { content: "OK, toi se chuyen ban den quan ly", },
-    //     position: { x: 305, y: 125 },
-    //     className: 'light',
-    //     parentNode: '4b',
-    //     type: 'message'
-    // },
-    // {
-    //     id: '4c1',
-    //     data: { content: "OK, toi se chuyen ban den nhan vien", },
-    //     position: { x: 305, y: 195 },
-    //     className: 'light',
-    //     parentNode: '4c',
-    //     type: 'message'
-    // }
-
 ];
 
 const initialEdges = [
-    { id: 'e1-2', source: '1', target: '2', label: 'Start conversation' },
-    // { id: 'e1-4', source: '1', target: '4', animated: true },
+    { id: 'e1-2', source: '1', target: '2', animated: true, label: 'Start conversation' },
+    // { id: 'e1-4', source: '1', target: '4'},
 ];
 
+const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
 const NestedFlow = () => {
-
-    // const [nodes, setNodes] = useState(initialNodes);
-    // const [edges, setEdges] = useState(initialEdges);
+    const [openPreview, setOpenPreview] = useState(false);
+    const [checkingMode, setCheckingMode] = useState(false);
     const control = useForm({
-        mode: 'onBlur',
+        mode: 'onChange',
         defaultValues: {
             nodes: initialNodes,
             edges: initialEdges,
+            flowErrors: []
         },
         resolver: zodResolver(schemaFlow),
     });
 
-    const { setValue, watch } = control;
-    const watchNodes = watch('nodes');
-    const watchEdges = watch('edges');
+    const { setValue, watch, trigger, formState: { errors } } = control;
 
+    const nodes = watch('nodes');
+    const edges = watch('edges');
+    const flowErrors = watch('flowErrors');
     const onNodesChange = useCallback(
         (changes: NodeChange[]) => {
+            const watchNodes = watch('nodes');
+            if (changes.every(({ type }) => ALLOWED_CHANGES.includes(type))) {
+                // @ts-ignore
+                setValue('nodes', applyNodeChanges(changes, watchNodes));
+            }
             // @ts-ignore
-            // setValue('nodes', applyNodeChanges(changes, watchNodes));
+
         },
-        [setValue, watchNodes]
+        [setValue, watch]
     );
     const onEdgesChange = useCallback(
         (changes: EdgeChange[]) => {
-            // @ts-ignore
-            // setValue('edges', applyEdgeChanges(changes, watchEdges));
+            if (changes.some(({ type }) => ALLOWED_CHANGES.includes(type))) {
+                // @ts-ignore
+                setValue('edges', applyEdgeChanges(changes, edges));
+            }
 
         },
-        [setValue, watchEdges]
+        [setValue, edges]
     );
 
     const onNodesDelete = useCallback(
         (nodesToDelete: Node[]) => {
             if (nodesToDelete.some((node) => initialNodes.find(n => n.id === node.id))) {
-                toast.error('Cannot delete this step');
                 return;
             }
-
-            const connected = getConnectedEdges(nodesToDelete, watchEdges);
-            console.log('connected', connected);
-            const newNodes = watchNodes.filter((node) => !connected.some((edge) => edge.source === node.id || edge.target === node.id));
-            console.log('newNodes', newNodes);
+            const connected = getConnectedEdges(nodesToDelete, edges);
+            const newNodes = nodes.filter((node) => !connected.some((edge) => edge.source === node.id || edge.target === node.id));
             setValue('nodes', newNodes);
         },
-        [setValue, watchNodes, watchEdges]
+        [setValue, nodes, edges]
     );
 
-    const onEdgeDelete = useCallback(
-        (edgesToDelete: Edge[]) => {
-            if (edgesToDelete.some((edge) => initialEdges.find(e => e.source === edge.source && e.target == edge.target))) { 
-                toast.error('Cannot delete this step');
-                return;
-            }
-            setValue('edges', watchEdges.filter((edge) => !edgesToDelete.some((e) => e.id === edge.id)));
-        },
-        [setValue, watchEdges]
-    );
 
     const onConnect = useCallback(
         (connection: Edge | Connection) => {
+            const watchEdges = watch('edges');
             // @ts-ignore
             setValue('edges', addEdge(connection, watchEdges));
+
         },
-        [setValue, watchEdges]
+        [addEdge, setValue, watch]
     );
 
-    return (
+    const checkingErrors = () => {
+        if (!checkingMode) {
+            return;
+        }
+        const flowErrors: FormDataErrors = [];
+        nodes.forEach((node) => {
+            switch (node.type) {
+                case 'option':
+                    const connected = edges.filter((edge) => edge.source === node.id);
+                    if (connected.length === 0) {
+                        flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
+                    }
+                    break;
+                case 'container':
+                    const childrens = nodes.filter((n) => n.parentNode === node.id);
+                    if (childrens.length === 0) {
+                        flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
+                    }
+                    break;
+                // case 'message':
+                //     if (!node.data?.content?.trim()?.length) {
+                //         flowErrors.push({ id: node.id, message: 'Message should have a content' });
+                //     }
+                //     break;
+                case 'button':
+                    if (!node.data?.content?.trim()?.length) {
+                        flowErrors.push({ id: node.id, message: 'Button should have a label' });
+                    }
+                    break;
+                default:
+                    break;
+            }
+        });
+        // @ts-ignore
+        setValue('flowErrors', flowErrors);
 
-        <Form {...control} >
-            <ReactFlow
-                nodes={watchNodes}
-                edges={watchEdges}
-                onNodesChange={onNodesChange}
-                onEdgesChange={onEdgesChange}
-                onConnect={onConnect}
-                onEdgesDelete={onEdgeDelete}
-                onNodesDelete={onNodesDelete}
-                // @ts-ignore
-                nodeTypes={nodeTypes}
-                fitView
-            >
-                <Background gap={16} variant={BackgroundVariant.Dots} className='bg-white outline-none' />
-            </ReactFlow></Form>
+    }
+    useEffect(() => {
+        if (checkingMode) {
+            checkingErrors();
+        }
+        else {
+            // @ts-ignore
+            setValue('flowErrors', []);
+        }
+    }, [nodes, checkingMode]);
+
+    const onPreviewClick = () => {
+        trigger('nodes')
+        if (!checkingMode) {
+            setCheckingMode(true);
+            return;
+        }
+        if (checkingMode && flowErrors.length) {
+            toast.error('Please complete the flow!');
+            return;
+        }
+        if (!isEmpty(errors)) {
+            toast.error('Please complete the flow!');
+            setOpenPreview(true);
+        }
+        toast.success('Previewing');
+
+    }
+
+
+    return (
+        <section className='w-full grid grid-rows-12'>
+            <div className='py-2 row-span-1 flex flex-row justify-between items-center'>
+                <label className='text-sm font-semibold'>Create your own chat flow</label>
+                <Button
+                    onClick={onPreviewClick}
+                    shape={'square'} size={'xs'} type='button' color={'secondary'} className='flex flex-row gap-2'>
+                    Preview <Eye />
+                </Button>
+            </div>
+            <div className='w-full row-span-11 bg-gray-200'>
+                <Form {...control}>
+                    <ReactFlow
+                        nodes={nodes}
+                        edges={edges}
+                        onNodesChange={onNodesChange}
+                        onEdgesChange={onEdgesChange}
+                        onConnect={onConnect}
+                        onNodesDelete={onNodesDelete}
+                        // @ts-ignore
+                        nodeTypes={nodeTypes}
+                        fitView
+                    >
+                        <Background gap={16} variant={BackgroundVariant.Dots} className='bg-white outline-none' />
+                    </ReactFlow>
+
+                </Form>
+            </div>
+        </section>
     );
 };
 
