@@ -78,43 +78,49 @@ export const wrapperMiddleVariants = cva('mb-1 mt-2 rounded-xl p-1 px-3', {
   },
 });
 
-export const textVariants = cva('break-word-mt text-start text-sm', {
-  variants: {
-    position: {
-      left: '',
-      right: 'text-neutral-white',
+export const textVariants = cva(
+  'break-word-mt text-start text-base md:text-sm',
+  {
+    variants: {
+      position: {
+        left: '',
+        right: 'text-neutral-white',
+      },
+      status: {
+        removed: 'text-neutral-300',
+        pending: '',
+        sent: '',
+        received: '',
+        read: '',
+      },
     },
-    status: {
-      removed: 'text-neutral-300',
-      pending: '',
-      sent: '',
-      received: '',
-      read: '',
-    },
-  },
 
-  defaultVariants: {
-    position: 'left',
-    status: 'sent',
-  },
-});
-export const textMiddleVariants = cva('break-word-mt text-start text-sm', {
-  variants: {
-    position: {
-      left: '',
-      right: 'text-background',
-    },
-    status: {
-      removed: 'text-neutral-600',
-      pending: '',
-      sent: '',
-      received: '',
-      read: '',
+    defaultVariants: {
+      position: 'left',
+      status: 'sent',
     },
   },
+);
+export const textMiddleVariants = cva(
+  'break-word-mt text-start test-base md:text-sm',
+  {
+    variants: {
+      position: {
+        left: '',
+        right: 'text-background',
+      },
+      status: {
+        removed: 'text-neutral-600',
+        pending: '',
+        sent: '',
+        received: '',
+        read: '',
+      },
+    },
 
-  defaultVariants: {
-    position: 'left',
-    status: 'sent',
+    defaultVariants: {
+      position: 'left',
+      status: 'sent',
+    },
   },
-});
+);

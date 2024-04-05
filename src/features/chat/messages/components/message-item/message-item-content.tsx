@@ -37,7 +37,9 @@ export const Content = ({ position, active, message }: ContentProps) => {
   }));
 
   const receiverLanguage = useMemo(() => {
-    return  isHelpDesk ? room?.participants?.find((p) => p.status === 'anonymous')?.language : userLanguage;
+    return isHelpDesk
+      ? room?.participants?.find((p) => p.status === 'anonymous')?.language
+      : userLanguage;
   }, [room, isHelpDesk, userLanguage]);
 
   const [contentDisplay, setContentDisplay] = useState(message.content);
@@ -51,7 +53,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
     if (
       message.language === userLanguage ||
       message.sender._id === currentUserId ||
-      isHelpDesk && position === 'right'
+      (isHelpDesk && position === 'right')
     ) {
       setContentDisplay(message.content);
       return;
@@ -60,7 +62,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
       const translated = await translateText(
         message.content,
         message?.language || message.sender.language,
-        receiverLanguage
+        receiverLanguage,
       );
       setContentDisplay(translated);
     };
@@ -86,6 +88,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
     >
       <div className={cn(textVariants({ position, status: message.status }))}>
         <RichTextView
+          editorStyle="text-base md:text-sm"
           mentions={
             message?.mentions?.map((mention) => ({
               id: mention._id,
@@ -122,7 +125,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
               >
                 <RichTextView
                   mentionClassName={position === 'right' ? 'right' : 'left'}
-                  editorStyle="font-light text-sm"
+                  editorStyle="font-light text-base md:text-sm"
                   content={message.contentEnglish}
                 />
               </div>

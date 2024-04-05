@@ -15,7 +15,7 @@ export interface ChatLayoutProps {
 const ChatLayout = ({ children }: ChatLayoutProps) => {
   return (
     <Fragment>
-      <div className="flex">
+      <div className="disable-text-selection flex">
         <ChatSidebar>
           <Inbox />
         </ChatSidebar>

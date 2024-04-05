@@ -67,7 +67,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
           {previewData?.title}
         </h6>
       </div>
-      <p className="line-clamp-1 text-sm text-neutral-600">
+      <p className="line-clamp-1 text-base text-neutral-600 md:text-sm">
         {previewData?.description}
       </p>
       {!isImageError && previewData.image && (

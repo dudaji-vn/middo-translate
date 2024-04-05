@@ -25,11 +25,13 @@ export const MessageItemForward = ({
   isMe,
 }: MessageItemForwardProps) => {
   const mediaRef = useRef<HTMLDivElement>(null);
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const displayForwardFrom = useMemo(() => {
-    let text = " " + message?.sender?.name + " ";
+    let text = ' ' + message?.sender?.name + ' ';
     if (message.room?.isGroup) {
-      text += t('CONVERSATION.FORWARD_FROM_CHANNEL', {name: message.room?.name || t('CONVERSATION.A_GROUP')});
+      text += t('CONVERSATION.FORWARD_FROM_CHANNEL', {
+        name: message.room?.name || t('CONVERSATION.A_GROUP'),
+      });
     }
     return text;
   }, [message, t]);
@@ -45,9 +47,11 @@ export const MessageItemForward = ({
           style={{
             width: mediaRef.current?.clientWidth,
           }}
-          className="overflow-hidden text-sm"
+          className="overflow-hidden text-base md:text-sm "
         >
-          <span className="italic text-neutral-400">{t('CONVERSATION.FORWARD_FROM')}&nbsp;</span>
+          <span className="italic text-neutral-400">
+            {t('CONVERSATION.FORWARD_FROM')}&nbsp;
+          </span>
           <Wrapper room={message.room!}>
             <span className="break-all text-primary max-md:inline-block">
               {displayForwardFrom}
