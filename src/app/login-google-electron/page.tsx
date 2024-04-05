@@ -6,8 +6,8 @@ import { setCookieService } from '@/services/auth.service';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import Image from 'next/image';
-import { Button } from '@/components/form/button';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/actions';
 
 export default function LoginGoogleElectron() {
   const router = useRouter();
@@ -17,10 +17,10 @@ export default function LoginGoogleElectron() {
   const IS_LOADING = !accessToken && !refreshToken;
   const { t } = useTranslation('common');
   if (accessToken && refreshToken) {
-    window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
+    // window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
   }
   const openDesktop = () => {
-    window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
+    // window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
   };
   useEffect(() => {
     if (accessToken || refreshToken) return;
@@ -32,9 +32,9 @@ export default function LoginGoogleElectron() {
   }, [accessToken, refreshToken, router]);
 
   return (
-    <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-      <div className="w-full bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
-        <div className="mx-auto w-[150px]">
+    <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')] h-screen">
+      <div className="w-full bg-background px-[5vw] py-8 my-auto md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+        <div className="mx-auto w-[100px]">
           <Image
             src="/logo.png"
             alt=""
@@ -42,18 +42,18 @@ export default function LoginGoogleElectron() {
             height={1000}
           ></Image>
         </div>
-        <p className="mt-8 text-center text-[22px] font-medium text-primary">
+        <p className="mt-8 text-center text-[22px] font-medium">
           {IS_LOADING
             ? t('DESKTOP_LOGIN.TITLE_LOADING')
             : t('DESKTOP_LOGIN.TITLE_LOGIN_SUCCESS')}
         </p>
-        <p className="mt-5 text-center">
+        <p className="mt-2 text-center">
           {IS_LOADING
             ? t('DESKTOP_LOGIN.DESCRIPTION_LOADING')
             : t('DESKTOP_LOGIN.DESCRIPTION_LOGIN_SUCCESS')}
         </p>
         {!IS_LOADING && (
-          <Button onClick={openDesktop}>{t('DESKTOP_LOGIN.OPEN_MIDDO')}</Button>
+          <Button onClick={openDesktop} shape={'square'} size={'sm'} className='mx-auto block mt-8'>{t('DESKTOP_LOGIN.OPEN_MIDDO')}</Button>
         )}
         {/* <div className="mt-8 flex justify-center">
           <Link

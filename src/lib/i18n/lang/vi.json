@@ -501,9 +501,9 @@
   "DESKTOP_LOGIN": {
     "TITLE_LOADING": "Đang chuyển hướng",
     "DESCRIPTION_LOADING": "Vui lòng đợi trong giây lát, chúng tôi đang chuyển hướng bạn đến trang đăng nhập",
-    "TITLE_LOGIN_SUCCESS": "Đăng nhập thành công",
+    "TITLE_LOGIN_SUCCESS": "Đăng nhập thành công!",
     "DESCRIPTION_LOGIN_SUCCESS": "Hãy bấm vào nút bên dưới để mở ứng dụng",
-    "OPEN_MIDDO": "Mở Middo",
+    "OPEN_MIDDO": "Mở ứng dụng Desktop",
     "BACK_TO_HOME": "Đi đến trang chủ"
   },
   "INBOX_EMPTY": {

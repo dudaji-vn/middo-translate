@@ -501,9 +501,9 @@
   "DESKTOP_LOGIN": {
     "TITLE_LOADING": "리디렉션 중",
     "DESCRIPTION_LOADING": "잠시 기다려주세요. 로그인 페이지로 리디렉션 중입니다",
-    "TITLE_LOGIN_SUCCESS": "로그인 성공",
+    "TITLE_LOGIN_SUCCESS": "성공적으로 로그인되었습니다!",
     "DESCRIPTION_LOGIN_SUCCESS": "앱을 열려면 아래 버튼을 클릭하세요",
-    "OPEN_MIDDO": "Middo 열기",
+    "OPEN_MIDDO": "데스크톱 앱 열기",
     "BACK_TO_HOME": "홈으로 돌아가기"
   },
   "INBOX_EMPTY": {
