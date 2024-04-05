@@ -1,8 +1,10 @@
 'use client';
 
 import React, {
+  Dispatch,
   HTMLAttributes,
   PropsWithChildren,
+  SetStateAction,
   createContext,
   forwardRef,
   useContext,
@@ -63,7 +65,7 @@ type MessageEditorContextProps = {
   inputDisabled: boolean;
   setInputDisabled: (disabled: boolean) => void;
   richText: Editor | null;
-  setRichText: (richText: Editor | null) => void;
+  setRichText: Dispatch<SetStateAction<Editor | null>>;
   handleSubmit: () => void;
   setTextContent: (text: string) => void;
   setContentEnglish: (content: string) => void;

@@ -1,22 +1,22 @@
 import { useMediaUpload } from '@/components/media-upload';
 import { MentionSuggestion } from '@/components/mention-suggestion-options';
-import { useAppStore } from '@/stores/app.store';
 import { useMessageEditor } from '.';
 import { RichTextInput } from './rich-text-input';
+import { useCallback } from 'react';
+import { Editor } from '@tiptap/react';
+import { useAppStore } from '@/stores/app.store';
 
 export interface MainInputProps {}
 
 let isTyping = false;
 
 export const MainInput = (props: MainInputProps) => {
-  const isMobile = useAppStore((state) => state.isMobile);
-
   const { handleClipboardEvent } = useMediaUpload();
+  const isMobile = useAppStore((state) => state.isMobile);
   const {
     setRichText,
     editorId,
     setContent,
-    toolbarRef,
     userMentions,
     onStoppedTyping,
     onTyping,
@@ -37,16 +37,29 @@ export const MainInput = (props: MainInputProps) => {
     });
   }
 
+  const handleSubmit = useCallback(() => {
+    const submitButton = document.getElementById('send-button-' + editorId);
+    submitButton?.click();
+  }, [editorId]);
+
+  const handleChange = useCallback((editor: Editor) => {
+    setContent(editor.getHTML());
+    setRichText((prev) => {
+      if (prev === null) {
+        return editor;
+      }
+      return prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <RichTextInput
       className="max-h-[200px] w-full overflow-y-auto pt-2 md:pt-1"
-      autoFocus={false}
+      autoFocus={!isMobile}
       suggestions={suggestions}
       onClipboardEvent={handleClipboardEvent}
-      onCreated={setRichText}
-      onChange={(editor) => {
-        setContent(editor.getHTML());
-      }}
+      onChange={handleChange}
       onTyping={(value) => {
         if (!isTyping) {
           onTyping?.(value);
@@ -59,16 +72,7 @@ export const MainInput = (props: MainInputProps) => {
         }
         isTyping = false;
       }}
-      onSubmit={() => {
-        const submitButton = document.getElementById('send-button-' + editorId);
-        submitButton?.click();
-      }}
-      // onFocus={() => {
-      //   if (isMobile) toolbarRef?.current?.collapse();
-      // }}
-      // onBlur={() => {
-      //   toolbarRef?.current?.expand();
-      // }}
+      onSubmit={handleSubmit}
     />
   );
 };
