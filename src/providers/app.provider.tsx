@@ -20,16 +20,15 @@ type Props = {};
 
 import data from '@emoji-mart/data';
 import { init } from 'emoji-mart';
-import useCheckNetwork from '@/hooks/use-check-network';
+import Offline from '@/components/modal/offline';
 init({ data });
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
 
-  useCheckNetwork();
-
   return (
     <>
       <I18nextProvider i18n={i18next}>
+        <Offline />
         <Toaster
           toastOptions={{
             error: {

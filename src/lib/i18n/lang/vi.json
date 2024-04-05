@@ -527,6 +527,7 @@
   },
   "OFFLINE": {
     "TITLE": "Bạn đang ngoại tuyến",
-    "DESCRIPTION": "Vui lòng kết nối với mạng Wi-Fi hoặc di động, kiểm tra kết nối internet của bạn hoặc khởi động lại thiết bị nếu cần"
+    "DESCRIPTION": "Vui lòng kết nối với mạng Wi-Fi hoặc di động, kiểm tra kết nối internet của bạn hoặc khởi động lại thiết bị nếu cần",
+    "REFRESH": "Tải lại"
   }
 }
