@@ -8,9 +8,11 @@ import { useVideoCallStore } from './store/video-call.store';
 import { CommonComponent } from './components/common/common';
 import VideoCall from './video-call';
 import ReceiveVideoCall from './receive-call';
+import { useNetworkStatus } from '@/utils/use-network-status';
 
 const CallVideoModalContainer = () => {
-  const { removeRequestCall } = useVideoCallStore();
+  const { removeRequestCall, clearStateVideoCall, room, setRoom } = useVideoCallStore();
+  const { isOnline } = useNetworkStatus();
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomIdEnd: string) => {
       removeRequestCall(roomIdEnd);
@@ -25,6 +27,13 @@ const CallVideoModalContainer = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  if(!isOnline) {
+    if(room) {
+      setRoom(null)
+      clearStateVideoCall();
+    }
+    return;
+  }
   return (
     <>
       <VideoCall />

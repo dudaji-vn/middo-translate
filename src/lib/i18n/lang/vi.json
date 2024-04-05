@@ -517,5 +517,9 @@
     "TIP_TITLE_GROUP": "Cách sử dụng \"Nhóm\"",
     "TITLE_GROUP": "Hiện tại, bạn không có Cuộc trò chuyện Nhóm nào",
     "DESCRIPTION_GROUP": "Nhấp vào nút dưới đây để tạo một cuộc trò chuyện mới hoặc yêu cầu Quản trị viên của một Cuộc trò chuyện Nhóm thêm bạn vào"
+  },
+  "OFFLINE": {
+    "TITLE": "Bạn đang ngoại tuyến",
+    "DESCRIPTION": "Vui lòng kết nối với mạng Wi-Fi hoặc di động, kiểm tra kết nối internet của bạn hoặc khởi động lại thiết bị nếu cần"
   }
 }

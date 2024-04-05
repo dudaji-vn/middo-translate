@@ -517,5 +517,9 @@
     "TIP_TITLE_GROUP": "How to use \"Group\"",
     "TITLE_GROUP": "Currently, you have no Group Conversation",
     "DESCRIPTION_GROUP": "Click button below to create a new one or ask Administrator of a Group Conversation add you in"
+  },
+  "OFFLINE": {
+    "TITLE": "You're offline",
+    "DESCRIPTION": "Please connect to a Wi-Fi or mobile network, check your internet connection or restart your device if need"
   }
 }
