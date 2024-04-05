@@ -2,6 +2,7 @@ import { Typography } from '@/components/data-display';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { COMMIT_SHA, LATEST_TAG } from '@/configs/commit-data';
 import { NEXT_PUBLIC_NAME, NEXT_PUBLIC_URL } from '@/configs/env.public';
+import { useElectron } from '@/hooks/use-electron';
 import { axios } from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useBoolean } from 'usehooks-ts';
@@ -12,7 +13,7 @@ export interface VersionModalProps {
 
 export const VersionModal = ({ trigger }: VersionModalProps) => {
   const { toggle, value, setTrue } = useBoolean();
-
+  const {electron, isElectron} = useElectron();
   const { data } = useQuery({
     queryKey: ['backend-version'],
     queryFn: async () => {
@@ -57,6 +58,15 @@ export const VersionModal = ({ trigger }: VersionModalProps) => {
         <Typography className="text-xs text-neutral-600">
           Commit: {backendCommit}
         </Typography>
+
+        {isElectron && (
+          <>
+            <Typography variant="h6">Desktop App:</Typography>
+            <Typography className="text-xs text-neutral-600">
+              Version: v{electron.getAppVersion()}
+            </Typography>
+          </>
+        )}
       </ConfirmAlertModal>
     </>
   );
