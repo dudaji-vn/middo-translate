@@ -100,6 +100,10 @@ export default function useHandleShareScreen() {
                 track.stop();
             });
         }
+        const isPinMyStream = participants.some((p) => p.isShareScreen && p.pin && p.isMe);
+        if(isPinMyStream) {
+            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+        }
         setShareScreen(false);
         removeParticipantShareScreen(socket.id);
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
@@ -113,7 +117,7 @@ export default function useHandleShareScreen() {
         if(isElectron && ipcRenderer) {
             ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
         }
-    },[clearPeerShareScreen, ipcRenderer, isElectron, peerShareScreen, removeParticipantShareScreen, setShareScreen, shareScreenStream])
+    },[clearPeerShareScreen, ipcRenderer, isElectron, participants, peerShareScreen, removeParticipantShareScreen, setLayout, setShareScreen, shareScreenStream])
 
     const handleShareScreen = useCallback(async ()=>{
         // if (participants.some((participant) => participant.isShareScreen)) return;

@@ -385,7 +385,7 @@
     },
     "SWITCH_ROOM": {
       "TITLE": "방 전환",
-      "DESCRIPTION": "방으로 전환됩니다. <strong>{{name}}</strong>"
+      "DESCRIPTION": "다른 회의실로 이동하시겠습니까?"
     },
     "DELETE_CONVERSATION": {
       "TITLE": "대화 삭제",

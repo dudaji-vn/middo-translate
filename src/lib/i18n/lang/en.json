@@ -385,7 +385,7 @@
     },
     "SWITCH_ROOM": {
       "TITLE": "Switch Room",
-      "DESCRIPTION": "You will switch to room <strong>{{name}}</strong>"
+      "DESCRIPTION": "Will you move to another meeting room?"
     },
     "DELETE_CONVERSATION": {
       "TITLE": "Delete Conversation",
