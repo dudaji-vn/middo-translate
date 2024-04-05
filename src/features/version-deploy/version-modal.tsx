@@ -63,7 +63,7 @@ export const VersionModal = ({ trigger }: VersionModalProps) => {
           <>
             <Typography variant="h6">Desktop App:</Typography>
             <Typography className="text-xs text-neutral-600">
-              Version: v{electron.getAppVersion()}
+              Version: {electron?.getAppVersion() ? ('v' + electron?.getAppVersion()) : 'Unknown'}
             </Typography>
           </>
         )}

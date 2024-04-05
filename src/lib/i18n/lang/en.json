@@ -527,6 +527,7 @@
   },
   "OFFLINE": {
     "TITLE": "You're offline",
-    "DESCRIPTION": "Please connect to a Wi-Fi or mobile network, check your internet connection or restart your device if need"
+    "DESCRIPTION": "Please connect to a Wi-Fi or mobile network, check your internet connection or restart your device if need",
+    "REFRESH": "Refresh"
   }
 }
