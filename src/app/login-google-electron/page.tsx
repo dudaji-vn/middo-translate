@@ -17,10 +17,10 @@ export default function LoginGoogleElectron() {
   const IS_LOADING = !accessToken && !refreshToken;
   const { t } = useTranslation('common');
   if (accessToken && refreshToken) {
-    // window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
+    window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
   }
   const openDesktop = () => {
-    // window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
+    window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
   };
   useEffect(() => {
     if (accessToken || refreshToken) return;
