@@ -92,7 +92,7 @@ export const MessageEmojiPicker = forwardRef<
                       handleEmojiClick(emoji.value);
                     }}
                     key={emoji.name}
-                    className="flex h-8 w-8  origin-bottom cursor-pointer items-center justify-center rounded-full text-[28px] transition-transform ease-linear hover:scale-150"
+                    className="disable-text-selection all flex h-8 w-8 origin-bottom cursor-pointer items-center justify-center rounded-full text-[28px] transition-transform ease-linear hover:scale-150"
                   >
                     {emoji.value}
                   </div>

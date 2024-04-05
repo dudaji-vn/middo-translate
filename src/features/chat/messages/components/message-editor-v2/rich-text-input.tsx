@@ -22,8 +22,6 @@ export interface RichTextInputProps {
   onChange?: (editor: Editor) => void;
   initialContent?: string;
   autoFocus?: boolean;
-  onBlur?: (editor?: Editor) => void;
-  onFocus?: (editor?: Editor) => void;
   suggestions?: MentionSuggestion[];
   onTyping?: (isTyping: boolean) => void;
   onStoppedTyping?: (isTyping: boolean) => void;
@@ -37,8 +35,6 @@ const RichTextInput = ({
   onChange,
   initialContent,
   autoFocus = false,
-  onBlur,
-  onFocus,
   onTyping,
   onStoppedTyping,
   suggestions = [],
@@ -61,12 +57,6 @@ const RichTextInput = ({
     autofocus: autoFocus ? 'end' : false,
     onCreate: ({ editor }) => {
       onCreated?.(editor as Editor);
-    },
-    onBlur: ({ editor }) => {
-      onBlur?.(editor as Editor);
-    },
-    onFocus: ({ editor }) => {
-      onFocus?.(editor as Editor);
     },
     extensions: [
       StarterKit,
