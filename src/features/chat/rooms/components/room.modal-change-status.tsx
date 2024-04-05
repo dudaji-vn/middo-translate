@@ -20,11 +20,7 @@ const MAPPED_ACTION_STATUS: Record<string, RoomStatus> = {
   'unarchive': 'active',
   'complete': 'completed',
 }
-const actionVariants: Record<string, AlertDialogActionProps['className']> = {
-  'archive': 'bg-orange-500 text-background active:!bg-orange-400 md:hover:bg-orange-600',
-  'unarchive': 'bg-primary-500-main text-white active:!bg-primary-400 md:hover:bg-primary-600',
-  'complete': 'bg-primary-500-main text-white active:!bg-primary-400 md:hover:bg-primary-600',
-}
+
 
 export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalChangeStatusProps) => {
   const { mutateAsync, isLoading } = useChangeStatusConversation();
@@ -61,7 +57,7 @@ export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalCha
       titleProps={{ className: 'capitalize' }}
       onCancel={() => { onClosed?.(); }}
       actionProps={{
-        className: actionVariants[actionName] || '',
+        className: 'bg-primary-500-main text-white active:!bg-primary-400 md:hover:bg-primary-600',
       }}
       isLoading={isLoading}
     />

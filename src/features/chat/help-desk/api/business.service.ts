@@ -1,14 +1,14 @@
-
-import { DEFAULT_CLIENTS_PAGINATION } from '@/app/(main-layout)/(protected)/business/statistics/@clients/page';
+import { User } from '@/features/users/types';
+import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { cookies } from 'next/headers';
 
 export type Client = {
-  firstConnectDate: string
-  lastConnectDate: string
-  _id: string
-  email: string
-  name: string
-}
+  firstConnectDate: string;
+  lastConnectDate: string;
+  _id: string;
+  email: string;
+  name: string;
+};
 
 export type AnalyticsFilterDate = {
   fromDate: string;
@@ -33,6 +33,7 @@ export type TBusinessExtensionData = {
   updatedAt?: string;
   deletedAt?: string;
   domains: string[];
+  user?: User;
   color: string;
   language: string;
   firstMessage: string;
@@ -41,7 +42,7 @@ export type TBusinessExtensionData = {
 };
 class BusinessAPI {
   private basePath: string;
-
+  
   constructor(basePath: string = process.env.NEXT_PUBLIC_API_URL + '/api') {
     this.basePath = basePath;
   }
@@ -153,6 +154,7 @@ class BusinessAPI {
         }),
       }).toString();
       const path = `${this.basePath}/help-desk/analytics?${query}`;
+      console.log('type-path', type, path);
       const response = await fetch(path, {
         method: 'GET',
         headers: {
@@ -184,7 +186,7 @@ class BusinessAPI {
     totalPage: number;
   }> {
     const cookieStore = cookies();
-    const path = `${this.basePath}/help-desk/my-clients?q=${search}&limit=${limit}&page=${currentPage}`;
+    const path = `${this.basePath}/help-desk/my-clients?q=${search}&limit=${limit}&currentPage=${currentPage}`;
     try {
       const response = await fetch(path, {
         method: 'GET',
@@ -206,6 +208,38 @@ class BusinessAPI {
       };
     }
   }
+  rateConversation = async ({
+    star,
+    businessId,
+    userId,
+  }: {
+    star: number;
+    businessId: string;
+    userId: string;
+  }) => {
+    const rawFormData = {
+      userId,
+      businessId,
+      star,
+    };
+    try {
+      const path = `${this.basePath}/help-desk/rating`;
+      const response = await fetch(path, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rawFormData),
+      });
+      const data = await response.json();
+      console.log('response', data);
+      if (!response.ok) {
+        throw new Error('Error in rate conversation');
+      }
+    } catch (error) {
+      console.error('Error in rate conversation', error);
+    }
+  };
 }
 const businessAPI = new BusinessAPI();
 

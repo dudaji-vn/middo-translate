@@ -72,7 +72,7 @@ export const TranslateOptionBar = forwardRef<
     }
     try {
       stopSpeechToText();
-      resetTranscript();
+      // resetTranscript();
     } catch {}
   };
   useKeyboardShortcut([SHORTCUTS.TOGGLE_SPEECH_TO_TEXT], () =>

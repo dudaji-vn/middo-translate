@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 export const useJoinCall = () => {
   const { user } = useAuthStore();
-  const { setRoom, room, setTempRoom, clearRequestCall } = useVideoCallStore();
+  const { setRoom, room, setTempRoom, tmpRoom,clearRequestCall } = useVideoCallStore();
   const router = useRouter();
   const {t} = useTranslation('common')
   const { room: roomChatBox, updateRoom } = useChatBox();
@@ -31,6 +31,10 @@ export const useJoinCall = () => {
   const startVideoCall = useCallback(
     async (roomId: string) => {
       if (room?.roomId == roomId) return;
+      if(room && !tmpRoom) {
+        setTempRoom(roomId);
+        return;
+      }
       let res = await joinVideoCallRoom({ roomId });
       const data = res?.data;
       if (data.status === STATUS.ROOM_NOT_FOUND) {
@@ -43,15 +47,6 @@ export const useJoinCall = () => {
         return;
       }
       clearRequestCall();
-      if (room) {
-        // If user is in a meeting => set temp room to show modal
-        setTempRoom({
-          type: data?.type,
-          call: data?.call,
-          room: data?.room,
-        });
-        return;
-      }
       setRoom(data?.call);
       if (
         data.type == JOIN_TYPE.NEW_CALL &&
@@ -68,7 +63,7 @@ export const useJoinCall = () => {
         });
       }
     },
-    [clearRequestCall, createRoomMeeting, room, setRoom, setTempRoom, user],
+    [clearRequestCall, createRoomMeeting, room, setRoom, setTempRoom, t, tmpRoom, user],
   );
 
   return startVideoCall;

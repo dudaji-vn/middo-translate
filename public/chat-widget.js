@@ -1,6 +1,21 @@
 (function () {
-  const styleTag = `
+  function intChatInterface(chatSRC, primaryColor = 'default') {
+    const colorMap = {
+      default: '#3D88ED',
+      halloween: '#ff5e00',
+      rose: '#ff005e',
+      violet: '#5e00ff',
+      sky: '#00b3ff',
+      forest: '#139e70',
+      lemon: '#e3df00',
+    };
+
+    const chatWidget = document.createElement('div');
+    const styleTag = `
           <style>
+              :root {
+                  --grey-color: ${colorMap[primaryColor]};
+              }
               #chat-widget {
                   position: fixed;
                   bottom: 20px;
@@ -25,7 +40,7 @@
                   border-radius: 9999px;
                   color: white;
                   cursor: pointer;
-                  background-color: #6b7280;
+                  background-color: var(--grey-color); /* Use custom color variable */
                   border-style: none;
               }
               .h-7 {
@@ -62,19 +77,16 @@
           </style>
       `;
 
-  const components = {
-    icon_close: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>`,
-    icon_message: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"></path></svg>`,
-  };
-
-  function intChatInterface(chatSRC) {
-
-    const chatWidget = document.createElement('div');
+    const components = {
+      icon_close: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>`,
+      icon_message: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square w-6 h-6"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
+    `,
+    };
 
     chatWidget.id = 'chat-widget';
     chatWidget.innerHTML = `
               <iframe id="chat-frame-widget" src="${chatSRC}" class="shadow-xl ring-1 rounded-lg" style="display: none; border: none; position: fixed; inset: auto 15px 75px auto; width: 400px; height: 540px; opacity: 1; color-scheme: none; background: white !important; margin: 0px; max-height: 100vh; max-width: 100vw; transform: translateY(0px); transition: none 0s ease 0s !important; visibility: visible; z-index: 999999999 !important;"></iframe>
-             
+            
               <button id="btn-trigger-chat" class="shadow-xl ring-1">${components.icon_message}</button>
               `;
 

@@ -133,13 +133,13 @@ export const InputCropImage = forwardRef<
 
   return (
     <>
-      <div className={cn('md:relative  md:h-[90%]', className)}>
+      <div className={cn('md:relative flex-1 py-5', className)}>
         {!image && (
           <label
             htmlFor={id}
-            className="mb-6 mt-5 flex border-spacing-3 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary p-4 py-[70px] transition-all hover:bg-slate-50 md:h-5/6"
+            className="flex border-spacing-3 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary p-4 py-[70px] transition-all hover:bg-slate-50 h-full"
           >
-            <span className="rounded-full  p-4">
+            <span className="rounded-full p-4">
               <Upload width={24} height={24} className="stroke-primary" />
             </span>
             <span className="mt-[10px] font-normal">{t("COMMON.UPLOAD_IMAGE")}</span>
@@ -153,18 +153,18 @@ export const InputCropImage = forwardRef<
           accept="image/png, image/gif, image/jpeg"
         />
         {image && (
-          <div className="relative mt-3 rounded-lg">
+          <div className="relative rounded-lg">
             <label
               htmlFor={id}
               className="z-100 absolute -top-[50px] right-0 block w-fit cursor-pointer rounded-full p-3 transition-all hover:bg-slate-100 "
             >
               <RotateCcw />
             </label>
-            <div className="overflow-hidden rounded-md md:pt-20">
+            <div className="overflow-hidden rounded-md">
               <Cropper
                 className="crop-container"
                 ref={cropperRef}
-                style={{ height: 400, width: '100%' }}
+                style={{ height: 330, width: '100%' }}
                 initialAspectRatio={1}
                 aspectRatio={1}
                 src={image}
@@ -231,7 +231,7 @@ export const InputCropImage = forwardRef<
           <p className="mt-2 text-center text-sm text-error">{errorMessage}</p>
         )}
       </div>
-      <div className="mt-6 flex items-center justify-end gap-3">
+      <div className="flex items-center justify-end gap-3">
         <AlertDialogCancel
           onClick={removeDragData}
           className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"

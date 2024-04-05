@@ -48,10 +48,8 @@ export const Content = ({ position, active, message }: ContentProps) => {
       setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
       return;
     }
-    if (position === 'left') {
-    }
     if (
-      message.language === userLanguage ||
+      (!isHelpDesk && message.language === userLanguage) ||
       message.sender._id === currentUserId ||
       (isHelpDesk && position === 'right')
     ) {
@@ -105,9 +103,14 @@ export const Content = ({ position, active, message }: ContentProps) => {
         !(message.language === DEFAULT_LANGUAGES_CODE.EN && isMe) && (
           <div className="relative mt-2">
             <TriangleSmall
-              fill={position === 'right' ? '#72a5e9' : '#e6e6e6'}
               position="top"
-              className="absolute left-4 top-0 -translate-y-full"
+              className={cn(
+                'absolute left-4 top-0 -translate-y-full fill-primary-400',
+              )}
+              pathProps={{
+                className:
+                  position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6]',
+              }}
             />
             <div
               className={cn(

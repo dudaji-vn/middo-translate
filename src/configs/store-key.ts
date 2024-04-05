@@ -8,3 +8,5 @@ export const ACCESS_TOKEN_NAME = 'access_token';
 export const REFRESH_TOKEN_NAME = 'refresh_token';
 
 export const LOGIN_FROM_DESKTOP = 'login_from_desktop';
+
+export const LIMIT_CLIENTS_TABLE = 'LIMIT_CLIENTS_TABLE';

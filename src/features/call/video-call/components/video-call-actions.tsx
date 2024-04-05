@@ -15,11 +15,15 @@ import ActionAddMembers from './actions/action-add-members';
 import ActionChat from './actions/action-chat';
 import InviteTooltip from './invite-tooltip';
 import DropdownActions from './actions/dropdown-actions';
-import processingStream from '../../utils/processing-stream';
 import getUserStream from '../../utils/get-user-stream';
 import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
-
+import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
+import ParticipantInVideoCall from '../../interfaces/participant';
+interface MediaStreamInterface {
+  video?: boolean;
+  audio?: boolean;
+}
 export default function VideoCallActions() {
   const {
     isTurnOnMic,
@@ -31,33 +35,22 @@ export default function VideoCallActions() {
   } = useMyVideoCallStore();
   const { participants, setStreamForParticipant } =
     useParticipantVideoCallStore();
-  const { setLoadingVideo } = useMyVideoCallStore();
+  const { setLoadingVideo, isLoadingStream, setLoadingStream } = useMyVideoCallStore();
   const {t} = useTranslation('common')
-  const handleChangeCameraOrMic = ({
-    video,
-    audio,
-  }: {
-    video?: boolean;
-    audio?: boolean;
-  }) => {
-    if (!socket.id) return;
-    if (!myStream) return;
-    // Check video or audio undefined
-    if (video === undefined) {
-      video = isTurnOnCamera;
-    }
-    if (audio === undefined) {
-      audio = isTurnOnMic;
-    }
+  const handleChangeCameraOrMic = (settings: MediaStreamInterface) => {
+    if (!socket.id || !myStream) return;
+    const video = settings?.video == undefined ? isTurnOnCamera : settings?.video;
+    const audio = settings?.audio == undefined ? isTurnOnMic : settings?.audio;
+    console.log('handleChangeCameraOrMic', video, audio);
+    if(isLoadingStream) return;
 
-    if (!audio) {
-      SpeechRecognition.stopListening();
-    }
-
-    if (video && isTurnOnCamera && myStream.getAudioTracks().length > 0) {
+    // CASE: No change in camera
+    if (video && isTurnOnCamera && myStream.getVideoTracks().length > 0) {
+      console.log('video-call-actions.tsx - Line 48 :: No change in camera');
       myStream.getAudioTracks().forEach((track) => {
         track.enabled = audio || false;
       });
+      setTurnOnMic(audio);
       return;
     }
     if (video != isTurnOnCamera) {
@@ -65,6 +58,7 @@ export default function VideoCallActions() {
     }
 
     myStream.getTracks().forEach((track) => track.stop());
+    setLoadingStream(true)
     if (!video && !audio) {
       let newUserMedia = new MediaStream();
       setStreamForParticipant(newUserMedia, socket.id || '', false);
@@ -78,11 +72,13 @@ export default function VideoCallActions() {
         }
       });
       setLoadingVideo(false);
+      setLoadingStream(false);
+      setTurnOnCamera(false);
+      setTurnOnMic(false);
       return;
     }
-    const streamConfig = getStreamConfig(video, audio);
     
-    getUserStream({isTurnOnCamera: video, isTurnOnMic: audio})
+    getUserStream({isTurnOnCamera: video, isTurnOnMic: true})
       .then((stream: MediaStream) => {
         const myVideoStream = stream;
         if (!audio && myVideoStream.getAudioTracks().length > 0) {
@@ -93,18 +89,28 @@ export default function VideoCallActions() {
         setStreamForParticipant(myVideoStream, socket.id || '', false);
         setMyStream(myVideoStream);
         setLoadingVideo(false);
+        setTurnOnCamera(video);
+        setTurnOnMic(audio);
+        // participants.forEach((participant: ParticipantInVideoCall) => {
+        //   if (participant.peer) {
+        //     participant.peer.addStream(myVideoStream);
+        //   }
+        // });
       })
       .catch(() => {
         toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         setTurnOnCamera(false);
         setTurnOnMic(false);
         setLoadingVideo(false);
+      })
+      .finally(() => {
+        setLoadingStream(false);
       });
   };
 
   return (
     <section className="relative z-20 flex items-center justify-between bg-primary-100 p-2">
-      <div className="flex w-full justify-center gap-6">
+      <div className="flex w-full md:justify-center justify-around md:gap-6">
         <DropdownActions />
         <ActionChat />
         <ActionDraw />

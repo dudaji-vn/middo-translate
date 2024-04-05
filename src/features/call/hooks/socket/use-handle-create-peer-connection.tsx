@@ -24,10 +24,7 @@ export default function useHandleCreatePeerConnection() {
         // Loop and create peer connection for each user
         users.forEach((user: { id: string; user: any }) => {
             if (user.id === socket.id) return;
-            const peer = createPeer();
-            if(myStream) {
-                peer.addStream(myStream);
-            }
+            const peer = createPeer(myStream);
             addParticipant({
                 peer,
                 user: user.user,
@@ -46,7 +43,8 @@ export default function useHandleCreatePeerConnection() {
 
     // SOCKET_CONFIG.EVENTS.CALL.USER_JOINED
     const addPeerUserConnection = useCallback((payload: IJoinCallPayload) => {
-        const peer = addPeer(payload.signal);
+        const peer = addPeer();
+        peer.signal(payload.signal);
         if(myStream) {
             peer.addStream(myStream);
         }

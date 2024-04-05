@@ -16,6 +16,8 @@ const ActionAddMembers = () => {
     setModalAddUser(!isShowModalAddUser);
   });
 
+  if(isFullScreen || room.type !== CALL_TYPE.GROUP) return null
+
   return (
     <Tooltip
       title={t('TOOL_TIP.ADD_MEMBER')}
@@ -24,9 +26,6 @@ const ActionAddMembers = () => {
           variant="default"
           size="xs"
           color={'default'}
-          className={`${
-            isFullScreen || room.type !== CALL_TYPE.GROUP ? 'hidden' : ''
-          }`}
           onClick={() => setModalAddUser(true)}
         >
           <UserPlus2 />

@@ -12,11 +12,13 @@ import { createPeer } from "../../utils/peer-action.util";
 import processingStream from "../../utils/processing-stream";
 import getUserStream from "../../utils/get-user-stream";
 import { useTranslation } from "react-i18next";
+import { SOCKET_CONFIG } from "@/configs/socket";
 
 export default function useHandleStreamMyVideo() {
     const { myStream, setMyStream, setShareScreenStream, setShareScreen, setTurnOnCamera, setTurnOnMic, setLoadingVideo } = useMyVideoCallStore();
     const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
-    const { clearStateVideoCall } = useVideoCallStore();
+    const { user } = useAuthStore();
+    const { clearStateVideoCall, room } = useVideoCallStore();
     const {t} = useTranslation('common');
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
@@ -28,11 +30,15 @@ export default function useHandleStreamMyVideo() {
             setMyStream(myVideoStream);
             setStreamForParticipant(myVideoStream, socket.id || '', false)
             setLoadingVideo(false);
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
+                callId: room?._id,
+                user,
+                roomId: room.roomId,
+            });
         }).catch((err: any) =>  {
             setTurnOnCamera(false);
             setTurnOnMic(false);
             setLoadingVideo(false);
-            console.log(err)
             toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         })
 
@@ -49,19 +55,19 @@ export default function useHandleStreamMyVideo() {
             setMyStream(undefined);
             resetParticipants();
         };
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, room?._id, room?.roomId, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t, user?._id]);
 
     // Add my stream to all participants
     useEffect(()=>{
         if(!myStream) return;
         participants.forEach((p: ParticipantInVideoCall) => {
             if(!p.peer || p.isShareScreen) return;
+            // console.log('Add my stream to all participants===============================')
             p.peer.destroy();
-            const newPeer = createPeer();
-            if(myStream) {
-                newPeer.addStream(myStream);
-            }
+            const newPeer = createPeer(myStream);
             updatePeerParticipant(newPeer, p.socketId)
+            // p.peer.addStream(myStream);
         })
         return () => {
             if(!myStream) return;

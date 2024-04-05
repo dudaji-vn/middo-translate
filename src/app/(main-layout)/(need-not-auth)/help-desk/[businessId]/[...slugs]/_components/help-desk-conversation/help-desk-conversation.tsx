@@ -22,15 +22,16 @@ import { User } from '@/features/users/types';
 import { useEffect } from 'react';
 import useClient from '@/hooks/use-client';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { cn } from '@/utils/cn';
 
-const HelpDeskConversation = ({ room,  anonymousUser, isAnonymousPage }: {
+const HelpDeskConversation = ({ room, anonymousUser, isAnonymousPage, ...props }: {
     room: Room;
     anonymousUser?: User;
     isAnonymousPage?: boolean;
     params: {
         slugs: string[];
     };
-}) => {
+} & React.HTMLAttributes<HTMLDivElement>) => {
     const { setRoom } = useBusinessExtensionStore();
     const isClient = useClient()
     useEffect(() => {
@@ -41,7 +42,7 @@ const HelpDeskConversation = ({ room,  anonymousUser, isAnonymousPage }: {
     if (!isClient) return null;
 
     return (
-        <div className="w-full h-main-container-height">
+        <div {...props} className={cn("w-full h-main-container-height", props.className)}>
             <ChatBoxProvider room={room}>
                 <div className="flex h-full">
                     <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">

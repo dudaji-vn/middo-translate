@@ -1,13 +1,14 @@
 import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/configs/store-key';
 import { cookies } from 'next/headers';
 
-export async function GET(request: Request) {
-  const cookieStore = cookies();
+export async function POST(request: Request) {
+  const {keys} = await request.json();
+  const data: Record<string, string> = {};
+  keys.forEach((key: string) => {
+    data[key] = cookies().get(key)?.value || '';
+  });
   return Response.json({
     message: 'Get cookie success!',
-    data: {
-      accessToken: cookieStore.get(ACCESS_TOKEN_NAME)?.value,
-      refreshToken: cookieStore.get(REFRESH_TOKEN_NAME)?.value,
-    },
+    data,
   });
 }

@@ -8,7 +8,7 @@ import { Button } from '@/components/form/button';
 import { InputField } from '@/components/form/Input-field';
 import { PageLoading } from '@/components/loading/page-loading';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { resetPasswordService } from '@/services/auth.service';
+import { resetPasswordService, setCookieService } from '@/services/auth.service';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -69,10 +69,6 @@ export default function ResetPassword() {
     if (!token) {
       router.push(ROUTE_NAMES.SIGN_IN);
     }
-    localStorage.setItem(ACCESS_TOKEN_NAME, token || '');
-    return () => {
-      localStorage.removeItem(ACCESS_TOKEN_NAME);
-    };
   }, [router, searchParams]);
 
   const handleSubmitForm = async (e: React.FormEvent) => {
@@ -81,8 +77,9 @@ export default function ResetPassword() {
     if (!isValid) return;
     setLoading(true);
     try {
+      const token = searchParams?.get('token');
+      await setCookieService([{key: ACCESS_TOKEN_NAME, value: token || '', time: 15 }]);
       await resetPasswordService(watch().password);
-      localStorage.removeItem(ACCESS_TOKEN_NAME);
       router.push(ROUTE_NAMES.SIGN_IN);
       toast.success(t('MESSAGE.SUCCESS.CHANGE_PASSWORD'));
       setErrorMessage('');

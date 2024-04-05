@@ -23,7 +23,8 @@ export const useBusinessNavigationData = () => {
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
   const isOnBusinessChat =
     params?.[PK_BUSINESS_CONVERSATIONS] && businessSlugs?.length > 0;
-  const isOnHelpDeskChat = isHelpDesk && businessSlugs?.length === 2;
+  const isOnHelpDeskChat =
+    isHelpDesk && businessSlugs?.length === 2 && !pathname?.includes('/rate/');
   const isUserChattingWithGuest = isBusiness && businessSlugs?.length == 1;
 
   const guestId = isUserChattingWithGuest ? businessSlugs?.[0] : null;
@@ -31,7 +32,7 @@ export const useBusinessNavigationData = () => {
   const businessConversationType = isBusiness
     ? params?.[PK_BUSINESS_CONVERSATIONS]
     : null;
-
+  const businessRoomId = isOnBusinessChat ? businessSlugs?.[0] : null;
   return {
     isBusiness,
     isHelpDesk,
@@ -40,6 +41,7 @@ export const useBusinessNavigationData = () => {
     isOnHelpDeskChat,
     isUserChattingWithGuest,
     guestId,
+    businessRoomId,
     anonymousId,
     businessConversationType,
     inboxStatus:
