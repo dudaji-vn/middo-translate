@@ -7,7 +7,7 @@ import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 import { Button } from '@/components/form/button';
 import Image from 'next/image';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { verifyEmailService } from '@/services/auth.service';
+import { setCookieService, verifyEmailService } from '@/services/auth.service';
 import { useTranslation } from 'react-i18next';
 
 export default function Verify() {
@@ -20,16 +20,15 @@ export default function Verify() {
     if (!token) {
       router.push(ROUTE_NAMES.SIGN_IN);
     }
-    localStorage.setItem(ACCESS_TOKEN_NAME, token || '');
     const verifyEmailWithToken = async () => {
       try {
+        const token = searchParams?.get('token');
+        await setCookieService([{key: ACCESS_TOKEN_NAME, value: token || '', time: 15 }]);
         await verifyEmailService();
         setStatusVerify('success');
       } catch (error) {
         setStatusVerify('expired');
-      } finally {
-        localStorage.removeItem(ACCESS_TOKEN_NAME);
-      }
+      } finally {}
     };
     verifyEmailWithToken();
   }, [router, searchParams]);

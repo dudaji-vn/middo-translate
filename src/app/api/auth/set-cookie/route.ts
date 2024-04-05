@@ -7,9 +7,10 @@ export async function POST(request: Request) {
   const data: DataRequestSetCookie[] = await request.json();
   const tokens: {access_token?: string, refresh_token?: string} = {}
   data.forEach((item: DataRequestSetCookie) => {
-    if(item.key === ACCESS_TOKEN_NAME || item.key === REFRESH_TOKEN_NAME) {
+    if((item.key === ACCESS_TOKEN_NAME || item.key === REFRESH_TOKEN_NAME) && !item.time) {
       tokens[item.key] = item.value;
     } else {
+      console.log("Set cookie: ", item.key, item.value, item?.time || 60 * 60 * 24 * 30);
       cookies().set(item.key, item.value, {
         maxAge: item?.time || 60 * 60 * 24 * 30,
       });

@@ -392,7 +392,7 @@
     },
     "SWITCH_ROOM": {
       "TITLE": "Chuyển phòng",
-      "DESCRIPTION": "Bạn sẽ chuyển sang phòng <strong>{{name}}</strong>"
+      "DESCRIPTION": "Bạn sẽ chuyển sang phòng họp khác?"
     },
     "DELETE_CONVERSATION": {
       "TITLE": "Xoá hội thoại",
@@ -508,9 +508,9 @@
   "DESKTOP_LOGIN": {
     "TITLE_LOADING": "Đang chuyển hướng",
     "DESCRIPTION_LOADING": "Vui lòng đợi trong giây lát, chúng tôi đang chuyển hướng bạn đến trang đăng nhập",
-    "TITLE_LOGIN_SUCCESS": "Đăng nhập thành công",
+    "TITLE_LOGIN_SUCCESS": "Đăng nhập thành công!",
     "DESCRIPTION_LOGIN_SUCCESS": "Hãy bấm vào nút bên dưới để mở ứng dụng",
-    "OPEN_MIDDO": "Mở Middo",
+    "OPEN_MIDDO": "Mở ứng dụng Desktop",
     "BACK_TO_HOME": "Đi đến trang chủ"
   },
   "INBOX_EMPTY": {
@@ -524,5 +524,9 @@
     "TIP_TITLE_GROUP": "Cách sử dụng \"Nhóm\"",
     "TITLE_GROUP": "Hiện tại, bạn không có Cuộc trò chuyện Nhóm nào",
     "DESCRIPTION_GROUP": "Nhấp vào nút dưới đây để tạo một cuộc trò chuyện mới hoặc yêu cầu Quản trị viên của một Cuộc trò chuyện Nhóm thêm bạn vào"
+  },
+  "OFFLINE": {
+    "TITLE": "Bạn đang ngoại tuyến",
+    "DESCRIPTION": "Vui lòng kết nối với mạng Wi-Fi hoặc di động, kiểm tra kết nối internet của bạn hoặc khởi động lại thiết bị nếu cần"
   }
 }

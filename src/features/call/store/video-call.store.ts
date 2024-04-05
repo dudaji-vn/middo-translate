@@ -16,7 +16,7 @@ export type VideoCallState = {
   isFullScreen: boolean;
   isPinDoodle: boolean;
   isPinShareScreen: boolean;
-  tmpRoom: any;
+  tmpRoom: string | null;
   isShowChat: boolean;
   isShowCaption: boolean;
   requestCall: any[];
@@ -35,7 +35,7 @@ export type VideoCallState = {
   setFullScreen: (isFullScreen: boolean) => void;
   setPinDoodle: (isPinDoodle: boolean) => void;
   setPinShareScreen: (isPinShareScreen: boolean) => void;
-  setTempRoom: (tmpRoom: any) => void;
+  setTempRoom: (tmpRoom: string | null) => void;
   setShowChat: (isShowChat: boolean) => void;
   setShowCaption: (isShowCaption: boolean) => void;
   addRequestCall: (data: any) => void;
@@ -107,7 +107,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
     if (isPinShareScreen) set(() => ({ isPinDoodle: false }));
     set(() => ({ isPinShareScreen }));
   },
-  setTempRoom: (tmpRoom: any) => {
+  setTempRoom: (tmpRoom: string | null) => {
     set(() => ({ tmpRoom }));
   },
   setShowChat: (isShowChat: boolean) => {
