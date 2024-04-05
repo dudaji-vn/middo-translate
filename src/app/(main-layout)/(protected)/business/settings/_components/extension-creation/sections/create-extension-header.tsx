@@ -112,7 +112,7 @@ const CreateExtensionHeader = ({
             <Typography className='text-neutral-600 capitalize min-w-max'>{mappedTitle[modalType || 'create-extension']}</Typography>
             <TabsList className='border-none gap-5 relative justify-between md:mx-10 xl:mx-14'>
                 <div className='absolute h-[50%] !z-0 inset-0 border-b-neutral-50 border-b-[1px] border-dashed w-full'></div>
-                <div style={{ width: `${stepPercentage}%` }} className='absolute  h-[50%] !z-10 top-0 left-0 border-b-[2px] border-b-success-200 transition-all duration-1000' ></div>
+                <div style={{ width: `${stepPercentage}%` }} className='absolute  h-[50%] !z-10 top-0 left-0 border-b-[2px] border-b-neutral-200 transition-all duration-1000' ></div>
                 {createExtensionSteps.map((item, index) => {
                     const isActive = step === index;
                     let isDone = step > index || isSubmitting || isSubmitSuccessful; 
