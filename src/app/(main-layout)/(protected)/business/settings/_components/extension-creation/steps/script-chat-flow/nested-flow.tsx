@@ -22,8 +22,8 @@ import { Form } from '@/components/ui/form';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
-import { isEmpty } from 'lodash';
-
+import { isEmpty, isEqual } from 'lodash';
+import { deepDeleteNodes } from './nodes.utils';
 const schemaFlow = z.object({
     nodes: z.array(z.object({
         id: z.string(),
@@ -76,7 +76,6 @@ const initialNodes: FlowNode[] = [
 
 const initialEdges = [
     { id: 'e1-2', source: '1', target: '2', animated: true, label: 'Start conversation' },
-    // { id: 'e1-4', source: '1', target: '4'},
 ];
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
@@ -126,9 +125,8 @@ const NestedFlow = () => {
             if (nodesToDelete.some((node) => initialNodes.find(n => n.id === node.id))) {
                 return;
             }
-            const connected = getConnectedEdges(nodesToDelete, edges);
-            const newNodes = nodes.filter((node) => !connected.some((edge) => edge.source === node.id || edge.target === node.id));
-            setValue('nodes', newNodes);
+            const newNodes = deepDeleteNodes(nodes, nodesToDelete, edges);
+            setValue('nodes', newNodes as FlowNode[]);
         },
         [setValue, nodes, edges]
     );
@@ -163,15 +161,12 @@ const NestedFlow = () => {
                         flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
                     }
                     break;
-                // case 'message':
-                //     if (!node.data?.content?.trim()?.length) {
-                //         flowErrors.push({ id: node.id, message: 'Message should have a content' });
-                //     }
-                //     break;
                 case 'button':
                     if (!node.data?.content?.trim()?.length) {
                         flowErrors.push({ id: node.id, message: 'Button should have a label' });
                     }
+                    break;
+                case 'message':
                     break;
                 default:
                     break;
@@ -192,6 +187,8 @@ const NestedFlow = () => {
     }, [nodes, checkingMode]);
 
     const onPreviewClick = () => {
+
+
         trigger('nodes')
         if (!checkingMode) {
             setCheckingMode(true);
@@ -204,10 +201,25 @@ const NestedFlow = () => {
         if (!isEmpty(errors)) {
             toast.error('Please complete the flow!');
             setOpenPreview(true);
+            return;
         }
         toast.success('Previewing');
 
     }
+    // load from local storage
+    useEffect(() => {
+        const flow = localStorage.getItem('flowww');
+        if (flow) {
+            try {
+                const { nodes, edges } = JSON.parse(flow);
+                setValue('nodes', nodes || initialNodes);
+                setValue('edges', edges || initialEdges);
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+    }, []);
 
 
     return (
