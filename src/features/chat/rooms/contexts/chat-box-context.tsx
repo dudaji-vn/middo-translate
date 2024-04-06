@@ -15,6 +15,7 @@ import socket from '@/lib/socket-io';
 import { useRouter } from 'next/navigation';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useNetworkStatus } from '@/utils/use-network-status';
+import { useAppStore } from '@/stores/app.store';
 
 interface ChatBoxContextProps {
   room: Room;
@@ -31,6 +32,7 @@ export const ChatBoxProvider = ({
 }: PropsWithChildren<{ room: Room }>) => {
   const notifyToken = usePlatformStore((state) => state.notifyToken);
   const { isOnline } = useNetworkStatus();
+  const { socketConnected } = useAppStore();
 
   const [room, setRoom] = useState<Room>(_room);
   const updateRoom = useCallback((room: Partial<Room>) => {
@@ -61,7 +63,7 @@ export const ChatBoxProvider = ({
         notifyToken,
       });
     };
-  }, [notifyToken, room._id, isOnline]);
+  }, [notifyToken, room._id, isOnline, socketConnected]);
 
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.UPDATE, updateRoom);
