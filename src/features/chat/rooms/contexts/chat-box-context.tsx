@@ -50,7 +50,7 @@ export const ChatBoxProvider = ({
     [room._id, router],
   );
   useEffect(() => {
-    if (isOnline) {
+    if (socketConnected) {
       socket.emit(SOCKET_CONFIG.EVENTS.CHAT.JOIN, {
         roomId: room._id,
         notifyToken,
