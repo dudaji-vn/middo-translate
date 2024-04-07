@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  MessageEditor,
-  MessageEditorSubmitData,
-} from '@/features/chat/messages/components/message-editor-v2';
-import { forwardRef, useEffect, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useState } from 'react';
 
 import { useMediaUpload } from '@/components/media-upload';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -18,6 +14,10 @@ import { useAuthStore } from '@/stores/auth.store';
 import { Media } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { useChatBox } from '../../contexts/chat-box-context';
+import {
+  MessageEditor,
+  MessageEditorSubmitData,
+} from '@/components/message-editor';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -33,7 +33,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
   ({ isAnonymous, guest, ...props }, ref) => {
     const currentUser = useAuthStore((s) => s.user);
     const { room, updateRoom } = useChatBox();
-    const { addMessage } = useMessagesBox();
+    const { addMessage, replaceMessage } = useMessagesBox();
     const { uploadedFiles } = useMediaUpload();
 
     const [localImageMessageWaiting, setLocalImageMessageWaiting] =
@@ -50,105 +50,136 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       mutationFn: isAnonymous
         ? messageApi.sendAnonymousMessage
         : messageApi.send,
+      onSuccess(data, variables) {
+        const clientTempId = variables.clientTempId;
+        if (clientTempId) {
+          replaceMessage(data, clientTempId);
+        }
+      },
     });
 
-    const handleSendText = async ({
-      roomId,
-      content,
-      contentEnglish,
-      language,
-      mentions,
-    }: {
-      roomId: string;
-      content: string;
-      contentEnglish: string;
-      language: string;
-      mentions: string[];
-    }) => {
-      if (!currentUser && !guest) return;
-      const localMessage = createLocalMessage({
-        sender: currentUser! || guest!,
-        content,
-        contentEnglish,
-        language,
-      });
-
-      addMessage(localMessage);
-      const payload = {
-        content,
-        contentEnglish,
+    const handleSendText = useCallback(
+      async ({
         roomId,
-        clientTempId: localMessage._id,
-        language,
-        mentions,
-        ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
-      };
-      mutateAsync(payload);
-    };
-
-    const handleSubmit = async (data: MessageEditorSubmitData) => {
-      const {
         content,
-        images,
-        documents,
         contentEnglish,
         language,
         mentions,
-        videos,
-      } = data;
-      let roomId = room._id;
-
-      if (room.status === 'temporary') {
-        const res = await roomApi.createRoom({
-          participants: room.participants.map((p) => p._id),
-        });
-        roomId = res._id;
-        updateRoom(res);
-      }
-
-      const trimContent = content.trim();
-      if (trimContent) {
-        handleSendText({
-          roomId,
-          content: trimContent,
-          contentEnglish,
-          language: language || 'en',
-          mentions: mentions || [],
-        });
-      }
-
-      if (images.length) {
-        const localImageMessage = createLocalMessage({
+      }: {
+        roomId: string;
+        content: string;
+        contentEnglish: string;
+        language: string;
+        mentions: string[];
+      }) => {
+        if (!currentUser && !guest) return;
+        const localMessage = createLocalMessage({
           sender: currentUser! || guest!,
-          media: images,
+          content,
+          contentEnglish,
+          language,
         });
-        addMessage(localImageMessage);
-        setLocalImageMessageWaiting(localImageMessage);
-      }
-      if (documents.length) {
-        const localDocumentMessages = documents.map((doc) => {
-          const localDocumentMessage = createLocalMessage({
-            sender: currentUser! || guest!,
-            media: [doc],
-          });
-          addMessage(localDocumentMessage);
-          return localDocumentMessage;
-        });
-        setLocalDocumentMessagesWaiting(localDocumentMessages);
-      }
+        addMessage(localMessage);
+        const payload = {
+          content,
+          contentEnglish,
+          roomId,
+          clientTempId: localMessage._id,
+          language,
+          mentions,
+          ...(isAnonymous && {
+            userId: currentUser?._id || guest?._id,
+          }),
+        };
+        mutateAsync(payload);
+      },
+      [addMessage, currentUser, guest, isAnonymous, mutateAsync],
+    );
 
-      if (videos.length) {
-        const localVideoMessages = videos.map((video) => {
-          const localVideoMessage = createLocalMessage({
-            sender: currentUser! || guest!,
-            media: [video],
+    const handleSubmit = useCallback(
+      async (data: MessageEditorSubmitData) => {
+        const {
+          content,
+          images,
+          documents,
+          contentEnglish,
+          language,
+          mentions,
+          videos,
+        } = data;
+        let roomId = room._id;
+
+        if (room.status === 'temporary') {
+          const res = await roomApi.createRoom({
+            participants: room.participants.map((p) => p._id),
           });
-          addMessage(localVideoMessage);
-          return localVideoMessage;
-        });
-        setLocalVideoMessageWaiting(localVideoMessages);
-      }
-    };
+          roomId = res._id;
+          updateRoom(res);
+        }
+
+        const trimContent = content.trim();
+
+        if (trimContent) {
+          handleSendText({
+            roomId,
+            content: trimContent,
+            contentEnglish,
+            language: language || 'en',
+            mentions: mentions || [],
+          });
+        }
+
+        if (images.length) {
+          const localImageMessage = createLocalMessage({
+            sender: currentUser! || guest!,
+            media: images,
+          });
+          addMessage(localImageMessage);
+          setLocalImageMessageWaiting(localImageMessage);
+        }
+
+        if (documents.length) {
+          const localDocumentMessages = documents.map((doc) => {
+            const localDocumentMessage = createLocalMessage({
+              sender: currentUser! || guest!,
+              media: [doc],
+            });
+            addMessage(localDocumentMessage);
+            return localDocumentMessage;
+          });
+          setLocalDocumentMessagesWaiting(localDocumentMessages);
+        }
+
+        if (videos.length) {
+          const localVideoMessages = videos.map((video) => {
+            const localVideoMessage = createLocalMessage({
+              sender: currentUser! || guest!,
+              media: [video],
+            });
+            addMessage(localVideoMessage);
+            return localVideoMessage;
+          });
+          setLocalVideoMessageWaiting(localVideoMessages);
+        }
+
+        const messageBox = document.getElementById('inbox-list' || '');
+        setTimeout(() => {
+          messageBox?.scrollTo({
+            top: messageBox.scrollHeight,
+          });
+        }, 1);
+      },
+      [
+        addMessage,
+        currentUser,
+        guest,
+        handleSendText,
+        room._id,
+        room.participants,
+        room.status,
+        updateRoom,
+      ],
+    );
 
     useEffect(() => {
       if (!localImageMessageWaiting || !uploadedFiles.length) return;
@@ -247,25 +278,17 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [localVideoMessageWaiting, uploadedFiles, room?._id]);
-
     return (
       <div className="relative w-full border-t p-2">
         <MessageEditor
-          onTyping={(isTyping) => {
-            socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {
-              roomId: room._id,
-              isTyping,
-            });
-          }}
-          onStoppedTyping={(isTyping) => {
-            socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {
-              roomId: room._id,
-              isTyping,
-            });
-          }}
           userMentions={room.isGroup ? room.participants : []}
-          scrollId="inbox-list"
           onSubmitValue={handleSubmit}
+          onTypingChange={(isTyping) => {
+            socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {
+              roomId: room._id,
+              isTyping,
+            });
+          }}
         />
       </div>
     );

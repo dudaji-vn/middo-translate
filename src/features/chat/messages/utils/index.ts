@@ -17,8 +17,9 @@ export const createLocalMessage = ({
   language = 'en',
   media = [],
 }: CreateLocalMessageParams): Message => {
+  const clientTempId = new Date().toISOString();
   return {
-    _id: new Date().toISOString(),
+    _id: clientTempId,
     sender: sender!,
     content,
     contentEnglish,
@@ -27,6 +28,7 @@ export const createLocalMessage = ({
     media,
     createdAt: new Date().toISOString(),
     language,
+    clientTempId,
   };
 };
 

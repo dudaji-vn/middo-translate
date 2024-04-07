@@ -1,26 +1,30 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { FileIcon, defaultStyles } from 'react-file-icon';
+import { forwardRef, useEffect, useMemo } from 'react';
+import { SelectedFile, useMediaUpload } from './media-upload';
+import { Button } from './actions';
 import { PlayCircleIcon, PlusCircleIcon, XIcon } from 'lucide-react';
-
-import { Button } from '@/components/actions';
+import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
-import { SelectedFile, useMediaUpload } from '@/components/media-upload';
-import { useEffect, useMemo } from 'react';
-import { useMessageEditor } from '.';
+import { Editor } from '@tiptap/react';
+export interface AttachmentSelectionProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  editor: Editor | null;
+}
 
-export const MediaSlot = () => {
+export const AttachmentSelection = forwardRef<
+  HTMLDivElement,
+  AttachmentSelectionProps
+>(({ editor }, ref) => {
   const { files, removeFile, open } = useMediaUpload();
-  const { richText } = useMessageEditor();
-  console.log('render attachment selection');
 
   useEffect(() => {
-    richText?.commands.focus();
-  }, [files, richText?.commands]);
-
+    if (files.length > 0) editor?.commands.focus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [files.length]);
   return (
     <AnimatePresence>
       {files.length > 0 && (
-        <div className="flex w-full flex-1 gap-2 overflow-scroll pt-4">
+        <div className="flex w-full flex-1 gap-2 overflow-auto overflow-y-hidden pt-2">
           <Button.Icon
             onClick={open}
             type="button"
@@ -30,7 +34,7 @@ export const MediaSlot = () => {
           >
             <PlusCircleIcon />
           </Button.Icon>
-          <div className="flex w-[10px] flex-1 flex-row-reverse  justify-end gap-2">
+          <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
             <AnimatePresence>
               {files.map((file) => {
                 return (
@@ -39,15 +43,17 @@ export const MediaSlot = () => {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0 }}
                     key={file.url}
-                    className="relative aspect-square h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl shadow"
+                    className="group relative aspect-square h-[60px] w-[60px]"
                   >
-                    <MediaItem file={file} />
+                    <div className="aspect-square h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl shadow">
+                      <MediaItem file={file} />
+                    </div>
                     <button
                       tabIndex={-1}
                       type="button"
                       onClick={() => removeFile(file)}
                     >
-                      <div className="absolute right-0 top-0 rounded-full bg-background shadow-1">
+                      <div className="absolute -right-1 -top-1 rounded-full border bg-background opacity-0 shadow-1 transition-all group-hover:opacity-100">
                         <XIcon width={16} height={16} />
                       </div>
                     </button>
@@ -60,7 +66,8 @@ export const MediaSlot = () => {
       )}
     </AnimatePresence>
   );
-};
+});
+AttachmentSelection.displayName = 'AttachmentSelection';
 
 const MediaItem = ({ file }: { file: SelectedFile }) => {
   const ItemComp = useMemo(() => {
@@ -95,7 +102,7 @@ const MediaItem = ({ file }: { file: SelectedFile }) => {
               />
             </div>
 
-            <div className="absolute bottom-0 left-0  w-full rounded-b-md bg-black/50 p-1">
+            <div className="absolute bottom-0 left-0  w-full rounded-b-xl bg-black/50 p-1">
               <span
                 title={file.file.name}
                 className="line-clamp-1 text-xs text-white"

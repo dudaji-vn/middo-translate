@@ -363,13 +363,13 @@
   @apply font-normal text-current underline hover:opacity-90;
 }
 
-em-emoji-picker {
-  @apply h-[320px] w-full max-w-screen-sm md:w-[300px];
-}
-
 .animation-up {
   animation: up 0.5s linear;
   -webkit-animation: up 0.5s linear;
+}
+
+em-emoji-picker section {
+  @apply !min-w-[100vw] md:min-w-0;
 }
 
 @keyframes up {
