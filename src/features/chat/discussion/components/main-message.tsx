@@ -81,7 +81,11 @@ const TextMessage = ({ message }: { message: Message }) => {
   }, [userLanguage, message, t]);
   return (
     <div className="flex flex-col">
-      <RichTextView mentionClassName="left" content={contentDisplay} />
+      <RichTextView
+        editorStyle="text-base md:text-sm"
+        mentionClassName="left"
+        content={contentDisplay}
+      />
       {message?.contentEnglish &&
         message.status !== 'removed' &&
         showMiddleTranslation && (
@@ -93,6 +97,7 @@ const TextMessage = ({ message }: { message: Message }) => {
             />
             <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
               <RichTextView
+                editorStyle="text-base md:text-sm"
                 mentionClassName="left"
                 content={message.contentEnglish}
               />

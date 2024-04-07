@@ -56,6 +56,7 @@ export type Message = {
   isPinned?: boolean;
   mentions?: User[];
   action?: ActionTypes;
+  clientTempId?: string;
 } & BaseEntity;
 
 export type PinMessage = {

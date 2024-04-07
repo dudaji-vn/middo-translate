@@ -1,8 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-import {
-  MessageEditor,
-  MessageEditorSubmitData,
-} from '../../messages/components/message-editor-v2';
 import { messageApi } from '../../messages/api';
 import { useDiscussion } from './discussion';
 import { createLocalMessage } from '../../messages/utils';
@@ -11,6 +7,10 @@ import { useEffect, useState } from 'react';
 import { Message } from '../../messages/types';
 import { useMediaUpload } from '@/components/media-upload';
 import { Media } from '@/types';
+import {
+  MessageEditor,
+  MessageEditorSubmitData,
+} from '@/components/message-editor';
 
 export interface DiscussionFormProps {}
 
