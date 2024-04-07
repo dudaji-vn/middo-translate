@@ -5,7 +5,6 @@ import React from 'react'
 import CustomFirstMessageOptions from '../sections/custom-first-message-options';
 import { useFormContext } from 'react-hook-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
-import Flow from './script-chat-flow/flow';
 import NestedFlow from './script-chat-flow/nested-flow';
 
 const StartingMessageStep = () => {
@@ -35,8 +34,7 @@ const StartingMessageStep = () => {
                         }}
                     />
                 </TabsContent>
-                <TabsContent value='custom' className='w-full h-[60vh]'>
-                    {/* <Flow /> */}
+                <TabsContent value='custom' className='w-full h-[70vh]'>
                     <NestedFlow />
                 </TabsContent>
             </Tabs>

@@ -205,7 +205,7 @@ export const MessageBox = ({
                           message._id ===
                             group.messages[group.messages.length - 1]._id
                         }
-                        key={message._id}
+                        key={message?.clientTempId || message._id}
                         message={newMessage}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}

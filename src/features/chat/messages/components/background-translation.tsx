@@ -18,7 +18,7 @@ export const BackgroundTranslation = ({}: BackgroundTranslationProps) => {
   const debouncedValue = useDebounce<string>(content, 100); // increase debounce time to decrease cost
   useEffect(() => {
     const handleChange = async (content: string) => {
-      setTranslating(true);
+      setTranslating && setTranslating(true);
       try {
         const detectedLang = await detectLanguage(richText?.getText() || '');
         setSrcLang(detectedLang);

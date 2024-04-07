@@ -89,6 +89,15 @@ export const useCursorPaginationQuery = <TData>({
           };
         });
         if (!hasReplace) {
+          const isExist = oldDeepCopy.pages.some((page) =>
+            page.items.some((item) => {
+              const itemWithBaseEntity = item as TypeWithBaseEntity<TData>;
+              return (
+                itemWithBaseEntity._id === (_item._id as unknown as string)
+              );
+            }),
+          );
+          if (isExist) return oldDeepCopy;
           newPage.unshift({
             pageInfo: {
               endCursor: _item._id,
