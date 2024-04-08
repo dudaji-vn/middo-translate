@@ -17,10 +17,10 @@ export default function LoginGoogleElectron() {
   const IS_LOADING = !accessToken && !refreshToken;
   const { t } = useTranslation('common');
   if (accessToken && refreshToken) {
-    window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
+    window.location.href = `middo://?token=${accessToken}&refresh_token=${refreshToken}`;
   }
   const openDesktop = () => {
-    window.location.href = `middo://token?token=${accessToken}&refresh_token=${refreshToken}`;
+    window.location.href = `middo://?token=${accessToken}&refresh_token=${refreshToken}`;
   };
   useEffect(() => {
     if (accessToken || refreshToken) return;
@@ -32,15 +32,10 @@ export default function LoginGoogleElectron() {
   }, [accessToken, refreshToken, router]);
 
   return (
-    <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')] h-screen">
-      <div className="w-full bg-background px-[5vw] py-8 my-auto md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+    <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+      <div className="my-auto w-full bg-background px-[5vw] py-8 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
         <div className="mx-auto w-[100px]">
-          <Image
-            src="/logo.png"
-            alt=""
-            width={1000}
-            height={1000}
-          ></Image>
+          <Image src="/logo.png" alt="" width={1000} height={1000}></Image>
         </div>
         <p className="mt-8 text-center text-[22px] font-medium">
           {IS_LOADING
@@ -53,7 +48,14 @@ export default function LoginGoogleElectron() {
             : t('DESKTOP_LOGIN.DESCRIPTION_LOGIN_SUCCESS')}
         </p>
         {!IS_LOADING && (
-          <Button onClick={openDesktop} shape={'square'} size={'sm'} className='mx-auto block mt-8'>{t('DESKTOP_LOGIN.OPEN_MIDDO')}</Button>
+          <Button
+            onClick={openDesktop}
+            shape={'square'}
+            size={'sm'}
+            className="mx-auto mt-8 block"
+          >
+            {t('DESKTOP_LOGIN.OPEN_MIDDO')}
+          </Button>
         )}
         {/* <div className="mt-8 flex justify-center">
           <Link
