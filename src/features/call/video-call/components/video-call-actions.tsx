@@ -45,12 +45,13 @@ export default function VideoCallActions() {
     if(isLoadingStream) return;
 
     // CASE: No change in camera
-    if (video && isTurnOnCamera && myStream.getVideoTracks().length > 0) {
+    if (video && isTurnOnCamera && myStream.getVideoTracks().length > 0 && audio) {
       console.log('video-call-actions.tsx - Line 48 :: No change in camera');
       myStream.getAudioTracks().forEach((track) => {
         track.enabled = audio || false;
       });
       setTurnOnMic(audio);
+      setLoadingStream(false);
       return;
     }
     if (video != isTurnOnCamera) {
@@ -104,7 +105,9 @@ export default function VideoCallActions() {
         setLoadingVideo(false);
       })
       .finally(() => {
-        setLoadingStream(false);
+        setTimeout(() => {
+          setLoadingStream(false);
+        }, 1000);
       });
   };
 
