@@ -8,6 +8,7 @@ import { useParams, usePathname } from 'next/navigation';
 export enum EPageType {
   BUSINESS = 'business',
   HELP_DESK = 'help-desk',
+  TEST_CHAT_FLOW = 'test-it-out',
 }
 const MAPPED_INBOX_STATUS = {
   [EBusinessConversationKeys.Conversations]: null,
@@ -21,6 +22,7 @@ export const useBusinessNavigationData = () => {
 
   const businessSlugs = params?.slugs || [];
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
+  const isTestItOutPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
   const isOnBusinessChat =
     params?.[PK_BUSINESS_CONVERSATIONS] && businessSlugs?.length > 0;
   const isOnHelpDeskChat =
@@ -44,6 +46,7 @@ export const useBusinessNavigationData = () => {
     businessRoomId,
     anonymousId,
     businessConversationType,
+    isTestItOutPage,
     inboxStatus:
       MAPPED_INBOX_STATUS[
         (businessConversationType || '') as EBusinessConversationKeys

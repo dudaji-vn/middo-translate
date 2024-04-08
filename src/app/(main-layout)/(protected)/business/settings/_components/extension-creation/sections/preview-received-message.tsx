@@ -11,7 +11,7 @@ import { useDebounce } from "usehooks-ts";
 
 const DEBOUNCED_TRANSLATE_TIME = 800;
 
-export const PreviewCustomMessages = ({ sender, content = '', englishContent, onTranlatedChange, ...props }: {
+export const PreviewReceivedMessage = ({ sender, content = '', englishContent, onTranlatedChange, ...props }: {
     sender?: User | null,
     content?: string,
     englishContent?: string
@@ -38,10 +38,9 @@ export const PreviewCustomMessages = ({ sender, content = '', englishContent, on
     }, [debouncedContent])
 
     return <div {...props}>
-        <TimeDisplay time={new Date().toString()} />
         <div className="w-full gap-1  pb-8 relative  flex pr-11 md:pr-20">
             <div className="overflow-hidden  relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
-                <Avatar src={String(sender?.avatar)} alt={String(sender?.email)} size="xs" />
+                <Avatar src={'/avatar.png'} alt={String(sender?.email)} size="xs" className="bg-primary-200 p-1" />
             </div>
             <div className="relative space-y-2">
                 <p className='p-1 break-words text-sm leading-[18px] font-light text-neutral-600'>{sender?.name}</p>
