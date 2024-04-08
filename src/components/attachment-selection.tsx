@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { Editor } from '@tiptap/react';
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
-  editor: Editor | null;
+  editor?: Editor | null;
 }
 
 export const AttachmentSelection = forwardRef<
@@ -69,7 +69,7 @@ export const AttachmentSelection = forwardRef<
 });
 AttachmentSelection.displayName = 'AttachmentSelection';
 
-const MediaItem = ({ file }: { file: SelectedFile }) => {
+export const MediaItem = ({ file }: { file: SelectedFile }) => {
   const ItemComp = useMemo(() => {
     const extension = file.file.name?.split('.').pop();
     switch (file.file.type.split('/')[0]) {

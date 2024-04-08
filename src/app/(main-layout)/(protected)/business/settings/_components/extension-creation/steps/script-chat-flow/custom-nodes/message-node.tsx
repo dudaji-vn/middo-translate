@@ -1,19 +1,31 @@
 'use client'
 
-import React from 'react';
+import React, { useState } from 'react';
 import 'reactflow/dist/style.css';
 
 
 import { Handle, Position } from 'reactflow';
 import { Button } from '@/components/actions';
-import { MessageSquare, Trash2} from 'lucide-react';
+import { MessageSquare, Smile, Trash2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { FlowNode } from '../nested-flow';
 import { useFormContext } from 'react-hook-form';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { CustomNodeProps } from './node-types';
 import Link from 'next/link';
-
+import { MediaUploadDropzone, MediaUploadProvider, useMediaUpload } from '@/components/media-upload';
+import { MessageEditorToolbarFile } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-file';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { MessageEditorToolbarEmoji } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-emoji';
+import { useTranslation } from 'react-i18next';
+import { MediaItem } from '@/components/attachment-selection';
+import { useAppStore } from '@/stores/app.store';
+import { Popover, PopoverTrigger } from '@/components/data-display/popover';
+import { PopoverContent } from '@radix-ui/react-popover';
+import EmojiPicker from '@emoji-mart/react';
+import { EmojiButton } from '@/components/emoji-button';
+import Picker from '@emoji-mart/react';
+import NodeMessageToolbar from './node-message-toolbar';
 
 
 
@@ -67,6 +79,11 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
                         className: 'w-full h-full'
                     }}
                 />
+                <MediaUploadProvider>
+                    <MediaUploadDropzone>
+                        <NodeMessageToolbar nameFieldImg={`nodes.${nodeIndex}.data.img`} nameFiledContent={`nodes.${nodeIndex}.data.content`} />
+                    </MediaUploadDropzone>
+                </MediaUploadProvider>
             </div>
         </div>
     );
