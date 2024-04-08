@@ -16,7 +16,7 @@ import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 type Props = {};
 
 export const Header = (props: Props) => {
-  const { isBusiness, isHelpDesk } = useBusinessNavigationData();
+  const { isBusiness, isHelpDesk, isTestItOutPage } = useBusinessNavigationData();
   const isClient = useClient();
   const hideNavigation = isBusiness || isHelpDesk;
 
@@ -27,6 +27,7 @@ export const Header = (props: Props) => {
       className={cn(
         'z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]',
         isHelpDesk ? 'w-full flex-row justify-between' : '',
+        isTestItOutPage && 'hidden'
       )}
     >
       {!hideNavigation && <HeaderNav />}

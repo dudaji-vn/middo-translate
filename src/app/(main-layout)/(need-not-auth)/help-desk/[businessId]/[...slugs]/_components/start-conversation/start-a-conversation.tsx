@@ -1,7 +1,7 @@
 'use client'
 
 import { DEFAULT_THEME, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options'
-import { PreviewCustomMessages } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/preview-custom-messages'
+import { PreviewReceivedMessage } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/preview-received-message'
 import { Button } from '@/components/actions'
 import { Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'
@@ -87,7 +87,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
                     <Typography variant={'h4'} className="text-lg">Thank you!</Typography>
                     <Typography >Conversation end. <br/> Your rating has been sent successfully.</Typography>
                 </div> :
-                <PreviewCustomMessages sender={owner} content={businessData.firstMessage} />}
+                <PreviewReceivedMessage sender={owner} content={businessData.firstMessage} />}
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetContent side='bottom' className={open ? 'w-full  bg-white max-md:rounded-t-2xl shadow-sm' : 'hidden'}>
                     <Form {...methods}>

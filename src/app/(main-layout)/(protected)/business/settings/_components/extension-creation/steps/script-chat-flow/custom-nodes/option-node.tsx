@@ -20,8 +20,8 @@ import { CustomNodeProps } from './node-types';
 function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
     const { watch, setValue } = useFormContext();
     const nodes = watch('nodes');
-    const flowErrors = watch('flowErrors');
-    const errorMessage = flowErrors.find((error: { id: string; }) => error.id === node.id)?.message || '';
+    // const flowErrors = watch('flowErrors');
+    // const errorMessage = flowErrors.find((error: { id: string; }) => error.id === node.id)?.message || '';
 
     const [open, setOpen] = useState(false);
     const onOpen = () => setOpen(true);
@@ -80,7 +80,7 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
                 <Handle type="target" position={Position.Left} isConnectable={isConnectable} />
                 <Plus size={18} />
             </Button.Icon>
-            <Ping className={!!errorMessage ? 'absolute' : 'hidden'} message={errorMessage} />
+            {/* <Ping className={!!errorMessage ? 'absolute' : 'hidden'} message={errorMessage} /> */}
             <div
                 className={cn('w-[180px] origin-top-left transition-all duration-500  h-auto border bg-transparent border-primary-500-main  border-dashed p-2 space-y-2 rounded-[12px]  shadow-[2px_4px_16px_2px_#1616161A]',
                     open ? 'scale-100' : 'scale-0'

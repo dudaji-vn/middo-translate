@@ -22,6 +22,8 @@ import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
 import { isEmpty, isEqual } from 'lodash';
 import { deepDeleteNodes } from './nodes.utils';
+import Link from 'next/link';
+import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
 const schemaFlow = z.object({
     nodes: z.array(z.object({
@@ -89,7 +91,6 @@ const initialEdges = [
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
 const NestedFlow = () => {
-    const [openPreview, setOpenPreview] = useState(false);
     const [checkingMode, setCheckingMode] = useState(false);
     const control = useForm({
         mode: 'onChange',
@@ -159,10 +160,10 @@ const NestedFlow = () => {
         nodes.forEach((node) => {
             switch (node.type) {
                 case 'option':
-                    const connected = edges.filter((edge) => edge.source === node.id);
-                    if (connected.length === 0) {
-                        flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
-                    }
+                    // const connected = edges.filter((edge) => edge.source === node.id);
+                    // if (connected.length === 0) {
+                    //     flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
+                    // }
                     break;
                 case 'container':
                     const childrens = nodes.filter((n) => n.parentNode === node.id);
@@ -209,10 +210,15 @@ const NestedFlow = () => {
         }
         if (!isEmpty(errors)) {
             toast.error('Please complete the flow!');
-            setOpenPreview(true);
             return;
         }
-        toast.success('Previewing');
+        toast.loading('Loading preview...');
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+        width=700,height=700,left=-500,top=-500`;
+        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);   
+        setTimeout(() => {
+            toast.dismiss();
+        }, 500);
         localStorage.setItem('chat-flow', JSON.stringify({ nodes, edges }));
 
     }
