@@ -47,6 +47,7 @@ export const RichTextView = ({
           class: 'link',
           rel: 'noopener noreferrer',
         },
+        openOnClick: false,
       }),
       Mention.configure({
         renderHTML(props) {
