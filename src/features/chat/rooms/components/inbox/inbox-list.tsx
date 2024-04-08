@@ -23,7 +23,6 @@ import { PinnedRoom } from '../pinned-room';
 import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
-import { useInboxRouter } from './use-inbox-router';
 
 interface InboxListProps {
   type: InboxType;
@@ -55,8 +54,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       queryFn: ({ pageParam }) =>
         roomApi.getRooms({ cursor: pageParam, limit: 10, type, status }),
     });
-
-    useInboxRouter({ rooms });
 
     const { rooms: pinnedRooms, refetch: refetchPinned } = useGetPinnedRooms();
 

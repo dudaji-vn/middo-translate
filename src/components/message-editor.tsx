@@ -99,6 +99,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       let english = '';
       let mentions: string[] = [];
       reset();
+      editor?.commands.focus();
       if (!isContentEmpty) {
         lang = await detectLanguage(content);
         english = await translateText(content, lang, DEFAULT_LANGUAGES_CODE.EN);
