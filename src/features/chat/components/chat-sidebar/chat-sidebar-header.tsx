@@ -83,17 +83,17 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             title={t('TOOL_TIP.NEW_CONVERSATION')}
             triggerItem={
               <div className="relative">
+                {pingEmptyInbox && (
+                  <div className="absolute left-0 top-0 h-full w-full animate-ping rounded-full ring-2" />
+                )}
                 <Button.Icon
                   onClick={handleNewConversation}
                   color="default"
-                  className={isBusiness ? 'hidden' : ''}
+                  className={isBusiness ? 'relative hidden' : 'relative'}
                   size="xs"
                 >
                   <PenSquareIcon />
                 </Button.Icon>
-                {pingEmptyInbox && (
-                  <div className="absolute left-0 top-0 h-full w-full animate-ping rounded-full ring-2" />
-                )}
               </div>
             }
           ></Tooltip>
