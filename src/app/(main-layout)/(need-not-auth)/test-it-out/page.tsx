@@ -1,12 +1,11 @@
 'use client'
 
-import Script from 'next/script'
-import React, { ReactNode, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Button } from '@/components/actions'
 import { Typography } from '@/components/data-display'
 import { useAuthStore } from '@/stores/auth.store'
 import { cn } from '@/utils/cn'
-import { MessagesSquare, Minus, Monitor, Smartphone } from 'lucide-react'
+import { MessagesSquare, Minus } from 'lucide-react'
 import Image from 'next/image'
 import { Triangle } from '@/components/icons'
 import { PreviewReceivedMessage } from '../../(protected)/business/settings/_components/extension-creation/sections/preview-received-message'
@@ -17,9 +16,7 @@ import { Message } from '@/features/chat/messages/types'
 import { User } from '@/features/users/types'
 import { FlowNode } from '../../(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow'
 import { Edge } from 'reactflow'
-import { set } from 'lodash'
 import FakeTyping from './_components/fake-typing'
-import Link from 'next/link'
 
 export type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options',

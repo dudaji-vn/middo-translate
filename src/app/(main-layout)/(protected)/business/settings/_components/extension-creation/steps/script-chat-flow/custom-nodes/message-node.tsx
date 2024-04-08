@@ -6,16 +6,34 @@ import 'reactflow/dist/style.css';
 
 import { Handle, Position } from 'reactflow';
 import { Button } from '@/components/actions';
-import { MessageSquare, Trash2} from 'lucide-react';
+import { MessageSquare, Trash2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { FlowNode } from '../nested-flow';
 import { useFormContext } from 'react-hook-form';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { CustomNodeProps } from './node-types';
 import Link from 'next/link';
+import { MediaUploadDropzone, MediaUploadProvider } from '@/components/media-upload';
+import { MessageEditorToolbarFile } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-file';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { MessageEditorToolbarEmoji } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-emoji';
+import { useTranslation } from 'react-i18next';
 
 
+const MessageNodeFiles = () => {
+    const { t } = useTranslation('common');
+    return <>
+        <Tooltip
+            title={t('TOOL_TIP.ATTACHMENT')}
+            triggerItem={<MessageEditorToolbarFile />}
+        />
 
+        <Tooltip
+            title={t('TOOL_TIP.EMOJI')}
+            triggerItem={<MessageEditorToolbarEmoji />}
+        />
+    </>
+}
 
 function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
     const { watch, setValue } = useFormContext();
@@ -67,6 +85,11 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
                         className: 'w-full h-full'
                     }}
                 />
+                <MediaUploadProvider>
+                    <MediaUploadDropzone>
+                        <MessageNodeFiles />
+                    </MediaUploadDropzone>
+                </MediaUploadProvider>
             </div>
         </div>
     );
