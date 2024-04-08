@@ -68,7 +68,6 @@ function ButtonNode(node: CustomNodeProps) {
     setIsLink(checked);
     if (checked) {
       const edged = getConnectedEdges([currentNode], edges)[0] || {};
-      console.log('edged', edged)
       const targetNode = nodes.find((n: { id: string; }) => n.id === edged.target);
       const newEdges = edges.filter((edge: Edge) => edge.target !== edged.target && edge.source !== edged.source)
       setValue('edges', newEdges);
@@ -85,12 +84,13 @@ function ButtonNode(node: CustomNodeProps) {
     <div className="w-[360px] h-auto px-4 flex-row gap-1 flex">
       <Button
         size={'xs'}
-        className='h-10 w-full px-2' shape={'square'}
+        startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
+        className='h-10 w-full px-2 flex flex-flow gap-3' shape={'square'}
         onClick={openEdit}>
         <span className='max-w-[160px] truncate'>{content}</span>
       </Button>
       <Handle type="source" position={Position.Right} isConnectable={isConnectable} />
-      <UpdatingNodeWrapper open={isUpdating || isErrors} onOpenChange={setIsUpdating}>
+      <UpdatingNodeWrapper open={isUpdating} onOpenChange={setIsUpdating}>
         <div className='flex flex-col gap-4 p-2'>
           <div className='flex flex-row justify-between  items-center px-2'>
             <FormLabel className='text-neutral-800 font-semibold'>Button</FormLabel>
@@ -122,6 +122,34 @@ function ButtonNode(node: CustomNodeProps) {
               className: 'w-full h-full'
             }}
           />
+        </div>
+        <div className='w-full flex flex-flow gap-3 px-3 justify-end'>
+          <Button
+            size={'xs'}
+            startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
+            className='h-10 px-3 flex flex-flow gap-3'
+            shape={'square'}
+            variant={'default'}
+            color={'secondary'}
+            onClick={() => {
+              setIsUpdating(false);
+              setIsLink(false);
+            }}
+          >
+
+            cancel
+          </Button>
+          <Button
+            size={'xs'}
+            startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
+            className='h-10 px-2 flex flex-flow gap-3' shape={'square'}
+            onClick={() => {
+              setIsUpdating(false);
+              setIsLink(false);
+            }}
+          >
+            save
+          </Button>
         </div>
       </UpdatingNodeWrapper >
       <Button.Icon color={'default'} size={'xs'} onClick={onRemoveNode}

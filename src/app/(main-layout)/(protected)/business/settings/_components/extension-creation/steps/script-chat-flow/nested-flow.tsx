@@ -159,10 +159,10 @@ const NestedFlow = () => {
         nodes.forEach((node) => {
             switch (node.type) {
                 case 'option':
-                    const connected = edges.filter((edge) => edge.source === node.id);
-                    if (connected.length === 0) {
-                        flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
-                    }
+                    // const connected = edges.filter((edge) => edge.source === node.id);
+                    // if (connected.length === 0) {
+                    //     flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
+                    // }
                     break;
                 case 'container':
                     const childrens = nodes.filter((n) => n.parentNode === node.id);
