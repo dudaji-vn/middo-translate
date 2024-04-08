@@ -11,16 +11,17 @@ import { useDebounce } from "usehooks-ts";
 
 const DEBOUNCED_TRANSLATE_TIME = 800;
 
-export const PreviewReceivedMessage = ({ sender, content = '', englishContent, onTranlatedChange, ...props }: {
+export const PreviewReceivedMessage = ({ sender, content = '', debouncedTime = DEBOUNCED_TRANSLATE_TIME, englishContent, onTranlatedChange, ...props }: {
     sender?: User | null,
     content?: string,
     englishContent?: string
-    onTranlatedChange?: (translated: string) => void
+    onTranlatedChange?: (translated: string) => void,
+    debouncedTime?: number
 } & React.HTMLAttributes<HTMLDivElement>) => {
 
     const [translatedContent, setTranslatedContent] = React.useState<string>(englishContent || '')
     const [isTranslating, setIsTranslating] = React.useState<boolean>(false)
-    const debouncedContent = useDebounce(content, DEBOUNCED_TRANSLATE_TIME);
+    const debouncedContent = useDebounce(content, debouncedTime);
     const isTyping = useMemo(() => debouncedContent !== content, [debouncedContent, content]);
 
     useEffect(() => {

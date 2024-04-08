@@ -19,9 +19,14 @@ import { FlowNode } from '../../(protected)/business/settings/_components/extens
 import { Edge } from 'reactflow'
 import { set } from 'lodash'
 import FakeTyping from './_components/fake-typing'
+import Link from 'next/link'
 
 export type FakeMessage = Message & {
-  fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options'
+  fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options',
+  nodeId: string,
+  nodeType: FlowNode['type'],
+  link?: string,
+  img?: string,
 }
 const fakeSender: User = {
   _id: 'fake-sender',
@@ -43,13 +48,17 @@ const baseMessage: Message = {
   type: 'text',
 }
 
-const createFakeMessages = (data: Partial<Message>, fakeType: FakeMessage['fakeType'] = 'flow-sender') => {
+const createFakeMessages = (data: Partial<Message>, fakeType: FakeMessage['fakeType'] = 'flow-sender', node: FlowNode) => {
   return {
     ...baseMessage,
     ...data,
     _id: new Date().getTime().toString(),
+    nodeId: node.id,
+    nodeType: node.type,
+    link: node.data?.link,
+    img: node.data?.img,
     fakeType
-  }
+  } as FakeMessage
 }
 
 const TestItOut = () => {
@@ -72,27 +81,40 @@ const TestItOut = () => {
   })
   const { nodes, edges } = flow;
   const [fakeMessages, setFakeMessages] = React.useState<FakeMessage[]>([]);
+  const [isStarted, setIsStarted] = React.useState(false);
   const [isTyping, setIsTyping] = React.useState(false);
   const themeColor = DEFAULT_THEME;
   const addSendessageFromFlow = (node: FlowNode) => {
     switch (node.type) {
       case 'root':
-        const firstMessage = createFakeMessages({ content: node.data?.content });
+        const firstMessage = createFakeMessages({ content: node.data?.content }, 'flow-sender', node);
         setFakeMessages([firstMessage]);
         break;
-      case 'message':
+      case 'container': {
+        const message = createFakeMessages({ content: node.data?.content }, 'flow-sender', node);
+        const optionNodes = nodes.filter((n: FlowNode) => n.parentNode === node.id);
+        const options = optionNodes.map((optionNode) => createFakeMessages({
+          content: optionNode.data?.content,
+        }, 'flow-options', optionNode)) || [];
+        setFakeMessages((prev) => [...prev, message])
+        setTimeout(() => {
+          setFakeMessages((prev) => [...prev, ...options]);
+        }, 1000);
         break;
+      }
+      case 'message': {
+        const message = createFakeMessages({ content: node.data?.content }, 'flow-sender', node);
+        setFakeMessages((prev) => [...prev, message]);
+        break;
+      }
       case 'button':
-        break;
-      case 'option':
         break;
       default:
         break;
     }
   }
   const addReceivedMessageFromMyChoice = (selectedNode: FlowNode) => {
-    const myMessage = createFakeMessages({ content: selectedNode.data?.content }, 'flow-receiver');
-
+    const myMessage = createFakeMessages({ content: selectedNode.data?.content }, 'flow-receiver', selectedNode);
     setFakeMessages((prev) => [...prev, myMessage]);
     setIsTyping(true);
     setTimeout(() => {
@@ -106,14 +128,20 @@ const TestItOut = () => {
   }
 
   useEffect(() => {
-    if (flow) {
-      const start = nodes.find((node) => node.type === 'root');
-      if (start) {
-        addSendessageFromFlow(start);
-      }
-    }
+    onStart();
   }, [nodes])
 
+  const onStart = () => {
+    const root = nodes.find((node) => node.type === 'root');
+    const nextToRoot = edges.find((edge) => edge.source === root?.id);
+    const nextNode = nodes.find((node) => node.id === nextToRoot?.target);
+    console.log('nextToRoot', nextToRoot)
+    console.log('nextNode', nextNode)
+    if (nextNode) {
+      addSendessageFromFlow(nextNode);
+    }
+    setIsStarted(true);
+  }
 
   if (!currentUser || !flow || !nodes || !edges) return null
 
@@ -138,17 +166,47 @@ const TestItOut = () => {
             <TimeDisplay time={new Date().toString()} />
             {fakeMessages.map((message, index) => {
               if (message.fakeType === 'flow-sender') {
-                return <PreviewReceivedMessage key={index} onTranlatedChange={() => { }} sender={currentUser} content={"Alo ALo"} className="overflow-y-auto max-h-[320px]" />
-
+                return <PreviewReceivedMessage debouncedTime={0} key={index} onTranlatedChange={(trans) => { console.log('trans', trans) }} sender={currentUser} content={message.content} className="overflow-y-auto max-h-[320px]" />
               }
               if (message.fakeType === 'flow-receiver') {
                 return <FakeMessage key={index} message={message} />
               }
+              if (message.fakeType === 'flow-options') {
+                if (message.nodeType === 'button' && message.link?.length) {
+                  return <div className='w-full h-auto flex flex-col pb-1 items-end' key={index}>
+                    <a target="_blank" href={message.link} key={index}>
+                      <Button
+                        className={'h-10  w-fit'}
+                        variant={'outline'}
+                        color={'primary'}
+                        shape={'square'}
+                        type={'button'}
+                      >{message.content}
+                      </Button>
+                    </a>
+                  </div>
+                }
+                return <div className='w-full h-auto flex flex-col pb-1 items-end' key={index}>
+                  <Button
+                    className={'h-10  w-fit'}
+                    variant={'outline'}
+                    color={'primary'}
+                    shape={'square'}
+                    type={'button'}
+                    onClick={() => {
+                      const thisNode = nodes.find((node) => node.id === message.nodeId);
+                      if (thisNode) {
+                        addReceivedMessageFromMyChoice(thisNode);
+                      }
+                    }}
+                  >{message.content}
+                  </Button>
+                </div>
+              }
             })}
           </div>
           {isTyping && <FakeTyping />}
-          <div className='px-4 pb-4'>
-            {/* <TextInput /> */}
+          <div className='px-8 pb-4'>
           </div>
           <Triangle
             fill='#ffffff'

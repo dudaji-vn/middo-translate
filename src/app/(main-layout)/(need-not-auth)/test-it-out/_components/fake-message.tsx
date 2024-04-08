@@ -59,7 +59,7 @@ export const FakeMessage = ({ position = 'right', active = false, message }: Con
             className={cn(
                 messageVariants({
                     sender: 'me'
-                }),
+                }), 'my-1'
             )}
         >
             <div
