@@ -19,7 +19,7 @@ export type CreateMessage = {
 };
 export const messageApi = {
   async send(data: CreateMessage) {
-    console.log('data send message: ', data);
+    console.log('data send(post) message: ', data);
     const res: Response<Message> = await axiosWithInterceptor.post(
       basePath,
       data,
