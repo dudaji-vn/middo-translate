@@ -1,12 +1,9 @@
 'use client'
 
 import React, { useMemo, useState } from 'react';
-import ReactFlow, { Background, NodeChange, EdgeChange, Connection, Edge, BackgroundVariant, useReactFlow, getConnectedEdges } from 'reactflow';
+import ReactFlow, { Background, NodeChange, EdgeChange, Connection, Edge, BackgroundVariant, useReactFlow, getConnectedEdges, addEdge } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import { addEdge, applyEdgeChanges, applyNodeChanges } from 'reactflow';
-
-import './nodes-flow.css';
 
 import { useCallback } from 'react';
 import { Handle, Position } from 'reactflow';
@@ -16,9 +13,9 @@ import { MessageSquare, MessagesSquare, Pen, Plus, Trash, Trash2, Zap } from 'lu
 import { cn } from '@/utils/cn';
 import { FlowNode } from './nested-flow';
 import { useFormContext } from 'react-hook-form';
-import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import Ping from './ping';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
+import { deepDeleteNodes } from './nodes.utils';
 
 export type CustomNodeProps = {
     data: FlowNode['data'];
@@ -38,7 +35,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
     const { watch, setValue } = useFormContext();
     const nodes = watch('nodes');
     const nodeIndex = nodes.findIndex((n: { id: string; }) => n.id === node.id);
-    const messVal = watch(`nodes.${nodeIndex}.data.content`);
+    // const messVal = watch(`nodes.${nodeIndex}.data.content`);
 
     const currentNode = nodes[nodeIndex];
 
@@ -141,6 +138,7 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
         const currentNode = nodes.find((n: { id: string; }) => n.id === node.id);
         const newContainerNode: FlowNode = {
             ...currentNode,
+            position: { x: currentNode.position.x + 100, y: currentNode.position.y - 100},
             type: 'container',
             data: {
                 label: 'Actions',
@@ -225,7 +223,7 @@ function ContainerNode(node: CustomNodeProps) {
 
     const onAddNode = () => {
         const newButtonNode: FlowNode = {
-            id: node.id + `button${childLenth + 1}-${new Date().getTime()}`,
+            id: node.id + `-btn-${new Date().getTime()}`,
             data: { content: "New Button", },
             position: { x: 0, y: Math.max(120 + childLenth * 50, height - 60) },
             parentNode: node.id,
@@ -234,13 +232,13 @@ function ContainerNode(node: CustomNodeProps) {
             draggable: false
         };
         const newButtonChildNode: FlowNode = {
-            id: `${newButtonNode}-child-${new Date().getTime()}`,
+            id: `${newButtonNode.id}-opt-${new Date().getTime()}`,
             type: 'option',
             data: {
                 content: '',
                 img: ''
             },
-            position: { x: node.xPos + width + 200, y: node.yPos + childLenth * 170 },
+            position: { x: node.xPos + width + 200, y: node.yPos + childLenth * 250 },
         };
         const newEdge: Edge = {
             id: `e${newButtonNode.id}-${newButtonChildNode.id}`,
@@ -256,8 +254,7 @@ function ContainerNode(node: CustomNodeProps) {
 
     const convertContainerToOption = () => {
         const currentChilds = nodes.filter((n: { parentNode: string; }) => n.parentNode === node.id);
-        const connected = getConnectedEdges(currentChilds, edges);
-        const newNodes = nodes.filter((node: Node) => !connected.some((edge) => edge.source === node.id || edge.target === node.id));
+        const newNodes = deepDeleteNodes(nodes, currentChilds, edges);
         const updatedNode = {
             ...currentNode,
             type: 'option',
@@ -304,10 +301,6 @@ function ContainerNode(node: CustomNodeProps) {
                         className: 'w-full h-full'
                     }}
                 />
-                {/* <div
-                    className={'bg-neutral-50 rounded-xl border border-neutral-100 text-neutral-900 p-3'}>
-                    {data.content}
-                </div> */}
             </div>
             <div className='absolute bottom-4 left-0 w-full px-4'>
                 <Button shape={'square'} className='w-full' color={'secondary'} size={'xs'} onClick={onAddNode}>
@@ -317,12 +310,6 @@ function ContainerNode(node: CustomNodeProps) {
         </div>
     );
 }
-
-const rfStyle = {
-    backgroundColor: '#B8CEFF',
-};
-
-
 
 
 const nodeTypes = {
