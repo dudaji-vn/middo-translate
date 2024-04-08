@@ -8,13 +8,11 @@ import ReactFlow, {
     Edge,
     Connection,
     BackgroundVariant,
-    getConnectedEdges,
     applyEdgeChanges,
     applyNodeChanges,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { nodeTypes } from './custom-node';
-import { useChatFlowStore } from '@/stores/chat-flow.store';
+import { nodeTypes } from './custom-nodes/node-types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -24,6 +22,7 @@ import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
 import { isEmpty, isEqual } from 'lodash';
 import { deepDeleteNodes } from './nodes.utils';
+
 const schemaFlow = z.object({
     nodes: z.array(z.object({
         id: z.string(),
@@ -31,26 +30,36 @@ const schemaFlow = z.object({
         data: z.object({
             label: z.string().optional(),
             content: z.string().min(1, {
-                message: 'Please enter message!',
+                message: 'Please enter content!',
             }),
+            link: z.string().optional(),
             img: z.string().optional(),
+        }).refine((data) => {
+            if (data.link && !data.link.trim().length) {
+                return false;
+            }
+            return true;
+        }, {
+            message: 'Link should not be empty'
         }),
         position: z.object({
             x: z.number(), y: z.number()
         })
-    })),
+    })
+    ),
     edges: z.array(z.object({ id: z.string(), source: z.string(), target: z.string(), label: z.string() })),
     flowErrors: z.array(z.object({ id: z.string(), message: z.string() }))
 })
 
 type FormDataErrors = z.infer<typeof schemaFlow>['flowErrors'];
 
-export type FlowItemType = 'button' | 'message' | 'root' | 'container' | 'option';
+export type FlowItemType = 'button' | 'message' | 'root' | 'container' | 'option' | 'link';
 
 export type FlowNode = Node<{
     content: string;
     label?: string;
     img?: string;
+    link?: string;
 }> & {
     type: FlowItemType;
 }
@@ -204,11 +213,12 @@ const NestedFlow = () => {
             return;
         }
         toast.success('Previewing');
+        localStorage.setItem('chat-flow', JSON.stringify({ nodes, edges }));
 
     }
     // load from local storage
     useEffect(() => {
-        const flow = localStorage.getItem('flowww');
+        const flow = localStorage.getItem('chat-flow');
         if (flow) {
             try {
                 const { nodes, edges } = JSON.parse(flow);
