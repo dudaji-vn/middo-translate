@@ -3,9 +3,10 @@ import { Editor } from '@tiptap/react';
 import { AtSignIcon } from 'lucide-react';
 export interface MentionButtonProps {
   editor: Editor | null;
+  onMention?: () => void;
 }
 
-export const MentionButton = ({ editor }: MentionButtonProps) => {
+export const MentionButton = ({ editor, onMention }: MentionButtonProps) => {
   return (
     <Button.Icon
       color="default"
@@ -13,6 +14,7 @@ export const MentionButton = ({ editor }: MentionButtonProps) => {
       size="xs"
       className="shrink-0 self-end"
       onClick={() => {
+        onMention?.();
         const mentionState = (
           editor?.state as unknown as {
             [key: string]: {

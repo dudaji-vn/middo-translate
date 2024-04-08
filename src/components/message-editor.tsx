@@ -99,7 +99,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       let english = '';
       let mentions: string[] = [];
       reset();
-      editor?.commands.focus();
+      focus();
       if (!isContentEmpty) {
         lang = await detectLanguage(content);
         english = await translateText(content, lang, DEFAULT_LANGUAGES_CODE.EN);
@@ -166,6 +166,11 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       true,
     );
 
+    const focus = () => {
+      document.getElementById(`input-${editorId}`)?.focus();
+      editor?.commands.focus('end');
+    };
+
     return (
       <>
         <TranslationHelper
@@ -188,7 +193,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
               <EmojiButton editor={editor} />
               <MicButton ref={micRef} editor={editor} />
               {mentionSuggestions.length > 0 && (
-                <MentionButton editor={editor} />
+                <MentionButton onMention={focus} editor={editor} />
               )}
             </div>
             <EditorContent
@@ -197,9 +202,17 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             />
             <AttachmentSelection editor={editor} />
           </div>
+
+          <input
+            className="h-0 w-0 opacity-0"
+            id={`input-${editorId}`}
+            type="text"
+          />
           <SendButton
             id={sendButtonId}
-            onClick={handleSubmit}
+            onClick={(e) => {
+              handleSubmit();
+            }}
             editor={editor}
             editorId={editorId}
           />
