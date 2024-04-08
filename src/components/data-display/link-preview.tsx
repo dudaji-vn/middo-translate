@@ -1,3 +1,4 @@
+import { cn } from '@/utils/cn';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Image from 'next/image';
@@ -11,6 +12,7 @@ export interface LinkPreviewProps {
 
 export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
   const [isImageError, setIsImageError] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const { data, isError, isFetched } = useQuery({
     queryKey: ['link-preview', _url],
     queryFn: async () => {
@@ -71,8 +73,16 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
         {previewData?.description}
       </p>
       {!isImageError && previewData.image && (
-        <div className="mt-3  max-w-64 overflow-hidden rounded-lg border md:max-w-none">
+        <div
+          className={cn(
+            'mt-3 max-w-64 overflow-hidden rounded-lg border md:max-w-none',
+            isImageLoading ? 'hidden' : 'block',
+          )}
+        >
           <Image
+            onLoadedData={() => {
+              setIsImageLoading(false);
+            }}
             quality={100}
             src={previewData.image}
             width={500}
