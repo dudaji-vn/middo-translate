@@ -121,12 +121,11 @@ export default function useSpeechToTextCaption(language?: string) {
       }
       processorRef.current?.disconnect();
       audioInputRef.current?.disconnect();
-      audioContextRef.current?.close();
+      audioContextRef.current?.close()
+      .then(() => {})
+      .catch(() => {});
     };
   }, [stream]);
-
-  
-
 
   return {
     transcript: finalTranscript,
