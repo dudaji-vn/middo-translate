@@ -102,6 +102,7 @@ export const MessagesBoxProvider = ({
         message: Message;
         clientTempId: string;
       }) => {
+        console.log(`socket.on(${SOCKET_CONFIG.EVENTS.MESSAGE.NEW})`, message);
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
         const targetText = message.room?.isGroup

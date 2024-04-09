@@ -8,13 +8,11 @@ import ReactFlow, {
     Edge,
     Connection,
     BackgroundVariant,
-    getConnectedEdges,
     applyEdgeChanges,
     applyNodeChanges,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { nodeTypes } from './custom-node';
-import { useChatFlowStore } from '@/stores/chat-flow.store';
+import { nodeTypes } from './custom-nodes/node-types';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -22,7 +20,10 @@ import { Form } from '@/components/ui/form';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
+import { deepDeleteNodes } from './nodes.utils';
+import Link from 'next/link';
+import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
 const schemaFlow = z.object({
     nodes: z.array(z.object({
@@ -31,26 +32,36 @@ const schemaFlow = z.object({
         data: z.object({
             label: z.string().optional(),
             content: z.string().min(1, {
-                message: 'Please enter message!',
+                message: 'Please enter content!',
             }),
+            link: z.string().optional(),
             img: z.string().optional(),
+        }).refine((data) => {
+            if (data.link && !data.link.trim().length) {
+                return false;
+            }
+            return true;
+        }, {
+            message: 'Link should not be empty'
         }),
         position: z.object({
             x: z.number(), y: z.number()
         })
-    })),
+    })
+    ),
     edges: z.array(z.object({ id: z.string(), source: z.string(), target: z.string(), label: z.string() })),
     flowErrors: z.array(z.object({ id: z.string(), message: z.string() }))
 })
 
 type FormDataErrors = z.infer<typeof schemaFlow>['flowErrors'];
 
-export type FlowItemType = 'button' | 'message' | 'root' | 'container' | 'option';
+export type FlowItemType = 'button' | 'message' | 'root' | 'container' | 'option' | 'link';
 
 export type FlowNode = Node<{
     content: string;
     label?: string;
     img?: string;
+    link?: string;
 }> & {
     type: FlowItemType;
 }
@@ -76,12 +87,10 @@ const initialNodes: FlowNode[] = [
 
 const initialEdges = [
     { id: 'e1-2', source: '1', target: '2', animated: true, label: 'Start conversation' },
-    // { id: 'e1-4', source: '1', target: '4'},
 ];
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
 const NestedFlow = () => {
-    const [openPreview, setOpenPreview] = useState(false);
     const [checkingMode, setCheckingMode] = useState(false);
     const control = useForm({
         mode: 'onChange',
@@ -126,9 +135,8 @@ const NestedFlow = () => {
             if (nodesToDelete.some((node) => initialNodes.find(n => n.id === node.id))) {
                 return;
             }
-            const connected = getConnectedEdges(nodesToDelete, edges);
-            const newNodes = nodes.filter((node) => !connected.some((edge) => edge.source === node.id || edge.target === node.id));
-            setValue('nodes', newNodes);
+            const newNodes = deepDeleteNodes(nodes, nodesToDelete, edges);
+            setValue('nodes', newNodes as FlowNode[]);
         },
         [setValue, nodes, edges]
     );
@@ -152,10 +160,10 @@ const NestedFlow = () => {
         nodes.forEach((node) => {
             switch (node.type) {
                 case 'option':
-                    const connected = edges.filter((edge) => edge.source === node.id);
-                    if (connected.length === 0) {
-                        flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
-                    }
+                    // const connected = edges.filter((edge) => edge.source === node.id);
+                    // if (connected.length === 0) {
+                    //     flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
+                    // }
                     break;
                 case 'container':
                     const childrens = nodes.filter((n) => n.parentNode === node.id);
@@ -163,15 +171,12 @@ const NestedFlow = () => {
                         flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
                     }
                     break;
-                // case 'message':
-                //     if (!node.data?.content?.trim()?.length) {
-                //         flowErrors.push({ id: node.id, message: 'Message should have a content' });
-                //     }
-                //     break;
                 case 'button':
                     if (!node.data?.content?.trim()?.length) {
                         flowErrors.push({ id: node.id, message: 'Button should have a label' });
                     }
+                    break;
+                case 'message':
                     break;
                 default:
                     break;
@@ -192,6 +197,8 @@ const NestedFlow = () => {
     }, [nodes, checkingMode]);
 
     const onPreviewClick = () => {
+
+
         trigger('nodes')
         if (!checkingMode) {
             setCheckingMode(true);
@@ -203,11 +210,32 @@ const NestedFlow = () => {
         }
         if (!isEmpty(errors)) {
             toast.error('Please complete the flow!');
-            setOpenPreview(true);
+            return;
         }
-        toast.success('Previewing');
+        toast.loading('Loading preview...');
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+        width=700,height=700,left=-500,top=-500`;
+        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);   
+        setTimeout(() => {
+            toast.dismiss();
+        }, 500);
+        localStorage.setItem('chat-flow', JSON.stringify({ nodes, edges }));
 
     }
+    // load from local storage
+    useEffect(() => {
+        const flow = localStorage.getItem('chat-flow');
+        if (flow) {
+            try {
+                const { nodes, edges } = JSON.parse(flow);
+                setValue('nodes', nodes || initialNodes);
+                setValue('edges', edges || initialEdges);
+            }
+            catch (e) {
+                console.log(e);
+            }
+        }
+    }, []);
 
 
     return (

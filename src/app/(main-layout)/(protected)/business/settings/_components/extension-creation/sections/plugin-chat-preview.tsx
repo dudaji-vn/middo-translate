@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn'
 import { MessagesSquare, Minus, Monitor, Smartphone } from 'lucide-react'
 import Image from 'next/image'
 import React, { ReactNode } from 'react'
-import { PreviewCustomMessages } from './preview-custom-messages'
+import { PreviewReceivedMessage } from './preview-received-message'
 import { Triangle } from '@/components/icons'
 import { DEFAULT_THEME } from './options'
 
@@ -88,7 +88,7 @@ const PluginChatPreview = ({ className, content, language, color,onTranslatedCha
                         <Minus className='w-4 h-4' />
                     </div>
                     <div className={'p-4'}>
-                        <PreviewCustomMessages onTranlatedChange={onTranslatedChange} sender={currentUser} content={content} className="overflow-y-auto max-h-[320px]" />
+                        <PreviewReceivedMessage onTranlatedChange={onTranslatedChange} sender={currentUser} content={content} className="overflow-y-auto max-h-[320px]" />
                         <Button
                             variant={'default'}
                             shape={'square'}

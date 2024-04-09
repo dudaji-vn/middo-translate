@@ -3,15 +3,23 @@
 import React, { useEffect } from 'react';
 
 import socket from '@/lib/socket-io';
+import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useChatStore } from '@/features/chat/store';
+import { useElectron } from '@/hooks/use-electron';
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
 
 const SocketProvider = () => {
+  const { isElectron, ipcRenderer } = useElectron();
   const user = useAuthStore((state) => state.user);
   const setOnlineList = useChatStore((state) => state.setOnlineList);
+  const setSocketConnected = useAppStore((state) => state.setSocketConnected);
+
   useEffect(() => {
     function onConnect() {
+      console.log('socket.onConnect');
+      setSocketConnected(true);
       if (user?._id) {
         console.log('connected', user._id);
         socket.emit(SOCKET_CONFIG.EVENTS.CLIENT.JOIN, user._id);
@@ -22,9 +30,10 @@ const SocketProvider = () => {
     }
 
     function onDisconnect() {
-      console.log('disconnected');
+      console.log('socket.onDisconnected');
+      setSocketConnected(false);
     }
-
+;
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.connect();
@@ -37,6 +46,22 @@ const SocketProvider = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?._id]);
+
+  useEffect(() => {
+    console.log('socket.provider.tsx: WINDOW_FOCUSED');
+    if (isElectron && ipcRenderer) {
+      ipcRenderer.on(ELECTRON_EVENTS.WINDOW_FOCUSED, (e: any) => {
+        console.log('Ensure socket connection');
+        if (!socket.connected) {
+          console.log('socket re-connection');
+          socket.connect();
+        } else {
+          console.log('socket connected (skip)');
+        }
+      });
+    }
+    return () => {};
+  }, [ipcRenderer, isElectron]);
 
   return <></>;
 };

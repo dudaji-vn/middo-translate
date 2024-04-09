@@ -16,13 +16,17 @@ import { actionItems, useMessageActions } from '../message-actions';
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { Drawer, DrawerContent } from '@/components/data-display/drawer';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { useBoolean } from 'usehooks-ts';
+import { MessageItem } from '.';
+import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
 import { MessageEmojiPicker } from '../message-emoji-picker';
+import EmojiPicker from '@emoji-mart/react';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
@@ -116,56 +120,88 @@ const MobileWrapper = ({
 }: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
   const { t } = useTranslation('common');
-  return (
-    <LongPressMenu
-      isOpen={value}
-      hasBackdrop={false}
-      onOpenChange={(isOpen) => {
-        setValue(isOpen);
-        setActive(isOpen);
-      }}
-    >
-      <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
-      <LongPressMenu.Menu>
-        {items.map((item) => (
-          <LongPressMenu.Item
-            key={item.action}
-            title={t(item.label)}
-            color={item.color === 'error' ? 'error' : 'default'}
-            onClick={item.onAction}
-          >
-            {item.icon}
-          </LongPressMenu.Item>
-        ))}
-      </LongPressMenu.Menu>
+  const {
+    setFalse: hideEmoji,
+    value: showEmoji,
+    setValue: changeShowEmoji,
+    setTrue: openEmoji,
+  } = useBoolean(false);
+  const { mutate } = useReactMessage();
+  const handleEmojiClick = (emoji: string) => {
+    mutate({ id: message._id, emoji });
+    hideEmoji();
+  };
 
-      {value && (
-        <>
-          <LongPressMenu.CloseTrigger className="fixed left-0 top-0 z-[99] h-screen w-screen" />
-          <Popover open>
-            <PopoverTrigger asChild>
-              <div
-                className={cn(
-                  'absolute top-0 h-[1px] w-full -translate-y-[calc(100%_+_8px)]',
-                )}
-              ></div>
-            </PopoverTrigger>
-            <PopoverContent
-              align={isMe ? 'end' : 'start'}
-              className="w-fit -translate-y-full border-none bg-transparent p-0 shadow-none"
+  return (
+    <>
+      <LongPressMenu
+        isOpen={value}
+        hasBackdrop={false}
+        onOpenChange={(isOpen) => {
+          setValue(isOpen);
+          setActive(isOpen);
+        }}
+      >
+        <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
+        <LongPressMenu.Menu
+          outsideComponent={
+            <div className="px-3 py-2">
+              <div className="pointer-events-auto mb-2">
+                <MessageItem
+                  sender={isMe ? 'me' : 'other'}
+                  showReactionBar={false}
+                  message={message}
+                  showAvatar={!isMe}
+                  disabledAllActions
+                  discussionDisabled
+                />
+              </div>
+              <div className="pointer-events-auto">
+                <MessageEmojiPicker
+                  onClickMore={() => {
+                    openEmoji();
+                    setFalse();
+                  }}
+                  onEmojiClick={() => {
+                    setFalse();
+                    setActive(false);
+                  }}
+                  messageId={message._id}
+                />
+              </div>
+            </div>
+          }
+        >
+          {items.map((item) => (
+            <LongPressMenu.Item
+              key={item.action}
+              startIcon={item.icon}
+              color={item.color === 'error' ? 'error' : 'default'}
+              onClick={item.onAction}
             >
-              <MessageEmojiPicker
-                onEmojiClick={() => {
-                  setFalse();
-                  setActive(false);
-                }}
-                messageId={message._id}
-              />
-            </PopoverContent>
-          </Popover>
-        </>
-      )}
-    </LongPressMenu>
+              {t(item.label)}
+            </LongPressMenu.Item>
+          ))}
+        </LongPressMenu.Menu>
+      </LongPressMenu>
+      <Drawer open={showEmoji} onOpenChange={changeShowEmoji}>
+        <DrawerContent>
+          <div
+            data-vaul-no-drag
+            className="custom-emoji-picker flex justify-center"
+          >
+            <EmojiPicker
+              theme="light"
+              onEmojiSelect={(emoji: any) => {
+                handleEmojiClick(emoji.native);
+              }}
+              skinTonePosition="none"
+              previewPosition="none"
+            />
+          </div>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };
 
