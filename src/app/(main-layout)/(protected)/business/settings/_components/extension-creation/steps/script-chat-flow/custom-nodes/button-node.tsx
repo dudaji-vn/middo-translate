@@ -26,7 +26,6 @@ import { add, set } from 'lodash';
 function ButtonNode(node: CustomNodeProps) {
   const { data, isConnectable } = node;
   const [isUpdating, setIsUpdating] = useState(false);
-  const [isLink, setIsLink] = useState(false);
   const { content, img } = data;
 
   const { deleteElements } = useReactFlow();
@@ -37,15 +36,28 @@ function ButtonNode(node: CustomNodeProps) {
   const { watch, setValue, formState: { errors } } = useFormContext();
   const nodes = watch('nodes');
   const edges = watch('edges');
-  const nodeIndex = nodes.findIndex((n: { id: string; }) => n.id === node.id);
-  const currentNode = nodes[nodeIndex];
+
+  const { nodeIndex, currentNode, isLink } = useMemo(() => {
+    const nodeIndex = nodes.findIndex((n: { id: string; }) => n.id === node.id);
+    return {
+      nodeIndex,
+      currentNode: nodes[nodeIndex],
+      isLink: !!nodes[nodeIndex]?.data?.link
+    }
+  }, [node.data, node.id, node.type, nodes]);
+
   const openEdit = () => {
     setIsUpdating(true);
   }
-  // @ts-ignore
-  const isErrors = errors.nodes && errors?.nodes[nodeIndex]?.data;
 
   const reAddOptionNode = () => {
+    const updatedCurrentNode = {
+      ...currentNode,
+      data: {
+        ...currentNode.data,
+        link: undefined
+      }
+    };
     const newButtonChildNode: FlowNode = {
       id: `${currentNode.id}-opt-${new Date().getTime()}`,
       type: 'option',
@@ -61,21 +73,36 @@ function ButtonNode(node: CustomNodeProps) {
       target: newButtonChildNode.id,
       animated: true,
     };
-    setValue('nodes', [...nodes, currentNode, newButtonChildNode]);
+    const nodesWithNewCurrentNode = nodes.map((n: { id: string; }) => n.id === currentNode.id ? updatedCurrentNode : n);
+    setValue('nodes', [...nodesWithNewCurrentNode, newButtonChildNode]);
     setValue('edges', [...edges, newEdge]);
+
   }
   const onIsLinkChange = (checked: boolean) => {
-    setIsLink(checked);
+    localStorage.setItem('before-changes', JSON.stringify({ nodes, edges }));
     if (checked) {
       const edged = getConnectedEdges([currentNode], edges)[0] || {};
       const targetNode = nodes.find((n: { id: string; }) => n.id === edged.target);
       const newEdges = edges.filter((edge: Edge) => edge.target !== edged.target && edge.source !== edged.source)
       setValue('edges', newEdges);
-      const newNodes = deepDeleteNodes(nodes, [targetNode], edges);
-      setValue('nodes', [...newNodes, currentNode]);
+      const newNodes = targetNode ? deepDeleteNodes(nodes, [targetNode], edges) : nodes;
+      setValue('nodes', [...newNodes, {
+        ...currentNode,
+        data: {
+          ...currentNode.data,
+          link: 'https://'
+        }
+      }]);
     }
     else {
       reAddOptionNode();
+    }
+  }
+  const onCancelAllChanges = () => {
+    const beforeChanges = JSON.parse(localStorage.getItem('before-changes') || '{}');
+    if (beforeChanges.nodes && beforeChanges.edges) {
+      setValue('nodes', beforeChanges.nodes);
+      setValue('edges', beforeChanges.edges);
     }
   }
 
@@ -89,7 +116,7 @@ function ButtonNode(node: CustomNodeProps) {
         onClick={openEdit}>
         <span className='max-w-[160px] truncate'>{content}</span>
       </Button>
-      <Handle type="source" position={Position.Right} isConnectable={isConnectable} />
+      <Handle type="source" className={currentNode.data?.link ? 'hidden' : ''} position={Position.Right} isConnectable={isConnectable} />
       <UpdatingNodeWrapper open={isUpdating} onOpenChange={setIsUpdating}>
         <div className='flex flex-col gap-4 p-2'>
           <div className='flex flex-row justify-between  items-center px-2'>
@@ -98,7 +125,6 @@ function ButtonNode(node: CustomNodeProps) {
               <Link size={16} />
               <FormLabel>Link</FormLabel>
               <Switch
-                onClick={() => setIsLink(!isLink)}
                 checked={isLink}
                 onCheckedChange={onIsLinkChange}
               />
@@ -126,14 +152,13 @@ function ButtonNode(node: CustomNodeProps) {
         <div className='w-full flex flex-flow gap-3 px-3 justify-end'>
           <Button
             size={'xs'}
-            startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
             className='h-10 px-3 flex flex-flow gap-3'
             shape={'square'}
             variant={'default'}
             color={'secondary'}
             onClick={() => {
               setIsUpdating(false);
-              setIsLink(false);
+              onCancelAllChanges();
             }}
           >
 
@@ -141,11 +166,9 @@ function ButtonNode(node: CustomNodeProps) {
           </Button>
           <Button
             size={'xs'}
-            startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
             className='h-10 px-2 flex flex-flow gap-3' shape={'square'}
             onClick={() => {
               setIsUpdating(false);
-              setIsLink(false);
             }}
           >
             save
