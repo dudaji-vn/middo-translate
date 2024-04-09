@@ -96,6 +96,13 @@ const CreateExtensionHeader = ({
     const canSubmit = isValid && step === createExtensionSteps.length - 1;
     const canNext = step < createExtensionSteps.length - 1 && !currentError
 
+    const onNextStepClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (canNext) {
+            e.preventDefault();
+            handleStepChange(step + 1);
+        }
+    }
+
     return (
         <section className={cn('w-full px-4 flex flex-row items-center createExtensionSteps-center gap-3 bg-primary-100', headerVariants({ navigation: modalType || 'default' }))}>
             <Button.Icon
@@ -115,7 +122,7 @@ const CreateExtensionHeader = ({
                 <div style={{ width: `${stepPercentage}%` }} className='absolute  h-[50%] !z-10 top-0 left-0 border-b-[2px] border-b-neutral-200 transition-all duration-1000' ></div>
                 {createExtensionSteps.map((item, index) => {
                     const isActive = step === index;
-                    let isDone = step > index || isSubmitting || isSubmitSuccessful; 
+                    let isDone = step > index || isSubmitting || isSubmitSuccessful;
                     const isAfterCurrent = step < index;
                     const disabled = createExtensionSteps[step]?.requiredFields.some((field) => errors[field]) && step < index;
                     let stepContent = isDone ? <Check className='text-white p-1' /> : <p className='!w-6'>{index + 1}</p>;
@@ -159,12 +166,7 @@ const CreateExtensionHeader = ({
             <Button
                 type={canSubmit ? 'submit' : 'button'}
                 size={'sm'}
-                onClick={(e) => {
-                    if (canNext) {
-                        e.preventDefault();
-                        handleStepChange(step + 1);
-                    }
-                }}
+                onClick={onNextStepClick}
                 color={canSubmit || canNext ? 'primary' : 'secondary'}
                 disabled={!canSubmit && !canNext || isSubmitting || isSubmitSuccessful}
                 loading={isSubmitting}

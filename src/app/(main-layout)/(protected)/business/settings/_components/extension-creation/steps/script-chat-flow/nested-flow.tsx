@@ -24,6 +24,8 @@ import { isEmpty, isEqual } from 'lodash';
 import { deepDeleteNodes } from './nodes.utils';
 import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
+import { CHAT_FLOW_KEY } from '@/configs/store-key';
+
 
 const schemaFlow = z.object({
     nodes: z.array(z.object({
@@ -65,7 +67,7 @@ export type FlowNode = Node<{
 }> & {
     type: FlowItemType;
 }
-const initialNodes: FlowNode[] = [
+export const initialChatFlowNodes: FlowNode[] = [
     {
         id: '1',
         data: { label: 'Start conversation', content: 'start conversation' },
@@ -85,17 +87,26 @@ const initialNodes: FlowNode[] = [
     },
 ];
 
-const initialEdges = [
+const initialEdges: Edge[] = [
     { id: 'e1-2', source: '1', target: '2', animated: true, label: 'Start conversation' },
 ];
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
-const NestedFlow = () => {
+const NestedFlow = ({
+    onSaveToForm,
+    savedFlow
+}: {
+    onSaveToForm: (data: { nodes: FlowNode[], edges: Edge[] }) => void,
+    savedFlow?: {
+        nodes: FlowNode[],
+        edges: Edge[]
+    }
+}) => {
     const [checkingMode, setCheckingMode] = useState(false);
     const control = useForm({
         mode: 'onChange',
         defaultValues: {
-            nodes: initialNodes,
+            nodes: initialChatFlowNodes,
             edges: initialEdges,
             flowErrors: []
         },
@@ -114,7 +125,6 @@ const NestedFlow = () => {
                 // @ts-ignore
                 setValue('nodes', applyNodeChanges(changes, watchNodes));
             }
-            // @ts-ignore
 
         },
         [setValue, watch]
@@ -132,7 +142,7 @@ const NestedFlow = () => {
 
     const onNodesDelete = useCallback(
         (nodesToDelete: Node[]) => {
-            if (nodesToDelete.some((node) => initialNodes.find(n => n.id === node.id))) {
+            if (nodesToDelete.some((node) => initialChatFlowNodes.find(n => n.id === node.id))) {
                 return;
             }
             const newNodes = deepDeleteNodes(nodes, nodesToDelete, edges);
@@ -157,7 +167,7 @@ const NestedFlow = () => {
             return;
         }
         const flowErrors: FormDataErrors = [];
-        nodes.forEach((node) => {
+        nodes.forEach((node: FlowNode) => {
             switch (node.type) {
                 case 'option':
                     // const connected = edges.filter((edge) => edge.source === node.id);
@@ -166,7 +176,7 @@ const NestedFlow = () => {
                     // }
                     break;
                 case 'container':
-                    const childrens = nodes.filter((n) => n.parentNode === node.id);
+                    const childrens = nodes.filter((n: FlowNode) => n.parentNode === node.id);
                     if (childrens.length === 0) {
                         flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
                     }
@@ -194,53 +204,51 @@ const NestedFlow = () => {
             // @ts-ignore
             setValue('flowErrors', []);
         }
-    }, [nodes, checkingMode]);
+    }, [nodes, edges, checkingMode]);
+
 
     const onPreviewClick = () => {
-
-
         trigger('nodes')
         if (!checkingMode) {
             setCheckingMode(true);
             return;
         }
         if (checkingMode && flowErrors.length) {
+            console.log('flowErrors', flowErrors)
             toast.error('Please complete the flow!');
             return;
         }
         if (!isEmpty(errors)) {
+            console.log('errors', errors)
             toast.error('Please complete the flow!');
             return;
         }
         toast.loading('Loading preview...');
         let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
         width=700,height=700,left=-500,top=-500`;
-        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);   
+        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);
         setTimeout(() => {
             toast.dismiss();
         }, 500);
-        localStorage.setItem('chat-flow', JSON.stringify({ nodes, edges }));
-
+        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
+        onSaveToForm({
+            nodes,
+            edges
+        })
     }
-    // load from local storage
+
     useEffect(() => {
-        const flow = localStorage.getItem('chat-flow');
-        if (flow) {
-            try {
-                const { nodes, edges } = JSON.parse(flow);
-                setValue('nodes', nodes || initialNodes);
-                setValue('edges', edges || initialEdges);
-            }
-            catch (e) {
-                console.log(e);
-            }
+        console.log('savedFlow', savedFlow)
+        if (savedFlow?.edges && savedFlow?.nodes.length && !isEqual(savedFlow?.nodes, nodes) && !isEqual(savedFlow?.edges, edges)) {
+            setValue('nodes', savedFlow.nodes);
+            setValue('edges', savedFlow.edges);
         }
-    }, []);
+    }, [savedFlow]);
 
 
     return (
-        <section className='w-full grid grid-rows-12'>
-            <div className='py-2 row-span-1 flex flex-row justify-between items-center'>
+        <>
+            <div className='py-2 min-h-fit flex flex-row justify-between items-center'>
                 <label className='text-sm font-semibold'>Create your own chat flow</label>
                 <Button
                     onClick={onPreviewClick}
@@ -248,7 +256,7 @@ const NestedFlow = () => {
                     Preview <Eye />
                 </Button>
             </div>
-            <div className='w-full row-span-11 bg-gray-200'>
+            <div className='w-full  bg-gray-200  h-[700px] max-h-[calc(100vh-340px)] min-h-[400px]'>
                 <Form {...control}>
                     <ReactFlow
                         nodes={nodes}
@@ -266,7 +274,7 @@ const NestedFlow = () => {
 
                 </Form>
             </div>
-        </section>
+        </>
     );
 };
 

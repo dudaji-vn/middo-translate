@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Edge, useReactFlow, getConnectedEdges, addEdge } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -21,31 +21,49 @@ import { FormLabel } from '@/components/ui/form';
 import { Switch } from '@/components/data-entry';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { add, set } from 'lodash';
+import toast from 'react-hot-toast';
 
 
 function ButtonNode(node: CustomNodeProps) {
   const { data, isConnectable } = node;
-  const [isUpdating, setIsUpdating] = useState(false);
-  const [isLink, setIsLink] = useState(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>();
   const { content, img } = data;
 
   const { deleteElements } = useReactFlow();
-  const onRemoveNode = useCallback(() => {
-    deleteElements({ nodes: [{ id: node.id }] });
-  }, [node, deleteElements]);
-
   const { watch, setValue, formState: { errors } } = useFormContext();
   const nodes = watch('nodes');
   const edges = watch('edges');
-  const nodeIndex = nodes.findIndex((n: { id: string; }) => n.id === node.id);
-  const currentNode = nodes[nodeIndex];
+  const { nodeIndex, currentNode, isLink } = useMemo(() => {
+    const nodeIndex = nodes.findIndex((n: { id: string; }) => n.id === node.id);
+    const currentNode = nodes[nodeIndex];
+    return {
+      nodeIndex,
+      currentNode,
+      isLink: !!currentNode?.data?.link
+    }
+  }, [node.data, node.id, node.type, nodes]);
+
+  const onRemoveNode = useCallback(() => {
+    if (isLink) {
+      setValue('nodes', nodes.filter((n: { id: string; }) => n.id !== node.id));
+      return;
+    }
+    deleteElements({ nodes: [{ id: node.id }] });
+  }, [node, deleteElements]);
+
+
   const openEdit = () => {
     setIsUpdating(true);
   }
-  // @ts-ignore
-  const isErrors = errors.nodes && errors?.nodes[nodeIndex]?.data;
 
   const reAddOptionNode = () => {
+    const updatedCurrentNode = {
+      ...currentNode,
+      data: {
+        ...currentNode.data,
+        link: undefined
+      }
+    };
     const newButtonChildNode: FlowNode = {
       id: `${currentNode.id}-opt-${new Date().getTime()}`,
       type: 'option',
@@ -61,23 +79,50 @@ function ButtonNode(node: CustomNodeProps) {
       target: newButtonChildNode.id,
       animated: true,
     };
-    setValue('nodes', [...nodes, currentNode, newButtonChildNode]);
+    const nodesWithNewCurrentNode = nodes.map((n: { id: string; }) => n.id === currentNode.id ? updatedCurrentNode : n);
+    setValue('nodes', [...nodesWithNewCurrentNode, newButtonChildNode]);
     setValue('edges', [...edges, newEdge]);
+
   }
   const onIsLinkChange = (checked: boolean) => {
-    setIsLink(checked);
     if (checked) {
       const edged = getConnectedEdges([currentNode], edges)[0] || {};
       const targetNode = nodes.find((n: { id: string; }) => n.id === edged.target);
       const newEdges = edges.filter((edge: Edge) => edge.target !== edged.target && edge.source !== edged.source)
       setValue('edges', newEdges);
-      const newNodes = deepDeleteNodes(nodes, [targetNode], edges);
-      setValue('nodes', [...newNodes, currentNode]);
+      const newNodes = targetNode ? deepDeleteNodes(nodes, [targetNode], edges) : nodes;
+      setValue('nodes', [...newNodes, {
+        ...currentNode,
+        data: {
+          ...currentNode.data,
+          link: 'https://'
+        }
+      }]);
     }
     else {
       reAddOptionNode();
     }
   }
+  const onCancelAllChanges = () => {
+    try {
+      const beforeChanges = JSON.parse(localStorage.getItem('before-changes') || '{}');
+      if (beforeChanges.nodes && beforeChanges.edges) {
+        setValue('nodes', beforeChanges.nodes);
+        setValue('edges', beforeChanges.edges);
+      }
+    } catch (error) {
+      toast.error('Can\'t revert changes, please try again');
+    }
+    localStorage.removeItem('before-changes');
+  }
+  useEffect(() => {
+    if (isUpdating === false) {
+      onCancelAllChanges();
+    }
+    else if (isUpdating) {
+      localStorage.setItem('before-changes', JSON.stringify({ nodes, edges }));
+    }
+  }, [isUpdating])
 
   if (!node) return null;
   return (
@@ -89,8 +134,8 @@ function ButtonNode(node: CustomNodeProps) {
         onClick={openEdit}>
         <span className='max-w-[160px] truncate'>{content}</span>
       </Button>
-      <Handle type="source" position={Position.Right} isConnectable={isConnectable} />
-      <UpdatingNodeWrapper open={isUpdating} onOpenChange={setIsUpdating}>
+      <Handle type="source" className={currentNode?.data?.link ? 'hidden' : ''} position={Position.Right} isConnectable={isConnectable} />
+      <UpdatingNodeWrapper open={Boolean(isUpdating)} onOpenChange={setIsUpdating}>
         <div className='flex flex-col gap-4 p-2'>
           <div className='flex flex-row justify-between  items-center px-2'>
             <FormLabel className='text-neutral-800 font-semibold'>Button</FormLabel>
@@ -98,7 +143,6 @@ function ButtonNode(node: CustomNodeProps) {
               <Link size={16} />
               <FormLabel>Link</FormLabel>
               <Switch
-                onClick={() => setIsLink(!isLink)}
                 checked={isLink}
                 onCheckedChange={onIsLinkChange}
               />
@@ -126,14 +170,12 @@ function ButtonNode(node: CustomNodeProps) {
         <div className='w-full flex flex-flow gap-3 px-3 justify-end'>
           <Button
             size={'xs'}
-            startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
             className='h-10 px-3 flex flex-flow gap-3'
             shape={'square'}
             variant={'default'}
             color={'secondary'}
             onClick={() => {
               setIsUpdating(false);
-              setIsLink(false);
             }}
           >
 
@@ -141,11 +183,10 @@ function ButtonNode(node: CustomNodeProps) {
           </Button>
           <Button
             size={'xs'}
-            startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
             className='h-10 px-2 flex flex-flow gap-3' shape={'square'}
             onClick={() => {
+              localStorage.removeItem('before-changes');
               setIsUpdating(false);
-              setIsLink(false);
             }}
           >
             save

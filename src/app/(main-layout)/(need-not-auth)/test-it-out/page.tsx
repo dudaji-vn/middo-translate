@@ -18,6 +18,8 @@ import { FlowNode } from '../../(protected)/business/settings/_components/extens
 import { Edge } from 'reactflow'
 import FakeTyping from './_components/fake-typing'
 import useClient from '@/hooks/use-client'
+import { CHAT_FLOW_KEY } from '@/configs/store-key'
+import { isEmpty } from 'lodash'
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options',
@@ -36,13 +38,13 @@ const fakeSender: User = {
   createdAt: new Date().toString(),
 };
 const baseMessage: Message = {
-  _id: '1',
-  content: 'Hello',
+  _id: '',
+  content: '',
   status: 'sent',
   sender: fakeSender,
   createdAt: new Date().toString(),
   language: 'en',
-  contentEnglish: 'Hello',
+  contentEnglish: '',
   type: 'text',
 }
 
@@ -53,6 +55,7 @@ const createFakeMessages = (data: Partial<Message>, fakeType: FakeMessage['fakeT
     _id: new Date().getTime().toString(),
     nodeId: node.id,
     nodeType: node.type,
+    contentEnglish: '',
     link: node.data?.link,
     img: node.data?.img,
     fakeType
@@ -118,20 +121,22 @@ const TestItOut = () => {
   }
 
   useEffect(() => {
-    onStart();
+    if (!isEmpty(nodes) && !isStarted) {
+      onStart();
+    }
   }, [nodes])
 
   useEffect(() => {
-    const gettedflow = localStorage.getItem('chat-flow');
+    const gettedflow = localStorage.getItem(CHAT_FLOW_KEY);
     if (gettedflow) {
       try {
         setFlow(JSON.parse(gettedflow));
+        console.log('gettedflow', gettedflow)
       } catch (error) {
+        console.error("ERROR:>>",error)
       }
     }
-
   }, [])
-
   const onStart = () => {
     const root = nodes.find((node) => node.type === 'root');
     const nextToRoot = edges.find((edge) => edge.source === root?.id);
@@ -143,6 +148,18 @@ const TestItOut = () => {
     }
     setIsStarted(true);
   }
+  const scrollToBottom = () => {
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+      chatContainer.scrollTo({
+        top: chatContainer.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }
+  useEffect(() => {
+    scrollToBottom();
+  }, [fakeMessages])
 
   if (!currentUser || !flow || !nodes || !edges) return null
 
@@ -150,7 +167,7 @@ const TestItOut = () => {
     <main className='w-full h-main-container-height bg-primary-100  relative'
       style={{
         backgroundImage: 'url(/test-flow-bg.png)',
-        backgroundSize: 'cover',
+        backgroundSize: 'contain',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}>
@@ -163,7 +180,7 @@ const TestItOut = () => {
             </div>
             <Minus className='w-4 h-4' />
           </div>
-          <div className={'p-4 overflow-y-auto overflow-x-hidden  h-[400px] '}>
+          <div className={'p-4 overflow-y-auto overflow-x-hidden  h-[400px] '} id='chat-container'>
             <TimeDisplay time={new Date().toString()} />
             {fakeMessages.map((message, index) => {
               if (message.fakeType === 'flow-sender') {
