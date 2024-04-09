@@ -19,7 +19,7 @@ import { Edge } from 'reactflow'
 import FakeTyping from './_components/fake-typing'
 import useClient from '@/hooks/use-client'
 import { CHAT_FLOW_KEY } from '@/configs/store-key'
-import { isEmpty } from 'lodash'
+import { isEmpty, set } from 'lodash'
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options',
@@ -64,6 +64,7 @@ const createFakeMessages = (data: Partial<Message>, fakeType: FakeMessage['fakeT
 
 const TestItOut = () => {
   const currentUser = useAuthStore((s) => s.user);
+  const [shrinked, setShrinked] = React.useState(false);
 
   const [flow, setFlow] = React.useState<{
     nodes: FlowNode[],
@@ -122,7 +123,9 @@ const TestItOut = () => {
 
   useEffect(() => {
     if (!isEmpty(nodes) && !isStarted) {
-      onStart();
+      setTimeout(() => {
+        onStart();
+      }, 1200);
     }
   }, [nodes])
 
@@ -133,7 +136,7 @@ const TestItOut = () => {
         setFlow(JSON.parse(gettedflow));
         console.log('gettedflow', gettedflow)
       } catch (error) {
-        console.error("ERROR:>>",error)
+        console.error("ERROR:>>", error)
       }
     }
   }, [])
@@ -161,6 +164,10 @@ const TestItOut = () => {
     scrollToBottom();
   }, [fakeMessages])
 
+  const onTriggerBtnClick = () => {
+    setShrinked(!shrinked);
+
+  }
   if (!currentUser || !flow || !nodes || !edges) return null
 
   return (<>
@@ -171,8 +178,12 @@ const TestItOut = () => {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}>
-      <div className={cn('divide-y divide-neutral-50 flex flex-col gap-4 w-[410px] h-fit fixed right-10 bottom-2')}>
-        <div className={cn('w-full  h-fit row-span-10 bg-white rounded-[20px] relative  justify-between  shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]')}>
+      <div className={cn('divide-y divide-neutral-50 flex flex-col gap-4 w-full sm:w-[410px] h-fit fixed sm:right-10 right-0 bottom-2')}>
+        <div
+          className={cn('w-full  h-fit row-span-10 bg-white rounded-[20px] relative  justify-between  shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]',
+            'transition-all duration-300 origin-[93%_100%] transform-gpu',
+            shrinked ? 'scale-0' : 'scale-100')}
+        >
           <div className='w-full h-11 px-3 border-b border-neutral-50 flex flex-row items-center'>
             <div className='w-full flex flex-row items-center justify-start'>
               <Typography className={'text-neutral-600 text-xs min-w-14'}>Power by</Typography>
@@ -232,14 +243,15 @@ const TestItOut = () => {
             className={"absolute rotate-180  right-6 -bottom-4 -translate-y-full"}
           />
         </div>
-        <div className={'w-full flex flex-row justify-end relative  mx-auto'}>
-          <button className='p-4 w-fit  rounded-full bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] relative'>
+        <div className={'w-full max-sm:pr-2 flex flex-row justify-end relative  mx-auto'}>
+          <button
+            onClick={onTriggerBtnClick}
+            className='p-4 w-fit  rounded-full bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] relative'>
             <MessagesSquare className={`w-6 h-6`} stroke={themeColor} />
           </button>
         </div>
-
       </div>
-    </main>
+    </main >
   </>
   )
 }
