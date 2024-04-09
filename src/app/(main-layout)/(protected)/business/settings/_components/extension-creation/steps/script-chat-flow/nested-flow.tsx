@@ -67,7 +67,7 @@ export type FlowNode = Node<{
 }> & {
     type: FlowItemType;
 }
-const initialNodes: FlowNode[] = [
+export const initialChatFlowNodes: FlowNode[] = [
     {
         id: '1',
         data: { label: 'Start conversation', content: 'start conversation' },
@@ -92,12 +92,14 @@ const initialEdges = [
 ];
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
-const NestedFlow = () => {
+const NestedFlow = ({onSaveToForm}:{
+    onSaveToForm: (data: { nodes: FlowNode[], edges: Edge[] }) => void
+}) => {
     const [checkingMode, setCheckingMode] = useState(false);
     const control = useForm({
         mode: 'onChange',
         defaultValues: {
-            nodes: initialNodes,
+            nodes: initialChatFlowNodes,
             edges: initialEdges,
             flowErrors: []
         },
@@ -133,7 +135,7 @@ const NestedFlow = () => {
 
     const onNodesDelete = useCallback(
         (nodesToDelete: Node[]) => {
-            if (nodesToDelete.some((node) => initialNodes.find(n => n.id === node.id))) {
+            if (nodesToDelete.some((node) => initialChatFlowNodes.find(n => n.id === node.id))) {
                 return;
             }
             const newNodes = deepDeleteNodes(nodes, nodesToDelete, edges);
@@ -195,8 +197,12 @@ const NestedFlow = () => {
             // @ts-ignore
             setValue('flowErrors', []);
         }
-        if (!isEmpty(nodes) && !isEqual(nodes, initialNodes)) {
+        if (!isEmpty(nodes) && !isEqual(nodes, initialChatFlowNodes)) {
             localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
+            onSaveToForm({
+                nodes,
+                edges
+            })
         }
     }, [nodes, edges, checkingMode]);
 
@@ -208,10 +214,12 @@ const NestedFlow = () => {
             return;
         }
         if (checkingMode && flowErrors.length) {
+            console.log('flowErrors', flowErrors)
             toast.error('Please complete the flow!');
             return;
         }
         if (!isEmpty(errors)) {
+            console.log('errors', errors)
             toast.error('Please complete the flow!');
             return;
         }
@@ -231,7 +239,7 @@ const NestedFlow = () => {
         if (flow) {
             try {
                 const { nodes, edges } = JSON.parse(flow);
-                setValue('nodes', nodes || initialNodes);
+                setValue('nodes', nodes || initialChatFlowNodes);
                 setValue('edges', edges || initialEdges);
             }
             catch (e) {

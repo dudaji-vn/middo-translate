@@ -22,6 +22,9 @@ import StepWrapper from './steps/step-wrapper';
 import StartingMessageStep from './steps/starting-message-step';
 import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
+import { CHAT_FLOW_KEY } from '@/configs/store-key';
+import { isEqual } from 'lodash';
+import { initialChatFlowNodes } from './steps/script-chat-flow/nested-flow';
 
 
 type TFormValues = {
@@ -32,6 +35,10 @@ type TFormValues = {
     firstMessage: string;
     firstMessageEnglish: string;
     color: string;
+    chatFlow: {
+      nodes: any[];
+      edges: any[];
+    };
   };
 
 }
@@ -60,6 +67,10 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         firstMessage: DEFAULT_FIRST_MESSAGE.content,
         firstMessageEnglish: DEFAULT_FIRST_MESSAGE.contentEnglish,
         color: DEFAULT_THEME,
+        chatFlow: {
+          nodes: [],
+          edges: [],
+        }
       },
     },
     resolver: zodResolver(createExtensionSchema),
@@ -90,17 +101,29 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         firstMessage: initialData.firstMessage,
         firstMessageEnglish: initialData.firstMessageEnglish,
         color: initialData.color || DEFAULT_THEME,
+        chatFlow: {
+          nodes: initialData?.chatFlow?.nodes || [],
+          edges: initialData?.chatFlow?.edges || [],
+        },
       });
+      if (initialData?.chatFlow?.nodes?.length && !isEqual(initialData?.chatFlow?.nodes, initialChatFlowNodes)) {
+        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify(initialData.chatFlow));
+      }
+      else if (!initialData?.chatFlow) {
+        localStorage.removeItem(CHAT_FLOW_KEY);
+      }
     }
   }, [initialData, open]);
 
   const submit = async (values: TFormValues) => {
     trigger();
-    const payload = {
-      domains: values.domains,
-      ...values.custom,
-    };
+
     try {
+      const payload = {
+        domains: values.domains,
+        ...values.custom,
+        chatFlow: watch('custom.chatFlow'),
+      };
       await createExtensionService(payload).then((res) => {
         router.push(pathname);
         toast.success('Create extension success!');
