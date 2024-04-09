@@ -92,7 +92,7 @@ const initialEdges = [
 ];
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
-const NestedFlow = ({onSaveToForm}:{
+const NestedFlow = ({ onSaveToForm }: {
     onSaveToForm: (data: { nodes: FlowNode[], edges: Edge[] }) => void
 }) => {
     const [checkingMode, setCheckingMode] = useState(false);
@@ -250,8 +250,8 @@ const NestedFlow = ({onSaveToForm}:{
 
 
     return (
-        <section className='w-full grid grid-rows-12'>
-            <div className='py-2 row-span-1 flex flex-row justify-between items-center'>
+        <>
+            <div className='py-2 min-h-fit flex flex-row justify-between items-center'>
                 <label className='text-sm font-semibold'>Create your own chat flow</label>
                 <Button
                     onClick={onPreviewClick}
@@ -259,7 +259,7 @@ const NestedFlow = ({onSaveToForm}:{
                     Preview <Eye />
                 </Button>
             </div>
-            <div className='w-full row-span-11 bg-gray-200'>
+            <div className='w-full  bg-gray-200  h-[700px] max-h-[calc(100vh-340px)] min-h-[400px]'>
                 <Form {...control}>
                     <ReactFlow
                         nodes={nodes}
@@ -277,7 +277,7 @@ const NestedFlow = ({onSaveToForm}:{
 
                 </Form>
             </div>
-        </section>
+        </>
     );
 };
 

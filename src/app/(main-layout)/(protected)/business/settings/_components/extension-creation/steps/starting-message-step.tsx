@@ -65,7 +65,7 @@ const StartingMessageStep = () => {
                         }}
                     />
                 </TabsContent>
-                <TabsContent value='custom' className='w-full h-[70vh]'>
+                <TabsContent value='custom' className='w-full h-fit'>
                     <NestedFlow onSaveToForm={onSaveChatFlow} />
                 </TabsContent>
             </Tabs>
