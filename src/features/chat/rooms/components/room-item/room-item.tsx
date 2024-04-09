@@ -67,30 +67,24 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const currentUserId = currentUser?._id;
   const params = useParams();
   const conversationType = params?.conversationType;
-  const {t} = useTranslation('common');
-  const room = useMemo(
-    () => {
-      const businessRedirectPath = conversationType  ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${_data._id}` : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
-      return generateRoomDisplay(
-        _data,
-        currentUserId,
-        !disabledRedirect,
-        Boolean(conversationType) ? businessRedirectPath : null
-      )
-    },
-    [
+  const { t } = useTranslation('common');
+  const room = useMemo(() => {
+    const businessRedirectPath = conversationType
+      ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${_data._id}`
+      : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
+    return generateRoomDisplay(
       _data,
       currentUserId,
-      disabledRedirect,
-      conversationType,
-    ],
-  );
+      !disabledRedirect,
+      Boolean(conversationType) ? businessRedirectPath : null,
+    );
+  }, [_data, currentUserId, disabledRedirect, conversationType]);
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
 
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
-    `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${currentRoomId}` ||
+      `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
@@ -167,7 +161,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
       </Wrapper>
       {room?.isPinned && (
         <div className="flex items-center pr-3">
-          <PinIcon className="size-4 text-neutral-600" />
+          <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
         </div>
       )}
       <Tooltip

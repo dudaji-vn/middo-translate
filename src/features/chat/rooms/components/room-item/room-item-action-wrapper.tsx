@@ -31,15 +31,32 @@ const BUSINESS_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
   archived: ['unarchive', 'delete'],
   completed: ['delete'],
 };
-const TALK_ALLOWED_ACTIONS: Action[] = ['notify', 'unnotify', 'pin', 'unpin', 'leave', 'delete', 'none'];
+const TALK_ALLOWED_ACTIONS: Action[] = [
+  'notify',
+  'unnotify',
+  'pin',
+  'unpin',
+  'leave',
+  'delete',
+  'none',
+];
 
-const checkAllowedActions = (isBusinessRoom: boolean, businessConversationType: string, action: Action, currentStatus: Room['status']) => {
-  if (currentStatus === 'completed') return BUSINESS_ALLOWED_ACTIONS.completed.includes(action);
-  if (currentStatus === 'archived') return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
-  if (isBusinessRoom) return BUSINESS_ALLOWED_ACTIONS[businessConversationType as EBusinessConversationKeys]?.includes(action);
+const checkAllowedActions = (
+  isBusinessRoom: boolean,
+  businessConversationType: string,
+  action: Action,
+  currentStatus: Room['status'],
+) => {
+  if (currentStatus === 'completed')
+    return BUSINESS_ALLOWED_ACTIONS.completed.includes(action);
+  if (currentStatus === 'archived')
+    return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
+  if (isBusinessRoom)
+    return BUSINESS_ALLOWED_ACTIONS[
+      businessConversationType as EBusinessConversationKeys
+    ]?.includes(action);
   return TALK_ALLOWED_ACTIONS.includes(action);
-}
-
+};
 
 export const RoomItemActionWrapper = forwardRef<
   HTMLDivElement,
@@ -52,8 +69,13 @@ export const RoomItemActionWrapper = forwardRef<
   const items = useMemo(() => {
     return actionItems
       .filter((item) => {
-        const isAllowed = checkAllowedActions(Boolean(isBusiness), String(businessConversationType), item.action, room.status);
-  
+        const isAllowed = checkAllowedActions(
+          Boolean(isBusiness),
+          String(businessConversationType),
+          item.action,
+          room.status,
+        );
+
         switch (item.action) {
           case 'notify':
             return isAllowed && isMuted;
@@ -97,7 +119,7 @@ const MobileWrapper = ({
   RoomItemActionWrapperProps & {
     items: Item[];
   }) => {
-    const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   return (
     <LongPressMenu>
       <LongPressMenu.Trigger className="w-full">
@@ -107,11 +129,11 @@ const MobileWrapper = ({
         {items.map((item) => (
           <LongPressMenu.Item
             key={item.action}
-            title={t(item.label)}
+            startIcon={item.icon}
             color={item.color === 'error' ? 'error' : 'default'}
             onClick={item.onAction}
           >
-            {item.icon}
+            {t(item.label)}
           </LongPressMenu.Item>
         ))}
       </LongPressMenu.Menu>
@@ -126,7 +148,7 @@ const DesktopWrapper = ({
   RoomItemActionWrapperProps & {
     items: Item[];
   }) => {
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   return (
     <div className="group relative flex-1">
       {children}

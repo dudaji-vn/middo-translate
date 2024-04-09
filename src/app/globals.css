@@ -368,8 +368,12 @@
   -webkit-animation: up 0.5s linear;
 }
 
-em-emoji-picker section {
-  @apply !min-w-[100vw] md:min-w-0;
+em-emoji-picker {
+  @apply shadow-none md:min-w-0 md:shadow-2;
+}
+
+.custom-emoji-picker .EmojiPickerReact {
+  @apply !border-none;
 }
 
 @keyframes up {

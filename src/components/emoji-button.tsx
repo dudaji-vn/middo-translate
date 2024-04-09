@@ -13,6 +13,8 @@ import Picker from '@emoji-mart/react';
 import { Smile } from 'lucide-react';
 import { useState } from 'react';
 import { Editor } from '@tiptap/react';
+import { Drawer, DrawerContent, DrawerTrigger } from './data-display/drawer';
+import EmojiPicker from '@emoji-mart/react';
 
 export interface EmojiToggleButtonProps {
   editor: Editor | null;
@@ -26,6 +28,40 @@ export const EmojiButton = ({ editor }: EmojiToggleButtonProps) => {
     e?.preventDefault();
     setOpenEmojisPicker((prev) => !prev);
   });
+
+  if (isMobile) {
+    return (
+      <Drawer open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
+        <DrawerTrigger asChild>
+          <Button.Icon variant="ghost" color="default" size="xs">
+            <Smile />
+          </Button.Icon>
+        </DrawerTrigger>
+        <DrawerContent>
+          <div
+            data-vaul-no-drag
+            className="custom-emoji-picker flex justify-center"
+          >
+            <EmojiPicker
+              theme="light"
+              onEmojiSelect={(emoji: any) => {
+                setOpenEmojisPicker(false);
+                setTimeout(() => {
+                  editor?.commands.insertContent({
+                    type: 'text',
+                    text: emoji.native,
+                  });
+                  editor?.commands.focus();
+                }, 500);
+              }}
+              skinTonePosition="none"
+              previewPosition="none"
+            />
+          </div>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
 
   return (
     <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
