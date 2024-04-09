@@ -11,7 +11,6 @@ import { set } from 'lodash';
 import { Edge } from 'reactflow';
 
 const StartingMessageStep = () => {
-    const [tab, setTab] = React.useState<string>('default');
     const { trigger, watch, setValue, formState: {
         errors,
         isValid,
@@ -20,30 +19,35 @@ const StartingMessageStep = () => {
     } } = useFormContext();
     const scriptChatFlow = watch('custom.chatFlow');
 
-    useEffect(() => {
-        setTab(scriptChatFlow?.nodes?.length > 1 ? 'custom' : 'default')
-    }, [scriptChatFlow])
-    useEffect(() => {
+    const [tab, setTab] = React.useState<string>('custom');
+
+
+    const onTabSelect = (tab: string) => {
         if (tab === 'default') {
+            localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify(
+                scriptChatFlow
+            ))
             setValue('custom.chatFlow', undefined)
         } else {
             const flow = localStorage.getItem(CHAT_FLOW_KEY);
             if (flow) {
                 try {
                     const parseFlow = JSON.parse(flow);
-                    setValue('custom.chatFlow', parseFlow)
+                    if (parseFlow.nodes.length > 1) {
+                        setValue('custom.chatFlow', parseFlow)
+                    }
                 } catch (error) {
                     console.error(error)
                 }
             }
         }
-    }, [tab])
+    }
 
     const onSaveChatFlow = (chatFlow: {
         nodes: FlowNode[];
         edges: Edge[];
     }) => {
-        setValue('custom.chatFlow', chatFlow)
+        setValue('custom.chatFlow', chatFlow);
     }
     return (
         <div className='flex flex-col gap-3 p-3'>
@@ -52,10 +56,14 @@ const StartingMessageStep = () => {
             >
                 Starting message
             </FormLabel>
-            <Tabs defaultValue='default' onValueChange={setTab} value={tab}>
+            <Tabs onValueChange={setTab} value={tab}>
                 <TabsList className='border-none bg-neutral-50 px-2 py-1 gap-1 rounded-[8px]'>
-                    <TabsTrigger value='default' variant='button'>Plain text</TabsTrigger>
-                    <TabsTrigger value='custom' variant='button'>Script</TabsTrigger>
+                    <TabsTrigger
+                        onClick={() => onTabSelect('default')}
+                        value='default' variant='button'>Plain text</TabsTrigger>
+                    <TabsTrigger
+                        onClick={() => onTabSelect('custom')}
+                        value='custom' variant='button'>Script</TabsTrigger>
                 </TabsList>
                 <TabsContent value='default'>
                     <CustomFirstMessageOptions
@@ -66,7 +74,9 @@ const StartingMessageStep = () => {
                     />
                 </TabsContent>
                 <TabsContent value='custom' className='w-full h-fit'>
-                    <NestedFlow onSaveToForm={onSaveChatFlow} />
+                    <NestedFlow onSaveToForm={onSaveChatFlow} savedFlow={
+                        scriptChatFlow
+                    } />
                 </TabsContent>
             </Tabs>
 

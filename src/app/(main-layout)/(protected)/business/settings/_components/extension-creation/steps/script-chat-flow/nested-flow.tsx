@@ -87,13 +87,20 @@ export const initialChatFlowNodes: FlowNode[] = [
     },
 ];
 
-const initialEdges = [
+const initialEdges: Edge[] = [
     { id: 'e1-2', source: '1', target: '2', animated: true, label: 'Start conversation' },
 ];
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
-const NestedFlow = ({ onSaveToForm }: {
-    onSaveToForm: (data: { nodes: FlowNode[], edges: Edge[] }) => void
+const NestedFlow = ({
+    onSaveToForm,
+    savedFlow
+}: {
+    onSaveToForm: (data: { nodes: FlowNode[], edges: Edge[] }) => void,
+    savedFlow?: {
+        nodes: FlowNode[],
+        edges: Edge[]
+    }
 }) => {
     const [checkingMode, setCheckingMode] = useState(false);
     const control = useForm({
@@ -197,13 +204,6 @@ const NestedFlow = ({ onSaveToForm }: {
             // @ts-ignore
             setValue('flowErrors', []);
         }
-        if (!isEmpty(nodes) && !isEqual(nodes, initialChatFlowNodes)) {
-            localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
-            onSaveToForm({
-                nodes,
-                edges
-            })
-        }
     }, [nodes, edges, checkingMode]);
 
 
@@ -231,22 +231,19 @@ const NestedFlow = ({ onSaveToForm }: {
             toast.dismiss();
         }, 500);
         localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
-
+        onSaveToForm({
+            nodes,
+            edges
+        })
     }
 
     useEffect(() => {
-        const flow = localStorage.getItem(CHAT_FLOW_KEY);
-        if (flow) {
-            try {
-                const { nodes, edges } = JSON.parse(flow);
-                setValue('nodes', nodes || initialChatFlowNodes);
-                setValue('edges', edges || initialEdges);
-            }
-            catch (e) {
-                console.log(e);
-            }
+        console.log('savedFlow', savedFlow)
+        if (savedFlow?.edges && savedFlow?.nodes.length && !isEqual(savedFlow?.nodes, nodes) && !isEqual(savedFlow?.edges, edges)) {
+            setValue('nodes', savedFlow.nodes);
+            setValue('edges', savedFlow.edges);
         }
-    }, []);
+    }, [savedFlow]);
 
 
     return (

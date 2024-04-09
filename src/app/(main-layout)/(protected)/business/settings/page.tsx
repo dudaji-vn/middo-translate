@@ -14,7 +14,7 @@ const SettingPage = async ({ searchParams }: {
 }) => {
     const businessExtension = await businessAPI.getExtension();
     const modatType = searchParams.modal;
-    console.log('BusinessExtension', BusinessExtension)
+    console.log('BusinessExtension', businessExtension)
     return (
         <div className='max-md:w-screen max-md:px-1 w-full bg-primary-100 h-full'>
             <SettingHeader data={businessExtension} />

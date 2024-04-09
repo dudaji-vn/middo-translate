@@ -19,6 +19,7 @@ import { Edge } from 'reactflow'
 import FakeTyping from './_components/fake-typing'
 import useClient from '@/hooks/use-client'
 import { CHAT_FLOW_KEY } from '@/configs/store-key'
+import { isEmpty } from 'lodash'
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options',
@@ -120,7 +121,9 @@ const TestItOut = () => {
   }
 
   useEffect(() => {
-    onStart();
+    if (!isEmpty(nodes) && !isStarted) {
+      onStart();
+    }
   }, [nodes])
 
   useEffect(() => {
@@ -128,10 +131,11 @@ const TestItOut = () => {
     if (gettedflow) {
       try {
         setFlow(JSON.parse(gettedflow));
+        console.log('gettedflow', gettedflow)
       } catch (error) {
+        console.error("ERROR:>>",error)
       }
     }
-
   }, [])
   const onStart = () => {
     const root = nodes.find((node) => node.type === 'root');

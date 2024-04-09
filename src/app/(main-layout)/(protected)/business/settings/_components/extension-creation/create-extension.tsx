@@ -35,7 +35,7 @@ type TFormValues = {
     firstMessage: string;
     firstMessageEnglish: string;
     color: string;
-    chatFlow: {
+    chatFlow?: {
       nodes: any[];
       edges: any[];
     };
@@ -67,10 +67,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         firstMessage: DEFAULT_FIRST_MESSAGE.content,
         firstMessageEnglish: DEFAULT_FIRST_MESSAGE.contentEnglish,
         color: DEFAULT_THEME,
-        chatFlow: {
-          nodes: [],
-          edges: [],
-        }
+        chatFlow: undefined,
       },
     },
     resolver: zodResolver(createExtensionSchema),
@@ -101,17 +98,11 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         firstMessage: initialData.firstMessage,
         firstMessageEnglish: initialData.firstMessageEnglish,
         color: initialData.color || DEFAULT_THEME,
-        chatFlow: {
+        chatFlow: initialData?.chatFlow ? {
           nodes: initialData?.chatFlow?.nodes || [],
           edges: initialData?.chatFlow?.edges || [],
-        },
+        } : undefined
       });
-      if (initialData?.chatFlow?.nodes?.length && !isEqual(initialData?.chatFlow?.nodes, initialChatFlowNodes)) {
-        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify(initialData.chatFlow));
-      }
-      else if (!initialData?.chatFlow) {
-        localStorage.removeItem(CHAT_FLOW_KEY);
-      }
     }
   }, [initialData, open]);
 
