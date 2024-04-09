@@ -61,7 +61,7 @@ const createFakeMessages = (data: Partial<Message>, fakeType: FakeMessage['fakeT
 
 const TestItOut = () => {
   const currentUser = useAuthStore((s) => s.user);
-  const isClient = useClient();
+
   const [flow, setFlow] = React.useState<{
     nodes: FlowNode[],
     edges: Edge[],
@@ -120,21 +120,17 @@ const TestItOut = () => {
   useEffect(() => {
     onStart();
   }, [nodes])
-  
+
   useEffect(() => {
-    if (!isClient) return;
     const gettedflow = localStorage.getItem('chat-flow');
     if (gettedflow) {
       try {
-        return JSON.parse(gettedflow);
+        setFlow(JSON.parse(gettedflow));
       } catch (error) {
       }
     }
-    return {
-      nodes: [],
-      edges: [],
-    }
-  }, [isClient])
+
+  }, [])
 
   const onStart = () => {
     const root = nodes.find((node) => node.type === 'root');
