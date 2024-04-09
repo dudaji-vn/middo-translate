@@ -118,7 +118,7 @@ const MobileWrapper = ({
   message,
   setActive,
 }: MessageItemMobileWrapperProps) => {
-  const { value, setValue, setFalse } = useBoolean(true);
+  const { value, setValue, setFalse } = useBoolean(false);
 
   const { t } = useTranslation('common');
   const {
