@@ -43,6 +43,7 @@ export interface MessageProps
   guestId?: string;
   disabledAllActions?: boolean;
   showTime?: boolean;
+  showReactionBar?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -78,8 +79,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       showReply = true,
       pinnedBy,
       disabledAllActions,
-      discussionDisabled,
+      discussionDisabled = false,
       showTime,
+      showReactionBar = true,
       ...props
     },
     ref,
@@ -192,14 +194,16 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                       isMe={isMe}
                     />
                   )}
-                  {message.hasChild && showReply && (
+                  {!discussionDisabled && message.hasChild && showReply && (
                     <MessageItemReply isMe={isMe} messageId={message._id} />
                   )}
                 </MessageItemWrapper>
               </div>
-              {message?.reactions && message.reactions.length > 0 && (
-                <MessageItemReactionBar isMe={isMe} message={message} />
-              )}
+              {showReactionBar &&
+                message?.reactions &&
+                message.reactions.length > 0 && (
+                  <MessageItemReactionBar isMe={isMe} message={message} />
+                )}
               {showTime && (
                 <span
                   className={cn(

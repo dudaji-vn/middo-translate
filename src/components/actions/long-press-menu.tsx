@@ -1,5 +1,6 @@
 import {
   PropsWithChildren,
+  cloneElement,
   createContext,
   forwardRef,
   useContext,
@@ -7,16 +8,22 @@ import {
 } from 'react';
 
 import { Button } from '@/components/actions';
-import Sheet from 'react-modal-sheet';
 import { cn } from '@/utils/cn';
-import { useBoolean } from 'usehooks-ts';
 import { useLongPress } from 'use-long-press';
+import { useBoolean } from 'usehooks-ts';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+} from '../data-display/drawer';
 
 type LongPressMenuProps = {
   isOpen: boolean;
   open: () => void;
   close: () => void;
   bind: ReturnType<typeof useLongPress>;
+  onOpenChange?: (isOpen: boolean) => void;
   hasBackdrop?: boolean;
 };
 
@@ -36,10 +43,11 @@ export const LongPressMenu = ({
   onPressed?: () => void;
   onOpenChange?: (isOpen: boolean) => void;
 }) => {
-  const { setFalse, setTrue, value } = useBoolean(false);
+  const { setFalse, setTrue, value, setValue } = useBoolean(false);
   const bind = useLongPress((event) => {
     onPressed && onPressed();
     setTrue();
+    navigator?.vibrate(8);
     onOpenChange && onOpenChange(true);
   });
 
@@ -69,6 +77,7 @@ export const LongPressMenu = ({
         close: handleClose,
         bind,
         hasBackdrop,
+        onOpenChange: setValue,
       }}
     >
       <> {children}</>
@@ -93,60 +102,68 @@ export const Trigger = (
   return <div {...bind()} {...props} />;
 };
 
-export const Menu = (
-  props: PropsWithChildren<React.HTMLProps<HTMLDivElement>>,
-) => {
-  const { isOpen, close, hasBackdrop } = useLongPressMenu();
+export const Menu = ({
+  outsideComponent,
+  children,
+}: PropsWithChildren<React.HTMLProps<HTMLDivElement>> & {
+  outsideComponent?: React.ReactNode;
+}) => {
+  const { isOpen, close, onOpenChange } = useLongPressMenu();
   return (
-    <Sheet isOpen={isOpen} onClose={close}>
-      <Sheet.Container className="!h-fit !rounded-t-3xl pb-6">
-        <Sheet.Header />
-        <Sheet.Content>
-          <div className="flex justify-evenly"> {props.children}</div>
-        </Sheet.Content>
-      </Sheet.Container>
-      {hasBackdrop ? (
-        <Sheet.Backdrop onTap={close} className="!bg-black/60" />
-      ) : (
-        <></>
-      )}
-    </Sheet>
+    <Drawer open={isOpen} onOpenChange={onOpenChange} onClose={close}>
+      <DrawerContent>
+        {outsideComponent && (
+          <div className="pointer-events-none absolute top-0 w-full -translate-y-full">
+            {outsideComponent}
+          </div>
+        )}
+        <div className="justify-start pb-3 pt-1"> {children}</div>
+      </DrawerContent>
+    </Drawer>
   );
 };
 
+type ItemProps = {} & typeof Button;
+
 const Item = forwardRef<
-  React.ElementRef<
-    typeof Button.Icon & {
-      title: string;
-    }
-  >,
-  React.ComponentPropsWithoutRef<
-    typeof Button.Icon & {
-      title: string;
-    }
-  >
->(({ className, title, color, onClick, ...props }, ref) => {
-  const { close } = useLongPressMenu();
-  return (
-    <div className="flex flex-col items-center">
-      <Button.Icon
+  React.ElementRef<ItemProps>,
+  React.ComponentPropsWithoutRef<ItemProps>
+>(
+  (
+    { className, startIcon, title, color, onClick, children, ...props },
+    ref,
+  ) => {
+    const { close } = useLongPressMenu();
+
+    return (
+      <button
         ref={ref}
-        className={cn(className)}
-        color={color || 'default'}
-        variant="ghost"
-        size="xs"
         {...props}
+        className={cn(
+          'hover:bg-blue-gray-50 hover:text-blue-gray-900 focus:bg-blue-gray-50 focus:text-blue-gray-900 flex h-14 w-full cursor-pointer select-none items-center gap-2 pb-2 pl-5 pt-[9px] text-start leading-tight transition-all  hover:bg-neutral-100 focus:bg-neutral-100 active:bg-neutral-100',
+          className,
+        )}
         onClick={(e) => {
           onClick && onClick(e);
           close();
         }}
-      />
-      <span className={cn('text-sm', color === 'error' && 'text-error')}>
-        {title}
-      </span>
-    </div>
-  );
-});
+      >
+        {startIcon && (
+          <>
+            {cloneElement(startIcon, {
+              size: 20,
+              className: cn('mr-2', color && `text-${color}`),
+            })}
+          </>
+        )}
+
+        <span className={cn('text-base', color === 'error' && 'text-error')}>
+          {children}
+        </span>
+      </button>
+    );
+  },
+);
 
 Item.displayName = 'Item';
 
