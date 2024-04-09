@@ -36,13 +36,13 @@ const fakeSender: User = {
   createdAt: new Date().toString(),
 };
 const baseMessage: Message = {
-  _id: '1',
-  content: 'Hello',
+  _id: '',
+  content: '',
   status: 'sent',
   sender: fakeSender,
   createdAt: new Date().toString(),
   language: 'en',
-  contentEnglish: 'Hello',
+  contentEnglish: '',
   type: 'text',
 }
 
@@ -53,6 +53,7 @@ const createFakeMessages = (data: Partial<Message>, fakeType: FakeMessage['fakeT
     _id: new Date().getTime().toString(),
     nodeId: node.id,
     nodeType: node.type,
+    contentEnglish: '',
     link: node.data?.link,
     img: node.data?.img,
     fakeType
@@ -131,6 +132,8 @@ const TestItOut = () => {
     }
 
   }, [])
+  console.log('flow', flow)
+
 
   const onStart = () => {
     const root = nodes.find((node) => node.type === 'root');
@@ -143,6 +146,18 @@ const TestItOut = () => {
     }
     setIsStarted(true);
   }
+  const scrollToBottom = () => {
+    const chatContainer = document.getElementById('chat-container');
+    if (chatContainer) {
+      chatContainer.scrollTo({
+        top: chatContainer.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+  }
+  useEffect(() => {
+    scrollToBottom();
+  }, [fakeMessages])
 
   if (!currentUser || !flow || !nodes || !edges) return null
 
@@ -150,7 +165,7 @@ const TestItOut = () => {
     <main className='w-full h-main-container-height bg-primary-100  relative'
       style={{
         backgroundImage: 'url(/test-flow-bg.png)',
-        backgroundSize: 'cover',
+        backgroundSize: 'contain',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}>
@@ -163,7 +178,7 @@ const TestItOut = () => {
             </div>
             <Minus className='w-4 h-4' />
           </div>
-          <div className={'p-4 overflow-y-auto overflow-x-hidden  h-[400px] '}>
+          <div className={'p-4 overflow-y-auto overflow-x-hidden  h-[400px] '} id='chat-container'>
             <TimeDisplay time={new Date().toString()} />
             {fakeMessages.map((message, index) => {
               if (message.fakeType === 'flow-sender') {

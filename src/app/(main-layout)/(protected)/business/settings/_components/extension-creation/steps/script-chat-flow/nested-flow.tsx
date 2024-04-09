@@ -114,8 +114,6 @@ const NestedFlow = () => {
                 // @ts-ignore
                 setValue('nodes', applyNodeChanges(changes, watchNodes));
             }
-            // @ts-ignore
-
         },
         [setValue, watch]
     );
