@@ -167,7 +167,7 @@ const NestedFlow = ({
             return;
         }
         const flowErrors: FormDataErrors = [];
-        nodes.forEach((node) => {
+        nodes.forEach((node: FlowNode) => {
             switch (node.type) {
                 case 'option':
                     // const connected = edges.filter((edge) => edge.source === node.id);
@@ -176,7 +176,7 @@ const NestedFlow = ({
                     // }
                     break;
                 case 'container':
-                    const childrens = nodes.filter((n) => n.parentNode === node.id);
+                    const childrens = nodes.filter((n: FlowNode) => n.parentNode === node.id);
                     if (childrens.length === 0) {
                         flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
                     }

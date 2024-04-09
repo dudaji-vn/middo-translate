@@ -21,7 +21,6 @@ const SettingPage = async ({ searchParams }: {
             <div className='w-full bg-white'>
                 <CreateExtension open={Boolean(modatType === 'create-extension' || modatType === 'edit-extension' && businessExtension)} initialData={businessExtension} />
             </div>
-            
         </div>
     )
 }

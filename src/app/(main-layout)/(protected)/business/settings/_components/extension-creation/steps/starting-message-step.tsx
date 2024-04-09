@@ -19,7 +19,7 @@ const StartingMessageStep = () => {
     } } = useFormContext();
     const scriptChatFlow = watch('custom.chatFlow');
 
-    const [tab, setTab] = React.useState<string>('custom');
+    const [tab, setTab] = React.useState<string>(scriptChatFlow ? 'custom' : 'default');
 
 
     const onTabSelect = (tab: string) => {
