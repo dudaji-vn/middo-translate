@@ -17,8 +17,9 @@ import { User } from '@/features/users/types'
 import { FlowNode } from '../../(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow'
 import { Edge } from 'reactflow'
 import FakeTyping from './_components/fake-typing'
+import useClient from '@/hooks/use-client'
 
-export type FakeMessage = Message & {
+type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options',
   nodeId: string,
   nodeType: FlowNode['type'],
@@ -60,21 +61,13 @@ const createFakeMessages = (data: Partial<Message>, fakeType: FakeMessage['fakeT
 
 const TestItOut = () => {
   const currentUser = useAuthStore((s) => s.user);
+  const isClient = useClient();
   const [flow, setFlow] = React.useState<{
     nodes: FlowNode[],
     edges: Edge[],
-  }>(() => {
-    const gettedflow = localStorage.getItem('chat-flow');
-    if (gettedflow) {
-      try {
-        return JSON.parse(gettedflow);
-      } catch (error) {
-      }
-    }
-    return {
-      nodes: [],
-      edges: [],
-    }
+  }>({
+    nodes: [],
+    edges: [],
   })
   const { nodes, edges } = flow;
   const [fakeMessages, setFakeMessages] = React.useState<FakeMessage[]>([]);
@@ -127,6 +120,21 @@ const TestItOut = () => {
   useEffect(() => {
     onStart();
   }, [nodes])
+  
+  useEffect(() => {
+    if (!isClient) return;
+    const gettedflow = localStorage.getItem('chat-flow');
+    if (gettedflow) {
+      try {
+        return JSON.parse(gettedflow);
+      } catch (error) {
+      }
+    }
+    return {
+      nodes: [],
+      edges: [],
+    }
+  }, [isClient])
 
   const onStart = () => {
     const root = nodes.find((node) => node.type === 'root');
