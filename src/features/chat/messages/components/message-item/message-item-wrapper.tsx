@@ -118,7 +118,8 @@ const MobileWrapper = ({
   message,
   setActive,
 }: MessageItemMobileWrapperProps) => {
-  const { value, setValue, setFalse } = useBoolean(false);
+  const { value, setValue, setFalse } = useBoolean(true);
+
   const { t } = useTranslation('common');
   const {
     setFalse: hideEmoji,
@@ -126,9 +127,9 @@ const MobileWrapper = ({
     setValue: changeShowEmoji,
     setTrue: openEmoji,
   } = useBoolean(false);
-  const { mutate } = useReactMessage();
-  const handleEmojiClick = (emoji: string) => {
-    mutate({ id: message._id, emoji });
+  const { mutateAsync } = useReactMessage();
+  const handleEmojiClick = async (emoji: string) => {
+    await mutateAsync({ id: message._id, emoji });
     hideEmoji();
   };
 
@@ -145,9 +146,15 @@ const MobileWrapper = ({
         <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
         <LongPressMenu.Menu
           outsideComponent={
-            <div className="px-3 py-2">
-              <div className="pointer-events-auto mb-2">
+            <div className={cn('px-3 py-2')}>
+              <div
+                className={cn(
+                  'pointer-events-auto mb-2 w-fit',
+                  isMe ? 'ml-auto' : '',
+                )}
+              >
                 <MessageItem
+                  isDraw
                   sender={isMe ? 'me' : 'other'}
                   showReactionBar={false}
                   message={message}

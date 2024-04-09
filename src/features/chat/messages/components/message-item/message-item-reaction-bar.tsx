@@ -23,6 +23,9 @@ import { useBoolean } from 'usehooks-ts';
 import { useReactMessage } from '../../hooks';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MessageEmojiPicker } from '../message-emoji-picker';
+import { Drawer, DrawerContent } from '@/components/data-display/drawer';
+import EmojiPicker from '@emoji-mart/react';
 
 export interface MessageItemReactionBarProps {
   message: Message;
@@ -50,12 +53,23 @@ export const MessageItemReactionBar = ({
   const user = useAuthStore((state) => state.user);
 
   const [tabValue, setTabValue] = useState<string>('all');
+  const {
+    value: showEmoji,
+    setValue: changeShowEmoji,
+    setFalse: hideEmoji,
+    setTrue: openEmoji,
+  } = useBoolean(false);
 
   const { setValue, value } = useBoolean(false);
 
   const { mutate } = useReactMessage();
 
   const keys = Object.keys(reactionsByEmoji);
+
+  const handleEmojiClick = (emoji: string) => {
+    mutate({ id: message._id, emoji });
+    hideEmoji();
+  };
 
   return (
     <div
@@ -113,8 +127,8 @@ export const MessageItemReactionBar = ({
               })}
             </TabsList>
           </Tabs>
-          <div>
-            {tabValue === 'all' && (
+          <div className="max-h-64 overflow-y-auto">
+            {tabValue === 'all' ? (
               <div>
                 {reactions.map((reaction) => {
                   const isMe = reaction.user._id === user?._id;
@@ -148,8 +162,7 @@ export const MessageItemReactionBar = ({
                   );
                 })}
               </div>
-            )}
-            {tabValue !== 'all' && (
+            ) : (
               <>
                 {reactionsByEmoji[tabValue]?.map((reaction) => (
                   <UserItem
@@ -181,6 +194,31 @@ export const MessageItemReactionBar = ({
           <AlertDialogFooter>
             <AlertDialogAction>{t('COMMON.CLOSE')}</AlertDialogAction>
           </AlertDialogFooter>
+          <div className="pointer-events-auto absolute -bottom-3 w-full translate-y-full rounded-full shadow-1 md:w-fit">
+            <MessageEmojiPicker
+              onClickMore={() => {
+                openEmoji();
+              }}
+              messageId={message._id}
+            />
+          </div>
+          <Drawer open={showEmoji} onOpenChange={changeShowEmoji}>
+            <DrawerContent>
+              <div
+                data-vaul-no-drag
+                className="custom-emoji-picker flex justify-center"
+              >
+                <EmojiPicker
+                  theme="light"
+                  onEmojiSelect={(emoji: any) => {
+                    handleEmojiClick(emoji.native);
+                  }}
+                  skinTonePosition="none"
+                  previewPosition="none"
+                />
+              </div>
+            </DrawerContent>
+          </Drawer>
         </AlertDialogContent>
       </AlertDialog>
     </div>

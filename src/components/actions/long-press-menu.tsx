@@ -3,6 +3,7 @@ import {
   cloneElement,
   createContext,
   forwardRef,
+  useCallback,
   useContext,
   useEffect,
 } from 'react';
@@ -11,12 +12,7 @@ import { Button } from '@/components/actions';
 import { cn } from '@/utils/cn';
 import { useLongPress } from 'use-long-press';
 import { useBoolean } from 'usehooks-ts';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-} from '../data-display/drawer';
+import { Drawer, DrawerContent } from '../data-display/drawer';
 
 type LongPressMenuProps = {
   isOpen: boolean;
@@ -51,14 +47,14 @@ export const LongPressMenu = ({
     onOpenChange && onOpenChange(true);
   });
 
-  const handleOpen = () => {
+  const handleOpen = useCallback(() => {
     setTrue();
     onOpenChange && onOpenChange(true);
-  };
-  const handleClose = () => {
+  }, [onOpenChange, setTrue]);
+  const handleClose = useCallback(() => {
     setFalse();
     onOpenChange && onOpenChange(false);
-  };
+  }, [onOpenChange, setFalse]);
 
   useEffect(() => {
     if (isOpen) {
@@ -66,8 +62,7 @@ export const LongPressMenu = ({
     } else {
       handleClose();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen]);
+  }, [handleClose, handleOpen, isOpen]);
 
   return (
     <LongPressMenuContext.Provider
