@@ -71,7 +71,7 @@ export const MessageEmojiPicker = forwardRef<
       <div
         ref={ref}
         {...props}
-        className="flex w-fit items-center gap-1 rounded-full border-neutral-50 bg-white p-1 px-1 pl-3 shadow-1"
+        className="flex w-full items-center justify-between gap-1 rounded-full border-neutral-50 bg-white p-1 px-1 pl-3 shadow-1 md:w-fit"
       >
         <AnimatePresence>
           {defaultEmoji.map((emoji, index) => (
@@ -99,7 +99,7 @@ export const MessageEmojiPicker = forwardRef<
                       handleEmojiClick(emoji.value);
                     }}
                     key={emoji.name}
-                    className="disable-text-selection all flex h-8 w-8 origin-bottom cursor-pointer items-center justify-center rounded-full text-[28px] transition-transform ease-linear hover:scale-150"
+                    className="disable-text-selection all flex h-8 w-8 origin-bottom cursor-pointer items-center justify-center rounded-full text-[32px] transition-transform ease-linear hover:scale-150 md:text-[28px]"
                   >
                     {emoji.value}
                   </div>

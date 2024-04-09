@@ -44,6 +44,7 @@ export interface MessageProps
   disabledAllActions?: boolean;
   showTime?: boolean;
   showReactionBar?: boolean;
+  isDraw?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -82,6 +83,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       discussionDisabled = false,
       showTime,
       showReactionBar = true,
+      isDraw = false,
       ...props
     },
     ref,
@@ -114,6 +116,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   'relative flex',
                   isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
                   isPending && 'opacity-50',
+                  isDraw && 'pl-0 md:pl-0',
                 )}
               >
                 {showAvatar ? (
@@ -124,7 +127,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     size="xs"
                   />
                 ) : (
-                  <div className="mb-0.5 mr-1 mt-auto size-6 shrink-0" />
+                  <div
+                    className={cn(
+                      'pointer-events-none mb-0.5 mr-1 mt-auto size-6 shrink-0',
+                    )}
+                  />
                 )}
                 <MessageItemWrapper
                   disabledAllActions={disabledAllActions}
