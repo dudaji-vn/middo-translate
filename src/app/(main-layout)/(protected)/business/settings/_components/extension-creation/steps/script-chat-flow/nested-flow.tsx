@@ -24,6 +24,8 @@ import { isEmpty, isEqual } from 'lodash';
 import { deepDeleteNodes } from './nodes.utils';
 import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
+import { CHAT_FLOW_KEY } from '@/configs/store-key';
+
 
 const schemaFlow = z.object({
     nodes: z.array(z.object({
@@ -114,6 +116,7 @@ const NestedFlow = () => {
                 // @ts-ignore
                 setValue('nodes', applyNodeChanges(changes, watchNodes));
             }
+
         },
         [setValue, watch]
     );
@@ -192,11 +195,13 @@ const NestedFlow = () => {
             // @ts-ignore
             setValue('flowErrors', []);
         }
-    }, [nodes, checkingMode]);
+        if (!isEmpty(nodes) && !isEqual(nodes, initialNodes)) {
+            localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
+        }
+    }, [nodes, edges, checkingMode]);
+
 
     const onPreviewClick = () => {
-
-
         trigger('nodes')
         if (!checkingMode) {
             setCheckingMode(true);
@@ -213,16 +218,16 @@ const NestedFlow = () => {
         toast.loading('Loading preview...');
         let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
         width=700,height=700,left=-500,top=-500`;
-        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);   
+        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);
         setTimeout(() => {
             toast.dismiss();
         }, 500);
-        localStorage.setItem('chat-flow', JSON.stringify({ nodes, edges }));
+        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
 
     }
-    // load from local storage
+
     useEffect(() => {
-        const flow = localStorage.getItem('chat-flow');
+        const flow = localStorage.getItem(CHAT_FLOW_KEY);
         if (flow) {
             try {
                 const { nodes, edges } = JSON.parse(flow);

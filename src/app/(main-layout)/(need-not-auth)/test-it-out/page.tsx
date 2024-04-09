@@ -18,6 +18,7 @@ import { FlowNode } from '../../(protected)/business/settings/_components/extens
 import { Edge } from 'reactflow'
 import FakeTyping from './_components/fake-typing'
 import useClient from '@/hooks/use-client'
+import { CHAT_FLOW_KEY } from '@/configs/store-key'
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options',
@@ -123,7 +124,7 @@ const TestItOut = () => {
   }, [nodes])
 
   useEffect(() => {
-    const gettedflow = localStorage.getItem('chat-flow');
+    const gettedflow = localStorage.getItem(CHAT_FLOW_KEY);
     if (gettedflow) {
       try {
         setFlow(JSON.parse(gettedflow));
@@ -132,9 +133,6 @@ const TestItOut = () => {
     }
 
   }, [])
-  console.log('flow', flow)
-
-
   const onStart = () => {
     const root = nodes.find((node) => node.type === 'root');
     const nextToRoot = edges.find((edge) => edge.source === root?.id);
