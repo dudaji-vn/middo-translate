@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Edge, useReactFlow, getConnectedEdges, addEdge } from 'reactflow';
 import 'reactflow/dist/style.css';
 
@@ -21,30 +21,36 @@ import { FormLabel } from '@/components/ui/form';
 import { Switch } from '@/components/data-entry';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { add, set } from 'lodash';
+import toast from 'react-hot-toast';
 
 
 function ButtonNode(node: CustomNodeProps) {
   const { data, isConnectable } = node;
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>();
   const { content, img } = data;
 
   const { deleteElements } = useReactFlow();
-  const onRemoveNode = useCallback(() => {
-    deleteElements({ nodes: [{ id: node.id }] });
-  }, [node, deleteElements]);
-
   const { watch, setValue, formState: { errors } } = useFormContext();
   const nodes = watch('nodes');
   const edges = watch('edges');
-
   const { nodeIndex, currentNode, isLink } = useMemo(() => {
     const nodeIndex = nodes.findIndex((n: { id: string; }) => n.id === node.id);
+    const currentNode = nodes[nodeIndex];
     return {
       nodeIndex,
-      currentNode: nodes[nodeIndex],
-      isLink: !!nodes[nodeIndex]?.data?.link
+      currentNode,
+      isLink: !!currentNode?.data?.link
     }
   }, [node.data, node.id, node.type, nodes]);
+
+  const onRemoveNode = useCallback(() => {
+    if (isLink) {
+      setValue('nodes', nodes.filter((n: { id: string; }) => n.id !== node.id));
+      return;
+    }
+    deleteElements({ nodes: [{ id: node.id }] });
+  }, [node, deleteElements]);
+
 
   const openEdit = () => {
     setIsUpdating(true);
@@ -79,7 +85,6 @@ function ButtonNode(node: CustomNodeProps) {
 
   }
   const onIsLinkChange = (checked: boolean) => {
-    localStorage.setItem('before-changes', JSON.stringify({ nodes, edges }));
     if (checked) {
       const edged = getConnectedEdges([currentNode], edges)[0] || {};
       const targetNode = nodes.find((n: { id: string; }) => n.id === edged.target);
@@ -99,12 +104,25 @@ function ButtonNode(node: CustomNodeProps) {
     }
   }
   const onCancelAllChanges = () => {
-    const beforeChanges = JSON.parse(localStorage.getItem('before-changes') || '{}');
-    if (beforeChanges.nodes && beforeChanges.edges) {
-      setValue('nodes', beforeChanges.nodes);
-      setValue('edges', beforeChanges.edges);
+    try {
+      const beforeChanges = JSON.parse(localStorage.getItem('before-changes') || '{}');
+      if (beforeChanges.nodes && beforeChanges.edges) {
+        setValue('nodes', beforeChanges.nodes);
+        setValue('edges', beforeChanges.edges);
+      }
+    } catch (error) {
+      toast.error('Can\'t revert changes, please try again');
     }
+    localStorage.removeItem('before-changes');
   }
+  useEffect(() => {
+    if (isUpdating === false) {
+      onCancelAllChanges();
+    }
+    else if (isUpdating) {
+      localStorage.setItem('before-changes', JSON.stringify({ nodes, edges }));
+    }
+  }, [isUpdating])
 
   if (!node) return null;
   return (
@@ -116,8 +134,8 @@ function ButtonNode(node: CustomNodeProps) {
         onClick={openEdit}>
         <span className='max-w-[160px] truncate'>{content}</span>
       </Button>
-      <Handle type="source" className={currentNode.data?.link ? 'hidden' : ''} position={Position.Right} isConnectable={isConnectable} />
-      <UpdatingNodeWrapper open={isUpdating} onOpenChange={setIsUpdating}>
+      <Handle type="source" className={currentNode?.data?.link ? 'hidden' : ''} position={Position.Right} isConnectable={isConnectable} />
+      <UpdatingNodeWrapper open={Boolean(isUpdating)} onOpenChange={setIsUpdating}>
         <div className='flex flex-col gap-4 p-2'>
           <div className='flex flex-row justify-between  items-center px-2'>
             <FormLabel className='text-neutral-800 font-semibold'>Button</FormLabel>
@@ -158,7 +176,6 @@ function ButtonNode(node: CustomNodeProps) {
             color={'secondary'}
             onClick={() => {
               setIsUpdating(false);
-              onCancelAllChanges();
             }}
           >
 
@@ -168,6 +185,7 @@ function ButtonNode(node: CustomNodeProps) {
             size={'xs'}
             className='h-10 px-2 flex flex-flow gap-3' shape={'square'}
             onClick={() => {
+              localStorage.removeItem('before-changes');
               setIsUpdating(false);
             }}
           >
