@@ -2,7 +2,7 @@ import { FlowNode } from '@/app/(main-layout)/(protected)/business/settings/_com
 import { Button } from '@/components/actions';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Edge } from 'reactflow';
 import { messageApi } from '../../api';
 
@@ -17,6 +17,14 @@ const MessageNode = ({
     const { chatFlow, room } = useBusinessExtensionStore();
     const { link, content } = messageNode.data || {};
     const [loading, setLoading] = React.useState(false);
+
+    const [me, them] = useMemo(() => {
+
+        // @ts-ignore
+        const me = room?.participants.find((p: { _id: string, tempEmail: boolean }) => p.tempEmail);
+        const them = room?.participants.find((p) => p._id !== me?._id);
+        return [me, them];
+    }, [room?.participants]);
     const onFlowActionClick = async () => {
         console.log('onFlowActionClick', messageNode, chatFlow);
         if (!chatFlow?.nodes || !chatFlow?.edges || !room?._id) return;
@@ -28,19 +36,39 @@ const MessageNode = ({
 
         if (nextNode) {
             const childrenActions = nodes.filter(node => node.parentNode === nextNode?.id);
+            const myMessage = {
+                content: messageNode.data?.content,
+                roomId: room?._id,
+                type: 'text',
+                language: 'en',
+                mentions: [],
+            }
             const newBotMessage = {
                 content: nextNode.data?.content,
                 roomId: room?._id,
-                type: 'flow-actions',
                 language: 'en',
+                type: nextNode.type === 'option' ? 'flow-actions' : 'text',
                 mentions: [],
                 actions: nextNode.type === 'message' ? undefined : childrenActions,
             }
-            await messageApi.sendAnonymousMessage({
-                ...newBotMessage,
-                senderType: 'bot',
-                clientTempId: new Date().toISOString()
-            });
+            try {
+                await messageApi.sendAnonymousMessage({
+                    ...myMessage,
+                    senderType: 'user',
+                    // @ts-ignore
+                    userId: me?._id,
+                    clientTempId: new Date().toISOString()
+                });
+                await messageApi.sendAnonymousMessage({
+                    ...newBotMessage,
+                    senderType: 'bot',
+                    // @ts-ignore
+                    userId: them?._id,
+                    clientTempId: new Date().toISOString()
+                });
+            } catch (error) {
+                console.error('Failed to send message', error);
+            }
             setLoading(false);
         }
     }
@@ -63,8 +91,7 @@ const MessageNode = ({
     }
     return (
         <Button
-            disabled={disabled}
-            loading={loading}
+            disabled={disabled || loading}
             className={'h-9  w-fit'}
             variant={'outline'}
             color={'primary'}
