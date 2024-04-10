@@ -3,7 +3,7 @@
 import { DEFAULT_THEME, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options'
 import { PreviewReceivedMessage } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/preview-received-message'
 import { Button } from '@/components/actions'
-import { Typography } from '@/components/data-display'
+import { Avatar, Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'
 import { InputSelectLanguage } from '@/components/form/input-select-language'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/navigation'
@@ -120,7 +120,14 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
                     <Typography variant={'h4'} className="text-lg">Thank you!</Typography>
                     <Typography >Conversation end. <br /> Your rating has been sent successfully.</Typography>
                 </div> :
-                <PreviewReceivedMessage sender={owner} content={businessData.firstMessage} />}
+                <div className="overflow-hidden  relative aspect-square max-h-[100px]  h-fit w-full flex flex-row gap-2">
+                    <Avatar src={owner?.avatar ?? '/avatar.png'} alt={'avatar-sender'} className="size-16  p-1 border border-neutral-50" />
+                    <div className="flex flex-col gap-1 w-full h-fit">
+                        <p className="text-neutral-800 max-h-fit text-xs">Conversation with</p>
+                        <p className="text-neutral-600 max-h-fit text-[24px] font-semibold">{owner?.name}</p>
+                    </div>
+                </div>
+            }
             <Sheet open={open} onOpenChange={setOpen}>
                 <SheetContent side='bottom' className={open ? 'w-full  bg-white max-md:rounded-t-2xl shadow-sm' : 'hidden'}>
                     <Form {...methods}>

@@ -6,6 +6,7 @@ import React, { useMemo } from 'react'
 import { Edge } from 'reactflow';
 import { messageApi } from '../../api';
 import { useQueryClient } from '@tanstack/react-query';
+import { useMessagesBox } from '../message-box';
 
 export type MessageNode = Omit<FlowNode, 'position'>;
 const MessageNode = ({
@@ -15,11 +16,11 @@ const MessageNode = ({
     messageNode: MessageNode,
     disabled?: boolean,
 }) => {
-    const { chatFlow, room } = useBusinessExtensionStore();
+    const { chatFlow, room, roomSendingState, setRoomSendingState } = useBusinessExtensionStore();
+    const { addMessage, replaceMessage } = useMessagesBox();
     const key = ['messages', room?._id];
     const queryClient = useQueryClient();
     const { link, content } = messageNode.data || {};
-    const [loading, setLoading] = React.useState(false);
 
     const [me, them] = useMemo(() => {
 
@@ -28,85 +29,97 @@ const MessageNode = ({
         const them = room?.participants.find((p) => p._id !== me?._id);
         return [me, them];
     }, [room?.participants]);
-    const onFlowActionClick = async () => {
-        console.log('onFlowActionClick', messageNode, chatFlow);
-        if (!chatFlow?.nodes || !chatFlow?.edges || !room?._id) return;
-        setLoading(true);
-        const { nodes, edges } = chatFlow;
-
-        const nextEdge = edges.find((edge) => edge.source === messageNode.id);
-        const nextNode = nodes.find((node) => node.id === nextEdge?.target);
-
-        if (nextNode) {
-            const childrenActions = nodes.filter(node => node.parentNode === nextNode?.id);
-            const myMessage = {
-                content: messageNode.data?.content,
-                roomId: room?._id,
-                type: 'text',
-                language: 'en',
-                mentions: [],
-            }
-            const newBotMessage = {
-                content: nextNode.data?.content,
-                roomId: room?._id,
-                language: 'en',
-                type: nextNode.type === 'option' ? 'flow-actions' : 'text',
-                mentions: [],
-                actions: nextNode.type === 'message' ? undefined : childrenActions,
-            }
-            try {
-                await messageApi.sendAnonymousMessage({
-                    ...myMessage,
-                    senderType: 'user',
-                    // @ts-ignore
-                    userId: me?._id,
-                    clientTempId: new Date().toISOString()
-                });
-                queryClient.invalidateQueries(key);
-                await messageApi.sendAnonymousMessage({
-                    ...newBotMessage,
-                    senderType: 'bot',
-                    // @ts-ignore
-                    userId: them?._id,
-                    clientTempId: new Date().toISOString()
-                });
-                queryClient.invalidateQueries(key);
-            } catch (error) {
-                console.error('Failed to send message', error);
-            }
-            setLoading(false);
+    const appendMyMessage = async () => {
+        const myMessage = {
+            content: messageNode.data?.content,
+            roomId: room?._id,
+            type: 'text',
+            language: 'en',
+            mentions: [],
+            senderType: 'user',
+            userId: me?._id,
+            clientTempId: new Date().toISOString()
         }
+        if (me) {
+            // @ts-ignore
+            addMessage({
+                ...myMessage,
+                status: 'pending',
+                sender: me });
     }
+    // @ts-ignore
+    await messageApi.sendAnonymousMessage(myMessage).then((res) => {
+        // @ts-ignore
+        if (res?._id)
+            // @ts-ignore
+            replaceMessage(res, myMessage.clientTempId);
+    });
+    // queryClient.invalidateQueries(key);
+}
+const onFlowActionClick = async () => {
+    await appendMyMessage();
+    if (!chatFlow?.nodes || !chatFlow?.edges || !room?._id) return;
+    setRoomSendingState('loading');
+    const { nodes, edges } = chatFlow;
 
-    if (messageNode.type === 'button' && link?.length) {
-        return (
-            <a target="_blank" href={link}>
-                <Button
-                    disabled={disabled}
-                    className={'h-9  w-fit'}
-                    variant={'outline'}
-                    color={'primary'}
-                    shape={'square'}
-                    type={'button'}
-                >
-                    {content || link}
-                </Button>
-            </a>
-        );
+    const nextEdge = edges.find((edge) => edge.source === messageNode.id);
+    const nextNode = nodes.find((node) => node.id === nextEdge?.target);
+
+    if (nextNode) {
+        const childrenActions = nodes.filter(node => node.parentNode === nextNode?.id);
+        const newBotMessage = {
+            content: nextNode.data?.content,
+            roomId: room?._id,
+            language: 'en',
+            type: nextNode.type === 'option' ? 'flow-actions' : 'text',
+            mentions: [],
+            actions: nextNode.type === 'message' ? undefined : childrenActions,
+        }
+        try {
+            await messageApi.sendAnonymousMessage({
+                ...newBotMessage,
+                senderType: 'bot',
+                // @ts-ignore
+                userId: them?._id,
+                clientTempId: new Date().toISOString()
+            })
+            // queryClient.invalidateQueries(key);
+        } catch (error) {
+            console.error('Failed to send message', error);
+        }
+        setRoomSendingState(null);
     }
+}
+
+if (messageNode.type === 'button' && link?.length) {
     return (
-        <Button
-            disabled={disabled || loading}
-            className={'h-9  w-fit'}
-            variant={'outline'}
-            color={'primary'}
-            shape={'square'}
-            type={'button'}
-            onClick={onFlowActionClick}
-        >
-            {content}
-        </Button>
+        <a target="_blank" href={link}>
+            <Button
+                disabled={disabled}
+                className={'h-9  w-fit'}
+                variant={'outline'}
+                color={'primary'}
+                shape={'square'}
+                type={'button'}
+            >
+                {content || link}
+            </Button>
+        </a>
     );
+}
+return (
+    <Button
+        disabled={disabled || !!roomSendingState}
+        className={'h-9  w-fit'}
+        variant={'outline'}
+        color={'primary'}
+        shape={'square'}
+        type={'button'}
+        onClick={onFlowActionClick}
+    >
+        {content}
+    </Button>
+);
 }
 
 export default function MessageItemFlowActions({

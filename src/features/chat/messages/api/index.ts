@@ -33,7 +33,7 @@ export const messageApi = {
       anonymousBasePath + '/messages/help-desk',
       data
     );
-    return res.data?.data;
+    return res.data;
   },
 
   async getOne(id: string) {
