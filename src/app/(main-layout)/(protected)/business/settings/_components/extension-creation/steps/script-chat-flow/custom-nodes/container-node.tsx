@@ -51,7 +51,7 @@ function ContainerNode(node: CustomNodeProps) {
             type: 'option',
             data: {
                 content: '',
-                img: ''
+                media: []
             },
             position: { x: node.xPos + width + 200, y: node.yPos + childLenth * 250 },
         };

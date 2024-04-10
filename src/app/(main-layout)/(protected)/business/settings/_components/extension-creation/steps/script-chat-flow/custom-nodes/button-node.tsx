@@ -27,7 +27,7 @@ import toast from 'react-hot-toast';
 function ButtonNode(node: CustomNodeProps) {
   const { data, isConnectable } = node;
   const [isUpdating, setIsUpdating] = useState<boolean>();
-  const { content, img } = data;
+  const { content } = data;
 
   const { deleteElements } = useReactFlow();
   const { watch, setValue, formState: { errors } } = useFormContext();
@@ -69,7 +69,7 @@ function ButtonNode(node: CustomNodeProps) {
       type: 'option',
       data: {
         content: '',
-        img: ''
+        media: []
       },
       position: { x: node.xPos + 600, y: node.yPos - 250 },
     };

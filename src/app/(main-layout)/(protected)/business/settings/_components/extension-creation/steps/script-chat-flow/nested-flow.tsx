@@ -22,9 +22,9 @@ import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
 import { isEmpty, isEqual } from 'lodash';
 import { deepDeleteNodes } from './nodes.utils';
-import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
+import { Media } from '@/types';
 
 
 const schemaFlow = z.object({
@@ -37,7 +37,7 @@ const schemaFlow = z.object({
                 message: 'Please enter content!',
             }),
             link: z.string().optional(),
-            img: z.string().optional(),
+            media: z.array(z.any()).optional(),
         }).refine((data) => {
             if (data.link && !data.link.trim().length) {
                 return false;
@@ -62,7 +62,7 @@ export type FlowItemType = 'button' | 'message' | 'root' | 'container' | 'option
 export type FlowNode = Node<{
     content: string;
     label?: string;
-    img?: string;
+    media?: Media[];
     link?: string;
 }> & {
     type: FlowItemType;

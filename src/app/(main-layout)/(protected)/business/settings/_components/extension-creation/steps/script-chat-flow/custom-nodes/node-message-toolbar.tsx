@@ -37,10 +37,13 @@ const NodeMessageToolbar = ({ nameFieldImg = '', nameFiledContent = '' }: {
     const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
 
     useEffect(() => {
-        // setValue(nameFieldImg, uploadedFiles.map((file) => file.url).join(','));
-    }, [uploadedFiles]);
+        console.log('uploadedFiles', uploadedFiles)
+        setValue(nameFieldImg, uploadedFiles || files);
+    }, [uploadedFiles, files, setValue, nameFieldImg]);
+
     return <>
         <div className='flex flex-col'>
+            <AttachmentSelection />
             <div className='flex flex-row'>
                 <MessageEditorToolbarFile />
                 <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
@@ -70,7 +73,6 @@ const NodeMessageToolbar = ({ nameFieldImg = '', nameFiledContent = '' }: {
                     </PopoverContent>
                 </Popover>
             </div>
-            <AttachmentSelection />
         </div>
     </>
 }

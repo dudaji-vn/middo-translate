@@ -1,7 +1,6 @@
 import { Media, Response } from '@/types';
 
 import { Message, PinMessage } from '@/features/chat/messages/types';
-import axios from 'axios';
 import { axios as axiosWithInterceptor } from '@/lib/axios';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
@@ -29,7 +28,6 @@ export const messageApi = {
 
   async sendAnonymousMessage(data: CreateMessage) {
     const res: Response<{ data: Message }> = await axiosWithInterceptor.post(
-
       anonymousBasePath + '/messages/help-desk',
       data,
     );
