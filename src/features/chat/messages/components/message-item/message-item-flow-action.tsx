@@ -5,6 +5,7 @@ import { useBusinessExtensionStore } from '@/stores/extension.store';
 import React, { useMemo } from 'react'
 import { Edge } from 'reactflow';
 import { messageApi } from '../../api';
+import { useQueryClient } from '@tanstack/react-query';
 
 export type MessageNode = Omit<FlowNode, 'position'>;
 const MessageNode = ({
@@ -15,6 +16,8 @@ const MessageNode = ({
     disabled?: boolean,
 }) => {
     const { chatFlow, room } = useBusinessExtensionStore();
+    const key = ['messages', room?._id];
+    const queryClient = useQueryClient();
     const { link, content } = messageNode.data || {};
     const [loading, setLoading] = React.useState(false);
 
@@ -66,6 +69,7 @@ const MessageNode = ({
                     userId: them?._id,
                     clientTempId: new Date().toISOString()
                 });
+                queryClient.invalidateQueries(key);
             } catch (error) {
                 console.error('Failed to send message', error);
             }
