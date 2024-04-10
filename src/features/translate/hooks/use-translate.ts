@@ -72,8 +72,14 @@ export const useTranslate = ({
     }
   };
 
-  const {listening, interimTranscript, startSpeechToText, stopSpeechToText, resetTranscript} = useSpeechRecognizer(
-    SUPPORTED_VOICE_MAP[user?.language as keyof typeof SUPPORTED_VOICE_MAP]
+  const {
+    listening,
+    interimTranscript,
+    startSpeechToText,
+    stopSpeechToText,
+    resetTranscript,
+  } = useSpeechRecognizer(
+    SUPPORTED_VOICE_MAP[user?.language as keyof typeof SUPPORTED_VOICE_MAP],
   );
 
   const handleStartListening = (lang?: string) => {
@@ -83,7 +89,7 @@ export const useTranslate = ({
   };
 
   const handleStopListening = () => {
-    if(listening) {
+    if (listening) {
       stopSpeechToText();
       // resetTranscript();
     }
