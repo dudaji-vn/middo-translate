@@ -54,6 +54,8 @@ export default function useHandleStreamMyVideo() {
             setShareScreenStream(undefined);
             setMyStream(undefined);
             resetParticipants();
+            setTurnOnCamera(DEFAULT_USER_CALL_STATE.isTurnOnCamera);
+            setTurnOnMic(DEFAULT_USER_CALL_STATE.isTurnOnMic);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, room?._id, room?.roomId, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t, user?._id]);

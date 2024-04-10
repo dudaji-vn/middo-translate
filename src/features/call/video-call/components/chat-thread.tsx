@@ -39,7 +39,7 @@ export default function ChatThread({ className }: { className?: string }) {
       className={twMerge(
         'z-20 h-full w-full flex-1 overflow-y-hidden border-t bg-background md:w-[400px] md:max-w-[400px] md:overflow-auto md:border-t-0',
         className,
-        isMobile && 'fixed top-[52px] h-[calc(100vh_-_104px)]',
+        isMobile && 'fixed top-[52px] h-[calc(100dvh_-_104px)]',
         (!isFullScreen || !isShowChat) && 'hidden md:hidden',
       )}
     >

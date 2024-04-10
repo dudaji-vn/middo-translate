@@ -9,6 +9,7 @@ import { CommonComponent } from './components/common/common';
 import VideoCall from './video-call';
 import ReceiveVideoCall from './receive-call';
 import { useNetworkStatus } from '@/utils/use-network-status';
+import { CUSTOM_EVENTS } from '@/configs/custom-event';
 
 const CallVideoModalContainer = () => {
   const { removeRequestCall, clearStateVideoCall, room, setRoom } = useVideoCallStore();
@@ -16,10 +17,10 @@ const CallVideoModalContainer = () => {
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomIdEnd: string) => {
       removeRequestCall(roomIdEnd);
-      sendEvent('MEETING_END', roomIdEnd);
+      sendEvent(CUSTOM_EVENTS.CALL.MEETING_END, roomIdEnd);
     });
     socket.on(SOCKET_CONFIG.EVENTS.CALL.START, (roomIdStart: string) => {
-      sendEvent('MEETING_START', roomIdStart);
+      sendEvent(CUSTOM_EVENTS.CALL.MEETING_START, roomIdStart);
     });
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.MEETING_END);

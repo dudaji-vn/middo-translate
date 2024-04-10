@@ -2,7 +2,7 @@
 
 import './style.css';
 
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useCallback, useEffect } from 'react';
 
 import { Button } from '@/components/actions';
 import { MicIcon } from 'lucide-react';
@@ -64,7 +64,7 @@ export const TranslateOptionBar = forwardRef<
     setIsListening(true);
     startSpeechToText();
   };
-  const handleStopListening = () => {
+  const handleStopListening = useCallback(() => {
     setIsListening(false);
     if (interimTranscript) {
       setParam('query', interimTranscript);
@@ -74,10 +74,21 @@ export const TranslateOptionBar = forwardRef<
       stopSpeechToText();
       // resetTranscript();
     } catch {}
-  };
+  }, [interimTranscript, setIsListening, setParam, setValue, stopSpeechToText])
+
   useKeyboardShortcut([SHORTCUTS.TOGGLE_SPEECH_TO_TEXT], () =>
     isListening ? handleStopListening() : handleStartListening(),
   );
+  
+  
+  useEffect(()=>{
+    return ()=> {
+      setIsListening(false);
+      stopSpeechToText();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceLang])
+  
 
   useEffect(() => {
     if (!isListening) {

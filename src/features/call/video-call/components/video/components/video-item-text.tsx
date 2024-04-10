@@ -16,7 +16,7 @@ export default function VideoItemText({ participant }: VideoItemTextProps) {
       {/* Text overlay focus view when pin */}
       <div
         className={cn(
-          '1234 pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90 opacity-0',
+          'pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90 opacity-0',
           participant.pin &&
             !isPinDoodle &&
             isFullScreen &&
