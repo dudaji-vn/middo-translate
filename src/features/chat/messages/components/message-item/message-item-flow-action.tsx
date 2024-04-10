@@ -69,7 +69,7 @@ const MessageNode = ({
                     userId: them?._id,
                     clientTempId: new Date().toISOString()
                 });
-                queryClient.invalidateQueries(key);
+                queryClient.invalidateQueries(key);a
             } catch (error) {
                 console.error('Failed to send message', error);
             }
