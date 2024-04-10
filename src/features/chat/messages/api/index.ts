@@ -1,5 +1,4 @@
 import { Media, Response } from '@/types';
-
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { Message, PinMessage } from '@/features/chat/messages/types';
 import { axios as axiosWithInterceptor } from '@/lib/axios';

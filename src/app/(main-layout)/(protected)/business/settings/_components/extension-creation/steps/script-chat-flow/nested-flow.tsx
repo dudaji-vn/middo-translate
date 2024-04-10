@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
     addEdge,
     Background,
@@ -22,9 +22,9 @@ import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
 import { isEmpty, isEqual } from 'lodash';
 import { deepDeleteNodes } from './nodes.utils';
-import Link from 'next/link';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
+import { Media } from '@/types';
 
 
 const schemaFlow = z.object({
@@ -37,7 +37,7 @@ const schemaFlow = z.object({
                 message: 'Please enter content!',
             }),
             link: z.string().optional(),
-            img: z.string().optional(),
+            media: z.array(z.any()).optional(),
         }).refine((data) => {
             if (data.link && !data.link.trim().length) {
                 return false;
@@ -62,7 +62,7 @@ export type FlowItemType = 'button' | 'message' | 'root' | 'container' | 'option
 export type FlowNode = Node<{
     content: string;
     label?: string;
-    img?: string;
+    media?: Media[];
     link?: string;
 }> & {
     type: FlowItemType;
@@ -161,11 +161,18 @@ const NestedFlow = ({
         },
         [addEdge, setValue, watch]
     );
+    const redirectToPreview = () => {
+        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
+        toast.loading('Loading preview...');
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+        width=700,height=700,left=-500,top=-500`;
+        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);
+        setTimeout(() => {
+            toast.dismiss();
+        }, 500);
+    }
 
     const checkingErrors = () => {
-        if (!checkingMode) {
-            return;
-        }
         const flowErrors: FormDataErrors = [];
         nodes.forEach((node: FlowNode) => {
             switch (node.type) {
@@ -194,7 +201,7 @@ const NestedFlow = ({
         });
         // @ts-ignore
         setValue('flowErrors', flowErrors);
-
+        return flowErrors;
     }
     useEffect(() => {
         if (checkingMode) {
@@ -207,11 +214,34 @@ const NestedFlow = ({
     }, [nodes, edges, checkingMode]);
 
 
+    useEffect(() => {
+        if (savedFlow && (savedFlow?.nodes || savedFlow?.edges)) {
+            setValue('nodes', savedFlow.nodes);
+            setValue('edges', savedFlow.edges);
+        }
+    }, []);
+    useEffect(() => {
+        if (isEqual(savedFlow?.nodes, nodes) && isEqual(savedFlow?.edges, edges)) {
+            return;
+        }
+        else if ((!isEqual(savedFlow?.nodes, nodes) || !isEqual(savedFlow?.edges, edges))) {
+            onSaveToForm({
+                nodes,
+                edges
+            })
+        }
+    }, [nodes, edges])
+
+
     const onPreviewClick = () => {
         trigger('nodes')
         if (!checkingMode) {
+            const error = checkingErrors();
+            if (error.length) {
+                toast.error('Please complete the flow!');
+                return;
+            }
             setCheckingMode(true);
-            return;
         }
         if (checkingMode && flowErrors.length) {
             console.log('flowErrors', flowErrors)
@@ -223,27 +253,16 @@ const NestedFlow = ({
             toast.error('Please complete the flow!');
             return;
         }
-        toast.loading('Loading preview...');
-        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
-        width=700,height=700,left=-500,top=-500`;
-        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);
-        setTimeout(() => {
-            toast.dismiss();
-        }, 500);
-        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
+
+        redirectToPreview();
         onSaveToForm({
             nodes,
             edges
         })
     }
 
-    useEffect(() => {
-        console.log('savedFlow', savedFlow)
-        if (savedFlow?.edges && savedFlow?.nodes.length && !isEqual(savedFlow?.nodes, nodes) && !isEqual(savedFlow?.edges, edges)) {
-            setValue('nodes', savedFlow.nodes);
-            setValue('edges', savedFlow.edges);
-        }
-    }, [savedFlow]);
+
+
 
 
     return (

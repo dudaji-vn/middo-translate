@@ -6,17 +6,11 @@ import CustomFirstMessageOptions from '../sections/custom-first-message-options'
 import { useFormContext } from 'react-hook-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
 import NestedFlow, { FlowNode } from './script-chat-flow/nested-flow';
-import { CHAT_FLOW_KEY } from '@/configs/store-key';
-import { set } from 'lodash';
 import { Edge } from 'reactflow';
 
 const StartingMessageStep = () => {
-    const { trigger, watch, setValue, formState: {
-        errors,
-        isValid,
-        isSubmitting,
-        isSubmitSuccessful
-    } } = useFormContext();
+    const { watch, setValue } = useFormContext();
+    const [temporalChatFlow, setTemporalChatFlow] = React.useState(watch('custom.chatFlow'));
     const scriptChatFlow = watch('custom.chatFlow');
 
     const [tab, setTab] = React.useState<string>(scriptChatFlow ? 'custom' : 'default');
@@ -24,22 +18,10 @@ const StartingMessageStep = () => {
 
     const onTabSelect = (tab: string) => {
         if (tab === 'default') {
-            localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify(
-                scriptChatFlow
-            ))
-            setValue('custom.chatFlow', undefined)
-        } else {
-            const flow = localStorage.getItem(CHAT_FLOW_KEY);
-            if (flow) {
-                try {
-                    const parseFlow = JSON.parse(flow);
-                    if (parseFlow.nodes.length > 1) {
-                        setValue('custom.chatFlow', parseFlow)
-                    }
-                } catch (error) {
-                    console.error(error)
-                }
-            }
+            setTemporalChatFlow(scriptChatFlow);
+            setValue('custom.chatFlow', null);
+        } else if (tab === 'custom') {
+            setValue('custom.chatFlow', temporalChatFlow);
         }
     }
 
@@ -74,9 +56,10 @@ const StartingMessageStep = () => {
                     />
                 </TabsContent>
                 <TabsContent value='custom' className='w-full h-fit'>
-                    <NestedFlow onSaveToForm={onSaveChatFlow} savedFlow={
-                        scriptChatFlow
-                    } />
+                    {tab === 'custom' && <NestedFlow
+                        onSaveToForm={onSaveChatFlow}
+                        savedFlow={scriptChatFlow || temporalChatFlow}
+                    />}
                 </TabsContent>
             </Tabs>
 

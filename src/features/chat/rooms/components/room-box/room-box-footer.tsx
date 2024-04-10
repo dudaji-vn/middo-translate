@@ -189,6 +189,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         roomId: room._id,
         clientTempId: localImageMessageWaiting._id,
         media: imagesUploaded,
+        // only help-desk extension  need `userId` field
         ...(isAnonymous && { userId: currentUser?._id || guest?._id }),
       });
       setLocalImageMessageWaiting(null);

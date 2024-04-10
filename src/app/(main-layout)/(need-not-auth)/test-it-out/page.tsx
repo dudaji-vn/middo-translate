@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
@@ -17,16 +17,20 @@ import { User } from '@/features/users/types';
 import { FlowNode } from '../../(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { Edge } from 'reactflow';
 import FakeTyping from './_components/fake-typing';
-import useClient from '@/hooks/use-client';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
-import { isEmpty } from 'lodash';
+import { isEmpty, set } from 'lodash';
+import { MessageEditor } from '@/components/message-editor';
+import { MediaUploadProvider } from '@/components/media-upload';
+import { Media } from '@/types';
+import { ImageGallery } from '@/features/chat/messages/components/message-item/message-item-image-gallery';
+import { DocumentMessage } from '@/features/chat/messages/components/message-item/message-item-document';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';
   nodeId: string;
   nodeType: FlowNode['type'];
   link?: string;
-  img?: string;
+  media?: Media[];
 };
 const fakeSender: User = {
   _id: 'fake-sender',
@@ -48,26 +52,33 @@ const baseMessage: Message = {
   type: 'text',
 };
 
-const createFakeMessages = (
-  data: Partial<Message>,
-  fakeType: FakeMessage['fakeType'] = 'flow-sender',
-  node: FlowNode,
-) => {
+const createFakeMessages = ({
+  data,
+  fakeType = 'flow-sender',
+  node,
+}: {
+  data: Partial<Message> & {
+    link?: string;
+  };
+  fakeType: FakeMessage['fakeType'];
+  node?: FlowNode;
+}) => {
+  console.log('data', data);
   return {
     ...baseMessage,
     ...data,
     _id: new Date().getTime().toString(),
-    nodeId: node.id,
-    nodeType: node.type,
+    nodeId: node?.id,
+    nodeType: node?.type,
     contentEnglish: '',
-    link: node.data?.link,
-    img: node.data?.img,
+    link: node?.data?.link,
     fakeType,
   } as FakeMessage;
 };
 
 const TestItOut = () => {
   const currentUser = useAuthStore((s) => s.user);
+  const [shrinked, setShrinked] = React.useState(false);
 
   const [flow, setFlow] = React.useState<{
     nodes: FlowNode[];
@@ -84,31 +95,33 @@ const TestItOut = () => {
   const addSendessageFromFlow = (node: FlowNode) => {
     switch (node.type) {
       case 'root':
-        const firstMessage = createFakeMessages(
-          { content: node.data?.content },
-          'flow-sender',
+        const firstMessage = createFakeMessages({
+          data: { content: node.data?.content },
+          fakeType: 'flow-sender',
           node,
-        );
+        });
         setFakeMessages([firstMessage]);
         break;
       case 'container': {
-        const message = createFakeMessages(
-          { content: node.data?.content },
-          'flow-sender',
+        const message = createFakeMessages({
+          data: { content: node.data?.content, media: node.data?.media },
+          fakeType: 'flow-sender',
           node,
-        );
+        });
         const optionNodes = nodes.filter(
           (n: FlowNode) => n.parentNode === node.id,
         );
         const options =
           optionNodes.map((optionNode) =>
-            createFakeMessages(
-              {
+            createFakeMessages({
+              data: {
                 content: optionNode.data?.content,
+                link: optionNode.data?.link,
+                media: optionNode.data?.media,
               },
-              'flow-options',
-              optionNode,
-            ),
+              fakeType: 'flow-options',
+              node: optionNode,
+            }),
           ) || [];
         setFakeMessages((prev) => [...prev, message]);
         setTimeout(() => {
@@ -117,11 +130,11 @@ const TestItOut = () => {
         break;
       }
       case 'message': {
-        const message = createFakeMessages(
-          { content: node.data?.content },
-          'flow-sender',
+        const message = createFakeMessages({
+          data: { content: node.data?.content, media: node.data?.media },
+          fakeType: 'flow-sender',
           node,
-        );
+        });
         setFakeMessages((prev) => [...prev, message]);
         break;
       }
@@ -132,11 +145,11 @@ const TestItOut = () => {
     }
   };
   const addReceivedMessageFromMyChoice = (selectedNode: FlowNode) => {
-    const myMessage = createFakeMessages(
-      { content: selectedNode.data?.content },
-      'flow-receiver',
-      selectedNode,
-    );
+    const myMessage = createFakeMessages({
+      data: { content: selectedNode.data?.content },
+      fakeType: 'flow-receiver',
+      node: selectedNode,
+    });
     setFakeMessages((prev) => [...prev, myMessage]);
     setIsTyping(true);
     setTimeout(() => {
@@ -151,7 +164,9 @@ const TestItOut = () => {
 
   useEffect(() => {
     if (!isEmpty(nodes) && !isStarted) {
-      onStart();
+      setTimeout(() => {
+        onStart();
+      }, 1200);
     }
   }, [nodes]);
 
@@ -190,27 +205,25 @@ const TestItOut = () => {
     scrollToBottom();
   }, [fakeMessages]);
 
+  const onTriggerBtnClick = () => {
+    setShrinked(!shrinked);
+  };
   if (!currentUser || !flow || !nodes || !edges) return null;
 
   return (
     <>
-      <main
-        className="relative h-main-container-height w-full  bg-primary-100"
-        style={{
-          backgroundImage: 'url(/test-flow-bg.png)',
-          backgroundSize: 'contain',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
+      <main className="relative h-main-container-height w-full  bg-primary-100 bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
+        <div className="absolute inset-0 bg-neutral-100 bg-opacity-25" />
         <div
           className={cn(
-            'fixed bottom-2 right-10 flex h-fit w-[410px] flex-col gap-4 divide-y divide-neutral-50',
+            'fixed bottom-2 right-0 flex h-fit w-full flex-col gap-4 divide-y divide-neutral-50 sm:right-10 sm:w-[410px]',
           )}
         >
           <div
             className={cn(
               'relative  row-span-10 h-fit w-full justify-between rounded-[20px]  bg-white  shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]',
+              'origin-[93%_100%] transform-gpu transition-all duration-300',
+              shrinked ? 'scale-0' : 'scale-100',
             )}
           >
             <div className="flex h-11 w-full flex-row items-center border-b border-neutral-50 px-3">
@@ -228,79 +241,93 @@ const TestItOut = () => {
               </div>
               <Minus className="h-4 w-4" />
             </div>
-            <div
-              className={'h-[400px] overflow-y-auto overflow-x-hidden  p-4 '}
-              id="chat-container"
-            >
-              <TimeDisplay time={new Date().toString()} />
-              {fakeMessages.map((message, index) => {
-                if (message.fakeType === 'flow-sender') {
-                  return (
-                    <PreviewReceivedMessage
-                      debouncedTime={0}
-                      key={index}
-                      onTranlatedChange={(trans) => {
-                        console.log('trans', trans);
-                      }}
-                      sender={currentUser}
-                      content={message.content}
-                      className="max-h-[320px] overflow-y-auto"
-                    />
-                  );
-                }
-                if (message.fakeType === 'flow-receiver') {
-                  return <FakeMessage key={index} message={message} />;
-                }
-                if (message.fakeType === 'flow-options') {
-                  if (message.nodeType === 'button' && message.link?.length) {
+            <div className={'flex h-[500px] flex-col justify-between'}>
+              <div
+                className="overflow-y-auto overflow-x-hidden p-4"
+                id="chat-container"
+              >
+                <TimeDisplay time={new Date().toString()} />
+                {fakeMessages.map((message, index) => {
+                  if (message.fakeType === 'flow-sender') {
+                    return (
+                      <PreviewReceivedMessage
+                        media={message.media}
+                        debouncedTime={0}
+                        key={index}
+                        onTranlatedChange={(trans) => {
+                          console.log('trans', trans);
+                        }}
+                        sender={currentUser}
+                        content={message.content}
+                      />
+                    );
+                  }
+                  if (message.fakeType === 'flow-receiver') {
+                    return <FakeMessage key={index} message={message} />;
+                  }
+                  if (message.fakeType === 'flow-options') {
+                    if (message.nodeType === 'button' && message.link?.length) {
+                      return (
+                        <div
+                          className="flex h-auto w-full flex-col items-end pb-1"
+                          key={index}
+                        >
+                          <a target="_blank" href={message.link} key={index}>
+                            <Button
+                              className={'h-10  w-fit'}
+                              variant={'outline'}
+                              color={'primary'}
+                              shape={'square'}
+                              type={'button'}
+                            >
+                              {message.content}
+                            </Button>
+                          </a>
+                        </div>
+                      );
+                    }
                     return (
                       <div
                         className="flex h-auto w-full flex-col items-end pb-1"
                         key={index}
                       >
-                        <a target="_blank" href={message.link} key={index}>
-                          <Button
-                            className={'h-10  w-fit'}
-                            variant={'outline'}
-                            color={'primary'}
-                            shape={'square'}
-                            type={'button'}
-                          >
-                            {message.content}
-                          </Button>
-                        </a>
+                        <Button
+                          className={'h-10  w-fit'}
+                          variant={'outline'}
+                          color={'primary'}
+                          shape={'square'}
+                          type={'button'}
+                          onClick={() => {
+                            const thisNode = nodes.find(
+                              (node) => node.id === message.nodeId,
+                            );
+                            if (thisNode) {
+                              addReceivedMessageFromMyChoice(thisNode);
+                            }
+                          }}
+                        >
+                          {message.content}
+                        </Button>
                       </div>
                     );
                   }
-                  return (
-                    <div
-                      className="flex h-auto w-full flex-col items-end pb-1"
-                      key={index}
-                    >
-                      <Button
-                        className={'h-10  w-fit'}
-                        variant={'outline'}
-                        color={'primary'}
-                        shape={'square'}
-                        type={'button'}
-                        onClick={() => {
-                          const thisNode = nodes.find(
-                            (node) => node.id === message.nodeId,
-                          );
-                          if (thisNode) {
-                            addReceivedMessageFromMyChoice(thisNode);
-                          }
-                        }}
-                      >
-                        {message.content}
-                      </Button>
-                    </div>
-                  );
-                }
-              })}
+                })}
+              </div>
+              <div className="">
+                {isTyping && <FakeTyping />}
+                <div className="relative w-full border-t p-2">
+                  <MediaUploadProvider>
+                    <MessageEditor
+                      userMentions={[]}
+                      sendBtnProps={{
+                        disabled: true,
+                      }}
+                    />
+                  </MediaUploadProvider>
+                </div>
+              </div>
             </div>
-            {isTyping && <FakeTyping />}
-            <div className="px-8 pb-4"></div>
+
             <Triangle
               fill="#ffffff"
               position="top"
@@ -309,8 +336,15 @@ const TestItOut = () => {
               }
             />
           </div>
-          <div className={'relative mx-auto flex w-full flex-row  justify-end'}>
-            <button className="relative w-fit  rounded-full bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]">
+          <div
+            className={
+              'relative mx-auto flex w-full flex-row justify-end  max-sm:pr-2'
+            }
+          >
+            <button
+              onClick={onTriggerBtnClick}
+              className="relative w-fit  rounded-full bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]"
+            >
               <MessagesSquare className={`h-6 w-6`} stroke={themeColor} />
             </button>
           </div>
