@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { checkRoomIsHaveMeetingService } from '@/services/call.servide';
 import { STATUS } from '@/features/call/constant/status';
 import { listenEvent } from '@/features/call/utils/custom-event.util';
+import { CUSTOM_EVENTS } from '@/configs/custom-event';
 
 export const useCheckHaveMeeting = (roomId: string) => {
     const [isHaveMeeting, setHaveMeeting] = useState(false);
@@ -20,13 +21,13 @@ export const useCheckHaveMeeting = (roomId: string) => {
     }, [roomId]);
 
     useEffect(() => {
-      const cleanupMeetingEnd = listenEvent('MEETING_END', (event: any) => {
+      const cleanupMeetingEnd = listenEvent(CUSTOM_EVENTS.CALL.MEETING_END, (event: any) => {
         const { detail: roomIdEnd } = event
         if(roomIdEnd === roomId) {
           setHaveMeeting(false)
         }
       })
-      const cleanupMeetingStart = listenEvent('MEETING_START', (event: any) => {
+      const cleanupMeetingStart = listenEvent(CUSTOM_EVENTS.CALL.MEETING_START, (event: any) => {
         const { detail: roomIdStart } = event
         if(roomIdStart === roomId) {
           setHaveMeeting(true)

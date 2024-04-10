@@ -15,7 +15,6 @@ import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
-import SpeechRecognition from 'react-speech-recognition';
 import { TranslationTab } from '@/types/translationstab.type';
 import { useTranslation } from 'react-i18next';
 
@@ -75,7 +74,6 @@ export const LanguagesControlBar = forwardRef<
       addRecentlyUsed(sourceValue, 'target');
       if (isListening) {
         setValue('');
-        SpeechRecognition.stopListening();
         setParams(newParams);
         return;
       }
@@ -125,7 +123,6 @@ export const LanguagesControlBar = forwardRef<
       }
       if (isListening) {
         setValue('');
-        SpeechRecognition.stopListening();
       }
     };
 

@@ -122,7 +122,7 @@ export default function useSpeechRecognizer(language?: string) {
     socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.STOP);
     processorRef.current?.disconnect();
     audioInputRef.current?.disconnect();
-    audioContextRef.current?.close();
+    // audioContextRef.current?.close();
     setListening(false);
     // stop stream if needed
     if (stream) {
