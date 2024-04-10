@@ -83,7 +83,6 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   } = form;
 
   useEffect(() => {
-    console.log('initialData', initialData)
     if (open) {
       setTabValue(0);
     }
@@ -105,6 +104,15 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
       });
     }
   }, [initialData, open]);
+
+  useEffect(() => {
+    if (tabValue === 1 && initialData?.chatFlow && isEmpty(watch('custom.chatFlow')) && isEqual(initialData.firstMessage, watch('custom.firstMessage'))) {
+      setValue('custom.chatFlow', {
+        nodes: initialData?.chatFlow?.nodes || [],
+        edges: initialData?.chatFlow?.edges || [],
+      });
+    }
+  }, [tabValue]);
 
   const submit = async (values: TFormValues) => {
     trigger();

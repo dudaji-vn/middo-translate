@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
     addEdge,
     Background,
@@ -207,6 +207,25 @@ const NestedFlow = ({
     }, [nodes, edges, checkingMode]);
 
 
+    useEffect(() => {
+        if (savedFlow && (savedFlow?.nodes || savedFlow?.edges)) {
+            setValue('nodes', savedFlow.nodes);
+            setValue('edges', savedFlow.edges);
+        }
+    }, []);
+    useEffect(() => {
+        if (isEqual(savedFlow?.nodes, nodes) && isEqual(savedFlow?.edges, edges)) {
+            return;
+        }
+        else if ((!isEqual(savedFlow?.nodes, nodes) || !isEqual(savedFlow?.edges, edges))) {
+            onSaveToForm({
+                nodes,
+                edges
+            })
+        }
+    }, [ nodes, edges])
+
+
     const onPreviewClick = () => {
         trigger('nodes')
         if (!checkingMode) {
@@ -237,13 +256,8 @@ const NestedFlow = ({
         })
     }
 
-    useEffect(() => {
-        console.log('savedFlow', savedFlow)
-        if (savedFlow?.edges && savedFlow?.nodes.length && !isEqual(savedFlow?.nodes, nodes) && !isEqual(savedFlow?.edges, edges)) {
-            setValue('nodes', savedFlow.nodes);
-            setValue('edges', savedFlow.edges);
-        }
-    }, [savedFlow]);
+
+
 
 
     return (
