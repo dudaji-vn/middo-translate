@@ -207,15 +207,15 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   {!discussionDisabled && message.hasChild && showReply && (
                     <MessageItemReply isMe={isMe} messageId={message._id} />
                   )}
-                </MessageItemWrapper>    
-                
+                </MessageItemWrapper>
+
               </div>
               {showReactionBar &&
                 message?.reactions &&
                 message.reactions.length > 0 && (
                   <MessageItemReactionBar isMe={isMe} message={message} />
                 )}
-              <MessageItemFlowActions actions={flowActions} />
+              <MessageItemFlowActions actions={flowActions || []} />
               {showTime && (
                 <span
                   className={cn(
@@ -226,7 +226,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   {formatTimeDisplay(message.createdAt!)}
                 </span>
               )}
-              
+
             </div>
             {direction === 'top' && (
               <ReadByUsers
