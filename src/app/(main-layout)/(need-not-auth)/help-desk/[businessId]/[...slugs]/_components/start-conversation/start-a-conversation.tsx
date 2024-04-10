@@ -10,6 +10,8 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/navigation'
 import { Form, FormMessage } from '@/components/ui/form'
 import { createGuestInfoSchema } from '@/configs/yup-form'
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service'
+import { messageApi } from '@/features/chat/messages/api'
+import { Room } from '@/features/chat/rooms/types'
 import { User } from '@/features/users/types'
 import useClient from '@/hooks/use-client'
 import { startAGuestConversationService } from '@/services/extension.service'
@@ -18,6 +20,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { getConnectedEdges } from 'reactflow'
 import { z } from 'zod'
 
 export type TGuestRoom = {
@@ -61,8 +64,37 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
         handleSubmit,
         trigger,
         setValue,
+        watch,
         formState: { isSubmitting, errors },
     } = methods;
+    const chatFlow = businessData.chatFlow;
+    const appendFirstMessageFromChatFlow = async (roomId: Room['_id']) => {
+        if (!chatFlow) return;
+        const { nodes, edges } = chatFlow;
+        const rootNode = nodes.find(node => node.type === 'root');
+        if (!rootNode) return;
+
+        const rootEdges = getConnectedEdges([rootNode], edges)[0] || {};
+        const rootChild = nodes.find(node => node.id === rootEdges.target);
+        if (!rootChild) return;
+
+        const childrenActions = nodes.filter(node => node.parentNode === rootChild.id);
+        const payload = {
+            content: rootChild.data?.content,
+            roomId,
+            type: 'flow-actions',
+            language: watch('language'),
+            mentions: [],
+            actions: rootChild.type === 'message' ? undefined : childrenActions,
+            userId: owner?._id,
+        };
+        await messageApi.sendAnonymousMessage({
+            ...payload,
+            senderType: 'bot',
+            clientTempId: new Date().toISOString()
+        });
+    }
+
     if (!isClient)
         return null
     const submit = async (values: z.infer<typeof createGuestInfoSchema>) => {
@@ -71,9 +103,10 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
             await startAGuestConversationService({
                 businessId: businessData._id,
                 ...values
-            }).then((res) => {
+            }).then(async (res) => {
                 const roomId = res.data.roomId;
                 const user = res.data.user;
+                await appendFirstMessageFromChatFlow(roomId);
                 router.push(`/help-desk/${businessData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
             })
         } catch (error) {
@@ -85,7 +118,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
             {isAfterDoneAnCOnversation ?
                 <div className="max-w-screen-md m-auto flex flex-col gap-4 items-center px-4">
                     <Typography variant={'h4'} className="text-lg">Thank you!</Typography>
-                    <Typography >Conversation end. <br/> Your rating has been sent successfully.</Typography>
+                    <Typography >Conversation end. <br /> Your rating has been sent successfully.</Typography>
                 </div> :
                 <PreviewReceivedMessage sender={owner} content={businessData.firstMessage} />}
             <Sheet open={open} onOpenChange={setOpen}>
