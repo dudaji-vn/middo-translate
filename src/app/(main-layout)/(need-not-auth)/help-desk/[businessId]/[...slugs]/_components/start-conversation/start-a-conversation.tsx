@@ -49,8 +49,6 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const showForm = () => {
-        console.log('businessData.chatFlow', businessData.chatFlow)
-
         setOpen(true);
     }
     const methods = useForm({

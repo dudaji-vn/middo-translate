@@ -20,9 +20,10 @@ const HelpDeskConversationPage = async ({ params: { slugs, }, searchParams: { th
     notFound();
   }
   const anonymousUser = room.participants.find((p: { _id: string }) => p._id === anonymousUserId);
-  const theme = extentionsCustomThemeOptions.find((item) => item.name === themeColor) || extentionsCustomThemeOptions[0]
+  const theme = extentionsCustomThemeOptions.find((item) => item.name === themeColor) || extentionsCustomThemeOptions[0];
+  const chatFlow = room?.chatFlow;
   return (
-    <HelpDeskConversation params={{ slugs }} anonymousUser={anonymousUser} room={room} className={theme.name} isAnonymousPage />
+    <HelpDeskConversation chatFlow={chatFlow} params={{ slugs }} anonymousUser={anonymousUser} room={room} className={theme.name} isAnonymousPage />
   );
 };
 

@@ -23,20 +23,29 @@ import { useEffect } from 'react';
 import useClient from '@/hooks/use-client';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { cn } from '@/utils/cn';
+import { FlowNode } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { Edge } from 'reactflow';
 
-const HelpDeskConversation = ({ room, anonymousUser, isAnonymousPage, ...props }: {
+const HelpDeskConversation = ({ room, chatFlow, anonymousUser, isAnonymousPage, ...props }: {
     room: Room;
     anonymousUser?: User;
     isAnonymousPage?: boolean;
     params: {
         slugs: string[];
     };
+    chatFlow?: {
+        nodes: FlowNode[];
+        edges: Edge[];
+    }
 } & React.HTMLAttributes<HTMLDivElement>) => {
-    const { setRoom } = useBusinessExtensionStore();
+    const { setRoom, setChatFlow } = useBusinessExtensionStore();
     const isClient = useClient()
     useEffect(() => {
         if (room) {
             setRoom(room);
+        }
+        if (chatFlow?.edges || chatFlow?.nodes) {
+            setChatFlow(chatFlow);
         }
     }, [])
     if (!isClient) return null;

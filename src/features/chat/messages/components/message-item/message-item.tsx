@@ -94,7 +94,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const mediaLength = message.media?.length || 0;
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
-    // TODO: replace by real flow actions: message.actions
     const flowActions = message.actions;
     return (
       <MessageItemContext.Provider
