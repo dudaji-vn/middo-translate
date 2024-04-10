@@ -41,6 +41,7 @@ const MessageNode = ({
                 senderType: 'bot',
                 clientTempId: new Date().toISOString()
             });
+            setLoading(false);
         }
     }
 
@@ -63,6 +64,7 @@ const MessageNode = ({
     return (
         <Button
             disabled={disabled}
+            loading={loading}
             className={'h-9  w-fit'}
             variant={'outline'}
             color={'primary'}
