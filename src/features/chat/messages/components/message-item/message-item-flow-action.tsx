@@ -62,6 +62,7 @@ const MessageNode = ({
                     userId: me?._id,
                     clientTempId: new Date().toISOString()
                 });
+                queryClient.invalidateQueries(key);
                 await messageApi.sendAnonymousMessage({
                     ...newBotMessage,
                     senderType: 'bot',
@@ -69,7 +70,7 @@ const MessageNode = ({
                     userId: them?._id,
                     clientTempId: new Date().toISOString()
                 });
-                queryClient.invalidateQueries(key);a
+                queryClient.invalidateQueries(key);
             } catch (error) {
                 console.error('Failed to send message', error);
             }
