@@ -97,10 +97,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         firstMessage: initialData.firstMessage,
         firstMessageEnglish: initialData.firstMessageEnglish,
         color: initialData.color || DEFAULT_THEME,
-        chatFlow: initialData?.chatFlow ? {
-          nodes: initialData?.chatFlow?.nodes || [],
-          edges: initialData?.chatFlow?.edges || [],
-        } : undefined
+        chatFlow: initialData?.chatFlow
       });
     }
   }, [initialData, open]);

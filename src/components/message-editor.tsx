@@ -21,6 +21,7 @@ import { useChatStore } from '@/features/chat/store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
+import { ButtonProps } from './actions';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -35,10 +36,11 @@ export interface MessageEditorProps
   onSubmitValue?: (data: MessageEditorSubmitData) => void;
   userMentions?: User[];
   onTypingChange?: (isTyping: boolean) => void;
+  sendBtnProps?: ButtonProps;
 }
 
 export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
-  ({ onSubmitValue, userMentions = [], onTypingChange, ...props }, ref) => {
+  ({ onSubmitValue, userMentions = [], sendBtnProps, onTypingChange, ...props }, ref) => {
     console.log('❤️ render editor');
     const { files, reset: filesReset, handleClipboardEvent } = useMediaUpload();
     const { t } = useTranslation('common');
@@ -201,6 +203,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             onClick={handleSubmit}
             editor={editor}
             editorId={editorId}
+            {...sendBtnProps}
           />
           {editor && !isMobile && <Autofocus editor={editor} />}
           {disabled && (
