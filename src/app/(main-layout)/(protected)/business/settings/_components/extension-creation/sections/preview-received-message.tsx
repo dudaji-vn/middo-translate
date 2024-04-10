@@ -40,12 +40,12 @@ export const PreviewReceivedMessage = ({ sender, media, content = '', debouncedT
         })
     }, [debouncedContent])
 
-    return <div {...props} className={cn("flex w-full gap-2", props?.className)}>
-        <div className="overflow-y-auto max-h-[320px]">
-            <div className="w-full gap-1  relative  flex pr-11 md:pr-20">
-                <div className="overflow-hidden  relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
-                    <Avatar src={'/avatar.png'} alt={String(sender?.email)} size="xs" className="bg-primary-200 p-1" />
-                </div>
+    return <div {...props} className={cn("flex flex-col w-full gap-2", props?.className)}>
+        <div className="w-full gap-1  relative  flex pr-11 md:pr-20">
+            <div className="overflow-hidden  relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
+                <Avatar src={'/avatar.png'} alt={String(sender?.email)} size="xs" className="bg-primary-200 p-1" />
+            </div>
+            <div className="overflow-y-auto max-h-[320px]">
                 <div className="relative space-y-2">
                     <p className='p-1 break-words text-sm leading-[18px] font-light text-neutral-600'>{sender?.name}</p>
                     <div className="w-fit min-w-10 bg-neutral-50 px-2 py-1 relative overflow-hidden rounded-[20px]">
@@ -70,7 +70,7 @@ export const PreviewReceivedMessage = ({ sender, media, content = '', debouncedT
                 </div>
             </div>
         </div>
-        {Number(media?.length) > 0 && <div className="pl-2">
+        {Number(media?.length) > 0 && <div className="pl-6">
             <ImageGallery images={media || []} />
         </div>
         }

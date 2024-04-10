@@ -161,11 +161,18 @@ const NestedFlow = ({
         },
         [addEdge, setValue, watch]
     );
+    const redirectToPreview = () => {
+        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
+        toast.loading('Loading preview...');
+        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
+        width=700,height=700,left=-500,top=-500`;
+        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);
+        setTimeout(() => {
+            toast.dismiss();
+        }, 500);
+    }
 
     const checkingErrors = () => {
-        if (!checkingMode) {
-            return;
-        }
         const flowErrors: FormDataErrors = [];
         nodes.forEach((node: FlowNode) => {
             switch (node.type) {
@@ -194,7 +201,7 @@ const NestedFlow = ({
         });
         // @ts-ignore
         setValue('flowErrors', flowErrors);
-
+        return flowErrors;
     }
     useEffect(() => {
         if (checkingMode) {
@@ -223,14 +230,18 @@ const NestedFlow = ({
                 edges
             })
         }
-    }, [ nodes, edges])
+    }, [nodes, edges])
 
 
     const onPreviewClick = () => {
         trigger('nodes')
         if (!checkingMode) {
+            const error = checkingErrors();
+            if (error.length) {
+                toast.error('Please complete the flow!');
+                return;
+            }
             setCheckingMode(true);
-            return;
         }
         if (checkingMode && flowErrors.length) {
             console.log('flowErrors', flowErrors)
@@ -242,14 +253,8 @@ const NestedFlow = ({
             toast.error('Please complete the flow!');
             return;
         }
-        toast.loading('Loading preview...');
-        let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
-        width=700,height=700,left=-500,top=-500`;
-        window.open(`${NEXT_PUBLIC_URL}/test-it-out`, 'test', params);
-        setTimeout(() => {
-            toast.dismiss();
-        }, 500);
-        localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
+
+        redirectToPreview();
         onSaveToForm({
             nodes,
             edges
