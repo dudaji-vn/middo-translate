@@ -12,16 +12,16 @@ import {
   ImgCopy,
   TextCopy,
 } from '@/features/translate/components/copy-to-clipboard';
-import { detectLanguage, translateText } from '@/services/languages.service';
+import { detectLanguage, translateTextV3 } from '@/services/languages.service';
 
-import { CompareProvider } from '@/features/translate/context';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { cn } from '@/utils/cn';
 import { Extension } from '@/features/translate/components/extension';
+import { CompareProvider } from '@/features/translate/context';
+import { cn } from '@/utils/cn';
 
-import { THistoryItem } from './_components/history/history';
 import { PageLoading } from '@/components/feedback';
 import { TranslationTab } from '@/types/translationstab.type';
+import { THistoryItem } from './_components/history/history';
 import HomeTemplate from './_components/home-template';
 
 export interface SearchParams {
@@ -49,25 +49,29 @@ export default async function Home(props: HomeProps) {
       : props.searchParams.source;
   const targetLanguage = props.searchParams.target;
   const targetResult = middleText
-    ? await translateText(middleText, DEFAULT_LANGUAGES_CODE.EN, targetLanguage)
-    : await translateText(sourceText, sourceLanguage, targetLanguage);
+    ? await translateTextV3(
+        middleText,
+        DEFAULT_LANGUAGES_CODE.EN,
+        targetLanguage,
+      )
+    : await translateTextV3(sourceText, sourceLanguage, targetLanguage);
   const sourceEnglishResult = middleText
     ? middleText
-    : await translateText(
+    : await translateTextV3(
         sourceText,
         sourceLanguage,
         DEFAULT_LANGUAGES_CODE.EN,
       );
   const targetEnglishResult = middleText
     ? middleText
-    : await translateText(
+    : await translateTextV3(
         targetResult,
         targetLanguage,
         DEFAULT_LANGUAGES_CODE.EN,
       );
 
   const sourceTranslateResult = middleText
-    ? await translateText(
+    ? await translateTextV3(
         middleText,
         DEFAULT_LANGUAGES_CODE.EN,
         props.searchParams.detect ? props.searchParams.detect : sourceLanguage,
