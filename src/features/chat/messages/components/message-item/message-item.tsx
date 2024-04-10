@@ -29,10 +29,11 @@ import { Content } from './message-item-content';
 import { MessageItemLinks } from './message-item-links';
 import { MessageItemVideo } from './message-item-video';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
+import MessageItemFlowActions from './message-item-flow-action';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof messageVariants> {
+  VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
   showAvatar?: boolean;
@@ -93,6 +94,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const mediaLength = message.media?.length || 0;
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
+    // TODO: replace by real flow actions: message.actions
+    const flowActions = message.actions;
     return (
       <MessageItemContext.Provider
         value={{
@@ -204,13 +207,15 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   {!discussionDisabled && message.hasChild && showReply && (
                     <MessageItemReply isMe={isMe} messageId={message._id} />
                   )}
-                </MessageItemWrapper>
+                </MessageItemWrapper>    
+                
               </div>
               {showReactionBar &&
                 message?.reactions &&
                 message.reactions.length > 0 && (
                   <MessageItemReactionBar isMe={isMe} message={message} />
                 )}
+              <MessageItemFlowActions actions={flowActions} />
               {showTime && (
                 <span
                   className={cn(
@@ -221,6 +226,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   {formatTimeDisplay(message.createdAt!)}
                 </span>
               )}
+              
             </div>
             {direction === 'top' && (
               <ReadByUsers
