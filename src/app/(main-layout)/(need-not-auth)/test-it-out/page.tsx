@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
@@ -18,12 +18,10 @@ import { FlowNode } from '../../(protected)/business/settings/_components/extens
 import { Edge } from 'reactflow';
 import FakeTyping from './_components/fake-typing';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
-import { isEmpty, set } from 'lodash';
+import { isEmpty } from 'lodash';
 import { MessageEditor } from '@/components/message-editor';
 import { MediaUploadProvider } from '@/components/media-upload';
 import { Media } from '@/types';
-import { ImageGallery } from '@/features/chat/messages/components/message-item/message-item-image-gallery';
-import { DocumentMessage } from '@/features/chat/messages/components/message-item/message-item-document';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';
@@ -63,7 +61,6 @@ const createFakeMessages = ({
   fakeType: FakeMessage['fakeType'];
   node?: FlowNode;
 }) => {
-  console.log('data', data);
   return {
     ...baseMessage,
     ...data,
@@ -175,7 +172,6 @@ const TestItOut = () => {
     if (gettedflow) {
       try {
         setFlow(JSON.parse(gettedflow));
-        console.log('gettedflow', gettedflow);
       } catch (error) {
         console.error('ERROR:>>', error);
       }
@@ -185,8 +181,6 @@ const TestItOut = () => {
     const root = nodes.find((node) => node.type === 'root');
     const nextToRoot = edges.find((edge) => edge.source === root?.id);
     const nextNode = nodes.find((node) => node.id === nextToRoot?.target);
-    console.log('nextToRoot', nextToRoot);
-    console.log('nextNode', nextNode);
     if (nextNode) {
       addSendessageFromFlow(nextNode);
     }
@@ -254,9 +248,6 @@ const TestItOut = () => {
                         media={message.media}
                         debouncedTime={0}
                         key={index}
-                        onTranlatedChange={(trans) => {
-                          console.log('trans', trans);
-                        }}
                         sender={currentUser}
                         content={message.content}
                       />
