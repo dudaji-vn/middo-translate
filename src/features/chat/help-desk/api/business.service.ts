@@ -1,6 +1,8 @@
+import { FlowNode } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { User } from '@/features/users/types';
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { cookies } from 'next/headers';
+import { Edge } from 'reactflow';
 
 export type Client = {
   firstConnectDate: string;
@@ -39,10 +41,14 @@ export type TBusinessExtensionData = {
   firstMessage: string;
   firstMessageEnglish: string;
   _id: string;
+  chatFlow?: {
+    nodes: FlowNode[];
+    edges: Edge[];
+  };
 };
 class BusinessAPI {
   private basePath: string;
-  
+
   constructor(basePath: string = process.env.NEXT_PUBLIC_API_URL + '/api') {
     this.basePath = basePath;
   }

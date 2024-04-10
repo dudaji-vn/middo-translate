@@ -57,6 +57,9 @@ export type Message = {
   mentions?: User[];
   action?: ActionTypes;
   clientTempId?: string;
+  translations?: {
+    [key: string]: string;
+  };
 } & BaseEntity;
 
 export type PinMessage = {

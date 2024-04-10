@@ -1,10 +1,13 @@
-import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { useChatStore } from '@/features/chat/store';
 import { User } from '@/features/users/types';
-import { detectLanguage, translateText } from '@/services/languages.service';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { detectLanguage } from '@/services/languages.service';
 import { useAppStore } from '@/stores/app.store';
 import { Media } from '@/types';
+import { SHORTCUTS } from '@/types/shortcuts';
 import { getMentionIdsFromHtml } from '@/utils/get-mention-ids-from-html';
 import { Editor, EditorContent } from '@tiptap/react';
+import { isEqual } from 'lodash';
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AttachmentButton } from './attachment-button';
@@ -17,16 +20,12 @@ import { MicButton, MicButtonRef } from './mic-button';
 import { SendButton } from './send-button';
 import { TranslationHelper } from './translation-helper';
 import { useEditor } from './use-editor';
-import { useChatStore } from '@/features/chat/store';
-import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { SHORTCUTS } from '@/types/shortcuts';
-import { isEqual } from 'lodash';
+import { ButtonProps } from './actions';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
   videos: Media[];
   documents: Media[];
-  contentEnglish: string;
   language?: string;
   mentions?: string[];
 };
@@ -35,10 +34,20 @@ export interface MessageEditorProps
   onSubmitValue?: (data: MessageEditorSubmitData) => void;
   userMentions?: User[];
   onTypingChange?: (isTyping: boolean) => void;
+  sendBtnProps?: ButtonProps;
 }
 
 export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
-  ({ onSubmitValue, userMentions = [], onTypingChange, ...props }, ref) => {
+  (
+    {
+      onSubmitValue,
+      userMentions = [],
+      sendBtnProps,
+      onTypingChange,
+      ...props
+    },
+    ref,
+  ) => {
     console.log('❤️ render editor');
     const { files, reset: filesReset, handleClipboardEvent } = useMediaUpload();
     const { t } = useTranslation('common');
@@ -102,7 +111,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       focus();
       if (!isContentEmpty) {
         lang = await detectLanguage(content);
-        english = await translateText(content, lang, DEFAULT_LANGUAGES_CODE.EN);
         mentions = getMentionIdsFromHtml(content);
       } else content = '';
 
@@ -140,7 +148,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         content,
         images,
         documents,
-        contentEnglish: english,
         language: lang,
         mentions: mentions,
         videos,
@@ -215,6 +222,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             }}
             editor={editor}
             editorId={editorId}
+            {...sendBtnProps}
           />
           {editor && !isMobile && <Autofocus editor={editor} />}
           {disabled && (

@@ -1,3 +1,4 @@
+import { Section } from '@/components/data-display';
 import { SearchInput } from '@/components/data-entry';
 import {
   AlertDialog,
@@ -8,25 +9,20 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/feedback';
+import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { Select } from '@/features/chat/rooms/components/room-select';
 import { Room } from '@/features/chat/rooms/types';
+import { useChatStore } from '@/features/chat/store';
+import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
 import { searchApi } from '@/features/search/api';
 import { User } from '@/features/users/types';
 import { useSearch } from '@/hooks/use-search';
-import { useId, useMemo, useState } from 'react';
-import { MessageEditorTextProvider } from '../message-editor/message-editor-text-context';
-import { MessageEditorToolbar } from '../message-editor/message-editor-toolbar';
-import { TextInput } from '../message-editor/message-editor-text-input';
-import { detectLanguage, translateText } from '@/services/languages.service';
-import { useChatStore } from '@/features/chat/store';
-import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { useAuthStore } from '@/stores/auth.store';
 import { useMutation } from '@tanstack/react-query';
+import { useId, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { messageApi } from '../../api';
 import { Message } from '../../types';
-import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
-import { Section } from '@/components/data-display';
-import { useAuthStore } from '@/stores/auth.store';
-import { useTranslation } from 'react-i18next';
 
 export interface ForwardModalProps {
   onClosed?: () => void;
@@ -39,7 +35,7 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
     users: User[];
   }>(searchApi.inboxes, 'forward');
   const { data: recData } = useGetRoomsRecChat();
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const { mutate } = useMutation({
@@ -83,24 +79,24 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
       if (language === 'auto') {
         language = formData.get('detLang') as string;
         if (!language) {
-          language = await detectLanguage(content);
+          // language = await detectLanguage(content);
         }
       }
       setSrcLang(language);
     }
     let contentEnglish = formData.get('messageEnglish') as string;
     if (!contentEnglish) {
-      contentEnglish = await translateText(
-        content,
-        language,
-        DEFAULT_LANGUAGES_CODE.EN,
-      );
+      // contentEnglish = await translateText(
+      //   content,
+      //   language,
+      //   DEFAULT_LANGUAGES_CODE.EN,
+      // );
     }
 
     mutate({
       forwardedMessageId: message._id,
       roomIds: selectedIds,
-      message: { content, contentEnglish, language },
+      message: { content, language },
     });
   };
 
@@ -112,7 +108,9 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
     <AlertDialog defaultOpen>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t('MODAL.FORWARD_MESSAGE.TITLE')}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t('MODAL.FORWARD_MESSAGE.TITLE')}
+          </AlertDialogTitle>
         </AlertDialogHeader>
         <Select onSelectChange={setSelectedIds} items={items || []}>
           <SearchInput
@@ -123,7 +121,10 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
           <div className="-mx-5 max-h-[200px] overflow-y-auto border-b">
             <Select.List />
             {recData && recData.length > 0 && !data && (
-              <Section label={t('COMMON.RECENTLY_USED')} labelClassName="pl-2.5">
+              <Section
+                label={t('COMMON.RECENTLY_USED')}
+                labelClassName="pl-2.5"
+              >
                 {recData?.map((room) => {
                   if (!room.isGroup) {
                     let user = currentUser;
@@ -142,7 +143,7 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
         </Select>
 
         <form id={id} onSubmit={handleSubmit} className="flex flex-col gap-2">
-          <MessageEditorTextProvider>
+          {/* <MessageEditorTextProvider>
             <MessageEditorToolbar disableMedia />
             <div className="relative flex w-full items-center gap-2">
               <div className="flex-1 items-center gap-2 rounded-[1.5rem]  border border-primary bg-card p-1 px-4 shadow-sm">
@@ -151,7 +152,7 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
                 </div>
               </div>
             </div>
-          </MessageEditorTextProvider>
+          </MessageEditorTextProvider> */}
         </form>
         <AlertDialogFooter>
           <AlertDialogCancel onClick={onClosed} className="mr-4">

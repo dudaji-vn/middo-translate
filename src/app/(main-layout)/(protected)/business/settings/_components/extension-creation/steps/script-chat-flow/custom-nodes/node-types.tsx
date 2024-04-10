@@ -9,7 +9,6 @@ import MessageNode from './message-node';
 import RootNode from './root-node';
 import ContainerNode from './container-node';
 import OptionNode from './option-node';
-import LinkNode from './link-node';
 
 export type CustomNodeProps = {
     data: FlowNode['data'];

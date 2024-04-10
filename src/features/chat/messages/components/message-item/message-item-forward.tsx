@@ -1,16 +1,16 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { Message } from '../../types';
-import { ImageGallery } from './message-item-image-gallery';
-import { DocumentMessage } from './message-item-document';
-import { useChatStore } from '@/features/chat/store';
-import { translateText } from '@/services/languages.service';
-import { useAuthStore } from '@/stores/auth.store';
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import { Room } from '@/features/chat/rooms/types';
-import Link from 'next/link';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import { RichTextView } from '@/components/rich-text-view';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { Room } from '@/features/chat/rooms/types';
+import { useChatStore } from '@/features/chat/store';
+import { useAuthStore } from '@/stores/auth.store';
+import Link from 'next/link';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { messageApi } from '../../api';
+import { Message } from '../../types';
+import { DocumentMessage } from './message-item-document';
+import { ImageGallery } from './message-item-image-gallery';
 import { MessageItemVideo } from './message-item-video';
 
 export interface MessageItemForwardProps {
@@ -85,47 +85,57 @@ export const MessageItemForward = ({
 };
 
 const TextMessage = ({ message }: { message: Message }) => {
+  const enContent = message.translations?.en;
+  const isMe = message.sender._id === useAuthStore.getState().user?._id;
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
-    if (userLanguage === message.sender.language) return;
-    const translateContent = async () => {
-      const translated = await translateText(
-        message.content,
-        message?.language || message.sender.language,
-        userLanguage,
-      );
-      setContentDisplay(translated);
+    if (userLanguage === message.language || isMe) return;
+    const translate = async () => {
+      let translated = message.translations?.[userLanguage!];
+      if (!translated) {
+        try {
+          const messageRes = await messageApi.translate({
+            id: message._id,
+            to: userLanguage!,
+          });
+          if (messageRes.translations)
+            translated = messageRes.translations[userLanguage!];
+        } catch (error) {
+          console.error('Translate error', error);
+        }
+      }
+      setContentDisplay(translated || message.content);
     };
-    translateContent();
+    translate();
   }, [
     userLanguage,
     message.content,
     message.sender.language,
-    message.contentEnglish,
     message.status,
     message.language,
+    isMe,
+    message.translations,
+    message._id,
   ]);
   return (
     <div className="p-1">
       <RichTextView content={contentDisplay} />
-      {message?.contentEnglish &&
-        message.status !== 'removed' &&
-        showMiddleTranslation && (
-          <div className="relative mt-2">
-            <TriangleSmall
-              fill="#F2F2F2"
-              position="top"
-              className="absolute left-4 top-0 -translate-y-full"
-            />
-            <div className={'mb-1 mt-2 rounded-xl bg-neutral-50 p-1 px-3'}>
-              <RichTextView content={message.contentEnglish} />
-            </div>
+      {enContent && message.status !== 'removed' && showMiddleTranslation && (
+        <div className="relative mt-2">
+          <TriangleSmall
+            fill="#F2F2F2"
+            position="top"
+            className="absolute left-4 top-0 -translate-y-full"
+          />
+          <div className={'mb-1 mt-2 rounded-xl bg-neutral-50 p-1 px-3'}>
+            <RichTextView content={enContent} />
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

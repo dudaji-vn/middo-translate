@@ -10,3 +10,5 @@ export const REFRESH_TOKEN_NAME = 'refresh_token';
 export const LOGIN_FROM_DESKTOP = 'login_from_desktop';
 
 export const LIMIT_CLIENTS_TABLE = 'LIMIT_CLIENTS_TABLE';
+
+export const CHAT_FLOW_KEY = 'chat-flow';

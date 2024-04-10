@@ -18,6 +18,8 @@ import { isEqual } from 'lodash';
 import { useQuery } from '@tanstack/react-query';
 import { useEditor } from './use-editor';
 import { useAppStore } from '@/stores/app.store';
+import { useDebounce } from 'usehooks-ts';
+const DEBOUNCE_TIME = 1000;
 export interface TranslationHelperProps {
   mentionSuggestionOptions: MentionSuggestion[];
   editor: Editor | null;
@@ -47,13 +49,17 @@ export const TranslationHelper = ({
   const [srcLang, setSrcLang] = useState<string | null>(null);
   const isRootEditorEmpty = rootEditor?.isEmpty;
 
+  // Use debounce to prevent too many requests
+  const htmlDebounce = useDebounce(rootEditor?.getHTML(), DEBOUNCE_TIME);
+  const textDebounce = useDebounce(rootEditor?.getText(), DEBOUNCE_TIME);
+
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: ['translation-helper', rootEditor?.getHTML()],
+    queryKey: ['translation-helper', htmlDebounce],
     queryFn: async () => {
-      const plainText = rootEditor?.getText().trim() || '';
+      const plainText = (textDebounce || '').trim();
       const srcLang = await detectLanguage(plainText);
       const translated = await translateText(
-        rootEditor?.getHTML() || '',
+        htmlDebounce || '',
         srcLang,
         DEFAULT_LANGUAGES_CODE.EN,
       );

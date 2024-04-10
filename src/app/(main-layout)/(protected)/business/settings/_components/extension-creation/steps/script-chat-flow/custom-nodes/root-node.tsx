@@ -11,7 +11,6 @@ import { CustomNodeProps } from './node-types';
 
 
 function RootNode({ data, isConnectable }: CustomNodeProps) {
-    // const { content, img } = data;
     return (
         <div className="button-node relative">
             <div className='p-4 w-fit  rounded-full bg-white text-primary-500-main shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] relative'>
