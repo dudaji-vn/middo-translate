@@ -1,8 +1,7 @@
 import { Media, Response } from '@/types';
-
+import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { Message, PinMessage } from '@/features/chat/messages/types';
 import { axios as axiosWithInterceptor } from '@/lib/axios';
-import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
 const basePath = '/messages';
 const anonymousBasePath = NEXT_PUBLIC_URL + '/api';
@@ -11,7 +10,6 @@ export type CreateMessage = {
   roomId: string;
   media?: Media[];
   content: string;
-  contentEnglish?: string;
   clientTempId: string;
   language?: string;
   mentions?: string[];
@@ -120,6 +118,15 @@ export const messageApi = {
     // TODO: ask BE for anonymous pined message or remove getting this from anonymous
     const res: Response<PinMessage[]> = await axiosWithInterceptor.get(
       `${basePath}/pinned/${id}`,
+    );
+    return res.data;
+  },
+  async translate({ id, to }: { id: string; to: string }) {
+    const res: Response<Message> = await axiosWithInterceptor.patch(
+      `${basePath}/${id}/translate`,
+      {
+        to,
+      },
     );
     return res.data;
   },

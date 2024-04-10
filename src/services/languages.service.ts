@@ -23,10 +23,20 @@ export async function translateText(text: string, from?: string, to?: string) {
 
   if (from === to) return text;
 
-  const textEncoded = encodeURIComponent(text);
-
+  const body = {
+    content: text,
+    from,
+    to,
+  };
   const response = await fetch(
-    `${NEXT_PUBLIC_URL}/api/languages/translate-cache?query=${textEncoded}&from=${from}&to=${to}`,
+    `${NEXT_PUBLIC_URL}/api/languages/v2/translate`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    },
   );
   try {
     const json = await response.json();
