@@ -33,19 +33,16 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
   });
   const handleSendText = async ({
     content,
-    contentEnglish,
     language,
     mentions,
   }: {
     content: string;
-    contentEnglish: string;
     language?: string;
     mentions?: string[];
   }) => {
     const localMessage = createLocalMessage({
       sender: currentUser!,
       content,
-      contentEnglish,
       language,
     });
     addReply(localMessage);
@@ -53,7 +50,6 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       repliedMessageId: message._id,
       message: {
         content,
-        contentEnglish,
         language,
         roomId: message?.room?._id!,
         mentions,
@@ -61,22 +57,13 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     });
   };
   const handleSubmit = async (data: MessageEditorSubmitData) => {
-    const {
-      content,
-      images,
-      documents,
-      contentEnglish,
-      language,
-      videos,
-      mentions,
-    } = data;
+    const { content, images, documents, language, videos, mentions } = data;
 
     const trimContent = content.trim();
 
     if (trimContent) {
       handleSendText({
         content: trimContent,
-        contentEnglish: contentEnglish.trim(),
         language,
         mentions,
       });

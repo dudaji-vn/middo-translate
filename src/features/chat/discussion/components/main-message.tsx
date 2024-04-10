@@ -1,7 +1,6 @@
 import { Avatar } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import { RichTextView } from '@/components/rich-text-view';
-import { translateText } from '@/services/languages.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { convertToTimeReadable } from '@/utils/time';
@@ -14,7 +13,7 @@ import { textVariants } from '../../messages/components/message-item/message-ite
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
 import { useTranslation } from 'react-i18next';
-import { formatTimeDisplay } from '../../rooms/utils';
+import { messageApi } from '../../messages/api';
 
 export interface MainMessageProps {
   message: Message;
@@ -57,6 +56,8 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
 };
 
 const TextMessage = ({ message }: { message: Message }) => {
+  const isMe = message.sender._id === useAuthStore.getState().user?._id;
+  const enContent = message.translations?.en;
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
@@ -68,17 +69,25 @@ const TextMessage = ({ message }: { message: Message }) => {
       setContentDisplay(t('CONVERSATION.REMOVED_A_MESSAGE'));
       return;
     }
-    if (userLanguage === message.sender.language) return;
-    const translateContent = async () => {
-      const translated = await translateText(
-        message.content,
-        message?.language || message.sender.language,
-        userLanguage,
-      );
-      setContentDisplay(translated);
+    if (userLanguage === message.language || isMe) return;
+    const translate = async () => {
+      let translated = message.translations?.[userLanguage!];
+      if (!translated) {
+        try {
+          const messageRes = await messageApi.translate({
+            id: message._id,
+            to: userLanguage!,
+          });
+          if (messageRes.translations)
+            translated = messageRes.translations[userLanguage!];
+        } catch (error) {
+          console.error('Translate error', error);
+        }
+      }
+      setContentDisplay(translated || message.content);
     };
-    translateContent();
-  }, [userLanguage, message, t]);
+    translate();
+  }, [userLanguage, message, t, isMe]);
   return (
     <div className="flex flex-col">
       <RichTextView
@@ -86,24 +95,22 @@ const TextMessage = ({ message }: { message: Message }) => {
         mentionClassName="left"
         content={contentDisplay}
       />
-      {message?.contentEnglish &&
-        message.status !== 'removed' &&
-        showMiddleTranslation && (
-          <div className="relative mt-2">
-            <TriangleSmall
-              fill="#f2f2f2"
-              position="top"
-              className="absolute left-4 top-0 -translate-y-full"
+      {enContent && message.status !== 'removed' && showMiddleTranslation && (
+        <div className="relative mt-2">
+          <TriangleSmall
+            fill="#f2f2f2"
+            position="top"
+            className="absolute left-4 top-0 -translate-y-full"
+          />
+          <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
+            <RichTextView
+              editorStyle="text-base md:text-sm"
+              mentionClassName="left"
+              content={enContent}
             />
-            <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
-              <RichTextView
-                editorStyle="text-base md:text-sm"
-                mentionClassName="left"
-                content={message.contentEnglish}
-              />
-            </div>
           </div>
-        )}
+        </div>
+      )}
     </div>
   );
 };

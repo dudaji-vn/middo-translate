@@ -49,6 +49,7 @@ export const actionItems: ActionItem[] = [
     action: 'forward',
     label: 'CONVERSATION.FORWARD',
     icon: <ForwardIcon />,
+    disabled: true,
   },
   {
     action: 'pin',

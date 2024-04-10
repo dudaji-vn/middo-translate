@@ -6,10 +6,10 @@ import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { getReadByUsers } from '@/features/chat/utils';
-import { translateText } from '@/services/languages.service';
 import { convert } from 'html-to-text';
 import { useTranslation } from 'react-i18next';
 import { generateSystemMessageContent } from '@/features/chat/messages/utils';
+import { messageApi } from '@/features/chat/messages/api';
 
 const ItemSub = ({
   message,
@@ -23,6 +23,7 @@ const ItemSub = ({
   isGroup: boolean;
 }) => {
   const currentUserId = currentUser?._id;
+  const isMe = message.sender._id === currentUserId;
   const userLanguage = currentUser.language;
   const isRead = message.readBy?.includes(currentUserId);
   const { t } = useTranslation('common');
@@ -34,10 +35,10 @@ const ItemSub = ({
     [message.content],
   );
   const englishContent = useMemo(() => {
-    return convert(message.contentEnglish ?? '', {
+    return convert(message.translations?.en ?? '', {
       selectors: [{ selector: 'a', options: { ignoreHref: true } }],
     });
-  }, [message.contentEnglish]);
+  }, [message.translations?.en]);
 
   const readByUsers = useMemo(() => {
     return getReadByUsers({
@@ -166,17 +167,29 @@ const ItemSub = ({
       message.status !== 'removed' &&
       !message.forwardOf
     ) {
-      if (userLanguage === message.sender.language) {
+      if (userLanguage === message.language || isMe) {
         setContentDisplay(content);
         return;
       }
       const translateContent = async () => {
-        const translated = await translateText(
-          englishContent || messageContent,
-          message.sender.language,
-          userLanguage,
+        let translated = message.translations?.[userLanguage];
+        if (!translated) {
+          try {
+            const messageRes = await messageApi.translate({
+              id: message._id,
+              to: userLanguage,
+            });
+            if (messageRes.translations)
+              translated = messageRes.translations[userLanguage];
+          } catch (error) {
+            console.error('Translate error', error);
+          }
+        }
+        setContentDisplay(
+          convert(translated || message.content, {
+            selectors: [{ selector: 'a', options: { ignoreHref: true } }],
+          }),
         );
-        setContentDisplay(translated);
       };
       translateContent();
       return;
@@ -269,7 +282,7 @@ const ItemSub = ({
     }
 
     setContentDisplay(content);
-  }, [userLanguage, message, content, messageContent, englishContent, t]);
+  }, [userLanguage, message, content, messageContent, englishContent, t, isMe]);
   return (
     <div className="flex items-center">
       <Typography

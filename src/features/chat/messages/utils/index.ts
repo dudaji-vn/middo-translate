@@ -5,7 +5,6 @@ import { User } from '@/features/users/types';
 type CreateLocalMessageParams = {
   sender: User;
   content?: string;
-  contentEnglish?: string;
   media?: Media[];
   language?: string;
 };
@@ -13,7 +12,6 @@ type CreateLocalMessageParams = {
 export const createLocalMessage = ({
   sender,
   content = '',
-  contentEnglish = '',
   language = 'en',
   media = [],
 }: CreateLocalMessageParams): Message => {
@@ -22,7 +20,6 @@ export const createLocalMessage = ({
     _id: clientTempId,
     sender: sender!,
     content,
-    contentEnglish,
     status: 'pending',
     type: 'text',
     media,
