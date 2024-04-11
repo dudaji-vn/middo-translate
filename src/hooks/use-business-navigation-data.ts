@@ -2,7 +2,7 @@
 
 import {
   EBusinessConversationKeys,
-  PK_BUSINESS_CONVERSATIONS,
+  PK_BUSINESS_SPACES,
 } from '@/types/business.type';
 import { useParams, usePathname } from 'next/navigation';
 export enum EPageType {
@@ -24,7 +24,7 @@ export const useBusinessNavigationData = () => {
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
   const isTestItOutPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
   const isOnBusinessChat =
-    params?.[PK_BUSINESS_CONVERSATIONS] && businessSlugs?.length > 0;
+    params?.[PK_BUSINESS_SPACES] && businessSlugs?.length > 0;
   const isOnHelpDeskChat =
     isHelpDesk && businessSlugs?.length === 2 && !pathname?.includes('/rate/');
   const isUserChattingWithGuest = isBusiness && businessSlugs?.length == 1;
@@ -32,7 +32,7 @@ export const useBusinessNavigationData = () => {
   const guestId = isUserChattingWithGuest ? businessSlugs?.[0] : null;
   const anonymousId = isOnHelpDeskChat ? businessSlugs?.[1] : null;
   const businessConversationType = isBusiness
-    ? params?.[PK_BUSINESS_CONVERSATIONS]
+    ? params?.[PK_BUSINESS_SPACES]
     : null;
   const businessRoomId = isOnBusinessChat ? businessSlugs?.[0] : null;
   return {

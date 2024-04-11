@@ -70,8 +70,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const { t } = useTranslation('common');
   const room = useMemo(() => {
     const businessRedirectPath = conversationType
-      ? `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${_data._id}`
-      : `${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/`;
+      ? `${ROUTE_NAMES.BUSINESS_SPACE}/${conversationType}/${_data._id}`
+      : `${ROUTE_NAMES.BUSINESS_SPACE}/${conversationType}/`;
     return generateRoomDisplay(
       _data,
       currentUserId,
@@ -84,7 +84,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
-      `/${ROUTE_NAMES.BUSINESS_CONVERSATION}/${conversationType}/${currentRoomId}` ||
+      `/${ROUTE_NAMES.BUSINESS_SPACE}/${conversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
