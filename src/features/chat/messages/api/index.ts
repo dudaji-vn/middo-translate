@@ -29,7 +29,7 @@ export const messageApi = {
       senderType?: 'bot' | 'user';
     },
   ) {
-    const res: Response<{ data: Message }> = await axiosWithInterceptor.post(
+    const res: Response< Message> = await axiosWithInterceptor.post(
       anonymousBasePath + '/messages/help-desk',
       data
     );
