@@ -6,48 +6,39 @@ import { cva } from 'class-variance-authority';
 import { ArrowLeft, Check, Info } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { use, useEffect, useMemo, useState } from 'react'
-import { ExtensionModalType } from '../../setting-header/setting-header';
 import { cn } from '@/utils/cn';
 import { TabsList, TabsTrigger } from '@/components/navigation';
 import { useFormContext } from 'react-hook-form';
+import { BusinessModalType } from '../../page';
 const headerVariants = cva('w-full flex flex-row', {
     variants: {
         navigation: {
             default: 'hidden',
-            'create-extension': 'w-full py-2 flex flex-row gap-3',
-            'edit-extension': 'w-full py-2 flex flex-row gap-3',
-            'edit-company': 'w-full py-2 flex flex-row gap-3'
+            'create-space': 'w-full py-2 flex flex-row gap-3',
+            'edit-space': 'w-full py-2 flex flex-row gap-3',
         },
     }
 });
 const mappedTitle = {
-    'edit-extension': 'Edit Extension',
-    'create-extension': 'Create Extension',
-    'edit-company': 'Edit Company'
+    'edit-space': 'Edit Space',
+    'create-space': 'Create Space',
 }
-export const createExtensionSteps = [
+export const createSpaceSteps = [
     {
-        title: 'Add Domains',
+        title: 'Space Information',
         value: 0,
-        nameField: 'domains',
-        requiredFields: ['domains']
+        nameField: 'information',
+        requiredFields: ['information']
     },
     {
-        title: 'Starting Message',
+        title: 'Invite Members',
         value: 1,
-        nameField: 'custom.firstMessage',
-        requiredFields: ['domains', 'custom.firstMessage']
-    },
-    {
-        title: 'Custom Extension',
-        value: 2,
-        nameField: 'custom.color',
-        requiredFields: ['domains', 'custom.firstMessage', 'custom.language', 'custom.firstMessageEnglish'],
-
-    },
+        nameField: 'members',
+        requiredFields: ['members']
+    }
 ]
 
-const CreateExtensionHeader = ({
+const CreateOrEditSpaceHeader = ({
     step = 0,
     onStepChange,
 }: {
@@ -55,53 +46,54 @@ const CreateExtensionHeader = ({
     onStepChange: (value: number) => void
 }) => {
     const searchParams = useSearchParams();
-    const [showErrorOnStep, setShowErrorOnStep] = useState<boolean>();
+    const [currentError, setCurrentError] = useState<boolean>();
     const router = useRouter();
-    const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
-    const handleStepChange = async (index: number) => {
-        if (step === index) return;
-        setShowErrorOnStep(false);
-        if (index < step) {
-            onStepChange(index);
-            return;
-        }
-        if (index > step) {
-            await trigger(createExtensionSteps[step]?.nameField).then((value) => {
-                if (!value) {
-                    setShowErrorOnStep(true);
-                }
-            });
-        }
-        Promise.all(createExtensionSteps[step]?.requiredFields.map((field) => {
-            return trigger(field);
-        })).then((values) => {
-            if (values.every((value) => value)) {
-                onStepChange(index);
-            }
-        })
-    }
+    const modalType: BusinessModalType = searchParams?.get('modal') as BusinessModalType;
+
     const { trigger, watch, formState: {
         errors,
         isValid,
         isSubmitting,
         isSubmitSuccessful
     } } = useFormContext();
-    const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
-    const currentValue = watch(createExtensionSteps[step]?.nameField);
+    const stepPercentage = (step / (createSpaceSteps.length - 1)) * 100;
+    const currentValue = watch(createSpaceSteps[step]?.nameField);
     useEffect(() => {
-        if (showErrorOnStep) {
-            trigger(createExtensionSteps[step]?.nameField).then((value) => setShowErrorOnStep(!value));
+        if (currentError) {
+            trigger(createSpaceSteps[step]?.nameField).then((value) => setCurrentError(!value));
         }
     }, [currentValue])
+    const canSubmit = isValid && step === createSpaceSteps.length - 1;
+    const canNext = step < createSpaceSteps.length - 1 && !currentError
 
-    const canSubmit = isValid && step === createExtensionSteps.length - 1;
-    const canNext = step < createExtensionSteps.length - 1 && !showErrorOnStep
-
-    const onNextStepClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const onNextStepClick = (e?: React.MouseEvent<HTMLButtonElement>) => {
         if (canNext) {
-            e.preventDefault();
+            e?.preventDefault();
             handleStepChange(step + 1);
         }
+    }
+    const handleStepChange = async (index: number) => {
+        if (step === index) return;
+        if (index == step + 1) onNextStepClick();
+        setCurrentError(false);
+        if (index < step) {
+            onStepChange(index);
+            return;
+        }
+        if (index > step) {
+            await trigger(createSpaceSteps[step]?.nameField).then((value) => {
+                if (!value) {
+                    setCurrentError(true);
+                }
+            });
+        }
+        Promise.all(createSpaceSteps[step]?.requiredFields.map((field) => {
+            return trigger(field);
+        })).then((values) => {
+            if (values.every((value) => value)) {
+                onStepChange(index);
+            }
+        })
     }
 
     return (
@@ -118,28 +110,24 @@ const CreateExtensionHeader = ({
                 >
                     <ArrowLeft className="" />
                 </Button.Icon>
-                <Typography className='text-neutral-600 capitalize min-w-max'>{mappedTitle[modalType || 'create-extension']}</Typography>
+                <Typography className='text-neutral-600 capitalize min-w-max'>{mappedTitle[modalType || 'create-space']}</Typography>
             </div>
-            <TabsList className='border-none gap-5 max-w-[900px] relative justify-between md:mx-10 xl:mx-14'>
+            <TabsList className='border-none gap-5 max-w-[600px] relative justify-between md:mx-10 xl:mx-14'>
                 <div className='absolute h-[50%] !z-0 inset-0 border-b-neutral-50 border-b-[1px] border-dashed w-full'></div>
                 <div style={{ width: `${stepPercentage}%` }} className='absolute  h-[50%] !z-10 top-0 left-0 border-b-[2px] border-b-neutral-200 transition-all duration-1000' ></div>
-                {createExtensionSteps.map((item, index) => {
+                {createSpaceSteps.map((item, index) => {
                     const isActive = step === index;
                     let isDone = step > index || isSubmitting || isSubmitSuccessful;
                     const isAfterCurrent = step < index;
-                    const disabled = createExtensionSteps[step]?.requiredFields.some((field) => errors[field]) && step < index;
+                    const disabled = createSpaceSteps[step]?.requiredFields.some((field) => errors[field]) && step < index;
                     let stepContent = isDone ? <Check className='text-white p-1' /> : <p className='!w-6'>{index + 1}</p>;
-                    const isError = showErrorOnStep && step === index;
+                    const isError = currentError && step === index;
                     if (isError) {
                         stepContent = <Info className='text-white p-1 rotate-180' />
                     }
                     return (
                         <TabsTrigger variant='unset' value={String(item.value)} key={index}
-                            onClick={(e) => {
-                                if (index === step + 1) {
-                                    onNextStepClick(e);
-                                    return;
-                                }
+                            onClick={() => {
                                 handleStepChange(index);
                             }}
                             className='z-20'
@@ -170,20 +158,9 @@ const CreateExtensionHeader = ({
                     )
                 })}
             </TabsList>
-            <Button
-                type={canSubmit ? 'submit' : 'button'}
-                size={'sm'}
-                onClick={onNextStepClick}
-                color={canSubmit || canNext ? 'primary' : 'secondary'}
-                disabled={!canSubmit && !canNext || isSubmitting || isSubmitSuccessful}
-                loading={isSubmitting}
-                shape={'square'}
-                className={cn('h-11')}
-            >
-                {canSubmit ? 'Save' : 'Next'}
-            </Button>
+            <em />
         </section>
     )
 }
 
-export default CreateExtensionHeader
+export default CreateOrEditSpaceHeader

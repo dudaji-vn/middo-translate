@@ -11,7 +11,7 @@ export interface InputProps
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, suffix, leftElement, isError, type, ...props }, ref) => {
+  ({ className, suffix, leftElement, isError, type, required, ...props }, ref) => {
     const [isShowPassword, setIsShowPassword] = React.useState(false);
     return (
       <div className="relative">
@@ -24,6 +24,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           ref={ref}
           {...props}
+          required={required}
+          placeholder={required ? `${props.placeholder} (*)` : props.placeholder}
         />
         {type === 'password' && (
           <div

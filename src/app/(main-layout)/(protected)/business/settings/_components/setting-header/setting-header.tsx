@@ -25,7 +25,7 @@ const headerVariants = cva('w-full flex flex-row', {
     }
 });
 
-const SettingHeader = ({ data }: { data: TBusinessExtensionData }) => {
+const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
