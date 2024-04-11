@@ -12,7 +12,7 @@ import {
   ImgCopy,
   TextCopy,
 } from '@/features/translate/components/copy-to-clipboard';
-import { detectLanguage, translateTextV3 } from '@/services/languages.service';
+import { detectLanguage, translateText } from '@/services/languages.service';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { Extension } from '@/features/translate/components/extension';
@@ -49,29 +49,25 @@ export default async function Home(props: HomeProps) {
       : props.searchParams.source;
   const targetLanguage = props.searchParams.target;
   const targetResult = middleText
-    ? await translateTextV3(
-        middleText,
-        DEFAULT_LANGUAGES_CODE.EN,
-        targetLanguage,
-      )
-    : await translateTextV3(sourceText, sourceLanguage, targetLanguage);
+    ? await translateText(middleText, DEFAULT_LANGUAGES_CODE.EN, targetLanguage)
+    : await translateText(sourceText, sourceLanguage, targetLanguage);
   const sourceEnglishResult = middleText
     ? middleText
-    : await translateTextV3(
+    : await translateText(
         sourceText,
         sourceLanguage,
         DEFAULT_LANGUAGES_CODE.EN,
       );
   const targetEnglishResult = middleText
     ? middleText
-    : await translateTextV3(
+    : await translateText(
         targetResult,
         targetLanguage,
         DEFAULT_LANGUAGES_CODE.EN,
       );
 
   const sourceTranslateResult = middleText
-    ? await translateTextV3(
+    ? await translateText(
         middleText,
         DEFAULT_LANGUAGES_CODE.EN,
         props.searchParams.detect ? props.searchParams.detect : sourceLanguage,
