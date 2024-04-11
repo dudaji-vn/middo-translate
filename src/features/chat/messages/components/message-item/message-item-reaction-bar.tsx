@@ -194,7 +194,7 @@ export const MessageItemReactionBar = ({
           <AlertDialogFooter>
             <AlertDialogAction>{t('COMMON.CLOSE')}</AlertDialogAction>
           </AlertDialogFooter>
-          <div className="pointer-events-auto absolute -bottom-3 w-full translate-y-full rounded-full shadow-1 md:w-fit">
+          <div className="pointer-events-auto absolute -bottom-3 flex w-full translate-y-full justify-center rounded-full shadow-1 md:shadow-none">
             <MessageEmojiPicker
               onClickMore={() => {
                 openEmoji();
@@ -204,10 +204,7 @@ export const MessageItemReactionBar = ({
           </div>
           <Drawer open={showEmoji} onOpenChange={changeShowEmoji}>
             <DrawerContent>
-              <div
-                data-vaul-no-drag
-                className="custom-emoji-picker flex justify-center"
-              >
+              <div className="custom-emoji-picker flex justify-center">
                 <EmojiPicker
                   theme="light"
                   onEmojiSelect={(emoji: any) => {

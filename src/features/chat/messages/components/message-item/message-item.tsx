@@ -33,7 +33,7 @@ import MessageItemFlowActions from './message-item-flow-action';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof messageVariants> {
+    VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
   showAvatar?: boolean;
@@ -112,7 +112,12 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             {direction === 'bottom' && (
               <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
             )}
-            <div className="group relative flex flex-col">
+            <div
+              className={cn(
+                `group relative flex flex-col`,
+                isActive && 'opacity-0',
+              )}
+            >
               <div
                 className={cn(
                   'relative flex',
@@ -207,7 +212,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     <MessageItemReply isMe={isMe} messageId={message._id} />
                   )}
                 </MessageItemWrapper>
-
               </div>
               {showReactionBar &&
                 message?.reactions &&
@@ -225,7 +229,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 </span>
               )}
               <MessageItemFlowActions actions={flowActions || []} />
-
             </div>
             {direction === 'top' && (
               <ReadByUsers

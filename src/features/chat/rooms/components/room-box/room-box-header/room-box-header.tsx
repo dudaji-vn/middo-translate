@@ -53,11 +53,18 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
     >
       <RoomBoxHeaderNavigation />
       <div className="flex flex-1 items-center gap-2">
-        <div className="flex gap-2 items-center md:cursor-pointer"  onClick={handleToggleInfo}>
+        <div
+          className="flex items-center gap-2 active:opacity-30 md:cursor-pointer"
+          onClick={handleToggleInfo}
+        >
           <RoomAvatar showStatus isOnline={isOnline} room={room} size={36} />
           <div>
-            <p className="break-word-mt line-clamp-1 font-medium">{room.name}</p>
-            <p className="text-sm font-light">{room.subtitle == 'Group' ? t('COMMON.GROUP') : room.subtitle }</p>
+            <p className="break-word-mt line-clamp-1 font-medium">
+              {room.name}
+            </p>
+            <p className="text-sm font-light">
+              {room.subtitle == 'Group' ? t('COMMON.GROUP') : room.subtitle}
+            </p>
           </div>
         </div>
       </div>
