@@ -18,11 +18,11 @@ type TRadioOptions = 'default' | 'custom';
 
 const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...props }: CustomFirstMessageOptionsProps & RadioGroupProps) => {
     const [checked, setChecked] = React.useState<TRadioOptions>(firstMessage?.length && firstMessage === DEFAULT_FIRST_MESSAGE.content ? 'default' : 'custom');
-    const [previousText, setPreviousText] = React.useState({
-        firstMessage: '',
-        firstMessageEnglish: ''
+
+    const { setValue, watch } = useFormContext(); const [previousText, setPreviousText] = React.useState({
+        firstMessage: watch('custom.firstMessage'),
+        firstMessageEnglish: watch('custom.firstMessageEnglish')
     })
-    const { setValue, watch } = useFormContext();
     return (
         <RadioGroup
             {...props}

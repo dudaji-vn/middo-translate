@@ -113,8 +113,9 @@ const NestedFlow = ({
         resolver: zodResolver(schemaFlow),
     });
 
-    const { setValue, watch, trigger, formState: { errors } } = control;
+    const { setValue, watch, trigger, formState } = control;
 
+    const { errors } = formState;
     const nodes = watch('nodes');
     const edges = watch('edges');
     const flowErrors = watch('flowErrors');
@@ -152,15 +153,10 @@ const NestedFlow = ({
     );
 
 
-    const onConnect = useCallback(
-        (connection: Edge | Connection) => {
-            const watchEdges = watch('edges');
-            // @ts-ignore
-            setValue('edges', addEdge(connection, watchEdges));
-
-        },
-        [addEdge, setValue, watch]
-    );
+    const onConnect = (connection: Edge | Connection) => {
+        // @ts-ignore
+        setValue('edges', addEdge(connection, edges));
+    }
     const redirectToPreview = () => {
         localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
         toast.loading('Loading preview...');
@@ -220,6 +216,7 @@ const NestedFlow = ({
             setValue('edges', savedFlow.edges);
         }
     }, []);
+    
     useEffect(() => {
         if (isEqual(savedFlow?.nodes, nodes) && isEqual(savedFlow?.edges, edges)) {
             return;
@@ -230,7 +227,7 @@ const NestedFlow = ({
                 edges
             })
         }
-    }, [nodes, edges])
+    }, [formState])
 
 
     const onPreviewClick = () => {
@@ -260,11 +257,6 @@ const NestedFlow = ({
             edges
         })
     }
-
-
-
-
-
     return (
         <>
             <div className='py-2 min-h-fit flex flex-row justify-between items-center'>
