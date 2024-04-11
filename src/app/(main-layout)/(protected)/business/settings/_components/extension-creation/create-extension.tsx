@@ -25,6 +25,7 @@ import AddingDomainsStep from './steps/adding-domains-step';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { isEqual } from 'lodash';
 import { initialChatFlowNodes } from './steps/script-chat-flow/nested-flow';
+import { translateWithDetection } from '@/services/languages.service';
 
 
 type TFormValues = {
@@ -112,13 +113,20 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   }, [tabValue]);
 
   const submit = async (values: TFormValues) => {
-    trigger();
+   
+    trigger(); 
+    const translatedFirstMess = await translateWithDetection(values.custom.firstMessage, 'en');
+    const firstMessageEnglish = typeof translatedFirstMess === 'string' ? translatedFirstMess : translatedFirstMess?.translatedText;
 
+    console.log('values ==> submit', values)
+    const chatFlow = watch('custom.chatFlow');
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
-        chatFlow: watch('custom.chatFlow'),
+        firstMessageEnglish,
+        // chatFlow: watch('custom.chatFlow'),
+        ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
       };
       await createExtensionService(payload).then((res) => {
         router.push(pathname);

@@ -39,7 +39,7 @@ export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalCha
   }, [actionName, id]);
   const onConfirm = async () => {
     mutateAsync({ roomId: id, status: MAPPED_ACTION_STATUS[actionName] }).then(() => {
-      router.push(`${ROUTE_NAMES.BUSINESS_CONVERSATION}/${businessConversationType}`);
+      router.push(`${ROUTE_NAMES.BUSINESS_SPACE}/${businessConversationType}`);
     }).catch(() => {
       toast.error(`Failed to ${actionName} conversation!`);
     }).finally(() => {

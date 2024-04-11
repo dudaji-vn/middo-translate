@@ -7,6 +7,8 @@ import { DEFAULT_FIRST_MESSAGE } from './options';
 import { Label } from '@/components/data-display';
 import { Check } from 'lucide-react';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
+import { translateWithDetection } from '@/services/languages.service';
+import { useFormContext } from 'react-hook-form';
 
 export type CustomFirstMessageOptionsProps = {
     firstMessage: string;
@@ -16,7 +18,11 @@ type TRadioOptions = 'default' | 'custom';
 
 const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...props }: CustomFirstMessageOptionsProps & RadioGroupProps) => {
     const [checked, setChecked] = React.useState<TRadioOptions>(firstMessage?.length && firstMessage === DEFAULT_FIRST_MESSAGE.content ? 'default' : 'custom');
-    const [previousText, setPreviousText] = React.useState<string>('')
+    const [previousText, setPreviousText] = React.useState({
+        firstMessage: '',
+        firstMessageEnglish: ''
+    })
+    const { setValue, watch } = useFormContext();
     return (
         <RadioGroup
             {...props}
@@ -24,10 +30,17 @@ const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...prop
             onValueChange={(value) => {
                 setChecked(value as TRadioOptions)
                 if (value === 'default') {
-                    setPreviousText(firstMessage);
-                    onFirstMessageChange(DEFAULT_FIRST_MESSAGE.content);
+                    setPreviousText({
+                        firstMessage: watch('custom.firstMessage'),
+                        firstMessageEnglish: watch('custom.firstMessageEnglish')
+                    })
+                    setValue('custom.firstMessage', DEFAULT_FIRST_MESSAGE.content);
+                    setValue('custom.firstMessageEnglish', DEFAULT_FIRST_MESSAGE.content);
                 }
-                else onFirstMessageChange(previousText);
+                else {
+                    setValue('custom.firstMessage', previousText.firstMessage);
+                    setValue('custom.firstMessageEnglish', previousText.firstMessageEnglish);
+                };
             }}
             value={checked}
         >
@@ -54,6 +67,7 @@ const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...prop
                 formItemProps={{
                     className: checked === 'custom' ? '' : 'hidden',
                 }}
+
                 textareaProps={{
                     placeholder: 'Type your custom first message',
                     disabled: checked !== 'custom',

@@ -13,7 +13,7 @@ export const ROUTE_NAMES = {
   ONLINE_CONVERSATION_SHARE: '/online-conversation/share',
   ONLINE_CONVERSATION_JOIN: '/online-conversation/join',
   ONLINE_CONVERSATION_NOT_FOUND: '/online-conversation/not-found',
-  BUSINESS_CONVERSATION: '/business',
+  BUSINESS_SPACE: '/business',
   HELPDESK_CONVERSATION: '/help-desk',
   DESKTOP_LOGIN: '/login-google-electron',
 };
