@@ -13,16 +13,10 @@ export interface ChatLayoutProps {
 }
 
 const ChatLayout = ({ children }: ChatLayoutProps) => {
-  const headersList = headers();
-  const fullUrl = headersList.get('referer') || "";
-  const isBussinessSpace = fullUrl.endsWith(ROUTE_NAMES.BUSINESS_SPACE);
-
   return (
     <Fragment>
       <div className="flex flex-row">
-        <div className={cn("w-[74px] max-md:hidden",)}>
-          <BusinessSidebar />
-        </div>
+        <BusinessSidebar />
         {children}
       </div>
       <FCMBackground />
