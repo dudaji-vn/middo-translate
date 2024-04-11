@@ -119,14 +119,14 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
     const firstMessageEnglish = typeof translatedFirstMess === 'string' ? translatedFirstMess : translatedFirstMess?.translatedText;
 
     console.log('values ==> submit', values)
-    const hasChatFlow = !isEmpty(values.custom.chatFlow);
+    const chatFlow = watch('custom.chatFlow');
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
         // chatFlow: watch('custom.chatFlow'),
-        ...(hasChatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
+        ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
       };
       await createExtensionService(payload).then((res) => {
         router.push(pathname);
