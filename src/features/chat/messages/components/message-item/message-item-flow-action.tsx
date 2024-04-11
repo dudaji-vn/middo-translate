@@ -67,7 +67,6 @@ const MessageNode = ({
                 mentions: [],
                 actions: nextNode.type === 'message' ? undefined : childrenActions,
             }
-            // addMessage(newBotMessage as any);
             try {
                 const mes = await messageApi.sendAnonymousMessage({
                     ...newBotMessage,
@@ -108,7 +107,7 @@ const MessageNode = ({
             className={'h-9  w-fit'}
             variant={'outline'}
             color={'primary'}
-            shape={'square'}
+            shape={'default'}
             type={'button'}
             onClick={onFlowActionClick}
         >
