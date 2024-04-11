@@ -214,7 +214,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 message.reactions.length > 0 && (
                   <MessageItemReactionBar isMe={isMe} message={message} />
                 )}
-              <MessageItemFlowActions actions={flowActions || []} />
               {showTime && (
                 <span
                   className={cn(
@@ -225,6 +224,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   {formatTimeDisplay(message.createdAt!)}
                 </span>
               )}
+              <MessageItemFlowActions actions={flowActions || []} />
 
             </div>
             {direction === 'top' && (

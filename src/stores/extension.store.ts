@@ -11,6 +11,8 @@ export type BusinessExtensionState = {
     nodes: FlowNode[];
     edges: Edge[];
   } | null;
+  roomSendingState: 'loading' | undefined | null;
+  setRoomSendingState: (state: 'loading' | undefined | null) => void;
   setBusinessExtension: (data: TBusinessExtensionData) => void;
   setRoom: (room: Room) => void;
   setChatFlow: (chatFlow: { nodes: FlowNode[]; edges: Edge[] }) => void;
@@ -21,6 +23,9 @@ export const useBusinessExtensionStore = create<BusinessExtensionState>()(
     businessData: null,
     room: null,
     chatFlow: null,
+    roomSendingState: undefined,
+    setRoomSendingState: (state: 'loading' | undefined | null) =>
+      set(() => ({ roomSendingState: state })),
     setRoom: (room: Room) => set(() => ({ room })),
     setChatFlow: (chatFlow: { nodes: FlowNode[]; edges: Edge[] }) =>
       set(() => ({ chatFlow })),

@@ -42,7 +42,7 @@ export const Header = (props: Props) => {
         )}
       >
         {isHelpDesk && (
-          <Typography className={'min-w-14 text-xs text-neutral-600'}>
+          <Typography className={' ml-5 min-w-14 text-xs text-neutral-600'}>
             Power by
           </Typography>
         )}

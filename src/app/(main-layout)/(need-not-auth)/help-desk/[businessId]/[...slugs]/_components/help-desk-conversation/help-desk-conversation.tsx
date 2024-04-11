@@ -25,6 +25,7 @@ import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { cn } from '@/utils/cn';
 import { FlowNode } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { Edge } from 'reactflow';
+import FakeTyping from '@/app/(main-layout)/(need-not-auth)/test-it-out/_components/fake-typing';
 
 const HelpDeskConversation = ({ room, chatFlow, anonymousUser, isAnonymousPage, ...props }: {
     room: Room;
@@ -38,7 +39,7 @@ const HelpDeskConversation = ({ room, chatFlow, anonymousUser, isAnonymousPage, 
         edges: Edge[];
     }
 } & React.HTMLAttributes<HTMLDivElement>) => {
-    const { setRoom, setChatFlow } = useBusinessExtensionStore();
+    const { setRoom, setChatFlow, roomSendingState } = useBusinessExtensionStore();
     const isClient = useClient()
     useEffect(() => {
         if (room) {
@@ -60,6 +61,7 @@ const HelpDeskConversation = ({ room, chatFlow, anonymousUser, isAnonymousPage, 
                             <MediaUploadDropzone>
                                 <MessagesBoxProvider room={room} guestId={anonymousUser?._id} isAnonymous={isAnonymousPage}>
                                     <MessageBox room={room} isAnonymous={isAnonymousPage} guestId={anonymousUser?._id} />
+                                    {roomSendingState === 'loading' && <FakeTyping />}
                                     <ChatBoxFooter isAnonymous={isAnonymousPage} guest={anonymousUser} />
                                 </MessagesBoxProvider>
                             </MediaUploadDropzone>
