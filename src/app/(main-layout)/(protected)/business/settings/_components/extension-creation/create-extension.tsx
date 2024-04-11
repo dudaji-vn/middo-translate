@@ -101,7 +101,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
       setValue('custom', {
         language: initialData.language,
         firstMessage: initialData.firstMessage || DEFAULT_FIRST_MESSAGE.content,
-        firstMessageEnglish: initialData.firstMessageEnglish || DEFAULT_FIRST_MESSAGE.contentEnglish,
+        firstMessageEnglish: initialData.firstMessageEnglish || DEFAULT_FIRST_MESSAGE.contentEnglish || '',
         color: initialData.color || DEFAULT_THEME,
         chatFlow: initialData?.chatFlow
       });
