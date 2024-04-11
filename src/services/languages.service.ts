@@ -47,45 +47,6 @@ export async function translateText(text: string, from?: string, to?: string) {
   }
 }
 
-export async function translateTextV3(
-  text: string,
-  from?: string,
-  to?: string,
-) {
-  if (!text || !from || !to || from === 'auto' || to === 'auto') return '';
-  // if not in supported languages, return text
-  const isFromSupported = SUPPORTED_LANGUAGES.some(
-    (lang) => lang.code === from,
-  );
-  const isToSupported = SUPPORTED_LANGUAGES.some((lang) => lang.code === to);
-  if (!isFromSupported || !isToSupported) return text;
-
-  if (from === to) return text;
-
-  const body = {
-    content: text,
-    from,
-    to,
-  };
-  const response = await fetch(
-    `${NEXT_PUBLIC_URL}/api/languages/v3/translate`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    },
-  );
-  try {
-    const json = await response.json();
-    return json.data;
-  } catch (error) {
-    toast.error("Content is too long, can't translate");
-    return '';
-  }
-}
-
 export async function detectLanguage(text: string) {
   try {
     if (!text) return '';
