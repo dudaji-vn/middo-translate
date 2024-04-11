@@ -164,6 +164,12 @@ export const createExtensionSchema = z.object({
       }),
       firstMessageEnglish: z.string().optional(),
       color: z.string().optional(),
+      chatFlow: z
+        .object({
+          nodes: z.array(z.object({})).optional(),
+          edges: z.array(z.object({})).optional(),
+        })
+        .optional()
     })
     .optional(),
 });
