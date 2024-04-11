@@ -4,7 +4,7 @@ import { Button } from '@/components/actions'
 import { Avatar, Typography } from '@/components/data-display'
 import { cn } from '@/utils/cn'
 import { cva } from 'class-variance-authority'
-import { ArrowLeft, Pen, Plus } from 'lucide-react'
+import { Pen, Plus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigatio
 
 import React from 'react'
 import BusinessExtension from '../extenstion/business-extension'
-import NestedFlow from '../extension-creation/steps/script-chat-flow/nested-flow'
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -25,7 +25,7 @@ const headerVariants = cva('w-full flex flex-row', {
     }
 });
 
-const SettingHeader = ({ data }: { data: any }) => {
+const SettingHeader = ({ data }: { data: TBusinessExtensionData }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
