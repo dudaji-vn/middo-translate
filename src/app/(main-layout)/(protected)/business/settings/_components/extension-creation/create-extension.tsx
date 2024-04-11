@@ -24,7 +24,9 @@ import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { isEqual } from 'lodash';
-import { initialChatFlowNodes } from './steps/script-chat-flow/nested-flow';
+import { FlowNode, initialChatFlowNodes } from './steps/script-chat-flow/nested-flow';
+import { translateWithDetection } from '@/services/languages.service';
+import { Edge } from 'reactflow';
 
 
 type TFormValues = {
@@ -40,6 +42,10 @@ type TFormValues = {
       edges: any[];
     };
   };
+  chatFlow: {
+    nodes: FlowNode[];
+    edges: Edge[];
+  } | null | undefined;
 
 }
 
@@ -94,8 +100,8 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
       setValue('domains', initialData.domains);
       setValue('custom', {
         language: initialData.language,
-        firstMessage: initialData.firstMessage,
-        firstMessageEnglish: initialData.firstMessageEnglish,
+        firstMessage: initialData.firstMessage || DEFAULT_FIRST_MESSAGE.content,
+        firstMessageEnglish: initialData.firstMessageEnglish || DEFAULT_FIRST_MESSAGE.contentEnglish || '',
         color: initialData.color || DEFAULT_THEME,
         chatFlow: initialData?.chatFlow
       });
@@ -112,13 +118,20 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   }, [tabValue]);
 
   const submit = async (values: TFormValues) => {
-    trigger();
 
+    trigger();
+    const translatedFirstMess = await translateWithDetection(values.custom.firstMessage, 'en');
+    const firstMessageEnglish = typeof translatedFirstMess === 'string' ? translatedFirstMess : translatedFirstMess?.translatedText;
+
+    console.log('values ==> submit', values)
+    const chatFlow = watch('custom.chatFlow');
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
-        chatFlow: watch('custom.chatFlow'),
+        firstMessageEnglish,
+        // chatFlow: watch('custom.chatFlow'),
+        ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
       };
       await createExtensionService(payload).then((res) => {
         router.push(pathname);

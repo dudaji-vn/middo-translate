@@ -1,12 +1,10 @@
-import { redirect, } from "next/navigation";
 
-
-const Page = async (props: {
+const BusinessSpacePage = async (props: {
   params: {
     id: string;
   };
 }) => {
-  redirect('/business/conversations');
+ return <h3>HUYENNNNNNNN</h3>
 };
 
-export default Page;
+export default BusinessSpacePage;

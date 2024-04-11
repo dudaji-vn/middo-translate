@@ -13,7 +13,9 @@ export default function useAudioLevel(stream?: MediaStream) {
         mediaStreamSource.connect(processor);
         processor.connect(audioContext.destination);
         let isTalkTemp = false;
+        let timerId:NodeJS.Timeout | null = null;
         processor.onaudioprocess = function (e) {
+            if(timerId) clearTimeout(timerId);
             var inputData = e.inputBuffer.getChannelData(0);
             var inputDataLength = inputData.length;
             var total = 0;
@@ -29,6 +31,9 @@ export default function useAudioLevel(stream?: MediaStream) {
                 setIsTalk(false)
                 isTalkTemp = false;
             }
+            timerId = setTimeout(() => {
+                setIsTalk(false)
+            }, 2000)
         };
         return () => {
             if(!mediaStreamSource) return;

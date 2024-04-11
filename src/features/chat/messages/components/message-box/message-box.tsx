@@ -19,6 +19,7 @@ import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useMessagesBox } from './messages-box.context';
 import { TimeDisplay } from '../time-display';
 import { cn } from '@/utils/cn';
+import { motion } from 'framer-motion';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes

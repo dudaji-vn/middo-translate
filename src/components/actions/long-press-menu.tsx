@@ -3,7 +3,6 @@ import {
   cloneElement,
   createContext,
   forwardRef,
-  useCallback,
   useContext,
   useEffect,
 } from 'react';
@@ -47,14 +46,14 @@ export const LongPressMenu = ({
     onOpenChange && onOpenChange(true);
   });
 
-  const handleOpen = useCallback(() => {
+  const handleOpen = () => {
     setTrue();
     onOpenChange && onOpenChange(true);
-  }, [onOpenChange, setTrue]);
-  const handleClose = useCallback(() => {
+  };
+  const handleClose = () => {
     setFalse();
     onOpenChange && onOpenChange(false);
-  }, [onOpenChange, setFalse]);
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -62,7 +61,8 @@ export const LongPressMenu = ({
     } else {
       handleClose();
     }
-  }, [handleClose, handleOpen, isOpen]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
 
   return (
     <LongPressMenuContext.Provider
@@ -72,7 +72,10 @@ export const LongPressMenu = ({
         close: handleClose,
         bind,
         hasBackdrop,
-        onOpenChange: setValue,
+        onOpenChange: (value) => {
+          setValue(value);
+          onOpenChange && onOpenChange(value);
+        },
       }}
     >
       <> {children}</>

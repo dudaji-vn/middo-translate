@@ -12,10 +12,11 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
 import { useTranslation } from "react-i18next";
+import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 
 export default function useHandleJoinLeaveCall() {
     const { removeParticipant, participants, peerShareScreen, removePeerShareScreen, addParticipant } = useParticipantVideoCallStore();
-    const { room } = useVideoCallStore();
+    const { room, setLayout } = useVideoCallStore();
     const { myStream } = useMyVideoCallStore();
     const { user } = useAuthStore();
     const {t} = useTranslation('common');
@@ -31,6 +32,11 @@ export default function useHandleJoinLeaveCall() {
             toast.success(t('MESSAGE.SUCCESS.LEFT_MEETING', {name: items[0].user.name}), { icon: <LogOutIcon size={20} /> });
         }
 
+        // Check have pin this user
+        const isHavePin = items.some((p: any) => p.pin);
+        if (isHavePin) {
+            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+        }
         // Remove peer share screen
         const itemShareScreen = peerShareScreen.find(
             (p: any) => p.id === socketId,
@@ -39,7 +45,7 @@ export default function useHandleJoinLeaveCall() {
             itemShareScreen.peer.destroy();
             removePeerShareScreen(socketId);
         }
-    }, [participants, peerShareScreen, removeParticipant, removePeerShareScreen, t])
+    }, [participants, peerShareScreen, removeParticipant, removePeerShareScreen, setLayout, t])
 
     const saveSignal = useCallback((payload: IReturnSignal) => {
         const participant = participants.find((p: ParticipantInVideoCall) =>

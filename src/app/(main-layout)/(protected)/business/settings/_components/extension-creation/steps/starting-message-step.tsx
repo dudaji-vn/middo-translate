@@ -7,6 +7,7 @@ import { useFormContext } from 'react-hook-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
 import NestedFlow, { FlowNode } from './script-chat-flow/nested-flow';
 import { Edge } from 'reactflow';
+import { translateText, translateWithDetection } from '@/services/languages.service';
 
 const StartingMessageStep = () => {
     const { watch, setValue } = useFormContext();
@@ -50,8 +51,11 @@ const StartingMessageStep = () => {
                 <TabsContent value='default'>
                     <CustomFirstMessageOptions
                         firstMessage={watch('custom.firstMessage')}
-                        onFirstMessageChange={(message) => {
-                            setValue('custom.firstMessage', message);
+                        onFirstMessageChange={async (message) => {
+                            // setValue('custom.firstMessage', message);
+                            // const translated = await translateWithDetection(message, 'en');
+                            // setValue('custom.firstMessageEnglish', translated);
+                            // console.log('translated', translated)
                         }}
                     />
                 </TabsContent>

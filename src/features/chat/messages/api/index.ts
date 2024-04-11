@@ -24,12 +24,16 @@ export const messageApi = {
     return res.data;
   },
 
-  async sendAnonymousMessage(data: CreateMessage) {
-    const res: Response<{ data: Message }> = await axiosWithInterceptor.post(
+  async sendAnonymousMessage(
+    data: CreateMessage & {
+      senderType?: 'bot' | 'user';
+    },
+  ) {
+    const res: Response< Message> = await axiosWithInterceptor.post(
       anonymousBasePath + '/messages/help-desk',
-      data,
+      data
     );
-    return res.data?.data;
+    return res.data;
   },
 
   async getOne(id: string) {

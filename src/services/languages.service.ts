@@ -29,7 +29,7 @@ export async function translateText(text: string, from?: string, to?: string) {
     to,
   };
   const response = await fetch(
-    `${NEXT_PUBLIC_URL}/api/languages/v2/translate`,
+    `${NEXT_PUBLIC_URL}/api/languages/v3/translate`,
     {
       method: 'POST',
       headers: {

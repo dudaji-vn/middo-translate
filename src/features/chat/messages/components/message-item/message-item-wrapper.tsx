@@ -12,7 +12,7 @@ import {
 import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
 import { PropsWithChildren, cloneElement, useMemo } from 'react';
 import { actionItems, useMessageActions } from '../message-actions';
-
+import { motion } from 'framer-motion';
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
@@ -146,7 +146,7 @@ const MobileWrapper = ({
         <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
         <LongPressMenu.Menu
           outsideComponent={
-            <div className={cn('px-3 py-2')}>
+            <div className={cn('px-3 py-2', value ? '' : 'hidden')}>
               <div
                 className={cn(
                   'pointer-events-auto mb-2 w-fit',

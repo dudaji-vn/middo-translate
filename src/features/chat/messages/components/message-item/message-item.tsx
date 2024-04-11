@@ -29,6 +29,7 @@ import { Content } from './message-item-content';
 import { MessageItemLinks } from './message-item-links';
 import { MessageItemVideo } from './message-item-video';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
+import MessageItemFlowActions from './message-item-flow-action';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -93,6 +94,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const mediaLength = message.media?.length || 0;
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
+    const flowActions = message.actions;
     return (
       <MessageItemContext.Provider
         value={{
@@ -110,7 +112,12 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             {direction === 'bottom' && (
               <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
             )}
-            <div className="group relative flex flex-col">
+            <div
+              className={cn(
+                `group relative flex flex-col`,
+                isActive && 'opacity-0',
+              )}
+            >
               <div
                 className={cn(
                   'relative flex',
@@ -221,6 +228,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   {formatTimeDisplay(message.createdAt!)}
                 </span>
               )}
+              <MessageItemFlowActions actions={flowActions || []} />
             </div>
             {direction === 'top' && (
               <ReadByUsers

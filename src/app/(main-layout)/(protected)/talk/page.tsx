@@ -22,7 +22,7 @@ export default function ChatPage() {
         </Typography>
       </div>
       <div className="flex items-center justify-center">
-        <Carousel className="max-w-xl">
+        <Carousel opts={{loop: true}} className="max-w-xl">
           <CarouselContent>
             <CarouselItem className="overflow-hidden">
               <CardItem
@@ -42,7 +42,7 @@ export default function ChatPage() {
               <CardItem
                 title={t('CONVERSATION.EMPTY_WELCOME_ITEM_3_TITLE')}
                 description={t(
-                  'CONVERSATION."EMPTY_WELCOME_ITEM_3_DESCRIPTION"',
+                  'CONVERSATION.EMPTY_WELCOME_ITEM_3_DESCRIPTION',
                 )}
                 image="/editor.png"
               />
@@ -65,8 +65,8 @@ const CardItem = ({
   description: string;
   image: string;
 }) => (
-  <div className="flex flex-col items-center justify-center">
-    <Image alt={title} src={image} quality={100} width={600} height={520} />
+  <div className="flex flex-col items-center justify-center ">
+    <Image alt={title} src={image} quality={100} width={600} height={520} className='max-h-[50vh] object-contain'/>
     <Typography variant="h4" className="mt-6 text-primary">
       {title}
     </Typography>

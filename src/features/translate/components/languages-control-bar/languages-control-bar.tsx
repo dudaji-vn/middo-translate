@@ -15,7 +15,6 @@ import { useLanguageStore } from '../../stores/language.store';
 import { useAppStore } from '@/stores/app.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
-import SpeechRecognition from 'react-speech-recognition';
 import { TranslationTab } from '@/types/translationstab.type';
 import { useTranslation } from 'react-i18next';
 
@@ -61,8 +60,11 @@ export const LanguagesControlBar = forwardRef<
 
     const handleSwapLanguage = useCallback(() => {
       if (!clickable || !_target) return;
-      const sourceValue =
+      let sourceValue =
         _source || recentlyTargetUsed.filter((item) => item !== _target)[0];
+      if(sourceValue === _target) {
+        sourceValue = recentlyTargetUsed.filter((item) => item !== _target)[0]
+      }
       const newParams = [
         { key: 'source', value: _target },
         {
@@ -75,7 +77,6 @@ export const LanguagesControlBar = forwardRef<
       addRecentlyUsed(sourceValue, 'target');
       if (isListening) {
         setValue('');
-        SpeechRecognition.stopListening();
         setParams(newParams);
         return;
       }
@@ -107,7 +108,6 @@ export const LanguagesControlBar = forwardRef<
       const sourceValue = searchParams?.get('source');
       const targetValue =
         searchParams?.get('target') || DEFAULT_LANGUAGES_CODE.EN;
-
       if (type === 'source') {
         if (code === targetValue) {
           handleSwapLanguage();
@@ -125,7 +125,6 @@ export const LanguagesControlBar = forwardRef<
       }
       if (isListening) {
         setValue('');
-        SpeechRecognition.stopListening();
       }
     };
 
