@@ -1,4 +1,5 @@
 import { ModalAddUser } from "./modal/modal-add-user";
+import { ModalAudioVideoSetting } from "./modal/modal-audio-video-setting";
 import { ModalChooseScreen } from "./modal/modal-choose-screen";
 import { ConfirmLeaveRoomModal } from "./modal/modal-leave-call";
 import { RequestJoinRoomModal } from "./modal/modal-request-join-room";
@@ -12,6 +13,7 @@ export const CommonComponent = () => {
         <ConfirmStopDoodle />
         <ModalSwitchRoom />
         <ModalAddUser />
+        <ModalAudioVideoSetting />
         <ModalChooseScreen />
     </>
 };

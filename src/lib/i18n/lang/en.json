@@ -331,7 +331,8 @@
     "EMPTY_WELCOME_ITEM_2_TITLE": "2. Middo Call",
     "EMPTY_WELCOME_ITEM_2_DESCRIPTION": "Middo Call is one of the most fantastic feature of Middo Conversation that could support your work more easily.",
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Translate tool",
-    "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation."
+    "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation.",
+    "VIDEO_AUDIO_SETTINGS": "Video and audio settings"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",
@@ -444,6 +445,13 @@
     },
     "FORWARD_MESSAGE": {
       "TITLE": "Forward Message To"
+    },
+    "AUDIO_VIDEO_SETTING": {
+      "TITLE": "Video and Audio Settings",
+      "AUDIO": "Microphone",
+      "VIDEO": "Camera",
+      "SPEAKER": "Speaker",
+      "NO_DEVICE": "No device"
     }
   },
   "SHORTCUT": {

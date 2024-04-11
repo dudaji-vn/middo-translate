@@ -19,6 +19,7 @@ import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import { SHORTCUTS } from '@/types/shortcuts';
 import  isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
+import ActionVideoAudioSetting from './action-video-audio-setting';
 
 
 export default function DropdownActions() {
@@ -111,6 +112,7 @@ export default function DropdownActions() {
           </DropdownMenuItem>
         )}
         <ActionToggleCaption />
+        <ActionVideoAudioSetting />
       </DropdownMenuContent>
     </DropdownMenu>
   );

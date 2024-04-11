@@ -20,6 +20,7 @@ import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
 import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
 import ParticipantInVideoCall from '../../interfaces/participant';
+import { useVideoSettingStore } from '../../store/video-setting.store';
 interface MediaStreamInterface {
   video?: boolean;
   audio?: boolean;
@@ -37,6 +38,7 @@ export default function VideoCallActions() {
     useParticipantVideoCallStore();
   const { setLoadingVideo, isLoadingStream, setLoadingStream } = useMyVideoCallStore();
   const {t} = useTranslation('common')
+  const {video: videoSetting, audio: audioSetting} = useVideoSettingStore();
   const handleChangeCameraOrMic = (settings: MediaStreamInterface) => {
     if (!socket.id || !myStream) return;
     const video = settings?.video == undefined ? isTurnOnCamera : settings?.video;
@@ -79,7 +81,7 @@ export default function VideoCallActions() {
       return;
     }
     
-    getUserStream({isTurnOnCamera: video, isTurnOnMic: true})
+    getUserStream({isTurnOnCamera: video, isTurnOnMic: true, cameraDeviceId: videoSetting?.deviceId || undefined, micDeviceId: audioSetting?.deviceId || undefined})
       .then((stream: MediaStream) => {
         const myVideoStream = stream;
         if (!audio && myVideoStream.getAudioTracks().length > 0) {

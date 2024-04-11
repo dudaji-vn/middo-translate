@@ -331,7 +331,8 @@
     "EMPTY_WELCOME_ITEM_2_TITLE": "2. Cuộc gọi Middo",
     "EMPTY_WELCOME_ITEM_2_DESCRIPTION": "Cuộc gọi Middo là một trong những tính năng tuyệt vời nhất của Cuộc trò chuyện Middo giúp bạn làm việc dễ dàng hơn.",
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Công cụ dịch",
-    "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện."
+    "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện.",
+    "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",
@@ -444,6 +445,13 @@
     },
     "FORWARD_MESSAGE": {
       "TITLE": "Chuyển tiếp tin nhắn đến"
+    },
+    "AUDIO_VIDEO_SETTING": {
+      "TITLE": "Cài đặt âm thanh và hình ảnh",
+      "AUDIO": "Microphone",
+      "VIDEO": "Hình ảnh",
+      "SPEAKER": "Loa",
+      "NO_DEVICE": "Không có thiết bị"
     }
   },
   "SHORTCUT": {

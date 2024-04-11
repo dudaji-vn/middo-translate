@@ -13,6 +13,7 @@ import processingStream from "../../utils/processing-stream";
 import getUserStream from "../../utils/get-user-stream";
 import { useTranslation } from "react-i18next";
 import { SOCKET_CONFIG } from "@/configs/socket";
+import { useVideoSettingStore } from "../../store/video-setting.store";
 
 export default function useHandleStreamMyVideo() {
     const { myStream, setMyStream, setShareScreenStream, setShareScreen, setTurnOnCamera, setTurnOnMic, setLoadingVideo } = useMyVideoCallStore();
@@ -20,11 +21,12 @@ export default function useHandleStreamMyVideo() {
     const { user } = useAuthStore();
     const { clearStateVideoCall, room } = useVideoCallStore();
     const {t} = useTranslation('common');
+    const {video, audio} = useVideoSettingStore();
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
         setLoadingVideo(true);
         // Start get streaming
-        getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic})
+        getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic, cameraDeviceId: video?.deviceId || undefined, micDeviceId: audio?.deviceId || undefined})
         .then((stream: MediaStream) => {
             myVideoStream = stream;
             setMyStream(myVideoStream);
