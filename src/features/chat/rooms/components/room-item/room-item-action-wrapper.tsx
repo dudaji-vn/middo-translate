@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { EBusinessConversationKeys } from '@/types/business.type';
+import { RoomItem } from '.';
 export interface RoomItemActionWrapperProps
   extends React.HTMLAttributes<HTMLDivElement> {
   room: Room;
@@ -115,9 +116,11 @@ RoomItemActionWrapper.displayName = 'RoomItemActionWrapper';
 const MobileWrapper = ({
   children,
   items,
+  room,
 }: PropsWithChildren &
   RoomItemActionWrapperProps & {
     items: Item[];
+    room: Room;
   }) => {
   const { t } = useTranslation('common');
   return (
@@ -125,7 +128,13 @@ const MobileWrapper = ({
       <LongPressMenu.Trigger className="w-full">
         {children}
       </LongPressMenu.Trigger>
-      <LongPressMenu.Menu>
+      <LongPressMenu.Menu
+        outsideComponent={
+          <div className="mx-1 mb-3 overflow-hidden rounded-xl">
+            <RoomItem disabledAction data={room} />
+          </div>
+        }
+      >
         {items.map((item) => (
           <LongPressMenu.Item
             key={item.action}

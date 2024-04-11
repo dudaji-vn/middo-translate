@@ -89,7 +89,7 @@ const TextMessage = ({ message }: { message: Message }) => {
     translate();
   }, [userLanguage, message, t, isMe]);
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col pl-6">
       <RichTextView
         editorStyle="text-base md:text-sm"
         mentionClassName="left"
