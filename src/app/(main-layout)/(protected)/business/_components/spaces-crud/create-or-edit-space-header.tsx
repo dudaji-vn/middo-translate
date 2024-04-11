@@ -9,7 +9,10 @@ import React, { use, useEffect, useMemo, useState } from 'react'
 import { cn } from '@/utils/cn';
 import { TabsList, TabsTrigger } from '@/components/navigation';
 import { useFormContext } from 'react-hook-form';
-import { BusinessModalType } from '../../page';
+enum BusinessModalType {
+    CreateSpace = 'create-space',
+    EditSpace = 'edit-space'
+  }
 const headerVariants = cva('w-full flex flex-row', {
     variants: {
         navigation: {

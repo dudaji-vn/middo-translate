@@ -1,7 +1,7 @@
 import BusinessSpaces from "./_components/business-header/business-spaces";
 import CreateOrEditSpace from "./_components/spaces-crud/create-or-edit-space";
 
-export enum BusinessModalType {
+enum BusinessModalType {
   CreateSpace = 'create-space',
   EditSpace = 'edit-space'
 }
