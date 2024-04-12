@@ -8,9 +8,13 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ReceiveVideoCallActions = () => {
-  const { requestCall, removeRequestCall, setRoom } = useVideoCallStore();
-  const isMobile = useAppStore((state) => state.isMobile);
   const {t} = useTranslation('common')
+  
+  const requestCall = useVideoCallStore((state) => state.requestCall);
+  const removeRequestCall = useVideoCallStore((state) => state.removeRequestCall);
+  const setRoom = useVideoCallStore((state) => state.setRoom);
+  const isMobile = useAppStore((state) => state.isMobile);
+  
   const declineCall = () => {
     removeRequestCall();
   };

@@ -6,10 +6,12 @@ import { useTranslation } from 'react-i18next';
 import trimLongName from '@/features/call/utils/trim-long-name.util';
 
 export default function ParticipantDoodleList() {
-  const { colorDoodle } = useVideoCallStore();
-  const { imagesCanvas } = useDoodleContext();
-  const { user } = useAuthStore();
   const {t} = useTranslation('common')
+  
+  const colorDoodle = useVideoCallStore(state => state.colorDoodle);
+  const user = useAuthStore(state => state.user);
+  
+  const { imagesCanvas } = useDoodleContext();
   return (
     <ul className="max-h-[180px] max-w-[52px] overflow-x-hidden w-full flex-1 overflow-auto border-t border-neutral-50 pb-4 pt-4">
       <ul className="flex w-full flex-col items-center justify-center gap-5 ">

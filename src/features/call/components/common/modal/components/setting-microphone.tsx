@@ -18,12 +18,13 @@ interface SettingMicrophoneProps {
 }
 const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProps) => {
   const { t } = useTranslation('common');
+
+  const audio = useVideoSettingStore(state => state.audio);
+  const setAudio = useVideoSettingStore(state => state.setAudio);
+
   const { audioInputDevices } = useGetAudioVideoSource();
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [volume, setVolume] = useState<number>(0);
-  
-  const audio = useVideoSettingStore(state => state.audio);
-  const setAudio = useVideoSettingStore(state => state.setAudio);
 
   useEffect(() => {
     if (audioInputDevices.length == 0) return;

@@ -7,7 +7,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ReceiveVideoCallContent = () => {
-  const { requestCall } = useVideoCallStore();
+  const requestCall = useVideoCallStore(state => state.requestCall);
   const isMobile = useAppStore((state) => state.isMobile);
   const {t} = useTranslation('common')
   return (

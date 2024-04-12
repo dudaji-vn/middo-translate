@@ -15,12 +15,25 @@ import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
 
 export default function useHandleShareScreen() {
-    const { room, setLayout, setChooseScreen } = useVideoCallStore();
-    const { participants, removeParticipantShareScreen, peerShareScreen, clearPeerShareScreen, addParticipant, addPeerShareScreen } = useParticipantVideoCallStore();
-    const { shareScreenStream, setShareScreen, isShareScreen, setShareScreenStream } = useMyVideoCallStore();
-    const { user } = useAuthStore();
-    const {isElectron, ipcRenderer} = useElectron();
     const {t} = useTranslation('common');
+
+    const room = useVideoCallStore(state => state.room);
+    const setLayout = useVideoCallStore(state => state.setLayout);
+    const setChooseScreen = useVideoCallStore(state => state.setChooseScreen);
+    const participants = useParticipantVideoCallStore(state => state.participants);
+    const removeParticipantShareScreen = useParticipantVideoCallStore(state => state.removeParticipantShareScreen);
+    const peerShareScreen = useParticipantVideoCallStore(state => state.peerShareScreen);
+    const clearPeerShareScreen = useParticipantVideoCallStore(state => state.clearPeerShareScreen);
+    const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
+    const addPeerShareScreen = useParticipantVideoCallStore(state => state.addPeerShareScreen);
+    const shareScreenStream = useMyVideoCallStore(state => state.shareScreenStream);
+    const setShareScreen = useMyVideoCallStore(state => state.setShareScreen);
+    const isShareScreen = useMyVideoCallStore(state => state.isShareScreen);
+    const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
+    const user = useAuthStore(state => state.user);
+
+    const {isElectron, ipcRenderer} = useElectron();
+    
     const removeShareScreen = useCallback((socketId: string) => {
         const item = participants.find((p: ParticipantInVideoCall) => p.socketId === socketId && p.isShareScreen);
         if (item) {

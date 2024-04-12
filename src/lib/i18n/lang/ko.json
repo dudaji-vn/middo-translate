@@ -332,7 +332,8 @@
     "EMPTY_WELCOME_ITEM_2_DESCRIPTION": "Middo 콜은 Middo 대화의 가장 환상적인 기능 중 하나로 작업을 더 쉽게 지원합니다.",
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. 번역 도구",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "대화 중 메시지의 정확도를 높일 수 있는 번역 도구입니다.",
-    "VIDEO_AUDIO_SETTINGS": "비디오 및 오디오 설정"
+    "VIDEO_AUDIO_SETTINGS": "비디오 및 오디오 설정",
+    "DOODLE": "그리기"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo가 권한이 필요합니다 ",

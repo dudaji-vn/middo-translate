@@ -18,10 +18,13 @@ interface SettingVideoProps {
 }
 const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
   const { t } = useTranslation('common');
-  const { videoInputDevices } = useGetAudioVideoSource();
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  
   const video = useVideoSettingStore(state => state.video);
   const setVideo = useVideoSettingStore(state => state.setVideo);
+
+  const { videoInputDevices } = useGetAudioVideoSource();
+  const [stream, setStream] = useState<MediaStream | null>(null);
+  
   const onVideoInputChange = (val: string) => {
     const selected = videoInputDevices.find(
       (device) => device.deviceId === val,

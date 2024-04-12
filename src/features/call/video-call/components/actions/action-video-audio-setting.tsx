@@ -5,8 +5,10 @@ import { SlidersHorizontal } from 'lucide-react';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 
 const ActionVideoAudioSetting = () => {
-  const { setModalAudioVideoSetting} = useVideoCallStore();
   const { t } = useTranslation('common');
+
+  const setModalAudioVideoSetting = useVideoCallStore((state) => state.setModalAudioVideoSetting);
+  
   return (
     <>
       <DropdownMenuItem onClick={() => setModalAudioVideoSetting(true)}>

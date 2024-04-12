@@ -1,5 +1,5 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
-import { use, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
@@ -14,12 +14,15 @@ import { SearchInput } from '@/components/data-entry';
 import { useTranslation } from 'react-i18next';
 
 export const ModalAddUser = () => {
+    const {t} = useTranslation("common");
 
-    const { isShowModalAddUser, setModalAddUser, room } = useVideoCallStore();
+    const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
+    const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
+    const room = useVideoCallStore((state) => state.room);
+    const participants = useParticipantVideoCallStore(state => state.participants)
     const [members, setMembers] = useState<User[]>([]);
     const [membersApi, setMembersApi] = useState<User[]>([]);
-    const { participants } = useParticipantVideoCallStore();
-    const {t} = useTranslation("common");
+    
     useEffect(() => {
         if (!room || !room.roomId) return;
         const fetchMembersInGroup = async () => {

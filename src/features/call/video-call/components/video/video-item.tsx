@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
@@ -10,7 +10,6 @@ import VideoItemAvatar from './components/video-item-avatar';
 import ExpandVideo from './components/expand-video';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemText from './components/video-item-text';
-import { useTranslation } from 'react-i18next';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -21,11 +20,10 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const itemRef = useRef<HTMLElement>(null);
   const { streamVideo, isTurnOnCamera } = useLoadStream(participant, videoRef);
-  const { isLoadingVideo } = useMyVideoCallStore();
+  const isLoadingVideo = useMyVideoCallStore(state => state.isLoadingVideo);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const { isTalk } = useAudioLevel(streamVideo);
-  const { isFullScreen } = useVideoCallStore();
-  const {t} = useTranslation('common')
-
+  
   return (
     <section
       ref={itemRef}
@@ -82,3 +80,10 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   );
 };
 export default memo(VideoItem);
+
+
+const VideoItemContent = () => {
+
+}
+
+

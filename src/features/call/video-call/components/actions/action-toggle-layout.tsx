@@ -7,8 +7,11 @@ import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ActionToggleLayout = () =>  {
-  const { layout, setLayout } = useVideoCallStore();
   const {t} = useTranslation('common')
+
+  const layout = useVideoCallStore((state) => state.layout);
+  const setLayout = useVideoCallStore((state) => state.setLayout);
+  
   const changeLayout = () => {
     setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
   };

@@ -16,14 +16,18 @@ interface ActionToggleMicProps {
   }) => void;
 }
 const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
-  const { isTurnOnMic, isLoadingStream } = useMyVideoCallStore();
+  const {t} = useTranslation('common')
+  
+  const isTurnOnMic = useMyVideoCallStore((state) => state.isTurnOnMic);
+  const isLoadingStream = useMyVideoCallStore((state) => state.isLoadingStream);
+
   const {isElectron, ipcRenderer} = useElectron();
   const onToggleMic = useCallback(() => {
     handleChangeCameraOrMic({
       audio: !isTurnOnMic,
     });
   }, [handleChangeCameraOrMic, isTurnOnMic])
-  const {t} = useTranslation('common')
+ 
   useKeyboardShortcut([SHORTCUTS.TOGGLE_MICROPHONE], onToggleMic);
 
   useEffect(() => {

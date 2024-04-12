@@ -26,19 +26,23 @@ interface MediaStreamInterface {
   audio?: boolean;
 }
 export default function VideoCallActions() {
-  const {
-    isTurnOnMic,
-    isTurnOnCamera,
-    setTurnOnMic,
-    setTurnOnCamera,
-    myStream,
-    setMyStream,
-  } = useMyVideoCallStore();
-  const { participants, setStreamForParticipant } =
-    useParticipantVideoCallStore();
-  const { setLoadingVideo, isLoadingStream, setLoadingStream } = useMyVideoCallStore();
+
   const {t} = useTranslation('common')
-  const {video: videoSetting, audio: audioSetting} = useVideoSettingStore();
+
+  const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
+  const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
+  const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
+  const setTurnOnCamera = useMyVideoCallStore(state => state.setTurnOnCamera);
+  const myStream = useMyVideoCallStore(state => state.myStream);
+  const setMyStream = useMyVideoCallStore(state => state.setMyStream);
+  const participants = useParticipantVideoCallStore(state => state.participants);
+  const setStreamForParticipant = useParticipantVideoCallStore(state => state.setStreamForParticipant);
+  const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
+  const isLoadingStream = useMyVideoCallStore(state => state.isLoadingStream);
+  const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
+  const videoSetting = useVideoSettingStore(state => state.video);
+  const audioSetting = useVideoSettingStore(state => state.audio);
+  
   const handleChangeCameraOrMic = (settings: MediaStreamInterface) => {
     if (!socket.id || !myStream) return;
     const video = settings?.video == undefined ? isTurnOnCamera : settings?.video;

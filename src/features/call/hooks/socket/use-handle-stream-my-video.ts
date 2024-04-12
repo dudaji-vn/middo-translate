@@ -5,23 +5,35 @@ import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
-import getStreamConfig from "../../utils/get-stream-config";
 import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { createPeer } from "../../utils/peer-action.util";
-import processingStream from "../../utils/processing-stream";
 import getUserStream from "../../utils/get-user-stream";
 import { useTranslation } from "react-i18next";
 import { SOCKET_CONFIG } from "@/configs/socket";
 import { useVideoSettingStore } from "../../store/video-setting.store";
 
 export default function useHandleStreamMyVideo() {
-    const { myStream, setMyStream, setShareScreenStream, setShareScreen, setTurnOnCamera, setTurnOnMic, setLoadingVideo } = useMyVideoCallStore();
-    const { participants, clearPeerShareScreen, resetParticipants, setStreamForParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
-    const { user } = useAuthStore();
-    const { clearStateVideoCall, room } = useVideoCallStore();
     const {t} = useTranslation('common');
-    const {video, audio} = useVideoSettingStore();
+
+    const myStream = useMyVideoCallStore(state => state.myStream);
+    const setMyStream = useMyVideoCallStore(state => state.setMyStream);
+    const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
+    const setShareScreen = useMyVideoCallStore(state => state.setShareScreen);
+    const setTurnOnCamera = useMyVideoCallStore(state => state.setTurnOnCamera);
+    const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
+    const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
+    const participants = useParticipantVideoCallStore(state => state.participants);
+    const clearPeerShareScreen = useParticipantVideoCallStore(state => state.clearPeerShareScreen);
+    const resetParticipants = useParticipantVideoCallStore(state => state.resetParticipants);
+    const setStreamForParticipant = useParticipantVideoCallStore(state => state.setStreamForParticipant);
+    const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
+    const user = useAuthStore(state => state.user);
+    const clearStateVideoCall = useVideoCallStore(state => state.clearStateVideoCall);
+    const room = useVideoCallStore(state => state.room);
+    const video = useVideoSettingStore(state => state.video);
+    const audio = useVideoSettingStore(state => state.audio);
+
     useEffect(() => {
         let myVideoStream: MediaStream | null = null;
         setLoadingVideo(true);

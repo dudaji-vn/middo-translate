@@ -18,14 +18,18 @@ interface ActionToggleCameraProps {
 const ActionToggleCamera = ({
   handleChangeCameraOrMic,
 }: ActionToggleCameraProps) => {
-  const { isTurnOnCamera, isLoadingStream } = useMyVideoCallStore();
+  const {t} = useTranslation('common')
+  
+  const isTurnOnCamera = useMyVideoCallStore((state) => state.isTurnOnCamera);
+  const isLoadingStream = useMyVideoCallStore((state) => state.isLoadingStream);
+
   const {isElectron, ipcRenderer} = useElectron();
   const onToggleCamera = useCallback(() => {
     handleChangeCameraOrMic({
       video: !isTurnOnCamera,
     });
   }, [handleChangeCameraOrMic, isTurnOnCamera]);
-  const {t} = useTranslation('common')
+  
   useKeyboardShortcut([SHORTCUTS.TOGGLE_CAMERA], onToggleCamera);
 
   useEffect(() => {

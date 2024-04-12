@@ -15,10 +15,15 @@ import ToolBar from './components/tool-bar';
 
 
 export const DoodleArea = () => {
-    const { doodleImage, setConfirmStopDoodle, colorDoodle, isMeDoole } = useVideoCallStore();
+    
+    const doodleImage = useVideoCallStore(state => state.doodleImage);
+    const colorDoodle = useVideoCallStore(state => state.colorDoodle);
+    const setConfirmStopDoodle = useVideoCallStore(state => state.setConfirmStopDoodle);
+    const isDrawing = useVideoCallStore(state => state.isDrawing);
+    const setDrawing = useVideoCallStore(state => state.setDrawing);
+
     const imageRef = useRef<HTMLImageElement>(null);
     const canvasRef = useRef<ReactSketchCanvasRef>(null);
-    const { isDrawing, setDrawing } = useVideoCallStore();
     const [isEraser, setIsEraser] = useState(false);
     const {width, height} = useFitSizeImage({imageRef, canvasRef});
 

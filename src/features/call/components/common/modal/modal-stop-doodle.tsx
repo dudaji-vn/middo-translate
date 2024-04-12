@@ -8,10 +8,14 @@ import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import { useTranslation } from 'react-i18next';
 
 export const ConfirmStopDoodle = () => {
-    const { confirmStopDoodle, setConfirmStopDoodle, setDoodle, setDoodleImage, setDrawing, setMeDoodle } = useVideoCallStore();
-    const { user } = useAuthStore();
-    const { setMyOldDoodle } = useMyVideoCallStore();
     const {t} = useTranslation('common');
+
+    const confirmStopDoodle = useVideoCallStore(state => state.confirmStopDoodle);
+    const setConfirmStopDoodle = useVideoCallStore(state => state.setConfirmStopDoodle);
+    const setMeDoodle = useVideoCallStore(state => state.setMeDoodle);
+    const user = useAuthStore(state => state.user);
+    const setMyOldDoodle = useMyVideoCallStore(state => state.setMyOldDoodle);
+    
     const handleStop = () => {
         setMeDoodle(false);
         setMyOldDoodle(null)

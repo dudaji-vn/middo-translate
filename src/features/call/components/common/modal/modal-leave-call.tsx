@@ -15,10 +15,16 @@ import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useTranslation } from 'react-i18next';
 
 export const ConfirmLeaveRoomModal = () => {
-  const { confirmLeave, setConfirmLeave, setRoom, room } = useVideoCallStore();
-  const { participants, removeParticipant } = useParticipantVideoCallStore();
-  const { isElectron, ipcRenderer } = useElectron();
   const {t} = useTranslation('common');
+
+  const confirmLeave = useVideoCallStore(state => state.confirmLeave);
+  const setConfirmLeave = useVideoCallStore(state => state.setConfirmLeave);
+  const setRoom = useVideoCallStore(state => state.setRoom);
+  const participants = useParticipantVideoCallStore(state => state.participants);
+  const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
+
+  const { isElectron, ipcRenderer } = useElectron();
+  
   const handleLeave = async () => {
     setConfirmLeave(false);
     participants.forEach((participant) => {

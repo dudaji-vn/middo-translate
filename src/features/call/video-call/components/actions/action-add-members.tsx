@@ -9,9 +9,13 @@ import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ActionAddMembers = () => {
-  const { room, isFullScreen, setModalAddUser, isShowModalAddUser } =
-    useVideoCallStore();
   const {t} = useTranslation('common')
+
+  const room = useVideoCallStore((state) => state.room);
+  const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
+  const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
+  const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
+    
   useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
     setModalAddUser(!isShowModalAddUser);
   });

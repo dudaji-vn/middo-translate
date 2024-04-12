@@ -8,8 +8,8 @@ interface ModalConfirmClearDoodleProps {
     handleSubmit: () => void;
 }
 export const ModalConfirmClearDoodle = ({ handleSubmit }: ModalConfirmClearDoodleProps) => {
-    const {isShowConfirmClear, setShowConfirmClear} = useDoodleContext();
     const {t} = useTranslation('common')
+    const {isShowConfirmClear, setShowConfirmClear} = useDoodleContext();
     return (
         <AlertDialog open={isShowConfirmClear} onOpenChange={() => setShowConfirmClear(false)}>
             <AlertDialogContent>

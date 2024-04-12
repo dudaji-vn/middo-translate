@@ -27,7 +27,10 @@ const Toolbar = (props: ToolbarProps) => {
   const constraintsRef = useRef(null);
   const controls = useDragControls();
   const [isShowColor, setShowColor] = useState(false);
-  const { isDrawing, isMeDoole } = useVideoCallStore();
+
+  const isDrawing = useVideoCallStore(state => state.isDrawing);
+  const  isMeDoole = useVideoCallStore(state => state.isMeDoole);
+
   const {setShowConfirmClear} = useDoodleContext();
   return (
     <motion.section

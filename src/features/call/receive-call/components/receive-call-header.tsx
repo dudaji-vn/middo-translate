@@ -6,7 +6,9 @@ import { memo } from 'react';
 import { useVideoCallStore } from '../../store/video-call.store';
 
 const ReceiveVideoCallHeader = () => {
-  const { requestCall, removeRequestCall } = useVideoCallStore();
+  
+  const requestCall = useVideoCallStore(state => state.requestCall);
+  const removeRequestCall = useVideoCallStore(state => state.removeRequestCall);
 
   const declineCall = () => {
     removeRequestCall();

@@ -8,8 +8,8 @@ import VideoCallContent from './components/video-call-contents';
 import { cn } from '@/utils/cn';
 
 export default function VideoCall() {
-  const { room } = useVideoCallStore();
-  const { isFullScreen } = useVideoCallStore();
+  const room = useVideoCallStore(state => state.room);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   if (!room) return null;
   return (
     <CallDragable

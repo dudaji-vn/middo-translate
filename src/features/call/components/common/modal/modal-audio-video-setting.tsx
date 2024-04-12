@@ -21,11 +21,20 @@ import toast from 'react-hot-toast';
 import socket from '@/lib/socket-io';
 
 export const ModalAudioVideoSetting = () => {
-  const { isShowModalAudioVideoSetting, setModalAudioVideoSetting } =
-    useVideoCallStore();
   const { t } = useTranslation('common');
-  const {isTurnOnMic, isTurnOnCamera, myStream, setLoadingVideo, setMyStream, setTurnOnCamera, setTurnOnMic, setLoadingStream} = useMyVideoCallStore();
-    const {setStreamForParticipant} = useParticipantVideoCallStore();
+
+  const isShowModalAudioVideoSetting = useVideoCallStore(state => state.isShowModalAudioVideoSetting);
+  const setModalAudioVideoSetting = useVideoCallStore(state => state.setModalAudioVideoSetting);
+  const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
+  const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
+  const myStream = useMyVideoCallStore(state => state.myStream);
+  const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
+  const setMyStream = useMyVideoCallStore(state => state.setMyStream);
+  const setTurnOnCamera = useMyVideoCallStore(state => state.setTurnOnCamera);
+  const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
+  const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
+  const setStreamForParticipant = useParticipantVideoCallStore(state => state.setStreamForParticipant);
+
   const onSettingChange = useCallback(({ type, deviceId }: VideoSetting) => {
     if((type === 'video' && !isTurnOnCamera) || (type === 'audio' && !isTurnOnMic)) return;
     if(myStream) {
@@ -60,6 +69,7 @@ export const ModalAudioVideoSetting = () => {
         }, 1000);
       });
   }, [isTurnOnCamera, isTurnOnMic, myStream, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t])
+  
   return (
     <div>
       <AlertDialog

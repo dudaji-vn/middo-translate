@@ -10,14 +10,14 @@ import { createPeer } from '../../utils/peer-action.util';
 import { decoderData } from '../../utils/text-decoder-encoder';
 
 export default function usePeerEvent() {
-  const {
-    participants,
-    setStreamForParticipant,
-    removeParticipant,
-    updatePeerParticipant,
-  } = useParticipantVideoCallStore();
-  const { user } = useAuthStore();
-  const { myStream } = useMyVideoCallStore();
+
+  const participants = useParticipantVideoCallStore(state => state.participants);
+  const setStreamForParticipant = useParticipantVideoCallStore(state => state.setStreamForParticipant);
+  const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
+  const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
+  const user = useAuthStore(state => state.user);
+  const myStream = useMyVideoCallStore(state => state.myStream);
+  
   useEffect(() => {
     let listeners: any = {};
     participants.forEach(

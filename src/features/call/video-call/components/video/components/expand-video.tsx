@@ -11,9 +11,15 @@ interface ExpandVideoProps {
   participant: ParticipantInVideoCall;
 }
 const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
-  const { isFullScreen, setFullScreen, setLayout, setPinShareScreen, setPinDoodle} = useVideoCallStore();
-  const { pinParticipant } = useParticipantVideoCallStore();
   const {t} = useTranslation('common')
+
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  const setFullScreen = useVideoCallStore(state => state.setFullScreen);
+  const setLayout = useVideoCallStore(state => state.setLayout);
+  const setPinShareScreen = useVideoCallStore(state => state.setPinShareScreen);
+  const setPinDoodle = useVideoCallStore(state => state.setPinDoodle);
+  const pinParticipant = useParticipantVideoCallStore(state => state.pinParticipant);
+  
   const expandVideoItem = () => {
     if (!isFullScreen) setFullScreen(true);
     setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);

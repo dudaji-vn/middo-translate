@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
 import ParticipantInVideoCall from "../interfaces/participant";
 import { useParticipantVideoCallStore } from "../store/participant.store";
+import { useVideoSettingStore } from "../store/video-setting.store";
 
 export default function useLoadStream(participant: ParticipantInVideoCall, elementRef: React.RefObject<HTMLVideoElement>) {
+    console.log('🔴Load stream')
+    const setStreamForParticipant = useParticipantVideoCallStore(state => state.setStreamForParticipant)
+    const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant)
+    
+    const speaker = useVideoSettingStore(state => state.speaker)
+
     const [streamVideo, setStreamVideo] = useState<MediaStream>()
     const [isTurnOnMic, setTurnOnMic] = useState<boolean>(false)
     const [isTurnOnCamera, setIsTurnOnCamera] = useState<boolean>(false)
-    const { setStreamForParticipant, removeParticipant } = useParticipantVideoCallStore();
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
     useEffect(() => {
@@ -60,6 +66,13 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
         }
         
     }, [elementRef, participant, removeParticipant, setStreamForParticipant])
+
+    useEffect(() => {
+        //@ts-ignore
+        elementRef.current?.setSinkId(speaker?.deviceId || 'default')
+    }, [elementRef, speaker])
+
+    console.log('-------------------------')
     return {
         streamVideo,
         isTurnOnMic,
