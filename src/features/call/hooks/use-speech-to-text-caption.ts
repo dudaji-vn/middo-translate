@@ -10,13 +10,16 @@ interface WordRecognized {
   text: string;
 }
 export default function useSpeechToTextCaption(language?: string) {
+
+  const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
+
   const [finalTranscript, setFinalTranscript] = useState<string>('');
   const [stream, setStream] = useState<MediaStream>();
   const [isListening, setIsListening] = useState(false);
-  const {isTurnOnMic} = useMyVideoCallStore();
   const processorRef = useRef<any>();
   const audioContextRef = useRef<any>();
   const audioInputRef = useRef<any>();
+  
   const receiveAudioText = useCallback((data: WordRecognized) => {
     // remove /n in data.text
     const transcript = data.text.replace(/\n/g, '');

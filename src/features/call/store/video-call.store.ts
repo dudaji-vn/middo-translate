@@ -21,6 +21,7 @@ export type VideoCallState = {
   isShowCaption: boolean;
   requestCall: any[];
   isShowModalAddUser: boolean;
+  isShowModalAudioVideoSetting: boolean;
   captions: CaptionInterface[];
   messageId: string;
   showChooseScreen: boolean;
@@ -41,6 +42,7 @@ export type VideoCallState = {
   addRequestCall: (data: any) => void;
   removeRequestCall: (roomId?: string) => void;
   setModalAddUser: (isShowModalAddUser: boolean) => void;
+  setModalAudioVideoSetting: (isShowModalAudioVideoSetting: boolean) => void;
   addCaption: (caption: CaptionInterface) => void;
   clearCaption: () => void;
   setMessageId: (messageId: string) => void;
@@ -69,6 +71,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   isShowCaption: false,
   requestCall: [],
   isShowModalAddUser: false,
+  isShowModalAudioVideoSetting: false,
   captions: [],
   messageId: '',
   showChooseScreen: false,
@@ -131,6 +134,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   setModalAddUser: (isShowModalAddUser: boolean) => {
     set(() => ({ isShowModalAddUser }));
+  },
+  setModalAudioVideoSetting: (isShowModalAudioVideoSetting: boolean) => {
+    set(() => ({ isShowModalAudioVideoSetting }));
   },
   addCaption: (caption: CaptionInterface) => {
     set((state) => ({ captions: [...state.captions, caption] }));

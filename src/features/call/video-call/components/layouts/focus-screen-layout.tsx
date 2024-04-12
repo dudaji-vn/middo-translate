@@ -8,8 +8,9 @@ import FocusVideoItem from "../video/focus-video-item";
 
 
 const FocusScreenLayout = () => {
-    const { isDoodle, isPinDoodle } = useVideoCallStore();
-    const { participants } = useParticipantVideoCallStore();
+    const isDoodle = useVideoCallStore(state => state.isDoodle);
+    const isPinDoodle = useVideoCallStore(state => state.isPinDoodle);
+    const participants = useParticipantVideoCallStore(state => state.participants)
     return (
         <div className="relative flex w-full h-full p-1">
             <div className="flex flex-col w-full h-full gap-1">

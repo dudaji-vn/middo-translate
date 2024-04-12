@@ -6,16 +6,16 @@ import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useTranslation } from 'react-i18next';
 interface DoodleItemProps {}
 const DoodleItem = ({}: DoodleItemProps) => {
-  const { doodleImage } = useVideoCallStore();
-  const {
-    isFullScreen,
-    setFullScreen,
-    layout,
-    setPinDoodle,
-    setLayout,
-    isPinDoodle,
-  } = useVideoCallStore();
   const {t} = useTranslation('common')
+  
+  const doodleImage = useVideoCallStore(state => state.doodleImage);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  const setFullScreen = useVideoCallStore(state => state.setFullScreen);
+  const layout = useVideoCallStore(state => state.layout);
+  const setPinDoodle = useVideoCallStore(state => state.setPinDoodle);
+  const setLayout = useVideoCallStore(state => state.setLayout);
+  const isPinDoodle = useVideoCallStore(state => state.isPinDoodle);
+
   const expandDoodle = () => {
     if (!isFullScreen) setFullScreen(true);
     setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);

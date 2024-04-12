@@ -11,10 +11,13 @@ interface IDoodleShareScreenProps {
     height: number;
 }
 export const DoodleShareScreen = (props: IDoodleShareScreenProps) => {
-    const { colorDoodle } = useVideoCallStore();
+
     const { width, height } = props;
+
+    const colorDoodle = useVideoCallStore(state => state.colorDoodle);
+    const isDrawing = useVideoCallStore(state => state.isDrawing);
+
     const canvasRef = useRef<ReactSketchCanvasRef>(null);
-    const { isDrawing } = useVideoCallStore();
     // const {width, height} = useFitSizeImage({imageRef, canvasRef});
 
     useEffect(() => {

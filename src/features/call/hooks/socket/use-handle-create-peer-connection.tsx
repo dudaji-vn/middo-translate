@@ -13,10 +13,19 @@ import { MonitorUpIcon, LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 export default function useHandleCreatePeerConnection() {
-    const { setDoodle, setDoodleImage, setLayout, isPinDoodle, setPinShareScreen } = useVideoCallStore();
-    const { participants, addParticipant, updatePeerParticipant } = useParticipantVideoCallStore();
-    const { myStream } = useMyVideoCallStore();
     const {t} = useTranslation('common')
+
+    const setDoodle = useVideoCallStore(state => state.setDoodle);
+    const setDoodleImage = useVideoCallStore(state => state.setDoodleImage);
+    const setLayout = useVideoCallStore(state => state.setLayout);
+    const isPinDoodle = useVideoCallStore(state => state.isPinDoodle);
+    const setPinShareScreen = useVideoCallStore(state => state.setPinShareScreen);
+
+    const participants = useParticipantVideoCallStore(state => state.participants);
+    const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
+    const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
+
+    const myStream = useMyVideoCallStore(state => state.myStream);
     
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
     const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: any[], doodleImage: string}) => {

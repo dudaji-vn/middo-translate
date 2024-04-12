@@ -15,12 +15,20 @@ import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
 
 export default function useHandleDoodle() {
-    const { setDoodle, setDoodleImage, setDrawing, setLayout, setPinDoodle, setMeDoodle } = useVideoCallStore();
-    const { participants } = useParticipantVideoCallStore();
-    const { user } = useAuthStore();
-    const { setMyOldDoodle } = useMyVideoCallStore();
-    const {isElectron, ipcRenderer} = useElectron();
     const {t} = useTranslation('common');
+
+    const setDoodle = useVideoCallStore(state => state.setDoodle);
+    const setDoodleImage = useVideoCallStore(state => state.setDoodleImage);
+    const setDrawing = useVideoCallStore(state => state.setDrawing);
+    const setLayout = useVideoCallStore(state => state.setLayout);
+    const setPinDoodle = useVideoCallStore(state => state.setPinDoodle);
+    const setMeDoodle = useVideoCallStore(state => state.setMeDoodle);
+    const participants = useParticipantVideoCallStore(state => state.participants);
+    const user = useAuthStore(state => state.user);
+    const setMyOldDoodle = useMyVideoCallStore(state => state.setMyOldDoodle);
+    
+    const {isElectron, ipcRenderer} = useElectron();
+    
     const doodleStart = useCallback((payload: IStartDoodlePayload) => {
         toast.success(t('MESSAGE.SUCCESS.START_DOODLE', {name: payload.name}), {icon: <Brush size={20} />});
         setDoodle(true);

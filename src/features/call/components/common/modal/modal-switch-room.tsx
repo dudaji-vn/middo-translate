@@ -5,8 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { useJoinCall } from '@/features/chat/rooms/hooks/use-join-call';
 
 export const ModalSwitchRoom = () => {
-    const { tmpRoom, setTempRoom, setRoom } = useVideoCallStore()
     const {t} = useTranslation('common');
+    
+    const tmpRoom = useVideoCallStore(state => state.tmpRoom);
+    const setTempRoom = useVideoCallStore(state => state.setTempRoom);
+    
     const startVideoCall = useJoinCall();
     const handleSwitch = () => {
         if(!tmpRoom) return;

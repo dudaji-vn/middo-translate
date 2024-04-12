@@ -8,8 +8,12 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { useTranslation } from 'react-i18next';
 
 export default function VideoCallHeader() {
-  const { room, isFullScreen, setFullScreen } = useVideoCallStore();
   const {t} = useTranslation('common')
+
+  const room = useVideoCallStore((state) => state.room);
+  const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
+  const setFullScreen = useVideoCallStore((state) => state.setFullScreen);
+  
   const toggleFullScreen =  useCallback(() => {
     setFullScreen(!isFullScreen);
   }, [setFullScreen, isFullScreen]);

@@ -1,18 +1,39 @@
 interface Parameter {
     isTurnOnCamera: boolean;
-    isTurnOnMic: boolean
+    isTurnOnMic: boolean;
+    cameraDeviceId?: string;
+    micDeviceId?: string;
 }
-export default async function getUserStream({isTurnOnCamera , isTurnOnMic} : Parameter) {
+interface ConstraintsVideoInterface {
+    audio: boolean;
+    video: boolean | { deviceId: string };
+}
+interface ConstraintsAudioInterface {
+    audio: {
+        echoCancellation: boolean;
+        noiseSuppression: boolean;
+        deviceId?: string;
+    }
+}
+export default async function getUserStream({isTurnOnCamera , isTurnOnMic, cameraDeviceId, micDeviceId} : Parameter) {
     try {
-        const constraintsVideo = {
+        const constraintsVideo : ConstraintsVideoInterface = {
             audio: false,
             video: true,
         }
-        const constraintsAudio = {
+        if(cameraDeviceId) {
+            constraintsVideo.video = {
+                deviceId: cameraDeviceId
+            }
+        }
+        const constraintsAudio: ConstraintsAudioInterface = {
             audio: {
                 echoCancellation: true,
                 noiseSuppression: true,
             }
+        }
+        if(micDeviceId) {
+            constraintsAudio.audio.deviceId = micDeviceId
         }
         // create audio and video streams separately
         let videoStream: (MediaStream | undefined) = undefined;

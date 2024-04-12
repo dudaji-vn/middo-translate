@@ -15,7 +15,7 @@ interface DrawlingShareScreenProps {
 
 const DrawlingShareScreen = forwardRef<ReactSketchCanvasRef, DrawlingShareScreenProps>((props, ref) => {
     const { width, height, color, className } = props;
-    const { user } = useAuthStore();
+    const user = useAuthStore(state => state.user);
     const timer = useRef(new Date().getTime());
     const timeout = useRef();
     const handleChangeCanvas = async () => {

@@ -19,24 +19,25 @@ import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import { SHORTCUTS } from '@/types/shortcuts';
 import  isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
+import ActionVideoAudioSetting from './action-video-audio-setting';
 
 
 export default function DropdownActions() {
-  const {
-    room,
-    isDoodle,
-    isMeDoole,
-    isShowModalAddUser,
-    layout,
-    isPinShareScreen,
-    setDrawing,
-    isDrawing,
-    isFullScreen,
-    setModalAddUser,
-    isShowCaption,
-    setShowCaption,
-    setLayout,
-  } = useVideoCallStore();
+  
+  const room = useVideoCallStore((state) => state.room);
+  const isDoodle = useVideoCallStore((state) => state.isDoodle);
+  const isMeDoole = useVideoCallStore((state) => state.isMeDoole);
+  const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
+  const layout = useVideoCallStore((state) => state.layout);
+  const isPinShareScreen = useVideoCallStore((state) => state.isPinShareScreen);
+  const setDrawing = useVideoCallStore((state) => state.setDrawing);
+  const isDrawing = useVideoCallStore((state) => state.isDrawing);
+  const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
+  const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
+  const isShowCaption = useVideoCallStore((state) => state.isShowCaption);
+  const setShowCaption = useVideoCallStore((state) => state.setShowCaption);
+  const setLayout = useVideoCallStore((state) => state.setLayout);
+
   const { handleStartDoodle } = useVideoCallContext();
 
   const haveShareScreen = useHaveShareScreen();
@@ -111,6 +112,7 @@ export default function DropdownActions() {
           </DropdownMenuItem>
         )}
         <ActionToggleCaption />
+        <ActionVideoAudioSetting />
       </DropdownMenuContent>
     </DropdownMenu>
   );

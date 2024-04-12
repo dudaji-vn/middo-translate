@@ -16,20 +16,21 @@ import useSpeechToTextCaption from '../../hooks/use-speech-to-text-caption';
 import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 
 export default function CaptionSection() {
-  const {
-    isFullScreen,
-    isShowCaption,
-    setShowCaption,
-    captions,
-    addCaption,
-    clearCaption,
-  } = useVideoCallStore();
-  const { user } = useAuthStore();
-  const { myStream } = useMyVideoCallStore();
+  
+  const {t} = useTranslation('common')
+
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  const isShowCaption = useVideoCallStore(state => state.isShowCaption);
+  const setShowCaption = useVideoCallStore(state => state.setShowCaption);
+  const captions = useVideoCallStore(state => state.captions);
+  const addCaption = useVideoCallStore(state => state.addCaption);
+  const clearCaption = useVideoCallStore(state => state.clearCaption);
+  const user = useAuthStore(state => state.user);
+
   const captionListRef = useRef<HTMLDivElement>(null);
   const { transcript } = useSpeechToTextCaption(SUPPORTED_VOICE_MAP[(user?.language || 'auto') as keyof typeof SUPPORTED_VOICE_MAP]);
   const [isScroll, setScroll] = useState(false);
-  const {t} = useTranslation('common')
+  
   const scrollToBottom = useCallback(
     (isForceScroll = false) => {
       if (isScroll && !isForceScroll) return;

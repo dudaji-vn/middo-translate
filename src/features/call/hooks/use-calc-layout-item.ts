@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useVideoCallStore } from "../store/video-call.store";
 import { VIDEOCALL_LAYOUTS } from "../constant/layout";
 
 export default function useCalcLayoutItem(elementRef: React.RefObject<HTMLElement>, length: number) {
-    const { layout, isFullScreen } = useVideoCallStore();
+    const layout = useVideoCallStore(state => state.layout)
+    const isFullScreen = useVideoCallStore(state => state.isFullScreen)
     useEffect(() => {
         let className: string[] = [];
         if(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen) {

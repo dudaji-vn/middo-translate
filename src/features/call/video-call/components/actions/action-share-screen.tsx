@@ -10,10 +10,12 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { useTranslation } from 'react-i18next';
 
 const ActionShareScreen = () => {
-  const { isShareScreen } = useMyVideoCallStore();
+  const {t} = useTranslation('common')
+
+  const isShareScreen = useMyVideoCallStore((state) => state.isShareScreen);
   const { handleShareScreen } = useVideoCallContext();
   const haveShareScreen = useHaveShareScreen();
-  const {t} = useTranslation('common')
+  
   useKeyboardShortcut([SHORTCUTS.START_STOP_SCREEN_SHARING], handleShareScreen);
   return (
     <Tooltip

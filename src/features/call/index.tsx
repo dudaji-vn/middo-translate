@@ -12,7 +12,11 @@ import { useNetworkStatus } from '@/utils/use-network-status';
 import { CUSTOM_EVENTS } from '@/configs/custom-event';
 
 const CallVideoModalContainer = () => {
-  const { removeRequestCall, clearStateVideoCall, room, setRoom } = useVideoCallStore();
+  const removeRequestCall = useVideoCallStore(state => state.removeRequestCall);
+  const clearStateVideoCall = useVideoCallStore(state => state.clearStateVideoCall);
+  const room = useVideoCallStore(state => state.room);
+  const setRoom = useVideoCallStore(state => state.setRoom);
+
   const { isOnline } = useNetworkStatus();
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomIdEnd: string) => {

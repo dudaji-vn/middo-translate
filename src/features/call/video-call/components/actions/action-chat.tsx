@@ -14,10 +14,15 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { useTranslation } from 'react-i18next';
 
 const ActionChat = () => {
-  const [newCount, setNewCount] = useState(0);
-  const { isFullScreen, isShowChat, setShowChat, messageId } =
-    useVideoCallStore();
   const {t} = useTranslation('common')
+  
+  const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
+  const isShowChat = useVideoCallStore((state) => state.isShowChat);
+  const setShowChat = useVideoCallStore((state) => state.setShowChat);
+  const messageId = useVideoCallStore((state) => state.messageId);
+
+  const [newCount, setNewCount] = useState(0);
+  
   const isMobile = useAppStore((state) => state.isMobile);
   const queryClient = useQueryClient();
   useEffect(() => {

@@ -7,8 +7,10 @@ import DoodleItem from '../doodle/doodle-item';
 import VideoItem from '../video/video-item';
 
 const GalleryLayout = () => {
-  const { participants } = useParticipantVideoCallStore();
-  const { isDoodle, isFullScreen } = useVideoCallStore();
+  
+  const participants = useParticipantVideoCallStore(state => state.participants);
+  const isDoodle = useVideoCallStore(state => state.isDoodle);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
 
   const classes = useMemo(() => {
     if (!isFullScreen) return 'grid-cols-4';

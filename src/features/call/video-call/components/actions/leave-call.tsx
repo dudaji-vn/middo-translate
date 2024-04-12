@@ -7,8 +7,10 @@ import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ActionLeaveCall = () => {
-  const { setConfirmLeave } = useVideoCallStore();
   const {t} = useTranslation('common')
+
+  const setConfirmLeave = useVideoCallStore(state => state.setConfirmLeave);
+  
   const handleLeave = () => {
     setConfirmLeave(true);
   };

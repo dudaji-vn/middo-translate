@@ -5,8 +5,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 export default function ActionToggleCaption() {
-  const { isShowCaption, setShowCaption } = useVideoCallStore();
   const {t} = useTranslation('common')
+  const isShowCaption = useVideoCallStore((state) => state.isShowCaption);
+  const setShowCaption = useVideoCallStore((state) => state.setShowCaption);
   return (
     <DropdownMenuItem
       onClick={() => setShowCaption(!isShowCaption)}

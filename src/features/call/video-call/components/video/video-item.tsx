@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
@@ -10,7 +10,7 @@ import VideoItemAvatar from './components/video-item-avatar';
 import ExpandVideo from './components/expand-video';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemText from './components/video-item-text';
-import { useTranslation } from 'react-i18next';
+import { useVideoSettingStore } from '@/features/call/store/video-setting.store';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -20,12 +20,10 @@ interface VideoItemProps {
 const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const itemRef = useRef<HTMLElement>(null);
-  const { streamVideo, isTurnOnCamera } = useLoadStream(participant, videoRef);
-  const { isLoadingVideo } = useMyVideoCallStore();
-  const { isTalk } = useAudioLevel(streamVideo);
-  const { isFullScreen } = useVideoCallStore();
-  const {t} = useTranslation('common')
-
+  const { isTurnOnCamera } = useLoadStream(participant, videoRef);
+  const isLoadingVideo = useMyVideoCallStore(state => state.isLoadingVideo);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  // console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
@@ -42,20 +40,17 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         )}
       >
         {/* Talk border */}
-        <div
-          className={cn(
-            'pointer-events-none absolute inset-0 z-10 rounded-xl border-4 border-primary transition-all',
-            isTalk ? 'opacity-100' : 'opacity-0',
-          )}
-        ></div>
+        <CheckIsTalk participant={participant}/>
 
         <video
           ref={videoRef}
-          className={`h-full w-full flex-1 rounded-xl object-cover ${
-            isTurnOnCamera ? 'block' : 'hidden'
-          }`}
+          className={cn('h-full w-full flex-1 rounded-xl object-cover',
+            isTurnOnCamera ? 'block' : 'hidden',
+            participant?.isMe ? '' : 'video-participant'
+          )}
           playsInline
           controls={false}
+
         ></video>
 
         {/* Expand video */}
@@ -82,3 +77,20 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   );
 };
 export default memo(VideoItem);
+
+interface CheckIsTalkProps {
+  participant: ParticipantInVideoCall;
+}
+const CheckIsTalk = ({participant}: CheckIsTalkProps) => {
+  const { isTalk } = useAudioLevel(participant?.stream);
+  return (
+    <div
+      className={cn(
+        'pointer-events-none absolute inset-0 z-10 rounded-xl border-4 border-primary transition-all',
+        isTalk ? 'opacity-100' : 'opacity-0',
+      )}
+    ></div>
+  )
+}
+
+
