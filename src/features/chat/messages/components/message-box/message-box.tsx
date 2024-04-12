@@ -2,25 +2,23 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { ArrowDownIcon } from 'lucide-react';
 import { Button } from '@/components/actions/button';
 import { InfiniteScroll } from '@/components/infinity-scroll';
-import { Message } from '../../types';
-import { MessageItem } from '../message-item';
-import { MessageItemGroup } from '../message-group';
-import { Room } from '../../../rooms/types';
 import { User } from '@/features/users/types';
+import { ArrowDownIcon } from 'lucide-react';
+import { Room } from '../../../rooms/types';
+import { Message } from '../../types';
+import { MessageItemGroup } from '../message-group';
+import { MessageItem } from '../message-item';
 
-import moment from 'moment';
 import { useAuthStore } from '@/stores/auth.store';
+import moment from 'moment';
 
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
-import { useMessagesBox } from './messages-box.context';
-import { TimeDisplay } from '../time-display';
 import { cn } from '@/utils/cn';
-import { motion } from 'framer-motion';
-import { formatTimeDisplay } from '@/features/chat/rooms/utils';
+import { TimeDisplay } from '../time-display';
+import { useMessagesBox } from './messages-box.context';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 export type MessageGroup = {

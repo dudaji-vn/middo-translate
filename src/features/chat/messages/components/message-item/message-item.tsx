@@ -104,7 +104,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           setActive,
         }}
       >
-        <SeenTracker guestId={guestId} />
+        {!isDraw && <SeenTracker guestId={guestId} />}
         {isSystemMessage ? (
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (
@@ -121,14 +121,16 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               <div
                 className={cn(
                   'relative flex',
-                  isMe ? 'justify-end pl-11 md:pl-20' : 'pr-11 md:pr-20',
+                  isMe ? 'justify-end' : '',
                   isPending && 'opacity-50',
-                  isDraw && 'pl-0 md:pl-0',
                 )}
               >
+                {isMe && (
+                  <div className="pointer-events-none w-11 shrink-0 md:w-20" />
+                )}
                 {showAvatar ? (
                   <Avatar
-                    className="mb-auto mr-1 mt-0.5  shrink-0"
+                    className="pointer-events-auto mb-auto mr-1  mt-0.5 shrink-0"
                     src={message.sender.avatar}
                     alt={message.sender.name}
                     size="xs"
@@ -137,6 +139,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <div
                     className={cn(
                       'pointer-events-none mb-0.5 mr-1 mt-auto size-6 shrink-0',
+                      isDraw ? 'hidden' : 'block',
                     )}
                   />
                 )}
@@ -147,71 +150,74 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   isMe={isMe}
                   message={message}
                 >
-                  <div
-                    {...props}
-                    ref={ref}
-                    className={cn(
-                      messageVariants({
-                        sender,
-                        order,
-                        status: message.status,
-                      }),
-                      className,
-                      mediaLength > 1 && 'rounded-none',
-                    )}
-                  >
-                    {message.content && (
-                      <Content
-                        position={isMe ? 'right' : 'left'}
-                        message={message}
-                        active={isActive}
-                      />
-                    )}
-                    {message.type === 'call' && (
-                      <CallMessage
-                        position={isMe ? 'right' : 'left'}
-                        message={message}
-                        active={isActive}
-                      />
+                  <div {...props} ref={ref} className={className}>
+                    <div
+                      className={cn(
+                        messageVariants({
+                          sender,
+                          order,
+                          status: message.status,
+                        }),
+                        'pointer-events-auto',
+                        mediaLength > 1 && 'rounded-none',
+                      )}
+                    >
+                      {message.content && (
+                        <Content
+                          position={isMe ? 'right' : 'left'}
+                          message={message}
+                          active={isActive}
+                        />
+                      )}
+                      {message.type === 'call' && (
+                        <CallMessage
+                          position={isMe ? 'right' : 'left'}
+                          message={message}
+                          active={isActive}
+                        />
+                      )}
+
+                      {message?.media && message.media.length > 0 && (
+                        <Fragment>
+                          {message.media[0].type === 'image' && (
+                            <ImageGallery images={message.media} />
+                          )}
+                          {message.media[0].type === 'document' && (
+                            <DocumentMessage
+                              isMe={isMe}
+                              file={message.media[0]}
+                            />
+                          )}
+                          {message.media[0].type === 'video' && (
+                            <MessageItemVideo file={message.media[0]} />
+                          )}
+                        </Fragment>
+                      )}
+                    </div>
+                    {message?.content && (
+                      <MessageItemLinks isMe={isMe} message={message} />
                     )}
 
-                    {message?.media && message.media.length > 0 && (
-                      <Fragment>
-                        {message.media[0].type === 'image' && (
-                          <ImageGallery images={message.media} />
-                        )}
-                        {message.media[0].type === 'document' && (
-                          <DocumentMessage
-                            isMe={isMe}
-                            file={message.media[0]}
-                          />
-                        )}
-                        {message.media[0].type === 'video' && (
-                          <MessageItemVideo file={message.media[0]} />
-                        )}
-                      </Fragment>
+                    {isPending && <PendingStatus />}
+                    {pinnedBy && (
+                      <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
                     )}
+                    {message.forwardOf && (
+                      <MessageItemForward
+                        hasParent={!!message.content}
+                        message={message.forwardOf}
+                        isMe={isMe}
+                      />
+                    )}
+                    {!discussionDisabled && message.hasChild && showReply && (
+                      <MessageItemReply isMe={isMe} messageId={message._id} />
+                    )}
+                    <div className="block-blur absolute bottom-0 left-0  hidden h-9 w-full bg-gradient-to-t from-gray2 to-gray2/0" />
                   </div>
-
-                  {message?.content && (
-                    <MessageItemLinks isMe={isMe} message={message} />
-                  )}
-
-                  {isPending && <PendingStatus />}
-                  {pinnedBy && (
-                    <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
-                  )}
-                  {message.forwardOf && (
-                    <MessageItemForward
-                      hasParent={!!message.content}
-                      message={message.forwardOf}
-                      isMe={isMe}
-                    />
-                  )}
-                  {!discussionDisabled && message.hasChild && showReply && (
-                    <MessageItemReply isMe={isMe} messageId={message._id} />
-                  )}
                 </MessageItemWrapper>
+                {!isMe && (
+                  <div className="pointer-events-none w-11 shrink-0 md:w-20" />
+                )}
               </div>
               {showReactionBar &&
                 message?.reactions &&

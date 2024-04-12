@@ -1,32 +1,37 @@
+import { Button } from '@/components/actions';
+import { LongPressMenu } from '@/components/actions/long-press-menu';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { Drawer, DrawerContent } from '@/components/data-display/drawer';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
-import { PropsWithChildren, cloneElement, useMemo } from 'react';
-import { actionItems, useMessageActions } from '../message-actions';
-import { motion } from 'framer-motion';
-import { Button } from '@/components/actions';
-import { LongPressMenu } from '@/components/actions/long-press-menu';
-import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
-import { Drawer, DrawerContent } from '@/components/data-display/drawer';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
+import EmojiPicker from '@emoji-mart/react';
+import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
 import moment from 'moment';
+import {
+  PropsWithChildren,
+  cloneElement,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBoolean } from 'usehooks-ts';
 import { MessageItem } from '.';
 import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
+import { actionItems, useMessageActions } from '../message-actions';
 import { MessageEmojiPicker } from '../message-emoji-picker';
-import EmojiPicker from '@emoji-mart/react';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
@@ -146,22 +151,14 @@ const MobileWrapper = ({
         <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
         <LongPressMenu.Menu
           outsideComponent={
-            <div className={cn('px-3 py-2', value ? '' : 'hidden')}>
+            <div className={cn('w-full px-3 py-2', value ? '' : 'hidden')}>
               <div
                 className={cn(
-                  'pointer-events-auto mb-2 w-fit',
+                  'pointer-events-none relative w-fit flex-1',
                   isMe ? 'ml-auto' : '',
                 )}
               >
-                <MessageItem
-                  isDraw
-                  sender={isMe ? 'me' : 'other'}
-                  showReactionBar={false}
-                  message={message}
-                  showAvatar={!isMe}
-                  disabledAllActions
-                  discussionDisabled
-                />
+                <DisplayMessage isMe={isMe} message={message} />
               </div>
               <div className="pointer-events-auto">
                 <MessageEmojiPicker
@@ -288,4 +285,41 @@ const DesktopWrapper = ({
 
 const RemovedWrapper = ({ children, items }: MessageItemMobileWrapperProps) => {
   return <>{children}</>;
+};
+
+const DisplayMessage = ({
+  isMe,
+  message,
+}: {
+  isMe: boolean;
+  message: Message;
+}) => {
+  const messageItemRef = useRef<HTMLDivElement>(null);
+  const { value, setTrue, setFalse } = useBoolean(false);
+  useEffect(() => {
+    if (messageItemRef?.current) {
+      setTimeout(() => {
+        const clientHeight = messageItemRef?.current?.clientHeight;
+        if (clientHeight !== undefined && clientHeight >= 250) setTrue();
+        else setFalse();
+      }, 200);
+    }
+  }, [setFalse, setTrue, message]);
+  return (
+    <div ref={messageItemRef} className={cn(!value && 'mb-2')}>
+      <MessageItem
+        isDraw
+        sender={isMe ? 'me' : 'other'}
+        showReactionBar={false}
+        message={message}
+        showAvatar={!isMe}
+        disabledAllActions
+        discussionDisabled
+        className={cn(
+          'relative  max-h-[250px] overflow-hidden',
+          value && 'message-blur rounded-b-none',
+        )}
+      />
+    </div>
+  );
 };

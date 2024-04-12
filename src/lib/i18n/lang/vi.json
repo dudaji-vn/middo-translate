@@ -294,7 +294,7 @@
     "CALL_END_AT": "Cuộc gọi kết thúc lúc {{time}}",
     "CALL_END": "Cuộc gọi đã kết thúc",
     "CALL_ENDED": "Cuộc gọi đã kết thúc",
-    "STARTED_CALL": "đã bắt đầu cuộc gọi",
+    "STARTED_CALL": "Bắt đầu cuộc gọi",
     "TRANSLATE_TOOL": "Công cụ dịch",
     "TRANSLATE_TOOL_OFF": "Công cụ dịch đã tắt, bạn có thể bật lại nó trong",
     "STOP_TYPE": "Dừng gõ để xem dịch...",

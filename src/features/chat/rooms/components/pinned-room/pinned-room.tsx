@@ -13,20 +13,21 @@ export interface PinnedRoomProps {
 
 export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
   const { businessData } = useBusinessExtensionStore();
-  const {isBusiness } = useBusinessNavigationData();
+  const { isBusiness } = useBusinessNavigationData();
   const filteredRooms = useMemo(() => {
     if (!rooms) return [];
-    const showHelpDeskRooms = isBusiness && businessData?._id && type ==='help-desk';
+    const showHelpDeskRooms =
+      isBusiness && businessData?._id && type === 'help-desk';
     return rooms.filter((room) => {
       if (showHelpDeskRooms) return room.isHelpDesk;
-      if (type === 'all') return  !room.isHelpDesk;
+      if (type === 'all') return !room.isHelpDesk;
       if (type === 'group') return room.isGroup;
     });
   }, [rooms, type, businessData, isBusiness]);
 
   if (!filteredRooms || !filteredRooms.length) return null;
   return (
-    <div className="">
+    <div>
       {filteredRooms.map((room) => (
         <RoomItem
           key={room._id}

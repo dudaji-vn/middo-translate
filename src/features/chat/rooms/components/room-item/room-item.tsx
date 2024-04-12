@@ -1,27 +1,27 @@
+import { createContext, forwardRef, memo, useContext, useMemo } from 'react';
 import {
   RoomItemActionWrapper,
   RoomItemActionWrapperDisabled,
 } from './room-item-action-wrapper';
-import { createContext, forwardRef, memo, useContext, useMemo } from 'react';
 
-import { ItemAvatar } from './room-item-avatar';
-import { ItemSub } from './room-item-sub';
+import { Avatar } from '@/components/data-display';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
-import { RoomItemHead } from './room-item-head';
-import { RoomItemWrapper } from './room-item-wrapper';
-import { User } from '@/features/users/types';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
-import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
+import { User } from '@/features/users/types';
 import { useAuthStore } from '@/stores/auth.store';
-import { RoomItemComingCall } from './room-item-coming-call';
 import { cn } from '@/utils/cn';
+import { motion } from 'framer-motion';
 import { PinIcon } from 'lucide-react';
-import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
-import { Avatar } from '@/components/data-display';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
+import { ItemAvatar } from './room-item-avatar';
+import { RoomItemComingCall } from './room-item-coming-call';
+import { RoomItemHead } from './room-item-head';
+import { ItemSub } from './room-item-sub';
+import { RoomItemWrapper } from './room-item-wrapper';
 
 export interface RoomItemProps {
   data: Room;
@@ -94,7 +94,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     : RoomItemActionWrapper;
 
   return (
-    <div
+    <motion.div
+      layoutId={room._id}
       className={cn(
         'flex',
         isActive ? 'bg-background-darker' : 'bg-white hover:bg-[#fafafa]',
@@ -168,7 +169,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         title={t('CONVERSATION.JOIN')}
         triggerItem={<RoomItemComingCall roomChatBox={room} />}
       />
-    </div>
+    </motion.div>
   );
 });
 
