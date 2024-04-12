@@ -130,8 +130,8 @@ const MobileWrapper = ({
       </LongPressMenu.Trigger>
       <LongPressMenu.Menu
         outsideComponent={
-          <div className="mx-1 mb-3 overflow-hidden rounded-xl">
-            <RoomItem disabledAction data={room} />
+          <div className="mx-1 mb-3 flex-1 overflow-hidden rounded-xl">
+            <RoomItem disabledAction data={room} className="w-full" />
           </div>
         }
       >

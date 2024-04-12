@@ -53,7 +53,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
     <Link
       href={previewData?.url}
       target="_blank"
-      className="block w-full max-w-lg rounded-2xl border p-2 hover:opacity-90"
+      className="block w-full max-w-lg rounded-2xl border bg-white p-2 hover:opacity-90"
     >
       <div className="flex items-center gap-1">
         <div className="size-4 shrink-0">

@@ -14,6 +14,7 @@ import { Message } from '../../messages/types';
 import { useChatStore } from '../../store';
 import { useTranslation } from 'react-i18next';
 import { messageApi } from '../../messages/api';
+import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';
 
 export interface MainMessageProps {
   message: Message;
@@ -43,6 +44,9 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
                 <DocumentMessage isMe={false} file={message.media[0]} />
               )}
             </div>
+            {message.media[0].type === 'video' && (
+              <MessageItemVideo file={message.media[0]} />
+            )}
           </Fragment>
         )}
         {message?.call && <CallMessage message={message} />}
