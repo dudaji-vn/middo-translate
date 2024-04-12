@@ -294,7 +294,7 @@
     "CALL_END_AT": "Call ended at {{time}}",
     "CALL_END": "Call ended",
     "CALL_ENDED": "Call ended",
-    "STARTED_CALL": "started a call",
+    "STARTED_CALL": "Call started",
     "TRANSLATE_TOOL": "Translate tool",
     "TRANSLATE_TOOL_OFF": "Translate tool is off, you can turn it back on in",
     "STOP_TYPE": "Stop typing to view translation...",

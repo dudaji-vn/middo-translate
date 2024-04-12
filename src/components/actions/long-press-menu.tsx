@@ -111,11 +111,11 @@ export const Menu = ({
     <Drawer open={isOpen} onOpenChange={onOpenChange} onClose={close}>
       <DrawerContent>
         {outsideComponent && (
-          <div className="pointer-events-none absolute top-0 w-full -translate-y-full">
+          <div className="pointer-events-none absolute top-0 flex w-full -translate-y-full overflow-hidden">
             {outsideComponent}
           </div>
         )}
-        <div className="justify-start pb-3 pt-1"> {children}</div>
+        <div className="justify-start pb-3 pt-1">{children}</div>
       </DrawerContent>
     </Drawer>
   );

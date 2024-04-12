@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       const [response] = await translate.translate(text, {
         from,
         to,
-      });
+      }); // use google cloud translate instead
       await fetch(NEXT_PUBLIC_API_URL + '/api/google-api-stat/translate', {
         method: 'POST',
         headers,

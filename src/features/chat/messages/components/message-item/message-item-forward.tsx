@@ -42,7 +42,7 @@ export const MessageItemForward = ({
           <div className="h-1/2 w-2 border-b border-l border-neutral-100" />
         </div>
       )}
-      <div className="order-neutral-100 ml-auto w-fit rounded-2xl border p-2">
+      <div className="order-neutral-100 ml-auto w-fit rounded-2xl border bg-white p-2">
         <div
           style={{
             width: mediaRef.current?.clientWidth,
