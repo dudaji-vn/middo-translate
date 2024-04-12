@@ -7,10 +7,15 @@ import { Button } from '@/components/actions';
 import { useTranslation } from 'react-i18next';
 
 export default function InviteTooltip() {
-  const { participants } = useParticipantVideoCallStore();
-  const { room, isFullScreen, setModalAddUser } = useVideoCallStore();
+  const { t } = useTranslation('common');
+
+  const participants = useParticipantVideoCallStore(state => state.participants);
+  const room = useVideoCallStore(state => state.room);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  const setModalAddUser = useVideoCallStore(state => state.setModalAddUser);
+  
   const [isShowInvite, setShowInvite] = useState(true);
-  const {t} = useTranslation('common')
+  
   useEffect(() => {
     let numParticipant = participants.length;
     if (numParticipant > 1 && isShowInvite) setShowInvite(false);

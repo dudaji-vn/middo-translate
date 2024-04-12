@@ -11,7 +11,7 @@ interface CallDragableProps {
 const CallDragable = ({ children, className }: PropsWithChildren & CallDragableProps) => {
   const constraintsRef = useRef<HTMLDivElement>(null);
   const controls = useDragControls();
-  const {isFullScreen } = useVideoCallStore();
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   return (
     <motion.div
       ref={constraintsRef}

@@ -11,16 +11,17 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 
 export default function ChatThread({ className }: { className?: string }) {
-  const {
-    isFullScreen,
-    isShowChat,
-    setShowChat,
-    room,
-    messageId,
-    setMessageId,
-  } = useVideoCallStore();
-  const isMobile = useAppStore((state) => state.isMobile);
+
   const {t} = useTranslation('common')
+
+  const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
+  const isShowChat = useVideoCallStore((state) => state.isShowChat);
+  const setShowChat = useVideoCallStore((state) => state.setShowChat);
+  const room = useVideoCallStore((state) => state.room);
+  const messageId = useVideoCallStore((state) => state.messageId);
+  const setMessageId = useVideoCallStore((state) => state.setMessageId);
+  const isMobile = useAppStore((state) => state.isMobile);
+  
   const [isShowAlert, setShowAlert] = useState(true);
   useEffect(() => {
     if (messageId) return;

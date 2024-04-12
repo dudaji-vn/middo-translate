@@ -28,15 +28,24 @@ interface MediaSource {
     name: string;
 }
 export const ModalChooseScreen = () => {
-    const { showChooseScreen, setChooseScreen } = useVideoCallStore();
+    const {t} = useTranslation('common');
+    
+    const user = useAuthStore(state => state.user);
+    const showChooseScreen = useVideoCallStore(state => state.showChooseScreen);
+    const setChooseScreen = useVideoCallStore(state => state.setChooseScreen);
+    const room = useVideoCallStore(state =>state.room);
+    
+    const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
+    const setShareScreen = useMyVideoCallStore(state => state.setShareScreen);
+    const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
+    const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
+    const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
+
+    const { ipcRenderer } = useElectron();
+
     const [selectedSource, setSelectedSource] = useState<MediaSource>();
     const [sources, setSources] = useState<MediaSource[]>([]);
-    const { user } = useAuthStore();
-    const { addParticipant } = useParticipantVideoCallStore();
-    const { setShareScreen, setShareScreenStream, isTurnOnMic, isTurnOnCamera} = useMyVideoCallStore();
-    const { room } = useVideoCallStore();
-    const { ipcRenderer } = useElectron();
-    const {t} = useTranslation('common');
+    
     const setSourceList = useCallback((sources: MediaSource[]) => {
         setSources(sources);
     }, [])

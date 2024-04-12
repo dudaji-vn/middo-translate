@@ -6,7 +6,7 @@ import useSpeechRecognizer from "@/hooks/use-speech-recognizer";
 
 let starting = false;
 const useExtractTextFromStream = (stream?: MediaStream) => {
-    const { user } = useAuthStore();
+    const user = useAuthStore(state => state.user);
     const { startSpeechToText, stopSpeechToText, finalTranscript, resetTranscript } = useSpeechRecognizer(SUPPORTED_VOICE_MAP[(user?.language || 'auto') as keyof typeof SUPPORTED_VOICE_MAP]);
     useEffect(() => {
         if (!stream) return;

@@ -12,8 +12,11 @@ import CallDragable from '../components/call-dragable';
 import usePlayAudio from '../hooks/use-play-audio';
 
 const ReceiveVideoCall = () => {
-  const { requestCall, addRequestCall } = useVideoCallStore();
-  const { user: me } = useAuthStore();
+  
+  const requestCall = useVideoCallStore(state => state.requestCall);
+  const addRequestCall = useVideoCallStore(state => state.addRequestCall);
+  const me = useAuthStore(state => state.user);
+
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
 
   const listenToCall = useCallback(

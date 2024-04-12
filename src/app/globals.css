@@ -357,12 +357,21 @@
 }
 
 .tiptap ul {
-  @apply my-1;
+  @apply my-0 pl-4;
+}
+.tiptap ul li {
+  @apply pl-0;
+}
+
+.tiptap ul li p {
+  @apply pl-2;
 }
 .editor-view .link {
   @apply font-normal text-current underline hover:opacity-90;
 }
-
+.message-blur .block-blur {
+  @apply block;
+}
 .animation-up {
   animation: up 0.5s linear;
   -webkit-animation: up 0.5s linear;
@@ -463,4 +472,41 @@ body {
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by most modern browsers */
+}
+
+.prose
+  :where(ul > li):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::marker {
+  color: #000;
+  content: '\25CF';
+}
+.me
+  .prose
+  :where(ul > li):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::marker {
+  color: white;
+}
+.prose
+  :where(ul > li > ul > li):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::marker {
+  content: '\25CB';
+}
+
+.prose
+  :where(ul > li > ul > li > ul > li):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::marker {
+  content: '▪';
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

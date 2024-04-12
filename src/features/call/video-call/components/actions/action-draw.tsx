@@ -9,18 +9,17 @@ import { useParticipantVideoCallStore } from '@/features/call/store/participant.
 import { useTranslation } from 'react-i18next';
 
 export default function ActionDraw({}: {}) {
-  const {
-    setDrawing,
-    isDrawing,
-    layout,
-    isPinShareScreen,
-    isFullScreen,
-  } = useVideoCallStore();
-  const haveShareScreen = useHaveShareScreen();
   const {t} = useTranslation('common')
-  const participants = useParticipantVideoCallStore(
-    (state) => state.participants,
-  );
+
+  const setDrawing = useVideoCallStore((state) => state.setDrawing);
+  const isDrawing = useVideoCallStore((state) => state.isDrawing);
+  const layout = useVideoCallStore((state) => state.layout);
+  const isPinShareScreen = useVideoCallStore((state) => state.isPinShareScreen);
+  const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
+
+  const haveShareScreen = useHaveShareScreen();
+  
+  const participants = useParticipantVideoCallStore((state) => state.participants);
   const participantShareScreen = useMemo(() => {
     return participants.find((p) => p.isShareScreen);
   }, [participants]);

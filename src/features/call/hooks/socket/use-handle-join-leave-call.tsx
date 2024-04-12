@@ -6,20 +6,25 @@ import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { IReturnSignal } from "../../interfaces/socket/signal.interface";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { useVideoCallStore } from "../../store/video-call.store";
-import SpeechRecognition from "react-speech-recognition";
 import { LogOutIcon } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
-import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
 import { useTranslation } from "react-i18next";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 
 export default function useHandleJoinLeaveCall() {
-    const { removeParticipant, participants, peerShareScreen, removePeerShareScreen, addParticipant } = useParticipantVideoCallStore();
-    const { room, setLayout } = useVideoCallStore();
-    const { myStream } = useMyVideoCallStore();
-    const { user } = useAuthStore();
     const {t} = useTranslation('common');
+
+    const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
+    const participants = useParticipantVideoCallStore(state => state.participants);
+    const peerShareScreen = useParticipantVideoCallStore(state => state.peerShareScreen);
+    const removePeerShareScreen = useParticipantVideoCallStore(state => state.removePeerShareScreen);
+    const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
+    const room = useVideoCallStore(state => state.room);
+    const setLayout = useVideoCallStore(state => state.setLayout);
+    const myStream = useMyVideoCallStore(state => state.myStream);
+    const user = useAuthStore(state => state.user);
+    
     const removeUserLeavedRoom = useCallback((socketId: string) => {
         if(socketId === socket.id) return;
         // use filter because when user share screen leave, need remove both user and share screen

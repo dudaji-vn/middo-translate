@@ -4,7 +4,7 @@ import { RichTextView } from '@/components/rich-text-view';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { convertToTimeReadable } from '@/utils/time';
-import { PhoneCallIcon, PhoneIcon } from 'lucide-react';
+import { Clock9Icon, PhoneCallIcon, PhoneIcon } from 'lucide-react';
 import moment from 'moment';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
@@ -30,10 +30,6 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
         <span className="max-w-80 break-words text-sm font-semibold">
           {sender.name}
         </span>
-
-        <span className=" text-sm text-neutral-500">
-          | {moment(message.createdAt).format('lll')}
-        </span>
       </div>
       <div className="ml-2 mt-1">
         {message.content && <TextMessage message={message} />}
@@ -51,6 +47,10 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
         )}
         {message?.call && <CallMessage message={message} />}
       </div>
+      <span className="mt-2 flex items-center pl-8 pr-3 text-xs text-neutral-300">
+        <Clock9Icon className="mr-1 inline-block size-3" />
+        {moment(message.createdAt).format('lll')}
+      </span>
     </div>
   );
 };
@@ -143,7 +143,7 @@ const CallMessage = ({ message }: { message: Message }) => {
     };
   }, [call?.createdAt, call?.endTime, t]);
   return (
-    <div>
+    <div className="pl-6">
       <div>
         <span
           className={cn(

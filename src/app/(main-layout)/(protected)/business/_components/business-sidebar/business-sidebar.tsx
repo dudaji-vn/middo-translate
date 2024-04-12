@@ -8,6 +8,7 @@ import { useSidebarStore } from "@/stores/sidebar.store"
 import { cn } from "@/utils/cn"
 import { Archive, CheckSquare, LineChartIcon, MessageSquare, Settings } from "lucide-react"
 import { useParams, usePathname, useRouter } from "next/navigation"
+import path from "path"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -106,18 +107,23 @@ const BusinessSidebar = () => {
 
     useEffect(() => {
     }, [openSidebar])
-    return (
-        <Sheet open={isMobile ? openSidebar : true} modal={isMobile} onOpenChange={setOpenSidebar} >
-            <div className={cn("h-full w-full relative max-md:hidden",)}
-                onMouseEnter={expandSheet}>
-                <SheetContent overlayProps={{ className: ' top-[51px]' }} side={'left'} className="w-fit  top-[51px]  bottom-0 p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
-                    <div className="h-full  w-full" onMouseLeave={shinkSheet}>
-                        <BusinessSidebarContent shrink={!expand} selectedItem={sellected} onSelectChange={onSelectedChange} />
-                    </div>
-                </SheetContent>
-            </div>
-        </Sheet>
 
+    if (pathname?.endsWith('/business')) {
+        return null
+    }
+    return (
+        <div className={cn("w-[74px] max-md:hidden")}>
+            <Sheet open={isMobile ? openSidebar : true} modal={isMobile} onOpenChange={setOpenSidebar} >
+                <div className={cn("h-full w-full relative max-md:hidden",)}
+                    onMouseEnter={expandSheet}>
+                    <SheetContent overlayProps={{ className: ' top-[51px]' }} side={'left'} className="w-fit  top-[51px]  bottom-0 p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0">
+                        <div className="h-full  w-full" onMouseLeave={shinkSheet}>
+                            <BusinessSidebarContent shrink={!expand} selectedItem={sellected} onSelectChange={onSelectedChange} />
+                        </div>
+                    </SheetContent>
+                </div>
+            </Sheet>
+        </div>
     )
 }
 

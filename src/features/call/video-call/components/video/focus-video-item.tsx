@@ -16,15 +16,17 @@ interface FocusVideoItemProps {
   participant?: any;
 }
 const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
+  const {t} = useTranslation('common')
+  const isLoadingVideo = useMyVideoCallStore((state) => state.isLoadingVideo);
+  
   const videoRef = useRef<HTMLVideoElement>(null);
   const parentRef = useRef<HTMLElement>(null);
   const { streamVideo, isTurnOnCamera } = useLoadStream(participant, videoRef);
   const { isTalk } = useAudioLevel(streamVideo);
-  const { isLoadingVideo } = useMyVideoCallStore();
   useFitRatio(videoRef, parentRef);
   const { width, height } = useGetVideoSize({ videoRef });
   // Disable pause video when fullscreen
-  const {t} = useTranslation('common')
+  
   useEffect(() => {
     if (!videoRef.current) return;
     let videoRefTmp = videoRef.current;

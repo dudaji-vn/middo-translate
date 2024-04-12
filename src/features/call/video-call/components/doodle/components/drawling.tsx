@@ -15,10 +15,13 @@ interface DrawlingProps {
 
 const Drawling = forwardRef<ReactSketchCanvasRef, DrawlingProps>((props, ref) => {
     const { width, height, color, className } = props;
-    const { user } = useAuthStore();
+
+    const user = useAuthStore(state => state.user);
+    const myOldDoodle  = useMyVideoCallStore(state => state.myOldDoodle);
+    const setMyOldDoodle = useMyVideoCallStore(state => state.setMyOldDoodle);
+
     const timer = useRef(new Date().getTime());
-    const { myOldDoodle, setMyOldDoodle } = useMyVideoCallStore();
-    
+
     const handleChangeCanvas = async () => {
         if (!ref || !ref.current) return;
         if (!ref?.current) return;

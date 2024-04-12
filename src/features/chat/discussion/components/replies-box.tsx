@@ -1,11 +1,7 @@
 import { useAuthStore } from '@/stores/auth.store';
 import { useMemo } from 'react';
 import moment from 'moment';
-import {
-  MAX_TIME_DIFF,
-  MAX_TIME_GROUP_DIFF,
-  MessageGroup,
-} from '../../messages/components/message-box';
+import { MessageGroup } from '../../messages/components/message-box';
 import { deepCopy } from '@/utils/deep-copy';
 import { User } from '@/features/users/types';
 import { formatTimeDisplay } from '../../rooms/utils';
@@ -15,7 +11,8 @@ import { useDiscussion } from './discussion';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../rooms/api';
 import { useTranslation } from 'react-i18next';
-import { cn } from '@/utils/cn';
+export const MAX_TIME_DIFF = 5; // 5 minutes
+export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 
 export interface RepliesBoxProps {}
 

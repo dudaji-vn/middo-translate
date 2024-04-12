@@ -109,6 +109,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
     <div
       className={cn(
         wrapperVariants({ active, position, status: message.status }),
+        position === 'right' ? 'me' : '',
       )}
     >
       <div className={cn(textVariants({ position, status: message.status }))}>

@@ -8,8 +8,12 @@ interface VideoItemTextProps {
   participant?: ParticipantInVideoCall;
 }
 export default function VideoItemText({ participant }: VideoItemTextProps) {
-  const { isPinDoodle, layout, isFullScreen } = useVideoCallStore();
   const {t} = useTranslation('common')
+  
+  const isPinDoodle = useVideoCallStore(state => state.isPinDoodle);
+  const layout = useVideoCallStore(state => state.layout);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+
   if (!participant) return null;
   return (
     <>

@@ -6,9 +6,12 @@ import { useParticipantVideoCallStore } from '../../../store/participant.store';
 import { useTranslation } from 'react-i18next';
 
 export const RequestJoinRoomModal = () => {
-    const { room } = useVideoCallStore();
-    const { usersRequestJoinRoom, removeUsersRequestJoinRoom } = useParticipantVideoCallStore()
     const {t} = useTranslation('common');
+
+    const room = useVideoCallStore(state => state.room);
+    const usersRequestJoinRoom = useParticipantVideoCallStore(state => state.usersRequestJoinRoom);
+    const removeUsersRequestJoinRoom = useParticipantVideoCallStore(state => state.removeUsersRequestJoinRoom);
+    
     const handleReject = async () => {
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.REJECT_JOIN_ROOM, {socketId: usersRequestJoinRoom[0].socketId});
         removeUsersRequestJoinRoom(usersRequestJoinRoom[0].socketId);
@@ -23,6 +26,7 @@ export const RequestJoinRoomModal = () => {
     };
 
     if(usersRequestJoinRoom.length == 0) return null;
+    
     return (
         <AlertDialog open={usersRequestJoinRoom.length > 0} onOpenChange={closeModal}>
             <AlertDialogContent>

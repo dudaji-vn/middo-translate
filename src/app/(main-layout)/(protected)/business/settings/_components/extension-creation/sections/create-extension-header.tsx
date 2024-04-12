@@ -55,12 +55,12 @@ const CreateExtensionHeader = ({
     onStepChange: (value: number) => void
 }) => {
     const searchParams = useSearchParams();
-    const [currentError, setCurrentError] = useState<boolean>();
+    const [showErrorOnStep, setShowErrorOnStep] = useState<boolean>();
     const router = useRouter();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
     const handleStepChange = async (index: number) => {
         if (step === index) return;
-        setCurrentError(false);
+        setShowErrorOnStep(false);
         if (index < step) {
             onStepChange(index);
             return;
@@ -68,7 +68,7 @@ const CreateExtensionHeader = ({
         if (index > step) {
             await trigger(createExtensionSteps[step]?.nameField).then((value) => {
                 if (!value) {
-                    setCurrentError(true);
+                    setShowErrorOnStep(true);
                 }
             });
         }
@@ -89,12 +89,13 @@ const CreateExtensionHeader = ({
     const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
     const currentValue = watch(createExtensionSteps[step]?.nameField);
     useEffect(() => {
-        if (currentError) {
-            trigger(createExtensionSteps[step]?.nameField).then((value) => setCurrentError(!value));
+        if (showErrorOnStep) {
+            trigger(createExtensionSteps[step]?.nameField).then((value) => setShowErrorOnStep(!value));
         }
     }, [currentValue])
+
     const canSubmit = isValid && step === createExtensionSteps.length - 1;
-    const canNext = step < createExtensionSteps.length - 1 && !currentError
+    const canNext = step < createExtensionSteps.length - 1 && !showErrorOnStep
 
     const onNextStepClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         if (canNext) {
@@ -104,20 +105,22 @@ const CreateExtensionHeader = ({
     }
 
     return (
-        <section className={cn('w-full px-4 flex flex-row items-center createExtensionSteps-center gap-3 bg-primary-100', headerVariants({ navigation: modalType || 'default' }))}>
-            <Button.Icon
-                onClick={() => {
-                    router.back();
-                }}
-                variant={'ghost'}
-                size={'xs'}
-                color={'default'}
-                className='text-neutral-600'
-            >
-                <ArrowLeft className="" />
-            </Button.Icon>
-            <Typography className='text-neutral-600 capitalize min-w-max'>{mappedTitle[modalType || 'create-extension']}</Typography>
-            <TabsList className='border-none gap-5 relative justify-between md:mx-10 xl:mx-14'>
+        <section className={cn('w-full px-4 flex flex-row items-center justify-between createSpaceSteps-center gap-3 bg-primary-100', headerVariants({ navigation: modalType || 'default' }))}>
+            <div className='flex flex-row items-center gap-2'>
+                <Button.Icon
+                    onClick={() => {
+                        router.back();
+                    }}
+                    variant={'ghost'}
+                    size={'xs'}
+                    color={'default'}
+                    className='text-neutral-600'
+                >
+                    <ArrowLeft className="" />
+                </Button.Icon>
+                <Typography className='text-neutral-600 capitalize min-w-max'>{mappedTitle[modalType || 'create-extension']}</Typography>
+            </div>
+            <TabsList className='border-none gap-5 max-w-[900px] relative justify-between md:mx-10 xl:mx-14'>
                 <div className='absolute h-[50%] !z-0 inset-0 border-b-neutral-50 border-b-[1px] border-dashed w-full'></div>
                 <div style={{ width: `${stepPercentage}%` }} className='absolute  h-[50%] !z-10 top-0 left-0 border-b-[2px] border-b-neutral-200 transition-all duration-1000' ></div>
                 {createExtensionSteps.map((item, index) => {
@@ -126,13 +129,17 @@ const CreateExtensionHeader = ({
                     const isAfterCurrent = step < index;
                     const disabled = createExtensionSteps[step]?.requiredFields.some((field) => errors[field]) && step < index;
                     let stepContent = isDone ? <Check className='text-white p-1' /> : <p className='!w-6'>{index + 1}</p>;
-                    const isError = currentError && step === index;
+                    const isError = showErrorOnStep && step === index;
                     if (isError) {
                         stepContent = <Info className='text-white p-1 rotate-180' />
                     }
                     return (
                         <TabsTrigger variant='unset' value={String(item.value)} key={index}
-                            onClick={() => {
+                            onClick={(e) => {
+                                if (index === step + 1) {
+                                    onNextStepClick(e);
+                                    return;
+                                }
                                 handleStepChange(index);
                             }}
                             className='z-20'
