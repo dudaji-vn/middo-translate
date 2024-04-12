@@ -12,7 +12,6 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { User } from '@/features/users/types';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { motion } from 'framer-motion';
 import { PinIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -94,8 +93,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     : RoomItemActionWrapper;
 
   return (
-    <motion.div
-      layoutId={room._id}
+    <div
       className={cn(
         'flex',
         isActive ? 'bg-background-darker' : 'bg-white hover:bg-[#fafafa]',
@@ -169,7 +167,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         title={t('CONVERSATION.JOIN')}
         triggerItem={<RoomItemComingCall roomChatBox={room} />}
       />
-    </motion.div>
+    </div>
   );
 });
 
