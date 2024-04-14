@@ -55,8 +55,8 @@ const Space = ({ data: {
         <span className='text-neutral-600 font-light text-sm leading-[18px]'>{`Created on: ${moment(createdAt).format('DD/MM/YYYY')}`}</span>
       </CardHeader>
       <CardContent className='p-0 flex flex-row items-center gap-2'>
-        <Avatar src={owner?.avatar ?? '/avatar.png'} alt={'avatar-owner'} className="size-[88px] p-1 border border-neutral-50" />
-        <div className='space-y-1'>
+        <Avatar src={owner?.avatar ?? '/logo.png'} alt={'avatar-owner'} className="size-[88px] p-1 border border-neutral-50" />
+        <div className='space-y-1 flex flex-col'>
           <CardTitle className='text-base font-normal leading-[18px]'>{name}</CardTitle>
           <span className='text-neutral-600 font-light text-sm leading-[18px]'>{`${members?.length} members`}</span>
           <Button

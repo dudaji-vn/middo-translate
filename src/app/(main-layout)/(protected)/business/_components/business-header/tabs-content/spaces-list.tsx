@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { BusinessTabType, TSpace, TSpaceTag } from '../business-spaces'
-import Space from './cards/space'
+import Space from './space-card/space'
 import { useAuthStore } from '@/stores/auth.store'
 
 function EmptyContent() {
@@ -37,6 +37,7 @@ function EmptyContent() {
     </div>
 }
 
+// TODO: Remove mock data
 const mockSpaces: TSpace[] = [
     {
         _id: '1',
@@ -47,7 +48,7 @@ const mockSpaces: TSpace[] = [
             _id: '65ee747a5fe03631e57731f3',
             email: 'la@gmail.com',
             name: 'La',
-            avatar: '/avatar.png',
+            avatar: '/logo.png',
             language: 'en',
             status: 'active'
         }
@@ -61,7 +62,7 @@ const mockSpaces: TSpace[] = [
             _id: '2',
             email: 'a@gmail.c',
             name: 'La22',
-            avatar: '/avatar.png',
+            avatar: '/logo.png',
             language: 'en',
             status: 'active'
         }
