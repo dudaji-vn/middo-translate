@@ -203,7 +203,7 @@ export default function CreateOrEditSpace({ open, initialData }: {
                 <RHFInputField
                   name='addingMember.email'
                   inputProps={{
-                    placeholder: 'https://example.com',
+                    placeholder: 'example@gmail.com',
                     className: 'h-10'
                   }}
                   formItemProps={{
@@ -223,33 +223,18 @@ export default function CreateOrEditSpace({ open, initialData }: {
                   Invite
                 </Button>
               </div>
-              <div className='w-full p-3 bg-primary-100 items-center rounded-[12px]'>
-                {watch('members')?.length > 0 && <Typography variant="h5" className="inline-block py-3 text-neutral-600 text-[1rem] font-medium">Added members</Typography>}
-                {watch('members')?.map((member, index) => {
-                  return (
-                    <div key={index} className={cn('flex flex-row items-center gap-4 w-full justify-between')}>
-                      <Typography className="text-neutral-600 text-[1rem] font-normal">
-                        {member.email}
-                      </Typography>
-                      <Button
-                        variant="ghost"
-                        color="error"
-                        shape="square"
-                        type="button"
-                        size={'xs'}
-                        onClick={() => {
-                          setValue('members', watch('members').filter((m) => m.email !== member.email))
-                        }}
-                        disabled={isSubmitting}
-                      >
-                        <Trash2 />
-                      </Button>
-                    </div>
-                  );
-                })
-                }
+              <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
+                <Avatar src={watch('information.avatar') as string}
+                  alt='avatar' className='w-24 h-24 cursor-pointer p-0' />
+                <div className='w-full flex flex-col gap-3'>
+                  <Typography className='text-neutral-800 text-[18px] font-semibold leading-9'>
+                    {watch('information.name')}
+                  </Typography>
+                  <Typography className='text-neutral-600 font-normal'>
+                    {watch('members')?.length} members
+                  </Typography>
+                </div>
               </div>
-
             </section>
           </StepWrapper>
           <div className='h-fit py-4 bg-primary-100 flex flex-row justify-between'>
