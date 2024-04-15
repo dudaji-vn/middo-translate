@@ -25,6 +25,8 @@ export type BusinessTabItem = {
 export type TSpaceTag = 'my' | 'joined' | undefined;
 export type TSpace = BaseEntity & {
     name: string;
+    avatar?: string;
+    backgroundImage?: string;
     description?: string;
     members: string[];
     newMessagesCount: number;

@@ -35,7 +35,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             const input = document.getElementById(String(props.name));
             input?.focus();
           }}
-          className={required ? 'text-muted-foreground  text-neutral absolute z-0 inset-y-0 text-left leading-[52px] pr-4 pl-5' : 'invisible'} htmlFor={props.placeholder}>
+          className={required ? 'text-muted-foreground  text-neutral absolute z-0 inset-y-0 text-left leading-[52px] pr-4 pl-5' : 'hidden'} htmlFor={props.placeholder}>
           {props.placeholder}
           <span className='text-error font-light'>*</span>
         </label>}

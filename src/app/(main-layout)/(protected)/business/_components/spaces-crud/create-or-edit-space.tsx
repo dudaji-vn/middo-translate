@@ -21,51 +21,27 @@ import { Button } from '@/components/actions';
 import { ArrowRight, Plus, Trash2 } from 'lucide-react';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
-import UploadSpaceImage from './upload-space-image';
+import UploadSpaceImage from './sections/upload-space-image';
 import { forEach } from 'lodash';
 import { DataTable } from '@/components/ui/data-table';
 import { cn } from '@/utils/cn';
+import { createSpaceService } from '@/services/business-space.service';
+import CreateSpaceForm from './sections/create-section';
+import InviteMembers from './sections/invite-section';
 
-
-type TFormValues = {
-  information: {
-    name: string;
-    description?: string;
-    avatar?: string;
-  };
-  members: any[];
-  addingMember?: {
-    email: string;
-    role: string;
-  }
-}
 
 
 const createSpaceSchema = z.object({
-  information: z.object({
-    name: z.string().min(1, {
-      message: 'Space name is required.'
-    }).max(255, {
-      message: 'Space name is too long, maximum 255 characters.'
-    }),
-    description: z.string().optional(),
-    avatar: z
-      .any()
-      .refine((value: any) => value?.length > 0 || value?.size > 0, {
-        message: "Please upload an image.",
-      })
-      .refine((value: any) => value?.size < 3000000, {
-        message: "Image size must be less than 3MB.",
-      }),
-    addingMember: z.object({
-      email: z.string().email({
-        message: 'Invalid email address.'
-      }),
-      role: z.string().optional(),
-    }).optional(),
+  name: z.string().min(1, {
+    message: 'Space name is required.'
+  }).max(255, {
+    message: 'Space name is too long, maximum 255 characters.'
   }),
-  members: z.string().optional(),
+  avatar: z.string().optional(),
+  backgroundImage: z.string().optional(),
 });
+
+type TCreateSpaceFormValues = z.infer<typeof createSpaceSchema>;
 
 export default function CreateOrEditSpace({ open, initialData }: {
   open: boolean;
@@ -73,66 +49,51 @@ export default function CreateOrEditSpace({ open, initialData }: {
 }) {
   const isClient = useClient()
   const [tabValue, setTabValue] = React.useState<number>(0);
-  const pathname = usePathname() || '';
-  const currentUser = useAuthStore((s) => s.user);
-  const router = useRouter();
+  const [space, setSpace] = React.useState(initialData);
 
-  const form = useForm<TFormValues>({
+  const formCreateSpace = useForm<TCreateSpaceFormValues>({
     mode: 'onChange',
     defaultValues: {
-      information: {
-        name: '',
-        description: '',
-      },
-      members: [],
+      name: '',
+      avatar: '',
+      backgroundImage: '',
     },
     resolver: zodResolver(createSpaceSchema),
   });
 
-  const {
-    watch,
-    handleSubmit,
-    trigger,
-    reset,
-    setValue,
-    formState: { errors, isValid, isSubmitting, },
-  } = form;
+
 
   useEffect(() => {
     if (open) {
       setTabValue(0);
     }
     if (!open) {
-      reset();
+      formCreateSpace.reset();
       return;
     }
 
   }, [initialData, open]);
 
-  const onNextClick = async () => {
-    const requiredFields = createSpaceSteps[tabValue]?.requiredFields;
-    await Promise.all(
-      requiredFields.map((field) => trigger(field as keyof TFormValues))
-    );
-
-    const canGoNext = requiredFields.every((field) => !errors[field as keyof TFormValues]);
-    if (canGoNext) {
-      setTabValue(tabValue + 1);
-    }
-  };
-  const addMember = () => {
-
-    const addingMember = watch('addingMember');
-    console.log('addingMember', addingMember)
-    if (!addingMember || !addingMember.email?.length) return;
-    setValue('members', [...watch('members'), addingMember]);
-    setValue('addingMember', undefined);
-    trigger('members');
+  const handleStepChange = (value: number) => {
+    // if (value < tabValue) {
+    //   // setTabValue(value);
+    //   return;
+    // }
+    // if (formCreateSpace.formState.isSubmitSuccessful) {
+    //   setTabValue(value);
+    // }
   }
-  const submit = async (values: TFormValues) => {
-    trigger();
 
+  const submitCreateSpace = async (values: TCreateSpaceFormValues) => {
+    formCreateSpace.trigger();
+    console.log('values', values)
     try {
+      const data = await createSpaceService(values)
+      toast.success('Space created successfully.');
+      if (data?.data) {
+        setSpace(data?.data);
+        setTabValue(1);
+      }
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -140,121 +101,46 @@ export default function CreateOrEditSpace({ open, initialData }: {
 
   if (!isClient || !open) return null;
   return (
-    <Form {...form}>
-      <form onSubmit={handleSubmit(submit)}>
-        <Tabs value={tabValue?.toString()} className="w-full bg-primary-100"
-          defaultValue={tabValue.toString()}
-          onValueChange={(value) => {
-            setTabValue(parseInt(value));
-          }}>
-          <CreateOrEditSpaceHeader step={tabValue} onStepChange={setTabValue} />
-          <StepWrapper value="0"
-            className='px-0'
-            cardProps={{
-              className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
-            }}>
-            <section
-              className='max-w-[800px] h-[calc(100vh-200px)] min-h-80  flex flex-col items-center justify-center gap-8'
-            >
-              <div className='w-full flex flex-col  gap-3'>
-                <Typography className='text-neutral-800 text-[32px] font-semibold leading-9'>
-                  Give <span className='text-primary-500-main'>your space</span> some information
-                </Typography>
-                <Typography className='text-neutral-600 font-normal'>
-                  Help your crews to recognize your business easier by naming this space, adding space avatar or company&apos;s logo <span className='font-light'>(optional)</span>.
-                </Typography>
-              </div>
-              <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
-                <UploadSpaceImage />
-                <RHFInputField name='information.name'
-                  formItemProps={{
-                    className: 'w-full'
-                  }}
-                  inputProps={{
-                    placeholder: 'Enter space name',
-                    required: true,
-                  }} />
-              </div>
-
-            </section>
-          </StepWrapper>
-          <StepWrapper
-            className='px-0'
-            value="1"
-            cardProps={{
-              className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
-            }}
-          >
-            <section
-              className='max-w-[800px] h-[calc(100vh-200px)] min-h-80  flex flex-col items-center justify-center gap-8'
-            >
-              <div className='w-full flex flex-col  gap-3'>
-                <Typography className='text-neutral-800 text-[32px] font-semibold leading-9'>
-                  <span className='text-primary-500-main'>Invite</span>other to join your space <span className='text-[24px] font-normal'>(optional)</span>
-                </Typography>
-                <Typography className='text-neutral-600 flex gap-2 font-light'>
-                  You can only invite 2 members in a Free plan account.
-                  <span className='text-primary-500-main font-normal'>
-                    upgrade plan.
-                  </span>
-                </Typography>
-              </div>
-              <div className='flex flex-row gap-3 items-start w-full justify-between'>
-                <RHFInputField
-                  name='addingMember.email'
-                  inputProps={{
-                    placeholder: 'example@gmail.com',
-                    className: 'h-10'
-                  }}
-                  formItemProps={{
-                    className: 'w-full',
-                  }}
-                />
-                <Button
-                  color="secondary"
-                  shape="square"
-                  type="button"
-                  endIcon={<Plus className="h-4 w-4 mr-1" />}
-                  className='h-10'
-                  onClick={addMember}
-                  disabled={Boolean(errors.addingMember) || isSubmitting}
-
-                >
-                  Invite
-                </Button>
-              </div>
-              <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
-                <Avatar src={watch('information.avatar') as string}
-                  alt='avatar' className='w-24 h-24 cursor-pointer p-0' />
-                <div className='w-full flex flex-col gap-3'>
-                  <Typography className='text-neutral-800 text-[18px] font-semibold leading-9'>
-                    {watch('information.name')}
-                  </Typography>
-                  <Typography className='text-neutral-600 font-normal'>
-                    {watch('members')?.length} members
-                  </Typography>
-                </div>
-              </div>
-            </section>
-          </StepWrapper>
-          <div className='h-fit py-4 bg-primary-100 flex flex-row justify-between'>
-            <em />
-            <Button
-              endIcon={(tabValue < createSpaceSteps.length - 1) ? <ArrowRight /> : <></>}
-              color={'primary'}
-              shape={'square'}
-              size={'sm'}
-              onClick={onNextClick}
-              type={tabValue === createSpaceSteps.length - 1 ? 'submit' : 'button'}
-            >
-              {tabValue === createSpaceSteps.length - 1 ? 'Create My Space' : 'Next'}
-            </Button>
-            <em />
-
-          </div>
-        </Tabs>
-      </form>
-    </Form>
+    <Tabs value={tabValue?.toString()} className="w-full bg-primary-100"
+      defaultValue={tabValue.toString()}
+      onValueChange={(value) => {
+        setTabValue(parseInt(value));
+      }}>
+      <CreateOrEditSpaceHeader step={tabValue} onStepChange={handleStepChange} />
+      <StepWrapper value="0"
+        className='px-0'
+        cardProps={{
+          className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
+        }}>
+        <Form {...formCreateSpace}>
+          <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>
+            <CreateSpaceForm />
+            <div className='h-fit w-full py-4 bg-primary-100 flex-col flex items-center'>
+              <Button
+                color={'primary'}
+                shape={'square'}
+                size={'sm'}
+                loading={formCreateSpace.formState.isSubmitting}
+                type='submit'
+              >
+                Create New Space
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </StepWrapper>
+      <StepWrapper
+        className='px-0'
+        value="1"
+        cardProps={{
+          className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
+        }}
+      >
+        <InviteMembers
+          space={space}
+        />
+      </StepWrapper>
+    </Tabs>
 
   );
 }
