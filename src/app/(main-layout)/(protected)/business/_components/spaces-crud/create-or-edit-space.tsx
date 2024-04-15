@@ -121,9 +121,9 @@ export default function CreateOrEditSpace({ open, initialData }: {
   };
   const addMember = () => {
     const addingMember = watch('addingMember');
-    if (!addingMember || addingMember.length === 0) return;
+    if (!addingMember || !addingMember.email?.length) return;
     setValue('members', [...watch('members'), addingMember]);
-    setValue('addingMember', '');
+    setValue('addingMember',undefined);
     trigger('members');
   }
   const submit = async (values: TFormValues) => {
