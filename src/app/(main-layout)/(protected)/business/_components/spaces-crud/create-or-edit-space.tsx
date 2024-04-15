@@ -18,12 +18,13 @@ import { TSpace } from '../business-header/business-spaces';
 import StepWrapper from '../../settings/_components/extension-creation/steps/step-wrapper';
 import { Avatar, Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
-import { ArrowRight, Plus } from 'lucide-react';
+import { ArrowRight, Plus, Trash2 } from 'lucide-react';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
 import UploadSpaceImage from './upload-space-image';
 import { forEach } from 'lodash';
 import { DataTable } from '@/components/ui/data-table';
+import { cn } from '@/utils/cn';
 
 
 type TFormValues = {
@@ -120,10 +121,12 @@ export default function CreateOrEditSpace({ open, initialData }: {
     }
   };
   const addMember = () => {
+
     const addingMember = watch('addingMember');
+    console.log('addingMember', addingMember)
     if (!addingMember || !addingMember.email?.length) return;
     setValue('members', [...watch('members'), addingMember]);
-    setValue('addingMember',undefined);
+    setValue('addingMember', undefined);
     trigger('members');
   }
   const submit = async (values: TFormValues) => {
@@ -198,7 +201,7 @@ export default function CreateOrEditSpace({ open, initialData }: {
               </div>
               <div className='flex flex-row gap-3 items-start w-full justify-between'>
                 <RHFInputField
-                  name='addingMember'
+                  name='addingMember.email'
                   inputProps={{
                     placeholder: 'https://example.com',
                     className: 'h-10'
@@ -221,7 +224,30 @@ export default function CreateOrEditSpace({ open, initialData }: {
                 </Button>
               </div>
               <div className='w-full p-3 bg-primary-100 items-center rounded-[12px]'>
-                updating
+                {watch('members')?.length > 0 && <Typography variant="h5" className="inline-block py-3 text-neutral-600 text-[1rem] font-medium">Added members</Typography>}
+                {watch('members')?.map((member, index) => {
+                  return (
+                    <div key={index} className={cn('flex flex-row items-center gap-4 w-full justify-between')}>
+                      <Typography className="text-neutral-600 text-[1rem] font-normal">
+                        {member.email}
+                      </Typography>
+                      <Button
+                        variant="ghost"
+                        color="error"
+                        shape="square"
+                        type="button"
+                        size={'xs'}
+                        onClick={() => {
+                          setValue('members', watch('members').filter((m) => m.email !== member.email))
+                        }}
+                        disabled={isSubmitting}
+                      >
+                        <Trash2 />
+                      </Button>
+                    </div>
+                  );
+                })
+                }
               </div>
 
             </section>
@@ -234,6 +260,7 @@ export default function CreateOrEditSpace({ open, initialData }: {
               shape={'square'}
               size={'sm'}
               onClick={onNextClick}
+              type={tabValue === createSpaceSteps.length - 1 ? 'submit' : 'button'}
             >
               {tabValue === createSpaceSteps.length - 1 ? 'Create My Space' : 'Next'}
             </Button>
