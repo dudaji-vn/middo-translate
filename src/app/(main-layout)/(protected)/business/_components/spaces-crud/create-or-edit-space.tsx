@@ -157,8 +157,33 @@ export default function CreateOrEditSpace({ open, initialData }: {
 
             </section>
           </StepWrapper>
-          <StepWrapper value="1" >
-            Adding members
+          <StepWrapper
+            className='px-0'
+            value="1"
+            cardProps={{
+              className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
+            }}
+          >
+            <section
+              className='max-w-[800px] h-[calc(100vh-200px)] min-h-80  flex flex-col items-center justify-center gap-8'
+            >
+              <div className='w-full flex flex-col  gap-3'>
+                <Typography className='text-neutral-800 text-[32px] font-semibold leading-9'>
+                  <span className='text-primary-500-main'>Invite</span>other to join your space <span className='text-[24px] font-normal'>(optional)</span>
+                </Typography>
+                <Typography className='text-neutral-600 flex gap-2 font-light'>
+                  You can only invite 2 members in a Free plan account.
+                  <span className='text-primary-500-main font-normal'>
+                    upgrade plan.
+                  </span>
+                </Typography>
+              </div>
+              <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
+            
+            
+              </div>
+
+            </section>
           </StepWrapper>
           <div className='h-fit py-4 bg-primary-100 flex flex-row justify-between'>
             <em />
