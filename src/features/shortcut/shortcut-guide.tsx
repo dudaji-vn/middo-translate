@@ -138,11 +138,11 @@ export default function ShortcutsGuide() {
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="h-fit  max-w-screen-md">
-          <DialogTitle className="flex h-[48px] flex-row items-center justify-between py-4 pr-2">
-            <Typography variant="h4">
-              <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" />
+          <DialogTitle className="flex h-[48px] flex-row items-center justify-between py-4 pr-2 text-2xl font-semibold tracking-tight">
+            {/* <Typography variant="h4"> */}
+              {/* <Info className="absolute -left-8 top-1/2 -translate-y-1/2 transform" /> */}
               {t('SHORTCUT.TITLE')}
-            </Typography>
+            {/* </Typography> */}
           </DialogTitle>
           <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-scroll bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
             <Accordion

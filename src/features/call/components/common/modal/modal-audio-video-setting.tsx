@@ -88,7 +88,7 @@ export const ModalAudioVideoSetting = () => {
             <SettingSpeaker />
           </div>
           <AlertDialogFooter>
-            <AlertDialogCancel className="mr-4">
+            <AlertDialogCancel>
               {t('COMMON.CLOSE')}
             </AlertDialogCancel>
           </AlertDialogFooter>

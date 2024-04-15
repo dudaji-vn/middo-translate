@@ -35,9 +35,8 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
                 tempStream = participant.stream;
                 elementRef.current.volume = 0.9;
             }
-
-            elementRef.current.muted = true;
             elementRef.current.volume = 0;
+            elementRef.current.muted = true;
             elementRef.current!.srcObject = tempStream;
             elementRef.current!.autoplay = true;
             setStreamVideo(tempStream)
