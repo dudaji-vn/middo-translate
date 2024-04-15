@@ -47,7 +47,6 @@ export default function VideoCallActions() {
     if (!socket.id || !myStream) return;
     const video = settings?.video == undefined ? isTurnOnCamera : settings?.video;
     const audio = settings?.audio == undefined ? isTurnOnMic : settings?.audio;
-    console.log('handleChangeCameraOrMic', video, audio);
     if(isLoadingStream) return;
 
     // CASE: No change in camera
