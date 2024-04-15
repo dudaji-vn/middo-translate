@@ -31,7 +31,7 @@ export const createSpaceSteps = [
         title: 'Space Information',
         value: 0,
         nameField: 'information',
-        requiredFields: ['information']
+        requiredFields: ['information.name', 'information.avatar']
     },
     {
         title: 'Invite Members',

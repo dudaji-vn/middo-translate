@@ -5,21 +5,26 @@ import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import toast from 'react-hot-toast';
 import useClient from '@/hooks/use-client';
 import { useAuthStore } from '@/stores/auth.store';
 import { Tabs } from '@/components/navigation';
-import CreateOrEditSpaceHeader from './create-or-edit-space-header';
+import CreateOrEditSpaceHeader, { createSpaceSteps } from './create-or-edit-space-header';
 import { z } from 'zod';
 import { TSpace } from '../business-header/business-spaces';
 import StepWrapper from '../../settings/_components/extension-creation/steps/step-wrapper';
 import { Avatar, Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Plus, Trash2 } from 'lucide-react';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
+import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
+import UploadSpaceImage from './upload-space-image';
+import { forEach } from 'lodash';
+import { DataTable } from '@/components/ui/data-table';
+import { cn } from '@/utils/cn';
 
 
 type TFormValues = {
@@ -29,16 +34,37 @@ type TFormValues = {
     avatar?: string;
   };
   members: any[];
+  addingMember?: {
+    email: string;
+    role: string;
+  }
 }
 
 
 const createSpaceSchema = z.object({
   information: z.object({
-    name: z.string(),
+    name: z.string().min(1, {
+      message: 'Space name is required.'
+    }).max(255, {
+      message: 'Space name is too long, maximum 255 characters.'
+    }),
     description: z.string().optional(),
-    avatar: z.string().optional(),
+    avatar: z
+      .any()
+      .refine((value: any) => value?.length > 0 || value?.size > 0, {
+        message: "Please upload an image.",
+      })
+      .refine((value: any) => value?.size < 3000000, {
+        message: "Image size must be less than 3MB.",
+      }),
+    addingMember: z.object({
+      email: z.string().email({
+        message: 'Invalid email address.'
+      }),
+      role: z.string().optional(),
+    }).optional(),
   }),
-  members: z.array(z.object({})),
+  members: z.string().optional(),
 });
 
 export default function CreateOrEditSpace({ open, initialData }: {
@@ -57,7 +83,6 @@ export default function CreateOrEditSpace({ open, initialData }: {
       information: {
         name: '',
         description: '',
-        avatar: '/empty-cam.svg',
       },
       members: [],
     },
@@ -84,7 +109,26 @@ export default function CreateOrEditSpace({ open, initialData }: {
 
   }, [initialData, open]);
 
+  const onNextClick = async () => {
+    const requiredFields = createSpaceSteps[tabValue]?.requiredFields;
+    await Promise.all(
+      requiredFields.map((field) => trigger(field as keyof TFormValues))
+    );
 
+    const canGoNext = requiredFields.every((field) => !errors[field as keyof TFormValues]);
+    if (canGoNext) {
+      setTabValue(tabValue + 1);
+    }
+  };
+  const addMember = () => {
+
+    const addingMember = watch('addingMember');
+    console.log('addingMember', addingMember)
+    if (!addingMember || !addingMember.email?.length) return;
+    setValue('members', [...watch('members'), addingMember]);
+    setValue('addingMember', undefined);
+    trigger('members');
+  }
   const submit = async (values: TFormValues) => {
     trigger();
 
@@ -121,7 +165,7 @@ export default function CreateOrEditSpace({ open, initialData }: {
                 </Typography>
               </div>
               <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
-                <Avatar src={watch('information.avatar') ?? '/empty-cam.svg'} alt='avatar' className='w-24 h-24 cursor-pointer p-0' />
+                <UploadSpaceImage />
                 <RHFInputField name='information.name'
                   formItemProps={{
                     className: 'w-full'
@@ -134,18 +178,76 @@ export default function CreateOrEditSpace({ open, initialData }: {
 
             </section>
           </StepWrapper>
-          <StepWrapper value="1" >
-            Adding members
+          <StepWrapper
+            className='px-0'
+            value="1"
+            cardProps={{
+              className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
+            }}
+          >
+            <section
+              className='max-w-[800px] h-[calc(100vh-200px)] min-h-80  flex flex-col items-center justify-center gap-8'
+            >
+              <div className='w-full flex flex-col  gap-3'>
+                <Typography className='text-neutral-800 text-[32px] font-semibold leading-9'>
+                  <span className='text-primary-500-main'>Invite</span>other to join your space <span className='text-[24px] font-normal'>(optional)</span>
+                </Typography>
+                <Typography className='text-neutral-600 flex gap-2 font-light'>
+                  You can only invite 2 members in a Free plan account.
+                  <span className='text-primary-500-main font-normal'>
+                    upgrade plan.
+                  </span>
+                </Typography>
+              </div>
+              <div className='flex flex-row gap-3 items-start w-full justify-between'>
+                <RHFInputField
+                  name='addingMember.email'
+                  inputProps={{
+                    placeholder: 'example@gmail.com',
+                    className: 'h-10'
+                  }}
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                />
+                <Button
+                  color="secondary"
+                  shape="square"
+                  type="button"
+                  endIcon={<Plus className="h-4 w-4 mr-1" />}
+                  className='h-10'
+                  onClick={addMember}
+                  disabled={Boolean(errors.addingMember) || isSubmitting}
+
+                >
+                  Invite
+                </Button>
+              </div>
+              <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
+                <Avatar src={watch('information.avatar') as string}
+                  alt='avatar' className='w-24 h-24 cursor-pointer p-0' />
+                <div className='w-full flex flex-col gap-3'>
+                  <Typography className='text-neutral-800 text-[18px] font-semibold leading-9'>
+                    {watch('information.name')}
+                  </Typography>
+                  <Typography className='text-neutral-600 font-normal'>
+                    {watch('members')?.length} members
+                  </Typography>
+                </div>
+              </div>
+            </section>
           </StepWrapper>
           <div className='h-fit py-4 bg-primary-100 flex flex-row justify-between'>
             <em />
             <Button
-              endIcon={<ArrowRight />}
+              endIcon={(tabValue < createSpaceSteps.length - 1) ? <ArrowRight /> : <></>}
               color={'primary'}
               shape={'square'}
               size={'sm'}
+              onClick={onNextClick}
+              type={tabValue === createSpaceSteps.length - 1 ? 'submit' : 'button'}
             >
-              Next
+              {tabValue === createSpaceSteps.length - 1 ? 'Create My Space' : 'Next'}
             </Button>
             <em />
 

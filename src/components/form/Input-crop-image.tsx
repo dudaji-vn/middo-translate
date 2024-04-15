@@ -15,7 +15,7 @@ import { Range } from 'react-range';
 import { useMediaUpload } from '@/components/media-upload';
 import { cn } from '@/utils/cn';
 import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
-import { Button } from '@/components/actions';
+import { Button, ButtonProps } from '@/components/actions';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'react-i18next';
 
@@ -24,6 +24,7 @@ interface InputCropImageProps {
   className?: string;
   getImage?: any;
   open?: boolean;
+  saveBtnProps?: ButtonProps;
 }
 
 const ALLOWED_FILE_TYPES = [
@@ -39,7 +40,7 @@ export interface InputCropImageRef {
 export const InputCropImage = forwardRef<
   InputCropImageRef,
   InputCropImageProps
->(({ className, isLoading, open, ...props }: InputCropImageProps, ref) => {
+>(({ className, isLoading, open, saveBtnProps, ...props }: InputCropImageProps, ref) => {
   const [image, setImage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [zoom, setZoom] = useState<number[]>([1]);
@@ -238,7 +239,7 @@ export const InputCropImage = forwardRef<
         >
           <p>{t("COMMON.CANCEL")}</p>
         </AlertDialogCancel>
-        <Button shape="square" disabled={isLoading} type="submit">
+        <Button shape="square" disabled={isLoading} type="submit" {...saveBtnProps}>
           {t("COMMON.SAVE")}
         </Button>
       </div>
