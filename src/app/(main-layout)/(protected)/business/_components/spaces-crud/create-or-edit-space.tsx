@@ -18,11 +18,12 @@ import { TSpace } from '../business-header/business-spaces';
 import StepWrapper from '../../settings/_components/extension-creation/steps/step-wrapper';
 import { Avatar, Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
 import UploadSpaceImage from './upload-space-image';
 import { forEach } from 'lodash';
+import { DataTable } from '@/components/ui/data-table';
 
 
 type TFormValues = {
@@ -32,6 +33,10 @@ type TFormValues = {
     avatar?: string;
   };
   members: any[];
+  addingMember?: {
+    email: string;
+    role: string;
+  }
 }
 
 
@@ -51,8 +56,14 @@ const createSpaceSchema = z.object({
       .refine((value: any) => value?.size < 3000000, {
         message: "Image size must be less than 3MB.",
       }),
+    addingMember: z.object({
+      email: z.string().email({
+        message: 'Invalid email address.'
+      }),
+      role: z.string().optional(),
+    }).optional(),
   }),
-  members: z.array(z.object({})),
+  members: z.string().optional(),
 });
 
 export default function CreateOrEditSpace({ open, initialData }: {
@@ -108,6 +119,13 @@ export default function CreateOrEditSpace({ open, initialData }: {
       setTabValue(tabValue + 1);
     }
   };
+  const addMember = () => {
+    const addingMember = watch('addingMember');
+    if (!addingMember || addingMember.length === 0) return;
+    setValue('members', [...watch('members'), addingMember]);
+    setValue('addingMember', '');
+    trigger('members');
+  }
   const submit = async (values: TFormValues) => {
     trigger();
 
@@ -178,9 +196,32 @@ export default function CreateOrEditSpace({ open, initialData }: {
                   </span>
                 </Typography>
               </div>
-              <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
-            
-            
+              <div className='flex flex-row gap-3 items-start w-full justify-between'>
+                <RHFInputField
+                  name='addingMember'
+                  inputProps={{
+                    placeholder: 'https://example.com',
+                    className: 'h-10'
+                  }}
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                />
+                <Button
+                  color="secondary"
+                  shape="square"
+                  type="button"
+                  endIcon={<Plus className="h-4 w-4 mr-1" />}
+                  className='h-10'
+                  onClick={addMember}
+                  disabled={Boolean(errors.addingMember) || isSubmitting}
+
+                >
+                  Invite
+                </Button>
+              </div>
+              <div className='w-full p-3 bg-primary-100 items-center rounded-[12px]'>
+                updating
               </div>
 
             </section>
@@ -188,13 +229,13 @@ export default function CreateOrEditSpace({ open, initialData }: {
           <div className='h-fit py-4 bg-primary-100 flex flex-row justify-between'>
             <em />
             <Button
-              endIcon={<ArrowRight />}
+              endIcon={(tabValue < createSpaceSteps.length - 1) ? <ArrowRight /> : <></>}
               color={'primary'}
               shape={'square'}
               size={'sm'}
               onClick={onNextClick}
             >
-              Next
+              {tabValue === createSpaceSteps.length - 1 ? 'Create My Space' : 'Next'}
             </Button>
             <em />
 
