@@ -4,30 +4,22 @@ import { Form } from '@/components/ui/form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { usePathname, useRouter } from 'next/navigation';
-import React, { useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import toast from 'react-hot-toast';
 import useClient from '@/hooks/use-client';
-import { useAuthStore } from '@/stores/auth.store';
 import { Tabs } from '@/components/navigation';
-import CreateOrEditSpaceHeader, { createSpaceSteps } from './create-or-edit-space-header';
+import CreateOrEditSpaceHeader from './create-or-edit-space-header';
 import { z } from 'zod';
-import { TSpace } from '../business-header/business-spaces';
 import StepWrapper from '../../settings/_components/extension-creation/steps/step-wrapper';
-import { Avatar, Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
-import { ArrowRight, Plus, Trash2 } from 'lucide-react';
-import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
-import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
-import UploadSpaceImage from './sections/upload-space-image';
-import { forEach } from 'lodash';
-import { DataTable } from '@/components/ui/data-table';
-import { cn } from '@/utils/cn';
+import { isEmpty } from 'lodash';
 import { createSpaceService } from '@/services/business-space.service';
 import CreateSpaceForm from './sections/create-section';
 import InviteMembers from './sections/invite-section';
+import { Member } from './sections/members-columns';
 
 
 
@@ -39,17 +31,23 @@ const createSpaceSchema = z.object({
   }),
   avatar: z.string().optional(),
   backgroundImage: z.string().optional(),
+  members: z.array(z.object({
+    email: z.string().email({
+      message: 'Invalid email address'
+    }),
+    role: z.string()
+  })).optional()
 });
 
 type TCreateSpaceFormValues = z.infer<typeof createSpaceSchema>;
 
-export default function CreateOrEditSpace({ open, initialData }: {
+export default function CreateOrEditSpace({ open }: {
   open: boolean;
-  initialData?: TSpace;
 }) {
   const isClient = useClient()
   const [tabValue, setTabValue] = React.useState<number>(0);
-  const [space, setSpace] = React.useState(initialData);
+  const [tabErrors, setTabErrors] = React.useState<boolean[]>([false, false]);
+  const [space, setSpace] = React.useState();
 
   const formCreateSpace = useForm<TCreateSpaceFormValues>({
     mode: 'onChange',
@@ -57,11 +55,12 @@ export default function CreateOrEditSpace({ open, initialData }: {
       name: '',
       avatar: '',
       backgroundImage: '',
+      members: []
     },
     resolver: zodResolver(createSpaceSchema),
   });
 
-
+  const router = useRouter();
 
   useEffect(() => {
     if (open) {
@@ -72,28 +71,31 @@ export default function CreateOrEditSpace({ open, initialData }: {
       return;
     }
 
-  }, [initialData, open]);
+  }, [open]);
 
-  const handleStepChange = (value: number) => {
-    // if (value < tabValue) {
-    //   // setTabValue(value);
-    //   return;
-    // }
-    // if (formCreateSpace.formState.isSubmitSuccessful) {
-    //   setTabValue(value);
-    // }
+  const handleStepChange = async (value: number) => {
+    await formCreateSpace.trigger();
+    console.log('formCreateSpace.formState.errors', formCreateSpace.formState.errors)
+    setTabErrors([!isEmpty(formCreateSpace.formState.errors), false]);
+    setTabValue(value);
   }
 
-  const submitCreateSpace = async (values: TCreateSpaceFormValues) => {
+  const submitCreateSpace = async (value: any) => {
     formCreateSpace.trigger();
-    console.log('values', values)
+    if (!isEmpty(formCreateSpace.formState.errors)) {
+      toast.error('Please fill all required fields.');
+      setTabErrors([true, false]);
+      return;
+    }
     try {
-      const data = await createSpaceService(values)
+      const data = await createSpaceService({
+        name: formCreateSpace.watch('name'),
+        avatar: formCreateSpace.watch('avatar'),
+        backgroundImage: formCreateSpace.watch('backgroundImage'),
+        members: formCreateSpace.watch('members')
+      })
       toast.success('Space created successfully.');
-      if (data?.data) {
-        setSpace(data?.data);
-        setTabValue(1);
-      }
+      router.push('/business')
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -106,40 +108,60 @@ export default function CreateOrEditSpace({ open, initialData }: {
       onValueChange={(value) => {
         setTabValue(parseInt(value));
       }}>
-      <CreateOrEditSpaceHeader step={tabValue} onStepChange={handleStepChange} />
-      <StepWrapper value="0"
-        className='px-0'
-        cardProps={{
-          className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
-        }}>
-        <Form {...formCreateSpace}>
-          <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>
-            <CreateSpaceForm />
-            <div className='h-fit w-full py-4 bg-primary-100 flex-col flex items-center'>
-              <Button
-                color={'primary'}
-                shape={'square'}
-                size={'sm'}
-                loading={formCreateSpace.formState.isSubmitting}
-                type='submit'
-              >
-                Create New Space
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </StepWrapper>
-      <StepWrapper
-        className='px-0'
-        value="1"
-        cardProps={{
-          className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
-        }}
-      >
-        <InviteMembers
-          space={space}
-        />
-      </StepWrapper>
+      <Form {...formCreateSpace}>
+        <CreateOrEditSpaceHeader
+          errors={tabErrors}
+          step={tabValue}
+          onStepChange={handleStepChange} />
+        <StepWrapper value="0"
+          className='px-0'
+          cardProps={{
+            className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
+          }}>
+          <CreateSpaceForm />
+          <div className='h-fit w-full py-4 bg-primary-100 flex-col flex items-center'>
+            <Button
+              color={'primary'}
+              shape={'square'}
+              size={'sm'}
+              onClick={() => handleStepChange(1)}
+            >
+              Next
+            </Button>
+          </div>
+        </StepWrapper>
+        <StepWrapper
+          className='px-0'
+          value="1"
+          cardProps={{
+            className: 'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none'
+          }}
+        >
+          <InviteMembers
+            space={{
+              name: formCreateSpace.watch('name'),
+              avatar: formCreateSpace.watch('avatar'),
+              members: formCreateSpace.watch('members') || []
+            }}
+            setMembers={(members: Member[]) => formCreateSpace.setValue('members', members)}
+          />
+          <div className='h-fit w-full py-4 bg-primary-100 flex-col flex items-center'>
+
+            <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)} >  <Button
+              color={'primary'}
+              shape={'square'}
+              type='submit'
+              size={'sm'}
+              loading={formCreateSpace.formState.isSubmitting}
+              disabled={!formCreateSpace.formState.isValid}
+            >
+              Create Space
+            </Button>
+            </form>
+          </div>
+        </StepWrapper>
+
+      </Form>
     </Tabs>
 
   );
