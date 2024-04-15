@@ -1,8 +1,6 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
-import { useMyVideoCallStore } from '@/features/call/store/me.store';
-import useAudioLevel from '@/features/call/hooks/use-audio-level';
 import useLoadStream from '@/features/call/hooks/use-load-stream';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
@@ -10,7 +8,7 @@ import VideoItemAvatar from './components/video-item-avatar';
 import ExpandVideo from './components/expand-video';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemText from './components/video-item-text';
-import { useVideoSettingStore } from '@/features/call/store/video-setting.store';
+import VideoItemTalk from './components/video-item-talk';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -20,10 +18,8 @@ interface VideoItemProps {
 const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const itemRef = useRef<HTMLElement>(null);
-  const { isTurnOnCamera } = useLoadStream(participant, videoRef);
-  const isLoadingVideo = useMyVideoCallStore(state => state.isLoadingVideo);
+  const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  // console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
@@ -40,7 +36,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         )}
       >
         {/* Talk border */}
-        <CheckIsTalk participant={participant}/>
+        <VideoItemTalk stream={streamVideo}/>
 
         <video
           ref={videoRef}
@@ -62,7 +58,6 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
 
         {/* Video Loading */}
         <VideoItemLoading
-          isLoading={isLoadingVideo}
           isMe={participant?.isMe}
           isShareScreen={participant?.isShareScreen}
         />
@@ -77,20 +72,4 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   );
 };
 export default memo(VideoItem);
-
-interface CheckIsTalkProps {
-  participant: ParticipantInVideoCall;
-}
-const CheckIsTalk = ({participant}: CheckIsTalkProps) => {
-  const { isTalk } = useAudioLevel(participant?.stream);
-  return (
-    <div
-      className={cn(
-        'pointer-events-none absolute inset-0 z-10 rounded-xl border-4 border-primary transition-all',
-        isTalk ? 'opacity-100' : 'opacity-0',
-      )}
-    ></div>
-  )
-}
-
 

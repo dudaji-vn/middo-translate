@@ -30,14 +30,15 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
                 if(participant.stream.getVideoTracks()[0]) {
                     const videoTrack = participant.stream.getVideoTracks()[0]
                     tempStream.addTrack(videoTrack)
+                    elementRef.current.volume = 0;
+                    elementRef.current.muted = true;
                 }
             } else {
                 tempStream = participant.stream;
-                elementRef.current.volume = 0.9;
+                elementRef.current.volume = 1;
             }
 
             elementRef.current.muted = true;
-            elementRef.current.volume = 0;
             elementRef.current!.srcObject = tempStream;
             elementRef.current!.autoplay = true;
             setStreamVideo(tempStream)

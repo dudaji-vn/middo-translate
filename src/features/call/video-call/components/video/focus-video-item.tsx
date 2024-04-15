@@ -1,28 +1,23 @@
 import { memo, useEffect, useRef } from 'react';
-import { Maximize } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { twMerge } from 'tailwind-merge';
 import useLoadStream from '@/features/call/hooks/use-load-stream';
-import useAudioLevel from '@/features/call/hooks/use-audio-level';
-import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import useFitRatio from '@/features/call/hooks/use-fit-ratio';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemAvatar from './components/video-item-avatar';
-import { DoodleArea } from '../doodle/doodle-area';
 import useGetVideoSize from '../doodle/hooks/use-get-video-size';
 import { DoodleShareScreen } from '../doodle/doodle-share-screen';
 import { useTranslation } from 'react-i18next';
+import VideoItemTalk from './components/video-item-talk';
 interface FocusVideoItemProps {
   participant?: any;
 }
 const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const {t} = useTranslation('common')
-  const isLoadingVideo = useMyVideoCallStore((state) => state.isLoadingVideo);
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const parentRef = useRef<HTMLElement>(null);
   const { streamVideo, isTurnOnCamera } = useLoadStream(participant, videoRef);
-  const { isTalk } = useAudioLevel(streamVideo);
   useFitRatio(videoRef, parentRef);
   const { width, height } = useGetVideoSize({ videoRef });
   // Disable pause video when fullscreen
@@ -52,12 +47,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         // isShowChat && 'h-[200px] md:h-full',
       )}
     >
-      <div
-        className={twMerge(
-          'pointer-events-none absolute inset-0 z-10 rounded-xl border-4 border-primary transition-all',
-          isTalk ? 'opacity-100' : 'opacity-0',
-        )}
-      ></div>
+      <VideoItemTalk stream={streamVideo} />
       <video
         ref={videoRef}
         className={twMerge(
@@ -96,7 +86,6 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
 
       {/* Video Loading */}
       <VideoItemLoading
-        isLoading={isLoadingVideo}
         isMe={participant?.isMe}
         isShareScreen={participant?.isShareScreen}
       />
