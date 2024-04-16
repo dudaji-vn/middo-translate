@@ -17,7 +17,7 @@ const SettingPage = async ({ searchParams, params }: {
     }
 
 }) => {
-    const businessExtension = await businessAPI.getExtension(params.spaceId);
+    const businessExtension = await businessAPI.getMyExtension(params.spaceId);
     const modatType = searchParams.modal;
     // console.log('BusinessExtension', businessExtension)
     return (

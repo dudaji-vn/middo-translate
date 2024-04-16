@@ -68,16 +68,16 @@ class BusinessAPI {
       },
     });
     const data = await res.json();
-    return  data?.accessToken || '';
+    return data?.accessToken || '';
   }
 
-  async getExtension(
+  async getMyExtension(
     spaceId: string,
   ): Promise<TBusinessExtensionData | undefined> {
-    let access_token = await this.getAccessToken();
+    const access_token = await this.getAccessToken();
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/business/' + spaceId,
+        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/spaces/' + spaceId,
         {
           method: 'GET',
           headers: {
@@ -96,6 +96,29 @@ class BusinessAPI {
       return undefined;
     }
   }
+  async getSpaceInformation(businessId: string) {
+    try {
+      const response = await fetch(
+        `${this.basePath}/help-desk/business/${businessId}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          cache: 'no-cache',
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      return data?.data;
+    } catch (error) {
+      console.error('Error in get business info', error);
+      return undefined;
+    }
+  }
+
   async getChatRoom(roomId: string, anonymousUserId?: string) {
     let access_token = await this.getAccessToken();
     const path = anonymousUserId
@@ -123,30 +146,6 @@ class BusinessAPI {
       return undefined;
     }
   }
-  
-  async getSpaceInformation(businessId: string) {
-    try {
-      const response = await fetch(
-        `${this.basePath}/help-desk/business/${businessId}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          cache: 'no-cache',
-        },
-      );
-      const data = await response.json();
-      console.log('getSpaceInformation ==>', data)
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      return data?.data;
-    } catch (error) {
-      console.error('Error in get business info', error);
-      return undefined;
-    }
-  }
 
   async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
     let access_token = await this.getAccessToken();
@@ -165,7 +164,6 @@ class BusinessAPI {
         }),
       }).toString();
       const path = `${this.basePath}/help-desk/analytics?${query}`;
-      console.log('type-path', type, path);
       const response = await fetch(path, {
         method: 'GET',
         headers: {
