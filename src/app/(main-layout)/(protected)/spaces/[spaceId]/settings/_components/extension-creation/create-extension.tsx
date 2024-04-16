@@ -131,9 +131,9 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         ...values.custom,
         firstMessageEnglish,
         spaceId: params?.spaceId,
-        // chatFlow: watch('custom.chatFlow'),
         ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
       };
+      // @ts-ignore
       await createExtension(payload).then((res) => {
         router.push(pathname);
         toast.success('Create extension success!');
