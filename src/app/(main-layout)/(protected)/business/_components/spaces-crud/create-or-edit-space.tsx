@@ -16,7 +16,7 @@ import { z } from 'zod';
 import StepWrapper from '../../settings/_components/extension-creation/steps/step-wrapper';
 import { Button } from '@/components/actions';
 import { isEmpty } from 'lodash';
-import { createSpaceService } from '@/services/business-space.service';
+import { createSpace } from '@/services/business-space.service';
 import CreateSpaceForm from './sections/create-section';
 import InviteMembers from './sections/invite-section';
 import { Member } from './sections/members-columns';
@@ -88,14 +88,15 @@ export default function CreateOrEditSpace({ open }: {
       return;
     }
     try {
-      const data = await createSpaceService({
+      const data = await createSpace({
         name: formCreateSpace.watch('name'),
         avatar: formCreateSpace.watch('avatar'),
         backgroundImage: formCreateSpace.watch('backgroundImage'),
         members: formCreateSpace.watch('members')
       })
       toast.success('Space created successfully.');
-      router.push('/business')
+      router.push('/business');
+      router.refresh();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }

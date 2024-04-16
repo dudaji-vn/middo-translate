@@ -11,7 +11,7 @@ import { cn } from '@/utils/cn';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import moment from 'moment';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
-import { deleteExtensionService } from '@/services/extension.service';
+import { deleteExtension } from '@/services/extension.service';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
@@ -28,7 +28,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
     const router = useRouter();
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const onDeleteExtension = async () => {
-      deleteExtensionService().then(() => {
+      deleteExtension().then(() => {
         toast.success('Extension deleted successfully');
         router.refresh();
       }).catch(() => {

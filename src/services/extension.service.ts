@@ -1,7 +1,7 @@
 import { axios } from '@/lib/axios';
 import { get, post, put } from './api.service';
 
-export const createExtensionService = (data: {
+export const createExtension = (data: {
   domains: Array<string>;
   color: string;
   language: string;
@@ -9,14 +9,14 @@ export const createExtensionService = (data: {
 }) => {
   return put('/help-desk/create-or-edit-business', data);
 };
-export const getExtensionService = () => {
+export const getExtension = () => {
   return get('/help-desk/my-business');
 };
-export const deleteExtensionService = () => {
+export const deleteExtension = () => {
   return axios.delete('/help-desk');
 };
 
-export const startAGuestConversationService = (data: {
+export const startAGuestConversation = (data: {
   businessId: string;
   name: string;
   language: string;

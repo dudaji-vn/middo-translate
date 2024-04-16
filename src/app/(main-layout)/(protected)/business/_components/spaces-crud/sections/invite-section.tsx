@@ -3,7 +3,7 @@ import { Avatar, Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'
 import { Form, FormLabel } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ChevronDown, Plus } from 'lucide-react'
+import { ChevronDown, Plus, Shield, UserRound } from 'lucide-react'
 import React from 'react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display'
 import { useForm, useFormContext } from 'react-hook-form'
@@ -11,32 +11,49 @@ import { z } from 'zod'
 import { TSpace } from '../../business-header/business-spaces'
 import { DataTable } from '@/components/ui/data-table'
 import { Member, membersColumns } from './members-columns'
-import { inviteMemberService } from '@/services/business-space.service'
+import { inviteMemberToSpace } from '@/services/business-space.service'
 import toast from 'react-hot-toast'
 
-type Status = 'invited' | 'joined'
+export enum ESpaceMemberRole {
+    Admin = 'admin',
+    Member = 'member'
+}
+export enum ESpaceMemberStatus {
+    Invited = 'invited',
+    Joined = 'joined'
+}
+
 const addingSchema = z.object({
     email: z.string().email({
         message: 'Invalid email address'
     }).min(1, {
         message: 'Email is required'
     }),
-    role: z.string(),
-    status: z.string().optional()
+    role: z.union([
+        z.literal('admin'),
+        z.literal('member')
+    ]),
+    status: z.union([
+        z.literal('invited'),
+        z.literal('joined')
+    ])
 })
 
 export type TAddingmember = z.infer<typeof addingSchema>
 
-const items = [
-    {
-        name: 'Admin',
-        icon: <Avatar src='/avatar.png' alt='avatar' className='w-6 h-6' />,
-    },
-    {
-        name: 'Member',
-        icon: <Avatar src='/avatar.png' alt='avatar' className='w-6 h-6' />,
-    },
-]
+const items: Array<{
+    name: ESpaceMemberRole;
+    icon: React.ReactNode;
+}> = [
+        {
+            name: ESpaceMemberRole.Admin,
+            icon: <Shield size={16} />,
+        },
+        {
+            name: ESpaceMemberRole.Member,
+            icon: <UserRound size={16} />,
+        },
+    ]
 
 const InviteMembers = ({ space, setMembers }: {
     space: {
@@ -50,8 +67,8 @@ const InviteMembers = ({ space, setMembers }: {
         mode: 'onChange',
         defaultValues: {
             email: '',
-            role: 'member',
-            status: 'invited'
+            role: ESpaceMemberRole.Member,
+            status: ESpaceMemberStatus.Invited
         },
         resolver: zodResolver(addingSchema),
     });
@@ -108,8 +125,10 @@ const InviteMembers = ({ space, setMembers }: {
                                 type='button'
                                 disabled={formAdding.formState.isSubmitting}
                                 color={'default'}
-                                size={'xs'}>
-                                {formAdding.watch('role') || 'Member'}
+                                size={'xs'}
+                                className='capitalize px-4'
+                            >
+                                {formAdding.watch('role') || 'Select a role'}
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
@@ -117,7 +136,7 @@ const InviteMembers = ({ space, setMembers }: {
                                 <DropdownMenuItem key={option.name} onSelect={() => {
                                     formAdding.setValue('role', option.name)
                                 }}
-                                    className='flex flex-row gap-2 text-neutral-600'>
+                                    className='flex flex-row gap-2 text-neutral-600 capitalize'>
                                     {option.icon}
                                     {option.name}
                                 </DropdownMenuItem>
@@ -151,6 +170,12 @@ const InviteMembers = ({ space, setMembers }: {
                     </div>
                 </div>
                 <DataTable
+                    tableHeadProps={{
+                        className: 'bg-transparent'
+                    }}
+                    rowProps={{
+                        className:'rounded-full bg-primary-100'
+                    }}
                     columns={membersColumns({
                         onDelete: (member) => {
                             setMembers(invitedMembers.filter(m => m.email !== member.email))

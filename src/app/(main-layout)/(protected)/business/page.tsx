@@ -3,7 +3,6 @@ import CreateOrEditSpace from "./_components/spaces-crud/create-or-edit-space";
 
 enum BusinessModalType {
   CreateSpace = 'create-space',
-  EditSpace = 'edit-space'
 }
 const BusinessSpacePage = async (props: {
   params: {
