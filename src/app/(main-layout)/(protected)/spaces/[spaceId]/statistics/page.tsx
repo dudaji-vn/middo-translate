@@ -8,8 +8,16 @@ export enum EStatisticErrors {
   NEXT_NOT_FOUND = "NEXT_NOT_FOUND"
 }
 
-const StatisticPage = async () => {
-  const spaceData = await businessAPI.getSpaceById();
+const StatisticPage = async ({
+  params: {
+    spaceId
+  }
+}: {
+  params: {
+    spaceId: string;
+  }
+}) => {
+  const spaceData = await businessAPI.getSpaceInformation(spaceId);
   if (!spaceData) {
     notFound();
   }
