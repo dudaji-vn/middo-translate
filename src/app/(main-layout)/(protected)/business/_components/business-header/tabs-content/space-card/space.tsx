@@ -1,5 +1,4 @@
 
-import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
 import React from 'react'
@@ -55,12 +54,12 @@ const Space = ({
       </div>
       <CardHeader className='flex p-0 !m-0 flex-row justify-between items-center text-neutral-600'>
         <Badge className={tagsVariants({ tag })}>{MAPPED_TAGS[tag]}</Badge>
-        <span className='text-neutral-600 font-light text-sm leading-[18px]'>{`Created on: ${moment(createdAt).format('DD/MM/YYYY')}`}</span>
+        <span className='text-neutral-600 font-light text-sm leading-[18px]'><span className='max-[320px]:hidden'>Created on:</span> {` ${moment(createdAt).format('DD/MM/YYYY')}`}</span>
       </CardHeader>
       <CardContent className='p-0 flex flex-row items-center gap-2'>
         <Avatar src={owner?.avatar ?? '/logo.png'} alt={'avatar-owner'} className="size-[88px] p-1 border border-neutral-50" />
         <div className='space-y-1 flex flex-col'>
-          <CardTitle className='text-base font-normal leading-[18px]'>{name}</CardTitle>
+          <CardTitle className='text-base font-normal  break-words max-w-36  sm:max-w-44 xl:max-w-56  leading-[18px]'>{name}</CardTitle>
           <span className='text-neutral-600 font-light text-sm leading-[18px]'>{`${members?.length} members`}</span>
           <Button
             size={'xs'}
