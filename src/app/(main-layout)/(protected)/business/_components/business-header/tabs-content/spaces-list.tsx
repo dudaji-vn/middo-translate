@@ -69,7 +69,7 @@ const mockSpaces: TSpace[] = [
     }
 ]
 const SpacesList = ({ spaces = mockSpaces, tab }: {
-    spaces?: TSpace[],
+    spaces: TSpace[],
     tab?: BusinessTabType
 }) => {
     const currentUser = useAuthStore((s) => s.user);

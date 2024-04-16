@@ -9,7 +9,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { createExtensionService } from '@/services/extension.service';
+import { createExtension } from '@/services/extension.service';
 import toast from 'react-hot-toast';
 import isEmpty from 'lodash/isEmpty';
 import useClient from '@/hooks/use-client';
@@ -133,7 +133,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
         // chatFlow: watch('custom.chatFlow'),
         ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
       };
-      await createExtensionService(payload).then((res) => {
+      await createExtension(payload).then((res) => {
         router.push(pathname);
         toast.success('Create extension success!');
       }).catch((err) => {

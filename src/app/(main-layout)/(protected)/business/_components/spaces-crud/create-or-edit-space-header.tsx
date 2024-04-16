@@ -12,19 +12,16 @@ import { useFormContext } from 'react-hook-form';
 import { on } from 'events';
 enum BusinessModalType {
     CreateSpace = 'create-space',
-    EditSpace = 'edit-space'
 }
 const headerVariants = cva('w-full flex flex-row', {
     variants: {
         navigation: {
             default: 'hidden',
             'create-space': 'w-full py-2 flex flex-row gap-3',
-            'edit-space': 'w-full py-2 flex flex-row gap-3',
         },
     }
 });
 const mappedTitle = {
-    'edit-space': 'Edit Space',
     'create-space': 'Create Space',
 }
 export const createSpaceSteps = [

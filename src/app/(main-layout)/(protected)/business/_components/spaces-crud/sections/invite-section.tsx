@@ -11,7 +11,6 @@ import { z } from 'zod'
 import { TSpace } from '../../business-header/business-spaces'
 import { DataTable } from '@/components/ui/data-table'
 import { Member, membersColumns } from './members-columns'
-import { inviteMemberService } from '@/services/business-space.service'
 import toast from 'react-hot-toast'
 
 type Status = 'invited' | 'joined'

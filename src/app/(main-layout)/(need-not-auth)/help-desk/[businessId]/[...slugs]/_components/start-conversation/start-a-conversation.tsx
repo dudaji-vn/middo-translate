@@ -12,7 +12,7 @@ import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.s
 import { messageApi } from '@/features/chat/messages/api'
 import { Room } from '@/features/chat/rooms/types'
 import useClient from '@/hooks/use-client'
-import { startAGuestConversationService } from '@/services/extension.service'
+import { startAGuestConversation } from '@/services/extension.service'
 import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -98,7 +98,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
     const submit = async (values: z.infer<typeof createGuestInfoSchema>) => {
         try {
             setLoading(true)
-            await startAGuestConversationService({
+            await startAGuestConversation({
                 businessId: businessData._id,
                 ...values
             }).then(async (res) => {
