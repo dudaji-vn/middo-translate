@@ -14,11 +14,15 @@ import useSpeechToTextCaption from '../../hooks/use-speech-to-text-caption';
 import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 
 export default function CaptionSection() {
-  
-  const {t} = useTranslation('common')
-
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const isShowCaption = useVideoCallStore(state => state.isShowCaption);
+  if (!isFullScreen || !isShowCaption) return null;
+  return <CaptionContent />;
+}
+
+
+const CaptionContent = () => {
+  const {t} = useTranslation('common')
   const setShowCaption = useVideoCallStore(state => state.setShowCaption);
   const captions = useVideoCallStore(state => state.captions);
   const addCaption = useVideoCallStore(state => state.addCaption);
@@ -109,8 +113,6 @@ export default function CaptionSection() {
       clearCaption();
     };
   }, [addCaption, user?._id, user?.language, clearCaption, scrollToBottom]);
-
-  if (!isFullScreen || !isShowCaption) return null;
 
   return (
     <section>
