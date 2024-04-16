@@ -97,7 +97,7 @@ class BusinessAPI {
       }
       return data?.data;
     } catch (error) {
-      console.error('Error in get business info :>>', error);
+      console.error('Error in get anonymous chat room', error);
       return undefined;
     }
   }
