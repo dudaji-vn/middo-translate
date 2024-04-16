@@ -10,6 +10,7 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
     const [isTurnOnMic, setTurnOnMic] = useState<boolean>(false)
     const [isTurnOnCamera, setIsTurnOnCamera] = useState<boolean>(false)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
+    // const speaker = useVideoSettingStore(state => state.speaker);
     // console.log('🔵useLoadStream')
     useEffect(() => {
         const elementRefCurrent = elementRef.current;
@@ -39,6 +40,13 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
             elementRef.current.muted = true;
             elementRef.current!.srcObject = tempStream;
             elementRef.current!.autoplay = true;
+            // @ts-ignore
+            // elementRef.current?.setSinkId(speaker?.deviceId || '').then(() => {
+            //     console.log('🟡setSinkId success',speaker?.deviceId || '');
+            //   })
+            //   .catch((err: any) => {
+            //     console.log('🟡setSinkId error', err);
+            //   });
             setStreamVideo(tempStream)
             setTurnOnMic(isMicOn)
             setIsTurnOnCamera(isCamOn)

@@ -11,7 +11,7 @@ const GalleryLayout = () => {
   const participants = useParticipantVideoCallStore(state => state.participants);
   const isDoodle = useVideoCallStore(state => state.isDoodle);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-
+  
   const classes = useMemo(() => {
     if (!isFullScreen) return 'grid-cols-4';
     const numberItem = participants.length + (isDoodle ? 1 : 0);
@@ -35,7 +35,9 @@ const GalleryLayout = () => {
         return 'grid-cols-2 md:grid-cols-3';
     }
   }, [isDoodle, isFullScreen, participants.length]);
-  
+
+  if(participants.length === 0) return <Fragment></Fragment>
+  // console.log('🔴GalleryLayout')
   return (
     <div className="h-full w-full overflow-auto md:overflow-hidden">
       <div

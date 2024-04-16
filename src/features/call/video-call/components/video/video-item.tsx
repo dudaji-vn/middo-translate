@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
 import useLoadStream from '@/features/call/hooks/use-load-stream';
@@ -21,6 +21,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const itemRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  // console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
