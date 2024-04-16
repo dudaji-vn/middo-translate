@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { DataTable } from '@/components/ui/data-table';
-import { clientsColumns as columns } from '@/app/(main-layout)/(protected)/business/statistics/_components/clients-table/clients-columns';
+import { clientsColumns as columns } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/business/statistics/_components/clients-table/clients-columns';
 import moment from 'moment';
 import { User } from '@/features/users/types';
 import ClientsPagination, { ClientPagination } from '../_components/clients-table/pagination/clients-pagination';

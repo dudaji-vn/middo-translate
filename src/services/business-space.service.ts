@@ -1,5 +1,5 @@
 import { get, post, put } from './api.service';
-import { Member } from '@/app/(main-layout)/(protected)/business/_components/spaces-crud/sections/members-columns';
+import { Member } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/business/_components/spaces-crud/sections/members-columns';
 
 export const createSpace = (data: {
   name: string;

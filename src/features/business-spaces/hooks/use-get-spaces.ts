@@ -1,6 +1,7 @@
 'use client';
 
-import { BusinessTabType } from '@/app/(main-layout)/(protected)/business/_components/business-header/business-spaces';
+
+import { BusinessTabType } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/business/_components/business-spaces';
 import { axios } from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 

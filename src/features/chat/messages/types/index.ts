@@ -4,7 +4,7 @@ import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { messageVariants } from '../components/message-item/variants';
-import { FlowNode } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 
 export type MessageType =
   | 'text'
