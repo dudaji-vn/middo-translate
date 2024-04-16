@@ -19,7 +19,7 @@ export default function AccountSettings() {
   const setShowConfirmLogout = useAppStore(
     (state) => state.setShowConfirmLogout,
   );
-  const {t} = useTranslation("common");
+  const { t } = useTranslation('common');
   const signOut = () => {
     setShowConfirmLogout(true);
   };
@@ -61,7 +61,7 @@ export default function AccountSettings() {
             </div>
           )}
         </div>
-        <h2 className="mt-5 text-center text-base  w-full px-4 break-words">
+        <h2 className="mt-5 w-full break-words  px-4 text-center text-base">
           {user?.name || 'Anonymous'}
         </h2>
         <p className="text-center text-base text-[#333]">{user?.email || ''}</p>
@@ -70,7 +70,7 @@ export default function AccountSettings() {
           <UpdateUserInfo />
           <UpdateUserAvatar />
         </div>
-        <div className="-mx-[5vw] mt-4 h-2 bg-[#FAFAFA] md:-mx-6"></div>
+        <div className="mt-4 h-2 bg-[#FAFAFA] md:-mx-6"></div>
         <UpdateUserPassword />
         <Button
           variant="ghost"

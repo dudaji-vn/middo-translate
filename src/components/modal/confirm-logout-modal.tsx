@@ -16,11 +16,13 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useNotificationStore } from '@/features/notification/store';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { usePlatformStore } from '@/features/platform/stores';
 
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
-  const {t} = useTranslation('common')
-  const { isShowConfirmLogout, setShowConfirmLogout, platform } = useAppStore();
+  const { t } = useTranslation('common');
+  const { isShowConfirmLogout, setShowConfirmLogout } = useAppStore();
+  const platform = usePlatformStore((state) => state.platform);
   const resetNotification = useNotificationStore((state) => state.reset);
   const router = useRouter();
 
@@ -47,15 +49,15 @@ export const ConfirmLogoutModal = () => {
     <AlertDialog open={isShowConfirmLogout} onOpenChange={closeModal}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-           {t('MODAL.SIGN_OUT.TITLE')}
-          </AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.SIGN_OUT.TITLE')}</AlertDialogTitle>
           <AlertDialogDescription>
             {t('MODAL.SIGN_OUT.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">
+            {t('COMMON.CANCEL')}
+          </AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"

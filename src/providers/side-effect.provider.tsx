@@ -50,7 +50,9 @@ export const SideEffectProvider = () => {
     handleMessage();
   }, []);
   useEffect(() => {
-    setPlatform(platform as 'web' | 'mobile');
+    if (platform === 'mobile') {
+      setPlatform('mobile');
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [platform]);
 

@@ -1,9 +1,10 @@
 'use client';
 
-import { Blocks, Minus } from 'lucide-react';
 import { Typography } from '@/components/data-display';
+import { Blocks } from 'lucide-react';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { usePlatformStore } from '@/features/platform/stores';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import useClient from '@/hooks/use-client';
 import { cn } from '@/utils/cn';
@@ -16,18 +17,22 @@ import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 type Props = {};
 
 export const Header = (props: Props) => {
-  const { isBusiness, isHelpDesk, isTestItOutPage } = useBusinessNavigationData();
+  const { isBusiness, isHelpDesk, isTestItOutPage } =
+    useBusinessNavigationData();
+  const platform = usePlatformStore((state) => state.platform);
   const isClient = useClient();
   const hideNavigation = isBusiness || isHelpDesk;
 
   if (!isClient) return null;
+  console.log('platform', platform);
+  if (platform === 'mobile') return null;
 
   return (
     <div
       className={cn(
         'z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]',
         isHelpDesk ? 'w-full flex-row justify-between' : '',
-        isTestItOutPage && 'hidden'
+        isTestItOutPage && 'hidden',
       )}
     >
       {!hideNavigation && <HeaderNav />}
