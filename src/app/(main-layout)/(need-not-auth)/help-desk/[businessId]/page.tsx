@@ -12,18 +12,18 @@ const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ..
         slugs: string[];
     };
 }) => {
-    const spaceData = await businessAPI.getSpaceInformation(businessId);
-    if (!spaceData) {
+    const extensionData = await businessAPI.getExtensionByBusinessId(businessId);
+    if (!extensionData) {
         notFound();
     }
     const headersList = headers();
     const referer = headersList.get('referer');
-    const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: spaceData.domains });
+    const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: extensionData.domains });
 
     if (!isAllowed) {
           notFound();
     }
-    return (<StartAConversation spaceData={spaceData} />)
+    return (<StartAConversation extensionData={extensionData} />)
 
 };
 

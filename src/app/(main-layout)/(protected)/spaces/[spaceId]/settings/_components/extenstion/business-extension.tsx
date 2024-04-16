@@ -66,7 +66,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
                   color="default"
                   onClick={() => {
                     if (params?.spaceId)
-                      router.push(`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings`);
+                      router.push(`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=edit-extension`);
                   }}
                 >
                   <PenIcon />

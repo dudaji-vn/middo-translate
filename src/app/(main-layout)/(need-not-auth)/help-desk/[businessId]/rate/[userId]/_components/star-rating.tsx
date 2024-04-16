@@ -12,9 +12,9 @@ import { ROUTE_NAMES } from "@/configs/route-name";
 import { useParams, useRouter } from "next/navigation";
 import { TBusinessExtensionData } from "@/features/chat/help-desk/api/business.service";
 
-const StarRating = ({ onRate, spaceData }: {
+const StarRating = ({ onRate, extensionData }: {
     onRate: (star: number) => Promise<void>
-    spaceData?: TBusinessExtensionData
+    extensionData?: TBusinessExtensionData
 }) => {
     const isMounted = useClient();
     const [hoverStar, setHoverStar] = useState(0);
@@ -32,8 +32,8 @@ const StarRating = ({ onRate, spaceData }: {
     if (!isMounted) return null;
 
     if (done) {
-        if (spaceData) {
-            return <StartAConversation spaceData={spaceData} isAfterDoneAnCOnversation />
+        if (extensionData) {
+            return <StartAConversation extensionData={extensionData} isAfterDoneAnCOnversation />
         }
         else router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`)
 

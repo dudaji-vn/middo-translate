@@ -1,3 +1,4 @@
+import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
 import { User } from '@/features/users/types';
@@ -71,9 +72,12 @@ class BusinessAPI {
     return data?.accessToken || '';
   }
 
-  async getMyExtension(
-    spaceId: string,
-  ): Promise<TBusinessExtensionData | undefined> {
+  async getSpaceBySpaceID(spaceId: string): Promise<
+    | ({
+        extension: TBusinessExtensionData;
+      } & TSpace)
+    | undefined
+  > {
     const access_token = await this.getAccessToken();
     try {
       const response = await fetch(
@@ -96,7 +100,7 @@ class BusinessAPI {
       return undefined;
     }
   }
-  async getSpaceInformation(businessId: string) {
+  async getExtensionByBusinessId(businessId: string) {
     try {
       const response = await fetch(
         `${this.basePath}/help-desk/business/${businessId}`,

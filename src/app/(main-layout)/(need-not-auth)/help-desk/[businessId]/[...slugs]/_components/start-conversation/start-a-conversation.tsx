@@ -36,14 +36,14 @@ export type TStartAConversation = {
     email: string
 }
 
-const StartAConversation = ({ spaceData, isAfterDoneAnCOnversation }: {
+const StartAConversation = ({ extensionData, isAfterDoneAnCOnversation }: {
     isAfterDoneAnCOnversation?: boolean
-    spaceData: TBusinessExtensionData
+    extensionData: TBusinessExtensionData
 }) => {
     const router = useRouter()
     const isClient = useClient();
-    const { user: owner } = spaceData || {};
-    const theme = extentionsCustomThemeOptions.find((item) => item.name === spaceData.color || item.hex === spaceData.color) || extentionsCustomThemeOptions[0];
+    const { user: owner } = extensionData || {};
+    const theme = extentionsCustomThemeOptions.find((item) => item.name === extensionData.color || item.hex === extensionData.color) || extentionsCustomThemeOptions[0];
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const showForm = () => {
@@ -65,7 +65,7 @@ const StartAConversation = ({ spaceData, isAfterDoneAnCOnversation }: {
         watch,
         formState: { isSubmitting, errors },
     } = methods;
-    const chatFlow = spaceData.chatFlow;
+    const chatFlow = extensionData.chatFlow;
     const appendFirstMessageFromChatFlow = async (roomId: Room['_id']) => {
         if (!chatFlow) return;
         const { nodes, edges } = chatFlow;
@@ -99,13 +99,13 @@ const StartAConversation = ({ spaceData, isAfterDoneAnCOnversation }: {
         try {
             setLoading(true)
             await startAGuestConversation({
-                businessId: spaceData._id,
+                businessId: extensionData._id,
                 ...values
             }).then(async (res) => {
                 const roomId = res.data.roomId;
                 const user = res.data.user;
                 await appendFirstMessageFromChatFlow(roomId);
-                router.push(`/help-desk/${spaceData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
+                router.push(`/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
             })
         } catch (error) {
             console.error('Error in create a guest conversation', error)
