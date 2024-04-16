@@ -5,7 +5,6 @@ import {
 
 import { Country } from '@/types/country.type';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
-import toast from 'react-hot-toast';
 
 export async function getSupportLanguages() {
   const response = await fetch(`${NEXT_PUBLIC_URL}/api/languages`);
@@ -42,7 +41,7 @@ export async function translateText(text: string, from?: string, to?: string) {
     const json = await response.json();
     return json.data;
   } catch (error) {
-    toast.error("Content is too long, can't translate");
+    console.log('Error in translateText', error);
     return '';
   }
 }
