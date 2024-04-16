@@ -41,26 +41,27 @@ const SettingHeader = ({ space }: {
     const isExtensionEmpty = !space?.extension
     console.log(' SettingHeade extension', space?.extension)
     return (<>
-        <section className={cn('bg-white w-full p-10 flex flex-row gap-3', headerVariants({ modal: modalType }))}>
-            <Avatar src='/avatar.svg' alt='avt' className='w-24 h-24' />
-            <div className='flex flex-col gap-2'>
-                <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>
-                    {space?.name}
-                </Typography>
-                <Typography className='text-neutral-600'>
-                    {space?.members?.length || 0} Members
-                </Typography>
-                <div className='pt-1'>
-                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
-                </div>
-            </div>
+        <section className='w-full h-fit px-10 py-5 bg-white'>
+            <div className={cn('bg-white w-full p-3 rounded-[12px] bg-primary-100 flex flex-row gap-3', headerVariants({ modal: modalType }))}>
+                <Avatar src={space?.avatar || '/avatar.png'} alt='avt' className='w-24 h-24' />
+                <div className='flex flex-col gap-2'>
+                    <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>
+                        {space?.name}
+                    </Typography>
+                    <Typography className='text-neutral-600'>
+                        {space?.members?.length || 0} Members
+                    </Typography>
+                    <div className='pt-1'>
+                        <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
+                    </div>
+                </div> </div>
         </section>
-        <section className={(modalType) ? 'hidden' : 'w-full flex flex-col items-center'}>
+        <section className={(modalType) ? 'hidden' : 'w-full bg-white flex flex-col items-center'}>
             <Tabs defaultValue='members' className="w-full">
                 <div className='w-full bg-white transition-all duration-300'>
-                    <TabsList className='lg:max-w-fit'>
-                        <TabsTrigger className='lg:px-10' value="members">Members Management</TabsTrigger>
-                        <TabsTrigger className='lg:px-10' value="extension">Conversation Extension</TabsTrigger>
+                    <TabsList className='w-full px-10  flex flex-row justify-start'>
+                        <TabsTrigger className='lg:px-10 w-fit' value="members">Members Management</TabsTrigger>
+                        <TabsTrigger className='lg:px-10  w-fit' value="extension">Conversation Extension</TabsTrigger>
                     </TabsList>
                 </div>
                 <TabsContent value="members" className="p-4">
