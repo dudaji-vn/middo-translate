@@ -96,7 +96,6 @@ export default function CreateOrEditSpace({ open }: {
       })
       toast.success('Space created successfully.');
       router.push('/business');
-      router.refresh();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
