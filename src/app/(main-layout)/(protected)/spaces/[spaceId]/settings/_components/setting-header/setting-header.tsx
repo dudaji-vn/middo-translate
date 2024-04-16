@@ -15,6 +15,7 @@ import BusinessExtension from '../extenstion/business-extension'
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service'
 import { ROUTE_NAMES } from '@/configs/route-name'
 import { TSpace } from '../../../_components/business-spaces'
+import MembersList from '../members-list/members-list'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -37,7 +38,7 @@ const SettingHeader = ({ space }: {
     const router = useRouter();
     const params = useParams();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
-    const isExtensionEmpty = ! space?.extension
+    const isExtensionEmpty = !space?.extension
     console.log(' SettingHeade extension', space?.extension)
     return (<>
         <section className={cn('bg-white w-full p-10 flex flex-row gap-3', headerVariants({ modal: modalType }))}>
@@ -63,7 +64,7 @@ const SettingHeader = ({ space }: {
                     </TabsList>
                 </div>
                 <TabsContent value="members" className="p-4">
-                    updating...
+                    <MembersList members={space.members} />
                 </TabsContent>
                 <TabsContent value="extension" className="p-4 w-full flex flex-col items-center">
                     <div className={isExtensionEmpty ? 'w-full flex flex-col items-center gap-2' : 'hidden'}>
