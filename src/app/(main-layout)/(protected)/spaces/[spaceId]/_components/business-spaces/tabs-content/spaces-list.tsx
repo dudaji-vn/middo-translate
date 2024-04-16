@@ -41,37 +41,7 @@ function EmptyContent({ createProps }: {
     </div>
 }
 
-// TODO: Remove mock data
-const mockSpaces: TSpace[] = [
-    {
-        _id: '1',
-        name: 'Dudaji',
-        members: ['1', '2', '3'],
-        newMessagesCount: 0,
-        owner: {
-            _id: '65ee747a5fe03631e57731f3',
-            email: 'la@gmail.com',
-            name: 'La',
-            avatar: '/logo.png',
-            language: 'en',
-            status: 'active'
-        }
-    },
-    {
-        _id: '2',
-        name: 'Dudaji  VN',
-        members: ['1', '2', '3'],
-        newMessagesCount: 3,
-        owner: {
-            _id: '2',
-            email: 'a@gmail.c',
-            name: 'La22',
-            avatar: '/logo.png',
-            language: 'en',
-            status: 'active'
-        }
-    }
-]
+
 const SpacesList = ({ loading = false, spaces, tab }: {
     spaces: TSpace[],
     tab?: BusinessTabType
