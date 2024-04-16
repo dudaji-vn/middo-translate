@@ -12,7 +12,7 @@ const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ..
         slugs: string[];
     };
 }) => {
-    const businessData = await businessAPI.getBusinessInfomation(businessId);
+    const businessData = await businessAPI.getSpaceInformation(businessId);
     if (!businessData) {
         notFound();
     }

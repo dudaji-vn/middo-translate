@@ -11,7 +11,7 @@ const RatingPage = async ({ params }: {
         userId: string
     }
 }) => {
-    const businessData = await businessAPI.getBusinessInfomation(params.businessId);
+    const businessData = await businessAPI.getSpaceInformation(params.businessId);
     if (!businessData) {
         notFound();
     }

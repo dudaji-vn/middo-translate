@@ -9,16 +9,17 @@ import React, { ReactNode } from 'react'
 const BusinessConversationLayout = async ({ children, params }: {
     children: ReactNode,
     params: {
-        conversationType: EBusinessConversationKeys
+        conversationType: EBusinessConversationKeys,
+        spaceId: string
     }
 }) => {
     if (!Object.values(EBusinessConversationKeys).includes(params.conversationType)) {
         notFound();
     }
-    const businessData = await businessAPI.getMyBusiness()
+    const spaceData = await businessAPI.getSpaceInformation(params.spaceId);
     return (
         <div className="flex w-full">
-            <ChatSidebar businessData={businessData}>
+            <ChatSidebar spaceData={spaceData}>
                 <Inbox />
             </ChatSidebar>
             {children}

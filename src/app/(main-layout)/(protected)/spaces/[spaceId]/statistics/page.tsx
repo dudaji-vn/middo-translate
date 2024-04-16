@@ -9,7 +9,7 @@ export enum EStatisticErrors {
 }
 
 const StatisticPage = async () => {
-  const businessData = await businessAPI.getMyBusiness();
+  const businessData = await businessAPI.getSpaceById();
   if (!businessData) {
     notFound();
   }

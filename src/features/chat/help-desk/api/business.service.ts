@@ -101,10 +101,10 @@ class BusinessAPI {
       return undefined;
     }
   }
-  async getBusinessInfomation(businessId: string) {
+  async getSpaceInformation(businessId: string) {
     try {
       const response = await fetch(
-        `${this.basePath}/help-desk/business/${businessId}`,
+        `${this.basePath}/help-desk/spaces/${businessId}`,
         {
           method: 'GET',
           headers: {
@@ -123,26 +123,26 @@ class BusinessAPI {
       return undefined;
     }
   }
-  async getMyBusiness() {
-    const cookieStore = cookies();
-    try {
-      const response = await fetch(`${this.basePath}/help-desk/my-business`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
-        },
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      return data?.data;
-    } catch (error) {
-      console.error('Error in get My business info', error);
-      return undefined;
-    }
-  }
+  // async getSpaceById() {
+  //   const cookieStore = cookies();
+  //   try {
+  //     const response = await fetch(`${this.basePath}/help-desk/spaces`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error(data.message);
+  //     }
+  //     return data?.data;
+  //   } catch (error) {
+  //     console.error('Error in get Space data', error);
+  //     return undefined;
+  //   }
+  // }
   async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
     const cookieStore = cookies();
     try {
