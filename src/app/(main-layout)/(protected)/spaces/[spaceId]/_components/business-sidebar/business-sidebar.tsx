@@ -3,6 +3,7 @@
 import { Button, ButtonProps } from "@/components/actions"
 import { Typography } from "@/components/data-display"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetOverlay, SheetTitle, SheetTrigger } from "@/components/navigation"
+import { ROUTE_NAMES } from "@/configs/route-name"
 import { useAppStore } from "@/stores/app.store"
 import { useSidebarStore } from "@/stores/sidebar.store"
 import { cn } from "@/utils/cn"
@@ -98,7 +99,10 @@ const BusinessSidebar = () => {
         setExpandSidebar(false);
     }
     const onSelectedChange = (item: { title: string, icon: React.ReactNode }) => {
-        router.push('/business/' + item.title)
+        const spaceId = params?.spaceId;
+        if (!spaceId) return;
+        const nextPath = `${ROUTE_NAMES.SPACES}/${spaceId}/business/${item.title}`;
+        router.push(nextPath);
     }
     useEffect(() => {
         setOpenSidebar(!isMobile, false);

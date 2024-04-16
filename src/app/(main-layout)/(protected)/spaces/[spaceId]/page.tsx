@@ -1,5 +1,5 @@
-import BusinessSpaces from "./[spaceId]/business/_components/business-spaces";
-import CreateOrEditSpace from "./[spaceId]/business/_components/spaces-crud/create-or-edit-space";
+import BusinessSpaces from "./_components/business-spaces";
+import CreateOrEditSpace from "./_components/spaces-crud/create-or-edit-space";
 
 enum BusinessModalType {
   CreateSpace = 'create-space',

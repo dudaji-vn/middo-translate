@@ -1,4 +1,4 @@
-import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { Button } from '@/components/actions';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useBusinessExtensionStore } from '@/stores/extension.store';

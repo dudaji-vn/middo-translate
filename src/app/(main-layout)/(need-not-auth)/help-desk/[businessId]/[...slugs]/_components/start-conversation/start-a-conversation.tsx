@@ -1,6 +1,6 @@
 'use client'
 
-import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/sections/options'
+import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options'
 import { Button } from '@/components/actions'
 import { Avatar, Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'

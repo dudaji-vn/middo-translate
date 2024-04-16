@@ -19,9 +19,9 @@ import { isEmpty } from 'lodash';
 import { MessageEditor } from '@/components/message-editor';
 import { MediaUploadProvider } from '@/components/media-upload';
 import { Media } from '@/types';
-import { FlowNode } from '../../(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
-import { PreviewReceivedMessage } from '../../(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/sections/preview-received-message';
-import { DEFAULT_THEME } from '../../(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/sections/options';
+import { FlowNode } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { PreviewReceivedMessage } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/preview-received-message';
+import { DEFAULT_THEME } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';

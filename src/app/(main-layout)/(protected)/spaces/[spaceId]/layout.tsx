@@ -1,7 +1,7 @@
 import { FCMBackground } from '@/features/notification/components';
 import { Fragment } from 'react';
 import { Metadata } from 'next';
-import BusinessSidebar from './[spaceId]/business/_components/business-sidebar/business-sidebar';
+import BusinessSidebar from './_components/business-sidebar/business-sidebar';
 import { headers } from 'next/headers';
 import { cn } from '@/utils/cn';
 import { ROUTE_NAMES } from '@/configs/route-name';
