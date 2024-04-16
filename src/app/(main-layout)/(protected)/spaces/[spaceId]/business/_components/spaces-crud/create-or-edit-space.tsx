@@ -99,7 +99,7 @@ export default function CreateOrEditSpace({ open }: {
       })
       toast.success('Space created successfully.');
       queryClient.invalidateQueries([GET_SPACES_KEY, { type: 'all_spaces' }]);
-      router.push('/spces');
+      router.push('/spaces');
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }

@@ -16,7 +16,7 @@ import { User } from '@/features/users/types'
 import { useAuthStore } from '@/stores/auth.store'
 import Ping from './ping/ping'
 import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces'
-import loading from '../../loading'
+import loading from '../../../../loading'
 import { ROUTE_NAMES } from '@/configs/route-name'
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
