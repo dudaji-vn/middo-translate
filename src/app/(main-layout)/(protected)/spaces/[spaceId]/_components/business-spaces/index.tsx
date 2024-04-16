@@ -17,6 +17,7 @@ import { useAuthStore } from '@/stores/auth.store'
 import Ping from './ping/ping'
 import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces'
 import { ROUTE_NAMES } from '@/configs/route-name'
+import { Member } from '../spaces-crud/sections/members-columns'
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
@@ -30,7 +31,7 @@ export type TSpace = BaseEntity & {
     avatar?: string;
     backgroundImage?: string;
     description?: string;
-    members: string[];
+    members: Member[];
     newMessagesCount: number;
     owner: User;
     tag?: TSpaceTag

@@ -19,7 +19,7 @@ import {
 import { cn } from "@/utils/cn"
 import { Skeleton } from "./skeleton"
 
-interface DataTableProps<TData, TValue> {
+export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   cellProps?: React.TdHTMLAttributes<HTMLTableCellElement>
