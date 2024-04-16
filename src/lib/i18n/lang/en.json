@@ -105,6 +105,8 @@
   "HEADER": {
     "TRANSLATION": "Translation",
     "CONVERSATION": "Conversation",
+    "EXTENSION": "Extension",
+    "DOWNLOAD": "Download app",
     "SIGN_IN": "Sign In",
     "ACCOUNT_SETTING": "Account Settings",
     "MIDDO_EXTENSION": "Middo Extension",

@@ -9,6 +9,7 @@ import ExpandVideo from './components/expand-video';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemText from './components/video-item-text';
 import VideoItemTalk from './components/video-item-talk';
+import GetCaptionUser from './components/get-caption-user';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -62,6 +63,13 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           isShareScreen={participant?.isShareScreen}
         />
 
+          {/* Get Caption */}
+          <GetCaptionUser
+          name={participant?.user.name}
+          avatar={participant?.user.avatar}
+          language={participant?.user.language}
+          stream={streamVideo}
+          />
         {/* Mic Status */}
         {/* {!isTurnOnMic && 
         <div className='absolute bottom-0 right-0 w-6 h-6 rounded-full bg-neutral-50 p-1'>

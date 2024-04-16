@@ -1,7 +1,10 @@
 export default interface CaptionInterface {
-    user: any;
-    isMe: boolean;
-    contentEn: string;
+    user: {
+        name: string;
+        avatar: string;
+    };
     content: string;
+    contentEn: string;
     language: string;
 }
+
