@@ -32,6 +32,7 @@ import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
 import { actionItems, useMessageActions } from '../message-actions';
 import { MessageEmojiPicker } from '../message-emoji-picker';
+import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
@@ -151,7 +152,15 @@ const MobileWrapper = ({
         <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
         <LongPressMenu.Menu
           outsideComponent={
-            <div className={cn('w-full px-3 py-2', value ? '' : 'hidden')}>
+            <div className="w-full px-3 py-2">
+              <span
+                className={cn(
+                  'mb-1  mt-1 block text-xs font-light text-neutral-800 drop-shadow-2xl',
+                  isMe ? 'text-end' : 'pl-7 text-start',
+                )}
+              >
+                {formatTimeDisplay(message.createdAt!)}
+              </span>
               <div
                 className={cn(
                   'pointer-events-none relative w-fit flex-1',

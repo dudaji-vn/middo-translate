@@ -110,7 +110,7 @@ export const Menu = ({
   return (
     <Drawer open={isOpen} onOpenChange={onOpenChange} onClose={close}>
       <DrawerContent>
-        {outsideComponent && (
+        {outsideComponent && isOpen && (
           <div className="pointer-events-none absolute top-0 flex w-full -translate-y-full overflow-hidden">
             {outsideComponent}
           </div>
