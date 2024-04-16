@@ -16,7 +16,7 @@ const BusinessConversationLayout = async ({ children, params }: {
     if (!Object.values(EBusinessConversationKeys).includes(params.conversationType)) {
         notFound();
     }
-    const spaceData = await businessAPI.getSpaceInformation(params.spaceId);
+    const spaceData = await businessAPI.getExtension(params.spaceId);
     return (
         <div className="flex w-full">
             <ChatSidebar spaceData={spaceData}>

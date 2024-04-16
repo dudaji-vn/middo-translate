@@ -17,7 +17,8 @@ const StatisticPage = async ({
     spaceId: string;
   }
 }) => {
-  const spaceData = await businessAPI.getSpaceInformation(spaceId);
+  const spaceData = await businessAPI.getExtension(spaceId);
+  console.log('statiscticData ==>', spaceData)
   if (!spaceData) {
     notFound();
   }
