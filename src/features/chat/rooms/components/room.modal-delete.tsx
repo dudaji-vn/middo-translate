@@ -32,7 +32,7 @@ export const RoomModalDelete = (props: RoomModalDeleteProps) => {
         await roomApi.deleteAllMessages(props.id);
         props.onClosed?.();
         if (isOnBusinessChat && businessRoomId === props.id)
-          router.push(`/business/${businessConversationType}`);
+          router.push(`/${businessConversationType}`);
         return;
       }
       await mutateAsync(props.id);

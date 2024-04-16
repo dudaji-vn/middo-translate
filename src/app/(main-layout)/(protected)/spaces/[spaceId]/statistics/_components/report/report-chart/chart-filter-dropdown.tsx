@@ -43,14 +43,14 @@ const generateHref = (type: AnalyticsType, custom: { fromDate: string, toDate: s
         return null;
     }
     if (type === 'custom' && custom.fromDate && !custom.toDate) {
-        return `/business/statistics?${new URLSearchParams({
+        return `/statistics?${new URLSearchParams({
             type: type || defaultOption,
             fromDate: custom.fromDate,
             toDate: custom.toDate,
             search: search || ''
         }).toString()}`
     } else if (type !== 'custom') {
-        return `/business/statistics?${new URLSearchParams({
+        return `/statistics?${new URLSearchParams({
             type,
             search: search || ''
         }).toString()}`
@@ -86,7 +86,7 @@ const ChartFilterDropdown = ({
         current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
         current.set('toDate', format(date?.to || new Date(), 'yyyy-MM-dd'));
         current.set('type', 'custom');
-        const href = `/business/statistics?${current.toString()}`
+        const href = `/statistics?${current.toString()}`
         router.push(href)
         setOpenDatePickerModal(false)
     }

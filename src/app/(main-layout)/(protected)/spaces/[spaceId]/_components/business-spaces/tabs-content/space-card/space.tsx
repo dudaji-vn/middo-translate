@@ -48,7 +48,7 @@ const Space = ({
       key={_id}
       className={cn("gap-2 relative p-3 space-y-3 border-primary-200 bg-primary-100 min-w-[320px] border rounded-[12px] border-solid hover:border-primary-500-main cursor-pointer transition-all duration-300 ease-in-out")}
       onClick={() => {
-        router.push(`${ROUTE_NAMES.SPACES}/${_id}/business/settings`)
+        router.push(`${ROUTE_NAMES.SPACES}/${_id}/settings`)
       }}
       {...props}
     >

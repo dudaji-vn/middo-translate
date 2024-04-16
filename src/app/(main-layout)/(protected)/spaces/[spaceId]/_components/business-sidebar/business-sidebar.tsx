@@ -101,7 +101,7 @@ const BusinessSidebar = () => {
     const onSelectedChange = (item: { title: string, icon: React.ReactNode }) => {
         const spaceId = params?.spaceId;
         if (!spaceId) return;
-        const nextPath = `${ROUTE_NAMES.SPACES}/${spaceId}/business/${item.title}`;
+        const nextPath = `${ROUTE_NAMES.SPACES}/${spaceId}/${item.title}`;
         router.push(nextPath);
     }
     useEffect(() => {
