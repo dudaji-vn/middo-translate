@@ -95,7 +95,8 @@ export default function CreateOrEditSpace({ open }: {
         members: formCreateSpace.watch('members')
       })
       toast.success('Space created successfully.');
-      router.push('/business')
+      router.push('/business');
+      router.refresh();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }

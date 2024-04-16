@@ -14,8 +14,9 @@ import { TabsContentProps } from '@radix-ui/react-tabs'
 import { BaseEntity } from '@/types'
 import { User } from '@/features/users/types'
 import { useAuthStore } from '@/stores/auth.store'
-import Ping from './tabs-content/ping/ping'
+import Ping from './ping/ping'
 import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces'
+import loading from '../../loading'
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
@@ -69,6 +70,7 @@ const BusinessSpaces = () => {
     }, [searchParams])
 
     const router = useRouter();
+
     return (
         <>
             <section className={modal ? 'hidden' : ''} >
@@ -116,7 +118,8 @@ const BusinessSpaces = () => {
                     {tabItems.map((item) => (
                         <TabsContent key={item.value} value={item.value} {...item.componentProps} className={cn('data-[state=active]:h-[calc(100vh-240px)] data-[state=active]:min-h-[400px] overflow-h-auto', item.componentProps?.className)}>
                             <SpacesList tab={item.value}
-                            spaces={spaces_list}
+                                spaces={spaces_list}
+                                loading={isLoading}
                             />
                         </TabsContent>
                     ))}

@@ -7,9 +7,10 @@ import React from 'react'
 import { BusinessTabType, TSpace, TSpaceTag } from '../business-spaces'
 import Space from './space-card/space'
 import { useAuthStore } from '@/stores/auth.store'
+import SpacesListSkeletons from '../skeletons/spaces-list-skeletons'
 
 function EmptyContent({ createProps }: {
-    createProps: Omit<LinkProps, 'href'>
+    createProps: Omit<LinkProps, 'href'> & React.HTMLAttributes<HTMLAnchorElement>
 }) {
     return <div className='w-full h-full flex gap-3 flex-col items-center justify-center'>
         <Image
@@ -70,21 +71,22 @@ const mockSpaces: TSpace[] = [
         }
     }
 ]
-const SpacesList = ({ spaces, tab }: {
+const SpacesList = ({ loading = false, spaces, tab }: {
     spaces: TSpace[],
     tab?: BusinessTabType
+    loading?: boolean
 }) => {
-    console.log('spaces', spaces)
     const currentUser = useAuthStore((s) => s.user);
-    if (!spaces || spaces.length === 0) {
+    if (!loading && (!spaces || spaces.length === 0)) {
         return <EmptyContent createProps={{
-            className: 'hidden'
+            className: tab === 'joined_spaces' ? 'hidden' : ''
         }} />
     }
 
     return (
         <div className='px-[5vw] py-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4'>
-            {spaces.map((space, index) => {
+            {loading && <SpacesListSkeletons count={3} />}
+            {spaces?.map((space, index) => {
                 console.log('space', space._id)
                 return (
                     <Space key={space._id} data={space} tag={currentUser?._id === space.owner?._id ? 'my' : 'joined'} />

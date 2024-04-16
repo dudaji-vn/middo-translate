@@ -6,6 +6,7 @@ export const createSpace = (data: {
   avatar?: string;
   backgroundImage?: string;
   members?: Member[];
+  spaceId?: string;
 }) => {
   return put('/help-desk/create-or-edit-space', data);
 };
