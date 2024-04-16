@@ -9,8 +9,8 @@ export enum EStatisticErrors {
 }
 
 const StatisticPage = async () => {
-  const businessData = await businessAPI.getSpaceById();
-  if (!businessData) {
+  const spaceData = await businessAPI.getSpaceById();
+  if (!spaceData) {
     notFound();
   }
   return <div className='md:hidden flex flex-row gap-2 items-center' >

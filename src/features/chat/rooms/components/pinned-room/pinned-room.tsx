@@ -12,18 +12,18 @@ export interface PinnedRoomProps {
 }
 
 export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
-  const { businessData } = useBusinessExtensionStore();
+  const { businessExtension } = useBusinessExtensionStore();
   const { isBusiness } = useBusinessNavigationData();
   const filteredRooms = useMemo(() => {
     if (!rooms) return [];
     const showHelpDeskRooms =
-      isBusiness && businessData?._id && type === 'help-desk';
+      isBusiness && businessExtension?._id && type === 'help-desk';
     return rooms.filter((room) => {
       if (showHelpDeskRooms) return room.isHelpDesk;
       if (type === 'all') return !room.isHelpDesk;
       if (type === 'group') return room.isGroup;
     });
-  }, [rooms, type, businessData, isBusiness]);
+  }, [rooms, type, businessExtension, isBusiness]);
 
   if (!filteredRooms || !filteredRooms.length) return null;
   return (
@@ -34,7 +34,7 @@ export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
           data={room}
           isActive={currentRoomId === room._id}
           currentRoomId={currentRoomId as string}
-          businessId={businessData?._id}
+          businessId={businessExtension?._id}
         />
       ))}
       <div className="my-1 border-t"></div>

@@ -11,8 +11,8 @@ const RatingPage = async ({ params }: {
         userId: string
     }
 }) => {
-    const businessData = await businessAPI.getSpaceInformation(params.businessId);
-    if (!businessData) {
+    const spaceData = await businessAPI.getSpaceInformation(params.businessId);
+    if (!spaceData) {
         notFound();
     }
     async function rateConversation(star: any) {
@@ -28,7 +28,7 @@ const RatingPage = async ({ params }: {
         })
     }
     return (
-        <StarRating onRate={rateConversation} businessData={businessData} />
+        <StarRating onRate={rateConversation} spaceData={spaceData} />
     )
 }
 

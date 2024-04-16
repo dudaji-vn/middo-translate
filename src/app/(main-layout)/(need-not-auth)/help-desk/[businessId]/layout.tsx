@@ -12,11 +12,11 @@ const HelpDeskConversationLayout = async ({ children, params: { businessId } }: 
     }
 }) => {
 
-    const businessData = await businessAPI.getSpaceInformation(businessId);
-    if (!businessData) {
+    const spaceData = await businessAPI.getSpaceInformation(businessId);
+    if (!spaceData) {
         notFound();
     }
-    const theme = extentionsCustomThemeOptions.find((item) => item.name === businessData.color || item.hex === businessData.color) || extentionsCustomThemeOptions[0];
+    const theme = extentionsCustomThemeOptions.find((item) => item.name === spaceData.color || item.hex === spaceData.color) || extentionsCustomThemeOptions[0];
 
     return (
         <div className={cn(theme.name, 'h-main-container-height')}>

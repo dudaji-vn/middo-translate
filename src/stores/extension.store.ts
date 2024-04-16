@@ -5,7 +5,7 @@ import { Edge } from 'reactflow';
 import { create } from 'zustand';
 
 export type BusinessExtensionState = {
-  businessData: TBusinessExtensionData | null;
+  businessExtension: TBusinessExtensionData | null;
   room?: Room | null;
   chatFlow?: {
     nodes: FlowNode[];
@@ -20,7 +20,7 @@ export type BusinessExtensionState = {
 
 export const useBusinessExtensionStore = create<BusinessExtensionState>()(
   (set) => ({
-    businessData: null,
+    businessExtension: null,
     room: null,
     chatFlow: null,
     roomSendingState: undefined,
@@ -30,6 +30,6 @@ export const useBusinessExtensionStore = create<BusinessExtensionState>()(
     setChatFlow: (chatFlow: { nodes: FlowNode[]; edges: Edge[] }) =>
       set(() => ({ chatFlow })),
     setBusinessExtension: (data: TBusinessExtensionData) =>
-      set(() => ({ businessData: data })),
+      set(() => ({ businessExtension: data })),
   }),
 );

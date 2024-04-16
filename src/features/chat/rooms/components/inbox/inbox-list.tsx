@@ -43,7 +43,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
     const { inboxStatus: status, businessRoomId } = useBusinessNavigationData();
-    const { businessData } = useBusinessExtensionStore();
+    const { businessExtension } = useBusinessExtensionStore();
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
@@ -142,7 +142,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   data={room}
                   isActive={currentRoomId === room._id}
                   currentRoomId={currentRoomId as string}
-                  businessId={businessData?._id}
+                  businessId={businessExtension?._id}
                 />
               );
             })}
