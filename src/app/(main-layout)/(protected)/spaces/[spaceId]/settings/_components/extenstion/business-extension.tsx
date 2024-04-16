@@ -13,9 +13,10 @@ import moment from 'moment';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { deleteExtension } from '@/services/extension.service';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { Card } from '@/components/ui/card';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,6 +27,7 @@ export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElem
 const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { data?: TBusinessExtensionData } & { name: string }>(
   ({ data, name, ...props }, ref) => {
     const router = useRouter();
+    const params = useParams();
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const onDeleteExtension = async () => {
       deleteExtension().then(() => {
@@ -63,7 +65,8 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
                   variant="ghost"
                   color="default"
                   onClick={() => {
-                    router.push('/business/settings?modal=edit-extension')
+                    if (params?.spaceId)
+                      router.push(`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings`);
                   }}
                 >
                   <PenIcon />

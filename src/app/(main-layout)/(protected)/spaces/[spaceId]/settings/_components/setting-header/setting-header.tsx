@@ -7,12 +7,13 @@ import { cva } from 'class-variance-authority'
 import { Pen, Plus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/navigation';
 
 import React from 'react'
 import BusinessExtension from '../extenstion/business-extension'
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service'
+import { ROUTE_NAMES } from '@/configs/route-name'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -28,6 +29,7 @@ const headerVariants = cva('w-full flex flex-row', {
 const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
     const searchParams = useSearchParams();
     const router = useRouter();
+    const params = useParams();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
     const isEmpty = !data;
     return (<>
@@ -37,9 +39,7 @@ const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
                 <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>DUDAJI Vietnam</Typography>
                 <Typography className='text-neutral-600'>10 member</Typography>
                 <div className='pt-1'>
-                    {/* <Link href='/business/settings?modal=edit-company'> */}
-                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
-                    {/* </Link> */}
+                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>   
                 </div>
             </div>
         </section>
@@ -64,7 +64,7 @@ const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
                             Create a conversation extension with the help of ready-made theme or define a unique one on your own
                         </Typography>
                     </div>
-                    <Link href='/business/settings?modal=create-extension' className={isEmpty ? '' : 'hidden'}>
+                    <Link href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`} className={isEmpty ? '' : 'hidden'}>
                         <Button variant={'default'} color={'primary'} shape={'square'} className={'mt-4 w-fit mx-auto'} >
                             <Plus className="h-4 w-4" />
                             <Typography className="ml-2 text-white">
