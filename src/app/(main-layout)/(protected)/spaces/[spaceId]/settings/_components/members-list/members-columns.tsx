@@ -4,7 +4,7 @@ import { Button } from "@/components/actions";
 import { Typography } from "@/components/data-display";
 import { cn } from "@/utils/cn";
 import { ColumnDef } from "@tanstack/react-table"
-import { RotateCcw, Trash2 } from "lucide-react";
+import { Grip, GripVertical, RotateCcw, Trash2 } from "lucide-react";
 import { ESpaceMemberRole } from "../../../_components/spaces-crud/sections/invite-section";
 
 export type Member = {
@@ -13,20 +13,33 @@ export type Member = {
     status?: 'joined' | 'invited';
 }
 
-export const membersColumns = ({ onDelete, onResendInvitation }: {
+export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
     onDelete: (member: Member) => void,
-    onResendInvitation: (member: Member) => void
+    onResendInvitation: (member: Member) => void,
+    isOwner: (memberId: string) => boolean
 }) => [
-
+    {
+        accessorKey: "_id",
+        header: "",
+        cell(props) {
+            return <GripVertical className="text-neutral-500" />
+        },
+    },
     {
         accessorKey: "email",
         header: "Email",
+        cell(props) {
+            return <div className="flex flex-row items-center  w-[240px] gap-6">
+                <Typography className="text-neutral-800">{props.getValue() as string}</Typography>
+                {isOwner(props.row.original.email) && <Typography className="text-neutral-500">(you)</Typography>}
+            </div>
+        },
     },
     {
         accessorKey: "status",
         header: "Status",
         cell(props) {
-            return <div className="flex flex-row items-center  gap-6">
+            return <div className="flex flex-row items-center  w-[120px] gap-6">
                 <Typography className={cn('text-gray-500 capitalize',
                     props.getValue() === 'joined' && 'text-primary-500-main',
                     props.getValue() === 'invited' && 'text-success-500-main'

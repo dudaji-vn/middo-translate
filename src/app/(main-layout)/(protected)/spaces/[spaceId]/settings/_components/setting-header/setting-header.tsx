@@ -64,7 +64,10 @@ const SettingHeader = ({ space }: {
                     </TabsList>
                 </div>
                 <TabsContent value="members" className="p-4">
-                    <MembersList members={space.members} />
+                    <MembersList
+                        members={space.members}
+                        owner={space.owner}
+                    />
                 </TabsContent>
                 <TabsContent value="extension" className="p-4 w-full flex flex-col items-center">
                     <div className={isExtensionEmpty ? 'w-full flex flex-col items-center gap-2' : 'hidden'}>
