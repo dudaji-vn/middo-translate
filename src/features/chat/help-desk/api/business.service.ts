@@ -103,7 +103,7 @@ class BusinessAPI {
   async getExtensionByBusinessId(businessId: string) {
     try {
       const response = await fetch(
-        `${this.basePath}/help-desk/business/${businessId}`,
+        `${this.basePath}/help-desk/extension/${businessId}`,
         {
           method: 'GET',
           headers: {
