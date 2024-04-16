@@ -1,4 +1,5 @@
-import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options';
+
+import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/sections/options';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { cn } from '@/utils/cn';
 import { notFound } from 'next/navigation';

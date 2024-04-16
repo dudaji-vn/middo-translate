@@ -9,6 +9,8 @@ import { Avatar, Typography } from '@/components/data-display';
 import { Circle, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
+import { useRouter } from 'next/navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
   variants: {
@@ -40,11 +42,13 @@ const Space = ({
 } & React.HTMLAttributes<HTMLDivElement>
 ) => {
   const hasNotification = newMessagesCount > 0;
+  const router = useRouter()
   return (
     <Card
       key={_id}
       className={cn("gap-2 relative p-3 space-y-3 border-primary-200 bg-primary-100 min-w-[320px] border rounded-[12px] border-solid hover:border-primary-500-main cursor-pointer transition-all duration-300 ease-in-out")}
       onClick={() => {
+        router.push(`${ROUTE_NAMES.SPACES}/${_id}/business/settings`)
       }}
       {...props}
     >

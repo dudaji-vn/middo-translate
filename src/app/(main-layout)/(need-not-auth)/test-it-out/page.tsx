@@ -8,13 +8,10 @@ import { cn } from '@/utils/cn';
 import { MessagesSquare, Minus } from 'lucide-react';
 import Image from 'next/image';
 import { Triangle } from '@/components/icons';
-import { PreviewReceivedMessage } from '../../(protected)/business/settings/_components/extension-creation/sections/preview-received-message';
-import { DEFAULT_THEME } from '../../(protected)/business/settings/_components/extension-creation/sections/options';
 import { TimeDisplay } from '@/features/chat/messages/components/time-display';
 import { FakeMessage } from './_components/fake-message';
 import { Message } from '@/features/chat/messages/types';
 import { User } from '@/features/users/types';
-import { FlowNode } from '../../(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { Edge } from 'reactflow';
 import FakeTyping from './_components/fake-typing';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
@@ -22,6 +19,9 @@ import { isEmpty } from 'lodash';
 import { MessageEditor } from '@/components/message-editor';
 import { MediaUploadProvider } from '@/components/media-upload';
 import { Media } from '@/types';
+import { FlowNode } from '../../(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { PreviewReceivedMessage } from '../../(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/sections/preview-received-message';
+import { DEFAULT_THEME } from '../../(protected)/spaces/[spaceId]/business/settings/_components/extension-creation/sections/options';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';
