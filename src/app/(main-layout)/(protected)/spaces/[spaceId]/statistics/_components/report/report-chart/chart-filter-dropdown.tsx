@@ -4,11 +4,12 @@ import { Button } from '@/components/actions'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/data-display'
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal'
 import { Calendar } from '@/components/ui/calendar'
+import { ROUTE_NAMES } from '@/configs/route-name'
 import { cn } from '@/utils/cn'
 import { addDays, format } from 'date-fns'
 import { CalendarIcon, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
 import { DateRange } from 'react-day-picker'
 import { useTranslation } from 'react-i18next'
@@ -73,8 +74,8 @@ const ChartFilterDropdown = ({
     const [openDropdown, setOpenDropdown] = useState(false);
     const [openDatePickerModal, setOpenDatePickerModal] = useState(false);
     const router = useRouter()
-
-    const {t} = useTranslation('common')
+    const params = useParams();
+    const { t } = useTranslation('common')
     const [date, setDate] = React.useState<DateRange | undefined>({
         from: fromDate ? new Date(fromDate) : addDays(new Date(), -7),
         to: toDate ? new Date(toDate) : new Date(),
@@ -117,7 +118,7 @@ const ChartFilterDropdown = ({
                 onClick={() => setOpenDropdown(false)}
             >
                 {Object.entries(filterOptions).map(([key, value]) => {
-                    const href = generateHref(key as AnalyticsType, { fromDate, toDate }, search) || '#';
+                    const href = `${ROUTE_NAMES.SPACES}/${params?.spaceId}` + generateHref(key as AnalyticsType, { fromDate, toDate }, search) || '#';
                     if (key === 'custom')
                         return <DropdownMenuItem className=" rounded-none  py-2 text-neutral-700 hover:bg-neutral-100 hover:text-neutral-500  outline-none" onClick={() => {
                             setOpenDatePickerModal(true)

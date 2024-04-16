@@ -103,7 +103,7 @@ const Report = ({ data }: { data: StatisticData }) => {
     const handleChartKeyChange = (key: TChartKey) => {
         setChartKey(key);
     }
-console.log('data', data)
+
     return (
         <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-4">

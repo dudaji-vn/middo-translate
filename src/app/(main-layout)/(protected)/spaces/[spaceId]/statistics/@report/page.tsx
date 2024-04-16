@@ -4,6 +4,27 @@ import { StatisticData } from '@/types/business-statistic.type'
 import { businessAPI } from '@/features/chat/help-desk/api/business.service'
 import { AnalyticsOptions } from '../_components/report/report-chart/chart-filter-dropdown'
 
+const emptyStatisticData: StatisticData = {
+  client: {
+    count: 0,
+    rate: 0
+  },
+  completedConversation: {
+    count: 0,
+    rate: 0
+  },
+  responseChat: {
+    averageTime: '0',
+    rate: 0
+  },
+  averageRating: 0,
+  chart: {
+    client: [],
+    completedConversation: [],
+    responseChat: [],
+    averageRating: []
+  }
+}
 
 const StatiscticReport = async ({ searchParams }: {
   searchParams: { type: AnalyticsOptions['type'], fromDate: string, toDate: string, search: string }
@@ -11,11 +32,10 @@ const StatiscticReport = async ({ searchParams }: {
   const { type, fromDate, toDate } = searchParams;
   const params = type === 'custom' ? { custom: { fromDate, toDate, }, type } : { type };
   const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
-  if (!statiscticData) {
-    throw new Error("NO_ANALYSTIC_DATA");
-  }
+
+  console.log('statisticData :>>>>', statiscticData)
   return (
-    <Report data={statiscticData} />
+    <Report data={statiscticData || emptyStatisticData} />
   )
 }
 
