@@ -5,7 +5,7 @@ import { createExtensionSchema } from '@/configs/yup-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -60,6 +60,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
   const isClient = useClient()
   const [tabValue, setTabValue] = React.useState<number>(0);
   const pathname = usePathname() || '';
+  const params = useParams();
   const currentUser = useAuthStore((s) => s.user);
   const router = useRouter();
 
@@ -123,13 +124,13 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
     const translatedFirstMess = await translateWithDetection(values.custom.firstMessage, 'en');
     const firstMessageEnglish = typeof translatedFirstMess === 'string' ? translatedFirstMess : translatedFirstMess?.translatedText;
 
-    console.log('values ==> submit', values)
     const chatFlow = watch('custom.chatFlow');
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
+        spaceId: params?.spaceId,
         // chatFlow: watch('custom.chatFlow'),
         ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
       };

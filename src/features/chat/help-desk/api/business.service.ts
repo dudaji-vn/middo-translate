@@ -52,11 +52,13 @@ class BusinessAPI {
   constructor(basePath: string = process.env.NEXT_PUBLIC_API_URL + '/api') {
     this.basePath = basePath;
   }
-  async getExtension(): Promise<TBusinessExtensionData | undefined> {
+  async getExtension(
+    spaceId: string,
+  ): Promise<TBusinessExtensionData | undefined> {
     const cookieStore = cookies();
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/my-business',
+        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/spaces/' + spaceId,
         {
           method: 'GET',
           headers: {

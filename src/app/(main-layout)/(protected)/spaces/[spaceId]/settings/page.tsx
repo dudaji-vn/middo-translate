@@ -9,10 +9,15 @@ import SettingHeader from './_components/setting-header/setting-header';
 import CreateExtension from './_components/extension-creation/create-extension';
 
 
-const SettingPage = async ({ searchParams }: {
-    searchParams: Record<string, string>
+const SettingPage = async ({ searchParams, params }: {
+    searchParams: Record<string, string>,
+    params: {
+        spaceId: string
+    
+    }
+
 }) => {
-    const businessExtension = await businessAPI.getExtension();
+    const businessExtension = await businessAPI.getExtension(params.spaceId);
     const modatType = searchParams.modal;
     // console.log('BusinessExtension', businessExtension)
     return (

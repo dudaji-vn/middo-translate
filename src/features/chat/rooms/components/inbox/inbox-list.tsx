@@ -23,16 +23,6 @@ import { PinnedRoom } from '../pinned-room';
 import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/data-display/drawer';
 
 interface InboxListProps {
   type: InboxType;
@@ -42,7 +32,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
   ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
-    const { inboxStatus: status, businessRoomId } = useBusinessNavigationData();
+    const { inboxStatus: status, businessRoomId, isBusiness } = useBusinessNavigationData();
     const { businessExtension } = useBusinessExtensionStore();
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
@@ -103,7 +93,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     if (!currentUser) return null;
 
-    if (!rooms.length && !isLoading && !pinnedRooms?.length) {
+    if (!rooms.length && !isLoading && !pinnedRooms?.length ) {
       return <EmptyInbox type={type} />;
     }
 
