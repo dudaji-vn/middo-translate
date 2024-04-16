@@ -125,6 +125,10 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
     const firstMessageEnglish = typeof translatedFirstMess === 'string' ? translatedFirstMess : translatedFirstMess?.translatedText;
 
     const chatFlow = watch('custom.chatFlow');
+    const spaceId = params?.spaceId;
+    if (!spaceId) {
+      return;
+    };
     try {
       const payload = {
         domains: values.domains,

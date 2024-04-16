@@ -6,9 +6,9 @@ export const createExtension = (data: {
   color: string;
   language: string;
   firstMessage: string;
-  spaceId?: string;
+  spaceId: string;
 }) => {
-  return put('/help-desk/create-or-edit-business', data);
+  return put('/help-desk/create-or-edit-extension', data);
 };
 
 export const deleteExtension = () => {
