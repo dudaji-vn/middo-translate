@@ -1,13 +1,12 @@
+'use client';
+
+import { BusinessTabType } from '@/app/(main-layout)/(protected)/business/_components/business-header/business-spaces';
 import { axios } from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 
 export const GET_SPACES_KEY = 'get-spaces';
 
-export const useGetSpaces = ({
-  type,
-}: {
-  type?: 'joined-spaces' | undefined | null;
-}) => {
+export const useGetSpaces = ({ type }: { type?: BusinessTabType }) => {
   return useQuery({
     queryKey: [GET_SPACES_KEY, { type }],
     queryFn: async () => {

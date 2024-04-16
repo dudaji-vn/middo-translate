@@ -15,6 +15,7 @@ import { BaseEntity } from '@/types'
 import { User } from '@/features/users/types'
 import { useAuthStore } from '@/stores/auth.store'
 import Ping from './tabs-content/ping/ping'
+import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces'
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
@@ -54,6 +55,13 @@ const BusinessSpaces = () => {
     const [tab, setTab] = React.useState<BusinessTabType>('all_spaces');
     const currentUser = useAuthStore(s => s.user);
     const searchParams = useSearchParams();
+    const {
+        data: spaces_list,
+        isLoading,
+        isError
+    } = useGetSpaces({
+        type: tab
+    });
     const modal = useMemo(() => {
         const modal = searchParams?.get('modal')
         if (modal === 'create-space') return modal;
@@ -92,7 +100,7 @@ const BusinessSpaces = () => {
                             size={'xs'}
                             className='relative'
                         >
-                            <Ping  className='absolute -top-[2px] -right-[8px]' size={12}/>
+                            <Ping className='absolute -top-[2px] -right-[8px]' size={12} />
                             <Bell className='h-4 w-4' />
                         </Button.Icon>
                     </div>
@@ -108,7 +116,7 @@ const BusinessSpaces = () => {
                     {tabItems.map((item) => (
                         <TabsContent key={item.value} value={item.value} {...item.componentProps} className={cn('data-[state=active]:h-[calc(100vh-240px)] data-[state=active]:min-h-[400px] overflow-h-auto', item.componentProps?.className)}>
                             <SpacesList tab={item.value}
-                            spaces={[]}
+                            spaces={spaces_list}
                             />
                         </TabsContent>
                     ))}
