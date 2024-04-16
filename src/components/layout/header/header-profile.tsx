@@ -40,7 +40,7 @@ const HeaderProfile = ({
   };
   return (
     <div
-      className={cn('flex flex-1 items-center justify-end', className)}
+      className={cn('flex items-center justify-end', className)}
       {...props}
     >
       {isAuthentication && user ? (

@@ -8,8 +8,6 @@ import { translateText } from '@/services/languages.service';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useVideoCallStore } from '../../store/video-call.store';
-import { useMyVideoCallStore } from '../../store/me.store';
-import useExtractTextFromStream from '../../hooks/use-extract-text-from-stream';
 import CaptionInterface from '../../interfaces/caption.interface';
 import { useTranslation } from 'react-i18next';
 import useSpeechToTextCaption from '../../hooks/use-speech-to-text-caption';

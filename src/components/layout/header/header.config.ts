@@ -13,6 +13,14 @@ const items: NavItem[] = [
     name: 'HEADER.CONVERSATION',
     href: ROUTE_NAMES.ONLINE_CONVERSATION,
   },
+  {
+    name: 'HEADER.EXTENSION',
+    href: ROUTE_NAMES.EXTENSION,
+  },
+  {
+    name: 'HEADER.DOWNLOAD',
+    href: ROUTE_NAMES.LANDING_PAGE,
+  },
 ];
 const landingPageItems: NavItem[] = [
   {
