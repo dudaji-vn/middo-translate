@@ -6,12 +6,11 @@ export const createExtension = (data: {
   color: string;
   language: string;
   firstMessage: string;
+  spaceId?: string;
 }) => {
   return put('/help-desk/create-or-edit-business', data);
 };
-export const getExtension = () => {
-  return get('/help-desk/my-business');
-};
+
 export const deleteExtension = () => {
   return axios.delete('/help-desk');
 };

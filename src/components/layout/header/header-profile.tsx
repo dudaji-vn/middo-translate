@@ -74,7 +74,7 @@ const HeaderProfile = ({
               </DropdownMenuItem>
             </Link>
             {!NEXT_PUBLIC_URL.includes('https://middo.app') && (
-              <Link href={ROUTE_NAMES.BUSINESS_SPACE}>
+              <Link href={ROUTE_NAMES.SPACES}>
                 <DropdownMenuItem className="flex items-center">
                   <Blocks className="mr-2 size-4" />
                   <span>{t('HEADER.MIDDO_EXTENSION')}</span>

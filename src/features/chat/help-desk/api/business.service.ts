@@ -1,4 +1,4 @@
-import { FlowNode } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { User } from '@/features/users/types';
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { cookies } from 'next/headers';
@@ -52,11 +52,13 @@ class BusinessAPI {
   constructor(basePath: string = process.env.NEXT_PUBLIC_API_URL + '/api') {
     this.basePath = basePath;
   }
-  async getExtension(): Promise<TBusinessExtensionData | undefined> {
+  async getExtension(
+    spaceId: string,
+  ): Promise<TBusinessExtensionData | undefined> {
     const cookieStore = cookies();
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/my-business',
+        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/spaces/' + spaceId,
         {
           method: 'GET',
           headers: {
@@ -97,14 +99,14 @@ class BusinessAPI {
       }
       return data?.data;
     } catch (error) {
-      console.error('Error in get business info :>>', error);
+      console.error('Error in get anonymous chat room', error);
       return undefined;
     }
   }
-  async getBusinessInfomation(businessId: string) {
+  async getSpaceInformation(businessId: string) {
     try {
       const response = await fetch(
-        `${this.basePath}/help-desk/business/${businessId}`,
+        `${this.basePath}/help-desk/spaces/${businessId}`,
         {
           method: 'GET',
           headers: {
@@ -123,26 +125,26 @@ class BusinessAPI {
       return undefined;
     }
   }
-  async getMyBusiness() {
-    const cookieStore = cookies();
-    try {
-      const response = await fetch(`${this.basePath}/help-desk/my-business`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
-        },
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      return data?.data;
-    } catch (error) {
-      console.error('Error in get My business info', error);
-      return undefined;
-    }
-  }
+  // async getSpaceById() {
+  //   const cookieStore = cookies();
+  //   try {
+  //     const response = await fetch(`${this.basePath}/help-desk/spaces`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
+  //       },
+  //     });
+  //     const data = await response.json();
+  //     if (!response.ok) {
+  //       throw new Error(data.message);
+  //     }
+  //     return data?.data;
+  //   } catch (error) {
+  //     console.error('Error in get Space data', error);
+  //     return undefined;
+  //   }
+  // }
   async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
     const cookieStore = cookies();
     try {

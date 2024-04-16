@@ -1,6 +1,6 @@
 'use client'
 
-import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options'
+import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options'
 import { Button } from '@/components/actions'
 import { Avatar, Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'
@@ -36,14 +36,14 @@ export type TStartAConversation = {
     email: string
 }
 
-const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
+const StartAConversation = ({ spaceData, isAfterDoneAnCOnversation }: {
     isAfterDoneAnCOnversation?: boolean
-    businessData: TBusinessExtensionData
+    spaceData: TBusinessExtensionData
 }) => {
     const router = useRouter()
     const isClient = useClient();
-    const { user: owner } = businessData || {};
-    const theme = extentionsCustomThemeOptions.find((item) => item.name === businessData.color || item.hex === businessData.color) || extentionsCustomThemeOptions[0];
+    const { user: owner } = spaceData || {};
+    const theme = extentionsCustomThemeOptions.find((item) => item.name === spaceData.color || item.hex === spaceData.color) || extentionsCustomThemeOptions[0];
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const showForm = () => {
@@ -65,7 +65,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
         watch,
         formState: { isSubmitting, errors },
     } = methods;
-    const chatFlow = businessData.chatFlow;
+    const chatFlow = spaceData.chatFlow;
     const appendFirstMessageFromChatFlow = async (roomId: Room['_id']) => {
         if (!chatFlow) return;
         const { nodes, edges } = chatFlow;
@@ -99,13 +99,13 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
         try {
             setLoading(true)
             await startAGuestConversation({
-                businessId: businessData._id,
+                businessId: spaceData._id,
                 ...values
             }).then(async (res) => {
                 const roomId = res.data.roomId;
                 const user = res.data.user;
                 await appendFirstMessageFromChatFlow(roomId);
-                router.push(`/help-desk/${businessData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
+                router.push(`/help-desk/${spaceData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
             })
         } catch (error) {
             console.error('Error in create a guest conversation', error)

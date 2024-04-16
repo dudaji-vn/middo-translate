@@ -14,12 +14,12 @@ import { TBusinessExtensionData } from '../../help-desk/api/business.service';
 
 interface ChatSidebarProps {
   children: ReactNode;
-  businessData?: TBusinessExtensionData
+  spaceData?: TBusinessExtensionData
 }
 
 export const ChatSidebar = ({
   children,
-  businessData,
+  spaceData,
 }: ChatSidebarProps & PropsWithChildren) => {
   const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
@@ -32,10 +32,10 @@ export const ChatSidebar = ({
   const showSide = (!isMobile || !isInRoom) && (!isOnBusinessChat || !isMobile);
 
   useEffect(() => {
-    if (businessData) {
-      setBusinessExtension(businessData);
+    if (spaceData) {
+      setBusinessExtension(spaceData);
     }
-  }, [businessData]);
+  }, [spaceData]);
 
   return (
     <>

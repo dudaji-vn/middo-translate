@@ -4,7 +4,7 @@ import { useChangeStatusConversation } from '../hooks/use-change-status-conversa
 import { useMemo, useState } from 'react';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { AlertDialogActionProps } from '@radix-ui/react-alert-dialog';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import toast from 'react-hot-toast';
@@ -27,6 +27,7 @@ export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalCha
   const [open, setOpen] = useState(true);
   const { businessConversationType } = useBusinessNavigationData();
   const router = useRouter();
+  const params = useParams();
   const {
     modalTitle,
     modalDescription,
@@ -39,7 +40,7 @@ export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalCha
   }, [actionName, id]);
   const onConfirm = async () => {
     mutateAsync({ roomId: id, status: MAPPED_ACTION_STATUS[actionName] }).then(() => {
-      router.push(`${ROUTE_NAMES.BUSINESS_SPACE}/${businessConversationType}`);
+      router.push(`${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}`);
     }).catch(() => {
       toast.error(`Failed to ${actionName} conversation!`);
     }).finally(() => {

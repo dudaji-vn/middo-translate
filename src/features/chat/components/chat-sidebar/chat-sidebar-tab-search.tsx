@@ -24,7 +24,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     const searchValue = useSearchStore((state) => state.searchValue);
     const { isBusiness } = useBusinessNavigationData();
     const { data: recData } = useGetRoomsRecChat(isBusiness ? 'help-desk' : undefined);
-    const { businessData } = useBusinessExtensionStore()
+    const { businessExtension } = useBusinessExtensionStore()
     const searchType = isBusiness ? 'help-desk' : undefined;
     const {t} = useTranslation('common');
     const { data } = useQuerySearch<{
@@ -56,7 +56,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
               <Section label={isBusiness ? "Guests" : "Groups"}>
                 {data?.rooms.map((room) => (
                   <RoomItem
-                    businessId={businessData?._id}
+                    businessId={businessExtension?._id}
                     disabledAction
                     key={room._id}
                     data={room}
@@ -72,7 +72,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
               {recData?.map((room) => {
                 return (
                   <RoomItem
-                    businessId={businessData?._id}
+                    businessId={businessExtension?._id}
                     disabledAction
                     key={room._id}
                     data={room}
