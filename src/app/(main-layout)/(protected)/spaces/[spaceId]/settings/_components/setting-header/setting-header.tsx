@@ -14,6 +14,7 @@ import React from 'react'
 import BusinessExtension from '../extenstion/business-extension'
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service'
 import { ROUTE_NAMES } from '@/configs/route-name'
+import { TSpace } from '../../../_components/business-spaces'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -26,20 +27,30 @@ const headerVariants = cva('w-full flex flex-row', {
     }
 });
 
-const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
+const SettingHeader = ({ space }: {
+
+    space: {
+        extension: TBusinessExtensionData;
+    } & TSpace
+}) => {
     const searchParams = useSearchParams();
     const router = useRouter();
     const params = useParams();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
-    const isEmpty = !data;
+    const isExtensionEmpty = ! space?.extension
+    console.log(' SettingHeade extension', space?.extension)
     return (<>
         <section className={cn('bg-white w-full p-10 flex flex-row gap-3', headerVariants({ modal: modalType }))}>
             <Avatar src='/avatar.svg' alt='avt' className='w-24 h-24' />
             <div className='flex flex-col gap-2'>
-                <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>DUDAJI Vietnam</Typography>
-                <Typography className='text-neutral-600'>10 member</Typography>
+                <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>
+                    {space?.name}
+                </Typography>
+                <Typography className='text-neutral-600'>
+                    {space?.members?.length || 0} Members
+                </Typography>
                 <div className='pt-1'>
-                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>   
+                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
                 </div>
             </div>
         </section>
@@ -55,7 +66,7 @@ const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
                     updating...
                 </TabsContent>
                 <TabsContent value="extension" className="p-4 w-full flex flex-col items-center">
-                    <div className={isEmpty ? 'w-full flex flex-col items-center gap-2' : 'hidden'}>
+                    <div className={isExtensionEmpty ? 'w-full flex flex-col items-center gap-2' : 'hidden'}>
                         <Image src='/empty-extentions.png' width={200} height={156} alt='empty-extentions' className='mx-auto my-3' />
                         <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
                             Your extension is almost here!
@@ -64,7 +75,7 @@ const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
                             Create a conversation extension with the help of ready-made theme or define a unique one on your own
                         </Typography>
                     </div>
-                    <Link href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`} className={isEmpty ? '' : 'hidden'}>
+                    <Link href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`} className={isExtensionEmpty ? '' : 'hidden'}>
                         <Button variant={'default'} color={'primary'} shape={'square'} className={'mt-4 w-fit mx-auto'} >
                             <Plus className="h-4 w-4" />
                             <Typography className="ml-2 text-white">
@@ -72,8 +83,7 @@ const SettingHeader = ({ data }: { data?: TBusinessExtensionData }) => {
                             </Typography>
                         </Button>
                     </Link>
-                    <BusinessExtension data={data} name='Middo Conversation Extension' />
-
+                    <BusinessExtension data={space.extension} name='Middo Conversation Extension' />
                 </TabsContent>
             </Tabs >
         </section>

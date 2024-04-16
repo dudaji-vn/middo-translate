@@ -10,11 +10,14 @@ import { useAppStore } from '@/stores/app.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { TBusinessExtensionData } from '../../help-desk/api/business.service';
+import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 
 
 interface ChatSidebarProps {
   children: ReactNode;
-  spaceData?: TBusinessExtensionData
+  spaceData?: {
+    extension: TBusinessExtensionData;
+  } & TSpace
 }
 
 export const ChatSidebar = ({
@@ -33,7 +36,7 @@ export const ChatSidebar = ({
 
   useEffect(() => {
     if (spaceData) {
-      setBusinessExtension(spaceData);
+      setBusinessExtension(spaceData.extension);
     }
   }, [spaceData]);
 

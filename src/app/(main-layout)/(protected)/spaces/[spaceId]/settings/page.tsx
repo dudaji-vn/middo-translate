@@ -7,6 +7,7 @@ import BusinessExtension from './_components/extenstion/business-extension';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import SettingHeader from './_components/setting-header/setting-header';
 import CreateExtension from './_components/extension-creation/create-extension';
+import { notFound } from 'next/navigation';
 
 
 const SettingPage = async ({ searchParams, params }: {
@@ -17,12 +18,16 @@ const SettingPage = async ({ searchParams, params }: {
     }
 
 }) => {
-    const businessExtension = await businessAPI.getMyExtension(params.spaceId);
+    const space = await businessAPI.getSpaceBySpaceID(params.spaceId);
     const modatType = searchParams.modal;
-    // console.log('BusinessExtension', businessExtension)
+    const businessExtension = space?.extension;
+    if (!space) {
+        notFound();
+    }
+
     return (
         <div className='max-md:w-screen max-md:px-1 w-full bg-primary-100 h-full'>
-            <SettingHeader data={businessExtension} />
+            <SettingHeader space={space} />
             <div className='w-full bg-white'>
                 <CreateExtension open={Boolean(modatType === 'create-extension' || modatType === 'edit-extension' && businessExtension)} initialData={businessExtension} />
             </div>
