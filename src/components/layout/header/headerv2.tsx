@@ -13,28 +13,33 @@ import { HeaderNav } from './header-nav';
 import HeaderProfile from './header-profile';
 import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 import { HeaderNavMobile } from './header-nav.mobile';
+import { usePlatformStore } from '@/features/platform/stores';
 
 type Props = {};
 
 export const Header = (props: Props) => {
   const isClient = useClient();
-  const { isBusiness, isHelpDesk, isTestItOutPage } = useBusinessNavigationData();
+  const platform = usePlatformStore((state) => state.platform);
+
+  const { isBusiness, isHelpDesk, isTestItOutPage } =
+    useBusinessNavigationData();
   const hideNavigation = isBusiness || isHelpDesk;
 
   if (!isClient) return null;
+  if (platform === 'mobile') return null;
 
   return (
     <div
       className={cn(
-        'z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]'
+        'z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]',
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
-      
+
       <Link
         href={isHelpDesk ? '#' : ROUTE_NAMES.ROOT}
         className={cn(
-          'w-[60px] flex flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
+          'flex w-[60px] flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
         )}
       >
         {isHelpDesk && (

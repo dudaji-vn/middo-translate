@@ -24,34 +24,39 @@ import { PASSWORD_PATTERN } from '@/configs/regex-pattern';
 export default function UpdateUserPassword() {
   const [errorMessage, setErrorMessage] = useState('');
   const [open, setOpen] = useState(false);
-  const {t} = useTranslation("common");
+  const { t } = useTranslation('common');
   const form = useForm<z.infer<typeof changePasswordSchema>>({
-    resolver: zodResolver(z
-      .object({
-        currentPassword: z.string().min(1, {
-          message: t('MESSAGE.ERROR.REQUIRED'),
-        }),
-        newPassword: z
-          .string()
-          .min(8, {
-            message: t('MESSAGE.ERROR.MIN_LENGTH', {num: 8, field: t('COMMON.PASSWORD')}),
-          })
-          .regex(PASSWORD_PATTERN, {
-            message:t('MESSAGE.ERROR.PASSWORD_PATTERN'),
+    resolver: zodResolver(
+      z
+        .object({
+          currentPassword: z.string().min(1, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
           }),
-    
-        confirmPassword: z.string().min(1, {
-          message: t('MESSAGE.ERROR.REQUIRED'),
+          newPassword: z
+            .string()
+            .min(8, {
+              message: t('MESSAGE.ERROR.MIN_LENGTH', {
+                num: 8,
+                field: t('COMMON.PASSWORD'),
+              }),
+            })
+            .regex(PASSWORD_PATTERN, {
+              message: t('MESSAGE.ERROR.PASSWORD_PATTERN'),
+            }),
+
+          confirmPassword: z.string().min(1, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          }),
+        })
+        .refine((data) => data.newPassword === data.confirmPassword, {
+          message: t('MESSAGE.ERROR.PASSWORD_NOT_MATCH'),
+          path: ['confirmPassword'],
+        })
+        .refine((data) => data.newPassword !== data.currentPassword, {
+          message: t('MESSAGE.ERROR.PASSWORD_THE_SAME'),
+          path: ['newPassword'],
         }),
-      })
-      .refine((data) => data.newPassword === data.confirmPassword, {
-        message: t('MESSAGE.ERROR.PASSWORD_NOT_MATCH'),
-        path: ['confirmPassword'],
-      })
-      .refine((data) => data.newPassword !== data.currentPassword, {
-        message: t('MESSAGE.ERROR.PASSWORD_THE_SAME'),
-        path: ['newPassword'],
-      })),
+    ),
     mode: 'onBlur',
     defaultValues: {
       currentPassword: '',
@@ -93,20 +98,22 @@ export default function UpdateUserPassword() {
       {isSubmitting && <PageLoading />}
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogTrigger className="w-full">
-          <span className="-mx-[5vw] block cursor-pointer border-b border-b-[#F2F2F2] p-4 text-center font-medium transition-all hover:bg-slate-100 md:-mx-6">
+          <span className="block cursor-pointer border-b border-b-[#F2F2F2] p-4 text-center font-medium transition-all hover:bg-slate-100 md:-mx-6">
             {t('ACCOUNT_SETTING.CHANGE_PASSWORD')}
           </span>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <Form {...form}>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <h3 className="text-[24px]">{t('ACCOUNT_SETTING.CHANGE_PASSWORD')}</h3>
+              <h3 className="text-[24px]">
+                {t('ACCOUNT_SETTING.CHANGE_PASSWORD')}
+              </h3>
               <RHFInputField
                 name="currentPassword"
                 formLabel={t('COMMON.CURRENT_PASSWORD')}
                 inputProps={{
                   type: 'password',
-                  placeholder: t('COMMON.CURRENT_PASSWORD_PLACEHOLDER')
+                  placeholder: t('COMMON.CURRENT_PASSWORD_PLACEHOLDER'),
                 }}
               />
               <RHFInputField
