@@ -20,14 +20,16 @@ import { createSpace } from '@/services/business-space.service';
 import CreateSpaceForm from './sections/create-section';
 import InviteMembers from './sections/invite-section';
 import { Member } from './sections/members-columns';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces';
 
 
 
 const createSpaceSchema = z.object({
   name: z.string().min(1, {
     message: 'Space name is required.'
-  }).max(255, {
-    message: 'Space name is too long, maximum 255 characters.'
+  }).max(100, {
+    message: 'Space name is too long, maximum 100 characters.'
   }),
   avatar: z.string().optional(),
   backgroundImage: z.string().optional(),
@@ -48,6 +50,7 @@ export default function CreateOrEditSpace({ open }: {
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [tabErrors, setTabErrors] = React.useState<boolean[]>([false, false]);
   const [space, setSpace] = React.useState();
+  const queryClient = useQueryClient();
 
   const formCreateSpace = useForm<TCreateSpaceFormValues>({
     mode: 'onChange',
@@ -95,8 +98,8 @@ export default function CreateOrEditSpace({ open }: {
         members: formCreateSpace.watch('members')
       })
       toast.success('Space created successfully.');
+      queryClient.invalidateQueries([GET_SPACES_KEY, { type: 'all_spaces' }]);
       router.push('/business');
-      router.refresh();
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
