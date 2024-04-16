@@ -3,15 +3,11 @@ import { ScanText, XIcon } from 'lucide-react';
 import { Avatar, Text } from '@/components/data-display';
 import { Button } from '@/components/actions';
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import { useAuthStore } from '@/stores/auth.store';
-import { translateText } from '@/services/languages.service';
-import socket from '@/lib/socket-io';
-import { SOCKET_CONFIG } from '@/configs/socket';
 import { useVideoCallStore } from '../../store/video-call.store';
 import CaptionInterface from '../../interfaces/caption.interface';
 import { useTranslation } from 'react-i18next';
-import useSpeechToTextCaption from '../../hooks/use-speech-to-text-caption';
-import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
+import { listenEvent } from '../../utils/custom-event.util';
+import { CUSTOM_EVENTS } from '@/configs/custom-event';
 
 export default function CaptionSection() {
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
@@ -27,10 +23,9 @@ const CaptionContent = () => {
   const captions = useVideoCallStore(state => state.captions);
   const addCaption = useVideoCallStore(state => state.addCaption);
   const clearCaption = useVideoCallStore(state => state.clearCaption);
-  const user = useAuthStore(state => state.user);
-
+  console.log('🔴captions', captions);
   const captionListRef = useRef<HTMLDivElement>(null);
-  const { transcript } = useSpeechToTextCaption(SUPPORTED_VOICE_MAP[(user?.language || 'auto') as keyof typeof SUPPORTED_VOICE_MAP]);
+
   const [isScroll, setScroll] = useState(false);
   
   const scrollToBottom = useCallback(
@@ -47,28 +42,16 @@ const CaptionContent = () => {
   );
 
   useEffect(() => {
-    if (!transcript) return;
-    const myLanguage = user?.language || 'en';
-    const translateCaption = async () => {
-      let contentEn = transcript;
-      if (myLanguage !== 'en') {
-        contentEn = await translateText(transcript, myLanguage, 'en');
-      }
-      const captionObj = {
-        user,
-        content: transcript,
-        contentEn: contentEn,
-        language: myLanguage,
-      };
-      addCaption({
-        ...captionObj,
-        isMe: true,
-      });
+    const cleanup = listenEvent(CUSTOM_EVENTS.CAPTION.SEND_CAPTION, (event: {detail: CaptionInterface}) => {
+      const { detail: caption } = event
+      addCaption(caption);
       scrollToBottom();
-      socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_CAPTION, captionObj);
+    });
+
+    return () => {
+      cleanup();
     };
-    translateCaption();
-  }, [addCaption, transcript, user, user?.language, scrollToBottom]);
+  }, [addCaption, scrollToBottom]);
 
   useEffect(() => {
     const captionList = captionListRef.current;
@@ -87,32 +70,6 @@ const CaptionContent = () => {
     };
   }, []);
 
-  useEffect(() => {
-    socket.on(
-      SOCKET_CONFIG.EVENTS.CALL.SEND_CAPTION,
-      async (caption: CaptionInterface) => {
-        if (caption.user._id == user?._id) return;
-        let message = caption.content;
-        if (caption.language !== user?.language) {
-          message = await translateText(
-            caption.content,
-            caption.language,
-            user?.language || 'en',
-          );
-        }
-        addCaption({
-          ...caption,
-          isMe: false,
-          content: message,
-        });
-        scrollToBottom();
-      },
-    );
-    return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.CALL.SEND_CAPTION);
-      clearCaption();
-    };
-  }, [addCaption, user?._id, user?.language, clearCaption, scrollToBottom]);
 
   return (
     <section>
@@ -130,13 +87,13 @@ const CaptionContent = () => {
       </div>
       <div className="h-[160px] overflow-auto" ref={captionListRef}>
         {captions.length > 0 &&
-          captions.map((caption: any, index: number) => {
+          captions.map((caption: CaptionInterface, index: number) => {
             return (
               <div className="flex items-start gap-2 p-3" key={index}>
                 <Avatar
-                  src={caption.user.avatar}
+                  src={caption.user?.avatar}
                   size="xs"
-                  alt={caption.user.name}
+                  alt={caption.user?.name}
                 />
                 <div className="flex-1">
                   <p className="mb-2 text-sm font-semibold">
