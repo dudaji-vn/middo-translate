@@ -9,6 +9,8 @@ import { Avatar, Typography } from '@/components/data-display';
 import { Circle, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
+import { useRouter } from 'next/navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
   variants: {
@@ -40,12 +42,12 @@ const Space = ({
 } & React.HTMLAttributes<HTMLDivElement>
 ) => {
   const hasNotification = newMessagesCount > 0;
+  const router = useRouter();
+
+  console.log('???????')
   return (
     <Card
-      key={_id}
       className={cn("gap-2 relative p-3 space-y-3 border-primary-200 bg-primary-100 min-w-[320px] border rounded-[12px] border-solid hover:border-primary-500-main cursor-pointer transition-all duration-300 ease-in-out")}
-      onClick={() => {
-      }}
       {...props}
     >
       <div className='absolute -top-1 right-[10px]'>
@@ -56,7 +58,11 @@ const Space = ({
         <Badge className={tagsVariants({ tag })}>{MAPPED_TAGS[tag]}</Badge>
         <span className='text-neutral-600 font-light text-sm leading-[18px]'><span className='max-[320px]:hidden'>Created on:</span> {` ${moment(createdAt).format('DD/MM/YYYY')}`}</span>
       </CardHeader>
-      <CardContent className='p-0 flex flex-row items-center gap-2'>
+      <CardContent 
+      onClick={() => {
+        console.log('???????hh')
+        router.push(`${ROUTE_NAMES.SPACES}/${_id}`);
+      }} className='p-0 flex flex-row items-center gap-2'>
         <Avatar src={owner?.avatar ?? '/logo.png'} alt={'avatar-owner'} className="size-[88px] p-1 border border-neutral-50" />
         <div className='space-y-1 flex flex-col'>
           <CardTitle className='text-base font-normal  break-words max-w-36  sm:max-w-44 xl:max-w-56  leading-[18px]'>{name}</CardTitle>

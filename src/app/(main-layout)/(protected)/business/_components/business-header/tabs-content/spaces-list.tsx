@@ -87,7 +87,6 @@ const SpacesList = ({ loading = false, spaces, tab }: {
         <div className='px-[5vw] py-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4'>
             {loading && <SpacesListSkeletons count={3} />}
             {spaces?.map((space, index) => {
-                console.log('space', space._id)
                 return (
                     <Space key={space._id} data={space} tag={currentUser?._id === space.owner?._id ? 'my' : 'joined'} />
                 )

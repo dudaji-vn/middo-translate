@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
 import React from 'react'
-import { TSpace } from '../../business-spaces';
+import { TSpace } from '../..';
 import { Badge } from '@/components/ui/badge';
 import moment from 'moment';
 import { Avatar, Typography } from '@/components/data-display';
