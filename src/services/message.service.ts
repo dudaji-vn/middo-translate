@@ -5,10 +5,5 @@ export const getMessageIdFromCallIdService = (callId: string) => {
 };
 
 export const checkSeenMessage = (id: string) => {
-  // const res: Response<{
-  //   seen: boolean;
-  // }> = await axiosWithInterceptor.get(`${basePath}/${id}/seen`);
-  // return res.data;\
-
   return get(`/messages/${id}/seen`);
 }
