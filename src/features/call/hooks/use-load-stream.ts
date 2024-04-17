@@ -10,8 +10,8 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
     const [isTurnOnMic, setTurnOnMic] = useState<boolean>(false)
     const [isTurnOnCamera, setIsTurnOnCamera] = useState<boolean>(false)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
-    // const speaker = useVideoSettingStore(state => state.speaker);
-    // console.log('🔵useLoadStream')
+    const speaker = useVideoSettingStore(state => state.speaker);
+    
     useEffect(() => {
         const elementRefCurrent = elementRef.current;
         let tempStream = new MediaStream();
@@ -25,6 +25,7 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
         const init = async () => {
             if(!elementRef.current || !participant) return;
             if(!participant.stream) return;
+            // console.log('🔵useLoadStream')
             const isMicOn = participant.stream.getAudioTracks()[0]?.enabled || false;
             const isCamOn = participant.stream.getVideoTracks()[0]?.enabled || false;
             if(participant.isMe) {
@@ -40,13 +41,6 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
             elementRef.current.muted = true;
             elementRef.current!.srcObject = tempStream;
             elementRef.current!.autoplay = true;
-            // @ts-ignore
-            // elementRef.current?.setSinkId(speaker?.deviceId || '').then(() => {
-            //     console.log('🟡setSinkId success',speaker?.deviceId || '');
-            //   })
-            //   .catch((err: any) => {
-            //     console.log('🟡setSinkId error', err);
-            //   });
             setStreamVideo(tempStream)
             setTurnOnMic(isMicOn)
             setIsTurnOnCamera(isCamOn)
@@ -73,6 +67,26 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
         }
         
     }, [elementRef, participant, removeParticipant, setStreamForParticipant])
+
+
+    useEffect(() => {
+        if(!elementRef.current || !participant) return;
+        if(!participant.stream || participant.isMe) return;
+        const isMicOn = participant.stream.getAudioTracks()[0]?.enabled || false;
+        if(!isMicOn) return;
+        // console.log('🟢changeSinkId',speaker?.deviceId)
+        // @ts-ignore
+        if(typeof elementRef.current!.setSinkId === 'function' && isMicOn) {
+            // @ts-ignore
+            elementRef.current?.setSinkId(speaker?.deviceId || '').then(() => {
+                console.log('🟡setSinkId success',speaker?.deviceId || '');
+              })
+              .catch((err: any) => {
+                console.log('🟡setSinkId error', err);
+              });
+        }
+    }, [elementRef, participant, speaker?.deviceId])
+
 
     return {
         streamVideo,

@@ -21,7 +21,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const itemRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  // console.log('🟣VideoItem')
+  console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
@@ -59,18 +59,16 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         <VideoItemText participant={participant}/>
 
         {/* Video Loading */}
-        <VideoItemLoading
-          isMe={participant?.isMe}
-          isShareScreen={participant?.isShareScreen}
-        />
+        <VideoItemLoading isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
 
           {/* Get Caption */}
-          <GetCaptionUser
+        <GetCaptionUser 
           name={participant?.user.name}
           avatar={participant?.user.avatar}
           language={participant?.user.language}
           stream={streamVideo}
-          />
+        />
+
         {/* Mic Status */}
         {/* {!isTurnOnMic && 
         <div className='absolute bottom-0 right-0 w-6 h-6 rounded-full bg-neutral-50 p-1'>
@@ -80,5 +78,6 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
     </section>
   );
 };
+
 export default memo(VideoItem);
 
