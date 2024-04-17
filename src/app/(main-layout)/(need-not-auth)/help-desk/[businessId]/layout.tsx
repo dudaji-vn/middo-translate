@@ -1,4 +1,5 @@
-import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options';
+
+import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { cn } from '@/utils/cn';
 import { notFound } from 'next/navigation';
@@ -11,11 +12,11 @@ const HelpDeskConversationLayout = async ({ children, params: { businessId } }: 
     }
 }) => {
 
-    const businessData = await businessAPI.getBusinessInfomation(businessId);
-    if (!businessData) {
+    const extensionData = await businessAPI.getExtensionByBusinessId(businessId);
+    if (!extensionData) {
         notFound();
     }
-    const theme = extentionsCustomThemeOptions.find((item) => item.name === businessData.color || item.hex === businessData.color) || extentionsCustomThemeOptions[0];
+    const theme = extentionsCustomThemeOptions.find((item) => item.name === extensionData.color || item.hex === extensionData.color) || extentionsCustomThemeOptions[0];
 
     return (
         <div className={cn(theme.name, 'h-main-container-height')}>

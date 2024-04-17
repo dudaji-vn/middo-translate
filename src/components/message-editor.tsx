@@ -1,4 +1,4 @@
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { User } from '@/features/users/types';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { detectLanguage } from '@/services/languages.service';
@@ -10,6 +10,7 @@ import { Editor, EditorContent } from '@tiptap/react';
 import { isEqual } from 'lodash';
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ButtonProps } from './actions';
 import { AttachmentButton } from './attachment-button';
 import { AttachmentSelection } from './attachment-selection';
 import { EmojiButton } from './emoji-button';
@@ -20,7 +21,6 @@ import { MicButton, MicButtonRef } from './mic-button';
 import { SendButton } from './send-button';
 import { TranslationHelper } from './translation-helper';
 import { useEditor } from './use-editor';
-import { ButtonProps } from './actions';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -35,6 +35,7 @@ export interface MessageEditorProps
   userMentions?: User[];
   onTypingChange?: (isTyping: boolean) => void;
   sendBtnProps?: ButtonProps;
+  roomId?: string;
 }
 
 export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
@@ -44,11 +45,11 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       userMentions = [],
       sendBtnProps,
       onTypingChange,
+      roomId,
       ...props
     },
     ref,
   ) => {
-    console.log('❤️ render editor');
     const { files, reset: filesReset, handleClipboardEvent } = useMediaUpload();
     const { t } = useTranslation('common');
 
@@ -84,6 +85,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onEnterTrigger: handleEnterTrigger,
       enterToSubmit: !isMobile,
       onTypingChange,
+      id: roomId,
     });
 
     const editorId = useId();

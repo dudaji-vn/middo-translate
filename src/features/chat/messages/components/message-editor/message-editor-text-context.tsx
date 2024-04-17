@@ -4,7 +4,7 @@ import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { useAuthStore } from '@/stores/auth.store';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useTranslate } from '@/features/translate/hooks/use-translate';
 
 interface MessageEditorTextContextProps {

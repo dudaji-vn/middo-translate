@@ -6,7 +6,7 @@ import {
 } from '@/types/business.type';
 import { useParams, usePathname } from 'next/navigation';
 export enum EPageType {
-  BUSINESS = 'business',
+  SPACES = 'spaces',
   HELP_DESK = 'help-desk',
   TEST_CHAT_FLOW = 'test-it-out',
 }
@@ -18,7 +18,7 @@ const MAPPED_INBOX_STATUS = {
 export const useBusinessNavigationData = () => {
   const params = useParams();
   const pathname = usePathname();
-  const isBusiness = pathname?.includes(EPageType.BUSINESS);
+  const isBusiness = pathname?.includes(EPageType.SPACES);
 
   const businessSlugs = params?.slugs || [];
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);

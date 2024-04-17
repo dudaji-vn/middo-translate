@@ -1,20 +1,18 @@
 'use client'
 
-import { DEFAULT_THEME, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/options'
-import { PreviewReceivedMessage } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/sections/preview-received-message'
+import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options'
 import { Button } from '@/components/actions'
 import { Avatar, Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'
 import { InputSelectLanguage } from '@/components/form/input-select-language'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/navigation'
-import { Form, FormMessage } from '@/components/ui/form'
+import { Form } from '@/components/ui/form'
 import { createGuestInfoSchema } from '@/configs/yup-form'
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service'
 import { messageApi } from '@/features/chat/messages/api'
 import { Room } from '@/features/chat/rooms/types'
-import { User } from '@/features/users/types'
 import useClient from '@/hooks/use-client'
-import { startAGuestConversationService } from '@/services/extension.service'
+import { startAGuestConversation } from '@/services/extension.service'
 import { cn } from '@/utils/cn'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
@@ -38,14 +36,14 @@ export type TStartAConversation = {
     email: string
 }
 
-const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
+const StartAConversation = ({ extensionData, isAfterDoneAnCOnversation }: {
     isAfterDoneAnCOnversation?: boolean
-    businessData: TBusinessExtensionData
+    extensionData: TBusinessExtensionData
 }) => {
     const router = useRouter()
     const isClient = useClient();
-    const { user: owner } = businessData || {};
-    const theme = extentionsCustomThemeOptions.find((item) => item.name === businessData.color || item.hex === businessData.color) || extentionsCustomThemeOptions[0];
+    const { user: owner } = extensionData || {};
+    const theme = extentionsCustomThemeOptions.find((item) => item.name === extensionData.color || item.hex === extensionData.color) || extentionsCustomThemeOptions[0];
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const showForm = () => {
@@ -67,7 +65,7 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
         watch,
         formState: { isSubmitting, errors },
     } = methods;
-    const chatFlow = businessData.chatFlow;
+    const chatFlow = extensionData.chatFlow;
     const appendFirstMessageFromChatFlow = async (roomId: Room['_id']) => {
         if (!chatFlow) return;
         const { nodes, edges } = chatFlow;
@@ -100,14 +98,14 @@ const StartAConversation = ({ businessData, isAfterDoneAnCOnversation }: {
     const submit = async (values: z.infer<typeof createGuestInfoSchema>) => {
         try {
             setLoading(true)
-            await startAGuestConversationService({
-                businessId: businessData._id,
+            await startAGuestConversation({
+                businessId: extensionData._id,
                 ...values
             }).then(async (res) => {
                 const roomId = res.data.roomId;
                 const user = res.data.user;
                 await appendFirstMessageFromChatFlow(roomId);
-                router.push(`/help-desk/${businessData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
+                router.push(`/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}`)
             })
         } catch (error) {
             console.error('Error in create a guest conversation', error)

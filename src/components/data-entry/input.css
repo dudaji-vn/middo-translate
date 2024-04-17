@@ -1,0 +1,8 @@
+
+input[required]:invalid + label {
+    display: inline-block;
+}
+
+input[required]:valid + label{
+    display: none;
+}

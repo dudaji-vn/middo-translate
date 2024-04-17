@@ -13,8 +13,6 @@ export interface HeaderNavProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const HeaderNav = forwardRef<HTMLDivElement, HeaderNavProps>(
   (props, ref) => {
-    const isMobile = useAppStore((state) => state.isMobile);
-
     const pathName = usePathname();
     const isCurrentPath = (href: string) =>
       href == ROUTE_NAMES.ROOT
@@ -23,10 +21,7 @@ export const HeaderNav = forwardRef<HTMLDivElement, HeaderNavProps>(
 
     return (
       <div {...props} className={cn("flex-1", props.className)}>
-        {isMobile ? (
-          <HeaderNavMobile />
-        ) : (
-          <div className="flex w-screen flex-row items-stretch gap-[60px] bg-background shadow-none md:!ml-0 md:w-auto md:items-center">
+          <div className="md:flex w-screen flex-row items-stretch md:gap-1 lg:gap-5 bg-background shadow-none md:!ml-0 md:w-auto md:items-center justify-center hidden">
             {navItems.map((item) => (
               <NavItem
                 isActive={isCurrentPath(item.href)}
@@ -35,7 +30,6 @@ export const HeaderNav = forwardRef<HTMLDivElement, HeaderNavProps>(
               />
             ))}
           </div>
-        )}
       </div>
     );
   },

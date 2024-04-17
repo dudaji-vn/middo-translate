@@ -7,7 +7,7 @@ import {
   USE_GET_PINNED_ROOMS_KEY,
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
@@ -23,16 +23,6 @@ import { PinnedRoom } from '../pinned-room';
 import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/data-display/drawer';
 
 interface InboxListProps {
   type: InboxType;
@@ -42,8 +32,12 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
   ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
-    const { inboxStatus: status, businessRoomId } = useBusinessNavigationData();
-    const { businessData } = useBusinessExtensionStore();
+    const {
+      inboxStatus: status,
+      businessRoomId,
+      isBusiness,
+    } = useBusinessNavigationData();
+    const { businessExtension } = useBusinessExtensionStore();
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
@@ -142,7 +136,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   data={room}
                   isActive={currentRoomId === room._id}
                   currentRoomId={currentRoomId as string}
-                  businessId={businessData?._id}
+                  businessId={businessExtension?._id}
                 />
               );
             })}

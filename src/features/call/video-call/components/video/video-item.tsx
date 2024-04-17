@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
 import useLoadStream from '@/features/call/hooks/use-load-stream';
@@ -9,6 +9,7 @@ import ExpandVideo from './components/expand-video';
 import VideoItemLoading from './components/video-item-loading';
 import VideoItemText from './components/video-item-text';
 import VideoItemTalk from './components/video-item-talk';
+import GetCaptionUser from './components/get-caption-user';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -20,6 +21,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const itemRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
@@ -57,9 +59,14 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
         <VideoItemText participant={participant}/>
 
         {/* Video Loading */}
-        <VideoItemLoading
-          isMe={participant?.isMe}
-          isShareScreen={participant?.isShareScreen}
+        <VideoItemLoading isMe={participant?.isMe} isShareScreen={participant?.isShareScreen} />
+
+          {/* Get Caption */}
+        <GetCaptionUser 
+          name={participant?.user.name}
+          avatar={participant?.user.avatar}
+          language={participant?.user.language}
+          stream={streamVideo}
         />
 
         {/* Mic Status */}
@@ -71,5 +78,6 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
     </section>
   );
 };
+
 export default memo(VideoItem);
 

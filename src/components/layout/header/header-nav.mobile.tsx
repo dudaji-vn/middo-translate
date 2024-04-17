@@ -18,16 +18,16 @@ export const HeaderNavMobile = forwardRef<HTMLDivElement, HeaderNavMobileProps>(
   (props, ref) => {
     const { toggle, value } = useBoolean(false);
     const pathName = usePathname();
-
+    
     return (
-      <>
+      <div className="md:hidden">
         <Button.Icon onClick={toggle} color="primary" variant="ghost" size="sm">
           {value ? <XIcon /> : <Menu />}
         </Button.Icon>
         <AnimatePresence>
           {value && <MobileNav toggleMenu={toggle} pathName={pathName} />}
         </AnimatePresence>
-      </>
+      </div>
     );
   },
 );
@@ -55,7 +55,7 @@ const MobileNav = ({
           },
         }}
         className={cn(
-          'absolute left-0 top-[52px] z-50 flex w-full flex-col items-stretch overflow-hidden rounded-b-2xl  bg-background shadow-1',
+          'absolute left-0 top-[52px] z-50 flex w-full flex-col items-stretch overflow-hidden rounded-b-2xl  bg-background shadow-1 md:hidden',
         )}
       >
         {navItems.map((item, index) => {

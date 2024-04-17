@@ -11,8 +11,8 @@ const RatingPage = async ({ params }: {
         userId: string
     }
 }) => {
-    const businessData = await businessAPI.getBusinessInfomation(params.businessId);
-    if (!businessData) {
+    const extensionData = await businessAPI.getExtensionByBusinessId(params.businessId);
+    if (!extensionData) {
         notFound();
     }
     async function rateConversation(star: any) {
@@ -28,7 +28,7 @@ const RatingPage = async ({ params }: {
         })
     }
     return (
-        <StarRating onRate={rateConversation} businessData={businessData} />
+        <StarRating onRate={rateConversation} extensionData={extensionData} />
     )
 }
 

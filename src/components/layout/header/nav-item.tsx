@@ -17,8 +17,8 @@ export const NavItem = ({
     <Link
       href={item.href}
       className={cn(
-        'bg-background px-[5vw] py-4 text-sm font-semibold md:!p-0 md:hover:text-primary',
-        isActive ? '!text-primary' : 'active:!text-primary-700',
+        'bg-background py-2 lg:px-3 md:px-2 font-semibold md:hover:bg-neutral-50 rounded-xl leading-[18px]',
+        isActive ? '!bg-primary !text-white' : '',
       )}
     >
       {t(item.name)}

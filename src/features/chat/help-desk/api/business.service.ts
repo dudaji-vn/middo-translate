@@ -1,4 +1,6 @@
-import { FlowNode } from '@/app/(main-layout)/(protected)/business/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
 import { User } from '@/features/users/types';
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { cookies } from 'next/headers';
@@ -52,16 +54,39 @@ class BusinessAPI {
   constructor(basePath: string = process.env.NEXT_PUBLIC_API_URL + '/api') {
     this.basePath = basePath;
   }
-  async getExtension(): Promise<TBusinessExtensionData | undefined> {
+
+  async getAccessToken() {
     const cookieStore = cookies();
+    const access_token = cookieStore.get('access_token')?.value;
+    if (access_token) {
+      return access_token;
+    }
+    const res = await fetch(NEXT_PUBLIC_API_URL + '/api/auth/refresh', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${cookieStore.get('refresh_token')?.value}`,
+      },
+    });
+    const data = await res.json();
+    return data?.accessToken || '';
+  }
+
+  async getSpaceBySpaceID(spaceId: string): Promise<
+    | ({
+        extension: TBusinessExtensionData;
+      } & TSpace)
+    | undefined
+  > {
+    const access_token = await this.getAccessToken();
     try {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/my-business',
+        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/spaces/' + spaceId,
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
+            Authorization: `Bearer ${access_token}`,
           },
         },
       );
@@ -75,36 +100,10 @@ class BusinessAPI {
       return undefined;
     }
   }
-  async getChatRoom(roomId: string, anonymousUserId?: string) {
-    const path = anonymousUserId
-      ? `${this.basePath}/rooms/anonymous/${roomId}?userId=${anonymousUserId}`
-      : `${this.basePath}/rooms/${roomId}`;
-    try {
-      const response = await fetch(path, {
-        method: 'GET',
-        headers: anonymousUserId
-          ? {
-              'Content-Type': 'application/json',
-            }
-          : {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${cookies().get('access_token')?.value}`,
-            },
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.message);
-      }
-      return data?.data;
-    } catch (error) {
-      console.error('Error in get business info :>>', error);
-      return undefined;
-    }
-  }
-  async getBusinessInfomation(businessId: string) {
+  async getExtensionByBusinessId(businessId: string) {
     try {
       const response = await fetch(
-        `${this.basePath}/help-desk/business/${businessId}`,
+        `${this.basePath}/help-desk/extension/${businessId}`,
         {
           method: 'GET',
           headers: {
@@ -123,15 +122,23 @@ class BusinessAPI {
       return undefined;
     }
   }
-  async getMyBusiness() {
-    const cookieStore = cookies();
+
+  async getChatRoom(roomId: string, anonymousUserId?: string) {
+    let access_token = await this.getAccessToken();
+    const path = anonymousUserId
+      ? `${this.basePath}/rooms/anonymous/${roomId}?userId=${anonymousUserId}`
+      : `${this.basePath}/rooms/${roomId}`;
     try {
-      const response = await fetch(`${this.basePath}/help-desk/my-business`, {
+      const response = await fetch(path, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
-        },
+        headers: anonymousUserId
+          ? {
+              'Content-Type': 'application/json',
+            }
+          : {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${access_token}`,
+            },
       });
       const data = await response.json();
       if (!response.ok) {
@@ -139,12 +146,13 @@ class BusinessAPI {
       }
       return data?.data;
     } catch (error) {
-      console.error('Error in get My business info', error);
+      console.error('Error in get anonymous chat room', error);
       return undefined;
     }
   }
+
   async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
-    const cookieStore = cookies();
+    let access_token = await this.getAccessToken();
     try {
       if (!analyticsType.includes(type)) {
         throw new Error('Invalid analytics type');
@@ -160,12 +168,11 @@ class BusinessAPI {
         }),
       }).toString();
       const path = `${this.basePath}/help-desk/analytics?${query}`;
-      console.log('type-path', type, path);
       const response = await fetch(path, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookieStore.get('access_token')?.value}`,
+          Authorization: `Bearer ${access_token}`,
         },
       });
       const data = await response.json();

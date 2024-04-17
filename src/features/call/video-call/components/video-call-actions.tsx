@@ -2,7 +2,6 @@
 
 import socket from '@/lib/socket-io';
 import toast from 'react-hot-toast';
-import SpeechRecognition from 'react-speech-recognition';
 import { useMyVideoCallStore } from '../../store/me.store';
 import { useParticipantVideoCallStore } from '../../store/participant.store';
 import { encoderData } from '../../utils/text-decoder-encoder';
@@ -18,8 +17,6 @@ import DropdownActions from './actions/dropdown-actions';
 import getUserStream from '../../utils/get-user-stream';
 import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
-import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
-import ParticipantInVideoCall from '../../interfaces/participant';
 import { useVideoSettingStore } from '../../store/video-setting.store';
 interface MediaStreamInterface {
   video?: boolean;
@@ -47,6 +44,7 @@ export default function VideoCallActions() {
     if (!socket.id || !myStream) return;
     const video = settings?.video == undefined ? isTurnOnCamera : settings?.video;
     const audio = settings?.audio == undefined ? isTurnOnMic : settings?.audio;
+    // console.log('handleChangeCameraOrMic', video, audio);
     if(isLoadingStream) return;
 
     // CASE: No change in camera
