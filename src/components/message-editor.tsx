@@ -21,6 +21,7 @@ import { MicButton, MicButtonRef } from './mic-button';
 import { SendButton } from './send-button';
 import { TranslationHelper } from './translation-helper';
 import { useEditor } from './use-editor';
+import { useDraftStore } from '@/features/chat/stores/draft.store';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -54,6 +55,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     const { t } = useTranslation('common');
 
     const [disabled, setDisabled] = useState(false);
+    const setDraft = useDraftStore((s) => s.setDraft);
 
     const mentionSuggestions = useMemo(() => {
       const suggestions = userMentions.map(
@@ -99,6 +101,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       filesReset();
       editor?.commands.clearContent();
       micRef.current?.stop();
+      setDraft(roomId ?? '', '');
     };
 
     const handleSubmit = async () => {
@@ -146,6 +149,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             });
         }
       }
+
       onSubmitValue?.({
         content,
         images,
