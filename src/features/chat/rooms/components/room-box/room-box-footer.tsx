@@ -269,6 +269,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     return (
       <div className="relative w-full border-t p-2">
         <MessageEditor
+          roomId={room._id}
           userMentions={room.isGroup ? room.participants : []}
           onSubmitValue={handleSubmit}
           onTypingChange={(isTyping) => {

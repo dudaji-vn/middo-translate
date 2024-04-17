@@ -11,7 +11,7 @@ import { DocumentMessage } from '../../messages/components/message-item/message-
 import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
 import { textVariants } from '../../messages/components/message-item/message-item-text.style';
 import { Message } from '../../messages/types';
-import { useChatStore } from '../../store';
+import { useChatStore } from '../../stores';
 import { useTranslation } from 'react-i18next';
 import { messageApi } from '../../messages/api';
 import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';

@@ -6,7 +6,7 @@ import socket from '@/lib/socket-io';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 
@@ -33,7 +33,6 @@ const SocketProvider = () => {
       console.log('socket.onDisconnected');
       setSocketConnected(false);
     }
-;
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.connect();
