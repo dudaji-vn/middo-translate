@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
-import Tiptap from '@/components/tiptap';
 
 export const metadata: Metadata = {
   title: NEXT_PUBLIC_NAME + ' - Design System',
