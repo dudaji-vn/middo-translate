@@ -19,6 +19,7 @@ import addNotification from 'react-push-notification';
 
 import { getAnalytics } from 'firebase/analytics';
 import { initializeApp } from 'firebase/app';
+import { messageApi } from '@/features/chat/messages/api';
 
 const firebaseConfig = {
   apiKey: NEXT_PUBLIC_FCM_API_KEY,
@@ -73,10 +74,18 @@ export const onMessageListener = () =>
     if (!messaging) {
       messaging = getMessaging(app);
     }
-    onMessage(messaging, (payload) => {
+    onMessage(messaging, async (payload) => {
       const notifyUrl = payload?.data?.url || '';
       const currentUrl = window.location.href;
       if (notifyUrl && currentUrl.includes(notifyUrl)) {
+        return;
+      }
+      let isSeen = false;
+      if (payload?.data?.messageId) {
+        const data = await messageApi.checkSeen(payload?.data?.messageId);
+        isSeen = data?.seen;
+      }
+      if (isSeen) {
         return;
       }
       addNotification({

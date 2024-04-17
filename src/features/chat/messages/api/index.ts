@@ -29,9 +29,9 @@ export const messageApi = {
       senderType?: 'bot' | 'user';
     },
   ) {
-    const res: Response< Message> = await axiosWithInterceptor.post(
+    const res: Response<Message> = await axiosWithInterceptor.post(
       anonymousBasePath + '/messages/help-desk',
-      data
+      data,
     );
     return res.data;
   },
@@ -66,6 +66,13 @@ export const messageApi = {
     const res: Response<Message> = await axiosWithInterceptor.patch(
       `${basePath}/${id}/seen`,
     );
+    return res.data;
+  },
+
+  async checkSeen(id: string) {
+    const res: Response<{
+      seen: boolean;
+    }> = await axiosWithInterceptor.get(`${basePath}/${id}/seen`);
     return res.data;
   },
 
