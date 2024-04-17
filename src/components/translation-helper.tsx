@@ -4,7 +4,7 @@ import { Spinner } from '@/components/feedback';
 import { MentionSuggestion } from '@/components/mention-suggestion-options';
 import { RichTextView } from '@/components/rich-text-view';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { detectLanguage, translateText } from '@/services/languages.service';
 import { Editor, EditorContent } from '@tiptap/react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -19,7 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEditor } from './use-editor';
 import { useAppStore } from '@/stores/app.store';
 import { useDebounce } from 'usehooks-ts';
-const DEBOUNCE_TIME = 1000;
+const DEBOUNCE_TIME = 500;
 export interface TranslationHelperProps {
   mentionSuggestionOptions: MentionSuggestion[];
   editor: Editor | null;
@@ -47,7 +47,9 @@ export const TranslationHelper = ({
   const { showTranslateOnType, toggleShowTranslateOnType } = useChatStore();
   const { t } = useTranslation('common');
   const [srcLang, setSrcLang] = useState<string | null>(null);
-  const isRootEditorEmpty = rootEditor?.isEmpty;
+  const isRootEditorEmpty = rootEditor
+    ? rootEditor.getText().trim().length === 0
+    : true;
 
   // Use debounce to prevent too many requests
   const htmlDebounce = useDebounce(rootEditor?.getHTML(), DEBOUNCE_TIME);

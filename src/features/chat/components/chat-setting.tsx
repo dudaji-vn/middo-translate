@@ -8,7 +8,7 @@ import { Switch } from '@/components/data-entry';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 import { stopPropagation } from '@/utils/stop-propagation';
-import { useChatStore } from '../store';
+import { useChatStore } from '../stores';
 import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
 import { useTranslation } from 'react-i18next';
 
@@ -23,7 +23,7 @@ export const ChatSettingMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(
       showMiddleTranslation,
       toggleShowMiddleTranslation,
     } = useChatStore();
-    const {t} = useTranslation('common');
+    const { t } = useTranslation('common');
     return (
       <DropdownMenu dir={'ltr'} {...props}>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
@@ -48,7 +48,9 @@ export const ChatSettingMenu = forwardRef<HTMLDivElement, DropdownMenuProps>(
               'flex items-center justify-between gap-5 bg-background p-3',
             )}
           >
-            <span className="text-sm">{t('CONVERSATION.MESSAGE_TRANSLATE')}</span>
+            <span className="text-sm">
+              {t('CONVERSATION.MESSAGE_TRANSLATE')}
+            </span>
             <Switch
               onClick={stopPropagation}
               checked={showMiddleTranslation}
