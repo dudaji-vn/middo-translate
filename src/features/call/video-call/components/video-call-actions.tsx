@@ -81,25 +81,13 @@ export default function VideoCallActions() {
       setTurnOnMic(false);
       return;
     }
-    
+    let myVideoStream: MediaStream = new MediaStream();
     getUserStream({isTurnOnCamera: video, isTurnOnMic: true, cameraDeviceId: videoSetting?.deviceId || undefined, micDeviceId: audioSetting?.deviceId || undefined})
       .then((stream: MediaStream) => {
-        const myVideoStream = stream;
-        if (!audio && myVideoStream.getAudioTracks().length > 0) {
-          myVideoStream.getAudioTracks().forEach((track) => {
-            track.enabled = false;
-          });
-        }
-        setStreamForParticipant(myVideoStream, socket.id || '', false);
-        setMyStream(myVideoStream);
+        myVideoStream = stream;
         setLoadingVideo(false);
         setTurnOnCamera(video);
         setTurnOnMic(audio);
-        // participants.forEach((participant: ParticipantInVideoCall) => {
-        //   if (participant.peer) {
-        //     participant.peer.addStream(myVideoStream);
-        //   }
-        // });
       })
       .catch(() => {
         toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
@@ -108,6 +96,13 @@ export default function VideoCallActions() {
         setLoadingVideo(false);
       })
       .finally(() => {
+        if (!audio && myVideoStream.getAudioTracks().length > 0) {
+          myVideoStream.getAudioTracks().forEach((track) => {
+            track.enabled = false;
+          });
+        }
+        setStreamForParticipant(myVideoStream, socket.id || '', false);
+        setMyStream(myVideoStream);
         setTimeout(() => {
           setLoadingStream(false);
         }, 1000);
