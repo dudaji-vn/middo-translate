@@ -1,4 +1,4 @@
-import HelpDeskConversation from "@/app/(main-layout)/(need-not-auth)/help-desk/[businessId]/[...slugs]/_components/help-desk-conversation/help-desk-conversation"
+import HelpDeskConversation from "@/app/help-desk/[businessId]/[...slugs]/_components/help-desk-conversation/help-desk-conversation"
 import { businessAPI } from "@/features/chat/help-desk/api/business.service";
 
 import { notFound } from "next/navigation";
