@@ -21,9 +21,9 @@ export const Header = (props: Props) => {
   const isClient = useClient();
   const platform = usePlatformStore((state) => state.platform);
 
-  const { isBusiness, isHelpDesk, isTestItOutPage } =
+  const { isBusiness } =
     useBusinessNavigationData();
-  const hideNavigation = isBusiness || isHelpDesk;
+  const hideNavigation = isBusiness;
 
   if (!isClient) return null;
   if (platform === 'mobile') return null;
@@ -35,18 +35,13 @@ export const Header = (props: Props) => {
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
-
       <Link
-        href={isHelpDesk ? '#' : ROUTE_NAMES.ROOT}
+        href={ ROUTE_NAMES.ROOT}
         className={cn(
           'flex w-[60px] flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
         )}
       >
-        {isHelpDesk && (
-          <Typography className={' ml-5 min-w-14 text-xs text-neutral-600'}>
-            Power by
-          </Typography>
-        )}
+
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
         {isBusiness && (
           <Typography

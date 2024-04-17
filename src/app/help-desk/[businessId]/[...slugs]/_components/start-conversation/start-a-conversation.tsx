@@ -81,7 +81,7 @@ const StartAConversation = ({ extensionData, isAfterDoneAnCOnversation }: {
             content: rootChild.data?.content,
             roomId,
             type: 'flow-actions',
-            language: watch('language'),
+            language: extensionData.language,
             mentions: [],
             actions: rootChild.type === 'message' ? undefined : childrenActions,
             userId: owner?._id,
