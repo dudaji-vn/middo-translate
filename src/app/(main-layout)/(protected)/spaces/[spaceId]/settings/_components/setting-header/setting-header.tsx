@@ -39,22 +39,24 @@ const SettingHeader = ({ space }: {
     const params = useParams();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
     const isExtensionEmpty = !space?.extension
-    console.log(' SettingHeade extension', space)
     return (<>
         <section className='w-full h-fit px-10 py-5 bg-white'>
-            <div className={cn('bg-white w-full p-3 rounded-[12px] bg-primary-100 flex flex-row gap-3', headerVariants({ modal: modalType }))}>
-                <Avatar src={space?.avatar || '/avatar.png'} alt='avt' className='w-24 h-24' />
-                <div className='flex flex-col gap-2'>
-                    <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>
-                        {space?.name}
-                    </Typography>
-                    <Typography className='text-neutral-600'>
-                        {space?.members?.length || 0} Members
-                    </Typography>
-                    <div className='pt-1'>
-                        <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
+            <div className='bg-primary-100 p-3 rounded-[12px]  w-full flex flex-row justify-between'>
+                <div className={cn('w-full flex flex-row gap-3', headerVariants({ modal: modalType }))}>
+                    <Avatar src={space?.avatar || '/avatar.png'} alt='avt' className='w-24 h-24' />
+                    <div className='flex flex-col gap-2'>
+                        <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>
+                            {space?.name}
+                        </Typography>
+                        <Typography className='text-neutral-600'>
+                            {space?.members?.length || 0} Members
+                        </Typography>
                     </div>
-                </div> </div>
+                </div>
+                <div className='pt-1'>
+                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
+                </div>
+            </div>
         </section>
         <section className={(modalType) ? 'hidden' : 'w-full bg-white flex flex-col items-center'}>
             <Tabs defaultValue='members' className="w-full">

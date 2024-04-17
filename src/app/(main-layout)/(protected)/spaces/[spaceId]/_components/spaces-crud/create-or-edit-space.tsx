@@ -28,10 +28,12 @@ import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces'
 const createSpaceSchema = z.object({
   name: z.string().min(1, {
     message: 'Space name is required.'
-  }).max(100, {
-    message: 'Space name is too long, maximum 100 characters.'
+  }).max(50, {
+    message: 'Space name is too long, maximum 500 characters.'
   }),
-  avatar: z.string().optional(),
+  avatar: z.string().min(1, {
+    message: 'Space avatar is required.'
+  }),
   backgroundImage: z.string().optional(),
   members: z.array(z.object({
     email: z.string().email({
@@ -56,7 +58,7 @@ export default function CreateOrEditSpace({ open }: {
     mode: 'onChange',
     defaultValues: {
       name: '',
-      avatar: '',
+      avatar: undefined,
       backgroundImage: '',
       members: []
     },

@@ -12,10 +12,11 @@ export type Member = {
     status?: 'joined' | 'invited' | 'deleted';
 }
 
-export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
+export const membersColumns = ({ onDelete, onResendInvitation, isOwner, isLoading }: {
     onDelete: (member: Member) => void,
     onResendInvitation: (member: Member) => void,
-    isOwner: (email: string) => boolean
+    isOwner: (email: string) => boolean,
+    isLoading: Record<string, boolean>
 }) => [
     {
         accessorKey: "_id",
@@ -51,6 +52,7 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
                     size={'xs'}
                     shape={'square'}
                     color={'default'}
+                    disabled={isLoading[props.row.original.email]}
                     onClick={() => onResendInvitation(props.row.original as Member)}>
                     Resend
                 </Button>
@@ -63,7 +65,7 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         header: "",
         cell(props) {
             const { email, status } = props.row.original || {};
-            const deleteAble = !isOwner(email) && status !== 'deleted'
+            const deleteAble = !isOwner(email) && status !== 'deleted' && !isLoading[email];
             return <div className="flex gap-2  min-w-10 px-2">
                 <Button.Icon size={'xs'}
                     className={deleteAble ? '' : 'invisible'}
