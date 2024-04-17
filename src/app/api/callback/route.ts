@@ -24,6 +24,7 @@ export async function GET(request: Request, response: Response) {
   } else {
     if (redirectUri) {
       redirect(redirectUri);
-    } else redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
+    }
+    redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
   }
 }
