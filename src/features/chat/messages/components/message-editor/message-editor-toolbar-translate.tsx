@@ -1,5 +1,5 @@
 import { TranslateTool } from './translate-tool';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useMessageEditorText } from './message-editor-text-context';
 
 export interface MessageEditorToolbarTranslateToolProps {}

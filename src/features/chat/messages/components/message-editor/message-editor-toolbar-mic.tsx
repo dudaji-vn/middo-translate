@@ -1,7 +1,7 @@
 import { Button } from '@/components/actions';
 import { ButtonProps } from '@/components/actions/button';
 import { Mic } from 'lucide-react';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useMessageEditorText } from './message-editor-text-context';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { on } from 'events';

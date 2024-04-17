@@ -2,7 +2,7 @@ import { TriangleSmall } from '@/components/icons/triangle-small';
 import { RichTextView } from '@/components/rich-text-view';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useAuthStore } from '@/stores/auth.store';
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';

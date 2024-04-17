@@ -9,7 +9,7 @@ import { getCountryCode, getCountryNameByCode } from '@/utils/language-fn';
 
 import { CircleFlag } from 'react-circle-flags';
 import { Globe2Icon } from 'lucide-react';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useMessageEditorText } from './message-editor-text-context';
 import { useState } from 'react';
 
@@ -22,11 +22,9 @@ export const MessageEditorToolbarLangControl = (
   const { setSrcLang, detLang, srcLang } = useChatStore((s) => s);
   const [openSwicthLanguage, setOpenSwicthLanguage] = useState(false);
 
-
-
   return (
     <div>
-      <Select   
+      <Select
         name="srcLang"
         value={srcLang}
         onValueChange={(value) => {
@@ -35,12 +33,12 @@ export const MessageEditorToolbarLangControl = (
         open={openSwicthLanguage}
         onOpenChange={setOpenSwicthLanguage}
       >
-        <SelectTrigger  className="mr-5 w-[180px] rounded-xl bg-neutral-50 !py-2 shadow-none">
+        <SelectTrigger className="mr-5 w-[180px] rounded-xl bg-neutral-50 !py-2 shadow-none">
           <SelectValue placeholder="Theme" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="auto">
-            <Globe2Icon  className="mr-2 inline-block h-4 w-4 text-primary " />
+            <Globe2Icon className="mr-2 inline-block h-4 w-4 text-primary " />
             Detection
           </SelectItem>
           <SelectItem value={userLanguage}>

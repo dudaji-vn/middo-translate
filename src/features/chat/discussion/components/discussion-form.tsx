@@ -212,6 +212,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
   return (
     <div className="border-t p-2">
       <MessageEditor
+        roomId={roomId + message._id}
         userMentions={room?.isGroup ? room.participants : []}
         onSubmitValue={handleSubmit}
       />

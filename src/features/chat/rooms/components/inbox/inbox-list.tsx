@@ -7,7 +7,7 @@ import {
   USE_GET_PINNED_ROOMS_KEY,
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
-import { useChatStore } from '@/features/chat/store';
+import { useChatStore } from '@/features/chat/stores';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
@@ -32,7 +32,11 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
   ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
-    const { inboxStatus: status, businessRoomId, isBusiness } = useBusinessNavigationData();
+    const {
+      inboxStatus: status,
+      businessRoomId,
+      isBusiness,
+    } = useBusinessNavigationData();
     const { businessExtension } = useBusinessExtensionStore();
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
@@ -93,7 +97,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     if (!currentUser) return null;
 
-    if (!rooms.length && !isLoading && !pinnedRooms?.length ) {
+    if (!rooms.length && !isLoading && !pinnedRooms?.length) {
       return <EmptyInbox type={type} />;
     }
 
