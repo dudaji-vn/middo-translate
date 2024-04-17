@@ -29,7 +29,7 @@ const Toolbar = (props: ToolbarProps) => {
   const [isShowColor, setShowColor] = useState(false);
 
   const isDrawing = useVideoCallStore(state => state.isDrawing);
-  const  isMeDoole = useVideoCallStore(state => state.isMeDoole);
+  const  isMeDoodle = useVideoCallStore(state => state.isMeDoodle);
 
   const {setShowConfirmClear} = useDoodleContext();
   return (
@@ -81,7 +81,7 @@ const Toolbar = (props: ToolbarProps) => {
         >
           <RotateCcw />
         </Button.Icon>
-        {isMeDoole && (
+        {isMeDoodle && (
           <Button.Icon
             variant="default"
             size="xs"
