@@ -43,9 +43,19 @@ export const ModalAudioVideoSetting = () => {
         });
     }
     setLoadingVideo(true);
+    let myVideoStream: MediaStream = new MediaStream();
     getUserStream({isTurnOnCamera: isTurnOnCamera, isTurnOnMic: true, cameraDeviceId: type === 'video' ? deviceId : undefined, micDeviceId: type === 'audio' ? deviceId : undefined})
       .then((stream: MediaStream) => {
-        const myVideoStream = stream;
+        myVideoStream = stream;
+        setTurnOnCamera(isTurnOnCamera);
+        setTurnOnMic(isTurnOnMic);
+      })
+      .catch(() => {
+        toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
+        setTurnOnCamera(false);
+        setTurnOnMic(false);
+      })
+      .finally(() => {
         if (!isTurnOnMic && myVideoStream.getAudioTracks().length > 0) {
           myVideoStream.getAudioTracks().forEach((track) => {
             track.enabled = false;
@@ -54,16 +64,6 @@ export const ModalAudioVideoSetting = () => {
         setStreamForParticipant(myVideoStream, socket.id || '', false);
         setMyStream(myVideoStream);
         setLoadingVideo(false);
-        setTurnOnCamera(isTurnOnCamera);
-        setTurnOnMic(isTurnOnMic);
-      })
-      .catch(() => {
-        toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
-        setTurnOnCamera(false);
-        setTurnOnMic(false);
-        setLoadingVideo(false);
-      })
-      .finally(() => {
         setTimeout(() => {
           setLoadingStream(false);
         }, 1000);

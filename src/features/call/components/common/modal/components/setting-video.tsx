@@ -9,7 +9,7 @@ import {
 import useGetAudioVideoSource from '@/features/call/hooks/use-get-audio-video-source';
 import VideoSetting from '@/features/call/interfaces/video-setting.interface';
 import { useVideoSettingStore } from '@/features/call/store/video-setting.store';
-import { Video } from 'lucide-react';
+import { Camera, CameraOff, Video } from 'lucide-react';
 import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 interface SettingVideoProps {
@@ -25,6 +25,21 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
   const { videoInputDevices } = useGetAudioVideoSource();
   const [stream, setStream] = useState<MediaStream | null>(null);
   
+  // Check is allow to access camera
+  const [isAllowCamera, setIsAllowCamera] = useState<boolean>(true);
+  console.log({isAllowCamera})
+  useEffect(() => {
+    const checkIsAllowCamera = async () => {
+      try {
+        await navigator.mediaDevices.getUserMedia({ video: true });
+        setIsAllowCamera(true);
+      } catch (error) {
+        setIsAllowCamera(false);
+      }
+    }
+    checkIsAllowCamera();
+  }, []);
+
   const onVideoInputChange = (val: string) => {
     const selected = videoInputDevices.find(
       (device) => device.deviceId === val,
@@ -99,7 +114,8 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
         </SelectContent>
       </Select>
       <div className="mt-2 h-40 w-full overflow-hidden first-letter:rounded-lg">
-        <video
+        
+        {isAllowCamera ? <video
           className="m-auto h-full w-fit rounded-lg object-contain"
           autoPlay
           playsInline
@@ -108,7 +124,9 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
               video.srcObject = stream;
             }
           }}
-        />
+        /> : <div className="m-auto h-full w-[80%] rounded-lg bg-neutral-50">
+          <CameraOff className="m-auto h-full w-fit text-red-400" size={40} />
+        </div> }
       </div>
     </div>
   );
