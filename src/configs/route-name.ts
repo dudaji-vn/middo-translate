@@ -16,6 +16,6 @@ export const ROUTE_NAMES = {
   SPACES: '/spaces',
   HELPDESK_CONVERSATION: '/help-desk',
   DESKTOP_LOGIN: '/login-google-electron',
-  EXTENSION: '/business',
+  EXTENSION: '/spaces',
   LANDING_PAGE: '/landing',
 };
