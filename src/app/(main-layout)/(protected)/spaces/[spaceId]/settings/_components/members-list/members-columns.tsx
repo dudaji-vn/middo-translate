@@ -4,19 +4,18 @@ import { Button } from "@/components/actions";
 import { Typography } from "@/components/data-display";
 import { cn } from "@/utils/cn";
 import { ColumnDef } from "@tanstack/react-table"
-import { Grip, GripVertical, RotateCcw, Trash2 } from "lucide-react";
-import { ESpaceMemberRole } from "../../../_components/spaces-crud/sections/invite-section";
+import { GripVertical, RotateCcw, Trash2 } from "lucide-react";
 
 export type Member = {
     email: string;
     role: string;
-    status?: 'joined' | 'invited';
+    status?: 'joined' | 'invited' | 'deleted';
 }
 
 export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
     onDelete: (member: Member) => void,
     onResendInvitation: (member: Member) => void,
-    isOwner: (memberId: string) => boolean
+    isOwner: (email: string) => boolean
 }) => [
     {
         accessorKey: "_id",
@@ -29,9 +28,9 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         accessorKey: "email",
         header: "Email",
         cell(props) {
-            return <div className="flex flex-row items-center  w-[240px] gap-6">
+            return <div className="flex flex-row items-center break-words h-auto max-w-40 md:w-[300px] xl:w-[400px] gap-1">
                 <Typography className="text-neutral-800">{props.getValue() as string}</Typography>
-                {isOwner(props.row.original.email) && <Typography className="text-neutral-500">(you)</Typography>}
+                {isOwner(props.row.original.email) && <span className="text-neutral-500">(you)</span>}
             </div>
         },
     },
@@ -39,23 +38,22 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         accessorKey: "status",
         header: "Status",
         cell(props) {
-            return <div className="flex flex-row items-center  w-[120px] gap-6">
-                <Typography className={cn('text-gray-500 capitalize',
+            return <div className="flex flex-row items-center  w-fit  gap-6">
+                <Typography className={cn('text-gray-500 w-[100px] capitalize',
                     props.getValue() === 'joined' && 'text-primary-500-main',
                     props.getValue() === 'invited' && 'text-success-500-main'
                 )} >
                     {props.getValue() as string}
                 </Typography >
-                {props.row.original.status === 'invited' ?
-                    <Button
-                        className="text-neutral-500"
-                        startIcon={<RotateCcw className="text-neutral-500" />}
-                        size={'xs'}
-                        shape={'square'}
-                        color={'default'}
-                        onClick={() => onResendInvitation(props.row.original as Member)}>
-                        Resend
-                    </Button> : null}
+                <Button
+                    className={isOwner(props.row.original.email) || props.row.original.status === 'joined' ? 'invisible' : "text-neutral-500"}
+                    startIcon={<RotateCcw className="text-neutral-500" />}
+                    size={'xs'}
+                    shape={'square'}
+                    color={'default'}
+                    onClick={() => onResendInvitation(props.row.original as Member)}>
+                    Resend
+                </Button>
             </div>
 
         },
@@ -64,8 +62,13 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         accessorKey: "actions",
         header: "",
         cell(props) {
-            return <div className="flex gap-2">
-                <Button.Icon size={'xs'} color={'default'}
+            const { email, status } = props.row.original || {};
+            const deleteAble = !isOwner(email) && status !== 'deleted'
+            return <div className="flex gap-2  min-w-10 px-2">
+                <Button.Icon size={'xs'}
+                    className={deleteAble ? '' : 'invisible'}
+                    disabled={!deleteAble}
+                    color={'default'}
                     onClick={() => onDelete(props.row.original as Member)}
                 >
                     <Trash2 className="text-error" />

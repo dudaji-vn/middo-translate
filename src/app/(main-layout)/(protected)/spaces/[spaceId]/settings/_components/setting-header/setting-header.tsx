@@ -39,7 +39,7 @@ const SettingHeader = ({ space }: {
     const params = useParams();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
     const isExtensionEmpty = !space?.extension
-    console.log(' SettingHeade extension', space?.extension)
+    console.log(' SettingHeade extension', space)
     return (<>
         <section className='w-full h-fit px-10 py-5 bg-white'>
             <div className={cn('bg-white w-full p-3 rounded-[12px] bg-primary-100 flex flex-row gap-3', headerVariants({ modal: modalType }))}>

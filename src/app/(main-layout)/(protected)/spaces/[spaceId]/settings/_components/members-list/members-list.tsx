@@ -3,6 +3,9 @@ import React, { useMemo } from 'react'
 import { Member, membersColumns } from './members-columns'
 import { Typography } from '@/components/data-display'
 import { UserCog, UserRound } from 'lucide-react'
+import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
+import { useParams, useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 
 const MembersList = ({
@@ -15,27 +18,62 @@ const MembersList = ({
         email: string;
     }
 }) => {
+    console.log('owner', owner)
+    const params = useParams();
+    const router = useRouter();
+    const onDelete = async (member: Member) => {
+        try {
+            const res = await removeMemberFromSpace({
+                spaceId: params?.spaceId as string,
+                email: member.email
+            })
+            if (res.data) {
+                toast.success('Member removed successfully')
+                router.refresh();
+                return;
+            }
+        }
+        catch (error) {
+            console.error('Error on DeleteMember:', error)
+            toast.error('Error on Delete member')
+        }
 
-    const onDelete = (member: Member) => {
-        console.log('delete', member)
     }
-    const onResendInvitation = (member: Member) => {
-        console.log('resend', member)
+    const onResendInvitation = async (member: Member) => {
+        try {
+            const res = await resendInvitation({
+                email: member.email,
+                spaceId: params?.spaceId as string,
+                role: member.role
+            })
+            toast.success('Invitation resent successfully')
+            router.refresh();
+
+        } catch (error) {
+            console.error('Error on ResendInvitation:', error)
+            toast.error('Error on Resend invitation')
+        }
+
     }
     const memberTableBaseProps: Omit<DataTableProps<
         Member,
         keyof Member
     >, 'data'> = {
         tableHeadProps: {
-            className: 'bg-transparent'
+            className: 'bg-transparent px-0'
         },
         rowProps: {
-            className: 'rounded-full odd:bg-white even:bg-white'
+            className: 'rounded-full odd:bg-white even:bg-white p-0'
+        },
+        cellProps:{
+            className:'p-0 py-3'
         },
         columns: membersColumns({
             onDelete: onDelete,
             onResendInvitation: onResendInvitation,
-            isOwner: (id) => id === owner._id
+            isOwner: (email) => {
+                return email === owner.email
+            }
         })
 
     }

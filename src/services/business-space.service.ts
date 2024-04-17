@@ -1,4 +1,4 @@
-import { get, post, put } from './api.service';
+import { get, post, put, remove } from './api.service';
 import { Member } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/spaces-crud/sections/members-columns';
 
 export const createSpace = (data: {
@@ -17,6 +17,27 @@ export const inviteMemberToSpace = (data: {
   spaceId: string;
 }) => {
   return put('/help-desk/invite-member', data);
+};
+export const resendInvitation = (data: {
+  email: string;
+  role: string;
+  spaceId: string;
+}) => {
+  return post('/help-desk/resend-invitation', data);
+};
+
+export const validateInvitation = (data: {
+  token: string;
+  status: 'accept' | 'decline';
+}) => {
+  return post('/help-desk/validate-invite', data);
+};
+
+export const removeMemberFromSpace = (data: {
+  email: string;
+  spaceId: string;
+}) => {
+  return remove('/help-desk/remove-member', data);
 };
 
 export const getSpaces = (type: 'joined-spaces' | undefined | null) => {
