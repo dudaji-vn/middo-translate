@@ -71,7 +71,43 @@ class BusinessAPI {
     const data = await res.json();
     return data?.accessToken || '';
   }
-  async getMyInvitations() : Promise<any> {
+
+  async validateInvitation(verifyData: {
+    token: string;
+    status: 'accept' | 'decline';
+  }) {
+    const access_token = await this.getAccessToken();
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/validate-invite',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token}`,
+          },
+          body: JSON.stringify(verifyData),
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      return true;
+    } catch (error) {
+      console.error('Error in accept invitation', error);
+      return false;
+    }
+  }
+
+  async getMyInvitations(): Promise<
+    Array<{
+      space: TSpace;
+      email: string;
+      verifyToken: string;
+      invitedAt: string;
+    }>
+  > {
     const access_token = await this.getAccessToken();
     try {
       const response = await fetch(

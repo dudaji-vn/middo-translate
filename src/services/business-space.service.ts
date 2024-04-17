@@ -26,6 +26,13 @@ export const resendInvitation = (data: {
   return post('/help-desk/resend-invitation', data);
 };
 
+export const validateInvitation = (data: {
+  token: string;
+  status: 'accept' | 'decline';
+}) => {
+  return post('/help-desk/validate-invite', data);
+};
+
 export const removeMemberFromSpace = (data: {
   email: string;
   spaceId: string;
