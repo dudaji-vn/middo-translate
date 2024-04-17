@@ -41,13 +41,6 @@ const SettingSpeaker = ({ className }: SettingSpeakerProps) => {
     );
     if (selected) {
       setSpeaker(selected);
-      const videos = document.querySelectorAll('video.video-participant');
-      videos.forEach(async (video) => {
-        // console.log('🟡video', video);
-        // @ts-ignore
-        // video.setSinkId(selected.deviceId);
-        // await video.setSinkId(selected.deviceId);
-      });
     }
   };
 
