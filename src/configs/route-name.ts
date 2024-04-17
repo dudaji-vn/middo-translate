@@ -14,6 +14,7 @@ export const ROUTE_NAMES = {
   ONLINE_CONVERSATION_JOIN: '/online-conversation/join',
   ONLINE_CONVERSATION_NOT_FOUND: '/online-conversation/not-found',
   SPACES: '/spaces',
+  SPACE_VERIFY: '/space-verify',
   HELPDESK_CONVERSATION: '/help-desk',
   DESKTOP_LOGIN: '/login-google-electron',
   EXTENSION: '/spaces',

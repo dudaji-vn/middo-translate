@@ -1,4 +1,5 @@
 'use client';
+
 import useProtectedRoute from '@/hooks/use-protected-route';
 import { usePathname, useRouter } from 'next/navigation';
 

@@ -12,7 +12,10 @@ export async function GET(request: Request, response: Response) {
   console.log('accessToken', accessToken);
   setTokens({ accessToken, refreshToken });
   const type = cookies().get('login-type')?.value || '';
+  const redirectPath = cookies().get('redirect-path')?.value || '';
+
   cookies().set('login-type', '', { expires: new Date(0) });
+  cookies().set('redirect-path', '', { expires: new Date(0) });
   if (type === 'desktop') {
     redirect(
       ROUTE_NAMES.DESKTOP_LOGIN +
@@ -22,6 +25,9 @@ export async function GET(request: Request, response: Response) {
         refreshToken,
     );
   } else {
+    if (redirectPath) {
+      redirect(redirectPath);
+    }
     if (redirectUri) {
       redirect(redirectUri);
     }
