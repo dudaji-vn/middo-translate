@@ -25,6 +25,7 @@ export type VideoCallState = {
   captions: CaptionInterface[];
   messageId: string;
   showChooseScreen: boolean;
+  isWaitingForSomeoneJoin: boolean;
   setRoom: (room: any) => void;
   setLayout: (layout?: string) => void;
   setConfirmLeave: (confirmLeave: boolean) => void;
@@ -49,6 +50,7 @@ export type VideoCallState = {
   clearStateVideoCall: () => void;
   clearRequestCall: () => void;
   setChooseScreen: (showChooseScreen: boolean) => void;
+  setWaitingForSomeoneJoin: (isWaitingForSomeoneJoin: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -75,6 +77,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   captions: [],
   messageId: '',
   showChooseScreen: false,
+  isWaitingForSomeoneJoin: false,
   setRoom: (room: any) => {
     set(() => ({ room }));
   },
@@ -149,6 +152,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   setChooseScreen: (showChooseScreen: boolean) => {
     set(() => ({ showChooseScreen }));
+  },
+  setWaitingForSomeoneJoin: (isWaitingForSomeoneJoin: boolean) => {
+    set(() => ({ isWaitingForSomeoneJoin }));
   },
   clearStateVideoCall: () => {
     set(() => ({
