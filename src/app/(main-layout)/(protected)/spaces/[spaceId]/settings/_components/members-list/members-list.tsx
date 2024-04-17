@@ -18,10 +18,14 @@ const MembersList = ({
         email: string;
     }
 }) => {
-    console.log('owner', owner)
+    const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({})
     const params = useParams();
     const router = useRouter();
     const onDelete = async (member: Member) => {
+        setIsLoading(prev => ({
+            ...prev,
+            [member.email]: true
+        }))
         try {
             const res = await removeMemberFromSpace({
                 spaceId: params?.spaceId as string,
@@ -37,18 +41,29 @@ const MembersList = ({
             console.error('Error on DeleteMember:', error)
             toast.error('Error on Delete member')
         }
+        setIsLoading(prev => ({
+            ...prev,
+            [member.email]: false
+        }))
 
     }
     const onResendInvitation = async (member: Member) => {
+        setIsLoading(prev => ({
+            ...prev,
+            [member.email]: true
+        }))
         try {
             const res = await resendInvitation({
                 email: member.email,
                 spaceId: params?.spaceId as string,
                 role: member.role
             })
+            setIsLoading(prev => ({
+                ...prev,
+                [member.email]: false
+            }))
             toast.success('Invitation resent successfully')
             router.refresh();
-
         } catch (error) {
             console.error('Error on ResendInvitation:', error)
             toast.error('Error on Resend invitation')
@@ -65,15 +80,16 @@ const MembersList = ({
         rowProps: {
             className: 'rounded-full odd:bg-white even:bg-white p-0'
         },
-        cellProps:{
-            className:'p-0 py-3'
+        cellProps: {
+            className: 'p-0 py-3'
         },
         columns: membersColumns({
             onDelete: onDelete,
             onResendInvitation: onResendInvitation,
             isOwner: (email) => {
                 return email === owner.email
-            }
+            },
+            isLoading,
         })
 
     }

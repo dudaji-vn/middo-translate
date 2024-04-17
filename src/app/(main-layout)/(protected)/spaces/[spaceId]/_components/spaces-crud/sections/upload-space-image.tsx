@@ -24,6 +24,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useFormContext } from 'react-hook-form';
 import { Avatar } from '@/components/data-display';
+import { cn } from '@/utils/cn';
 
 export default function UploadSpaceImage() {
   const [open, setOpen] = useState(false);
@@ -62,7 +63,7 @@ export default function UploadSpaceImage() {
           <Button
             className='absolute top-0 right-1 p-1 m-0'
             onClick={() => {
-              setValue(namefield, '');
+              setValue(namefield, undefined);
             }}
             color={'default'}
           >
@@ -70,7 +71,11 @@ export default function UploadSpaceImage() {
           </Button>
         </div> :
           <AlertDialogTrigger>
-            <Avatar src={'/empty-cam.svg'} alt='avatar' className='w-24 h-24 cursor-pointer p-0' />
+            <Avatar src={'/empty-cam.svg'}
+              alt='avatar'
+              className={cn('w-24 h-24 cursor-pointer p-0',
+                errors[namefield] && 'border border-red-500'
+              )} />
           </AlertDialogTrigger>}
         <AlertDialogContent className="md:h-[80vh] md:max-w-[80vw] xl:max-w-[70vw]">
           <MediaUploadProvider>
