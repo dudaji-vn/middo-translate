@@ -4,7 +4,8 @@ import { Member, membersColumns } from './members-columns'
 import { Typography } from '@/components/data-display'
 import { UserCog, UserRound } from 'lucide-react'
 import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
+import toast from 'react-hot-toast'
 
 
 const MembersList = ({
@@ -17,28 +18,40 @@ const MembersList = ({
         email: string;
     }
 }) => {
+    console.log('owner', owner)
     const params = useParams();
-    const onDelete = (member: Member) => {
+    const router = useRouter();
+    const onDelete = async (member: Member) => {
         try {
-            removeMemberFromSpace({
+            const res = await removeMemberFromSpace({
                 spaceId: params?.spaceId as string,
                 email: member.email
             })
+            if (res.data) {
+                toast.success('Member removed successfully')
+                router.refresh();
+                return;
+            }
         }
         catch (error) {
             console.error('Error on DeleteMember:', error)
+            toast.error('Error on Delete member')
         }
 
     }
     const onResendInvitation = async (member: Member) => {
         try {
-            await resendInvitation({
+            const res = await resendInvitation({
                 email: member.email,
-                spaceId: member._id,
+                spaceId: params?.spaceId as string,
                 role: member.role
             })
+            toast.success('Invitation resent successfully')
+            router.refresh();
+
         } catch (error) {
             console.error('Error on ResendInvitation:', error)
+            toast.error('Error on Resend invitation')
         }
 
     }
@@ -55,7 +68,9 @@ const MembersList = ({
         columns: membersColumns({
             onDelete: onDelete,
             onResendInvitation: onResendInvitation,
-            isOwner: (id) => id === owner._id
+            isOwner: (email) => {
+                return email === owner.email
+            }
         })
 
     }

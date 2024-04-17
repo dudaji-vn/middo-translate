@@ -14,3 +14,7 @@ export const put = (url: string, body: any) => {
 export const patch = (url: string, body: any) => {
     return axios.patch(url, body);
 }
+export const remove = (url: string, body: any) => {
+    return axios.delete(url, { data: body });
+}
+
