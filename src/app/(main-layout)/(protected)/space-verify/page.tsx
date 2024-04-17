@@ -55,7 +55,7 @@ const SpaceVerify = async ({
                 <Typography className='text-neutral-600 text-base font-normal'>
                     Accept this invitation to join to Dudaji Vietnam. Or you could decline it.
                 </Typography>
-                <ValidateInvitation invitation={thisInvitation} token={token} />
+                <ValidateInvitation token={token} />
             </div>
         </main>
     )
