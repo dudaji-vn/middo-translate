@@ -4,10 +4,10 @@ import { Button } from "@/components/actions";
 import { Typography } from "@/components/data-display";
 import { cn } from "@/utils/cn";
 import { ColumnDef } from "@tanstack/react-table"
-import { Grip, GripVertical, RotateCcw, Trash2 } from "lucide-react";
-import { ESpaceMemberRole } from "../../../_components/spaces-crud/sections/invite-section";
+import { GripVertical, RotateCcw, Trash2 } from "lucide-react";
 
 export type Member = {
+    _id: string;
     email: string;
     role: string;
     status?: 'joined' | 'invited';
@@ -29,9 +29,9 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         accessorKey: "email",
         header: "Email",
         cell(props) {
-            return <div className="flex flex-row items-center  w-[240px] gap-6">
+            return <div className="flex flex-row items-center  w-[240px] gap-1">
                 <Typography className="text-neutral-800">{props.getValue() as string}</Typography>
-                {isOwner(props.row.original.email) && <Typography className="text-neutral-500">(you)</Typography>}
+                {isOwner(props.row.original._id) && <span className="text-neutral-500">(you)</span>}
             </div>
         },
     },
@@ -48,7 +48,7 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
                 </Typography >
                 {props.row.original.status === 'invited' ?
                     <Button
-                        className="text-neutral-500"
+                        className={isOwner(props.row.original._id) ? 'hidden' : "text-neutral-500"}
                         startIcon={<RotateCcw className="text-neutral-500" />}
                         size={'xs'}
                         shape={'square'}
@@ -65,7 +65,9 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         header: "",
         cell(props) {
             return <div className="flex gap-2">
-                <Button.Icon size={'xs'} color={'default'}
+                <Button.Icon size={'xs'}
+                    className={isOwner(props.row.original._id) ? 'hidden' : ''}
+                    color={'default'}
                     onClick={() => onDelete(props.row.original as Member)}
                 >
                     <Trash2 className="text-error" />

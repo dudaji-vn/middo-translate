@@ -3,6 +3,8 @@ import React, { useMemo } from 'react'
 import { Member, membersColumns } from './members-columns'
 import { Typography } from '@/components/data-display'
 import { UserCog, UserRound } from 'lucide-react'
+import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
+import { useParams } from 'next/navigation'
 
 
 const MembersList = ({
@@ -15,12 +17,30 @@ const MembersList = ({
         email: string;
     }
 }) => {
-
+    const params = useParams();
     const onDelete = (member: Member) => {
-        console.log('delete', member)
+        try {
+            removeMemberFromSpace({
+                spaceId: params?.spaceId as string,
+                email: member.email
+            })
+        }
+        catch (error) {
+            console.error('Error on DeleteMember:', error)
+        }
+
     }
-    const onResendInvitation = (member: Member) => {
-        console.log('resend', member)
+    const onResendInvitation = async (member: Member) => {
+        try {
+            await resendInvitation({
+                email: member.email,
+                spaceId: member._id,
+                role: member.role
+            })
+        } catch (error) {
+            console.error('Error on ResendInvitation:', error)
+        }
+
     }
     const memberTableBaseProps: Omit<DataTableProps<
         Member,

@@ -18,6 +18,22 @@ export const inviteMemberToSpace = (data: {
 }) => {
   return put('/help-desk/invite-member', data);
 };
+export const resendInvitation = (data: {
+  email: string;
+  role: string;
+  spaceId: string;
+}) => {
+  return put('/help-desk/resend-invitation', data);
+};
+
+
+export const removeMemberFromSpace = (data: {
+  email: string;
+  spaceId: string;
+}) => {
+  return post('/help-desk/remove-member', data);
+};
+
 
 export const getSpaces = (type: 'joined-spaces' | undefined | null) => {
   const queryParams = type ? `?type=${type}` : '';
