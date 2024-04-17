@@ -60,10 +60,13 @@ const MembersList = ({
         keyof Member
     >, 'data'> = {
         tableHeadProps: {
-            className: 'bg-transparent'
+            className: 'bg-transparent px-0'
         },
         rowProps: {
-            className: 'rounded-full odd:bg-white even:bg-white'
+            className: 'rounded-full odd:bg-white even:bg-white p-0'
+        },
+        cellProps:{
+            className:'p-0 py-3'
         },
         columns: membersColumns({
             onDelete: onDelete,

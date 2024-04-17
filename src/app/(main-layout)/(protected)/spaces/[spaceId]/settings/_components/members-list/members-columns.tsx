@@ -28,7 +28,7 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         accessorKey: "email",
         header: "Email",
         cell(props) {
-            return <div className="flex flex-row items-center  w-[240px] gap-1">
+            return <div className="flex flex-row items-center break-words h-auto max-w-40 md:w-[300px] xl:w-[400px] gap-1">
                 <Typography className="text-neutral-800">{props.getValue() as string}</Typography>
                 {isOwner(props.row.original.email) && <span className="text-neutral-500">(you)</span>}
             </div>
@@ -38,23 +38,22 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         accessorKey: "status",
         header: "Status",
         cell(props) {
-            return <div className="flex flex-row items-center  w-[120px] gap-6">
-                <Typography className={cn('text-gray-500 min-w-[60px] capitalize',
+            return <div className="flex flex-row items-center  w-fit  gap-6">
+                <Typography className={cn('text-gray-500 w-[100px] capitalize',
                     props.getValue() === 'joined' && 'text-primary-500-main',
                     props.getValue() === 'invited' && 'text-success-500-main'
                 )} >
                     {props.getValue() as string}
                 </Typography >
-                {props.row.original.status !== 'joined' ?
-                    <Button
-                        className={isOwner(props.row.original.email) ? 'hidden' : "text-neutral-500"}
-                        startIcon={<RotateCcw className="text-neutral-500" />}
-                        size={'xs'}
-                        shape={'square'}
-                        color={'default'}
-                        onClick={() => onResendInvitation(props.row.original as Member)}>
-                        Resend
-                    </Button> : null}
+                <Button
+                    className={isOwner(props.row.original.email) || props.row.original.status === 'joined' ? 'invisible' : "text-neutral-500"}
+                    startIcon={<RotateCcw className="text-neutral-500" />}
+                    size={'xs'}
+                    shape={'square'}
+                    color={'default'}
+                    onClick={() => onResendInvitation(props.row.original as Member)}>
+                    Resend
+                </Button>
             </div>
 
         },
@@ -64,9 +63,11 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner }: {
         header: "",
         cell(props) {
             const { email, status } = props.row.original || {};
-            return <div className="flex gap-2">
+            const deleteAble = !isOwner(email) && status !== 'deleted'
+            return <div className="flex gap-2  min-w-10 px-2">
                 <Button.Icon size={'xs'}
-                    className={isOwner(email) || (status === 'deleted')  ? 'hidden' : ''}
+                    className={deleteAble ? '' : 'invisible'}
+                    disabled={!deleteAble}
                     color={'default'}
                     onClick={() => onDelete(props.row.original as Member)}
                 >
