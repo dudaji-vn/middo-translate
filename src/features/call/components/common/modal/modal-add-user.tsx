@@ -22,7 +22,8 @@ export const ModalAddUser = () => {
     const participants = useParticipantVideoCallStore(state => state.participants)
     const [members, setMembers] = useState<User[]>([]);
     const [membersApi, setMembersApi] = useState<User[]>([]);
-    
+    const setWaitingForSomeoneJoin = useVideoCallStore(state => state.setWaitingForSomeoneJoin);
+
     useEffect(() => {
         if (!room || !room.roomId) return;
         const fetchMembersInGroup = async () => {
@@ -68,6 +69,7 @@ export const ModalAddUser = () => {
             call: room,
             user
         })
+        setWaitingForSomeoneJoin(true);
         setSelectedUsers([]);
     };
     const handleChangeSearch = (e: React.FormEvent<HTMLInputElement>) => {
