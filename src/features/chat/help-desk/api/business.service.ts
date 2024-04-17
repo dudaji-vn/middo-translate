@@ -71,7 +71,29 @@ class BusinessAPI {
     const data = await res.json();
     return data?.accessToken || '';
   }
-
+  async getMyInvitations() : Promise<any> {
+    const access_token = await this.getAccessToken();
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + '/api/help-desk/my-invitations',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message);
+      }
+      return data?.data;
+    } catch (error) {
+      console.error('Error in get my invitation list', error);
+      return [];
+    }
+  }
   async getSpaceBySpaceID(spaceId: string): Promise<
     | ({
         extension: TBusinessExtensionData;
