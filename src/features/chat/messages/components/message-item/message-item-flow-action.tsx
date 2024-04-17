@@ -75,9 +75,13 @@ const MessageNode = ({
                     userId: them?._id,
                     clientTempId: new Date().toISOString()
                 })
+                console.log('bot-mes', mes)
                 if (mes)
-                    // @ts-ignore
-                    replaceMessage(mes, newBotMessage.clientTempId);
+                    replaceMessage({
+                        ...mes,
+                        content: mes.translations?.[me!.language] || newBotMessage.content
+                        // @ts-ignore
+                    }, newBotMessage.clientTempId);
             } catch (error) {
                 console.error('Failed to send message', error);
             }
