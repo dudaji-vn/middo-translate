@@ -2,14 +2,13 @@
 
 import { Button, ButtonProps } from "@/components/actions"
 import { Typography } from "@/components/data-display"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetOverlay, SheetTitle, SheetTrigger } from "@/components/navigation"
+import { Sheet, SheetContent } from "@/components/navigation"
 import { ROUTE_NAMES } from "@/configs/route-name"
 import { useAppStore } from "@/stores/app.store"
 import { useSidebarStore } from "@/stores/sidebar.store"
 import { cn } from "@/utils/cn"
-import { Archive, CheckSquare, LineChartIcon, MessageSquare, Settings } from "lucide-react"
+import { Archive, CheckSquare, LineChartIcon, MessagesSquare, Settings } from "lucide-react"
 import { useParams, usePathname, useRouter } from "next/navigation"
-import path from "path"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -21,7 +20,7 @@ interface SidebarContent {
 const sidebarContents = [
     {
         title: 'conversations',
-        icon: <MessageSquare />,
+        icon: <MessagesSquare />,
     },
     {
         title: 'completed',
