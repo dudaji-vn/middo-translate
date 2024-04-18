@@ -56,7 +56,7 @@ export const EditSpaceModal = () => {
             avatar: space?.avatar || '/avatar.svg',
             backgroundImage: space?.backgroundImage,
         });
-    }, [space]);
+    }, [space, open]);
 
     const onAddNewMember = (member: Member) => {
         if (space?.members && space?.members.find((mem: Member) => mem.email === member.email)) {
@@ -121,13 +121,13 @@ export const EditSpaceModal = () => {
                                 }}
                             />
                             <div className='w-full flex flex-row gap-3 items-center justify-end'>
-                                <Button
+                                {/* <Button
                                     onClick={() => setOpen(false)}
                                     color={'default'}
                                     shape={'square'}
                                     size={'sm'} >
                                     Cancel
-                                </Button>
+                                </Button> */}
                                 <Button
                                     type='submit'
                                     color={'primary'}
