@@ -29,7 +29,7 @@ export const membersColumns = ({ onDelete, onResendInvitation, isOwner, isLoadin
         accessorKey: "email",
         header: "Email",
         cell(props) {
-            return <div className="flex flex-row items-center break-words h-auto max-w-40 md:w-[300px] xl:w-[400px] gap-1">
+            return <div className="flex flex-row items-center break-words h-auto min-w-fit sm:w-[400px] md:min-w-[500px] xl:min-w-[800px] gap-1">
                 <Typography className="text-neutral-800">{props.getValue() as string}</Typography>
                 {isOwner(props.row.original.email) && <span className="text-neutral-500">(you)</span>}
             </div>
