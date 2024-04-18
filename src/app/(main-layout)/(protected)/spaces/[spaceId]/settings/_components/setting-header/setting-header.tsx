@@ -43,7 +43,7 @@ const SettingHeader = ({ space }: {
         <section className='w-full h-fit px-10 py-5 bg-white'>
             <div className='bg-primary-100 p-3 rounded-[12px]  w-full flex flex-row justify-between'>
                 <div className={cn('w-full flex flex-row gap-3', headerVariants({ modal: modalType }))}>
-                    <Avatar src={space?.avatar || '/avatar.png'} alt='avt' className='w-24 h-24' />
+                    <Avatar src={space?.avatar || '/avatar.svg'} alt='avt' className='w-24 h-24' />
                     <div className='flex flex-col gap-2'>
                         <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>
                             {space?.name}
