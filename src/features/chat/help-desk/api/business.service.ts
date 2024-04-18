@@ -22,6 +22,7 @@ export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
 export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
 export type AnalyticsOptions = {
   type: AnalyticsType;
+  spaceId: string;
 } & (
   | {
       type: 'custom';
@@ -209,7 +210,7 @@ class BusinessAPI {
     }
   }
 
-  async getAnalytics({ type = 'last-week', custom }: AnalyticsOptions) {
+  async getAnalytics({ type = 'last-week', custom, spaceId }: AnalyticsOptions) {
     let access_token = await this.getAccessToken();
     try {
       if (!analyticsType.includes(type)) {
@@ -220,6 +221,7 @@ class BusinessAPI {
       }
       const query = new URLSearchParams({
         type,
+        spaceId,
         ...(custom && {
           fromDate: custom.fromDate,
           toDate: custom.toDate,
