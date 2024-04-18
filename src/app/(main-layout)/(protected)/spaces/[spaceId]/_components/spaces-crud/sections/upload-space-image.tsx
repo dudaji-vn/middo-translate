@@ -26,7 +26,9 @@ import { useFormContext } from 'react-hook-form';
 import { Avatar } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 
-export default function UploadSpaceImage() {
+export default function UploadSpaceImage({ nameField }: {
+  nameField: string;
+}) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const inputCropImage = useRef<InputCropImageRef>(null);
@@ -34,8 +36,7 @@ export default function UploadSpaceImage() {
   const {
     setValue, watch, formState: { errors },
   } = useFormContext();
-  const namefield = `avatar`;
-  const avatar = watch(namefield);
+  const avatar = watch(nameField);
   const onUploadedImage = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -48,7 +49,7 @@ export default function UploadSpaceImage() {
       let image = await uploadImage(file);
       let imgUrl = image.secure_url;
       if (!imgUrl) throw new Error(t('MESSAGE.ERROR.UPLOAD_IMAGE'));
-      setValue(namefield, imgUrl);
+      setValue(nameField, imgUrl);
       setOpen(false);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
@@ -63,7 +64,7 @@ export default function UploadSpaceImage() {
           <Button
             className='absolute top-0 right-1 p-1 m-0'
             onClick={() => {
-              setValue(namefield, undefined);
+              setValue(nameField, undefined);
             }}
             color={'default'}
           >
@@ -74,7 +75,7 @@ export default function UploadSpaceImage() {
             <Avatar src={'/empty-cam.svg'}
               alt='avatar'
               className={cn('w-24 h-24 cursor-pointer p-0',
-                errors[namefield] && 'border border-red-500'
+                errors[nameField] && 'border border-red-500'
               )} />
           </AlertDialogTrigger>}
         <AlertDialogContent className="md:h-[80vh] md:max-w-[80vw] xl:max-w-[70vw]">

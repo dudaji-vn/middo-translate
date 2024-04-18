@@ -16,6 +16,7 @@ import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.s
 import { ROUTE_NAMES } from '@/configs/route-name'
 import { TSpace } from '../../../_components/business-spaces'
 import MembersList from '../members-list/members-list'
+import { EditSpaceModal } from '../space-edition/edit-space-modal'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -29,7 +30,6 @@ const headerVariants = cva('w-full flex flex-row', {
 });
 
 const SettingHeader = ({ space }: {
-
     space: {
         extension: TBusinessExtensionData;
     } & TSpace
@@ -52,9 +52,7 @@ const SettingHeader = ({ space }: {
                         </Typography>
                     </div>
                 </div>
-                <div className='pt-1'>
-                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
-                </div>
+                <EditSpaceModal />
             </div>
         </section>
         <section className={(modalType) ? 'hidden' : 'w-full bg-white flex flex-col items-center'}>
