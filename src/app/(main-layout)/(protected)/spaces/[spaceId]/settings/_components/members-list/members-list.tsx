@@ -35,6 +35,11 @@ const MembersList = ({
             const res = await removeMemberFromSpace({
                 spaceId: params?.spaceId as string,
                 email: member.email
+            }).finally(() => {
+                setIsLoading(prev => ({
+                    ...prev,
+                    [member.email]: false
+                }))
             })
             if (res.data) {
                 toast.success('Member removed successfully')
@@ -46,10 +51,7 @@ const MembersList = ({
             console.error('Error on DeleteMember:', error)
             toast.error('Error on Delete member')
         }
-        setIsLoading(prev => ({
-            ...prev,
-            [member.email]: false
-        }))
+
 
     }
     const onResendInvitation = async (member: Member) => {
@@ -62,18 +64,22 @@ const MembersList = ({
                 email: member.email,
                 spaceId: params?.spaceId as string,
                 role: member.role
+            }).finally(() => {
+                setIsLoading(prev => ({
+                    ...prev,
+                    [member.email]: false
+                }))
             })
-            setIsLoading(prev => ({
-                ...prev,
-                [member.email]: false
-            }))
             toast.success('Invitation resent successfully')
             router.refresh();
         } catch (error) {
             console.error('Error on ResendInvitation:', error)
             toast.error('Error on Resend invitation')
         }
-
+        setIsLoading(prev => ({
+            ...prev,
+            [member.email]: false
+        }))
     }
     const memberTableBaseProps: Omit<DataTableProps<
         Member,
