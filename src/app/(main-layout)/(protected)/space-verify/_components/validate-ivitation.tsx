@@ -32,18 +32,18 @@ const ValidateInvitation = (
             variant={'default'}
             color={'primary'}
             shape={'square'}
-            className='min-w-[200px]'
+            className='min-w-[280px]'
             size={'sm'}
             onClick={() => onValidateInvitation('accept')}
         >
             Accept
         </Button>
         <Button
-            variant={'ghost'}
-            color={'primary'}
+            variant={'ghost'}   
+            color={'default'}
             shape={'square'}
-            size={'sm'}
-            className='min-w-[200px]'
+            // size={'sm'}
+            className='min-w-[280px]'
             onClick={() => onValidateInvitation('decline')}
         >
             Decline
