@@ -12,7 +12,7 @@ export const createExtension = (data: {
 };
 
 export const deleteExtension = (extensionId: string) => {
-  return axios.delete('/help-desk/extension/' + extensionId);
+  return axios.delete('/help-desk/extensions/' + extensionId);
 };
 
 export const startAGuestConversation = (data: {
