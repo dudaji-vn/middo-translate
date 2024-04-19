@@ -11,8 +11,8 @@ export const createExtension = (data: {
   return put('/help-desk/create-or-edit-extension', data);
 };
 
-export const deleteExtension = () => {
-  return axios.delete('/help-desk');
+export const deleteExtension = (extensionId: string) => {
+  return axios.delete('/help-desk/extension/' + extensionId);
 };
 
 export const startAGuestConversation = (data: {
