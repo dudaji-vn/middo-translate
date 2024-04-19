@@ -99,7 +99,6 @@
     "react-resizable-panels": "^1.0.8",
     "react-sketch-canvas": "^6.2.0",
     "react-speech-recognition": "^3.10.0",
-    "react-split-pane": "^0.1.92",
     "reactflow": "^11.10.4",
     "recharts": "^2.12.3",
     "regenerator-runtime": "^0.14.0",
