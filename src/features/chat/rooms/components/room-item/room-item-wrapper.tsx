@@ -7,9 +7,10 @@ export interface RoomItemWrapperProps {
   isBusinessRoom?: boolean;
 }
 
-export const RoomItemWrapper = (
-  { isBusinessRoom, ...props }: RoomItemWrapperProps & PropsWithChildren,
-) => {
+export const RoomItemWrapper = ({
+  isBusinessRoom,
+  ...props
+}: RoomItemWrapperProps & PropsWithChildren) => {
   const { data, isActive, onClick, disabledRedirect } = useRoomItem();
 
   return (

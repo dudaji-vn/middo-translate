@@ -15,14 +15,14 @@ import {
 export default function ChatPage() {
   const { t } = useTranslation('common');
   return (
-    <main className="h-full flex-1">
+    <main className="hidden h-full flex-1 md:block">
       <div className="flex-col items-center justify-center py-10 text-center">
         <Typography variant="h6" className="text-center text-lg  text-primary">
           {t('CONVERSATION.EMPTY_WELCOME_TITLE')}
         </Typography>
       </div>
       <div className="flex items-center justify-center">
-        <Carousel opts={{loop: true}} className="max-w-xl">
+        <Carousel opts={{ loop: true }} className="max-w-xl">
           <CarouselContent>
             <CarouselItem className="overflow-hidden">
               <CardItem
@@ -41,15 +41,13 @@ export default function ChatPage() {
             <CarouselItem>
               <CardItem
                 title={t('CONVERSATION.EMPTY_WELCOME_ITEM_3_TITLE')}
-                description={t(
-                  'CONVERSATION.EMPTY_WELCOME_ITEM_3_DESCRIPTION',
-                )}
+                description={t('CONVERSATION.EMPTY_WELCOME_ITEM_3_DESCRIPTION')}
                 image="/editor.png"
               />
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious className='left-1'/>
-          <CarouselNext className='right-1'/>
+          <CarouselPrevious className="left-1" />
+          <CarouselNext className="right-1" />
         </Carousel>
       </div>
     </main>
@@ -66,7 +64,14 @@ const CardItem = ({
   image: string;
 }) => (
   <div className="flex flex-col items-center justify-center ">
-    <Image alt={title} src={image} quality={100} width={600} height={520} className='max-h-[50vh] object-contain'/>
+    <Image
+      alt={title}
+      src={image}
+      quality={100}
+      width={600}
+      height={520}
+      className="max-h-[50vh] object-contain"
+    />
     <Typography variant="h4" className="mt-6 text-primary">
       {title}
     </Typography>

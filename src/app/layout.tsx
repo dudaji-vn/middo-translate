@@ -7,7 +7,7 @@ import {
 } from '@/configs/env.public';
 
 import { AppProvider } from '@/providers/app.provider';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Open_Sans } from 'next/font/google';
 
 const font = Open_Sans({ subsets: ['latin'] });
@@ -27,6 +27,10 @@ export const metadata: Metadata = {
   verification: {
     google: '93nxwzFXGw9SFXutb6FCgeqV5Pz9rL9MTxCRxzJwDKM',
   },
+};
+
+export const viewport: Viewport = {
+  interactiveWidget: 'resizes-content',
 };
 
 export default function RootLayout({
