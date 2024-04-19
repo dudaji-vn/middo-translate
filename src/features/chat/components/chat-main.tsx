@@ -2,11 +2,12 @@
 
 import { useParams, usePathname } from 'next/navigation';
 
-import { PropsWithChildren } from 'react';
+import { Sideslip } from '@/components/animations';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { RoomActions } from '../rooms/components/room-actions';
-import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
+import { cn } from '@/utils/cn';
+import { AnimatePresence } from 'framer-motion';
+import { PropsWithChildren } from 'react';
 
 export interface ChatMainProps {}
 
@@ -21,23 +22,18 @@ export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
   const show = !isMobile || isInRoom;
 
   return (
-    // <AnimatePresence initial={false}>
-    <>
+    <AnimatePresence mode="wait" initial={false}>
       {show && (
-        <div
-          // initial={{ x: '100%' }}
-          // animate={{ x: 0 }}
-          // exit={{ x: '100%' }}
+        <Sideslip
           className={cn(
             isMobile
-              ? 'absolute left-0 top-0 z-50 h-dvh w-screen'
+              ? 'fixed left-0 top-0 z-50 h-dvh w-screen overflow-hidden'
               : 'h-main-container-height',
           )}
         >
           {children}
-        </div>
+        </Sideslip>
       )}
-    </>
-    // </AnimatePresence>
+    </AnimatePresence>
   );
 };
