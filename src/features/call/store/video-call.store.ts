@@ -10,7 +10,7 @@ export type VideoCallState = {
   isDoodle: boolean;
   isDrawing: boolean;
   doodleImage: string | null;
-  isMeDoole: boolean;
+  isMeDoodle: boolean;
   confirmStopDoodle: boolean;
   colorDoodle: string;
   isFullScreen: boolean;
@@ -25,12 +25,13 @@ export type VideoCallState = {
   captions: CaptionInterface[];
   messageId: string;
   showChooseScreen: boolean;
+  isWaitingForSomeoneJoin: boolean;
   setRoom: (room: any) => void;
   setLayout: (layout?: string) => void;
   setConfirmLeave: (confirmLeave: boolean) => void;
   setDoodle: (isDoodle: boolean) => void;
   setDoodleImage: (doodleImage: string) => void;
-  setMeDoodle: (isMeDoole: boolean) => void;
+  setMeDoodle: (isMeDoodle: boolean) => void;
   setDrawing: (isDrawing: boolean) => void;
   setConfirmStopDoodle: (confirmStopDoodle: boolean) => void;
   setFullScreen: (isFullScreen: boolean) => void;
@@ -49,6 +50,7 @@ export type VideoCallState = {
   clearStateVideoCall: () => void;
   clearRequestCall: () => void;
   setChooseScreen: (showChooseScreen: boolean) => void;
+  setWaitingForSomeoneJoin: (isWaitingForSomeoneJoin: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -58,7 +60,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   usersRequestJoinRoom: [],
   isDoodle: false,
   doodleImage: null,
-  isMeDoole: false,
+  isMeDoodle: false,
   isDrawing: false,
   confirmStopDoodle: false,
   colorDoodle: getRandomColor(),
@@ -75,6 +77,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   captions: [],
   messageId: '',
   showChooseScreen: false,
+  isWaitingForSomeoneJoin: false,
   setRoom: (room: any) => {
     set(() => ({ room }));
   },
@@ -90,8 +93,8 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   setDoodleImage: (doodleImage: string) => {
     set(() => ({ doodleImage }));
   },
-  setMeDoodle: (isMeDoole: boolean) => {
-    set(() => ({ isMeDoole }));
+  setMeDoodle: (isMeDoodle: boolean) => {
+    set(() => ({ isMeDoodle }));
   },
   setDrawing: (isDrawing: boolean) => {
     set(() => ({ isDrawing }));
@@ -150,13 +153,16 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   setChooseScreen: (showChooseScreen: boolean) => {
     set(() => ({ showChooseScreen }));
   },
+  setWaitingForSomeoneJoin: (isWaitingForSomeoneJoin: boolean) => {
+    set(() => ({ isWaitingForSomeoneJoin }));
+  },
   clearStateVideoCall: () => {
     set(() => ({
       layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
       confirmLeave: false,
       isDoodle: false,
       doodleImage: null,
-      isMeDoole: false,
+      isMeDoodle: false,
       isDrawing: false,
       confirmStopDoodle: false,
       peerShareScreen: [],
@@ -170,6 +176,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
       isShowModalAddUser: false,
       captions: [],
       messageId: '',
+      isWaitingForSomeoneJoin: false,
     }));
   }
 }));

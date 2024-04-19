@@ -5,6 +5,8 @@ import { Fragment, useMemo } from 'react';
 import { twMerge } from 'tailwind-merge';
 import DoodleItem from '../doodle/doodle-item';
 import VideoItem from '../video/video-item';
+import { cn } from '@/utils/cn';
+import WaitingItem from '../video/waiting-item';
 
 const GalleryLayout = () => {
   
@@ -57,6 +59,9 @@ const GalleryLayout = () => {
             </div>
           ),
         )}
+
+        <WaitingItem />
+        
       </div>
     </div>
   );

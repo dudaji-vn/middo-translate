@@ -21,7 +21,7 @@ const HelpDeskStartConversationPage = async ({ params: { slugs, businessId }, ..
     const isAllowed = isAllowedDomain({ refer: referer, allowedDomains: extensionData.domains });
 
     if (!isAllowed) {
-          notFound();
+        //   notFound();
     }
     return (<StartAConversation extensionData={extensionData} />)
 

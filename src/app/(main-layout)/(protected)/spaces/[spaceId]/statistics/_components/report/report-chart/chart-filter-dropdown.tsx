@@ -19,6 +19,7 @@ export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
 export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
 export type AnalyticsOptions = {
     type: AnalyticsType;
+    spaceId: string;
 } & (
         | {
             type: 'custom';

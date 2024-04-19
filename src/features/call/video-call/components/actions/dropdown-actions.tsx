@@ -26,7 +26,7 @@ export default function DropdownActions() {
   
   const room = useVideoCallStore((state) => state.room);
   const isDoodle = useVideoCallStore((state) => state.isDoodle);
-  const isMeDoole = useVideoCallStore((state) => state.isMeDoole);
+  const isMeDoodle = useVideoCallStore((state) => state.isMeDoodle);
   const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
   const layout = useVideoCallStore((state) => state.layout);
   const isPinShareScreen = useVideoCallStore((state) => state.isPinShareScreen);
@@ -52,7 +52,7 @@ export default function DropdownActions() {
   }, [haveShareScreen, isFullScreen, isPinShareScreen, layout]);
   const {t} = useTranslation('common')
   const onDoodle = () => {
-    if (!isDoodle && isMeDoole) return;
+    if (!isDoodle && isMeDoodle) return;
     // Start doodle
     if (haveShareScreen && !isDoodle) {
       setDrawing(true);

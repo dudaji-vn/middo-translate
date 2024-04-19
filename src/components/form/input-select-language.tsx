@@ -74,7 +74,7 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
         {t('COMMON.LANGUAGE')}
       </label>
       <Select onValueChange={handleSelectChange} {...selectProps}>
-        <SelectTrigger className="flex w-full px-5">
+        <SelectTrigger className="flex w-full px-5 rounded-xl">
           {!valueSelect?.value && (
             <span className="opacity-60">{t('COMMON.LANGUAGE_PLACEHOLDER')}</span>
           )}
@@ -84,7 +84,7 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
                 countryCode={LANGUAGE_CODES_MAP[
                   valueSelect.value as keyof typeof LANGUAGE_CODES_MAP
                 ].toLowerCase()}
-                className="mr-2 inline-block h-5 w-5"
+                className="mr-2 inline-block h-5 w-5 rounded-full overflow-hidden"
               />
               <span className="flex-1 text-left">{t('LANGUAGE.' + valueSelect.title)}</span>
             </>
@@ -103,7 +103,7 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
                     countryCode={LANGUAGE_CODES_MAP[
                       option.value as keyof typeof LANGUAGE_CODES_MAP
                     ].toLowerCase()}
-                    className="mr-2 inline-block h-5 w-5"
+                    className="mr-2 inline-block h-5 w-5 rounded-full overflow-hidden"
                   />
                   <span>{t('LANGUAGE.' + option.title)}</span>
                 </SelectItem>

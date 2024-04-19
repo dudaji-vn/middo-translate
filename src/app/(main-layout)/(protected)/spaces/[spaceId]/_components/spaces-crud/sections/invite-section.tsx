@@ -9,10 +9,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useForm, useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 import { TSpace } from '../../business-spaces'
-import { DataTable } from '@/components/ui/data-table'
+import { DataTable, DataTableProps } from '@/components/ui/data-table'
 import { Member, membersColumns } from './members-columns'
 import { inviteMemberToSpace } from '@/services/business-space.service'
 import toast from 'react-hot-toast'
+import { cn } from '@/utils/cn'
 
 export enum ESpaceMemberRole {
     Admin = 'admin',
@@ -55,14 +56,35 @@ const items: Array<{
         },
     ]
 
-const InviteMembers = ({ space, setMembers }: {
+export type InviteMembersProps = {
     space: {
         name?: string;
         avatar?: string;
         members: Member[];
     },
-    setMembers: (members: Member[]) => void
-}) => {
+    setMembers: (members: Member[]) => void,
+    onAddMember?: (member: Member) => void,
+    headerProps?: React.HTMLAttributes<HTMLDivElement>,
+    spacePreviewProps?: React.HTMLAttributes<HTMLDivElement>,
+    header?: React.ReactNode,
+    tableProps?: DataTableProps<Member, any>,
+    headerTitleProps?: React.HTMLAttributes<HTMLDivElement>,
+    headerDescriptionProps?: React.HTMLAttributes<HTMLDivElement>
+} & React.HTMLAttributes<HTMLDivElement>
+
+const InviteMembers = ({
+    space,
+    setMembers,
+    spacePreviewProps,
+    tableProps,
+    header,
+    headerProps,
+    headerTitleProps,
+    headerDescriptionProps,
+    onAddMember,
+    ...props
+}: InviteMembersProps
+) => {
     const formAdding = useForm<TAddingmember>({
         mode: 'onChange',
         defaultValues: {
@@ -74,33 +96,48 @@ const InviteMembers = ({ space, setMembers }: {
     });
     const invitedMembers = (space?.members || []) as Member[];
     const onAddUser = () => {
-        const newInvitedMember = formAdding.getValues();
-        if (!newInvitedMember.email || newInvitedMember.email.trim() == '') {
+        if (onAddMember) {
+            onAddMember(formAdding.getValues());
+            formAdding.setValue('email', '');
             return;
         }
-        if (invitedMembers.find(m => m.email === newInvitedMember.email)) {
-            toast.error('This user has already been invited');
-            return;
+        if (setMembers) {
+            const newInvitedMember = formAdding.getValues();
+            if (!newInvitedMember.email || newInvitedMember.email.trim() == '') {
+                return;
+            }
+            if (invitedMembers.find(m => m.email === newInvitedMember.email)) {
+                toast.error('This user has already been invited');
+                return;
+            }
+            setMembers([...invitedMembers, newInvitedMember as Member]);
         }
-        setMembers([...invitedMembers, newInvitedMember as Member]);
         formAdding.setValue('email', '');
+
     }
     return (
         <Form {...formAdding}>
             <section
-                className='max-w-6xl h-[calc(100vh-200px)] min-h-80  flex flex-col items-center justify-center gap-8'
+                {...props}
+                className={cn('max-w-6xl h-[calc(100vh-200px)] min-h-80  flex flex-col items-center justify-center gap-8', props.className)}
             >
-                <div className='w-full flex flex-col  gap-3'>
-                    <Typography className='text-neutral-800 text-[32px] font-semibold leading-9'>
-                        <span className='text-primary-500-main mr-2'>Invite</span>other to join your space <span className='text-[24px] font-normal'>(optional)</span>
-                    </Typography>
-                    <Typography className='text-neutral-600 flex gap-2 font-light'>
-                        You can only invite 2 members in a Free plan account.
-                        <span className='text-primary-500-main font-normal'>
-                            upgrade plan.
-                        </span>
-                    </Typography>
-                </div>
+
+                {header ? <React.Fragment>
+                    {header}
+                </React.Fragment>
+                    :
+                    <div className='w-full flex flex-col  gap-3' {...headerProps}>
+                        <Typography className='text-neutral-800 text-[32px] font-semibold leading-9' {...headerTitleProps}>
+                            <span className='text-primary-500-main mr-2'>Invite</span>other to join your space <span className='text-[24px] font-normal'>(optional)</span>
+                        </Typography>
+                        <Typography className='text-neutral-600 flex gap-2 font-light' {...headerDescriptionProps}>
+                            You can only invite 2 members in a Free plan account.
+                            <span className='text-primary-500-main font-normal'>
+                                upgrade plan.
+                            </span>
+                        </Typography>
+                    </div>
+                }
                 <div className='flex flex-row gap-3 items-start w-full justify-between'>
                     <RHFInputField
                         name='email'
@@ -157,8 +194,8 @@ const InviteMembers = ({ space, setMembers }: {
                         </Button>
                     </div>
                 </div>
-                <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]'>
-                    <Avatar src={space?.avatar || '/avatar.png'}
+                <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]' {...spacePreviewProps}>
+                    <Avatar src={space?.avatar || '/avatar.svg'}
                         alt='avatar' className='size-[88px] cursor-pointer p-0' />
                     <div className='w-full flex flex-col gap-1'>
                         <Typography className='text-neutral-800 text-[18px] font-semibold'>
@@ -174,14 +211,17 @@ const InviteMembers = ({ space, setMembers }: {
                         className: 'bg-transparent'
                     }}
                     rowProps={{
-                        className:'rounded-full bg-primary-100'
+                        className: 'rounded-full bg-primary-100'
                     }}
+
                     columns={membersColumns({
                         onDelete: (member) => {
                             setMembers(invitedMembers.filter(m => m.email !== member.email))
                         }
                     })}
-                    data={invitedMembers} />
+                    data={invitedMembers}
+                    {...tableProps}
+                />
             </section></Form>
     )
 }

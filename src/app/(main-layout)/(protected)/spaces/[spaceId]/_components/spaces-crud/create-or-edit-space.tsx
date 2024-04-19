@@ -16,7 +16,7 @@ import { z } from 'zod';
 import StepWrapper from '../../settings/_components/extension-creation/steps/step-wrapper';
 import { Button } from '@/components/actions';
 import { isEmpty } from 'lodash';
-import { createSpace } from '@/services/business-space.service';
+import { createOrEditSpace} from '@/services/business-space.service';
 import CreateSpaceForm from './sections/create-section';
 import InviteMembers from './sections/invite-section';
 import { Member } from './sections/members-columns';
@@ -28,10 +28,12 @@ import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces'
 const createSpaceSchema = z.object({
   name: z.string().min(1, {
     message: 'Space name is required.'
-  }).max(100, {
-    message: 'Space name is too long, maximum 100 characters.'
+  }).max(50, {
+    message: 'Space name is too long, maximum 500 characters.'
   }),
-  avatar: z.string().optional(),
+  avatar: z.string().min(1, {
+    message: 'Space avatar is required.'
+  }),
   backgroundImage: z.string().optional(),
   members: z.array(z.object({
     email: z.string().email({
@@ -56,7 +58,7 @@ export default function CreateOrEditSpace({ open }: {
     mode: 'onChange',
     defaultValues: {
       name: '',
-      avatar: '',
+      avatar: undefined,
       backgroundImage: '',
       members: []
     },
@@ -91,7 +93,7 @@ export default function CreateOrEditSpace({ open }: {
       return;
     }
     try {
-      const data = await createSpace({
+      const data = await createOrEditSpace({
         name: formCreateSpace.watch('name'),
         avatar: formCreateSpace.watch('avatar'),
         backgroundImage: formCreateSpace.watch('backgroundImage'),

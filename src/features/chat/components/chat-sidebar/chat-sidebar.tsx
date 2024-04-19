@@ -47,7 +47,7 @@ export const ChatSidebar = ({
       {showSide && (
         <div
           className={cn(
-            'relative flex  w-full min-w-[320px] flex-col overflow-hidden border-r md:w-[26.5rem]',
+            'relative flex  w-full flex-col overflow-hidden border-r',
             platform === 'mobile' ? 'h-dvh' : 'h-main-container-height',
           )}
         >

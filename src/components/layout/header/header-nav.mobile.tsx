@@ -10,6 +10,7 @@ import { useBoolean } from 'usehooks-ts';
 import { useDisableScrollWhenMount } from '@/hooks/use-disable-scroll-when-mount';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useElectron } from '@/hooks/use-electron';
 
 export interface HeaderNavMobileProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -40,6 +41,7 @@ const MobileNav = ({
   pathName: string | null;
 }) => {
   const {t} = useTranslation('common');
+  const { isElectron } = useElectron();
   useDisableScrollWhenMount();
   return (
     <>
@@ -59,6 +61,7 @@ const MobileNav = ({
         )}
       >
         {navItems.map((item, index) => {
+          if(!item.isShowOnDesktop && isElectron ) return;
           return (
             <motion.div
               onClick={toggleMenu}

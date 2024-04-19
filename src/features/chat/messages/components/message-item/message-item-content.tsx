@@ -64,16 +64,16 @@ export const Content = ({ position, active, message }: ContentProps) => {
       setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
       return;
     }
+    console.log('receiverLanguage', receiverLanguage);
+    console.log('message', message);
     if (
-      (!isHelpDesk && message.language === userLanguage) ||
-      isMe ||
-      (isHelpDesk && position === 'right')
+      (message.language === userLanguage) || isMe || message.language === receiverLanguage
     ) {
       setContentDisplay(message.content);
       return;
     }
     const translate = async () => {
-      let translated = message.translations?.[userLanguage!];
+      let translated = message.translations?.[receiverLanguage!];
       if (!translated) {
         try {
           const messageRes = await messageApi.translate({

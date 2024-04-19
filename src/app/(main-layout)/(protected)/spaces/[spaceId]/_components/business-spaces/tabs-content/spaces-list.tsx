@@ -9,11 +9,13 @@ import Space from './space-card/space'
 import { useAuthStore } from '@/stores/auth.store'
 import SpacesListSkeletons from '../skeletons/spaces-list-skeletons'
 import { ROUTE_NAMES } from '@/configs/route-name'
+import { cn } from '@/utils/cn'
 
-function EmptyContent({ createProps }: {
-    createProps: Omit<LinkProps, 'href'> & React.HTMLAttributes<HTMLAnchorElement>
-}) {
-    return <div className='w-full h-full flex gap-3 flex-col items-center justify-center'>
+function EmptyContent({ createProps, ...props }: {
+    createProps?: Omit<LinkProps, 'href'> & React.HTMLAttributes<HTMLAnchorElement>
+} & React.HTMLAttributes<HTMLDivElement>
+) {
+    return <div  {...props} className={cn('w-full h-full flex gap-3 flex-col items-center justify-center', props.className)}>
         <Image
             src={`/empty-space.svg`}
             alt='empty-space'
@@ -49,9 +51,7 @@ const SpacesList = ({ loading = false, spaces, tab }: {
 }) => {
     const currentUser = useAuthStore((s) => s.user);
     if (!loading && (!spaces || spaces.length === 0)) {
-        return <EmptyContent createProps={{
-            className: tab === 'joined_spaces' ? 'hidden' : ''
-        }} />
+        return <EmptyContent className={tab === 'joined_spaces' ? 'hidden' : ''} />
     }
 
     return (

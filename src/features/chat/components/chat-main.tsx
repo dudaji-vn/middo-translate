@@ -29,7 +29,6 @@ export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
           // animate={{ x: 0 }}
           // exit={{ x: '100%' }}
           className={cn(
-            'flex-1',
             isMobile
               ? 'absolute left-0 top-0 z-50 h-dvh w-screen'
               : 'h-main-container-height',

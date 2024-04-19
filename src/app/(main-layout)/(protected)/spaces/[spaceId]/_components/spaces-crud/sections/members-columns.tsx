@@ -10,7 +10,7 @@ import { ESpaceMemberRole } from "./invite-section";
 export type Member = {
     email: string;
     role: string;
-    status?: 'joined' | 'invited';
+    status?: 'joined' | 'invited' | 'deleted';
 }
 
 export const membersColumns = ({ onDelete }: {
