@@ -75,13 +75,13 @@ const SettingHeader = ({ space }: {
     });
 
     return (<>
-        <section className={(modalType) ? 'hidden' : 'w-full h-fit px-10 py-5 bg-white'}>
+        <section className={(modalType) ? 'hidden' : 'w-full h-fit md:px-10 px-3 py-5 bg-white'}>
             <Form {...formEditSpace}> <div className='bg-primary-100 p-3 rounded-[12px] items-center w-full flex flex-row justify-between'>
-                <div className={cn('w-full flex flex-row items-center  gap-3', headerVariants({ modal: modalType }))}>
+                <div className={cn('w-full flex flex-row items-center gap-3', headerVariants({ modal: modalType }))}>
                     <EditSpaceImage />
                     <div className='flex flex-col gap-2'>
                         <div className='flex flex-row gap-2 items-center'>
-                            <Typography className='text-neutral-800  font-semibold text-[18px] leading-5'>
+                            <Typography className='text-neutral-800  font-semibold  text-[18px] leading-5'>
                                 {space?.name}
                             </Typography>
                             <EditSpaceModal space={space} />
@@ -97,8 +97,8 @@ const SettingHeader = ({ space }: {
         </section>
         <section className={(modalType) ? 'hidden' : 'w-full bg-white flex flex-col items-center'}>
             <Tabs defaultValue='members' className="w-full">
-                <div className='w-full bg-white transition-all duration-300'>
-                    <TabsList className='w-full px-10  flex flex-row justify-start'>
+                <div className='w-full bg-white transition-all duration-300 overflow-x-auto'>
+                    <TabsList className='w-full sm:px-10  flex flex-row justify-start'>
                         <TabsTrigger className='lg:px-10 w-fit' value="members">Members Management</TabsTrigger>
                         <TabsTrigger className='lg:px-10  w-fit' value="extension">Conversation Extension</TabsTrigger>
                         <TabsTrigger className='lg:px-10  w-fit' value="tags">Tags</TabsTrigger>

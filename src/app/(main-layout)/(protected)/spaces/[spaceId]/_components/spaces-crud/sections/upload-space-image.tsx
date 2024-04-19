@@ -69,7 +69,7 @@ export default function UploadSpaceImage({ nameField, onUploadDone, clearBtnProp
     <>
       <AlertDialog open={open} onOpenChange={setOpen}>
         {avatar ? <div className='w-fit h-fit flex flex-col gap-1 relative'>
-          <Avatar src={watch('avatar')} alt='avatar' className='size-[132px] cursor-pointer p-0' />
+          <Avatar src={watch('avatar')} alt='avatar' className='size-[100px] md:size-[132px] cursor-pointer p-0' />
           <Button.Icon
             className={clearAble ? 'absolute top-0 right-0 m-0' : 'hidden'}
             onClick={() => {

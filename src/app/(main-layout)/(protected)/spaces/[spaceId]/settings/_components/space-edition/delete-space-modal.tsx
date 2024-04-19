@@ -52,7 +52,7 @@ export const DeleteSpaceModal = ({
             onClick={() => setOpen(true)}
             color={'default'}
             shape={'square'}
-            className='text-error  min-w-fit'
+            className='text-error  min-w-fit max-sm:hidden'
             size={'xs'} >
             Delete Space
         </Button>
