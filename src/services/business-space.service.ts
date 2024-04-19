@@ -1,4 +1,5 @@
-import { get, post, put, remove } from './api.service';
+import { axios } from '@/lib/axios';
+import { get, post, put } from './api.service';
 import { Member } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/spaces-crud/sections/members-columns';
 
 export const createOrEditSpace = (data: {
@@ -11,7 +12,7 @@ export const createOrEditSpace = (data: {
   return put('/help-desk/create-or-edit-space', data);
 };
 export const deleteSpace = (spaceId: string) => {
-  return remove(`/help-desk/delete-space/${spaceId}`, {});
+  return axios.delete(`/help-desk/delete-space/${spaceId}`);
 };
 
 export const inviteMemberToSpace = (data: {
@@ -40,7 +41,7 @@ export const removeMemberFromSpace = (data: {
   email: string;
   spaceId: string;
 }) => {
-  return remove('/help-desk/remove-member', data);
+  return axios.delete('/help-desk/remove-member', { data });
 };
 
 export const getSpaces = (type: 'joined-spaces' | undefined | null) => {

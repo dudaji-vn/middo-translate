@@ -140,7 +140,7 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
     const isEmptyData = isEmpty(data);
 
     return (
-        <div className='md:min-w-[400px] overflow-x-auto'>
+        <div className='md:min-w-[400px] overflow-x-auto pr-10 flex flex-col gap-1'>
             <p className={cn('text-neutral-500 font-light text-sm italic w-full text-center py-1', !isEmptyData && "hidden")}>No members</p>
             <div className={cn('w-full py-2 flex justify-start flex-row items-center ', isEmptyData && "hidden")}>
                 <div className='!w-[50px] invisible'>

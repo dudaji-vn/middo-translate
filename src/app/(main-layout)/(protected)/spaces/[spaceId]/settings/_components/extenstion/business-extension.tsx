@@ -15,7 +15,6 @@ import { deleteExtension } from '@/services/extension.service';
 import toast from 'react-hot-toast';
 import { useParams, useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
-import { Card } from '@/components/ui/card';
 import { ROUTE_NAMES } from '@/configs/route-name';
 
 
@@ -30,7 +29,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
     const params = useParams();
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const onDeleteExtension = async () => {
-      deleteExtension().then(() => {
+      deleteExtension(data?._id as string).then(() => {
         toast.success('Extension deleted successfully');
         router.refresh();
       }).catch(() => {
