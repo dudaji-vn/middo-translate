@@ -6,6 +6,7 @@ import { notFound, redirect } from 'next/navigation';
 import React from 'react'
 import ValidateInvitation from './_components/validate-ivitation';
 import { Clock } from 'lucide-react';
+import InvalidVerifyToken from './_components/invalid-verify-token';
 
 
 
@@ -23,9 +24,12 @@ const SpaceVerify = async ({
     const thisInvitation = invitations.find(invitation => {
         return invitation.verifyToken === token
     });
+    if (!token) {
+        notFound();
+    }
 
     if (!thisInvitation) {
-        notFound();
+        return <InvalidVerifyToken token={token} />
     }
 
     const { space, email, invitedAt } = thisInvitation;
