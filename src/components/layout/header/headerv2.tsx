@@ -31,7 +31,7 @@ export const Header = (props: Props) => {
   return (
     <div
       className={cn(
-        'z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]',
+        'z-50 flex h-header w-full items-center justify-between gap-1 md:gap-5 border-b border-neutral-50 py-4  pl-[1vw] pr-[5vw] md:pl-[5vw] bg-primary-100',
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
