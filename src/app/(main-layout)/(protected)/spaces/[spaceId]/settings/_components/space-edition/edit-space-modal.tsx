@@ -9,7 +9,6 @@ import { z } from 'zod';
 import { useForm, useFormContext } from 'react-hook-form';
 import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Member } from '../members-list/members-columns';
 import UploadSpaceImage from '../../../_components/spaces-crud/sections/upload-space-image';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { Form } from '@/components/ui/form';
@@ -29,7 +28,6 @@ export const EditSpaceModal = ({
 }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
-    const params = useParams();
     const { t } = useTranslation('common')
     const formEditSpace = useFormContext();
     const { formState: { errors } } = formEditSpace;
@@ -44,7 +42,7 @@ export const EditSpaceModal = ({
             }).then(res => {
                 if (res.data) {
                     toast.success('Space name updated successfully');
-                    router.refresh(); 
+                    router.refresh();
                     setOpen(false);
                     return;
                 }
@@ -63,9 +61,8 @@ export const EditSpaceModal = ({
         <Button.Icon
             onClick={() => setOpen(true)}
             color={'default'}
-            variant={'ghost'}
-            className='flex flex-row gap-2 h-10'
-            size={'xs'} ><Pen size={15} />
+            size={'xs'} >
+            <Pen size={15} />
         </Button.Icon>
         <ConfirmAlertModal
             title='Editing space'

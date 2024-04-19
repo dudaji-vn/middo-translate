@@ -22,6 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import EditSpaceImage from '../space-edition/edit-space-image'
+import { DeleteSpaceModal } from '../space-edition/delete-space-modal'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -75,24 +76,24 @@ const SettingHeader = ({ space }: {
 
     return (<>
         <section className={(modalType) ? 'hidden' : 'w-full h-fit px-10 py-5 bg-white'}>
-            <div className='bg-primary-100 p-3 rounded-[12px] items-center w-full flex flex-row justify-between'>
-                <Form {...formEditSpace}>
-                    <div className={cn('w-full flex flex-row items-center  gap-3', headerVariants({ modal: modalType }))}>
-                        <EditSpaceImage />
-                        <div className='flex flex-col gap-2'>
-                            <div className='flex flex-row gap-2 items-center'>
-                                <Typography className='text-neutral-800  font-semibold text-[18px] leading-5'>
-                                    {space?.name}
-                                </Typography>
-                                <EditSpaceModal space={space} />
-                            </div>
-                            <Typography className='text-neutral-400 font-normal text-sm leading-[18px]'>
-                                {space?.members?.length || 0} Members
+            <Form {...formEditSpace}> <div className='bg-primary-100 p-3 rounded-[12px] items-center w-full flex flex-row justify-between'>
+                <div className={cn('w-full flex flex-row items-center  gap-3', headerVariants({ modal: modalType }))}>
+                    <EditSpaceImage />
+                    <div className='flex flex-col gap-2'>
+                        <div className='flex flex-row gap-2 items-center'>
+                            <Typography className='text-neutral-800  font-semibold text-[18px] leading-5'>
+                                {space?.name}
                             </Typography>
+                            <EditSpaceModal space={space} />
                         </div>
+                        <Typography className='text-neutral-400 font-normal text-sm leading-[18px]'>
+                            {space?.members?.length || 0} Members
+                        </Typography>
                     </div>
-                </Form>
+                </div>
+                <DeleteSpaceModal space={space} />
             </div>
+            </Form>
         </section>
         <section className={(modalType) ? 'hidden' : 'w-full bg-white flex flex-col items-center'}>
             <Tabs defaultValue='members' className="w-full">

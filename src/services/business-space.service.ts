@@ -10,6 +10,9 @@ export const createOrEditSpace = (data: {
 }) => {
   return put('/help-desk/create-or-edit-space', data);
 };
+export const deleteSpace = (spaceId: string) => {
+  return remove(`/help-desk/delete-space/${spaceId}`, {});
+};
 
 export const inviteMemberToSpace = (data: {
   email: string;

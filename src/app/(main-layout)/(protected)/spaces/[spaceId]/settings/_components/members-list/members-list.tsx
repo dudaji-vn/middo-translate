@@ -1,6 +1,5 @@
 
 import React, { useMemo } from 'react'
-import { Member } from './members-columns'
 import { Typography } from '@/components/data-display'
 import { GripVertical, RotateCcw, Search, Trash2, UserCog, UserRound } from 'lucide-react'
 import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
@@ -10,6 +9,8 @@ import TableSearch from '../../../statistics/_components/clients-table/table-sea
 import { cn } from '@/utils/cn'
 import { Button } from '@/components/actions'
 import { isEmpty } from 'lodash'
+import { useAuthStore } from '@/stores/auth.store'
+import { Member } from '../../../_components/spaces-crud/sections/members-columns'
 
 type MemberItemProps = {
     isOwner: boolean;
@@ -19,18 +20,18 @@ type MemberItemProps = {
     onResendInvitation: (member: Member) => void;
 } & Member & React.HTMLAttributes<HTMLDivElement>
 const MemberItem = ({ role, isOwner, email, status, isAdmin, isLoading, onResendInvitation, onDelete, ...props }: MemberItemProps) => {
-
-    const deleteAble = !isOwner && !isLoading;
+    const currentUser = useAuthStore((state) => state.user);
+    const deleteAble = !isOwner && !isLoading && (isAdmin || currentUser?.email !== email);
     return (<div className='w-full flex justify-between flex-row items-center bg-primary-100 py-1 rounded-[12px]' {...props}>
         <div className='w-full flex justify-start flex-row items-center'>
             <div className="flex rounded-l-[12px] px-3 justify-start flex-row items-center break-words h-auto w-[400px] md:w-[500px] xl:w-[800px]">
                 <Typography className="text-neutral-800">{email}</Typography>
                 {isOwner && <span className="text-neutral-500 font-light pl-3">(You)</span>}
             </div>
-            <div className="flex flex-row items-center justify-start  w-fit  gap-6">
+            <div className="flex flex-row items-center justify-start  w-fit  gap-6 py-1">
                 <Typography className={cn('text-gray-500 w-[100px] capitalize',
                     status === 'joined' && 'text-primary-500-main',
-                    status === 'invited' && 'text-success-500-main'
+                    status === 'invited' && 'text-success-700'
                 )} >
                     {status}
                 </Typography >
@@ -40,7 +41,7 @@ const MemberItem = ({ role, isOwner, email, status, isAdmin, isLoading, onResend
                     size={'xs'}
                     shape={'square'}
                     color={'default'}
-                    disabled={isLoading}
+                    loading={isLoading}
                     onClick={() => onResendInvitation({
                         email,
                         role,
@@ -70,7 +71,8 @@ const MemberItem = ({ role, isOwner, email, status, isAdmin, isLoading, onResend
 
 }
 
-const ListItems = ({ data, owner, ...props }: {
+const ListItems = ({ data, owner, isAdmin = false, ...props }: {
+    isAdmin?: boolean;
     data: Member[];
     owner: {
         _id: string;
@@ -158,13 +160,13 @@ const ListItems = ({ data, owner, ...props }: {
                             <GripVertical className='stroke-neutral-500 fill-neutral-500' />
                         </Button.Icon>
                     </div>
-                    <MemberItem  {...member}
-                        isAdmin={
-                            member.role === 'admin'
-                        }
+                    <MemberItem  
+                    {...member}
+                        isAdmin={isAdmin}
                         isOwner={member.email === owner.email}
                         onResendInvitation={onResendInvitation}
                         onDelete={onDelete}
+                        isLoading={isLoading[member.email]}
                         {...props}
                     />
                 </div>
@@ -224,7 +226,7 @@ const MembersList = ({
                     Admin role
                 </Typography>
             </div>
-            <ListItems data={adminsData} owner={owner} />
+            <ListItems data={adminsData} owner={owner} isAdmin />
         </div>
         <div className='flex flex-col gap-1 w-full'>
             <div className='w-full p-[20px_40px]  flex flex-row  gap-3 items-center font-semibold  bg-[#fafafa]'>
