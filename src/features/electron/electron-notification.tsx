@@ -29,7 +29,6 @@ export default function ElectronNotification() {
 
   useEffect(() => {
     if (!isElectron || !ipcRenderer) return;
-    // ipcRenderer.send('check-seen-notification');
     ipcRenderer.on(
       ELECTRON_EVENTS.CHECK_SEEN_NOTIFICATION,
       checkSeenNotification,

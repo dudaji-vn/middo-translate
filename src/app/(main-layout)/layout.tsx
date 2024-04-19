@@ -1,6 +1,6 @@
 import { MainLayout } from '@/components/layout/main-layout';
 import CallVideoModalContainer from '@/features/call';
-import ElectronNotification from '@/features/electron/electron-notification';
+import ElectronHandler from '@/features/electron/electron-handler';
 import ShortcutsGuide from '@/features/shortcut/shortcut-guide';
 // import GlobalError from '@/app/global-error';
 export default async function RootLayout({
@@ -15,7 +15,7 @@ export default async function RootLayout({
       {children}
       <ShortcutsGuide />
       <CallVideoModalContainer />
-      <ElectronNotification />
+      <ElectronHandler />
       {/* <GlobalError error='Error test'/> */}
     </MainLayout>
   );
