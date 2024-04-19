@@ -12,7 +12,7 @@ export const createOrEditSpace = (data: {
   return put('/help-desk/create-or-edit-space', data);
 };
 export const deleteSpace = (spaceId: string) => {
-  return axios.delete(`/help-desk/delete-space/${spaceId}`);
+  return axios.delete(`/help-desk/spaces/${spaceId}`);
 };
 
 export const inviteMemberToSpace = (data: {
