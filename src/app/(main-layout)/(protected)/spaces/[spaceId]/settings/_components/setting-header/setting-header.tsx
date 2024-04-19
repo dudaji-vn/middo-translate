@@ -109,7 +109,7 @@ const SettingHeader = ({ space }: {
                         owner={space.owner}
                     />
                 </TabsContent>
-                <TabsContent value="extension" className="p-4 w-full min-h-[calc(100vh-320px)] flex flex-col items-center justify-center">
+                <TabsContent value="extension" className={cn("p-4 w-full flex flex-col items-center justify-center", isExtensionEmpty && " min-h-[calc(100vh-320px)]")}>
                     <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2' : 'hidden'}>
                         <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extentions' className='mx-auto' />
                         <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
