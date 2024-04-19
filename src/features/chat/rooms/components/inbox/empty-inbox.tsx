@@ -61,14 +61,16 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
             {t(`INBOX_EMPTY.DESCRIPTION${translateExtension}`)}
           </p>
           {type === 'all' && (
-            <ul className="ml-5 list-decimal text-neutral-400">
+            <ul className="ml-5 list-decimal space-y-4 text-neutral-400">
               <li className="items-center">
                 <div className="flex items-center">
-                  <span className="capitalize"> {t('COMMON.CLICK')} </span>
-                  <Button.Icon size="xs" color="default" className="mx-2">
-                    <PenSquareIcon />
-                  </Button.Icon>
-                  {t(`INBOX_EMPTY.LIST_ITEM_1${translateExtension}`)}
+                  <span className="capitalize">
+                    {t('COMMON.CLICK')}
+                    <Button.Icon size="xs" color="default" className="mx-2">
+                      <PenSquareIcon />
+                    </Button.Icon>
+                    {t(`INBOX_EMPTY.LIST_ITEM_1${translateExtension}`)}
+                  </span>
                 </div>
               </li>
               <li>{t(`INBOX_EMPTY.LIST_ITEM_2${translateExtension}`)}</li>
