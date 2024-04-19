@@ -190,7 +190,7 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply select-none overflow-hidden bg-background text-foreground md:select-auto md:overflow-auto;
   }
   button {
     @apply !outline-none;
@@ -240,6 +240,7 @@
   .disable-ios-img-tap {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
+    user-select: none;
   }
   .scrollbar-hoverAble::-webkit-scrollbar {
     @apply hidden;
