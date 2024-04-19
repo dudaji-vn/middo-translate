@@ -699,6 +699,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@juggle/resize-observer@^3.3.1":
+  version "3.4.0"
+  resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
+  integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
+
 "@mongodb-js/saslprep@^1.1.0":
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/@mongodb-js/saslprep/-/saslprep-1.1.1.tgz#9a6c2516bc9188672c4d953ec99760ba49970da7"
@@ -2802,6 +2807,18 @@ ajv@^6.12.4:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
+allotment@^1.20.0:
+  version "1.20.0"
+  resolved "https://registry.yarnpkg.com/allotment/-/allotment-1.20.0.tgz#a7926f611d957577c63e8c406c83de0984b28098"
+  integrity sha512-G02sKgkSCIMpQozuuEkBHblv4aWVGrHQJuOgfCZn3YtHrvmfzS5+mu1N5eWUkpucu/JMl/0FmeCta662RtyaAw==
+  dependencies:
+    classnames "^2.3.0"
+    eventemitter3 "^5.0.0"
+    lodash.clamp "^4.0.0"
+    lodash.debounce "^4.0.0"
+    lodash.isequal "^4.5.0"
+    use-resize-observer "^9.0.0"
+
 ansi-escapes@^5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/ansi-escapes/-/ansi-escapes-5.0.0.tgz#b6a0caf0eef0c41af190e9a749e0c00ec04bb2a6"
@@ -3398,6 +3415,11 @@ classcat@^5.0.3, classcat@^5.0.4:
   version "5.0.4"
   resolved "https://registry.yarnpkg.com/classcat/-/classcat-5.0.4.tgz#e12d1dfe6df6427f260f03b80dc63571a5107ba6"
   integrity sha512-sbpkOw6z413p+HDGcBENe498WM9woqWHiJxCq7nvmxe9WmrUmqfAcxpIwAiMtM5Q3AhYkzXcNQHqsWq0mND51g==
+
+classnames@^2.3.0:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
+  integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
 
 clean-stack@^2.0.0:
   version "2.2.0"
@@ -4588,7 +4610,7 @@ eventemitter3@^4.0.0, eventemitter3@^4.0.1:
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-4.0.7.tgz#2de9b68f6528d5644ef5c59526a1b4a07306169f"
   integrity sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==
 
-eventemitter3@^5.0.1:
+eventemitter3@^5.0.0, eventemitter3@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-5.0.1.tgz#53f5ffd0a492ac800721bb42c66b841de96423c4"
   integrity sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==
@@ -6128,6 +6150,16 @@ lodash.castarray@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.castarray/-/lodash.castarray-4.4.0.tgz#c02513515e309daddd4c24c60cfddcf5976d9115"
   integrity sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==
+
+lodash.clamp@^4.0.0:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/lodash.clamp/-/lodash.clamp-4.0.3.tgz#5c24bedeeeef0753560dc2b4cb4671f90a6ddfaa"
+  integrity sha512-HvzRFWjtcguTW7yd8NJBshuNaCa8aqNFtnswdT7f/cMd/1YKy5Zzoq4W/Oxvnx9l7aeY258uSdDfM793+eLsVg==
+
+lodash.debounce@^4.0.0:
+  version "4.0.8"
+  resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
+  integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
 lodash.defaults@^4.2.0:
   version "4.2.0"
@@ -9037,6 +9069,13 @@ use-long-press@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/use-long-press/-/use-long-press-3.2.0.tgz#87696a782b7059a1eadf93246b1238ba4eb43ae3"
   integrity sha512-uq5o2qFR1VRjHn8Of7Fl344/AGvgk7C5Mcb4aSb1ZRVp6PkgdXJJLdRrlSTJQVkkQcDuqFbFc3mDX4COg7mRTA==
+
+use-resize-observer@^9.0.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/use-resize-observer/-/use-resize-observer-9.1.0.tgz#14735235cf3268569c1ea468f8a90c5789fc5c6c"
+  integrity sha512-R25VqO9Wb3asSD4eqtcxk8sJalvIOYBqS8MNZlpDSQ4l4xMQxC/J7Id9HoTqPq8FwULIn0PVW+OAqF2dyYbjow==
+  dependencies:
+    "@juggle/resize-observer" "^3.3.1"
 
 use-sidecar@^1.1.2:
   version "1.1.2"
