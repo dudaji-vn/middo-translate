@@ -7,7 +7,9 @@ import { messageApi } from '../../api';
 import { useMessagesBox } from '../message-box';
 import { createLocalMessage } from '../../utils';
 
-export type MessageNode = Omit<FlowNode, 'position'>;
+export type MessageNode = Omit<FlowNode, 'position' | 'data'> & {
+    data: FlowNode['data'] & { translations?: { [key: string]: string } }
+}
 const MessageNode = ({
     messageNode,
     disabled = false,
@@ -18,7 +20,8 @@ const MessageNode = ({
     const { chatFlow, room, roomSendingState, setRoomSendingState } = useBusinessExtensionStore();
     const { addMessage, replaceMessage } = useMessagesBox();
     const key = ['messages', room?._id];
-    const { link, content } = messageNode.data || {};
+    const { link, content: originalContent, translations } = messageNode.data || {};
+
 
     const [me, them] = useMemo(() => {
         // @ts-ignore
@@ -26,6 +29,8 @@ const MessageNode = ({
         const them = room?.participants.find((p) => p._id !== me?._id);
         return [me, them];
     }, [room?.participants]);
+
+    const content = translations?.[me?.language as string] || originalContent;
     const appendMyMessage = async () => {
         const myMessage = {
             ...createLocalMessage({
@@ -121,9 +126,10 @@ const MessageNode = ({
 }
 
 export default function MessageItemFlowActions({
-    actions }: {
-        actions: MessageNode[]
-    }) {
+    actions
+}: {
+    actions: MessageNode[]
+}) {
     const { isUserChattingWithGuest, isHelpDesk } = useBusinessNavigationData();
     if (actions.length === 0 || !isHelpDesk || isUserChattingWithGuest) {
         return null;
