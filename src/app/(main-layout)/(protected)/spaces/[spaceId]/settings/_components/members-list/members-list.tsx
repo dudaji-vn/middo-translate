@@ -1,31 +1,85 @@
-import { DataTable, DataTableProps } from '@/components/ui/data-table'
+
 import React, { useMemo } from 'react'
-import { Member, membersColumns } from './members-columns'
+import { Member } from './members-columns'
 import { Typography } from '@/components/data-display'
-import { Search, UserCog, UserRound } from 'lucide-react'
+import { GripVertical, RotateCcw, Search, Trash2, UserCog, UserRound } from 'lucide-react'
 import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import TableSearch from '../../../statistics/_components/clients-table/table-search'
+import { cn } from '@/utils/cn'
+import { Button } from '@/components/actions'
+import { isEmpty } from 'lodash'
 
+type MemberItemProps = {
+    isOwner: boolean;
+    isAdmin: boolean;
+    isLoading?: boolean;
+    onDelete: (member: Member) => void;
+    onResendInvitation: (member: Member) => void;
+} & Member & React.HTMLAttributes<HTMLDivElement>
+const MemberItem = ({ role, isOwner, email, status, isAdmin, isLoading, onResendInvitation, onDelete, ...props }: MemberItemProps) => {
 
-const MembersList = ({
-    members,
-    owner
-}: {
-    members: Member[],
+    const deleteAble = !isOwner && !isLoading;
+    return (<div className='w-full flex justify-between flex-row items-center bg-primary-100 py-1 rounded-[12px]' {...props}>
+        <div className='w-full flex justify-start flex-row items-center'>
+            <div className="flex rounded-l-[12px] px-3 justify-start flex-row items-center break-words h-auto w-[400px] md:w-[500px] xl:w-[800px]">
+                <Typography className="text-neutral-800">{email}</Typography>
+                {isOwner && <span className="text-neutral-500 font-light pl-3">(You)</span>}
+            </div>
+            <div className="flex flex-row items-center justify-start  w-fit  gap-6">
+                <Typography className={cn('text-gray-500 w-[100px] capitalize',
+                    status === 'joined' && 'text-primary-500-main',
+                    status === 'invited' && 'text-success-500-main'
+                )} >
+                    {status}
+                </Typography >
+                <Button
+                    className={isOwner || status === 'joined' ? 'invisible' : "text-neutral-500"}
+                    startIcon={<RotateCcw className="text-neutral-500" />}
+                    size={'xs'}
+                    shape={'square'}
+                    color={'default'}
+                    disabled={isLoading}
+                    onClick={() => onResendInvitation({
+                        email,
+                        role,
+                        status
+                    })}>
+
+                    Resend
+                </Button>
+            </div>
+        </div >
+        <div className="min-w-10 px-4">
+            <Button.Icon size={'xs'}
+                className={deleteAble ? '' : 'invisible'}
+                disabled={!deleteAble}
+                color={'default'}
+                onClick={() => onDelete({
+                    email,
+                    role,
+                    status
+                })}
+            >
+                <Trash2 className="text-error" />
+            </Button.Icon>
+        </div>
+    </div>
+    )
+
+}
+
+const ListItems = ({ data, owner, ...props }: {
+    data: Member[];
     owner: {
         _id: string;
         email: string;
     }
-}) => {
+} & React.HTMLAttributes<HTMLDivElement>) => {
     const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({})
-    const [search, setSearch] = React.useState('');
     const params = useParams();
     const router = useRouter();
-    const onSearchChange = (search: string) => {
-        setSearch(search.trim());
-    }
     const onDelete = async (member: Member) => {
         setIsLoading(prev => ({
             ...prev,
@@ -81,29 +135,61 @@ const MembersList = ({
             [member.email]: false
         }))
     }
-    const memberTableBaseProps: Omit<DataTableProps<
-        Member,
-        keyof Member
-    >, 'data'> = {
-        tableHeadProps: {
-            className: 'bg-transparent px-0 font-light'
-        },
-        rowProps: {
-            className: 'rounded-full odd:bg-white even:bg-white p-0'
-        },
-        cellProps: {
-            className: 'p-0 py-3'
-        },
-        columns: membersColumns({
-            onDelete: onDelete,
-            onResendInvitation: onResendInvitation,
-            isOwner: (email) => {
-                return email === owner.email
-            },
-            isLoading,
-        })
+    const isEmptyData = isEmpty(data);
 
+    return (
+        <div className='min-w-[400px]  overflow-x-auto'>
+            <Typography className={cn('text-neutral-500 font-light italic', !isEmptyData && "hidden")}>No members</Typography>
+            <div className={cn('w-full py-2 flex justify-start flex-row items-center ', isEmptyData && "hidden")}>
+                <div className='!w-[50px] invisible'>
+                </div>
+                <div className="flex  px-3 justify-start flex-row items-center break-words h-auto w-[400px] md:w-[500px] xl:w-[800px]">
+
+                    <Typography className="text-neutral-800  text-sm font-light">Email</Typography>
+                </div>
+                <Typography className={cn('text-gray-500 w-[100px] capitalize text-sm font-light')} >
+                    status
+                </Typography >
+            </div>
+            {data.map((member, index) => {
+                return <div className='w-full grid grid-cols-[48px_auto]' key={member.email}>
+                    <div className='!w-fit p-1 bg-white '>
+                        <Button.Icon size={'xs'} shape={'square'} variant={'ghost'} color={'default'}>
+                            <GripVertical className='stroke-neutral-500 fill-neutral-500' />
+                        </Button.Icon>
+                    </div>
+                    <MemberItem  {...member}
+                        isAdmin={
+                            member.role === 'admin'
+                        }
+                        isOwner={member.email === owner.email}
+                        onResendInvitation={onResendInvitation}
+                        onDelete={onDelete}
+                        {...props}
+                    />
+                </div>
+            })}
+        </div >
+    )
+
+}
+
+const MembersList = ({
+    members,
+    owner
+}: {
+    members: Member[],
+    owner: {
+        _id: string;
+        email: string;
     }
+}) => {
+    const [search, setSearch] = React.useState('');
+
+    const onSearchChange = (search: string) => {
+        setSearch(search.trim());
+    }
+
     const { adminsData, membersData } = useMemo(() => {
 
         const filteredMembers = search ? members.filter(member => {
@@ -123,37 +209,31 @@ const MembersList = ({
     }, [members, search])
 
 
-    return (<section className='flex flex-col gap-5 w-full items-end [&_div]:w-full'>
-        <div className='!w-96 relative'>
+    return (<section className='flex flex-col gap-5 w-full items-end'>
+        <div className='w-96 relative px-4 '>
             <TableSearch
-                className='py-2 min-h-12 w-full outline-neutral-100'
+                className='py-2 min-h-[44px] w-full outline-neutral-100'
                 onSearch={onSearchChange}
                 search={search} />
-            <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
+            <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-6 transform -translate-y-1/2' />
         </div>
-        <div>
-            <div className='w-full p-2 flex flex-row gap-3 items-center font-semibold bg-[#fafafa]'>
+        <div className='flex flex-col gap-1 w-full'>
+            <div className='w-full p-[20px_40px] flex flex-row gap-3 items-center font-semibold bg-[#fafafa]'>
                 <UserCog size={16} className='text-primary-500-main stroke-[3px]' />
                 <Typography className='text-primary-500-main '>
                     Admin role
                 </Typography>
             </div>
-            <DataTable
-                {...memberTableBaseProps}
-                data={adminsData}
-            />
+            <ListItems data={adminsData} owner={owner} />
         </div>
-        <div>
-            <div className='w-full  p-2 flex flex-row  gap-3 items-center font-semibold  bg-[#fafafa]'>
+        <div className='flex flex-col gap-1 w-full'>
+            <div className='w-full p-[20px_40px]  flex flex-row  gap-3 items-center font-semibold  bg-[#fafafa]'>
                 <UserRound size={16} className='text-primary-500-main stroke-[3px]' />
                 <Typography className='text-primary-500-main'>
                     Member role
                 </Typography>
             </div>
-            <DataTable
-                {...memberTableBaseProps}
-                data={membersData}
-            />
+            <ListItems data={membersData} owner={owner} />
         </div>
     </section>
     )

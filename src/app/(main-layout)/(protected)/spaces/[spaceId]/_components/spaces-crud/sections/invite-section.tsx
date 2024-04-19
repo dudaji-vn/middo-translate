@@ -194,7 +194,7 @@ const InviteMembers = ({
                         </Button>
                     </div>
                 </div>
-                <div className='w-full flex flex-row gap-3 bg-primary-100 items-center rounded-[12px]' {...spacePreviewProps}>
+                <div className='w-full flex flex-row gap-3 p-3 bg-primary-100 items-center rounded-[12px]' {...spacePreviewProps}>
                     <Avatar src={space?.avatar || '/avatar.svg'}
                         alt='avatar' className='size-[88px] cursor-pointer p-0' />
                     <div className='w-full flex flex-col gap-1'>
