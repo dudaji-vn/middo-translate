@@ -7,6 +7,7 @@ import React from 'react'
 import ValidateInvitation from './_components/validate-ivitation';
 import { Clock } from 'lucide-react';
 import InvalidVerifyToken from './_components/invalid-verify-token';
+import ExpiredVerifyToken from './_components/expired-verify-token';
 
 
 
@@ -31,9 +32,12 @@ const SpaceVerify = async ({
     if (!thisInvitation) {
         return <InvalidVerifyToken token={token} />
     }
+    if (thisInvitation.isExpired) {
+        return <ExpiredVerifyToken token={token} />
+    }
 
     const { space, email, invitedAt } = thisInvitation;
-    console.log('space', space)
+    console.log('thisInvitation', thisInvitation)
 
 
     return (
