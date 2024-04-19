@@ -107,6 +107,7 @@ class BusinessAPI {
       email: string;
       verifyToken: string;
       invitedAt: string;
+      isExpired: boolean;
     }>
   > {
     const access_token = await this.getAccessToken();

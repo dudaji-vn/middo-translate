@@ -191,7 +191,8 @@ const MembersList = ({
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
     }
-
+    console.log('members', members)
+    console.log('owner', owner)
     const { adminsData, membersData } = useMemo(() => {
 
         const filteredMembers = search ? members.filter(member => {
