@@ -43,7 +43,7 @@ export const PreviewReceivedMessage = ({ sender, media, content = '', debouncedT
     return <div {...props} className={cn("flex flex-col w-full gap-2", props?.className)}>
         <div className="w-full gap-1  relative  flex pr-11 md:pr-20">
             <div className="overflow-hidden  relative aspect-square size-6 rounded-full mb-auto mr-1 mt-0.5 shrink-0">
-                <Avatar src={'/avatar.png'} alt={String(sender?.email)} size="xs" className="bg-primary-200 p-1" />
+                <Avatar src={sender?.avatar || '/avatar.svg'} alt={String(sender?.email)} size="xs" className="bg-primary-200 p-1" />
             </div>
             <div className="overflow-y-auto max-h-[320px]">
                 <div className="relative space-y-2">

@@ -119,7 +119,7 @@ const StartAConversation = ({ extensionData, isAfterDoneAnCOnversation }: {
                     <Typography >Conversation end. <br /> Your rating has been sent successfully.</Typography>
                 </div> :
                 <div className="overflow-hidden  relative aspect-square max-h-[100px]  h-fit w-full flex flex-row gap-2">
-                    <Avatar src={owner?.avatar ?? '/avatar.png'} alt={'avatar-sender'} className="size-16  p-1 border border-neutral-50" />
+                    <Avatar src={owner?.avatar ?? '/avatar.svg'} alt={'avatar-sender'} className="size-16  p-1 border border-neutral-50" />
                     <div className="flex flex-col gap-1 w-full h-fit">
                         <p className="text-neutral-800 max-h-fit text-xs">Conversation with</p>
                         <p className="text-neutral-600 max-h-fit text-[24px] font-semibold">{owner?.name}</p>

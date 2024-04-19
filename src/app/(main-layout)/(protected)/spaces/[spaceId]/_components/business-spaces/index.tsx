@@ -77,7 +77,7 @@ const BusinessSpaces = () => {
             <section className={modal ? 'hidden' : ''} >
                 <div className={cn('bg-primary-100 w-full px-[5vw] py-5 flex items-end flex-row justify-between')}>
                     <div className='flex flex-row gap-3'>
-                        <Avatar src={currentUser?.avatar ?? '/avatar.png'} alt='avt' className='w-16 h-16' />
+                        <Avatar src={currentUser?.avatar ?? '/avatar.svg'} alt='avt' className='w-16 h-16' />
                         <div className='flex flex-col gap-2'>
                             <Typography className='text-neutral-600 text-base font-normal leading-[18px]'>Hi, welcome back</Typography>
                             <Typography className='text-primary-500-main text-base font-semibold'>{currentUser?.name}</Typography>

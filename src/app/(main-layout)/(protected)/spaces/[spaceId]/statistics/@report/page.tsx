@@ -26,11 +26,20 @@ const emptyStatisticData: StatisticData = {
   }
 }
 
-const StatiscticReport = async ({ searchParams }: {
+const StatiscticReport = async ({ searchParams, params: {
+  spaceId
+} }: {
+  params: {
+    spaceId: string
+  },
   searchParams: { type: AnalyticsOptions['type'], fromDate: string, toDate: string, search: string }
 }) => {
   const { type, fromDate, toDate } = searchParams;
-  const params = type === 'custom' ? { custom: { fromDate, toDate, }, type } : { type };
+  const baseParams = { type, spaceId };
+  const params = {
+    ...baseParams,
+    ...(type === 'custom' && { custom: { fromDate, toDate } })
+  }
   const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
   return (
     <Report data={statiscticData || emptyStatisticData} />

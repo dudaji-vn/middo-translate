@@ -16,6 +16,7 @@ import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.s
 import { ROUTE_NAMES } from '@/configs/route-name'
 import { TSpace } from '../../../_components/business-spaces'
 import MembersList from '../members-list/members-list'
+import { EditSpaceModal } from '../space-edition/edit-space-modal'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -29,33 +30,29 @@ const headerVariants = cva('w-full flex flex-row', {
 });
 
 const SettingHeader = ({ space }: {
-
     space: {
         extension: TBusinessExtensionData;
     } & TSpace
 }) => {
     const searchParams = useSearchParams();
-    const router = useRouter();
     const params = useParams();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
     const isExtensionEmpty = !space?.extension
     return (<>
         <section className='w-full h-fit px-10 py-5 bg-white'>
-            <div className='bg-primary-100 p-3 rounded-[12px]  w-full flex flex-row justify-between'>
-                <div className={cn('w-full flex flex-row gap-3', headerVariants({ modal: modalType }))}>
-                    <Avatar src={space?.avatar || '/avatar.png'} alt='avt' className='w-24 h-24' />
+            <div className='bg-primary-100 p-3 rounded-[12px] items-center w-full flex flex-row justify-between'>
+                <div className={cn('w-full flex flex-row items-center  gap-3', headerVariants({ modal: modalType }))}>
+                    <Avatar src={space?.avatar || '/avatar.svg'} alt='avt' className='w-24 h-24' />
                     <div className='flex flex-col gap-2'>
-                        <Typography variant={'h4'} className='text-neutral-800  font-semibold text-2xl leading-5'>
+                        <Typography variant={'h4'} className='text-neutral-800  font-semibold text-[18px] leading-5'>
                             {space?.name}
                         </Typography>
-                        <Typography className='text-neutral-600'>
+                        <Typography className='text-neutral-400 font-normal text-sm leading-[18px]'>
                             {space?.members?.length || 0} Members
                         </Typography>
                     </div>
                 </div>
-                <div className='pt-1'>
-                    <Button color={'secondary'} className='flex flex-row gap-2 h-10' shape={'square'} size={'sm'} >Edit<Pen size={15} /></Button>
-                </div>
+                <EditSpaceModal />
             </div>
         </section>
         <section className={(modalType) ? 'hidden' : 'w-full bg-white flex flex-col items-center'}>
