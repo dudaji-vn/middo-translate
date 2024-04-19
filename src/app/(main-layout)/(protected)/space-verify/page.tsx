@@ -20,14 +20,16 @@ const SpaceVerify = async ({
     }
 }) => {
     const invitations = await businessAPI.getMyInvitations()
-    const thisInvitation = invitations.find(invitation => invitation.verifyToken === token);
+    const thisInvitation = invitations.find(invitation => {
+        return invitation.verifyToken === token
+    });
 
-    console.log('invitations', invitations)
     if (!thisInvitation) {
         notFound();
     }
 
     const { space, email, invitedAt } = thisInvitation;
+    console.log('space', space)
 
 
     return (

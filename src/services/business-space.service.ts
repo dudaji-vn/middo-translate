@@ -1,7 +1,7 @@
 import { get, post, put, remove } from './api.service';
 import { Member } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/spaces-crud/sections/members-columns';
 
-export const createSpace = (data: {
+export const createOrEditSpace = (data: {
   name: string;
   avatar?: string;
   backgroundImage?: string;
@@ -9,6 +9,9 @@ export const createSpace = (data: {
   spaceId?: string;
 }) => {
   return put('/help-desk/create-or-edit-space', data);
+};
+export const deleteSpace = (spaceId: string) => {
+  return remove(`/help-desk/delete-space/${spaceId}`, {});
 };
 
 export const inviteMemberToSpace = (data: {
