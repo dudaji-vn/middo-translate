@@ -18,13 +18,14 @@ import toast from 'react-hot-toast';
 import { TEditSpaceFormValues } from '../setting-header/setting-header';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { TSpace } from '../../../_components/business-spaces';
+import { createOrEditSpace } from '@/services/business-space.service';
 
 
 
 export const EditSpaceModal = ({
     space,
 }: {
-    space: TSpace;
+    space: Omit<TSpace, 'owner'>;
 }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
@@ -33,31 +34,28 @@ export const EditSpaceModal = ({
     const formEditSpace = useFormContext();
     const { formState: { errors } } = formEditSpace;
 
-    useEffect(() => {
-        if (!open) {
-            formEditSpace.reset();
+
+    const onSubmitEditSpaceName = async ({ name }: Partial<TEditSpaceFormValues>) => {
+        if (!name) return;
+        try {
+            await createOrEditSpace({
+                spaceId: space._id,
+                name,
+            }).then(res => {
+                if (res.data) {
+                    toast.success('Space name updated successfully');
+                    router.refresh(); 
+                    setOpen(false);
+                    return;
+                }
+            }).catch(err => {
+                toast.error('Error on update space. Please try again');
+            })
         }
-    }, [open]);
-
-
-    const onSubmitEditSpaceName = async (values: Partial<TEditSpaceFormValues>) => {
-        console.log('values', values)
-        console.log('space', space)
-        // try {
-        //     const res = await updateSpace({
-        //         spaceId: spaceId,
-        //         data: values
-        //     });
-        //     if (res.data) {
-        //         toast.success('Space name updated successfully');
-        //         router.refresh();
-        //         return;
-        //     }
-        // }
-        // catch (error) {
-        //     console.error('Error on UpdateSpace:', error)
-        //     toast.error('Error on Update space')
-        // }
+        catch (error) {
+            console.error('Error on UpdateSpace:', error)
+            toast.error('Error on Update space')
+        }
     }
 
 

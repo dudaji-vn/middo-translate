@@ -82,7 +82,15 @@ export default function UploadSpaceImage({ nameField, onUploadDone, clearBtnProp
             <XIcon size={14} />
           </Button.Icon>
           {uploadAble && <AlertDialogTrigger className={uploadAble ? 'absolute  bottom-0 right-0 size-fit' : 'hidden'}>
-            <Camera className='size-7 bg-neutral-100 stroke-neutral-400 fill-neutral-100 rounded-full cursor-pointer p-1' />
+            <Button.Icon
+              color={'default'}
+              size={'xs'}
+              className='border-[2px] border-primary-100'
+              onClick={() => setOpen(true)}
+              {...uploadBtnProps}
+            >
+              <Camera/>
+            </Button.Icon>
           </AlertDialogTrigger>}
         </div> :
           <AlertDialogTrigger className='relative'>

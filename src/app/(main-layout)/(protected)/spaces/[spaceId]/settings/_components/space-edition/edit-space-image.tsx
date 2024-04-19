@@ -8,11 +8,10 @@ const EditSpaceImage = () => {
     const { getValues } = useFormContext<TEditSpaceFormValues>();
     const onSubmitEditSpaceAvatar = async () => {
         const payload = getValues();
-        console.log('payload', payload)
         try {
-          const res =  await createOrEditSpace(payload);
+          await createOrEditSpace(payload);
         } catch (error) {
-
+            console.error('Error on Edit Space Image:', error)
         }
     };
     return (

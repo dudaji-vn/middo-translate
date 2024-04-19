@@ -74,7 +74,7 @@ const SettingHeader = ({ space }: {
     });
 
     return (<>
-        <section className='w-full h-fit px-10 py-5 bg-white'>
+        <section className={(modalType) ? 'hidden' : 'w-full h-fit px-10 py-5 bg-white'}>
             <div className='bg-primary-100 p-3 rounded-[12px] items-center w-full flex flex-row justify-between'>
                 <Form {...formEditSpace}>
                     <div className={cn('w-full flex flex-row items-center  gap-3', headerVariants({ modal: modalType }))}>
@@ -109,9 +109,9 @@ const SettingHeader = ({ space }: {
                         owner={space.owner}
                     />
                 </TabsContent>
-                <TabsContent value="extension" className="p-4 w-full flex flex-col items-center">
-                    <div className={isExtensionEmpty ? 'w-full flex flex-col items-center gap-2' : 'hidden'}>
-                        <Image src='/empty-extentions.png' width={200} height={156} alt='empty-extentions' className='mx-auto my-3' />
+                <TabsContent value="extension" className="p-4 w-full min-h-[calc(100vh-320px)] flex flex-col items-center justify-center">
+                    <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2' : 'hidden'}>
+                        <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extentions' className='mx-auto' />
                         <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
                             Your extension is almost here!
                         </Typography>
