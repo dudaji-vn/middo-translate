@@ -77,6 +77,7 @@ const StartAConversation = ({ extensionData, isAfterDoneAnCOnversation }: {
         if (!rootChild) return;
 
         const childrenActions = nodes.filter(node => node.parentNode === rootChild.id);
+        console.log('childrenActions', childrenActions)
         const payload = {
             content: rootChild.data?.content,
             roomId,

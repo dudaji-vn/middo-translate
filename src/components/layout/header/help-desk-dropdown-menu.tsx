@@ -28,10 +28,8 @@ const HelpDeskDropdownMenu = () => {
     if (!isOnHelpDeskChat) return null;
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger>
-                <Button.Icon variant={'ghost'} size={'xs'} className='text-neutral-300'>
+            <DropdownMenuTrigger className='text-neutral-300 p-3'>
                     <Menu size={20} />
-                </Button.Icon>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 {items.map(option => (
