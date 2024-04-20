@@ -26,7 +26,7 @@ const MessageNode = ({
 
     const [me, them] = useMemo(() => {
         // @ts-ignore
-        const me = room?.participants.find((p: { _id: string, tempEmail: boolean }) => p.tempEmail);
+        const me = room?.participants.find((p: { _id: string, tempEmail: boolean, status: string, email: string }) => p.status === 'anonymous' || (p.email && p.tempEmail === p.email))
         const them = room?.participants.find((p) => p._id !== me?._id);
         return [me, them];
     }, [room?.participants]);
@@ -60,8 +60,8 @@ const MessageNode = ({
         const nextEdge = edges.find((edge) => edge.source === messageNode.id);
         const nextNode = nodes.find((node) => node.id === nextEdge?.target);
 
-        console.log('nextNode', nextNode)
         if (nextNode) {
+            console.log('nextNode', nextNode)
             setRoomSendingState('loading');
             const childrenActions = nodes.filter(node => node.parentNode === nextNode?.id);
             const newBotMessage = {
