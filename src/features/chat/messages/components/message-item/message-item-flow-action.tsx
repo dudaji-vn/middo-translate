@@ -1,3 +1,5 @@
+'use client';
+
 import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { Button } from '@/components/actions';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
@@ -22,13 +24,15 @@ const MessageNode = ({
     const key = ['messages', room?._id];
     const { link, content: originalContent, translations } = messageNode.data || {};
 
-
     const [me, them] = useMemo(() => {
         // @ts-ignore
         const me = room?.participants.find((p: { _id: string, tempEmail: boolean }) => p.tempEmail);
         const them = room?.participants.find((p) => p._id !== me?._id);
         return [me, them];
     }, [room?.participants]);
+
+    console.log('translations', translations)
+    console.log('me :>>', me)
 
     const content = translations?.[me?.language as string] || originalContent;
     const appendMyMessage = async () => {
