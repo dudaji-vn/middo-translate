@@ -31,15 +31,14 @@ const MessageNode = ({
         return [me, them];
     }, [room?.participants]);
 
-    console.log('translations', translations)
-    console.log('me :>>', me)
 
     const content = translations?.[me?.language as string] || originalContent;
     const appendMyMessage = async () => {
+        const transletedContent = messageNode.data?.translations?.[me?.language as string] || messageNode.data?.content;
         const myMessage = {
             ...createLocalMessage({
                 sender: me!,
-                content: messageNode.data?.content,
+                content: transletedContent,
                 language: me?.language,
             }),
             userId: me!._id,
@@ -56,13 +55,14 @@ const MessageNode = ({
     const onFlowActionClick = async () => {
         await appendMyMessage();
         if (!chatFlow?.nodes || !chatFlow?.edges || !room?._id) return;
-        setRoomSendingState('loading');
         const { nodes, edges } = chatFlow;
 
         const nextEdge = edges.find((edge) => edge.source === messageNode.id);
         const nextNode = nodes.find((node) => node.id === nextEdge?.target);
 
+        console.log('nextNode', nextNode)
         if (nextNode) {
+            setRoomSendingState('loading');
             const childrenActions = nodes.filter(node => node.parentNode === nextNode?.id);
             const newBotMessage = {
                 ...createLocalMessage({

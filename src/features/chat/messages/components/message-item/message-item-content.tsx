@@ -64,8 +64,6 @@ export const Content = ({ position, active, message }: ContentProps) => {
       setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
       return;
     }
-    console.log('receiverLanguage', receiverLanguage);
-    console.log('message', message);
     if (
       (message.language === userLanguage) || isMe || message.language === receiverLanguage
     ) {

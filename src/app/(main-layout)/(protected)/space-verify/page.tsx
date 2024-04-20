@@ -37,7 +37,6 @@ const SpaceVerify = async ({
     }
 
     const { space, email, invitedAt } = thisInvitation;
-    console.log('thisInvitation', thisInvitation)
 
 
     return (
