@@ -26,7 +26,13 @@ const formatClientData = (data: Client[]) => {
   })) || [];
 };
 
-const Page = () => {
+const Page = ({ params: {
+  spaceId
+} }: {
+  params: {
+    spaceId: string
+  }
+}) => {
   const [currentPage, setCurrentPage] = useState(DEFAULT_CLIENTS_PAGINATION.currentPage);
   const [limit, setLimit] = useState(getClientsTablePerpage());
   const [search, setSearch] = useState('')
@@ -34,7 +40,8 @@ const Page = () => {
     ...DEFAULT_CLIENTS_PAGINATION,
     currentPage,
     search,
-    limit
+    limit,
+    spaceId,
   });
   const items = formatClientData(data?.items || []);
   const totalPage = data?.totalPage || 0;

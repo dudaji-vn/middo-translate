@@ -9,13 +9,15 @@ export const useGetClients = ({
   currentPage = DEFAULT_CLIENTS_PAGINATION.currentPage,
   limit = DEFAULT_CLIENTS_PAGINATION.limit,
   search = '',
+  spaceId,
 }: {
   search?: string;
   limit?: number;
   currentPage?: number;
+  spaceId?: string;
 }) => {
   return useQuery({
-    queryKey: [GET_CLIENTS_KEY, { search, limit, currentPage }],
+    queryKey: [GET_CLIENTS_KEY, { search, limit, currentPage, spaceId }],
     queryFn: async () => {
         try {
             const response = await axios.get(`/help-desk/my-clients`, {
@@ -23,6 +25,7 @@ export const useGetClients = ({
                     q: search,
                     limit,
                     currentPage: currentPage,
+                    spaceId,
                 },
             });
             return response.data;

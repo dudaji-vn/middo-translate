@@ -38,6 +38,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       isBusiness,
     } = useBusinessNavigationData();
     const { businessExtension } = useBusinessExtensionStore();
+    const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
@@ -56,7 +57,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
-        roomApi.getRooms({ cursor: pageParam, limit: 10, type, status }),
+        roomApi.getRooms({ cursor: pageParam, limit: 10, type, status, spaceId }),
     });
 
     const { rooms: pinnedRooms, refetch: refetchPinned } = useGetPinnedRooms();

@@ -5,9 +5,13 @@ import { User } from '@/features/users/types';
 import { axios } from '@/lib/axios';
 import queryString from 'query-string';
 
+type HelpdeskSearchParam = {
+  type?: string;
+  spaceId?: string;
+}
 const basePath = '/search';
 export const searchApi = {
-  async inboxes(params: SearchParams) {
+  async inboxes(params: SearchParams & HelpdeskSearchParam) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/inboxes`,
       query: params,
@@ -18,17 +22,6 @@ export const searchApi = {
     }> = await axios.get(path);
     return res.data;
   },  
-  async businessInboxes(params: SearchParams) {
-    const path = queryString.stringifyUrl({
-      url: `${basePath}/inboxes`,
-      query: params,
-    });
-    const res: Response<{
-      rooms: Room[];
-      users: User[];
-    }> = await axios.get(path);
-    return res.data;
-  },
   async users(params: SearchParams) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/users`,

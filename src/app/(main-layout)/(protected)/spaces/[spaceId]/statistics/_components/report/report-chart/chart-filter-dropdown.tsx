@@ -88,7 +88,7 @@ const ChartFilterDropdown = ({
         current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
         current.set('toDate', format(date?.to || new Date(), 'yyyy-MM-dd'));
         current.set('type', 'custom');
-        const href = `/statistics?${current.toString()}`
+        const href = `${ROUTE_NAMES.SPACES}/${params?.spaceId}/statistics?${current.toString()}`
         router.push(href)
         setOpenDatePickerModal(false)
     }
