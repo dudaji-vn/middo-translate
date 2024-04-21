@@ -8,6 +8,7 @@ import { Button } from '@/components/actions'
 import { TConversationTag } from '../../../_components/business-spaces'
 import { cn } from '@/utils/cn'
 import { CreateOrEditTag } from './create-or-edit-tag'
+import { ConfirmDeleteTag } from './confirm-delete-tag'
 
 
 type Tag = TConversationTag;
@@ -57,6 +58,10 @@ const TagItem = ({ _id, name, color, isReadonly, onEdit, onDelete, editAble, del
 
 }
 
+enum TagModalType {
+    CREATE_OR_EDIT = 'create-edit',
+    DELETE = 'delete',
+}
 const TagsList = ({
     tags,
     spaceId
@@ -68,8 +73,10 @@ const TagsList = ({
     const [modalState, setModalState] = React.useState<{
         open: boolean;
         initTag: Tag | undefined;
+        modalType?: TagModalType;
     }>({
         open: false,
+        modalType: undefined,
         initTag: undefined,
     });
 
@@ -80,12 +87,6 @@ const TagsList = ({
         return tags.filter(tag => tag.name.toLowerCase().includes(search.toLowerCase()));
     }, [tags, search])
 
-    const openModal = (tag?: Tag) => {
-        setModalState({
-            open: true,
-            initTag: tag,
-        });
-    }
 
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
         <div className='w-full flex flex-row px-4 gap-5 justify-end items-center'>
@@ -97,7 +98,7 @@ const TagsList = ({
                 <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-6 transform -translate-y-1/2' />
             </div>
             <Button
-                onClick={() => openModal()}
+                onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
                 shape={'square'}
                 size={'sm'}
                 variant={'ghost'}
@@ -113,18 +114,24 @@ const TagsList = ({
                         {...tag}
                         editAble={true}
                         deleteAble={true}
-                        onEdit={() => openModal(tag)}
-                        onDelete={() => { }}
+                        onEdit={() => setModalState({ open: true, initTag: tag, modalType: TagModalType.CREATE_OR_EDIT })}
+                        onDelete={() => setModalState({ open: true, initTag: tag, modalType: TagModalType.DELETE })}
                     />
                 })}
             </div>
         </div>
-        {modalState.open && <CreateOrEditTag
+        {modalState.modalType === TagModalType.CREATE_OR_EDIT && <CreateOrEditTag
             spaceId={spaceId}
             tags={tags}
             open={modalState.open}
             onOpenChange={(open) => setModalState({ open, initTag: modalState.initTag })}
             initTag={modalState.initTag}
+        />}
+        {modalState.initTag && modalState.modalType === TagModalType.DELETE && <ConfirmDeleteTag
+            onOpenChange={(open) => setModalState({ open, initTag: modalState.initTag })}
+            open={modalState.open}
+            tag={modalState.initTag}
+            spaceId={spaceId}
         />}
     </section>
     )

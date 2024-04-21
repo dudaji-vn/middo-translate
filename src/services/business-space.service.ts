@@ -57,3 +57,13 @@ export const createOrEditTag = (data: {
 }) => {
   return put('/help-desk/create-or-edit-tag', data);
 };
+
+export const deleteTag = ({
+  tagId,
+  spaceId,
+}: {
+  tagId: string;
+  spaceId: string;
+}) => {
+  return axios.delete(`/help-desk/tags/${tagId}`, { data: { spaceId } });
+};
