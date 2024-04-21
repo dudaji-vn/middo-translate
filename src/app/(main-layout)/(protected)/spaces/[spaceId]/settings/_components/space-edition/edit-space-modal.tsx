@@ -14,7 +14,7 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { Form } from '@/components/ui/form';
 import { Typography } from '@/components/data-display';
 import toast from 'react-hot-toast';
-import { TEditSpaceFormValues } from '../setting-header/setting-header';
+import { TEditSpaceFormValues } from '../space-setting/space-setting';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { TSpace } from '../../../_components/business-spaces';
 import { createOrEditSpace } from '@/services/business-space.service';

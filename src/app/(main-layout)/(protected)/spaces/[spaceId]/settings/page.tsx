@@ -5,12 +5,12 @@ import Image from 'next/image';
 import BusinessExtension from './_components/extenstion/business-extension';
 
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
-import SettingHeader from './_components/setting-header/setting-header';
+import SpaceSetting from './_components/space-setting/space-setting';
 import CreateExtension from './_components/extension-creation/create-extension';
 import { notFound } from 'next/navigation';
 
 
-const SettingPage = async ({ searchParams, params }: {
+const SpaceSettingPage = async ({ searchParams, params }: {
     searchParams: Record<string, string>,
     params: {
         spaceId: string
@@ -26,8 +26,8 @@ const SettingPage = async ({ searchParams, params }: {
     }
 
     return (
-        <div className='max-md:w-screen max-md:px-1 w-full bg-primary-100 h-full'>
-            <SettingHeader space={space} />
+        <div className='max-md:w-screen max-md:px-1 w-full bg-white h-full max-h-full overflow-y-auto'>
+            <SpaceSetting space={space} />
             <div className='w-full bg-white'>
                 <CreateExtension open={Boolean(modatType === 'create-extension' || modatType === 'edit-extension' && businessExtension)} initialData={businessExtension} />
             </div>
@@ -35,4 +35,4 @@ const SettingPage = async ({ searchParams, params }: {
     )
 }
 
-export default SettingPage
+export default SpaceSettingPage

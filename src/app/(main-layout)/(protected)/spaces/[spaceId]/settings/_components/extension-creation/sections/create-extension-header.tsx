@@ -6,7 +6,7 @@ import { cva } from 'class-variance-authority';
 import { ArrowLeft, Check, Info } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { use, useEffect, useMemo, useState } from 'react'
-import { ExtensionModalType } from '../../setting-header/setting-header';
+import { ExtensionModalType } from '../../space-setting/space-setting';
 import { cn } from '@/utils/cn';
 import { TabsList, TabsTrigger } from '@/components/navigation';
 import { useFormContext } from 'react-hook-form';

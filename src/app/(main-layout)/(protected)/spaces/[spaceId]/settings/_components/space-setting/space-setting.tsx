@@ -23,6 +23,7 @@ import { z } from 'zod'
 import { Form } from '@/components/ui/form'
 import EditSpaceImage from '../space-edition/edit-space-image'
 import { DeleteSpaceModal } from '../space-edition/delete-space-modal'
+import TagsList from '../tags-list/tags-list'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -53,7 +54,7 @@ const editSpaceSchema = z.object({
 export type TEditSpaceFormValues = z.infer<typeof editSpaceSchema>;
 
 
-const SettingHeader = ({ space }: {
+const SpaceSetting = ({ space }: {
     space: {
         extension: TBusinessExtensionData;
     } & TSpace
@@ -73,7 +74,7 @@ const SettingHeader = ({ space }: {
         },
         resolver: zodResolver(editSpaceSchema),
     });
-
+    console.log('spaces :>>', space)
     return (<>
         <section className={(modalType) ? 'hidden' : 'w-full h-fit md:px-10 px-3 py-5 bg-white'}>
             <Form {...formEditSpace}>
@@ -102,10 +103,10 @@ const SettingHeader = ({ space }: {
                     <TabsList className='w-full sm:px-10  flex flex-row justify-start'>
                         <TabsTrigger className='lg:px-10 w-fit' value="members">Members Management</TabsTrigger>
                         <TabsTrigger className='lg:px-10  w-fit' value="extension">Conversation Extension</TabsTrigger>
-                        <TabsTrigger className='lg:px-10  w-fit' value="tags">Tags</TabsTrigger>
+                        <TabsTrigger className='lg:px-10  w-fit' value="tags">Tags Management</TabsTrigger>
                     </TabsList>
                 </div>
-                <TabsContent value="members" className="py-4">
+                <TabsContent value="members" className="py-4 ">
                     <MembersList
                         members={space.members}
                         owner={space.owner}
@@ -132,6 +133,7 @@ const SettingHeader = ({ space }: {
                     <BusinessExtension data={space.extension} name='Middo Conversation Extension' />
                 </TabsContent>
                 <TabsContent value="tags" className="p-4">
+                    <TagsList tags={space.tags} />
                 </TabsContent>
             </Tabs >
         </section>
@@ -140,4 +142,4 @@ const SettingHeader = ({ space }: {
     )
 }
 
-export default SettingHeader
+export default SpaceSetting

@@ -6,7 +6,7 @@ import { Pen, Trash2 } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import toast from 'react-hot-toast';
-import { TEditSpaceFormValues } from '../setting-header/setting-header';
+import { TEditSpaceFormValues } from '../space-setting/space-setting';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { TSpace } from '../../../_components/business-spaces';
 import { Typography } from '@/components/data-display';
