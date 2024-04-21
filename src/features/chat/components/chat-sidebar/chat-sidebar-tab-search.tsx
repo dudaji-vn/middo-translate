@@ -15,6 +15,7 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'next/navigation';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 
@@ -22,15 +23,23 @@ export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> { }
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchValue = useSearchStore((state) => state.searchValue);
-    const { isBusiness } = useBusinessNavigationData();
-    const { data: recData } = useGetRoomsRecChat(isBusiness ? 'help-desk' : undefined);
+    const { isBusiness, isOnASpace } = useBusinessNavigationData();
+    const params = useParams();
+    const helpdeskParams = isOnASpace ? { type: 'help-desk', spaceId: params?.spaceId as string } : undefined;
+
+    const { data: recData } = useGetRoomsRecChat(helpdeskParams);
     const { businessExtension } = useBusinessExtensionStore()
-    const searchType = isBusiness ? 'help-desk' : undefined;
-    const {t} = useTranslation('common');
+    const { t } = useTranslation('common');
     const { data } = useQuerySearch<{
       rooms: Room[];
       users: User[];
-    }>(searchApi.inboxes, 'chat-search', searchValue || '', searchType);
+    }>({
+      searchApi: searchApi.inboxes,
+      queryKey: 'chat-search',
+      searchTerm: searchValue || '',
+      helpdeskParams,
+    }
+    );
 
     return (
       <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">

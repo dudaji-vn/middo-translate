@@ -8,9 +8,12 @@ export const useGetUsersRecChat = () => {
   });
 };
 
-export const useGetRoomsRecChat = (type?: string) => {
+export const useGetRoomsRecChat = (helpdeskParams?: {
+  type?: string;
+  spaceId?: string;
+}) => {
   return useQuery({
     queryKey: ['rooms-rec-chat'],
-    queryFn: () => recommendationApi.rooms(type),
+    queryFn: () => recommendationApi.rooms(helpdeskParams),
   });
 };

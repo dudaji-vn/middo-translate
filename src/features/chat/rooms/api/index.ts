@@ -20,7 +20,7 @@ export const roomApi = {
     return res.data;
   },
   async getRooms(
-    params: CursorParams & { type: InboxType; status?: string | null },
+    params: CursorParams & { type: InboxType; status?: string | null, spaceId?: string},
   ) {
     const path = queryString.stringifyUrl({
       url: basePath,

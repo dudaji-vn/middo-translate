@@ -17,14 +17,13 @@ const HelpDeskConversationPage = async ({ params: { businessId, slugs, }, search
   const [roomId, anonymousUserId] = slugs;
 
   const room = await businessAPI.getChatRoom(roomId, anonymousUserId);
-  const extension = await businessAPI.getExtensionByBusinessId(businessId);
 
   if (!room || !room?._id || !anonymousUserId) {
     notFound();
   }
   const anonymousUser = room.participants.find((p: { _id: string }) => p._id === anonymousUserId);
   const theme = extentionsCustomThemeOptions.find((item) => item.name === themeColor) || extentionsCustomThemeOptions[0];
-  const chatFlow = extension?.chatFlow;
+  const chatFlow = room?.chatFlow;
 
   return (
     <HelpDeskConversation chatFlow={chatFlow} params={{ slugs }} anonymousUser={anonymousUser} room={room} className={theme.name} isAnonymousPage />
