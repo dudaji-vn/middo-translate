@@ -1,10 +1,10 @@
 'use client'
 
 import { Button } from '@/components/actions'
-import { Avatar, Typography } from '@/components/data-display'
+import { Typography } from '@/components/data-display'
 import { cn } from '@/utils/cn'
 import { cva } from 'class-variance-authority'
-import { Pen, Plus } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams, useSearchParams } from 'next/navigation'
@@ -24,6 +24,7 @@ import { Form } from '@/components/ui/form'
 import EditSpaceImage from '../space-edition/edit-space-image'
 import { DeleteSpaceModal } from '../space-edition/delete-space-modal'
 import TagsList from '../tags-list/tags-list'
+import { t } from 'i18next'
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -47,18 +48,19 @@ const editSpaceSchema = z.object({
     avatar: z.string().min(1, {
         message: 'Space avatar is required.'
     }),
+    tags: z.array(z.string()).optional(),
     backgroundImage: z.string().optional(),
 
 });
 
 export type TEditSpaceFormValues = z.infer<typeof editSpaceSchema>;
-
-
-const SpaceSetting = ({ space }: {
+type SpaceSettingProps = {
     space: {
         extension: TBusinessExtensionData;
     } & TSpace
-}) => {
+}
+
+const SpaceSetting = ({ space }: SpaceSettingProps) => {
     const searchParams = useSearchParams();
     const params = useParams();
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
@@ -74,7 +76,7 @@ const SpaceSetting = ({ space }: {
         },
         resolver: zodResolver(editSpaceSchema),
     });
-    console.log('spaces :>>', space)
+
     return (<>
         <section className={(modalType) ? 'hidden' : 'w-full h-fit md:px-10 px-3 py-5 bg-white'}>
             <Form {...formEditSpace}>
@@ -106,13 +108,13 @@ const SpaceSetting = ({ space }: {
                         <TabsTrigger className='lg:px-10  w-fit' value="tags">Tags Management</TabsTrigger>
                     </TabsList>
                 </div>
-                <TabsContent value="members" className="py-4 ">
+                <TabsContent value="members" className="p-0">
                     <MembersList
                         members={space.members}
                         owner={space.owner}
                     />
                 </TabsContent>
-                <TabsContent value="extension" className={cn("p-4 w-full flex flex-col items-center justify-center")}>
+                <TabsContent value="extension" className={cn("p-0 w-full flex flex-col items-center justify-center")}>
                     <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2 min-h-[calc(100vh-350px)] justify-center' : 'hidden'}>
                         <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extentions' className='mx-auto' />
                         <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
@@ -132,8 +134,8 @@ const SpaceSetting = ({ space }: {
                     </div>
                     <BusinessExtension data={space.extension} name='Middo Conversation Extension' />
                 </TabsContent>
-                <TabsContent value="tags" className="p-4">
-                    <TagsList tags={space.tags} />
+                <TabsContent value="tags" className="p-0">
+                    <TagsList tags={space.tags} spaceId={space._id} />
                 </TabsContent>
             </Tabs >
         </section>
