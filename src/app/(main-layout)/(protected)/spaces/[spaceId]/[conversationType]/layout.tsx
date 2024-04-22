@@ -1,29 +1,30 @@
+import { businessAPI } from '@/features/chat/help-desk/api/business.service';
+import { useAppStore } from '@/stores/app.store';
+import { EBusinessConversationKeys } from '@/types/business.type';
+import { notFound } from 'next/navigation';
+import React, { ReactNode } from 'react';
+import ConversationLayout from './_components/conversation-layout';
 
-import { ChatSidebar } from '@/features/chat/components/chat-sidebar'
-import { businessAPI } from '@/features/chat/help-desk/api/business.service'
-import { Inbox } from '@/features/chat/rooms/components'
-import { EBusinessConversationKeys } from '@/types/business.type'
-import { notFound } from 'next/navigation'
-import React, { ReactNode } from 'react'
-
-const BusinessConversationLayout = async ({ children, params }: {
-    children: ReactNode,
-    params: {
-        conversationType: EBusinessConversationKeys,
-        spaceId: string
-    }
+const BusinessConversationLayout = async ({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: {
+    conversationType: EBusinessConversationKeys;
+    spaceId: string;
+  };
 }) => {
-    if (!Object.values(EBusinessConversationKeys).includes(params.conversationType)) {
-        notFound();
-    }
-    const spaceData = await businessAPI.getSpaceBySpaceID(params.spaceId);
-    return (
-        <div className="flex w-full">
-            <ChatSidebar spaceData={spaceData}>
-                <Inbox />
-            </ChatSidebar>
-            {children}
-        </div>
-    )
-}
-export default BusinessConversationLayout
+  if (
+    !Object.values(EBusinessConversationKeys).includes(params.conversationType)
+  ) {
+    notFound();
+  }
+  const spaceData = await businessAPI.getSpaceBySpaceID(params.spaceId);
+  return (
+    <div className="flex-1">
+      <ConversationLayout spaceData={spaceData}>{children}</ConversationLayout>
+    </div>
+  );
+};
+export default BusinessConversationLayout;

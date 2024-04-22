@@ -6,7 +6,6 @@ import { FCMBackground } from '@/features/notification/components';
 import { Fragment } from 'react';
 import { Inbox } from '@/features/chat/rooms/components';
 import { Allotment } from 'allotment';
-import 'allotment/dist/style.css';
 
 import { FCMElectron } from '@/features/notification/components/fcm-electron';
 import { useAppStore } from '@/stores/app.store';
