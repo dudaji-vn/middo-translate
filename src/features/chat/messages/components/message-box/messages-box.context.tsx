@@ -8,21 +8,21 @@ import {
   useState,
 } from 'react';
 
-import { Message, PinMessage } from '@/features/chat/messages/types';
-import { MessageActions } from '../message-actions';
 import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
-import { Room } from '@/features/chat/rooms/types';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { roomApi } from '../../../rooms/api';
+import { anounymousMesssagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
+import { Message, PinMessage } from '@/features/chat/messages/types';
+import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
+import { Room } from '@/features/chat/rooms/types';
+import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth.store';
-import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
-import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
-import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
-import { useParams } from 'next/navigation';
-import { convert } from 'html-to-text';
 import { useQueryClient } from '@tanstack/react-query';
-import { anounymousMesssagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
+import { convert } from 'html-to-text';
+import { useParams } from 'next/navigation';
+import { roomApi } from '../../../rooms/api';
+import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
+import { MessageActions } from '../message-actions';
 
 interface MessagesBoxContextProps {
   room: Room;
