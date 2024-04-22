@@ -5,7 +5,7 @@ const Layout = ({ children }: {
 }
 ) => {
     return (
-        <div className=' w-full bg-primary-100 h-main-container-height'>
+        <div className=' w-full bg-primary-100 h-main-container-height overflow-hidden'>
             {children}
         </div>
     )

@@ -1,6 +1,6 @@
 import React from 'react'
 import UploadSpaceImage from '../../../_components/spaces-crud/sections/upload-space-image'
-import { TEditSpaceFormValues } from '../setting-header/setting-header';
+import { TEditSpaceFormValues } from '../space-setting/space-setting';
 import { useFormContext } from 'react-hook-form';
 import { createOrEditSpace } from '@/services/business-space.service';
 
