@@ -119,8 +119,6 @@ const ListItems = ({ data, owner, myRole, isAdmin = false, ...props }: {
             console.error('Error on DeleteMember:', error)
             toast.error('Error on Delete member')
         }
-
-
     }
     const onResendInvitation = async (member: Member) => {
         setIsLoading(prev => ({
@@ -196,7 +194,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
     const { members, owner } = space;
     const currentUser = useAuthStore((state) => state.user);
     const myRole = getUserSpaceRole(currentUser, space);
-
+    const editMemberRoles = SPACE_SETTING_ITEMS.find(setting => setting.name === 'members')?.roles.edit || [];
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
     }
@@ -230,7 +228,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
                 <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
             </div>
 
-            <InviteMemberModal space={space} />
+            {editMemberRoles.includes(myRole as ESPaceRoles) && <InviteMemberModal space={space} />}
         </div>
 
         <div className='flex flex-col gap-1 w-full'>
@@ -249,7 +247,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
                     Member role
                 </Typography>
             </div>
-            <ListItems data={membersData} owner={owner}  myRole={myRole} />
+            <ListItems data={membersData} owner={owner} myRole={myRole} />
         </div>
     </section>
     )
