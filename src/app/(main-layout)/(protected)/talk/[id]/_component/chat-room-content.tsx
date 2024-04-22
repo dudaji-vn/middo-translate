@@ -30,11 +30,11 @@ const ChatRoomContent = ({ room }: { room: any }) => {
         </>
       ) : (
         <Allotment defaultSizes={[400, 300]}>
-          <Allotment.Pane minSize={250}>
+          <Allotment.Pane minSize={300}>
             <ChatRoomMain room={room} />
           </Allotment.Pane>
           {currentSide && 
-          <Allotment.Pane minSize={200} maxSize={600} preferredSize={400}>
+          <Allotment.Pane minSize={250} maxSize={600} preferredSize={400}>
             <RoomSide />
           </Allotment.Pane>}
         </Allotment>

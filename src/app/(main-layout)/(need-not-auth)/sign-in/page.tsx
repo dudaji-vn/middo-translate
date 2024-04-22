@@ -135,7 +135,7 @@ export default function SignIn() {
       if (!userData?.avatar && !userData?.name && !userData?.language) {
         router.push(ROUTE_NAMES.CREATE_ACCOUNT);
       } else {
-        router.push(ROUTE_NAMES.ROOT);
+        router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
       }
     }
   }, [
