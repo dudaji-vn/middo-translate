@@ -7,17 +7,21 @@ const baseUrl = NEXT_PUBLIC_API_URL;
 
 export async function fetchApi<T>(path: string, options?: RequestInit) {
   const url = new URL(`/api${path}`, baseUrl).toString();
-  const accessToken = getAccessToken();
-  const refreshToken = getRefreshToken();
+  let accessToken = getAccessToken();
+  let refreshToken = getRefreshToken();
   if (!accessToken && refreshToken) {
     const res = await fetch(`${NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${refreshToken}`,
+        Authorization: `Bearer ${refreshToken.value}`,
       },
     });
     const data = await res.json();
+    accessToken = {
+      value: data.accessToken,
+      name: 'access_token',
+    };
   }
   const res = await fetch(url, {
     ...options,
