@@ -116,8 +116,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
                 </div>
                 <TabsContent value="members" className="py-4">
                     <MembersList
-                        members={space.members}
-                        owner={space.owner}
+                        space={space}
                     />
                 </TabsContent>
                 <TabsContent value="tags" className="py-4">

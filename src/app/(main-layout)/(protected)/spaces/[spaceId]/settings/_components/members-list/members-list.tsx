@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react'
 import { Typography } from '@/components/data-display'
-import { GripVertical, Plus, RotateCcw, Search, Trash2, UserCog, UserRound } from 'lucide-react'
+import { GripVertical, Plus, RotateCcw, Search, Trash2, UserCog, UserRound, UserRoundPlus } from 'lucide-react'
 import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -11,6 +11,8 @@ import { Button } from '@/components/actions'
 import { isEmpty } from 'lodash'
 import { useAuthStore } from '@/stores/auth.store'
 import { Member } from '../../../_components/spaces-crud/sections/members-columns'
+import InviteMemberModal from './invite-member-modal'
+import { TSpace } from '../../../_components/business-spaces'
 
 type MemberItemProps = {
     isOwner: boolean;
@@ -141,7 +143,9 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
 
     return (
         <div className='md:min-w-[400px] overflow-x-auto pr-10 flex flex-col gap-1'>
-            <p className={cn('text-neutral-500 font-light text-sm italic w-full text-center py-1', !isEmptyData && "hidden")}>No members</p>
+            <p className={cn('text-neutral-500 font-light text-sm italic w-full text-center py-1', !isEmptyData && "hidden")}>{
+                (isAdmin ? 'No admin founded' : 'No member founded')
+            }</p>
             <div className={cn('w-full py-2 flex justify-start flex-row items-center ', isEmptyData && "hidden")}>
                 <div className='!w-[50px] invisible'>
                 </div>
@@ -176,17 +180,9 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
 
 }
 
-const MembersList = ({
-    members,
-    owner
-}: {
-    members: Member[],
-    owner: {
-        _id: string;
-        email: string;
-    }
-}) => {
+const MembersList = ({ space }: { space: TSpace }) => {
     const [search, setSearch] = React.useState('');
+    const { members, owner } = space;
 
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
@@ -212,7 +208,7 @@ const MembersList = ({
 
 
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
-        <div className='w-full flex flex-row px-4 gap-5 justify-end items-center'>
+        <div className='w-full flex flex-row px-10 gap-5 justify-end items-center'>
 
             <div className='md:w-96 w-60 relative'>
                 <TableSearch
@@ -221,14 +217,10 @@ const MembersList = ({
                     search={search} />
                 <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
             </div>
-            <Button
-                // onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
-                shape={'square'}
-                size={'xs'}
-                startIcon={<Plus />}>
-                Add Member
-            </Button>
+
+            <InviteMemberModal space={space} />
         </div>
+
         <div className='flex flex-col gap-1 w-full'>
             <div className='w-full  py-4 sm:p-[20px_40px] flex flex-row gap-3 items-center font-semibold bg-[#fafafa]'>
                 <UserCog size={16} className='text-primary-500-main stroke-[3px]' />
