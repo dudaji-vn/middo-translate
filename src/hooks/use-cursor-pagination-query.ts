@@ -6,9 +6,10 @@ import {
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { deepCopy } from '@/utils/deep-copy';
+import { useAppStore } from '@/stores/app.store';
 
 type TDataResponse<T> = ListResponse<T, CursorPagination>;
 
@@ -25,6 +26,8 @@ export const useCursorPaginationQuery = <TData>({
   queryFn,
   config,
 }: CursorPaginationQuery<TData>) => {
+  const isConnected = useAppStore((s) => s.socketConnected);
+  const [canRefetch, setCanRefetch] = useState(false);
   const { data, ...rest } = useInfiniteQuery({
     queryKey,
     queryFn,
@@ -36,6 +39,16 @@ export const useCursorPaginationQuery = <TData>({
     },
     ...config,
   });
+  useEffect(() => {
+    if (isConnected && canRefetch) {
+      console.log('refetch');
+      rest.refetch();
+    }
+    if (!isConnected) {
+      setCanRefetch(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected, canRefetch]);
 
   const queryClient = useQueryClient();
 
