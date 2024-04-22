@@ -16,17 +16,23 @@ import toast from 'react-hot-toast';
 import { useParams, useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items';
 
 
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
-
+  myRole?: ESPaceRoles;
 }
 
 
 const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { data?: TBusinessExtensionData } & { name: string }>(
-  ({ data, name, ...props }, ref) => {
+  ({ data, myRole, name, ...props }, ref) => {
     const router = useRouter();
     const params = useParams();
+    const extensionRoles = SPACE_SETTING_ITEMS.find(item => item.name === 'extension')?.roles || {
+      'delete': [],
+      'edit': [],
+      'create': [],
+    }
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const onDeleteExtension = async () => {
       deleteExtension(data?._id as string).then(() => {
@@ -63,6 +69,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
                   size="xs"
                   variant="ghost"
                   color="default"
+                  className={cn({ 'hidden': !extensionRoles.edit.find(role => role === myRole) })}
                   onClick={() => {
                     if (params?.spaceId)
                       router.push(`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=edit-extension`);
@@ -79,6 +86,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
               }}
               triggerItem={
                 <Button.Icon
+                  className={cn({ 'hidden': !extensionRoles.delete.find(role => role === myRole) })}
                   size="xs"
                   onClick={() => setOpenConfirmDialog(true)}
                   variant="default"

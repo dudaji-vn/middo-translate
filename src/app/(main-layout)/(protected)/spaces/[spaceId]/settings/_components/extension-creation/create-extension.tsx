@@ -27,6 +27,8 @@ import { isEqual } from 'lodash';
 import { FlowNode, initialChatFlowNodes } from './steps/script-chat-flow/nested-flow';
 import { translateWithDetection } from '@/services/languages.service';
 import { Edge } from 'reactflow';
+import { getUserSpaceRole } from '../space-setting/role.util';
+import { SPACE_SETTING_ITEMS } from '../space-setting/setting-items';
 
 
 type TFormValues = {
@@ -52,16 +54,18 @@ type TFormValues = {
 
 
 
-export default function CreateExtension({ open, initialData, title = 'Create Extension' }: {
+export default function CreateExtension({ open, initialData, title = 'Create Extension', space }: {
   open: boolean;
   initialData?: TBusinessExtensionData;
   title?: string;
+  space: TSpace;
 }) {
   const isClient = useClient()
   const [tabValue, setTabValue] = React.useState<number>(0);
   const pathname = usePathname() || '';
   const params = useParams();
   const currentUser = useAuthStore((s) => s.user);
+  const myRole = getUserSpaceRole(currentUser, space);
   const router = useRouter();
 
   const form = useForm<TFormValues>({
@@ -149,8 +153,9 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
       toast.error(err?.response?.data?.message);
     }
   };
-
-  if (!isClient || !open) return null;
+  const extensionRoles = SPACE_SETTING_ITEMS.find(item => item.name === 'extension')?.roles;
+  const notAllowedMe = !extensionRoles?.edit.includes(myRole);
+  if (!isClient || !open || notAllowedMe) return null;
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>

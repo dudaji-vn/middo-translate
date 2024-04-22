@@ -29,7 +29,7 @@ const SpaceSettingPage = async ({ searchParams, params }: {
         <div className='max-md:w-screen max-md:px-1 w-full bg-white h-full max-h-full overflow-y-auto'>
             <SpaceSetting space={space} />
             <div className='w-full bg-white'>
-                <CreateExtension open={Boolean(modatType === 'create-extension' || modatType === 'edit-extension' && businessExtension)} initialData={businessExtension} />
+                <CreateExtension space={space} open={Boolean(modatType === 'create-extension' || modatType === 'edit-extension' && businessExtension)} initialData={businessExtension} />
             </div>
         </div>
     )

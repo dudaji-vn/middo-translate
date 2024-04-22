@@ -19,7 +19,7 @@ export const inviteMembersToSpace = (data: {
   members: Array<{ email: string; role: string }>;
   spaceId: string;
 }) => {
-  return put('/help-desk/invite-member', data);
+  return put('/help-desk/invite-members', data);
 };
 export const resendInvitation = (data: {
   email: string;
