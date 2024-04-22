@@ -14,9 +14,8 @@ import { TConversationTag } from '../../../_components/business-spaces';
 import { DEFAULT_THEME } from '../extension-creation/sections/options';
 import { createOrEditTag } from '@/services/business-space.service';
 import { isEqual } from 'lodash';
-import { generateRandomHexColor, getContrastingTextColor } from '@/utils/color-generator';
-import { COLOR_REGEX } from '@/components/form/RHF-color-selector/rhf-color-selector';
- 
+import RHFColorSelector, { COLOR_REGEX } from '@/components/form/RHF-color-selector/rhf-color-selector';
+
 const createOrEditTagSchema = z.object({
     tagId: z.string().optional(),
     name: z.string().min(1, {
@@ -102,9 +101,7 @@ export const CreateOrEditTag = ({
             console.error(error);
         }
     }
-    const onRandomColor = () => {
-        methods.setValue('color', generateRandomHexColor());
-    }
+
     const submitAble = isValid && !isEqual({
         name: watch('name'),
         color: watch('color')
@@ -139,8 +136,8 @@ export const CreateOrEditTag = ({
                                     placeholder: 'Enter tag name',
                                 }} />
                         </div>
-                        
-                        <div className='w-full relative flex flex-row gap-3 items-start rounded-[12px]'>
+                        <RHFColorSelector colorNameFiled='color' selectedColor={tagColor} />
+                        {/* <div className='w-full relative flex flex-row gap-3 items-start rounded-[12px]'>
                             <RHFInputField
                                 name='color'
                                 formItemProps={{
@@ -162,7 +159,7 @@ export const CreateOrEditTag = ({
                             >
                                 <RefreshCcw size={15} />
                             </Button.Icon>
-                        </div>
+                        </div> */}
                         <div className='w-full flex flex-row gap-3 items-center justify-end'>
                             <Button
                                 onClick={() => onOpenChange(false)}
