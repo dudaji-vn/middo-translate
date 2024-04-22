@@ -20,7 +20,7 @@ type TagItemProps = {
     deleteAble?: boolean;
 } & Tag & React.HTMLAttributes<HTMLDivElement>
 const TagItem = ({ _id, name, color, isReadonly, onEdit, onDelete, editAble, deleteAble, ...props }: TagItemProps) => {
-    return (<div className='w-full flex justify-between gap-10 flex-row items-center bg-primary-100 p-[8px_40px] rounded-[12px]' {...props}>
+    return (<div className='w-full flex justify-between gap-10 flex-row items-center bg-primary-100 p-[8px_40px]' {...props}>
         <div className='w-full flex justify-start flex-row gap-10  items-center'>
             <Button.Icon size={'xs'} shape={'square'} variant={'ghost'} color={'default'}>
                 <GripVertical className='stroke-neutral-500 fill-neutral-500' />
@@ -90,23 +90,22 @@ const TagsList = ({
 
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
         <div className='w-full flex flex-row px-4 gap-5 justify-end items-center'>
-            <Button
-                onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
-                shape={'square'}
-                size={'sm'}
-                variant={'ghost'}
-                startIcon={<Plus />}>
-                Add Tag
-            </Button>
             <div className='md:w-96 w-60 relative'>
                 <TableSearch
                     className='py-2 min-h-[44px] w-full outline-neutral-100'
                     onSearch={onSearchChange}
                     search={search} />
                 <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
-            </div>
+            </div>            
+            <Button
+                onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
+                shape={'square'}
+                size={'xs'}
+                startIcon={<Plus />}>
+                Add Tag
+            </Button>
         </div>
-        <div className='w-full rounded-md p-0 overflow-x-auto'>
+        <div className='w-full p-0 overflow-x-auto'>
             <div className='w-full flex flex-col gap-2'>
                 {displayedTags.map((tag) => {
                     return <TagItem

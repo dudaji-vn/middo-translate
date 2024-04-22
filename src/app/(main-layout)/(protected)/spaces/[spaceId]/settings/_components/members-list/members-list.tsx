@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react'
 import { Typography } from '@/components/data-display'
-import { GripVertical, RotateCcw, Search, Trash2, UserCog, UserRound } from 'lucide-react'
+import { GripVertical, Plus, RotateCcw, Search, Trash2, UserCog, UserRound } from 'lucide-react'
 import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -191,7 +191,7 @@ const MembersList = ({
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
     }
- 
+
     const { adminsData, membersData } = useMemo(() => {
 
         const filteredMembers = search ? members?.filter(member => {
@@ -212,12 +212,22 @@ const MembersList = ({
 
 
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
-        <div className='md:w-96 w-60 relative px-4 '>
-            <TableSearch
-                className='py-2 min-h-[44px] w-full outline-neutral-100'
-                onSearch={onSearchChange}
-                search={search} />
-            <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-6 transform -translate-y-1/2' />
+        <div className='w-full flex flex-row px-4 gap-5 justify-end items-center'>
+
+            <div className='md:w-96 w-60 relative'>
+                <TableSearch
+                    className='py-2 min-h-[44px] w-full outline-neutral-100'
+                    onSearch={onSearchChange}
+                    search={search} />
+                <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
+            </div>
+            <Button
+                // onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
+                shape={'square'}
+                size={'xs'}
+                startIcon={<Plus />}>
+                Add Member
+            </Button>
         </div>
         <div className='flex flex-col gap-1 w-full'>
             <div className='w-full  py-4 sm:p-[20px_40px] flex flex-row gap-3 items-center font-semibold bg-[#fafafa]'>

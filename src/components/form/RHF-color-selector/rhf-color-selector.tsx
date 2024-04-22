@@ -1,16 +1,12 @@
 'use client'
 
 import React from 'react'
-import Tooltip from '../../data-display/custom-tooltip/tooltip';
-import { DEFAULT_THEME, TThemeOption, extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
+import { DEFAULT_THEME, extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { Button, ButtonProps } from '../../actions';
-import { Check, CircleIcon, Plus, RefreshCcw, XIcon } from 'lucide-react';
-import { generateRandomHexColor, getContrastingTextColor } from '@/utils/color-generator';
-import RHFInputField from '../RHF/RHFInputFields/RHFInputField';
+import { Check, CircleIcon, Plus, XIcon } from 'lucide-react';
+import { generateRandomHexColor } from '@/utils/color-generator';
 import { useFormContext } from 'react-hook-form';
 import { cn } from '@/utils/cn';
-import RHFInputColor from '../RHF/RHFInputFields/RHFInputColor';
-import { ref } from 'yup';
 
 export const COLOR_REGEX = /^#[0-9A-F]{6}$/i;
 
