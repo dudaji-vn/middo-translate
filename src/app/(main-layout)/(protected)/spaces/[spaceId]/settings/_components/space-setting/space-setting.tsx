@@ -161,7 +161,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
                             </Button>
                         </Link>
                     </div>
-                    <BusinessExtension data={space.extension} name='Middo Conversation Extension' />
+                    <BusinessExtension data={space.extension} name='Middo Conversation Extension' myRole={currentUserRole} />
                 </TabsContent>
             </Tabs >
         </section>

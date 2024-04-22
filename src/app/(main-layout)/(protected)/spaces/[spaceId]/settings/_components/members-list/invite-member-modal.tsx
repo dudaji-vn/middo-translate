@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import InviteMembers from '../../../_components/spaces-crud/sections/invite-section'
 import { TSpace } from '../../../_components/business-spaces'
@@ -6,6 +8,7 @@ import { Button } from '@/components/actions'
 import { UserRoundPlus } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
 import { inviteMembersToSpace } from '@/services/business-space.service'
+import toast from 'react-hot-toast'
 
 const InviteMemberModal = ({
     space
@@ -20,10 +23,12 @@ const InviteMemberModal = ({
                 members: members.map(({ email, role }) => ({ email, role })),
                 spaceId: space._id
             });
+            toast.success('Members invited successfully');
             setOpen(false);
         }
         catch (error) {
             console.log(error)
+            toast.error('Error inviting members. Please try again');
         }
     }
     return (
