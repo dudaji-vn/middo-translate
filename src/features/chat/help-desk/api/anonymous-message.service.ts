@@ -12,7 +12,7 @@ import queryString from 'query-string';
 import { Room } from '../../rooms/types';
 import axios from 'axios';
 
-class AnounymousMesssagesAPI {
+class AnounymousMessagesAPI {
   private basePath: string;
 
   constructor(basePath: string = '/api/rooms/anonymous') {
@@ -75,6 +75,6 @@ class AnounymousMesssagesAPI {
     return [];
   }
 }
-const anounymousMesssagesAPI = new AnounymousMesssagesAPI();
+const anounymousMessagesAPI = new AnounymousMessagesAPI();
 
-export { anounymousMesssagesAPI, AnounymousMesssagesAPI };
+export { anounymousMessagesAPI, AnounymousMessagesAPI };

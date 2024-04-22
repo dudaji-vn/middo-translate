@@ -28,7 +28,8 @@ import { FlowNode, initialChatFlowNodes } from './steps/script-chat-flow/nested-
 import { translateWithDetection } from '@/services/languages.service';
 import { Edge } from 'reactflow';
 import { getUserSpaceRole } from '../space-setting/role.util';
-import { SPACE_SETTING_ITEMS } from '../space-setting/setting-items';
+import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items';
+import { TSpace } from '../../../_components/business-spaces';
 
 
 type TFormValues = {
@@ -154,7 +155,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
     }
   };
   const extensionRoles = SPACE_SETTING_ITEMS.find(item => item.name === 'extension')?.roles;
-  const notAllowedMe = !extensionRoles?.edit.includes(myRole);
+  const notAllowedMe = !extensionRoles?.edit.includes(myRole as ESPaceRoles);
   if (!isClient || !open || notAllowedMe) return null;
   return (
     <Form {...form}>
