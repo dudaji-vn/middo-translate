@@ -67,7 +67,7 @@ export const MessagesBoxProvider = ({
     queryKey: key,
     queryFn: ({ pageParam }) => {
       if (isAnonymous) {
-        return anounymousMesssagesAPI.getMessages(room._id, {
+        return anounymousMessagesAPI.getMessages(room._id, {
           cursor: pageParam,
           limit: 16,
           userId: guestId as string,
