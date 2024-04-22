@@ -40,7 +40,7 @@ export default function useProtectedRoute() {
       router.push(ROUTE_NAMES.CREATE_ACCOUNT);
       return;
     }
-  }, [user, isLoaded, router, isElectron]);
+  }, [user, isLoaded, router, isElectron, pathname, searchParams]);
 
   return {
     user,

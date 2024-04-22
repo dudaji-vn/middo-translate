@@ -140,8 +140,8 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
     const isEmptyData = isEmpty(data);
 
     return (
-        <div className='min-w-[400px]  overflow-x-auto'>
-            <Typography className={cn('text-neutral-500 font-light italic', !isEmptyData && "hidden")}>No members</Typography>
+        <div className='md:min-w-[400px] overflow-x-auto pr-10 flex flex-col gap-1'>
+            <p className={cn('text-neutral-500 font-light text-sm italic w-full text-center py-1', !isEmptyData && "hidden")}>No members</p>
             <div className={cn('w-full py-2 flex justify-start flex-row items-center ', isEmptyData && "hidden")}>
                 <div className='!w-[50px] invisible'>
                 </div>
@@ -155,13 +155,13 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
             </div>
             {data.map((member, index) => {
                 return <div className='w-full grid grid-cols-[48px_auto]' key={member.email}>
-                    <div className='!w-fit p-1 bg-white '>
+                    <div className='!w-fit p-1 py-2 bg-white '>
                         <Button.Icon size={'xs'} shape={'square'} variant={'ghost'} color={'default'}>
                             <GripVertical className='stroke-neutral-500 fill-neutral-500' />
                         </Button.Icon>
                     </div>
-                    <MemberItem  
-                    {...member}
+                    <MemberItem
+                        {...member}
                         isAdmin={isAdmin}
                         isOwner={member.email === owner.email}
                         onResendInvitation={onResendInvitation}
@@ -191,7 +191,8 @@ const MembersList = ({
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
     }
-
+    console.log('members', members)
+    console.log('owner', owner)
     const { adminsData, membersData } = useMemo(() => {
 
         const filteredMembers = search ? members.filter(member => {
@@ -212,7 +213,7 @@ const MembersList = ({
 
 
     return (<section className='flex flex-col gap-5 w-full items-end'>
-        <div className='w-96 relative px-4 '>
+        <div className='md:w-96 w-60 relative px-4 '>
             <TableSearch
                 className='py-2 min-h-[44px] w-full outline-neutral-100'
                 onSearch={onSearchChange}
@@ -220,7 +221,7 @@ const MembersList = ({
             <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-6 transform -translate-y-1/2' />
         </div>
         <div className='flex flex-col gap-1 w-full'>
-            <div className='w-full p-[20px_40px] flex flex-row gap-3 items-center font-semibold bg-[#fafafa]'>
+            <div className='w-full  py-4 sm:p-[20px_40px] flex flex-row gap-3 items-center font-semibold bg-[#fafafa]'>
                 <UserCog size={16} className='text-primary-500-main stroke-[3px]' />
                 <Typography className='text-primary-500-main '>
                     Admin role
@@ -229,7 +230,7 @@ const MembersList = ({
             <ListItems data={adminsData} owner={owner} isAdmin />
         </div>
         <div className='flex flex-col gap-1 w-full'>
-            <div className='w-full p-[20px_40px]  flex flex-row  gap-3 items-center font-semibold  bg-[#fafafa]'>
+            <div className='w-full py-4 sm:p-[20px_40px]  flex flex-row  gap-3 items-center font-semibold  bg-[#fafafa]'>
                 <UserRound size={16} className='text-primary-500-main stroke-[3px]' />
                 <Typography className='text-primary-500-main'>
                     Member role

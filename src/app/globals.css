@@ -511,3 +511,8 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+
+.sash-hover::before {
+  background: #3d88ed !important;
+}

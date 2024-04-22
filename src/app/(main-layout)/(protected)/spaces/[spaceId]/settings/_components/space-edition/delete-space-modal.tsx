@@ -11,6 +11,7 @@ import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { TSpace } from '../../../_components/business-spaces';
 import { Typography } from '@/components/data-display';
 import { deleteSpace } from '@/services/business-space.service';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 
 
@@ -31,7 +32,7 @@ export const DeleteSpaceModal = ({
             await deleteSpace(space._id).then(res => {
                 if (res.data) {
                     toast.success('Space name deleted successfully');
-                    router.refresh();
+                    router.push(ROUTE_NAMES.SPACES);
                     setOpen(false);
                     return;
                 }
@@ -52,7 +53,7 @@ export const DeleteSpaceModal = ({
             onClick={() => setOpen(true)}
             color={'default'}
             shape={'square'}
-            className='text-error  min-w-fit'
+            className='text-error  min-w-fit max-sm:hidden'
             size={'xs'} >
             Delete Space
         </Button>

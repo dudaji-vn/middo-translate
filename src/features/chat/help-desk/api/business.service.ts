@@ -107,6 +107,7 @@ class BusinessAPI {
       email: string;
       verifyToken: string;
       invitedAt: string;
+      isExpired: boolean;
     }>
   > {
     const access_token = await this.getAccessToken();
@@ -162,7 +163,7 @@ class BusinessAPI {
   async getExtensionByBusinessId(businessId: string) {
     try {
       const response = await fetch(
-        `${this.basePath}/help-desk/extension/${businessId}`,
+        `${this.basePath}/help-desk/extensions/${businessId}`,
         {
           method: 'GET',
           headers: {

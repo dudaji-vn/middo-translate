@@ -24,6 +24,7 @@ export const isBusinessConversation = (
   }
 };
 
+export const PK_SPACE_KEY = 'spaceId';
 export const PK_BUSINESS_SPACES = 'conversationType';
 export enum EBusinessSidebarKeys {
   Conversations = 'conversations',

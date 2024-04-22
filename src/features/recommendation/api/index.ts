@@ -13,9 +13,12 @@ export const recommendationApi = {
     const res: Response<User[]> = await axios.get(path);
     return res.data;
   },
-  async rooms(type?: string) {
+  async rooms(helpdeskParams?: { type?: string; spaceId?: string }) {
+    const helpdeskQueryParams = helpdeskParams?.type
+      ? `?type=${helpdeskParams.type}&spaceId=${helpdeskParams.spaceId}`
+      : '';
     const path = queryString.stringifyUrl({
-      url: `${basePath}/chat` + (type ? `?type=${type}` : ''),
+      url: `${basePath}/chat` + helpdeskQueryParams,
     });
     const res: Response<Room[]> = await axios.get(path);
     return res.data;

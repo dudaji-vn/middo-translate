@@ -3,6 +3,7 @@
 import {
   EBusinessConversationKeys,
   PK_BUSINESS_SPACES,
+  PK_SPACE_KEY,
 } from '@/types/business.type';
 import { useParams, usePathname } from 'next/navigation';
 export enum EPageType {
@@ -19,6 +20,7 @@ export const useBusinessNavigationData = () => {
   const params = useParams();
   const pathname = usePathname();
   const isBusiness = pathname?.includes(EPageType.SPACES);
+  const isOnASpace = isBusiness && params?.[PK_SPACE_KEY];
 
   const businessSlugs = params?.slugs || [];
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
@@ -38,6 +40,7 @@ export const useBusinessNavigationData = () => {
   return {
     isBusiness,
     isHelpDesk,
+    isOnASpace,
     isOnBusinessChat,
     businessSlugs,
     isOnHelpDeskChat,

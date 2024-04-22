@@ -75,30 +75,31 @@ const SettingHeader = ({ space }: {
     });
 
     return (<>
-        <section className={(modalType) ? 'hidden' : 'w-full h-fit px-10 py-5 bg-white'}>
-            <Form {...formEditSpace}> <div className='bg-primary-100 p-3 rounded-[12px] items-center w-full flex flex-row justify-between'>
-                <div className={cn('w-full flex flex-row items-center  gap-3', headerVariants({ modal: modalType }))}>
-                    <EditSpaceImage />
-                    <div className='flex flex-col gap-2'>
-                        <div className='flex flex-row gap-2 items-center'>
-                            <Typography className='text-neutral-800  font-semibold text-[18px] leading-5'>
-                                {space?.name}
+        <section className={(modalType) ? 'hidden' : 'w-full h-fit md:px-10 px-3 py-5 bg-white'}>
+            <Form {...formEditSpace}>
+                <div className='bg-primary-100 p-3 rounded-[12px] items-center w-full flex flex-row justify-between'>
+                    <div className={cn('w-full flex flex-row items-center gap-3', headerVariants({ modal: modalType }))}>
+                        <EditSpaceImage />
+                        <div className='flex flex-col gap-2'>
+                            <div className='flex flex-row gap-2 items-center'>
+                                <Typography className='text-neutral-800  font-semibold  text-[18px] leading-5'>
+                                    {space?.name}
+                                </Typography>
+                                <EditSpaceModal space={space} />
+                            </div>
+                            <Typography className='text-neutral-400 font-normal text-sm leading-[18px]'>
+                                {space?.members?.length || 0} Members
                             </Typography>
-                            <EditSpaceModal space={space} />
                         </div>
-                        <Typography className='text-neutral-400 font-normal text-sm leading-[18px]'>
-                            {space?.members?.length || 0} Members
-                        </Typography>
                     </div>
+                    <DeleteSpaceModal space={space} />
                 </div>
-                <DeleteSpaceModal space={space} />
-            </div>
             </Form>
         </section>
-        <section className={(modalType) ? 'hidden' : 'w-full bg-white flex flex-col items-center'}>
+        <section className={(modalType) ? 'hidden' : 'w-full bg-white items-center'}>
             <Tabs defaultValue='members' className="w-full">
-                <div className='w-full bg-white transition-all duration-300'>
-                    <TabsList className='w-full px-10  flex flex-row justify-start'>
+                <div className='w-full bg-white transition-all duration-300 overflow-x-auto'>
+                    <TabsList className='w-full sm:px-10  flex flex-row justify-start'>
                         <TabsTrigger className='lg:px-10 w-fit' value="members">Members Management</TabsTrigger>
                         <TabsTrigger className='lg:px-10  w-fit' value="extension">Conversation Extension</TabsTrigger>
                         <TabsTrigger className='lg:px-10  w-fit' value="tags">Tags</TabsTrigger>
@@ -110,8 +111,8 @@ const SettingHeader = ({ space }: {
                         owner={space.owner}
                     />
                 </TabsContent>
-                <TabsContent value="extension" className={cn("p-4 w-full flex flex-col items-center justify-center", isExtensionEmpty && " min-h-[calc(100vh-320px)]")}>
-                    <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2' : 'hidden'}>
+                <TabsContent value="extension" className={cn("p-4 w-full flex flex-col items-center justify-center")}>
+                    <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2 min-h-[calc(100vh-350px)] justify-center' : 'hidden'}>
                         <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extentions' className='mx-auto' />
                         <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
                             Your extension is almost here!
@@ -119,15 +120,15 @@ const SettingHeader = ({ space }: {
                         <Typography className='text-neutral-600'>
                             Create a conversation extension with the help of ready-made theme or define a unique one on your own
                         </Typography>
+                        <Link href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`} className={isExtensionEmpty ? '' : 'hidden'}>
+                            <Button variant={'default'} color={'primary'} shape={'square'} className={'mt-4 w-fit mx-auto'} >
+                                <Plus className="h-4 w-4" />
+                                <Typography className="ml-2 text-white">
+                                    Create Extension
+                                </Typography>
+                            </Button>
+                        </Link>
                     </div>
-                    <Link href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`} className={isExtensionEmpty ? '' : 'hidden'}>
-                        <Button variant={'default'} color={'primary'} shape={'square'} className={'mt-4 w-fit mx-auto'} >
-                            <Plus className="h-4 w-4" />
-                            <Typography className="ml-2 text-white">
-                                Create Extension
-                            </Typography>
-                        </Button>
-                    </Link>
                     <BusinessExtension data={space.extension} name='Middo Conversation Extension' />
                 </TabsContent>
                 <TabsContent value="tags" className="p-4">

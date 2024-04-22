@@ -1,3 +1,5 @@
+'use client';
+
 import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { Button } from '@/components/actions';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
@@ -7,7 +9,9 @@ import { messageApi } from '../../api';
 import { useMessagesBox } from '../message-box';
 import { createLocalMessage } from '../../utils';
 
-export type MessageNode = Omit<FlowNode, 'position'>;
+export type MessageNode = Omit<FlowNode, 'position' | 'data'> & {
+    data: FlowNode['data'] & { translations?: { [key: string]: string } }
+}
 const MessageNode = ({
     messageNode,
     disabled = false,
@@ -18,19 +22,23 @@ const MessageNode = ({
     const { chatFlow, room, roomSendingState, setRoomSendingState } = useBusinessExtensionStore();
     const { addMessage, replaceMessage } = useMessagesBox();
     const key = ['messages', room?._id];
-    const { link, content } = messageNode.data || {};
+    const { link, content: originalContent, translations } = messageNode.data || {};
 
     const [me, them] = useMemo(() => {
         // @ts-ignore
-        const me = room?.participants.find((p: { _id: string, tempEmail: boolean }) => p.tempEmail);
+        const me = room?.participants.find((p: { _id: string, tempEmail: boolean, status: string, email: string }) => p.status === 'anonymous' || (p.email && p.tempEmail === p.email))
         const them = room?.participants.find((p) => p._id !== me?._id);
         return [me, them];
     }, [room?.participants]);
+
+
+    const content = translations?.[me?.language as string] || originalContent;
     const appendMyMessage = async () => {
+        const transletedContent = messageNode.data?.translations?.[me?.language as string] || messageNode.data?.content;
         const myMessage = {
             ...createLocalMessage({
                 sender: me!,
-                content: messageNode.data?.content,
+                content: transletedContent,
                 language: me?.language,
             }),
             userId: me!._id,
@@ -47,13 +55,14 @@ const MessageNode = ({
     const onFlowActionClick = async () => {
         await appendMyMessage();
         if (!chatFlow?.nodes || !chatFlow?.edges || !room?._id) return;
-        setRoomSendingState('loading');
         const { nodes, edges } = chatFlow;
 
         const nextEdge = edges.find((edge) => edge.source === messageNode.id);
         const nextNode = nodes.find((node) => node.id === nextEdge?.target);
 
         if (nextNode) {
+            console.log('nextNode', nextNode)
+            setRoomSendingState('loading');
             const childrenActions = nodes.filter(node => node.parentNode === nextNode?.id);
             const newBotMessage = {
                 ...createLocalMessage({
@@ -121,9 +130,10 @@ const MessageNode = ({
 }
 
 export default function MessageItemFlowActions({
-    actions }: {
-        actions: MessageNode[]
-    }) {
+    actions
+}: {
+    actions: MessageNode[]
+}) {
     const { isUserChattingWithGuest, isHelpDesk } = useBusinessNavigationData();
     if (actions.length === 0 || !isHelpDesk || isUserChattingWithGuest) {
         return null;

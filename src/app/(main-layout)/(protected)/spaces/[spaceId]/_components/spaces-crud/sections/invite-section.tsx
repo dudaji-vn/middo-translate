@@ -14,6 +14,7 @@ import { Member, membersColumns } from './members-columns'
 import { inviteMemberToSpace } from '@/services/business-space.service'
 import toast from 'react-hot-toast'
 import { cn } from '@/utils/cn'
+import { useAuthStore } from '@/stores/auth.store'
 
 export enum ESpaceMemberRole {
     Admin = 'admin',
@@ -85,6 +86,7 @@ const InviteMembers = ({
     ...props
 }: InviteMembersProps
 ) => {
+    const currentUser = useAuthStore(state => state.user);
     const formAdding = useForm<TAddingmember>({
         mode: 'onChange',
         defaultValues: {
@@ -96,6 +98,10 @@ const InviteMembers = ({
     });
     const invitedMembers = (space?.members || []) as Member[];
     const onAddUser = () => {
+        if (currentUser?.email === formAdding.getValues().email) {
+            toast.error('You cannot invite yourself!');
+            return;
+        }
         if (onAddMember) {
             onAddMember(formAdding.getValues());
             formAdding.setValue('email', '');

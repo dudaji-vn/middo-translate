@@ -109,7 +109,7 @@ const BusinessSpaces = () => {
                     </div>
                 </div>
                 <Tabs defaultValue='joined_spaces' className="w-full h-fit " value={tab} onValueChange={(val) => setTab(val as BusinessTabType)}>
-                    <TabsList className='justify-start px-[5vw] h-fit'>
+                    <TabsList className='justify-start px-[5vw] h-fit max-md:overflow-x-auto'>
                         {tabItems.map((item) => (
                             <TabsTrigger key={item.value} value={item.value} className='max-w-fit px-8'>
                                 {item.label}
