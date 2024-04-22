@@ -212,7 +212,7 @@ const MembersList = ({
     }, [members, search])
 
 
-    return (<section className='flex flex-col gap-5 w-full items-end'>
+    return (<section className='flex flex-col gap-5 w-full items-end py-4'>
         <div className='md:w-96 w-60 relative px-4 '>
             <TableSearch
                 className='py-2 min-h-[44px] w-full outline-neutral-100'

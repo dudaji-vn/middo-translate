@@ -48,3 +48,22 @@ export const getSpaces = (type: 'joined-spaces' | undefined | null) => {
   const queryParams = type ? `?type=${type}` : '';
   return get(`/help-desk/spaces` + queryParams);
 };
+
+export const createOrEditTag = (data: {
+  name: string;
+  color: string;
+  tagId?: string;
+  spaceId: string;
+}) => {
+  return put('/help-desk/create-or-edit-tag', data);
+};
+
+export const deleteTag = ({
+  tagId,
+  spaceId,
+}: {
+  tagId: string;
+  spaceId: string;
+}) => {
+  return axios.delete(`/help-desk/tags/${tagId}`, { data: { spaceId } });
+};

@@ -26,6 +26,12 @@ export type BusinessTabItem = {
     componentProps?: Partial<TabsContentProps>;
 }
 export type TSpaceTag = 'my' | 'joined' | undefined;
+export type TConversationTag = {
+    _id: string;
+    name: string;
+    color: string;
+    isReadonly?: boolean;
+}
 export type TSpace = BaseEntity & {
     name: string;
     avatar?: string;
@@ -34,7 +40,8 @@ export type TSpace = BaseEntity & {
     members: Member[];
     newMessagesCount: number;
     owner: User;
-    tag?: TSpaceTag
+    tag?: TSpaceTag;
+    tags: TConversationTag[];
 }
 const tabItems: BusinessTabItem[] = [
     {
