@@ -6,7 +6,7 @@ export interface TThemeOption {
 }
 
 export const DEFAULT_THEME = '#3D88ED'
-export const extentionsCustomThemeOptions: TThemeOption[] = [
+export const extensionsCustomThemeOptions: TThemeOption[] = [
   {
     name: 'default',
     hex: '#3D88ED',

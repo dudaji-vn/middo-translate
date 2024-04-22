@@ -1,5 +1,5 @@
 import React from 'react'
-import { TThemeOption, DEFAULT_THEME, extentionsCustomThemeOptions } from './options';
+import { TThemeOption, DEFAULT_THEME, extensionsCustomThemeOptions } from './options';
 import { Button } from '@/components/actions';
 import { Check, CircleIcon, Info, Plus } from 'lucide-react';
 import { FormLabel } from '@/components/ui/form';
@@ -26,7 +26,7 @@ const CustomExtension = ({
         Theme
       </FormLabel>
       <div className='grid md:grid-cols-6 grid-cols-4 xl:grid-cols-10  lg:grid-cols-8 grid-flow-row '>
-        {extentionsCustomThemeOptions.map((color, index) => {
+        {extensionsCustomThemeOptions.map((color, index) => {
           const isSelect = selectedColor === color.hex;
           return (<Tooltip
             title={color.name}

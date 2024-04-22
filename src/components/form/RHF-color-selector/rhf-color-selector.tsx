@@ -2,13 +2,15 @@
 
 import React from 'react'
 import Tooltip from '../../data-display/custom-tooltip/tooltip';
-import { DEFAULT_THEME, TThemeOption, extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
+import { DEFAULT_THEME, TThemeOption, extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { Button, ButtonProps } from '../../actions';
-import { Check, CircleIcon, Plus, RefreshCcw } from 'lucide-react';
+import { Check, CircleIcon, Plus, RefreshCcw, XIcon } from 'lucide-react';
 import { generateRandomHexColor, getContrastingTextColor } from '@/utils/color-generator';
 import RHFInputField from '../RHF/RHFInputFields/RHFInputField';
 import { useFormContext } from 'react-hook-form';
 import { cn } from '@/utils/cn';
+import RHFInputColor from '../RHF/RHFInputFields/RHFInputColor';
+import { ref } from 'yup';
 
 export const COLOR_REGEX = /^#[0-9A-F]{6}$/i;
 
@@ -20,6 +22,7 @@ export type TColorSelectorProps = {
     itemProps?: ButtonProps;
     randomButtonProps?: React.HTMLAttributes<HTMLButtonElement>;
     addButtonProps?: React.HTMLAttributes<HTMLButtonElement>;
+    listColors?: string[];
 
 }
 const RHFColorSelector = ({
@@ -29,82 +32,86 @@ const RHFColorSelector = ({
     gridContainerProps,
     itemProps,
     randomButtonProps,
-    addButtonProps
+    addButtonProps,
+    listColors,
 
 }: TColorSelectorProps) => {
-    const [openManualAddColor, setOpenManualAddColor] = React.useState(false);
     const { setValue } = useFormContext();
+    const inputRef = React.useRef<HTMLInputElement>(null);
     const onRandomColor = () => {
         setValue(colorNameFiled, generateRandomHexColor());
     }
     const onClickManualAddColor = () => {
-        setOpenManualAddColor(true);
+        inputRef.current?.click();
     }
-    const isTagColorValid = COLOR_REGEX.test(selectedColor);
+    const colorOptions = listColors || extensionsCustomThemeOptions.map(color => color.hex);
+
+    const manualColor = selectedColor && !extensionsCustomThemeOptions.find(color => color.hex === selectedColor);
     return (
         <div {...wrapperProps} className={cn('w-full flex flex-col gap-3', wrapperProps?.className)}>
             <div
                 {...gridContainerProps}
-                className={cn('grid md:grid-cols-6 grid-cols-4 xl:grid-cols-10  lg:grid-cols-8 grid-flow-row ', gridContainerProps?.className)}>
-                {extentionsCustomThemeOptions.map((color, index) => {
-                    const isSelect = selectedColor === color.hex;
-                    return (<Tooltip
-                        title={color.name}
-                        key={color.hex}
-                        contentProps={{
-                            className: 'text-neutral-800 capitalize',
-                        }}
-                        triggerItem={
-                            <Button.Icon
-                                variant="ghost"
-                                type="button"
-                                {...itemProps}
-                                className={cn('!w-6 !h-6 relative', itemProps?.className)}
-                                onClick={() => {
-                                    setValue(colorNameFiled, color.hex);
-                                }}
+                className={cn('grid grid-cols-4 sm:grid-cols-8 md:grid-cols-14  xl:grid-cols-16 2xl:grid-cols-20 lg:grid-cols-8 grid-flow-row ', gridContainerProps?.className)}>
+                {colorOptions.map((color, index) => {
+                    const isSelect = selectedColor === color
+                    return (
+                        <Button.Icon
+                            key={color}
+                            variant="ghost"
+                            type="button"
+                            {...itemProps}
+                            className={cn('size-8 bg-transparent relative', itemProps?.className)}
+                            onClick={() => {
+                                setValue(colorNameFiled, color);
+                            }}
+                        >
+                            <CircleIcon className='absolute inset-0 size-full m-auto' stroke={selectedColor === color ? 'var(--color-primary)' : 'var(--color-neutral-500)'} fill={color} />
+                            <Check stroke='white' className={`absolute inset-0 size-[50%]  m-auto ${isSelect ? 'block' : 'hidden'}`} />
+                        </Button.Icon>
 
-                            >
-                                <CircleIcon className='w-6 h-6' stroke={selectedColor === color.hex ? 'var(--color-primary)' : 'var(--color-neutral-500)'} fill={color.hex} />
-                                <Check stroke='white' className={`absolute top-1 left-1 w-4 h-4 ${isSelect ? 'block' : 'hidden'}`} />
-                            </Button.Icon>
-                        } />
                     )
                 })}
                 <Button.Icon
-                    variant="ghost"
+                    // variant="ghost"
+                    color={'default'}
                     type="button"
-                    onClick={onClickManualAddColor}
-                    className='!w-6 !h-6  relative hover:bg-neutral-200 bg-neutral-100'
+                    {...itemProps}
+                    onClick={(e) => {
+                        if (manualColor) {
+                            setValue(colorNameFiled, DEFAULT_THEME);
+                        } else {
+                            onClickManualAddColor();
+                        }
+                    }}
+                    className={cn('size-8 bg-transparent border-[2px] border-white relative', itemProps?.className)}
                 >
-                    <Plus stroke='grey' className={`absolute top-1 left-1 w-4 h-4 stroke-neutral-700 `} />
+                    {manualColor && <CircleIcon className='absolute inset-0 size-full m-auto' stroke={selectedColor || '#FAFAFA'} fill={selectedColor || '#FAFAFA'} />}
+                    <input
+                        onChange={(e) => {
+                            setValue(colorNameFiled, e.target.value);
+                        }}
+                        ref={inputRef}
+                        type='color'
+                        className='inset-0 absolute invisible'
+                    />
+
+                    {manualColor ? <>
+                        <Check stroke='white' className={`absolute inset-0 size-[50%] hover:hidden m-auto`} />
+                        <Button.Icon
+                            color={'default'}
+                            className='!w-[16px] !h-[16px] absolute -right-0  -top-0 p-1 bg-black text-white opacity-60 hover:opacity-100' >
+                            <XIcon />
+                        </Button.Icon>
+
+                    </>
+                        : <Plus stroke='grey' className={`absolute inset-0 w-6 h-6 m-auto stroke-neutral-700 `} />}
                 </Button.Icon>
 
             </div>
             <div className={cn('w-full relative flex flex-row gap-3 items-start rounded-[12px]',
-                { 'hidden': !openManualAddColor }
+
             )}>
-                <RHFInputField
-                    name={colorNameFiled}
-                    formItemProps={{
-                        className: 'w-full'
-                    }}
-                    inputProps={{
-                        placeholder: DEFAULT_THEME
-                    }} />
-                <Button.Icon
-                    shape={'square'}
-                    size={'xs'}
-                    variant={'default'}
-                    className='mt-[6px]'
-                    style={{
-                        backgroundColor: isTagColorValid ? selectedColor : '#000',
-                        color: isTagColorValid ? getContrastingTextColor(selectedColor) : '#fff'
-                    }}
-                    onClick={onRandomColor}
-                >
-                    <RefreshCcw size={15} />
-                </Button.Icon>
+
             </div>
         </div >
     )

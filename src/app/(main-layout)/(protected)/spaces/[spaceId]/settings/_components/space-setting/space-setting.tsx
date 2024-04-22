@@ -125,7 +125,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
                 </TabsContent>
                 <TabsContent value="extension" className={cn("p-0 w-full flex flex-col items-center justify-center")}>
                     <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2 min-h-[calc(100vh-350px)] justify-center' : 'hidden'}>
-                        <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extentions' className='mx-auto' />
+                        <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extensions' className='mx-auto' />
                         <Typography className='text-neutral-800 font-semibold text-lg leading-5'>
                             Your extension is almost here!
                         </Typography>
