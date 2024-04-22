@@ -5,6 +5,7 @@ import { Member } from '../../../_components/spaces-crud/sections/members-column
 import { Button } from '@/components/actions'
 import { UserRoundPlus } from 'lucide-react'
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog'
+import { inviteMembersToSpace } from '@/services/business-space.service'
 
 const InviteMemberModal = ({
     space
@@ -14,7 +15,16 @@ const InviteMemberModal = ({
     const [members, setMembers] = React.useState<Member[]>([]);
     const [open, setOpen] = React.useState(false);
     const onInviteUsers = async () => {
-        console.log('members', members)
+        try {
+            await inviteMembersToSpace({
+                members: members.map(({ email, role }) => ({ email, role })),
+                spaceId: space._id
+            });
+            setOpen(false);
+        }
+        catch (error) {
+            console.log(error)
+        }
     }
     return (
         <>

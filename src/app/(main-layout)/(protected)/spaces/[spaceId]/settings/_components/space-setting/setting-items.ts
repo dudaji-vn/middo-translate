@@ -38,4 +38,3 @@ export const SPACE_SETTING_ITEMS: Array<{
     },
   },
 ];
-

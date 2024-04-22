@@ -10,6 +10,7 @@ import { cn } from '@/utils/cn'
 import { CreateOrEditTag } from './create-or-edit-tag'
 import { ConfirmDeleteTag } from './confirm-delete-tag'
 import { isEmpty } from 'lodash'
+import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items'
 
 
 type Tag = TConversationTag;
@@ -65,12 +66,15 @@ enum TagModalType {
 }
 const TagsList = ({
     tags,
-    spaceId
+    spaceId,
+    myRole
 }: {
     tags: Tag[],
-    spaceId: string
+    spaceId: string,
+    myRole?: ESPaceRoles
 }) => {
     const [search, setSearch] = React.useState('');
+    const roles = SPACE_SETTING_ITEMS.find(item => item.name === 'tags')?.roles || { view: [], edit: [], delete: [] };
     const [modalState, setModalState] = React.useState<{
         open: boolean;
         initTag: Tag | undefined;
@@ -102,6 +106,10 @@ const TagsList = ({
                 onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
                 shape={'square'}
                 size={'xs'}
+                className={cn('', {
+                    'hidden': !roles.edit.find(role => role === myRole)
+                })}
+                disabled={!roles.edit.find(role => role === myRole)}
                 startIcon={<Plus />}
             >
                 Add Tag
@@ -114,8 +122,8 @@ const TagsList = ({
                     return <TagItem
                         key={tag._id}
                         {...tag}
-                        editAble={true}
-                        deleteAble={true}
+                        editAble={!!roles.edit.find(role => role === myRole)}
+                        deleteAble={!!roles.delete.find(role => role === myRole)}
                         onEdit={() => setModalState({ open: true, initTag: tag, modalType: TagModalType.CREATE_OR_EDIT })}
                         onDelete={() => setModalState({ open: true, initTag: tag, modalType: TagModalType.DELETE })}
                     />
