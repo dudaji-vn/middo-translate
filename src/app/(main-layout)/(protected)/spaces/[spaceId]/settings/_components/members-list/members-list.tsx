@@ -153,7 +153,7 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
                     status
                 </Typography >
             </div>
-            {data.map((member, index) => {
+            {data?.map((member, index) => {
                 return <div className='w-full grid grid-cols-[48px_auto]' key={member.email}>
                     <div className='!w-fit p-1 py-2 bg-white '>
                         <Button.Icon size={'xs'} shape={'square'} variant={'ghost'} color={'default'}>
@@ -191,11 +191,10 @@ const MembersList = ({
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
     }
-    console.log('members', members)
-    console.log('owner', owner)
+ 
     const { adminsData, membersData } = useMemo(() => {
 
-        const filteredMembers = search ? members.filter(member => {
+        const filteredMembers = search ? members?.filter(member => {
             return member.email.toLowerCase().includes(search.toLowerCase()) || member.role.toLowerCase().includes(search.toLowerCase())
         }) : members;
         return filteredMembers.reduce((acc, member: Member) => {

@@ -76,6 +76,9 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
         },
         resolver: zodResolver(editSpaceSchema),
     });
+    if (!space) {
+        return null;
+    }
 
     return (<>
         <section className={(modalType) ? 'hidden' : 'w-full h-fit md:px-10 px-3 py-5 bg-white'}>

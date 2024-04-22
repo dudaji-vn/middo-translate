@@ -84,7 +84,7 @@ const TagsList = ({
         setSearch(search.trim());
     }
     const displayedTags = useMemo(() => {
-        return tags.filter(tag => tag.name.toLowerCase().includes(search.toLowerCase()));
+        return tags?.filter(tag => tag.name.toLowerCase().includes(search.toLowerCase())) || [];
     }, [tags, search])
 
 
