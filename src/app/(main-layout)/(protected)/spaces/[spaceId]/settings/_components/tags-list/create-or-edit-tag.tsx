@@ -137,29 +137,6 @@ export const CreateOrEditTag = ({
                                 }} />
                         </div>
                         <RHFColorSelector colorNameFiled='color' selectedColor={tagColor} />
-                        {/* <div className='w-full relative flex flex-row gap-3 items-start rounded-[12px]'>
-                            <RHFInputField
-                                name='color'
-                                formItemProps={{
-                                    className: 'w-full'
-                                }}
-                                inputProps={{
-                                    placeholder: DEFAULT_THEME
-                                }} />
-                            <Button.Icon
-                                shape={'square'}
-                                size={'xs'}
-                                variant={'default'}
-                                className='mt-[6px]'
-                                style={{
-                                    backgroundColor: isTagColorValid ? tagColor : '#000',
-                                    color: isTagColorValid ? getContrastingTextColor(tagColor) : '#fff'
-                                }}
-                                onClick={onRandomColor}
-                            >
-                                <RefreshCcw size={15} />
-                            </Button.Icon>
-                        </div> */}
                         <div className='w-full flex flex-row gap-3 items-center justify-end'>
                             <Button
                                 onClick={() => onOpenChange(false)}

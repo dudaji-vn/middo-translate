@@ -15,44 +15,28 @@ import { inviteMemberToSpace } from '@/services/business-space.service'
 import toast from 'react-hot-toast'
 import { cn } from '@/utils/cn'
 import { useAuthStore } from '@/stores/auth.store'
+import { isEmpty } from 'lodash'
+import { ESPaceRoles } from '../../../settings/_components/space-setting/setting-items'
 
-export enum ESpaceMemberRole {
-    Admin = 'admin',
-    Member = 'member'
-}
-export enum ESpaceMemberStatus {
+export enum ESPaceMemberStatus {
     Invited = 'invited',
     Joined = 'joined'
 }
 
-const addingSchema = z.object({
-    email: z.string().email({
-        message: 'Invalid email address'
-    }).min(1, {
-        message: 'Email is required'
-    }),
-    role: z.union([
-        z.literal('admin'),
-        z.literal('member')
-    ]),
-    status: z.union([
-        z.literal('invited'),
-        z.literal('joined')
-    ])
-})
 
-export type TAddingmember = z.infer<typeof addingSchema>
+
+
 
 const items: Array<{
-    name: ESpaceMemberRole;
+    name: 'admin' | 'member'
     icon: React.ReactNode;
 }> = [
         {
-            name: ESpaceMemberRole.Admin,
+            name: ESPaceRoles.Admin,
             icon: <Shield size={16} />,
         },
         {
-            name: ESpaceMemberRole.Member,
+            name: ESPaceRoles.Member,
             icon: <UserRound size={16} />,
         },
     ]
@@ -70,11 +54,13 @@ export type InviteMembersProps = {
     header?: React.ReactNode,
     tableProps?: DataTableProps<Member, any>,
     headerTitleProps?: React.HTMLAttributes<HTMLDivElement>,
-    headerDescriptionProps?: React.HTMLAttributes<HTMLDivElement>
+    headerDescriptionProps?: React.HTMLAttributes<HTMLDivElement>,
+    blackList?: string[];
 } & React.HTMLAttributes<HTMLDivElement>
 
 const InviteMembers = ({
     space,
+    blackList,
     setMembers,
     spacePreviewProps,
     tableProps,
@@ -87,12 +73,39 @@ const InviteMembers = ({
 }: InviteMembersProps
 ) => {
     const currentUser = useAuthStore(state => state.user);
-    const formAdding = useForm<TAddingmember>({
+    const addingSchema = z.object({
+        email: z.string().email({
+            message: 'Invalid email address'
+        }).min(1, {
+            message: 'Email is required'
+        }).refine(value => {
+            return value !== currentUser?.email;
+        }, {
+            message: 'You cannot invite yourself!'
+        }).refine(value => {
+            if (isEmpty(blackList)) {
+                return true;
+            }
+            return !blackList?.includes(value);
+        }, {
+            message: 'This user has already been invited!'
+        }),
+        role: z.union([
+            z.literal('admin'),
+            z.literal('member'),
+        ]),
+        status: z.union([
+            z.literal('invited'),
+            z.literal('joined')
+        ])
+    })
+    type TAddingMember = z.infer<typeof addingSchema>
+    const formAdding = useForm<TAddingMember>({
         mode: 'onChange',
         defaultValues: {
             email: '',
-            role: ESpaceMemberRole.Member,
-            status: ESpaceMemberStatus.Invited
+            role: ESPaceRoles.Member,
+            status: ESPaceMemberStatus.Invited
         },
         resolver: zodResolver(addingSchema),
     });
@@ -121,6 +134,7 @@ const InviteMembers = ({
         formAdding.setValue('email', '');
 
     }
+    const disabledInviteBtn = formAdding.formState.errors?.['email'] || Boolean(formAdding.formState.isSubmitting || invitedMembers.find((e: Member) => e.email === formAdding.watch('email')) || blackList?.includes(formAdding.watch('email')));
     return (
         <Form {...formAdding}>
             <section
@@ -195,8 +209,9 @@ const InviteMembers = ({
                             loading={formAdding.formState.isSubmitting}
                             endIcon={<Plus className="h-4 w-4 mr-1" />}
                             className='h-10'
+                            disabled={disabledInviteBtn as boolean}
                         >
-                            Invite
+                            Add
                         </Button>
                     </div>
                 </div>

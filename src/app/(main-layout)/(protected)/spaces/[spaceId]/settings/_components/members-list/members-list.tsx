@@ -1,7 +1,7 @@
 
 import React, { useMemo } from 'react'
 import { Typography } from '@/components/data-display'
-import { GripVertical, RotateCcw, Search, Trash2, UserCog, UserRound } from 'lucide-react'
+import { GripVertical, Plus, RotateCcw, Search, Trash2, UserCog, UserRound, UserRoundPlus } from 'lucide-react'
 import { removeMemberFromSpace, resendInvitation } from '@/services/business-space.service'
 import { useParams, useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
@@ -11,22 +11,30 @@ import { Button } from '@/components/actions'
 import { isEmpty } from 'lodash'
 import { useAuthStore } from '@/stores/auth.store'
 import { Member } from '../../../_components/spaces-crud/sections/members-columns'
+import InviteMemberModal from './invite-member-modal'
+import { TSpace } from '../../../_components/business-spaces'
+import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items'
+import { Badge } from '@/components/ui/badge'
+import { getUserSpaceRole } from '../space-setting/role.util'
 
 type MemberItemProps = {
-    isOwner: boolean;
-    isAdmin: boolean;
+    isOwnerRow: boolean;
     isLoading?: boolean;
     onDelete: (member: Member) => void;
     onResendInvitation: (member: Member) => void;
+    myRole?: ESPaceRoles,
+    isMe?: boolean
 } & Member & React.HTMLAttributes<HTMLDivElement>
-const MemberItem = ({ role, isOwner, email, status, isAdmin, isLoading, onResendInvitation, onDelete, ...props }: MemberItemProps) => {
-    const currentUser = useAuthStore((state) => state.user);
-    const deleteAble = !isOwner && !isLoading && (isAdmin || currentUser?.email !== email);
+const MemberItem = ({ role, isMe, isOwnerRow, email, myRole, status, isLoading, onResendInvitation, onDelete, ...props }: MemberItemProps) => {
+
+    const roles = SPACE_SETTING_ITEMS.find(setting => setting.name === 'members')?.roles;
+    const deleteAble = !isLoading && roles?.delete.includes(myRole as ESPaceRoles) && !isOwnerRow;
     return (<div className='w-full flex justify-between flex-row items-center bg-primary-100 py-1 rounded-[12px]' {...props}>
         <div className='w-full flex justify-start flex-row items-center'>
-            <div className="flex rounded-l-[12px] px-3 justify-start flex-row items-center break-words h-auto w-[400px] md:w-[500px] xl:w-[800px]">
+            <div className="flex rounded-l-[12px] px-3 justify-start flex-row gap-3 items-center break-words h-auto w-[400px] md:w-[500px] xl:w-[800px]">
                 <Typography className="text-neutral-800">{email}</Typography>
-                {isOwner && <span className="text-neutral-500 font-light pl-3">(You)</span>}
+                {isOwnerRow && <Badge className='bg-primary text-white'>Owner</Badge>}
+                {isMe && <span className="text-neutral-500 font-light">(You)</span>}
             </div>
             <div className="flex flex-row items-center justify-start  w-fit  gap-6 py-1">
                 <Typography className={cn('text-gray-500 w-[100px] capitalize',
@@ -36,7 +44,9 @@ const MemberItem = ({ role, isOwner, email, status, isAdmin, isLoading, onResend
                     {status}
                 </Typography >
                 <Button
-                    className={isOwner || status === 'joined' ? 'invisible' : "text-neutral-500"}
+                    className={cn("text-neutral-500", {
+                        'invisible': isOwnerRow || status === 'joined' || roles?.edit.includes(myRole as ESPaceRoles)
+                    })}
                     startIcon={<RotateCcw className="text-neutral-500" />}
                     size={'xs'}
                     shape={'square'}
@@ -71,8 +81,9 @@ const MemberItem = ({ role, isOwner, email, status, isAdmin, isLoading, onResend
 
 }
 
-const ListItems = ({ data, owner, isAdmin = false, ...props }: {
+const ListItems = ({ data, owner, myRole, isAdmin = false, ...props }: {
     isAdmin?: boolean;
+    myRole?: ESPaceRoles;
     data: Member[];
     owner: {
         _id: string;
@@ -81,6 +92,7 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
 } & React.HTMLAttributes<HTMLDivElement>) => {
     const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({})
     const params = useParams();
+    const currentUser = useAuthStore((state) => state.user);
     const router = useRouter();
     const onDelete = async (member: Member) => {
         setIsLoading(prev => ({
@@ -141,7 +153,9 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
 
     return (
         <div className='md:min-w-[400px] overflow-x-auto pr-10 flex flex-col gap-1'>
-            <p className={cn('text-neutral-500 font-light text-sm italic w-full text-center py-1', !isEmptyData && "hidden")}>No members</p>
+            <p className={cn('text-neutral-500 font-light text-sm italic w-full text-center py-1', !isEmptyData && "hidden")}>{
+                (isAdmin ? 'No admin founded' : 'No member founded')
+            }</p>
             <div className={cn('w-full py-2 flex justify-start flex-row items-center ', isEmptyData && "hidden")}>
                 <div className='!w-[50px] invisible'>
                 </div>
@@ -162,8 +176,9 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
                     </div>
                     <MemberItem
                         {...member}
-                        isAdmin={isAdmin}
-                        isOwner={member.email === owner.email}
+                        myRole={myRole}
+                        isMe={member.email === currentUser?.email}
+                        isOwnerRow={member.email === owner.email}
                         onResendInvitation={onResendInvitation}
                         onDelete={onDelete}
                         isLoading={isLoading[member.email]}
@@ -176,29 +191,22 @@ const ListItems = ({ data, owner, isAdmin = false, ...props }: {
 
 }
 
-const MembersList = ({
-    members,
-    owner
-}: {
-    members: Member[],
-    owner: {
-        _id: string;
-        email: string;
-    }
-}) => {
+const MembersList = ({ space }: { space: TSpace }) => {
     const [search, setSearch] = React.useState('');
+    const { members, owner } = space;
+    const currentUser = useAuthStore((state) => state.user);
+    const myRole = getUserSpaceRole(currentUser, space);
 
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
     }
- 
-    const { adminsData, membersData } = useMemo(() => {
 
+    const { adminsData, membersData } = useMemo(() => {
         const filteredMembers = search ? members?.filter(member => {
             return member.email.toLowerCase().includes(search.toLowerCase()) || member.role.toLowerCase().includes(search.toLowerCase())
         }) : members;
         return filteredMembers.reduce((acc, member: Member) => {
-            if (member.role === 'admin') {
+            if (member.role === ESPaceRoles.Admin) {
                 acc.adminsData.push(member)
             } else {
                 acc.membersData.push(member)
@@ -212,13 +220,19 @@ const MembersList = ({
 
 
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
-        <div className='md:w-96 w-60 relative px-4 '>
-            <TableSearch
-                className='py-2 min-h-[44px] w-full outline-neutral-100'
-                onSearch={onSearchChange}
-                search={search} />
-            <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-6 transform -translate-y-1/2' />
+        <div className='w-full flex flex-row px-10 gap-5 justify-end items-center'>
+
+            <div className='md:w-96 w-60 relative'>
+                <TableSearch
+                    className='py-2 min-h-[44px] w-full outline-neutral-100'
+                    onSearch={onSearchChange}
+                    search={search} />
+                <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
+            </div>
+
+            <InviteMemberModal space={space} />
         </div>
+
         <div className='flex flex-col gap-1 w-full'>
             <div className='w-full  py-4 sm:p-[20px_40px] flex flex-row gap-3 items-center font-semibold bg-[#fafafa]'>
                 <UserCog size={16} className='text-primary-500-main stroke-[3px]' />
@@ -226,7 +240,7 @@ const MembersList = ({
                     Admin role
                 </Typography>
             </div>
-            <ListItems data={adminsData} owner={owner} isAdmin />
+            <ListItems data={adminsData} owner={owner} isAdmin myRole={myRole} />
         </div>
         <div className='flex flex-col gap-1 w-full'>
             <div className='w-full py-4 sm:p-[20px_40px]  flex flex-row  gap-3 items-center font-semibold  bg-[#fafafa]'>
@@ -235,7 +249,7 @@ const MembersList = ({
                     Member role
                 </Typography>
             </div>
-            <ListItems data={membersData} owner={owner} />
+            <ListItems data={membersData} owner={owner}  myRole={myRole} />
         </div>
     </section>
     )
