@@ -72,7 +72,7 @@ export default function UpdateUserAvatar() {
             </span>
           </div>
         </AlertDialogTrigger>
-        <AlertDialogContent className="md:h-[80vh] md:max-w-[80vw] xl:max-w-[70vw]">
+        <AlertDialogContent className="md:max-w-[80vw] xl:max-w-[70vw]">
           <form
             onSubmit={onSubmitForm}
             className="flex h-full w-full flex-col justify-between"

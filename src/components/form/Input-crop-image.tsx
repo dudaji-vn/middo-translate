@@ -138,7 +138,7 @@ export const InputCropImage = forwardRef<
         {!image && (
           <label
             htmlFor={id}
-            className="flex border-spacing-3 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary p-4 py-[70px] transition-all hover:bg-slate-50 h-full"
+            className="flex border-spacing-3 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary p-4 py-32 transition-all hover:bg-slate-50 h-full"
           >
             <span className="rounded-full p-4">
               <Upload width={24} height={24} className="stroke-primary" />
