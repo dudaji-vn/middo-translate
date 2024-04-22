@@ -10,7 +10,6 @@ import {
 
 import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { anounymousMesssagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 import { Message, PinMessage } from '@/features/chat/messages/types';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { Room } from '@/features/chat/rooms/types';
@@ -23,6 +22,7 @@ import { useParams } from 'next/navigation';
 import { roomApi } from '../../../rooms/api';
 import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { MessageActions } from '../message-actions';
+import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 
 interface MessagesBoxContextProps {
   room: Room;
