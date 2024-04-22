@@ -41,7 +41,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
           }
         >
           <div className="flex items-center gap-2">
-            <Package2 width={16} height={16} /> <span>{t('CONVERSATION.CLOUD_SHARED')}</span>
+            <Package2 width={16} height={16} /> <span className='truncate'>{t('CONVERSATION.CLOUD_SHARED')}</span>
             <span className="text-sm text-neutral-600">
               ({data?.count || 0})
             </span>
@@ -56,6 +56,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
               shape="square"
               variant={currentTab === 'media' ? 'default' : 'ghost'}
               color={currentTab === 'media' ? 'secondary' : 'default'}
+              className="truncate"
             >
               {t('CONVERSATION.MEDIA')} ({data?.mediaCount || 0})
             </Button>
@@ -66,6 +67,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
               shape="square"
               variant={currentTab === 'file' ? 'default' : 'ghost'}
               color={currentTab === 'file' ? 'secondary' : 'default'}
+              className="truncate"
             >
               {t('CONVERSATION.FILE')} ({data?.fileCount || 0})
             </Button>

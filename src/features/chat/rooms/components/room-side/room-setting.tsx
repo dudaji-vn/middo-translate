@@ -22,7 +22,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
   return (
     <div className="mt-0 flex flex-col items-center gap-1">
       <Item
-        className="rounded-b-[4px]"
+        className="rounded-b-[4px] truncate"
         leftIcon={<Bell />}
         right={
           <Switch
@@ -40,7 +40,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
         <span> {t('CONVERSATION.NOTIFICATION')}</span>
       </Item>
       <Item
-        className="rounded-t-[4px]"
+        className="rounded-t-[4px] truncate"
         leftIcon={<PinIcon />}
         right={
           <Switch
