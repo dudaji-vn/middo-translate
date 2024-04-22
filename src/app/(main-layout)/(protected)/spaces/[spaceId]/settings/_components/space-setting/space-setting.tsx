@@ -26,6 +26,11 @@ import { DeleteSpaceModal } from '../space-edition/delete-space-modal'
 import TagsList from '../tags-list/tags-list'
 import { t } from 'i18next'
 import { useAuthStore } from '@/stores/auth.store'
+import { SPACE_SETTING_ITEMS } from './setting-items'
+import { getUserSpaceRole } from './role.util'
+
+
+
 
 export type ExtensionModalType = 'edit-extension' | 'create-extension' | 'edit-company' | undefined | null;
 const headerVariants = cva('w-full flex flex-row', {
@@ -65,6 +70,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
     const searchParams = useSearchParams();
     const params = useParams();
     const currentUser = useAuthStore(state => state.user);
+    const currentUserRole = getUserSpaceRole(currentUser, space);
     const modalType: ExtensionModalType = searchParams?.get('modal') as ExtensionModalType;
     const isExtensionEmpty = !space?.extension;
     const isSpaceOwner = Boolean(currentUser?._id) && currentUser?._id === space?.owner?._id;
@@ -109,20 +115,35 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
             <Tabs defaultValue='members' className="w-full m-0 p-0">
                 <div className='w-full bg-white transition-all duration-300 overflow-x-auto'>
                     <TabsList className='w-full sm:px-10  flex flex-row justify-start'>
-                        <TabsTrigger className='lg:px-10 w-fit' value="members">Members Management</TabsTrigger>
-                        <TabsTrigger className='lg:px-10  w-fit' value="tags">Tags Management</TabsTrigger>
-                        <TabsTrigger className='lg:px-10  w-fit' value="extension">Conversation Extension</TabsTrigger>
+                        {SPACE_SETTING_ITEMS.map(item => {
+                            return <TabsTrigger
+                                key={item.label}
+                                value={item.name}
+                                className={cn('lg:px-10 w-fit', {
+                                    'hidden': !currentUserRole || !item.roles.view.find(role => role === currentUserRole)
+                                })}>
+                                {item.label}
+                            </TabsTrigger>
+                        })}
                     </TabsList>
                 </div>
-                <TabsContent value="members" className="py-4">
+                <TabsContent value="members" className={cn("py-4",
+                    {
+                        'hidden': !currentUserRole || !SPACE_SETTING_ITEMS.find(item => item.name === 'members')?.roles.view.find(role => role === currentUserRole)
+                    }
+                )}>
                     <MembersList
                         space={space}
                     />
                 </TabsContent>
-                <TabsContent value="tags" className="py-4">
+                <TabsContent value="tags" className={cn("py-4", {
+                    'hidden': !currentUserRole || !SPACE_SETTING_ITEMS.find(item => item.name === 'tags')?.roles.view.find(role => role === currentUserRole)
+                })}>
                     <TagsList tags={space.tags} spaceId={space._id} />
                 </TabsContent>
-                <TabsContent value="extension" className={cn("p-0 w-full flex flex-col items-center justify-center")}>
+                <TabsContent value="extension" className={cn("p-0 w-full flex flex-col items-center justify-center", {
+                    'hidden': !currentUserRole || !SPACE_SETTING_ITEMS.find(item => item.name === 'extension')?.roles.view.find(role => role === currentUserRole)
+                })}>
                     <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2 min-h-[calc(100vh-350px)] justify-center' : 'hidden'}>
                         <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extensions' className='mx-auto' />
                         <Typography className='text-neutral-800 font-semibold text-lg leading-5'>

@@ -102,7 +102,8 @@ const TagsList = ({
                 onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
                 shape={'square'}
                 size={'xs'}
-                startIcon={<Plus />}>
+                startIcon={<Plus />}
+            >
                 Add Tag
             </Button>
         </div>

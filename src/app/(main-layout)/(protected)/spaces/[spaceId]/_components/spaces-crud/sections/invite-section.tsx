@@ -16,12 +16,9 @@ import toast from 'react-hot-toast'
 import { cn } from '@/utils/cn'
 import { useAuthStore } from '@/stores/auth.store'
 import { isEmpty } from 'lodash'
+import { ESPaceRoles } from '../../../settings/_components/space-setting/setting-items'
 
-export enum ESpaceMemberRole {
-    Admin = 'admin',
-    Member = 'member'
-}
-export enum ESpaceMemberStatus {
+export enum ESPaceMemberStatus {
     Invited = 'invited',
     Joined = 'joined'
 }
@@ -31,15 +28,15 @@ export enum ESpaceMemberStatus {
 
 
 const items: Array<{
-    name: ESpaceMemberRole;
+    name: 'admin' | 'member'
     icon: React.ReactNode;
 }> = [
         {
-            name: ESpaceMemberRole.Admin,
+            name: ESPaceRoles.Admin,
             icon: <Shield size={16} />,
         },
         {
-            name: ESpaceMemberRole.Member,
+            name: ESPaceRoles.Member,
             icon: <UserRound size={16} />,
         },
     ]
@@ -95,7 +92,7 @@ const InviteMembers = ({
         }),
         role: z.union([
             z.literal('admin'),
-            z.literal('member')
+            z.literal('member'),
         ]),
         status: z.union([
             z.literal('invited'),
@@ -107,8 +104,8 @@ const InviteMembers = ({
         mode: 'onChange',
         defaultValues: {
             email: '',
-            role: ESpaceMemberRole.Member,
-            status: ESpaceMemberStatus.Invited
+            role: ESPaceRoles.Member,
+            status: ESPaceMemberStatus.Invited
         },
         resolver: zodResolver(addingSchema),
     });
