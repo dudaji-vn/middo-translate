@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/actions';
-import { Pen, Trash2 } from 'lucide-react';
+import { Button, ButtonProps } from '@/components/actions';
+import { Trash2 } from 'lucide-react';
 import { useFormContext } from 'react-hook-form';
-import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import toast from 'react-hot-toast';
-import { TEditSpaceFormValues } from '../space-setting/space-setting';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { TSpace } from '../../../_components/business-spaces';
 import { Typography } from '@/components/data-display';
@@ -19,6 +17,7 @@ export const DeleteSpaceModal = ({
     space,
 }: {
     space: Omit<TSpace, 'owner'>;
+    deleteBtnProps?: ButtonProps;
 }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
@@ -54,7 +53,8 @@ export const DeleteSpaceModal = ({
             color={'default'}
             shape={'square'}
             className='text-error  min-w-fit max-sm:hidden'
-            size={'xs'} >
+            size={'xs'}
+        >
             Delete Space
         </Button>
         <ConfirmAlertModal

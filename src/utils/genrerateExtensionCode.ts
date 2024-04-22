@@ -1,9 +1,9 @@
-import { extentionsCustomThemeOptions } from "@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options";
+import { extensionsCustomThemeOptions } from "@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options";
 
 export const generateExtensionCode = (url: string, theme?: string) => {
   const path = process.env.NEXT_PUBLIC_URL;
   const themeName =
-    extentionsCustomThemeOptions.find(
+    extensionsCustomThemeOptions.find(
       (th) => th.name === theme || th.hex === theme,
     )?.name || 'default';
   return `

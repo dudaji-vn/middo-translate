@@ -4,18 +4,24 @@ import { TEditSpaceFormValues } from '../space-setting/space-setting';
 import { useFormContext } from 'react-hook-form';
 import { createOrEditSpace } from '@/services/business-space.service';
 
-const EditSpaceImage = () => {
+const EditSpaceImage = ({
+    uploadAble = false,
+    clearAble = false
+}: {
+    uploadAble?: boolean,
+    clearAble?: boolean,
+}) => {
     const { getValues } = useFormContext<TEditSpaceFormValues>();
     const onSubmitEditSpaceAvatar = async () => {
         const payload = getValues();
         try {
-          await createOrEditSpace(payload);
+            await createOrEditSpace(payload);
         } catch (error) {
             console.error('Error on Edit Space Image:', error)
         }
     };
     return (
-        <UploadSpaceImage nameField='avatar' clearAble={false} uploadAble={true} onUploadDone={onSubmitEditSpaceAvatar} />
+        <UploadSpaceImage nameField='avatar' clearAble={clearAble} uploadAble={uploadAble} onUploadDone={onSubmitEditSpaceAvatar} />
     )
 }
 

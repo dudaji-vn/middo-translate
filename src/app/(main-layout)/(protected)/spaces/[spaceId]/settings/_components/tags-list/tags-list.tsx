@@ -90,13 +90,6 @@ const TagsList = ({
 
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
         <div className='w-full flex flex-row px-4 gap-5 justify-end items-center'>
-            <div className='md:w-96 w-60 relative'>
-                <TableSearch
-                    className='py-2 min-h-[44px] w-full outline-neutral-100'
-                    onSearch={onSearchChange}
-                    search={search} />
-                <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-6 transform -translate-y-1/2' />
-            </div>
             <Button
                 onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
                 shape={'square'}
@@ -105,6 +98,13 @@ const TagsList = ({
                 startIcon={<Plus />}>
                 Add Tag
             </Button>
+            <div className='md:w-96 w-60 relative'>
+                <TableSearch
+                    className='py-2 min-h-[44px] w-full outline-neutral-100'
+                    onSearch={onSearchChange}
+                    search={search} />
+                <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
+            </div>
         </div>
         <div className='w-full rounded-md p-0 overflow-x-auto'>
             <div className='w-full flex flex-col gap-2'>

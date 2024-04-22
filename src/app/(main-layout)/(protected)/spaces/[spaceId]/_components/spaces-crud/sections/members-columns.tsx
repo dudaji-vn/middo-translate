@@ -32,19 +32,19 @@ export const membersColumns = ({ onDelete }: {
             </Typography >
         }
     },
-    {
-        accessorKey: "status",
-        header: "Status",
-        cell(props) {
-            return <Typography className={cn('text-gray-500 capitalize',
-                props.getValue() === 'joined' && 'text-primary-500-main',
-                props.getValue() === 'invited' && 'text-success-500-main'
-            )} >
-                {props.getValue() as string}
-            </Typography >
+    // {
+    //     accessorKey: "status",
+    //     header: "Status",
+    //     cell(props) {
+    //         return <Typography className={cn('text-gray-500 capitalize',
+    //             props.getValue() === 'joined' && 'text-primary-500-main',
+    //             props.getValue() === 'invited' && 'text-success-700'
+    //         )} >
+    //             {props.getValue() as string}
+    //         </Typography >
 
-        },
-    },
+    //     },
+    // },
     {
         accessorKey: "actions",
         header: "",
