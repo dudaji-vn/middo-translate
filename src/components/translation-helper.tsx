@@ -19,6 +19,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useEditor } from './use-editor';
 import { useAppStore } from '@/stores/app.store';
 import { Checkbox } from './form/checkbox';
+import { useDebounce } from 'usehooks-ts';
+const DEBOUNCE_TIME = 500;
 export interface TranslationHelperProps {
   mentionSuggestionOptions: MentionSuggestion[];
   editor: Editor | null;
@@ -29,7 +31,7 @@ export interface TranslationHelperProps {
 
 export type TranslationHelperRef = {
   getEnContent: () => string | null;
-  clearEnContent: () => void;
+  clearContent: () => void;
 };
 
 export const TranslationHelper = forwardRef<
@@ -75,10 +77,13 @@ export const TranslationHelper = forwardRef<
       ? rootEditor.getText().trim().length === 0
       : true;
 
-    const htmlDebounce = rootEditor?.getHTML();
-    const textDebounce = rootEditor?.getText();
-
-    const { isLoading, isFetching } = useQuery({
+    const htmlDebounce = useDebounce(rootEditor?.getHTML(), DEBOUNCE_TIME);
+    const textDebounce = useDebounce(rootEditor?.getText(), DEBOUNCE_TIME);
+    const translatedEnContentDebounce = useDebounce(
+      translatedEnContent,
+      DEBOUNCE_TIME,
+    );
+    const { isLoading, isFetching, data } = useQuery({
       queryKey: ['translation-helper', htmlDebounce],
       queryFn: async () => {
         const plainText = (textDebounce || '').trim();
@@ -89,15 +94,15 @@ export const TranslationHelper = forwardRef<
           DEFAULT_LANGUAGES_CODE.EN,
         );
         setSrcLang(srcLang);
-        setEnContent(translated);
         return translated;
       },
-      enabled: !isRootEditorEmpty && htmlDebounce !== translatedEnContent,
+      enabled:
+        !isRootEditorEmpty && htmlDebounce !== translatedEnContentDebounce,
       staleTime: Infinity,
       keepPreviousData: true,
     });
     const handleStartEdit = () => {
-      editor?.commands.setContent(enContent);
+      editor?.commands.setContent(enContent || data);
       editor?.commands.focus('end');
       setIsEditing(true);
       onStartedEdit?.();
@@ -154,13 +159,14 @@ export const TranslationHelper = forwardRef<
       return enContent;
     };
 
-    const clearEnContent = () => {
+    const clearContent = () => {
       setEnContent(null);
+      setTranslatedEnContent(null);
     };
 
     useImperativeHandle(ref, () => ({
       getEnContent,
-      clearEnContent,
+      clearContent,
     }));
     return (
       <AnimatePresence mode="wait">
@@ -232,10 +238,10 @@ export const TranslationHelper = forwardRef<
                   ) : (
                     <>
                       <div className="max-h-[200px] flex-1 overflow-y-auto">
-                        {enContent && !isLoading ? (
+                        {data && !isLoading ? (
                           <RichTextView
                             mentionClassName="left"
-                            content={enContent}
+                            content={enContent || data}
                           />
                         ) : (
                           <p className="italic text-neutral-300">

@@ -167,7 +167,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
           isMe ? 'text-right text-white/40' : 'text-left text-neutral-300',
         )}
       >
-        Translate from {getLanguageByCode(message.language)?.name}
+        Translated from {getLanguageByCode(message.language)?.name}
       </span>
     </div>
   );
