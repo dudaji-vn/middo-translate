@@ -30,7 +30,7 @@ export const useKeyboardShortcut = (
         ignoreFocusingInputs ||
         ((isFocused || !allowShortcutListener) && event?.ctrlKey)
       ) {
-        // console.log('event.key', event.key)
+        // console.log('event.key', event.key);
         keysSet?.some((keys) => {
           if (
             keys?.every((key) => {
@@ -46,7 +46,9 @@ export const useKeyboardShortcut = (
                 (isMacOS &&
                   MAPPED_WIN_KEYS[key] &&
                   MAPPED_WIN_KEYS[key]?.toLowerCase() ===
-                    event?.key?.toLowerCase());
+                    event?.key?.toLowerCase()) ||
+                (keyByOS === 'esc' && event?.key.toLowerCase() === 'escape');
+
               return isMatched;
             })
           ) {

@@ -138,7 +138,7 @@ export const TranslationHelper = forwardRef<
         SHORTCUTS.CANCEL_EDIT_TRANSLATION,
       ],
       (e, matchedKeys) => {
-        if (!enContent) return;
+        if (!showHelper) return;
         if (isEqual(matchedKeys, SHORTCUTS.OPEN_EDIT_TRANSLATION)) {
           handleStartEdit();
           return;
@@ -150,6 +150,7 @@ export const TranslationHelper = forwardRef<
           handleConfirm();
           return;
         }
+
         handleCancel();
       },
       true,
