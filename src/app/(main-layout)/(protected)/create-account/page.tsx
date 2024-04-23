@@ -45,9 +45,13 @@ export default function CreateNewAccount() {
     },
     resolver: zodResolver(z
       .object({
-        name: z.string().min(1, {
-          message: t('MESSAGE.ERROR.REQUIRED'),
-        }),
+        name: z.string()
+          .min(1, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .refine((value: string) => value.trim().length > 0, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
+          }),
         avatar: z
           .any()
           .refine((value: any) => value?.length > 0 || value?.size > 0, {
