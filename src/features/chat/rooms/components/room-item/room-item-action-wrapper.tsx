@@ -28,7 +28,15 @@ type Item = Omit<ActionItem, 'onAction'> & {
   onAction: () => void;
 };
 const BUSINESS_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
-  conversations: ['archive', 'notify', 'unnotify', 'pin', 'unpin'],
+  conversations: [
+    'archive',
+    'notify',
+    'unnotify',
+    'pin',
+    'unpin',
+    'tag',
+    'delete',
+  ],
   archived: ['unarchive', 'delete'],
 };
 const TALK_ALLOWED_ACTIONS: Action[] = [
@@ -42,10 +50,21 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
 ];
 
 const checkAllowedActions = (
-  isBusinessRoom: boolean,
-  businessConversationType: string,
-  action: Action,
-  currentStatus: Room['status'],
+  {
+    isBusinessRoom,
+    businessConversationType,
+    action,
+    currentStatus,
+  }: {
+    isBusinessRoom: boolean;
+    businessConversationType: string;
+    action: Action;
+    currentStatus: Room['status'];
+  },
+  // isBusinessRoom: boolean,
+  // businessConversationType: string,
+  // action: Action,
+  // currentStatus: Room['status'],
 ) => {
   if (currentStatus === 'archived')
     return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
@@ -67,12 +86,12 @@ export const RoomItemActionWrapper = forwardRef<
   const items = useMemo(() => {
     return actionItems
       .filter((item) => {
-        const isAllowed = checkAllowedActions(
-          Boolean(isBusiness),
-          String(businessConversationType),
-          item.action,
-          room.status,
-        );
+        const isAllowed = checkAllowedActions({
+          isBusinessRoom: Boolean(isBusiness),
+          businessConversationType: String(businessConversationType),
+          action: item.action,
+          currentStatus: room.status,
+        });
 
         switch (item.action) {
           case 'notify':

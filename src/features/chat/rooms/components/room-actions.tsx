@@ -7,6 +7,7 @@ import {
   LogOut,
   PinIcon,
   PinOffIcon,
+  Tag,
   TrashIcon,
 } from 'lucide-react';
 import { createContext, useContext, useMemo, useState } from 'react';
@@ -16,6 +17,7 @@ import { RoomModalLeave } from './room.modal-leave';
 import { RoomModalNotification } from './room.modal-notification';
 import { usePinRoom } from '../hooks/use-pin-room';
 import { RoomModalChangeStatus } from './room.modal-change-status';
+import RoomAssignTag from './room-assign-tag';
 
 export type Action =
   | 'delete'
@@ -26,6 +28,7 @@ export type Action =
   | 'none'
   | 'unnotify'
   | 'archive'
+  | 'tag'
   | 'unarchive'
   ;
 
@@ -86,6 +89,9 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
       case 'archive':
       case 'unarchive':
         return <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />;
+      case 'tag':
+        return null;
+        // return <RoomAssignTag onClosed={reset} id={id} />;
       default:
         return null;
     }
@@ -114,11 +120,15 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         icon: <BellOffIcon />,
       },
       {
+        action: 'tag',
+        label: "CONVERSATION.TAG",
+        icon: <RoomAssignTag id="" />,
+      },
+      {
         action: 'leave',
         label: "COMMON.LEAVE",
         icon: <LogOut />,
       },
-
       {
         action: 'delete',
         label: "COMMON.DELETE",
