@@ -4,8 +4,12 @@ import CustomExtension from '../sections/custom-extension';
 import PluginChatPreview from '../sections/plugin-chat-preview';
 import { TThemeOption } from '../sections/options';
 import { useFormContext } from 'react-hook-form';
+import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces'
 
-const CustomChatThemeStep = () => {
+
+const CustomChatThemeStep = ({ space }: {
+    space: TSpace
+}) => {
     const { trigger, watch, setValue, formState: {
     } } = useFormContext();
     return (<div className=" max-w-screen-md md:max-w-screen-xl  bg-white [&_h3]:text-[1.25rem]">
@@ -18,6 +22,7 @@ const CustomChatThemeStep = () => {
                 }} />
             </div>
             <PluginChatPreview
+                space={space}
                 onTranslatedChange={(text) => {
                     setValue('custom.firstMessageEnglish', text);
                 }}

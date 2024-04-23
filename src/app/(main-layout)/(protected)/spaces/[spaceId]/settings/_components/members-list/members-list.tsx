@@ -13,7 +13,7 @@ import { useAuthStore } from '@/stores/auth.store'
 import { Member } from '../../../_components/spaces-crud/sections/members-columns'
 import InviteMemberModal from './invite-member-modal'
 import { TSpace } from '../../../_components/business-spaces'
-import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from '../space-setting/setting-items'
+import { ESPaceRoles, MANAGE_SPACE_ROLES, SPACE_SETTING_TAB_ROLES } from '../space-setting/setting-items'
 import { Badge } from '@/components/ui/badge'
 import { getUserSpaceRole } from '../space-setting/role.util'
 
@@ -228,7 +228,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
                 <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
             </div>
 
-            {editMemberRoles.includes(myRole as ESPaceRoles) && <InviteMemberModal space={space} />}
+            {MANAGE_SPACE_ROLES['invite-member'].includes(myRole as ESPaceRoles) && <InviteMemberModal space={space} />}
         </div>
 
         <div className='flex flex-col gap-1 w-full'>

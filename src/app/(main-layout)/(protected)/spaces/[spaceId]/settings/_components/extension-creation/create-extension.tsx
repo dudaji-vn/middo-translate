@@ -173,7 +173,7 @@ export default function CreateExtension({ open, initialData, title = 'Create Ext
             <StartingMessageStep />
           </StepWrapper>
           <StepWrapper value="2">
-            <CustomChatThemeStep />
+            <CustomChatThemeStep space={space}/>
           </StepWrapper>
 
         </Tabs>
