@@ -141,7 +141,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
                 })}>
                     <TagsList tags={space.tags} spaceId={space._id} myRole={currentUserRole} />
                 </TabsContent>
-                <TabsContent value="extension" className={cn("p-0 w-full flex flex-col items-center justify-center", {
+                <TabsContent value="extension" className={cn("p-10 w-full flex flex-col items-center justify-center", {
                     'hidden': !currentUserRole || !SPACE_SETTING_TAB_ROLES.find(item => item.name === 'extension')?.roles.view.find(role => role === currentUserRole)
                 })}>
                     <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2 min-h-[calc(100vh-350px)] justify-center' : 'hidden'}>
