@@ -21,9 +21,7 @@ import {
 import { Avatar } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
 import { useAppStore } from '@/stores/app.store';
-import HeaderSelectLanguage from './header-select-language';
 import { useTranslation } from 'react-i18next';
-import { usePathname } from 'next/navigation';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 const HeaderProfile = ({
   className,
@@ -110,7 +108,6 @@ const HeaderProfile = ({
           </span>
         </Link>
       )}
-      <HeaderSelectLanguage className="ml-2" />
     </div>
   );
 };

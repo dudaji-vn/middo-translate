@@ -181,9 +181,10 @@
   },
   "ACCOUNT_SETTING": {
     "HEADING": "Account Settings",
-    "PROFILE": "Profile",
+    "PROFILE": "Edit account info",
     "AVATAR": "Avatar",
-    "CHANGE_PASSWORD": "Change Password",
+    "CHANGE_PASSWORD": "Change password",
+    "DISPLAY_LANGUAGE": "Display Language",
     "SIGN_OUT": "Sign Out",
     "EDIT_PROFILE": "Edit Profile",
     "CHANGE_AVATAR": "Change Avatar"
