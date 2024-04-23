@@ -28,9 +28,8 @@ type Item = Omit<ActionItem, 'onAction'> & {
   onAction: () => void;
 };
 const BUSINESS_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
-  conversations: ['archive', 'complete', 'notify', 'unnotify', 'pin', 'unpin'],
+  conversations: ['archive', 'notify', 'unnotify', 'pin', 'unpin'],
   archived: ['unarchive', 'delete'],
-  completed: ['delete'],
 };
 const TALK_ALLOWED_ACTIONS: Action[] = [
   'notify',
@@ -48,8 +47,6 @@ const checkAllowedActions = (
   action: Action,
   currentStatus: Room['status'],
 ) => {
-  if (currentStatus === 'completed')
-    return BUSINESS_ALLOWED_ACTIONS.completed.includes(action);
   if (currentStatus === 'archived')
     return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
   if (isBusinessRoom)
@@ -92,8 +89,6 @@ export const RoomItemActionWrapper = forwardRef<
             return isAllowed && room.status === 'active';
           case 'unarchive':
             return isAllowed && room.status === 'archived';
-          case 'complete':
-            return isAllowed && room.status === 'active';
           default:
             return isAllowed;
         }

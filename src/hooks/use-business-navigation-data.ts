@@ -13,7 +13,6 @@ export enum EPageType {
 }
 const MAPPED_INBOX_STATUS = {
   [EBusinessConversationKeys.Conversations]: null,
-  [EBusinessConversationKeys.Completed]: 'completed',
   [EBusinessConversationKeys.Archived]: 'archived',
 };
 export const useBusinessNavigationData = () => {

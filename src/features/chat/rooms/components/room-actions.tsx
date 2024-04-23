@@ -27,7 +27,6 @@ export type Action =
   | 'unnotify'
   | 'archive'
   | 'unarchive'
-  | 'complete'
   ;
 
 export type ActionItem = {
@@ -86,7 +85,6 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         );
       case 'archive':
       case 'unarchive':
-      case 'complete':
         return <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />;
       default:
         return null;
@@ -136,11 +134,6 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         action: 'unarchive',
         label: 'Unarchive',
         icon: <ArchiveX />,
-      },
-      {
-        action: 'complete',
-        label: 'Complete',
-        icon: <CheckSquare />,
       }
     ];
   }, []);
