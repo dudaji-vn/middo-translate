@@ -86,7 +86,7 @@ const BusinessSpaces = () => {
       <section className={modal ? 'hidden' : ''}>
         <div
           className={cn(
-            'flex w-full flex-row items-end justify-between bg-primary-100 px-[5vw] py-5',
+            'flex w-full md:flex-row flex-col md:items-end  gap-4 sm:gap-1 justify-between bg-primary-100 px-[5vw] py-5',
           )}
         >
           <div className="flex flex-row gap-3">
@@ -96,7 +96,7 @@ const BusinessSpaces = () => {
               className="h-16 w-16"
             />
             <div className="flex flex-col gap-2">
-              <Typography className="text-base font-normal leading-[18px] text-neutral-600">
+              <Typography className="text-base font-normal leading-[18px] text-neutral-600 min-w-fit">
                 Hi, welcome back
               </Typography>
               <Typography className="text-base font-semibold text-primary-500-main">
@@ -104,13 +104,13 @@ const BusinessSpaces = () => {
               </Typography>
             </div>
           </div>
-          <div className="flex h-fit flex-row items-center gap-3">
+          <div className="flex h-fit flex-row items-center sm:justify-end justify-stretch w-full gap-3">
             <Button
               variant={'default'}
               startIcon={<Plus className="h-4 w-4" />}
               color={'primary'}
               shape={'square'}
-              className={'w-fit'}
+              className={'w-full sm:w-fit'}
               onClick={() => {
                 router.push(ROUTE_NAMES.SPACES + '?modal=create-space');
               }}

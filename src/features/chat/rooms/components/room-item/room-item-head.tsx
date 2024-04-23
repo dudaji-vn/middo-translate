@@ -13,11 +13,10 @@ export interface RoomItemHeadProps {
 
 export const RoomItemHead = ({ isRead, showTime, time }: RoomItemHeadProps) => {
   const { data } = useRoomItem();
-  const isCompleted = data?.status === 'completed';
   return (
     <div className="mb-1 flex items-center justify-between">
       <div className="max-w-full flex flex-row items-center gap-2">
-        <Badge variant="default" className={isCompleted ? 'capitalize' : 'hidden'}>{data.status}</Badge>
+        <Badge variant="default" className={data.tag ? 'capitalize' : 'hidden'}>{data.tag}</Badge>
         <span
           className={cn(
             'line-clamp-1 break-all ',

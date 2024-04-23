@@ -12,8 +12,10 @@ import moment from 'moment';
 import { cn } from '@/utils/cn';
 
 export type TNotification = {
-  image: string;
-  name: string | React.ReactNode;
+  from: {
+    image: string;
+    name: string | React.ReactNode;
+  };
   description: string;
   deleteAble?: boolean;
   createdAt: string;
@@ -22,10 +24,9 @@ export type TNotification = {
 };
 
 const Notification = ({
-  image,
-  name,
+  from: { image, name },
   description,
-  deleteAble,
+  deleteAble = true,
   createdAt,
   unRead = true,
   link,
@@ -35,6 +36,11 @@ const Notification = ({
     timeDiff > 1
       ? moment(createdAt).format('DD/MM/YYYY HH:mm')
       : moment(createdAt).fromNow();
+
+  const onClickNotification = () => {
+    console.log('onClickNotification ==>', link);
+  }
+
   return (
     <div
       className={cn(
@@ -44,6 +50,7 @@ const Notification = ({
           'cursor-pointer hover:bg-primary-200': !!link,
         },
       )}
+      onClick={onClickNotification}
     >
       {unRead && (
         <Circle className=" h-3 w-3 fill-primary-500-main stroke-primary-500-main" />
@@ -92,12 +99,17 @@ const SpacesNotifications = ({
   const [open, setOpen] = React.useState(false);
   const notifications: TNotification[] = invitations?.map((item) => {
     return {
-      image: item.space.avatar,
-      name: item.space.name,
+      from: {
+        image: item.space.avatar,
+        name: item.space.name,
+      },
       description: `You've been invited to join ${item.space.name}`,
       createdAt: item.invitedAt,
     };
   });
+  const onRead = () => {
+    // TODO: call api to mark all notifications as read
+  }
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

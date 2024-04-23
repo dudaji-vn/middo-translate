@@ -23,10 +23,6 @@ const sidebarContents = [
         icon: <MessagesSquare />,
     },
     {
-        title: 'completed',
-        icon: <CheckSquare />,
-    },
-    {
         title: 'archived',
         icon: <Archive />,
     },

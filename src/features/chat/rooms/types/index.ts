@@ -4,7 +4,12 @@ import { User } from '@/features/users/types';
 
 export type InboxSides = 'default' | 'settings' | 'new-message' | 'new-group';
 
-export type RoomStatus = 'active' | 'temporary' | 'deleted' | 'cannot_message' | 'archived' | 'completed';
+export type RoomStatus =
+  | 'active'
+  | 'temporary'
+  | 'deleted'
+  | 'cannot_message'
+  | 'archived';
 export type Room = {
   name?: string;
   subtitle?: string;
@@ -19,4 +24,5 @@ export type Room = {
   isHelpDesk?: boolean;
   isSetName: boolean;
   isPinned?: boolean;
+  tag?: string;
 } & BaseEntity;
