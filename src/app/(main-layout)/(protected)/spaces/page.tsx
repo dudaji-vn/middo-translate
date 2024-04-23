@@ -5,9 +5,6 @@ enum BusinessModalType {
   CreateSpace = 'create-space',
 }
 const BusinessSpacePage = async (props: {
-  params: {
-    id: string;
-  },
   searchParams: {
     modal: BusinessModalType;
   }

@@ -4,6 +4,7 @@ import { Bell } from 'lucide-react'
 import Ping from '../ping/ping'
 
 const SpacesNotifications = () => {
+    const [open, setOpen] = React.useState(false);
     return (
         <>
             <Button.Icon
