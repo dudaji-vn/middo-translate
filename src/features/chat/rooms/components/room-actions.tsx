@@ -30,8 +30,7 @@ export type Action =
   | 'unnotify'
   | 'archive'
   | 'tag'
-  | 'unarchive'
-  ;
+  | 'unarchive';
 
 export type ActionItem = {
   action: Action;
@@ -40,7 +39,7 @@ export type ActionItem = {
   color?: string;
   disabled?: boolean;
   renderItem?: (params: {
-    item: Omit<ActionItem, 'renderItem'>,
+    item: Omit<ActionItem, 'renderItem'>;
   }) => JSX.Element | ReactNode;
 };
 export interface RoomActionsContextProps {
@@ -92,7 +91,9 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         );
       case 'archive':
       case 'unarchive':
-        return <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />;
+        return (
+          <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />
+        );
       case 'tag':
         return null;
       default:
@@ -104,40 +105,42 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
     return [
       {
         action: 'pin',
-        label: "CONVERSATION.PIN",
+        label: 'CONVERSATION.PIN',
         icon: <PinIcon />,
       },
       {
         action: 'unpin',
-        label: "CONVERSATION.UNPIN",
+        label: 'CONVERSATION.UNPIN',
         icon: <PinOffIcon />,
       },
       {
         action: 'notify',
-        label: "CONVERSATION.ON",
+        label: 'CONVERSATION.ON',
         icon: <BellIcon />,
       },
       {
         action: 'unnotify',
-        label: "CONVERSATION.OFF",
+        label: 'CONVERSATION.OFF',
         icon: <BellOffIcon />,
       },
       {
         action: 'tag',
-        label: "CONVERSATION.TAG",
+        label: 'CONVERSATION.TAG',
         icon: <Tag />,
         renderItem(params) {
-          return <RoomAssignTag id={id} key={params.item.action} onClosed={reset} />;
+          return (
+            <RoomAssignTag id={id} key={params.item.action} onClosed={reset} />
+          );
         },
       },
       {
         action: 'leave',
-        label: "COMMON.LEAVE",
+        label: 'COMMON.LEAVE',
         icon: <LogOut />,
       },
       {
         action: 'delete',
-        label: "COMMON.DELETE",
+        label: 'COMMON.DELETE',
         icon: <TrashIcon />,
         color: 'error',
       },
@@ -150,7 +153,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         action: 'unarchive',
         label: 'Unarchive',
         icon: <ArchiveX />,
-      }
+      },
     ] as ActionItem[];
   }, []);
 

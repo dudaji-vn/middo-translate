@@ -162,7 +162,7 @@ const MobileWrapper = ({
             >
               {t(item.label)}
             </LongPressMenu.Item>
-          )
+          );
         })}
       </LongPressMenu.Menu>
     </LongPressMenu>
@@ -212,7 +212,7 @@ const DesktopWrapper = ({
                     {t(item.label)}
                   </span>
                 </DropdownMenuItem>
-              )
+              );
             })}
           </DropdownMenuContent>
         </DropdownMenu>
