@@ -105,6 +105,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       editor?.commands.clearContent();
       micRef.current?.stop();
       setDraft(roomId ?? '', '');
+      translationHelperRef.current?.clearContent();
     };
 
     const handleSubmit = async () => {
@@ -113,7 +114,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       const videos: Media[] = [];
       let content = editor?.getHTML() || '';
       let lang = '';
-      let english = '';
+      let english = translationHelperRef.current?.getEnContent();
       let mentions: string[] = [];
       reset();
       focus();
@@ -160,7 +161,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         language: lang,
         mentions: mentions,
         videos,
-        enContent: translationHelperRef.current?.getEnContent(),
+        enContent: english,
       });
     };
 
