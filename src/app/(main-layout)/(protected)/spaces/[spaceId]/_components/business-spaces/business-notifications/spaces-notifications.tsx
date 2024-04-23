@@ -40,6 +40,7 @@ const Notification = ({
   const onClickNotification = () => {
     console.log('onClickNotification ==>', link);
   }
+
   return (
     <div
       className={cn(
@@ -106,6 +107,9 @@ const SpacesNotifications = ({
       createdAt: item.invitedAt,
     };
   });
+  const onRead = () => {
+    // TODO: call api to mark all notifications as read
+  }
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
