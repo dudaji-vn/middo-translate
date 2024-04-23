@@ -12,8 +12,10 @@ import moment from 'moment';
 import { cn } from '@/utils/cn';
 
 export type TNotification = {
-  image: string;
-  name: string | React.ReactNode;
+  from: {
+    image: string;
+    name: string | React.ReactNode;
+  };
   description: string;
   deleteAble?: boolean;
   createdAt: string;
@@ -22,10 +24,9 @@ export type TNotification = {
 };
 
 const Notification = ({
-  image,
-  name,
+  from: { image, name },
   description,
-  deleteAble,
+  deleteAble = true,
   createdAt,
   unRead = true,
   link,
@@ -92,8 +93,10 @@ const SpacesNotifications = ({
   const [open, setOpen] = React.useState(false);
   const notifications: TNotification[] = invitations?.map((item) => {
     return {
-      image: item.space.avatar,
-      name: item.space.name,
+      from: {
+        image: item.space.avatar,
+        name: item.space.name,
+      },
       description: `You've been invited to join ${item.space.name}`,
       createdAt: item.invitedAt,
     };
