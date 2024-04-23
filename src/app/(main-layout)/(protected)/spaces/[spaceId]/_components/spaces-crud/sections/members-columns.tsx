@@ -5,9 +5,10 @@ import { Typography } from "@/components/data-display";
 import { cn } from "@/utils/cn";
 import { ColumnDef } from "@tanstack/react-table"
 import { Trash2 } from "lucide-react";
-import { ESpaceMemberRole } from "./invite-section";
+import { ESPaceRoles } from "../../../settings/_components/space-setting/setting-items";
 
 export type Member = {
+    _id?: string;
     email: string;
     role: string;
     status?: 'joined' | 'invited' | 'deleted';
@@ -26,25 +27,25 @@ export const membersColumns = ({ onDelete }: {
         header: "Role",
         cell(props) {
             return <Typography className={cn('text-gray-500 capitalize',
-                props.getValue() === ESpaceMemberRole.Admin && 'text-primary-500-main',
+                props.getValue() === ESPaceRoles.Admin && 'text-primary-500-main',
             )} >
                 {props.getValue() as string}
             </Typography >
         }
     },
-    {
-        accessorKey: "status",
-        header: "Status",
-        cell(props) {
-            return <Typography className={cn('text-gray-500 capitalize',
-                props.getValue() === 'joined' && 'text-primary-500-main',
-                props.getValue() === 'invited' && 'text-success-500-main'
-            )} >
-                {props.getValue() as string}
-            </Typography >
+    // {
+    //     accessorKey: "status",
+    //     header: "Status",
+    //     cell(props) {
+    //         return <Typography className={cn('text-gray-500 capitalize',
+    //             props.getValue() === 'joined' && 'text-primary-500-main',
+    //             props.getValue() === 'invited' && 'text-success-700'
+    //         )} >
+    //             {props.getValue() as string}
+    //         </Typography >
 
-        },
-    },
+    //     },
+    // },
     {
         accessorKey: "actions",
         header: "",

@@ -9,6 +9,8 @@ import { TConversationTag } from '../../../_components/business-spaces'
 import { cn } from '@/utils/cn'
 import { CreateOrEditTag } from './create-or-edit-tag'
 import { ConfirmDeleteTag } from './confirm-delete-tag'
+import { isEmpty } from 'lodash'
+import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items'
 
 
 type Tag = TConversationTag;
@@ -20,7 +22,7 @@ type TagItemProps = {
     deleteAble?: boolean;
 } & Tag & React.HTMLAttributes<HTMLDivElement>
 const TagItem = ({ _id, name, color, isReadonly, onEdit, onDelete, editAble, deleteAble, ...props }: TagItemProps) => {
-    return (<div className='w-full flex justify-between gap-10 flex-row items-center bg-primary-100 p-[8px_40px] rounded-[12px]' {...props}>
+    return (<div className='w-full flex justify-between gap-10 flex-row items-center bg-primary-100 p-[8px_40px]' {...props}>
         <div className='w-full flex justify-start flex-row gap-10  items-center'>
             <Button.Icon size={'xs'} shape={'square'} variant={'ghost'} color={'default'}>
                 <GripVertical className='stroke-neutral-500 fill-neutral-500' />
@@ -64,12 +66,15 @@ enum TagModalType {
 }
 const TagsList = ({
     tags,
-    spaceId
+    spaceId,
+    myRole
 }: {
     tags: Tag[],
-    spaceId: string
+    spaceId: string,
+    myRole?: ESPaceRoles
 }) => {
     const [search, setSearch] = React.useState('');
+    const roles = SPACE_SETTING_ITEMS.find(item => item.name === 'tags')?.roles || { view: [], edit: [], delete: [] };
     const [modalState, setModalState] = React.useState<{
         open: boolean;
         initTag: Tag | undefined;
@@ -84,36 +89,41 @@ const TagsList = ({
         setSearch(search.trim());
     }
     const displayedTags = useMemo(() => {
-        return tags.filter(tag => tag.name.toLowerCase().includes(search.toLowerCase()));
+        return tags?.filter(tag => tag.name.toLowerCase().includes(search.toLowerCase())) || [];
     }, [tags, search])
 
 
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
-        <div className='w-full flex flex-row px-4 gap-5 justify-end items-center'>
+        <div className='w-full flex flex-row px-10 gap-5 justify-end items-center'>
             <div className='md:w-96 w-60 relative'>
                 <TableSearch
                     className='py-2 min-h-[44px] w-full outline-neutral-100'
                     onSearch={onSearchChange}
                     search={search} />
-                <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-6 transform -translate-y-1/2' />
+                <Search size={16} className='text-neutral-700 stroke-[3px] absolute top-1/2 right-3 transform -translate-y-1/2' />
             </div>
             <Button
                 onClick={() => setModalState({ open: true, initTag: undefined, modalType: TagModalType.CREATE_OR_EDIT })}
                 shape={'square'}
-                size={'sm'}
-                variant={'ghost'}
-                startIcon={<Plus />}>
+                size={'xs'}
+                className={cn('', {
+                    'hidden': !roles.edit.find(role => role === myRole)
+                })}
+                disabled={!roles.edit.find(role => role === myRole)}
+                startIcon={<Plus />}
+            >
                 Add Tag
             </Button>
         </div>
-        <div className='w-full rounded-md p-0 overflow-x-auto'>
+        <div className='w-full p-0 overflow-x-auto'>
             <div className='w-full flex flex-col gap-2'>
+                <p className={cn('text-neutral-500 font-light text-sm italic w-full text-center py-1', !isEmpty(displayedTags) && "hidden")}>No tag founded</p>
                 {displayedTags.map((tag) => {
                     return <TagItem
                         key={tag._id}
                         {...tag}
-                        editAble={true}
-                        deleteAble={true}
+                        editAble={!!roles.edit.find(role => role === myRole)}
+                        deleteAble={!!roles.delete.find(role => role === myRole)}
                         onEdit={() => setModalState({ open: true, initTag: tag, modalType: TagModalType.CREATE_OR_EDIT })}
                         onDelete={() => setModalState({ open: true, initTag: tag, modalType: TagModalType.DELETE })}
                     />

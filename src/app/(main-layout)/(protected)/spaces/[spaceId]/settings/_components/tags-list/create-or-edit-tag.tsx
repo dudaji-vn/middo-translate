@@ -14,8 +14,7 @@ import { TConversationTag } from '../../../_components/business-spaces';
 import { DEFAULT_THEME } from '../extension-creation/sections/options';
 import { createOrEditTag } from '@/services/business-space.service';
 import { isEqual } from 'lodash';
-
-const COLOR_REGEX = /^#[0-9A-F]{6}$/i;
+import RHFColorSelector, { COLOR_REGEX } from '@/components/form/RHF-color-selector/rhf-color-selector';
 
 const createOrEditTagSchema = z.object({
     tagId: z.string().optional(),
@@ -32,16 +31,6 @@ const createOrEditTagSchema = z.object({
         message: 'Tag color should follow the HEX format. (e.g. #FAFAFA)'
     }),
 });
-const generateRandomHexColor = () => {
-    return `#${Math.floor(Math.random() * 16777215).toString(16)}`
-}
-const getContrastingTextColor = (hex: string) => {
-    const r = parseInt(hex.substring(1, 3), 16);
-    const g = parseInt(hex.substring(3, 5), 16);
-    const b = parseInt(hex.substring(5, 7), 16);
-    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-    return (yiq >= 128) ? 'black' : 'white';
-}
 
 export type TCreateOrEditTagFormValues = z.infer<typeof createOrEditTagSchema>;
 
@@ -112,9 +101,7 @@ export const CreateOrEditTag = ({
             console.error(error);
         }
     }
-    const onRandomColor = () => {
-        methods.setValue('color', generateRandomHexColor());
-    }
+
     const submitAble = isValid && !isEqual({
         name: watch('name'),
         color: watch('color')
@@ -149,29 +136,7 @@ export const CreateOrEditTag = ({
                                     placeholder: 'Enter tag name',
                                 }} />
                         </div>
-                        <div className='w-full relative flex flex-row gap-3 items-start rounded-[12px]'>
-                            <RHFInputField
-                                name='color'
-                                formItemProps={{
-                                    className: 'w-full'
-                                }}
-                                inputProps={{
-                                    placeholder: DEFAULT_THEME
-                                }} />
-                            <Button.Icon
-                                shape={'square'}
-                                size={'xs'}
-                                variant={'default'}
-                                className='mt-[6px]'
-                                style={{
-                                    backgroundColor: isTagColorValid ? tagColor : '#000',
-                                    color: isTagColorValid ? getContrastingTextColor(tagColor) : '#fff'
-                                }}
-                                onClick={onRandomColor}
-                            >
-                                <RefreshCcw size={15} />
-                            </Button.Icon>
-                        </div>
+                        <RHFColorSelector colorNameFiled='color' selectedColor={tagColor} />
                         <div className='w-full flex flex-row gap-3 items-center justify-end'>
                             <Button
                                 onClick={() => onOpenChange(false)}

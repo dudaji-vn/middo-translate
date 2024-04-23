@@ -35,10 +35,12 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
     content,
     language,
     mentions,
+    enContent,
   }: {
     content: string;
     language?: string;
     mentions?: string[];
+    enContent?: string | null;
   }) => {
     const localMessage = createLocalMessage({
       sender: currentUser!,
@@ -53,11 +55,20 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
         language,
         roomId: message?.room?._id!,
         mentions,
+        enContent,
       },
     });
   };
   const handleSubmit = async (data: MessageEditorSubmitData) => {
-    const { content, images, documents, language, videos, mentions } = data;
+    const {
+      content,
+      images,
+      documents,
+      language,
+      videos,
+      mentions,
+      enContent,
+    } = data;
 
     const trimContent = content.trim();
 
@@ -66,6 +77,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
         content: trimContent,
         language,
         mentions,
+        enContent,
       });
     }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { extentionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options'
+import { extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options'
 import { Button } from '@/components/actions'
 import { Avatar, Typography } from '@/components/data-display'
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField'
@@ -43,7 +43,7 @@ const StartAConversation = ({ extensionData, isAfterDoneAnCOnversation }: {
     const router = useRouter()
     const isClient = useClient();
     const { user: owner } = extensionData || {};
-    const theme = extentionsCustomThemeOptions.find((item) => item.name === extensionData.color || item.hex === extensionData.color) || extentionsCustomThemeOptions[0];
+    const theme = extensionsCustomThemeOptions.find((item) => item.name === extensionData.color || item.hex === extensionData.color) || extensionsCustomThemeOptions[0];
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const showForm = () => {

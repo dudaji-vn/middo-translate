@@ -161,7 +161,7 @@ export default function CreateOrEditSpace({ open }: {
               loading={formCreateSpace.formState.isSubmitting}
               disabled={!formCreateSpace.formState.isValid}
             >
-              Create Space
+              Create space and Invite members
             </Button>
             </form>
           </div>

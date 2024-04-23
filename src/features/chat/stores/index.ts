@@ -14,6 +14,8 @@ export type ChatState = {
   setDetLang: (lang: string) => void;
   onlineList: string[];
   setOnlineList: (list: string[]) => void;
+  sendOnSave: boolean;
+  toggleSendOnSave: () => void;
 };
 
 export const useChatStore = create<ChatState>()(
@@ -35,6 +37,9 @@ export const useChatStore = create<ChatState>()(
       setDetLang: (lang) => set(() => ({ detLang: lang })),
       onlineList: [],
       setOnlineList: (list) => set(() => ({ onlineList: list })),
+      sendOnSave: false,
+      toggleSendOnSave: () =>
+        set((state) => ({ sendOnSave: !state.sendOnSave })),
     }),
     {
       name: 'chat-storage',
