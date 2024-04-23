@@ -64,11 +64,13 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         content,
         language,
         mentions,
+        enContent,
       }: {
         roomId: string;
         content: string;
         language: string;
         mentions: string[];
+        enContent?: string | null;
       }) => {
         if (!currentUser && !guest) return;
         const localMessage = createLocalMessage({
@@ -82,6 +84,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           roomId,
           clientTempId: localMessage._id,
           language,
+          enContent,
           mentions,
           ...(isAnonymous && {
             userId: currentUser?._id || guest?._id,
@@ -94,7 +97,15 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
     const handleSubmit = useCallback(
       async (data: MessageEditorSubmitData) => {
-        const { content, images, documents, language, mentions, videos } = data;
+        const {
+          content,
+          images,
+          documents,
+          language,
+          mentions,
+          videos,
+          enContent,
+        } = data;
         let roomId = room._id;
 
         if (room.status === 'temporary') {
@@ -113,6 +124,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
             content: trimContent,
             language: language || 'en',
             mentions: mentions || [],
+            enContent,
           });
         }
 
