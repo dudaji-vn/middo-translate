@@ -15,6 +15,7 @@ import { useChatStore } from '../../stores';
 import { useTranslation } from 'react-i18next';
 import { messageApi } from '../../messages/api';
 import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';
+import { getLanguageByCode } from '@/utils/language-fn';
 
 export interface MainMessageProps {
   message: Message;
@@ -51,6 +52,9 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
         )}
         {message?.call && <CallMessage message={message} />}
       </div>
+      <span className="mt-2 flex items-center pl-8 pr-3 text-xs text-neutral-300">
+        Translated from {getLanguageByCode(message.language)?.name}
+      </span>
       <span className="mt-2 flex items-center pl-8 pr-3 text-xs text-neutral-300">
         <Clock9Icon className="mr-1 inline-block size-3" />
         {moment(message.createdAt).format('lll')}
