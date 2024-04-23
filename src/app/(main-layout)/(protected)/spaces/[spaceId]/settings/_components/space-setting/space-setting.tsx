@@ -26,7 +26,7 @@ import { DeleteSpaceModal } from '../space-edition/delete-space-modal'
 import TagsList from '../tags-list/tags-list'
 import { t } from 'i18next'
 import { useAuthStore } from '@/stores/auth.store'
-import { SPACE_SETTING_ITEMS } from './setting-items'
+import { SPACE_SETTING_TAB_ROLES } from './setting-items'
 import { getUserSpaceRole } from './role.util'
 
 
@@ -115,7 +115,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
             <Tabs defaultValue='members' className="w-full m-0 p-0">
                 <div className='w-full bg-white transition-all duration-300 overflow-x-auto'>
                     <TabsList className='w-full sm:px-10  flex flex-row justify-start'>
-                        {SPACE_SETTING_ITEMS.map(item => {
+                        {SPACE_SETTING_TAB_ROLES.map(item => {
                             return <TabsTrigger
                                 key={item.label}
                                 value={item.name}
@@ -129,7 +129,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
                 </div>
                 <TabsContent value="members" className={cn("py-4",
                     {
-                        'hidden': !currentUserRole || !SPACE_SETTING_ITEMS.find(item => item.name === 'members')?.roles.view.find(role => role === currentUserRole)
+                        'hidden': !currentUserRole || !SPACE_SETTING_TAB_ROLES.find(item => item.name === 'members')?.roles.view.find(role => role === currentUserRole)
                     }
                 )}>
                     <MembersList
@@ -137,12 +137,12 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
                     />
                 </TabsContent>
                 <TabsContent value="tags" className={cn("py-4", {
-                    'hidden': !currentUserRole || !SPACE_SETTING_ITEMS.find(item => item.name === 'tags')?.roles.view.find(role => role === currentUserRole)
+                    'hidden': !currentUserRole || !SPACE_SETTING_TAB_ROLES.find(item => item.name === 'tags')?.roles.view.find(role => role === currentUserRole)
                 })}>
                     <TagsList tags={space.tags} spaceId={space._id} myRole={currentUserRole} />
                 </TabsContent>
                 <TabsContent value="extension" className={cn("p-0 w-full flex flex-col items-center justify-center", {
-                    'hidden': !currentUserRole || !SPACE_SETTING_ITEMS.find(item => item.name === 'extension')?.roles.view.find(role => role === currentUserRole)
+                    'hidden': !currentUserRole || !SPACE_SETTING_TAB_ROLES.find(item => item.name === 'extension')?.roles.view.find(role => role === currentUserRole)
                 })}>
                     <div className={isExtensionEmpty ? 'w-full flex flex-col  items-center gap-2 min-h-[calc(100vh-350px)] justify-center' : 'hidden'}>
                         <Image src='/empty_extension.svg' width={200} height={156} alt='empty-extensions' className='mx-auto' />

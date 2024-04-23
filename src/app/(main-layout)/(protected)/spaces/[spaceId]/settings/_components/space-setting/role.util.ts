@@ -13,11 +13,11 @@ export const getUserSpaceRole = (
   if (!currentUser) {
     return undefined;
   }
-  return space.owner?._id === currentUser?._id
+  return space.owner?.email === currentUser?.email
     ? ESPaceRoles.Owner
     : space.members?.find(
           (member) =>
-            member._id === currentUser?._id &&
+            member.email === currentUser?.email &&
             member.role === ESPaceRoles.Admin,
         )
       ? ESPaceRoles.Admin
