@@ -16,14 +16,16 @@ export default function LoginGoogleElectron() {
   const refreshToken = searchParams?.get('refresh_token') || '';
   const IS_LOADING = !accessToken && !refreshToken;
   const { t } = useTranslation('common');
-  if (accessToken && refreshToken) {
-    window.location.href = `middo://?token=${accessToken}&refresh_token=${refreshToken}`;
-  }
   const openDesktop = () => {
+    // router.push(`middo://?token=${accessToken}&refresh_token=${refreshToken}`);
     window.location.href = `middo://?token=${accessToken}&refresh_token=${refreshToken}`;
   };
+  
   useEffect(() => {
-    if (accessToken || refreshToken) return;
+    if (accessToken && refreshToken) {
+      window.location.href = `middo://?token=${accessToken}&refresh_token=${refreshToken}`;
+      return;
+    };
     setCookieService([{ key: 'login-type', value: 'desktop' }])
       .then((_) => {
         router.push('/api/auth/google');
