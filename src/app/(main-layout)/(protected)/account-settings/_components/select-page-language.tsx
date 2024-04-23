@@ -100,7 +100,7 @@ const SelectPageLanguage = () => {
                   ].toLowerCase()}
                   className="inline-block h-5 w-5 overflow-hidden rounded-full"
                 />
-                <div className="relative left-0 flex items-center justify-center rounded-full md:group-hover:left-1 transition-all group-active:left-1">
+                <div className="relative left-0 flex items-center justify-center rounded-full md:group-hover:left-1 transition-all md:group-active:left-1">
                   <ChevronRight className="opacity-60" />
                 </div>
               </>
