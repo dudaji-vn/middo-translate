@@ -149,16 +149,21 @@ const MobileWrapper = ({
           </div>
         }
       >
-        {items.map((item) => (
-          <LongPressMenu.Item
-            key={item.action}
-            startIcon={item.icon}
-            color={item.color === 'error' ? 'error' : 'default'}
-            onClick={item.onAction}
-          >
-            {t(item.label)}
-          </LongPressMenu.Item>
-        ))}
+        {items.map(({ renderItem, ...item }) => {
+          if (renderItem) {
+            return renderItem({ item });
+          }
+          return (
+            <LongPressMenu.Item
+              key={item.action}
+              startIcon={item.icon}
+              color={item.color === 'error' ? 'error' : 'default'}
+              onClick={item.onAction}
+            >
+              {t(item.label)}
+            </LongPressMenu.Item>
+          )
+        })}
       </LongPressMenu.Menu>
     </LongPressMenu>
   );
@@ -188,22 +193,27 @@ const DesktopWrapper = ({
             </Button.Icon>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {items.map((item) => (
-              <DropdownMenuItem
-                key={item.action}
-                disabled={item.disabled}
-                className="flex items-center"
-                onClick={item.onAction}
-              >
-                {cloneElement(item.icon, {
-                  size: 16,
-                  className: cn('mr-2', item.color && `text-${item.color}`),
-                })}
-                <span className={cn(item.color && `text-${item.color}`)}>
-                  {t(item.label)}
-                </span>
-              </DropdownMenuItem>
-            ))}
+            {items.map(({ renderItem, ...item }) => {
+              if (renderItem) {
+                return renderItem({ item });
+              }
+              return (
+                <DropdownMenuItem
+                  className="flex items-center"
+                  key={item.action}
+                  disabled={item.disabled}
+                  onClick={item.onAction}
+                >
+                  {cloneElement(item.icon, {
+                    size: 16,
+                    className: cn('mr-2', item.color && `text-${item.color}`),
+                  })}
+                  <span className={cn(item.color && `text-${item.color}`)}>
+                    {t(item.label)}
+                  </span>
+                </DropdownMenuItem>
+              )
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

@@ -10,7 +10,7 @@ import {
   Tag,
   TrashIcon,
 } from 'lucide-react';
-import { createContext, useContext, useMemo, useState } from 'react';
+import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
 import { RoomModalDelete } from './room.modal-delete';
 import { RoomModalLeave } from './room.modal-leave';
@@ -18,6 +18,7 @@ import { RoomModalNotification } from './room.modal-notification';
 import { usePinRoom } from '../hooks/use-pin-room';
 import { RoomModalChangeStatus } from './room.modal-change-status';
 import RoomAssignTag from './room-assign-tag';
+import { Room } from '../types';
 
 export type Action =
   | 'delete'
@@ -38,6 +39,9 @@ export type ActionItem = {
   icon: JSX.Element;
   color?: string;
   disabled?: boolean;
+  renderItem?: (params: {
+    item: Omit<ActionItem, 'renderItem'>,
+  }) => JSX.Element | ReactNode;
 };
 export interface RoomActionsContextProps {
   onAction: (action: Action, id: string) => void;
@@ -91,7 +95,6 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         return <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />;
       case 'tag':
         return null;
-        // return <RoomAssignTag onClosed={reset} id={id} />;
       default:
         return null;
     }
@@ -122,7 +125,10 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
       {
         action: 'tag',
         label: "CONVERSATION.TAG",
-        icon: <RoomAssignTag id="" />,
+        icon: <Tag />,
+        renderItem(params) {
+          return <RoomAssignTag id={id} key={params.item.action} onClosed={reset} />;
+        },
       },
       {
         action: 'leave',
@@ -145,7 +151,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         label: 'Unarchive',
         icon: <ArchiveX />,
       }
-    ];
+    ] as ActionItem[];
   }, []);
 
   return (
