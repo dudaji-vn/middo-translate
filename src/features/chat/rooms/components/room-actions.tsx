@@ -39,7 +39,7 @@ export type ActionItem = {
   color?: string;
   disabled?: boolean;
   renderItem?: (params: {
-    item: Omit<ActionItem, 'renderItem'>;
+    item: Omit<ActionItem, 'renderItem'> & { onAction: () => void };
   }) => JSX.Element | ReactNode;
 };
 export interface RoomActionsContextProps {
@@ -59,9 +59,14 @@ export const useRoomActions = () => {
 export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const [id, setId] = useState<string>('');
   const [action, setAction] = useState<Action>('none');
+  const [idRoomAssignTag, setIdRoomAssignTag] = useState<string>('');
   const { mutate: pin } = usePinRoom();
   const onAction = (action: Action, id: string) => {
     switch (action) {
+      case 'tag':
+        // because update the state "id" will re-render RoomAssignTag, it's a popover, so I need to keep it not re-render
+        setIdRoomAssignTag(id);
+        break;
       case 'pin':
       case 'unpin':
         pin(id);
@@ -74,6 +79,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   };
   const reset = () => {
     setAction('none');
+    setIdRoomAssignTag('');
     setId('');
   };
 
@@ -127,9 +133,14 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         action: 'tag',
         label: 'CONVERSATION.TAG',
         icon: <Tag />,
-        renderItem(params) {
+        renderItem({ item: { onAction, action } }) {
           return (
-            <RoomAssignTag id={id} key={params.item.action} onClosed={reset} />
+            <RoomAssignTag
+              id={idRoomAssignTag}
+              key={action}
+              onAction={onAction}
+              onClosed={reset}
+            />
           );
         },
       },

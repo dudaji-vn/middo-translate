@@ -114,7 +114,10 @@ export const RoomItemActionWrapper = forwardRef<
       })
       .map((item) => ({
         ...item,
-        onAction: () => onAction(item.action, room._id),
+        onAction: () => {
+          console.log('room', room);
+          onAction(item.action, room._id);
+        },
       }));
   }, [actionItems, isMuted, onAction, room._id, room.isGroup, room.isPinned]);
 
