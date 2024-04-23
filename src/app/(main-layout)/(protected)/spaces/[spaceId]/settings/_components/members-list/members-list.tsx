@@ -216,7 +216,6 @@ const MembersList = ({ space }: { space: TSpace }) => {
         })
     }, [members, search])
 
-
     return (<section className='flex flex-col gap-5 w-full items-end py-4'>
         <div className='w-full flex flex-row px-10 gap-5 justify-end items-center'>
 

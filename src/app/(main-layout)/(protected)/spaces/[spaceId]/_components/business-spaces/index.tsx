@@ -14,10 +14,10 @@ import { TabsContentProps } from '@radix-ui/react-tabs'
 import { BaseEntity } from '@/types'
 import { User } from '@/features/users/types'
 import { useAuthStore } from '@/stores/auth.store'
-import Ping from './ping/ping'
 import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces'
 import { ROUTE_NAMES } from '@/configs/route-name'
 import { Member } from '../spaces-crud/sections/members-columns'
+import SpacesNotifications from './business-notifications/spaces-notifications'
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
@@ -67,7 +67,6 @@ const BusinessSpaces = () => {
     const {
         data: spaces_list,
         isLoading,
-        isError
     } = useGetSpaces({
         type: tab
     });
@@ -104,15 +103,7 @@ const BusinessSpaces = () => {
                         >
                             Create New Space
                         </Button>
-                        <Button.Icon
-                            variant={'default'}
-                            color={'default'}
-                            size={'xs'}
-                            className='relative'
-                        >
-                            <Ping className='absolute -top-[2px] -right-[8px]' size={12} />
-                            <Bell className='h-4 w-4' />
-                        </Button.Icon>
+                        <SpacesNotifications />
                     </div>
                 </div>
                 <Tabs defaultValue='joined_spaces' className="w-full h-fit " value={tab} onValueChange={(val) => setTab(val as BusinessTabType)}>
