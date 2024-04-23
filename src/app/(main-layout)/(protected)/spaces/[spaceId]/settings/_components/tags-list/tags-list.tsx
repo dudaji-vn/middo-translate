@@ -10,7 +10,7 @@ import { cn } from '@/utils/cn'
 import { CreateOrEditTag } from './create-or-edit-tag'
 import { ConfirmDeleteTag } from './confirm-delete-tag'
 import { isEmpty } from 'lodash'
-import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items'
+import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from '../space-setting/setting-items'
 
 
 type Tag = TConversationTag;
@@ -74,7 +74,7 @@ const TagsList = ({
     myRole?: ESPaceRoles
 }) => {
     const [search, setSearch] = React.useState('');
-    const roles = SPACE_SETTING_ITEMS.find(item => item.name === 'tags')?.roles || { view: [], edit: [], delete: [] };
+    const roles = SPACE_SETTING_TAB_ROLES.find(item => item.name === 'tags')?.roles || { view: [], edit: [], delete: [] };
     const [modalState, setModalState] = React.useState<{
         open: boolean;
         initTag: Tag | undefined;

@@ -13,7 +13,7 @@ import { useAuthStore } from '@/stores/auth.store'
 import { Member } from '../../../_components/spaces-crud/sections/members-columns'
 import InviteMemberModal from './invite-member-modal'
 import { TSpace } from '../../../_components/business-spaces'
-import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items'
+import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from '../space-setting/setting-items'
 import { Badge } from '@/components/ui/badge'
 import { getUserSpaceRole } from '../space-setting/role.util'
 
@@ -27,7 +27,7 @@ type MemberItemProps = {
 } & Member & React.HTMLAttributes<HTMLDivElement>
 const MemberItem = ({ role, isMe, isOwnerRow, email, myRole, status, isLoading, onResendInvitation, onDelete, ...props }: MemberItemProps) => {
 
-    const roles = SPACE_SETTING_ITEMS.find(setting => setting.name === 'members')?.roles;
+    const roles = SPACE_SETTING_TAB_ROLES.find(setting => setting.name === 'members')?.roles;
     const deleteAble = !isLoading && roles?.delete.includes(myRole as ESPaceRoles) && !isOwnerRow;
     return (<div className='w-full flex justify-between flex-row items-center bg-primary-100 py-1 rounded-[12px]' {...props}>
         <div className='w-full flex justify-start flex-row items-center'>
@@ -194,7 +194,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
     const { members, owner } = space;
     const currentUser = useAuthStore((state) => state.user);
     const myRole = getUserSpaceRole(currentUser, space);
-    const editMemberRoles = SPACE_SETTING_ITEMS.find(setting => setting.name === 'members')?.roles.edit || [];
+    const editMemberRoles = SPACE_SETTING_TAB_ROLES.find(setting => setting.name === 'members')?.roles.edit || [];
     const onSearchChange = (search: string) => {
         setSearch(search.trim());
     }
