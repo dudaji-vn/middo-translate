@@ -181,9 +181,10 @@
   },
   "ACCOUNT_SETTING": {
     "HEADING": "계정 설정",
-    "PROFILE": "프로필",
+    "PROFILE": "계정 정보 편집",
     "AVATAR": "아바타",
     "CHANGE_PASSWORD": "비밀번호 변경",
+    "DISPLAY_LANGUAGE": "표시 언어",
     "SIGN_OUT": "로그아웃",
     "EDIT_PROFILE": "프로필 편집",
     "CHANGE_AVATAR": "아바타 변경"

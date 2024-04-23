@@ -6,13 +6,11 @@ import {
   AlertDialogContent,
   AlertDialogTrigger,
 } from '@/components/feedback';
-
+import { Button } from '@/components/actions'
 import { AlertError } from '@/components/alert/alert-error';
-import { Button } from '@/components/actions';
-import { Edit2Icon } from 'lucide-react';
+import { UserRound } from 'lucide-react';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
 import { PageLoading } from '@/components/loading/page-loading';
-import { User } from '../users/types';
 import { updateInforSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
@@ -24,6 +22,7 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
+import { User } from '../users/types';
 
 export default function UpdateUserInfo() {
   const [loading, setLoading] = useState(false);
@@ -101,15 +100,18 @@ export default function UpdateUserInfo() {
     <>
       {loading && <PageLoading />}
       <AlertDialog open={open} onOpenChange={onModalChange}>
-        <AlertDialogTrigger>
-          <div className="cursor-pointer transition-all hover:opacity-80">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-primary-200 p-0 font-semibold text-primary ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 active:bg-primary-400 disabled:pointer-events-none disabled:bg-primary-100 disabled:text-primary-200 disabled:opacity-50 md:hover:bg-primary-300 md:active:bg-primary-400">
-              <Edit2Icon />
-            </div>
-            <span className="mt-2 block text-center text-sm font-light">
-              {t('ACCOUNT_SETTING.PROFILE')}
-            </span>
-          </div>
+        <AlertDialogTrigger className='w-full flex items-center px-5 py-4 border-b border-b-[#F2F2F2] bg-white md:hover:bg-primary-100'>
+          <Button.Icon
+            variant={'ghost'}
+            color={'primary'}
+            size={'sm'}
+            className='relative bg-primary-200 rounded-xl'
+          >
+            <UserRound size={20} />
+          </Button.Icon>
+          <span className="ml-4 block text-center text-base font-medium">
+            {t('ACCOUNT_SETTING.PROFILE')}
+          </span>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <Form {...form}>

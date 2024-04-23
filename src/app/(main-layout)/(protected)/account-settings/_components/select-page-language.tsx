@@ -5,19 +5,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from '@/components/data-entry';
-import {
   LANGUAGE_CODES_MAP,
   SUPPORTED_VOICE_MAP,
 } from '@/configs/default-language';
 import I18N_SUPPORTED_LANGUAGES from '@/lib/i18n/support_language';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
-import { ChevronDownIcon } from 'lucide-react';
+import { ChevronDownIcon, ChevronRight, Globe2 } from 'lucide-react';
 import moment from 'moment';
 import 'moment/locale/vi';
 import 'moment/locale/ko';
@@ -26,16 +20,13 @@ import 'moment/locale/en-gb';
 import React, { useCallback, useEffect, useState } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/actions';
 interface InputSelect {
   value: string;
   title: string;
 }
 
-interface InputSelectLanguageProps {
-  className?: string;
-}
-
-const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
+const SelectPageLanguage = () => {
   const { language, setLanguage } = useAppStore();
   moment.locale(language);
   const [isOpenDropdown, setOpenDropdown] = useState(false);
@@ -86,10 +77,21 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
     i18n.changeLanguage(lang);
   }, [handleSelectChange, i18n, setLanguage]);
   return (
-    <div className={cn(className)}>
+    <div className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4">
+      <Button.Icon
+        variant={'ghost'}
+        color={'default'}
+        size={'sm'}
+        className="relative rounded-xl bg-neutral-50"
+      >
+        <Globe2 size={20} />
+      </Button.Icon>
+      <span className="ml-4 block text-base font-medium flex-1">
+        {t('ACCOUNT_SETTING.DISPLAY_LANGUAGE')}
+      </span>
       <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
         <DropdownMenuTrigger>
-          <div className="relative flex items-center gap-1 rounded-xl bg-neutral-50 px-3 py-1 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
+          <div className="relative flex w-full items-center gap-1 rounded-xl px-3 py-1 group">
             {valueSelect?.value && (
               <>
                 <CircleFlag
@@ -98,14 +100,17 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
                   ].toLowerCase()}
                   className="inline-block h-5 w-5 overflow-hidden rounded-full"
                 />
-                <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
-                  <ChevronDownIcon className="opacity-60" />
+                <div className="relative left-0 flex items-center justify-center rounded-full md:group-hover:left-1 transition-all group-active:left-1">
+                  <ChevronRight className="opacity-60" />
                 </div>
               </>
             )}
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" onClick={() => setOpenDropdown(false)}>
+        <DropdownMenuContent
+          align="end"
+          onClick={() => setOpenDropdown(false)}
+        >
           {I18N_SUPPORTED_LANGUAGES?.length > 0 &&
             I18N_SUPPORTED_LANGUAGES?.map((option: InputSelect) => {
               return (
@@ -125,7 +130,7 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
                     ].toLowerCase()}
                     className="mr-2 inline-block h-5 overflow-hidden rounded-full"
                   />
-                    <span className="pr-4">{option.title}</span>
+                  <span className="pr-4">{option.title}</span>
                 </DropdownMenuItem>
               );
             })}
@@ -135,4 +140,4 @@ const HeaderSelectLanguage = ({ className }: InputSelectLanguageProps) => {
   );
 };
 
-export default HeaderSelectLanguage;
+export default SelectPageLanguage;

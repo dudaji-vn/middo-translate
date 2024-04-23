@@ -181,9 +181,10 @@
   },
   "ACCOUNT_SETTING": {
     "HEADING": "Cài đặt tài khoản",
-    "PROFILE": "Hồ sơ",
+    "PROFILE": "Chỉnh sửa thông tin tài khoản",
     "AVATAR": "Hình đại diện",
     "CHANGE_PASSWORD": "Đổi mật khẩu",
+    "DISPLAY_LANGUAGE": "Ngôn ngữ hiển thị",
     "SIGN_OUT": "Đăng xuất",
     "EDIT_PROFILE": "Chỉnh sửa hồ sơ",
     "CHANGE_AVATAR": "Thay đổi hình đại diện"
