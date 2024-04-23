@@ -36,6 +36,10 @@ const Notification = ({
     timeDiff > 1
       ? moment(createdAt).format('DD/MM/YYYY HH:mm')
       : moment(createdAt).fromNow();
+
+  const onClickNotification = () => {
+    console.log('onClickNotification ==>', link);
+  }
   return (
     <div
       className={cn(
@@ -45,6 +49,7 @@ const Notification = ({
           'cursor-pointer hover:bg-primary-200': !!link,
         },
       )}
+      onClick={onClickNotification}
     >
       {unRead && (
         <Circle className=" h-3 w-3 fill-primary-500-main stroke-primary-500-main" />
