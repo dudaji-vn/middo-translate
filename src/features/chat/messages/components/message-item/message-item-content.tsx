@@ -18,6 +18,7 @@ import { VariantProps } from 'class-variance-authority';
 import { useTranslation } from 'react-i18next';
 import { Message } from '../../types';
 import { messageApi } from '../../api';
+import { getLanguageByCode } from '@/utils/language-fn';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -65,7 +66,9 @@ export const Content = ({ position, active, message }: ContentProps) => {
       return;
     }
     if (
-      (message.language === userLanguage) || isMe || message.language === receiverLanguage
+      message.language === userLanguage ||
+      isMe ||
+      message.language === receiverLanguage
     ) {
       setContentDisplay(message.content);
       return;
@@ -158,6 +161,14 @@ export const Content = ({ position, active, message }: ContentProps) => {
           </div>
         </div>
       )}
+      <span
+        className={cn(
+          'inline-block w-full text-xs font-light',
+          isMe ? 'text-right text-white/40' : 'text-left text-neutral-300',
+        )}
+      >
+        Translate from {getLanguageByCode(message.language)?.name}
+      </span>
     </div>
   );
 };

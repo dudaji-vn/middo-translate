@@ -19,7 +19,7 @@ import { MentionButton } from './mention-button';
 import { MentionSuggestion } from './mention-suggestion-options';
 import { MicButton, MicButtonRef } from './mic-button';
 import { SendButton } from './send-button';
-import { TranslationHelper } from './translation-helper';
+import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
 export type MessageEditorSubmitData = {
@@ -29,6 +29,7 @@ export type MessageEditorSubmitData = {
   documents: Media[];
   language?: string;
   mentions?: string[];
+  enContent?: string | null;
 };
 export interface MessageEditorProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -89,6 +90,8 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onTypingChange,
       id: roomId,
     });
+
+    const translationHelperRef = useRef<TranslationHelperRef>(null);
 
     const editorId = useId();
     const sendButtonId = useId();
@@ -157,6 +160,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         language: lang,
         mentions: mentions,
         videos,
+        enContent: translationHelperRef.current?.getEnContent(),
       });
     };
 
@@ -187,6 +191,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     return (
       <>
         <TranslationHelper
+          ref={translationHelperRef}
           mentionSuggestionOptions={mentionSuggestions}
           editor={editor}
           onStartedEdit={() => setDisabled(true)}
@@ -194,6 +199,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             setDisabled(false);
             editor?.commands.focus('end');
           }}
+          onSend={handleSubmit}
         />
         <div className="relative flex gap-1">
           <div

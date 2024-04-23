@@ -13,6 +13,7 @@ export type CreateMessage = {
   clientTempId: string;
   language?: string;
   mentions?: string[];
+  enContent?: string | null;
 };
 export const messageApi = {
   async send(data: CreateMessage) {
