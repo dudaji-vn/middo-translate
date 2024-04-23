@@ -24,7 +24,7 @@ const RoomAssignTag = ({
 }: {
   id: Room['_id'];
   onClosed?: () => void;
- onAction: () => void;
+  onAction: () => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const { space } = useSpaceStore();
@@ -32,12 +32,13 @@ const RoomAssignTag = ({
   const tags = space?.tags || ([] as TConversationTag[]);
   const { t } = useTranslation('common');
 
-    
 
   const onUpdateRoomTag = async (tag: TConversationTag) => {
     console.log('onUpdateRoomTag', id);
     try {
       await roomApi.changeTagRoom({ roomId: id, tagId: tag._id });
+      onClosed && onClosed();
+      setOpen(false);
     } catch (error) {
       toast.error('Failed to update tag');
     }
