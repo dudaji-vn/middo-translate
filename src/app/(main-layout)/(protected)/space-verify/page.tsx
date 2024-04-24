@@ -37,7 +37,6 @@ const SpaceVerify = async ({
     }
 
     const { space, email, invitedAt } = thisInvitation;
-    console.log('thisInvitation', thisInvitation)
 
     return (
         <main className='flex justify-center items-center h-[calc(100vh-52px)]  px-8 md:px-2  ' >
