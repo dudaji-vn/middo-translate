@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import { Check, Circle, CircleCheck, Pin, Tag } from 'lucide-react';
+import { Check, Circle, CircleCheck, Pin, Tag, XIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useSpaceStore } from '@/stores/space.store';
@@ -20,6 +20,8 @@ import { CreateOrEditTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId
 import { useChangeStatusConversation } from '../hooks/use-change-status-conversation';
 import { useChangeTagConversation } from '../hooks/use-change-tag-conversation';
 import { Spinner } from '@/components/feedback';
+import { useRouter } from 'next/navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 const RoomAssignTag = ({
   room,
@@ -31,23 +33,29 @@ const RoomAssignTag = ({
   const [open, setOpen] = React.useState(false);
   const [openAddTag, setOpenAddTag] = React.useState(false);
   const { mutateAsync, isLoading, isSuccess } = useChangeTagConversation();
-  const [clicked, setClicked] = React.useState<string>();
+  const [clicked, setClicked] = React.useState<string | null>();
   const { space, setSpace } = useSpaceStore();
-
+  const router = useRouter();
   const tags = space?.tags || ([] as TConversationTag[]);
   const { t } = useTranslation('common');
 
-  const onUpdateRoomTag = async (tag: TConversationTag) => {
-    setClicked(tag._id);
-    mutateAsync({ roomId: room._id, tagId: tag._id })
+  const onUpdateRoomTag = async (id: TConversationTag['_id']) => {
+    setClicked(id);
+    const tagId = id === room.tag?._id ? null : id;
+    mutateAsync({ roomId: room._id, tagId: tagId })
       .catch(() => {
         toast.error('Failed to update tag');
       })
       .finally(() => {
+        
         onClosed && onClosed();
         setOpen(false);
         setClicked(undefined);
       });
+  };
+  const onRedirectToSettings = () => {
+    if (!space) return;
+    router.push(`${ROUTE_NAMES.SPACES}/${space._id}/settings`);
   };
 
   return (
@@ -77,14 +85,14 @@ const RoomAssignTag = ({
                   <div
                     key={name}
                     className={cn(
-                      'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
+                      'relative flex w-full min-w-full cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
                       { 'bg-primary-100': isCurrent || isLoading },
                       {
                         'cursor-default bg-neutral-100':
                           isLoading && clicked === _id,
                       },
                     )}
-                    onClick={() => onUpdateRoomTag({ _id, color, name })}
+                    onClick={() => onUpdateRoomTag(_id)}
                   >
                     <div
                       className={cn(
@@ -108,13 +116,26 @@ const RoomAssignTag = ({
                         className={cn(
                           'invisible absolute inset-0 stroke-neutral-50',
                           {
-                            visible: isCurrent && !isLoading && !clicked
+                            visible: isCurrent && !isLoading && !clicked,
                           },
                         )}
                       />
                     </div>
                     <Circle size={12} fill={color} stroke={color} />
                     <span className="text-base text-neutral-700">{name}</span>
+                    <Button.Icon
+                      size={'xs'}
+                      variant={'ghost'}
+                      color={'default'}
+                      className={cn(
+                        'invisible absolute inset-y-[2px] right-1',
+                        {
+                          visible: !isLoading && isCurrent,
+                        },
+                      )}
+                    >
+                      <XIcon />
+                    </Button.Icon>
                   </div>
                 );
               })}
@@ -132,6 +153,7 @@ const RoomAssignTag = ({
                 className={cn(
                   'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
                 )}
+                onClick={onRedirectToSettings}
               >
                 Tags management
               </div>

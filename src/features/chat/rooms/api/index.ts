@@ -177,7 +177,7 @@ export const roomApi = {
     return [];
   },
 
-  async changeTagRoom({ roomId, tagId }: { roomId: string; tagId: string }) {
+  async changeTagRoom({ roomId, tagId }: { roomId: string; tagId?: string | null }) {
     const res: Response<Room> = await axios.patch(
       `${basePath}/${roomId}/change-tag-room`,
       { tagId },
