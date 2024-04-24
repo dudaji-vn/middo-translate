@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 
 import { Input, RadioGroup, RadioGroupItem } from '@/components/data-entry';
 import { RadioGroupProps } from '@radix-ui/react-radio-group';
@@ -9,73 +9,112 @@ import { Check } from 'lucide-react';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { translateWithDetection } from '@/services/languages.service';
 import { useFormContext } from 'react-hook-form';
+import NestedFlow, { FlowNode } from '../steps/script-chat-flow/nested-flow';
+import { Edge } from 'reactflow';
 
-export type CustomFirstMessageOptionsProps = {
-    firstMessage: string;
-    onFirstMessageChange: (value: string) => void;
-}
-type TRadioOptions = 'default' | 'custom';
+export type CustomFirstMessageOptionsProps = {};
+type TRadioOptions = 'default' | 'custom' | 'script';
 
-const CustomFirstMessageOptions = ({ firstMessage, onFirstMessageChange, ...props }: CustomFirstMessageOptionsProps & RadioGroupProps) => {
-    const [checked, setChecked] = React.useState<TRadioOptions>(firstMessage?.length && firstMessage === DEFAULT_FIRST_MESSAGE.content ? 'default' : 'custom');
+const CustomFirstMessageOptions = ({
+  ...props
+}: CustomFirstMessageOptionsProps & RadioGroupProps) => {
+  const { setValue, watch } = useFormContext();
+  const firstMessage = watch('custom.firstMessage');
+  const [checked, setChecked] = React.useState<TRadioOptions>(
+    firstMessage?.length && firstMessage === DEFAULT_FIRST_MESSAGE.content
+      ? 'default'
+      : 'custom',
+  );
 
-    const { setValue, watch } = useFormContext(); const [previousText, setPreviousText] = React.useState({
-        firstMessage: watch('custom.firstMessage'),
-        firstMessageEnglish: watch('custom.firstMessageEnglish')
-    })
-    return (
-        <RadioGroup
-            {...props}
-            className='flex flex-col gap-4 w-full'
-            onValueChange={(value) => {
-                setChecked(value as TRadioOptions)
-                if (value === 'default') {
-                    setPreviousText({
-                        firstMessage: watch('custom.firstMessage'),
-                        firstMessageEnglish: watch('custom.firstMessageEnglish')
-                    })
-                    setValue('custom.firstMessage', DEFAULT_FIRST_MESSAGE.content);
-                    setValue('custom.firstMessageEnglish', DEFAULT_FIRST_MESSAGE.content);
-                }
-                else {
-                    setValue('custom.firstMessage', previousText.firstMessage);
-                    setValue('custom.firstMessageEnglish', previousText.firstMessageEnglish);
-                };
-            }}
-            value={checked}
+  const scriptChatFlow = watch('custom.chatFlow');
+
+  const onSaveChatFlow = (chatFlow: { nodes: FlowNode[]; edges: Edge[] }) => {
+    setValue('custom.chatFlow', chatFlow);
+  };
+  return (
+    <RadioGroup
+      {...props}
+      className="flex w-full flex-col gap-4"
+      onValueChange={(value) => {
+        setChecked(value as TRadioOptions);
+          switch (value) {
+            case 'default':
+              setValue('custom.firstMessage', DEFAULT_FIRST_MESSAGE.content);
+              break;
+            case 'custom':
+              setValue('custom.firstMessage', '');
+              break;
+            case 'script':
+              setValue('custom.firstMessage', '');
+              break;
+          }
+      }}
+      value={checked}
+    >
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem
+          value="default"
+          id="r1"
+          iconProps={{ className: 'h-full w-full' }}
+          className="border-neutral-200 ring-neutral-200"
         >
-            <div className="flex items-center space-x-2">
-                <RadioGroupItem value="default" id="r1" iconProps={{ className: 'h-full w-full' }} className='border-neutral-200 ring-neutral-200' >
-                    <Check className='w-3 h-[14px] absolute top-[1px] left-[1px]' stroke='white' />
-                </RadioGroupItem>
-                <Label htmlFor="r1">Default</Label>
-            </div>
-            <Input
-                name='firstMessage'
-                disabled={checked !== 'default'}
-                readOnly
-                value={DEFAULT_FIRST_MESSAGE.content}
-            />
-            <div className="flex items-center space-x-2">
-                <RadioGroupItem value="custom" id="r2" iconProps={{ className: 'h-full w-full' }} className='border-neutral-200 ring-neutral-200' >
-                    <Check className='w-3 h-[14px] absolute top-[1px] left-[1px]' stroke='white' />
-                </RadioGroupItem>
-                <Label htmlFor="r2">Custom</Label>
-            </div>
-            <RHFTextAreaField
-                name={'custom.firstMessage'}
-                formItemProps={{
-                    className: checked === 'custom' ? '' : 'hidden',
-                }}
+          <Check
+            className="absolute left-[1px] top-[1px] h-[14px] w-3"
+            stroke="white"
+          />
+        </RadioGroupItem>
+        <Label htmlFor="r1">Default</Label>
+      </div>
+      <Input
+        name="firstMessage"
+        disabled={checked !== 'default'}
+        readOnly
+        value={DEFAULT_FIRST_MESSAGE.content}
+      />
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem
+          value="custom"
+          id="r2"
+          iconProps={{ className: 'h-full w-full' }}
+          className="border-neutral-200 ring-neutral-200"
+        >
+          <Check
+            className="absolute left-[1px] top-[1px] h-[14px] w-3"
+            stroke="white"
+          />
+        </RadioGroupItem>
+        <Label htmlFor="r2">Custom</Label>
+      </div>
+      <RHFTextAreaField
+        name={'custom.firstMessage'}
+        textareaProps={{
+          placeholder: 'Type your custom first message',
+          disabled: checked !== 'custom',
+          className:
+            checked === 'custom'
+              ? 'border-primary ring-primary px-2'
+              : 'opacity-50 border-neutral-200 ring-neutral-200',
+        }}
+      />
+      <div className="flex items-center space-x-2">
+        <RadioGroupItem
+          value="script"
+          id="r2"
+          iconProps={{ className: 'h-full w-full' }}
+          className="border-neutral-200 ring-neutral-200"
+        >
+          <Check
+            className="absolute left-[1px] top-[1px] h-[14px] w-3"
+            stroke="white"
+          />
+        </RadioGroupItem>
+        <Label htmlFor="r2">Script</Label>
+      </div>
+      {checked === 'custom' && (
+        <NestedFlow onSaveToForm={onSaveChatFlow} savedFlow={scriptChatFlow} />
+      )}
+    </RadioGroup>
+  );
+};
 
-                textareaProps={{
-                    placeholder: 'Type your custom first message',
-                    disabled: checked !== 'custom',
-                    className: checked === 'custom' ? 'border-primary ring-primary px-2' : 'opacity-50 border-neutral-200 ring-neutral-200',
-                }}
-            />
-        </RadioGroup >
-    )
-}
-
-export default CustomFirstMessageOptions
+export default CustomFirstMessageOptions;
