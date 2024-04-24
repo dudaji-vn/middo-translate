@@ -9,11 +9,7 @@ import { Check } from 'lucide-react';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { translateWithDetection } from '@/services/languages.service';
 import { useFormContext } from 'react-hook-form';
-import NestedFlow, {
-  FlowNode,
-  initialChatFlowNodes,
-  initialEdges,
-} from '../steps/script-chat-flow/nested-flow';
+import NestedFlow, { FlowNode } from '../steps/script-chat-flow/nested-flow';
 import { Edge } from 'reactflow';
 import { cn } from '@/utils/cn';
 
@@ -58,8 +54,8 @@ const CustomFirstMessageOptions = ({
             setValue('custom.firstMessage', '');
             if (
               !scriptChatFlow ||
-              !scriptChatFlow.nodes.length <= 1 ||
-              !scriptChatFlow.edges.length <= 1
+              scriptChatFlow?.nodes?.length < 2 ||
+              scriptChatFlow?.edges?.length < 1
             )
               setValue('custom.chatFlow', null);
             break;

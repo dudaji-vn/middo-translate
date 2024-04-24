@@ -113,6 +113,7 @@ export default function CreateExtension({
       reset();
       return;
     }
+
     if (!isEmpty(initialData)) {
       setValue('domains', initialData.domains);
       setValue('custom', {
@@ -123,17 +124,12 @@ export default function CreateExtension({
           DEFAULT_FIRST_MESSAGE.contentEnglish ||
           '',
         color: initialData.color || DEFAULT_THEME,
-        chatFlow: initialData?.chatFlow,
       });
     }
-  }, [initialData, open]);
-
-  useEffect(() => {
     if (
-      tabValue === 1 &&
       initialData?.chatFlow &&
-      isEmpty(watch('custom.chatFlow')) &&
-      isEqual(initialData.firstMessage, watch('custom.firstMessage'))
+      initialData?.chatFlow?.nodes?.length > 1 &&
+      initialData?.chatFlow?.edges?.length > 0
     ) {
       setValue('custom.chatFlow', {
         nodes: initialData?.chatFlow?.nodes || [],
@@ -141,7 +137,7 @@ export default function CreateExtension({
       });
       setValue('selectedRadioFM', 'script');
     }
-  }, [tabValue]);
+  }, [initialData, open]);
 
   const submit = async (values: TFormValues) => {
     trigger();
