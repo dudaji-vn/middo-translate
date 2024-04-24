@@ -45,7 +45,7 @@ const MemberItem = ({ role, isMe, isOwnerRow, email, myRole, status, isLoading, 
                 </Typography >
                 <Button
                     className={cn("text-neutral-500", {
-                        'invisible': isOwnerRow || status === 'joined' || roles?.edit.includes(myRole as ESPaceRoles)
+                        'invisible': isOwnerRow || status === 'joined' || !MANAGE_SPACE_ROLES['invite-member'].includes(myRole as ESPaceRoles)
                     })}
                     startIcon={<RotateCcw className="text-neutral-500" />}
                     size={'xs'}

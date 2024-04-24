@@ -68,7 +68,6 @@ const tabItems: BusinessTabItem[] = [
 ];
 const BusinessSpaces = () => {
   const [tab, setTab] = React.useState<BusinessTabType>('all_spaces');
-  const { data: invitations } = useGetMyBusinessNotifications();
   const currentUser = useAuthStore((s) => s.user);
   const searchParams = useSearchParams();
   const { data: spaces_list, isLoading } = useGetSpaces({
@@ -119,7 +118,7 @@ const BusinessSpaces = () => {
             >
               Create New Space
             </Button>
-            <SpacesNotifications invitations={invitations} />
+            <SpacesNotifications />
           </div>
         </div>
         <Tabs
