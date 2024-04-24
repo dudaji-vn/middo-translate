@@ -51,7 +51,6 @@ export default function CreateOrEditSpace({ open }: {
   const isClient = useClient()
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [tabErrors, setTabErrors] = React.useState<boolean[]>([false, false]);
-  const [space, setSpace] = React.useState();
   const queryClient = useQueryClient();
 
   const formCreateSpace = useForm<TCreateSpaceFormValues>({

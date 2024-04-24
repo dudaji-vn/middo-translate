@@ -8,7 +8,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import { Circle, CircleCheck, Tag } from 'lucide-react';
+import { Check, Circle, CircleCheck, Pin, Tag } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useSpaceStore } from '@/stores/space.store';
@@ -19,6 +19,7 @@ import { ActionItem } from './room-actions';
 import { CreateOrEditTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/tags-list/create-or-edit-tag';
 import { useChangeStatusConversation } from '../hooks/use-change-status-conversation';
 import { useChangeTagConversation } from '../hooks/use-change-tag-conversation';
+import { Spinner } from '@/components/feedback';
 
 const RoomAssignTag = ({
   room,
@@ -29,13 +30,15 @@ const RoomAssignTag = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const [openAddTag, setOpenAddTag] = React.useState(false);
-  const { mutateAsync } = useChangeTagConversation();
+  const { mutateAsync, isLoading, isSuccess } = useChangeTagConversation();
+  const [clicked, setClicked] = React.useState<string>();
   const { space, setSpace } = useSpaceStore();
 
   const tags = space?.tags || ([] as TConversationTag[]);
   const { t } = useTranslation('common');
 
   const onUpdateRoomTag = async (tag: TConversationTag) => {
+    setClicked(tag._id);
     mutateAsync({ roomId: room._id, tagId: tag._id })
       .catch(() => {
         toast.error('Failed to update tag');
@@ -43,6 +46,7 @@ const RoomAssignTag = ({
       .finally(() => {
         onClosed && onClosed();
         setOpen(false);
+        setClicked(undefined);
       });
   };
 
@@ -68,24 +72,47 @@ const RoomAssignTag = ({
           <div className="divide-y divide-neutral-100">
             <div className="flex max-h-60 w-full flex-col overflow-y-auto">
               {tags.map(({ _id, color, name }) => {
-                const isCurrent = false;
+                const isCurrent = room.tag?._id === _id;
                 return (
                   <div
                     key={name}
                     className={cn(
                       'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
-                      { 'bg-primary-100': isCurrent },
+                      { 'bg-primary-100': isCurrent || isLoading },
+                      {
+                        'cursor-default bg-neutral-100':
+                          isLoading && clicked === _id,
+                      },
                     )}
                     onClick={() => onUpdateRoomTag({ _id, color, name })}
                   >
-                    {isCurrent ? (
-                      <CircleCheck
-                        size={18}
-                        className="border-none fill-primary-500-main stroke-white"
+                    <div
+                      className={cn(
+                        'relative size-4 rounded-full ',
+                        isCurrent
+                          ? 'bg-primary-500-main'
+                          : 'border border-primary-300 bg-neutral-100',
+                        {
+                          'border-none': isLoading && clicked === _id,
+                        },
+                      )}
+                    >
+                      <Spinner
+                        className={cn('invisible absolute inset-0 size-4', {
+                          visible: isLoading && clicked === _id,
+                        })}
+                        color="white"
                       />
-                    ) : (
-                      <Circle size={16} className="stroke-neutral-50" />
-                    )}
+                      <Check
+                        size={16}
+                        className={cn(
+                          'invisible absolute inset-0 stroke-neutral-50',
+                          {
+                            visible: isCurrent && !isLoading && !clicked
+                          },
+                        )}
+                      />
+                    </div>
                     <Circle size={12} fill={color} stroke={color} />
                     <span className="text-base text-neutral-700">{name}</span>
                   </div>
@@ -117,8 +144,13 @@ const RoomAssignTag = ({
           spaceId={space._id}
           tags={tags}
           open={openAddTag}
-          onCreateSuccess={(tags) => {
-            setSpace({ ...space, tags });
+          onCreateSuccess={(tags: TConversationTag[]) => {
+            if (tags?.length > 0) {
+              setSpace({
+                ...space,
+                tags: tags.filter((tag) => !tag.isDeleted),
+              });
+            }
           }}
           onOpenChange={(open) => setOpenAddTag(open)}
         />

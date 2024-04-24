@@ -34,6 +34,7 @@ export type TSpaceTag = 'my' | 'joined' | undefined;
 export type TConversationTag = {
   _id: string;
   name: string;
+  isDeleted?: boolean;
   color: string;
   isReadonly?: boolean;
 };
