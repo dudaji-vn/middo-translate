@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { setCookieService } from '@/services/auth.service';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -16,14 +16,21 @@ export default function LoginGoogleElectron() {
   const refreshToken = searchParams?.get('refresh_token') || '';
   const IS_LOADING = !accessToken && !refreshToken;
   const { t } = useTranslation('common');
-  const openDesktop = () => {
-    // router.push(`middo://?token=${accessToken}&refresh_token=${refreshToken}`);
-    window.location.href = `middo://?token=${accessToken}&refresh_token=${refreshToken}`;
-  };
+  const openDesktop = useCallback(() => {
+    const dataObject = {
+      type: 'google-login',
+      data: {
+        token: accessToken,
+        refresh_token: refreshToken,
+      },
+    }
+    const dataUrl = encodeURIComponent(JSON.stringify(dataObject));
+    window.location.href = `middo://?data=${dataUrl}`;
+  }, [accessToken, refreshToken]);
   
   useEffect(() => {
     if (accessToken && refreshToken) {
-      window.location.href = `middo://?token=${accessToken}&refresh_token=${refreshToken}`;
+      openDesktop();
       return;
     };
     setCookieService([{ key: 'login-type', value: 'desktop' }])
@@ -31,7 +38,7 @@ export default function LoginGoogleElectron() {
         router.push('/api/auth/google');
       })
       .catch((_) => router.push(ROUTE_NAMES.ROOT));
-  }, [accessToken, refreshToken, router]);
+  }, [accessToken, openDesktop, refreshToken, router]);
 
   return (
     <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">

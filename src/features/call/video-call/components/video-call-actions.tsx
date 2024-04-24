@@ -18,6 +18,7 @@ import getUserStream from '../../utils/get-user-stream';
 import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
 import { useVideoSettingStore } from '../../store/video-setting.store';
+import { useCallback } from 'react';
 interface MediaStreamInterface {
   video?: boolean;
   audio?: boolean;
@@ -40,7 +41,7 @@ export default function VideoCallActions() {
   const videoSetting = useVideoSettingStore(state => state.video);
   const audioSetting = useVideoSettingStore(state => state.audio);
   
-  const handleChangeCameraOrMic = (settings: MediaStreamInterface) => {
+  const handleChangeCameraOrMic = useCallback((settings: MediaStreamInterface) => {
     if (!socket.id || !myStream) return;
     const video = settings?.video == undefined ? isTurnOnCamera : settings?.video;
     const audio = settings?.audio == undefined ? isTurnOnMic : settings?.audio;
@@ -107,7 +108,7 @@ export default function VideoCallActions() {
           setLoadingStream(false);
         }, 1000);
       });
-  };
+  }, [audioSetting?.deviceId, isLoadingStream, isTurnOnCamera, isTurnOnMic, myStream, participants, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t, videoSetting?.deviceId]);
 
   return (
     <section className="relative z-20 flex items-center justify-between bg-primary-100 p-2">
