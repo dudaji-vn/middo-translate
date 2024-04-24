@@ -1,5 +1,5 @@
 import { Button } from '@/components/actions';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Bell, Circle, Clock, Clock3, Trash2 } from 'lucide-react';
 import Ping from '../ping/ping';
 import {
@@ -10,10 +10,15 @@ import {
 import { Avatar, Typography } from '@/components/data-display';
 import moment from 'moment';
 import { cn } from '@/utils/cn';
+import { useGetMyBusinessNotifications } from '@/features/business-spaces/hooks/use-get-notification';
+import { useReadNotifications } from '@/features/business-spaces/hooks/use-read-notifications';
+import { useRouter } from 'next/navigation';
+import { useDeleteNotifications } from '@/features/business-spaces/hooks/use-delete-notifications';
 
-export type TNotification = {
+export type TSpacesNotification = {
+  _id: string;
   from: {
-    image: string;
+    avatar: string;
     name: string | React.ReactNode;
   };
   description: string;
@@ -24,22 +29,31 @@ export type TNotification = {
 };
 
 const Notification = ({
-  from: { image, name },
+  _id,
+  from: { avatar, name },
   description,
   deleteAble = true,
   createdAt,
   unRead = true,
   link,
-}: TNotification) => {
+}: TSpacesNotification) => {
   const timeDiff = moment().diff(createdAt, 'days');
+  const router = useRouter();
+  const { mutateAsync: deleteNotifications, isLoading } =
+    useDeleteNotifications();
+  const onDelete = (notificationId: TSpacesNotification['_id']) => {
+    deleteNotifications(notificationId);
+  };
+
   const displayTime =
     timeDiff > 1
       ? moment(createdAt).format('DD/MM/YYYY HH:mm')
       : moment(createdAt).fromNow();
 
   const onClickNotification = () => {
-    console.log('onClickNotification ==>', link);
-  }
+    if (isLoading) return;
+    router.push(link || '/');
+  };
 
   return (
     <div
@@ -47,8 +61,9 @@ const Notification = ({
         'flex w-full flex-row items-center justify-stretch gap-3 p-4',
         {
           'bg-white': unRead,
-          'cursor-pointer hover:bg-primary-200': !!link,
+          'cursor-pointer hover:bg-primary-100': !!link,
         },
+        { 'opacity-50': isLoading },
       )}
       onClick={onClickNotification}
     >
@@ -58,7 +73,7 @@ const Notification = ({
       <div className="flex w-full flex-col justify-between">
         <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row items-center  justify-start gap-2">
-            <Avatar src={image} alt="avt" className="size-4" />
+            <Avatar src={avatar} alt="avt" className="size-4" />
             <p className="text-sm font-semibold text-neutral-500">{name}</p>
           </div>
           <div className="flex flex-row items-center justify-start gap-2">
@@ -73,8 +88,14 @@ const Notification = ({
       <Button.Icon
         variant={'default'}
         color={'default'}
+        disabled={isLoading}
         size={'xs'}
         className={deleteAble ? '' : 'invisible'}
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          onDelete(_id);
+        }}
       >
         <Trash2 />
       </Button.Icon>
@@ -82,34 +103,23 @@ const Notification = ({
   );
 };
 
-const SpacesNotifications = ({
-  invitations = [],
-  others = [],
-}: {
-  invitations?: Array<{
-    email: string;
-    space: {
-      name: string;
-      avatar: string;
-    };
-    invitedAt: string;
-  }>;
-  others?: TNotification[];
-}) => {
+const SpacesNotifications = ({}: {}) => {
   const [open, setOpen] = React.useState(false);
-  const notifications: TNotification[] = invitations?.map((item) => {
-    return {
-      from: {
-        image: item.space.avatar,
-        name: item.space.name,
-      },
-      description: `You've been invited to join ${item.space.name}`,
-      createdAt: item.invitedAt,
-    };
-  });
-  const onRead = () => {
-    // TODO: call api to mark all notifications as read
-  }
+  const { data: notifications } = useGetMyBusinessNotifications();
+
+  const { mutateAsync: readNotifications } = useReadNotifications();
+
+  useEffect(() => {
+    if (open) {
+      const unreadList = notifications?.filter(
+        (item: TSpacesNotification) => item.unRead,
+      );
+      if (unreadList?.length) {
+        readNotifications(unreadList);
+      }
+    }
+  }, [open, notifications]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -121,7 +131,9 @@ const SpacesNotifications = ({
         >
           <Ping
             className={cn('absolute -right-[8px] -top-[2px]', {
-              hidden: !notifications.some((item) => item.unRead),
+              hidden: !notifications?.some(
+                (item: TSpacesNotification) => item.unRead,
+              ),
             })}
             size={12}
           />
@@ -130,11 +142,16 @@ const SpacesNotifications = ({
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="flex max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4"
+        className="flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4"
       >
-        {notifications.map((item, index) => (
-          <Notification key={index} {...item} />
+        {notifications?.map((item: TSpacesNotification) => (
+          <Notification {...item} key={item._id} />
         ))}
+        {notifications?.length === 0 && (
+          <Typography className="mx-auto py-3 text-center font-light italic text-neutral-400">
+            There&apos;s no notification
+          </Typography>
+        )}
       </PopoverContent>
     </Popover>
   );

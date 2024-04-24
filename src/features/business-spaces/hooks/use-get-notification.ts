@@ -10,15 +10,20 @@ export const useGetMyBusinessNotifications = () => {
     queryKey: [GET_NOTI_KEY],
     queryFn: async () => {
       try {
-        const response = await axios.get(`/help-desk/my-invitations`);
+        const response = await axios.get(`/help-desk/notifications`);
         return response.data;
       } catch (error) {
         console.error(
           `Error fetching business notifications: ${(error as Error).message}`,
         );
-        return {};
+        return [];
       }
     },
     enabled: true,
+    refetchInterval: 1000 * 60 * 2, // 2 minutes
   });
 };
+
+// PATCH   {{SERVER_URL}}/api/help-desk/notifications/read/{{notificationId}}
+// ####
+// GET {{SERVER_URL}}/api/help-desk/notifications?spaceId=
