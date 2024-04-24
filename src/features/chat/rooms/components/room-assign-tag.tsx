@@ -21,11 +21,9 @@ import { CreateOrEditTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId
 const RoomAssignTag = ({
   id,
   onClosed,
-  onAction,
 }: {
   id: Room['_id'];
   onClosed?: () => void;
-  onAction: () => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const [openAddTag, setOpenAddTag] = React.useState(false);
@@ -51,7 +49,6 @@ const RoomAssignTag = ({
         <PopoverTrigger asChild>
           <div
             onClick={() => {
-              onAction();
               setOpen(true);
             }}
             className="relative flex cursor-pointer select-none items-center gap-2 rounded-md px-3 py-1.5 text-sm outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground"

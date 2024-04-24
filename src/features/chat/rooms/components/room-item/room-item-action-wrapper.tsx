@@ -114,10 +114,7 @@ export const RoomItemActionWrapper = forwardRef<
       })
       .map((item) => ({
         ...item,
-        onAction: () => {
-          console.log('room', room);
-          onAction(item.action, room._id);
-        },
+        onAction: () => onAction(item.action, room._id),
       }));
   }, [actionItems, isMuted, onAction, room._id, room.isGroup, room.isPinned]);
 
@@ -154,7 +151,7 @@ const MobileWrapper = ({
       >
         {items.map(({ renderItem, ...item }) => {
           if (renderItem) {
-            return renderItem({ item });
+            return renderItem({ item, room });
           }
           return (
             <LongPressMenu.Item
@@ -175,6 +172,7 @@ const MobileWrapper = ({
 const DesktopWrapper = ({
   children,
   items,
+  room,
 }: PropsWithChildren &
   RoomItemActionWrapperProps & {
     items: Item[];
@@ -198,7 +196,7 @@ const DesktopWrapper = ({
           <DropdownMenuContent>
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
-                return renderItem({ item });
+                return renderItem({ item, room });
               }
               return (
                 <DropdownMenuItem
