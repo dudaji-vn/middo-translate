@@ -17,30 +17,33 @@ import { roomApi } from '../api';
 import toast from 'react-hot-toast';
 import { ActionItem } from './room-actions';
 import { CreateOrEditTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/tags-list/create-or-edit-tag';
+import { useChangeStatusConversation } from '../hooks/use-change-status-conversation';
+import { useChangeTagConversation } from '../hooks/use-change-tag-conversation';
 
 const RoomAssignTag = ({
-  id,
+  room,
   onClosed,
 }: {
-  id: Room['_id'];
+  room: Room;
   onClosed?: () => void;
 }) => {
   const [open, setOpen] = React.useState(false);
   const [openAddTag, setOpenAddTag] = React.useState(false);
+  const { mutateAsync } = useChangeTagConversation();
   const { space, setSpace } = useSpaceStore();
 
   const tags = space?.tags || ([] as TConversationTag[]);
   const { t } = useTranslation('common');
 
   const onUpdateRoomTag = async (tag: TConversationTag) => {
-    console.log('onUpdateRoomTag', id);
-    try {
-      await roomApi.changeTagRoom({ roomId: id, tagId: tag._id });
-      onClosed && onClosed();
-      setOpen(false);
-    } catch (error) {
-      toast.error('Failed to update tag');
-    }
+    mutateAsync({ roomId: room._id, tagId: tag._id })
+      .catch(() => {
+        toast.error('Failed to update tag');
+      })
+      .finally(() => {
+        onClosed && onClosed();
+        setOpen(false);
+      });
   };
 
   return (
