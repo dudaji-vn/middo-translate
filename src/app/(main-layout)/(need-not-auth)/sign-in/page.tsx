@@ -152,7 +152,7 @@ export default function SignIn() {
     <div>
       {loading && <PageLoading />}
       <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-        <div className="w-full bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+        <div className="w-full bg-background px-[5vw] py-8 md:my-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
           <h4 className="text-center text-[26px] font-bold text-primary">
             {t('SIGN_IN.TITLE')}
           </h4>

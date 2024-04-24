@@ -97,7 +97,7 @@ export default function SignUp() {
     <div>
       {loading && <PageLoading />}
       <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-        <div className="w-full bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+        <div className="w-full bg-background px-[5vw] py-8 md:my-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
           <div className="flex w-full items-stretch justify-start gap-3">
             <div className="h-full w-1 rounded-full bg-primary"></div>
             <h3 className="relative pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
