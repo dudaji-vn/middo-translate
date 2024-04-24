@@ -24,5 +24,9 @@ export type Room = {
   isHelpDesk?: boolean;
   isSetName: boolean;
   isPinned?: boolean;
-  tag?: string;
+  tag?: {
+    name: string;
+    color: string;
+    _id: string;
+  }
 } & BaseEntity;

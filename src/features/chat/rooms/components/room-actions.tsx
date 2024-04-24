@@ -129,9 +129,12 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         label: 'CONVERSATION.TAG',
         icon: <Tag />,
         renderItem(params) {
-          console.log('params', params);
           return (
-            <RoomAssignTag id={params.room._id} key={action} onClosed={reset} />
+            <RoomAssignTag
+              room={params.room}
+              key={params.item.action}
+              onClosed={reset}
+            />
           );
         },
       },
