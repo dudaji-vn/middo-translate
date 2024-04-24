@@ -9,8 +9,13 @@ import { Check } from 'lucide-react';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { translateWithDetection } from '@/services/languages.service';
 import { useFormContext } from 'react-hook-form';
-import NestedFlow, { FlowNode } from '../steps/script-chat-flow/nested-flow';
+import NestedFlow, {
+  FlowNode,
+  initialChatFlowNodes,
+  initialEdges,
+} from '../steps/script-chat-flow/nested-flow';
 import { Edge } from 'reactflow';
+import { cn } from '@/utils/cn';
 
 export type CustomFirstMessageOptionsProps = {};
 type TRadioOptions = 'default' | 'custom' | 'script';
@@ -20,15 +25,21 @@ const CustomFirstMessageOptions = ({
 }: CustomFirstMessageOptionsProps & RadioGroupProps) => {
   const { setValue, watch } = useFormContext();
   const firstMessage = watch('custom.firstMessage');
-  const [checked, setChecked] = React.useState<TRadioOptions>(
-    firstMessage?.length && firstMessage === DEFAULT_FIRST_MESSAGE.content
-      ? 'default'
-      : 'custom',
-  );
-
   const scriptChatFlow = watch('custom.chatFlow');
+  const selectedRadioFM = watch('selectedRadioFM') || 'default';
 
   const onSaveChatFlow = (chatFlow: { nodes: FlowNode[]; edges: Edge[] }) => {
+    const root = chatFlow.nodes.find((node) => node.type === 'root');
+    const edgeNextToRoot = chatFlow.edges.find(
+      (edge) => edge.source === root?.id,
+    );
+    const nodeNextToRoot = chatFlow.nodes.find(
+      (node) => node.id === edgeNextToRoot?.target && node.type !== 'option',
+    );
+    if (nodeNextToRoot) {
+      const firstMessage = nodeNextToRoot.data?.content;
+      setValue('custom.firstMessage', firstMessage);
+    }
     setValue('custom.chatFlow', chatFlow);
   };
   return (
@@ -36,20 +47,26 @@ const CustomFirstMessageOptions = ({
       {...props}
       className="flex w-full flex-col gap-4"
       onValueChange={(value) => {
-        setChecked(value as TRadioOptions);
-          switch (value) {
-            case 'default':
-              setValue('custom.firstMessage', DEFAULT_FIRST_MESSAGE.content);
-              break;
-            case 'custom':
-              setValue('custom.firstMessage', '');
-              break;
-            case 'script':
-              setValue('custom.firstMessage', '');
-              break;
-          }
+        switch (value) {
+          case 'default':
+            setValue('custom.firstMessage', DEFAULT_FIRST_MESSAGE.content);
+            break;
+          case 'custom':
+            setValue('custom.firstMessage', '');
+            break;
+          case 'script':
+            setValue('custom.firstMessage', '');
+            if (
+              !scriptChatFlow ||
+              !scriptChatFlow.nodes.length <= 1 ||
+              !scriptChatFlow.edges.length <= 1
+            )
+              setValue('custom.chatFlow', null);
+            break;
+        }
+        setValue('selectedRadioFM', value);
       }}
-      value={checked}
+      value={selectedRadioFM}
     >
       <div className="flex items-center space-x-2">
         <RadioGroupItem
@@ -67,8 +84,13 @@ const CustomFirstMessageOptions = ({
       </div>
       <Input
         name="firstMessage"
-        disabled={checked !== 'default'}
+        disabled={selectedRadioFM !== 'default'}
         readOnly
+        wrapperProps={{
+          className: cn({
+            hidden: selectedRadioFM !== 'default',
+          }),
+        }}
         value={DEFAULT_FIRST_MESSAGE.content}
       />
       <div className="flex items-center space-x-2">
@@ -86,12 +108,18 @@ const CustomFirstMessageOptions = ({
         <Label htmlFor="r2">Custom</Label>
       </div>
       <RHFTextAreaField
+        formItemProps={{
+          className: cn({
+            hidden: selectedRadioFM !== 'custom',
+          }),
+        }}
         name={'custom.firstMessage'}
         textareaProps={{
+          hidden: selectedRadioFM !== 'custom',
           placeholder: 'Type your custom first message',
-          disabled: checked !== 'custom',
+          disabled: selectedRadioFM !== 'custom',
           className:
-            checked === 'custom'
+            selectedRadioFM === 'custom'
               ? 'border-primary ring-primary px-2'
               : 'opacity-50 border-neutral-200 ring-neutral-200',
         }}
@@ -110,8 +138,13 @@ const CustomFirstMessageOptions = ({
         </RadioGroupItem>
         <Label htmlFor="r2">Script</Label>
       </div>
-      {checked === 'custom' && (
-        <NestedFlow onSaveToForm={onSaveChatFlow} savedFlow={scriptChatFlow} />
+      {selectedRadioFM === 'script' && (
+        <div className={cn('')}>
+          <NestedFlow
+            onSaveToForm={onSaveChatFlow}
+            savedFlow={scriptChatFlow}
+          />
+        </div>
       )}
     </RadioGroup>
   );

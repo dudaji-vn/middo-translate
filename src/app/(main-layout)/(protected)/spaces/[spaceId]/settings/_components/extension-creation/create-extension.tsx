@@ -40,6 +40,7 @@ import { TSpace } from '../../../_components/business-spaces';
 type TFormValues = {
   addingDomain: string;
   domains: Array<string>;
+  selectedRadioFM?: string;
   custom: {
     language: string;
     firstMessage: string;
@@ -83,6 +84,7 @@ export default function CreateExtension({
     defaultValues: {
       addingDomain: '',
       domains: [],
+      selectedRadioFM: 'default',
       custom: {
         language: currentUser?.language,
         firstMessage: DEFAULT_FIRST_MESSAGE.content,
@@ -137,6 +139,7 @@ export default function CreateExtension({
         nodes: initialData?.chatFlow?.nodes || [],
         edges: initialData?.chatFlow?.edges || [],
       });
+      setValue('selectedRadioFM', 'script');
     }
   }, [tabValue]);
 
@@ -156,13 +159,16 @@ export default function CreateExtension({
     if (!spaceId) {
       return;
     }
+
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
         spaceId: params?.spaceId,
-        ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
+        ...(chatFlow && watch('selectedRadioFM') === 'script'
+          ? { chatFlow: watch('custom.chatFlow') }
+          : {}),
       };
       // @ts-ignore
       await createExtension(payload)

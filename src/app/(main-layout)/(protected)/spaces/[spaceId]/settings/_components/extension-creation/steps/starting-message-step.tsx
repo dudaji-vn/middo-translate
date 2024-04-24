@@ -1,21 +1,8 @@
 'use client';
 
 import { FormLabel } from '@/components/ui/form';
-import React, { useEffect } from 'react';
+import React from 'react';
 import CustomFirstMessageOptions from '../sections/custom-first-message-options';
-import { useFormContext } from 'react-hook-form';
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from '@/components/navigation';
-import NestedFlow, { FlowNode } from './script-chat-flow/nested-flow';
-import { Edge } from 'reactflow';
-import {
-  translateText,
-  translateWithDetection,
-} from '@/services/languages.service';
 
 const StartingMessageStep = () => {
   return (
