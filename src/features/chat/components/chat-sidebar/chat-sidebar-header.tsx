@@ -4,7 +4,6 @@ import { SearchInput, SearchInputRef } from '@/components/data-entry';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowLeftIcon, Menu, PenSquareIcon, Settings } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
-import { SPK_CHAT_TAB, SPK_SEARCH } from '../../configs';
 
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
@@ -17,14 +16,13 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useSidebarTabs } from '../../hooks';
 import { ChatSettingMenu } from '../chat-setting';
 import { useAppStore } from '@/stores/app.store';
+import { useSideChatStore } from '../../stores/side-chat.store';
 
 export interface ChatSidebarHeaderProps {}
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
-  const { changeSide, currentSide, removeParam, removeParams } =
-    useSidebarTabs();
+  const { currentSide, setCurrentSide } = useSideChatStore();
   const pingEmptyInbox = useAppStore((state) => state.pingEmptyInbox);
   const [openSetting, setOpenSetting] = useState(false);
   const { searchValue, setSearchValue } = useSearchStore();
@@ -43,13 +41,14 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const searchInputRef = useRef<SearchInputRef>(null);
 
   const handleNewConversation = useCallback(() => {
-    changeSide('individual');
-  }, [changeSide]);
+    setCurrentSide('individual');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleBack = useCallback(() => {
-    removeParams([SPK_CHAT_TAB]);
+    setCurrentSide('');
     searchInputRef.current?.reset();
-  }, [removeParams, searchInputRef]);
+  }, [setCurrentSide]);
 
   if (pathname?.includes('statistics')) {
     return (
@@ -138,16 +137,14 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               defaultValue={searchValue || ''}
               autoFocus={isSearch}
               onFocus={() => {
-                if (currentSide !== 'search') changeSide('search');
+                setCurrentSide('search');
               }}
               btnDisabled
               placeholder={t('CONVERSATION.SEARCH')}
               onChange={(e) => {
                 setSearchValue(e.target.value);
               }}
-              onClear={() => {
-                removeParam(SPK_SEARCH);
-              }}
+              onClear={handleBack}
             />
           </motion.div>
         </AnimatePresence>
