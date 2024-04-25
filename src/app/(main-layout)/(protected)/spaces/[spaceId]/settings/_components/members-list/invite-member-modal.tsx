@@ -13,9 +13,11 @@ import { useRouter } from 'next/navigation';
 
 const InviteMemberModal = ({ space }: { space: TSpace }) => {
   const [members, setMembers] = React.useState<Member[]>([]);
+  const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
   const onInviteUsers = async () => {
+    setLoading(true);
     try {
       await inviteMembersToSpace({
         members: members.map(({ email, role }) => ({ email, role })),
@@ -29,6 +31,7 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
       console.log(error);
       toast.error('Error inviting members. Please try again');
     }
+    setLoading(false);
   };
   return (
     <>
@@ -60,7 +63,10 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
           />
           <div className="flex h-fit flex-row justify-end gap-3 py-2">
             <Button
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setMembers([]);
+                setOpen(false);
+              }}
               color={'default'}
               shape={'square'}
               size={'sm'}
@@ -69,8 +75,10 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
             </Button>
             <Button
               onClick={onInviteUsers}
-              color={'primary'}
+              color={members.length ? 'primary' : 'disabled'}
               shape={'square'}
+              disabled={!members.length}
+              loading={loading}
               size={'sm'}
             >
               Invite

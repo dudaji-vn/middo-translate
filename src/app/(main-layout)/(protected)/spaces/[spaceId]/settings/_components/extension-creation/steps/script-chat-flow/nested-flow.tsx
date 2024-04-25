@@ -179,10 +179,10 @@ const NestedFlow = ({
                     // }
                     break;
                 case 'container':
-                    const childrens = nodes.filter((n: FlowNode) => n.parentNode === node.id);
-                    if (childrens.length === 0) {
-                        flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
-                    }
+                    // const childrens = nodes.filter((n: FlowNode) => n.parentNode === node.id);
+                    // if (childrens.length === 0) {
+                    //     flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
+                    // }
                     break;
                 case 'button':
                     if (!node.data?.content?.trim()?.length) {
