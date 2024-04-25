@@ -22,6 +22,7 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
         spaceId: space._id,
       });
       toast.success('Members invited successfully');
+      setMembers([]);
       setOpen(false);
       router.refresh();
     } catch (error) {
@@ -40,12 +41,12 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
         Invite Member
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="h-fit max-h-fit max-w-screen-md">
+        <DialogContent className="flex h-fit  max-h-[80vh] min-h-fit max-w-screen-md flex-col justify-start overflow-y-auto">
           <DialogTitle className="flex flex-row items-center justify-between text-2xl font-semibold tracking-tight">
             Invite Members
           </DialogTitle>
           <InviteMembers
-            className="h-auto"
+            className="h-auto max-h-[400px] overflow-y-auto"
             hideOwner
             header={<></>}
             spacePreviewProps={{
@@ -57,7 +58,7 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
               setMembers(members);
             }}
           />
-          <div className="flex flex-row justify-end gap-3 py-2">
+          <div className="flex h-fit flex-row justify-end gap-3 py-2">
             <Button
               onClick={() => setOpen(false)}
               color={'default'}
