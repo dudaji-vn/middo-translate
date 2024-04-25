@@ -31,6 +31,8 @@ import {
 } from '../space-setting/setting-items';
 import { Badge } from '@/components/ui/badge';
 import { getUserSpaceRole } from '../space-setting/role.util';
+import { SearchInput } from '@/components/data-entry';
+import { useTranslation } from 'react-i18next';
 
 type MemberItemProps = {
   isOwnerRow: boolean;
@@ -262,6 +264,7 @@ const ListItems = ({
 const MembersList = ({ space }: { space: TSpace }) => {
   const [search, setSearch] = React.useState('');
   const { members, owner } = space;
+  const { t } = useTranslation('common');
   const currentUser = useAuthStore((state) => state.user);
   const myRole = getUserSpaceRole(currentUser, space);
   const editMemberRoles =
@@ -300,14 +303,11 @@ const MembersList = ({ space }: { space: TSpace }) => {
     <section className="flex w-full flex-col items-end gap-5 py-4">
       <div className="flex w-full flex-row items-center justify-between gap-5 px-10">
         <div className="relative w-60 md:w-96">
-          <TableSearch
-            className="min-h-[44px] w-full py-2 outline-neutral-100"
-            onSearch={onSearchChange}
-            search={search}
-          />
-          <Search
-            size={16}
-            className="absolute right-3 top-1/2 -translate-y-1/2 transform stroke-[3px] text-neutral-700"
+          <SearchInput
+            className="flex-1"
+            onChange={(e) => onSearchChange(e.target.value)}
+            onClear={() => onSearchChange('')}
+            placeholder={t('SEARCH')}
           />
         </div>
 
