@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
-  console.log('v3/translate POST');
   try {
+    console.log('v3/translate POST');
     const body = await request.json();
     const text = body.content;
     if (!body.content) {

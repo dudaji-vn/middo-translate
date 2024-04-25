@@ -6,8 +6,8 @@ import { PenSquareIcon, Users2Icon } from 'lucide-react';
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InboxType } from './inbox';
-import { useSidebarTabs } from '@/features/chat/hooks';
 import { useAppStore } from '@/stores/app.store';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 export interface EmptyInboxProps extends React.HTMLAttributes<HTMLDivElement> {
   type?: InboxType;
 }
@@ -27,9 +27,9 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
     }, [type]);
     const { t } = useTranslation('common');
     const [hideTip, setHideTip] = useState(false);
-    const { changeSide } = useSidebarTabs();
+    const { setCurrentSide } = useSideChatStore();
     const handleCreateGroup = () => {
-      changeSide('group');
+      setCurrentSide('group');
     };
 
     useEffect(() => {

@@ -13,8 +13,8 @@ import { searchApi } from '@/features/search/api';
 import { useGetUsersRecChat } from '@/features/recommendation/hooks';
 import { useParams } from 'next/navigation';
 import { useSearch } from '@/hooks/use-search';
-import { useSidebarTabs } from '../../hooks';
 import { useTranslation } from 'react-i18next';
+import { useSideChatStore } from '../../stores/side-chat.store';
 
 export interface IndividualSideCreateProps {
   onBack?: () => void;
@@ -23,11 +23,11 @@ export interface IndividualSideCreateProps {
 export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
   const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'users');
   const { data: recData } = useGetUsersRecChat();
-  const { changeSide } = useSidebarTabs();
+  const { setCurrentSide } = useSideChatStore();
   const params = useParams();
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const handleCreateGroup = () => {
-    changeSide('group');
+    setCurrentSide('group');
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,7 +52,8 @@ export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
             size="md"
             onClick={handleCreateGroup}
           >
-            <Users2Icon className="mr-3 h-5 w-5" /> {t('CONVERSATION.NEW_GROUP_CHAT')}
+            <Users2Icon className="mr-3 h-5 w-5" />{' '}
+            {t('CONVERSATION.NEW_GROUP_CHAT')}
           </Button>
         </div>
         {data && (
