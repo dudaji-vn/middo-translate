@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
@@ -89,58 +89,61 @@ const TestItOut = () => {
   const [isStarted, setIsStarted] = React.useState(false);
   const [isTyping, setIsTyping] = React.useState(false);
   const themeColor = DEFAULT_THEME;
-  const addSendessageFromFlow = (node: FlowNode) => {
-    switch (node.type) {
-      case 'root':
-        const firstMessage = createFakeMessages({
-          data: { content: node.data?.content },
-          fakeType: 'flow-sender',
-          node,
-        });
-        setFakeMessages([firstMessage]);
-        break;
-      case 'container': {
-        const message = createFakeMessages({
-          data: { content: node.data?.content, media: node.data?.media },
-          fakeType: 'flow-sender',
-          node,
-        });
-        const optionNodes = nodes.filter(
-          (n: FlowNode) => n.parentNode === node.id,
-        );
-        const options =
-          optionNodes.map((optionNode) =>
-            createFakeMessages({
-              data: {
-                content: optionNode.data?.content,
-                link: optionNode.data?.link,
-                media: optionNode.data?.media,
-              },
-              fakeType: 'flow-options',
-              node: optionNode,
-            }),
-          ) || [];
-        setFakeMessages((prev) => [...prev, message]);
-        setTimeout(() => {
-          setFakeMessages((prev) => [...prev, ...options]);
-        }, 1000);
-        break;
+  const addSendMessageFromFlow = useCallback(
+    (node: FlowNode) => {
+      switch (node.type) {
+        case 'root':
+          const firstMessage = createFakeMessages({
+            data: { content: node.data?.content },
+            fakeType: 'flow-sender',
+            node,
+          });
+          setFakeMessages([firstMessage]);
+          break;
+        case 'container': {
+          const message = createFakeMessages({
+            data: { content: node.data?.content, media: node.data?.media },
+            fakeType: 'flow-sender',
+            node,
+          });
+          const optionNodes = nodes.filter(
+            (n: FlowNode) => n.parentNode === node.id,
+          );
+          const options =
+            optionNodes.map((optionNode) =>
+              createFakeMessages({
+                data: {
+                  content: optionNode.data?.content,
+                  link: optionNode.data?.link,
+                  media: optionNode.data?.media,
+                },
+                fakeType: 'flow-options',
+                node: optionNode,
+              }),
+            ) || [];
+          setFakeMessages((prev) => [...prev, message]);
+          setTimeout(() => {
+            setFakeMessages((prev) => [...prev, ...options]);
+          }, 1000);
+          break;
+        }
+        case 'message': {
+          const message = createFakeMessages({
+            data: { content: node.data?.content, media: node.data?.media },
+            fakeType: 'flow-sender',
+            node,
+          });
+          setFakeMessages((prev) => [...prev, message]);
+          break;
+        }
+        case 'button':
+          break;
+        default:
+          break;
       }
-      case 'message': {
-        const message = createFakeMessages({
-          data: { content: node.data?.content, media: node.data?.media },
-          fakeType: 'flow-sender',
-          node,
-        });
-        setFakeMessages((prev) => [...prev, message]);
-        break;
-      }
-      case 'button':
-        break;
-      default:
-        break;
-    }
-  };
+    },
+    [nodes],
+  );
   const addReceivedMessageFromMyChoice = (selectedNode: FlowNode) => {
     const myMessage = createFakeMessages({
       data: { content: selectedNode.data?.content },
@@ -154,10 +157,19 @@ const TestItOut = () => {
       const targetEdge = edges.find((edge) => edge.source === selectedNode.id);
       const targetNode = nodes.find((node) => node.id === targetEdge?.target);
       if (targetNode) {
-        addSendessageFromFlow(targetNode);
+        addSendMessageFromFlow(targetNode);
       }
     }, 1000);
   };
+  const onStart = useCallback(() => {
+    const root = nodes.find((node) => node.type === 'root');
+    const nextToRoot = edges.find((edge) => edge.source === root?.id);
+    const nextNode = nodes.find((node) => node.id === nextToRoot?.target);
+    if (nextNode) {
+      addSendMessageFromFlow(nextNode);
+    }
+    setIsStarted(true);
+  }, [nodes, edges, addSendMessageFromFlow]);
 
   useEffect(() => {
     if (!isEmpty(nodes) && !isStarted) {
@@ -165,7 +177,7 @@ const TestItOut = () => {
         onStart();
       }, 1200);
     }
-  }, [isStarted, nodes]);
+  }, [isStarted, nodes, onStart]);
 
   useEffect(() => {
     const gettedflow = localStorage.getItem(CHAT_FLOW_KEY);
@@ -177,15 +189,7 @@ const TestItOut = () => {
       }
     }
   }, []);
-  const onStart = () => {
-    const root = nodes.find((node) => node.type === 'root');
-    const nextToRoot = edges.find((edge) => edge.source === root?.id);
-    const nextNode = nodes.find((node) => node.id === nextToRoot?.target);
-    if (nextNode) {
-      addSendessageFromFlow(nextNode);
-    }
-    setIsStarted(true);
-  };
+
   const scrollToBottom = () => {
     const chatContainer = document.getElementById('chat-container');
     if (chatContainer) {
