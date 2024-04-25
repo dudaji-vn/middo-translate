@@ -137,7 +137,7 @@ const SpacesNotifications = ({}: {}) => {
             })}
             size={12}
           />
-          <Bell className="h-4 w-4" />
+          <Bell />
         </Button.Icon>
       </PopoverTrigger>
       <PopoverContent
