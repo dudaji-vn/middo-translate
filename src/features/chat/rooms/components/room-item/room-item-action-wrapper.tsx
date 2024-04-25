@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import { PropsWithChildren, cloneElement, forwardRef, useMemo } from 'react';
+import { PropsWithChildren, cloneElement, forwardRef, useMemo, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
@@ -178,11 +178,12 @@ const DesktopWrapper = ({
     items: Item[];
   }) => {
   const { t } = useTranslation('common');
+  const [isOpen, setOpen] = useState(false);
   return (
     <div className="group relative flex-1">
       {children}
       <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
-        <DropdownMenu>
+        <DropdownMenu open={isOpen} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon
               size="xs"
@@ -193,7 +194,7 @@ const DesktopWrapper = ({
               <MoreVertical />
             </Button.Icon>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent >
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
                 return renderItem({ item, room });

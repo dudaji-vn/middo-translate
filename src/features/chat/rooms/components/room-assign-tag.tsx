@@ -69,14 +69,14 @@ const RoomAssignTag = ({
       }}
     >
       <Popover open={open}>
-        <PopoverTrigger asChild >
+        <PopoverTrigger asChild>
           <div
             onMouseEnter={() => {
               setOpen(true);
             }}
-            className="relative flex cursor-pointer select-none items-center gap-2 rounded-md px-3 py-1.5 text-sm outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground"
+            className="relative flex cursor-pointer select-none items-center gap-2 max-md:gap-4 rounded-md px-3 max-md:text-[16px]  max-md:px-5 py-1.5 text-sm outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground"
           >
-            <Tag size={16} />
+            <Tag size={16} className="max-md:size-5" />
             <span>{t(`CONVERSATION.TAG`)}</span>
           </div>
         </PopoverTrigger>
