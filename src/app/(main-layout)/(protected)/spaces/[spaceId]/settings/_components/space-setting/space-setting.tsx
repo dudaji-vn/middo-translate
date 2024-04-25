@@ -31,7 +31,7 @@ import { DeleteSpaceModal } from '../space-edition/delete-space-modal';
 import TagsList from '../tags-list/tags-list';
 import { t } from 'i18next';
 import { useAuthStore } from '@/stores/auth.store';
-import { SPACE_SETTING_TAB_ROLES } from './setting-items';
+import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from './setting-items';
 import { getUserSpaceRole } from './role.util';
 
 export type ExtensionModalType =
@@ -75,6 +75,8 @@ type SpaceSettingProps = {
   } & TSpace;
 };
 
+const SETTINGS_VIEW_ROLES = [ESPaceRoles.Admin, ESPaceRoles.Owner];
+
 const SpaceSetting = ({ space }: SpaceSettingProps) => {
   const searchParams = useSearchParams();
   const params = useParams();
@@ -97,6 +99,11 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
     },
     resolver: zodResolver(editSpaceSchema),
   });
+
+  if (!currentUserRole || SETTINGS_VIEW_ROLES.indexOf(currentUserRole) === -1) {
+    return null;
+  }
+
   if (!space) {
     return null;
   }

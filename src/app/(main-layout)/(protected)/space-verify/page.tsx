@@ -21,7 +21,8 @@ const SpaceVerify = async ({
         token: string
     }
 }) => {
-    const invitations = await businessAPI.getMyInvitations()
+    const invitations = await businessAPI.getMyInvitations();
+    console.log('invitations', invitations)
     const thisInvitation = invitations.find(invitation => {
         return invitation.verifyToken === token
     });

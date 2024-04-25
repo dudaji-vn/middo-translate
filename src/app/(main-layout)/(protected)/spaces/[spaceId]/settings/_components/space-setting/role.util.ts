@@ -10,7 +10,7 @@ export const getUserSpaceRole = (
   } | null,
   space: TSpace,
 ) => {
-  if (!currentUser) {
+  if (!currentUser || !space) {
     return undefined;
   }
   return space.owner?.email === currentUser?.email

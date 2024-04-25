@@ -16,10 +16,11 @@ import {
   Settings,
 } from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth.store';
 import { getUserSpaceRole } from '../../settings/_components/space-setting/role.util';
+import { TSpace } from '../business-spaces';
 
 interface SidebarContent {
   title: string;
@@ -49,21 +50,20 @@ const sidebarContents: Array<{
     roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
   },
 ];
-const sidebarContentMeappedStyles: Record<string, ButtonProps['className']> = {
-  settings: 'max-md:hidden',
-};
 
 const BusinessSidebarContent = ({
   shrink,
   onSelectChange,
   selectedItem,
   notifications,
+  myRole = ESPaceRoles.Member,
 }: {
   shrink: boolean;
   selectedItem?: {
     title: string;
     icon: React.ReactNode;
   };
+  myRole?: ESPaceRoles;
   onSelectChange: (item: { title: string; icon: React.ReactNode }) => void;
   notifications?: { [key: string]: number };
 }) => {
@@ -71,7 +71,7 @@ const BusinessSidebarContent = ({
 
   return (
     <div className="flex w-fit flex-col items-start justify-start">
-      {sidebarContents.map(({ icon, title }, index) => {
+      {sidebarContents.map(({ icon, title, roles }, index) => {
         const isSelected = selectedItem?.title === title;
         const displayTitle = shrink
           ? title
@@ -84,10 +84,15 @@ const BusinessSidebarContent = ({
             key={index}
             className={cn(
               'flex w-full flex-row items-center justify-start gap-2 rounded-none p-5 text-left transition-all duration-200 hover:bg-primary-300 [&_svg]:h-5 [&_svg]:w-5',
+              {
+                hidden: roles && !roles.includes(myRole),
+              },
+              {
+                'max-md:hidden': title === 'settings',
+              },
               isSelected
                 ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white'
                 : 'hover:bg-primary-300',
-              sidebarContentMeappedStyles[title] || '',
             )}
             onClick={() => onSelectChange({ icon, title })}
           >
@@ -116,16 +121,15 @@ const BusinessSidebarContent = ({
   );
 };
 
-const BusinessSidebar = () => {
+const BusinessSidebar = ({ space }: { space: TSpace }) => {
   const { isMobile } = useAppStore();
   const { openSidebar, setOpenSidebar, expand, setExpandSidebar } =
     useSidebarStore();
 
-  //   const currentUser = useAuthStore((s) => s.user);
-  //     const myRole = getUserSpaceRole(currentUser, space);
-
   const params = useParams();
   const pathname = usePathname();
+  const currentUser = useAuthStore((s) => s.user);
+
   const [sellected, setSellected] = useState<SidebarContent | undefined>(
     sidebarContents.find((item) => pathname?.includes(`/${item.title}`)) ||
       undefined,
@@ -143,6 +147,10 @@ const BusinessSidebar = () => {
     const nextPath = `${ROUTE_NAMES.SPACES}/${spaceId}/${item.title}`;
     router.push(nextPath);
   };
+  const myRole = useMemo(() => {
+    return getUserSpaceRole(currentUser, space);
+  }, [currentUser, space]);
+
   useEffect(() => {
     setOpenSidebar(!isMobile, false);
     setSellected(
@@ -151,38 +159,35 @@ const BusinessSidebar = () => {
     );
   }, [params]);
 
-  useEffect(() => {}, [openSidebar]);
+  useEffect(() => { }, [openSidebar]);
+  console.log('myRole', myRole)
 
-  if (pathname?.endsWith('/spaces')) {
-    return null;
-  }
   return (
-    <div className={cn('w-[74px] max-md:hidden')}>
-      <Sheet
-        open={isMobile ? openSidebar : true}
-        modal={isMobile}
-        onOpenChange={setOpenSidebar}
+    <Sheet
+      open={isMobile ? openSidebar : true}
+      modal={isMobile}
+      onOpenChange={setOpenSidebar}
+    >
+      <div
+        className={cn('relative h-full w-full max-md:hidden')}
+        onMouseEnter={expandSheet}
       >
-        <div
-          className={cn('relative h-full w-full max-md:hidden')}
-          onMouseEnter={expandSheet}
+        <SheetContent
+          overlayProps={{ className: ' top-[51px]' }}
+          side={'left'}
+          className="bottom-0  top-[51px]  w-fit p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
         >
-          <SheetContent
-            overlayProps={{ className: ' top-[51px]' }}
-            side={'left'}
-            className="bottom-0  top-[51px]  w-fit p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
-          >
-            <div className="h-full  w-full" onMouseLeave={shinkSheet}>
-              <BusinessSidebarContent
-                shrink={!expand}
-                selectedItem={sellected}
-                onSelectChange={onSelectedChange}
-              />
-            </div>
-          </SheetContent>
-        </div>
-      </Sheet>
-    </div>
+          <div className="h-full  w-full" onMouseLeave={shinkSheet}>
+            <BusinessSidebarContent
+              shrink={!expand}
+              selectedItem={sellected}
+              onSelectChange={onSelectedChange}
+              myRole={myRole}
+            />
+          </div>
+        </SheetContent>
+      </div>
+    </Sheet>
   );
 };
 
