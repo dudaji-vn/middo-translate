@@ -5,11 +5,9 @@ import { GroupTab } from './chat-sidebar-tab-group';
 import { IndividualTab } from './chat-sidebar-tab-individual';
 import { SearchTab } from './chat-sidebar-tab-search';
 import { SidebarTabs } from '../../types';
-import { useSidebarTabs } from '../../hooks';
-import { usePathname } from 'next/navigation';
-import { ROUTE_NAMES } from '@/configs/route-name';
+import { useSideChatStore } from '../../stores/side-chat.store';
 export interface ChatSidebarTabsProps
-  extends React.HTMLAttributes<HTMLDivElement> { }
+  extends React.HTMLAttributes<HTMLDivElement> {}
 
 const tabMap: Record<
   SidebarTabs,
@@ -26,13 +24,11 @@ const tabMap: Record<
   individual: {
     component: <IndividualTab />,
   },
-
 };
-
 
 export const ChatSidebarTabs = forwardRef<HTMLDivElement, ChatSidebarTabsProps>(
   ({ children, ...props }, ref) => {
-    const { currentSide } = useSidebarTabs();
+    const { currentSide } = useSideChatStore();
 
     return (
       <>
@@ -43,7 +39,9 @@ export const ChatSidebarTabs = forwardRef<HTMLDivElement, ChatSidebarTabsProps>(
         >
           {children}
         </div>
-        <AnimatePresence>{tabMap[currentSide]?.component}</AnimatePresence>
+        <AnimatePresence>
+          {tabMap[currentSide as SidebarTabs]?.component}
+        </AnimatePresence>
       </>
     );
   },

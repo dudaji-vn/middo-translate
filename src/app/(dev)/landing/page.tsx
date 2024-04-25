@@ -39,7 +39,7 @@ export default function Landing() {
     videoRef.current.addEventListener('play', () => {
       setIsPlayVideo(true);
     });
-  }, [videoRef.current]);
+  }, []);
 
   const handleScroll = (href: string) => {
     const targetElement = document.getElementById(href);
@@ -101,7 +101,7 @@ export default function Landing() {
               }}
               className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer"
             >
-              <div className="z-10 cursor-pointer rounded-full bg-white/60 p-3 hover:bg-primary-500-main/60">
+              <div className="hover:bg-primary-500-main/60 z-10 cursor-pointer rounded-full bg-white/60 p-3">
                 <Play className="size-7" color="white" />
               </div>
             </div>
