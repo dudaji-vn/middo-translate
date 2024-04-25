@@ -5,7 +5,7 @@ import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useMemo } from 'react';
+import React, { use, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import toast from 'react-hot-toast';
@@ -55,7 +55,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   const isClient = useClient();
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [tabErrors, setTabErrors] = React.useState<boolean[]>([false, false]);
-  const currentUser = useAuthStore((state) => state.user);
+  const router = useRouter();
   const queryClient = useQueryClient();
 
   const formCreateSpace = useForm<TCreateSpaceFormValues>({
@@ -68,8 +68,6 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
     },
     resolver: zodResolver(createSpaceSchema),
   });
-
-  const router = useRouter();
 
   useEffect(() => {
     if (open) {
@@ -112,9 +110,14 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
       toast.error(err?.response?.data?.message);
     }
   };
+  const canNext = useMemo(() => {
+    if (formCreateSpace.watch('avatar') && formCreateSpace.watch('name')) {
+      return formCreateSpace.trigger();
+    }
+    return false;
+  }, [formCreateSpace.watch('name'), formCreateSpace.watch('avatar')]);
 
   if (!isClient || !open) return null;
-
   return (
     <Tabs
       value={tabValue?.toString()}
@@ -141,7 +144,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           <CreateSpaceForm />
           <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4">
             <Button
-              color={'primary'}
+              color={canNext ? 'primary' : 'disabled'}
               shape={'square'}
               size={'sm'}
               onClick={() => handleStepChange(1)}

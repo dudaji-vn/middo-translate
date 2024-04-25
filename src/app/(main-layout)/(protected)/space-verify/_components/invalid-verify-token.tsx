@@ -19,7 +19,7 @@ const InvalidVerifyToken = ({
   status,
 }: {
   token: string;
-  status: string;
+  status: number;
 }) => {
   const { user: currentUser, setData } = useAuthStore();
   const router = useRouter();
@@ -52,9 +52,7 @@ const InvalidVerifyToken = ({
           </span>
           <span
             className={cn('font-light  leading-[22px] text-neutral-800', {
-              hidden: {
-                status: '409',
-              },
+              hidden: status == 409,
             })}
           >
             You&apos;re sign in as &nbsp;
@@ -68,9 +66,7 @@ const InvalidVerifyToken = ({
           onClick={onSwitchAccount}
           startIcon={<ArrowLeftRight />}
           className={cn('px-6', {
-            hidden: {
-              status: '409',
-            },
+            hidden: status == 409,
           })}
         >
           Switch account

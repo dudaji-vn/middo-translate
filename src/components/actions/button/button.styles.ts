@@ -20,6 +20,8 @@ export const buttonVariants = cva(
           'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
         error:
           'bg-error md:hover:bg-error-500 text-background active:!bg-error-600',
+        disabled:
+          'bg-primary-100 text-primary-200 disabled:bg-primary-100 disabled:text-primary-200',
       },
       size: {
         xs: 'py-2 px-3',
