@@ -1,11 +1,8 @@
-import { Button } from '@/components/actions';
 import { Avatar, Typography } from '@/components/data-display';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
-import moment from 'moment';
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import React from 'react';
 import ValidateInvitation from './_components/validate-ivitation';
-import { Clock } from 'lucide-react';
 import InvalidVerifyToken from './_components/invalid-verify-token';
 import ExpiredVerifyToken from './_components/expired-verify-token';
 import ClientInviteTime from './_components/client-invite-time';
@@ -17,16 +14,12 @@ const SpaceVerify = async ({
     token: string;
   };
 }) => {
-  // const invitations = await businessAPI.getMyInvitations();
-  // const thisInvitation = invitations.find((invitation) => {
-  //   return invitation.verifyToken === token;
-  // });
   if (!token) {
     notFound();
   }
   const invitation = await businessAPI.getInvitationByToken(token);
 
-console.log('invitation==>', invitation)
+  console.log('invitation==>', invitation);
   if (invitation.statusCode === 410 || invitation.isExpired) {
     return <ExpiredVerifyToken token={token} />;
   }

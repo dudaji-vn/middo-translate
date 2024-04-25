@@ -1,9 +1,6 @@
 'use client';
 
 import { Button } from '@/components/actions';
-import { Typography } from '@/components/data-display';
-import { ROUTE_NAMES } from '@/configs/route-name';
-import { ACCESS_TOKEN_NAME, REFRESH_TOKEN_NAME } from '@/configs/store-key';
 import { setCookieService, signOutService } from '@/services/auth.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
