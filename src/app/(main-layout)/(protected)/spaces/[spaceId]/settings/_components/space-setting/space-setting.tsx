@@ -34,12 +34,12 @@ import { useAuthStore } from '@/stores/auth.store';
 import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from './setting-items';
 import { getUserSpaceRole } from './role.util';
 
-export type ExtensionModalType =
-  | 'edit-extension'
-  | 'create-extension'
-  | 'edit-company'
-  | undefined
-  | null;
+export enum ESettingTabs {
+  'MEMBERS' = 'members',
+  'EXTENSION' = 'extension',
+  'TAGS' = 'tags',
+}
+export type ExtensionModalType = 'edit-extension' | 'create-extension';
 const headerVariants = cva('w-full flex flex-row', {
   variants: {
     modal: {
@@ -70,6 +70,7 @@ const editSpaceSchema = z.object({
 
 export type TEditSpaceFormValues = z.infer<typeof editSpaceSchema>;
 type SpaceSettingProps = {
+  defaultTab?: ESettingTabs;
   space: {
     extension: TBusinessExtensionData;
   } & TSpace;
@@ -77,7 +78,10 @@ type SpaceSettingProps = {
 
 const SETTINGS_VIEW_ROLES = [ESPaceRoles.Admin, ESPaceRoles.Owner];
 
-const SpaceSetting = ({ space }: SpaceSettingProps) => {
+const SpaceSetting = ({
+  space,
+  defaultTab = ESettingTabs.MEMBERS,
+}: SpaceSettingProps) => {
   const searchParams = useSearchParams();
   const params = useParams();
   const currentUser = useAuthStore((state) => state.user);
@@ -143,7 +147,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
       <section
         className={modalType ? 'hidden' : 'w-full items-center bg-white'}
       >
-        <Tabs defaultValue="members" className="m-0 w-full p-0">
+        <Tabs defaultValue={defaultTab} className="m-0 w-full p-0">
           <div className="w-full overflow-x-auto bg-white transition-all duration-300">
             <TabsList className="flex w-full  flex-row justify-start sm:px-10">
               {SPACE_SETTING_TAB_ROLES.map((item) => {
@@ -166,7 +170,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
             </TabsList>
           </div>
           <TabsContent
-            value="members"
+            value={ESettingTabs.MEMBERS}
             className={cn('py-4', {
               hidden:
                 !currentUserRole ||
@@ -178,7 +182,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
             <MembersList space={space} />
           </TabsContent>
           <TabsContent
-            value="tags"
+            value={ESettingTabs.TAGS}
             className={cn('py-4', {
               hidden:
                 !currentUserRole ||
@@ -194,7 +198,7 @@ const SpaceSetting = ({ space }: SpaceSettingProps) => {
             />
           </TabsContent>
           <TabsContent
-            value="extension"
+            value={ESettingTabs.EXTENSION}
             className={cn(
               'flex w-full flex-col items-center justify-center p-10',
               {
