@@ -13,10 +13,7 @@ export interface BusinessLayoutProps {
 const BusinessLayout = ({ children }: BusinessLayoutProps) => {
   return (
     <Fragment>
-      <div className="flex flex-row">
-        <BusinessSidebar />
-        {children}
-      </div>
+      {children}
       <FCMBackground />
     </Fragment>
   );

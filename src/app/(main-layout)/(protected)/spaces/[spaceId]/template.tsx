@@ -4,6 +4,7 @@ import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-
 import { useSpaceStore } from '@/stores/space.store';
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
+import BusinessSidebar from './_components/business-sidebar/business-sidebar';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
@@ -16,7 +17,12 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
     }
   }, [data, setSpace]);
 
-  return children;
+  return (
+    <div className="flex flex-row">
+      <BusinessSidebar />
+      {children}
+    </div>
+  );
 };
 
 export default SpaceTemplate;

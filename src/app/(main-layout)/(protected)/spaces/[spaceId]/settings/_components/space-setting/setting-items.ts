@@ -28,7 +28,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
     label: 'Members Management',
     name: 'members',
     roles: {
-      view: Array.from(Object.values(ESPaceRoles)),
+      view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       delete: [ESPaceRoles.Owner],
     },
@@ -37,7 +37,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
     label: 'Tags Management',
     name: 'tags',
     roles: {
-      view: Array.from(Object.values(ESPaceRoles)),
+      view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       delete: [ESPaceRoles.Owner],
     },
@@ -46,7 +46,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
     label: 'Conversation Extension',
     name: 'extension',
     roles: {
-      view: Array.from(Object.values(ESPaceRoles)),
+      view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner],
       delete: [ESPaceRoles.Owner],
     },
