@@ -21,7 +21,7 @@ const StatisticPage = async ({
   if (!spaceData) {
     notFound();
   }
-  return <div className='md:hidden flex flex-row gap-2 items-center' >
+  return <div className='md:hidden flex flex-row gap-2 items-center max-h-full w-full overflow-y-auto' >
     <ChatSidebarHeader />
     <Typography variant="h6">Statistics </Typography>
   </div>

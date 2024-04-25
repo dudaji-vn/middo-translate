@@ -56,31 +56,38 @@ const RoomAssignTag = ({
         setClicked(undefined);
       });
   };
-  const onRedirectToSettings = () => {
+  const onRedirectToTagsManagement = () => {
     if (!space) return;
-    router.push(`${ROUTE_NAMES.SPACES}/${space._id}/settings`);
+    router.push(`${ROUTE_NAMES.SPACES}/${space._id}/settings?tab=tags`);
   };
 
   return (
-    <>
+    <div
+      onMouseLeave={() => {
+        setOpen(false);
+        onClosed && onClosed();
+      }}
+    >
       <Popover open={open}>
         <PopoverTrigger asChild>
           <div
-            onClick={() => {
+            onMouseEnter={() => {
               setOpen(true);
             }}
-            className="relative flex cursor-pointer select-none items-center gap-2 rounded-md px-3 py-1.5 text-sm outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground"
+            className="relative flex cursor-pointer select-none items-center gap-2 max-md:gap-4 rounded-md px-3 max-md:text-[16px]  max-md:px-5 py-1.5 text-sm outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground"
           >
-            <Tag size={16} />
+            <Tag size={16} className="max-md:size-5" />
             <span>{t(`CONVERSATION.TAG`)}</span>
           </div>
         </PopoverTrigger>
         <PopoverContent
           align="start"
+          alignOffset={300}
+          sideOffset={-100}
           onMouseLeave={() => setOpen(false)}
-          className="flex h-auto flex-col  bg-white px-0 py-4"
+          className="ml-1 flex h-auto flex-col px-0 py-2"
         >
-          <div className="divide-y divide-neutral-100">
+          <div className="divide-y divide-neutral-100 bg-white">
             <div className="flex max-h-60 w-full flex-col overflow-y-auto">
               {tags.map(({ _id, color, name }) => {
                 const isCurrent = room.tag?._id === _id;
@@ -160,7 +167,7 @@ const RoomAssignTag = ({
                 className={cn(
                   'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
                 )}
-                onClick={onRedirectToSettings}
+                onClick={onRedirectToTagsManagement}
               >
                 Tags management
               </div>
@@ -184,7 +191,7 @@ const RoomAssignTag = ({
           onOpenChange={(open) => setOpenAddTag(open)}
         />
       )}
-    </>
+    </div>
   );
 };
 

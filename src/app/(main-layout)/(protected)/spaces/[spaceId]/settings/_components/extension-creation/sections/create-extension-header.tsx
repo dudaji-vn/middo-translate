@@ -10,6 +10,7 @@ import { ExtensionModalType } from '../../space-setting/space-setting';
 import { cn } from '@/utils/cn';
 import { TabsList, TabsTrigger } from '@/components/navigation';
 import { useFormContext } from 'react-hook-form';
+import { isEmpty } from 'lodash';
 const headerVariants = cva('w-full flex flex-row', {
   variants: {
     navigation: {
@@ -66,29 +67,32 @@ const CreateExtensionHeader = ({
   const {
     trigger,
     watch,
-    formState: { errors, isValid, isSubmitting, isSubmitSuccessful },
+    formState: { errors, isValid, isSubmitting, isSubmitSuccessful, isDirty },
   } = useFormContext();
   const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
   const currentValue = watch(createExtensionSteps[step]?.nameField);
   const [canNext, setCanNext] = useState<boolean>(false);
 
-  const onNextStepClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onStepClick = (newStep: number) => {
     trigger(createExtensionSteps[step]?.nameField).then((result) => {
       setCanNext(result);
+      if (result) {
+        handleStepChange(step + 1);
+        handleStepChange(step + 1);
+      }
     });
-    if (step === createExtensionSteps.length - 1) {
-      return;
-    }
-    if (canNext) {
-      e.preventDefault();
-      handleStepChange(step + 1);
-    }
   };
   useEffect(() => {
-    trigger(createExtensionSteps[step]?.nameField).then((result) => {
-      setCanNext(result);
-    });
+    if (!isEmpty(currentValue)) {
+      trigger(createExtensionSteps[step]?.nameField).then((result) => {
+        setCanNext(result);
+      });
+    }
   }, [currentValue]);
+
+  useEffect(() => {
+    if (isEmpty(currentValue)) setCanNext(false);
+  }, [step, currentValue]);
 
   return (
     <section
@@ -128,7 +132,10 @@ const CreateExtensionHeader = ({
               variant="unset"
               value={String(item.value)}
               key={index}
-              onClick={(e) => {}}
+              onClick={(e) => {
+                e.preventDefault();
+                handleStepChange(index);
+              }}
               className="z-20"
               disabled={step !== index && !canNext}
             >
@@ -175,9 +182,8 @@ const CreateExtensionHeader = ({
       </TabsList>
       <Button
         type={step === createExtensionSteps.length - 1 ? 'submit' : 'button'}
-        onClick={onNextStepClick}
-        color={canNext ? 'primary' : 'secondary'}
-        disabled={!canNext}
+        onClick={() => onStepClick(step + 1)}
+        color={canNext ? 'primary' : 'disabled'}
         loading={isSubmitting}
         shape={'square'}
         className={cn('h-11')}

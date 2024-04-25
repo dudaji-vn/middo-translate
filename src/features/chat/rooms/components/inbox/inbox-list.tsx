@@ -57,10 +57,16 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
-        roomApi.getRooms({ cursor: pageParam, limit: 10, type, status, spaceId }),
+        roomApi.getRooms({
+          cursor: pageParam,
+          limit: 10,
+          type,
+          status,
+          spaceId,
+        }),
     });
-
-    const { rooms: pinnedRooms, refetch: refetchPinned } = useGetPinnedRooms();
+    const { rooms: pinnedRooms, refetch: refetchPinned } =
+      useGetPinnedRooms(spaceId);
 
     const queryClient = useQueryClient();
 

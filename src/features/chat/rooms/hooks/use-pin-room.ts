@@ -16,10 +16,9 @@ export const usePinRoom = () => {
 };
 
 export const USE_GET_PINNED_ROOMS_KEY = ['rooms', 'pinned'];
-export const useGetPinnedRooms = (isAnonymous?: boolean) => {
-  const { data, ...rest } = useQuery(
-    USE_GET_PINNED_ROOMS_KEY,
-    isAnonymous ? roomApi.getPinnedAnonynousRooms : roomApi.getPinned,
+export const useGetPinnedRooms = (spaceId?: string) => {
+  const { data, ...rest } = useQuery(USE_GET_PINNED_ROOMS_KEY, () =>
+    roomApi.getPinned(spaceId),
   );
   return { rooms: data, ...rest };
 };
