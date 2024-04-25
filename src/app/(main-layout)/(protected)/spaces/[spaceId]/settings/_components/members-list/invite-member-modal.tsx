@@ -46,6 +46,7 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
           </DialogTitle>
           <InviteMembers
             className="h-auto"
+            hideOwner
             header={<></>}
             spacePreviewProps={{
               className: 'hidden',

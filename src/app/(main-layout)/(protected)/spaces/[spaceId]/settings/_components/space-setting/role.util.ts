@@ -8,7 +8,7 @@ export const getUserSpaceRole = (
     _id: string;
     email: string;
   } | null,
-  space: TSpace,
+  space: TSpace | null,
 ) => {
   if (!currentUser || !space) {
     return undefined;

@@ -22,7 +22,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
     <div className="flex flex-row">
       <div
         className={cn('w-[74px] max-md:hidden', {
-          hidden: isLoading || !data,
+          invisible: isLoading || !data,
         })}
       >
         <BusinessSidebar space={data} />

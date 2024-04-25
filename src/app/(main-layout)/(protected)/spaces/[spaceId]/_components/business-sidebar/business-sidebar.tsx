@@ -130,7 +130,7 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
   const pathname = usePathname();
   const currentUser = useAuthStore((s) => s.user);
 
-  const [sellected, setSellected] = useState<SidebarContent | undefined>(
+  const [selected, setSelected] = useState<SidebarContent | undefined>(
     sidebarContents.find((item) => pathname?.includes(`/${item.title}`)) ||
       undefined,
   );
@@ -153,11 +153,11 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
 
   useEffect(() => {
     setOpenSidebar(!isMobile, false);
-    setSellected(
+    setSelected(
       sidebarContents.find((item) => pathname?.includes(`/${item.title}`)) ||
         undefined,
     );
-  }, [params]);
+  }, [isMobile, params, pathname, setOpenSidebar]);
 
   useEffect(() => { }, [openSidebar]);
 
@@ -179,7 +179,7 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
           <div className="h-full  w-full" onMouseLeave={shinkSheet}>
             <BusinessSidebarContent
               shrink={!expand}
-              selectedItem={sellected}
+              selectedItem={selected}
               onSelectChange={onSelectedChange}
               myRole={myRole}
             />

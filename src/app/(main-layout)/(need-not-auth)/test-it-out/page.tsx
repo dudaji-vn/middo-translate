@@ -165,7 +165,7 @@ const TestItOut = () => {
         onStart();
       }, 1200);
     }
-  }, [nodes]);
+  }, [isStarted, nodes]);
 
   useEffect(() => {
     const gettedflow = localStorage.getItem(CHAT_FLOW_KEY);
