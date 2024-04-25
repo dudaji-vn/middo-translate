@@ -541,5 +541,9 @@
     "TITLE": "You're offline",
     "DESCRIPTION": "Please connect to a Wi-Fi or mobile network, check your internet connection or restart your device if need",
     "REFRESH": "Refresh"
+  },
+  "404": {
+    "TITLE": "Page not found",
+    "DESCRIPTION": "We can't find the page you're looking for"
   }
 }

@@ -541,5 +541,9 @@
     "TITLE": "Bạn đang ngoại tuyến",
     "DESCRIPTION": "Vui lòng kết nối với mạng Wi-Fi hoặc di động, kiểm tra kết nối internet của bạn hoặc khởi động lại thiết bị nếu cần",
     "REFRESH": "Tải lại"
+  },
+  "404": {
+    "TITLE": "Trang không tìm thấy",
+    "DESCRIPTION": "Chúng tôi không thể tìm thấy trang bạn đang tìm kiếm"
   }
 }
