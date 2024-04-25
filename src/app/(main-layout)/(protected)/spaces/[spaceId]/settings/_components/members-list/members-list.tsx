@@ -298,7 +298,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
-      <div className="flex w-full flex-row items-center justify-end gap-5 px-10">
+      <div className="flex w-full flex-row items-center justify-between gap-5 px-10">
         <div className="relative w-60 md:w-96">
           <TableSearch
             className="min-h-[44px] w-full py-2 outline-neutral-100"
