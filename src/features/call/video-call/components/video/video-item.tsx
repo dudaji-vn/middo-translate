@@ -21,7 +21,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const itemRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  console.log('🟣VideoItem')
+  // console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
