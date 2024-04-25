@@ -14,6 +14,8 @@ import { useGetMyBusinessNotifications } from '@/features/business-spaces/hooks/
 import { useReadNotifications } from '@/features/business-spaces/hooks/use-read-notifications';
 import { useRouter } from 'next/navigation';
 import { useDeleteNotifications } from '@/features/business-spaces/hooks/use-delete-notifications';
+import socket from '@/lib/socket-io';
+import { SOCKET_CONFIG } from '@/configs/socket';
 
 export type TSpacesNotification = {
   _id: string;
@@ -105,7 +107,7 @@ const Notification = ({
 
 const SpacesNotifications = ({}: {}) => {
   const [open, setOpen] = React.useState(false);
-  const { data: notifications } = useGetMyBusinessNotifications();
+  const { data: notifications, refetch } = useGetMyBusinessNotifications();
 
   const { mutateAsync: readNotifications } = useReadNotifications();
 
@@ -119,6 +121,15 @@ const SpacesNotifications = ({}: {}) => {
       }
     }
   }, [open, notifications]);
+
+  useEffect(() => {
+    socket.on(SOCKET_CONFIG.EVENTS.SPACE.NOTIFICATION.NEW, (data) => {
+      refetch();
+    });
+    return () => {
+      socket.off(SOCKET_CONFIG.EVENTS.SPACE.NOTIFICATION.NEW);
+    };
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -137,7 +148,7 @@ const SpacesNotifications = ({}: {}) => {
             })}
             size={12}
           />
-          <Bell className="h-4 w-4" />
+          <Bell />
         </Button.Icon>
       </PopoverTrigger>
       <PopoverContent
