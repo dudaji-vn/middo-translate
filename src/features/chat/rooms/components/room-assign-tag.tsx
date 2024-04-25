@@ -1,6 +1,6 @@
 'use client';
 
-import React, { cloneElement, use, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { Room } from '../types';
 import { Button } from '@/components/actions';
 import {
@@ -8,20 +8,20 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import { Check, Circle, CircleCheck, Pin, Tag, XIcon } from 'lucide-react';
+import { Check, Circle, Tag, XIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useSpaceStore } from '@/stores/space.store';
 import { TConversationTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
-import { roomApi } from '../api';
 import toast from 'react-hot-toast';
-import { ActionItem } from './room-actions';
 import { CreateOrEditTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/tags-list/create-or-edit-tag';
-import { useChangeStatusConversation } from '../hooks/use-change-status-conversation';
 import { useChangeTagConversation } from '../hooks/use-change-tag-conversation';
 import { Spinner } from '@/components/feedback';
 import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useAuthStore } from '@/stores/auth.store';
+import { getUserSpaceRole } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/space-setting/role.util';
+import { ESPaceRoles } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/space-setting/setting-items';
 
 const RoomAssignTag = ({
   room,
@@ -35,6 +35,10 @@ const RoomAssignTag = ({
   const { mutateAsync, isLoading, isSuccess } = useChangeTagConversation();
   const [clicked, setClicked] = React.useState<string | null>();
   const { space, setSpace } = useSpaceStore();
+  const currentUser = useAuthStore((s) => s.user);
+  const myRole = useMemo(() => {
+    return getUserSpaceRole(currentUser, space);
+  }, [space, currentUser]);
   const router = useRouter();
   const tags = space?.tags || ([] as TConversationTag[]);
   const { t } = useTranslation('common');
@@ -47,7 +51,6 @@ const RoomAssignTag = ({
         toast.error('Failed to update tag');
       })
       .finally(() => {
-        
         onClosed && onClosed();
         setOpen(false);
         setClicked(undefined);
@@ -140,7 +143,11 @@ const RoomAssignTag = ({
                 );
               })}
             </div>
-            <div className="flex flex-col  items-start gap-1">
+            <div
+              className={cn('flex flex-col  items-start gap-1', {
+                hidden: myRole === ESPaceRoles.Member,
+              })}
+            >
               <div
                 className={cn(
                   'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',

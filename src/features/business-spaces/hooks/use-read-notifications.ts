@@ -2,12 +2,10 @@ import { TSpacesNotification } from '@/app/(main-layout)/(protected)/spaces/[spa
 import { axios } from '@/lib/axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-
 export const useReadNotifications = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (notifications: TSpacesNotification[]) => {
-      console.log('useReadNotifications', notifications);
       const notificationIds = notifications.map((item) => item._id);
       await Promise.all(
         notificationIds.map((notificationId) =>
