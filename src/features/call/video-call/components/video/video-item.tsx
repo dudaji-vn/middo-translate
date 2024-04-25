@@ -34,7 +34,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           isTurnOnCamera && !isGalleryView && 'w-[100px]',
           !isFullScreen && 'aspect-square h-[60px] w-[60px]',
           !isFullScreen && isGalleryView && isTurnOnCamera && 'w-[100px]',
-          isGalleryView && isFullScreen && 'min-h-[200px]',
+          isGalleryView && isFullScreen && 'min-h-[200px] md:min-h-max',
         )}
       >
         {/* Talk border */}
