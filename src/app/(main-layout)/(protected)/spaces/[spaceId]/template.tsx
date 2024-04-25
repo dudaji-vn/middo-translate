@@ -13,7 +13,6 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const { setSpace } = useSpaceStore();
 
   useEffect(() => {
-    console.log('sdata', data);
     if (data) {
       setSpace(data);
     }

@@ -160,7 +160,6 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
   }, [params]);
 
   useEffect(() => { }, [openSidebar]);
-  console.log('myRole', myRole)
 
   return (
     <Sheet
