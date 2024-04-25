@@ -40,6 +40,7 @@ import { TSpace } from '../../../_components/business-spaces';
 type TFormValues = {
   addingDomain: string;
   domains: Array<string>;
+  selectedRadioFM?: string;
   custom: {
     language: string;
     firstMessage: string;
@@ -83,6 +84,7 @@ export default function CreateExtension({
     defaultValues: {
       addingDomain: '',
       domains: [],
+      selectedRadioFM: 'default',
       custom: {
         language: currentUser?.language,
         firstMessage: DEFAULT_FIRST_MESSAGE.content,
@@ -111,6 +113,7 @@ export default function CreateExtension({
       reset();
       return;
     }
+
     if (!isEmpty(initialData)) {
       setValue('domains', initialData.domains);
       setValue('custom', {
@@ -121,24 +124,20 @@ export default function CreateExtension({
           DEFAULT_FIRST_MESSAGE.contentEnglish ||
           '',
         color: initialData.color || DEFAULT_THEME,
-        chatFlow: initialData?.chatFlow,
       });
     }
-  }, [initialData, open]);
-
-  useEffect(() => {
     if (
-      tabValue === 1 &&
       initialData?.chatFlow &&
-      isEmpty(watch('custom.chatFlow')) &&
-      isEqual(initialData.firstMessage, watch('custom.firstMessage'))
+      initialData?.chatFlow?.nodes?.length > 1 &&
+      initialData?.chatFlow?.edges?.length > 0
     ) {
       setValue('custom.chatFlow', {
         nodes: initialData?.chatFlow?.nodes || [],
         edges: initialData?.chatFlow?.edges || [],
       });
+      setValue('selectedRadioFM', 'script');
     }
-  }, [tabValue]);
+  }, [initialData, open]);
 
   const submit = async (values: TFormValues) => {
     trigger();
@@ -156,13 +155,16 @@ export default function CreateExtension({
     if (!spaceId) {
       return;
     }
+
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
         spaceId: params?.spaceId,
-        ...(chatFlow ? { chatFlow: watch('custom.chatFlow') } : {}),
+        ...(chatFlow && watch('selectedRadioFM') === 'script'
+          ? { chatFlow: watch('custom.chatFlow') }
+          : {}),
       };
       // @ts-ignore
       await createExtension(payload)

@@ -2,25 +2,40 @@ import * as React from 'react';
 
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import './input.css'
+import './input.css';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   isError?: boolean;
   suffix?: React.ReactNode;
   leftElement?: React.ReactNode;
+  wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, suffix, leftElement, isError, type, required, ...props }, ref) => {
+  (
+    {
+      className,
+      wrapperProps,
+      suffix,
+      leftElement,
+      isError,
+      type,
+      required,
+      ...props
+    },
+    ref,
+  ) => {
     const [isShowPassword, setIsShowPassword] = React.useState(false);
     return (
-      <div className="relative">
-
+      <div
+        {...wrapperProps}
+        className={cn('relative', wrapperProps?.className)}
+      >
         <input
           type={type === 'password' && isShowPassword ? 'text' : type}
           className={cn(
-            'flex  w-full placeholder:!text-neutral-200 z-10 rounded-xl border border-input bg-background px-5 py-[14px] pr-[3.75rem] text-base font-normal leading-none ring-offset-background file:bg-transparent placeholder:text-muted-foreground focus-within:border-primary focus-within:caret-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ',
+            'z-10  flex w-full rounded-xl border border-input bg-background px-5 py-[14px] pr-[3.75rem] text-base font-normal leading-none ring-offset-background file:bg-transparent placeholder:!text-neutral-200 placeholder:text-muted-foreground focus-within:border-primary focus-within:caret-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ',
             className,
             isError && 'border-error focus-within:border-error',
           )}
@@ -30,15 +45,23 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           placeholder={required ? '' : props.placeholder}
           id={props.name}
         />
-        {<label
-          onClick={() => {
-            const input = document.getElementById(String(props.name));
-            input?.focus();
-          }}
-          className={required ? 'text-muted-foreground  text-neutral absolute z-0 inset-y-0 text-left leading-[52px] pr-4 pl-5' : 'hidden'} htmlFor={props.placeholder}>
-          {props.placeholder}
-          <span className='text-error font-light'>*</span>
-        </label>}
+        {
+          <label
+            onClick={() => {
+              const input = document.getElementById(String(props.name));
+              input?.focus();
+            }}
+            className={
+              required
+                ? 'text-neutral  absolute inset-y-0 z-0 pl-5 pr-4 text-left leading-[52px] text-muted-foreground'
+                : 'hidden'
+            }
+            htmlFor={props.placeholder}
+          >
+            {props.placeholder}
+            <span className="font-light text-error">*</span>
+          </label>
+        }
         {type === 'password' && (
           <div
             onClick={() => setIsShowPassword(!isShowPassword)}
