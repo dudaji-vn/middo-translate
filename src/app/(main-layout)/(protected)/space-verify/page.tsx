@@ -17,23 +17,25 @@ const SpaceVerify = async ({
     token: string;
   };
 }) => {
-  const invitations = await businessAPI.getMyInvitations();
-  console.log('invitations', invitations);
-  const thisInvitation = invitations.find((invitation) => {
-    return invitation.verifyToken === token;
-  });
+  // const invitations = await businessAPI.getMyInvitations();
+  // const thisInvitation = invitations.find((invitation) => {
+  //   return invitation.verifyToken === token;
+  // });
   if (!token) {
     notFound();
   }
+  const invitation = await businessAPI.getInvitationByToken(token);
 
-  if (!thisInvitation) {
-    return <InvalidVerifyToken token={token} />;
-  }
-  if (thisInvitation.isExpired) {
+console.log('invitation==>', invitation)
+  if (invitation.statusCode === 410 || invitation.isExpired) {
     return <ExpiredVerifyToken token={token} />;
   }
 
-  const { space, email, invitedAt } = thisInvitation;
+  if (invitation.statusCode) {
+    return <InvalidVerifyToken token={token} status={invitation.statusCode} />;
+  }
+
+  const { space, email, invitedAt } = invitation;
 
   return (
     <main className="flex h-[calc(100vh-52px)] items-center justify-center  px-8 md:px-2  ">
