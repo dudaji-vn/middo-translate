@@ -26,8 +26,8 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="h-main-container-height overflow-auto">
-      <div className="mx-auto w-full bg-[#FAFAFA] md:my-8 md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2">
+    <div className="h-main-container-height flex items-center justify-center md:my-8">
+      <div className="mx-auto w-full bg-[#FAFAFA]  md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2">
         <div className="p-10">
           <div className="relative mx-auto h-24 w-24 ">
             <Image
@@ -74,11 +74,11 @@ export default function AccountSettings() {
             variant={'ghost'}
             color={'error'}
             size={'sm'}
-            className="relative rounded-xl bg-error-100"
+            className="relative rounded-xl bg-error-100 !w-10 !h-10"
           >
             <LogOut size={20} />
           </Button.Icon>
-          <span className="ml-4 block text-center text-base font-medium text-error-400-main">
+          <span className="ml-4 block text-center text-base text-error-400-main">
             {t('ACCOUNT_SETTING.SIGN_OUT')}
           </span>
         </div>

@@ -82,7 +82,7 @@ const SelectPageLanguage = () => {
         variant={'ghost'}
         color={'default'}
         size={'sm'}
-        className="relative rounded-xl bg-neutral-50"
+        className="relative rounded-xl bg-neutral-50 !w-10 !h-10"
       >
         <Globe2 size={20} />
       </Button.Icon>
@@ -100,7 +100,7 @@ const SelectPageLanguage = () => {
                   ].toLowerCase()}
                   className="inline-block h-5 w-5 overflow-hidden rounded-full"
                 />
-                <div className="relative left-0 flex items-center justify-center rounded-full md:group-hover:left-1 transition-all md:group-active:left-1">
+                <div className={cn('relative left-0 flex items-center justify-center rounded-full md:group-hover:rotate-90 transition-all md:group-active:rotate-90', isOpenDropdown ? 'rotate-90' : '')}>
                   <ChevronRight className="opacity-60" />
                 </div>
               </>
