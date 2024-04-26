@@ -21,8 +21,7 @@ export const Header = (props: Props) => {
   const isClient = useClient();
   const platform = usePlatformStore((state) => state.platform);
 
-  const { isBusiness } =
-    useBusinessNavigationData();
+  const { isBusiness } = useBusinessNavigationData();
   const hideNavigation = isBusiness;
 
   if (!isClient) return null;
@@ -31,17 +30,16 @@ export const Header = (props: Props) => {
   return (
     <div
       className={cn(
-        'z-50 flex h-header w-full items-center justify-between gap-1 md:gap-5 border-b border-neutral-50 py-4  pl-[1vw] pr-[5vw] md:pl-[5vw] bg-primary-100 fixed top-0 left-0 right-0',
+        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] md:gap-5 md:pl-[5vw]',
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
       <Link
-        href={ ROUTE_NAMES.ROOT}
+        href={ROUTE_NAMES.ROOT}
         className={cn(
           'flex w-[60px] flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
         )}
       >
-
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
         {isBusiness && (
           <Typography

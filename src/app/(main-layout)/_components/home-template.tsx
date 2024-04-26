@@ -1,15 +1,21 @@
 'use client';
 
-import { ReactNode, use, useCallback, useEffect, useState } from 'react';
+import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { ReactNode, useCallback, useEffect } from 'react';
+import { SearchParams } from '../page';
 import History from './history/history';
 import Phrases from './phrases/phrases';
-import { useAppStore } from '@/stores/app.store';
-import { SearchParams } from '../page';
 
-const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchParams: SearchParams }) => {
+const HomeTemplate = ({
+  children,
+  searchParams,
+}: {
+  children: ReactNode;
+  searchParams: SearchParams;
+}) => {
   const pathname = usePathname();
   const currentTab = searchParams?.['tab'] || '';
   const query = searchParams?.['query'];
@@ -27,39 +33,47 @@ const HomeTemplate = ({ children, searchParams }: { children: ReactNode, searchP
     if (isMobile && isValidTab) {
       onCloseTab();
     }
-  }, [query])
-
+  }, [query]);
 
   return (
-    <main className={cn(isValidTab ?
-      'flex w-full flex-col divide-x max-md:gap-6 md:h-main-container-height md:flex-row' : 'h-full'
-    )}>
-      <div className={isValidTab ? 'h-fit w-full md:w-3/4 max-md:invisible' : 'h-full'}>{children}</div>
+    <main
+      className={cn(
+        isValidTab
+          ? 'md:container-height flex w-full flex-col divide-x max-md:gap-6 md:flex-row'
+          : '',
+      )}
+    >
       <AnimatePresence>
-        <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ type: 'spring', duration: 1 }}
-          className={cn(
-            'max-h z-50 w-full border-l bg-background  md:relative md:z-auto md:h-auto md:w-1/3 xl:w-1/4',
-            'absolute inset-0 h-dvh',
-            isValidTab ? 'max-md:h-screen h-full' :'hidden'
-          )
+        <div
+          className={
+            isValidTab ? 'h-fit w-full max-md:invisible md:w-3/4' : 'h-full'
           }
         >
-          <Phrases
-            isSelected={currentTab === 'phrases'}
-            onClose={onCloseTab}
-            searchParams={searchParams}
-          />
-          <History
-            isSelected={currentTab === 'history'}
-            onClose={onCloseTab}
-            searchParams={searchParams}
-          />
-        </motion.div>
+          {children}
+        </div>
+        {isValidTab && (
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ type: 'spring', duration: 1 }}
+            className={cn(
+              'md:container-height fixed right-0 top-0 z-50 h-dvh w-full border-l bg-background md:top-[52px] md:z-auto md:w-1/3 xl:w-1/4',
+              // 'absolute inset-0 h-dvh',
+            )}
+          >
+            <Phrases
+              isSelected={currentTab === 'phrases'}
+              onClose={onCloseTab}
+              searchParams={searchParams}
+            />
+            <History
+              isSelected={currentTab === 'history'}
+              onClose={onCloseTab}
+              searchParams={searchParams}
+            />
+          </motion.div>
+        )}
       </AnimatePresence>
-
     </main>
   );
 };

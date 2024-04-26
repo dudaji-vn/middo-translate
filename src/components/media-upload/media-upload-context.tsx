@@ -142,7 +142,6 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
       old.filter((f) => {
         if (f.localUrl === file.localUrl) {
           URL.revokeObjectURL(f.url);
-          deleteByPublicId(f.metadata.public_id);
           return false;
         }
         return true;

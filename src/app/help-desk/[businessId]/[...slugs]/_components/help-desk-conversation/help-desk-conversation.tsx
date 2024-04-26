@@ -63,10 +63,7 @@ const HelpDeskConversation = ({
   if (!isClient) return null;
 
   return (
-    <div
-      {...props}
-      className={cn('h-main-container-height w-full', props.className)}
-    >
+    <div {...props} className={cn('container-height w-full', props.className)}>
       <ChatBoxProvider room={room}>
         <div className="flex h-full">
           {isMobile ? (
