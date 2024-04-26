@@ -25,7 +25,6 @@ const MessageNode = ({
     const { link, content: originalContent, translations } = messageNode.data || {};
 
     const [me, bot] = useMemo(() => {
-        console.log('par', room?.participants)
         // @ts-ignore
         const me = room?.participants.find((p: { _id: string, tempEmail: boolean, status: string, email: string }) => p.status === 'anonymous' || (p.email && p.tempEmail === p.email))
         const bot = room?.participants.find((p) => p._id !== me?._id);

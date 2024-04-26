@@ -92,7 +92,6 @@ export const RoomItemActionWrapper = forwardRef<
           action: item.action,
           currentStatus: room.status,
         });
-        console.log('room.status', room.status, room.lastMessage?.sender.name);
         switch (item.action) {
           case 'notify':
             return isAllowed && isMuted;
