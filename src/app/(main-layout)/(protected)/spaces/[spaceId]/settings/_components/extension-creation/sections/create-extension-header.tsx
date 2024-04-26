@@ -3,9 +3,9 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { cva } from 'class-variance-authority';
-import { ArrowLeft, Check, Info } from 'lucide-react';
+import { ArrowLeft, Check } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { use, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ExtensionModalType } from '../../space-setting/space-setting';
 import { cn } from '@/utils/cn';
 import { TabsList, TabsTrigger } from '@/components/navigation';
@@ -67,31 +67,35 @@ const CreateExtensionHeader = ({
   const {
     trigger,
     watch,
-    formState: { errors, isValid, isSubmitting, isSubmitSuccessful, isDirty },
+    formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();
   const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
   const currentValue = watch(createExtensionSteps[step]?.nameField);
   const [canNext, setCanNext] = useState<boolean>(false);
+  const btnSubmitRef = useRef<HTMLButtonElement>(null);
 
   const onStepClick = (newStep: number) => {
+    if (newStep >= createExtensionSteps.length) {
+      btnSubmitRef.current?.click();
+      return;
+    }
     trigger(createExtensionSteps[step]?.nameField).then((result) => {
       setCanNext(result);
       if (result) {
-        handleStepChange(step + 1);
-        handleStepChange(step + 1);
+        handleStepChange(newStep);
       }
     });
   };
+
   useEffect(() => {
     if (!isEmpty(currentValue)) {
       trigger(createExtensionSteps[step]?.nameField).then((result) => {
         setCanNext(result);
       });
     }
-  }, [currentValue]);
-
-  useEffect(() => {
+    console.log('step=== ', step);
     if (isEmpty(currentValue)) setCanNext(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, currentValue]);
 
   return (
@@ -172,7 +176,6 @@ const CreateExtensionHeader = ({
                     isError && 'text-error-500' && step === index,
                   )}
                 >
-                  {' '}
                   {item.title}
                 </p>
               </Button>
@@ -181,15 +184,16 @@ const CreateExtensionHeader = ({
         })}
       </TabsList>
       <Button
-        type={step === createExtensionSteps.length - 1 ? 'submit' : 'button'}
+        type={'button'}
         onClick={() => onStepClick(step + 1)}
         color={canNext ? 'primary' : 'disabled'}
         loading={isSubmitting}
         shape={'square'}
         className={cn('h-11')}
       >
-        {step === createExtensionSteps.length - 1 ? 'Save' : 'Next'}
+        {step === createExtensionSteps.length - 1 && canNext ? 'Save' : 'Next'}
       </Button>
+      <button ref={btnSubmitRef} type="submit" className="hidden" />
     </section>
   );
 };

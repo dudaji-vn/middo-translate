@@ -14,7 +14,6 @@ export interface RoomItemHeadProps {
 
 export const RoomItemHead = ({ isRead, showTime, time }: RoomItemHeadProps) => {
   const { data } = useRoomItem();
-  console.log('tag', data)
   return (
     <div className="mb-1 flex items-center justify-between">
       <div className="flex max-w-full flex-row items-center gap-2">

@@ -5,7 +5,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import { PropsWithChildren, cloneElement, forwardRef, useMemo, useState } from 'react';
+import {
+  PropsWithChildren,
+  cloneElement,
+  forwardRef,
+  useMemo,
+  useState,
+} from 'react';
 
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
@@ -49,23 +55,17 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'none',
 ];
 
-const checkAllowedActions = (
-  {
-    isBusinessRoom,
-    businessConversationType,
-    action,
-    currentStatus,
-  }: {
-    isBusinessRoom: boolean;
-    businessConversationType: string;
-    action: Action;
-    currentStatus: Room['status'];
-  },
-  // isBusinessRoom: boolean,
-  // businessConversationType: string,
-  // action: Action,
-  // currentStatus: Room['status'],
-) => {
+const checkAllowedActions = ({
+  isBusinessRoom,
+  businessConversationType,
+  action,
+  currentStatus,
+}: {
+  isBusinessRoom: boolean;
+  businessConversationType: string;
+  action: Action;
+  currentStatus: Room['status'];
+}) => {
   if (currentStatus === 'archived')
     return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
   if (isBusinessRoom)
@@ -92,7 +92,6 @@ export const RoomItemActionWrapper = forwardRef<
           action: item.action,
           currentStatus: room.status,
         });
-
         switch (item.action) {
           case 'notify':
             return isAllowed && isMuted;
@@ -194,7 +193,7 @@ const DesktopWrapper = ({
               <MoreVertical />
             </Button.Icon>
           </DropdownMenuTrigger>
-          <DropdownMenuContent >
+          <DropdownMenuContent>
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
                 return renderItem({ item, room });
