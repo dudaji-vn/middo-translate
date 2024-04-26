@@ -126,7 +126,7 @@ function ButtonNode(node: CustomNodeProps) {
 
   if (!node) return null;
   return (
-    <div className="w-[360px] h-auto px-4 flex-row gap-1 flex">
+    <div className="w-[400px] h-auto pl-2  flex-row gap-1 flex">
       <Button
         size={'xs'}
         startIcon={isLink ? <Link className='w-4  h-4' /> : <></>}
@@ -194,7 +194,7 @@ function ButtonNode(node: CustomNodeProps) {
         </div>
       </UpdatingNodeWrapper >
       <Button.Icon color={'default'} size={'xs'} onClick={onRemoveNode}
-        className='text-neutral-600 hover:text-error-500'>
+        className='text-neutral-600 hover:text-error-500 mr-3'>
         <Trash2 size={18} />
       </Button.Icon>
     </div >

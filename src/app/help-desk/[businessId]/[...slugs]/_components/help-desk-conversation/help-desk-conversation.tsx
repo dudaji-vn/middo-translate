@@ -65,7 +65,7 @@ const HelpDeskConversation = ({
   return (
     <div
       {...props}
-      className={cn('h-main-container-height w-full', props.className)}
+      className={cn('h-full w-full', props.className)}
     >
       <ChatBoxProvider room={room}>
         <div className="flex h-full">

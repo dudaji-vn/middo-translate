@@ -84,7 +84,7 @@ function ContainerNode(node: CustomNodeProps) {
     const formFieldId = `nodes.${currentNodeIndex}.data.content`;
 
     return (
-        <div className="w-[400px] h-[500px] border bg-transparent rounded-2xl relative"
+        <div className="w-[400px] h-[500px] border bg-white rounded-2xl relative"
             style={{ width, height }}
         >
             <Handle type="target" position={Position.Left} isConnectable={isConnectable} />
@@ -94,7 +94,7 @@ function ContainerNode(node: CustomNodeProps) {
                         <MessageSquare size={18} />
                         <p>{data.label}</p>
                     </div>
-                    <div className="flex items-center flex-row gap-2 text-primary-500-main"
+                    <div className="flex items-center flex-row gap-2  text-primary-500-main"
                     >
                         <Button.Icon
                             color={'error'}
