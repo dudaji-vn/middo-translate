@@ -217,7 +217,7 @@ const TestItOut = ({
 
   return (
     <>
-      <main className="relative h-main-container-height w-full  bg-primary-100 bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
+      <main className="container-height relative w-full  bg-primary-100 bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
         <div className="absolute inset-0 bg-neutral-100 bg-opacity-25" />
         <div
           className={cn(

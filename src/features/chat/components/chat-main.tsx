@@ -27,8 +27,8 @@ export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
         <Sideslip
           className={cn(
             isMobile
-              ? 'fixed left-0 top-0 z-50 h-dvh w-screen overflow-hidden'
-              : 'h-main-container-height',
+              ? 'full-screen-height fixed left-0 top-0 z-50 w-screen overflow-hidden'
+              : 'container-height',
           )}
         >
           {children}
