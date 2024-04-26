@@ -39,7 +39,7 @@ const HomeTemplate = ({
     <main
       className={cn(
         isValidTab
-          ? 'md:container-height flex w-full flex-col divide-x max-md:gap-6 md:flex-row'
+          ? 'container-height flex w-full flex-col divide-x max-md:gap-6 md:flex-row'
           : '',
       )}
     >
@@ -57,8 +57,8 @@ const HomeTemplate = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: 'spring', duration: 1 }}
             className={cn(
-              'md:container-height fixed right-0 top-0 z-50 h-dvh w-full border-l bg-background md:top-[52px] md:z-auto md:w-1/3 xl:w-1/4',
-              // 'absolute inset-0 h-dvh',
+              'fixed right-0 top-0 z-50 w-full border-l bg-background md:top-[52px] md:z-auto md:w-1/3 xl:w-1/4',
+              isMobile ? 'full-screen-height' : 'container-height',
             )}
           >
             <Phrases
