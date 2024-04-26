@@ -21,6 +21,8 @@ import { RoomItemComingCall } from './room-item-coming-call';
 import { RoomItemHead } from './room-item-head';
 import { ItemSub } from './room-item-sub';
 import { RoomItemWrapper } from './room-item-wrapper';
+import { convert } from 'html-to-text';
+import { useDraftStore } from '@/features/chat/stores/draft.store';
 
 export interface RoomItemProps {
   data: Room;
@@ -95,7 +97,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   return (
     <div
       className={cn(
-        'flex',
+        'group flex',
         isActive ? 'bg-primary-200' : 'bg-white hover:bg-primary-100',
         className,
       )}
@@ -144,15 +146,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                   </span>
                 </div>
               )}
-
-              {room.lastMessage && !showMembersName && (
-                <ItemSub
-                  currentUser={currentUser}
-                  isGroup={room.isGroup}
-                  message={room.lastMessage}
-                  participants={room.participants}
-                />
-              )}
+              <RenderItemSub />
             </div>
             {rightElement}
           </RoomItemWrapper>
@@ -181,4 +175,41 @@ export const useRoomItem = () => {
     throw new Error('useRoomItem must be used within RoomItemContext');
   }
   return context;
+};
+
+const RenderItemSub = () => {
+  const { data, showMembersName, currentUser, isActive } = useRoomItem();
+  const draft = useDraftStore((s) => s.draft[data._id]);
+  const isRead = data.lastMessage?.readBy?.includes(currentUser._id) || false;
+  if (showMembersName) return null;
+  if (draft && isRead && !isActive) {
+    return <ItemSubDraft htmlContent={draft} />;
+  }
+  if (!data.lastMessage) return null;
+  return (
+    <ItemSub
+      currentUser={currentUser}
+      isGroup={data.isGroup}
+      message={data.lastMessage}
+      participants={data.participants}
+    />
+  );
+};
+
+const ItemSubDraft = ({ htmlContent }: { htmlContent: string }) => {
+  const { t } = useTranslation('common');
+
+  const content = useMemo(() => {
+    return convert(htmlContent, {
+      selectors: [{ selector: 'a', options: { ignoreHref: true } }],
+    });
+  }, [htmlContent]);
+  return (
+    <div className="line-clamp-1">
+      <span className="text-primary">{t('COMMON.DRAFT')}:&nbsp;</span>
+      <span className="line-clamp-1 inline break-all text-text opacity-80">
+        {content}
+      </span>
+    </div>
+  );
 };
