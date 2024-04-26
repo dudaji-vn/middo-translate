@@ -280,7 +280,6 @@ const TestItOut = ({
                               className={'h-10  w-fit'}
                               variant={'outline'}
                               color={'primary'}
-                              shape={'square'}
                               type={'button'}
                             >
                               {message.content}
@@ -298,7 +297,6 @@ const TestItOut = ({
                           className={'h-10  w-fit'}
                           variant={'outline'}
                           color={'primary'}
-                          shape={'square'}
                           type={'button'}
                           onClick={() => {
                             const thisNode = nodes.find(
@@ -317,7 +315,7 @@ const TestItOut = ({
                 })}
               </div>
               <div className="">
-                {isTyping && <FakeTyping />}
+                {isTyping && <FakeTyping name={space?.name} />}
                 <div className="relative w-full border-t p-2">
                   <MediaUploadProvider>
                     <MessageEditor
