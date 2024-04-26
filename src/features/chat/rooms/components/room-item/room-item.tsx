@@ -96,7 +96,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     <div
       className={cn(
         'flex',
-        // isActive ? '!bg-red-500' : 'bg-white hover:bg-[#fafafa]',
+        isActive ? 'bg-primary-200' : 'bg-white hover:bg-primary-100',
         className,
       )}
     >

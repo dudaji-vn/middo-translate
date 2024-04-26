@@ -17,7 +17,7 @@ export const RoomItemWrapper = ({
     <div
       className={cn(
         'relative flex flex-1 cursor-pointer items-center justify-between px-3 py-2 transition-all',
-        isActive ? 'bg-primary-200' : 'bg-transparent hover:bg-primary-100',
+        isActive ? 'bg-primary-200' : 'bg-white hover:bg-primary-100',
       )}
     >
       {disabledRedirect ? (
