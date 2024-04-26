@@ -22,6 +22,7 @@ import { Media } from '@/types';
 import { FlowNode } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { PreviewReceivedMessage } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/preview-received-message';
 import { DEFAULT_THEME } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
+import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';
@@ -73,10 +74,15 @@ const createFakeMessages = ({
   } as FakeMessage;
 };
 
-const TestItOut = () => {
+const TestItOut = ({
+  searchParams: { spaceId },
+}: {
+  searchParams: {
+    spaceId: string;
+  };
+}) => {
   const currentUser = useAuthStore((s) => s.user);
   const [shrinked, setShrinked] = React.useState(false);
-
   const [flow, setFlow] = React.useState<{
     nodes: FlowNode[];
     edges: Edge[];
@@ -86,6 +92,7 @@ const TestItOut = () => {
   });
   const { nodes, edges } = flow;
   const [fakeMessages, setFakeMessages] = React.useState<FakeMessage[]>([]);
+  const { data: space } = useGetSpaceData({ spaceId });
   const [isStarted, setIsStarted] = React.useState(false);
   const [isTyping, setIsTyping] = React.useState(false);
   const themeColor = DEFAULT_THEME;
@@ -206,7 +213,7 @@ const TestItOut = () => {
   const onTriggerBtnClick = () => {
     setShrinked(!shrinked);
   };
-  if (!currentUser || !flow || !nodes || !edges) return null;
+  if (!currentUser || !flow || !nodes || !edges || !spaceId) return null;
 
   return (
     <>
@@ -249,6 +256,7 @@ const TestItOut = () => {
                   if (message.fakeType === 'flow-sender') {
                     return (
                       <PreviewReceivedMessage
+                        space={space}
                         media={message.media}
                         debouncedTime={0}
                         key={index}

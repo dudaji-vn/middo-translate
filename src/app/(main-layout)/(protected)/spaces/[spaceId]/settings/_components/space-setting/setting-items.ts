@@ -47,7 +47,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
     name: 'extension',
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
-      edit: [ESPaceRoles.Owner],
+      edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       delete: [ESPaceRoles.Owner],
     },
   },
