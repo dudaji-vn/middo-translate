@@ -1,7 +1,6 @@
 export enum EBusinessConversationKeys {
   Conversations = 'conversations',
   Archived = 'archived',
-  Completed = 'completed',
 }
 
 export const isBusinessConversation = (
@@ -29,7 +28,6 @@ export const PK_BUSINESS_SPACES = 'conversationType';
 export enum EBusinessSidebarKeys {
   Conversations = 'conversations',
   Archived = 'archived',
-  Completed = 'completed',
   Settings = 'settings',
   Statistic = 'statistics',
 }

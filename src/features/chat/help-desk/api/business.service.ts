@@ -132,6 +132,37 @@ class BusinessAPI {
       return [];
     }
   }
+  //GET {{SERVER_URL}}/api/help-desk/space-verify/{{TOKEN}}
+
+  async getInvitationByToken(token: string) {
+    const access_token = await this.getAccessToken();
+    try {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL +
+          '/api/help-desk/space-verify/' +
+          token,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${access_token}`,
+          },
+        },
+      );
+      const data = await response.json();
+      if (!response.ok) {
+        return {
+          statusCode: response.status,
+          error: data.message,
+        };
+      }
+      return data?.data;
+    } catch (error) {
+      console.error('Error in get invitation by token', error);
+      return undefined;
+    }
+  }
+
   async getSpaceBySpaceID(spaceId: string): Promise<
     | ({
         extension: TBusinessExtensionData;
@@ -211,7 +242,11 @@ class BusinessAPI {
     }
   }
 
-  async getAnalytics({ type = 'last-week', custom, spaceId }: AnalyticsOptions) {
+  async getAnalytics({
+    type = 'last-week',
+    custom,
+    spaceId,
+  }: AnalyticsOptions) {
     let access_token = await this.getAccessToken();
     try {
       if (!analyticsType.includes(type)) {

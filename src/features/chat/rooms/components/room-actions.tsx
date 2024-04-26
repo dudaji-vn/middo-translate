@@ -7,15 +7,18 @@ import {
   LogOut,
   PinIcon,
   PinOffIcon,
+  Tag,
   TrashIcon,
 } from 'lucide-react';
-import { createContext, useContext, useMemo, useState } from 'react';
+import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
 import { RoomModalDelete } from './room.modal-delete';
 import { RoomModalLeave } from './room.modal-leave';
 import { RoomModalNotification } from './room.modal-notification';
 import { usePinRoom } from '../hooks/use-pin-room';
 import { RoomModalChangeStatus } from './room.modal-change-status';
+import RoomAssignTag from './room-assign-tag';
+import { Room } from '../types';
 
 export type Action =
   | 'delete'
@@ -26,9 +29,8 @@ export type Action =
   | 'none'
   | 'unnotify'
   | 'archive'
-  | 'unarchive'
-  | 'complete'
-  ;
+  | 'tag'
+  | 'unarchive';
 
 export type ActionItem = {
   action: Action;
@@ -36,6 +38,10 @@ export type ActionItem = {
   icon: JSX.Element;
   color?: string;
   disabled?: boolean;
+  renderItem?: (params: {
+    item: Omit<ActionItem, 'renderItem'> & { onAction: () => void };
+    room: Room;
+  }) => JSX.Element | ReactNode;
 };
 export interface RoomActionsContextProps {
   onAction: (action: Action, id: string) => void;
@@ -86,8 +92,11 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         );
       case 'archive':
       case 'unarchive':
-      case 'complete':
-        return <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />;
+        return (
+          <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />
+        );
+      case 'tag':
+        return null;
       default:
         return null;
     }
@@ -97,33 +106,46 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
     return [
       {
         action: 'pin',
-        label: "CONVERSATION.PIN",
+        label: 'CONVERSATION.PIN',
         icon: <PinIcon />,
       },
       {
         action: 'unpin',
-        label: "CONVERSATION.UNPIN",
+        label: 'CONVERSATION.UNPIN',
         icon: <PinOffIcon />,
       },
       {
         action: 'notify',
-        label: "CONVERSATION.ON",
+        label: 'CONVERSATION.ON',
         icon: <BellIcon />,
       },
       {
         action: 'unnotify',
-        label: "CONVERSATION.OFF",
+        label: 'CONVERSATION.OFF',
         icon: <BellOffIcon />,
       },
       {
+        action: 'tag',
+        label: 'CONVERSATION.TAG',
+        icon: <Tag />,
+        renderItem(params) {
+          return (
+            <RoomAssignTag
+              room={params.room}
+              key={params.item.action}
+              onClosed={reset}
+            />
+          );
+        },
+      },
+      {
         action: 'leave',
-        label: "COMMON.LEAVE",
+        label: 'COMMON.LEAVE',
         icon: <LogOut />,
       },
-
       {
         action: 'delete',
-        label: "COMMON.DELETE",
+        label: 'COMMON.DELETE',
         icon: <TrashIcon />,
         color: 'error',
       },
@@ -137,12 +159,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         label: 'Unarchive',
         icon: <ArchiveX />,
       },
-      {
-        action: 'complete',
-        label: 'Complete',
-        icon: <CheckSquare />,
-      }
-    ];
+    ] as ActionItem[];
   }, []);
 
   return (

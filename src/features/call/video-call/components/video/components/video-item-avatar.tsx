@@ -1,10 +1,9 @@
 import { Avatar } from '@/components/data-display';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
-import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface VideoItemAvatarProps {
@@ -19,17 +18,22 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
   const layout = useVideoCallStore(state => state.layout);
 
   const isGalleryView = layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW
-  
+  const statusClass = useMemo(()=> {
+    if(participant?.status == 'WAITING') return 'opacity-10'
+    if(participant?.status == 'DECLINE') return 'opacity-10'
+    return ''
+  }, [participant?.status])
   return (
     <div
       className={cn(
         'absolute left-1/2 top-1/2 flex max-h-full w-full max-w-full -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center',
         isTurnOnCamera ? 'pointer-events-none hidden cursor-none' : '',
+        statusClass
       )}
     >
       <div
         className={cn(
-          'aspect-square max-w-[90%] ',
+          'aspect-square max-w-[90%] max-h-[90%] ',
             size === 'sm' && ' w-9',
             size === 'md' && ' w-16',
             size === 'lg' && ' w-40',

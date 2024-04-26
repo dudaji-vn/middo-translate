@@ -57,7 +57,8 @@
     "ALL_LANGUAGES": "All Languages",
     "LISTENING": "Listening...",
     "TYPE_A_MESSAGE": "Type a message",
-    "CLICK": "Click"
+    "CLICK": "Click",
+    "WAITING": "Waiting"
   },
   "MESSAGE": {
     "ERROR": {
@@ -78,7 +79,8 @@
       "NOT_SELECTED_LANGUAGE": "Please select a language!",
       "NOT_CHOOSE_IMAGE": "Please choose an image!",
       "UPLOAD_IMAGE": "Failed to upload image!",
-      "CONTENT_TOO_LARGE": "Content is too large to translate!"
+      "CONTENT_TOO_LARGE": "Content is too large to translate!",
+      "DECLINE_CALL": "{{name}} declined the call!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -181,9 +183,10 @@
   },
   "ACCOUNT_SETTING": {
     "HEADING": "Account Settings",
-    "PROFILE": "Profile",
+    "PROFILE": "Edit account info",
     "AVATAR": "Avatar",
-    "CHANGE_PASSWORD": "Change Password",
+    "CHANGE_PASSWORD": "Change password",
+    "DISPLAY_LANGUAGE": "Display Language",
     "SIGN_OUT": "Sign Out",
     "EDIT_PROFILE": "Edit Profile",
     "CHANGE_AVATAR": "Change Avatar"
@@ -248,6 +251,7 @@
     "MESSAGE": "message",
     "MESSAGES": "messages",
     "VIEW": "View",
+    "TAG": "Tag",
     "TO": "To",
     "NEW_GROUP_CHAT": "Create group chat",
     "GROUP_CHAT": "Group chat",
@@ -540,5 +544,9 @@
     "TITLE": "You're offline",
     "DESCRIPTION": "Please connect to a Wi-Fi or mobile network, check your internet connection or restart your device if need",
     "REFRESH": "Refresh"
+  },
+  "404": {
+    "TITLE": "Page not found",
+    "DESCRIPTION": "We can't find the page you're looking for"
   }
 }

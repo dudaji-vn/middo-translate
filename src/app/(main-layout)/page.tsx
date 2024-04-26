@@ -98,7 +98,7 @@ export default async function Home(props: HomeProps) {
   return (
     <HomeTemplate searchParams={props.searchParams}>
       <PageLoading title="Loading" className="h-full" />
-      <div className="flex h-full w-full flex-col pt-5">
+      <div className="flex w-full flex-col py-5">
         <CompareProvider
           text={sourceEnglishResult}
           textCompare={targetEnglishResult}

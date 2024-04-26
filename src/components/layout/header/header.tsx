@@ -17,7 +17,7 @@ import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 type Props = {};
 
 export const Header = (props: Props) => {
-  const { isBusiness, isTestItOutPage } =
+  const { isBusiness, isPreviewChatflowPage } =
     useBusinessNavigationData();
   const platform = usePlatformStore((state) => state.platform);
   const isClient = useClient();
@@ -31,12 +31,12 @@ export const Header = (props: Props) => {
     <div
       className={cn(
         'z-50 flex h-header w-full items-center justify-between gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw]',
-        isTestItOutPage && 'hidden',
+        isPreviewChatflowPage && 'hidden',
       )}
     >
       {!hideNavigation && <HeaderNav />}
       <Link
-        href={ ROUTE_NAMES.ROOT}
+        href={ROUTE_NAMES.ROOT}
         className={cn(
           'mx-auto block w-[60px]',
           isBusiness
@@ -44,7 +44,7 @@ export const Header = (props: Props) => {
             : '',
         )}
       >
-       
+
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
         {isBusiness && (
           <Typography
@@ -57,7 +57,7 @@ export const Header = (props: Props) => {
           </Typography>
         )}
       </Link>
-       <HeaderProfile />
+      <HeaderProfile />
     </div>
   );
 };

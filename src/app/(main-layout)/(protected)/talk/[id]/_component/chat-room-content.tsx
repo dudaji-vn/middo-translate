@@ -7,12 +7,9 @@ import {
   MessageBox,
   MessagesBoxProvider,
 } from '@/features/chat/messages/components/message-box';
-import {
-  ChatBoxFooter,
-  ChatBoxHeader,
-  RoomSide,
-} from '@/features/chat/rooms/components';
+import { ChatBoxHeader, RoomSide } from '@/features/chat/rooms/components';
 import { PinnedBar } from '@/features/chat/rooms/components/pin-message-bar';
+import { ChatBoxFooter } from '@/features/chat/rooms/components/room-box/room-box-footer';
 import { RoomTyping } from '@/features/chat/rooms/components/room-box/room-typing';
 import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/room-side-tabs/room-side-tabs.hook';
 import { useAppStore } from '@/stores/app.store';
@@ -33,10 +30,11 @@ const ChatRoomContent = ({ room }: { room: any }) => {
           <Allotment.Pane minSize={300}>
             <ChatRoomMain room={room} />
           </Allotment.Pane>
-          {currentSide && 
-          <Allotment.Pane minSize={250} maxSize={600} preferredSize={400}>
-            <RoomSide />
-          </Allotment.Pane>}
+          {currentSide && (
+            <Allotment.Pane minSize={250} maxSize={600} preferredSize={400}>
+              <RoomSide />
+            </Allotment.Pane>
+          )}
         </Allotment>
       )}
     </div>

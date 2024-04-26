@@ -20,6 +20,8 @@ import { AlertError } from '@/components/alert/alert-error';
 import { changePasswordSchema } from '@/configs/yup-form';
 import { useTranslation } from 'react-i18next';
 import { PASSWORD_PATTERN } from '@/configs/regex-pattern';
+import { Button } from '@/components/actions';
+import { KeyRound } from 'lucide-react';
 
 export default function UpdateUserPassword() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -97,9 +99,17 @@ export default function UpdateUserPassword() {
     <>
       {isSubmitting && <PageLoading />}
       <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger className="w-full">
-          <span className="block cursor-pointer border-b border-b-[#F2F2F2] p-4 text-center font-medium transition-all hover:bg-slate-100 md:-mx-6">
-            {t('ACCOUNT_SETTING.CHANGE_PASSWORD')}
+        <AlertDialogTrigger className='w-full flex items-center px-5 py-4 border-b border-b-[#F2F2F2] bg-white md:hover:bg-primary-100'>
+          <Button.Icon
+            variant={'ghost'}
+            color={'primary'}
+            size={'sm'}
+            className='relative bg-primary-200 rounded-xl'
+          >
+            <KeyRound size={20} />
+          </Button.Icon>
+          <span className="ml-4 block text-center text-base font-medium">
+          {t('ACCOUNT_SETTING.CHANGE_PASSWORD')}
           </span>
         </AlertDialogTrigger>
         <AlertDialogContent>

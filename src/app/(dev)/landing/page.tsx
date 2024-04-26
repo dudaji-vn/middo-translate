@@ -7,10 +7,12 @@ import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
+import { Header } from '@/components/layout/header/headerv2';
 import { ArrowRightFromLine, Sparkles, StarIcon, Play } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import { HeaderLandingPage } from '@/components/layout/header/header-landing-page';
 
 export default function Landing() {
   const [isScrollDown, setScrollDown] = useState(false);
@@ -53,44 +55,16 @@ export default function Landing() {
     <div className="relative overflow-x-hidden">
       <div
         className={cn(
-          'fixed z-10 flex h-[76px] w-full items-center justify-between pl-5 pr-1 md:!px-[5vw]',
+          'fixed z-10 flex h-fit w-full items-center justify-between ',
           isScrollDown && 'bg-white/80 shadow-2 backdrop-blur-xl',
         )}
       >
-        <Link href={ROUTE_NAMES.ROOT} className="block w-[90px] cursor-pointer">
-          <Image src="/logo.png" priority alt="logo" width={500} height={500} />
-        </Link>
-        {isMobile ? (
+        {/* {isMobile ? (
           <HeaderNavLandingMobile navItems={navLandingPageItems} />
         ) : (
-          <div className="hidden items-center justify-end gap-12 md:flex">
-            {navLandingPageItems.map((item, index) => {
-              return (
-                <Button
-                  onClick={() => handleScroll(item.href)}
-                  key={index}
-                  size="md"
-                  shape="square"
-                  variant="ghost"
-                  color="default"
-                >
-                  {item.name}
-                </Button>
-              );
-            })}
-            <Link href={NEXT_PUBLIC_URL}>
-              <Button
-                size="md"
-                shape="square"
-                variant="default"
-                color="primary"
-              >
-                Explore Product
-                <ArrowRightFromLine className="ml-2" />
-              </Button>
-            </Link>
-          </div>
-        )}
+          <Header></Header>
+        )} */}
+        <HeaderLandingPage />
       </div>
       <div className="h-fit w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
         <div className="relative h-fit md:w-[44%] md:min-w-[44%]">

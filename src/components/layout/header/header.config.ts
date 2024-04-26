@@ -36,10 +36,17 @@ const landingPageItems: NavItem[] = [
   {
     name: 'Solution',
     href: 'solution',
+    target: '_self',
   },
   {
-    name: 'About us',
-    href: 'about-us',
+    name: 'Pricing',
+    href: 'pricing',
+    target: '_self',
+  },
+  {
+    name: 'Contact us',
+    href: 'contact-us',
+    target: '_self',
   },
 ];
 

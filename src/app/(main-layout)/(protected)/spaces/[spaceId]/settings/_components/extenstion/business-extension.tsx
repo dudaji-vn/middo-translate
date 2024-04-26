@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 import { useParams, useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { ESPaceRoles, SPACE_SETTING_ITEMS } from '../space-setting/setting-items';
+import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from '../space-setting/setting-items';
 
 
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,7 +28,7 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
   ({ data, myRole, name, ...props }, ref) => {
     const router = useRouter();
     const params = useParams();
-    const extensionRoles = SPACE_SETTING_ITEMS.find(item => item.name === 'extension')?.roles || {
+    const extensionRoles = SPACE_SETTING_TAB_ROLES.find(item => item.name === 'extension')?.roles || {
       'delete': [],
       'edit': [],
       'create': [],

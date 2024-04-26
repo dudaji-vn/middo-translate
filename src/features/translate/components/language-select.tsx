@@ -25,7 +25,7 @@ export const LanguageSelect = ({
   const id = useId();
   return (
     <div className="flex h-[42px] w-full flex-1 items-center gap-2">
-      <div className="flex h-full w-full gap-2 rounded-2xl font-semibold lg:w-fit lg:bg-neutral-50 lg:p-1 max-w-full lg:max-w-[calc(100%-48px)] overflow-hidden">
+      <div className="flex h-full w-full max-w-full gap-2 overflow-hidden rounded-xl font-semibold lg:w-fit lg:max-w-[calc(100%-48px)] lg:bg-neutral-50 lg:p-1">
         {languageCodes.map((code) => (
           <LanguageItem
             shrinkAble={shrinkAble}
@@ -81,34 +81,33 @@ const LanguageItem = ({
       {active && (
         <motion.span
           layoutId={layoutId || 'bubble'}
-          className="absolute inset-0 z-10 rounded-2xl border border-primary-200 bg-primary-100"
+          className="absolute inset-0 z-10 rounded-xl border border-primary-200 bg-primary-100"
           transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
-          // animate={{ boxShadow: '2px 2px 4px 2px rgba(22, 22, 22, 0.1)' }}
           exit={{ boxShadow: 'none' }}
         />
       )}
-      <div className="z-10 flex items-center gap-2 overflow-hidden">
-        {code && code !== 'auto' ? (
-          <div className="size-5 overflow-hidden rounded-full">
-            <CircleFlag
-              countryCode={getCountryCode(code as string) as string}
-              height={20}
-              width={20}
-              className="z-10"
-            />
-          </div>
-        ) : (
-          <Globe2Icon className="size-5 h-5 w-5 shrink-0 text-primary" />
-        )}
-        {
-          <span
-            className={cn('z-10 truncate', shrinkAble && !active && 'hidden')}
-          >
-            {t('LANGUAGE.' + languageName)}
-          </span>
-        }
-      </div>
-      <ChevronDownIcon className="z-10 size-5 text-neutral-600 lg:hidden" />
+
+      {code && code !== 'auto' ? (
+        <div className="z-10 size-5 overflow-hidden rounded-full">
+          <CircleFlag
+            countryCode={getCountryCode(code as string) as string}
+            height={20}
+            width={20}
+            className="z-10"
+          />
+        </div>
+      ) : (
+        <Globe2Icon className="z-10 size-5 shrink-0 text-primary" />
+      )}
+
+      {
+        <span
+          className={cn('z-10 truncate', shrinkAble && !active && 'hidden')}
+        >
+          {t('LANGUAGE.' + languageName)}
+        </span>
+      }
+      <ChevronDownIcon className="z-10 size-5 shrink-0 text-neutral-600 lg:hidden" />
     </button>
   );
 };

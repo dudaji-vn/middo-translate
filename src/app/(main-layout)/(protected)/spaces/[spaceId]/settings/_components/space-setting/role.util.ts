@@ -8,16 +8,16 @@ export const getUserSpaceRole = (
     _id: string;
     email: string;
   } | null,
-  space: TSpace,
+  space: TSpace | null,
 ) => {
-  if (!currentUser) {
+  if (!currentUser || !space) {
     return undefined;
   }
-  return space.owner?._id === currentUser?._id
+  return space.owner?.email === currentUser?.email
     ? ESPaceRoles.Owner
     : space.members?.find(
           (member) =>
-            member._id === currentUser?._id &&
+            member.email === currentUser?.email &&
             member.role === ESPaceRoles.Admin,
         )
       ? ESPaceRoles.Admin

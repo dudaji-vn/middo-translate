@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef } from 'react';
+import { memo, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
 import useLoadStream from '@/features/call/hooks/use-load-stream';
@@ -10,6 +10,7 @@ import VideoItemLoading from './components/video-item-loading';
 import VideoItemText from './components/video-item-text';
 import VideoItemTalk from './components/video-item-talk';
 import GetCaptionUser from './components/get-caption-user';
+import UserStatus from './components/user-status';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -21,11 +22,11 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   const itemRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  console.log('🟣VideoItem')
+  // console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
-      className="flex h-full w-full items-center justify-center p-[2px]"
+      className={cn("flex h-full w-full items-center justify-center p-[2px] relative", !isFullScreen && 'w-fit mx-auto overflow-hidden')}
     >
       <div
         className={cn(
@@ -34,7 +35,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           isTurnOnCamera && !isGalleryView && 'w-[100px]',
           !isFullScreen && 'aspect-square h-[60px] w-[60px]',
           !isFullScreen && isGalleryView && isTurnOnCamera && 'w-[100px]',
-          isGalleryView && isFullScreen && 'min-h-[200px]',
+          isGalleryView && isFullScreen && 'min-h-[200px] md:min-h-max',
         )}
       >
         {/* Talk border */}
@@ -63,11 +64,14 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
 
           {/* Get Caption */}
         <GetCaptionUser 
-          name={participant?.user.name}
-          avatar={participant?.user.avatar}
-          language={participant?.user.language}
+          name={participant?.user?.name}
+          avatar={participant?.user?.avatar}
+          language={participant?.user?.language}
           stream={streamVideo}
         />
+
+        {/* Is waiting for Join */}
+        <UserStatus participant={participant}/>
 
         {/* Mic Status */}
         {/* {!isTurnOnMic && 
@@ -75,6 +79,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
           <MicOff className='w-4 h-4 text-error-500 stroke-error-500 bg-neutral-100 rounded-full p-[1px]' />
         </div>} */}
       </div>
+      
     </section>
   );
 };

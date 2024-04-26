@@ -161,14 +161,18 @@ export const Content = ({ position, active, message }: ContentProps) => {
           </div>
         </div>
       )}
-      <span
-        className={cn(
-          'inline-block w-full text-xs font-light',
-          isMe ? 'text-right text-white/40' : 'text-left text-neutral-300',
-        )}
-      >
-        Translated from {getLanguageByCode(message.language)?.name}
-      </span>
+      {message.status !== 'removed' && (
+        <span
+          className={cn(
+            'inline-block w-full text-xs font-light',
+            isMe || position === 'right'
+              ? 'text-right text-white/40'
+              : 'text-left text-neutral-300',
+          )}
+        >
+          Translated from {getLanguageByCode(message.language)?.name}
+        </span>
+      )}
     </div>
   );
 };

@@ -24,7 +24,7 @@ export default function useHandleCreatePeerConnection() {
     const participants = useParticipantVideoCallStore(state => state.participants);
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
     const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
-
+    const updateParticipant = useParticipantVideoCallStore(state => state.updateParticipant);
     const myStream = useMyVideoCallStore(state => state.myStream);
     
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
@@ -74,6 +74,7 @@ export default function useHandleCreatePeerConnection() {
             isShareScreen: payload.isShareScreen,
             isElectron: payload?.isElectron || false,
         };
+
         if (payload.isShareScreen) {
             setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
             const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
@@ -86,8 +87,15 @@ export default function useHandleCreatePeerConnection() {
         } else {
             toast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
         }
-        addParticipant(newUser);
-    },[addParticipant, isPinDoodle, myStream, participants, setLayout, setPinShareScreen, updatePeerParticipant, t])
+        // Check is user is waiting for join
+        let isInParticipantList = participants.some((p: ParticipantInVideoCall) => p.user._id === payload.user._id);
+        if(isInParticipantList) {
+            updateParticipant(newUser, payload.user._id);
+        } else {
+            addParticipant(newUser);
+        }
+        
+    },[myStream, participants, addParticipant, updatePeerParticipant, updateParticipant, setLayout, isPinDoodle, t, setPinShareScreen])
 
     
     // useEffect when myStream change

@@ -8,6 +8,7 @@ import { PropsWithChildren, ReactNode, useEffect } from 'react';
 import { TBusinessExtensionData } from '../../help-desk/api/business.service';
 import ChatSidebarHeader from './chat-sidebar-header';
 import { ChatSidebarTabs } from './chat-sidebar-tabs';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 interface ChatSidebarProps {
   children: ReactNode;
@@ -22,6 +23,7 @@ export const ChatSidebar = ({
 }: ChatSidebarProps & PropsWithChildren) => {
   const platform = usePlatformStore((state) => state.platform);
   const { setBusinessExtension } = useBusinessExtensionStore();
+  const { isOnBusinessChat } = useBusinessNavigationData();
 
   useEffect(() => {
     if (spaceData) {
@@ -34,6 +36,7 @@ export const ChatSidebar = ({
       <div
         className={cn(
           'relative flex  w-full flex-col overflow-hidden border-r',
+          { 'max-md:hidden': isOnBusinessChat },
           platform === 'mobile' ? 'h-dvh' : 'h-main-container-height',
         )}
       >

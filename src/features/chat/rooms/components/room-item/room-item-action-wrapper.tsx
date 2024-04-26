@@ -5,7 +5,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import { PropsWithChildren, cloneElement, forwardRef, useMemo } from 'react';
+import {
+  PropsWithChildren,
+  cloneElement,
+  forwardRef,
+  useMemo,
+  useState,
+} from 'react';
 
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
@@ -28,9 +34,16 @@ type Item = Omit<ActionItem, 'onAction'> & {
   onAction: () => void;
 };
 const BUSINESS_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
-  conversations: ['archive', 'complete', 'notify', 'unnotify', 'pin', 'unpin'],
+  conversations: [
+    'archive',
+    'notify',
+    'unnotify',
+    'pin',
+    'unpin',
+    'tag',
+    'delete',
+  ],
   archived: ['unarchive', 'delete'],
-  completed: ['delete'],
 };
 const TALK_ALLOWED_ACTIONS: Action[] = [
   'notify',
@@ -42,14 +55,17 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'none',
 ];
 
-const checkAllowedActions = (
-  isBusinessRoom: boolean,
-  businessConversationType: string,
-  action: Action,
-  currentStatus: Room['status'],
-) => {
-  if (currentStatus === 'completed')
-    return BUSINESS_ALLOWED_ACTIONS.completed.includes(action);
+const checkAllowedActions = ({
+  isBusinessRoom,
+  businessConversationType,
+  action,
+  currentStatus,
+}: {
+  isBusinessRoom: boolean;
+  businessConversationType: string;
+  action: Action;
+  currentStatus: Room['status'];
+}) => {
   if (currentStatus === 'archived')
     return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
   if (isBusinessRoom)
@@ -70,13 +86,12 @@ export const RoomItemActionWrapper = forwardRef<
   const items = useMemo(() => {
     return actionItems
       .filter((item) => {
-        const isAllowed = checkAllowedActions(
-          Boolean(isBusiness),
-          String(businessConversationType),
-          item.action,
-          room.status,
-        );
-
+        const isAllowed = checkAllowedActions({
+          isBusinessRoom: Boolean(isBusiness),
+          businessConversationType: String(businessConversationType),
+          action: item.action,
+          currentStatus: room.status,
+        });
         switch (item.action) {
           case 'notify':
             return isAllowed && isMuted;
@@ -92,8 +107,6 @@ export const RoomItemActionWrapper = forwardRef<
             return isAllowed && room.status === 'active';
           case 'unarchive':
             return isAllowed && room.status === 'archived';
-          case 'complete':
-            return isAllowed && room.status === 'active';
           default:
             return isAllowed;
         }
@@ -135,16 +148,21 @@ const MobileWrapper = ({
           </div>
         }
       >
-        {items.map((item) => (
-          <LongPressMenu.Item
-            key={item.action}
-            startIcon={item.icon}
-            color={item.color === 'error' ? 'error' : 'default'}
-            onClick={item.onAction}
-          >
-            {t(item.label)}
-          </LongPressMenu.Item>
-        ))}
+        {items.map(({ renderItem, ...item }) => {
+          if (renderItem) {
+            return renderItem({ item, room });
+          }
+          return (
+            <LongPressMenu.Item
+              key={item.action}
+              startIcon={item.icon}
+              color={item.color === 'error' ? 'error' : 'default'}
+              onClick={item.onAction}
+            >
+              {t(item.label)}
+            </LongPressMenu.Item>
+          );
+        })}
       </LongPressMenu.Menu>
     </LongPressMenu>
   );
@@ -153,16 +171,18 @@ const MobileWrapper = ({
 const DesktopWrapper = ({
   children,
   items,
+  room,
 }: PropsWithChildren &
   RoomItemActionWrapperProps & {
     items: Item[];
   }) => {
   const { t } = useTranslation('common');
+  const [isOpen, setOpen] = useState(false);
   return (
     <div className="group relative flex-1">
       {children}
       <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
-        <DropdownMenu>
+        <DropdownMenu open={isOpen} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon
               size="xs"
@@ -174,22 +194,27 @@ const DesktopWrapper = ({
             </Button.Icon>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            {items.map((item) => (
-              <DropdownMenuItem
-                key={item.action}
-                disabled={item.disabled}
-                className="flex items-center"
-                onClick={item.onAction}
-              >
-                {cloneElement(item.icon, {
-                  size: 16,
-                  className: cn('mr-2', item.color && `text-${item.color}`),
-                })}
-                <span className={cn(item.color && `text-${item.color}`)}>
-                  {t(item.label)}
-                </span>
-              </DropdownMenuItem>
-            ))}
+            {items.map(({ renderItem, ...item }) => {
+              if (renderItem) {
+                return renderItem({ item, room });
+              }
+              return (
+                <DropdownMenuItem
+                  className="flex items-center"
+                  key={item.action}
+                  disabled={item.disabled}
+                  onClick={item.onAction}
+                >
+                  {cloneElement(item.icon, {
+                    size: 16,
+                    className: cn('mr-2', item.color && `text-${item.color}`),
+                  })}
+                  <span className={cn(item.color && `text-${item.color}`)}>
+                    {t(item.label)}
+                  </span>
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

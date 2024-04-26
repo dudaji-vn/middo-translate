@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import ParticipantInVideoCall from '../interfaces/participant';
+import ParticipantInVideoCall, { StatusParticipantType } from '../interfaces/participant';
 
 export type VideoCallState = {
     participants: ParticipantInVideoCall[];
@@ -8,14 +8,16 @@ export type VideoCallState = {
     addPeerShareScreen: (peer: any) => void;
     removePeerShareScreen: (id: string) => void;
     clearPeerShareScreen: () => void;
-    updateParticipant: (participants: ParticipantInVideoCall[]) => void;
+    updateParticipant: (participant: ParticipantInVideoCall, userId: string) => void;
     addParticipant: (participant: ParticipantInVideoCall) => void;
     setStreamForParticipant: (stream: MediaStream, socketId: string, isShareScreen: boolean) => void;
     removeParticipant: (socketId: string) => void;
+    removeParticipantByUserId: (userId: string) => void;
     removeParticipantShareScreen: (socketId: string) => void;
     updatePeerParticipant: (peer: any, socketId: string) => void;
     addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => void;
     removeUsersRequestJoinRoom: (socketId: string) => void;
+    updateStatusParticipant: (userId: string, status: StatusParticipantType) => void;
     pinParticipant: (socketId: string, isShareScreen: boolean) => void;
     clearPinParticipant: () => void;
     resetParticipants: () => void;
@@ -26,8 +28,15 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
     participants: [],
     usersRequestJoinRoom: [],
     peerShareScreen: [],
-    updateParticipant: (participants: ParticipantInVideoCall[]) => {
-        set(() => ({ participants }));
+    updateParticipant: (participant: ParticipantInVideoCall, userId: string) => {
+        set((state) => ({
+            participants: state.participants.map((p) => {
+                if (p.user._id == userId) {
+                    return participant;
+                }
+                return p;
+            }),
+        }));
     },
     addParticipant: (participant: ParticipantInVideoCall) => {
         set((state) => ({ participants: [...state.participants, participant] }));
@@ -48,6 +57,11 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
     removeParticipant: (socketId: string) => {
         set((state) => ({
             participants: state.participants.filter((p) => p.socketId != socketId),
+        }));
+    },
+    removeParticipantByUserId(userId) {
+        set((state) => ({
+            participants: state.participants.filter((p) => p.user._id != userId),
         }));
     },
     removeParticipantShareScreen: (socketId: string) => {
@@ -82,6 +96,19 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
     },
     removeUsersRequestJoinRoom: (socketId: string) => {
         set((state) => ({ usersRequestJoinRoom: state.usersRequestJoinRoom.filter((u) => u.socketId != socketId) }));
+    },
+    updateStatusParticipant: (userId: string, status: StatusParticipantType) => {
+        set((state) => ({
+            participants: state.participants.map((p) => {
+                if (p.user._id == userId) {
+                    return {
+                        ...p,
+                        status
+                    };
+                }
+                return p;
+            }),
+        }));
     },
     pinParticipant: (socketId: string, isShareScreen: boolean) => {
         set((state) => ({

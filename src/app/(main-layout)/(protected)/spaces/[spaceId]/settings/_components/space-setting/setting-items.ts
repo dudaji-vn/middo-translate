@@ -3,18 +3,32 @@ export enum ESPaceRoles {
   Admin = 'admin',
   Member = 'member',
 }
-export type SpaceRoleAction = 'view' | 'edit' | 'delete';
+export enum ERoleActions {
+  VIEW = 'view',
+  EDIT = 'edit',
+  DELETE = 'delete',
+}
 
-export const SPACE_SETTING_ITEMS: Array<{
+export const MANAGE_SPACE_ROLES: Record<
+  ERoleActions | 'invite-member',
+  Array<ESPaceRoles>
+> = {
+  edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
+  delete: [ESPaceRoles.Owner],
+  view: Array.from(Object.values(ESPaceRoles)),
+  'invite-member': [ESPaceRoles.Owner, ESPaceRoles.Admin],
+};
+
+export const SPACE_SETTING_TAB_ROLES: Array<{
   label: string;
   name: string;
-  roles: Record<SpaceRoleAction, Array<ESPaceRoles>>;
+  roles: Record<ERoleActions, Array<ESPaceRoles>>;
 }> = [
   {
     label: 'Members Management',
     name: 'members',
     roles: {
-      view: Array.from(Object.values(ESPaceRoles)),
+      view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       delete: [ESPaceRoles.Owner],
     },
@@ -23,7 +37,7 @@ export const SPACE_SETTING_ITEMS: Array<{
     label: 'Tags Management',
     name: 'tags',
     roles: {
-      view: Array.from(Object.values(ESPaceRoles)),
+      view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       delete: [ESPaceRoles.Owner],
     },
@@ -32,8 +46,8 @@ export const SPACE_SETTING_ITEMS: Array<{
     label: 'Conversation Extension',
     name: 'extension',
     roles: {
-      view: Array.from(Object.values(ESPaceRoles)),
-      edit: [ESPaceRoles.Owner],
+      view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
+      edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       delete: [ESPaceRoles.Owner],
     },
   },

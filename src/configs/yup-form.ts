@@ -141,6 +141,7 @@ export const updateInforSchema = z.object({
   }),
 });
 export const createExtensionSchema = z.object({
+  selectedRadioFM: z.string().optional(),
   addingDomain: z
     .string()
     .refine(

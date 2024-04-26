@@ -20,7 +20,11 @@ export const roomApi = {
     return res.data;
   },
   async getRooms(
-    params: CursorParams & { type: InboxType; status?: string | null, spaceId?: string},
+    params: CursorParams & {
+      type: InboxType;
+      status?: string | null;
+      spaceId?: string;
+    },
   ) {
     const path = queryString.stringifyUrl({
       url: basePath,
@@ -164,12 +168,24 @@ export const roomApi = {
     return res.data;
   },
 
-  async getPinned() {
-    const res: Response<Room[]> = await axios.get(`${basePath}/pin`);
+  async getPinned(spaceId?: string) {
+    const res: Response<Room[]> = await axios.get(
+      `${basePath}/pin` + (spaceId ? `?spaceId=${spaceId}` : ''),
+    );
     return res.data;
   },
-  async getPinnedAnonynousRooms() {
-    // TODO: implement this when has BE or remove it
-    return [];
+
+  async changeTagRoom({
+    roomId,
+    tagId,
+  }: {
+    roomId: string;
+    tagId?: string | null;
+  }) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/change-tag-room`,
+      { tagId },
+    );
+    return res.data;
   },
 };

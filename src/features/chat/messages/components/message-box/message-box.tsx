@@ -19,6 +19,8 @@ import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { cn } from '@/utils/cn';
 import { TimeDisplay } from '../time-display';
 import { useMessagesBox } from './messages-box.context';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 export type MessageGroup = {
@@ -46,6 +48,7 @@ export const MessageBox = ({
   const { ref, isScrolled } = useScrollDistanceFromTop(0, true);
   const bottomRef = useRef<HTMLDivElement>(null);
   const { scrollIntoView } = useScrollIntoView(bottomRef);
+  const { isOnBusinessChat } = useBusinessNavigationData();
 
   const [participants, setParticipants] = useState(room.participants);
 
@@ -162,6 +165,9 @@ export const MessageBox = ({
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
         {messagesGroup.map((group, index) => {
+          const isSendBySpaceMember = Boolean(
+            isOnBusinessChat && group.lastMessage.senderType !== 'anonymous',
+          );
           const timeDiff = moment(moment(group.lastMessage.createdAt)).diff(
             messagesGroup[index + 1]?.messages[0].createdAt ?? moment(),
             'minute',
@@ -172,6 +178,7 @@ export const MessageBox = ({
           const isSystem =
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';
+
           return (
             <div key={group.lastMessage._id}>
               {isShowTimeGroup && (
@@ -199,11 +206,14 @@ export const MessageBox = ({
                         guestId={guestId}
                         pinnedBy={pinnedBy}
                         showAvatar={
+                          !isSendBySpaceMember &&
                           !isMe &&
                           !isSystem &&
                           message._id ===
                             group.messages[group.messages.length - 1]._id
                         }
+                        spaceAvatar={isAnonymous? room.space?.avatar: undefined}
+                        isSendBySpaceMember={isSendBySpaceMember}
                         key={message?.clientTempId || message._id}
                         message={newMessage}
                         sender={isMe ? 'me' : 'other'}

@@ -7,11 +7,13 @@ import Image from 'next/image'
 import React, { ReactNode } from 'react'
 import { Triangle } from '@/components/icons'
 import { DEFAULT_THEME } from './options'
+import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces'
 
 export type PluginChatPreviewProps = {
     content: string;
     language: string;
     color?: string;
+    space: TSpace;
     onTranslatedChange?: (translated: string) => void;
 
 } & React.HTMLAttributes<HTMLDivElement>
@@ -45,10 +47,9 @@ const devices: Array<{ name: TPreviewDevice, icon: ReactNode }> = [
 ];
 
 
-const PluginChatPreview = ({ className, content, language, color, onTranslatedChange, ...props }: PluginChatPreviewProps) => {
+const PluginChatPreview = ({ className, content, language, color, onTranslatedChange, space, ...props }: PluginChatPreviewProps) => {
     const [selectedDevice, setSelectedDevice] = React.useState<TPreviewDevice>('desktop');
 
-    const currentUser = useAuthStore((s) => s.user);
     const themeColor = color || DEFAULT_THEME;
     const isMobile = selectedDevice === 'mobile';
 
@@ -88,10 +89,10 @@ const PluginChatPreview = ({ className, content, language, color, onTranslatedCh
                     </div>
                     <div className={'p-4 flex flex-col gap-6'}>
                         <div className="overflow-hidden  relative aspect-square max-h-[100px]  h-fit w-full flex flex-row gap-2">
-                            <Avatar src={currentUser?.avatar ?? '/avatar.svg'} alt={'avatar-sender'} className="size-16  p-1 border border-neutral-50" />
+                            <Avatar src={space?.avatar ?? '/avatar.svg'} alt={'avatar-sender'} className="size-16  p-1 border border-neutral-50" />
                             <div className="flex flex-col gap-1 w-full h-fit">
                                 <p className="text-neutral-800 max-h-fit text-xs">Conversation with</p>
-                                <p className="text-neutral-600 max-h-fit text-[24px] font-semibold">{currentUser?.name}</p>
+                                <p className="text-neutral-600 max-h-fit text-[24px] font-semibold">{space?.name}</p>
                             </div>
                         </div>
                         <Button
