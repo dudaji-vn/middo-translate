@@ -22,6 +22,7 @@ interface MediaUploadContextProps extends DropzoneState {
   ) => void;
   handleClipboardEvent: (e: ClipboardEvent) => void;
   reset: () => void;
+  removeUploadedFile: (file: UploadedFile) => void;
 }
 
 export const MediaUploadContext = createContext<MediaUploadContextProps>(
@@ -136,6 +137,18 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
       }),
     );
   };
+  const removeUploadedFile = (file: UploadedFile) => {
+    setUploadedFiles((old) =>
+      old.filter((f) => {
+        if (f.localUrl === file.localUrl) {
+          URL.revokeObjectURL(f.url);
+          deleteByPublicId(f.metadata.public_id);
+          return false;
+        }
+        return true;
+      }),
+    );
+  };
   const reset = () => {
     setFiles([]);
   };
@@ -148,6 +161,7 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
         handlePasteFile,
         handleClipboardEvent,
         reset,
+        removeUploadedFile,
         ...dropzoneState,
       }}
     >
