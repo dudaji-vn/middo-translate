@@ -68,6 +68,8 @@ export const SOCKET_CONFIG = {
       STARTING_NEW_CALL: 'call.starting_new_call',
       MEETING_END: 'call.meeting_end',
       INVITE_TO_CALL: 'call.invite_to_call',
+      DECLINE_CALL: 'call.decline_call',
+      LIST_WAITING_CALL: 'call.list_waiting_call',
       SEND_CAPTION: 'call.send_caption',
       UPDATE: 'call.update',
     },

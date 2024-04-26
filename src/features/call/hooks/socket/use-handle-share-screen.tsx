@@ -150,7 +150,7 @@ export default function useHandleShareScreen() {
         }
         try {
             let stream: MediaStream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 15 }, audio: true })
-            if (!socket.id) return;
+            if (!socket.id || !user) return;
             const shareScreen = {
                 stream,
                 user: user,

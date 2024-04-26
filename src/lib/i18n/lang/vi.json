@@ -57,7 +57,8 @@
     "ALL_LANGUAGES": "Tất cả ngôn ngữ",
     "LISTENING": "Đang nghe...",
     "TYPE_A_MESSAGE": "Nhập tin nhắn",
-    "CLICK": "Ấn"
+    "CLICK": "Ấn",
+    "WAITING": "Đang chờ"
   },
   "MESSAGE": {
     "ERROR": {
@@ -78,7 +79,8 @@
       "NOT_SELECTED_LANGUAGE": "Vui lòng chọn ngôn ngữ!",
       "NOT_CHOOSE_IMAGE": "Vui lòng chọn ảnh!",
       "UPLOAD_IMAGE": "Tải ảnh lên không thành công!",
-      "CONTENT_TOO_LARGE": "Nội dung quá lớn không thể dịch!"
+      "CONTENT_TOO_LARGE": "Nội dung quá lớn không thể dịch!",
+      "DECLINE_CALL": "{{name}} đã từ chối cuộc gọi!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",

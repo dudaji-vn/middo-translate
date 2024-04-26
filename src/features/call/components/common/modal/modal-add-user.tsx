@@ -12,6 +12,7 @@ import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { SearchInput } from '@/components/data-entry';
 import { useTranslation } from 'react-i18next';
+import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 
 export const ModalAddUser = () => {
     const {t} = useTranslation("common");
@@ -20,10 +21,10 @@ export const ModalAddUser = () => {
     const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
     const room = useVideoCallStore((state) => state.room);
     const participants = useParticipantVideoCallStore(state => state.participants)
+    const addParticipant = useParticipantVideoCallStore(state => state.addParticipant)
     const [members, setMembers] = useState<User[]>([]);
     const [membersApi, setMembersApi] = useState<User[]>([]);
-    const setWaitingForSomeoneJoin = useVideoCallStore(state => state.setWaitingForSomeoneJoin);
-
+    
     useEffect(() => {
         if (!room || !room.roomId) return;
         const fetchMembersInGroup = async () => {
@@ -63,13 +64,29 @@ export const ModalAddUser = () => {
     }, []);
 
     const handleSubmit = () => { 
-        const userIds = selectedUsers.map((u) => u._id);
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
-            users: userIds,
-            call: room,
+            users: selectedUsers,
+            room,
             user
         })
-        setWaitingForSomeoneJoin(true);
+        // selectedUsers.forEach((user: User) => {
+        //     // Check to make sure the user is not in the list
+        //     if(!participants.some((p) => p.user._id === user._id)) {
+        //         let participant: ParticipantInVideoCall = {
+        //             socketId: user._id,
+        //             user: {
+        //                 _id: user._id,
+        //                 name: user.name,
+        //                 avatar: user.avatar,
+        //                 language: user.language,
+        //                 status: user.status,
+        //                 email: user.email,
+        //             },
+        //             status: 'WAITING'
+        //         }
+        //         addParticipant(participant)
+        //     }
+        // });
         setSelectedUsers([]);
     };
     const handleChangeSearch = (e: React.FormEvent<HTMLInputElement>) => {
