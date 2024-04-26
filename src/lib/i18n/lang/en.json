@@ -58,7 +58,8 @@
     "LISTENING": "Listening...",
     "TYPE_A_MESSAGE": "Type a message",
     "CLICK": "Click",
-    "WAITING": "Waiting"
+    "WAITING": "Waiting",
+    "DRAFT": "Draft"
   },
   "MESSAGE": {
     "ERROR": {

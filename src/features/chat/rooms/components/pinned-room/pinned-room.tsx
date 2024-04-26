@@ -4,6 +4,9 @@ import { RoomItem } from '../room-item';
 import { Room } from '../../types';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useChatStore } from '@/features/chat/stores';
+import { isRoomOnline } from '../inbox/inbox-list';
+import { useAuthStore } from '@/stores/auth.store';
 
 export interface PinnedRoomProps {
   currentRoomId?: string;
@@ -12,6 +15,9 @@ export interface PinnedRoomProps {
 }
 
 export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
+  const onlineList = useChatStore((state) => state.onlineList);
+  const user = useAuthStore((state) => state.user);
+
   const { businessExtension } = useBusinessExtensionStore();
   const { isBusiness } = useBusinessNavigationData();
   const filteredRooms = useMemo(() => {
@@ -30,6 +36,11 @@ export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
     <div>
       {filteredRooms.map((room) => (
         <RoomItem
+          isOnline={isRoomOnline({
+            currentUser: user!,
+            onlineList,
+            room,
+          })}
           key={room._id}
           data={room}
           isActive={currentRoomId === room._id}
