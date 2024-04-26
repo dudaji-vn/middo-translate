@@ -69,15 +69,31 @@ export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
           </div>
         )}
         {recData && recData.length > 0 && !data && (
-          <Section label={t('COMMON.SUGGESTION')}>
-            {recData?.map((user) => {
-              return (
-                <Link key={user?._id} href={`/talk/${user?._id}`}>
-                  <UserItem user={user} />
-                </Link>
-              );
-            })}
-          </Section>
+          <div className="flex w-full flex-1 flex-col overflow-y-auto px-2">
+            <Section label={t('COMMON.SUGGESTION')}>
+              {recData?.map((user) => {
+                return (
+                  <Link key={user?._id} href={`/talk/${user?._id}`}>
+                    <UserItem user={user} />
+                  </Link>
+                );
+              })}
+              {recData?.map((user) => {
+                return (
+                  <Link key={user?._id} href={`/talk/${user?._id}`}>
+                    <UserItem user={user} />
+                  </Link>
+                );
+              })}
+              {recData?.map((user) => {
+                return (
+                  <Link key={user?._id} href={`/talk/${user?._id}`}>
+                    <UserItem user={user} />
+                  </Link>
+                );
+              })}
+            </Section>
+          </div>
         )}
       </div>
     </div>

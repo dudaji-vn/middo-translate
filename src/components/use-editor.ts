@@ -45,8 +45,9 @@ export const useEditor = ({
       },
     },
     onUpdate: ({ editor }) => {
-      setDraft(id ?? '', editor.getHTML());
       if (editor.getText().length > 0) {
+        setDraft(id ?? '', editor.getHTML());
+
         if (!isTyping.current) {
           onTypingChange?.(true);
           isTyping.current = true;
@@ -60,6 +61,7 @@ export const useEditor = ({
         onTypingChange?.(false);
         isTyping.current = false;
         clearTimeout(typingTimeout.current);
+        setDraft(id ?? '', '');
       }
     },
     extensions: [

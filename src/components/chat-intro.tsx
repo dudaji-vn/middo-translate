@@ -71,6 +71,7 @@ const CardItem = ({
       quality={100}
       width={600}
       height={520}
+      priority
       className="max-h-[50vh] object-contain"
     />
     <Typography variant="h4" className="mt-6 text-primary">

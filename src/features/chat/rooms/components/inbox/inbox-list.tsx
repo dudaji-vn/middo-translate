@@ -23,6 +23,7 @@ import { PinnedRoom } from '../pinned-room';
 import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
+import { User } from '@/features/users/types';
 
 interface InboxListProps {
   type: InboxType;
@@ -130,12 +131,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               currentRoomId={currentRoomId as string}
             />
             {rooms.map((room) => {
-              const participants = room.participants.filter(
-                (user) => user._id !== currentUser._id,
-              );
-              const isOnline = participants.some((user) =>
-                onlineList.includes(user._id),
-              );
+              const isOnline = isRoomOnline({ currentUser, room, onlineList });
               return (
                 <RoomItem
                   isOnline={isOnline}
@@ -157,3 +153,19 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 InboxList.displayName = 'InboxList';
 
 export default memo(InboxList);
+
+export const isRoomOnline = ({
+  room,
+  onlineList,
+  currentUser,
+}: {
+  room: Room;
+  onlineList: string[];
+  currentUser: User;
+}) => {
+  const participants = room.participants.filter(
+    (user) => user._id !== currentUser._id,
+  );
+  const isOnline = participants.some((user) => onlineList.includes(user._id));
+  return participants.some((user) => onlineList.includes(user._id));
+};

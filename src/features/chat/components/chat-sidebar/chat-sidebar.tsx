@@ -40,7 +40,6 @@ export const ChatSidebar = ({
         )}
       >
         <ChatSidebarHeader />
-        {/* TODO: UPDATE THIS */}
         <ChatSidebarTabs>{children}</ChatSidebarTabs>
       </div>
     </>
