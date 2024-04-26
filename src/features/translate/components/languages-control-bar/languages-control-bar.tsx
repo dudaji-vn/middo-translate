@@ -62,8 +62,8 @@ export const LanguagesControlBar = forwardRef<
       if (!clickable || !_target) return;
       let sourceValue =
         _source || recentlyTargetUsed.filter((item) => item !== _target)[0];
-      if(sourceValue === _target) {
-        sourceValue = recentlyTargetUsed.filter((item) => item !== _target)[0]
+      if (sourceValue === _target) {
+        sourceValue = recentlyTargetUsed.filter((item) => item !== _target)[0];
       }
       const newParams = [
         { key: 'source', value: _target },
@@ -172,7 +172,7 @@ export const LanguagesControlBar = forwardRef<
             props.className,
           )}
         >
-          <div className="flex flex-1 justify-end overflow-hidden md:rounded-2xl lg:justify-start lg:overflow-hidden">
+          <div className="flex flex-1 justify-end overflow-hidden md:rounded-xl lg:justify-start lg:overflow-hidden">
             <LanguageSelect
               shrinkAble={shrinkAble}
               onChevronClick={() => {
@@ -201,10 +201,10 @@ export const LanguagesControlBar = forwardRef<
               variant="ghost"
               color="default"
             >
-              <ArrowRightLeftIcon className="text-text" />
+              <ArrowRightLeftIcon />
             </Button.Icon>
           </div>
-          <div className="flex flex-1 justify-start rounded-2xl lg:overflow-hidden">
+          <div className="flex flex-1 justify-start rounded-xl lg:overflow-hidden">
             <LanguageSelect
               shrinkAble={shrinkAble}
               onChange={(code) => {

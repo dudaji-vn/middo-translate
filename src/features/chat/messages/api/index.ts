@@ -5,7 +5,7 @@ import { axios as axiosWithInterceptor } from '@/lib/axios';
 
 const basePath = '/messages';
 const anonymousBasePath = NEXT_PUBLIC_URL + '/api';
-
+type senderType = 'bot' | 'user' | 'anonymous';
 export type CreateMessage = {
   roomId: string;
   media?: Media[];
@@ -14,10 +14,21 @@ export type CreateMessage = {
   language?: string;
   mentions?: string[];
   enContent?: string | null;
+  isAnonymous?: boolean;
+  senderType?: senderType;
+  parentId?: string;
 };
 export const messageApi = {
   async send(data: CreateMessage) {
-    console.log('data send(post) message: ', data);
+    if (data.isAnonymous) {
+      return messageApi.sendAnonymousMessage(data);
+    }
+    if (data.parentId) {
+      return messageApi.reply({
+        repliedMessageId: data.parentId,
+        message: data,
+      });
+    }
     const res: Response<Message> = await axiosWithInterceptor.post(
       basePath,
       data,
@@ -25,11 +36,7 @@ export const messageApi = {
     return res.data;
   },
 
-  async sendAnonymousMessage(
-    data: CreateMessage & {
-      senderType?: 'bot' | 'user';
-    },
-  ) {
+  async sendAnonymousMessage(data: CreateMessage) {
     const res: Response<Message> = await axiosWithInterceptor.post(
       anonymousBasePath + '/messages/help-desk',
       data,

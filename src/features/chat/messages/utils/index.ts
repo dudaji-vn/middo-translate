@@ -15,7 +15,7 @@ export const createLocalMessage = ({
   language = 'en',
   media = [],
 }: CreateLocalMessageParams): Message => {
-  const clientTempId = new Date().toISOString();
+  const clientTempId = Math.random().toString(36).substring(7);
   return {
     _id: clientTempId,
     sender: sender!,

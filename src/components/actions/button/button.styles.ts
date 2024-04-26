@@ -15,7 +15,7 @@ export const buttonVariants = cva(
         primary:
           'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:opacity-75  ',
         secondary:
-          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-75 ',
+          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-15 ',
         success:
           'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
         error:
@@ -51,13 +51,13 @@ export const buttonVariants = cva(
         variant: 'ghost',
         color: 'default',
         className:
-          'bg-transparent text-neutral-700 md:hover:bg-neutral-50 active:!bg-neutral-100 disabled:!bg-transparent disabled:text-neutral-50',
+          'bg-transparent text-neutral-700 md:hover:bg-neutral-50 active:!bg-neutral-100 disabled:!bg-transparent disabled:text-neutral-100',
       },
       {
         variant: 'ghost',
         color: 'primary',
         className:
-          'bg-transparent text-primary md:hover:bg-primary-200 active:!bg-primary-300 disabled:!bg-transparent disabled:text-primary-200 disabled:bg-primary-100',
+          'bg-transparent text-primary md:hover:bg-primary-200 active:!bg-primary-300 disabled:!bg-transparent disabled:text-primary-200',
       },
       {
         variant: 'ghost',

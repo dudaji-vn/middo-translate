@@ -36,7 +36,7 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
       <div className="ml-2 mt-1">
         {message.content && <TextMessage message={message} />}
         {message?.media && message.media.length > 0 && (
-          <Fragment>
+          <div className="ml-6">
             {message.media[0].type === 'image' && (
               <ImageGallery images={message.media} />
             )}
@@ -48,13 +48,11 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
             {message.media[0].type === 'video' && (
               <MessageItemVideo file={message.media[0]} />
             )}
-          </Fragment>
+          </div>
         )}
         {message?.call && <CallMessage message={message} />}
       </div>
-      <span className="mt-2 flex items-center pl-8 pr-3 text-xs text-neutral-300">
-        Translated from {getLanguageByCode(message.language)?.name}
-      </span>
+
       <span className="mt-2 flex items-center pl-8 pr-3 text-xs text-neutral-300">
         <Clock9Icon className="mr-1 inline-block size-3" />
         {moment(message.createdAt).format('lll')}
@@ -119,6 +117,9 @@ const TextMessage = ({ message }: { message: Message }) => {
           </div>
         </div>
       )}
+      <span className="mt-2 flex items-center pr-3 text-xs text-neutral-300">
+        Translated from {getLanguageByCode(message.language)?.name}
+      </span>
     </div>
   );
 };
