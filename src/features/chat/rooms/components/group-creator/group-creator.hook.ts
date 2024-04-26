@@ -6,11 +6,13 @@ import { searchApi } from '@/features/search/api';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { useSearch } from '@/hooks/use-search';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 
 export const useGroupCreateSide = () => {
   const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'group');
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const router = useRouter();
+  const { currentSide, setCurrentSide } = useSideChatStore();
 
   const handleSelectUser = useCallback((user: User) => {
     setSelectedUsers((prev) => {
@@ -33,6 +35,9 @@ export const useGroupCreateSide = () => {
   const { mutate, isLoading } = useMutation({
     mutationFn: roomApi.createRoom,
     onSuccess: (data) => {
+      if (currentSide === 'group') {
+        setCurrentSide('');
+      }
       router.push(`/talk/${data._id}`);
     },
   });
