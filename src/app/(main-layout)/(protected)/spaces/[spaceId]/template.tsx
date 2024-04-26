@@ -1,16 +1,16 @@
 'use client';
 
 import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
-import { useSpaceStore } from '@/stores/space.store';
 import { useParams } from 'next/navigation';
 import React, { useEffect } from 'react';
 import BusinessSidebar from './_components/business-sidebar/business-sidebar';
 import { cn } from '@/utils/cn';
+import { useAuthStore } from '@/stores/auth.store';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
   const { data, isLoading } = useGetSpaceData({ spaceId });
-  const { setSpace } = useSpaceStore();
+  const { setSpace } = useAuthStore();
 
   useEffect(() => {
     if (data) {

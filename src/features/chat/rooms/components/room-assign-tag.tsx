@@ -11,7 +11,6 @@ import {
 import { Check, Circle, Tag, XIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
-import { useSpaceStore } from '@/stores/space.store';
 import { TConversationTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 import toast from 'react-hot-toast';
 import { CreateOrEditTag } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/tags-list/create-or-edit-tag';
@@ -34,7 +33,7 @@ const RoomAssignTag = ({
   const [openAddTag, setOpenAddTag] = React.useState(false);
   const { mutateAsync, isLoading, isSuccess } = useChangeTagConversation();
   const [clicked, setClicked] = React.useState<string | null>();
-  const { space, setSpace } = useSpaceStore();
+  const { space, setSpace } = useAuthStore();
   const currentUser = useAuthStore((s) => s.user);
   const myRole = useMemo(() => {
     return getUserSpaceRole(currentUser, space);
@@ -74,7 +73,7 @@ const RoomAssignTag = ({
             onMouseEnter={() => {
               setOpen(true);
             }}
-            className="relative flex cursor-pointer select-none items-center gap-2 max-md:gap-4 rounded-md px-3 max-md:text-[16px]  max-md:px-5 py-1.5 text-sm outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground"
+            className="relative flex cursor-pointer select-none items-center gap-2 rounded-md px-3 py-1.5 text-sm  outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground max-md:gap-4 max-md:px-5 max-md:text-[16px]"
           >
             <Tag size={16} className="max-md:size-5" />
             <span>{t(`CONVERSATION.TAG`)}</span>

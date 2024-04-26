@@ -17,7 +17,6 @@ import { isEqual } from 'lodash';
 import RHFColorSelector, {
   COLOR_REGEX,
 } from '@/components/form/RHF-color-selector/rhf-color-selector';
-import { useSpaceStore } from '@/stores/space.store';
 
 const createOrEditTagSchema = z.object({
   tagId: z.string().optional(),
