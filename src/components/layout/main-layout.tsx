@@ -5,7 +5,7 @@ export interface MainLayoutProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const MainLayout = forwardRef<HTMLDivElement, MainLayoutProps>(
   (props, ref) => {
     return (
-      <div ref={ref} className="mx-auto h-full">
+      <div ref={ref} className="mx-auto">
         <Header />
         <div className='pt-[52px]'>
           {props.children}

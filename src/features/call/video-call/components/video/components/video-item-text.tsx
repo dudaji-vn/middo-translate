@@ -28,16 +28,16 @@ export default function VideoItemText({ participant }: VideoItemTextProps) {
             'opacity-100',
         )}
       >
-        <p className="truncate px-1 text-sm leading-snug text-white">
+        <p className="truncate px-1 text-xs leading-snug text-white">
           {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
           {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
         </p>
       </div>
       {/* Text Bottom */}
-      {(!participant.pin || layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW) && (
+      {(!participant.pin || layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW || !isFullScreen) && (
         <div className="pointer-events-none absolute bottom-1 z-10 w-full px-1">
-          <div className="pointer-events-none w-fit max-w-full cursor-none rounded-full  bg-black/80 px-2  py-1">
-            <p className="truncate px-1 text-sm leading-snug text-white">
+          <div className="pointer-events-none w-fit max-w-full cursor-none rounded-lg  bg-black/80 px-2  py-1">
+            <p className="truncate text-xs leading-snug text-white">
               {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
               {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
             </p>

@@ -190,7 +190,7 @@
   }
 
   body {
-    @apply select-none overflow-hidden bg-background text-foreground md:select-auto md:overflow-auto;
+    @apply select-none bg-background text-foreground md:select-auto md:overflow-auto;
   }
   button {
     @apply !outline-none;

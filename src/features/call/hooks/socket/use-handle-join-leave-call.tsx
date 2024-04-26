@@ -11,6 +11,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import { useTranslation } from "react-i18next";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { User } from "@/features/users/types";
 
 export default function useHandleJoinLeaveCall() {
     const {t} = useTranslation('common');
@@ -67,6 +68,17 @@ export default function useHandleJoinLeaveCall() {
         item.peer.signal(payload.signal);
     }, [participants, peerShareScreen])
 
+
+    const addWaitingUser = useCallback((payload: {
+        users: User[]
+    }) => {
+        payload.users.forEach((user: User) => {
+            if(!participants.some((p: any) => p.user._id === user._id)) {
+                addParticipant({ user, socketId: user._id, status: 'WAITING' });
+            }
+        })
+    }, [addParticipant, participants])
+
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.LEAVE, removeUserLeavedRoom);
         socket.on(SOCKET_CONFIG.EVENTS.CALL.RECEIVE_RETURN_SIGNAL, saveSignal);
@@ -91,10 +103,19 @@ export default function useHandleJoinLeaveCall() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [room._id, room.roomId, user?._id]);
 
+    // Add user waiting for join
+    useEffect(() => {
+        if(!socket.id) return;
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_WAITING_CALL, addWaitingUser);
+        return () => {
+            socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_WAITING_CALL, addWaitingUser);
+        }
+    }, [addWaitingUser, participants]);
 
     // // Add Me To list participant
     useEffect(() => {
         const isHaveMe = participants.some((p: ParticipantInVideoCall) => p.isMe);
+        if(!user) return;
         if (!isHaveMe) {
             const me: ParticipantInVideoCall = { user, isMe: true, socketId: socket.id || '' }
             if (myStream) {
@@ -102,6 +123,20 @@ export default function useHandleJoinLeaveCall() {
             }
             addParticipant(me);
         };
+    }, [addParticipant, myStream, participants, user]);
+
+    useEffect(() => {
+        if(!user) return;
+        const me: ParticipantInVideoCall = { user, isMe: true, socketId: socket.id || '' }
+        if (myStream) {
+            me.stream = myStream
+        }
+        let timer: NodeJS.Timeout = setTimeout(() => {
+            // addParticipant(me);
+        }, 2000)
+        return () => {
+            clearTimeout(timer);
+        }
     }, [addParticipant, myStream, participants, user]);
 
 }

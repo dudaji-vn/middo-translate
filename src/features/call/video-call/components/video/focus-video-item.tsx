@@ -10,6 +10,7 @@ import { DoodleShareScreen } from '../doodle/doodle-share-screen';
 import { useTranslation } from 'react-i18next';
 import VideoItemTalk from './components/video-item-talk';
 import { Maximize, Minimize } from 'lucide-react';
+import UserStatus from './components/user-status';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -114,8 +115,8 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       />
 
       {/* Overlay name */}
-      <div className="absolute bottom-1 left-1 z-10 flex max-w-[90%] items-center justify-center gap-2 rounded-xl bg-black/80 p-2 text-white">
-        <span className="relative truncate leading-snug">
+      <div className="absolute bottom-1 left-1 z-10 flex max-w-[90%] items-center justify-center gap-2 rounded-lg bg-black/80 p-2 py-1 text-white">
+        <span className="relative truncate leading-snug text-xs">
           {participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
           {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
         </span>
@@ -132,6 +133,8 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         // {participant?.isShareScreen &&
         <DoodleShareScreen width={width} height={height} />
       )}
+
+        <UserStatus isForgeShow={true} participant={participant}/>
     </section>
   );
 };

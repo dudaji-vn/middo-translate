@@ -57,7 +57,8 @@
     "ALL_LANGUAGES": "모든 언어",
     "LISTENING": "듣는 중...",
     "TYPE_A_MESSAGE": "메시지 입력",
-    "CLICK": "클릭"
+    "CLICK": "클릭",
+    "WAITING": "대기 중"
   },
   "MESSAGE": {
     "ERROR": {
@@ -78,7 +79,8 @@
       "NOT_SELECTED_LANGUAGE": "언어를 선택해주세요!",
       "NOT_CHOOSE_IMAGE": "이미지를 선택해주세요!",
       "UPLOAD_IMAGE": "이미지 업로드에 실패했습니다!",
-      "CONTENT_TOO_LARGE": "번역할 내용이 너무 커서 처리할 수 없습니다!"
+      "CONTENT_TOO_LARGE": "번역할 내용이 너무 커서 처리할 수 없습니다!",
+      "DECLINE_CALL": "{{name}}는 전화를 거절했습니다!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "프로필이 성공적으로 업데이트되었습니다!",
@@ -542,5 +544,9 @@
     "TITLE": "인터넷 연결이 끊어졌습니다",
     "DESCRIPTION": "Wi-Fi 또는 모바일 네트워크에 연결하거나 인터넷 연결을 확인하거나 필요한 경우 장치를 다시 시작하세요",
     "REFRESH": "새로 고침"
+  },
+  "404": {
+    "TITLE": "페이지를 찾을 수 없음",
+    "DESCRIPTION": "찾을 수 없는 페이지입니다"
   }
 }
