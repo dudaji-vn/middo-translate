@@ -24,11 +24,12 @@ const MessageNode = ({
     const key = ['messages', room?._id];
     const { link, content: originalContent, translations } = messageNode.data || {};
 
-    const [me, them] = useMemo(() => {
+    const [me, bot] = useMemo(() => {
+        console.log('par', room?.participants)
         // @ts-ignore
         const me = room?.participants.find((p: { _id: string, tempEmail: boolean, status: string, email: string }) => p.status === 'anonymous' || (p.email && p.tempEmail === p.email))
-        const them = room?.participants.find((p) => p._id !== me?._id);
-        return [me, them];
+        const bot = room?.participants.find((p) => p._id !== me?._id);
+        return [me, bot];
     }, [room?.participants]);
 
 
@@ -66,9 +67,9 @@ const MessageNode = ({
             const childrenActions = nodes.filter(node => node.parentNode === nextNode?.id);
             const newBotMessage = {
                 ...createLocalMessage({
-                    sender: them!,
+                    sender: bot!,
                     content: nextNode.data?.content,
-                    language: them?.language,
+                    language: bot?.language,
                 }),
                 status: 'sent',
                 roomId: room?._id,
@@ -81,7 +82,7 @@ const MessageNode = ({
                     ...newBotMessage,
                     senderType: 'bot',
                     // @ts-ignore
-                    userId: them?._id,
+                    userId: bot?._id,
                     clientTempId: new Date().toISOString()
                 })
                 if (mes)

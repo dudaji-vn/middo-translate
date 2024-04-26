@@ -77,8 +77,7 @@ const CreateExtensionHeader = ({
     trigger(createExtensionSteps[step]?.nameField).then((result) => {
       setCanNext(result);
       if (result) {
-        handleStepChange(step + 1);
-        handleStepChange(step + 1);
+        handleStepChange(newStep);
       }
     });
   };
