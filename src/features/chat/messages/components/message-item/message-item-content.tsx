@@ -164,7 +164,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
       <span
         className={cn(
           'inline-block w-full text-xs font-light',
-          isMe ? 'text-right text-white/40' : 'text-left text-neutral-300',
+          isMe || position==='right' ? 'text-right text-white/40' : 'text-left text-neutral-300',
         )}
       >
         Translated from {getLanguageByCode(message.language)?.name}
