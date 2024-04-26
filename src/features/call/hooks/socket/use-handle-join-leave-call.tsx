@@ -122,6 +122,14 @@ export default function useHandleJoinLeaveCall() {
                 me.stream = myStream
             }
             addParticipant(me);
+            addParticipant(me);
+            addParticipant(me);
+            addParticipant(me);
+            addParticipant(me);
+            addParticipant(me);
+            addParticipant(me);
+            addParticipant(me);
+            addParticipant(me);
         };
     }, [addParticipant, myStream, participants, user]);
 
