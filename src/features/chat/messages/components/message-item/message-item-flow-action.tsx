@@ -84,7 +84,6 @@ const MessageNode = ({
                     userId: them?._id,
                     clientTempId: new Date().toISOString()
                 })
-                console.log('bot-mes', mes)
                 if (mes)
                     replaceMessage({
                         ...mes,
