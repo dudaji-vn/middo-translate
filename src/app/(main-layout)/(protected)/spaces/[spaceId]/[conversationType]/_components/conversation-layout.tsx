@@ -16,7 +16,7 @@ export default function ConversationLayout({
 }) {
   const isMobile = useAppStore((state) => state.isMobile);
   return (
-    <div className="disable-text-selection  overflow-y-hidden h-[calc(100vh-94px)]">
+    <div className="disable-text-selection  h-[calc(100vh-94px)] overflow-y-hidden">
       {isMobile ? (
         <>
           <ChatSidebar spaceData={spaceData}>

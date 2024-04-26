@@ -26,7 +26,7 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="h-main-container-height overflow-auto">
+    <div className="container-height overflow-auto">
       <div className="mx-auto w-full bg-[#FAFAFA] md:my-8 md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2">
         <div className="p-10">
           <div className="relative mx-auto h-24 w-24 ">

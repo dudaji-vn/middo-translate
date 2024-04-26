@@ -190,7 +190,7 @@
   }
 
   body {
-    @apply select-none bg-background text-foreground md:select-auto md:overflow-auto;
+    @apply select-none overflow-hidden bg-background text-foreground md:select-auto md:overflow-auto;
   }
   button {
     @apply !outline-none;
@@ -512,7 +512,26 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 
-
 .sash-hover::before {
   background: #3d88ed !important;
+}
+
+.container-height {
+  height: calc(100dvh - 52px);
+}
+
+.platform-electron .container-height {
+  height: calc(100vh - 52px);
+}
+
+.platform-mobile .container-height {
+  height: 100dvh;
+}
+
+.full-screen-height {
+  height: 100dvh;
+}
+
+.platform-electron .full-screen-height {
+  height: 100vh;
 }

@@ -35,9 +35,8 @@ export const ChatSidebar = ({
     <>
       <div
         className={cn(
-          'relative flex  w-full flex-col overflow-hidden border-r',
+          'container-height relative  flex w-full flex-col overflow-hidden border-r',
           { 'max-md:hidden': isOnBusinessChat },
-          platform === 'mobile' ? 'h-dvh' : 'h-main-container-height',
         )}
       >
         <ChatSidebarHeader />
