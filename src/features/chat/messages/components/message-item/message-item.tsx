@@ -46,6 +46,7 @@ export interface MessageProps
   showTime?: boolean;
   showReactionBar?: boolean;
   isDraw?: boolean;
+  isSendBySpaceMember: boolean;
 }
 
 type MessageItemContextProps = {
@@ -84,17 +85,20 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       discussionDisabled = false,
       showTime,
       showReactionBar = true,
+      isSendBySpaceMember = false,
       isDraw = false,
       ...props
     },
     ref,
   ) => {
-    const isMe = sender === 'me';
+    const isMe = sender === 'me' || isSendBySpaceMember;
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
+
     const flowActions = message.actions;
+
     return (
       <MessageItemContext.Provider
         value={{
@@ -212,6 +216,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     {!discussionDisabled && message.hasChild && showReply && (
                       <MessageItemReply isMe={isMe} messageId={message._id} />
                     )}
+
                     <div className="block-blur absolute bottom-0 left-0  hidden h-9 w-full bg-gradient-to-t from-gray2 to-gray2/0" />
                   </div>
                 </MessageItemWrapper>
@@ -224,15 +229,32 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 message.reactions.length > 0 && (
                   <MessageItemReactionBar isMe={isMe} message={message} />
                 )}
+
               {showTime && (
-                <span
-                  className={cn(
-                    'mt-1  block text-xs font-light text-neutral-500',
-                    isMe ? 'text-end' : 'pl-7 text-start',
+                <>
+                  {isSendBySpaceMember && (
+                    <span
+                      className={cn(
+                        'mt-1  block text-xs font-light text-neutral-500',
+                        isMe ? 'text-end' : 'pl-7 text-start',
+                      )}
+                    >
+                      Send by&nbsp;
+                      <span className="font-medium">
+                        {message.sender?.name}
+                        {message.senderType === 'bot' && <>&apos;s script</>}
+                      </span>
+                    </span>
                   )}
-                >
-                  {formatTimeDisplay(message.createdAt!)}
-                </span>
+                  <span
+                    className={cn(
+                      'mt-1  block text-xs font-light text-neutral-500',
+                      isMe ? 'text-end' : 'pl-7 text-start',
+                    )}
+                  >
+                    {formatTimeDisplay(message.createdAt!)}
+                  </span>
+                </>
               )}
               <MessageItemFlowActions actions={flowActions || []} />
             </div>
