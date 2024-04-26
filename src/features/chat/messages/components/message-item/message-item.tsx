@@ -36,6 +36,7 @@ export interface MessageProps
     VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
+  spaceAvatar?: string;
   showAvatar?: boolean;
   showReply?: boolean;
   direction?: 'bottom' | 'top';
@@ -77,6 +78,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       guestId,
       className,
       readByUsers,
+      spaceAvatar,
       showAvatar,
       direction,
       showReply = true,
@@ -98,7 +100,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const { value: isActive, setValue: setActive } = useBoolean(false);
 
     const flowActions = message.actions;
-
     return (
       <MessageItemContext.Provider
         value={{
@@ -135,7 +136,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 {showAvatar ? (
                   <Avatar
                     className="pointer-events-auto mb-auto mr-1  mt-0.5 shrink-0"
-                    src={message.sender.avatar}
+                    src={spaceAvatar || message.sender.avatar}
                     alt={message.sender.name}
                     size="xs"
                   />
@@ -180,7 +181,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           active={isActive}
                         />
                       )}
-
                       {message?.media && message.media.length > 0 && (
                         <Fragment>
                           {message.media[0].type === 'image' && (

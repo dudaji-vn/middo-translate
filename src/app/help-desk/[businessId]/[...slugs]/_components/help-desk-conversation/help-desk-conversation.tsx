@@ -129,7 +129,9 @@ const HelpDeskConversationContent = memo(
                 isAnonymous={isAnonymousPage}
                 guestId={anonymousUser?._id}
               />
-              {roomSendingState === 'loading' && <FakeTyping />}
+              {roomSendingState === 'loading' && (
+                <FakeTyping name={room.space?.name} />
+              )}
               <ChatBoxFooter
                 isAnonymous={isAnonymousPage}
                 guest={anonymousUser}
