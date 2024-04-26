@@ -19,11 +19,9 @@ export const useBusinessNavigationData = () => {
   const params = useParams();
   const pathname = usePathname();
   const isBusiness = pathname?.includes(EPageType.SPACES);
-  const isOnASpace = isBusiness && params?.[PK_SPACE_KEY];
-
   const businessSlugs = params?.slugs || [];
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
-  const isTestItOutPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
+  const isPreviewChatflowPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
   const isOnBusinessChat =
     params?.[PK_BUSINESS_SPACES] && businessSlugs?.length > 0;
   const isOnHelpDeskChat =
@@ -35,20 +33,21 @@ export const useBusinessNavigationData = () => {
   const businessConversationType = isBusiness
     ? params?.[PK_BUSINESS_SPACES]
     : null;
+
+  const spaceId = params?.[PK_SPACE_KEY];
   const businessRoomId = isOnBusinessChat ? businessSlugs?.[0] : null;
   return {
     isBusiness,
     isHelpDesk,
-    isOnASpace,
     isOnBusinessChat,
-    businessSlugs,
     isOnHelpDeskChat,
     isUserChattingWithGuest,
     guestId,
     businessRoomId,
     anonymousId,
     businessConversationType,
-    isTestItOutPage,
+    spaceId,
+    isPreviewChatflowPage,
     inboxStatus:
       MAPPED_INBOX_STATUS[
         (businessConversationType || '') as EBusinessConversationKeys
