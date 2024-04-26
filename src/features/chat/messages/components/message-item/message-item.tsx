@@ -46,7 +46,7 @@ export interface MessageProps
   showTime?: boolean;
   showReactionBar?: boolean;
   isDraw?: boolean;
-  isSendBySpaceMember: boolean;
+  isSendBySpaceMember?: boolean;
 }
 
 type MessageItemContextProps = {
