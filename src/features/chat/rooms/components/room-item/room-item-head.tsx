@@ -16,15 +16,15 @@ export const RoomItemHead = ({ isRead, showTime, time }: RoomItemHeadProps) => {
   const { data } = useRoomItem();
   return (
     <div className="mb-1 flex items-center justify-between">
-      <div className="flex max-w-full flex-row items-center gap-2">
+      <div className="flex max-w-full flex-row w-full items-center gap-2">
         {data.tag && (
           <Badge
             variant="default"
-            className={'capitalize'}
             style={{
               backgroundColor: data.tag.color,
               color: getContrastingTextColor(data.tag.color),
             }}
+            className={'max-w-40 line-clamp-1 capitalize'}
           >
             {data.tag.name}
           </Badge>
