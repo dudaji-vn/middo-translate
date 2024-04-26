@@ -39,15 +39,12 @@ export const LongPressMenu = ({
   onOpenChange?: (isOpen: boolean) => void;
 }) => {
   const { setFalse, setTrue, value, setValue } = useBoolean(false);
-  const bind = useLongPress(
-    (event) => {
-      onPressed && onPressed();
-      setTrue();
-      navigator?.vibrate(8);
-      onOpenChange && onOpenChange(true);
-    },
-    { threshold: 600 },
-  );
+  const bind = useLongPress((event) => {
+    onPressed && onPressed();
+    setTrue();
+    navigator?.vibrate(8);
+    onOpenChange && onOpenChange(true);
+  });
 
   const handleOpen = () => {
     setTrue();
