@@ -8,6 +8,7 @@ import React, { useMemo } from 'react';
 import { messageApi } from '../../api';
 import { useMessagesBox } from '../message-box';
 import { createLocalMessage } from '../../utils';
+import { Message } from '../../types';
 
 export type MessageNode = Omit<FlowNode, 'position' | 'data'> & {
   data: FlowNode['data'] & { translations?: { [key: string]: string } };
@@ -31,7 +32,7 @@ const MessageNode = ({
 
   const [me, bot] = useMemo(() => {
     const me = room?.participants.find(
-    // @ts-ignore
+      // @ts-ignore
       (p: { _id: string; tempEmail: boolean; status: string; email: string }) =>
         p.status === 'anonymous',
     );
@@ -61,7 +62,12 @@ const MessageNode = ({
       // @ts-ignore
       replaceMessage(mes, myMessage.clientTempId);
   };
-  const onSendBotMessage = async (botMessage: any) => {
+  const onSendBotMessage = async (
+    botMessage: Message & {
+      roomId: string;
+    },
+  ) => {
+    setRoomSendingState('loading');
     try {
       const mes = await messageApi.sendAnonymousMessage({
         ...botMessage,
@@ -75,8 +81,7 @@ const MessageNode = ({
           {
             ...mes,
             content: mes.translations?.[me!.language] || botMessage.content,
-            // @ts-ignore
-          },
+          }, // @ts-ignore
           botMessage.clientTempId,
         );
     } catch (error) {
@@ -93,8 +98,6 @@ const MessageNode = ({
     const nextNode = nodes.find((node) => node.id === nextEdge?.target);
 
     if (nextNode) {
-      console.log('nextNode', nextNode);
-      setRoomSendingState('loading');
       const childrenActions = nodes.filter(
         (node) => node.parentNode === nextNode?.id,
       );
@@ -122,7 +125,7 @@ const MessageNode = ({
           type: nextNode.type === 'option' ? 'flow-actions' : 'text',
           mentions: [],
           actions: nextNode.type === 'message' ? undefined : childrenActions,
-          media: nextNode.data?.media.map((med) => ({ ...med, type: 'image' })),
+          media: nextNode.data?.media,
         });
       }
     }
