@@ -19,12 +19,12 @@ const items: NavItem[] = [
     isShowOnDesktop: true,
     target: '_self',
   },
-  {
-    name: 'HEADER.EXTENSION',
-    href: ROUTE_NAMES.EXTENSION,
-    isShowOnDesktop: true,
-    target: '_blank',
-  },
+  // {
+  //   name: 'HEADER.EXTENSION',
+  //   href: ROUTE_NAMES.EXTENSION,
+  //   isShowOnDesktop: true,
+  //   target: '_blank',
+  // },
   {
     name: 'HEADER.DOWNLOAD',
     href: ROUTE_NAMES.LANDING_PAGE,
