@@ -63,10 +63,7 @@ const HelpDeskConversation = ({
   if (!isClient) return null;
 
   return (
-    <div
-      {...props}
-      className={cn('h-main-container-height w-full', props.className)}
-    >
+    <div {...props} className={cn('h-full w-full', props.className)}>
       <ChatBoxProvider room={room}>
         <div className="flex h-full">
           {isMobile ? (
@@ -129,7 +126,9 @@ const HelpDeskConversationContent = memo(
                 isAnonymous={isAnonymousPage}
                 guestId={anonymousUser?._id}
               />
-              {roomSendingState === 'loading' && <FakeTyping />}
+              {roomSendingState === 'loading' && (
+                <FakeTyping name={room.space?.name} />
+              )}
               <ChatBoxFooter
                 isAnonymous={isAnonymousPage}
                 guest={anonymousUser}

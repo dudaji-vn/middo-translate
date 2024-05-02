@@ -19,7 +19,7 @@ const ChatLayout = ({ children }: ChatLayoutProps) => {
 
   return (
     <Fragment>
-      <div className="disable-text-selection h-main-container-height">
+      <div className="disable-text-selection container-height">
         {isMobile ? (
           <>
             <ChatSidebar>

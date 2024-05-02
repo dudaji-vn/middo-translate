@@ -48,9 +48,9 @@ export const RoomTyping = (props: RoomTypingProps) => {
   const verb = isMoreThanOne ? 'are' : 'is';
   return (
     <div className="relative">
-      <div className="absolute left-0 top-0 flex -translate-y-full bg-white  p-1 pl-3 text-sm text-neutral-600">
+      <div className="absolute left-0 top-0 ml-2 flex -translate-y-full rounded-t-lg bg-white bg-gradient-to-r p-1 text-sm font-light text-neutral-600">
         <span>
-          <span className="font-semibold">{actor}</span> {verb}&nbsp;
+          <span className="font-normal">{actor}</span> {verb}&nbsp;
         </span>
         <span>
           typing&nbsp;

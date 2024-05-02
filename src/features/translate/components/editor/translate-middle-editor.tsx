@@ -2,8 +2,6 @@
 
 import './style.css';
 
-import { CheckCircle2Icon, XCircleIcon } from 'lucide-react';
-
 import { Button } from '@/components/actions';
 import { cn } from '@/utils/cn';
 import { useSetParams } from '@/hooks/use-set-params';
@@ -52,16 +50,19 @@ export const TranslateMiddleEditor = ({
       },
     ]);
   };
-  useKeyboardShortcut([SHORTCUTS.EDIT_ESL_TRANSLATION, SHORTCUTS.CONFIRM_ESL_TRANSLATED], (e, matchedKeys) => {
-    if (isEqual(matchedKeys, SHORTCUTS.EDIT_ESL_TRANSLATION)) {
-      handleCancel();
-    } else if (isEqual(matchedKeys, SHORTCUTS.CONFIRM_ESL_TRANSLATED)) {
-      handleDone();
-    }
-  })
+  useKeyboardShortcut(
+    [SHORTCUTS.EDIT_ESL_TRANSLATION, SHORTCUTS.CONFIRM_ESL_TRANSLATED],
+    (e, matchedKeys) => {
+      if (isEqual(matchedKeys, SHORTCUTS.EDIT_ESL_TRANSLATION)) {
+        handleCancel();
+      } else if (isEqual(matchedKeys, SHORTCUTS.CONFIRM_ESL_TRANSLATED)) {
+        handleDone();
+      }
+    },
+  );
 
   return (
-    <div className="translateTextWrapper relative flex items-stretch gap-3">
+    <div className="translateTextWrapper relative flex flex-col items-stretch gap-3 !rounded-xl">
       <textarea
         value={value}
         ref={textAreaRef}
@@ -69,22 +70,21 @@ export const TranslateMiddleEditor = ({
           setValue(e.target.value);
         }}
         className={cn('inputTranslate  bg-transparent')}
-        placeholder="hello"
+        placeholder="Type your translation here"
       />
-      <div className="flex flex-col justify-between">
-        <Button.Icon
+      <div className="flex justify-end gap-1">
+        <Button
+          size="xs"
           onClick={handleCancel}
           variant="ghost"
-          className="btn-icon -mt-3"
           color="default"
+          shape="square"
         >
-          <XCircleIcon />
-        </Button.Icon>
-        <div className="">
-          <Button.Icon disabled={!value} onClick={handleDone} color="success">
-            <CheckCircle2Icon />
-          </Button.Icon>
-        </div>
+          Cancel
+        </Button>
+        <Button disabled={!value} onClick={handleDone} size="xs" shape="square">
+          Save
+        </Button>
       </div>
     </div>
   );

@@ -8,6 +8,8 @@ import {
 } from './room-side-tabs/room-side-tabs.hook';
 import { RoomSideTabDiscussion } from './room-side-tab-discussion';
 import { RoomSideTabPinned } from './room-side-tabs/room-side-tab-pinned';
+import { useAppStore } from '@/stores/app.store';
+import { cn } from '@/utils/cn';
 
 const tabsMap: Record<RoomSidebarTabs, React.ReactNode> = {
   info: <RoomSideTabInfo />,
@@ -20,13 +22,17 @@ export interface RoomSideProps extends React.HTMLAttributes<HTMLDivElement> {}
 export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
   (props, ref) => {
     const { currentSide } = useRoomSidebarTabs();
+    const isMobile = useAppStore((state) => state.isMobile);
     if (!currentSide) return <></>;
     return (
       <RoomActions>
         <div
           ref={ref}
           {...props}
-          className="absolute left-0 top-0 z-50 h-dvh w-screen overflow-y-auto border-l bg-background p-3 pb-0 md:relative md:z-auto md:w-full md:h-main-container-height"
+          className={cn(
+            'absolute left-0 top-0 z-50 w-screen overflow-y-auto border-l bg-background p-3 pb-0 md:relative md:z-auto md:w-full',
+            isMobile ? 'full-screen-height' : 'container-height',
+          )}
         >
           {tabsMap[currentSide]}
         </div>

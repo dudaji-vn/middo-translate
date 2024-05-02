@@ -1,15 +1,15 @@
 'use client';
 
 import { Button } from '@/components/actions';
-import { MultipleCopyIcon } from '@/components/icons';
-import { forwardRef } from 'react';
-import { getCountryCode } from '@/utils/language-fn';
 import { useCompare } from '@/features/translate/context';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import { useTranslateStore } from '@/stores/translate.store';
-import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { getFlagEmoji } from '@/utils/get-flag-emoji';
+import { getCountryCode } from '@/utils/language-fn';
+import { Layers3Icon } from 'lucide-react';
+import { forwardRef } from 'react';
 
 export interface TextCopyProps extends React.HTMLAttributes<HTMLDivElement> {
   sourceText: string;
@@ -59,11 +59,11 @@ export const TextCopy = forwardRef<HTMLDivElement, TextCopyProps>(
         <Button.Icon
           disabled={!isMatch || isEnglishTranslate}
           onClick={handleCopy}
-          variant="ghost"
-          color="primary"
-          size="lg"
+          variant="default"
+          color="secondary"
+          size="sm"
         >
-          <MultipleCopyIcon />
+          <Layers3Icon />
         </Button.Icon>
       </div>
     );

@@ -85,5 +85,10 @@ export const SOCKET_CONFIG = {
         CLIENT: 'typing.update.client',
       },
     },
+    SPACE: {
+      NOTIFICATION: {
+        NEW: 'space.notification.new',
+      },
+    },
   },
 };

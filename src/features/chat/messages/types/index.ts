@@ -59,6 +59,7 @@ export type Message = {
   mentions?: User[];
   action?: ActionTypes;
   clientTempId?: string;
+  senderType?: 'bot' | 'user' | 'anonymous';
   translations?: {
     [key: string]: string;
   };

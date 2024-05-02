@@ -58,7 +58,8 @@
     "LISTENING": "Listening...",
     "TYPE_A_MESSAGE": "Type a message",
     "CLICK": "Click",
-    "WAITING": "Waiting"
+    "WAITING": "Waiting",
+    "DRAFT": "Draft"
   },
   "MESSAGE": {
     "ERROR": {
@@ -251,6 +252,7 @@
     "MESSAGE": "message",
     "MESSAGES": "messages",
     "VIEW": "View",
+    "TAG": "Tag",
     "TO": "To",
     "NEW_GROUP_CHAT": "Create group chat",
     "GROUP_CHAT": "Group chat",

@@ -15,8 +15,8 @@ import { SearchIcon, XCircleIcon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
-import { useSidebarTabs } from '@/features/chat/hooks';
 import isEqual from 'lodash/isEqual';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 
 interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
@@ -31,7 +31,7 @@ export interface SearchInputRef extends HTMLInputElement {
 export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
   ({ btnDisabled, defaultValue, onClear, ...props }, ref) => {
     const [value, setValue] = useState(defaultValue || '');
-    const { changeSide, currentSide } = useSidebarTabs();
+    const { setCurrentSide } = useSideChatStore();
     const inputRef = useRef<HTMLInputElement>(null);
     const handleClear = useCallback(() => {
       setValue('');
@@ -42,7 +42,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       [SHORTCUTS.SEARCH, SHORTCUTS.NEW_CONVERSATION],
       (_, mathedKeys) => {
         if (isEqual(mathedKeys, SHORTCUTS.NEW_CONVERSATION)) {
-          changeSide('individual');
+          setCurrentSide('individual');
           return;
         }
         inputRef.current?.focus();

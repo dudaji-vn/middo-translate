@@ -18,7 +18,6 @@ export interface RoomModalChangeStatusProps {
 const MAPPED_ACTION_STATUS: Record<string, RoomStatus> = {
   'archive': 'archived',
   'unarchive': 'active',
-  'complete': 'completed',
 }
 
 

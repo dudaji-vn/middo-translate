@@ -47,7 +47,7 @@ const SocketProvider = () => {
   }, [user?._id]);
 
   useEffect(() => {
-    console.log('socket.provider.tsx: WINDOW_FOCUSED');
+    // console.log('socket.provider.tsx: WINDOW_FOCUSED');
     if (isElectron && ipcRenderer) {
       ipcRenderer.on(ELECTRON_EVENTS.WINDOW_FOCUSED, (e: any) => {
         console.log('Ensure socket connection');

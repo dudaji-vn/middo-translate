@@ -58,7 +58,8 @@
     "LISTENING": "Đang nghe...",
     "TYPE_A_MESSAGE": "Nhập tin nhắn",
     "CLICK": "Ấn",
-    "WAITING": "Đang chờ"
+    "WAITING": "Đang chờ",
+    "DRAFT": "Nháp"
   },
   "MESSAGE": {
     "ERROR": {
@@ -251,6 +252,7 @@
     "MESSAGE": "tin nhắn",
     "MESSAGES": "tin nhắn",
     "VIEW": "Xem",
+    "TAG": "Tag",
     "TO": "Đến",
     "NEW_GROUP_CHAT": "Tạo nhóm trò chuyện",
     "GROUP_CHAT": "Nhóm trò chuyện",

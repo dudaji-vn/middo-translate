@@ -54,39 +54,38 @@ export const ItemAvatar = ({
   isMuted?: boolean;
 }) => {
   const avatars = useMemo(() => {
-    const avatars = [];
-    const { participants, avatar, isGroup, name, admin } = room;
-
-    if (avatar) {
-      avatars.push({
-        src: avatar,
-        alt: name ?? '',
-      });
-    } else if (!isGroup) {
+    const { participants } = room;
+    if (room.avatar) {
+      return [
+        {
+          src: room.avatar,
+          alt: room.name ?? '',
+        },
+      ];
+    }
+    if (!room.isGroup) {
       const other = participants.find(
-        (participant) => participant._id !== admin?._id,
+        (participant) => participant._id !== room.admin?._id,
       );
       if (other) {
-        avatars.push({
-          src: other.avatar!,
-          alt: other.name,
-        });
+        return [
+          {
+            src: other.avatar!,
+            alt: other.name,
+          },
+        ];
       }
-    } else {
-      participants.slice(0, MAX_AVATAR_COUNT).forEach((participant) => {
-        avatars.push({
-          src: participant.avatar!,
-          alt: participant.name,
-        });
-      });
     }
-
-    return avatars;
+    return participants.map((participant) => ({
+      src: participant.avatar!,
+      alt: participant.name,
+    }));
   }, [room]);
 
   const avatarsDisplay = useMemo(() => {
     return avatars.slice(0, MAX_AVATAR_COUNT);
   }, [avatars]);
+
   return (
     <div className="relative">
       <div className="relative aspect-square h-12 shrink-0 overflow-hidden rounded-full">

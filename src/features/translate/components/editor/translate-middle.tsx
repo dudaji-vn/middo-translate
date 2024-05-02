@@ -56,10 +56,7 @@ export const TranslateMiddle = ({
   );
 
   useKeyboardShortcut(
-    [
-      SHORTCUTS.EDIT_ESL_TRANSLATION,
-      SHORTCUTS.CONFIRM_ESL_TRANSLATED,
-    ],
+    [SHORTCUTS.EDIT_ESL_TRANSLATION, SHORTCUTS.CONFIRM_ESL_TRANSLATED],
     (_, matched) => {
       if (isEqual(matched, SHORTCUTS.EDIT_ESL_TRANSLATION)) {
         editUnMatch();
@@ -84,13 +81,18 @@ export const TranslateMiddle = ({
       </div>
       <div className="mt-2 flex justify-end">
         {type === 'edit' ? (
-          <Button.Icon variant="ghost" color="default" onClick={editUnMatch}>
+          <Button.Icon
+            variant="ghost"
+            color="default"
+            size="xs"
+            onClick={editUnMatch}
+          >
             <Edit2Icon />
           </Button.Icon>
         ) : (
           <>
             {!isMatch && !isEdit && (
-              <Button.Icon color="success" onClick={acceptUnMatch}>
+              <Button.Icon size="xs" color="success" onClick={acceptUnMatch}>
                 <CheckCircle2Icon />
               </Button.Icon>
             )}

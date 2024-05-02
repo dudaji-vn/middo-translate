@@ -10,13 +10,16 @@ export default function ProtectedLayout({
   children: React.ReactNode;
 }) {
   const { user, isLoaded } = useProtectedRoute();
-  const pathname = usePathname()
+  const pathname = usePathname();
   const router = useRouter();
-  if (!isLoaded || !user) return <div className='flex items-center justify-center mt-2'>
-    <Spinner />
-  </div>;
-  
-  if(isLoaded && user.status == 'unset' && pathname !== '/create-account') {
+  if (!isLoaded || !user)
+    return (
+      <div className="mt-2 flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+
+  if (isLoaded && user.status == 'unset' && pathname !== '/create-account') {
     router.push('/create-account');
     return;
   }

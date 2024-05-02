@@ -19,13 +19,16 @@ import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { RoomAddMember } from '../../room-side/room-add-member';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { EBusinessConversationKeys } from '@/types/business.type';
 
 export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room: _room } = useChatBox();
   const currentUser = useAuthStore((s) => s.user)!;
   const onlineList = useChatStore((state) => state.onlineList);
   const { t } = useTranslation('common');
-  const { isBusiness } = useBusinessNavigationData();
+  const { isBusiness, spaceId, businessConversationType } =
+    useBusinessNavigationData();
   const { toggleTab } = useRoomSidebarTabs();
   const allowCall = !isBusiness;
   const room = useMemo(
@@ -51,7 +54,13 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
         props.className,
       )}
     >
-      <RoomBoxHeaderNavigation />
+      <RoomBoxHeaderNavigation
+        href={
+          isBusiness
+            ? `${ROUTE_NAMES.SPACES}/${spaceId}/${businessConversationType}`
+            : ROUTE_NAMES.ONLINE_CONVERSATION
+        }
+      />
       <div className="flex flex-1 items-center gap-2">
         <div
           className="flex items-center gap-2 active:opacity-30 md:cursor-pointer"

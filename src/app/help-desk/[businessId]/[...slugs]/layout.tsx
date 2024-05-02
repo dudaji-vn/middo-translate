@@ -1,12 +1,11 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode } from 'react';
 
 const LayoutHelpDesk = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="container-height mx-auto flex w-full shadow-md md:max-w-7xl">
+      {children}
+    </div>
+  );
+};
 
-    return (
-        <div className="flex w-full h-main-container-height md:max-w-7xl mx-auto shadow-md">
-            {children}
-        </div>
-    )
-}
-
-export default LayoutHelpDesk
+export default LayoutHelpDesk;

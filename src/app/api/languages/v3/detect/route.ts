@@ -1,25 +1,23 @@
 import { translate } from '@/lib/cloud-translate';
-import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
-	const { searchParams } = new URL(request.url);
-	const text = searchParams.get('query') || '';
-
-	if (!text) {
-		return Response.json({
-			data: '',
-		});
-	}
-	const [response] = await translate.detect(text);
-
-	await fetch(NEXT_PUBLIC_API_URL + '/api/google-api-stat/detect', {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-	}).then((res) => res.json());
-
-	return Response.json({
-		data: response,
-	});
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const text = body.content;
+    if (!text) {
+      return Response.json({
+        data: '',
+      });
+    }
+    const [response] = await translate.detect(text);
+    return Response.json({
+      data: response,
+    });
+  } catch (error: any) {
+    return NextResponse.next({
+      status: error.status || 500,
+      statusText: error.message || 'Internal Server Error',
+    });
+  }
 }
