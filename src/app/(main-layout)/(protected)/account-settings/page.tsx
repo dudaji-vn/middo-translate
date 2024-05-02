@@ -74,11 +74,11 @@ export default function AccountSettings() {
             variant={'ghost'}
             color={'error'}
             size={'sm'}
-            className="relative rounded-xl bg-error-100"
+            className="relative rounded-xl bg-error-100 !w-10 !h-10"
           >
             <LogOut size={20} />
           </Button.Icon>
-          <span className="ml-4 block text-center text-base font-medium text-error-400-main">
+          <span className="ml-4 block text-center text-base text-error-400-main">
             {t('ACCOUNT_SETTING.SIGN_OUT')}
           </span>
         </div>
