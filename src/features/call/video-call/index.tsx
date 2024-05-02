@@ -31,9 +31,7 @@ export default function VideoCall() {
     }) => {
       const { roomId, userId } = payload;
       let participant = participants.find(p => p.user._id === userId)
-      console.log(participant)
-      console.log({room})
-      if (room?._id === roomId && participant) {
+      if (room?.roomId === roomId && participant) {
         if (participant.status == StatusParticipant.WAITING) {
           updateStatusParticipant(userId, StatusParticipant.DECLINE)
         }
