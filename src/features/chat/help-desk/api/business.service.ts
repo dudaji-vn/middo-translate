@@ -48,6 +48,7 @@ export type TBusinessExtensionData = {
     nodes: FlowNode[];
     edges: Edge[];
   };
+  space?: TSpace;
 };
 class BusinessAPI {
   private basePath: string;
