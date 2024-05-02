@@ -67,11 +67,11 @@ export default function UpdateUserAvatar() {
             variant={'ghost'}
             color={'primary'}
             size={'sm'}
-            className='relative bg-primary-200 rounded-xl'
+            className='relative bg-primary-200 rounded-xl !w-10 !h-10'
           >
             <Camera size={20}/>
           </Button.Icon>
-          <span className="ml-4 block text-center text-base font-medium">
+          <span className="ml-4 block text-center text-base">
               {t('ACCOUNT_SETTING.AVATAR')}
             </span>
         </AlertDialogTrigger>

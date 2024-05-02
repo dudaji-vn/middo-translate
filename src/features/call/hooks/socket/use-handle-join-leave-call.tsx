@@ -122,29 +122,22 @@ export default function useHandleJoinLeaveCall() {
                 me.stream = myStream
             }
             addParticipant(me);
-            addParticipant(me);
-            addParticipant(me);
-            addParticipant(me);
-            addParticipant(me);
-            addParticipant(me);
-            addParticipant(me);
-            addParticipant(me);
-            addParticipant(me);
         };
     }, [addParticipant, myStream, participants, user]);
 
-    useEffect(() => {
-        if(!user) return;
-        const me: ParticipantInVideoCall = { user, isMe: true, socketId: socket.id || '' }
-        if (myStream) {
-            me.stream = myStream
-        }
-        let timer: NodeJS.Timeout = setTimeout(() => {
-            // addParticipant(me);
-        }, 2000)
-        return () => {
-            clearTimeout(timer);
-        }
-    }, [addParticipant, myStream, participants, user]);
+    // For testing layout
+    // useEffect(() => {
+    //     if(!user) return;
+    //     const me: ParticipantInVideoCall = { user, isMe: true, socketId: socket.id || '' }
+    //     if (myStream) {
+    //         me.stream = myStream
+    //     }
+    //     let timer: NodeJS.Timeout = setTimeout(() => {
+    //         // addParticipant(me);
+    //     }, 2000)
+    //     return () => {
+    //         clearTimeout(timer);
+    //     }
+    // }, [addParticipant, myStream, participants, user]);
 
 }
