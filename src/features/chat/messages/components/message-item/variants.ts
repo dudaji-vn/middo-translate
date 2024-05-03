@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const messageVariants = cva(
-  'w-fit relative overflow-hidden rounded-2xl',
+  'w-fit relative overflow-hidden rounded-[12px]',
   {
     variants: {
       sender: {
@@ -9,9 +9,9 @@ export const messageVariants = cva(
         other: 'mr-auto',
       },
       order: {
-        default: 'rounded-2xl',
+        default: 'rounded-[12px]',
         first: '',
-        middle: 'rounded-2xl',
+        middle: 'rounded-[12px]',
         last: '',
       },
       status: {
@@ -27,32 +27,32 @@ export const messageVariants = cva(
       {
         sender: 'me',
         order: 'first',
-        className: 'rounded-tr-[8px]',
+        className: 'rounded-tr-[4px]',
       },
       {
         sender: 'me',
         order: 'middle',
-        className: 'rounded-r-[8px]',
+        className: 'rounded-r-[4px]',
       },
       {
         sender: 'me',
         order: 'last',
-        className: 'rounded-br-[8px]',
+        className: 'rounded-br-[4px]',
       },
       {
         sender: 'other',
         order: 'first',
-        className: 'rounded-tl-[8px]',
+        className: 'rounded-tl-[4px]',
       },
       {
         sender: 'other',
         order: 'middle',
-        className: 'rounded-l-[8px]',
+        className: 'rounded-l-[4px]',
       },
       {
         sender: 'other',
         order: 'last',
-        className: 'rounded-bl-[8px]',
+        className: 'rounded-bl-[4px]',
       },
     ],
     defaultVariants: {
