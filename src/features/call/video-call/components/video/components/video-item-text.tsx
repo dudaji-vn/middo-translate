@@ -26,9 +26,19 @@ export default function VideoItemText({ participant, isFocusItem }: VideoItemTex
       || participant.status === StatusParticipant.DECLINE) return;
     
     if(participant.isMe) {
-      return isTurnOnMic ? <Mic size={16} className='text-neutral-500'></Mic> : <MicOff size={16} className='text-error'></MicOff>
+      return <>
+        <span className='w-[1px] bg-neutral-400 h-[15px] mx-2'></span>
+        <span>
+          {isTurnOnMic ? <Mic size={16} className='text-neutral-500'></Mic> : <MicOff size={16} className='text-error'></MicOff>}
+        </span>
+      </>
     }
-    return participant.isTurnOnMic ? <Mic size={16} className='text-neutral-500'></Mic> : <MicOff size={16} className='text-error'></MicOff>
+    return <>
+      <span className='w-[1px] bg-neutral-400 h-[15px] mx-2'></span>
+      <span>
+        {participant.isTurnOnMic ? <Mic size={16} className='text-neutral-500'></Mic> : <MicOff size={16} className='text-error'></MicOff>}
+      </span>
+    </>
   }
 
   if(participant.pin && !isFocusItem && !isPinDoodle && isFullScreen && layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW ) {
@@ -36,14 +46,9 @@ export default function VideoItemText({ participant, isFocusItem }: VideoItemTex
     return ( <div
       className='pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90'
     >
-      <p className="px-1 flex items-center justify-center">
-        <span className='truncate leading-snug text-white text-xs '>
-          {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
-          {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
-        </span>
-        {/* <span className='ml-1'>
-          <Mic size={16} className='text-neutral-500'></Mic>
-        </span> */}
+      <p className="px-1 truncate leading-snug text-white text-xs">
+        {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
+        {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
       </p>
     </div>)
   }
@@ -56,10 +61,7 @@ export default function VideoItemText({ participant, isFocusItem }: VideoItemTex
               {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
               {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
             </span>
-            {isFullScreen && layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW && <span className='w-[1px] bg-neutral-400 h-[15px] mx-2'></span>}
-            <span>
-              {getMicStatus()}
-            </span>
+            {getMicStatus()}
           </p>
         </div>
       </div>

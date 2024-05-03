@@ -114,7 +114,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         <DoodleShareScreen width={width} height={height} />
       )}
 
-      <ChangeToGalleryView>
+      <ChangeToGalleryView isExpandFull={isExpandFull}>
         <FullScreenButton setFullScreenWeb={setFullScreenWeb} isExpandFull={isExpandFull} />
       </ChangeToGalleryView>
 
