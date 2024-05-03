@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const wrapperVariants = cva('px-3 py-2', {
+export const wrapperVariants = cva('px-2 py-1', {
   variants: {
     position: {
       left: 'bg-neutral-50',
@@ -39,44 +39,47 @@ export const wrapperVariants = cva('px-3 py-2', {
   },
 });
 
-export const wrapperMiddleVariants = cva('mb-1 mt-2 rounded-xl p-1 px-3', {
-  variants: {
-    position: {
-      left: 'bg-neutral-100',
-      right: 'bg-primary-400',
+export const wrapperMiddleVariants = cva(
+  'mt-1 mb-1 rounded-md p-0.5 px-2 bg-white/90',
+  {
+    variants: {
+      position: {
+        left: 'bg-neutral-100/80',
+        right: 'bg-primary-400s bg-white/20',
+      },
+      status: {
+        removed: 'bg-transparent',
+        pending: '',
+        sent: '',
+        received: '',
+        read: '',
+      },
+      active: {
+        true: '',
+        false: '',
+      },
     },
-    status: {
-      removed: 'bg-transparent',
-      pending: '',
-      sent: '',
-      received: '',
-      read: '',
-    },
-    active: {
-      true: '',
-      false: '',
-    },
-  },
 
-  compoundVariants: [
-    {
+    compoundVariants: [
+      {
+        position: 'left',
+        active: true,
+        className: 'bg-neutral-100',
+      },
+      {
+        position: 'right',
+        active: true,
+        className: 'bg-primary-600',
+      },
+    ],
+
+    defaultVariants: {
       position: 'left',
-      active: true,
-      className: 'bg-neutral-100',
+      status: 'sent',
+      active: false,
     },
-    {
-      position: 'right',
-      active: true,
-      className: 'bg-primary-600',
-    },
-  ],
-
-  defaultVariants: {
-    position: 'left',
-    status: 'sent',
-    active: false,
   },
-});
+);
 
 export const textVariants = cva(
   'break-word-mt text-start text-base md:text-sm',

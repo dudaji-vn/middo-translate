@@ -59,7 +59,8 @@
     "TYPE_A_MESSAGE": "Nhập tin nhắn",
     "CLICK": "Ấn",
     "WAITING": "Đang chờ",
-    "DRAFT": "Nháp"
+    "DRAFT": "Nháp",
+    "TRANSLATED_FROM": "Dịch từ"
   },
   "MESSAGE": {
     "ERROR": {

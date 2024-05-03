@@ -8,6 +8,7 @@ import { forwardRef } from 'react';
 const spinnerVariants = cva('spinner', {
   variants: {
     size: {
+      ss: 'w-3 h-3',
       xs: 'w-3 h-3',
       sm: 'w-5 h-5',
       md: 'w-6 h-6',

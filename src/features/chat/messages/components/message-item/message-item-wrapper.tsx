@@ -16,7 +16,7 @@ import {
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
 import EmojiPicker from '@emoji-mart/react';
-import { MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
+import { Clock9Icon, MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
 import moment from 'moment';
 import {
   PropsWithChildren,
@@ -32,7 +32,7 @@ import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
 import { actionItems, useMessageActions } from '../message-actions';
 import { MessageEmojiPicker } from '../message-emoji-picker';
-import { formatTimeDisplay } from '@/features/chat/rooms/utils';
+import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
@@ -139,6 +139,10 @@ const MobileWrapper = ({
     hideEmoji();
   };
 
+  const translatedFrom = useTranslatedFromText({
+    languageCode: message.language,
+  });
+
   return (
     <>
       <LongPressMenu
@@ -153,14 +157,26 @@ const MobileWrapper = ({
         <LongPressMenu.Menu
           outsideComponent={
             <div className="w-full px-3 py-2">
+              {translatedFrom && (
+                <span
+                  className={cn(
+                    'mb-1  mt-1 block text-xs font-light text-white drop-shadow-2xl',
+                    isMe ? 'text-end' : 'pl-7 text-start',
+                  )}
+                >
+                  {translatedFrom}
+                </span>
+              )}
               <span
                 className={cn(
-                  'mb-1  mt-1 block text-xs font-light text-neutral-800 drop-shadow-2xl',
-                  isMe ? 'text-end' : 'pl-7 text-start',
+                  'mb-2 flex items-center pl-8 pr-3 text-xs text-white',
+                  isMe ? 'justify-end' : 'justify-start pl-7',
                 )}
               >
-                {formatTimeDisplay(message.createdAt!)}
+                <Clock9Icon className="mr-1 inline-block size-3" />
+                {moment(message.createdAt).format('lll')}
               </span>
+
               <div
                 className={cn(
                   'pointer-events-none relative w-fit flex-1',
@@ -227,9 +243,23 @@ const DesktopWrapper = ({
   const { setFalse, value, setValue } = useBoolean(false);
   const { t } = useTranslation('common');
   const formattedDate = moment(message.createdAt).format('lll');
+  const translatedFrom = useTranslatedFromText({
+    languageCode: message.language,
+  });
   return (
     <>
-      <Tooltip triggerItem={children} title={formattedDate} />
+      <Tooltip
+        triggerItem={children}
+        title={
+          translatedFrom
+            ? translatedFrom + ' • ' + formattedDate
+            : formattedDate
+        }
+        contentProps={{
+          className: 'bg-black/60 text-white rounded-lg',
+          align: isMe ? 'end' : 'start',
+        }}
+      />
       <div
         className={cn(
           'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:flex',
@@ -240,7 +270,7 @@ const DesktopWrapper = ({
       >
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button.Icon size="xs" variant="ghost" color="default">
+            <Button.Icon size="ss" variant="ghost" color="default">
               <MoreVerticalIcon />
             </Button.Icon>
           </DropdownMenuTrigger>
@@ -270,7 +300,7 @@ const DesktopWrapper = ({
           }}
         >
           <PopoverTrigger asChild>
-            <Button.Icon size="xs" variant="ghost" color="default">
+            <Button.Icon size="ss" variant="ghost" color="default">
               <SmilePlusIcon />
             </Button.Icon>
           </PopoverTrigger>

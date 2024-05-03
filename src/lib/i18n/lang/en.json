@@ -59,7 +59,8 @@
     "TYPE_A_MESSAGE": "Type a message",
     "CLICK": "Click",
     "WAITING": "Waiting",
-    "DRAFT": "Draft"
+    "DRAFT": "Draft",
+    "TRANSLATED_FROM": "Translated from"
   },
   "MESSAGE": {
     "ERROR": {

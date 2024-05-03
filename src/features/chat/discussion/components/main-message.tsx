@@ -6,7 +6,7 @@ import { cn } from '@/utils/cn';
 import { convertToTimeReadable } from '@/utils/time';
 import { Clock9Icon, PhoneCallIcon, PhoneIcon } from 'lucide-react';
 import moment from 'moment';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
 import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
 import { textVariants } from '../../messages/components/message-item/message-item-text.style';
@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { messageApi } from '../../messages/api';
 import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';
 import { getLanguageByCode } from '@/utils/language-fn';
+import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 
 export interface MainMessageProps {
   message: Message;
@@ -68,6 +69,9 @@ const TextMessage = ({ message }: { message: Message }) => {
     (state) => state.showMiddleTranslation,
   );
   const { t } = useTranslation('common');
+  const translatedFrom = useTranslatedFromText({
+    languageCode: message.language,
+  });
   const userLanguage = useAuthStore((state) => state.user?.language);
   const [contentDisplay, setContentDisplay] = useState(message.content);
   useEffect(() => {
@@ -117,9 +121,11 @@ const TextMessage = ({ message }: { message: Message }) => {
           </div>
         </div>
       )}
-      <span className="mt-2 flex items-center pr-3 text-xs text-neutral-300">
-        Translated from {getLanguageByCode(message.language)?.name}
-      </span>
+      {translatedFrom && (
+        <span className="mt-2 flex items-center pr-3 text-xs text-neutral-300">
+          {translatedFrom}
+        </span>
+      )}
     </div>
   );
 };

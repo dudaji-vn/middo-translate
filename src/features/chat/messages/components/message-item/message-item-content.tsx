@@ -127,11 +127,11 @@ export const Content = ({ position, active, message }: ContentProps) => {
         />
       </div>
       {showEnContent && (
-        <div className="relative mt-2">
+        <div className="relative mt-1">
           <TriangleSmall
             position="top"
             className={cn(
-              'absolute left-4 top-0 -translate-y-full fill-primary-400',
+              'absolute left-2 top-0 -translate-y-full fill-primary-400',
             )}
             pathProps={{
               className:
@@ -154,14 +154,14 @@ export const Content = ({ position, active, message }: ContentProps) => {
             >
               <RichTextView
                 mentionClassName={position === 'right' ? 'right' : 'left'}
-                editorStyle="font-light text-base md:text-sm"
+                editorStyle="font-light text-base md:text-xs"
                 content={enContent || ''}
               />
             </div>
           </div>
         </div>
       )}
-      {message.status !== 'removed' && (
+      {/* {message.status !== 'removed' && (
         <span
           className={cn(
             'inline-block w-full text-xs font-light',
@@ -172,7 +172,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
         >
           Translated from {getLanguageByCode(message.language)?.name}
         </span>
-      )}
+      )} */}
     </div>
   );
 };
