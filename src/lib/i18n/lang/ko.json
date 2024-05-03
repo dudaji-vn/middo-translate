@@ -59,7 +59,8 @@
     "TYPE_A_MESSAGE": "메시지 입력",
     "CLICK": "클릭",
     "WAITING": "대기 중",
-    "DRAFT": "임시"
+    "DRAFT": "임시",
+    "TRANSLATED_FROM": "번역됨"
   },
   "MESSAGE": {
     "ERROR": {
