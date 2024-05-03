@@ -17,7 +17,8 @@ export default function usePeerEvent() {
   const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
   const user = useAuthStore(state => state.user);
   const myStream = useMyVideoCallStore(state => state.myStream);
-  
+  const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
+
   useEffect(() => {
     let listeners: any = {};
     participants.forEach(
@@ -54,6 +55,7 @@ export default function usePeerEvent() {
                 callerId: socket.id,
                 signal,
                 isShareScreen: participant.isShareScreen,
+                isTurnOnMic,
               });
               break;
             case 'answer':

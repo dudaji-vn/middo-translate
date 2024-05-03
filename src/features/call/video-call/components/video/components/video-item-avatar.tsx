@@ -46,12 +46,12 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
           alt={participant?.user?.name || 'Anonymous'}
         />
       </div>
-      {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
+      {/* {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
         <span className="relative mt-2 block w-full truncate px-1 text-center leading-snug">
           {participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
           {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
         </span>
-      )}
+      )} */}
     </div>
   );
 }

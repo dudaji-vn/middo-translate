@@ -283,9 +283,9 @@
     "JOIN": "Join",
     "CHANGE_GROUP_AVATAR": "Change group avatar",
     "CHANGE_GROUP_NAME": "Change group name",
-    "TITLE_DISCUSSION_CALL": "Discussion automatically created by Middo Call",
+    "TITLE_DISCUSSION_CALL": "Discussion is created automatically",
     "CONTENT_DISCUSSION_CALL": "All messages, files, and links sent in this discussion will be saved in the group chat. Members can access them even after the meeting ends.",
-    "GALERY_VIEW": "Gallery view",
+    "GALLERY_VIEW": "Gallery view",
     "SCREEN_DOODLE": "Screen doodle",
     "SCREEN_CAPTURE": "Screen capture",
     "ADD_MEMBER": "Add member",
@@ -340,7 +340,8 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Translate tool",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation.",
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
-    "DOODLE": "Doodle"
+    "DOODLE": "Doodle",
+    "FOCUS_VIEW": "Focus view"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",

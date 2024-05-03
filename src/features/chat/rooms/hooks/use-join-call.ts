@@ -11,6 +11,7 @@ import { roomApi } from '../api';
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 
 export const useJoinCall = () => {
   const { user } = useAuthStore();
@@ -18,6 +19,7 @@ export const useJoinCall = () => {
   const router = useRouter();
   const {t} = useTranslation('common')
   const { room: roomChatBox, updateRoom } = useChatBox();
+  const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
   const createRoomMeeting = useCallback(async () => {
     const res = await roomApi.createRoom({
       participants: roomChatBox.participants.map((p) => p._id),
@@ -53,17 +55,18 @@ export const useJoinCall = () => {
         data.call.type === CALL_TYPE.DIRECT
       ) {
         // Get participants id except me
-        const participants = data?.room?.participants
-          .filter((p: any) => p._id !== user?._id)
-          .map((p: any) => p._id);
+        const inviteParticipant = data?.room?.participants.filter((p: any) => p._id !== user?._id)
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
-          users: participants,
-          call: data?.call,
+          users: [...inviteParticipant],
+          room: data?.call,
           user: user,
         });
+        setTimeout(() => {
+          addParticipant({ user: inviteParticipant[0], socketId: inviteParticipant._id, status: 'WAITING' });
+        }, 500);
       }
     },
-    [clearRequestCall, createRoomMeeting, room, setRoom, setTempRoom, t, tmpRoom, user],
+    [addParticipant, clearRequestCall, createRoomMeeting, room, setRoom, setTempRoom, t, tmpRoom, user],
   );
 
   return startVideoCall;

@@ -21,7 +21,7 @@ const ActionToggleLayout = () =>  {
       onClick={changeLayout}
     >
       <LayoutGrid />
-      <span className="ml-2">{t('CONVERSATION.GALERY_VIEW')}</span>
+      <span className="ml-2">{t('CONVERSATION.GALLERY_VIEW')}</span>
     </DropdownMenuItem>
   );
 }

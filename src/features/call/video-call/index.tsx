@@ -27,18 +27,20 @@ export default function VideoCall() {
   useEffect(() => {
     const declineCall = (payload: {
       roomId: string,
-      userId: string,
+      userIds: string[],
     }) => {
-      const { roomId, userId } = payload;
-      let participant = participants.find(p => p.user._id === userId)
-      if (room?.roomId === roomId && participant) {
-        if (participant.status == StatusParticipant.WAITING) {
-          updateStatusParticipant(userId, StatusParticipant.DECLINE)
+      const { roomId, userIds } = payload;
+      userIds.forEach(userId => {
+        let participant = participants.find(p => p.user._id === userId)
+        if (room?.roomId === roomId && participant) {
+          if (participant.status == StatusParticipant.WAITING) {
+            updateStatusParticipant(userId, StatusParticipant.DECLINE)
+          }
         }
-      }
-      if(userId === user?._id) {
-        removeRequestCall(roomId)
-      }
+        if(userId === user?._id) {
+          removeRequestCall(roomId)
+        }
+      })
     }
     socket.on(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, declineCall)
     return () => {
