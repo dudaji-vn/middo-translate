@@ -67,6 +67,9 @@ export const useSendMediaMessages = ({
         }, []),
         roomId: roomId,
         isAnonymous,
+        ...(isAnonymous && {
+          userId: messagesWaiting?.[0].sender._id,
+        }),
         parentId,
       });
     });
