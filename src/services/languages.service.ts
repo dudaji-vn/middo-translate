@@ -49,9 +49,13 @@ export async function translateText(text: string, from?: string, to?: string) {
 export async function detectLanguage(text: string) {
   try {
     if (!text) return '';
-    const response = await fetch(
-      `${NEXT_PUBLIC_URL}/api/languages/detect?query=${text}`,
-    );
+    const response = await fetch(`${NEXT_PUBLIC_URL}/api/languages/v3/detect`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: text }),
+    });
     const json = await response.json();
     const language = json.data.language as string;
     const isSupported = SUPPORTED_LANGUAGES.some(

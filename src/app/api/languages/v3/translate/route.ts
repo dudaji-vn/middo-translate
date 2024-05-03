@@ -1,9 +1,14 @@
+import { DUDAJI_API_URL } from '@/configs/env.public';
 import { NextResponse } from 'next/server';
+
 export async function POST(request: Request) {
   try {
     console.log('v3/translate POST');
     const body = await request.json();
-    const text = body.content;
+
+    let text = body.content;
+
+    // Validate input
     if (!body.content) {
       return Response.json({
         data: '',
@@ -11,27 +16,29 @@ export async function POST(request: Request) {
     }
     const from = body.from || 'vi';
     const to = body.to || 'en';
-    const url =
-      'https://translate.stage.dudaji.com/api/v1/language/translate/v2';
+
+    const url = `${DUDAJI_API_URL}/api/v1/language/translate/v2`;
     const headers = {
       accept: 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
     };
-    const data = new URLSearchParams({
-      target: to,
-    });
-    data.append('q', text);
-    data.append('source', from);
 
-    const res = await fetch(url, {
-      method: 'POST',
-      headers,
-      body: data.toString(),
-    });
-    const json = await res.json();
-    const result = json.data.translations[0].translatedText;
+    if (from !== 'en' && to !== 'en') {
+      // Translate to English first
+      console.log('Translate to English first');
+      const englishTranslation = await translateText(
+        url,
+        text,
+        from,
+        'en',
+        headers,
+      );
+      text = englishTranslation.data.translations[0].translatedText;
+    }
+
+    const result = await translateText(url, text, from, to, headers);
     return Response.json({
-      data: result,
+      data: result.data.translations[0].translatedText,
     });
   } catch (error: any) {
     console.log('Error in translateText ❤️', error.message);
@@ -40,4 +47,30 @@ export async function POST(request: Request) {
       statusText: error.message || 'Internal Server Error',
     });
   }
+}
+
+async function translateText(
+  url: string,
+  text: string,
+  from: string,
+  to: string,
+  headers: Record<string, string>,
+) {
+  const data = new URLSearchParams({
+    target: to,
+    q: text,
+    source: from,
+  });
+
+  const response = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: data.toString(),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to translate text: ${response.statusText}`);
+  }
+
+  return response.json();
 }
