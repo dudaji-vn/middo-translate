@@ -49,6 +49,9 @@ export const useSendImageMessage = ({
       roomId: roomId,
       isAnonymous,
       parentId,
+      ...(isAnonymous && {
+        userId: messageWaiting.sender._id,
+      }),
     });
     setMessageWaiting(null);
     uploadedFiles.forEach((file) => {
