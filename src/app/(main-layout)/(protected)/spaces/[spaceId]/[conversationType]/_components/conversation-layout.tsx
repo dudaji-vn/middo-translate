@@ -1,11 +1,11 @@
 'use client';
 
-import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { Inbox } from '@/features/chat/rooms/components';
 import { useAppStore } from '@/stores/app.store';
-import { EBusinessConversationKeys } from '@/types/business.type';
 import { Allotment } from 'allotment';
 import { ChatSidebar } from '@/features/chat/components/chat-sidebar';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { cn } from '@/utils/cn';
 
 export default function ConversationLayout({
   children,
@@ -15,8 +15,14 @@ export default function ConversationLayout({
   spaceData: any;
 }) {
   const isMobile = useAppStore((state) => state.isMobile);
+  const { isOnBusinessChat } = useBusinessNavigationData();
   return (
-    <div className="disable-text-selection  h-[calc(100vh-94px)] overflow-y-hidden">
+    <div
+      className={cn(
+        'disable-text-selection   extension-container-height overflow-y-hidden',
+        { 'container-height': isMobile && isOnBusinessChat },
+      )}
+    >
       {isMobile ? (
         <>
           <ChatSidebar spaceData={spaceData}>
