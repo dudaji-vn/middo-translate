@@ -91,7 +91,7 @@ export default function useHandleCreatePeerConnection() {
             toast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
         }
         // Check is user is waiting for join
-        let isInParticipantList = participants.some((p: ParticipantInVideoCall) => (p.user._id === payload.user._id && p.isShareScreen == payload.isShareScreen));
+        let isInParticipantList = participants.some((p: ParticipantInVideoCall) => (p.user._id === payload.user._id && !!p.isShareScreen == !!payload.isShareScreen));
         if(isInParticipantList) {
             updateParticipant(newUser, payload.user._id);
         } else {
