@@ -17,21 +17,30 @@ export async function POST(request: Request) {
     const from = body.from || 'vi';
     const to = body.to || 'en';
 
-    if (from !== 'en' && to !== 'en') {
+    if (to !== 'en') {
       // Translate to English first
+      console.log('Translating to English first');
       const englishTranslation = await translateText({
         text,
         from,
         to: 'en',
       });
-      text = englishTranslation.data.translations[0].translatedText;
+      const result = await translateText({
+        text: englishTranslation.data.translations[0].translatedText,
+        from: 'en',
+        to,
+      });
+      return Response.json({
+        data: result.data.translations[0].translatedText,
+      });
     }
-
+    console.log('Translating directly');
     const result = await translateText({
       text,
-      from: 'en',
+      from,
       to,
     });
+
     return Response.json({
       data: result.data.translations[0].translatedText,
     });
