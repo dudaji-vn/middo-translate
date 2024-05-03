@@ -56,7 +56,7 @@ export default function VideoItemText({ participant, isFocusItem }: VideoItemTex
               {participant.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
               {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}
             </span>
-            {isFullScreen && <span className='w-[1px] bg-neutral-400 h-[15px] mx-2'></span>}
+            {isFullScreen && layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW && <span className='w-[1px] bg-neutral-400 h-[15px] mx-2'></span>}
             <span>
               {getMicStatus()}
             </span>

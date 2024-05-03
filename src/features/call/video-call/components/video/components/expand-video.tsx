@@ -37,7 +37,7 @@ const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
     >
       {isGalleryView && isFullScreen && <Fullscreen className="h-4 w-4" />}
       {isFullScreen && isGalleryView && (
-        <p className="text-center">{t('CONVERSATION.EXPAND')}</p>
+        <p className="text-center text-sm">{t('CONVERSATION.FOCUS_VIEW')}</p>
       )}
     </div>
   );

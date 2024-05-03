@@ -1,5 +1,5 @@
 import { Button } from '@/components/actions';
-import { SubtitlesIcon } from 'lucide-react';
+import { MessageSquareText } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import socket from '@/lib/socket-io';
 import { memo, useCallback, useEffect, useState } from 'react';
@@ -64,7 +64,7 @@ const ActionChat = () => {
             color={isShowChat ? 'primary' : 'default'}
             onClick={onToggleDiscussion}
           >
-            <SubtitlesIcon />
+            <MessageSquareText />
           </Button.Icon>
         }
       />

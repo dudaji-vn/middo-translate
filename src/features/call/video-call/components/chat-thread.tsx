@@ -9,6 +9,7 @@ import { useAppStore } from '@/stores/app.store';
 import { useVideoCallStore } from '../../store/video-call.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
+import Tip from '@/components/data-display/tip/tip';
 
 export default function ChatThread({ className }: { className?: string }) {
 
@@ -68,26 +69,7 @@ export default function ChatThread({ className }: { className?: string }) {
           </div>
         </div>
         <div className="flex flex-1 flex-col overflow-hidden">
-          {isShowAlert && (
-            <div className="p-3">
-              <div className="rounded-xl bg-neutral-50 p-2">
-                <div className="flex items-center text-neutral-600">
-                  <Lightbulb className="h-4 w-4 text-neutral-400" />
-                  <p className="ml-1 flex-1">
-                    {t('CONVERSATION.TITLE_DISCUSSION_CALL')}
-                  </p>
-                  <X
-                    className="h-4 w-4 cursor-pointer text-neutral-400"
-                    onClick={() => setShowAlert(false)}
-                  />
-                </div>
-                <p className="mt-2 text-sm font-light text-neutral-400">
-                {t('CONVERSATION.CONTENT_DISCUSSION_CALL')}
-                </p>
-              </div>
-            </div>
-          )}
-
+        <Tip hideTip={!isShowAlert} closeTip={()=>setShowAlert(false)} tipTitle={t('CONVERSATION.TITLE_DISCUSSION_CALL')} tipContent={t('CONVERSATION.CONTENT_DISCUSSION_CALL')} className='p-3' />
           <div className="flex-1 overflow-hidden">
             <div className="h-full">
               <Discussion messageId={messageId} />

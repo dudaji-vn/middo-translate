@@ -12,6 +12,8 @@ import VideoItemTalk from './components/video-item-talk';
 import { Maximize, Minimize } from 'lucide-react';
 import UserStatus from './components/user-status';
 import VideoItemText from './components/video-item-text';
+import ChangeToGalleryView from './components/change-to-gallery-view';
+import FullScreenButton from './components/full-screen-button';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -67,7 +69,6 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       setIsExpandFull(true)
       parentRef.current?.requestFullscreen()
     }
-
   }
   return (
     <section
@@ -79,13 +80,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         // isShowChat && 'h-[200px] md:h-full',
       )}
     >
-      <div className="absolute bottom-2 right-2 cursor-pointer hover:opacity-70"
-        onClick={setFullScreenWeb}
-      >
-        {
-          isExpandFull ? <Minimize className='text-neutral-700' size={20} /> : <Maximize className='text-neutral-700' size={20} />
-        }
-      </div>
+      
       <VideoItemTalk stream={streamVideo} />
       <video
         ref={videoRef}
@@ -98,16 +93,6 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         playsInline
         controls={false}
       ></video>
-      {/* Overlay black gradient from bottom to top */}
-      {/* {isTurnOnCamera  && (
-        <div className="absolute bottom-0 left-0 right-0 top-1/2 hidden items-end justify-end bg-gradient-to-t p-3 transition-all md:flex md:hover:from-black/70">
-          <Maximize
-            className="h-5 w-5 cursor-pointer stroke-white"
-            onClick={fullScreenVideo}
-          />
-        </div>
-      )} */}
-
       {/* Overlay name */}
       <VideoItemAvatar
         size="lg"
@@ -129,7 +114,11 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         <DoodleShareScreen width={width} height={height} />
       )}
 
-        <UserStatus isForgeShow={true} participant={participant}/>
+      <ChangeToGalleryView>
+        <FullScreenButton setFullScreenWeb={setFullScreenWeb} isExpandFull={isExpandFull} />
+      </ChangeToGalleryView>
+
+      <UserStatus isForgeShow={true} participant={participant}/>
     </section>
   );
 };
