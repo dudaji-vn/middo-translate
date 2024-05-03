@@ -6,6 +6,7 @@ import { Allotment } from 'allotment';
 import { ChatSidebar } from '@/features/chat/components/chat-sidebar';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { cn } from '@/utils/cn';
+import { usePathname } from 'next/navigation';
 
 export default function ConversationLayout({
   children,
@@ -15,12 +16,25 @@ export default function ConversationLayout({
   spaceData: any;
 }) {
   const isMobile = useAppStore((state) => state.isMobile);
-  const { isOnBusinessChat } = useBusinessNavigationData();
+  const { businessConversationType } = useBusinessNavigationData();
+  const pathname = usePathname();
+  console.log(
+    'businessConversationType',
+    businessConversationType,
+    isMobile &&
+      businessConversationType &&
+      !pathname?.endsWith(String(businessConversationType)),
+  );
   return (
     <div
       className={cn(
-        'disable-text-selection   extension-container-height overflow-y-hidden',
-        { 'container-height': isMobile && isOnBusinessChat },
+        'disable-text-selection  extension-container-height overflow-y-hidden',
+        {
+          'max-md:h-main-container-height':
+            isMobile &&
+            businessConversationType &&
+            !pathname?.endsWith(String(businessConversationType)),
+        },
       )}
     >
       {isMobile ? (
