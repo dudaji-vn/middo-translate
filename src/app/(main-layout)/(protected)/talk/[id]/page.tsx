@@ -21,7 +21,8 @@ const ChatBoxPage = async (props: {
   };
 }) => {
   const room = await getChatRoom(props.params.id);
-  if (!room) {
+
+  if (!room || room.isHelpDesk) {
     return redirect(ROUTE_NAMES.ONLINE_CONVERSATION);
   }
   return (
