@@ -17,6 +17,8 @@ import { updateInfoGuestService } from '@/services/user.service';
 import toast from 'react-hot-toast';
 import { User } from '@/features/users/types';
 import { useParams, useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 type GuestInformation = Pick<User, '_id' | 'email' | 'phoneNumber'>;
 const infoNameFields: Array<keyof GuestInformation> = ['email', 'phoneNumber'];
@@ -28,8 +30,8 @@ const editableFields: Array<keyof GuestInformation> = ['phoneNumber'];
 
 const GuestInformation = (guestData: GuestInformation) => {
   const [open, setOpen] = useState(false);
+  const { businessRoomId } = useBusinessNavigationData();
   const params = useParams();
-  const { refresh } = useRouter();
   const methods = useForm({
     mode: 'onBlur',
     defaultValues: {
@@ -42,6 +44,8 @@ const GuestInformation = (guestData: GuestInformation) => {
     setValue,
     formState: { isSubmitting },
   } = methods;
+
+  const queryClient = useQueryClient();
   const submit = async ({
     phoneNumber,
   }: z.infer<typeof updateGuestInfoSchema>) => {
@@ -52,8 +56,8 @@ const GuestInformation = (guestData: GuestInformation) => {
         spaceId: String(params?.spaceId),
       });
       toast.success(`Update phone number success!`);
+      queryClient.invalidateQueries(['messages', businessRoomId]);
       setOpen(false);
-      refresh();
     } catch (err: any) {
       toast.error(err.response.data.message);
     }
