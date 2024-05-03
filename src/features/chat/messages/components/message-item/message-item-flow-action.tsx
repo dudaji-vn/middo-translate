@@ -42,13 +42,13 @@ const MessageNode = ({
 
   const content = translations?.[me?.language as string] || originalContent;
   const appendMyMessage = async () => {
-    const transletedContent =
+    const translatedContent =
       messageNode.data?.translations?.[me?.language as string] ||
       messageNode.data?.content;
     const myMessage = {
       ...createLocalMessage({
         sender: me!,
-        content: transletedContent,
+        content: translatedContent,
         language: me?.language,
       }),
       userId: me!._id,
@@ -136,7 +136,7 @@ const MessageNode = ({
       <a target="_blank" href={link}>
         <Button
           disabled={disabled}
-          className={'h-9  w-fit'}
+          className={'h-9 rounded-full w-fit'}
           variant={'outline'}
           color={'primary'}
           shape={'square'}
@@ -150,7 +150,7 @@ const MessageNode = ({
   return (
     <Button
       disabled={disabled || !!roomSendingState}
-      className={'h-9  w-fit'}
+      className={'h-9 rounded-full w-fit'}
       variant={'outline'}
       color={'primary'}
       shape={'default'}

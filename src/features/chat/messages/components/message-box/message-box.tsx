@@ -174,7 +174,7 @@ export const MessageBox = ({
           );
           const isShowTimeGroup = timeDiff > MAX_TIME_GROUP_DIFF;
           const isMe =
-            group.lastMessage.sender?._id === currentUserId && currentUserId || guestId || isSendBySpaceMember;
+            group.lastMessage.sender?._id === currentUserId && currentUserId || isSendBySpaceMember;
           const isSystem =
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';
