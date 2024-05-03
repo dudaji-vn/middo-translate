@@ -17,26 +17,21 @@ export async function POST(request: Request) {
     const from = body.from || 'vi';
     const to = body.to || 'en';
 
-    const url = `${DUDAJI_API_URL}/api/v1/language/translate/v2`;
-    const headers = {
-      accept: 'application/json',
-      'Content-Type': 'application/x-www-form-urlencoded',
-    };
-
     if (from !== 'en' && to !== 'en') {
       // Translate to English first
-      console.log('Translate to English first');
-      const englishTranslation = await translateText(
-        url,
+      const englishTranslation = await translateText({
         text,
         from,
-        'en',
-        headers,
-      );
+        to: 'en',
+      });
       text = englishTranslation.data.translations[0].translatedText;
     }
 
-    const result = await translateText(url, text, from, to, headers);
+    const result = await translateText({
+      text,
+      from: 'en',
+      to,
+    });
     return Response.json({
       data: result.data.translations[0].translatedText,
     });
@@ -49,23 +44,30 @@ export async function POST(request: Request) {
   }
 }
 
-async function translateText(
-  url: string,
-  text: string,
-  from: string,
-  to: string,
-  headers: Record<string, string>,
-) {
-  const data = new URLSearchParams({
+async function translateText({
+  text,
+  from,
+  to,
+}: {
+  text: string;
+  from: string;
+  to: string;
+}) {
+  const url = `${DUDAJI_API_URL}/api/v1/language/translate/v2`;
+  const headers = {
+    accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
+  const data = {
     target: to,
-    q: text,
+    q: [text],
     source: from,
-  });
+  };
 
   const response = await fetch(url, {
     method: 'POST',
     headers,
-    body: data.toString(),
+    body: JSON.stringify(data),
   });
 
   if (!response.ok) {
