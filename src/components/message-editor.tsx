@@ -22,6 +22,7 @@ import { SendButton } from './send-button';
 import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
+import { usePlatformStore } from '@/features/platform/stores';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -78,6 +79,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     }, [userMentions]);
 
     const isMobile = useAppStore((s) => s.isMobile);
+    const isPlatformMobile = usePlatformStore((s) => s.platform === 'mobile');
     const handleEnterTrigger = () => {
       document.getElementById(sendButtonId)?.click();
     };
@@ -86,7 +88,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onClipboardEvent: handleClipboardEvent,
       mentionSuggestions,
       onEnterTrigger: handleEnterTrigger,
-      enterToSubmit: !isMobile,
+      enterToSubmit: !isPlatformMobile,
       onTypingChange,
       id: roomId,
     });
