@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import ParticipantInVideoCall, { StatusParticipantType } from '../interfaces/participant';
 
 export type VideoCallState = {
+    changeMicStatusParticipant: any;
     participants: ParticipantInVideoCall[];
     usersRequestJoinRoom: any[];
     peerShareScreen: any[];
@@ -133,6 +134,19 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
                     ...p,
                     pin: false
                 };
+            }),
+        }));
+    },
+    changeMicStatusParticipant: (userId: string, isTurnOnMic: boolean) => {
+        set((state) => ({
+            participants: state.participants.map((p) => {
+                if (p.user._id == userId) {
+                    return {
+                        ...p,
+                        isTurnOnMic
+                    };
+                }
+                return p;
             }),
         }));
     },

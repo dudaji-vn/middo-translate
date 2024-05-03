@@ -74,6 +74,9 @@ export default function useHandleCreatePeerConnection() {
             isShareScreen: payload.isShareScreen,
             isElectron: payload?.isElectron || false,
         };
+        if (!payload.isShareScreen) {
+            newUser.isTurnOnMic = payload.isTurnOnMic;
+        }
 
         if (payload.isShareScreen) {
             setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
@@ -88,7 +91,7 @@ export default function useHandleCreatePeerConnection() {
             toast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
         }
         // Check is user is waiting for join
-        let isInParticipantList = participants.some((p: ParticipantInVideoCall) => p.user._id === payload.user._id);
+        let isInParticipantList = participants.some((p: ParticipantInVideoCall) => (p.user._id === payload.user._id && !!p.isShareScreen == !!payload.isShareScreen));
         if(isInParticipantList) {
             updateParticipant(newUser, payload.user._id);
         } else {

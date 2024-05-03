@@ -30,6 +30,7 @@ import { MessageItemLinks } from './message-item-links';
 import { MessageItemVideo } from './message-item-video';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 import MessageItemFlowActions from './message-item-flow-action';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -96,6 +97,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isMe = sender === 'me' || isSendBySpaceMember;
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
+    const { isOnHelpDeskChat } = useBusinessNavigationData();
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
 
@@ -114,7 +116,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (
           <>
-            {direction === 'bottom' && (
+            {direction === 'bottom' && !isOnHelpDeskChat && (
               <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
             )}
             <div
@@ -136,7 +138,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 {showAvatar ? (
                   <Avatar
                     className="pointer-events-auto mb-auto mr-1  mt-0.5 shrink-0"
-                    src={spaceAvatar || message.sender.avatar}
+                    src={
+                      spaceAvatar ||
+                      message.sender.avatar ||
+                      '/anonymous_avt.png'
+                    }
                     alt={message.sender.name}
                     size="xs"
                   />

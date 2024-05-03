@@ -21,4 +21,6 @@ export default interface ParticipantInVideoCall {
     pin?: boolean;
     isElectron?: boolean;
     status?: 'WAITING' | 'DECLINE' | 'JOINED';
+    isTurnOnCamera?: boolean;
+    isTurnOnMic?: boolean;
 }

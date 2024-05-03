@@ -59,7 +59,8 @@
     "TYPE_A_MESSAGE": "Nhập tin nhắn",
     "CLICK": "Ấn",
     "WAITING": "Đang chờ",
-    "DRAFT": "Nháp"
+    "DRAFT": "Nháp",
+    "TRANSLATED_FROM": "Dịch từ"
   },
   "MESSAGE": {
     "ERROR": {
@@ -283,9 +284,9 @@
     "JOIN": "Tham gia",
     "CHANGE_GROUP_AVATAR": "Thay đổi hình đại diện nhóm",
     "CHANGE_GROUP_NAME": "Thay đổi tên nhóm",
-    "TITLE_DISCUSSION_CALL": "Thảo luận được tạo tự động bởi Cuộc gọi Middo",
+    "TITLE_DISCUSSION_CALL": "Cuộc thảo luận được tạo tự động",
     "CONTENT_DISCUSSION_CALL": "Tất cả những tin nhắn, tệp và đường dẫn được gửi trong cuộc thảo luận này sẽ được lưu lại trong cuộc hội thoại của nhóm. Các thành viên có thể truy cập vào chúng ngay cả khi cuộc họp đã kết thúc",
-    "GALERY_VIEW": "Xem dạng lưới",
+    "GALLERY_VIEW": "Xem dạng lưới",
     "SCREEN_DOODLE": "Vẽ theo màn hình",
     "SCREEN_CAPTURE": "Chụp màn hình và vẽ",
     "ADD_MEMBER": "Thêm thành viên",
@@ -340,7 +341,8 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Công cụ dịch",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện.",
     "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh",
-    "DOODLE": "Vẽ"
+    "DOODLE": "Vẽ",
+    "FOCUS_VIEW": "Tập trung"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",

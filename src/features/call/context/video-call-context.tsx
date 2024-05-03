@@ -8,6 +8,7 @@ import useHandleStreamMyVideo from '../hooks/socket/use-handle-stream-my-video';
 import useHandleCreatePeerConnection from '../hooks/socket/use-handle-create-peer-connection';
 import usePeerEvent from '../hooks/socket/use-peer-event';
 import useHandleEventElectron from '../hooks/electron/use-handle-event-electron';
+import useHandleCallStatus from '../hooks/socket/use-handle-call-status';
 
 interface VideoCallContextProps {
   handleShareScreen: () => void;
@@ -25,6 +26,7 @@ export const VideoCallProvider = ({ children }: PropsWithChildren) => {
   useHandleStreamMyVideo();
   useHandleCreatePeerConnection();
   usePeerEvent();
+  useHandleCallStatus();
   // For electron
   useHandleEventElectron();
 

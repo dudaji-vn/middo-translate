@@ -72,6 +72,9 @@ export const SOCKET_CONFIG = {
       LIST_WAITING_CALL: 'call.list_waiting_call',
       SEND_CAPTION: 'call.send_caption',
       UPDATE: 'call.update',
+      CALL_STATUS: {
+        MIC_CHANGE: 'call.status.mic_change',
+      }
     },
     SPEECH_TO_TEXT: {
       START: 'speech_to_text.start',

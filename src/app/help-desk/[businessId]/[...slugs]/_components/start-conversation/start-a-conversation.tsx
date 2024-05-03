@@ -45,7 +45,7 @@ const StartAConversation = ({
 }) => {
   const router = useRouter();
   const isClient = useClient();
-  const { user: owner } = extensionData || {};
+  const { user: owner, space } = extensionData || {};
   const theme =
     extensionsCustomThemeOptions.find(
       (item) =>
@@ -143,7 +143,7 @@ const StartAConversation = ({
       ) : (
         <div className="relative  flex aspect-square h-fit  max-h-[100px] w-full flex-row gap-2 overflow-hidden">
           <Avatar
-            src={owner?.avatar ?? '/avatar.svg'}
+            src={space?.avatar ?? '/avatar.svg'}
             alt={'avatar-sender'}
             className="size-16  border border-neutral-50 p-1"
           />
@@ -152,7 +152,7 @@ const StartAConversation = ({
               Conversation with
             </p>
             <p className="max-h-fit text-[24px] font-semibold text-neutral-600">
-              {owner?.name}
+              {space?.name}
             </p>
           </div>
         </div>

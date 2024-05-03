@@ -103,7 +103,7 @@ export const RoomAvatar = ({
               shape="square"
               key={index}
               alt={avatar.alt}
-              src={avatar.src}
+              src={avatar.src || '/anonymous_avt.png'}
               style={{
                 width: avtSize,
                 height: avtSize,

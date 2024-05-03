@@ -520,6 +520,10 @@ body {
   height: calc(100dvh - 52px);
 }
 
+.extension-container-height {
+  height: calc(100dvh - 104px);
+}
+
 .platform-electron .container-height {
   height: calc(100vh - 52px);
 }
@@ -535,3 +539,4 @@ body {
 .platform-electron .full-screen-height {
   height: 100vh;
 }
+
