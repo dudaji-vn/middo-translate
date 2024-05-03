@@ -1,5 +1,5 @@
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
-import ParticipantInVideoCall from '@/features/call/interfaces/participant';
+import ParticipantInVideoCall, { StatusParticipant } from '@/features/call/interfaces/participant';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
@@ -17,10 +17,14 @@ export default function VideoItemText({ participant, isFocusItem }: VideoItemTex
   const layout = useVideoCallStore(state => state.layout);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const isTurnOnMic = useMyVideoCallStore((state) => state.isTurnOnMic);
-  console.log('🟣VideoItemText', isTurnOnMic, participant)
+  // console.log('🟣VideoItemText', isTurnOnMic, participant)
   if (!participant) return null;
 
   const getMicStatus = () => {
+    if(participant.isShareScreen 
+      || participant.status === StatusParticipant.WAITING 
+      || participant.status === StatusParticipant.DECLINE) return;
+    
     if(participant.isMe) {
       return isTurnOnMic ? <Mic size={16} className='text-neutral-500'></Mic> : <MicOff size={16} className='text-error'></MicOff>
     }

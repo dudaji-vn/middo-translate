@@ -55,13 +55,6 @@ export default function useHandleStreamMyVideo() {
                 user,
                 roomId: room.roomId,
             });
-            setTimeout(() => {
-                socket.emit(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, {
-                    userId: user?._id,
-                    status: true,
-                    roomId: room._id
-                });
-            }, 1000);
         });
 
         return () => {

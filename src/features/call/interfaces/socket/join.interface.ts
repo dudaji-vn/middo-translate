@@ -6,4 +6,5 @@ export interface IJoinCallPayload {
     user: any;
     isShareScreen: boolean;
     isElectron?: boolean;
+    isTurnOnMic?: boolean;
 }
