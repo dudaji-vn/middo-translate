@@ -160,7 +160,7 @@ export const MessageBox = ({
         isFetching={isFetching}
         ref={ref}
         id="inbox-list"
-        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2 overflow-y-scroll px-2 pb-2 md:px-5"
+        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2 overflow-y-scroll px-2 pb-2 md:px-3"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
@@ -212,7 +212,9 @@ export const MessageBox = ({
                           message._id ===
                             group.messages[group.messages.length - 1]._id
                         }
-                        spaceAvatar={isAnonymous? room.space?.avatar: undefined}
+                        spaceAvatar={
+                          isAnonymous ? room.space?.avatar : undefined
+                        }
                         isSendBySpaceMember={isSendBySpaceMember}
                         key={message?.clientTempId || message._id}
                         message={newMessage}

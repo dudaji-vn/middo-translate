@@ -32,7 +32,7 @@ export default function VideoCall() {
       const { roomId, userIds } = payload;
       userIds.forEach(userId => {
         let participant = participants.find(p => p.user._id === userId)
-        if (room?._id === roomId && participant) {
+        if (room?.roomId === roomId && participant) {
           if (participant.status == StatusParticipant.WAITING) {
             updateStatusParticipant(userId, StatusParticipant.DECLINE)
           }
