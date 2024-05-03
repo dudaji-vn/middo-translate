@@ -35,7 +35,7 @@ const fakeSender: User = {
   _id: 'fake-sender',
   language: 'en',
   name: 'John Doe',
-  avatar: '/avatar.svg',
+  avatar: '/anonymous_avt.png',
   email: '',
   status: 'active',
   createdAt: new Date().toString(),

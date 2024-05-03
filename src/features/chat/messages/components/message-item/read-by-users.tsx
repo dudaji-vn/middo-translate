@@ -24,7 +24,7 @@ export const ReadByUsers = forwardRef<HTMLDivElement, ReadByUsersProps>(
           {showUsers?.map((user) => (
             <Avatar
               key={user._id}
-              src={user.avatar}
+              src={user.avatar || '/anonymous_avt.png'}
               alt={user.name}
               className="h-4 w-4"
             />
