@@ -1,4 +1,4 @@
-import { memo, useRef } from 'react';
+import { memo, useMemo, useRef } from 'react';
 
 import { cn } from '@/utils/cn';
 import useLoadStream from '@/features/call/hooks/use-load-stream';
@@ -11,6 +11,8 @@ import VideoItemText from './components/video-item-text';
 import VideoItemTalk from './components/video-item-talk';
 import GetCaptionUser from './components/get-caption-user';
 import UserStatus from './components/user-status';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { useTranslation } from 'react-i18next';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
@@ -18,11 +20,29 @@ interface VideoItemProps {
   isGalleryView?: boolean;
 }
 const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
+  const { t } = useTranslation('common');
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  const userName = useMemo(() => {
+    return `${
+      participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''} ${
+        participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}`;
+  }, [participant?.isMe, participant?.isShareScreen, participant?.user?.name, t]);
+  return (
+    <>
+      {isFullScreen ? <VideoItemContent participant={participant} isGalleryView={isGalleryView} /> : 
+      <Tooltip 
+        title={userName} 
+        triggerItem={<VideoItemContent participant={participant} isGalleryView={isGalleryView} />}
+      />}
+    </>
+  );
+};
+
+const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const itemRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  // console.log('🟣VideoItem')
   return (
     <section
       ref={itemRef}
@@ -82,7 +102,9 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
       
     </section>
   );
-};
+})
+
+VideoItemContent.displayName = 'VideoItemContent';
 
 export default memo(VideoItem);
 
