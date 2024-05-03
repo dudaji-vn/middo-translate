@@ -23,7 +23,7 @@ export const ChatSidebar = ({
 }: ChatSidebarProps & PropsWithChildren) => {
   const platform = usePlatformStore((state) => state.platform);
   const { setBusinessExtension } = useBusinessExtensionStore();
-  const { isOnBusinessChat } = useBusinessNavigationData();
+  const { isOnBusinessChat, isBusiness } = useBusinessNavigationData();
 
   useEffect(() => {
     if (spaceData) {
@@ -35,8 +35,9 @@ export const ChatSidebar = ({
     <>
       <div
         className={cn(
-          'container-height relative  flex w-full flex-col overflow-hidden border-r',
-          { 'max-md:hidden': isOnBusinessChat },
+          'container-height relative flex w-full flex-col overflow-hidden border-r',
+          { 'extension-container-height': isBusiness },
+          { 'max-md:hidden ': isOnBusinessChat },
         )}
       >
         <ChatSidebarHeader />

@@ -118,7 +118,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         >
           <RoomItemWrapper>
             {!!conversationType ? (
-              <Avatar src={'/anonymous.png'} alt="anonymous-avt" />
+              <Avatar src={'/anonymous_avt.png'} alt="anonymous-avt" />
             ) : (
               <ItemAvatar isOnline={isOnline} room={room} isMuted={isMuted} />
             )}

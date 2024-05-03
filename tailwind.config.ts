@@ -151,8 +151,7 @@ module.exports = {
             transform: 'scale(1.2)',
             opacity: '0',
           },
-        }
-
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',

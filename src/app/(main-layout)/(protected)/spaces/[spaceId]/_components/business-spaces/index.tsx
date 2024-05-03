@@ -90,13 +90,13 @@ const BusinessSpaces = () => {
             'flex w-full flex-col justify-between gap-4  bg-primary-100 px-[5vw] py-5 sm:gap-1 md:flex-row md:items-end',
           )}
         >
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-row w-full gap-3">
             <Avatar
               src={currentUser?.avatar ?? '/avatar.svg'}
               alt="avt"
               className="h-16 w-16"
             />
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col w-full gap-2">
               <Typography className="min-w-fit text-base font-normal leading-[18px] text-neutral-600">
                 Hi, welcome back
               </Typography>

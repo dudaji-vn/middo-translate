@@ -138,7 +138,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 {showAvatar ? (
                   <Avatar
                     className="pointer-events-auto mb-auto mr-1  mt-0.5 shrink-0"
-                    src={spaceAvatar || message.sender.avatar}
+                    src={
+                      spaceAvatar ||
+                      message.sender.avatar ||
+                      '/anonymous_avt.png'
+                    }
                     alt={message.sender.name}
                     size="xs"
                   />
