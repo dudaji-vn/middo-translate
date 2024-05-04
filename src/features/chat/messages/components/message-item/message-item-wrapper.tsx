@@ -192,7 +192,7 @@ const MobileWrapper = ({
   });
 
   return (
-    <>
+    <div onClick={(e) => e.stopPropagation()}>
       <LongPressMenu
         isOpen={value}
         hasBackdrop={false}
@@ -278,7 +278,7 @@ const MobileWrapper = ({
           </div>
         </DrawerContent>
       </Drawer>
-    </>
+    </div>
   );
 };
 
@@ -327,7 +327,10 @@ const DesktopWrapper = ({
               <DropdownMenuItem
                 disabled={item.disabled}
                 key={item.action}
-                onClick={item.onAction}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  item.onAction();
+                }}
               >
                 {cloneElement(item.icon, {
                   size: 16,
@@ -347,7 +350,7 @@ const DesktopWrapper = ({
             setValue(open);
           }}
         >
-          <PopoverTrigger asChild>
+          <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
             <Button.Icon size="ss" variant="ghost" color="default">
               <SmilePlusIcon />
             </Button.Icon>
