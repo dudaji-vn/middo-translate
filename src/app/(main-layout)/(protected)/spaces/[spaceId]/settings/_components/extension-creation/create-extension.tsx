@@ -36,6 +36,8 @@ import {
   SPACE_SETTING_TAB_ROLES,
 } from '../space-setting/setting-items';
 import { TSpace } from '../../../_components/business-spaces';
+import { ArrowRight, SaveIcon } from 'lucide-react';
+import { Button } from '@/components/actions';
 
 type TFormValues = {
   addingDomain: string;
@@ -65,11 +67,13 @@ export default function CreateExtension({
   initialData,
   title = 'Create Extension',
   space,
+  isEditing = false,
 }: {
   open: boolean;
   initialData?: TBusinessExtensionData;
   title?: string;
   space: TSpace;
+  isEditing?: boolean;
 }) {
   const isClient = useClient();
   const [tabValue, setTabValue] = React.useState<number>(0);
@@ -187,6 +191,7 @@ export default function CreateExtension({
   )?.roles;
   const notAllowedMe = !extensionRoles?.edit.includes(myRole as ESPaceRoles);
   if (!isClient || !open || notAllowedMe) return null;
+
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
@@ -201,12 +206,18 @@ export default function CreateExtension({
           <CreateExtensionHeader
             step={tabValue}
             onStepChange={setTabValue}
-            isEditing={!!initialData}
+            isEditing={isEditing}
           />
           <StepWrapper
             value="0"
             canNext={watch('domains').length > 0}
             onNextStep={() => setTabValue(1)}
+            footerProps={{
+              className: isEditing ? 'hidden' : '',
+            }}
+            nextProps={{
+              endIcon: <ArrowRight />,
+            }}
           >
             <AddingDomainsStep />
           </StepWrapper>
@@ -214,21 +225,53 @@ export default function CreateExtension({
             value="1"
             canNext={watch('custom.firstMessage').length > 0}
             canPrev={watch('custom.firstMessage').length > 0}
-            onNextStep={() => setTabValue(1)}
+            onNextStep={() => setTabValue(2)}
             onPrevStep={() => setTabValue(0)}
+            nextProps={{
+              endIcon: <ArrowRight />,
+            }}
+            footerProps={{
+              className: isEditing ? 'hidden' : '',
+            }}
           >
             <StartingMessageStep />
           </StepWrapper>
           <StepWrapper
             value="2"
             canPrev={true}
-            canNext={watch('custom.color').length > 0}
-            onNextStep={() => setTabValue(2)}
-            onNextLabel="Save"
-            nextButtonType="submit"
+            canNext={isValid}
+            onNextStep={() => {
+              form.handleSubmit(submit)();
+            }}
+            isLoading={isSubmitting}
+            onNextLabel={'Create extension'}
+            nextProps={{
+              endIcon: <></>,
+            }}
+            footerProps={{
+              className: isEditing ? 'hidden' : '',
+            }}
           >
             <CustomChatThemeStep space={space} />
           </StepWrapper>
+          <div className="flex h-fit w-full flex-col items-center bg-transparent py-4">
+            <Button
+              color={'primary'}
+              shape={'square'}
+              size={'sm'}
+              loading={isSubmitting}
+              type="submit"
+              disabled={
+                !isValid ||
+                (isEqual(watch('custom.color'), initialData?.color) &&
+                  isEqual(watch('domains'), initialData?.domains) &&
+                  isEqual(watch('custom.chatFlow'), initialData?.chatFlow))
+              }
+              className={isEditing ? 'min-w-[240px]' : 'hidden'}
+            >
+              Save Change
+            </Button>
+          </div>
         </Tabs>
       </form>
     </Form>

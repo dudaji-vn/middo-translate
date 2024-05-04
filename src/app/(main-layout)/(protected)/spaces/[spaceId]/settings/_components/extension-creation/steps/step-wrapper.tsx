@@ -1,4 +1,4 @@
-import { Button } from '@/components/actions';
+import { Button, ButtonProps } from '@/components/actions';
 import { TabsContent } from '@/components/navigation';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
@@ -15,6 +15,11 @@ const StepWrapper = ({
   onNextLabel = 'Next',
   onPrevLabel = 'Previous',
   cardProps,
+  footerProps,
+  isLoading,
+  nextProps = {
+    endIcon: <ArrowRight />,
+  },
   ...props
 }: React.ComponentPropsWithoutRef<typeof TabsContent> & {
   onNextStep?: () => void;
@@ -23,8 +28,12 @@ const StepWrapper = ({
   canPrev?: boolean;
   onNextLabel?: string;
   onPrevLabel?: string;
+  isLoading?: boolean;
   cardProps?: React.ComponentPropsWithoutRef<typeof Card>;
-  nextButtonType?: 'button' | 'submit';
+  nextProps?: Omit<ButtonProps, 'endIcon'> & {
+    endIcon?: any;
+  };
+  footerProps?: React.ComponentPropsWithoutRef<'div'>;
 }) => {
   return (
     <TabsContent {...props} className={cn('bg-primary-100 px-4', className)}>
@@ -34,7 +43,12 @@ const StepWrapper = ({
       >
         {children}
       </Card>
-      <div className="flex h-fit w-full flex-row items-center justify-between bg-transparent py-4">
+      <div
+        className={
+          'flex h-fit w-full flex-row items-center justify-between bg-transparent py-4'
+        }
+        {...footerProps}
+      >
         <Button
           variant={'ghost'}
           color={'default'}
@@ -51,11 +65,11 @@ const StepWrapper = ({
           color={'primary'}
           shape={'square'}
           size={'sm'}
-          endIcon={<ArrowRight />}
-          onClick={onNextStep}
+          loading={isLoading}
           disabled={!canNext}
+          onClick={onNextStep}
           className={onNextStep ? 'min-w-[240px]' : 'invisible'}
-          type={props.nextButtonType}
+          {...nextProps}
         >
           {onNextLabel}
         </Button>

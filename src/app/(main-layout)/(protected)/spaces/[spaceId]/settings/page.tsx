@@ -39,6 +39,7 @@ const SpaceSettingPage = async ({
             modalType === 'create-extension' ||
               (modalType === 'edit-extension' && businessExtension),
           )}
+          isEditing={Boolean(modalType === 'edit-extension')}
           initialData={businessExtension}
         />
       </div>

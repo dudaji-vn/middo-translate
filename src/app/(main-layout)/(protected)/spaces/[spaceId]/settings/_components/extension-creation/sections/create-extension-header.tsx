@@ -132,7 +132,7 @@ const CreateExtensionHeader = ({
                 e.preventDefault();
                 handleStepChange(index);
               }}
-              className="z-20"
+              className="z-20 min-h-[70px]"
               disabled={step !== index && !canNext}
             >
               <Button
@@ -141,11 +141,14 @@ const CreateExtensionHeader = ({
                 key={index}
                 variant={'ghost'}
                 className={cn(
-                  'flex flex-row gap-3',
+                  'flex flex-row font-light gap-3 transition-all px-3 py-2 duration-300',
                   isActive && '!bg-neutral-50',
                   isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100',
                   isError && '!bg-error-100' && step === index,
                   isDone && '!bg-success-100',
+                  {
+                    'py-3 px-4 text-base font-semibold': isActive,
+                  }
                 )}
               >
                 <div
@@ -154,16 +157,18 @@ const CreateExtensionHeader = ({
                     isAfterCurrent && 'bg-neutral-200 text-white',
                     isError && 'bg-error-500 text-white' && step === index,
                     isDone && 'bg-success-700 text-white',
-                    'size-6 rounded-full flex items-center justify-center text-[12px]',
+                    'flex size-6 items-center justify-center rounded-full text-[12px]',
                   )}
                 >
-                  {isDone && <Check className="size-3" />}
-                  {isActive && <Pen className=" size-3" />}
+                  {(isEditing || (isDone && !isActive)) && (
+                    <Check className="size-3" />
+                  )}
+                  {isActive && !isDone && <Pen className=" size-3" />}
                   {!isDone && !isActive && index + 1}
                 </div>
                 <p
                   className={cn(
-                    'font-light max-md:hidden',
+                    ' max-md:hidden',
                     isActive && 'text-primary-500-main ',
                     isAfterCurrent && 'text-neutral-200',
                     isError && 'text-error-500' && step === index,
