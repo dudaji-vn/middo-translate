@@ -22,11 +22,9 @@ import StepWrapper from './steps/step-wrapper';
 import StartingMessageStep from './steps/starting-message-step';
 import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
-import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { isEqual } from 'lodash';
 import {
   FlowNode,
-  initialChatFlowNodes,
 } from './steps/script-chat-flow/nested-flow';
 import { translateWithDetection } from '@/services/languages.service';
 import { Edge } from 'reactflow';
@@ -36,7 +34,7 @@ import {
   SPACE_SETTING_TAB_ROLES,
 } from '../space-setting/setting-items';
 import { TSpace } from '../../../_components/business-spaces';
-import { ArrowRight, SaveIcon } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/actions';
 
 type TFormValues = {
