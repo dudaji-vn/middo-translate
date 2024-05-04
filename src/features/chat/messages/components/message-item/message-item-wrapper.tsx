@@ -192,7 +192,12 @@ const MobileWrapper = ({
   });
 
   return (
-    <div onClick={(e) => e.stopPropagation()}>
+    <div
+      onClick={(e) => {
+        if (!value) return;
+        e.stopPropagation();
+      }}
+    >
       <LongPressMenu
         isOpen={value}
         hasBackdrop={false}

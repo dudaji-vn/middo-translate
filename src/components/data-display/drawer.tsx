@@ -32,6 +32,10 @@ const DrawerOverlay = React.forwardRef<
       className,
     )}
     {...props}
+    onClick={(event) => {
+      event.stopPropagation();
+      props.onClick?.(event);
+    }}
   />
 ));
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
