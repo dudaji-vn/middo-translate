@@ -253,18 +253,23 @@ const NestedFlow = ({
   }, []);
 
   useEffect(() => {
+    if (
+      savedFlow?.nodes &&
+      savedFlow?.edges &&
+      isEqual(initialChatFlowNodes, nodes) &&
+      isEqual(initialEdges, edges)
+    ) {
+      return;
+    }
+
     if (isEqual(savedFlow?.nodes, nodes) && isEqual(savedFlow?.edges, edges)) {
       return;
-    } else if (
-      !isEqual(savedFlow?.nodes, nodes) ||
-      !isEqual(savedFlow?.edges, edges)
-    ) {
-      onSaveToForm({
-        nodes,
-        edges,
-      });
     }
-  }, [formState]);
+    onSaveToForm({
+      nodes,
+      edges,
+    });
+  }, [formState, savedFlow, nodes, edges]);
 
   const onPreviewClick = () => {
     trigger('nodes');
@@ -277,7 +282,6 @@ const NestedFlow = ({
       setCheckingMode(true);
     }
     if (checkingMode && flowErrors.length) {
-      console.log('flowErrors', flowErrors);
       toast.error('Please complete the flow!');
       return;
     }
