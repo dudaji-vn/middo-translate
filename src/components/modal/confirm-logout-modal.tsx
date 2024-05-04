@@ -50,7 +50,7 @@ export const ConfirmLogoutModal = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('MODAL.SIGN_OUT.TITLE')}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className='mt-2 md:mt-0'>
             {t('MODAL.SIGN_OUT.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

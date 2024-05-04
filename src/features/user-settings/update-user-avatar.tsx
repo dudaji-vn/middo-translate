@@ -63,14 +63,9 @@ export default function UpdateUserAvatar() {
       {loading && <PageLoading />}
       <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger className='w-full flex items-center px-5 py-4 border-b border-b-[#F2F2F2] bg-white md:hover:bg-primary-100'>
-          <Button.Icon
-            variant={'ghost'}
-            color={'primary'}
-            size={'sm'}
-            className='relative bg-primary-200 rounded-xl !w-10 !h-10'
-          >
+          <div className='relative bg-primary-200 rounded-xl !w-10 !h-10 flex items-center justify-center text-primary'>
             <Camera size={20}/>
-          </Button.Icon>
+          </div>
           <span className="ml-4 block text-center text-base">
               {t('ACCOUNT_SETTING.AVATAR')}
             </span>

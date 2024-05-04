@@ -27,7 +27,7 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
   
   // Check is allow to access camera
   const [isAllowCamera, setIsAllowCamera] = useState<boolean>(true);
-  console.log({isAllowCamera})
+  
   useEffect(() => {
     const checkIsAllowCamera = async () => {
       try {
@@ -90,7 +90,7 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
         <Video className="mr-1 inline-block" size={16} />
         {t('MODAL.AUDIO_VIDEO_SETTING.VIDEO')}
       </Typography>
-      <Select
+      {videoInputDevices.length > 0 ? <Select
         value={
           video?.deviceId || videoInputDevices[0]?.deviceId || ''
         }
@@ -112,9 +112,8 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
             </SelectItem>
           ))}
         </SelectContent>
-      </Select>
+      </Select> : <Typography variant="h6" className="text-sm font-normal">{t('MESSAGE.ERROR.NOT_ALLOW_CAMERA')}</Typography>}
       <div className="mt-2 h-40 w-full overflow-hidden first-letter:rounded-lg">
-        
         {isAllowCamera ? <video
           className="m-auto h-full w-fit rounded-lg object-contain"
           autoPlay

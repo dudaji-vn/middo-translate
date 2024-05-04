@@ -8,6 +8,7 @@ export const updateInfoUserService = (data: any) => {
 export const updateInfoGuestService = (data: {
   phoneNumber?: string;
   userId: User['_id'];
+  spaceId: string;
 }) => {
   return patch('/help-desk/edit-client-profile', { ...data });
 };

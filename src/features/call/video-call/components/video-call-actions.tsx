@@ -116,7 +116,7 @@ export default function VideoCallActions() {
         <DropdownActions />
         <ActionChat />
         <ActionDraw />
-        <ActionAddMembers />
+        {/* <ActionAddMembers /> */}
         <ActionShareScreen />
         <ActionToggleCamera handleChangeCameraOrMic={handleChangeCameraOrMic} />
         <ActionToggleMic handleChangeCameraOrMic={handleChangeCameraOrMic} />

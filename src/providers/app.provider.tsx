@@ -21,6 +21,7 @@ type Props = {};
 import data from '@emoji-mart/data';
 import { init } from 'emoji-mart';
 import Offline from '@/components/modal/offline';
+import { I18nInitProvider } from './I18nInit.provider';
 init({ data });
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
@@ -51,6 +52,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
           <SideEffectProvider />
         </Suspense>
         <ModalProvider />
+        <I18nInitProvider />
       </I18nextProvider>
     </>
   );

@@ -1,12 +1,12 @@
 
-import useAudioLevel from '@/features/call/hooks/use-audio-level';
+import useCheckTalk from '@/features/call/hooks/use-check-talk';
 import { cn } from '@/utils/cn';
 import React, { memo } from 'react';
 interface VideoItemTalkProps {
   stream?: MediaStream;
 }
 const VideoItemTalk = ({ stream }: VideoItemTalkProps) => {
-    const { isTalk } = useAudioLevel(stream);
+    const { isTalk } = useCheckTalk(stream);
     return (
       <div
         className={cn(

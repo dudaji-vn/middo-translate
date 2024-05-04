@@ -28,7 +28,6 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
     const others = room.participants.filter(
       (member) => member._id !== user?._id,
     );
-    console.log('others', others)
     const languageCode =
       others.length > 0 ? others[0].language : user?.language;
     const languageName = getLanguageByCode(languageCode || 'en')?.name;

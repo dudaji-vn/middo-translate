@@ -3,7 +3,7 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { cva } from 'class-variance-authority';
-import { ArrowLeft, Check } from 'lucide-react';
+import { ArrowLeft, Check, Pen } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { ExtensionModalType } from '../../space-setting/space-setting';
@@ -49,11 +49,13 @@ const CreateExtensionHeader = ({
   onStepChange,
   // canNext,
   isError,
+  isEditing,
 }: {
   step: number;
   onStepChange: (value: number) => void;
   // canNext: boolean;
   isError?: boolean;
+  isEditing?: boolean;
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -69,23 +71,12 @@ const CreateExtensionHeader = ({
     watch,
     formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();
-  const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
+  const stepPercentage = isEditing
+    ? 100
+    : (step / (createExtensionSteps.length - 1)) * 100;
   const currentValue = watch(createExtensionSteps[step]?.nameField);
   const [canNext, setCanNext] = useState<boolean>(false);
   const btnSubmitRef = useRef<HTMLButtonElement>(null);
-
-  const onStepClick = (newStep: number) => {
-    if (newStep >= createExtensionSteps.length) {
-      btnSubmitRef.current?.click();
-      return;
-    }
-    trigger(createExtensionSteps[step]?.nameField).then((result) => {
-      setCanNext(result);
-      if (result) {
-        handleStepChange(newStep);
-      }
-    });
-  };
 
   useEffect(() => {
     if (!isEmpty(currentValue)) {
@@ -129,7 +120,8 @@ const CreateExtensionHeader = ({
         ></div>
         {createExtensionSteps.map((item, index) => {
           const isActive = step === index;
-          let isDone = step > index || isSubmitting || isSubmitSuccessful;
+          let isDone =
+            step > index || isSubmitting || isSubmitSuccessful || isEditing;
           const isAfterCurrent = step < index;
           return (
             <TabsTrigger
@@ -140,7 +132,7 @@ const CreateExtensionHeader = ({
                 e.preventDefault();
                 handleStepChange(index);
               }}
-              className="z-20"
+              className="z-20 min-h-[70px]"
               disabled={step !== index && !canNext}
             >
               <Button
@@ -149,31 +141,38 @@ const CreateExtensionHeader = ({
                 key={index}
                 variant={'ghost'}
                 className={cn(
-                  'flex flex-row gap-3',
+                  'flex flex-row font-light gap-3 transition-all px-3 py-2 duration-300',
                   isActive && '!bg-neutral-50',
                   isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100',
-                  isDone && '!bg-success-100',
                   isError && '!bg-error-100' && step === index,
+                  isDone && '!bg-success-100',
+                  {
+                    'py-3 px-4 text-base font-semibold': isActive,
+                  }
                 )}
               >
                 <div
                   className={cn(
-                    ' h-6 w-6 rounded-full ',
                     isActive && 'bg-primary-500-main text-white',
                     isAfterCurrent && 'bg-neutral-200 text-white',
-                    isDone && 'bg-success-700 text-white',
                     isError && 'bg-error-500 text-white' && step === index,
+                    isDone && 'bg-success-700 text-white',
+                    'flex size-6 items-center justify-center rounded-full text-[12px]',
                   )}
                 >
-                  {isDone ? <Check className="h-6 w-6" /> : item.value + 1}
+                  {(isEditing || (isDone && !isActive)) && (
+                    <Check className="size-3" />
+                  )}
+                  {isActive && !isDone && <Pen className=" size-3" />}
+                  {!isDone && !isActive && index + 1}
                 </div>
                 <p
                   className={cn(
-                    'font-light max-md:hidden',
+                    ' max-md:hidden',
                     isActive && 'text-primary-500-main ',
                     isAfterCurrent && 'text-neutral-200',
-                    isDone && 'text-success-700',
                     isError && 'text-error-500' && step === index,
+                    isDone && 'text-success-700',
                   )}
                 >
                   {item.title}
@@ -183,16 +182,8 @@ const CreateExtensionHeader = ({
           );
         })}
       </TabsList>
-      <Button
-        type={'button'}
-        onClick={() => onStepClick(step + 1)}
-        color={canNext ? 'primary' : 'disabled'}
-        loading={isSubmitting}
-        shape={'square'}
-        className={cn('h-11')}
-      >
-        {step === createExtensionSteps.length - 1 && canNext ? 'Save' : 'Next'}
-      </Button>
+      <em />
+      <em />
       <button ref={btnSubmitRef} type="submit" className="hidden" />
     </section>
   );
