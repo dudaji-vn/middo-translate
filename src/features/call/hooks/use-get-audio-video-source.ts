@@ -17,6 +17,7 @@ export default function useGetAudioVideoSource() {
       const _audioOutput = [];
       const devices = await navigator.mediaDevices.enumerateDevices();
       for (const device of devices) {
+        if(!device.deviceId) continue;
         switch (device.kind) {
           case 'audioinput':
             _audioInput.push(device);

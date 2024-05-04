@@ -82,7 +82,10 @@
       "NOT_CHOOSE_IMAGE": "이미지를 선택해주세요!",
       "UPLOAD_IMAGE": "이미지 업로드에 실패했습니다!",
       "CONTENT_TOO_LARGE": "번역할 내용이 너무 커서 처리할 수 없습니다!",
-      "DECLINE_CALL": "{{name}}는 전화를 거절했습니다!"
+      "DECLINE_CALL": "{{name}}는 전화를 거절했습니다!",
+      "BROWSER_NOT_SUPPORT_SPEAKER": "브라우저가 스피커 설정을 지원하지 않습니다!",
+      "NOT_ALLOW_CAMERA": "카메라에 대한 액세스를 허용하지 않았습니다!",
+      "NOT_ALLOW_MICROPHONE": "마이크에 대한 액세스를 허용하지 않았습니다!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "프로필이 성공적으로 업데이트되었습니다!",
