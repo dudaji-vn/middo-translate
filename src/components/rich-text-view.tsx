@@ -29,7 +29,7 @@ export const RichTextView = ({
     editable: false,
     editorProps: {
       attributes: {
-        class: `prose editor-view prose-strong:text-current max-w-none w-full focus:outline-none text-current  ${editorStyle}`,
+        class: `prose editor-view prose-strong:text-current max-w-none w-full !leading-[22px] focus:outline-none text-current ${editorStyle}`,
       },
     },
     content,

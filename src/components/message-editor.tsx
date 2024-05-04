@@ -115,13 +115,15 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       const documents: Media[] = [];
       const videos: Media[] = [];
       let content = editor?.getHTML() || '';
+      const text = editor?.getText() || '';
       let lang = '';
       let english = translationHelperRef.current?.getEnContent();
       let mentions: string[] = [];
       reset();
       focus();
       if (!isContentEmpty) {
-        lang = await detectLanguage(content);
+        lang = await detectLanguage(text);
+        console.log('lang', lang);
         mentions = getMentionIdsFromHtml(content);
       } else content = '';
 

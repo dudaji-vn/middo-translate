@@ -22,7 +22,7 @@ import { useMessagesBox } from './messages-box.context';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 export const MAX_TIME_DIFF = 5; // 5 minutes
-export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
+export const MAX_TIME_GROUP_DIFF = 1440; // 10 minutes
 export type MessageGroup = {
   messages: Message[];
   lastMessage: Message;
@@ -160,7 +160,7 @@ export const MessageBox = ({
         isFetching={isFetching}
         ref={ref}
         id="inbox-list"
-        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2 overflow-y-scroll px-2 pb-2 md:px-3"
+        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-1 overflow-y-scroll px-2 pb-2 md:px-3"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
@@ -174,7 +174,9 @@ export const MessageBox = ({
           );
           const isShowTimeGroup = timeDiff > MAX_TIME_GROUP_DIFF;
           const isMe =
-            group.lastMessage.sender?._id === currentUserId && currentUserId || isSendBySpaceMember;
+            (group.lastMessage.sender?._id === currentUserId &&
+              currentUserId) ||
+            isSendBySpaceMember;
           const isSystem =
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';

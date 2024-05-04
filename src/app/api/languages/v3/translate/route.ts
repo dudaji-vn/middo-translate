@@ -16,17 +16,22 @@ export async function POST(request: Request) {
     }
     const from = body.from || 'vi';
     const to = body.to || 'en';
-
+    console.log('co to ko', to);
     if (to !== 'en') {
       // Translate to English first
       console.log('Translating to English first');
-      const englishTranslation = await translateText({
-        text,
-        from,
-        to: 'en',
-      });
+      let text = body.content;
+      if (from !== 'en') {
+        const englishTranslation = await translateText({
+          text,
+          from,
+          to: 'en',
+        });
+        text = englishTranslation.data.translations[0].translatedText;
+      }
+
       const result = await translateText({
-        text: englishTranslation.data.translations[0].translatedText,
+        text,
         from: 'en',
         to,
       });
@@ -34,7 +39,6 @@ export async function POST(request: Request) {
         data: result.data.translations[0].translatedText,
       });
     }
-    console.log('Translating directly');
     const result = await translateText({
       text,
       from,
