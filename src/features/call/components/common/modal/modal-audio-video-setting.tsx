@@ -19,6 +19,7 @@ import getUserStream from '@/features/call/utils/get-user-stream';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import toast from 'react-hot-toast';
 import socket from '@/lib/socket-io';
+import { useVideoSettingStore } from '@/features/call/store/video-setting.store';
 
 export const ModalAudioVideoSetting = () => {
   const { t } = useTranslation('common');
@@ -34,6 +35,8 @@ export const ModalAudioVideoSetting = () => {
   const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
   const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
   const setStreamForParticipant = useParticipantVideoCallStore(state => state.setStreamForParticipant);
+  const audio = useVideoSettingStore(state => state.audio);
+  const video = useVideoSettingStore(state => state.video);
 
   const onSettingChange = useCallback(({ type, deviceId }: VideoSetting) => {
     if((type === 'video' && !isTurnOnCamera) || (type === 'audio' && !isTurnOnMic)) return;
@@ -44,7 +47,12 @@ export const ModalAudioVideoSetting = () => {
     }
     setLoadingVideo(true);
     let myVideoStream: MediaStream = new MediaStream();
-    getUserStream({isTurnOnCamera: isTurnOnCamera, isTurnOnMic: true, cameraDeviceId: type === 'video' ? deviceId : undefined, micDeviceId: type === 'audio' ? deviceId : undefined})
+    getUserStream({
+      isTurnOnCamera: isTurnOnCamera, 
+      isTurnOnMic: true, 
+      cameraDeviceId: type === 'video' ? deviceId : video?.deviceId, 
+      micDeviceId: type === 'audio' ? deviceId : audio?.deviceId
+    })
       .then((stream: MediaStream) => {
         myVideoStream = stream;
         setTurnOnCamera(isTurnOnCamera);
@@ -68,7 +76,7 @@ export const ModalAudioVideoSetting = () => {
           setLoadingStream(false);
         }, 1000);
       });
-  }, [isTurnOnCamera, isTurnOnMic, myStream, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t])
+  }, [audio?.deviceId, isTurnOnCamera, isTurnOnMic, myStream, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t, video?.deviceId])
   
   return (
     <div>

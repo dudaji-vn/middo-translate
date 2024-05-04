@@ -75,7 +75,8 @@ const SettingSpeaker = ({ className }: SettingSpeakerProps) => {
         <Button.Icon
           size="sm"
           variant={'ghost'}
-          shape={'square'}
+          shape={'default'}
+          color={'default'}
           onClick={testSpeaker}
         >
           <Volume2Icon

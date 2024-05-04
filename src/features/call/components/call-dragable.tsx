@@ -22,7 +22,7 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
         dragConstraints={constraintsRef}
         dragControls={controls}
         dragMomentum={false}
-        className={cn("pointer-events-auto absolute h-full w-fit cursor-auto shadow-glow md:bottom-4 md:left-4 md:w-[336px] rounded-xl", className)}
+        className={cn("pointer-events-auto absolute h-full cursor-auto shadow-glow md:bottom-4 md:left-4 w-[336px] rounded-xl", className)}
       >
         <div className={cn("flex max-h-vh w-full flex-col overflow-hidden bg-primary-100 rounded-xl md:rounded-none", isFullScreen ? 'h-full' : 'md:rounded-xl border border-primary-400 h-fit')}>
           {children}

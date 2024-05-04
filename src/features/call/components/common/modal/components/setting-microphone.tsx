@@ -9,6 +9,7 @@ import {
 import useGetAudioVideoSource from '@/features/call/hooks/use-get-audio-video-source';
 import VideoSetting from '@/features/call/interfaces/video-setting.interface';
 import { useVideoSettingStore } from '@/features/call/store/video-setting.store';
+import useAudioLevel from '@/hooks/use-audio-level';
 import { Mic } from 'lucide-react';
 import { memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,9 +24,9 @@ const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProp
   const setAudio = useVideoSettingStore(state => state.setAudio);
 
   const { audioInputDevices } = useGetAudioVideoSource();
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [volume, setVolume] = useState<number>(0);
-
+  const [stream, setStream] = useState<MediaStream | undefined>();
+  const { level } = useAudioLevel(stream);
+  
   useEffect(() => {
     if (audioInputDevices.length == 0) return;
     navigator.mediaDevices
@@ -46,36 +47,6 @@ const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProp
       })
       .catch((err) => {});
   }, [audio?.deviceId, audioInputDevices]);
-  
-  // Check stream to get volume rms
-  useEffect(() => {
-    if (stream) {
-      const audioContext = new AudioContext();
-      const analyser = audioContext.createAnalyser();
-      const microphone = audioContext.createMediaStreamSource(stream);
-      const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
-
-      analyser.smoothingTimeConstant = 0.3;
-      analyser.fftSize = 1024;
-
-      microphone.connect(analyser);
-      analyser.connect(javascriptNode);
-      javascriptNode.connect(audioContext.destination);
-
-      javascriptNode.onaudioprocess = () => {
-        const array = new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(array);
-        let values = 0;
-        const length = array.length;
-        for (let i = 0; i < length; i++) {
-          values += array[i];
-        }
-        const average = values / length;
-        setVolume(average);
-      };
-    }
-  }, [stream]);
-
   
   // cleanup stream
   useEffect(() => {
@@ -127,7 +98,7 @@ const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProp
       </Select>
       <div className="mt-2  w-full overflow-hidden first-letter:rounded-lg">
         <div className='h-3 w-full bg-neutral-100 rounded-xl overflow-hidden relative'>
-          <div className='absolute bg-primary left-0 top-0 bottom-0 transition-all' style={{width: volume + '%'}}></div>
+          <div className='absolute bg-primary left-0 top-0 bottom-0 transition-all' style={{width: level + '%'}}></div>
         </div>
       </div>
     </div>

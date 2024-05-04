@@ -22,7 +22,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   
   const videoRef = useRef<HTMLVideoElement>(null);
   const parentRef = useRef<HTMLElement>(null);
-  const { streamVideo, isTurnOnCamera } = useLoadStream(participant, videoRef);
+  const { isTurnOnCamera } = useLoadStream(participant, videoRef);
   useFitRatio(videoRef, parentRef);
   const { width, height } = useGetVideoSize({ videoRef });
   // Disable pause video when fullscreen
@@ -42,7 +42,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       if (!videoRefTmp) return;
       videoRefTmp.removeEventListener('pause', handleDisablePauseVideo);
     };
-  }, [streamVideo]);
+  }, [participant.stream]);
 
   useEffect(() => {
     const handleFullScreenEsc = () => {
@@ -81,7 +81,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       )}
     >
       
-      <VideoItemTalk stream={streamVideo} />
+      <VideoItemTalk stream={participant.stream} />
       <video
         ref={videoRef}
         className={twMerge(

@@ -37,77 +37,79 @@ const HeaderProfile = ({
     setShowConfirmLogout(true);
   };
   return (
-    <div
-      className={cn('flex items-center justify-end z-10', className)}
-      {...props}
-    >
-      {isAuthentication && user ? (
-        <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
-          <DropdownMenuTrigger>
-            <div className="relative flex gap-2 rounded-xl bg-neutral-50 px-3 py-1 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
-              <Avatar
-                src={user.avatar || '/person.svg'}
-                size="xs"
-                alt={user?.name || 'Anonymous'}
-              />
+    <div className='md:w-[60px] relative h-full'>
+      <div
+        className={cn('md:absolute md:top-1/2 md:right-0 md:-translate-y-1/2 h-full flex items-center justify-end z-10', className)}
+        {...props}
+      >
+        {isAuthentication && user ? (
+          <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
+            <DropdownMenuTrigger>
+              <div className="relative flex gap-2 rounded-xl bg-neutral-50 px-3 py-[6px] md:py-1 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
+                <Avatar
+                  src={user.avatar || '/person.svg'}
+                  size="xs"
+                  alt={user?.name || 'Anonymous'}
+                />
 
-              <div className="line-clamp-1 hidden max-w-[200px] items-center truncate md:flex">
-                <div className="truncate text-sm font-medium">
-                  {user?.name || 'Anonymous'}
+                <div className="line-clamp-1 hidden max-w-[200px] items-center truncate md:flex">
+                  <div className="truncate text-sm font-medium">
+                    {user?.name || 'Anonymous'}
+                  </div>
+                </div>
+                <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
+                  <ChevronDownIcon className="opacity-60" />
                 </div>
               </div>
-              <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
-                <ChevronDownIcon className="opacity-60" />
-              </div>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            onClick={() => setOpenDropdown(false)}
-          >
-            <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
-              <DropdownMenuItem className="flex items-center">
-                <SettingsIcon className="mr-2 size-4" />
-                <span>{t('HEADER.ACCOUNT_SETTING')}</span>
-              </DropdownMenuItem>
-            </Link>
-            {/* {!NEXT_PUBLIC_URL.includes('https://middo.app') && (
-              <Link href={ROUTE_NAMES.SPACES}>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              onClick={() => setOpenDropdown(false)}
+            >
+              <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
                 <DropdownMenuItem className="flex items-center">
-                  <Blocks className="mr-2 size-4" />
-                  <span>{t('HEADER.MIDDO_EXTENSION')}</span>
+                  <SettingsIcon className="mr-2 size-4" />
+                  <span>{t('HEADER.ACCOUNT_SETTING')}</span>
                 </DropdownMenuItem>
               </Link>
-            )} */}
+              {/* {!NEXT_PUBLIC_URL.includes('https://middo.app') && (
+                <Link href={ROUTE_NAMES.SPACES}>
+                  <DropdownMenuItem className="flex items-center">
+                    <Blocks className="mr-2 size-4" />
+                    <span>{t('HEADER.MIDDO_EXTENSION')}</span>
+                  </DropdownMenuItem>
+                </Link>
+              )} */}
 
-            <DropdownMenuItem className="flex items-center" onClick={signOut}>
-              <LogOutIcon className="mr-2 size-4" />
-              <span> {t('HEADER.SIGN_OUT')}</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ) : (
-        <Link
-          href={ROUTE_NAMES.SIGN_IN}
-          className="group flex size-9 items-center rounded-full bg-neutral-50 p-1 active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl md:p-1 md:px-4 md:hover:bg-neutral-100"
-        >
-          <Image
-            src="/hero_avatar.png"
-            priority
-            className="block md:hidden"
-            alt="logo"
-            width={500}
-            height={500}
-          />
-          <span
-            className={
-              'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
-            }
+              <DropdownMenuItem className="flex items-center" onClick={signOut}>
+                <LogOutIcon className="mr-2 size-4" />
+                <span> {t('HEADER.SIGN_OUT')}</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <Link
+            href={ROUTE_NAMES.SIGN_IN}
+            className="group flex size-9 items-center rounded-full bg-neutral-50 active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl py-[6px] md:py-1 md:px-4 md:hover:bg-neutral-100"
           >
-            {t('HEADER.SIGN_IN')}
-          </span>
-        </Link>
-      )}
+            <Image
+              src="/hero_avatar.png"
+              priority
+              className="block md:hidden"
+              alt="logo"
+              width={500}
+              height={500}
+            />
+            <span
+              className={
+                'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
+              }
+            >
+              {t('HEADER.SIGN_IN')}
+            </span>
+          </Link>
+        )}
+      </div>
     </div>
   );
 };
