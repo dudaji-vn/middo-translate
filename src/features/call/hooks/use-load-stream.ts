@@ -6,7 +6,6 @@ import { useVideoSettingStore } from "../store/video-setting.store";
 export default function useLoadStream(participant: ParticipantInVideoCall, elementRef: React.RefObject<HTMLVideoElement>) {
     const setStreamForParticipant = useParticipantVideoCallStore(state => state.setStreamForParticipant)
     const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant)
-    const [streamVideo, setStreamVideo] = useState<MediaStream>()
     const [isTurnOnMic, setTurnOnMic] = useState<boolean>(false)
     const [isTurnOnCamera, setIsTurnOnCamera] = useState<boolean>(false)
     const [isLoaded, setIsLoaded] = useState<boolean>(false)
@@ -29,19 +28,23 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
             const isMicOn = participant.stream.getAudioTracks()[0]?.enabled || false;
             const isCamOn = participant.stream.getVideoTracks()[0]?.enabled || false;
             if(participant.isMe) {
-                if(participant.stream.getVideoTracks()[0]) {
-                    const videoTrack = participant.stream.getVideoTracks()[0]
-                    tempStream.addTrack(videoTrack)
-                }
+                // if(participant.stream.getVideoTracks()[0]) {
+                //     const videoTrack = participant.stream.getVideoTracks()[0]
+                //     tempStream.addTrack(videoTrack)
+                // }
+                elementRef.current.volume = 0;
+                elementRef.current.muted = true;
+                // Remove audio track for me
+                // if(participant.stream.getAudioTracks()[0]) {
+                //     participant.stream.getAudioTracks()[0].enabled = false
+                // }
             } else {
-                tempStream = participant.stream;
                 elementRef.current.volume = 0.9;
             }
-            elementRef.current.volume = 0;
-            elementRef.current.muted = true;
-            elementRef.current!.srcObject = tempStream;
+            // elementRef.current.volume = 0;
+            // elementRef.current.muted = true;
+            elementRef.current!.srcObject = participant.stream;
             elementRef.current!.autoplay = true;
-            setStreamVideo(tempStream)
             setTurnOnMic(isMicOn)
             setIsTurnOnCamera(isCamOn)
             
@@ -60,10 +63,10 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
             if(elementRefCurrent) {
                 elementRefCurrent.removeEventListener('loadedmetadata', loadMetadataSuccess)
             }
-            tempStream.removeEventListener('inactive', handleVideoTrackEnded)
-            if(tempStream?.getVideoTracks()[0]) {
-                tempStream.getVideoTracks()[0].removeEventListener('ended', handleVideoTrackEnded)
-            }
+            // tempStream.removeEventListener('inactive', handleVideoTrackEnded)
+            // if(tempStream?.getVideoTracks()[0]) {
+            //     tempStream.getVideoTracks()[0].removeEventListener('ended', handleVideoTrackEnded)
+            // }
         }
         
     }, [elementRef, participant, removeParticipant, setStreamForParticipant])
@@ -74,22 +77,15 @@ export default function useLoadStream(participant: ParticipantInVideoCall, eleme
         if(!participant.stream || participant.isMe) return;
         const isMicOn = participant.stream.getAudioTracks()[0]?.enabled || false;
         if(!isMicOn) return;
-        // console.log('🟢changeSinkId',speaker?.deviceId)
+        if(!speaker?.deviceId) return;
         // @ts-ignore
         if(typeof elementRef.current!.setSinkId === 'function' && isMicOn) {
             // @ts-ignore
-            elementRef.current?.setSinkId(speaker?.deviceId || '').then(() => {
-                console.log('🟡setSinkId success',speaker?.deviceId || '');
-              })
-              .catch((err: any) => {
-                console.log('🟡setSinkId error', err);
-              });
+            elementRef.current?.setSinkId(speaker?.deviceId || '')
         }
     }, [elementRef, participant, speaker?.deviceId])
 
-
     return {
-        streamVideo,
         isTurnOnMic,
         isTurnOnCamera,
         isLoaded,

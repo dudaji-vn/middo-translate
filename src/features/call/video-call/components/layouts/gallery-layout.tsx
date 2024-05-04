@@ -146,7 +146,7 @@ const AddUserItem = () => {
   });
 
   return <div className='h-full w-full relative flex items-center justify-center'>
-    <div className='rounded-lg text-neutral-700 w-[60px] h-[60px] bg-neutral-50 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModalAddUser(true)}>
+    <div className='rounded-xl text-neutral-700 w-[60px] h-[60px] bg-neutral-50 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModalAddUser(true)}>
       <UserPlus2></UserPlus2>
     </div>
   </div>

@@ -41,8 +41,9 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
 const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const itemRef = useRef<HTMLElement>(null);
-  const { isTurnOnCamera, streamVideo } = useLoadStream(participant, videoRef);
+  const { isTurnOnCamera } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  
   return (
     <section
       ref={itemRef}
@@ -54,12 +55,12 @@ const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) =
           // !isTurnOnCamera && !isFullScreen && 'aspect-square h-[60px] w-[60px]',
           isTurnOnCamera && !isGalleryView && 'w-[100px]',
           !isFullScreen && 'aspect-square h-[60px] w-[60px]',
-          !isFullScreen && isGalleryView && isTurnOnCamera && 'w-[100px]',
+          !isFullScreen && isGalleryView && isTurnOnCamera && 'w-[60px]',
           isGalleryView && isFullScreen && 'min-h-[200px] md:min-h-max',
         )}
       >
         {/* Talk border */}
-        <VideoItemTalk stream={streamVideo}/>
+        <VideoItemTalk stream={participant.stream}/>
 
         <video
           ref={videoRef}
@@ -87,7 +88,7 @@ const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) =
           name={participant?.user?.name}
           avatar={participant?.user?.avatar}
           language={participant?.user?.language}
-          stream={streamVideo}
+          stream={participant?.stream}
         />
 
         {/* Is waiting for Join */}

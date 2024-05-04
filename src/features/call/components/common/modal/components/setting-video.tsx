@@ -27,7 +27,7 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
   
   // Check is allow to access camera
   const [isAllowCamera, setIsAllowCamera] = useState<boolean>(true);
-  console.log({isAllowCamera})
+  
   useEffect(() => {
     const checkIsAllowCamera = async () => {
       try {
