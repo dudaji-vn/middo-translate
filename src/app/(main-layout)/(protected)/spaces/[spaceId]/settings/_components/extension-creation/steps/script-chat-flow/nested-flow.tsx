@@ -310,7 +310,7 @@ const NestedFlow = ({
           Preview <Eye />
         </Button>
       </div>
-      <div className="h-[700px]  max-h-[calc(100vh-340px)]  min-h-[400px] w-full bg-gray-200">
+      <div className="h-[calc(100vh-400px)]  max-h-[calc(100vh-400px)]  min-h-[400px] w-full bg-gray-200">
         <Form {...control}>
           <ReactFlow
             nodes={nodes}
