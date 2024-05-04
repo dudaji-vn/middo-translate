@@ -50,6 +50,7 @@ const SettingSpeaker = ({ className }: SettingSpeakerProps) => {
         <Volume1Icon className="mr-1 inline-block" size={16} />
         {t('MODAL.AUDIO_VIDEO_SETTING.SPEAKER')}
       </Typography>
+      {audioOutputDevices.length > 0 ? 
       <div className="flex gap-2">
         <Select
           value={speaker?.deviceId || audioOutputDevices[0]?.deviceId || ''}
@@ -84,7 +85,7 @@ const SettingSpeaker = ({ className }: SettingSpeakerProps) => {
             className={isPlaying ? 'text-primary' : 'text-neutral-800'}
           />
         </Button.Icon>
-      </div>
+      </div> : <Typography variant="h6" className="text-sm font-normal">{t('MESSAGE.ERROR.BROWSER_NOT_SUPPORT_SPEAKER')}</Typography>}
     </div>
   );
 };

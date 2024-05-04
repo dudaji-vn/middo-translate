@@ -82,7 +82,8 @@
       "NOT_CHOOSE_IMAGE": "Please choose an image!",
       "UPLOAD_IMAGE": "Failed to upload image!",
       "CONTENT_TOO_LARGE": "Content is too large to translate!",
-      "DECLINE_CALL": "{{name}} declined the call!"
+      "DECLINE_CALL": "{{name}} declined the call!",
+      "BROWSER_NOT_SUPPORT_SPEAKER": "Your browser does not support speaker settings!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
