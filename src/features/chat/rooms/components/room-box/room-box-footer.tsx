@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useCallback } from 'react';
+import { forwardRef, useCallback, useState } from 'react';
 
 import {
   MessageEditor,
@@ -32,6 +32,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
   ({ isAnonymous, guest, ...props }, ref) => {
     const currentUser = useAuthStore((s) => s.user);
     const { room, updateRoom } = useChatBox();
+    const [roomId, setRoomId] = useState<string>(room._id);
     const { addMessage, replaceMessage } = useMessagesBox();
     const onSuccessfulSend = (data: Message, variables: CreateMessage) => {
       {
@@ -43,21 +44,21 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     };
 
     const { sendImageMessage } = useSendImageMessage({
-      roomId: room._id,
+      roomId,
       isAnonymous,
       addMessage,
       onSuccess: onSuccessfulSend,
     });
 
     const { sendMediaMessages } = useSendMediaMessages({
-      roomId: room._id,
+      roomId,
       isAnonymous,
       addMessage,
       onSuccess: onSuccessfulSend,
     });
 
     const { sendTextMessage } = useSendTextMessage({
-      roomId: room._id,
+      roomId,
       isAnonymous,
       addMessage,
       onSuccess: onSuccessfulSend,
@@ -74,12 +75,14 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           videos,
           enContent,
         } = data;
+
         let roomId = room._id;
 
         if (room.status === 'temporary') {
           const res = await roomApi.createRoom({
             participants: room.participants.map((p) => p._id),
           });
+          setRoomId(roomId);
           roomId = res._id;
           updateRoom(res);
         }
@@ -93,6 +96,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
             mentions: mentions || [],
             enContent,
             sender: currentUser! || guest!,
+            roomId,
           });
         }
 
@@ -100,6 +104,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           sendImageMessage({
             images,
             sender: currentUser! || guest!,
+            roomId,
           });
         }
 
@@ -107,6 +112,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           sendMediaMessages({
             media: documents,
             sender: currentUser! || guest!,
+            roomId,
           });
         }
 

@@ -17,13 +17,20 @@ import { cn } from '@/utils/cn';
 import { VariantProps } from 'class-variance-authority';
 import { useDisplayContent } from '../../hooks/use-display-content';
 import { Message } from '../../types';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
   setLinks?: (links: string[]) => void;
+  showDetails?: boolean;
 }
 
-export const Content = ({ position, active, message }: ContentProps) => {
+export const Content = ({
+  position,
+  active,
+  message,
+  showDetails,
+}: ContentProps) => {
   const { userLanguage, currentUserId } = useAuthStore((state) => ({
     userLanguage: state.user?.language,
     currentUserId: state.user?._id,
@@ -37,7 +44,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
   const showEnContent = useMemo(() => {
     if (!enContent) return false;
     if (message.status === 'removed') return false;
-    if (!showMiddleTranslation) return false;
+    if (!showMiddleTranslation && !showDetails) return false;
     if (message.language === DEFAULT_LANGUAGES_CODE.EN && isMe) return false;
     return true;
   }, [
@@ -45,6 +52,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
     isMe,
     message.language,
     message.status,
+    showDetails,
     showMiddleTranslation,
   ]);
   const { isHelpDesk } = useBusinessNavigationData();
@@ -62,74 +70,82 @@ export const Content = ({ position, active, message }: ContentProps) => {
   });
 
   return (
-    <div
-      className={cn(
-        wrapperVariants({ active, position, status: message.status }),
-        position === 'right' ? 'me' : '',
-      )}
-    >
-      <div className={cn(textVariants({ position, status: message.status }))}>
-        <RichTextView
-          editorStyle={cn('text-base md:text-sm', {
-            translated: !isUseOriginal,
-          })}
-          mentions={
-            message?.mentions?.map((mention) => ({
-              id: mention._id,
-              label: mention.name,
-            })) || []
-          }
-          mentionClassName={position === 'right' ? 'right' : 'left'}
-          content={contentDisplay}
-        />
-      </div>
-      {showEnContent && (
-        <div className="relative mt-1">
-          <TriangleSmall
-            position="top"
-            className={cn(
-              'absolute left-2 top-0 -translate-y-full fill-primary-400',
-            )}
-            pathProps={{
-              className:
-                position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6]',
-            }}
-          />
-          <div
-            className={cn(
-              wrapperMiddleVariants({
-                position,
-                active,
-                status: message.status,
-              }),
-            )}
-          >
-            <div
-              className={cn(
-                textMiddleVariants({ position, status: message.status }),
-              )}
-            >
-              <RichTextView
-                mentionClassName={position === 'right' ? 'right' : 'left'}
-                editorStyle="font-light translated text-base md:text-sm"
-                content={enContent || ''}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      {/* {message.status !== 'removed' && (
-        <span
+    <AnimatePresence mode="sync">
+      <div
+        className={cn(
+          wrapperVariants({ active, position, status: message.status }),
+          position === 'right' ? 'me' : '',
+          showEnContent ? 'pb-3 md:pb-3' : '',
+        )}
+      >
+        <div
           className={cn(
-            'inline-block w-full text-xs font-light',
-            isMe || position === 'right'
-              ? 'text-right text-white/40'
-              : 'text-left text-neutral-300',
+            textVariants({ position, status: message.status }),
+            showEnContent ? 'mb-1 md:mb-1' : '',
           )}
         >
-          Translated from {getLanguageByCode(message.language)?.name}
-        </span>
-      )} */}
-    </div>
+          <RichTextView
+            editorStyle={cn('text-base md:text-sm', {
+              translated: !isUseOriginal,
+            })}
+            mentions={
+              message?.mentions?.map((mention) => ({
+                id: mention._id,
+                label: mention.name,
+              })) || []
+            }
+            mentionClassName={position === 'right' ? 'right' : 'left'}
+            content={contentDisplay}
+          />
+        </div>
+        {showEnContent && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: -5,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="relative"
+          >
+            <TriangleSmall
+              position="top"
+              className={cn(
+                'absolute left-2 top-0 -translate-y-full fill-primary-400',
+              )}
+              pathProps={{
+                className:
+                  position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6]',
+              }}
+            />
+            <div
+              className={cn(
+                wrapperMiddleVariants({
+                  position,
+                  active,
+                  status: message.status,
+                }),
+              )}
+            >
+              <div
+                className={cn(
+                  textMiddleVariants({ position, status: message.status }),
+                )}
+              >
+                <RichTextView
+                  mentionClassName={position === 'right' ? 'right' : 'left'}
+                  editorStyle="font-light translated text-base md:text-sm"
+                  content={enContent || ''}
+                />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </AnimatePresence>
   );
 };

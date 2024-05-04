@@ -74,7 +74,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             height={280}
             src={images[0].url}
             alt="img"
-            className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[12px] border border-neutral-50"
+            className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[16px] border border-neutral-50"
           />
         )}
         <Lightbox
