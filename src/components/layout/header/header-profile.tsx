@@ -102,7 +102,7 @@ const HeaderProfile = ({
             />
             <span
               className={
-                'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
+                'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main whitespace-nowrap'
               }
             >
               {t('HEADER.SIGN_IN')}
