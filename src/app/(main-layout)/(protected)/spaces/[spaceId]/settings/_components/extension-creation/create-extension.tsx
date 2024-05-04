@@ -225,6 +225,7 @@ export default function CreateExtension({
             canNext={watch('custom.color').length > 0}
             onNextStep={() => setTabValue(2)}
             onNextLabel="Save"
+            nextButtonType="submit"
           >
             <CustomChatThemeStep space={space} />
           </StepWrapper>

@@ -24,6 +24,7 @@ const StepWrapper = ({
   onNextLabel?: string;
   onPrevLabel?: string;
   cardProps?: React.ComponentPropsWithoutRef<typeof Card>;
+  nextButtonType?: 'button' | 'submit';
 }) => {
   return (
     <TabsContent {...props} className={cn('bg-primary-100 px-4', className)}>
@@ -54,6 +55,7 @@ const StepWrapper = ({
           onClick={onNextStep}
           disabled={!canNext}
           className={onNextStep ? 'min-w-[240px]' : 'invisible'}
+          type={props.nextButtonType}
         >
           {onNextLabel}
         </Button>
