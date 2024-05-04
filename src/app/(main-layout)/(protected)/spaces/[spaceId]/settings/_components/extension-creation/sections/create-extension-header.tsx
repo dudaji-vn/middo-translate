@@ -49,11 +49,13 @@ const CreateExtensionHeader = ({
   onStepChange,
   // canNext,
   isError,
+  isEditting = true,
 }: {
   step: number;
   onStepChange: (value: number) => void;
   // canNext: boolean;
   isError?: boolean;
+  isEditting?: boolean;
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -69,7 +71,9 @@ const CreateExtensionHeader = ({
     watch,
     formState: { isSubmitting, isSubmitSuccessful },
   } = useFormContext();
-  const stepPercentage = (step / (createExtensionSteps.length - 1)) * 100;
+  const stepPercentage = isEditting
+    ? 100
+    : (step / (createExtensionSteps.length - 1)) * 100;
   const currentValue = watch(createExtensionSteps[step]?.nameField);
   const [canNext, setCanNext] = useState<boolean>(false);
   const btnSubmitRef = useRef<HTMLButtonElement>(null);
@@ -129,7 +133,8 @@ const CreateExtensionHeader = ({
         ></div>
         {createExtensionSteps.map((item, index) => {
           const isActive = step === index;
-          let isDone = step > index || isSubmitting || isSubmitSuccessful;
+          let isDone =
+            step > index || isSubmitting || isSubmitSuccessful || isEditting;
           const isAfterCurrent = step < index;
           return (
             <TabsTrigger
@@ -152,8 +157,8 @@ const CreateExtensionHeader = ({
                   'flex flex-row gap-3',
                   isActive && '!bg-neutral-50',
                   isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100',
-                  isDone && '!bg-success-100',
                   isError && '!bg-error-100' && step === index,
+                  isDone && '!bg-success-100',
                 )}
               >
                 <div
@@ -161,8 +166,8 @@ const CreateExtensionHeader = ({
                     ' h-6 w-6 rounded-full ',
                     isActive && 'bg-primary-500-main text-white',
                     isAfterCurrent && 'bg-neutral-200 text-white',
-                    isDone && 'bg-success-700 text-white',
                     isError && 'bg-error-500 text-white' && step === index,
+                    isDone && 'bg-success-700 text-white',
                   )}
                 >
                   {isDone ? <Check className="h-6 w-6" /> : item.value + 1}
@@ -172,8 +177,8 @@ const CreateExtensionHeader = ({
                     'font-light max-md:hidden',
                     isActive && 'text-primary-500-main ',
                     isAfterCurrent && 'text-neutral-200',
-                    isDone && 'text-success-700',
                     isError && 'text-error-500' && step === index,
+                    isDone && 'text-success-700',
                   )}
                 >
                   {item.title}
