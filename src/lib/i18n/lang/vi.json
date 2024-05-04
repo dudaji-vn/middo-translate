@@ -83,7 +83,9 @@
       "UPLOAD_IMAGE": "Tải ảnh lên không thành công!",
       "CONTENT_TOO_LARGE": "Nội dung quá lớn không thể dịch!",
       "DECLINE_CALL": "{{name}} đã từ chối cuộc gọi!",
-      "BROWSER_NOT_SUPPORT_SPEAKER": "Trình duyệt của bạn không hỗ trợ thiết lập loa!"
+      "BROWSER_NOT_SUPPORT_SPEAKER": "Trình duyệt của bạn không hỗ trợ thiết lập loa!",
+      "NOT_ALLOW_CAMERA": "Bạn chưa cho phép truy cập vào camera!",
+      "NOT_ALLOW_MICROPHONE": "Bạn chưa cho phép truy cập vào microphone!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",

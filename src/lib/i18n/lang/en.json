@@ -83,7 +83,9 @@
       "UPLOAD_IMAGE": "Failed to upload image!",
       "CONTENT_TOO_LARGE": "Content is too large to translate!",
       "DECLINE_CALL": "{{name}} declined the call!",
-      "BROWSER_NOT_SUPPORT_SPEAKER": "Your browser does not support speaker settings!"
+      "BROWSER_NOT_SUPPORT_SPEAKER": "Your browser does not support speaker settings!",
+      "NOT_ALLOW_CAMERA": "You have not allowed access to the camera!",
+      "NOT_ALLOW_MICROPHONE": "You have not allowed access to the microphone!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",

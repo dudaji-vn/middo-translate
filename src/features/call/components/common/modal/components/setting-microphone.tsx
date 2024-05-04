@@ -78,6 +78,7 @@ const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProp
         <Mic className="mr-1 inline-block" size={16} />
         {t('MODAL.AUDIO_VIDEO_SETTING.AUDIO')}
       </Typography>
+      {audioInputDevices.length > 0 && (<>
       <Select value={audio?.deviceId || audioInputDevices[0]?.deviceId || ""} onValueChange={onVideoInputChange}>
         <SelectTrigger className="w-full rounded-xl bg-neutral-50 !py-2 shadow-none">
           <SelectValue>
@@ -101,6 +102,8 @@ const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProp
           <div className='absolute bg-primary left-0 top-0 bottom-0 transition-all' style={{width: level + '%'}}></div>
         </div>
       </div>
+      </>)}
+      {audioInputDevices.length == 0 && <Typography variant="h6" className="text-sm font-normal">{t('MESSAGE.ERROR.NOT_ALLOW_MICROPHONE')}</Typography>}
     </div>
   );
 };
