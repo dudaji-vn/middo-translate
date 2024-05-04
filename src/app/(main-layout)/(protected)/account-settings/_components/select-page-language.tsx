@@ -74,7 +74,6 @@ const SelectPageLanguage = () => {
     }
     handleSelectChange(lang);
     setLanguage(lang);
-    i18n.changeLanguage(lang);
   }, [handleSelectChange, i18n, setLanguage]);
   return (
     <div className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4">
