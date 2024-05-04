@@ -122,8 +122,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       reset();
       focus();
       if (!isContentEmpty) {
-        lang = await detectLanguage(text);
-        console.log('lang', lang);
         mentions = getMentionIdsFromHtml(content);
       } else content = '';
 

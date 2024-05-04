@@ -92,7 +92,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         if (trimContent) {
           sendTextMessage({
             content: trimContent,
-            language: language || 'en',
+            language: language,
             mentions: mentions || [],
             enContent,
             sender: currentUser! || guest!,

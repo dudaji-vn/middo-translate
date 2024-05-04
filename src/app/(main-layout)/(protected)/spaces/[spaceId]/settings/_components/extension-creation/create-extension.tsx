@@ -6,7 +6,7 @@ import { createExtensionSchema } from '@/configs/yup-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { use, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { createExtension } from '@/services/extension.service';
@@ -23,9 +23,7 @@ import StartingMessageStep from './steps/starting-message-step';
 import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
 import { isEqual } from 'lodash';
-import {
-  FlowNode,
-} from './steps/script-chat-flow/nested-flow';
+import { FlowNode } from './steps/script-chat-flow/nested-flow';
 import { translateWithDetection } from '@/services/languages.service';
 import { Edge } from 'reactflow';
 import { getUserSpaceRole } from '../space-setting/role.util';
@@ -131,7 +129,9 @@ export default function CreateExtension({
     if (
       initialData?.chatFlow &&
       initialData?.chatFlow?.nodes?.length > 1 &&
-      initialData?.chatFlow?.edges?.length > 0
+      initialData?.chatFlow?.edges?.length > 0 &&
+      !initialData?.chatFlow?.nodes?.find((node) => isEmpty(node)) &&
+      !initialData?.chatFlow?.edges?.find((edge) => isEmpty(edge))
     ) {
       setValue('custom.chatFlow', {
         nodes: initialData?.chatFlow?.nodes || [],
@@ -157,16 +157,21 @@ export default function CreateExtension({
     if (!spaceId) {
       return;
     }
-
+    const isValidateChatFlow =
+      !chatFlow?.nodes?.find((node) => isEmpty(node)) &&
+      !chatFlow?.edges?.find((edge) => isEmpty(edge));
+    const chatFLowPayload =
+      chatFlow && watch('selectedRadioFM') === 'script' && isValidateChatFlow
+        ? chatFlow
+        : {};
+    console.log('chatFLowPayload', chatFLowPayload);
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
         spaceId: params?.spaceId,
-        ...(chatFlow && watch('selectedRadioFM') === 'script'
-          ? { chatFlow: watch('custom.chatFlow') }
-          : {}),
+        chatFlow: chatFLowPayload,
       };
       // @ts-ignore
       await createExtension(payload)
@@ -188,6 +193,34 @@ export default function CreateExtension({
     (item) => item.name === 'extension',
   )?.roles;
   const notAllowedMe = !extensionRoles?.edit.includes(myRole as ESPaceRoles);
+  const isNoChange = useMemo(() => {
+    const hasEqualChatFlow =
+      isEqual(watch('custom.chatFlow.nodes'), initialData?.chatFlow?.nodes) &&
+      watch('custom.chatFlow.nodes')?.length > 0 &&
+      isEqual(watch('custom.chatFlow.edges'), initialData?.chatFlow?.edges) &&
+      watch('custom.chatFlow.edges')?.length > 0 &&
+      watch('selectedRadioFM') === 'script';
+
+    const hasEqualFirstMessage =
+      isEqual(watch('custom.firstMessage'), initialData?.firstMessage) &&
+      watch('selectedRadioFM') !== 'script';
+    console.log('hasEqualFirstMessage', hasEqualFirstMessage);
+    return (
+      isEqual(watch('custom.color'), initialData?.color) &&
+      isEqual(watch('domains'), initialData?.domains) &&
+      (hasEqualFirstMessage || hasEqualChatFlow)
+    );
+  }, [
+    initialData,
+    watch,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    watch('custom.color'),
+    watch('domains'),
+    watch('custom.firstMessage'),
+    watch('selectedRadioFM'),
+    open,
+  ]);
+
   if (!isClient || !open || notAllowedMe) return null;
 
   return (
@@ -259,12 +292,7 @@ export default function CreateExtension({
               size={'sm'}
               loading={isSubmitting}
               type="submit"
-              disabled={
-                !isValid ||
-                (isEqual(watch('custom.color'), initialData?.color) &&
-                  isEqual(watch('domains'), initialData?.domains) &&
-                  isEqual(watch('custom.chatFlow'), initialData?.chatFlow))
-              }
+              disabled={!isValid || isNoChange || isSubmitting || notAllowedMe}
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
             >
               Save Change

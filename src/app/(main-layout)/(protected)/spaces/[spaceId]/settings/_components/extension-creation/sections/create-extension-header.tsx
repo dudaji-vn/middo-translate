@@ -84,7 +84,6 @@ const CreateExtensionHeader = ({
         setCanNext(result);
       });
     }
-    console.log('step=== ', step);
     if (isEmpty(currentValue)) setCanNext(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, currentValue]);

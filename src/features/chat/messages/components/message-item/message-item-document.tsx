@@ -13,6 +13,7 @@ export const DocumentMessage = ({ file, isMe = false }: DocumentProps) => {
   const extension = file.name?.split('.').pop();
   return (
     <a
+      onClick={(e) => e.stopPropagation()}
       download
       target="_blank"
       href={file.url}

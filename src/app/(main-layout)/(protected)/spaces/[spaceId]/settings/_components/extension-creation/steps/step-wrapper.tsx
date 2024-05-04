@@ -44,10 +44,11 @@ const StepWrapper = ({
         {children}
       </Card>
       <div
-        className={
-          'flex h-fit w-full flex-row items-center justify-between bg-transparent py-4'
-        }
         {...footerProps}
+        className={cn(
+          'flex h-fit w-full flex-row items-center justify-between bg-transparent py-4',
+          footerProps?.className,
+        )}
       >
         <Button
           variant={'ghost'}
