@@ -198,14 +198,34 @@ export default function CreateExtension({
             setTabValue(parseInt(value));
           }}
         >
-          <CreateExtensionHeader step={tabValue} onStepChange={setTabValue} />
-          <StepWrapper value="0">
+          <CreateExtensionHeader
+            step={tabValue}
+            onStepChange={setTabValue}
+            isEditing={!!initialData}
+          />
+          <StepWrapper
+            value="0"
+            canNext={watch('domains').length > 0}
+            onNextStep={() => setTabValue(1)}
+          >
             <AddingDomainsStep />
           </StepWrapper>
-          <StepWrapper value="1">
+          <StepWrapper
+            value="1"
+            canNext={watch('custom.firstMessage').length > 0}
+            canPrev={watch('custom.firstMessage').length > 0}
+            onNextStep={() => setTabValue(1)}
+            onPrevStep={() => setTabValue(0)}
+          >
             <StartingMessageStep />
           </StepWrapper>
-          <StepWrapper value="2">
+          <StepWrapper
+            value="2"
+            canPrev={true}
+            canNext={watch('custom.color').length > 0}
+            onNextStep={() => setTabValue(2)}
+            onNextLabel="Save"
+          >
             <CustomChatThemeStep space={space} />
           </StepWrapper>
         </Tabs>
