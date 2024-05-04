@@ -6,6 +6,9 @@ import DoodleItem from '../doodle/doodle-item';
 import VideoItem from '../video/video-item';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
+import { UserPlus, UserPlus2 } from 'lucide-react';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { SHORTCUTS } from '@/types/shortcuts';
 
 const GalleryLayout = () => {
   const isMobile = useAppStore(state => state.isMobile);
@@ -59,15 +62,15 @@ const GalleryLayout = () => {
         {isDoodle && <DoodleItem />}
         {participants.map(
           (participant: ParticipantInVideoCall, index: number) => {
-            if(index == (isDoodle ? 6 : 7) && numberItem > 8) {
-              const remain = numberItem - 8;
+            if(index == (isDoodle ? 5 : 6) && numberItem > 7) {
+              const remain = numberItem - 7;
               const key = participant.user._id + participant.isShareScreen;
               return <div key={key} className='h-full w-full relative'>
                 <VideoItem isGalleryView participant={participant} />
                 <ItemNumber numberItem={remain} />
               </div>
             }
-            if(index > (isDoodle ? 6 : 7) && numberItem > 8) return null;
+            if(index > (isDoodle ? 5 : 6) && numberItem > 7) return null;
             const key = participant.user._id + participant.isShareScreen;
             return ( <div
               key={key}
@@ -76,6 +79,7 @@ const GalleryLayout = () => {
             </div>
           )},
         )}
+        <AddUserItem />
       </div>
     }
     let result = []
@@ -132,5 +136,20 @@ const ItemNumber = ({ numberItem }: { numberItem: number }) => {
       </p>
     </div>
 };
+
+const AddUserItem = () => {
+  const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
+  const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
+    
+  useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
+    setModalAddUser(!isShowModalAddUser);
+  });
+
+  return <div className='h-full w-full relative flex items-center justify-center'>
+    <div className='rounded-lg text-neutral-700 w-[60px] h-[60px] bg-neutral-50 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModalAddUser(true)}>
+      <UserPlus2></UserPlus2>
+    </div>
+  </div>
+}
 
 export default GalleryLayout;
