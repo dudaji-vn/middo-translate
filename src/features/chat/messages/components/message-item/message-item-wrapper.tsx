@@ -108,6 +108,14 @@ export const MessageItemWrapper = ({
       >
         {props.children}
       </Wrapper>
+      {/* <span
+        className={cn(
+          'mt-1  block text-xs font-light text-neutral-500',
+          isMe ? 'text-end' : 'pl-7 text-start',
+        )}
+      >
+        {formatTimeDisplay(message.createdAt!)}
+      </span> */}
     </div>
   );
 };
@@ -160,7 +168,7 @@ const MobileWrapper = ({
               {translatedFrom && (
                 <span
                   className={cn(
-                    'mb-1  mt-1 block text-xs font-light text-white drop-shadow-2xl',
+                    'mb-1  mt-1 block text-xs text-white drop-shadow-2xl',
                     isMe ? 'text-end' : 'pl-7 text-start',
                   )}
                 >
@@ -169,7 +177,7 @@ const MobileWrapper = ({
               )}
               <span
                 className={cn(
-                  'mb-2 flex items-center pl-8 pr-3 text-xs text-white',
+                  'mb-2 flex items-center pl-8 text-xs text-white',
                   isMe ? 'justify-end' : 'justify-start pl-7',
                 )}
               >

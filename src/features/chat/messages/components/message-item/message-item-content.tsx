@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   textMiddleVariants,
   textVariants,
@@ -15,10 +15,8 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { cn } from '@/utils/cn';
 import { VariantProps } from 'class-variance-authority';
-import { useTranslation } from 'react-i18next';
+import { useDisplayContent } from '../../hooks/use-display-content';
 import { Message } from '../../types';
-import { messageApi } from '../../api';
-import { getLanguageByCode } from '@/utils/language-fn';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -49,7 +47,6 @@ export const Content = ({ position, active, message }: ContentProps) => {
     message.status,
     showMiddleTranslation,
   ]);
-  const { t } = useTranslation('common');
   const { isHelpDesk } = useBusinessNavigationData();
   const { room } = useBusinessExtensionStore();
 
@@ -59,53 +56,11 @@ export const Content = ({ position, active, message }: ContentProps) => {
       : userLanguage;
   }, [room, isHelpDesk, userLanguage]);
 
-  const [contentDisplay, setContentDisplay] = useState(message.content);
-  useEffect(() => {
-    if (message.status === 'removed') {
-      setContentDisplay(t('CONVERSATION.UNSEND_A_MESSAGE'));
-      return;
-    }
-    if (
-      message.language === userLanguage ||
-      isMe ||
-      message.language === receiverLanguage
-    ) {
-      setContentDisplay(message.content);
-      return;
-    }
-    const translate = async () => {
-      let translated = message.translations?.[receiverLanguage!];
-      if (!translated) {
-        try {
-          const messageRes = await messageApi.translate({
-            id: message._id,
-            to: userLanguage!,
-          });
-          if (messageRes.translations)
-            translated = messageRes.translations[userLanguage!];
-        } catch (error) {
-          console.error('Translate error', error);
-        }
-      }
-      setContentDisplay(translated || message.content);
-    };
-    translate();
-  }, [
-    message.content,
-    message.sender.language,
-    message.status,
-    message.language,
-    message.sender._id,
-    message.translations,
-    receiverLanguage,
-    currentUserId,
-    t,
-    isHelpDesk,
-    userLanguage,
-    isMe,
-    position,
-    message._id,
-  ]);
+  const { contentDisplay, isUseOriginal, translatedFrom } = useDisplayContent({
+    message,
+    userLanguage: receiverLanguage,
+  });
+
   return (
     <div
       className={cn(
@@ -115,7 +70,9 @@ export const Content = ({ position, active, message }: ContentProps) => {
     >
       <div className={cn(textVariants({ position, status: message.status }))}>
         <RichTextView
-          editorStyle="text-base md:text-sm"
+          editorStyle={cn('text-base md:text-sm', {
+            translated: !isUseOriginal,
+          })}
           mentions={
             message?.mentions?.map((mention) => ({
               id: mention._id,
@@ -154,7 +111,7 @@ export const Content = ({ position, active, message }: ContentProps) => {
             >
               <RichTextView
                 mentionClassName={position === 'right' ? 'right' : 'left'}
-                editorStyle="font-light text-base md:text-xs"
+                editorStyle="font-light translated text-base md:text-sm"
                 content={enContent || ''}
               />
             </div>

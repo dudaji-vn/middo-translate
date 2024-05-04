@@ -74,7 +74,7 @@ export const MessageItemReactionBar = ({
   return (
     <div
       className={cn(
-        'mb-1 mt-0.5 flex h-5',
+        'mt-0.5 flex h-5',
         isMe ? 'justify-end' : 'justify-start pl-8 md:pl-8',
       )}
     >
@@ -232,7 +232,7 @@ const ReactionItem = (props: {
   return (
     <div
       onClick={props.onClick}
-      className="flex h-5 cursor-pointer items-center justify-center rounded-full border border-neutral-50 bg-white shadow-1"
+      className="flex h-5 cursor-pointer items-center justify-center rounded-full border border-neutral-50 bg-white"
     >
       <Tooltip>
         <TooltipContent className="rounded-2xl">
@@ -246,11 +246,13 @@ const ReactionItem = (props: {
             </div>
           ))}
         </TooltipContent>
-        <TooltipTrigger>
-          <span className="mx-[2px]">{reactions[0].emoji}</span>
+        <TooltipTrigger className="flex h-fit items-center">
+          <span className="mx-[2px] inline-block text-xs">
+            {reactions[0].emoji}
+          </span>
         </TooltipTrigger>
       </Tooltip>
-      <span className="mx-[2px] mr-1 text-sm text-neutral-600">
+      <span className="mx-[2px] mr-1 text-xs text-neutral-600">
         {reactions.length}
       </span>
     </div>

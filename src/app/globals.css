@@ -539,4 +539,11 @@ body {
 .platform-electron .full-screen-height {
   height: 100vh;
 }
+.editor-view > p:has(.mention) {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+}
 
+.editor-view.translated .mention {
+  margin-right: 4px !important;
+}

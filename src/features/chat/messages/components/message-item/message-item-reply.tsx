@@ -41,16 +41,16 @@ export const MessageItemReply = ({
         onClickReplyMessage(messageId);
       }}
       className={cn(
-        'mb-1 mt-1 flex cursor-pointer',
+        'mt-0.5 flex cursor-pointer',
         isMe ? 'justify-end' : 'justify-start',
       )}
     >
       {!isMe && (
         <div>
-          <div className="h-1/2 w-2 border-b border-l border-neutral-100" />
+          <div className="h-1/2 w-2 rounded-bl-sm border-b border-l border-neutral-50" />
         </div>
       )}
-      <div className="flex h-fit w-fit items-center gap-1 rounded-xl border border-neutral-100 px-2 py-1">
+      <div className="flex h-fit w-fit items-center gap-1 rounded-xl border border-neutral-50 px-2 py-1">
         {uniqueUsers.map((user) => (
           <Avatar
             alt={user.name}
@@ -59,17 +59,16 @@ export const MessageItemReply = ({
             className="h-4 w-4"
           />
         ))}
-        <div className="px-1">
-          <span className="text-sm text-primary">
-            {messages.length > 1
-              ? t('CONVERSATION.REPLIES', { num: messages.length })
-              : t('CONVERSATION.REPLY', { num: messages.length })}
-          </span>
-        </div>
+
+        <span className="text-sm text-primary">
+          {messages.length > 1
+            ? t('CONVERSATION.REPLIES', { num: messages.length })
+            : t('CONVERSATION.REPLY', { num: messages.length })}
+        </span>
       </div>
       {isMe && (
         <div>
-          <div className="h-1/2 w-2 border-b border-r border-neutral-100" />
+          <div className="h-1/2 w-2 border-b border-r border-neutral-50" />
         </div>
       )}
     </div>

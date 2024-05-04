@@ -1,22 +1,20 @@
 import { Avatar } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
 import { RichTextView } from '@/components/rich-text-view';
-import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { convertToTimeReadable } from '@/utils/time';
 import { Clock9Icon, PhoneCallIcon, PhoneIcon } from 'lucide-react';
 import moment from 'moment';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
 import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
 import { textVariants } from '../../messages/components/message-item/message-item-text.style';
+import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';
+import { useDisplayContent } from '../../messages/hooks/use-display-content';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../stores';
-import { useTranslation } from 'react-i18next';
-import { messageApi } from '../../messages/api';
-import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';
-import { getLanguageByCode } from '@/utils/language-fn';
-import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
+import { useAuthStore } from '@/stores/auth.store';
 
 export interface MainMessageProps {
   message: Message;
@@ -63,45 +61,22 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
 };
 
 const TextMessage = ({ message }: { message: Message }) => {
-  const isMe = message.sender._id === useAuthStore.getState().user?._id;
   const enContent = message.translations?.en;
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
-  const { t } = useTranslation('common');
-  const translatedFrom = useTranslatedFromText({
-    languageCode: message.language,
-  });
   const userLanguage = useAuthStore((state) => state.user?.language);
-  const [contentDisplay, setContentDisplay] = useState(message.content);
-  useEffect(() => {
-    if (message.status === 'removed') {
-      setContentDisplay(t('CONVERSATION.REMOVED_A_MESSAGE'));
-      return;
-    }
-    if (userLanguage === message.language || isMe) return;
-    const translate = async () => {
-      let translated = message.translations?.[userLanguage!];
-      if (!translated) {
-        try {
-          const messageRes = await messageApi.translate({
-            id: message._id,
-            to: userLanguage!,
-          });
-          if (messageRes.translations)
-            translated = messageRes.translations[userLanguage!];
-        } catch (error) {
-          console.error('Translate error', error);
-        }
-      }
-      setContentDisplay(translated || message.content);
-    };
-    translate();
-  }, [userLanguage, message, t, isMe]);
+
+  const { contentDisplay, isUseOriginal, translatedFrom } = useDisplayContent({
+    message,
+    userLanguage,
+  });
   return (
     <div className="flex flex-col pl-6">
       <RichTextView
-        editorStyle="text-base md:text-sm"
+        editorStyle={cn('text-base md:text-sm', {
+          translated: !isUseOriginal,
+        })}
         mentionClassName="left"
         content={contentDisplay}
       />
@@ -114,7 +89,7 @@ const TextMessage = ({ message }: { message: Message }) => {
           />
           <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
             <RichTextView
-              editorStyle="text-base md:text-sm"
+              editorStyle="text-base md:text-sm translated"
               mentionClassName="left"
               content={enContent}
             />
