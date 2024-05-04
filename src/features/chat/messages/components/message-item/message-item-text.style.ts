@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const wrapperVariants = cva('px-2 py-1', {
+export const wrapperVariants = cva('px-3 py-1', {
   variants: {
     position: {
       left: 'bg-neutral-50',
@@ -40,7 +40,7 @@ export const wrapperVariants = cva('px-2 py-1', {
 });
 
 export const wrapperMiddleVariants = cva(
-  'mt-1 mb-1 rounded-md p-0.5 px-2 bg-white/90',
+  'mt-1 mb-2 rounded-md p-0.5 px-2 bg-white/90',
   {
     variants: {
       position: {

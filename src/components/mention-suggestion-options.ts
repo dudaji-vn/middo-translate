@@ -60,7 +60,7 @@ export const mentionSuggestionOptions = (
             showOnCreate: true,
             interactive: true,
             trigger: 'manual',
-            placement: 'top-start',
+            placement: 'auto-start',
           })[0];
         },
 
