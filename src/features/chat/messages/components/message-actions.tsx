@@ -1,22 +1,19 @@
 import {
   CopyIcon,
   ForwardIcon,
-  MessageSquareQuote,
-  MessageSquareQuoteIcon,
   PinIcon,
   PinOffIcon,
-  ReplyIcon,
+  MessageSquareQuoteIcon,
   TrashIcon,
 } from 'lucide-react';
 import { createContext, useContext, useMemo, useState } from 'react';
 
 import { useClickReplyMessage } from '../hooks/use-click-reply-message';
 import { useCopyMessage } from '../hooks/use-copy-message';
+import { usePinMessage } from '../hooks/use-pin-message';
 import { Message } from '../types';
 import { ForwardModal } from './forward-modal';
 import { MessageModalRemove } from './message-modal-remove';
-import { usePinMessage } from '../hooks/use-pin-message';
-import { convert } from 'html-to-text';
 
 type Action =
   | 'remove'

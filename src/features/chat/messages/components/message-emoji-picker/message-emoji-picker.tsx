@@ -69,6 +69,7 @@ export const MessageEmojiPicker = forwardRef<
 
     return (
       <div
+        onClick={(e) => e.stopPropagation()}
         ref={ref}
         {...props}
         className="flex w-full items-center justify-between gap-1 rounded-full border-neutral-50 bg-white p-1 px-1 pl-3 shadow-1 md:w-fit"

@@ -161,7 +161,7 @@ export const MessageBox = ({
         isFetching={isFetching}
         ref={ref}
         id="inbox-list"
-        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2.5 overflow-y-scroll px-2 pb-2 md:px-3"
+        className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2.5 overflow-x-hidden overflow-y-scroll px-2 pb-2 md:px-3"
       >
         <div ref={bottomRef} className="h-[0.1px] w-[0.1px]" />
 
@@ -189,26 +189,28 @@ export const MessageBox = ({
               {isShowTimeGroup && (
                 <TimeDisplay time={group.lastMessage.createdAt} />
               )}
-              <div
-                className={cn(
-                  'flex items-center gap-2 pl-7',
-                  isMe ? 'justify-end' : '',
-                )}
-              >
-                {!isMe && !isSystem && room.isGroup && (
-                  <div className="break-word-mt mb-0.5 text-xs font-medium text-neutral-600">
-                    <span>{group.lastMessage.sender.name}</span>
-                  </div>
-                )}
-                <span
+              {!isSystem && (
+                <div
                   className={cn(
-                    'flex items-center gap-1 text-xs font-light text-neutral-500',
+                    'flex items-center gap-2 pl-7',
+                    isMe ? 'justify-end' : '',
                   )}
                 >
-                  <Clock9Icon size={10} />{' '}
-                  {formatTimeDisplay(group.lastMessage.createdAt!)}
-                </span>
-              </div>
+                  {!isMe && room.isGroup && (
+                    <div className="break-word-mt mb-0.5 text-xs font-medium text-neutral-600">
+                      <span>{group.lastMessage.sender.name}</span>
+                    </div>
+                  )}
+                  <span
+                    className={cn(
+                      'flex items-center gap-1 text-xs font-light text-neutral-500',
+                    )}
+                  >
+                    <Clock9Icon size={10} />{' '}
+                    {formatTimeDisplay(group.lastMessage.createdAt!)}
+                  </span>
+                </div>
+              )}
               <div className="flex w-full gap-1">
                 <MessageItemGroup>
                   {group.messages.map((message) => {

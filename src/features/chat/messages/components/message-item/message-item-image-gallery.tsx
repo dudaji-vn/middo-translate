@@ -42,7 +42,8 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             {images.map((img, index) => {
               return (
                 <div
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setIndex(index);
                   }}
                   key={index}
@@ -65,17 +66,20 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             })}
           </div>
         ) : (
-          <Image
-            priority
-            onClick={() => {
-              setIndex(0);
-            }}
-            width={280}
-            height={280}
-            src={images[0].url}
-            alt="img"
-            className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[16px] border border-neutral-50"
-          />
+          <div className="relative h-auto">
+            <Image
+              priority
+              onClick={(e) => {
+                e.stopPropagation();
+                setIndex(0);
+              }}
+              width={280}
+              height={280}
+              src={images[0].url}
+              alt="img"
+              className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[16px] border border-neutral-50"
+            />
+          </div>
         )}
         <Lightbox
           slides={slides}
