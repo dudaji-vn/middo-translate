@@ -35,11 +35,13 @@ export const useDisplayContent = ({
           });
           if (messageRes.translations) {
             translated = messageRes.translations[userLanguage!];
-            setIsUseOriginal(false);
           }
         } catch (error) {
           console.error('Translate error', error);
         }
+      }
+      if (translated) {
+        setIsUseOriginal(false);
       }
       setContentDisplay(translated || message.content);
     };

@@ -1,3 +1,9 @@
+import { Avatar } from '@/components/data-display';
+import { Message } from '@/features/chat/messages/types';
+import { User } from '@/features/users/types';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { cn } from '@/utils/cn';
+import { VariantProps } from 'class-variance-authority';
 import {
   Dispatch,
   Fragment,
@@ -6,31 +12,25 @@ import {
   forwardRef,
   useContext,
 } from 'react';
-import { Avatar } from '@/components/data-display';
+import { useBoolean } from 'usehooks-ts';
+import { CallMessage } from './message-item-call';
+import { Content } from './message-item-content';
 import { DocumentMessage } from './message-item-document';
+import MessageItemFlowActions from './message-item-flow-action';
+import { MessageItemForward } from './message-item-forward';
 import { ImageGallery } from './message-item-image-gallery';
-import { Message } from '@/features/chat/messages/types';
+import { MessageItemLinks } from './message-item-links';
+import { MessageItemPinned } from './message-item-pinned';
 import { MessageItemReactionBar } from './message-item-reaction-bar';
+import { MessageItemReply } from './message-item-reply';
+import { SeenTracker } from './message-item-seen-tracker';
 import { MessageItemSystem } from './message-item-system';
+import { MessageItemVideo } from './message-item-video';
 import { MessageItemWrapper } from './message-item-wrapper';
 import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
-import { SeenTracker } from './message-item-seen-tracker';
-import { User } from '@/features/users/types';
-import { VariantProps } from 'class-variance-authority';
-import { cn } from '@/utils/cn';
 import { messageVariants } from './variants';
-import { useBoolean } from 'usehooks-ts';
-import { MessageItemForward } from './message-item-forward';
-import { CallMessage } from './message-item-call';
-import { MessageItemReply } from './message-item-reply';
-import { MessageItemPinned } from './message-item-pinned';
-import { Content } from './message-item-content';
-import { MessageItemLinks } from './message-item-links';
-import { MessageItemVideo } from './message-item-video';
-import { formatTimeDisplay } from '@/features/chat/rooms/utils';
-import MessageItemFlowActions from './message-item-flow-action';
-import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { AnimatePresence } from 'framer-motion';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -101,6 +101,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
 
+    const {
+      value: showDetail,
+      setValue: setShowDetail,
+      toggle: toggleShowDetail,
+      setFalse: hideDetail,
+    } = useBoolean(false);
+
     const flowActions = message.actions;
     return (
       <MessageItemContext.Provider
@@ -155,6 +162,10 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   />
                 )}
                 <MessageItemWrapper
+                  hideDetail={hideDetail}
+                  showDetail={showDetail}
+                  toggleDetail={toggleShowDetail}
+                  showTime={showTime}
                   disabledAllActions={disabledAllActions}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
@@ -175,6 +186,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     >
                       {message.content && (
                         <Content
+                          showDetails={showDetail}
                           position={isMe ? 'right' : 'left'}
                           message={message}
                           active={isActive}
@@ -236,31 +248,19 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <MessageItemReactionBar isMe={isMe} message={message} />
                 )}
 
-              {showTime && (
-                <>
-                  {isSendBySpaceMember && (
-                    <span
-                      className={cn(
-                        'mt-1  block text-xs font-light text-neutral-500',
-                        isMe ? 'text-end' : 'pl-7 text-start',
-                      )}
-                    >
-                      Send by&nbsp;
-                      <span className="font-medium">
-                        {message.sender?.name}
-                        {message.senderType === 'bot' && <>&apos;s script</>}
-                      </span>
-                    </span>
+              {isSendBySpaceMember && (
+                <span
+                  className={cn(
+                    'mt-1  block text-xs font-light text-neutral-500',
+                    isMe ? 'text-end' : 'pl-7 text-start',
                   )}
-                  <span
-                    className={cn(
-                      'mt-1  block text-xs font-light text-neutral-500',
-                      isMe ? 'text-end' : 'pl-7 text-start',
-                    )}
-                  >
-                    {formatTimeDisplay(message.createdAt!)}
+                >
+                  Send by&nbsp;
+                  <span className="font-medium">
+                    {message.sender?.name}
+                    {message.senderType === 'bot' && <>&apos;s script</>}
                   </span>
-                </>
+                </span>
               )}
               <MessageItemFlowActions actions={flowActions || []} />
             </div>

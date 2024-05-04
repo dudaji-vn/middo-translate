@@ -11,6 +11,8 @@ import { useDiscussion } from './discussion';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../rooms/api';
 import { useTranslation } from 'react-i18next';
+import { Clock9Icon } from 'lucide-react';
+import { cn } from '@/utils/cn';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 
@@ -117,14 +119,6 @@ export const RepliesBox = () => {
   return (
     <>
       {messages.length > 0 && (
-        // <div className="relative flex justify-center">
-        //   <div className="absolute top-1/2 h-[1px] w-[95%] bg-neutral-200 "></div>
-        //   <div className="relative bg-white p-1 px-3 text-sm text-neutral-400">
-        //     {messages.length > 1
-        //       ? t('CONVERSATION.REPLIES', { num: messages.length })
-        //       : t('CONVERSATION.REPLY', { num: messages.length })}
-        //   </div>
-        // </div>
         <div className={'my-0.5 flex items-center justify-center gap-3'}>
           <div className="h-[1px] flex-1 bg-neutral-100" />
           <div className="flex items-center justify-center">
@@ -162,11 +156,26 @@ export const RepliesBox = () => {
                   </div>
                 </div>
               )}
-              {!isMe && !isSystem && room?.isGroup && (
-                <div className="break-word-mt mb-0.5 pl-8 text-xs text-neutral-600">
-                  <span>{group.lastMessage.sender.name}</span>
-                </div>
-              )}
+              <div
+                className={cn(
+                  'flex items-center gap-2 pl-7',
+                  isMe ? 'justify-end' : '',
+                )}
+              >
+                {!isMe && !isSystem && room?.isGroup && (
+                  <div className="break-word-mt mb-0.5 text-xs font-medium text-neutral-600">
+                    <span>{group.lastMessage.sender.name}</span>
+                  </div>
+                )}
+                <span
+                  className={cn(
+                    'flex items-center gap-1 text-xs font-light text-neutral-500',
+                  )}
+                >
+                  <Clock9Icon size={10} />{' '}
+                  {formatTimeDisplay(group.lastMessage.createdAt!)}
+                </span>
+              </div>
               <div className="flex w-full gap-1">
                 <MessageItemGroup direction="top" className="flex-col">
                   {group.messages.map((message) => {

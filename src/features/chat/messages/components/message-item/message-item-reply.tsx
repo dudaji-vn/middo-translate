@@ -38,6 +38,8 @@ export const MessageItemReply = ({
   return (
     <div
       onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
         onClickReplyMessage(messageId);
       }}
       className={cn(
@@ -68,7 +70,7 @@ export const MessageItemReply = ({
       </div>
       {isMe && (
         <div>
-          <div className="h-1/2 w-2 border-b border-r border-neutral-50" />
+          <div className="h-1/2 w-2 rounded-br-sm border-b border-r border-neutral-50" />
         </div>
       )}
     </div>

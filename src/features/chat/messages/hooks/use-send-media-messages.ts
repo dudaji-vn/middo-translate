@@ -7,7 +7,7 @@ import { Media } from '@/types';
 import { createLocalMessage } from '../utils';
 // Send media with create multiple messages
 export const useSendMediaMessages = ({
-  roomId,
+  roomId: _roomId,
   isAnonymous,
   addMessage,
   parentId,
@@ -17,6 +17,7 @@ export const useSendMediaMessages = ({
   const [messagesWaiting, setMessagesWaiting] = useState<Message[] | null>(
     null,
   );
+  const [roomId, setRoomId] = useState<string>(_roomId); // update roomId
 
   const { uploadedFiles, removeUploadedFile } = useMediaUpload();
   const sendMediaMessages = useCallback(
@@ -24,11 +25,16 @@ export const useSendMediaMessages = ({
       media,
       sender,
       parentId,
+      roomId,
     }: {
       media: Media[];
       sender: User;
       parentId?: string;
+      roomId?: string;
     }) => {
+      if (roomId) {
+        setRoomId(roomId);
+      }
       const localMessages = media.map((doc) => {
         const message = createLocalMessage({
           sender,
