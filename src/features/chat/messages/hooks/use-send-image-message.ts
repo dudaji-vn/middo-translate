@@ -7,7 +7,7 @@ import { useMediaUpload } from '@/components/media-upload';
 import { Message } from '../types';
 
 export const useSendImageMessage = ({
-  roomId,
+  roomId: _roomId,
   isAnonymous,
   addMessage,
   parentId,
@@ -15,10 +15,22 @@ export const useSendImageMessage = ({
 }: SendMessageProps) => {
   const { sendMessage } = useSendMessage({ onSuccess });
   const [messageWaiting, setMessageWaiting] = useState<Message | null>(null);
+  const [roomId, setRoomId] = useState<string>(_roomId);
 
   const { uploadedFiles, removeUploadedFile } = useMediaUpload();
   const sendImageMessage = useCallback(
-    async ({ images, sender }: { images: Media[]; sender: User }) => {
+    async ({
+      images,
+      sender,
+      roomId,
+    }: {
+      images: Media[];
+      sender: User;
+      roomId?: string;
+    }) => {
+      if (roomId) {
+        setRoomId(roomId);
+      }
       const localImageMessage = createLocalMessage({
         sender,
         media: images,

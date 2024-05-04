@@ -1,16 +1,17 @@
 import { User } from '@/features/users/types';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { createLocalMessage } from '../utils';
 import { SendMessageProps, useSendMessage } from './use-send-message';
 
 export const useSendTextMessage = ({
-  roomId,
+  roomId: _roomId,
   isAnonymous,
   addMessage,
   parentId,
   onSuccess,
 }: SendMessageProps) => {
   const { sendMessage } = useSendMessage({ onSuccess });
+  const [roomId, setRoomId] = useState<string>(_roomId);
   const sendTextMessage = useCallback(
     async ({
       content,
@@ -18,12 +19,14 @@ export const useSendTextMessage = ({
       mentions,
       enContent,
       sender,
+      roomId: _roomIdParam,
     }: {
       content: string;
       language?: string;
       mentions?: string[];
       enContent?: string | null;
       sender: User;
+      roomId?: string;
     }) => {
       if (!sender) return;
       const localMessage = createLocalMessage({
@@ -31,11 +34,14 @@ export const useSendTextMessage = ({
         content,
         language,
       });
+      if (_roomIdParam) {
+        setRoomId(_roomIdParam);
+      }
       addMessage(localMessage);
       const payload = {
         isAnonymous,
         content,
-        roomId,
+        roomId: _roomIdParam || roomId,
         clientTempId: localMessage._id,
         language,
         enContent,
@@ -45,7 +51,6 @@ export const useSendTextMessage = ({
           userId: sender._id,
         }),
       };
-
       sendMessage(payload);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

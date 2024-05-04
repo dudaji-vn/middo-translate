@@ -1,5 +1,6 @@
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,13 +27,14 @@ import {
   useRef,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useBoolean } from 'usehooks-ts';
+import { useBoolean, useOnClickOutside } from 'usehooks-ts';
 import { MessageItem } from '.';
 import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
 import { actionItems, useMessageActions } from '../message-actions';
 import { MessageEmojiPicker } from '../message-emoji-picker';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
+import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 
 export interface MessageItemWrapperProps {
   isMe: boolean;
@@ -40,14 +42,28 @@ export interface MessageItemWrapperProps {
   setActive: (active: boolean) => void;
   discussionDisabled?: boolean;
   disabledAllActions?: boolean;
+  showTime?: boolean;
+  showDetail?: boolean;
+  hideDetail?: () => void;
+  toggleDetail?: () => void;
 }
 
 export const MessageItemWrapper = ({
   disabledAllActions,
+  showDetail,
+  hideDetail,
+  toggleDetail,
   ...props
 }: MessageItemWrapperProps & PropsWithChildren) => {
   const isMobile = useAppStore((state) => state.isMobile);
-  const { isMe, message, setActive, discussionDisabled } = props;
+  const { isMe, message, setActive, discussionDisabled, showTime } = props;
+  const ref = useRef(null);
+
+  const translatedFrom = useTranslatedFromText({
+    languageCode: message.language,
+  });
+
+  useOnClickOutside(ref, hideDetail || (() => {}));
 
   const { onAction } = useMessageActions();
 
@@ -86,7 +102,7 @@ export const MessageItemWrapper = ({
             isMe,
           }),
       }));
-  }, [isMe, message, onAction]);
+  }, [discussionDisabled, isMe, message, onAction]);
 
   const Wrapper = useMemo(() => {
     if (message.status === 'removed') return RemovedWrapper;
@@ -99,7 +115,7 @@ export const MessageItemWrapper = ({
   }
 
   return (
-    <div className="relative">
+    <div ref={ref} className="relative cursor-pointer" onClick={toggleDetail}>
       <Wrapper
         setActive={setActive}
         isMe={isMe}
@@ -108,14 +124,38 @@ export const MessageItemWrapper = ({
       >
         {props.children}
       </Wrapper>
-      {/* <span
-        className={cn(
-          'mt-1  block text-xs font-light text-neutral-500',
-          isMe ? 'text-end' : 'pl-7 text-start',
+      <AnimatePresence>
+        {showDetail && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              height: 0,
+            }}
+            animate={{
+              opacity: 1,
+              height: 'auto',
+            }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.1 }}
+            className={cn(
+              'my-1 flex items-center gap-1 text-xs text-neutral-500',
+              isMe ? 'justify-end' : 'justify-start',
+            )}
+          >
+            {translatedFrom && (
+              <span className="font-light">{translatedFrom}</span>
+            )}
+            {!showTime && (
+              <>
+                <span> • </span>
+                <span className={cn(' flex items-center gap-1 font-light ')}>
+                  {formatTimeDisplay(message.createdAt!)}
+                </span>
+              </>
+            )}
+          </motion.div>
         )}
-      >
-        {formatTimeDisplay(message.createdAt!)}
-      </span> */}
+      </AnimatePresence>
     </div>
   );
 };
