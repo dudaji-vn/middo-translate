@@ -114,16 +114,16 @@ export const MessageItemWrapper = ({
   }, [isMobile, message.status]);
 
   useEffect(() => {
-    if (showDetail && isMobile) {
+    if (showDetail) {
       setTimeout(() => {
         if (!ref?.current) return;
         ref?.current.scrollIntoView({
           behavior: 'smooth',
-          block: 'center',
+          block: 'nearest',
         });
-      }, 100);
+      }, 200);
     }
-  }, [isMobile, showDetail]);
+  }, [showDetail]);
 
   if (disabledAllActions) {
     return <div className="relative">{props.children}</div>;
@@ -147,38 +147,41 @@ export const MessageItemWrapper = ({
       >
         {props.children}
       </Wrapper>
-      <AnimatePresence>
-        {showDetail && (
-          <motion.div
-            initial={{
-              opacity: 0,
-              height: 0,
-            }}
-            animate={{
-              opacity: 1,
-              height: 'auto',
-            }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.1 }}
-            className={cn(
-              'my-1 flex items-center gap-1 text-xs text-neutral-500',
-              isMe ? 'justify-end' : 'justify-start',
-            )}
-          >
-            {translatedFrom && (
-              <span className="font-light">{translatedFrom}</span>
-            )}
-            {!showTime && (
-              <>
-                <span> • </span>
-                <span className={cn(' flex items-center gap-1 font-light ')}>
-                  {formatTimeDisplay(message.createdAt!)}
-                </span>
-              </>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {message.status !== 'removed' && (
+        <AnimatePresence>
+          {showDetail && (
+            <motion.div
+              layout
+              initial={{
+                opacity: 0,
+                height: 0,
+              }}
+              animate={{
+                opacity: 1,
+                height: 'auto',
+              }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.1 }}
+              className={cn(
+                'my-1 flex items-center gap-1 text-xs text-neutral-500',
+                isMe ? 'justify-end' : 'justify-start',
+              )}
+            >
+              {translatedFrom && (
+                <span className="font-light">{translatedFrom}</span>
+              )}
+              {showTime && translatedFrom && <span> • </span>}
+              {!showTime && (
+                <>
+                  <span className={cn(' flex items-center gap-1 font-light ')}>
+                    {formatTimeDisplay(message.createdAt!)}
+                  </span>
+                </>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      )}
     </div>
   );
 };
