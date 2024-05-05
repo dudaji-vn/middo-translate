@@ -25,6 +25,7 @@ import {
   useEffect,
   useMemo,
   useRef,
+  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useBoolean, useOnClickOutside } from 'usehooks-ts';
@@ -46,6 +47,7 @@ export interface MessageItemWrapperProps {
   showDetail?: boolean;
   hideDetail?: () => void;
   toggleDetail?: () => void;
+  setIsMenuOpen?: (isOpen: boolean) => void;
 }
 
 export const MessageItemWrapper = ({
@@ -56,8 +58,9 @@ export const MessageItemWrapper = ({
   ...props
 }: MessageItemWrapperProps & PropsWithChildren) => {
   const isMobile = useAppStore((state) => state.isMobile);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMe, message, setActive, discussionDisabled, showTime } = props;
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const translatedFrom = useTranslatedFromText({
     languageCode: message.language,
@@ -110,17 +113,37 @@ export const MessageItemWrapper = ({
     return DesktopWrapper;
   }, [isMobile, message.status]);
 
+  useEffect(() => {
+    if (showDetail && isMobile) {
+      setTimeout(() => {
+        if (!ref?.current) return;
+        ref?.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+        });
+      }, 100);
+    }
+  }, [isMobile, showDetail]);
+
   if (disabledAllActions) {
     return <div className="relative">{props.children}</div>;
   }
 
   return (
-    <div ref={ref} className="relative cursor-pointer" onClick={toggleDetail}>
+    <div
+      ref={ref}
+      className="relative cursor-pointer"
+      onClick={() => {
+        !isMenuOpen && toggleDetail?.();
+      }}
+    >
       <Wrapper
         setActive={setActive}
         isMe={isMe}
         message={message}
         items={items}
+        hideDetail={hideDetail}
+        setIsMenuOpen={setIsMenuOpen}
       >
         {props.children}
       </Wrapper>
@@ -171,6 +194,8 @@ const MobileWrapper = ({
   isMe,
   message,
   setActive,
+  hideDetail,
+  setIsMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
 
@@ -192,18 +217,14 @@ const MobileWrapper = ({
   });
 
   return (
-    <div
-      onClick={(e) => {
-        if (!value) return;
-        e.stopPropagation();
-      }}
-    >
+    <>
       <LongPressMenu
         isOpen={value}
         hasBackdrop={false}
         onOpenChange={(isOpen) => {
           setValue(isOpen);
           setActive(isOpen);
+          setIsMenuOpen?.(isOpen);
         }}
       >
         <LongPressMenu.Trigger>{children}</LongPressMenu.Trigger>
@@ -283,7 +304,7 @@ const MobileWrapper = ({
           </div>
         </DrawerContent>
       </Drawer>
-    </div>
+    </>
   );
 };
 
