@@ -170,7 +170,7 @@ export const MessageItemWrapper = ({
               {translatedFrom && (
                 <span className="font-light">{translatedFrom}</span>
               )}
-              {showTime && translatedFrom && <span> • </span>}
+              {!showTime && translatedFrom && <span> • </span>}
               {!showTime && (
                 <>
                   <span className={cn(' flex items-center gap-1 font-light ')}>
