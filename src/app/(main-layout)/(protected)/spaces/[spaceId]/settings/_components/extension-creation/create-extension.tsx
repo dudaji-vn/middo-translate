@@ -139,7 +139,8 @@ export default function CreateExtension({
       });
       setValue('selectedRadioFM', 'script');
     }
-  }, [initialData, open, reset, setValue]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData, open]);
 
   const submit = async (values: TFormValues) => {
     trigger();
