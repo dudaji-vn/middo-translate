@@ -170,10 +170,9 @@ export default function CreateExtension({
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
-        spaceId: params?.spaceId,
+        spaceId: String(params?.spaceId),
         chatFlow: chatFLowPayload,
       };
-      // @ts-ignore
       await createExtension(payload)
         .then((res) => {
           router.push(pathname + '?tab=extension');
@@ -216,9 +215,6 @@ export default function CreateExtension({
     const isFirstMessageUpdated =
       !isEqual(firstMessage, initialData?.firstMessage) &&
       isEmpty(initialData?.chatFlow);
-
-    console.log('\n------\n isFirstMessageUpdated', isFirstMessageUpdated);
-    console.log('\n------\n isChatFlowUpdated', isChatFlowUpdated);
     return (
       isEqual(customColor, initialData?.color) &&
       isEqual(domains, initialData?.domains) &&
