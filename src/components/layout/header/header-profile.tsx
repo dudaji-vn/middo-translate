@@ -37,15 +37,18 @@ const HeaderProfile = ({
     setShowConfirmLogout(true);
   };
   return (
-    <div className='md:w-[60px] relative h-full'>
+    <div className="relative h-full md:w-[60px]">
       <div
-        className={cn('md:absolute md:top-1/2 md:right-0 md:-translate-y-1/2 h-full flex items-center justify-end z-10', className)}
+        className={cn(
+          'z-10 flex h-full items-center justify-end md:absolute md:right-0 md:top-1/2 md:-translate-y-1/2',
+          className,
+        )}
         {...props}
       >
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
             <DropdownMenuTrigger>
-              <div className="relative flex gap-2 rounded-xl bg-neutral-50 px-3 py-[6px] md:py-1 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
+              <div className="relative flex gap-2 rounded-xl bg-neutral-50 px-3 py-[6px] active:!bg-neutral-200 active:!text-shading md:py-1 md:hover:bg-neutral-100">
                 <Avatar
                   src={user.avatar || '/person.svg'}
                   size="xs"
@@ -90,7 +93,7 @@ const HeaderProfile = ({
         ) : (
           <Link
             href={ROUTE_NAMES.SIGN_IN}
-            className="group flex size-9 items-center rounded-full bg-neutral-50 active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl py-[6px] md:py-1 md:px-4 md:hover:bg-neutral-100"
+            className="group flex size-9 items-center rounded-full bg-neutral-50 py-[6px] active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl md:px-4 md:py-1 md:hover:bg-neutral-100"
           >
             <Image
               src="/hero_avatar.png"
@@ -102,7 +105,7 @@ const HeaderProfile = ({
             />
             <span
               className={
-                'hidden  font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main whitespace-nowrap'
+                'hidden  whitespace-nowrap font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
               }
             >
               {t('HEADER.SIGN_IN')}
