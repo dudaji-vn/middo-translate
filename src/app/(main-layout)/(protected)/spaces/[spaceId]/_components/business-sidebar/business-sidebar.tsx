@@ -77,7 +77,7 @@ const BusinessSidebarContent = ({
               variant={'ghost'}
               color={'default'}
               className={cn(
-                'flex w-full flex-row items-center justify-start gap-2 rounded-xl p-5 text-left transition-all duration-200 hover:bg-primary-300 [&_svg]:h-5 [&_svg]:w-5',
+                'flex !h-[52px] w-full flex-row items-center justify-start gap-2 rounded-xl p-5 !px-4 text-left transition-all duration-500 hover:bg-primary-300 [&_svg]:h-5 [&_svg]:w-5',
                 {
                   hidden: roles && !roles.includes(myRole),
                 },
@@ -96,10 +96,10 @@ const BusinessSidebarContent = ({
               {icon}
               <Typography
                 className={cn(
-                  'p-0 transition-all duration-700 ease-in-out',
+                  'relative scale-y-0 p-0',
                   shrink
-                    ? 'w-0  scale-y-0 transition-all duration-100 ease-in-out md:invisible md:w-0 '
-                    : 'min-w-[100px] capitalize ',
+                    ? 'w-fit  md:invisible md:w-0 '
+                    : 'min-w-[100px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
                   isSelected ? 'text-white ' : 'text-neutral-600',
                 )}
               >
@@ -158,7 +158,9 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
     );
   }, [isMobile, params, pathname, setOpenSidebar]);
 
-  useEffect(() => {}, [openSidebar]);
+  useEffect(() => {
+    if (openSidebar) setExpandSidebar(false);
+  }, [selected]);
 
   return (
     <Sheet
@@ -173,6 +175,7 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
         <SheetContent
           overlayProps={{ className: ' top-[93px]' }}
           side={'left'}
+          onMouseLeave={shinkSheet}
           className="bottom-0  top-[93px]  w-fit p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
         >
           <div className="h-full  w-full" onMouseLeave={shinkSheet}>

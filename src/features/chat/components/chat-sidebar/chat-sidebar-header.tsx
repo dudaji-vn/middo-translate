@@ -53,7 +53,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   if (pathname?.includes('statistics')) {
     return (
       <Button.Icon
-        onClick={() => setOpenSidebar(!openSidebar, false)}
+        onClick={() => setOpenSidebar(!openSidebar, true)}
         color="default"
         size="xs"
         variant={'ghost'}
@@ -68,7 +68,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     <div className="w-full px-3 pt-3">
       <div className="mb-3 flex items-center justify-between">
         <Button.Icon
-          onClick={() => setOpenSidebar(!openSidebar, false)}
+          onClick={() => setOpenSidebar(!openSidebar, true)}
           color="default"
           size="xs"
           variant={'ghost'}
