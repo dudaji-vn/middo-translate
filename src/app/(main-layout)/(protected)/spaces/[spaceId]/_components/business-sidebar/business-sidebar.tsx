@@ -8,7 +8,13 @@ import { useAppStore } from '@/stores/app.store';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import { cn } from '@/utils/cn';
 import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
-import { Archive, LineChartIcon, MessagesSquare, Settings } from 'lucide-react';
+import {
+  Archive,
+  Circle,
+  LineChartIcon,
+  MessagesSquare,
+  Settings,
+} from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -93,7 +99,17 @@ const BusinessSidebarContent = ({
               )}
               onClick={() => onSelectChange({ icon, title })}
             >
-              {icon}
+              <div className="relative size-fit">
+                {icon}
+                <Circle
+                  className={cn(
+                    'absolute -right-2 -top-2 !size-4 fill-primary-500-main stroke-white stroke-[2px]',
+                    {
+                      hidden: isSelected || !notifications?.[title],
+                    },
+                  )}
+                />
+              </div>
               <Typography
                 className={cn(
                   'relative scale-y-0 p-0',
@@ -184,6 +200,9 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
               selectedItem={selected}
               onSelectChange={onSelectedChange}
               myRole={myRole}
+              notifications={{
+                conversations: space?.totalNewMessages,
+              }}
             />
           </div>
         </SheetContent>
