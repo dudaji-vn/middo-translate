@@ -77,7 +77,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
               height={280}
               src={images[0].url}
               alt="img"
-              className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[16px] border border-neutral-50"
+              className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50 md:rounded-[16px]"
             />
           </div>
         )}

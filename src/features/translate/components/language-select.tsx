@@ -81,7 +81,7 @@ const LanguageItem = ({
       {active && (
         <motion.span
           layoutId={layoutId || 'bubble'}
-          className="absolute inset-0 z-10 rounded-lg border border-primary-200 bg-primary-100"
+          className="absolute inset-0 z-10 rounded-xl border border-primary-200 bg-primary-100 lg:rounded-lg"
           transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
           exit={{ boxShadow: 'none' }}
         />
