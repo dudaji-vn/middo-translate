@@ -213,15 +213,7 @@ export default function CreateExtension({
     const isFirstMessageUpdated =
       !isEqual(firstMessage, initialData?.firstMessage)  &&
       (selectedRadioFM === 'default' || selectedRadioFM === 'custom');
-    console.log(
-      'isFirstMessageUpdated',
-      isFirstMessageUpdated,
-      '\n-------------------',
-      firstMessage,
-      '\n-------------------',
-      selectedRadioFM,
-      initialData?.chatFlow,
-    );
+
     return Boolean(
       isEqual(customColor, initialData?.color) &&
         isEqual(domains, initialData?.domains) &&
@@ -251,8 +243,6 @@ export default function CreateExtension({
   }, [selectedRadioFM, nodeLength, edgeLength, editingChatFlow]);
 
   if (!isClient || !open || hasNoPermissionToEdit) return null;
-  console.log('hasInvalidChatFlow', hasInvalidChatFlow);
-  console.log('extensionHasNoUpdate', extensionHasNoUpdate);
 
   return (
     <Form {...form}>
