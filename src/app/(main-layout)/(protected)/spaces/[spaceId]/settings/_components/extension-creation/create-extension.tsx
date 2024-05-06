@@ -170,13 +170,12 @@ export default function CreateExtension({
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
-        spaceId: params?.spaceId,
+        spaceId: String(params?.spaceId),
         chatFlow: chatFLowPayload,
       };
-      // @ts-ignore
       await createExtension(payload)
         .then((res) => {
-          router.push(pathname);
+          router.push(pathname + '?tab=extension');
           toast.success('Create extension success!');
         })
         .catch((err) => {
@@ -192,36 +191,61 @@ export default function CreateExtension({
   const extensionRoles = SPACE_SETTING_TAB_ROLES.find(
     (item) => item.name === 'extension',
   )?.roles;
-  const notAllowedMe = !extensionRoles?.edit.includes(myRole as ESPaceRoles);
-  const isNoChange = useMemo(() => {
-    const hasEqualChatFlow =
-      isEqual(watch('custom.chatFlow.nodes'), initialData?.chatFlow?.nodes) &&
-      watch('custom.chatFlow.nodes')?.length > 0 &&
-      isEqual(watch('custom.chatFlow.edges'), initialData?.chatFlow?.edges) &&
-      watch('custom.chatFlow.edges')?.length > 0 &&
-      watch('selectedRadioFM') === 'script';
 
-    const hasEqualFirstMessage =
-      isEqual(watch('custom.firstMessage'), initialData?.firstMessage) &&
-      watch('selectedRadioFM') !== 'script';
-    console.log('hasEqualFirstMessage', hasEqualFirstMessage);
+  const customColor = watch('custom.color');
+  const domains = watch('domains');
+  const firstMessage = watch('custom.firstMessage');
+  const selectedRadioFM = watch('selectedRadioFM');
+  const editingChatFlow = watch('custom.chatFlow');
+
+  const nodeLength = editingChatFlow?.nodes?.length || 0;
+  const edgeLength = editingChatFlow?.edges?.length || 0;
+
+  const hasNoPermissionToEdit = !extensionRoles?.edit.includes(
+    myRole as ESPaceRoles,
+  );
+  const extensionHasNoUpdate = useMemo(() => {
+    const isChatFlowUpdated =
+      !isEqual(editingChatFlow?.nodes, initialData?.chatFlow?.nodes) &&
+      nodeLength > 1 &&
+      !isEqual(editingChatFlow?.edges, initialData?.chatFlow?.edges) &&
+      edgeLength > 0 &&
+      selectedRadioFM === 'script';
+
+    const isFirstMessageUpdated =
+      !isEqual(firstMessage, initialData?.firstMessage) &&
+      isEmpty(initialData?.chatFlow);
     return (
-      isEqual(watch('custom.color'), initialData?.color) &&
-      isEqual(watch('domains'), initialData?.domains) &&
-      (hasEqualFirstMessage || hasEqualChatFlow)
+      isEqual(customColor, initialData?.color) &&
+      isEqual(domains, initialData?.domains) &&
+      !isChatFlowUpdated &&
+      !isFirstMessageUpdated
     );
   }, [
+    editingChatFlow,
     initialData,
-    watch,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    watch('custom.color'),
-    watch('domains'),
-    watch('custom.firstMessage'),
-    watch('selectedRadioFM'),
-    open,
+    nodeLength,
+    edgeLength,
+    selectedRadioFM,
+    firstMessage,
+    customColor,
+    domains,
   ]);
+  const hasInvalidChatFlow = useMemo(() => {
+    return (
+      selectedRadioFM === 'script' &&
+      (nodeLength < 2 ||
+        edgeLength < 1 ||
+        editingChatFlow?.nodes?.find(
+          (node: FlowNode) =>
+            isEmpty(node) ||
+            (isEmpty(node?.data?.content) && node.type !== 'option') ||
+            (node.type === 'option' && nodeLength == 2),
+        ))
+    );
+  }, [selectedRadioFM, nodeLength, edgeLength, editingChatFlow]);
 
-  if (!isClient || !open || notAllowedMe) return null;
+  if (!isClient || !open || hasNoPermissionToEdit) return null;
 
   return (
     <Form {...form}>
@@ -250,7 +274,7 @@ export default function CreateExtension({
               endIcon: <ArrowRight />,
             }}
             cardProps={{
-              className: 'divide-y divide-neutral-50'
+              className: 'divide-y divide-neutral-50',
             }}
           >
             <AddingDomainsStep />
@@ -264,6 +288,9 @@ export default function CreateExtension({
             nextProps={{
               endIcon: <ArrowRight />,
             }}
+            cardProps={{
+              className: 'max-h-fit',
+            }}
             footerProps={{
               className: isEditing ? 'hidden' : '',
             }}
@@ -272,7 +299,8 @@ export default function CreateExtension({
           </StepWrapper>
           <StepWrapper
             value="2"
-            canPrev={true}
+            canPrev={watch('custom.color').length > 0}
+            onPrevStep={() => setTabValue(1)}
             canNext={isValid}
             onNextStep={() => {
               form.handleSubmit(submit)();
@@ -295,7 +323,13 @@ export default function CreateExtension({
               size={'sm'}
               loading={isSubmitting}
               type="submit"
-              disabled={!isValid || isNoChange || isSubmitting || notAllowedMe}
+              disabled={
+                !isValid ||
+                extensionHasNoUpdate ||
+                isSubmitting ||
+                hasNoPermissionToEdit ||
+                hasInvalidChatFlow
+              }
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
             >
               Save Change

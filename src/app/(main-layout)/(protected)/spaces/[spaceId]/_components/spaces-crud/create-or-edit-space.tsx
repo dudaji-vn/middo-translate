@@ -23,6 +23,7 @@ import { Member } from './sections/members-columns';
 import { useQueryClient } from '@tanstack/react-query';
 import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces';
 import { useAuthStore } from '@/stores/auth.store';
+import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
 
 const createSpaceSchema = z.object({
   name: z
@@ -170,7 +171,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
             setMembers={(members: Member[]) =>
               formCreateSpace.setValue('members', members)
             }
-            allowedRoles={['admin', 'member']}
+            allowedRoles={[ESPaceRoles.Admin, ESPaceRoles.Member]}
           />
           <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4">
             <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>
