@@ -17,7 +17,7 @@ import { cn } from '@/utils/cn';
 import { VariantProps } from 'class-variance-authority';
 import { useDisplayContent } from '../../hooks/use-display-content';
 import { Message } from '../../types';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -70,81 +70,82 @@ export const Content = ({
   });
 
   return (
-    // <AnimatePresence mode="sync">
-    <div
-      className={cn(
-        wrapperVariants({ active, position, status: message.status }),
-        position === 'right' ? 'me' : '',
-        showEnContent ? 'pb-3 md:pb-3' : '',
-      )}
-    >
+    <AnimatePresence mode="sync">
       <div
         className={cn(
-          textVariants({ position, status: message.status }),
-          showEnContent ? 'mb-1 md:mb-1' : '',
+          wrapperVariants({ active, position, status: message.status }),
+          position === 'right' ? 'me' : '',
+          showEnContent ? 'pb-3 md:pb-3' : '',
         )}
       >
-        <RichTextView
-          editorStyle={cn('text-base md:text-sm', {
-            translated: !isUseOriginal,
-          })}
-          mentions={
-            message?.mentions?.map((mention) => ({
-              id: mention._id,
-              label: mention.name,
-            })) || []
-          }
-          mentionClassName={position === 'right' ? 'right' : 'left'}
-          content={contentDisplay}
-        />
-      </div>
-      {showEnContent && (
-        <motion.div
-          layout
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.2 }}
-          className="relative"
+        <div
+          className={cn(
+            textVariants({ position, status: message.status }),
+            showEnContent ? 'mb-1 md:mb-1' : '',
+          )}
         >
-          <TriangleSmall
-            position="top"
-            className={cn(
-              'absolute left-2 top-0 -translate-y-full fill-primary-400',
-            )}
-            pathProps={{
-              className:
-                position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6]',
-            }}
+          <RichTextView
+            editorStyle={cn('text-base md:text-sm', {
+              translated: !isUseOriginal,
+            })}
+            mentions={
+              message?.mentions?.map((mention) => ({
+                id: mention._id,
+                label: mention.name,
+              })) || []
+            }
+            mentionClassName={position === 'right' ? 'right' : 'left'}
+            content={contentDisplay}
           />
-          <div
-            className={cn(
-              wrapperMiddleVariants({
-                position,
-                active,
-                status: message.status,
-              }),
-            )}
+        </div>
+        {showEnContent && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              translateY: -5,
+            }}
+            animate={{
+              opacity: 1,
+              translateY: 0,
+            }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="relative"
           >
+            <TriangleSmall
+              position="top"
+              className={cn(
+                'absolute left-2 top-0 -translate-y-full fill-primary-400',
+              )}
+              pathProps={{
+                className:
+                  position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6]',
+              }}
+            />
             <div
               className={cn(
-                textMiddleVariants({ position, status: message.status }),
+                wrapperMiddleVariants({
+                  position,
+                  active,
+                  status: message.status,
+                }),
               )}
             >
-              <RichTextView
-                mentionClassName={position === 'right' ? 'right' : 'left'}
-                editorStyle="font-light translated text-base md:text-sm"
-                content={enContent || ''}
-              />
+              <div
+                className={cn(
+                  textMiddleVariants({ position, status: message.status }),
+                )}
+              >
+                <RichTextView
+                  mentionClassName={position === 'right' ? 'right' : 'left'}
+                  editorStyle="font-light translated text-base md:text-sm"
+                  content={enContent || ''}
+                />
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
-    </div>
-    // </AnimatePresence>
+          </motion.div>
+        )}
+      </div>
+    </AnimatePresence>
   );
 };
