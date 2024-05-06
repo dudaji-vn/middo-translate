@@ -20,7 +20,6 @@ import { cn } from '@/utils/cn';
 import { TimeDisplay } from '../time-display';
 import { useMessagesBox } from './messages-box.context';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 export const MAX_TIME_DIFF = 60; // 1 hour
 export const MAX_TIME_GROUP_DIFF = 1440; // 1 day
