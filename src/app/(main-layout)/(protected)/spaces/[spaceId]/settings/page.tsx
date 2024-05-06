@@ -20,6 +20,7 @@ const SpaceSettingPage = async ({
   };
 }) => {
   const space = await businessAPI.getSpaceBySpaceID(params.spaceId);
+
   const modalType = searchParams.modal;
   const openTab =
     Object.values(ESettingTabs).find((tab) => tab === searchParams.tab) ||

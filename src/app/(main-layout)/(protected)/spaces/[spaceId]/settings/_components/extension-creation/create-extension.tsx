@@ -163,16 +163,15 @@ export default function CreateExtension({
       !chatFlow?.edges?.find((edge) => isEmpty(edge));
     const chatFLowPayload =
       chatFlow && watch('selectedRadioFM') === 'script' && isValidateChatFlow
-        ? chatFlow
-        : {};
-    console.log('chatFLowPayload', chatFLowPayload);
+        ? {chatFlow}
+        : null;
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
         spaceId: String(params?.spaceId),
-        chatFlow: chatFLowPayload,
+        ...chatFLowPayload,
       };
       await createExtension(payload)
         .then((res) => {
@@ -212,9 +211,8 @@ export default function CreateExtension({
         !isEqual(editingChatFlow?.edges, initialData?.chatFlow?.edges));
 
     const isFirstMessageUpdated =
-      !isEqual(firstMessage, initialData?.firstMessage) &&
-      !isEmpty(initialData?.chatFlow?.nodes?.[0]) &&
-      selectedRadioFM !== 'script';
+      !isEqual(firstMessage, initialData?.firstMessage)  &&
+      (selectedRadioFM === 'default' || selectedRadioFM === 'custom');
 
     return Boolean(
       isEqual(customColor, initialData?.color) &&
@@ -245,8 +243,6 @@ export default function CreateExtension({
   }, [selectedRadioFM, nodeLength, edgeLength, editingChatFlow]);
 
   if (!isClient || !open || hasNoPermissionToEdit) return null;
-  console.log('hasInvalidChatFlow', hasInvalidChatFlow);
-  console.log('extensionHasNoUpdate', extensionHasNoUpdate);
 
   return (
     <Form {...form}>
