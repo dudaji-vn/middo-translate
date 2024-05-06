@@ -33,10 +33,11 @@ export default function useHandleStreamMyVideo() {
     const room = useVideoCallStore(state => state.room);
     const video = useVideoSettingStore(state => state.video);
     const audio = useVideoSettingStore(state => state.audio);
-
+    const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
     useEffect(() => {
         let myVideoStream: MediaStream = new MediaStream();
         setLoadingVideo(true);
+        setLoadingStream(true);
         // Start get streaming
         getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic, cameraDeviceId: video?.deviceId || undefined, micDeviceId: audio?.deviceId || undefined})
         .then((stream: MediaStream) => {
@@ -44,12 +45,10 @@ export default function useHandleStreamMyVideo() {
         }).catch((err: any) =>  {
             setTurnOnCamera(false);
             setTurnOnMic(false);
-            setLoadingVideo(false);
             toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         }).finally(() => {
             setMyStream(myVideoStream);
             setStreamForParticipant(myVideoStream, socket.id || '', false)
-            setLoadingVideo(false);
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
                 callId: room?._id,
                 user,
