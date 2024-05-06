@@ -262,6 +262,7 @@ const InviteMembers = ({
           {...spacePreviewProps}
         >
           <Avatar
+            variant={'outline'}
             src={space?.avatar || '/avatar.svg'}
             alt="avatar"
             className="size-[88px] cursor-pointer p-0"

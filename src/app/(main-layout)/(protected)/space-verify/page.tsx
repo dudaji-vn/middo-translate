@@ -44,6 +44,7 @@ const SpaceVerify = async ({
         <div className="h-auto w-fit min-w-[320px] space-y-3">
           <div className="flex w-full flex-row  items-center justify-center gap-4 rounded-[12px] bg-primary-100 p-3 sm:min-w-[320px]">
             <Avatar
+              variant={'outline'}
               src={space?.avatar || '/avatar.svg'}
               alt="avt"
               className="h-24 w-24 bg-white"

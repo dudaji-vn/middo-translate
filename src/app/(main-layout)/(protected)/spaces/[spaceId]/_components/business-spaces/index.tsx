@@ -79,7 +79,7 @@ const BusinessSpaces = () => {
     if (modal === 'create-space') return modal;
     return null;
   }, [searchParams]);
-  
+
   const router = useRouter();
   return (
     <>
@@ -94,6 +94,7 @@ const BusinessSpaces = () => {
               src={currentUser?.avatar ?? '/avatar.svg'}
               alt="avt"
               className="h-16 w-16"
+              variant={'outline'}
             />
             <div className="flex w-full flex-col gap-2">
               <Typography className="min-w-fit text-base font-normal leading-[18px] text-neutral-600">

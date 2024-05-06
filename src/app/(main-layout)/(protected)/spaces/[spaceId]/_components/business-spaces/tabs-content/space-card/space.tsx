@@ -74,6 +74,7 @@ const Space = ({
         <Avatar
           src={avatar || '/logo.png'}
           alt={'avatar-owner'}
+          variant={'outline'}
           className="size-[88px] border border-neutral-50 p-1"
         />
         <div className="flex flex-col space-y-1">

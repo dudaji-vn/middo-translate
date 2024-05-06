@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, ButtonProps } from '@/components/actions';
+import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { Sheet, SheetContent } from '@/components/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
@@ -8,13 +8,7 @@ import { useAppStore } from '@/stores/app.store';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import { cn } from '@/utils/cn';
 import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
-import {
-  Archive,
-  CheckSquare,
-  LineChartIcon,
-  MessagesSquare,
-  Settings,
-} from 'lucide-react';
+import { Archive, LineChartIcon, MessagesSquare, Settings } from 'lucide-react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -77,44 +71,49 @@ const BusinessSidebarContent = ({
           ? title
           : t(`business.${title}`.toUpperCase());
         return (
-          <Button
-            shape={'square'}
-            variant={'ghost'}
-            color={'default'}
-            key={index}
-            className={cn(
-              'flex w-full flex-row items-center justify-start gap-2 rounded-none p-5 text-left transition-all duration-200 hover:bg-primary-300 [&_svg]:h-5 [&_svg]:w-5',
-              {
-                hidden: roles && !roles.includes(myRole),
-              },
-              {
-                'max-md:hidden': title === 'settings',
-              },
-              isSelected
-                ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white'
-                : 'hover:bg-primary-300',
-            )}
-            onClick={() => onSelectChange({ icon, title })}
-          >
-            {icon}
-            <Typography
+          <div key={index} className="size-fit p-2">
+            <Button
+              shape={'square'}
+              variant={'ghost'}
+              color={'default'}
               className={cn(
-                shrink
-                  ? 'w-0  scale-y-0 transition duration-100 ease-in-out md:invisible'
-                  : 'min-w-[100px] capitalize transition duration-300 ease-in-out',
-                isSelected ? 'text-white ' : 'text-neutral-600',
+                'flex w-full flex-row items-center justify-start gap-2 rounded-xl p-5 text-left transition-all duration-200 hover:bg-primary-300 [&_svg]:h-5 [&_svg]:w-5',
+                {
+                  hidden: roles && !roles.includes(myRole),
+                },
+                {
+                  'max-md:hidden': title === 'settings',
+                },
+                isSelected
+                  ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white'
+                  : 'hover:bg-primary-300',
+                {
+                  'gap-0': shrink,
+                },
               )}
+              onClick={() => onSelectChange({ icon, title })}
             >
-              {displayTitle}
-            </Typography>
-            {notifications?.[title] && notifications[title] > 0 && (
-              <div className="flex h-3 w-3 items-center justify-center rounded-full bg-primary-500-main">
-                <Typography className="text-white">
-                  {notifications[title]}
-                </Typography>
-              </div>
-            )}
-          </Button>
+              {icon}
+              <Typography
+                className={cn(
+                  'p-0 transition-all duration-700 ease-in-out',
+                  shrink
+                    ? 'w-0  scale-y-0 transition-all duration-100 ease-in-out md:invisible md:w-0 '
+                    : 'min-w-[100px] capitalize ',
+                  isSelected ? 'text-white ' : 'text-neutral-600',
+                )}
+              >
+                {displayTitle}
+              </Typography>
+              {notifications?.[title] && notifications[title] > 0 && (
+                <div className="flex h-3 w-3 items-center justify-center rounded-full bg-primary-500-main">
+                  <Typography className="text-white">
+                    {notifications[title]}
+                  </Typography>
+                </div>
+              )}
+            </Button>
+          </div>
         );
       })}
     </div>
@@ -159,7 +158,7 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
     );
   }, [isMobile, params, pathname, setOpenSidebar]);
 
-  useEffect(() => { }, [openSidebar]);
+  useEffect(() => {}, [openSidebar]);
 
   return (
     <Sheet
