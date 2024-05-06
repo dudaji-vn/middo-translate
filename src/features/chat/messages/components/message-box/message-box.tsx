@@ -166,9 +166,7 @@ export const MessageBox = ({
 
         {messagesGroup.map((group, index) => {
           const isSendBySpaceMember = Boolean(
-            isOnBusinessChat &&
-              group.lastMessage.senderType !== 'anonymous' &&
-              group.lastMessage.senderType !== 'user',
+            isOnBusinessChat && group.lastMessage.senderType !== 'anonymous',
           );
           const timeDiff = moment(moment(group.lastMessage.createdAt)).diff(
             messagesGroup[index + 1]?.messages[0].createdAt ?? moment(),
