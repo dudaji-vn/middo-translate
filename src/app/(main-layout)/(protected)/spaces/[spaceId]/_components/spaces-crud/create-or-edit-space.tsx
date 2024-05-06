@@ -170,6 +170,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
             setMembers={(members: Member[]) =>
               formCreateSpace.setValue('members', members)
             }
+            allowedRoles={['admin', 'member']}
           />
           <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4">
             <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>

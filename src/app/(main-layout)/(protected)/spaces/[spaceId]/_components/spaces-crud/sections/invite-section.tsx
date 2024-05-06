@@ -56,6 +56,7 @@ export type InviteMembersProps = {
   headerDescriptionProps?: React.HTMLAttributes<HTMLDivElement>;
   blackList?: string[];
   hideOwner?: boolean;
+  allowedRoles?: ESPaceRoles[];
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const InviteMembers = ({
@@ -70,6 +71,7 @@ const InviteMembers = ({
   hideOwner = false,
   headerDescriptionProps,
   onAddMember,
+  allowedRoles = [ESPaceRoles.Member],
   ...props
 }: InviteMembersProps) => {
   const currentUser = useAuthStore((state) => state.user);
@@ -159,6 +161,10 @@ const InviteMembers = ({
         },
       ];
 
+  const rolesOptions = items.filter((item) =>
+    allowedRoles.includes(item.name as ESPaceRoles),
+  );
+
   return (
     <Form {...formAdding}>
       <section
@@ -177,7 +183,7 @@ const InviteMembers = ({
               {...headerTitleProps}
             >
               <span className="mr-2 text-primary-500-main">Invite</span>other to
-              join your space{' '}
+              join your space&nbsp;
               <span className="text-[24px] font-normal">(optional)</span>
             </Typography>
             <Typography
@@ -222,7 +228,7 @@ const InviteMembers = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {items.map((option) => (
+              {rolesOptions.map((option) => (
                 <DropdownMenuItem
                   key={option.name}
                   onSelect={() => {
