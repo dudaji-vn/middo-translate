@@ -26,10 +26,17 @@ export default function useHandleCreatePeerConnection() {
     const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
     const updateParticipant = useParticipantVideoCallStore(state => state.updateParticipant);
     const myStream = useMyVideoCallStore(state => state.myStream);
+
+    const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
+    const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
     
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
     const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: any[], doodleImage: string}) => {
         if(!socket.id) return;
+        if(users.length === 0) {
+            setLoadingVideo(false);
+            setLoadingStream(false);
+        }
         // Loop and create peer connection for each user
         users.forEach((user: { id: string; user: any }) => {
             if (user.id === socket.id) return;
@@ -48,7 +55,7 @@ export default function useHandleCreatePeerConnection() {
             setDoodleImage(doodleImage);
         }
 
-    },[addParticipant, myStream, setDoodle, setDoodleImage])
+    },[addParticipant, myStream, setDoodle, setDoodleImage, setLoadingStream, setLoadingVideo])
 
     // SOCKET_CONFIG.EVENTS.CALL.USER_JOINED
     const addPeerUserConnection = useCallback((payload: IJoinCallPayload) => {
