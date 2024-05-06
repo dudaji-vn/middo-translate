@@ -139,7 +139,7 @@ export default function CreateExtension({
       });
       setValue('selectedRadioFM', 'script');
     }
-  }, [initialData, open]);
+  }, [initialData, open, reset, setValue]);
 
   const submit = async (values: TFormValues) => {
     trigger();
@@ -206,46 +206,46 @@ export default function CreateExtension({
   );
   const extensionHasNoUpdate = useMemo(() => {
     const isChatFlowUpdated =
-      !isEqual(editingChatFlow?.nodes, initialData?.chatFlow?.nodes) &&
-      nodeLength > 1 &&
-      !isEqual(editingChatFlow?.edges, initialData?.chatFlow?.edges) &&
-      edgeLength > 0 &&
-      selectedRadioFM === 'script';
+      selectedRadioFM === 'script' &&
+      (!isEqual(editingChatFlow?.nodes, initialData?.chatFlow?.nodes) ||
+        !isEqual(editingChatFlow?.edges, initialData?.chatFlow?.edges));
 
     const isFirstMessageUpdated =
       !isEqual(firstMessage, initialData?.firstMessage) &&
-      isEmpty(initialData?.chatFlow);
-    return (
+      !isEmpty(initialData?.chatFlow?.nodes?.[0]) &&
+      selectedRadioFM !== 'script';
+
+    return Boolean(
       isEqual(customColor, initialData?.color) &&
-      isEqual(domains, initialData?.domains) &&
-      !isChatFlowUpdated &&
-      !isFirstMessageUpdated
+        isEqual(domains, initialData?.domains) &&
+        !isChatFlowUpdated &&
+        !isFirstMessageUpdated,
     );
   }, [
     editingChatFlow,
     initialData,
-    nodeLength,
-    edgeLength,
     selectedRadioFM,
     firstMessage,
     customColor,
     domains,
   ]);
   const hasInvalidChatFlow = useMemo(() => {
-    return (
+    return Boolean(
       selectedRadioFM === 'script' &&
-      (nodeLength < 2 ||
-        edgeLength < 1 ||
-        editingChatFlow?.nodes?.find(
-          (node: FlowNode) =>
-            isEmpty(node) ||
-            (isEmpty(node?.data?.content) && node.type !== 'option') ||
-            (node.type === 'option' && nodeLength == 2),
-        ))
+        (nodeLength < 2 ||
+          edgeLength < 1 ||
+          editingChatFlow?.nodes?.find(
+            (node: FlowNode) =>
+              isEmpty(node) ||
+              (isEmpty(node?.data?.content) && node.type !== 'option') ||
+              (node.type === 'option' && nodeLength == 2),
+          )),
     );
   }, [selectedRadioFM, nodeLength, edgeLength, editingChatFlow]);
 
   if (!isClient || !open || hasNoPermissionToEdit) return null;
+  console.log('hasInvalidChatFlow', hasInvalidChatFlow);
+  console.log('extensionHasNoUpdate', extensionHasNoUpdate);
 
   return (
     <Form {...form}>
@@ -327,7 +327,6 @@ export default function CreateExtension({
                 !isValid ||
                 extensionHasNoUpdate ||
                 isSubmitting ||
-                hasNoPermissionToEdit ||
                 hasInvalidChatFlow
               }
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
