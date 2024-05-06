@@ -14,8 +14,8 @@ const CustomChatThemeStep = ({ space }: { space: TSpace }) => {
     formState: {},
   } = useFormContext();
   return (
-    <div className=" max-w-screen-md bg-white  md:max-w-screen-xl [&_h3]:text-[1.25rem]">
-      <div className="flex flex-row divide-x divide-neutral-50  border-x border-b border-neutral-50 ">
+    <div className=" max-w-screen-md  md:max-w-full   [&_h3]:text-[1.25rem]">
+      <div className="flex flex-row divide-x h-full divide-neutral-50  border-neutral-50 ">
         <div className="flex  w-1/3 flex-col gap-3 p-4">
           <Typography
             variant="h5"
