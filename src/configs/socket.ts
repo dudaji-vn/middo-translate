@@ -74,7 +74,7 @@ export const SOCKET_CONFIG = {
       UPDATE: 'call.update',
       CALL_STATUS: {
         MIC_CHANGE: 'call.status.mic_change',
-      }
+      },
     },
     SPEECH_TO_TEXT: {
       START: 'speech_to_text.start',
@@ -92,6 +92,7 @@ export const SOCKET_CONFIG = {
       NOTIFICATION: {
         NEW: 'space.notification.new',
       },
+      REMOVE_MEMBER: 'space.member.remove',
     },
   },
 };
