@@ -249,6 +249,9 @@ export default function CreateExtension({
             nextProps={{
               endIcon: <ArrowRight />,
             }}
+            cardProps={{
+              className: 'divide-y divide-neutral-50'
+            }}
           >
             <AddingDomainsStep />
           </StepWrapper>
