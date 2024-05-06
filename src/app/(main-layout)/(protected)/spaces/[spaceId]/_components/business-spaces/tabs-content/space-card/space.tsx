@@ -25,14 +25,14 @@ const MAPPED_TAGS = {
   joined: 'Joined spaces',
 };
 const Space = ({
-  data: { name, members = [], newMessagesCount, owner, createdAt, avatar, _id },
+  data: { name, members = [], totalNewMessages = 0, createdAt, avatar, _id },
   tag,
   ...props
 }: {
   data: TSpace;
   tag: 'my' | 'joined';
 } & React.HTMLAttributes<HTMLDivElement>) => {
-  const hasNotification = newMessagesCount > 0;
+  const hasNotification = totalNewMessages > 0;
   const router = useRouter();
   return (
     <Card
@@ -86,13 +86,17 @@ const Space = ({
             shape={'square'}
             color={'primary'}
             variant={'ghost'}
+            onClick={(e) => {
+              e.stopPropagation();
+              router.push(`${ROUTE_NAMES.SPACES}/${_id}/conversations`);
+            }}
             className={
-              newMessagesCount > 0
+              totalNewMessages > 0
                 ? 'text-sm font-semibold leading-[18px]  text-primary-500-main'
                 : 'invisible'
             }
             startIcon={<MessageSquare className="h-4 w-4" />}
-          >{`${newMessagesCount} new messages`}</Button>
+          >{`${totalNewMessages} new messages`}</Button>
         </div>
       </CardContent>
     </Card>

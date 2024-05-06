@@ -21,7 +21,6 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Member } from '../spaces-crud/sections/members-columns';
-import { useGetMyBusinessNotifications } from '@/features/business-spaces/hooks/use-get-notification';
 import SpacesNotifications from './business-notifications/spaces-notifications';
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
@@ -44,7 +43,7 @@ export type TSpace = BaseEntity & {
   backgroundImage?: string;
   description?: string;
   members: Member[];
-  newMessagesCount: number;
+  totalNewMessages: number;
   owner: User;
   tag?: TSpaceTag;
   tags: TConversationTag[];
@@ -71,6 +70,7 @@ const BusinessSpaces = () => {
   const [tab, setTab] = React.useState<BusinessTabType>('all_spaces');
   const currentUser = useAuthStore((s) => s.user);
   const searchParams = useSearchParams();
+
   const { data: spaces_list, isLoading } = useGetSpaces({
     type: tab,
   });
@@ -79,9 +79,8 @@ const BusinessSpaces = () => {
     if (modal === 'create-space') return modal;
     return null;
   }, [searchParams]);
-
+  
   const router = useRouter();
-
   return (
     <>
       <section className={modal ? 'hidden' : ''}>
@@ -90,13 +89,13 @@ const BusinessSpaces = () => {
             'flex w-full flex-col justify-between gap-4  bg-primary-100 px-[5vw] py-5 sm:gap-1 md:flex-row md:items-end',
           )}
         >
-          <div className="flex flex-row w-full gap-3">
+          <div className="flex w-full flex-row gap-3">
             <Avatar
               src={currentUser?.avatar ?? '/avatar.svg'}
               alt="avt"
               className="h-16 w-16"
             />
-            <div className="flex flex-col w-full gap-2">
+            <div className="flex w-full flex-col gap-2">
               <Typography className="min-w-fit text-base font-normal leading-[18px] text-neutral-600">
                 Hi, welcome back
               </Typography>
