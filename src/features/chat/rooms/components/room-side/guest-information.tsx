@@ -54,9 +54,9 @@ const GuestInformation = (guestData: GuestInformation) => {
         phoneNumber,
         userId: guestData._id,
         spaceId: String(params?.spaceId),
+        roomId: String(businessRoomId),
       });
       toast.success(`Update phone number success!`);
-      queryClient.invalidateQueries(['messages', businessRoomId]);
       setOpen(false);
     } catch (err: any) {
       toast.error(err.response.data.message);
