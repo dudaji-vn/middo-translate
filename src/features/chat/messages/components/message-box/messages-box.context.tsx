@@ -170,7 +170,7 @@ export const MessagesBoxProvider = ({
         isFetching,
       }}
     >
-      <MessageActions>{children}</MessageActions>
+      {children}
     </MessagesBoxContext.Provider>
   );
 };

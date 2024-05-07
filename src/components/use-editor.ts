@@ -11,6 +11,7 @@ import {
 } from './mention-suggestion-options';
 import { useEffect, useRef } from 'react';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
+import { useMessageActions } from '@/features/chat/messages/components/message-actions';
 type UseEditorOptions = {
   enterToSubmit?: boolean;
   onClipboardEvent?: (e: ClipboardEvent) => void;
@@ -19,6 +20,7 @@ type UseEditorOptions = {
   mentionSuggestions: MentionSuggestion[];
   onTypingChange?: (isTyping: boolean) => void;
   id?: string;
+  isEditing?: boolean;
 };
 export const useEditor = ({
   enterToSubmit = true,
@@ -28,10 +30,12 @@ export const useEditor = ({
   mentionSuggestions,
   onTypingChange,
   id,
+  isEditing,
 }: UseEditorOptions) => {
   const typingTimeout = useRef<any>(null);
   const isTyping = useRef(false);
   const setDraft = useDraftStore((s) => s.setDraft);
+  const { message } = useMessageActions();
   const editor = useTiptapEditor({
     editorProps: {
       transformPastedHTML(html) {
@@ -45,9 +49,9 @@ export const useEditor = ({
       },
     },
     onUpdate: ({ editor }) => {
+      if (isEditing) return;
       if (editor.getText().length > 0) {
         setDraft(id ?? '', editor.getHTML());
-
         if (!isTyping.current) {
           onTypingChange?.(true);
           isTyping.current = true;
@@ -113,11 +117,16 @@ export const useEditor = ({
     content: '',
   });
   useEffect(() => {
-    if (editor) {
-      editor.commands.setContent(
-        useDraftStore.getState().draft[id ?? ''] ?? '',
-      );
+    if (!editor) return;
+    if (isEditing) {
+      console.log('isEditing', message?.content);
+      editor.commands.setContent(message?.content ?? '');
+      setTimeout(() => {
+        editor.commands.focus('end');
+      }, 500);
+      return;
     }
-  }, [id, editor]);
+    editor.commands.setContent(useDraftStore.getState().draft[id ?? ''] ?? '');
+  }, [id, editor, isEditing, message?.content]);
   return editor;
 };

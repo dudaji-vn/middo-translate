@@ -18,11 +18,13 @@ import { VariantProps } from 'class-variance-authority';
 import { useDisplayContent } from '../../hooks/use-display-content';
 import { Message } from '../../types';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
   setLinks?: (links: string[]) => void;
   showDetails?: boolean;
+  isEditing?: boolean;
 }
 
 export const Content = ({
@@ -30,6 +32,7 @@ export const Content = ({
   active,
   message,
   showDetails,
+  isEditing,
 }: ContentProps) => {
   const { userLanguage, currentUserId } = useAuthStore((state) => ({
     userLanguage: state.user?.language,
@@ -82,8 +85,12 @@ export const Content = ({
           className={cn(
             textVariants({ position, status: message.status }),
             showEnContent ? 'mb-1 md:mb-1' : '',
+            isEditing ? 'text-opacity-20' : '',
           )}
         >
+          {message.status === 'edited' && !isEditing && (
+            <EditedStatus position={position} />
+          )}
           <RichTextView
             editorStyle={cn('text-base md:text-sm', {
               translated: !isUseOriginal,
@@ -138,7 +145,10 @@ export const Content = ({
               >
                 <RichTextView
                   mentionClassName={position === 'right' ? 'right' : 'left'}
-                  editorStyle="font-light translated text-base md:text-sm"
+                  editorStyle={cn(
+                    'font-light translated text-base md:text-sm',
+                    isEditing ? 'isEditing' : '',
+                  )}
                   content={enContent || ''}
                 />
               </div>
@@ -147,5 +157,21 @@ export const Content = ({
         )}
       </div>
     </AnimatePresence>
+  );
+};
+
+const EditedStatus = ({ position }: { position?: 'left' | 'right' | null }) => {
+  const { t } = useTranslation('common');
+  return (
+    <span
+      className={
+        'flex text-xs font-light' +
+        (position === 'right'
+          ? ' justify-end text-primary-300'
+          : ' text-neutral-300')
+      }
+    >
+      {t('COMMON.EDITED')}
+    </span>
   );
 };

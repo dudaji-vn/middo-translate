@@ -83,6 +83,23 @@ export const messageApi = {
     }> = await axiosWithInterceptor.get(`${basePath}/${id}/seen`);
     return res.data;
   },
+  async edit({
+    id,
+    data,
+  }: {
+    id: string;
+    data: Pick<
+      CreateMessage,
+      'content' | 'enContent' | 'mentions' | 'language'
+    >;
+  }) {
+    console.log(`${basePath}/${id}/edit`);
+    const res: Response<Message> = await axiosWithInterceptor.patch(
+      `${basePath}/${id}/edit`,
+      data,
+    );
+    return res.data;
+  },
 
   async react({ id, emoji }: { id: string; emoji: string }) {
     const res: Response<Message> = await axiosWithInterceptor.patch(

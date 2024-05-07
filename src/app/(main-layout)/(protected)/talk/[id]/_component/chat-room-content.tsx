@@ -3,6 +3,7 @@ import {
   MediaUploadDropzone,
   MediaUploadProvider,
 } from '@/components/media-upload';
+import { MessageActions } from '@/features/chat/messages/components/message-actions';
 import {
   MessageBox,
   MessagesBoxProvider,
@@ -49,9 +50,11 @@ const ChatRoomMain = ({ room }: { room: any }) => {
       <MediaUploadProvider>
         <MediaUploadDropzone>
           <MessagesBoxProvider room={room}>
-            <MessageBox room={room} />
-            <RoomTyping />
-            <ChatBoxFooter />
+            <MessageActions>
+              <MessageBox room={room} />
+              <RoomTyping />
+              <ChatBoxFooter />
+            </MessageActions>
           </MessagesBoxProvider>
         </MediaUploadDropzone>
       </MediaUploadProvider>
