@@ -35,6 +35,8 @@
     "SHOW_MORE": "Show More",
     "CLOSE": "Close",
     "FORWARD": "Forward",
+    "EDIT": "Edit",
+    "DOWNLOAD": "Download",
     "SIGN_OUT": "Sign Out",
     "NAME": "Name",
     "NAME_PLACEHOLDER": "Enter your name",
@@ -60,7 +62,9 @@
     "CLICK": "Click",
     "WAITING": "Waiting",
     "DRAFT": "Draft",
-    "TRANSLATED_FROM": "Translated from"
+    "TRANSLATED_FROM": "Translated from",
+    "EDITED": "Edited",
+    "EDITING": "Editing"
   },
   "MESSAGE": {
     "ERROR": {
@@ -184,7 +188,8 @@
     "Ukrainian": "Ukrainian",
     "Urdu": "Urdu",
     "Vietnamese": "Vietnamese",
-    "Welsh": "Welsh"
+    "Welsh": "Welsh",
+    "undefined": "unknown"
   },
   "ACCOUNT_SETTING": {
     "HEADING": "Account Settings",
@@ -345,7 +350,8 @@
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation.",
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
     "DOODLE": "Doodle",
-    "FOCUS_VIEW": "Focus view"
+    "FOCUS_VIEW": "Focus view",
+    "EDIT_MESSAGE": "Edit message"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",

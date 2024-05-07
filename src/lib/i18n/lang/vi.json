@@ -60,7 +60,11 @@
     "CLICK": "Ấn",
     "WAITING": "Đang chờ",
     "DRAFT": "Nháp",
-    "TRANSLATED_FROM": "Dịch từ tiếng"
+    "TRANSLATED_FROM": "Dịch từ tiếng",
+    "EDIT": "Chỉnh sửa",
+    "DOWNLOAD": "Tải xuống",
+    "EDITING": "Đang chỉnh sửa",
+    "EDITED": "Đã chỉnh sửa"
   },
   "MESSAGE": {
     "ERROR": {
@@ -184,7 +188,8 @@
     "Ukrainian": "Ukraina",
     "Urdu": "Urdu",
     "Vietnamese": "Việt",
-    "Welsh": "Wales"
+    "Welsh": "Wales",
+    "undefined": "không xác định"
   },
   "ACCOUNT_SETTING": {
     "HEADING": "Cài đặt tài khoản",
@@ -265,6 +270,8 @@
     "GROUP_NAME_PLACEHOLDER": "Nhập tên nhóm (tùy chọn)",
     "REPLY_IN_DISCUSSION": "Trả lời trong Thảo luận",
     "FORWARD": "Chuyển tiếp",
+    "EDIT": "Chỉnh sửa",
+    "DOWNLOAD": "Tải xuống",
     "PIN": "Ghim",
     "LEAVE": "Rời khỏi",
     "ON": "Bật",
@@ -345,7 +352,8 @@
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện.",
     "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh",
     "DOODLE": "Vẽ",
-    "FOCUS_VIEW": "Tập trung"
+    "FOCUS_VIEW": "Tập trung",
+    "EDIT_MESSAGE": "Chỉnh sửa tin nhắn"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",
