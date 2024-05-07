@@ -7,6 +7,8 @@ import { useSendImageMessage } from '../../messages/hooks/use-send-image-message
 import { useSendMediaMessages } from '../../messages/hooks/use-send-media-messages';
 import { useSendTextMessage } from '../../messages/hooks/use-send-text-message';
 import { useDiscussion } from './discussion';
+import { useMemo } from 'react';
+import { useMessageActions } from '../../messages/components/message-actions';
 
 export interface DiscussionFormProps {}
 
@@ -75,9 +77,17 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
   };
 
   const room = message.room;
+  const { action, message: messageEditing } = useMessageActions();
+
+  const isEdit = useMemo(() => {
+    if (action !== 'edit') return false;
+    if (message._id !== messageEditing?.parent?._id) return false;
+    return true;
+  }, [action, message._id, messageEditing?.parent]);
   return (
     <div className="border-t p-2">
       <MessageEditor
+        isEditing={isEdit}
         roomId={roomId + message._id}
         userMentions={room?.isGroup ? room.participants : []}
         onSubmitValue={handleSubmit}

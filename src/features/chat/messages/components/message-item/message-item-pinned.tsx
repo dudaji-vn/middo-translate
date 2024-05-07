@@ -12,18 +12,18 @@ export const MessageItemPinned = ({
   pinnedBy,
   isMe,
 }: MessageItemPinnedProps) => {
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const userId = useAuthStore((s) => s.user?._id);
   const isMePinned = pinnedBy._id === userId;
   const actor = isMePinned ? t('CONVERSATION.YOU') : pinnedBy.name;
   return (
     <div
       className={cn(
-        'text-xs font-light text-neutral-800 ',
+        'text-xs font-light text-neutral-600 ',
         isMe ? 'text-right' : 'text-left',
       )}
     >
-      {t('CONVERSATION.PINED_BY', {name: actor})}
+      {t('CONVERSATION.PINED_BY', { name: actor })}
     </div>
   );
 };

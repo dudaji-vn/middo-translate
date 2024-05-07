@@ -37,6 +37,8 @@ import { MessageEmojiPicker } from '../message-emoji-picker';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 
+const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
+
 export interface MessageItemWrapperProps {
   isMe: boolean;
   message: Message;
@@ -92,6 +94,11 @@ export const MessageItemWrapper = ({
             return message.isPinned;
           case 'reply':
             return !discussionDisabled;
+          case 'download':
+            return message.type === 'media';
+          case 'edit':
+            const timeDiff = moment().diff(message.createdAt);
+            return message.type === 'text' && timeDiff < MAX_TIME_CAN_EDIT;
           default:
             return true;
         }
@@ -333,7 +340,6 @@ const DesktopWrapper = ({
             : formattedDate
         }
         contentProps={{
-          className: 'bg-black/60 text-white rounded-lg',
           align: isMe ? 'end' : 'start',
         }}
       />

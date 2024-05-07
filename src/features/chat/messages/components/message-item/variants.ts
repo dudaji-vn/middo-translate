@@ -20,6 +20,7 @@ export const messageVariants = cva(
         sent: '',
         received: '',
         read: '',
+        edited: '',
       },
     },
 

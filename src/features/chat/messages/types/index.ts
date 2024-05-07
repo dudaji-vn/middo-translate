@@ -63,6 +63,7 @@ export type Message = {
   translations?: {
     [key: string]: string;
   };
+  parent?: Message;
   // use for flow actions on helpdesk
   actions?: FlowNode[];
 } & BaseEntity;
