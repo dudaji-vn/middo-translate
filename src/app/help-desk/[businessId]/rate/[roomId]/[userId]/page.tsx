@@ -2,9 +2,8 @@ import React from 'react';
 import StarRating from './_components/star-rating';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { notFound } from 'next/navigation';
-import { cookies, headers } from 'next/headers';
+import { headers } from 'next/headers';
 import { getAllowedDomain } from '@/utils/allowed-domains';
-import { CK_VISITOR_ID, CK_VISITOR_ROOM_ID } from '@/types/business.type';
 
 const RatingPage = async ({
   params,
@@ -20,9 +19,6 @@ const RatingPage = async ({
   if (!extensionData) {
     notFound();
   }
-
-  cookies().delete(CK_VISITOR_ID);
-  cookies().delete(CK_VISITOR_ROOM_ID);
 
   async function rateConversation(star: any) {
     'use server';
