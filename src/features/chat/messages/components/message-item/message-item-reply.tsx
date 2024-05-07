@@ -17,7 +17,7 @@ export const MessageItemReply = ({
   isMe,
 }: MessageItemReplyProps) => {
   const { data: messages } = useQuery({
-    queryKey: ['message-replies', messageId],
+    queryKey: ['message-item-replies', messageId],
     queryFn: () => messageApi.getReplies(messageId),
     enabled: !!messageId,
   });

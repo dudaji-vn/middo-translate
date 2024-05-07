@@ -10,12 +10,14 @@ import { useDiscussion } from './discussion';
 import { useMemo } from 'react';
 import { useMessageActions } from '../../messages/components/message-actions';
 
-export interface DiscussionFormProps {}
+export interface DiscussionFormProps {
+  scrollId: string;
+}
 
-export const DiscussionForm = (props: DiscussionFormProps) => {
+export const DiscussionForm = ({ scrollId }: DiscussionFormProps) => {
   const currentUser = useAuthStore((s) => s.user);
 
-  const { message, addReply } = useDiscussion();
+  const { message, addReply, updateReply } = useDiscussion();
   const roomId = message?.room?._id || '';
 
   const { sendImageMessage } = useSendImageMessage({
@@ -68,12 +70,23 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
       sendMediaMessages({
         media: documents,
         sender: currentUser!,
+        parentId: message._id,
       });
     }
 
     if (videos.length) {
-      sendMediaMessages({ media: videos, sender: currentUser! });
+      sendMediaMessages({
+        media: videos,
+        sender: currentUser!,
+        parentId: message._id,
+      });
     }
+    const messageBox = document.getElementById(scrollId);
+    setTimeout(() => {
+      messageBox?.scrollTo({
+        top: messageBox.scrollHeight,
+      });
+    }, 500);
   };
 
   const room = message.room;
@@ -87,6 +100,7 @@ export const DiscussionForm = (props: DiscussionFormProps) => {
   return (
     <div className="border-t p-2">
       <MessageEditor
+        onEditSubmit={updateReply}
         isEditing={isEdit}
         roomId={roomId + message._id}
         userMentions={room?.isGroup ? room.participants : []}

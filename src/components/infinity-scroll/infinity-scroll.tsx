@@ -1,7 +1,7 @@
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect } from 'react';
 
-import { Spinner } from '../feedback';
 import { useIntersectionObserver } from 'usehooks-ts';
+import { Spinner } from '../feedback';
 
 interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {
   onLoadMore: () => void;
@@ -11,21 +11,21 @@ interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
   ({ hasMore, onLoadMore, isFetching, ...props }, ref) => {
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const entry = useIntersectionObserver(triggerRef, {});
-    const isTriggered = !!entry?.isIntersecting;
+    const { isIntersecting, ref: triggerRef } = useIntersectionObserver({
+      threshold: 1,
+    });
     useEffect(() => {
-      if (isTriggered && hasMore) {
+      if (isIntersecting && hasMore) {
         onLoadMore();
       }
-    }, [isTriggered, hasMore, onLoadMore, isFetching]);
+    }, [isIntersecting, hasMore, onLoadMore]);
 
     return (
       <div ref={ref} {...props}>
         {props.children}
         {isFetching && (
-          <div className="bg-primary/10 absolute left-1/2 top-6 -translate-x-1/2 rounded-full p-2 text-primary">
-            <Spinner size="lg" />
+          <div className="bg-primary/10 absolute left-1/2 top-1 -translate-x-1/2 rounded-full p-2 text-primary opacity-30">
+            <Spinner size="sm" />
           </div>
         )}
         <div className="relative h-[1px] w-[1px]">
