@@ -12,8 +12,10 @@ import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.s
 import { messageApi } from '@/features/chat/messages/api';
 import { Room } from '@/features/chat/rooms/types';
 import useClient from '@/hooks/use-client';
+import { setCookieService } from '@/services/auth.service';
 import { startAGuestConversation } from '@/services/extension.service';
 import { cn } from '@/utils/cn';
+import { createVisitorCookies } from '@/utils/create-visitor-cookie-data';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -88,7 +90,6 @@ const StartAConversation = ({
     const childrenActions = nodes.filter(
       (node) => node.parentNode === rootChild.id,
     );
-    console.log('childrenActions', childrenActions);
     const payload = {
       content: rootChild.data?.content,
       roomId,
@@ -116,6 +117,7 @@ const StartAConversation = ({
       }).then(async (res) => {
         const roomId = res.data.roomId;
         const user = res.data.user;
+        setCookieService(createVisitorCookies({ user, roomId }));
         await appendFirstMessageFromChatFlow(roomId);
         router.push(
           `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}`,
