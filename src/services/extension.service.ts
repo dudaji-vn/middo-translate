@@ -24,3 +24,8 @@ export const startAGuestConversation = (data: {
 }) => {
   return post('/help-desk/create-client', data);
 };
+
+export const endConversation = (data: { roomId: string; senderId: string }) => {
+  return post('/messages/end-conversation', data);
+};
+

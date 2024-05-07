@@ -17,7 +17,6 @@ import { updateInfoGuestService } from '@/services/user.service';
 import toast from 'react-hot-toast';
 import { User } from '@/features/users/types';
 import { useParams, useRouter } from 'next/navigation';
-import { useQueryClient } from '@tanstack/react-query';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 type GuestInformation = Pick<User, '_id' | 'email' | 'phoneNumber'>;
@@ -45,7 +44,6 @@ const GuestInformation = (guestData: GuestInformation) => {
     formState: { isSubmitting },
   } = methods;
 
-  const queryClient = useQueryClient();
   const submit = async ({
     phoneNumber,
   }: z.infer<typeof updateGuestInfoSchema>) => {

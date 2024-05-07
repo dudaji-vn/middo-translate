@@ -25,7 +25,8 @@ export type ActionTypes =
   | 'updateGroupName'
   | 'updateGroupAvatar'
   | 'removeGroupName'
-  | 'createGroup';
+  | 'createGroup'
+  | 'leaveHelpDesk';
 
 export type Reaction = {
   emoji: string;

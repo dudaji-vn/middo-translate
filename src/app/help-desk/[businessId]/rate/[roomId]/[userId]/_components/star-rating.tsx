@@ -6,11 +6,12 @@ import useClient from '@/hooks/use-client';
 import { cn } from '@/utils/cn';
 import { Star } from 'lucide-react';
 import { useState } from 'react';
-import StartAConversation from '../../../[...slugs]/_components/start-conversation/start-a-conversation';
 import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useParams, useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
+import { endConversation } from '@/services/extension.service';
+import StartAConversation from '@/app/help-desk/[businessId]/[...slugs]/_components/start-conversation/start-a-conversation';
 
 const StarRating = ({
   onRate,
@@ -29,9 +30,38 @@ const StarRating = ({
   const [done, setDone] = useState(false);
   const [star, setStar] = useState(0);
   const action = onRate.bind(null, star);
+
   const onRateStar = (star: number) => {
     setStar(star);
     setHoverStar(0);
+  };
+
+  const onEndConversation = async () => {
+    setLoading(true);
+    try {
+      await endConversation({
+        roomId: String(params?.roomId),
+        senderId: String(params?.userId),
+      });
+    } catch (e) {
+      console.log('err', e);
+    }
+    setLoading(false);
+    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`);
+  };
+
+  const submitRating = async () => {
+    try {
+      setLoading(true);
+      onRate(star).then(() => {
+        setLoading(false);
+        setDone(true);
+      });
+    } catch (e) {
+      console.log('err', e);
+    }
+    onEndConversation();
+    setLoading(false);
   };
 
   if (!isMounted) return null;
@@ -107,13 +137,7 @@ const StarRating = ({
         className="w-full"
         shape={'square'}
         disabled={star === 0}
-        onClick={() => {
-          setLoading(true);
-          onRate(star).then(() => {
-            setLoading(false);
-            setDone(true);
-          });
-        }}
+        onClick={submitRating}
         loading={loading}
       >
         Send Rating
@@ -124,6 +148,7 @@ const StarRating = ({
           className="w-full hover:text-primary-700"
           shape={'square'}
           loading={loading}
+          onClick={onEndConversation}
         >
           Skip
         </Button>

@@ -333,6 +333,7 @@
     "PINNED_A_MESSAGE": "{{name}} đã ghim một tin nhắn",
     "UNPINNED_A_MESSAGE": "{{name}} đã bỏ ghim một tin nhắn",
     "CREATED_GROUP": "{{name}} đã tạo nhóm",
+    "LEFT_HELP_DESK": "{{name}} đã kết thúc cuộc trò chuyện",
     "LEFT_GROUP": "{{name}} đã rời nhóm",
     "CHANGED_GROUP_NAME": "{{name}} đã đổi tên nhóm thành {{newName}}",
     "CHANGED_GROUP_AVATAR": "{{name}} đã thay đổi hình đại diện nhóm",
