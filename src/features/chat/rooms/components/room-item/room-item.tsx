@@ -4,7 +4,7 @@ import {
   RoomItemActionWrapperDisabled,
 } from './room-item-action-wrapper';
 
-import { Avatar } from '@/components/data-display';
+import { Avatar, Typography } from '@/components/data-display';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
@@ -12,7 +12,7 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { User } from '@/features/users/types';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { PinIcon } from 'lucide-react';
+import { Globe, PinIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
@@ -23,6 +23,8 @@ import { ItemSub } from './room-item-sub';
 import { RoomItemWrapper } from './room-item-wrapper';
 import { convert } from 'html-to-text';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
+import { CircleFlag } from 'react-circle-flags';
+import { getCountryCode } from '@/utils/language-fn';
 
 export interface RoomItemProps {
   data: Room;
@@ -69,17 +71,29 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const params = useParams();
   const conversationType = params?.conversationType;
   const { t } = useTranslation('common');
-  const room = useMemo(() => {
+  const { room, visitorCountry } = useMemo(() => {
     const businessRedirectPath = conversationType
       ? `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/${_data._id}`
       : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/`;
-    return generateRoomDisplay(
-      _data,
-      currentUserId,
-      !disabledRedirect,
-      Boolean(conversationType) ? businessRedirectPath : null,
+    const visitor = _data.participants.find(
+      (user) => user.status === 'anonymous',
     );
-  }, [_data, currentUserId, disabledRedirect, conversationType]);
+    return {
+      room: generateRoomDisplay(
+        _data,
+        currentUserId,
+        !disabledRedirect,
+        Boolean(conversationType) ? businessRedirectPath : null,
+      ),
+      visitorCountry: getCountryCode(visitor?.language || 'en'),
+    };
+  }, [
+    _data,
+    currentUserId,
+    disabledRedirect,
+    conversationType,
+    params?.spaceId,
+  ]);
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
 
   const isActive =
@@ -118,7 +132,13 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         >
           <RoomItemWrapper>
             {!!conversationType ? (
-              <Avatar src={'/anonymous_avt.png'} alt="anonymous-avt" />
+              <div className="relative">
+                <Avatar src={'/anonymous_avt.png'} alt="anonymous-avt" />
+                <CircleFlag
+                  className="absolute bottom-0 right-0 size-4 rounded-full border-2 border-white"
+                  countryCode={visitorCountry?.toLowerCase() || 'gb'}
+                />
+              </div>
             ) : (
               <ItemAvatar isOnline={isOnline} room={room} isMuted={isMuted} />
             )}
@@ -147,7 +167,19 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                 </div>
               )}
               <RenderItemSub />
+              <Typography
+                className={cn(
+                  'flex flex-row items-center gap-1 text-sm font-light text-primary-500-main',
+                  {
+                    hidden: !room.fromDomain,
+                  },
+                )}
+              >
+                <Globe size={11} />
+                {room.fromDomain}
+              </Typography>
             </div>
+
             {rightElement}
           </RoomItemWrapper>
         </RoomItemContext.Provider>
