@@ -44,6 +44,8 @@ const StarRating = ({
         senderId: String(params?.userId),
       });
       if (!done) {
+        localStorage.removeItem('visitorId');
+        localStorage.removeItem('visitorRoomId');
         router.push(
           `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`,
         );

@@ -1,6 +1,6 @@
 import { CK_VISITOR_ID, CK_VISITOR_ROOM_ID } from '@/types/business.type';
 
-const DEFAULT_COOKIE_TIME = 150;
+const DEFAULT_COOKIE_TIME = 1500;
 export const createVisitorCookies = ({
   user,
   roomId,

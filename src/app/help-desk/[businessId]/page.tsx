@@ -29,9 +29,7 @@ const HelpDeskStartConversationPage = async ({
   const cookieStore = cookies();
   const visitorId = cookieStore.get(CK_VISITOR_ID)?.value;
   const visitorRoomId = cookieStore.get(CK_VISITOR_ROOM_ID)?.value;
-  console.log('visitorId', visitorId);
-  console.log('visitorRoomId', visitorRoomId);
-  
+
   if (visitorId && visitorRoomId) {
     redirect(
       `/help-desk/${businessId}/${visitorRoomId}/${visitorId}?themeColor=${extensionData.color}`,
