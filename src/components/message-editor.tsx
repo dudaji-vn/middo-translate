@@ -1,10 +1,15 @@
+import { messageApi } from '@/features/chat/messages/api';
+import { useMessageActions } from '@/features/chat/messages/components/message-actions';
+import { Message } from '@/features/chat/messages/types';
 import { useChatStore } from '@/features/chat/stores';
+import { useDraftStore } from '@/features/chat/stores/draft.store';
 import { User } from '@/features/users/types';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { useAppStore } from '@/stores/app.store';
 import { Media } from '@/types';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { getMentionIdsFromHtml } from '@/utils/get-mention-ids-from-html';
+import { useMutation } from '@tanstack/react-query';
 import { Editor, EditorContent } from '@tiptap/react';
 import { isEqual } from 'lodash';
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
@@ -20,13 +25,7 @@ import { MicButton, MicButtonRef } from './mic-button';
 import { SendButton } from './send-button';
 import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
-import { useDraftStore } from '@/features/chat/stores/draft.store';
-import { usePlatformStore } from '@/features/platform/stores';
-import { useMessageActions } from '@/features/chat/messages/components/message-actions';
-import { useMutation } from '@tanstack/react-query';
-import { messageApi } from '@/features/chat/messages/api';
-import { useMessagesBox } from '@/features/chat/messages/components/message-box';
-import { Message } from '@/features/chat/messages/types';
+import { isMobile as isMobileDevice } from 'react-device-detect';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -87,7 +86,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     }, [userMentions]);
 
     const isMobile = useAppStore((s) => s.isMobile);
-    const isPlatformMobile = usePlatformStore((s) => s.platform === 'mobile');
     const handleEnterTrigger = () => {
       document.getElementById(sendButtonId)?.click();
     };
@@ -98,7 +96,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onClipboardEvent: handleClipboardEvent,
       mentionSuggestions,
       onEnterTrigger: handleEnterTrigger,
-      enterToSubmit: !isPlatformMobile,
+      enterToSubmit: !isMobileDevice,
       onTypingChange,
       isEditing,
       id: roomId,
