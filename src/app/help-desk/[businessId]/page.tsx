@@ -1,9 +1,9 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
-import { headers } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { getAllowedDomain } from '@/utils/allowed-domains';
 import StartAConversation from './[...slugs]/_components/start-conversation/start-a-conversation';
-import { cn } from '@/utils/cn';
+import { CK_VISITOR_ID, CK_VISITOR_ROOM_ID } from '@/types/business.type';
 
 const HelpDeskStartConversationPage = async ({
   params: { slugs, businessId },
@@ -18,6 +18,7 @@ const HelpDeskStartConversationPage = async ({
   if (!extensionData) {
     notFound();
   }
+
   const headersList = headers();
   const referer = headersList.get('referer');
   const allowedDomain = getAllowedDomain({
@@ -25,6 +26,17 @@ const HelpDeskStartConversationPage = async ({
     allowedDomains: extensionData.domains,
   });
 
+  const cookieStore = cookies();
+  const visitorId = cookieStore.get(CK_VISITOR_ID)?.value;
+  const visitorRoomId = cookieStore.get(CK_VISITOR_ROOM_ID)?.value;
+  console.log('visitorId', visitorId);
+  console.log('visitorRoomId', visitorRoomId);
+  
+  if (visitorId && visitorRoomId) {
+    redirect(
+      `/help-desk/${businessId}/${visitorRoomId}/${visitorId}?themeColor=${extensionData.color}`,
+    );
+  }
   if (!allowedDomain) {
     notFound();
   }

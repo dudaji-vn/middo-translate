@@ -11,7 +11,6 @@ const HelpDeskConversationLayout = async ({
   children: ReactNode;
   params: {
     businessId: string;
-    slugs: string[];
   };
 }) => {
   const extensionData = await businessAPI.getExtensionByBusinessId(businessId);

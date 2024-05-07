@@ -31,3 +31,6 @@ export enum EBusinessSidebarKeys {
   Settings = 'settings',
   Statistic = 'statistics',
 }
+
+export const CK_VISITOR_ID = 'visitor_id';
+export const CK_VISITOR_ROOM_ID = 'visitor_room_id';
