@@ -98,7 +98,9 @@ export const MessageItemWrapper = ({
             return message.type === 'media';
           case 'edit':
             const timeDiff = moment().diff(message.createdAt);
-            return message.type === 'text' && timeDiff < MAX_TIME_CAN_EDIT;
+            return (
+              message.type === 'text' && timeDiff < MAX_TIME_CAN_EDIT && isMe
+            );
           default:
             return true;
         }
