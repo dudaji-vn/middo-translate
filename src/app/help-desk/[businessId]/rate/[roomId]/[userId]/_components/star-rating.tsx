@@ -6,12 +6,12 @@ import useClient from '@/hooks/use-client';
 import { cn } from '@/utils/cn';
 import { Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { endConversation } from '@/services/extension.service';
 import StartAConversation from '@/app/help-desk/[businessId]/[...slugs]/_components/start-conversation/start-a-conversation';
+import { LSK_VISITOR_ID, LSK_VISITOR_ROOM_ID } from '@/types/business.type';
 
 const StarRating = ({
   onRate,
@@ -25,7 +25,6 @@ const StarRating = ({
   const isMounted = useClient();
   const [hoverStar, setHoverStar] = useState(0);
   const router = useRouter();
-  const pathname = usePathname();
   const [loading, setLoading] = useState(false);
   const params = useParams();
   const [done, setDone] = useState(false);
@@ -38,14 +37,14 @@ const StarRating = ({
   };
 
   const onEndConversation = async () => {
+    localStorage.removeItem(LSK_VISITOR_ID);
+    localStorage.removeItem(LSK_VISITOR_ROOM_ID);
     try {
       endConversation({
         roomId: String(params?.roomId),
         senderId: String(params?.userId),
       });
       if (!done) {
-        localStorage.removeItem('visitorId');
-        localStorage.removeItem('visitorRoomId');
         router.push(
           `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`,
         );
