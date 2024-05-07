@@ -63,6 +63,8 @@ export const generateSystemMessageContent = ({
       return ` updated the group avatar`;
     case 'removeGroupName':
       return ` removed the group name`;
+    case 'leaveHelpDesk':
+      return ` end this conversation`;
     default:
       return '';
   }

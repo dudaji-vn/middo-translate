@@ -331,6 +331,7 @@
     "PINNED_A_MESSAGE": "{{name}}님이 메시지를 고정함",
     "UNPINNED_A_MESSAGE": "{{name}}님이 메시지 고정 해제함",
     "CREATED_GROUP": "{{name}}님이 그룹 생성함",
+    "LEFT_HELP_DESK": "{{name}}님이 대화를 종료했습니다",
     "LEFT_GROUP": "{{name}}님이 그룹 나감",
     "CHANGED_GROUP_NAME": "{{name}}가 그룹명을 {{newName}}로 변경했습니다.",
     "CHANGED_GROUP_AVATAR": "{{name}}가 그룹 아바타를 변경했습니다.",
