@@ -39,8 +39,10 @@ export type TStartAConversation = {
 const StartAConversation = ({
   extensionData,
   isAfterDoneAnCOnversation,
+  fromDomain,
 }: {
   isAfterDoneAnCOnversation?: boolean;
+  fromDomain: string;
   extensionData: TBusinessExtensionData;
 }) => {
   const router = useRouter();
@@ -109,6 +111,7 @@ const StartAConversation = ({
       setLoading(true);
       await startAGuestConversation({
         businessId: extensionData._id,
+        fromDomain,
         ...values,
       }).then(async (res) => {
         const roomId = res.data.roomId;
