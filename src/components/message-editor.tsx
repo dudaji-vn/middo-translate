@@ -44,6 +44,7 @@ export interface MessageEditorProps
   sendBtnProps?: ButtonProps;
   roomId?: string;
   isEditing?: boolean;
+  onEditSubmit?: (message: Message) => void;
 }
 
 export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
@@ -55,6 +56,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onTypingChange,
       roomId,
       isEditing,
+      onEditSubmit,
       ...props
     },
     ref,
@@ -212,6 +214,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         <div className="relative">
           {isEditing && editor && (
             <EditControl
+              onEditSubmit={onEditSubmit}
               translationHelperRef={translationHelperRef}
               isContentEmpty={isContentEmpty}
               sendButtonId={sendButtonId}
@@ -281,13 +284,14 @@ const EditControl = ({
   translationHelperRef,
   isContentEmpty,
   editor,
+  onEditSubmit,
 }: {
   sendButtonId: string;
   translationHelperRef: React.MutableRefObject<TranslationHelperRef | null>;
   isContentEmpty: boolean;
   editor: Editor;
+  onEditSubmit?: (message: Message) => void;
 }) => {
-  const { updateMessage } = useMessagesBox();
   const { mutate, isLoading } = useMutation({
     mutationFn: messageApi.edit,
   });
@@ -308,8 +312,8 @@ const EditControl = ({
         enContent: english,
       },
     });
-    updateMessage &&
-      updateMessage({
+    onEditSubmit &&
+      onEditSubmit({
         _id: message!._id,
         content,
         status: 'edited',

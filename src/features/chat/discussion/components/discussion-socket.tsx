@@ -8,17 +8,25 @@ import { useDiscussion } from './discussion';
 export interface DiscussionSocketProps {}
 
 export const DiscussionSocket = (props: DiscussionSocketProps) => {
-  const { message } = useDiscussion();
+  const { message, replaceReply, updateReply } = useDiscussion();
   const messageId = message._id;
-  const queryClient = useQueryClient();
   useEffect(() => {
     socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.JOIN, messageId);
 
-    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.NEW, (message: Message) => {
-      queryClient.invalidateQueries(['message-replies', messageId]);
-    });
+    socket.on(
+      SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.NEW,
+      ({
+        message,
+        clientTempId,
+      }: {
+        message: Message;
+        clientTempId: string;
+      }) => {
+        replaceReply(message, clientTempId);
+      },
+    );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.UPDATE, (message: Message) => {
-      queryClient.invalidateQueries(['message-replies', messageId]);
+      updateReply(message);
     });
 
     return () => {

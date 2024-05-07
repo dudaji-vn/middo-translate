@@ -34,7 +34,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     const currentUser = useAuthStore((s) => s.user);
     const { room, updateRoom } = useChatBox();
     const [roomId, setRoomId] = useState<string>(room._id);
-    const { addMessage, replaceMessage } = useMessagesBox();
+    const { addMessage, replaceMessage, updateMessage } = useMessagesBox();
     const onSuccessfulSend = (data: Message, variables: CreateMessage) => {
       {
         const clientTempId = variables.clientTempId;
@@ -152,6 +152,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       <div className="relative w-full border-t p-2">
         <MessageEditor
           isEditing={isEdit}
+          onEditSubmit={updateMessage}
           roomId={room._id}
           userMentions={room.isGroup ? room.participants : []}
           onSubmitValue={handleSubmit}

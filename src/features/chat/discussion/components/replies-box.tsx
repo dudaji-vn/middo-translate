@@ -146,7 +146,7 @@ export const RepliesBox = () => {
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';
           return (
-            <div key={group.lastMessage._id}>
+            <div key={group.messages[0]._id}>
               {isShowTimeGroup && (
                 <div className="my-2 flex items-center justify-center">
                   <div className="flex items-center space-x-2">
@@ -195,7 +195,7 @@ export const RepliesBox = () => {
                           !isSystem &&
                           message._id === group.messages[0]._id
                         }
-                        key={message._id}
+                        key={message?.clientTempId || message._id}
                         message={message}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}

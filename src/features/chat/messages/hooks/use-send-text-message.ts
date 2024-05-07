@@ -1,5 +1,5 @@
 import { User } from '@/features/users/types';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createLocalMessage } from '../utils';
 import { SendMessageProps, useSendMessage } from './use-send-message';
 
@@ -7,11 +7,16 @@ export const useSendTextMessage = ({
   roomId: _roomId,
   isAnonymous,
   addMessage,
-  parentId,
+  parentId: _parentId,
   onSuccess,
 }: SendMessageProps) => {
   const { sendMessage } = useSendMessage({ onSuccess });
   const [roomId, setRoomId] = useState<string>(_roomId);
+  const [parentId, setParentId] = useState<string | undefined>(_parentId);
+  useEffect(() => {
+    setRoomId(_roomId);
+    setParentId(_parentId);
+  }, [_roomId, _parentId]);
   const sendTextMessage = useCallback(
     async ({
       content,
@@ -54,7 +59,7 @@ export const useSendTextMessage = ({
       sendMessage(payload);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [isAnonymous, roomId],
+    [isAnonymous, parentId, roomId],
   );
 
   return { sendTextMessage };
