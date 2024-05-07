@@ -4,7 +4,7 @@ import {
   RoomItemActionWrapperDisabled,
 } from './room-item-action-wrapper';
 
-import { Avatar } from '@/components/data-display';
+import { Avatar, Typography } from '@/components/data-display';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
@@ -12,7 +12,7 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { User } from '@/features/users/types';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { PinIcon } from 'lucide-react';
+import { Globe, PinIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
@@ -147,7 +147,19 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                 </div>
               )}
               <RenderItemSub />
+              <Typography
+                className={cn(
+                  'flex flex-row items-center gap-1 text-sm font-light text-primary-500-main',
+                  {
+                    hidden: !room.fromDomain,
+                  },
+                )}
+              >
+                <Globe size={11} />
+                {room.fromDomain}
+              </Typography>
             </div>
+
             {rightElement}
           </RoomItemWrapper>
         </RoomItemContext.Provider>

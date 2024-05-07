@@ -31,4 +31,5 @@ export type Room = {
     _id: string;
   };
   space?: TSpace;
+  fromDomain?: string;
 } & BaseEntity;
