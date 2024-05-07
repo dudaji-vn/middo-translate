@@ -15,12 +15,13 @@ export default function UserStatus({isForgeShow, participant}: UserStatusProps) 
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const layout = useVideoCallStore(state => state.layout);
   if(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen && !isForgeShow) return null;
-
+  const notShow = layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen && !isForgeShow;
   switch (participant.status) {
     case 'WAITING':
-      return <WaitingStatus />
+      if(notShow) return null;
+      return <WaitingStatus/>
     case 'DECLINE':
-      return <DeclineStatus participant={participant}/>
+      return <DeclineStatus participant={participant} notShow={notShow}/>
     default:
       return null;
   }
@@ -44,7 +45,7 @@ const WaitingStatus = () => {
   );
 }
 
-const DeclineStatus = ({participant}: {participant: ParticipantInVideoCall}) => {
+const DeclineStatus = ({participant, notShow}: {participant: ParticipantInVideoCall, notShow: boolean}) => {
   const {t} = useTranslation('common')
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const removeParticipantByUserId = useParticipantVideoCallStore(state => state.removeParticipantByUserId)
@@ -57,9 +58,11 @@ const DeclineStatus = ({participant}: {participant: ParticipantInVideoCall}) => 
       clearTimeout(timeout)
     }
   }, [participant?.user?._id, removeParticipantByUserId])
+  
+  if(notShow) return null;
 
   return (
-    <div className="absolute inset-0">
+    <div className={cn("absolute inset-0", notShow && 'opacity-0')}>
       <div className={cn("absolute right-0 top-0 bg-error-100 p-2 px-3 rounded-bl-xl flex items-center justify-end gap-2 text-error")}>
       {isFullScreen && <span className='text-xs text-neutral-bg-neutral-600'>{t('COMMON.DECLINE')}</span>}
         <PhoneMissed  size={16} />

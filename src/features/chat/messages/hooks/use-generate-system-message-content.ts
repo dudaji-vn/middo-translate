@@ -52,6 +52,10 @@ export default function useGenerateSystemMessageContent(
         return t('CONVERSATION.CREATED_GROUP', {
           name: isMe ? t('CONVERSATION.YOU') : message.sender.name,
         });
+      case 'leaveHelpDesk':
+        return t('CONVERSATION.LEFT_HELP_DESK', {
+          name: message.sender.name,
+        });
       default:
         return message.content;
     }

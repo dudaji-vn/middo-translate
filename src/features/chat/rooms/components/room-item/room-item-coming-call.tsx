@@ -23,6 +23,7 @@ export const RoomItemComingCall = ({
         onClick={() => startVideoCall(roomChatBox._id)}
         size="xs"
         shape="square"
+        className='whitespace-nowrap'
       >
         {t('CONVERSATION.JOIN')}
       </Button>

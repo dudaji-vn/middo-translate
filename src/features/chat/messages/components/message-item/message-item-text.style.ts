@@ -12,6 +12,7 @@ export const wrapperVariants = cva('px-3 py-2 md:py-1', {
       sent: '',
       received: '',
       read: '',
+      edited: '',
     },
     active: {
       true: '',
@@ -53,6 +54,7 @@ export const wrapperMiddleVariants = cva(
         sent: '',
         received: '',
         read: '',
+        edited: '',
       },
       active: {
         true: '',
@@ -95,6 +97,7 @@ export const textVariants = cva(
         sent: '',
         received: '',
         read: '',
+        edited: '',
       },
     },
 
@@ -118,6 +121,7 @@ export const textMiddleVariants = cva(
         sent: '',
         received: '',
         read: '',
+        edited: '',
       },
     },
 

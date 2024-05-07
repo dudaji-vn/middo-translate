@@ -1,7 +1,6 @@
 import { useChatStore } from '@/features/chat/stores';
 import { User } from '@/features/users/types';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { detectLanguage } from '@/services/languages.service';
 import { useAppStore } from '@/stores/app.store';
 import { Media } from '@/types';
 import { SHORTCUTS } from '@/types/shortcuts';
@@ -10,7 +9,7 @@ import { Editor, EditorContent } from '@tiptap/react';
 import { isEqual } from 'lodash';
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ButtonProps } from './actions';
+import { Button, ButtonProps } from './actions';
 import { AttachmentButton } from './attachment-button';
 import { AttachmentSelection } from './attachment-selection';
 import { EmojiButton } from './emoji-button';
@@ -23,6 +22,11 @@ import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
 import { usePlatformStore } from '@/features/platform/stores';
+import { useMessageActions } from '@/features/chat/messages/components/message-actions';
+import { useMutation } from '@tanstack/react-query';
+import { messageApi } from '@/features/chat/messages/api';
+import { useMessagesBox } from '@/features/chat/messages/components/message-box';
+import { Message } from '@/features/chat/messages/types';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -39,6 +43,8 @@ export interface MessageEditorProps
   onTypingChange?: (isTyping: boolean) => void;
   sendBtnProps?: ButtonProps;
   roomId?: string;
+  isEditing?: boolean;
+  onEditSubmit?: (message: Message) => void;
 }
 
 export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
@@ -49,6 +55,8 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       sendBtnProps,
       onTypingChange,
       roomId,
+      isEditing,
+      onEditSubmit,
       ...props
     },
     ref,
@@ -83,6 +91,8 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     const handleEnterTrigger = () => {
       document.getElementById(sendButtonId)?.click();
     };
+    const editorId = useId();
+    const sendButtonId = useId();
     const editor = useEditor({
       placeholder: t('CONVERSATION.TYPE_A_MESSAGE'),
       onClipboardEvent: handleClipboardEvent,
@@ -90,13 +100,11 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onEnterTrigger: handleEnterTrigger,
       enterToSubmit: !isPlatformMobile,
       onTypingChange,
+      isEditing,
       id: roomId,
     });
 
     const translationHelperRef = useRef<TranslationHelperRef>(null);
-
-    const editorId = useId();
-    const sendButtonId = useId();
 
     const micRef = useRef<MicButtonRef>(null);
 
@@ -115,7 +123,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       const documents: Media[] = [];
       const videos: Media[] = [];
       let content = editor?.getHTML() || '';
-      const text = editor?.getText() || '';
       let lang = '';
       let english = translationHelperRef.current?.getEnContent();
       let mentions: string[] = [];
@@ -204,44 +211,57 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           }}
           onSend={handleSubmit}
         />
-        <div className="relative flex gap-1">
-          <div
-            ref={ref}
-            {...props}
-            className="flex min-h-[82px] w-full flex-col rounded-xl border border-primary p-1 px-3 pb-3 shadow-sm"
-          >
-            <div className="-ml-2">
-              <AttachmentButton />
-              <EmojiButton editor={editor} />
-              <MicButton ref={micRef} editor={editor} />
-              {mentionSuggestions.length > 0 && (
-                <MentionButton onMention={focus} editor={editor} />
-              )}
-            </div>
-            <EditorContent
-              className="max-h-[200px] min-h-[46] w-full overflow-y-auto"
+        <div className="relative">
+          {isEditing && editor && (
+            <EditControl
+              onEditSubmit={onEditSubmit}
+              translationHelperRef={translationHelperRef}
+              isContentEmpty={isContentEmpty}
+              sendButtonId={sendButtonId}
               editor={editor}
             />
-            <AttachmentSelection editor={editor} />
-          </div>
+          )}
+          <div className="relative flex gap-1">
+            <div
+              ref={ref}
+              {...props}
+              className="flex min-h-[82px] w-full flex-col rounded-xl border border-primary p-1 px-3 pb-3 shadow-sm"
+            >
+              <div className="-ml-2">
+                {!isEditing && <AttachmentButton />}
+                <EmojiButton editor={editor} />
+                <MicButton ref={micRef} editor={editor} />
+                {mentionSuggestions.length > 0 && (
+                  <MentionButton onMention={focus} editor={editor} />
+                )}
+              </div>
+              <EditorContent
+                className="max-h-[200px] min-h-[46] w-full overflow-y-auto"
+                editor={editor}
+              />
+              {!isEditing && <AttachmentSelection editor={editor} />}
+            </div>
 
-          <input
-            className="h-0 w-0 opacity-0"
-            id={`input-${editorId}`}
-            type="text"
-          />
-          <SendButton
-            id={sendButtonId}
-            onClick={(e) => {
-              handleSubmit();
-            }}
-            editor={editor}
-            editorId={editorId}
-            {...sendBtnProps}
-          />
-          {editor && !isMobile && <Autofocus editor={editor} />}
+            <input
+              className="absolute h-0 w-0 opacity-0"
+              id={`input-${editorId}`}
+              type="text"
+            />
+            {!isEditing && (
+              <SendButton
+                id={sendButtonId}
+                onClick={(e) => {
+                  handleSubmit();
+                }}
+                editor={editor}
+                editorId={editorId}
+                {...sendBtnProps}
+              />
+            )}
+            {editor && !isMobile && <Autofocus editor={editor} />}
+          </div>
           {disabled && (
-            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80"></div>
+            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80" />
           )}
         </div>
       </>
@@ -250,11 +270,84 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
 );
 MessageEditor.displayName = 'MessageEditor';
 
-const Autofocus = ({ editor }: { editor: Editor }) => {
+export const Autofocus = ({ editor }: { editor: Editor }) => {
   useEffect(() => {
     console.log('render Autofocus');
     editor?.commands.focus('end');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return null;
+};
+
+const EditControl = ({
+  sendButtonId,
+  translationHelperRef,
+  isContentEmpty,
+  editor,
+  onEditSubmit,
+}: {
+  sendButtonId: string;
+  translationHelperRef: React.MutableRefObject<TranslationHelperRef | null>;
+  isContentEmpty: boolean;
+  editor: Editor;
+  onEditSubmit?: (message: Message) => void;
+}) => {
+  const { mutate, isLoading } = useMutation({
+    mutationFn: messageApi.edit,
+  });
+  const { reset, message } = useMessageActions();
+  const { t } = useTranslation('common');
+  const handleSave = () => {
+    let content = editor?.getHTML() || '';
+    let english = translationHelperRef.current?.getEnContent();
+    let mentions: string[] = [];
+    if (!isContentEmpty) {
+      mentions = getMentionIdsFromHtml(content);
+    } else content = '';
+    mutate({
+      id: message!._id,
+      data: {
+        content,
+        mentions,
+        enContent: english,
+      },
+    });
+    onEditSubmit &&
+      onEditSubmit({
+        _id: message!._id,
+        content,
+        status: 'edited',
+      } as Message);
+    reset();
+  };
+  const isDirty = editor?.getHTML() !== message?.content;
+
+  return (
+    <div className="mb-2 flex items-center justify-between">
+      <span className="font-semibold text-neutral-800">
+        {t('CONVERSATION.EDIT_MESSAGE')}
+      </span>
+      <div className="space-x-2">
+        <Button
+          onClick={reset}
+          size="xs"
+          shape="square"
+          variant="ghost"
+          color="default"
+        >
+          {t('COMMON.CANCEL')}
+        </Button>
+        <Button
+          loading={isLoading}
+          disabled={!isDirty || isContentEmpty}
+          onClick={handleSave}
+          id={sendButtonId}
+          size="xs"
+          shape="square"
+        >
+          {t('COMMON.SAVE')}
+        </Button>
+      </div>
+    </div>
+  );
 };

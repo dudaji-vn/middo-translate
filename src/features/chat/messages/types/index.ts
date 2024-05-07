@@ -25,7 +25,8 @@ export type ActionTypes =
   | 'updateGroupName'
   | 'updateGroupAvatar'
   | 'removeGroupName'
-  | 'createGroup';
+  | 'createGroup'
+  | 'leaveHelpDesk';
 
 export type Reaction = {
   emoji: string;
@@ -63,6 +64,7 @@ export type Message = {
   translations?: {
     [key: string]: string;
   };
+  parent?: Message;
   // use for flow actions on helpdesk
   actions?: FlowNode[];
 } & BaseEntity;

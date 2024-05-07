@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useCallback, useState } from 'react';
+import { forwardRef, useCallback, useMemo, useState } from 'react';
 
 import {
   MessageEditor,
@@ -17,6 +17,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useChatBox } from '../../contexts/chat-box-context';
 import { Message } from '@/features/chat/messages/types';
 import { CreateMessage } from '@/features/chat/messages/api';
+import { useMessageActions } from '@/features/chat/messages/components/message-actions';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -33,7 +34,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     const currentUser = useAuthStore((s) => s.user);
     const { room, updateRoom } = useChatBox();
     const [roomId, setRoomId] = useState<string>(room._id);
-    const { addMessage, replaceMessage } = useMessagesBox();
+    const { addMessage, replaceMessage, updateMessage } = useMessagesBox();
     const onSuccessfulSend = (data: Message, variables: CreateMessage) => {
       {
         const clientTempId = variables.clientTempId;
@@ -140,9 +141,18 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       ],
     );
 
+    const { action, message } = useMessageActions();
+    const isEdit = useMemo(() => {
+      if (action !== 'edit') return false;
+      if (room._id !== message?.room?._id) return false;
+      return true;
+    }, [action, room._id, message?.room?._id]);
+
     return (
       <div className="relative w-full border-t p-2">
         <MessageEditor
+          isEditing={isEdit}
+          onEditSubmit={updateMessage}
           roomId={room._id}
           userMentions={room.isGroup ? room.participants : []}
           onSubmitValue={handleSubmit}

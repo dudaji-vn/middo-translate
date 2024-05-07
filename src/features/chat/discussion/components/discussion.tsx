@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { createContext, useContext, useEffect, useId, useRef } from 'react';
 import { messageApi } from '../../messages/api';
 import { DiscussionForm } from './discussion-form';
 import { DiscussionSocket } from './discussion-socket';
@@ -19,6 +19,8 @@ interface DiscussionContextProps {
   message: Message;
   replies: Message[];
   addReply: (reply: Message) => void;
+  replaceReply: (reply: Message, replaceId: string) => void;
+  updateReply: (reply: Message) => void;
 }
 
 export const DiscussionContext = createContext<DiscussionContextProps>(
@@ -27,6 +29,7 @@ export const DiscussionContext = createContext<DiscussionContextProps>(
 
 const Discussion = ({ messageId }: Props) => {
   const messageBoxRef = useRef<HTMLDivElement>(null);
+  const messageBoxId = useId();
 
   const { data } = useQuery({
     queryKey: ['message', messageId],
@@ -43,7 +46,42 @@ const Discussion = ({ messageId }: Props) => {
   });
 
   const addReply = (reply: Message) => {
-    queryClient.setQueryData(repliesKey, (old: any) => [...old, reply]);
+    queryClient.setQueryData<typeof messages | undefined>(repliesKey, (old) =>
+      old ? [...old, reply] : [reply],
+    );
+  };
+
+  const replaceReply = (reply: Message, replaceId: string) => {
+    queryClient.setQueryData(repliesKey, (old: any) => {
+      let isReplaced = false;
+      const newMessages = old?.map((m: Message) => {
+        if (m._id === replaceId) {
+          isReplaced = true;
+          return {
+            ...m,
+            ...reply,
+          };
+        }
+        return m;
+      });
+      if (!isReplaced) {
+        newMessages?.push(reply);
+      }
+      return newMessages;
+    });
+  };
+
+  const updateReply = (reply: Message) => {
+    queryClient.setQueryData(repliesKey, (old: any) =>
+      old.map((m: Message) =>
+        m._id === reply._id
+          ? {
+              ...m,
+              ...reply,
+            }
+          : m,
+      ),
+    );
   };
 
   useEffect(
@@ -63,17 +101,20 @@ const Discussion = ({ messageId }: Props) => {
             message: data,
             replies: messages || [],
             addReply,
+            replaceReply,
+            updateReply,
           }}
         >
           <MediaUploadDropzone className='overflow-hidden" flex h-full flex-1 flex-col'>
             <div
               ref={messageBoxRef}
+              id={messageBoxId}
               className="flex flex-1 flex-col overflow-y-auto"
             >
               <MainMessage message={data} className="p-3" />
               <RepliesBox />
             </div>
-            <DiscussionForm />
+            <DiscussionForm scrollId={messageBoxId} />
           </MediaUploadDropzone>
           <DiscussionSocket />
         </DiscussionContext.Provider>

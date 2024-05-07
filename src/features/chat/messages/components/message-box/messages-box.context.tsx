@@ -118,7 +118,7 @@ export const MessagesBoxProvider = ({
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
       queryClient.invalidateQueries(['message', message._id]);
       if (message.hasChild) {
-        queryClient.invalidateQueries(['message-replies', message._id]);
+        queryClient.invalidateQueries(['message-item-replies', message._id]);
       }
     });
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
@@ -170,7 +170,7 @@ export const MessagesBoxProvider = ({
         isFetching,
       }}
     >
-      <MessageActions>{children}</MessageActions>
+      {children}
     </MessagesBoxContext.Provider>
   );
 };

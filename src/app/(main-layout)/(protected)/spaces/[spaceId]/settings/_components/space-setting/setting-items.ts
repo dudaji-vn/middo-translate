@@ -39,7 +39,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
-      delete: [ESPaceRoles.Owner],
+      delete: [ESPaceRoles.Owner, ESPaceRoles.Admin],
     },
   },
   {

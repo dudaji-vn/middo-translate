@@ -19,7 +19,13 @@ export const startAGuestConversation = (data: {
   businessId: string;
   name: string;
   language: string;
+  fromDomain: string;
   email: string;
 }) => {
   return post('/help-desk/create-client', data);
 };
+
+export const endConversation = (data: { roomId: string; senderId: string }) => {
+  return post('/messages/end-conversation', data);
+};
+

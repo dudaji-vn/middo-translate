@@ -25,7 +25,6 @@ export const EnterToSubmit = Extension.create({
         }
         const { onSubmit } = this.options as EnterToSubmitOptions;
         onSubmit({ editor: editor as Editor });
-        editor.commands.clearContent();
         return true;
       },
       'Shift-Enter': () => {

@@ -21,6 +21,7 @@ import { TimeDisplay } from '../time-display';
 import { useMessagesBox } from './messages-box.context';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
+import { useMessageActions } from '../message-actions';
 export const MAX_TIME_DIFF = 60; // 1 hour
 export const MAX_TIME_GROUP_DIFF = 1440; // 1 day
 export type MessageGroup = {
@@ -49,6 +50,7 @@ export const MessageBox = ({
   const bottomRef = useRef<HTMLDivElement>(null);
   const { scrollIntoView } = useScrollIntoView(bottomRef);
   const { isOnBusinessChat } = useBusinessNavigationData();
+  const { message: messageEditing, action } = useMessageActions();
 
   const [participants, setParticipants] = useState(room.participants);
 
@@ -166,9 +168,7 @@ export const MessageBox = ({
 
         {messagesGroup.map((group, index) => {
           const isSendBySpaceMember = Boolean(
-            isOnBusinessChat &&
-              group.lastMessage.senderType !== 'anonymous' &&
-              group.lastMessage.senderType !== 'user',
+            isOnBusinessChat && group.lastMessage.senderType !== 'anonymous',
           );
           const timeDiff = moment(moment(group.lastMessage.createdAt)).diff(
             messagesGroup[index + 1]?.messages[0].createdAt ?? moment(),
@@ -223,6 +223,10 @@ export const MessageBox = ({
                     };
                     return (
                       <MessageItem
+                        isEditing={
+                          message._id === messageEditing?._id &&
+                          action === 'edit'
+                        }
                         disabledAllActions={isAnonymous || room.isHelpDesk}
                         guestId={guestId}
                         pinnedBy={pinnedBy}

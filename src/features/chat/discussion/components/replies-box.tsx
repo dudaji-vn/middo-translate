@@ -13,19 +13,21 @@ import { roomApi } from '../../rooms/api';
 import { useTranslation } from 'react-i18next';
 import { Clock9Icon } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import { useMessageActions } from '../../messages/components/message-actions';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 
 export interface RepliesBoxProps {}
 
 export const RepliesBox = () => {
-  const { replies: messages, message } = useDiscussion();
+  const { replies: messages, message: parent } = useDiscussion();
+  const { message: messageEditing, action } = useMessageActions();
   const currentUserId = useAuthStore((s) => s.user?._id);
   const { t } = useTranslation('common');
   const { data: room } = useQuery({
-    queryKey: ['room', message.room?._id],
-    queryFn: () => roomApi.getRoom(message.room?._id!),
-    enabled: !!message.room?._id,
+    queryKey: ['room', parent.room?._id],
+    queryFn: () => roomApi.getRoom(parent.room?._id!),
+    enabled: !!parent.room?._id,
   });
   const messagesGroup = useMemo(() => {
     const data = messages?.reduce((acc, message) => {
@@ -144,7 +146,7 @@ export const RepliesBox = () => {
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';
           return (
-            <div key={group.lastMessage._id}>
+            <div key={group.messages[0]._id}>
               {isShowTimeGroup && (
                 <div className="my-2 flex items-center justify-center">
                   <div className="flex items-center space-x-2">
@@ -181,6 +183,11 @@ export const RepliesBox = () => {
                   {group.messages.map((message) => {
                     return (
                       <MessageItem
+                        isEditing={
+                          parent._id === messageEditing?.parent?._id &&
+                          message._id === messageEditing?._id &&
+                          action === 'edit'
+                        }
                         discussionDisabled
                         showReply={false}
                         showAvatar={
@@ -188,7 +195,7 @@ export const RepliesBox = () => {
                           !isSystem &&
                           message._id === group.messages[0]._id
                         }
-                        key={message._id}
+                        key={message?.clientTempId || message._id}
                         message={message}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}

@@ -1,13 +1,15 @@
 import {
   CopyIcon,
   ForwardIcon,
+  MessageSquareQuoteIcon,
+  PenIcon,
   PinIcon,
   PinOffIcon,
-  MessageSquareQuoteIcon,
   TrashIcon,
 } from 'lucide-react';
 import { createContext, useContext, useMemo, useState } from 'react';
 
+import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
 import { useClickReplyMessage } from '../hooks/use-click-reply-message';
 import { useCopyMessage } from '../hooks/use-copy-message';
 import { usePinMessage } from '../hooks/use-pin-message';
@@ -22,7 +24,9 @@ type Action =
   | 'copy'
   | 'forward'
   | 'none'
-  | 'unpin';
+  | 'unpin'
+  | 'edit'
+  | 'download';
 type ActionItem = {
   action: Action;
   label: string;
@@ -43,6 +47,11 @@ export const actionItems: ActionItem[] = [
   },
 
   {
+    action: 'edit',
+    label: 'COMMON.EDIT',
+    icon: <PenIcon />,
+  },
+  {
     action: 'forward',
     label: 'CONVERSATION.FORWARD',
     icon: <ForwardIcon />,
@@ -58,6 +67,7 @@ export const actionItems: ActionItem[] = [
     label: 'CONVERSATION.UNPIN',
     icon: <PinOffIcon />,
   },
+
   {
     action: 'remove',
     label: 'CONVERSATION.REMOVE',
@@ -73,6 +83,9 @@ type OnActionParams = {
 };
 export interface MessageActionsContextProps {
   onAction: (params: OnActionParams) => void;
+  action?: Action;
+  message?: Message | null;
+  reset: () => void;
 }
 const MessageActionsContext = createContext<
   MessageActionsContextProps | undefined
@@ -105,6 +118,17 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
       case 'unpin':
         pin(message._id);
         break;
+      case 'download':
+        if (!message?.media) return;
+        message.media.forEach((media) => {
+          const link = document.createElement('a');
+          link.href = media.url;
+          link.download = media.name || `file from ${NEXT_PUBLIC_NAME}`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
+
       default:
         setAction(action);
         setMessage(message);
@@ -137,6 +161,9 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
     <MessageActionsContext.Provider
       value={{
         onAction,
+        action,
+        message,
+        reset,
       }}
     >
       {children}

@@ -38,8 +38,11 @@ const StepWrapper = ({
   return (
     <TabsContent {...props} className={cn('bg-primary-100 px-4', className)}>
       <Card
-        className="min-h-[500px] rounded-md border-none p-5 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] "
         {...cardProps}
+        className={cn(
+          'min-h-[500px] rounded-md border-none p-0 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] ',
+          cardProps?.className,
+        )}
       >
         {children}
       </Card>

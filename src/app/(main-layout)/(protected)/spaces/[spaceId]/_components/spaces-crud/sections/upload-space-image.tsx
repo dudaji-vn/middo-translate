@@ -27,20 +27,29 @@ import { Avatar } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { clear } from 'console';
 
-export default function UploadSpaceImage({ nameField, onUploadDone, clearBtnProps, clearAble = true, uploadAble = false, uploadBtnProps }: {
+export default function UploadSpaceImage({
+  nameField,
+  onUploadDone,
+  clearBtnProps,
+  clearAble = true,
+  uploadAble = false,
+  uploadBtnProps,
+}: {
   nameField: string;
-  clearBtnProps?: ButtonProps,
-  uploadBtnProps?: ButtonProps,
-  clearAble?: boolean,
-  uploadAble?: boolean,
+  clearBtnProps?: ButtonProps;
+  uploadBtnProps?: ButtonProps;
+  clearAble?: boolean;
+  uploadAble?: boolean;
   onUploadDone?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const inputCropImage = useRef<InputCropImageRef>(null);
-  const { t } = useTranslation("common");
+  const { t } = useTranslation('common');
   const {
-    setValue, watch, formState: { errors },
+    setValue,
+    watch,
+    formState: { errors },
   } = useFormContext();
   const avatar = watch(nameField);
   const onUploadedImage = async (e: React.FormEvent) => {
@@ -57,7 +66,7 @@ export default function UploadSpaceImage({ nameField, onUploadDone, clearBtnProp
       if (!imgUrl) throw new Error(t('MESSAGE.ERROR.UPLOAD_IMAGE'));
       setValue(nameField, imgUrl);
       if (onUploadDone) {
-        onUploadDone()
+        onUploadDone();
       }
       setOpen(false);
     } catch (err: any) {
@@ -68,38 +77,56 @@ export default function UploadSpaceImage({ nameField, onUploadDone, clearBtnProp
   return (
     <>
       <AlertDialog open={open} onOpenChange={setOpen}>
-        {avatar ? <div className='w-fit h-fit flex flex-col gap-1 relative'>
-          <Avatar src={watch('avatar')} alt='avatar' className='size-[100px] md:size-[132px] cursor-pointer p-0' />
-          <Button.Icon
-            className={clearAble ? 'absolute top-0 right-0 m-0' : 'hidden'}
-            onClick={() => {
-              setValue(nameField, undefined);
-            }}
-            color={'default'}
-            size={'xs'}
-            {...clearBtnProps}
-          >
-            <XIcon size={14} />
-          </Button.Icon>
-          {uploadAble && <AlertDialogTrigger className={uploadAble ? 'absolute  bottom-0 right-0 size-fit' : 'hidden'}>
+        {avatar ? (
+          <div className="relative flex h-fit w-fit flex-col gap-1">
+            <Avatar
+              variant={'outline'}
+              src={watch('avatar')}
+              alt="avatar"
+              className="size-[100px] cursor-pointer p-0 md:size-[132px]"
+            />
             <Button.Icon
+              className={clearAble ? 'absolute right-0 top-0 m-0' : 'hidden'}
+              onClick={() => {
+                setValue(nameField, undefined);
+              }}
               color={'default'}
               size={'xs'}
-              className='border-[2px] border-primary-100'
-              onClick={() => setOpen(true)}
-              {...uploadBtnProps}
+              {...clearBtnProps}
             >
-              <Camera/>
+              <XIcon size={14} />
             </Button.Icon>
-          </AlertDialogTrigger>}
-        </div> :
-          <AlertDialogTrigger className='relative'>
-            <Avatar src={'/empty-cam.svg'}
-              alt='avatar'
-              className={cn('w-24 h-24 cursor-pointer p-0 z-0',
-                errors[nameField] && 'border border-red-500'
-              )} />
-          </AlertDialogTrigger>}
+            {uploadAble && (
+              <AlertDialogTrigger
+                className={
+                  uploadAble ? 'absolute  bottom-0 right-0 size-fit' : 'hidden'
+                }
+              >
+                <Button.Icon
+                  color={'default'}
+                  size={'xs'}
+                  className="border-[2px] border-primary-100"
+                  onClick={() => setOpen(true)}
+                  {...uploadBtnProps}
+                >
+                  <Camera />
+                </Button.Icon>
+              </AlertDialogTrigger>
+            )}
+          </div>
+        ) : (
+          <AlertDialogTrigger className="relative">
+            <Avatar
+              variant={'outline'}
+              src={'/empty-cam.svg'}
+              alt="avatar"
+              className={cn(
+                'z-0 h-24 w-24 cursor-pointer p-0',
+                errors[nameField] && 'border border-red-500',
+              )}
+            />
+          </AlertDialogTrigger>
+        )}
         <AlertDialogContent className="md:h-[80vh] md:max-w-[80vw] xl:max-w-[70vw]">
           <MediaUploadProvider>
             <MediaUploadDropzone>
@@ -112,7 +139,8 @@ export default function UploadSpaceImage({ nameField, onUploadDone, clearBtnProp
                   type: 'button',
                   onClick: onUploadedImage,
                   loading: isLoading,
-                }} />
+                }}
+              />
             </MediaUploadDropzone>
           </MediaUploadProvider>
         </AlertDialogContent>

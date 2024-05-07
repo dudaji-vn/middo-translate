@@ -39,8 +39,10 @@ export type TStartAConversation = {
 const StartAConversation = ({
   extensionData,
   isAfterDoneAnCOnversation,
+  fromDomain,
 }: {
   isAfterDoneAnCOnversation?: boolean;
+  fromDomain: string;
   extensionData: TBusinessExtensionData;
 }) => {
   const router = useRouter();
@@ -109,6 +111,7 @@ const StartAConversation = ({
       setLoading(true);
       await startAGuestConversation({
         businessId: extensionData._id,
+        fromDomain,
         ...values,
       }).then(async (res) => {
         const roomId = res.data.roomId;
@@ -143,6 +146,7 @@ const StartAConversation = ({
       ) : (
         <div className="relative  flex aspect-square h-fit  max-h-[100px] w-full flex-row gap-2 overflow-hidden">
           <Avatar
+            variant={'outline'}
             src={space?.avatar ?? '/avatar.svg'}
             alt={'avatar-sender'}
             className="size-16  border border-neutral-50 p-1"

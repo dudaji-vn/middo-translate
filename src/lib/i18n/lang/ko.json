@@ -35,6 +35,8 @@
     "SHOW_MORE": "더 보기",
     "CLOSE": "닫기",
     "FORWARD": "전달",
+    "EDIT": "편집",
+    "DOWNLOAD": "다운로드",
     "SIGN_OUT": "로그아웃",
     "NAME": "이름",
     "NAME_PLACEHOLDER": "이름을 입력하세요",
@@ -60,7 +62,9 @@
     "CLICK": "클릭",
     "WAITING": "대기 중",
     "DRAFT": "임시",
-    "TRANSLATED_FROM": "번역됨"
+    "TRANSLATED_FROM": "번역됨",
+    "EDITING": "편집 중",
+    "EDITED": "편집됨"
   },
   "MESSAGE": {
     "ERROR": {
@@ -184,7 +188,8 @@
     "Ukrainian": "우크라이나어",
     "Urdu": "우르드어",
     "Vietnamese": "베트남어",
-    "Welsh": "웨일스어"
+    "Welsh": "웨일스어",
+    "undefined": "알 수 없음"
   },
   "ACCOUNT_SETTING": {
     "HEADING": "계정 설정",
@@ -326,6 +331,7 @@
     "PINNED_A_MESSAGE": "{{name}}님이 메시지를 고정함",
     "UNPINNED_A_MESSAGE": "{{name}}님이 메시지 고정 해제함",
     "CREATED_GROUP": "{{name}}님이 그룹 생성함",
+    "LEFT_HELP_DESK": "{{name}}님이 대화를 종료했습니다",
     "LEFT_GROUP": "{{name}}님이 그룹 나감",
     "CHANGED_GROUP_NAME": "{{name}}가 그룹명을 {{newName}}로 변경했습니다.",
     "CHANGED_GROUP_AVATAR": "{{name}}가 그룹 아바타를 변경했습니다.",
@@ -345,7 +351,8 @@
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "대화 중 메시지의 정확도를 높일 수 있는 번역 도구입니다.",
     "VIDEO_AUDIO_SETTINGS": "비디오 및 오디오 설정",
     "DOODLE": "그리기",
-    "FOCUS_VIEW": "집중 보기"
+    "FOCUS_VIEW": "집중 보기",
+    "EDIT_MESSAGE": "메시지 편집"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo가 권한이 필요합니다 ",

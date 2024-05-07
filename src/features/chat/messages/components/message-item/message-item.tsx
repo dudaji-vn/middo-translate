@@ -31,6 +31,9 @@ import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { messageVariants } from './variants';
 import { AnimatePresence } from 'framer-motion';
+import { useMessageActions } from '../message-actions';
+import { PenLineIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -49,6 +52,7 @@ export interface MessageProps
   showReactionBar?: boolean;
   isDraw?: boolean;
   isSendBySpaceMember?: boolean;
+  isEditing?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -90,17 +94,18 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       showReactionBar = true,
       isSendBySpaceMember = false,
       isDraw = false,
+      isEditing = false,
       ...props
     },
     ref,
   ) => {
     const isMe = sender === 'me' || isSendBySpaceMember;
+    const { t } = useTranslation('common');
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
     const { isOnHelpDeskChat } = useBusinessNavigationData();
     const isSystemMessage = message.type === 'action';
     const { value: isActive, setValue: setActive } = useBoolean(false);
-
     const {
       value: showDetail,
       setValue: setShowDetail,
@@ -132,6 +137,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 isActive && 'opacity-0',
               )}
             >
+              {isEditing && (
+                <div className="flex justify-end gap-2 text-xs text-neutral-800">
+                  <PenLineIcon size={16} /> <span>{t('COMMON.EDITING')}</span>
+                </div>
+              )}
               <div
                 className={cn(
                   'relative flex',
@@ -166,7 +176,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   showDetail={showDetail}
                   toggleDetail={toggleShowDetail}
                   showTime={showTime}
-                  disabledAllActions={disabledAllActions}
+                  disabledAllActions={disabledAllActions || isEditing}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
@@ -190,6 +200,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           position={isMe ? 'right' : 'left'}
                           message={message}
                           active={isActive}
+                          isEditing={isEditing}
                         />
                       )}
                       {message.type === 'call' && (

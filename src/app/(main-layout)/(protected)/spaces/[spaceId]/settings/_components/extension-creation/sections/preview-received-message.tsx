@@ -66,11 +66,12 @@ export const PreviewReceivedMessage = ({
   return (
     <div
       {...props}
-      className={cn('flex w-full mb-1 flex-col gap-2', props?.className)}
+      className={cn('mb-1 flex w-full flex-col gap-2', props?.className)}
     >
       <div className="relative flex  w-full  gap-1 pr-11 md:pr-20">
         <div className="relative  mb-auto mr-1 mt-0.5 aspect-square size-6 shrink-0 overflow-hidden rounded-full">
           <Avatar
+            variant={'outline'}
             src={space?.avatar || '/avatar.svg'}
             alt={String(sender?.email)}
             size="xs"

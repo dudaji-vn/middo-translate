@@ -1,17 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import InviteMembers from '../../../_components/spaces-crud/sections/invite-section';
-import { TSpace } from '../../../_components/business-spaces';
-import { Member } from '../../../_components/spaces-crud/sections/members-columns';
+import { type TSpace } from '../../../_components/business-spaces';
+import { type Member } from '../../../_components/spaces-crud/sections/members-columns';
 import { Button } from '@/components/actions';
 import { UserRoundPlus } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { inviteMembersToSpace } from '@/services/business-space.service';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { ESPaceRoles } from '../space-setting/setting-items';
 
-const InviteMemberModal = ({ space }: { space: TSpace }) => {
+const InviteMemberModal = ({
+  space,
+  myRole,
+}: {
+  space: TSpace;
+  myRole?: ESPaceRoles;
+}) => {
   const [members, setMembers] = React.useState<Member[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -33,6 +40,16 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
     }
     setLoading(false);
   };
+  const allowedRoles = useMemo(() => {
+    switch (myRole) {
+      case ESPaceRoles.Admin:
+        return [ESPaceRoles.Member];
+      case ESPaceRoles.Owner:
+        return [ESPaceRoles.Admin, ESPaceRoles.Member];
+      default:
+        return [];
+    }
+  }, [myRole]);
   return (
     <>
       <Button
@@ -55,6 +72,7 @@ const InviteMemberModal = ({ space }: { space: TSpace }) => {
             spacePreviewProps={{
               className: 'hidden',
             }}
+            allowedRoles={allowedRoles}
             blackList={space.members.map((member) => member.email)}
             space={{ ...space, members }}
             setMembers={(members: Member[]) => {

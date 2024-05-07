@@ -37,7 +37,9 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
       code: languageCode,
       countryCode,
     };
-    const anonymousUser: User | null = isGuest ? others[0] : null;
+    const anonymousUser: User | null = isGuest
+      ? others?.find((member) => member.status === 'anonymous') || null
+      : null;
     return {
       room,
       language,
@@ -46,37 +48,40 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
   }, [_room, user?._id, user?.language]);
   const [loading, setLoading] = useState(false);
 
-  return (<>
-    <div className="flex flex-col items-center">
-      <div className="relative">
-        <RoomAvatar room={room} size={96} />
-        {loading && (
-          <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-white bg-opacity-80">
-            <Spinner className="text-primary" />
+  return (
+    <>
+      <div className="flex flex-col items-center">
+        <div className="relative">
+          <RoomAvatar room={room} size={96} />
+          {loading && (
+            <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-white bg-opacity-80">
+              <Spinner className="text-primary" />
+            </div>
+          )}
+        </div>
+        <p className=" break-word-mt mt-3 text-center font-medium">
+          {room.name}
+        </p>
+        {!room.isGroup ? (
+          <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2">
+            <CircleFlag
+              countryCode={language.countryCode?.toLowerCase() || 'gb'}
+              height={20}
+              width={20}
+            />
+            <span className="text-center">{language.name}</span>
+          </div>
+        ) : (
+          <div className="mt-4 flex gap-6">
+            <RoomUpdateName />
+            <RoomUpdateAvatar
+              onUploading={() => setLoading(true)}
+              onUploaded={() => setLoading(false)}
+            />
           </div>
         )}
       </div>
-      <p className=" break-word-mt mt-3 text-center font-medium">{room.name}</p>
-      {!room.isGroup ? (
-        <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2">
-          <CircleFlag
-            countryCode={language.countryCode?.toLowerCase() || 'gb'}
-            height={20}
-            width={20}
-          />
-          <span className="text-center">{language.name}</span>
-        </div>
-      ) : (
-        <div className="mt-4 flex gap-6">
-          <RoomUpdateName />
-          <RoomUpdateAvatar
-            onUploading={() => setLoading(true)}
-            onUploaded={() => setLoading(false)}
-          />
-        </div>
-      )}
-    </div>
-    {!isEmpty(anonymousUser) && <GuestInformation {...anonymousUser}/>}
-  </>
+      {!isEmpty(anonymousUser) && <GuestInformation {...anonymousUser} />}
+    </>
   );
 };

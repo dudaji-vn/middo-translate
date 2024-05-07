@@ -140,14 +140,14 @@ const CreateExtensionHeader = ({
                 key={index}
                 variant={'ghost'}
                 className={cn(
-                  'flex flex-row font-light gap-3 transition-all px-3 py-2 duration-300',
+                  'flex flex-row gap-3 px-3 py-2 font-light transition-all duration-300',
                   isActive && '!bg-neutral-50',
                   isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100',
                   isError && '!bg-error-100' && step === index,
-                  isDone && '!bg-success-100',
+                  isDone && '!bg-success-100 active:!bg-success-200',
                   {
-                    'py-3 px-4 text-base font-semibold': isActive,
-                  }
+                    'px-4 py-3 text-base font-semibold': isActive,
+                  },
                 )}
               >
                 <div

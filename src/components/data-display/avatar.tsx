@@ -20,6 +20,10 @@ const avatarVariants = cva('overflow-hidden shrink-0 relative aspect-square', {
       circle: 'rounded-full',
       square: 'rounded-none',
     },
+    variant: {
+      outline: 'border-2 border-neutral-50',
+      default: '',
+    },
   },
   defaultVariants: {
     size: 'md',

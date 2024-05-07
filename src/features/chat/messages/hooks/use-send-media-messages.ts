@@ -10,7 +10,7 @@ export const useSendMediaMessages = ({
   roomId: _roomId,
   isAnonymous,
   addMessage,
-  parentId,
+  parentId: _parentId,
   onSuccess,
 }: SendMessageProps) => {
   const { sendMessage } = useSendMessage({ onSuccess });
@@ -18,6 +18,11 @@ export const useSendMediaMessages = ({
     null,
   );
   const [roomId, setRoomId] = useState<string>(_roomId); // update roomId
+  const [parentId, setParentId] = useState<string | undefined>(_parentId); // update parentId
+  useEffect(() => {
+    setRoomId(_roomId);
+    setParentId(_parentId);
+  }, [_roomId, _parentId]);
 
   const { uploadedFiles, removeUploadedFile } = useMediaUpload();
   const sendMediaMessages = useCallback(
@@ -51,11 +56,10 @@ export const useSendMediaMessages = ({
   useEffect(() => {
     if (!messagesWaiting || uploadedFiles.length <= 0) return;
     // get messages have mediaUploaded
-    const messagesReadyToUpload = messagesWaiting.filter(
-      (message) =>
-        message.media?.every((media) =>
-          uploadedFiles.some((file) => file.localUrl === media.url),
-        ),
+    const messagesReadyToUpload = messagesWaiting.filter((message) =>
+      message.media?.every((media) =>
+        uploadedFiles.some((file) => file.localUrl === media.url),
+      ),
     );
     if (messagesReadyToUpload.length <= 0) return;
     messagesReadyToUpload.forEach((message) => {
@@ -86,16 +90,15 @@ export const useSendMediaMessages = ({
       );
     });
     uploadedFiles.forEach((file) => {
-      const isMatched = messagesReadyToUpload.some(
-        (message) =>
-          message.media?.some((media) => media.url === file.localUrl),
+      const isMatched = messagesReadyToUpload.some((message) =>
+        message.media?.some((media) => media.url === file.localUrl),
       );
       if (isMatched) {
         removeUploadedFile(file);
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAnonymous, messagesWaiting, roomId, uploadedFiles]);
+  }, [isAnonymous, messagesWaiting, roomId, uploadedFiles, parentId]);
 
   return { sendMediaMessages };
 };

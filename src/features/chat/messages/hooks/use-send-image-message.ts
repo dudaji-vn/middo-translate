@@ -10,12 +10,18 @@ export const useSendImageMessage = ({
   roomId: _roomId,
   isAnonymous,
   addMessage,
-  parentId,
+  parentId: _parentId,
   onSuccess,
 }: SendMessageProps) => {
   const { sendMessage } = useSendMessage({ onSuccess });
   const [messageWaiting, setMessageWaiting] = useState<Message | null>(null);
   const [roomId, setRoomId] = useState<string>(_roomId);
+  const [parentId, setParentId] = useState<string | undefined>(_parentId);
+
+  useEffect(() => {
+    setRoomId(_roomId);
+    setParentId(_parentId);
+  }, [_roomId, _parentId]);
 
   const { uploadedFiles, removeUploadedFile } = useMediaUpload();
   const sendImageMessage = useCallback(
@@ -73,7 +79,7 @@ export const useSendImageMessage = ({
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messageWaiting, roomId, uploadedFiles]);
+  }, [isAnonymous, messageWaiting, parentId, roomId, uploadedFiles]);
 
   return { sendImageMessage };
 };

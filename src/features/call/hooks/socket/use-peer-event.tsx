@@ -18,7 +18,8 @@ export default function usePeerEvent() {
   const user = useAuthStore(state => state.user);
   const myStream = useMyVideoCallStore(state => state.myStream);
   const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
-
+  const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
+  const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
   useEffect(() => {
     let listeners: any = {};
     participants.forEach(
@@ -31,6 +32,8 @@ export default function usePeerEvent() {
             participant.socketId,
             participant.isShareScreen || false,
           );
+          setLoadingVideo(false);
+          setLoadingStream(false);
         };
         const errorListener = (error: Error) => {
           console.log('errorListener', error);
@@ -118,12 +121,5 @@ export default function usePeerEvent() {
         },
       );
     };
-  }, [
-    myStream,
-    participants,
-    removeParticipant,
-    setStreamForParticipant,
-    updatePeerParticipant,
-    user,
-  ]);
+  }, [isTurnOnMic, myStream, participants, removeParticipant, setLoadingStream, setLoadingVideo, setStreamForParticipant, updatePeerParticipant, user]);
 }

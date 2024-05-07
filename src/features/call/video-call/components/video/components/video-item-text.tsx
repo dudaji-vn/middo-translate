@@ -28,8 +28,6 @@ export default function VideoItemText({
     return `${participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''} ${participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}`;
   }, [participant?.isMe, participant?.isShareScreen, participant?.user?.name, t]);
 
-  if(participant?.status) console.log('🟣VideoItemText', participant, userName)
-
   if (!participant) return null;
   
   const getMicStatus = () => {
@@ -41,7 +39,7 @@ export default function VideoItemText({
     if (participant.isMe) {
       return (
         <>
-          {isFullScreen && (
+          {isFullScreen && !(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) &&(
             <span className="mx-2 h-[15px] w-[1px] bg-neutral-400"></span>
           )}
           <span>
@@ -56,7 +54,7 @@ export default function VideoItemText({
     }
     return (
       <>
-        {isFullScreen && (
+        {isFullScreen && !(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) && (
           <span className="mx-2 h-[15px] w-[1px] bg-neutral-400"></span>
         )}
         <span>
@@ -77,9 +75,6 @@ export default function VideoItemText({
     isFullScreen &&
     layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW
   ) {
-    {
-      /* Text overlay focus view when pin */
-    }
     return (
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90">
         <p className="truncate px-1 text-xs leading-snug text-white">

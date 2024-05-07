@@ -60,6 +60,13 @@ const MemberItem = ({
   )?.roles;
   const deleteAble =
     !isLoading && roles?.delete.includes(myRole as ESPaceRoles) && !isOwnerRow;
+
+  const canNotResend =
+    isOwnerRow ||
+    status === 'joined' ||
+    !MANAGE_SPACE_ROLES['invite-member'].includes(myRole as ESPaceRoles) ||
+    (myRole === ESPaceRoles.Admin && role !== ESPaceRoles.Member);
+
   return (
     <div
       className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 py-1"
@@ -83,12 +90,7 @@ const MemberItem = ({
           </Typography>
           <Button
             className={cn('text-neutral-500', {
-              invisible:
-                isOwnerRow ||
-                status === 'joined' ||
-                !MANAGE_SPACE_ROLES['invite-member'].includes(
-                  myRole as ESPaceRoles,
-                ),
+              invisible: canNotResend,
             })}
             startIcon={<RotateCcw className="text-neutral-500" />}
             size={'xs'}
@@ -313,7 +315,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
 
         {MANAGE_SPACE_ROLES['invite-member'].includes(
           myRole as ESPaceRoles,
-        ) && <InviteMemberModal space={space} />}
+        ) && <InviteMemberModal space={space} myRole={myRole} />}
       </div>
 
       <div className="flex w-full flex-col gap-1">

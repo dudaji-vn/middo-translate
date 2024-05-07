@@ -7,6 +7,7 @@ import {
   TooltipTrigger,
 } from '@/components/data-display';
 import { useAppStore } from '@/stores/app.store';
+import { cn } from '@/utils/cn';
 export type TooltipProps = {
   title: string;
   children?: React.ReactNode;
@@ -23,7 +24,13 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
     return (
       <ShadcnTooltip delayDuration={100} {...rest}>
         {!isMobile && (
-          <TooltipContent className="rounded-full" {...contentProps}>
+          <TooltipContent
+            {...contentProps}
+            className={cn(
+              'rounded-lg bg-black/60 text-white',
+              contentProps?.className,
+            )}
+          >
             <p>{title}</p>
           </TooltipContent>
         )}

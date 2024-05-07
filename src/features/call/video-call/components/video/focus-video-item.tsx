@@ -14,6 +14,8 @@ import UserStatus from './components/user-status';
 import VideoItemText from './components/video-item-text';
 import ChangeToGalleryView from './components/change-to-gallery-view';
 import FullScreenButton from './components/full-screen-button';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 interface FocusVideoItemProps {
   participant?: any;
 }
@@ -23,11 +25,12 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const parentRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera } = useLoadStream(participant, videoRef);
+  const setLayout = useVideoCallStore(state => state.setLayout);
   useFitRatio(videoRef, parentRef);
   const { width, height } = useGetVideoSize({ videoRef });
   // Disable pause video when fullscreen
   const [isExpandFull, setIsExpandFull] = useState(false);
-
+  
   useEffect(() => {
     if (!videoRef.current) return;
     let videoRefTmp = videoRef.current;
@@ -42,7 +45,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       if (!videoRefTmp) return;
       videoRefTmp.removeEventListener('pause', handleDisablePauseVideo);
     };
-  }, [participant.stream]);
+  }, [participant?.stream]);
 
   useEffect(() => {
     const handleFullScreenEsc = () => {
@@ -70,6 +73,11 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       parentRef.current?.requestFullscreen()
     }
   }
+
+  if(!participant) {
+    setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+    return null;
+  };
   return (
     <section
       ref={parentRef}
@@ -81,7 +89,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       )}
     >
       
-      <VideoItemTalk stream={participant.stream} />
+      <VideoItemTalk stream={participant?.stream} />
       <video
         ref={videoRef}
         className={twMerge(

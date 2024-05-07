@@ -6,7 +6,7 @@ import CustomFirstMessageOptions from '../sections/custom-first-message-options'
 
 const StartingMessageStep = () => {
   return (
-    <div className="flex flex-col gap-3 p-3">
+    <div className="flex flex-col gap-3 p-4">
       <FormLabel className="mb-1 inline-block text-[1rem] font-semibold text-neutral-900">
         Starting message
       </FormLabel>

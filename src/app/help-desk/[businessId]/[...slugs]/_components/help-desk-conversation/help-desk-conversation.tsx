@@ -28,6 +28,7 @@ import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/setti
 import { useAppStore } from '@/stores/app.store';
 import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/room-side-tabs/room-side-tabs.hook';
 import { Allotment } from 'allotment';
+import { MessageActions } from '@/features/chat/messages/components/message-actions';
 
 const HelpDeskConversation = ({
   room,
@@ -116,24 +117,26 @@ const HelpDeskConversationContent = memo(
         {!isAnonymousPage && <ChatBoxHeader />}
         <MediaUploadProvider>
           <MediaUploadDropzone>
+              <MessageActions>
             <MessagesBoxProvider
               room={room}
               guestId={anonymousUser?._id}
               isAnonymous={isAnonymousPage}
             >
-              <MessageBox
-                room={room}
-                isAnonymous={isAnonymousPage}
-                guestId={anonymousUser?._id}
-              />
-              {roomSendingState === 'loading' && (
-                <FakeTyping name={room.space?.name} />
-              )}
+                <MessageBox
+                  room={room}
+                  isAnonymous={isAnonymousPage}
+                  guestId={anonymousUser?._id}
+                />
+                {roomSendingState === 'loading' && (
+                  <FakeTyping name={room.space?.name} />
+                )}
               <ChatBoxFooter
                 isAnonymous={isAnonymousPage}
                 guest={anonymousUser}
               />
             </MessagesBoxProvider>
+              </MessageActions>
           </MediaUploadDropzone>
         </MediaUploadProvider>
       </div>

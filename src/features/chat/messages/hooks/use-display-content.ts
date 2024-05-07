@@ -19,12 +19,17 @@ export const useDisplayContent = ({
   const [contentDisplay, setContentDisplay] = useState(message.content);
   const [isUseOriginal, setIsUseOriginal] = useState(true);
   const { t } = useTranslation('common');
+
   useEffect(() => {
     if (message.status === 'removed') {
       setContentDisplay(t('CONVERSATION.REMOVED_A_MESSAGE'));
       return;
     }
-    if (userLanguage === message.language || isMe) return;
+    if (userLanguage === message.language || isMe) {
+      setContentDisplay(message.content);
+      setIsUseOriginal(true);
+      return;
+    }
     const translate = async () => {
       let translated = message.translations?.[userLanguage!];
       if (!translated) {
