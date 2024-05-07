@@ -38,7 +38,7 @@ const HelpDeskStartConversationPage = async ({
     );
   }
   if (!allowedDomain) {
-    // notFound();
+    notFound();
   }
   return (
     <StartAConversation
