@@ -334,7 +334,7 @@
 }
 
 .mention {
-  @apply font-semibold text-primary no-underline;
+  @apply !whitespace-nowrap font-semibold text-primary no-underline;
 }
 
 .editor-view .mention {
