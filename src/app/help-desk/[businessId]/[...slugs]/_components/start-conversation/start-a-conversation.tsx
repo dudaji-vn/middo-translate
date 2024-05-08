@@ -13,7 +13,11 @@ import { messageApi } from '@/features/chat/messages/api';
 import { Room } from '@/features/chat/rooms/types';
 import useClient from '@/hooks/use-client';
 import { startAGuestConversation } from '@/services/extension.service';
-import { LSK_VISITOR_ID, LSK_VISITOR_ROOM_ID } from '@/types/business.type';
+import {
+  LSK_VISITOR_DATA,
+  LSK_VISITOR_ID,
+  LSK_VISITOR_ROOM_ID,
+} from '@/types/business.type';
 import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -109,7 +113,7 @@ const StartAConversation = ({
   useEffect(() => {
     const visitorId = localStorage.getItem(LSK_VISITOR_ID);
     const visitorRoomId = localStorage.getItem(LSK_VISITOR_ROOM_ID);
-    localStorage.setItem('visitorData', visitorData || '');
+    localStorage.setItem(LSK_VISITOR_DATA, visitorData || '');
     if (visitorId && visitorRoomId) {
       router.push(
         `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}`,
@@ -143,9 +147,7 @@ const StartAConversation = ({
     <div
       className={cn(
         'flex h-full w-full flex-col justify-between px-4 py-3',
-        isAfterDoneAConversation
-          ? 'my-auto max-h-60'
-          : 'container-height pb-5',
+        isAfterDoneAConversation ? 'my-auto max-h-60' : 'container-height pb-5',
       )}
     >
       {isAfterDoneAConversation ? (

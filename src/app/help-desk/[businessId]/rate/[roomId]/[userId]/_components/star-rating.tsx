@@ -35,11 +35,14 @@ const StarRating = ({
     setStar(star);
     setHoverStar(0);
   };
+  const clearVisitorData = () => {
+    localStorage.removeItem(LSK_VISITOR_ID);
+    localStorage.removeItem(LSK_VISITOR_ROOM_ID);
+  };
 
   const onEndConversation = async () => {
     setLoading(true);
-    localStorage.removeItem(LSK_VISITOR_ID);
-    localStorage.removeItem(LSK_VISITOR_ROOM_ID);
+    clearVisitorData();
     try {
       await endConversation({
         roomId: String(params?.roomId),
@@ -54,17 +57,18 @@ const StarRating = ({
 
   const submitRating = async () => {
     setLoading(true);
+    clearVisitorData();
     try {
       await onRate(star);
       await endConversation({
         roomId: String(params?.roomId),
         senderId: String(params?.userId),
       });
-      setDone(true);
+      // setDone(true);
     } catch (e) {
       console.log('error on rate', e);
-      router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`);
     }
+    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`);
     setLoading(false);
   };
 
@@ -121,8 +125,8 @@ const StarRating = ({
                     index + 1 <= star && 'fill-yellow-300 stroke-yellow-300',
                     index + 1 > hoverStar && hoverStar !== 0 && ' opacity-75',
                     index + 1 <= hoverStar &&
-                    hoverStar !== 0 &&
-                    'fill-yellow-300 stroke-yellow-300',
+                      hoverStar !== 0 &&
+                      'fill-yellow-300 stroke-yellow-300',
                   )}
                   style={{
                     transitionDelay:
