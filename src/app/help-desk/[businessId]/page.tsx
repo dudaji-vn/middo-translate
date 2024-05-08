@@ -25,7 +25,7 @@ const HelpDeskStartConversationPage = async ({
     allowedDomains: extensionData.domains,
   });
   const isRedirectedFromRatePage = referer?.startsWith(
-    `${window.location.origin}/help-desk/${businessId}/rate`,
+    `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
   );
 
   if (!allowedDomain && !isRedirectedFromRatePage) {
