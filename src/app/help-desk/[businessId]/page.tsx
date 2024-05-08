@@ -24,12 +24,16 @@ const HelpDeskStartConversationPage = async ({
     refer: referer,
     allowedDomains: extensionData.domains,
   });
+  const isRedirectedFromRatePage = referer?.startsWith(
+    `${window.location.origin}/help-desk/${businessId}/rate`,
+  );
 
-  if (!allowedDomain) {
+  if (!allowedDomain && !isRedirectedFromRatePage) {
     notFound();
   }
   return (
     <StartAConversation
+      visitorData={JSON.stringify(headersList)}
       extensionData={extensionData}
       fromDomain={allowedDomain}
     />
