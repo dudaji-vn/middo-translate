@@ -22,8 +22,8 @@ import { useMessagesBox } from './messages-box.context';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 import { useMessageActions } from '../message-actions';
-export const MAX_TIME_DIFF = 60; // 1 hour
-export const MAX_TIME_GROUP_DIFF = 1440; // 1 day
+export const MAX_TIME_DIFF = 5; // 5 minutes
+export const MAX_TIME_GROUP_DIFF = 30; // 1 day
 export type MessageGroup = {
   messages: Message[];
   lastMessage: Message;
@@ -200,14 +200,14 @@ export const MessageBox = ({
                       <span>{group.lastMessage.sender.name}</span>
                     </div>
                   )}
-                  <span
+                  {/* <span
                     className={cn(
                       'flex items-center gap-1 text-xs font-light text-neutral-500',
                     )}
                   >
                     <Clock9Icon size={10} />{' '}
                     {formatTimeDisplay(group.lastMessage.createdAt!)}
-                  </span>
+                  </span> */}
                 </div>
               )}
               <div className="flex w-full gap-1">
@@ -244,9 +244,6 @@ export const MessageBox = ({
                         message={newMessage}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}
-                        showTime={
-                          message._id === group.lastMessage._id && !isSystem
-                        }
                       />
                     );
                   })}
