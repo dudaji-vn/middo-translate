@@ -52,11 +52,16 @@ export default function Landing() {
     targetElement.scrollIntoView({ behavior: 'smooth' });
   };
   
-  const downloadUrl = useMemo(()=>{
+
+  const downloadApp = () => {
     const userAgent = window.navigator.userAgent;
     const isMacOS = userAgent.includes('Mac OS')
-    return isMacOS ? MAC_DOWNLOAD_URL : WINDOW_DOWNLOAD_URL;
-  }, [])
+    if (isMacOS) {
+      window.open(MAC_DOWNLOAD_URL, '_blank');
+    } else {
+      window.open(WINDOW_DOWNLOAD_URL, '_blank');
+    }
+  };
 
   return (
     <div className="relative overflow-x-hidden">
@@ -109,9 +114,8 @@ export default function Landing() {
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
           </p>
-          <Link 
-            href={isMobile ? NEXT_PUBLIC_URL : downloadUrl} 
-            target={isMobile ? '_self' : '_blank'}
+          {isMobile ? <Link 
+            href={NEXT_PUBLIC_URL} 
           >
             <Button
               size="lg"
@@ -120,10 +124,21 @@ export default function Landing() {
               color="primary"
               className="mt-8"
             >
-              {isMobile ? 'Explore Product' : 'Download App'}
+              Explore Product
               <ArrowRightFromLine className="ml-2" />
             </Button>
-          </Link>
+          </Link> : 
+            <Button
+              size="lg"
+              shape="square"
+              variant="default"
+              color="primary"
+              className="mt-8"
+              onClick={downloadApp}
+            >
+              Download App
+              <ArrowRightFromLine className="ml-2" />
+            </Button>}
         </div>
       </div>
       <div id="solution">
