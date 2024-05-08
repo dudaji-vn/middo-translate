@@ -62,16 +62,21 @@ const GalleryLayout = () => {
         {isDoodle && <DoodleItem />}
         {participants.map(
           (participant: ParticipantInVideoCall, index: number) => {
+            const key = participant.user._id + participant.isShareScreen;
             if(index == (isDoodle ? 5 : 6) && numberItem > 7) {
               const remain = numberItem - 7;
-              const key = participant.user._id + participant.isShareScreen;
               return <div key={key} className='h-full w-full relative'>
                 <VideoItem isGalleryView participant={participant} />
                 <ItemNumber numberItem={remain} />
               </div>
             }
-            if(index > (isDoodle ? 5 : 6) && numberItem > 7) return null;
-            const key = participant.user._id + participant.isShareScreen;
+            if(index > (isDoodle ? 5 : 6) && numberItem > 7) {
+              return <div
+                        key={key}
+                        className='hidden'>
+                        <VideoItem isGalleryView participant={participant} />
+                      </div>;
+            }
             return ( <div
               key={key}
               className='h-full w-full'>
