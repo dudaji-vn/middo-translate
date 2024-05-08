@@ -126,7 +126,7 @@ const StartAConversation = ({
     addDetectVisitorLanguage();
     if (visitorId && visitorRoomId) {
       router.push(
-        `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}&originReferrer=${fromDomain}`,
+        `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}`,
       );
     }
   }, []);
@@ -146,7 +146,7 @@ const StartAConversation = ({
         localStorage.setItem(LSK_VISITOR_ID, user._id);
         await appendFirstMessageFromChatFlow(roomId);
         router.push(
-          `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}&originReferrer=${fromDomain}`,
+          `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}`,
         );
       });
     } catch (error) {
