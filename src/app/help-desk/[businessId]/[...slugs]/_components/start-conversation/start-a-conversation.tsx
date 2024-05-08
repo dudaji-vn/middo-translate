@@ -48,7 +48,7 @@ const StartAConversation = ({
   visitorData,
 }: {
   isAfterDoneAConversation?: boolean;
-  fromDomain: string;
+  fromDomain?: string;
   extensionData: TBusinessExtensionData;
   visitorData?: string;
 }) => {
