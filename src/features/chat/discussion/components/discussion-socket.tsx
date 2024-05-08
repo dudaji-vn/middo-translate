@@ -1,6 +1,5 @@
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
-import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { Message } from '../../messages/types';
 import { useDiscussion } from './discussion';
