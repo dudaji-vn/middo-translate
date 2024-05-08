@@ -11,9 +11,10 @@ import { Header } from '@/components/layout/header/headerv2';
 import { ArrowRightFromLine, Sparkles, StarIcon, Play } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { HeaderLandingPage } from '@/components/layout/header/header-landing-page';
-
+const WINDOW_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.exe';
+const MAC_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.dmg';
 export default function Landing() {
   const [isScrollDown, setScrollDown] = useState(false);
   const isMobile = useAppStore((state) => state.isMobile);
@@ -49,6 +50,17 @@ export default function Landing() {
       return;
     }
     targetElement.scrollIntoView({ behavior: 'smooth' });
+  };
+  
+
+  const downloadApp = () => {
+    const userAgent = window.navigator.userAgent;
+    const isMacOS = userAgent.includes('Mac OS')
+    if (isMacOS) {
+      window.open(MAC_DOWNLOAD_URL, '_blank');
+    } else {
+      window.open(WINDOW_DOWNLOAD_URL, '_blank');
+    }
   };
 
   return (
@@ -95,14 +107,16 @@ export default function Landing() {
             Your browser does not support the video tag.
           </video>
         </div>
-
+        
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">
           <JayTextAnimation />
           <p className="mt-8 text-center text-neutral-600 md:text-left">
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
           </p>
-          <Link href={NEXT_PUBLIC_URL}>
+          {isMobile ? <Link 
+            href={NEXT_PUBLIC_URL} 
+          >
             <Button
               size="lg"
               shape="square"
@@ -113,7 +127,18 @@ export default function Landing() {
               Explore Product
               <ArrowRightFromLine className="ml-2" />
             </Button>
-          </Link>
+          </Link> : 
+            <Button
+              size="lg"
+              shape="square"
+              variant="default"
+              color="primary"
+              className="mt-8"
+              onClick={downloadApp}
+            >
+              Download App
+              <ArrowRightFromLine className="ml-2" />
+            </Button>}
         </div>
       </div>
       <div id="solution">
