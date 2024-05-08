@@ -36,7 +36,7 @@ export default function useProtectedRoute() {
       return;
     }
 
-    if (user && isLoaded && user.status == 'unset') {
+    if (user && isLoaded && user.status == 'unset' && pathname !== '/create-account') {
       router.push(ROUTE_NAMES.CREATE_ACCOUNT);
       return;
     }
