@@ -11,9 +11,10 @@ import { Header } from '@/components/layout/header/headerv2';
 import { ArrowRightFromLine, Sparkles, StarIcon, Play } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { HeaderLandingPage } from '@/components/layout/header/header-landing-page';
-
+const WINDOW_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.exe';
+const MAC_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.dmg';
 export default function Landing() {
   const [isScrollDown, setScrollDown] = useState(false);
   const isMobile = useAppStore((state) => state.isMobile);
@@ -50,6 +51,12 @@ export default function Landing() {
     }
     targetElement.scrollIntoView({ behavior: 'smooth' });
   };
+  
+  const downloadUrl = useMemo(()=>{
+    const userAgent = window.navigator.userAgent;
+    const isMacOS = userAgent.includes('Mac OS')
+    return isMacOS ? MAC_DOWNLOAD_URL : WINDOW_DOWNLOAD_URL;
+  }, [])
 
   return (
     <div className="relative overflow-x-hidden">
@@ -95,14 +102,17 @@ export default function Landing() {
             Your browser does not support the video tag.
           </video>
         </div>
-
+        
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">
           <JayTextAnimation />
           <p className="mt-8 text-center text-neutral-600 md:text-left">
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
           </p>
-          <Link href={NEXT_PUBLIC_URL}>
+          <Link 
+            href={isMobile ? NEXT_PUBLIC_URL : downloadUrl} 
+            target={isMobile ? '_self' : '_blank'}
+          >
             <Button
               size="lg"
               shape="square"
@@ -110,7 +120,7 @@ export default function Landing() {
               color="primary"
               className="mt-8"
             >
-              Explore Product
+              {isMobile ? 'Explore Product' : 'Download App'}
               <ArrowRightFromLine className="ml-2" />
             </Button>
           </Link>
