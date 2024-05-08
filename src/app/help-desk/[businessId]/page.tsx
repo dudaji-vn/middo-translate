@@ -29,7 +29,7 @@ const HelpDeskStartConversationPage = async ({
   );
 
   if (!allowedDomain && !isRedirectedFromRatePage) {
-    // notFound();
+    notFound();
   }
   return (
     <StartAConversation
