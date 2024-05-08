@@ -31,10 +31,8 @@ import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { messageVariants } from './variants';
 import { AnimatePresence } from 'framer-motion';
-import { useMessageActions } from '../message-actions';
 import { PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -132,8 +130,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             {direction === 'bottom' && !isOnHelpDeskChat && (
               <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
             )}
-            <motion.div
-              layout="position"
+            <div
               className={cn(
                 `group relative flex flex-col`,
                 isActive && 'opacity-0',
@@ -278,7 +275,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 </span>
               )}
               <MessageItemFlowActions actions={flowActions || []} />
-            </motion.div>
+            </div>
             {direction === 'top' && (
               <ReadByUsers
                 readByUsers={readByUsers}
