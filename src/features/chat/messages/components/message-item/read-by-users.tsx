@@ -3,6 +3,7 @@ import { User } from '@/features/users/types';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { cn } from '@/utils/cn';
 import { forwardRef, useMemo } from 'react';
+import { motion } from 'framer-motion';
 export interface ReadByUsersProps extends React.HTMLAttributes<HTMLDivElement> {
   readByUsers?: User[];
   isMe?: boolean;
@@ -22,12 +23,14 @@ export const ReadByUsers = forwardRef<HTMLDivElement, ReadByUsersProps>(
       <div ref={ref} {...props}>
         <div className={cn('ml-auto flex justify-end space-x-0.5', className)}>
           {showUsers?.map((user) => (
-            <Avatar
-              key={user._id}
-              src={user.avatar || '/anonymous_avt.png'}
-              alt={user.name}
-              className="h-4 w-4"
-            />
+            <motion.div title={user.name} key={user._id} layoutId={user._id}>
+              <Avatar
+                key={user._id}
+                src={user.avatar || '/anonymous_avt.png'}
+                alt={user.name}
+                className="h-4 w-4"
+              />
+            </motion.div>
           ))}
         </div>
       </div>

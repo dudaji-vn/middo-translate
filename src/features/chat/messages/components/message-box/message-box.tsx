@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/actions/button';
 import { InfiniteScroll } from '@/components/infinity-scroll';
 import { User } from '@/features/users/types';
-import { ArrowDownIcon, Clock9Icon } from 'lucide-react';
+import { ArrowDownIcon } from 'lucide-react';
 import { Room } from '../../../rooms/types';
 import { Message } from '../../types';
 import { MessageItemGroup } from '../message-group';
@@ -14,14 +14,13 @@ import { MessageItem } from '../message-item';
 import { useAuthStore } from '@/stores/auth.store';
 import moment from 'moment';
 
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { cn } from '@/utils/cn';
+import { useMessageActions } from '../message-actions';
 import { TimeDisplay } from '../time-display';
 import { useMessagesBox } from './messages-box.context';
-import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { formatTimeDisplay } from '@/features/chat/rooms/utils';
-import { useMessageActions } from '../message-actions';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 30; // 1 day
 export type MessageGroup = {
@@ -210,6 +209,7 @@ export const MessageBox = ({
                   </span> */}
                 </div>
               )}
+
               <div className="flex w-full gap-1">
                 <MessageItemGroup>
                   {group.messages.map((message) => {
