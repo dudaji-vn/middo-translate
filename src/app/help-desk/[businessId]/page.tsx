@@ -1,9 +1,8 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { headers } from 'next/headers';
 import { getAllowedDomain } from '@/utils/allowed-domains';
 import StartAConversation from './[...slugs]/_components/start-conversation/start-a-conversation';
-import { cn } from '@/utils/cn';
 
 const HelpDeskStartConversationPage = async ({
   params: { slugs, businessId },
@@ -18,6 +17,7 @@ const HelpDeskStartConversationPage = async ({
   if (!extensionData) {
     notFound();
   }
+
   const headersList = headers();
   const referer = headersList.get('referer');
   const allowedDomain = getAllowedDomain({
