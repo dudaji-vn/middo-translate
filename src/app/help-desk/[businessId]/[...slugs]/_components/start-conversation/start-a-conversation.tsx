@@ -12,13 +12,12 @@ import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.s
 import { messageApi } from '@/features/chat/messages/api';
 import { Room } from '@/features/chat/rooms/types';
 import useClient from '@/hooks/use-client';
-import { setCookieService } from '@/services/auth.service';
 import { startAGuestConversation } from '@/services/extension.service';
+import { LSK_VISITOR_ID, LSK_VISITOR_ROOM_ID } from '@/types/business.type';
 import { cn } from '@/utils/cn';
-import { createVisitorCookies } from '@/utils/create-visitor-cookie-data';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { getConnectedEdges } from 'reactflow';
 import { z } from 'zod';
@@ -105,6 +104,15 @@ const StartAConversation = ({
       clientTempId: new Date().toISOString(),
     });
   };
+  useEffect(() => {
+    const visitorId = localStorage.getItem(LSK_VISITOR_ID);
+    const visitorRoomId = localStorage.getItem(LSK_VISITOR_ROOM_ID);
+    if (visitorId && visitorRoomId) {
+      router.push(
+        `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}`,
+      );
+    }
+  }, []);
 
   if (!isClient) return null;
   const submit = async (values: z.infer<typeof createGuestInfoSchema>) => {
@@ -117,7 +125,8 @@ const StartAConversation = ({
       }).then(async (res) => {
         const roomId = res.data.roomId;
         const user = res.data.user;
-        setCookieService(createVisitorCookies({ user, roomId }));
+        localStorage.setItem(LSK_VISITOR_ROOM_ID, roomId);
+        localStorage.setItem(LSK_VISITOR_ID, user._id);
         await appendFirstMessageFromChatFlow(roomId);
         router.push(
           `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}`,
