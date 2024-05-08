@@ -121,7 +121,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       const documents: Media[] = [];
       const videos: Media[] = [];
       let content = editor?.getHTML() || '';
-      let lang = '';
+      let lang = translationHelperRef.current?.getSourceLang() || '';
       let english = translationHelperRef.current?.getEnContent();
       let mentions: string[] = [];
       reset();

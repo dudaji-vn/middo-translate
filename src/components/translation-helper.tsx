@@ -17,9 +17,9 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
 import { useQuery } from '@tanstack/react-query';
 import { useEditor } from './use-editor';
-import { useAppStore } from '@/stores/app.store';
 import { Checkbox } from './form/checkbox';
 import { useDebounce } from 'usehooks-ts';
+import { isMobile } from 'react-device-detect';
 const DEBOUNCE_TIME = 500;
 export interface TranslationHelperProps {
   mentionSuggestionOptions: MentionSuggestion[];
@@ -32,6 +32,7 @@ export interface TranslationHelperProps {
 export type TranslationHelperRef = {
   getEnContent: () => string | null;
   clearContent: () => void;
+  getSourceLang: () => string | null;
 };
 
 export const TranslationHelper = forwardRef<
@@ -54,7 +55,6 @@ export const TranslationHelper = forwardRef<
       sendOnSave,
       toggleSendOnSave,
     } = useChatStore();
-    const isMobile = useAppStore((s) => s.isMobile);
     const [isEditing, setIsEditing] = useState(false);
     const [enContent, setEnContent] = useState<string | null>(null);
     const [translatedEnContent, setTranslatedEnContent] = useState<
@@ -156,19 +156,26 @@ export const TranslationHelper = forwardRef<
       true,
     );
 
-    const getEnContent = () => {
-      return enContent;
-    };
-
     const clearContent = () => {
       setEnContent(null);
       setTranslatedEnContent(null);
+      setSrcLang(null);
     };
 
-    useImperativeHandle(ref, () => ({
-      getEnContent,
-      clearContent,
-    }));
+    useImperativeHandle(
+      ref,
+      () => ({
+        getEnContent: () => {
+          console.log(isFetching, isLoading);
+          return enContent || (!isLoading && !isFetching) ? data : null;
+        },
+        clearContent,
+        getSourceLang: () => {
+          return srcLang;
+        },
+      }),
+      [data, enContent, isFetching, isLoading, srcLang],
+    );
     return (
       <AnimatePresence mode="wait">
         {showHelper && (
