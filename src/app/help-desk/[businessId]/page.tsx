@@ -30,6 +30,7 @@ const HelpDeskStartConversationPage = async ({
   }
   return (
     <StartAConversation
+      visitorData={JSON.stringify(headersList)}
       extensionData={extensionData}
       fromDomain={allowedDomain}
     />

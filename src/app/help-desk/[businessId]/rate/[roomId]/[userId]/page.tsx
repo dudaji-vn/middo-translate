@@ -19,7 +19,6 @@ const RatingPage = async ({
   if (!extensionData) {
     notFound();
   }
-
   async function rateConversation(star: any) {
     'use server';
 
