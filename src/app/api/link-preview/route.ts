@@ -5,14 +5,54 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
 
   const url = searchParams.get('q') || '';
-  console.log('🚀 ~ GET ~ url:', url);
 
   if (!url) {
-    return Response.json({
-      data: {
-        message: 'URL is required',
+    return Response.json(
+      {},
+      {
+        status: 400,
+        statusText: 'Bad Request',
       },
-    });
+    );
+  }
+
+  // ignore link file type
+  const listFileType = [
+    '.pdf',
+    '.doc',
+    '.docx',
+    '.ppt',
+    '.pptx',
+    '.xls',
+    '.xlsx',
+    '.csv',
+    '.txt',
+    '.json',
+    '.xml',
+    '.zip',
+    '.rar',
+    '.7z',
+    '.tar',
+    '.apk',
+    '.mp3',
+    '.wav',
+    '.ogg',
+    '.flac',
+    '.aac',
+    '.wma',
+    '.mp4',
+    '.dmg',
+    '.exe',
+    '.iso',
+  ];
+  if (listFileType.some((fileType) => url.endsWith(fileType))) {
+    return Response.json(
+      {},
+      {
+        status: 404,
+        statusText: 'Not Found',
+      },
+    );
   }
   try {
     const response = await axios.get(url, {
