@@ -363,6 +363,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "새 대화",
+    "FILTER": "필터",
     "SETTINGS": "설정",
     "START_CALL": "통화 시작",
     "LEAVE_CALL": "통화 종료",
@@ -473,6 +474,11 @@
       "SPEAKER": "스피커",
       "NO_DEVICE": "장치 없음"
     }
+  },
+  "FILTERS": {
+    "DOMAINS": "도메인",
+    "COUNTRIES": "국가",
+    "TAGS": "태그"
   },
   "SHORTCUT": {
     "TITLE": "바로 가기",

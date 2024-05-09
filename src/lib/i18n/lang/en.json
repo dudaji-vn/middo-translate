@@ -363,6 +363,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "New Conversation",
+    "FILTER": "Filter",
     "SETTINGS": "Settings",
     "START_CALL": "Start Call",
     "LEAVE_CALL": "Leave Call",
@@ -473,6 +474,11 @@
       "SPEAKER": "Speaker",
       "NO_DEVICE": "No device"
     }
+  },
+  "FILTERS": {
+    "DOMAINS": "Domains",
+    "COUNTRIES": "Countries",
+    "TAGS": "Tags"
   },
   "SHORTCUT": {
     "TITLE": "Shortcut",

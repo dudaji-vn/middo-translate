@@ -135,7 +135,35 @@ export const MessageItemWrapper = ({
   }, [showDetail]);
 
   if (disabledAllActions) {
-    return <div className="relative">{props.children}</div>;
+    return (
+      <div
+        ref={ref}
+        className="relative cursor-pointer"
+        onClick={() => {
+          !isMenuOpen && toggleDetail?.();
+        }}
+      >
+        {props.children}
+        <div
+          className={cn(
+            'my-1 flex items-center gap-1 text-xs text-neutral-500',
+            isMe ? 'justify-end' : 'justify-start',
+          )}
+        >
+          {translatedFrom && (
+            <span className="font-light">{translatedFrom}</span>
+          )}
+          {!showTime && translatedFrom && <span> • </span>}
+          {!showTime && (
+            <>
+              <span className={cn(' flex items-center gap-1 font-light ')}>
+                {formatTimeDisplay(message.createdAt!)}
+              </span>
+            </>
+          )}
+        </div>
+      </div>
+    );
   }
 
   return (

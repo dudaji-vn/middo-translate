@@ -365,6 +365,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "Hội thoại mới",
+    "FILTER": "Bộ lọc",
     "SETTINGS": "Cài đặt",
     "START_CALL": "Bắt đầu cuộc gọi",
     "LEAVE_CALL": "Rời khỏi cuộc gọi",
@@ -475,6 +476,11 @@
       "SPEAKER": "Loa",
       "NO_DEVICE": "Không có thiết bị"
     }
+  },
+  "FILTERS": {
+    "DOMAINS": "Miền",
+    "COUNTRIES": "Quốc gia",
+    "TAGS": "Thẻ"
   },
   "SHORTCUT": {
     "TITLE": "Phím tắt",
