@@ -331,7 +331,7 @@
     "PINNED_A_MESSAGE": "{{name}} pinned a message",
     "UNPINNED_A_MESSAGE": "{{name}} unpinned a message",
     "CREATED_GROUP": "{{name}} created a group",
-    "LEFT_HELP_DESK": "{{name}} end this conversation",
+    "LEFT_HELP_DESK": "{{name}} end the conversation",
     "LEFT_GROUP": "{{name}} left the group",
     "CHANGED_GROUP_NAME": "{{name}} changed the group name to {{newName}}",
     "CHANGED_GROUP_AVATAR": "{{name}} changed the group avatar",

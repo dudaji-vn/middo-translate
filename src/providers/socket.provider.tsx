@@ -15,12 +15,12 @@ const SocketProvider = () => {
   const { isElectron, ipcRenderer } = useElectron();
   const user = useAuthStore((state) => state.user);
   const { anonymousId } = useBusinessNavigationData();
-  const clientId = anonymousId || user?._id;
   const setOnlineList = useChatStore((state) => state.setOnlineList);
   const setSocketConnected = useAppStore((state) => state.setSocketConnected);
 
   useEffect(() => {
     function onConnect() {
+      const clientId = anonymousId || user?._id;
       console.log('socket.onConnect');
       setSocketConnected(true);
       if (clientId) {
@@ -47,7 +47,7 @@ const SocketProvider = () => {
       socket.off(SOCKET_CONFIG.EVENTS.CLIENT.LIST);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientId]);
+  }, [anonymousId, user?._id]);
 
   useEffect(() => {
     // console.log('socket.provider.tsx: WINDOW_FOCUSED');

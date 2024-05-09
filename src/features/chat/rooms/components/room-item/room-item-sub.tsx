@@ -55,9 +55,9 @@ const ItemSub = ({
     if (message.type === 'call' && message.call?.endTime) {
       return '';
     }
-
     if (
       (message.type === 'call' ||
+        message.action === 'leaveHelpDesk' ||
         (message.type === 'action' && messageContent.includes('pin'))) &&
       !isCurrentUserSender
     ) {
@@ -271,6 +271,13 @@ const ItemSub = ({
         case 'createGroup':
           setContentDisplay(
             t('CONVERSATION.CREATED_GROUP', {
+              name: '',
+            }),
+          );
+          return;
+        case 'leaveHelpDesk':
+          setContentDisplay(
+            t('CONVERSATION.LEFT_HELP_DESK', {
               name: '',
             }),
           );
