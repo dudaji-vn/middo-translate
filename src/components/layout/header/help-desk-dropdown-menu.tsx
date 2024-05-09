@@ -10,16 +10,20 @@ import {
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { LogOut, Menu } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 const HelpDeskDropdownMenu = () => {
   const { isOnHelpDeskChat } = useBusinessNavigationData();
+  const searchParams = useSearchParams();
+  const originReferer = searchParams?.get('originReferer');
+
   const params = useParams();
   const userId = params?.slugs?.[1];
   const roomId = params?.slugs?.[0];
   const router = useRouter();
   const items = useMemo(() => {
+    const queryParams = originReferer ? `?originReferer=${originReferer}` : ``;
     return [
       {
         name: 'End conversation',
@@ -27,12 +31,13 @@ const HelpDeskDropdownMenu = () => {
         onClick: () => {
           if (!userId) return;
           router.replace(
-            `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${roomId}/${userId}`,
+            `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${roomId}/${userId}` +
+              queryParams,
           );
         },
       },
     ];
-  }, [params, userId]);
+  }, [originReferer, params?.businessId, roomId, router, userId]);
   if (!isOnHelpDeskChat) return null;
   return (
     <DropdownMenu>

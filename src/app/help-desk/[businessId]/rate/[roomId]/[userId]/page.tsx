@@ -2,15 +2,17 @@ import React from 'react';
 import StarRating from './_components/star-rating';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { notFound } from 'next/navigation';
-import { headers } from 'next/headers';
-import { getAllowedDomain } from '@/utils/allowed-domains';
 
 const RatingPage = async ({
   params,
+  searchParams: { originReferer },
 }: {
   params: {
     businessId: string;
     userId: string;
+  };
+  searchParams: {
+    originReferer: string;
   };
 }) => {
   const extensionData = await businessAPI.getExtensionByBusinessId(
@@ -32,15 +34,9 @@ const RatingPage = async ({
     });
   }
 
-  const headersList = headers();
-  const referer = headersList.get('referer');
-  const allowedDomain = getAllowedDomain({
-    refer: referer,
-    allowedDomains: extensionData.domains,  
-  });
   return (
     <StarRating
-      fromDomain={allowedDomain as string}
+      fromDomain={originReferer}
       onRate={rateConversation}
       extensionData={extensionData}
     />
