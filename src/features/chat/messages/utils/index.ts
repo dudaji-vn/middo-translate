@@ -64,7 +64,7 @@ export const generateSystemMessageContent = ({
     case 'removeGroupName':
       return ` removed the group name`;
     case 'leaveHelpDesk':
-      return ` end this conversation`;
+      return ` end the conversation`;
     default:
       return '';
   }
