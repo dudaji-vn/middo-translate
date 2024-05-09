@@ -7,18 +7,20 @@ import BusinessSidebar from './_components/business-sidebar/business-sidebar';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 import { NavigationBreadcrumb } from '@/components/data-display/navigation-breadcrumb/navigation-breadcrumb';
-import { HomeIcon } from 'lucide-react';
+import { Globe, HomeIcon } from 'lucide-react';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import toast from 'react-hot-toast';
-import { set } from 'lodash';
+import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
+import { getRoomsFilterOptionsFromSpace } from '@/utils/get-rooms-filter-options';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
   const { data, isLoading } = useGetSpaceData({ spaceId });
   const { isOnBusinessChat } = useBusinessNavigationData();
+  const { setFilterOptions } = useSpaceInboxFilterStore();
   const pathname = usePathname();
   const router = useRouter();
 
@@ -43,11 +45,12 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (data) {
+      setFilterOptions(getRoomsFilterOptionsFromSpace(data));
       setSpace(data);
     }
-  }, [data, setSpace]);
+  }, [data, setFilterOptions, setSpace]);
+
   const handleRefresh = useCallback(() => {
-    console.log('SOCKET_CONFIG.EVENTS.SPACE.REMOV');
     toast.loading('You has been removed from this space. Refreshing...');
     setTimeout(() => {
       router.push(ROUTE_NAMES.SPACES);

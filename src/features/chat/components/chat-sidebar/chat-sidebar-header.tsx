@@ -2,7 +2,13 @@
 
 import { SearchInput, SearchInputRef } from '@/components/data-entry';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeftIcon, Menu, PenSquareIcon, Settings } from 'lucide-react';
+import {
+  ArrowLeftIcon,
+  Filter,
+  Menu,
+  PenSquareIcon,
+  Settings,
+} from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
@@ -19,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { ChatSettingMenu } from '../chat-setting';
 import { useAppStore } from '@/stores/app.store';
 import { useSideChatStore } from '../../stores/side-chat.store';
+import { RoomsModalFilter } from '../../rooms/components/rooms.modal-filter';
 
 export interface ChatSidebarHeaderProps {}
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
@@ -95,7 +102,8 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
                 </Button.Icon>
               </div>
             }
-          ></Tooltip>
+          />
+          {isBusiness && <RoomsModalFilter />}
           <Tooltip
             title={t('TOOL_TIP.SETTINGS')}
             triggerItem={
@@ -105,7 +113,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
                 </Button.Icon>
               </ChatSettingMenu>
             }
-          ></Tooltip>
+          />
         </div>
       </div>
       <div

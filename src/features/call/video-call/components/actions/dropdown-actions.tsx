@@ -17,13 +17,13 @@ import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useVideoCallContext } from '@/features/call/context/video-call-context';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import { SHORTCUTS } from '@/types/shortcuts';
-import  isEqual from 'lodash/isEqual';
+import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
 import ActionVideoAudioSetting from './action-video-audio-setting';
 
 
 export default function DropdownActions() {
-  
+
   const room = useVideoCallStore((state) => state.room);
   const isDoodle = useVideoCallStore((state) => state.isDoodle);
   const isMeDoodle = useVideoCallStore((state) => state.isMeDoodle);
@@ -50,7 +50,7 @@ export default function DropdownActions() {
       layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW
     );
   }, [haveShareScreen, isFullScreen, isPinShareScreen, layout]);
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common')
   const onDoodle = () => {
     if (!isDoodle && isMeDoodle) return;
     // Start doodle
@@ -70,21 +70,21 @@ export default function DropdownActions() {
     SHORTCUTS.TOGGLE_LIVE_CAPTION,
     SHORTCUTS.ADD_MEMBERS
   ]
-  useKeyboardShortcut(actionShortcutKeysSet, (e, mathedKeys) => {
+  useKeyboardShortcut(actionShortcutKeysSet, (e, matchedKeys) => {
     if (!e || !isFullScreen) return;
-    if(isEqual(mathedKeys, SHORTCUTS.SWITCH_TO_GALLERY_VIEW)) {
+    if (isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_GALLERY_VIEW)) {
       setLayout(layout === VIDEOCALL_LAYOUTS.FOCUS_VIEW ? VIDEOCALL_LAYOUTS.GALLERY_VIEW : VIDEOCALL_LAYOUTS.FOCUS_VIEW);
       return;
     }
-    if(isEqual(mathedKeys, SHORTCUTS.START_STOP_SCREEN_DOODLE)) {
+    if (isEqual(matchedKeys, SHORTCUTS.START_STOP_SCREEN_DOODLE)) {
       onDoodle();
       return;
     }
-    if(isEqual(mathedKeys, SHORTCUTS.TOGGLE_LIVE_CAPTION)) {
+    if (isEqual(matchedKeys, SHORTCUTS.TOGGLE_LIVE_CAPTION)) {
       setShowCaption(!isShowCaption);
       return;
     }
-    if(isEqual(mathedKeys, SHORTCUTS.ADD_MEMBERS)) {
+    if (isEqual(matchedKeys, SHORTCUTS.ADD_MEMBERS)) {
       setModalAddUser(!isShowModalAddUser);
       return;
     }

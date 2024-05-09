@@ -169,7 +169,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
               <RenderItemSub />
               <div className="flex flex-row items-center gap-1 text-sm font-light">
                 <CircleFlag
-                  className={cn('size-4 rounded-full border-2 border-white', {
+                  className={cn('size-4 rounded-full', {
                     hidden: !visitorCountry?.code || !visitorCountry?.name,
                   })}
                   countryCode={visitorCountry?.code?.toLowerCase() || 'gb'}
