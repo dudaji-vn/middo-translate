@@ -52,7 +52,7 @@ const StarRating = ({
       console.error('error on end conversation', e);
     }
     setLoading(false);
-    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`);
+    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}?originReferer=${fromDomain}`);
   };
 
   const submitRating = async () => {
@@ -68,7 +68,7 @@ const StarRating = ({
     } catch (e) {
       console.log('error on rate', e);
     }
-    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`);
+    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}?originReferer=${fromDomain}`);
     setLoading(false);
   };
 
