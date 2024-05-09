@@ -16,13 +16,13 @@ import React, { useMemo } from 'react';
 const HelpDeskDropdownMenu = () => {
   const { isOnHelpDeskChat } = useBusinessNavigationData();
   const searchParams = useSearchParams();
-  const originReferer = searchParams?.get('originReferer');
 
   const params = useParams();
   const userId = params?.slugs?.[1];
   const roomId = params?.slugs?.[0];
   const router = useRouter();
   const items = useMemo(() => {
+    const originReferer = searchParams?.get('originReferer');
     const queryParams = originReferer ? `?originReferer=${originReferer}` : ``;
     return [
       {
@@ -37,7 +37,7 @@ const HelpDeskDropdownMenu = () => {
         },
       },
     ];
-  }, [originReferer, params?.businessId, roomId, router, userId]);
+  }, [searchParams, params?.businessId, roomId, router, userId]);
   if (!isOnHelpDeskChat) return null;
   return (
     <DropdownMenu>
