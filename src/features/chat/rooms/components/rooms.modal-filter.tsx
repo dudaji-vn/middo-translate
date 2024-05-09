@@ -42,7 +42,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
   };
 
   return (
-    <AccordionItem value={title} className="p-0">
+    <AccordionItem value={name} className="p-0">
       <AccordionTrigger
         icon={
           <ChevronDown
@@ -70,7 +70,6 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
               >
                 <Checkbox
                   checked={selectedValues.includes(item.value)}
-                  // onCheckedChange={() => onToggleFilter(item.value)}
                   label={
                     name === 'tags' ? (
                       <Badge
@@ -158,7 +157,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
             <Accordion
               type="multiple"
               className="h-full w-full p-0 transition-all duration-500  "
-              //   defaultValue={defaultValue}
+              defaultValue={['countries', 'domains', 'tags']}
             >
               <FilterSection title={t('FILTERS.COUNTRIES')} name="countries" />
               <FilterSection title={t('FILTERS.DOMAINS')} name="domains" />
@@ -166,7 +165,12 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
             </Accordion>
           </div>
           <div className="w-full p-3">
-            <Button className="w-full" size={'xs'} shape={'square'}>
+            <Button
+              className="w-full"
+              size={'xs'}
+              shape={'square'}
+              onClick={onUpdateFilterOptions}
+            >
               Filter
             </Button>
           </div>
