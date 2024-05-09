@@ -38,7 +38,7 @@ const HelpDeskStartConversationPage = async ({
   }
   return (
     <StartAConversation
-      visitorData={JSON.stringify(headersList)}
+      visitorData={headersList}
       extensionData={extensionData}
       fromDomain={isRedirectedFromRatePage ? originReferer : allowedDomain}
     />
