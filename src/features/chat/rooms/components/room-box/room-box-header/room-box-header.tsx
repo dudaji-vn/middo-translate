@@ -44,7 +44,13 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   }, [toggleTab]);
 
   if (participants.length === 0) participants.push(currentUser); // if no participants, is a self chat
-  const isOnline = participants.some((user) => onlineList.includes(user._id));
+  const isOnline = useMemo(() => {
+    if (isBusiness) {
+      const visitor = participants.find((user) => user.status === 'anonymous');
+      return visitor && onlineList.includes(visitor._id);
+    }
+    return participants.some((user) => onlineList.includes(user._id));
+  }, []);
 
   return (
     <div
