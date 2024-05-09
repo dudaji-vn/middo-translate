@@ -19,7 +19,6 @@ const RatingPage = async ({
   if (!extensionData) {
     notFound();
   }
-
   async function rateConversation(star: any) {
     'use server';
 
@@ -37,7 +36,7 @@ const RatingPage = async ({
   const referer = headersList.get('referer');
   const allowedDomain = getAllowedDomain({
     refer: referer,
-    allowedDomains: extensionData.domains,
+    allowedDomains: extensionData.domains,  
   });
   return (
     <StarRating

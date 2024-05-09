@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 const ActionChat = () => {
   const { t } = useTranslation('common');
+  const queryClient = useQueryClient();
 
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const isShowChat = useVideoCallStore((state) => state.isShowChat);
@@ -30,7 +31,7 @@ const ActionChat = () => {
     }
     socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.JOIN, messageId);
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.NEW, (message: Message) => {
-      // queryClient.invalidateQueries(['message-replies', messageId]);
+      queryClient.invalidateQueries(['message-replies', messageId]);
       if (isShowChat) return;
       setNewCount((prev) => prev + 1);
     });

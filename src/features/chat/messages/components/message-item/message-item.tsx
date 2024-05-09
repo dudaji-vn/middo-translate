@@ -31,7 +31,6 @@ import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { messageVariants } from './variants';
 import { AnimatePresence } from 'framer-motion';
-import { useMessageActions } from '../message-actions';
 import { PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

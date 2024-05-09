@@ -42,7 +42,18 @@ export default function handler(
           Authorization: `Bearer ${refreshToken}`,
         },
       });
-      const data: Tokens = await res.json();
+      const data:
+        | Tokens
+        | {
+            message: string;
+            statusCode: number;
+          } = await res.json();
+      if ('statusCode' in data) {
+        console.log(data);
+        cookies.set(ACCESS_TOKEN_NAME, '', { maxAge: 0 });
+        cookies.set(REFRESH_TOKEN_NAME, '', { maxAge: 0 });
+        throw new Error(data.message);
+      }
       accessToken = data.accessToken;
       refreshToken = data.refreshToken;
       cookies.set(ACCESS_TOKEN_NAME, accessToken, {

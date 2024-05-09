@@ -36,12 +36,13 @@ export const SeenTracker = ({ onSeen, guestId, hidden }: SeenTrackProps) => {
 };
 
 export const Track = ({ onSeen }: SeenTrackProps) => {
-  const messRef = useRef<HTMLDivElement | null>(null);
-  const entry = useIntersectionObserver(messRef, {});
+  const { isIntersecting, ref } = useIntersectionObserver({
+    threshold: 0,
+  });
 
   const isFocused = useHasFocus();
 
-  const isVisible = !!entry?.isIntersecting && isFocused;
+  const isVisible = isIntersecting && isFocused;
 
   useEffect(() => {
     if (isVisible && onSeen) {
@@ -50,5 +51,5 @@ export const Track = ({ onSeen }: SeenTrackProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isVisible]);
 
-  return <div ref={messRef} className="h-[0.1px] w-[0.1px]" />;
+  return <div ref={ref} className="h-[0.1px] w-[0.1px]" />;
 };
