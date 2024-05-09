@@ -1,24 +1,22 @@
 import useAudioLevel from "@/hooks/use-audio-level";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function useCheckTalk(stream?: MediaStream) {
     const [isTalk, setIsTalk] = useState(false)
     const {level} = useAudioLevel(stream);
+    const timerId = useRef<NodeJS.Timeout>();
     useEffect(() => {
         if(!stream) return;
         if(stream.getAudioTracks().length === 0) return;
-        let timerId: NodeJS.Timeout;
+        if(timerId.current) clearTimeout(timerId.current)
         if(level > 10 && !isTalk){
             setIsTalk(true)
         } else if(level <= 10 && isTalk){
             setIsTalk(false)
         }
-        timerId = setTimeout(() => {
+        timerId.current = setTimeout(() => {
             setIsTalk(false)
-        }, 5000)
-        return () => {
-            if(timerId) clearTimeout(timerId);
-        }
+        }, 3000)
     }, [isTalk, level, stream])
 
     return {

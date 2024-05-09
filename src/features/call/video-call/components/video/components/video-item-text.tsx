@@ -85,8 +85,8 @@ export default function VideoItemText({
   }
 
   return (
-    <div className="pointer-events-none absolute bottom-1 z-10 w-full px-1">
-      <div className="pointer-events-none w-fit max-w-full cursor-none rounded-lg  bg-black/80 px-2  py-1">
+    <div className="pointer-events-none absolute bottom-[5px] left-[1px] max-w-[calc(100%_-_2px)] z-10 w-full px-1">
+      <div className="pointer-events-none w-fit max-w-full cursor-none rounded-lg bg-black/80 px-2  py-1">
         <p className="flex items-center justify-center">
           {isFullScreen && (
             <span className="truncate text-xs leading-snug text-white">
