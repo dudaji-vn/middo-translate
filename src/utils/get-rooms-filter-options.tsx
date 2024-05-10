@@ -7,6 +7,7 @@ import {
 import { Globe } from 'lucide-react';
 import { CircleFlag } from 'react-circle-flags';
 import { getContrastingTextColor } from './color-generator';
+import { getCountryCode } from './language-fn';
 
 export const getRoomsFilterOptionsFromSpace = (data: TSpace) => {
   return {
@@ -16,9 +17,15 @@ export const getRoomsFilterOptionsFromSpace = (data: TSpace) => {
         icon: <Globe size={16} />,
       })) || [],
     countries:
-      data?.countries?.map((countryCode: string) => ({
-        value: countryCode,
-        icon: <CircleFlag countryCode={countryCode} height={20} width={20} />,
+      data?.countries?.map((code: string) => ({
+        value: code,
+        icon: (
+          <CircleFlag
+            countryCode={getCountryCode(code) || code}
+            height={20}
+            width={20}
+          />
+        ),
       })) || [],
     tags: data?.tags?.map(({ name, color }: TConversationTag) => ({
       value: name,
