@@ -77,16 +77,10 @@ const GalleryLayout = () => {
                 <ItemNumber numberItem={remain} />
               </div>
             }
-            if(index > (isDoodle ? 5 : 6) && numberItem > 7) {
-              return <div
-                        key={key}
-                        className='hidden'>
-                        <VideoItem isGalleryView participant={participant} />
-                      </div>;
-            }
+            const isHidden = index > (isDoodle ? 5 : 6) && numberItem > 7;
             return ( <div
               key={key}
-              className='h-full w-full'>
+              className={cn('h-full w-full', isHidden ? 'hidden' : '')}>
               <VideoItem isGalleryView participant={participant} />
             </div>
           )},
