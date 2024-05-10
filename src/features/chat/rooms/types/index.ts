@@ -30,6 +30,7 @@ export type Room = {
     color: string;
     _id: string;
   };
+  expiredAt?: string;
   space?: TSpace;
   fromDomain?: string;
 } & BaseEntity;

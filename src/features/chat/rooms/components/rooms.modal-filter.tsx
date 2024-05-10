@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/actions';
-import { ChevronDown, ListFilter } from 'lucide-react';
+import { ChevronDown, Globe, ListFilter } from 'lucide-react';
 import { Typography, TypographyProps } from '@/components/data-display';
 import {
   Accordion,
@@ -19,6 +19,7 @@ import {
   LANGUAGE_CODES_MAP,
   SUPPORTED_LANGUAGES,
 } from '@/configs/default-language';
+import { Global } from 'recharts';
 
 export type RoomsFilterOption = {
   value: string;
@@ -35,6 +36,20 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
     useSpaceInboxFilterStore();
   const options = filterOptions[name] || [];
   const selectedValues = selectedFilters[name] || [];
+  const hasSelected = !!selectedValues.length;
+
+  const onSelectAll = () => {
+    setSelectedFilters({
+      ...selectedFilters,
+      [name]: options.map((option) => option.value),
+    });
+  };
+  const onDeselectAll = () => {
+    setSelectedFilters({
+      ...selectedFilters,
+      [name]: [],
+    });
+  };
 
   const onToggleFilter = (value: string) => {
     setSelectedFilters({
@@ -46,7 +61,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
   };
 
   return (
-    <AccordionItem value={name} className="p-0">
+    <AccordionItem value={name} className="w-full p-0">
       <AccordionTrigger
         icon={
           <ChevronDown
@@ -56,15 +71,24 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
         }
         className="flex h-fit w-full flex-row items-center justify-between  rounded-none !bg-primary-100 px-3 py-4"
       >
-        <Typography
-          variant="h4"
-          className="text-base font-normal leading-[18px] text-neutral-800"
+        <div
+          className="h flex w-full cursor-pointer flex-row items-center justify-start gap-2"
+          onClick={(e) => {
+            e.stopPropagation();
+            hasSelected ? onDeselectAll() : onSelectAll();
+          }}
         >
-          {title}
-        </Typography>
+          <Checkbox checked={hasSelected} />
+          <Typography
+            variant="h4"
+            className="text-base font-normal leading-[18px] text-neutral-800"
+          >
+            {title}
+          </Typography>
+        </div>
       </AccordionTrigger>
-      <AccordionContent className="accordion-up 0.2s p-0 ease-out">
-        <div className="flex flex-col gap-0 divide-y divide-neutral-50">
+      <AccordionContent className="accordion-up 0.2s w-full p-0  ease-out">
+        <div className="flex flex-col gap-0 px-6">
           {options.map((item, index) => {
             const displayText =
               name === 'countries'
@@ -73,7 +97,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
             return (
               <div
                 key={index}
-                className="my-0 flex h-[50px] w-full cursor-pointer flex-row items-center justify-between p-3"
+                className="my-0 flex h-fit !w-full cursor-pointer flex-row items-center justify-between p-3"
                 onClick={() => onToggleFilter(item.value)}
               >
                 <Checkbox
@@ -83,7 +107,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
                       <Badge
                         variant="default"
                         className={cn(
-                          'line-clamp-1 cursor-pointer capitalize',
+                          'line-clamp-1 max-w-[380px] cursor-pointer  capitalize max-sm:max-w-[200px]',
                           {
                             hidden: !item.value,
                           },
@@ -95,12 +119,13 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
                     ) : (
                       <div
                         className={
-                          'mt-0  flex cursor-pointer flex-row items-center gap-2 text-base font-normal'
+                          'mt-0 flex cursor-pointer flex-row items-center gap-2 [&_svg]:!size-4 '
                         }
-                        {...item.props}
                       >
-                        {item.icon && item.icon}
-                        {displayText}
+                        {item.icon}
+                        <span className="line-clamp-1  max-w-[380px] flex-1 break-words text-base font-normal max-sm:max-w-[200px] ">
+                          {displayText}
+                        </span>
                       </div>
                     )
                   }
@@ -120,7 +145,8 @@ export interface RoomsFilterProps
 export const RoomsModalFilter = (props: RoomsFilterProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
-  const { filterOptions, setSelectedFilters } = useSpaceInboxFilterStore();
+  const { filterOptions, setSelectedFilters, selectedFilters } =
+    useSpaceInboxFilterStore();
 
   const onUpdateFilterOptions = () => {
     console.log('Update filter options: ', filterOptions);
@@ -134,6 +160,25 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
       tags: [],
     });
   };
+  const onSelectAll = () => {
+    setSelectedFilters({
+      countries: filterOptions.countries?.map((c) => c.value) || [],
+      domains: filterOptions.domains?.map((d) => d.value) || [],
+      tags: filterOptions.tags?.map((t) => t.value) || [],
+    });
+  };
+  const { isSelectAll } = useMemo(() => {
+    const isSelectAllCountries =
+      filterOptions.countries?.length === selectedFilters.countries?.length;
+    const isSelectAllDomains =
+      filterOptions.domains?.length === selectedFilters.domains?.length;
+    const isSelectAllTags =
+      filterOptions.tags?.length === selectedFilters.tags?.length;
+    return {
+      isSelectAll:
+        isSelectAllCountries && isSelectAllDomains && isSelectAllTags,
+    };
+  }, [filterOptions, selectedFilters]);
 
   return (
     <>
@@ -146,7 +191,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
         }
       />
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="h-fit  max-w-[400px] gap-0 p-0">
+        <DialogContent className="h-fit  max-w-[500px] gap-0 p-0">
           <div className="flex flex-row items-center justify-between p-3">
             <Typography className="font-semibold text-neutral-800">
               Filter by
@@ -156,15 +201,19 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
               color="primary"
               size={'xs'}
               shape={'square'}
-              onClick={onDeselectAll}
+              onClick={() => {
+                isSelectAll ? onDeselectAll() : onSelectAll();
+              }}
             >
-              Deselect All
+              {isSelectAll
+                ? t('FILTERS.BUTTONS.DESELECT_ALL')
+                : t('FILTERS.BUTTONS.SELECT_ALL')}
             </Button>
           </div>
-          <div className=" mb-4 h-fit max-h-[400px] space-y-3 overflow-y-scroll bg-white">
+          <div className=" mb-4 h-fit max-h-[400px] max-w-[500px] space-y-3 overflow-y-scroll bg-white">
             <Accordion
               type="multiple"
-              className="h-full w-full p-0 transition-all duration-500  "
+              className="h-full w-full max-w-full p-0 transition-all duration-500  "
               defaultValue={['countries', 'domains', 'tags']}
             >
               <FilterSection title={t('FILTERS.COUNTRIES')} name="countries" />

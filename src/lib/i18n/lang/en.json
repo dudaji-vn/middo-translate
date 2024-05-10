@@ -478,7 +478,12 @@
   "FILTERS": {
     "DOMAINS": "Domains",
     "COUNTRIES": "Countries",
-    "TAGS": "Tags"
+    "TAGS": "Tags",
+    "BUTTONS": {
+      "DESELECT_ALL": "Deselect all",
+      "SELECT_ALL": "Select all",
+      "FILTER": "Filter"
+    }
   },
   "SHORTCUT": {
     "TITLE": "Shortcut",

@@ -478,7 +478,12 @@
   "FILTERS": {
     "DOMAINS": "도메인",
     "COUNTRIES": "국가",
-    "TAGS": "태그"
+    "TAGS": "태그",
+    "BUTTONS": {
+      "DESELECT_ALL": "모두 선택 해제",
+      "SELECT_ALL": "모두 선택",
+      "FILTER": "필터"
+    }
   },
   "SHORTCUT": {
     "TITLE": "바로 가기",

@@ -480,7 +480,12 @@
   "FILTERS": {
     "DOMAINS": "Miền",
     "COUNTRIES": "Quốc gia",
-    "TAGS": "Thẻ"
+    "TAGS": "Thẻ",
+    "BUTTONS": {
+      "DESELECT_ALL": "Bỏ chọn tất cả",
+      "SELECT_ALL": "Chọn tất cả",
+      "FILTER": "Lọc"
+    }
   },
   "SHORTCUT": {
     "TITLE": "Phím tắt",
