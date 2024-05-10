@@ -14,7 +14,6 @@ interface UserStatusProps {
 export default function UserStatus({isForgeShow, participant}: UserStatusProps) {
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const layout = useVideoCallStore(state => state.layout);
-  if(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen && !isForgeShow) return null;
   const notShow = layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen && !isForgeShow;
   switch (participant.status) {
     case 'WAITING':
