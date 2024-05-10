@@ -36,7 +36,7 @@ import { useTranslation } from 'react-i18next';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof messageVariants> {
+  VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
   spaceAvatar?: string;
@@ -46,7 +46,7 @@ export interface MessageProps
   pinnedBy?: User;
   discussionDisabled?: boolean;
   guestId?: string;
-  disabledAllActions?: boolean;
+  actionsDisabled?: boolean;
   showTime?: boolean;
   showReactionBar?: boolean;
   isDraw?: boolean;
@@ -87,7 +87,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       direction,
       showReply = true,
       pinnedBy,
-      disabledAllActions,
+      actionsDisabled = false,
       discussionDisabled = false,
       showTime,
       showReactionBar = true,
@@ -112,7 +112,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       setFalse: hideDetail,
     } = useBoolean(false);
 
-    const flowActions = message.actions;
+    const actionsFromScriptChat = message.actions;
     return (
       <MessageItemContext.Provider
         value={{
@@ -175,7 +175,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   showDetail={showDetail}
                   toggleDetail={toggleShowDetail}
                   showTime={showTime}
-                  disabledAllActions={disabledAllActions || isEditing}
+                  actionsDisabled={actionsDisabled || isEditing}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
@@ -274,7 +274,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   </span>
                 </span>
               )}
-              <MessageItemFlowActions actions={flowActions || []} />
+              <MessageItemFlowActions actions={actionsFromScriptChat || []} />
             </div>
             {direction === 'top' && (
               <ReadByUsers

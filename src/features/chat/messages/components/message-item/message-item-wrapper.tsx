@@ -44,7 +44,7 @@ export interface MessageItemWrapperProps {
   message: Message;
   setActive: (active: boolean) => void;
   discussionDisabled?: boolean;
-  disabledAllActions?: boolean;
+  actionsDisabled?: boolean;
   showTime?: boolean;
   showDetail?: boolean;
   hideDetail?: () => void;
@@ -52,8 +52,58 @@ export interface MessageItemWrapperProps {
   setIsMenuOpen?: (isOpen: boolean) => void;
 }
 
+const MessageDetail = ({
+  isMe,
+  message,
+  translatedFrom,
+  showTime,
+  showDetail,
+}: {
+  isMe: boolean;
+  translatedFrom: string;
+  showTime?: boolean;
+  message: Message;
+  showDetail?: boolean;
+}) => {
+  return (
+    <AnimatePresence>
+      {showDetail && (
+        <motion.div
+          layout
+          initial={{
+            opacity: 0,
+            height: 0,
+          }}
+          animate={{
+            opacity: 1,
+            height: 'auto',
+          }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.1 }}
+          className={cn(
+            'my-1 flex items-center gap-1 text-xs text-neutral-500',
+            isMe ? 'justify-end' : 'justify-start',
+          )}
+        >
+          {translatedFrom && (
+            <span className="font-light">{translatedFrom}</span>
+          )}
+          {!showTime && translatedFrom && <span> • </span>}
+          {!showTime && (
+            <>
+              <span className={cn(' flex items-center gap-1 font-light ')}>
+                {formatTimeDisplay(message.createdAt!)}
+              </span>
+            </>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export const MessageItemWrapper = ({
-  disabledAllActions,
+  actionsDisabled,
   showDetail,
   hideDetail,
   toggleDetail,
@@ -134,34 +184,24 @@ export const MessageItemWrapper = ({
     }
   }, [showDetail]);
 
-  if (disabledAllActions) {
+  if (actionsDisabled) {
     return (
       <div
-        ref={ref}
-        className="relative cursor-pointer"
+        className="relative h-fit cursor-pointer transition-all duration-300"
         onClick={() => {
           !isMenuOpen && toggleDetail?.();
         }}
       >
         {props.children}
-        <div
-          className={cn(
-            'my-1 flex items-center gap-1 text-xs text-neutral-500',
-            isMe ? 'justify-end' : 'justify-start',
-          )}
-        >
-          {translatedFrom && (
-            <span className="font-light">{translatedFrom}</span>
-          )}
-          {!showTime && translatedFrom && <span> • </span>}
-          {!showTime && (
-            <>
-              <span className={cn(' flex items-center gap-1 font-light ')}>
-                {formatTimeDisplay(message.createdAt!)}
-              </span>
-            </>
-          )}
-        </div>
+        {message.status !== 'removed' && (
+          <MessageDetail
+            isMe={isMe}
+            message={message}
+            showTime={showTime}
+            showDetail={showDetail}
+            translatedFrom={translatedFrom}
+          />
+        )}
       </div>
     );
   }
@@ -185,39 +225,13 @@ export const MessageItemWrapper = ({
         {props.children}
       </Wrapper>
       {message.status !== 'removed' && (
-        <AnimatePresence>
-          {showDetail && (
-            <motion.div
-              layout
-              initial={{
-                opacity: 0,
-                height: 0,
-              }}
-              animate={{
-                opacity: 1,
-                height: 'auto',
-              }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.1 }}
-              className={cn(
-                'my-1 flex items-center gap-1 text-xs text-neutral-500',
-                isMe ? 'justify-end' : 'justify-start',
-              )}
-            >
-              {translatedFrom && (
-                <span className="font-light">{translatedFrom}</span>
-              )}
-              {!showTime && translatedFrom && <span> • </span>}
-              {!showTime && (
-                <>
-                  <span className={cn(' flex items-center gap-1 font-light ')}>
-                    {formatTimeDisplay(message.createdAt!)}
-                  </span>
-                </>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <MessageDetail
+          isMe={isMe}
+          message={message}
+          showTime={showTime}
+          showDetail={showDetail}
+          translatedFrom={translatedFrom}
+        />
       )}
     </div>
   );
@@ -468,7 +482,7 @@ const DisplayMessage = ({
         showReactionBar={false}
         message={message}
         showAvatar={!isMe}
-        disabledAllActions
+        actionsDisabled
         discussionDisabled
         className={cn(
           'relative  max-h-[250px] overflow-hidden',
