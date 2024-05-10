@@ -85,7 +85,10 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">
         {allowCall && <VideoCall />}
-        {room.isGroup && <RoomAddMember />}
+        {room.isGroup && <Tooltip
+          title={t('TOOL_TIP.ADD_MEMBER') }
+          triggerItem={ <RoomAddMember /> }
+        />}
         <Tooltip title={t('TOOL_TIP.INFO')} triggerItem={<ActionBar />} />
       </div>
     </div>
