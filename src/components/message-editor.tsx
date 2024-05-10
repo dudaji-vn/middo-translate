@@ -298,6 +298,7 @@ const EditControl = ({
   const handleSave = () => {
     let content = editor?.getHTML() || '';
     let english = translationHelperRef.current?.getEnContent();
+    let language = translationHelperRef.current?.getSourceLang();
     let mentions: string[] = [];
     if (!isContentEmpty) {
       mentions = getMentionIdsFromHtml(content);
@@ -308,14 +309,23 @@ const EditControl = ({
         content,
         mentions,
         enContent: english,
+        language: language || '',
       },
     });
-    onEditSubmit &&
-      onEditSubmit({
-        _id: message!._id,
-        content,
-        status: 'edited',
-      } as Message);
+    const messageData = {
+      _id: message!._id,
+      content,
+      status: 'edited',
+    } as Message;
+    if (language) {
+      messageData.language = language;
+    }
+    if (english) {
+      messageData.translations = {
+        en: english,
+      };
+    }
+    onEditSubmit && onEditSubmit(messageData);
     reset();
   };
   const isDirty = editor?.getHTML() !== message?.content;

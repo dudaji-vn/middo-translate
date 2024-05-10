@@ -4,7 +4,6 @@ import { cn } from '@/utils/cn';
 import socket from '@/lib/socket-io';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useQueryClient } from '@tanstack/react-query';
 import { Message } from '@/features/chat/messages/types';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useAppStore } from '@/stores/app.store';
@@ -15,8 +14,6 @@ import { useTranslation } from 'react-i18next';
 
 const ActionChat = () => {
   const { t } = useTranslation('common');
-  const queryClient = useQueryClient();
-
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const isShowChat = useVideoCallStore((state) => state.isShowChat);
   const setShowChat = useVideoCallStore((state) => state.setShowChat);
@@ -30,15 +27,15 @@ const ActionChat = () => {
       setNewCount(0);
     }
     socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.JOIN, messageId);
-    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.NEW, (message: Message) => {
-      queryClient.invalidateQueries(['message-replies', messageId]);
+    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.COUNT, (message: Message) => {
+      console.log('message', message);
       if (isShowChat) return;
       setNewCount((prev) => prev + 1);
     });
 
     return () => {
       socket.emit(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.LEAVE, messageId);
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.NEW);
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.REPLY.COUNT);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [messageId, isShowChat]);

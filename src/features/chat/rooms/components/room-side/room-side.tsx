@@ -33,7 +33,7 @@ export const RoomSide = forwardRef<HTMLDivElement, RoomSideProps>(
               ref={ref}
               {...props}
               className={cn(
-                'absolute left-0 top-0 z-50 w-screen overflow-y-auto border-l bg-background p-3 pb-0 md:relative md:z-auto md:w-full',
+                'absolute left-0 top-0 z-50 w-screen overflow-y-auto border-l bg-[#fcfcfc] p-3 pb-0 md:relative md:z-auto md:w-full',
                 isMobile ? 'full-screen-height' : 'container-height',
               )}
             >

@@ -286,6 +286,7 @@
     "CLOUD_SHARED": "Media & Files",
     "MEDIA": "Media",
     "FILE": "File",
+    "LINK": "Link",
     "LEAVE_GROUP": "Leave group",
     "DELETE": "Delete conversation",
     "START": "Start conversation",

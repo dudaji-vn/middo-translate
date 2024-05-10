@@ -1,7 +1,6 @@
 'use client';
 
 import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
-import { usePlatformStore } from '@/features/platform/stores';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { cn } from '@/utils/cn';
 import { PropsWithChildren, ReactNode, useEffect } from 'react';
@@ -21,7 +20,6 @@ export const ChatSidebar = ({
   children,
   spaceData,
 }: ChatSidebarProps & PropsWithChildren) => {
-  const platform = usePlatformStore((state) => state.platform);
   const { setBusinessExtension } = useBusinessExtensionStore();
   const { isOnBusinessChat, isBusiness } = useBusinessNavigationData();
 

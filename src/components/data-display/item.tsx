@@ -8,17 +8,34 @@ type ItemProps = {
   children: React.ReactNode;
   right?: React.ReactNode;
   className?: string;
+  onClick?: () => void;
+  danger?: boolean;
 };
 
-export const Item = ({ children, leftIcon, right, className }: ItemProps) => {
+export const Item = ({
+  children,
+  leftIcon,
+  right,
+  className,
+  onClick,
+  danger,
+}: ItemProps) => {
   return (
     <div
       className={cn(
-        'flex w-full items-center gap-2 rounded-xl bg-neutral-50 px-3 py-3',
+        'flex w-full items-center gap-2 bg-white px-3 py-3',
         className,
+        onClick && 'cursor-pointer hover:bg-primary-100 active:bg-primary-200',
+        danger && 'text-error',
+        onClick && danger && 'hover:bg-error-100/20 active:bg-error-200',
       )}
+      onClick={onClick}
     >
-      {leftIcon && <IconWrapper>{leftIcon}</IconWrapper>}
+      {leftIcon && (
+        <IconWrapper danger={danger} size="sm">
+          {leftIcon}
+        </IconWrapper>
+      )}
       {children}
       <div className="ml-auto flex">{right}</div>
     </div>
@@ -28,7 +45,7 @@ export const Item = ({ children, leftIcon, right, className }: ItemProps) => {
 export const IconWrapperVariants = cva('inline-block', {
   variants: {
     type: {
-      left: 'mr-[0.625rem] -ml-1',
+      left: '',
       right: 'ml-2',
       default: '',
     },
@@ -51,11 +68,23 @@ type IconWrapperProps = {
   type?: 'left' | 'right';
   className?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'unset';
+  danger?: boolean;
 };
 
-const IconWrapper = ({ children, type, className, size }: IconWrapperProps) => {
+export const IconWrapper = ({
+  children,
+  type,
+  className,
+  size,
+  danger,
+}: IconWrapperProps) => {
   return (
-    <>
+    <div
+      className={cn(
+        'flex size-10 items-center justify-center rounded-xl bg-primary-100 text-primary',
+        danger && 'bg-error-100 text-error',
+      )}
+    >
       {Children.map(children, (child) => {
         if (isValidElement(child)) {
           return cloneElement(child, {
@@ -64,6 +93,6 @@ const IconWrapper = ({ children, type, className, size }: IconWrapperProps) => {
         }
         return child;
       })}
-    </>
+    </div>
   );
 };

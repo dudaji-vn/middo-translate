@@ -12,7 +12,7 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { User } from '@/features/users/types';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { Globe, PinIcon } from 'lucide-react';
+import { BellOffIcon, Globe, PinIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
@@ -167,37 +167,44 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                 </div>
               )}
               <RenderItemSub />
-              <div className="flex flex-row items-center gap-1 text-sm font-light">
-                <CircleFlag
-                  className={cn('size-4 rounded-full', {
-                    hidden: !visitorCountry?.code || !visitorCountry?.name,
-                  })}
-                  countryCode={visitorCountry?.code?.toLowerCase() || 'gb'}
-                />
-                <span className={'uppercase text-neutral-600'}>
-                  {visitorCountry?.code}
-                </span>
-                <Globe
-                  size={11}
-                  className={cn('text-primary-500-main', {
-                    hidden: !room.fromDomain,
-                  })}
-                />
-                <span className={'text-primary-500-main'}>
-                  {room.fromDomain}
-                </span>
-              </div>
+              {room.isHelpDesk && (
+                <div className="flex flex-row items-center gap-1 text-sm font-light">
+                  <CircleFlag
+                    className={cn('size-4 rounded-full', {
+                      hidden: !visitorCountry?.code || !visitorCountry?.name,
+                    })}
+                    countryCode={visitorCountry?.code?.toLowerCase() || 'gb'}
+                  />
+                  <span className={'uppercase text-neutral-600'}>
+                    {visitorCountry?.code}
+                  </span>
+                  <Globe
+                    size={11}
+                    className={cn('text-primary-500-main', {
+                      hidden: !room.fromDomain,
+                    })}
+                  />
+                  <span className={'text-primary-500-main'}>
+                    {room.fromDomain}
+                  </span>
+                </div>
+              )}
             </div>
 
             {rightElement}
+            {isMuted && (
+              <div className="flex items-center">
+                <BellOffIcon className="size-4 fill-error stroke-error text-neutral-600" />
+              </div>
+            )}
+            {room?.isPinned && (
+              <div className="flex items-center">
+                <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
+              </div>
+            )}
           </RoomItemWrapper>
         </RoomItemContext.Provider>
       </Wrapper>
-      {room?.isPinned && (
-        <div className="flex items-center pr-3">
-          <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
-        </div>
-      )}
       <Tooltip
         title={t('CONVERSATION.JOIN')}
         triggerItem={<RoomItemComingCall roomChatBox={room} />}

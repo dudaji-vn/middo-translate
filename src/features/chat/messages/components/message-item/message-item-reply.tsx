@@ -17,7 +17,7 @@ export const MessageItemReply = ({
   isMe,
 }: MessageItemReplyProps) => {
   const { data: messages } = useQuery({
-    queryKey: ['message-replies', messageId],
+    queryKey: ['message-item-replies', messageId],
     queryFn: () => messageApi.getReplies(messageId),
     enabled: !!messageId,
   });
@@ -52,7 +52,7 @@ export const MessageItemReply = ({
           <div className="h-1/2 w-2 rounded-bl-sm border-b border-l border-neutral-50" />
         </div>
       )}
-      <div className="flex h-fit w-fit items-center gap-1 rounded-xl border border-neutral-50 px-2 py-1">
+      <div className="flex h-fit w-fit items-center gap-1 rounded-lg border border-neutral-50 px-2 py-1">
         {uniqueUsers.map((user) => (
           <Avatar
             alt={user.name}

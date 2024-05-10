@@ -41,7 +41,10 @@ export const RoomItemHead = ({ isRead, showTime, time }: RoomItemHeadProps) => {
         </span>
       </div>
       {time && showTime && (
-        <RoomItemTime date={time} className="ml-2 text-sm font-light" />
+        <RoomItemTime
+          date={time}
+          className="ml-2 text-xs font-light text-neutral-500"
+        />
       )}
     </div>
   );
