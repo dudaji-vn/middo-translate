@@ -205,8 +205,8 @@
     "TITLE": "Đăng nhập",
     "FORGOT_PASSWORD": "Quên mật khẩu?",
     "NO_ACCOUNT": "Chưa có tài khoản?",
-    "SIGN_UP_HERE": "Đăng ký tại đây",
-    "SOCIAL_LOGIN": "Hoặc đăng nhập với"
+    "SIGN_UP": "Đăng ký",
+    "GOOGLE_LOGIN": "Đăng nhập với Google"
   },
   "SIGN_UP": {
     "TITLE": "Đăng ký",

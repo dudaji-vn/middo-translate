@@ -204,9 +204,9 @@
   "SIGN_IN": {
     "TITLE": "Sign In",
     "FORGOT_PASSWORD": "Forgot Password?",
-    "NO_ACCOUNT": "Don't have an account?",
-    "SIGN_UP_HERE": "Sign Up Here",
-    "SOCIAL_LOGIN": "Or sign in with"
+    "NO_ACCOUNT": "Not have account yet?",
+    "SIGN_UP": "Sign Up",
+    "GOOGLE_LOGIN": "Sign in with Google"
   },
   "SIGN_UP": {
     "TITLE": "Sign Up",

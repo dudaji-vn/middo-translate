@@ -205,8 +205,8 @@
     "TITLE": "로그인",
     "FORGOT_PASSWORD": "비밀번호를 잊으셨나요?",
     "NO_ACCOUNT": "계정이 없으신가요?",
-    "SIGN_UP_HERE": "여기에서 가입하세요",
-    "SOCIAL_LOGIN": "또는 다음으로 로그인"
+    "SIGN_UP": "가입하기",
+    "GOOGLE_LOGIN": "Google로 로그인"
   },
   "SIGN_UP": {
     "TITLE": "가입하기",

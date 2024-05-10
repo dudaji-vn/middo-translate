@@ -3,13 +3,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import * as yup from 'yup';
 import { AlertError } from '@/components/alert/alert-error';
-import { Button } from '@/components/form/button';
+
 import { GoogleIcon } from '@/components/icons';
 import Image from 'next/image';
 import { InputField } from '@/components/form/Input-field';
 import Link from 'next/link';
-import { Button as MyButton } from '@/components/actions/button';
-import { PageLoading } from '@/components/loading/page-loading';
+
 import { ROUTE_NAMES } from '@/configs/route-name';
 import {
   getCookieService,
@@ -27,6 +26,13 @@ import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import trim from 'lodash/trim';
 import { useTranslation } from 'react-i18next';
 import DataRequestSetCookie from '@/types/set-cookie-data.interface';
+import { PageLoading } from '@/components/feedback';
+import { Typography } from '@/components/data-display';
+import { Button } from '@/components/actions';
+import { UserRound } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useAppStore } from '@/stores/app.store';
+
 interface DataResponseToken {
   token: string;
   refresh_token: string;
@@ -37,6 +43,7 @@ export default function SignIn() {
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const { isElectron, ipcRenderer } = useElectron();
+  const isMobile = useAppStore((state) => state.isMobile);
   const {t} = useTranslation("common");
   const {
     register,
@@ -149,66 +156,97 @@ export default function SignIn() {
   if (isAuthentication && userData) return null;
 
   return (
-    <div>
+    <div className="h-full bg-cover bg-center md:!bg-[url('/images/auth-background.jpg')]">
       {loading && <PageLoading />}
-      <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-        <div className="w-full bg-background px-[5vw] py-8 md:my-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
-          <h4 className="text-center text-[26px] font-bold text-primary">
-            {t('SIGN_IN.TITLE')}
-          </h4>
-
-          <form
-            className="flex w-full flex-col items-center"
-            onSubmit={handleSubmitForm}
-          >
-            <InputField
-              className="mt-8"
-              placeholder={t('COMMON.EMAIL_PLACEHOLDER')}
-              register={{ ...register('email') }}
-              errors={errors.email}
-              type="text"
-            />
-            <InputField
-              className="mt-4"
-              placeholder={t('COMMON.PASSWORD_PLACEHOLDER')}
-              register={{ ...register('password') }}
-              errors={errors.password}
-              type="password"
-            />
-            <Link
-              className="color-[#333] ml-auto mt-3 inline-block italic hover:underline"
-              href={ROUTE_NAMES.FORGOT_PASSWORD}
-            >
-              {t('SIGN_IN.FORGOT_PASSWORD')}
-            </Link>
-            <AlertError errorMessage={errorMessage}></AlertError>
-            <Button type="submit">{t('SIGN_IN.TITLE')}</Button>
-          </form>
-          <div className="mx-auto my-10 h-[1px] w-[120px] bg-[#ccc]"></div>
-          <p className="mb-5 text-center text-[#333]">{t('SIGN_IN.NO_ACCOUNT')}</p>
-          <div className="mb-10 flex justify-center">
-            <Link
-              className="hover:after:opacity-1 relative font-medium text-primary after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-primary after:opacity-0 after:content-['']"
-              href={ROUTE_NAMES.SIGN_UP}
-            >
-              {t('SIGN_IN.SIGN_UP_HERE')}
-            </Link>
+      <div className="flex justify-center items-center h-full">
+        <div className='md:flex items-center justify-center flex-1 hidden'>
+          <div className='max-w-[60%]'>
+            <Image src="/images/login.png" alt="Logo" width={674} height={500}
+            ></Image>
           </div>
-          <div className="flex items-center justify-center gap-5">
-            <p>{t('SIGN_IN.SOCIAL_LOGIN')}</p>
+        </div>
+        <motion.div 
+          layout
+          transition={{ delay: 0.5 }}
+          initial={{ width: 0, opacity: 0}}
+          animate={{ width: isMobile ? '100%' : 400, opacity: 1}}
+          className='bg-white h-full overflow-auto w-full md:w-[400px] whitespace-nowrap'>
+          <div className="p-5">
+            <form
+              className="flex w-full flex-col items-center"
+              onSubmit={handleSubmitForm}
+            >
+              <Typography variant={'h1'} className="text-center text-2xl font-semibold text-primary mb-8">
+                {t('SIGN_IN.TITLE')}
+              </Typography>
+              <InputField
+                placeholder={t('COMMON.EMAIL_PLACEHOLDER')}
+                register={{ ...register('email') }}
+                errors={errors.email}
+                type="text"
+              />
+              <InputField
+                className="mt-3"
+                placeholder={t('COMMON.PASSWORD_PLACEHOLDER')}
+                register={{ ...register('password') }}
+                errors={errors.password}
+                type="password"
+              />
+              <Link
+                className="text-neutral-700 ml-auto mt-3 inline-block rounded-xl font-semibold py-2 px-3 md:hover:bg-neutral-50 active:bg-neutral-100"
+                href={ROUTE_NAMES.FORGOT_PASSWORD}
+              >
+                {t('SIGN_IN.FORGOT_PASSWORD')}
+              </Link>
+              <AlertError errorMessage={errorMessage}></AlertError>
+              <Button
+                variant={'default'}
+                size={'md'}
+                shape={'square'}
+                color={'primary'}
+                className='w-full mt-5'
+                type='submit'
+              >{t('SIGN_IN.TITLE')}</Button>
+            </form>
+            <div className="mx-auto my-10 h-[1px] w-full bg-neutral-50"></div>
+            <Typography variant={'h2'} className="mb-5 text-center text-neutral-800 font-normal text-base">{t('SIGN_IN.NO_ACCOUNT')}</Typography>
+            <Link href={ROUTE_NAMES.SIGN_UP} className='mb-4 block'>
+              <Button
+                variant={'default'}
+                size={'md'}
+                shape={'square'}
+                color={'default'}
+                startIcon={<UserRound className='size-4'/>}
+                className='w-full'>
+                {t('SIGN_IN.SIGN_UP')}
+              </Button>
+            </Link>
             {isElectron ? (
-              <MyButton.Icon color="default" onClick={handleLoginGoogle}>
-                <GoogleIcon />
-              </MyButton.Icon>
+              <Button
+                variant={'default'}
+                size={'md'}
+                shape={'square'}
+                color={'default'}
+                onClick={handleLoginGoogle}
+                className='w-full'>
+                <Image src="/images/google-icon.svg" alt="Google" width={16} height={16} className='mr-2'/>
+                {t('SIGN_IN.GOOGLE_LOGIN')}
+              </Button>
             ) : (
               <Link href="/api/auth/google">
-                <MyButton.Icon color="default">
-                  <GoogleIcon />
-                </MyButton.Icon>
+                <Button
+                  variant={'default'}
+                  size={'md'}
+                  shape={'square'}
+                  color={'default'}
+                  className='w-full'>
+                  <Image src="/images/google-icon.svg" alt="Google" width={16} height={16} className='mr-2'/>
+                  {t('SIGN_IN.GOOGLE_LOGIN')}
+                </Button>
               </Link>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

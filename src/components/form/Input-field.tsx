@@ -48,7 +48,7 @@ export const InputField = (props: InputFieldProps) => {
       )}
       <div
         className={cn(
-          `flex h-[50px] w-full items-center justify-start rounded-full border px-4`,
+          `flex h-[50px] w-full items-center justify-start rounded-xl border px-4`,
           type === 'password' ? (isTouched && !errors ? 'pr-4' : 'pr-1') : '',
           isTouched && !errors ? 'border-green-500' : '',
         )}
@@ -82,8 +82,8 @@ export const InputField = (props: InputFieldProps) => {
         )}
       </div>
       {errors && (
-        <div className="mt-2 flex items-center gap-2 pl-5 text-[14px] text-error">
-          <AlertCircleIcon className="h-7 w-5 min-w-[20px] " />
+        <div className="mt-2 flex items-center gap-1 text-[14px] text-error">
+          <AlertCircleIcon size={16} />
           {(errors?.message?.message as string) || (errors?.message as string)}
         </div>
       )}
