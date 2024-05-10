@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Drawer, DrawerContent } from '@/components/data-display/drawer';
 import {
   Popover,
@@ -118,7 +117,13 @@ export const MessageItemWrapper = ({
     languageCode: message.language,
   });
 
-  useOnClickOutside(ref, hideDetail || (() => {}));
+  useOnClickOutside(
+    ref,
+    (() => {
+      if (isMenuOpen) return;
+      hideDetail?.();
+    }) || (() => {}),
+  );
 
   const { onAction } = useMessageActions();
 
@@ -248,7 +253,6 @@ const MobileWrapper = ({
   isMe,
   message,
   setActive,
-  hideDetail,
   setIsMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
@@ -367,26 +371,13 @@ const DesktopWrapper = ({
   children,
   isMe,
   message,
+  setIsMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
   const { t } = useTranslation('common');
-  const formattedDate = moment(message.createdAt).format('lll');
-  const translatedFrom = useTranslatedFromText({
-    languageCode: message.language,
-  });
   return (
     <>
-      <Tooltip
-        triggerItem={children}
-        title={
-          translatedFrom
-            ? translatedFrom + ' • ' + formattedDate
-            : formattedDate
-        }
-        contentProps={{
-          align: isMe ? 'end' : 'start',
-        }}
-      />
+      {children}
       <div
         className={cn(
           'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:flex',
@@ -395,7 +386,7 @@ const DesktopWrapper = ({
             : '-right-4 translate-x-full flex-row-reverse',
         )}
       >
-        <DropdownMenu>
+        <DropdownMenu onOpenChange={setIsMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon size="ss" variant="ghost" color="default">
               <MoreVerticalIcon />
@@ -427,6 +418,7 @@ const DesktopWrapper = ({
           open={value}
           onOpenChange={(open) => {
             setValue(open);
+            setIsMenuOpen?.(open);
           }}
         >
           <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
@@ -441,6 +433,7 @@ const DesktopWrapper = ({
             <MessageEmojiPicker
               align={isMe ? 'end' : 'start'}
               onEmojiClick={() => {
+                setIsMenuOpen?.(false);
                 setFalse();
               }}
               messageId={message._id}
@@ -482,8 +475,8 @@ const DisplayMessage = ({
         showReactionBar={false}
         message={message}
         showAvatar={!isMe}
-        actionsDisabled
         discussionDisabled
+        actionsDisabled
         className={cn(
           'relative  max-h-[250px] overflow-hidden',
           value && 'message-blur rounded-b-none',

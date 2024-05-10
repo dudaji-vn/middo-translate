@@ -24,7 +24,7 @@ export const RoomItemTime = forwardRef<HTMLSpanElement, RoomItemTimeProps>(
       <span
         ref={ref}
         {...props}
-        className="ml-auto shrink-0 pl-2 text-sm font-light"
+        className="ml-auto shrink-0 pl-2 text-xs font-light text-neutral-300"
       >
         {time}
       </span>

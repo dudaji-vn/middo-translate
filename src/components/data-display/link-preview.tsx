@@ -56,7 +56,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       }}
       href={previewData?.url}
       target="_blank"
-      className="block w-full max-w-lg rounded-2xl border bg-white p-2 hover:opacity-90"
+      className="block w-full max-w-96 rounded-2xl border bg-white p-2 hover:opacity-90"
     >
       <div className="flex items-center gap-1">
         <div className="size-4 shrink-0">
@@ -78,7 +78,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       {!isImageError && previewData.image && (
         <div
           className={cn(
-            'mt-3 max-w-64 overflow-hidden rounded-lg border md:max-w-none',
+            'mt-3 overflow-hidden rounded-lg border md:max-w-none',
             isImageLoading ? 'hidden' : 'block',
           )}
         >

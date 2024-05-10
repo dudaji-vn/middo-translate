@@ -16,6 +16,7 @@ export const SOCKET_CONFIG = {
         LEAVE: 'message.reply.leave',
         UPDATE: 'message.reply.update',
         REMOVE: 'message.reply.remove',
+        COUNT: 'message.reply.count',
       },
       PIN: 'message.pin',
     },

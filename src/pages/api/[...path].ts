@@ -22,52 +22,55 @@ export default function handler(
 ) {
   return new Promise(async () => {
     const cookies = new Cookies(req, res);
-    let accessToken = cookies.get(ACCESS_TOKEN_NAME) || '';
-    let refreshToken = cookies.get(REFRESH_TOKEN_NAME) || '';
-    let isInvalidAccessToken = false;
-    if (!accessToken) {
-      isInvalidAccessToken = true;
-    } else {
-      const decodedAccessToken = jwtDecode(accessToken);
-      const currentTime = Date.now() / 1000;
-      if (decodedAccessToken.exp! < currentTime) {
+    try {
+      let accessToken = cookies.get(ACCESS_TOKEN_NAME) || '';
+      let refreshToken = cookies.get(REFRESH_TOKEN_NAME) || '';
+      let isInvalidAccessToken = false;
+      if (!accessToken) {
         isInvalidAccessToken = true;
+      } else {
+        const decodedAccessToken = jwtDecode(accessToken);
+        const currentTime = Date.now() / 1000;
+        if (decodedAccessToken.exp! < currentTime) {
+          isInvalidAccessToken = true;
+        }
       }
-    }
-    if (isInvalidAccessToken && refreshToken) {
-      const res = await fetch(`${NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
-      const data:
-        | Tokens
-        | {
-            message: string;
-            statusCode: number;
-          } = await res.json();
-      if ('statusCode' in data) {
-        console.log(data);
+      if (isInvalidAccessToken && refreshToken) {
+        const res = await fetch(`${NEXT_PUBLIC_API_URL}/api/auth/refresh`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${refreshToken}`,
+          },
+        });
+        const data:
+          | Tokens
+          | {
+              statusCode: number;
+              message: string;
+            } = await res.json();
+        if ('statusCode' in data) {
+          throw new Error(data.message);
+        }
+        accessToken = data.accessToken;
+        refreshToken = data.refreshToken;
+        cookies.set(ACCESS_TOKEN_NAME, accessToken, {
+          maxAge: getTokenMaxAge(accessToken),
+        });
+        cookies.set(REFRESH_TOKEN_NAME, refreshToken, {
+          maxAge: getTokenMaxAge(refreshToken),
+        });
+      }
+      if (accessToken) {
+        req.headers.Authorization = `Bearer ${accessToken}`;
+      }
+    } catch (error: any) {
+      if (error.message.includes('not found')) {
         cookies.set(ACCESS_TOKEN_NAME, '', { maxAge: 0 });
         cookies.set(REFRESH_TOKEN_NAME, '', { maxAge: 0 });
-        throw new Error(data.message);
+        return res.status(404).json({ message: 'Not found' });
       }
-      accessToken = data.accessToken;
-      refreshToken = data.refreshToken;
-      cookies.set(ACCESS_TOKEN_NAME, accessToken, {
-        maxAge: getTokenMaxAge(accessToken),
-      });
-      cookies.set(REFRESH_TOKEN_NAME, refreshToken, {
-        maxAge: getTokenMaxAge(refreshToken),
-      });
     }
-
-    if (accessToken) {
-      req.headers.Authorization = `Bearer ${accessToken}`;
-    }
-
     req.headers.cookie = '';
     proxy.web(req, res, {
       target: NEXT_PUBLIC_API_URL,

@@ -11,7 +11,6 @@ import { useDiscussion } from './discussion';
 import { useQuery } from '@tanstack/react-query';
 import { roomApi } from '../../rooms/api';
 import { useTranslation } from 'react-i18next';
-import { Clock9Icon } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useMessageActions } from '../../messages/components/message-actions';
 export const MAX_TIME_DIFF = 5; // 5 minutes
@@ -146,7 +145,7 @@ export const RepliesBox = () => {
             group.lastMessage.type === 'notification' ||
             group.lastMessage.type === 'action';
           return (
-            <div key={group.messages[0]._id}>
+            <div key={group.messages[0]?.clientTempId || group.messages[0]._id}>
               {isShowTimeGroup && (
                 <div className="my-2 flex items-center justify-center">
                   <div className="flex items-center space-x-2">
@@ -169,14 +168,6 @@ export const RepliesBox = () => {
                     <span>{group.lastMessage.sender.name}</span>
                   </div>
                 )}
-                <span
-                  className={cn(
-                    'flex items-center gap-1 text-xs font-light text-neutral-500',
-                  )}
-                >
-                  <Clock9Icon size={10} />{' '}
-                  {formatTimeDisplay(group.lastMessage.createdAt!)}
-                </span>
               </div>
               <div className="flex w-full gap-1">
                 <MessageItemGroup direction="top" className="flex-col">

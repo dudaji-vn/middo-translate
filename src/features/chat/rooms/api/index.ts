@@ -147,6 +147,7 @@ export const roomApi = {
       count: number;
       mediaCount: number;
       fileCount: number;
+      linkCount: number;
     }> = await axios.get(`${basePath}/${roomId}/cloud/count`);
     return res.data;
   },

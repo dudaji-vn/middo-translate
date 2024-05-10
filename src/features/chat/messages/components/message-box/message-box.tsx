@@ -183,7 +183,7 @@ export const MessageBox = ({
             group.lastMessage.type === 'action';
 
           return (
-            <div key={group.lastMessage._id}>
+            <div key={group.lastMessage.clientTempId || group.lastMessage._id}>
               {isShowTimeGroup && (
                 <TimeDisplay time={group.lastMessage.createdAt} />
               )}
@@ -199,14 +199,6 @@ export const MessageBox = ({
                       <span>{group.lastMessage.sender.name}</span>
                     </div>
                   )}
-                  {/* <span
-                    className={cn(
-                      'flex items-center gap-1 text-xs font-light text-neutral-500',
-                    )}
-                  >
-                    <Clock9Icon size={10} />{' '}
-                    {formatTimeDisplay(group.lastMessage.createdAt!)}
-                  </span> */}
                 </div>
               )}
 

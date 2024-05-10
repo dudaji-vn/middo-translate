@@ -18,11 +18,11 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
   const { isMuted } = useIsMutedRoom(_room._id);
   const { onAction } = useRoomActions();
   const [isPinned, setIsPinned] = useState(_room.isPinned);
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   return (
-    <div className="mt-0 flex flex-col items-center gap-1">
+    <div className="mt-0 flex flex-col items-center divide-y-[1px] divide-neutral-50 bg-white">
       <Item
-        className="rounded-b-[4px] truncate"
+        className="truncate"
         leftIcon={<Bell />}
         right={
           <Switch
@@ -40,7 +40,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
         <span> {t('CONVERSATION.NOTIFICATION')}</span>
       </Item>
       <Item
-        className="rounded-t-[4px] truncate"
+        className="truncate"
         leftIcon={<PinIcon />}
         right={
           <Switch
