@@ -36,7 +36,7 @@ import { useTranslation } from 'react-i18next';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof messageVariants> {
+    VariantProps<typeof messageVariants> {
   message: Message;
   readByUsers?: User[];
   spaceAvatar?: string;
@@ -52,6 +52,7 @@ export interface MessageProps
   isDraw?: boolean;
   isSendBySpaceMember?: boolean;
   isEditing?: boolean;
+  isDiscussion?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -94,6 +95,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       isSendBySpaceMember = false,
       isDraw = false,
       isEditing = false,
+      isDiscussion = false,
       ...props
     },
     ref,
@@ -278,6 +280,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
             </div>
             {direction === 'top' && (
               <ReadByUsers
+                isDiscussion={isDiscussion}
                 readByUsers={readByUsers}
                 isMe={isMe}
                 className="mb-2 mt-0"

@@ -174,6 +174,7 @@ export const RepliesBox = () => {
                   {group.messages.map((message) => {
                     return (
                       <MessageItem
+                        isDiscussion
                         isEditing={
                           parent._id === messageEditing?.parent?._id &&
                           message._id === messageEditing?._id &&
