@@ -27,7 +27,7 @@ export default function AccountSettings() {
 
   return (
     <div className="container-height overflow-auto">
-      <div className="mx-auto w-full bg-[#FAFAFA] md:my-8 md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2">
+      <div className="mx-auto w-full bg-[#FCFCFC] md:my-8 md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2">
         <div className="p-10">
           <div className="relative mx-auto h-24 w-24 ">
             <Image
@@ -36,10 +36,10 @@ export default function AccountSettings() {
               alt={user?.name || 'Anonymous'}
               width={500}
               height={500}
-              className="h-full w-full overflow-hidden rounded-full object-cover"
+              className="h-full w-full overflow-hidden rounded-full object-cover border border-neutral-50"
             ></Image>
             {user?.language && (
-              <div className="absolute -bottom-1 -right-1 mt-2 flex items-center justify-center overflow-hidden rounded-full border-4 border-white">
+              <div className="absolute -bottom-1 -right-1 mt-2 flex items-center justify-center overflow-hidden rounded-full border-4 border-[#FCFCFC]">
                 <CircleFlag
                   countryCode={
                     LANGUAGE_CODES_MAP[
