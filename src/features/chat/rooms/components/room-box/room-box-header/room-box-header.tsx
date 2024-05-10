@@ -44,7 +44,13 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   }, [toggleTab]);
 
   if (participants.length === 0) participants.push(currentUser); // if no participants, is a self chat
-  const isOnline = participants.some((user) => onlineList.includes(user._id));
+  const isOnline = useMemo(() => {
+    if (isBusiness) {
+      const visitor = participants.find((user) => user.status === 'anonymous');
+      return visitor && onlineList.includes(visitor._id);
+    }
+    return participants.some((user) => onlineList.includes(user._id));
+  }, []);
 
   return (
     <div
@@ -79,7 +85,10 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">
         {allowCall && <VideoCall />}
-        {room.isGroup && <RoomAddMember />}
+        {room.isGroup && <Tooltip
+          title={t('TOOL_TIP.ADD_MEMBER') }
+          triggerItem={ <RoomAddMember /> }
+        />}
         <Tooltip title={t('TOOL_TIP.INFO')} triggerItem={<ActionBar />} />
       </div>
     </div>

@@ -35,41 +35,42 @@ const StarRating = ({
     setStar(star);
     setHoverStar(0);
   };
-
-  const onEndConversation = async () => {
+  const clearVisitorData = () => {
     localStorage.removeItem(LSK_VISITOR_ID);
     localStorage.removeItem(LSK_VISITOR_ROOM_ID);
+  };
+
+  const onEndConversation = async () => {
+    setLoading(true);
+    clearVisitorData();
     try {
-      endConversation({
+      await endConversation({
         roomId: String(params?.roomId),
         senderId: String(params?.userId),
       });
-      if (!done) {
-        router.push(
-          `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`,
-        );
-      }
     } catch (e) {
-      console.log('err', e);
+      console.error('error on end conversation', e);
     }
+    setLoading(false);
+    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}?originReferer=${fromDomain}`);
   };
 
   const submitRating = async () => {
+    setLoading(true);
+    clearVisitorData();
     try {
-      setLoading(true);
       await onRate(star);
-      setDone(true);
+      await endConversation({
+        roomId: String(params?.roomId),
+        senderId: String(params?.userId),
+      });
+      // setDone(true);
     } catch (e) {
-      console.log('err', e);
+      console.log('error on rate', e);
     }
-    onEndConversation();
+    router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}?originReferer=${fromDomain}`);
     setLoading(false);
   };
-
-  useEffect(() => {
-    if (done && !extensionData)
-      router.push(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}`);
-  }, [done, extensionData, params?.businessId, router]);
 
   if (!isMounted) return null;
 
@@ -79,7 +80,7 @@ const StarRating = ({
         <StartAConversation
           fromDomain={fromDomain}
           extensionData={extensionData}
-          isAfterDoneAnCOnversation
+          isAfterDoneAConversation
         />
       )}
       <form

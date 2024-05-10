@@ -74,12 +74,11 @@ const AddingDomainsStep = () => {
 
       <div className="flex w-full flex-col p-4">
         {domains?.length > 0 && (
-          <Typography
-            variant="h5"
+          <p
             className="inline-block text-[1rem] font-semibold text-neutral-800"
           >
             Added domains
-          </Typography>
+          </p>
         )}
         <Typography
           className={
@@ -102,7 +101,7 @@ const AddingDomainsStep = () => {
                 'flex w-full flex-row items-center justify-between gap-4 border-b border-neutral-50 py-3 last:border-b-0',
               )}
             >
-              <Typography className="text-[1rem] font-normal text-neutral-600">
+              <Typography className="text-[1rem] font-normal text-neutral-600 line-clamp-1 max-w-full truncate text-ellipsis">
                 {domain}
               </Typography>
               <Button

@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Drawer, DrawerContent } from '@/components/data-display/drawer';
 import {
   Popover,
@@ -44,7 +43,7 @@ export interface MessageItemWrapperProps {
   message: Message;
   setActive: (active: boolean) => void;
   discussionDisabled?: boolean;
-  disabledAllActions?: boolean;
+  actionsDisabled?: boolean;
   showTime?: boolean;
   showDetail?: boolean;
   hideDetail?: () => void;
@@ -52,8 +51,58 @@ export interface MessageItemWrapperProps {
   setIsMenuOpen?: (isOpen: boolean) => void;
 }
 
+const MessageDetail = ({
+  isMe,
+  message,
+  translatedFrom,
+  showTime,
+  showDetail,
+}: {
+  isMe: boolean;
+  translatedFrom: string;
+  showTime?: boolean;
+  message: Message;
+  showDetail?: boolean;
+}) => {
+  return (
+    <AnimatePresence>
+      {showDetail && (
+        <motion.div
+          layout
+          initial={{
+            opacity: 0,
+            height: 0,
+          }}
+          animate={{
+            opacity: 1,
+            height: 'auto',
+          }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.1 }}
+          className={cn(
+            'my-1 flex items-center gap-1 text-xs text-neutral-500',
+            isMe ? 'justify-end' : 'justify-start',
+          )}
+        >
+          {translatedFrom && (
+            <span className="font-light">{translatedFrom}</span>
+          )}
+          {!showTime && translatedFrom && <span> • </span>}
+          {!showTime && (
+            <>
+              <span className={cn(' flex items-center gap-1 font-light ')}>
+                {formatTimeDisplay(message.createdAt!)}
+              </span>
+            </>
+          )}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export const MessageItemWrapper = ({
-  disabledAllActions,
+  actionsDisabled,
   showDetail,
   hideDetail,
   toggleDetail,
@@ -68,7 +117,13 @@ export const MessageItemWrapper = ({
     languageCode: message.language,
   });
 
-  useOnClickOutside(ref, hideDetail || (() => {}));
+  useOnClickOutside(
+    ref,
+    (() => {
+      if (isMenuOpen) return;
+      hideDetail?.();
+    }) || (() => {}),
+  );
 
   const { onAction } = useMessageActions();
 
@@ -134,8 +189,26 @@ export const MessageItemWrapper = ({
     }
   }, [showDetail]);
 
-  if (disabledAllActions) {
-    return <div className="relative">{props.children}</div>;
+  if (actionsDisabled) {
+    return (
+      <div
+        className="relative h-fit cursor-pointer transition-all duration-300"
+        onClick={() => {
+          !isMenuOpen && toggleDetail?.();
+        }}
+      >
+        {props.children}
+        {message.status !== 'removed' && (
+          <MessageDetail
+            isMe={isMe}
+            message={message}
+            showTime={showTime}
+            showDetail={showDetail}
+            translatedFrom={translatedFrom}
+          />
+        )}
+      </div>
+    );
   }
 
   return (
@@ -157,39 +230,13 @@ export const MessageItemWrapper = ({
         {props.children}
       </Wrapper>
       {message.status !== 'removed' && (
-        <AnimatePresence>
-          {showDetail && (
-            <motion.div
-              layout
-              initial={{
-                opacity: 0,
-                height: 0,
-              }}
-              animate={{
-                opacity: 1,
-                height: 'auto',
-              }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.1 }}
-              className={cn(
-                'my-1 flex items-center gap-1 text-xs text-neutral-500',
-                isMe ? 'justify-end' : 'justify-start',
-              )}
-            >
-              {translatedFrom && (
-                <span className="font-light">{translatedFrom}</span>
-              )}
-              {!showTime && translatedFrom && <span> • </span>}
-              {!showTime && (
-                <>
-                  <span className={cn(' flex items-center gap-1 font-light ')}>
-                    {formatTimeDisplay(message.createdAt!)}
-                  </span>
-                </>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <MessageDetail
+          isMe={isMe}
+          message={message}
+          showTime={showTime}
+          showDetail={showDetail}
+          translatedFrom={translatedFrom}
+        />
       )}
     </div>
   );
@@ -206,7 +253,6 @@ const MobileWrapper = ({
   isMe,
   message,
   setActive,
-  hideDetail,
   setIsMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { value, setValue, setFalse } = useBoolean(false);
@@ -325,26 +371,13 @@ const DesktopWrapper = ({
   children,
   isMe,
   message,
+  setIsMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
   const { t } = useTranslation('common');
-  const formattedDate = moment(message.createdAt).format('lll');
-  const translatedFrom = useTranslatedFromText({
-    languageCode: message.language,
-  });
   return (
     <>
-      <Tooltip
-        triggerItem={children}
-        title={
-          translatedFrom
-            ? translatedFrom + ' • ' + formattedDate
-            : formattedDate
-        }
-        contentProps={{
-          align: isMe ? 'end' : 'start',
-        }}
-      />
+      {children}
       <div
         className={cn(
           'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:flex',
@@ -353,7 +386,7 @@ const DesktopWrapper = ({
             : '-right-4 translate-x-full flex-row-reverse',
         )}
       >
-        <DropdownMenu>
+        <DropdownMenu onOpenChange={setIsMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon size="ss" variant="ghost" color="default">
               <MoreVerticalIcon />
@@ -385,6 +418,7 @@ const DesktopWrapper = ({
           open={value}
           onOpenChange={(open) => {
             setValue(open);
+            setIsMenuOpen?.(open);
           }}
         >
           <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
@@ -399,6 +433,7 @@ const DesktopWrapper = ({
             <MessageEmojiPicker
               align={isMe ? 'end' : 'start'}
               onEmojiClick={() => {
+                setIsMenuOpen?.(false);
                 setFalse();
               }}
               messageId={message._id}
@@ -440,8 +475,8 @@ const DisplayMessage = ({
         showReactionBar={false}
         message={message}
         showAvatar={!isMe}
-        disabledAllActions
         discussionDisabled
+        actionsDisabled
         className={cn(
           'relative  max-h-[250px] overflow-hidden',
           value && 'message-blur rounded-b-none',

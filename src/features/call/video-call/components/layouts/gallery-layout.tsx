@@ -6,16 +6,17 @@ import DoodleItem from '../doodle/doodle-item';
 import VideoItem from '../video/video-item';
 import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
-import { UserPlus, UserPlus2 } from 'lucide-react';
+import { UserPlus2 } from 'lucide-react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
+import useGetMemberInRoom from '@/features/call/hooks/use-get-member-in-room';
 
 const GalleryLayout = () => {
   const isMobile = useAppStore(state => state.isMobile);
   const participants = useParticipantVideoCallStore(state => state.participants);
   const isDoodle = useVideoCallStore(state => state.isDoodle);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-
+  const room = useVideoCallStore(state => state.room);
   const numberItem = useMemo(() => participants.length + (isDoodle ? 1 : 0), [isDoodle, participants.length]);
   const [numColumn, numRow] = useMemo(()=>{
     if(isMobile) {
@@ -53,33 +54,38 @@ const GalleryLayout = () => {
         return [4, Math.ceil(numberItem / 4)];
     }
   }, [isMobile, numberItem])
+  const numberParticipant = useMemo(() => {
+    const members = participants.filter((p: ParticipantInVideoCall) => !p.isShareScreen);
+    return members.length;
+  }, [participants]);
 
+  const { members } = useGetMemberInRoom({roomId: room.roomId});
 
   const renderLayout = () => {
     // CASE NOT FULL SCREEN
     if(!isFullScreen) {
+
       return <div className='grid grid-cols-4'>
         {isDoodle && <DoodleItem />}
         {participants.map(
           (participant: ParticipantInVideoCall, index: number) => {
+            const key = participant.user._id + participant.isShareScreen;
             if(index == (isDoodle ? 5 : 6) && numberItem > 7) {
               const remain = numberItem - 7;
-              const key = participant.user._id + participant.isShareScreen;
               return <div key={key} className='h-full w-full relative'>
                 <VideoItem isGalleryView participant={participant} />
                 <ItemNumber numberItem={remain} />
               </div>
             }
-            if(index > (isDoodle ? 5 : 6) && numberItem > 7) return null;
-            const key = participant.user._id + participant.isShareScreen;
+            const isHidden = index > (isDoodle ? 5 : 6) && numberItem > 7;
             return ( <div
               key={key}
-              className='h-full w-full'>
+              className={cn('h-full w-full', isHidden ? 'hidden' : '')}>
               <VideoItem isGalleryView participant={participant} />
             </div>
           )},
         )}
-        <AddUserItem />
+        {members.length > 2 && (members.length > numberParticipant) && <AddUserItem />}
       </div>
     }
     let result = []
@@ -115,7 +121,7 @@ const GalleryLayout = () => {
 
 
   if(participants.length === 0) return <Fragment></Fragment>
-  // console.log('🔴GalleryLayout')
+
   return (
     <div className="h-full w-full overflow-auto md:overflow-hidden">
       <div

@@ -6,11 +6,15 @@ import StartAConversation from './[...slugs]/_components/start-conversation/star
 
 const HelpDeskStartConversationPage = async ({
   params: { slugs, businessId },
+  searchParams: { originReferer },
   ...props
 }: {
   params: {
     businessId: string;
     slugs: string[];
+  };
+  searchParams: {
+    originReferer: string;
   };
 }) => {
   const extensionData = await businessAPI.getExtensionByBusinessId(businessId);
@@ -24,14 +28,19 @@ const HelpDeskStartConversationPage = async ({
     refer: referer,
     allowedDomains: extensionData.domains,
   });
+  const isRedirectedFromRatePage =
+    referer?.startsWith(
+      `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
+    ) && originReferer;
 
-  if (!allowedDomain) {
-    notFound();
+  if (!allowedDomain && !isRedirectedFromRatePage) {
+    // notFound();
   }
   return (
     <StartAConversation
+      visitorData={headersList}
       extensionData={extensionData}
-      fromDomain={allowedDomain}
+      fromDomain={isRedirectedFromRatePage ? originReferer : allowedDomain}
     />
   );
 };

@@ -8,7 +8,7 @@ import { CheckIcon } from 'lucide-react';
 const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & {
-    label?: string;
+    label?: string | React.ReactNode;
   }
 >(({ className, label, ...props }, ref) => {
   const id = React.useId();
@@ -30,10 +30,13 @@ const Checkbox = React.forwardRef<
           <CheckIcon className="h-3 w-3 text-white" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
-      {label && (
+      {label && typeof label === 'string' && (
         <label htmlFor={checkId} className="ml-2 text-sm text-neutral-600">
           {label}
         </label>
+      )}
+      {label && typeof label !== 'string' && (
+        <div className="ml-2 ">{label}</div>
       )}
     </div>
   );

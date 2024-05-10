@@ -119,11 +119,6 @@ export const ItemAvatar = ({
           <div className="h-full w-full rounded-full bg-success"></div>
         </div>
       )}
-      {isMuted && (
-        <div className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-error-100 ">
-          <BellOffIcon width={12} height={12} className="text-error" />
-        </div>
-      )}
     </div>
   );
 };

@@ -2,6 +2,7 @@
 
 import { Spinner } from '@/components/feedback';
 import useProtectedRoute from '@/hooks/use-protected-route';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 
 export default function ProtectedLayout({
@@ -14,8 +15,8 @@ export default function ProtectedLayout({
   const router = useRouter();
   if (!isLoaded || !user)
     return (
-      <div className="mt-2 flex items-center justify-center">
-        <Spinner />
+      <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center">
+        <Image src='/loading-middo.gif' alt="Loading" width={100} height={100} />
       </div>
     );
 

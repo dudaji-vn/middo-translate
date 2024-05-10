@@ -1,80 +1,82 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/data-display/accordion';
-import { ChevronDown, File, ImageIcon, Package2 } from 'lucide-react';
+import { File, ImageIcon, LinkIcon } from 'lucide-react';
 
-import { Button } from '@/components/actions';
+import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { roomApi } from '../../api';
 import { Room } from '../../types';
 import { RoomFiles } from './room-files';
 import { RoomMedia } from './room-media';
-import { roomApi } from '../../api';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export interface RoomCloudProps {
   room: Room;
 }
 
-const ComponentMap: Record<'media' | 'file', JSX.Element> = {
+type TabType = 'media' | 'file' | 'link';
+
+const ComponentMap: Record<TabType, JSX.Element> = {
   media: <RoomMedia />,
   file: <RoomFiles />,
+  link: <div>Coming soon</div>,
 };
-
+const tabs: {
+  label: string;
+  value: TabType;
+  icon: JSX.Element;
+}[] = [
+  {
+    label: 'CONVERSATION.MEDIA',
+    value: 'media',
+    icon: <ImageIcon className="h-4 w-4" />,
+  },
+  {
+    label: 'CONVERSATION.FILE',
+    value: 'file',
+    icon: <File className="h-4 w-4" />,
+  },
+  {
+    label: 'CONVERSATION.LINK',
+    value: 'link',
+    icon: <LinkIcon className="h-4 w-4" />,
+  },
+];
 export const RoomCloud = ({ room }: RoomCloudProps) => {
-  const [currentTab, setCurrentTab] = useState<'media' | 'file'>('media');
+  const [currentTab, setCurrentTab] = useState<TabType>('media');
   const { data } = useQuery({
     queryKey: ['cloud-count'],
     queryFn: () => roomApi.getCloudCount(room._id),
   });
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
+  const counts = useMemo(() => {
+    return {
+      media: data?.mediaCount || 0,
+      file: data?.fileCount || 0,
+      link: data?.linkCount || 0,
+    };
+  }, [data]);
   return (
-    <Accordion type="single" collapsible className="mt-8">
-      <AccordionItem value="item-1">
-        <AccordionTrigger
-          className="p-3"
-          icon={
-            <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200" />
-          }
-        >
-          <div className="flex items-center gap-2">
-            <Package2 width={16} height={16} /> <span className='truncate'>{t('CONVERSATION.CLOUD_SHARED')}</span>
-            <span className="text-sm text-neutral-600">
-              ({data?.count || 0})
-            </span>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="border-t">
-          <div className="mt-3 flex w-full gap-2">
-            <Button
-              onClick={() => setCurrentTab('media')}
-              startIcon={<ImageIcon className="h-4 w-4" />}
-              size="xs"
-              shape="square"
-              variant={currentTab === 'media' ? 'default' : 'ghost'}
-              color={currentTab === 'media' ? 'secondary' : 'default'}
-              className="truncate"
+    <div className="mt-5 bg-white p-3">
+      <Tabs defaultValue="all" value={currentTab} className="w-full">
+        <TabsList className="overflow-x-auto">
+          {tabs.map((tab) => (
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              onClick={() => setCurrentTab(tab.value)}
+              className="!rounded-none"
             >
-              {t('CONVERSATION.MEDIA')} ({data?.mediaCount || 0})
-            </Button>
-            <Button
-              onClick={() => setCurrentTab('file')}
-              startIcon={<File className="h-4 w-4" />}
-              size="xs"
-              shape="square"
-              variant={currentTab === 'file' ? 'default' : 'ghost'}
-              color={currentTab === 'file' ? 'secondary' : 'default'}
-              className="truncate"
-            >
-              {t('CONVERSATION.FILE')} ({data?.fileCount || 0})
-            </Button>
-          </div>
-          <div className="mt-3">{ComponentMap[currentTab]}</div>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+              <div className="mr-2">{tab.icon}</div>
+              {t(tab.label)}
+              &nbsp;
+              <span className="text-sm text-neutral-600">
+                ({counts[tab.value]})
+              </span>
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      <div className="mt-3">{ComponentMap[currentTab]}</div>
+    </div>
   );
 };

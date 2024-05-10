@@ -15,6 +15,8 @@ import { useDisplayContent } from '../../messages/hooks/use-display-content';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../stores';
 import { useAuthStore } from '@/stores/auth.store';
+import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
+import { useBoolean } from 'usehooks-ts';
 
 export interface MainMessageProps {
   message: Message;
@@ -24,8 +26,17 @@ export interface MainMessageProps {
 export const MainMessage = ({ message, className }: MainMessageProps) => {
   const sender = message.sender;
 
+  const { toggle: toggleClick, value } = useBoolean(false);
+
+  const translatedFrom = useTranslatedFromText({
+    languageCode: message.language,
+  });
+
   return (
-    <div className={cn('flex flex-col', className)}>
+    <div
+      onClick={toggleClick}
+      className={cn('flex cursor-pointer flex-col', className)}
+    >
       <div className="flex items-center gap-2">
         <Avatar size="xs" src={sender.avatar} alt={sender.name} />
         <span className="max-w-80 break-words text-sm font-semibold">
@@ -33,7 +44,7 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
         </span>
       </div>
       <div className="ml-2 mt-1">
-        {message.content && <TextMessage message={message} />}
+        {message.content && <TextMessage isActive={value} message={message} />}
         {message?.media && message.media.length > 0 && (
           <div className="ml-6">
             {message.media[0].type === 'image' && (
@@ -52,22 +63,33 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
         {message?.call && <CallMessage message={message} />}
       </div>
 
-      <span className="mt-2 flex items-center pl-8 pr-3 text-xs text-neutral-300">
-        <Clock9Icon className="mr-1 inline-block size-3" />
-        {moment(message.createdAt).format('lll')}
-      </span>
+      <div className="mt-2 flex flex-wrap items-center gap-2 pl-8 text-xs text-neutral-300">
+        {translatedFrom && (
+          <span className="whitespace-nowrap">{translatedFrom}</span>
+        )}
+        <span className="flex items-center whitespace-nowrap text-xs">
+          <Clock9Icon className="mr-1 inline-block size-3" />
+          {moment(message.createdAt).format('lll')}
+        </span>
+      </div>
     </div>
   );
 };
 
-const TextMessage = ({ message }: { message: Message }) => {
+const TextMessage = ({
+  message,
+  isActive,
+}: {
+  message: Message;
+  isActive: boolean;
+}) => {
   const enContent = message.translations?.en;
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
   );
   const userLanguage = useAuthStore((state) => state.user?.language);
 
-  const { contentDisplay, isUseOriginal, translatedFrom } = useDisplayContent({
+  const { contentDisplay, isUseOriginal } = useDisplayContent({
     message,
     userLanguage,
   });
@@ -80,27 +102,24 @@ const TextMessage = ({ message }: { message: Message }) => {
         mentionClassName="left"
         content={contentDisplay}
       />
-      {enContent && message.status !== 'removed' && showMiddleTranslation && (
-        <div className="relative mt-2">
-          <TriangleSmall
-            fill="#f2f2f2"
-            position="top"
-            className="absolute left-4 top-0 -translate-y-full"
-          />
-          <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
-            <RichTextView
-              editorStyle="text-base md:text-sm translated"
-              mentionClassName="left"
-              content={enContent}
+      {enContent &&
+        message.status !== 'removed' &&
+        (showMiddleTranslation || isActive) && (
+          <div className="relative mt-2">
+            <TriangleSmall
+              fill="#f2f2f2"
+              position="top"
+              className="absolute left-4 top-0 -translate-y-full"
             />
+            <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
+              <RichTextView
+                editorStyle="text-base md:text-sm translated"
+                mentionClassName="left"
+                content={enContent}
+              />
+            </div>
           </div>
-        </div>
-      )}
-      {translatedFrom && (
-        <span className="mt-2 flex items-center pr-3 text-xs text-neutral-300">
-          {translatedFrom}
-        </span>
-      )}
+        )}
     </div>
   );
 };

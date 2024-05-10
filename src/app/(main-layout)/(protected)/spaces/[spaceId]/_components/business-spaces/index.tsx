@@ -22,6 +22,7 @@ import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Member } from '../spaces-crud/sections/members-columns';
 import SpacesNotifications from './business-notifications/spaces-notifications';
+import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
@@ -47,6 +48,8 @@ export type TSpace = BaseEntity & {
   owner: User;
   tag?: TSpaceTag;
   tags: TConversationTag[];
+  extension?: TBusinessExtensionData;
+  countries?: string[];
   bot?: string;
 };
 const tabItems: BusinessTabItem[] = [

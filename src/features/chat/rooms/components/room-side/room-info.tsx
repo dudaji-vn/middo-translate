@@ -45,12 +45,12 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
       language,
       anonymousUser,
     };
-  }, [_room, user?._id, user?.language]);
+  }, [_room, isGuest, user?._id, user?.language]);
   const [loading, setLoading] = useState(false);
 
   return (
     <>
-      <div className="flex flex-col items-center">
+      <div className="mt-2 flex flex-col items-center">
         <div className="relative">
           <RoomAvatar room={room} size={96} />
           {loading && (

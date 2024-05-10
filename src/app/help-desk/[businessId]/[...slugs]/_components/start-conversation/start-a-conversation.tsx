@@ -7,13 +7,18 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/navigation';
 import { Form } from '@/components/ui/form';
+import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { createGuestInfoSchema } from '@/configs/yup-form';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { messageApi } from '@/features/chat/messages/api';
 import { Room } from '@/features/chat/rooms/types';
 import useClient from '@/hooks/use-client';
 import { startAGuestConversation } from '@/services/extension.service';
-import { LSK_VISITOR_ID, LSK_VISITOR_ROOM_ID } from '@/types/business.type';
+import {
+  LSK_VISITOR_DATA,
+  LSK_VISITOR_ID,
+  LSK_VISITOR_ROOM_ID,
+} from '@/types/business.type';
 import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -39,12 +44,14 @@ export type TStartAConversation = {
 
 const StartAConversation = ({
   extensionData,
-  isAfterDoneAnCOnversation,
+  isAfterDoneAConversation,
   fromDomain,
+  visitorData,
 }: {
-  isAfterDoneAnCOnversation?: boolean;
-  fromDomain: string;
+  isAfterDoneAConversation?: boolean;
+  fromDomain?: string;
   extensionData: TBusinessExtensionData;
+  visitorData?: any;
 }) => {
   const router = useRouter();
   const isClient = useClient();
@@ -104,12 +111,22 @@ const StartAConversation = ({
       clientTempId: new Date().toISOString(),
     });
   };
+  const addDetectVisitorLanguage = () => {
+    // const visitorCountry = visitorData;
+    const browserLanguage = navigator.language;
+    let language = SUPPORTED_LANGUAGES.find((item) =>
+      browserLanguage.includes(item.code),
+    );
+    if (language?.code) setValue('language', language.code);
+  };
   useEffect(() => {
     const visitorId = localStorage.getItem(LSK_VISITOR_ID);
     const visitorRoomId = localStorage.getItem(LSK_VISITOR_ROOM_ID);
+    localStorage.setItem(LSK_VISITOR_DATA, JSON.stringify(visitorData));
+    addDetectVisitorLanguage();
     if (visitorId && visitorRoomId) {
       router.push(
-        `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}`,
+        `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}&originReferer=${fromDomain}`,
       );
     }
   }, []);
@@ -129,7 +146,7 @@ const StartAConversation = ({
         localStorage.setItem(LSK_VISITOR_ID, user._id);
         await appendFirstMessageFromChatFlow(roomId);
         router.push(
-          `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}`,
+          `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}&originReferer=${fromDomain}`,
         );
       });
     } catch (error) {
@@ -140,12 +157,10 @@ const StartAConversation = ({
     <div
       className={cn(
         'flex h-full w-full flex-col justify-between px-4 py-3',
-        isAfterDoneAnCOnversation
-          ? 'my-auto max-h-60'
-          : 'container-height pb-5',
+        isAfterDoneAConversation ? 'my-auto max-h-60' : 'container-height pb-5',
       )}
     >
-      {isAfterDoneAnCOnversation ? (
+      {isAfterDoneAConversation ? (
         <div className="m-auto flex max-w-screen-md flex-col items-center gap-4 px-4">
           <Typography variant={'h4'} className="text-lg">
             Thank you!
@@ -207,6 +222,7 @@ const StartAConversation = ({
                 className="mt-5 rounded-md"
                 field="language"
                 setValue={setValue}
+                defaultValue={watch('language')}
                 errors={errors.language}
                 trigger={trigger}
                 labelProps={{ className: 'ml-0 mb-2' }}
@@ -237,7 +253,7 @@ const StartAConversation = ({
             disabled={isSubmitting}
             loading={isSubmitting}
           >
-            {isAfterDoneAnCOnversation
+            {isAfterDoneAConversation
               ? 'Click to start a new conversation!'
               : 'Click to start a conversation'}
           </Button>

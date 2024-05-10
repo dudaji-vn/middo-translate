@@ -27,6 +27,7 @@ export default function useHandleCallStatus() {
         });
     }, [isTurnOnMic, room, user?._id, participants?.length])
 
+
     // Listen to Mic change
     useEffect(() => {
         if(!room) return;

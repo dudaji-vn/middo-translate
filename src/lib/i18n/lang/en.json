@@ -286,6 +286,7 @@
     "CLOUD_SHARED": "Media & Files",
     "MEDIA": "Media",
     "FILE": "File",
+    "LINK": "Link",
     "LEAVE_GROUP": "Leave group",
     "DELETE": "Delete conversation",
     "START": "Start conversation",
@@ -331,7 +332,7 @@
     "PINNED_A_MESSAGE": "{{name}} pinned a message",
     "UNPINNED_A_MESSAGE": "{{name}} unpinned a message",
     "CREATED_GROUP": "{{name}} created a group",
-    "LEFT_HELP_DESK": "{{name}} end this conversation",
+    "LEFT_HELP_DESK": "{{name}} end the conversation",
     "LEFT_GROUP": "{{name}} left the group",
     "CHANGED_GROUP_NAME": "{{name}} changed the group name to {{newName}}",
     "CHANGED_GROUP_AVATAR": "{{name}} changed the group avatar",
@@ -363,6 +364,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "New Conversation",
+    "FILTER": "Filter",
     "SETTINGS": "Settings",
     "START_CALL": "Start Call",
     "LEAVE_CALL": "Leave Call",
@@ -472,6 +474,16 @@
       "VIDEO": "Camera",
       "SPEAKER": "Speaker",
       "NO_DEVICE": "No device"
+    }
+  },
+  "FILTERS": {
+    "DOMAINS": "Domains",
+    "COUNTRIES": "Countries",
+    "TAGS": "Tags",
+    "BUTTONS": {
+      "DESELECT_ALL": "Deselect all",
+      "SELECT_ALL": "Select all",
+      "FILTER": "Filter"
     }
   },
   "SHORTCUT": {

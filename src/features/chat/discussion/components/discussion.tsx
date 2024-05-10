@@ -1,16 +1,16 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { createContext, useContext, useEffect, useId, useRef } from 'react';
-import { messageApi } from '../../messages/api';
-import { DiscussionForm } from './discussion-form';
-import { DiscussionSocket } from './discussion-socket';
-import { MainMessage } from './main-message';
-import { RepliesBox } from './replies-box';
-import { Message } from '../../messages/types';
-import { MessageActions } from '../../messages/components/message-actions';
 import {
   MediaUploadDropzone,
   MediaUploadProvider,
 } from '@/components/media-upload';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { createContext, useContext, useId, useRef } from 'react';
+import { messageApi } from '../../messages/api';
+import { MessageActions } from '../../messages/components/message-actions';
+import { Message } from '../../messages/types';
+import { DiscussionForm } from './discussion-form';
+import { DiscussionSocket } from './discussion-socket';
+import { MainMessage } from './main-message';
+import { RepliesBox } from './replies-box';
 
 type Props = {
   messageId: string;
@@ -83,15 +83,6 @@ const Discussion = ({ messageId }: Props) => {
       ),
     );
   };
-
-  useEffect(
-    () => {
-      if (messageBoxRef.current) {
-        messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
-      }
-    } /* eslint-disable-next-line react-hooks/exhaustive-deps */,
-    [messages],
-  );
   if (!data) return null;
   return (
     <MediaUploadProvider>

@@ -1,17 +1,17 @@
 import { Button } from '@/components/actions';
-import Image from 'next/image';
-import { Media } from '@/types';
 import { Message } from '@/features/chat/messages/types';
-import { RoomStatus } from '../../types';
-import { roomApi } from '../../api';
-import { useChatBox } from '../../contexts';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
-import { use, useEffect, useMemo, useState } from 'react';
+import { Media } from '@/types';
+import Image from 'next/image';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Lightbox from "yet-another-react-lightbox";
+import Lightbox from 'yet-another-react-lightbox';
 import Download from 'yet-another-react-lightbox/plugins/download';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import { roomApi } from '../../api';
+import { useChatBox } from '../../contexts';
+import { useAppStore } from '@/stores/app.store';
 
 export interface RoomMediaProps {}
 
@@ -19,7 +19,7 @@ export const RoomMedia = () => {
   const { room } = useChatBox();
   const roomId = room._id;
   const roomStatus = room.status;
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const { items, hasNextPage, fetchNextPage } =
     useCursorPaginationQuery<Message>({
       queryKey: ['media', roomId],
@@ -44,21 +44,25 @@ export const RoomMedia = () => {
   }, [items]);
 
   const [index, setIndex] = useState<number | undefined>(undefined);
-  const slides = useMemo(() => media.map((img) => ({
-    src: img.url,
-    title: img.name,
-    width: 1000,
-    height: 1000,
-  })), [media]);
+  const slides = useMemo(
+    () =>
+      media.map((img) => ({
+        src: img.url,
+        title: img.name,
+        width: 1000,
+        height: 1000,
+      })),
+    [media],
+  );
 
   return (
     <>
-      <div className=" my-2 grid w-full grid-cols-4 flex-wrap gap-1">
+      <div className="mb-3 grid w-full grid-cols-4 flex-wrap gap-1">
         {media.map((media, index) => (
           <div
             key={media.url}
-            onClick={()=>setIndex(index)}
-            className="relative aspect-square overflow-hidden rounded-[4px] border border-neutral-50 cursor-pointer"
+            onClick={() => setIndex(index)}
+            className="relative aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"
           >
             <Image
               src={media.url}
@@ -78,9 +82,9 @@ export const RoomMedia = () => {
           finite: false,
         }}
         on={{
-          view: ({index}) => {
+          view: ({ index }) => {
             setIndex(index);
-            if(index >= media.length - 1) {
+            if (index >= media.length - 1) {
               fetchNextPage();
             }
           },
@@ -93,10 +97,10 @@ export const RoomMedia = () => {
           onClick={() => fetchNextPage()}
           shape="square"
           color="default"
-          size="lg"
+          size="md"
           className="w-full"
         >
-          <span className="text-primary-500-main">{t('COMMON.SHOW_MORE')}</span>
+          {t('COMMON.SHOW_MORE')}
         </Button>
       )}
     </>

@@ -47,12 +47,12 @@ export const Inbox = (props: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
   const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
   const [type, setType] = useState<InboxType>(tabs[0].value);
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   useKeyboardShortcut(
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
-    (_, mathedKeys) => {
+    (_, matchedKeys) => {
       setType(
-        isEqual(mathedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB) ? tabs[0].value : tabs[1].value,
+        isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB) ? tabs[0].value : tabs[1].value,
       );
     },
   );

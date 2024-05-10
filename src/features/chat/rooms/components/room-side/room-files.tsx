@@ -16,7 +16,7 @@ export const RoomFiles = () => {
   const { room } = useChatBox();
   const roomId = room._id;
   const roomStatus = room.status;
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const { items, hasNextPage, fetchNextPage } =
     useCursorPaginationQuery<Message>({
       queryKey: ['files', roomId],
@@ -56,7 +56,10 @@ export const RoomFiles = () => {
               <File className="h-5 w-5 text-primary" />
             </div>
             <div className="flex flex-col">
-              <span className="text-base font-semibold" title={file.name}>
+              <span
+                className="line-clamp-1 text-base font-semibold"
+                title={file.name}
+              >
                 {file.name}
               </span>
               <span className={cn('text-xs')}>

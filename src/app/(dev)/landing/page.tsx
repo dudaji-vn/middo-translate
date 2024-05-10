@@ -17,6 +17,7 @@ const WINDOW_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-a
 const MAC_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.dmg';
 export default function Landing() {
   const [isScrollDown, setScrollDown] = useState(false);
+  const [system, setSystem] = useState<'mac' | 'window' | 'linux' | 'ios' | 'android' | ''>('');
   const isMobile = useAppStore((state) => state.isMobile);
   const videoRef = useRef<any>();
   const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
@@ -54,14 +55,23 @@ export default function Landing() {
   
 
   const downloadApp = () => {
-    const userAgent = window.navigator.userAgent;
-    const isMacOS = userAgent.includes('Mac OS')
-    if (isMacOS) {
+    if (system === 'mac') {
       window.open(MAC_DOWNLOAD_URL, '_blank');
     } else {
       window.open(WINDOW_DOWNLOAD_URL, '_blank');
     }
   };
+
+  useEffect(() => {
+    const userAgent = window.navigator.userAgent;
+    const isMacOS = userAgent.includes('Mac OS')
+    if (isMacOS) {
+      setSystem('mac');
+    } else {
+      setSystem('window');
+    }
+  }, []);
+
 
   return (
     <div className="relative overflow-x-hidden">
@@ -137,7 +147,11 @@ export default function Landing() {
               onClick={downloadApp}
             >
               Download App
-              <ArrowRightFromLine className="ml-2" />
+              {system === 'mac' ? <div className='ml-2 relative bottom-[2px]'>
+                <Image  src="/landing-page/apple.svg" width="20" height="20" alt='Apple' />
+              </div> : <div className='ml-2'>
+                <Image  src="/landing-page/window.svg" width="20" height="20" alt='Window' />
+              </div>}
             </Button>}
         </div>
       </div>

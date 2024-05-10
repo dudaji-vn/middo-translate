@@ -4,7 +4,7 @@ import {
   RoomItemActionWrapperDisabled,
 } from './room-item-action-wrapper';
 
-import { Avatar, Typography } from '@/components/data-display';
+import { Typography } from '@/components/data-display';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
@@ -12,7 +12,7 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { User } from '@/features/users/types';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { Globe, PinIcon } from 'lucide-react';
+import { BellOffIcon, Globe, PinIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
@@ -23,8 +23,10 @@ import { ItemSub } from './room-item-sub';
 import { RoomItemWrapper } from './room-item-wrapper';
 import { convert } from 'html-to-text';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
-import { CircleFlag } from 'react-circle-flags';
 import { getCountryCode } from '@/utils/language-fn';
+import RoomItemVisitorAvatar from './room-item-visitor-avatar';
+import { CircleFlag } from 'react-circle-flags';
+import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 
 export interface RoomItemProps {
   data: Room;
@@ -78,6 +80,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     const visitor = _data.participants.find(
       (user) => user.status === 'anonymous',
     );
+    const countryCode = getCountryCode(visitor?.language || 'en');
     return {
       room: generateRoomDisplay(
         _data,
@@ -85,7 +88,10 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         !disabledRedirect,
         Boolean(conversationType) ? businessRedirectPath : null,
       ),
-      visitorCountry: getCountryCode(visitor?.language || 'en'),
+      visitorCountry: {
+        ...SUPPORTED_LANGUAGES.find((sl) => sl.code === visitor?.language),
+        code: countryCode,
+      },
     };
   }, [
     _data,
@@ -131,16 +137,10 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           }}
         >
           <RoomItemWrapper>
-            {!!conversationType ? (
-              <div className="relative">
-                <Avatar src={'/anonymous_avt.png'} alt="anonymous-avt" />
-                <CircleFlag
-                  className="absolute bottom-0 right-0 size-4 rounded-full border-2 border-white"
-                  countryCode={visitorCountry?.toLowerCase() || 'gb'}
-                />
-              </div>
-            ) : (
+            {!conversationType ? (
               <ItemAvatar isOnline={isOnline} room={room} isMuted={isMuted} />
+            ) : (
+              <RoomItemVisitorAvatar isOnline={isOnline} isMuted={isMuted} />
             )}
             <div className="w-full">
               <RoomItemHead
@@ -167,28 +167,44 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                 </div>
               )}
               <RenderItemSub />
-              <Typography
-                className={cn(
-                  'flex flex-row items-center gap-1 text-sm font-light text-primary-500-main',
-                  {
-                    hidden: !room.fromDomain,
-                  },
-                )}
-              >
-                <Globe size={11} />
-                {room.fromDomain}
-              </Typography>
+              {room.isHelpDesk && (
+                <div className="flex flex-row items-center gap-1 text-sm font-light">
+                  <CircleFlag
+                    className={cn('size-4 rounded-full', {
+                      hidden: !visitorCountry?.code || !visitorCountry?.name,
+                    })}
+                    countryCode={visitorCountry?.code?.toLowerCase() || 'gb'}
+                  />
+                  <span className={'uppercase text-neutral-600'}>
+                    {visitorCountry?.code}
+                  </span>
+                  <Globe
+                    size={11}
+                    className={cn('text-primary-500-main', {
+                      hidden: !room.fromDomain,
+                    })}
+                  />
+                  <span className={'text-primary-500-main'}>
+                    {room.fromDomain}
+                  </span>
+                </div>
+              )}
             </div>
 
             {rightElement}
+            {isMuted && (
+              <div className="flex items-center">
+                <BellOffIcon className="size-4 fill-error stroke-error text-neutral-600" />
+              </div>
+            )}
+            {room?.isPinned && (
+              <div className="flex items-center">
+                <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
+              </div>
+            )}
           </RoomItemWrapper>
         </RoomItemContext.Provider>
       </Wrapper>
-      {room?.isPinned && (
-        <div className="flex items-center pr-3">
-          <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
-        </div>
-      )}
       <Tooltip
         title={t('CONVERSATION.JOIN')}
         triggerItem={<RoomItemComingCall roomChatBox={room} />}

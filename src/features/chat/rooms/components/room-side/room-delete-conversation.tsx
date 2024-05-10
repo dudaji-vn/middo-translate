@@ -15,6 +15,7 @@ import { Trash2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useDeleteConversation } from '../../hooks/use-delete-conversation';
 import { useTranslation } from 'react-i18next';
+import { Item } from '@/components/data-display';
 
 export interface RoomDeleteConversationProps {
   roomId: string;
@@ -26,29 +27,27 @@ export const RoomDeleteConversation = ({
   roomId,
 }: RoomDeleteConversationProps) => {
   const { mutate } = useDeleteConversation();
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button
-          startIcon={<Trash2 className="h-4 w-4 text-error-400-main" />}
-          shape="square"
-          color="default"
-          size="md"
-          className={cn('w-full ', isGroup ? 'rounded-t-[4px]' : '-mt-4')}
-        >
-          <span className="text-error-400-main">{t('MODAL.DELETE_CONVERSATION.TITLE')}</span>
-        </Button>
+        <Item danger leftIcon={<Trash2 />}>
+          {t('MODAL.DELETE_CONVERSATION.TITLE')}
+        </Item>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t('MODAL.DELETE_CONVERSATION.TITLE')} ?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t('MODAL.DELETE_CONVERSATION.TITLE')} ?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-          {t('MODAL.DELETE_CONVERSATION.DESCRIPTION')}
+            {t('MODAL.DELETE_CONVERSATION.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="sm:mr-3">{t('COMMON.CANCEL')}</AlertDialogCancel>
+          <AlertDialogCancel className="sm:mr-3">
+            {t('COMMON.CANCEL')}
+          </AlertDialogCancel>
           <AlertDialogAction
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"

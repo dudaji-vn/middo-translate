@@ -40,8 +40,8 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
     const canClear = value !== '';
     useKeyboardShortcut(
       [SHORTCUTS.SEARCH, SHORTCUTS.NEW_CONVERSATION],
-      (_, mathedKeys) => {
-        if (isEqual(mathedKeys, SHORTCUTS.NEW_CONVERSATION)) {
+      (_, matchedKeys) => {
+        if (isEqual(matchedKeys, SHORTCUTS.NEW_CONVERSATION)) {
           setCurrentSide('individual');
           return;
         }
@@ -113,7 +113,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
 SearchInput.displayName = 'SearchInput';
 
 export interface SearchButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> {}
+  extends ButtonHTMLAttributes<HTMLButtonElement> { }
 
 const SearchButton = forwardRef<HTMLButtonElement, SearchButtonProps>(
   ({ className, ...props }, ref) => {

@@ -4,6 +4,7 @@ import { SvgSpinnersGooeyBalls1 } from '../icons';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
 import { useTranslateStore } from '@/stores/translate.store';
+import Image from 'next/image';
 
 interface PageLoadingProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -17,11 +18,10 @@ export const PageLoading = forwardRef<HTMLDivElement, PageLoadingProps>(
         {isLoading && (
           <div
             className={cn(
-              'fixed bottom-0 left-0 right-0 top-0 z-[999] flex items-center justify-center bg-black/20',
+              'fixed bottom-0 left-0 right-0 top-0 z-[999] flex items-center justify-center bg-white/90',
             )}
           >
-            <SvgSpinnersGooeyBalls1 className="h-[32px] w-[32px] text-primary" />
-            <p>{props.title}</p>
+            <Image src='/loading-middo.gif' alt="Loading" width={100} height={100} />
           </div>
         )}
         <div className={isLoading ? 'hidden' : 'block'} {...props}>{props.children}</div>

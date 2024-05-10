@@ -46,12 +46,13 @@ export interface MessageProps
   pinnedBy?: User;
   discussionDisabled?: boolean;
   guestId?: string;
-  disabledAllActions?: boolean;
+  actionsDisabled?: boolean;
   showTime?: boolean;
   showReactionBar?: boolean;
   isDraw?: boolean;
   isSendBySpaceMember?: boolean;
   isEditing?: boolean;
+  isDiscussion?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -87,13 +88,14 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       direction,
       showReply = true,
       pinnedBy,
-      disabledAllActions,
+      actionsDisabled = false,
       discussionDisabled = false,
       showTime,
       showReactionBar = true,
       isSendBySpaceMember = false,
       isDraw = false,
       isEditing = false,
+      isDiscussion = false,
       ...props
     },
     ref,
@@ -112,7 +114,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       setFalse: hideDetail,
     } = useBoolean(false);
 
-    const flowActions = message.actions;
+    const actionsFromScriptChat = message.actions;
     return (
       <MessageItemContext.Provider
         value={{
@@ -175,7 +177,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   showDetail={showDetail}
                   toggleDetail={toggleShowDetail}
                   showTime={showTime}
-                  disabledAllActions={disabledAllActions || isEditing}
+                  actionsDisabled={actionsDisabled || isEditing}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
@@ -226,26 +228,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                         </Fragment>
                       )}
                     </div>
-                    {message?.content && (
-                      <MessageItemLinks isMe={isMe} message={message} />
-                    )}
-
-                    <AnimatePresence>
-                      {isPending && <PendingStatus />}
-                    </AnimatePresence>
-                    {pinnedBy && (
-                      <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
-                    )}
-                    {message.forwardOf && (
-                      <MessageItemForward
-                        hasParent={!!message.content}
-                        message={message.forwardOf}
-                        isMe={isMe}
-                      />
-                    )}
-                    {!discussionDisabled && message.hasChild && showReply && (
-                      <MessageItemReply isMe={isMe} messageId={message._id} />
-                    )}
 
                     <div className="block-blur absolute bottom-0 left-0  hidden h-9 w-full bg-gradient-to-t from-gray2 to-gray2/0" />
                   </div>
@@ -254,6 +236,26 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <div className="pointer-events-none w-11 shrink-0 md:w-20" />
                 )}
               </div>
+              <AnimatePresence>
+                {isPending && <PendingStatus />}
+              </AnimatePresence>
+              {message?.content && (
+                <MessageItemLinks isMe={isMe} message={message} />
+              )}
+              {pinnedBy && (
+                <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
+              )}
+              {message.forwardOf && (
+                <MessageItemForward
+                  hasParent={!!message.content}
+                  message={message.forwardOf}
+                  isMe={isMe}
+                />
+              )}
+              {!discussionDisabled && message.hasChild && showReply && (
+                <MessageItemReply isMe={isMe} messageId={message._id} />
+              )}
+
               {showReactionBar &&
                 message?.reactions &&
                 message.reactions.length > 0 && (
@@ -274,10 +276,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   </span>
                 </span>
               )}
-              <MessageItemFlowActions actions={flowActions || []} />
+              <MessageItemFlowActions actions={actionsFromScriptChat || []} />
             </div>
             {direction === 'top' && (
               <ReadByUsers
+                isDiscussion={isDiscussion}
                 readByUsers={readByUsers}
                 isMe={isMe}
                 className="mb-2 mt-0"

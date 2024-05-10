@@ -131,7 +131,13 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               currentRoomId={currentRoomId as string}
             />
             {rooms.map((room) => {
-              const isOnline = isRoomOnline({ currentUser, room, onlineList });
+              const isOnline = isRoomOnline({
+                currentUser,
+                room,
+                onlineList,
+                isBusiness,
+              });
+
               return (
                 <RoomItem
                   isOnline={isOnline}
@@ -158,14 +164,21 @@ export const isRoomOnline = ({
   room,
   onlineList,
   currentUser,
+  isBusiness,
 }: {
   room: Room;
   onlineList: string[];
   currentUser: User;
+  isBusiness?: boolean;
 }) => {
+  if (isBusiness) {
+    const visitor = room.participants.find(
+      (user) => user.status === 'anonymous',
+    );
+    return visitor && onlineList.includes(visitor._id);
+  }
   const participants = room.participants.filter(
     (user) => user._id !== currentUser._id,
   );
-  const isOnline = participants.some((user) => onlineList.includes(user._id));
   return participants.some((user) => onlineList.includes(user._id));
 };
