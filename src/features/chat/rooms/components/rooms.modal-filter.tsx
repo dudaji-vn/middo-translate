@@ -15,6 +15,10 @@ import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import { Checkbox } from '@/components/form/checkbox';
 import { cn } from '@/utils/cn';
 import { Badge } from '@/components/ui/badge';
+import {
+  LANGUAGE_CODES_MAP,
+  SUPPORTED_LANGUAGES,
+} from '@/configs/default-language';
 
 export type RoomsFilterOption = {
   value: string;
@@ -62,6 +66,10 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
       <AccordionContent className="accordion-up 0.2s p-0 ease-out">
         <div className="flex flex-col gap-0 divide-y divide-neutral-50">
           {options.map((item, index) => {
+            const displayText =
+              name === 'countries'
+                ? SUPPORTED_LANGUAGES.find((l) => l.code === item.value)?.name
+                : item.value;
             return (
               <div
                 key={index}
@@ -92,7 +100,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
                         {...item.props}
                       >
                         {item.icon && item.icon}
-                        {item.value}
+                        {displayText}
                       </div>
                     )
                   }
