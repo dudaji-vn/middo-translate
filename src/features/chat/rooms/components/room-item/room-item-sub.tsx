@@ -301,7 +301,7 @@ const ItemSub = ({
     <div className="flex items-center">
       <Typography
         className={cn(
-          'line-clamp-1 flex-1 break-all flex flex-row',
+          'line-clamp-1 flex-1 break-all',
           isRead ? 'text-text opacity-80' : 'font-medium',
         )}
       >
