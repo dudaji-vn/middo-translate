@@ -338,7 +338,7 @@
 }
 
 .editor-view .mention {
-  @apply rounded-md  bg-primary-200 p-0.5 px-2 text-current hover:opacity-90;
+  @apply rounded-sm  bg-primary-200 px-0.5 text-current hover:opacity-90;
 }
 
 .editor-view .mention.left {
@@ -540,8 +540,8 @@ body {
   height: 100vh;
 }
 .editor-view > p:has(.mention) {
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
 }
 
 .editor-view.translated .mention {
