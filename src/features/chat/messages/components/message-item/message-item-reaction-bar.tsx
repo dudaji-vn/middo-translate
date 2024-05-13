@@ -73,10 +73,7 @@ export const MessageItemReactionBar = ({
 
   return (
     <div
-      className={cn(
-        'mt-0.5 flex h-5',
-        isMe ? 'justify-end' : 'justify-start pl-7',
-      )}
+      className={cn('mt-0.5 flex h-5', isMe ? 'justify-end' : 'justify-start')}
     >
       <div className="flex gap-1">
         <div className="flex items-center gap-1">

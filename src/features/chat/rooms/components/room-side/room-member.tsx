@@ -118,30 +118,30 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
         })}
       </div>
       {!isShowAll && INITIAL_SHOW_MEMBERS < members.length && (
-        <Button
-          onClick={handleShowAll}
-          shape="square"
-          color="default"
-          size="md"
-          className="w-full"
-        >
-          <span className="text-primary-500-main">
-            {t('CONVERSATION.SHOW_ALL')}{' '}
-          </span>
-        </Button>
+        <div className="px-3">
+          <Button
+            onClick={handleShowAll}
+            shape="square"
+            color="default"
+            size="md"
+            className="w-full"
+          >
+            {t('CONVERSATION.SHOW_ALL')}
+          </Button>
+        </div>
       )}
       {isShowAll && INITIAL_SHOW_MEMBERS < membersToShow.length && (
-        <Button
-          onClick={handleHide}
-          shape="square"
-          color="default"
-          size="md"
-          className="w-full"
-        >
-          <span className="text-primary-500-main">
+        <div className="px-3">
+          <Button
+            onClick={handleHide}
+            shape="square"
+            color="default"
+            size="md"
+            className="w-full"
+          >
             {t('CONVERSATION.HIDE')}
-          </span>
-        </Button>
+          </Button>
+        </div>
       )}
     </div>
   );
