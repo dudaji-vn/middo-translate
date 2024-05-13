@@ -9,6 +9,7 @@ import {
   PropsWithChildren,
   cloneElement,
   forwardRef,
+  useCallback,
   useMemo,
   useState,
 } from 'react';
@@ -150,7 +151,7 @@ const MobileWrapper = ({
       >
         {items.map(({ renderItem, ...item }) => {
           if (renderItem) {
-            return renderItem({ item, room });
+            return renderItem({ item, room, setOpen: () => {} });
           }
           return (
             <LongPressMenu.Item
@@ -178,6 +179,10 @@ const DesktopWrapper = ({
   }) => {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
+  const onOpenChange = useCallback((open: boolean) => {
+    setOpen(open);
+  }, []);
+
   return (
     <div className="group relative flex-1">
       {children}
@@ -196,7 +201,7 @@ const DesktopWrapper = ({
           <DropdownMenuContent>
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
-                return renderItem({ item, room });
+                return renderItem({ item, room, setOpen: onOpenChange });
               }
               return (
                 <DropdownMenuItem
