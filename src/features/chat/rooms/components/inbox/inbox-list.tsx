@@ -108,7 +108,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!rooms.length && !isLoading && !pinnedRooms?.length) {
       return <EmptyInbox type={type} />;
     }
-
     return (
       <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
         {isScrolled && (
