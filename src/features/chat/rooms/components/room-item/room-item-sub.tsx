@@ -301,14 +301,11 @@ const ItemSub = ({
     <div className="flex items-center">
       <Typography
         className={cn(
-          'line-clamp-1 flex flex-1 flex-row items-center justify-between break-all',
+          'line-clamp-1 flex-1 break-all flex flex-row',
           isRead ? 'text-text opacity-80' : 'font-medium',
         )}
       >
-        <span>
-          {preMessage} {contentDisplay}
-        </span>
-        {isExpired && <Clock9 size={16} className="mx-1 text-error-500" />}
+        {preMessage} {contentDisplay}
       </Typography>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
       {readByUsers.length > 0 && (
