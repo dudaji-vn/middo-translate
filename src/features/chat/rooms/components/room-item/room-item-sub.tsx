@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { generateSystemMessageContent } from '@/features/chat/messages/utils';
 import { messageApi } from '@/features/chat/messages/api';
 import { Room } from '../../types';
-import { Clock9 } from 'lucide-react';
+import { Clock9, LogOut } from 'lucide-react';
 
 const ItemSub = ({
   message,
@@ -296,17 +296,23 @@ const ItemSub = ({
   }, [userLanguage, message, content, messageContent, englishContent, t, isMe]);
 
   const isExpired = new Date(expiredAt || '') < new Date();
+  const isVisitorLeft =
+    message.type === 'action' && message.action === 'leaveHelpDesk';
 
   return (
     <div className="flex items-center">
-      <Typography
-        className={cn(
-          'line-clamp-1 flex-1 break-all',
-          isRead ? 'text-text opacity-80' : 'font-medium',
-        )}
-      >
-        {preMessage} {contentDisplay}
-      </Typography>
+      <div className="flex w-full flex-row items-center justify-between gap-1">
+        <Typography
+          className={cn(
+            'line-clamp-1 flex-1 break-all',
+            isRead ? 'text-text opacity-80' : 'font-medium',
+          )}
+        >
+          {preMessage} {contentDisplay}
+        </Typography>
+        {isExpired && <Clock9 className=" size-4 text-error-500" />}
+        {isVisitorLeft && <LogOut className=" size-4 text-error-500" />}
+      </div>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
       {readByUsers.length > 0 && (
         <div className="ml-auto flex items-center pl-2">
