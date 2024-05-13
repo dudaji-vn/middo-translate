@@ -41,6 +41,7 @@ export type ActionItem = {
   renderItem?: (params: {
     item: Omit<ActionItem, 'renderItem'> & { onAction: () => void };
     room: Room;
+    setOpen: (value: boolean) => void;
   }) => JSX.Element | ReactNode;
 };
 export interface RoomActionsContextProps {
@@ -133,7 +134,10 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
             <RoomAssignTag
               room={params.room}
               key={params.item.action}
-              onClosed={reset}
+              onClosed={() => {
+                reset();
+                params.setOpen(false);
+              }}
             />
           );
         },

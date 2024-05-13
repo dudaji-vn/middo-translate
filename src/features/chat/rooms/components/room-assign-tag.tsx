@@ -64,7 +64,6 @@ const RoomAssignTag = ({
     <div
       onMouseLeave={() => {
         setOpen(false);
-        onClosed && onClosed();
       }}
     >
       <Popover open={open}>
@@ -81,12 +80,12 @@ const RoomAssignTag = ({
         </PopoverTrigger>
         <PopoverContent
           align="start"
-          alignOffset={300}
-          sideOffset={-100}
+          alignOffset={100}
+          sideOffset={-200}
           onMouseLeave={() => setOpen(false)}
-          className="ml-1 flex h-auto flex-col px-0 py-2"
+          className=" flex h-auto flex-col border-none bg-transparent px-0  py-2 pl-8 shadow-none"
         >
-          <div className="divide-y divide-neutral-100 bg-white">
+          <div className="divide-y divide-neutral-100  rounded-[16px] border bg-white py-2 shadow-md">
             <div className="flex max-h-60 w-full flex-col overflow-y-auto">
               {tags.map(({ _id, color, name }) => {
                 const isCurrent = room.tag?._id === _id;
