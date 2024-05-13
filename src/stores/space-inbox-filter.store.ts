@@ -38,7 +38,11 @@ export const useSpaceInboxFilterStore = create<SpaceInboxFilterState>()(
     setFilterOptions: (filterOptions) =>
       set(() => ({
         filterOptions,
-        isFilterApplied: false,
+        selectedFilters: {
+          domains: filterOptions.domains.map((d) => d.value),
+          tags: filterOptions.tags.map((t) => t.value),
+          countries: filterOptions.countries.map((c) => c.value),
+        },
       })),
     selectedFilters: {
       domains: [],

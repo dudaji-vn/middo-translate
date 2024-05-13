@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/actions';
-import { ChevronDown, Globe, ListFilter } from 'lucide-react';
-import { Typography, TypographyProps } from '@/components/data-display';
+import { ChevronDown, ListFilter } from 'lucide-react';
+import { Typography } from '@/components/data-display';
 import {
   Accordion,
   AccordionContent,
@@ -16,8 +16,6 @@ import { Checkbox } from '@/components/form/checkbox';
 import { cn } from '@/utils/cn';
 import { Badge } from '@/components/ui/badge';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
-import { Global } from 'recharts';
-import { isEmpty } from 'lodash';
 
 export type RoomsFilterOption = {
   value: string;
@@ -70,14 +68,16 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
         }
         className="flex h-fit w-full flex-row items-center justify-between  rounded-none !bg-primary-100 px-3 py-4"
       >
-        <div
-          className="h flex w-full cursor-pointer flex-row items-center justify-start gap-2"
-          onClick={(e) => {
-            e.stopPropagation();
-            hasSelected ? onDeselectAll() : onSelectAll();
-          }}
-        >
-          <Checkbox checked={hasSelected} />
+        <div className="h flex w-full cursor-pointer flex-row items-center justify-start gap-2">
+          <Checkbox
+            checked={hasSelected}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            onCheckedChange={(checked) => {
+              checked ? onSelectAll() : onDeselectAll();
+            }}
+          />
           <Typography
             variant="h4"
             className="text-base font-normal leading-[18px] text-neutral-800"
@@ -149,10 +149,24 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
     setSelectedFilters,
     selectedFilters,
     setFilterApplied,
+    appliedFilters,
   } = useSpaceInboxFilterStore();
 
+  const { isSelectAll } = useMemo(() => {
+    const isSelectAllCountries =
+      filterOptions.countries?.length === selectedFilters.countries?.length;
+    const isSelectAllDomains =
+      filterOptions.domains?.length === selectedFilters.domains?.length;
+    const isSelectAllTags =
+      filterOptions.tags?.length === selectedFilters.tags?.length;
+    return {
+      isSelectAll:
+        isSelectAllCountries && isSelectAllDomains && isSelectAllTags,
+    };
+  }, [filterOptions, selectedFilters]);
+
   const onUpdateFilterOptions = () => {
-    setFilterApplied(selectedFilters);
+    setFilterApplied(isSelectAll ? undefined : selectedFilters);
     setOpen(false);
   };
   const onDeselectAll = () => {
@@ -169,18 +183,27 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
       tags: filterOptions.tags?.map((t) => t.value) || [],
     });
   };
-  const { isSelectAll } = useMemo(() => {
-    const isSelectAllCountries =
-      filterOptions.countries?.length === selectedFilters.countries?.length;
-    const isSelectAllDomains =
-      filterOptions.domains?.length === selectedFilters.domains?.length;
-    const isSelectAllTags =
-      filterOptions.tags?.length === selectedFilters.tags?.length;
-    return {
-      isSelectAll:
-        isSelectAllCountries && isSelectAllDomains && isSelectAllTags,
-    };
-  }, [filterOptions, selectedFilters]);
+
+  const disabledFilter =
+    selectedFilters.countries.length === 0 &&
+    selectedFilters.domains.length === 0 &&
+    selectedFilters.tags.length === 0;
+
+  const onCancel = () => {
+    if (appliedFilters) {
+      setSelectedFilters(appliedFilters);
+    } else {
+      onSelectAll();
+    }
+    setOpen(false);
+  };
+  const onOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      onCancel();
+      return;
+    }
+    setOpen(isOpen);
+  };
 
   return (
     <>
@@ -192,8 +215,8 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
           </Button.Icon>
         }
       />
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="h-fit  max-w-[500px] gap-0 p-0">
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="max-h-[600px] min-h-fit  max-w-[500px] flex-row gap-0 p-0">
           <div className="flex flex-row items-center justify-between p-3">
             <Typography className="font-semibold text-neutral-800">
               Filter by
@@ -212,7 +235,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
                 : t('FILTERS.BUTTONS.SELECT_ALL')}
             </Button>
           </div>
-          <div className=" mb-4 h-fit max-h-[400px] max-w-[500px] space-y-3 overflow-y-scroll bg-white">
+          <div className="h-fit max-h-[400px] max-w-[500px] space-y-3 overflow-y-scroll bg-white">
             <Accordion
               type="multiple"
               className="h-full w-full max-w-full p-0 transition-all duration-500  "
@@ -223,14 +246,25 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
               <FilterSection title={t('FILTERS.TAGS')} name="tags" />
             </Accordion>
           </div>
-          <div className="w-full p-3">
+          <div className="w-full rounded-b-[12px] p-3  ">
             <Button
               className="w-full"
               size={'xs'}
               shape={'square'}
               onClick={onUpdateFilterOptions}
+              disabled={disabledFilter}
             >
               Filter
+            </Button>
+            <Button
+              className="mt-3 w-full"
+              size={'xs'}
+              shape={'square'}
+              color={'default'}
+              variant={'ghost'}
+              onClick={onCancel}
+            >
+              Cancel
             </Button>
           </div>
         </DialogContent>
