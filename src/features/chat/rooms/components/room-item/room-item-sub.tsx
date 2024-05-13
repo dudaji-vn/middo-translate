@@ -10,10 +10,13 @@ import { convert } from 'html-to-text';
 import { useTranslation } from 'react-i18next';
 import { generateSystemMessageContent } from '@/features/chat/messages/utils';
 import { messageApi } from '@/features/chat/messages/api';
+import { Room } from '../../types';
+import { Clock9 } from 'lucide-react';
 
 const ItemSub = ({
   message,
   participants,
+  expiredAt = '',
   isGroup,
   currentUser,
 }: {
@@ -21,6 +24,7 @@ const ItemSub = ({
   participants: User[];
   currentUser: User;
   isGroup: boolean;
+  expiredAt?: Room['expiredAt'];
 }) => {
   const currentUserId = currentUser?._id;
   const isMe = message.sender._id === currentUserId;
@@ -290,15 +294,21 @@ const ItemSub = ({
 
     setContentDisplay(content);
   }, [userLanguage, message, content, messageContent, englishContent, t, isMe]);
+
+  const isExpired = new Date(expiredAt || '') < new Date();
+
   return (
     <div className="flex items-center">
       <Typography
         className={cn(
-          'line-clamp-1 flex-1 break-all',
+          'line-clamp-1 flex flex-1 flex-row items-center justify-between break-all',
           isRead ? 'text-text opacity-80' : 'font-medium',
         )}
       >
-        {preMessage} {contentDisplay}
+        <span>
+          {preMessage} {contentDisplay}
+        </span>
+        {isExpired && <Clock9 size={16} className="mx-1 text-error-500" />}
       </Typography>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
       {readByUsers.length > 0 && (
