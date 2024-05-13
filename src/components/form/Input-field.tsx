@@ -6,6 +6,7 @@ import {
   EyeOffIcon,
 } from 'lucide-react';
 import { useId, useState } from 'react';
+import { Button } from '../actions';
 
 export interface InputFieldProps {
   label?: string;
@@ -37,19 +38,18 @@ export const InputField = (props: InputFieldProps) => {
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <label className="mb-2 ml-5 inline-block" htmlFor={id}>
+        <label className="mb-2 inline-block" htmlFor={id}>
           {label}
         </label>
       )}
       {subLabel && (
-        <span className="mb-2 block max-w-[460px] break-words pl-5 text-sm opacity-60">
+        <span className="mb-2 block max-w-[460px] break-words text-sm opacity-60">
           {subLabel}
         </span>
       )}
       <div
         className={cn(
-          `flex h-[50px] w-full items-center justify-start rounded-xl border px-4`,
-          type === 'password' ? (isTouched && !errors ? 'pr-4' : 'pr-1') : '',
+          `flex h-[50px] w-full items-center justify-start rounded-xl border px-4 pr-1`,
           isTouched && !errors ? 'border-green-500' : '',
         )}
       >
@@ -64,21 +64,17 @@ export const InputField = (props: InputFieldProps) => {
           placeholder={placeholder}
         />
         {type === 'password' && (
-          <div
-            onClick={() => setIsShowPassword(!isShowPassword)}
-            className="inline-flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 text-sm  font-semibold text-primary ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:!bg-transparent disabled:!opacity-30 md:hover:bg-slate-200"
+          <Button.Icon
+            variant={'ghost'}
+            size={'sm'}
+            onClick={() => setIsShowPassword(!isShowPassword)}  
           >
             {isShowPassword ? (
               <EyeIcon className="text-slate-600 opacity-60" />
             ) : (
               <EyeOffIcon className="text-slate-600 opacity-60" />
             )}
-          </div>
-        )}
-        {isTouched && !errors && (
-          <CheckCircle2
-            className={`text-success-2 h-5 min-h-[20px] w-5 min-w-[20px]`}
-          />
+          </Button.Icon>
         )}
       </div>
       {errors && (

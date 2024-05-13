@@ -77,6 +77,8 @@
       "PASSWORD_THE_SAME": "New password must be different from current password!",
       "INVALID_EMAIL": "Please enter a valid email address!",
       "INVALID_ACCOUNT": "Invalid email or password!",
+      "AT_LEAST_ONE_CAPITAL": "At least 1 capital letter",
+      "AT_LEAST_CHARACTERS": "At least {{num}} characters",
       "DEVICE_NOT_SUPPORTED": "Your device does not support this feature!",
       "NO_ACCESS_MEDIA": "Unable to access your camera or microphone!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File too large or not supported!",
@@ -221,11 +223,11 @@
   },
   "RESET_PASSWORD_SENDED": {
     "TITLE": "Reset Password",
-    "MESSAGE": "A reset password link has been sent to"
+    "MESSAGE": "A reset password link has been sent to <strong>{{email}}</strong>. If you don't see the email, please check your spam folder"
   },
   "SIGN_UP_SUCCESS": {
     "TITLE": "Verify Your Email Address",
-    "MESSAGE": "A link has been sent to <strong>{{email}}</strong> because you used it as your login method. <br /> <br /> Please verify this email address to complete your Middo account registration.",
+    "MESSAGE": "A link has been sent to <strong>{{email}}</strong>. Verify this email address to complete registration. </br></br>If you don't see the email, check your spam folder or click the button below to resend the email.",
     "RESEND": "Resend",
     "RESEND_AFTER": "Resend after {{time}} seconds"
   },

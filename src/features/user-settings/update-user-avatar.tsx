@@ -13,7 +13,7 @@ import { useRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { Camera } from 'lucide-react';
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
 import { uploadImage } from '@/utils/upload-img';

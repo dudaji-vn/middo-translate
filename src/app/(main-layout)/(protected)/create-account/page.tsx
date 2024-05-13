@@ -6,7 +6,7 @@ import { Button } from '@/components/form/button';
 import { InputField } from '@/components/form/Input-field';
 import { InputImage } from '@/components/form/input-image';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { addInfoUserService } from '@/services/auth.service';
 import { uploadImage } from '@/utils/upload-img';

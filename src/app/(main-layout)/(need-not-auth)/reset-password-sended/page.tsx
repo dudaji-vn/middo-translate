@@ -20,8 +20,8 @@ export default function ResetPasswordSended() {
   }, [router]);
 
   return (
-    <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-      <div className="w-full bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+    <div className="flex h-screen flex-col items-center bg-background">
+      <div className="w-full bg-background px-[5vw] py-8 md:mt-10 md:w-[500px] md:rounded-3xl md:px-6">
         <div className="mx-auto w-[223px]">
           <Image
             src="/sended_email.svg"
@@ -33,8 +33,7 @@ export default function ResetPasswordSended() {
         <p className="mt-8 text-center text-[22px] font-medium text-primary">
           {t('RESET_PASSWORD_SENDED.TITLE')}
         </p>
-        <p className="mt-5 text-center">
-          {t('RESET_PASSWORD_SENDED.MESSAGE')} <strong>{email}</strong>
+        <p className="mt-5 text-center" dangerouslySetInnerHTML={{__html: t('RESET_PASSWORD_SENDED.MESSAGE', {email: email})}}>
         </p>
         {/* <Button tag='a' href={ROUTE_NAMES.SIGN_IN}>Go to sign in</Button> */}
       </div>

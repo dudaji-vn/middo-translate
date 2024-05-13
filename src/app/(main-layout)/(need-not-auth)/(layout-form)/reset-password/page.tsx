@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react';
 
 import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 import { AlertError } from '@/components/alert/alert-error';
-import { Button } from '@/components/form/button';
 import { InputField } from '@/components/form/Input-field';
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { resetPasswordService, setCookieService } from '@/services/auth.service';
 import toast from 'react-hot-toast';
@@ -15,7 +14,10 @@ import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { PASSWORD_PATTERN } from '@/configs/regex-pattern';
+import { CAPS_PATTERN, PASSWORD_PATTERN, patternMinLength } from '@/configs/regex-pattern';
+import { Typography } from '@/components/data-display';
+import { Button } from '@/components/actions';
+import { InputPasswordPattern } from '@/components/form/input-password-pattern';
 
 export default function ResetPassword() {
   const [loading, setLoading] = useState(false);
@@ -48,7 +50,7 @@ export default function ResetPassword() {
             message: t('MESSAGE.ERROR.MIN_LENGTH', {num: 8, field: t('COMMON.PASSWORD')}),
           })
           .matches(
-            PASSWORD_PATTERN, t('MESSAGE.ERROR.PASSWORD_PATTERN'),
+            CAPS_PATTERN, t('MESSAGE.ERROR.PASSWORD_PATTERN'),
           ),
         confirmPassword: yup
           .string()
@@ -91,33 +93,54 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+    <>
       {loading && <PageLoading />}
-      <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
-        <h4 className="relative mb-5 pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
-          {t('CHANGE_PASSWORD.TITLE')}
-        </h4>
-        <form onSubmit={handleSubmitForm}>
-          <InputField
-            className="mt-5"
-            label={t('COMMON.PASSWORD')}
-            placeholder={t('COMMON.PASSWORD_PLACEHOLDER')}
-            register={{ ...register('password') }}
-            errors={errors.password}
-            type="password"
-          />
-          <InputField
-            className="mt-5"
-            label={t('COMMON.CONFIRM_PASSWORD')}
-            placeholder={t('COMMON.CONFIRM_PASSWORD_PLACEHOLDER')}
-            register={{ ...register('confirmPassword') }}
-            errors={errors.confirmPassword}
-            type="password"
-          />
-          <AlertError errorMessage={errorMessage}></AlertError>
-          <Button type="submit">{t('COMMON.CONFIRM')}</Button>
-        </form>
-      </div>
-    </div>
+      <form onSubmit={handleSubmitForm} className='mt-5'>
+      <Typography variant={'h1'} className="text-center text-2xl font-semibold text-primary mb-1">
+        {t('CHANGE_PASSWORD.TITLE')}
+      </Typography>
+      {/* <InputField
+        className="mt-5"
+        placeholder={t('COMMON.PASSWORD_PLACEHOLDER')}
+        register={{ ...register('password') }}
+        errors={errors.password}
+        type="password"
+      /> */}
+      <InputPasswordPattern 
+        className="mt-5"
+        placeholder={t('COMMON.PASSWORD_PLACEHOLDER')}
+        register={{ ...register('password') }}
+        errors={errors.password}
+        value={watch().password}
+        patterns={[
+          {
+            pattern: patternMinLength(8),
+            message: t('MESSAGE.ERROR.AT_LEAST_CHARACTERS', { num: 8 }),
+          },
+          {
+            pattern: CAPS_PATTERN,
+            message: t('MESSAGE.ERROR.AT_LEAST_ONE_CAPITAL'),
+          },
+        ]}
+      />
+      <InputField
+        className="mt-5"
+        placeholder={t('COMMON.CONFIRM_PASSWORD_PLACEHOLDER')}
+        register={{ ...register('confirmPassword') }}
+        errors={errors.confirmPassword}
+        type="password"
+      />
+      <AlertError errorMessage={errorMessage}></AlertError>
+      <Button
+        variant={'default'}
+        size={'md'}
+        shape={'square'}
+        color={'primary'}
+        className='w-full mt-5'
+        disabled={!isValid}
+        type='submit'
+      >{t('COMMON.CONFIRM')}</Button>
+      </form>
+    </>
   );
 }

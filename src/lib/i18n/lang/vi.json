@@ -77,6 +77,8 @@
       "PASSWORD_THE_SAME": "Mật khẩu mới phải khác mật khẩu hiện tại!",
       "INVALID_EMAIL": "Vui lòng nhập địa chỉ email hợp lệ!",
       "INVALID_ACCOUNT": "Email hoặc mật khẩu không hợp lệ!",
+      "AT_LEAST_ONE_CAPITAL": "Ít nhất 1 chữ cái viết hoa",
+      "AT_LEAST_CHARACTERS": "Ít nhất {{num}} ký tự",
       "DEVICE_NOT_SUPPORTED": "Thiết bị của bạn không hỗ trợ chức năng này!",
       "NO_ACCESS_MEDIA": "Không thể truy cập vào máy ảnh hoặc microphone của bạn!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File quá lớn hoặc không được hỗ trợ!",
@@ -221,11 +223,11 @@
   },
   "RESET_PASSWORD_SENDED": {
     "TITLE": "Đặt lại mật khẩu",
-    "MESSAGE": "Một liên kết đặt lại mật khẩu đã được gửi đến"
+    "MESSAGE": "Một liên kết đặt lại mật khẩu đã được gửi đến <strong>{{email}}</strong>. Nếu bạn không nhìn thấy email, vui lòng kiểm tra thư mục spam của bạn"
   },
   "SIGN_UP_SUCCESS": {
     "TITLE": "Xác minh địa chỉ email của bạn",
-    "MESSAGE": "Một liên kết đã được gửi đến <strong>{{email}}</strong> vì bạn đã sử dụng nó làm phương thức đăng nhập của mình. <br /> <br /> Vui lòng xác minh địa chỉ email này để hoàn tất việc đăng ký tài khoản Middo của bạn.",
+    "MESSAGE": "Một liên kết đặt lại mật khẩu đã được gửi đến <strong>{{email}}</strong>. Vui lòng kiểm tra email của bạn để hoàn tất quá trình đăng ký. </br></br>Nếu bạn không nhận được email, vui lòng kiểm tra thư mục spam hoặc nhấn vào nút bên dưới để gửi lại email.",
     "RESEND": "Gửi lại",
     "RESEND_AFTER": "Gửi lại sau {{time}} giây"
   },

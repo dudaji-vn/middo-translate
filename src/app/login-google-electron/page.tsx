@@ -41,12 +41,12 @@ export default function LoginGoogleElectron() {
   }, [accessToken, openDesktop, refreshToken, router]);
 
   return (
-    <div className="flex h-screen flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
-      <div className="my-auto w-full bg-background px-[5vw] py-8 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+    <div className="flex h-screen flex-col items-center">
+      <div className="my-auto w-full bg-background px-[5vw] py-8 md:rounded-3xl md:px-6">
         <div className="mx-auto w-[100px]">
-          <Image src="/logo.png" alt="" width={1000} height={1000}></Image>
+          <Image src="/notify-logo.png" alt="" width={1000} height={1000}></Image>
         </div>
-        <p className="mt-8 text-center text-[22px] font-medium">
+        <p className="mt-5 text-center text-[22px] font-medium">
           {IS_LOADING
             ? t('DESKTOP_LOGIN.TITLE_LOADING')
             : t('DESKTOP_LOGIN.TITLE_LOGIN_SUCCESS')}
@@ -61,7 +61,7 @@ export default function LoginGoogleElectron() {
             onClick={openDesktop}
             shape={'square'}
             size={'sm'}
-            className="mx-auto mt-8 block"
+            className="mx-auto mt-5 block"
           >
             {t('DESKTOP_LOGIN.OPEN_MIDDO')}
           </Button>
