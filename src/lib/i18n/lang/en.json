@@ -247,6 +247,10 @@
     "TITLE": "Create a New Account"
   },
   "CONVERSATION": {
+    "BLOCKED": {
+      "MESSAGE": "Currently, you can not reply to this conversation.",
+      "LEARN_MORE": "Learn more"
+    },
     "WELCOME_TITLE": "Welcome to Middo conversation!",
     "WELCOME_CONTENT": "Start a conversation with your team or group. You can also create a group chat to discuss and share files.",
     "TITLE": "Conversation",

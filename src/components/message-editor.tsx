@@ -26,6 +26,7 @@ import { SendButton } from './send-button';
 import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
 import { isMobile as isMobileDevice } from 'react-device-detect';
+import BlockChatBar from './block-chat-bar';
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -42,6 +43,7 @@ export interface MessageEditorProps
   onTypingChange?: (isTyping: boolean) => void;
   sendBtnProps?: ButtonProps;
   roomId?: string;
+  isBlocked?: boolean;
   isEditing?: boolean;
   onEditSubmit?: (message: Message) => void;
 }
@@ -55,6 +57,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onTypingChange,
       roomId,
       isEditing,
+      isBlocked = false,
       onEditSubmit,
       ...props
     },
@@ -196,6 +199,15 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       editor?.commands.focus('end');
     };
 
+    if (isBlocked) {
+      return (
+        <BlockChatBar
+          blockContent={t('CONVERSATION.BLOCKED.MESSAGE')}
+          learnMoreLink={'#'}
+          learnMoreText={t('CONVERSATION.BLOCKED.LEARN_MORE')}
+        />
+      );
+    }
     return (
       <>
         <TranslationHelper
@@ -259,7 +271,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             {editor && !isMobile && <Autofocus editor={editor} />}
           </div>
           {disabled && (
-            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80" />
+            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80 max-md:text-sm" />
           )}
         </div>
       </>
