@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { Button } from '@/components/form/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import { PageLoading } from '@/components/feedback';
@@ -11,6 +10,7 @@ import { resendEmailService } from '@/services/auth.service';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/actions';
 
 export default function SignUpSuccess() {
   const router = useRouter();
@@ -54,9 +54,9 @@ export default function SignUpSuccess() {
   };
 
   return (
-    <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+    <div className="flex flex-col items-center">
       {loading && <PageLoading />}
-      <div className="w-full bg-background px-[5vw] py-8 md:my-10 md:w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+      <div className="w-full bg-background px-[5vw] py-8 md:my-10 md:w-[500px] md:rounded-3xl md:px-6">
         <div className="mx-auto w-[223px]">
           <Image
             src="/sended_email.svg"
@@ -69,17 +69,34 @@ export default function SignUpSuccess() {
           {t('SIGN_UP_SUCCESS.TITLE')}
         </p>
         <p className="mt-5 text-center" dangerouslySetInnerHTML={{__html: t('SIGN_UP_SUCCESS.MESSAGE', {email: email})}}></p>
-        <Button onClick={resendEmail} disabled={isResend || time > 0}>
-          {time > 0 ? t('SIGN_UP_SUCCESS.RESEND_AFTER', {time: time}) : t('SIGN_UP_SUCCESS.RESEND')}
+        {time > 0 && <p className="mt-4 text-center text-sm text-neutral-300 font-medium">
+          {t('SIGN_UP_SUCCESS.RESEND_AFTER', {time: time})}
+        </p>}
+        <Button
+          variant={'default'}
+          size={'md'}
+          shape={'square'}
+          color={'primary'}
+          className='w-full mt-5'
+          onClick={resendEmail}
+          disabled={isResend || time > 0}
+          type='submit'
+        >
+          {t('SIGN_UP_SUCCESS.RESEND')}
         </Button>
-        <div className="mt-8 flex justify-center">
-          <Link
-            href={ROUTE_NAMES.SIGN_IN}
-            className="w-fit-content mx-auto inline-block active:text-primary md:hover:font-medium"
-          >
-            {t('COMMON.CANCEL')}
+        <div className="flex justify-center">
+          <Link href={ROUTE_NAMES.SIGN_IN} className='block w-full mt-3'>
+            <Button
+              variant={'ghost'}
+              size={'md'}
+              shape={'square'}
+              color={'default'}
+              className='w-full'>
+              {t('COMMON.CANCEL')}
+            </Button>
           </Link>
         </div>
+        
       </div>
     </div>
   );

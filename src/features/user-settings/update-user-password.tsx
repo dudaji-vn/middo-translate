@@ -7,7 +7,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/feedback';
 
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { changePasswordUserService } from '@/services/user.service';
 import toast from 'react-hot-toast';
 import { use, useEffect, useState } from 'react';

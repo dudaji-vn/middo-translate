@@ -10,7 +10,7 @@ import { Button } from '@/components/actions'
 import { AlertError } from '@/components/alert/alert-error';
 import { UserRound } from 'lucide-react';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { updateInforSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
