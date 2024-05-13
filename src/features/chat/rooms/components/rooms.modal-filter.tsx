@@ -23,7 +23,7 @@ export type RoomsFilterOption = {
   value: string;
   icon?: React.ReactNode;
   props?: React.ComponentPropsWithoutRef<'div'>;
-  name?: string;
+  label?: string;
 };
 type FilterSectionProps = {
   title: string;
@@ -113,7 +113,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
                         )}
                         {...item.props}
                       >
-                        {item.name || item.value}
+                        {item.label || item.value}
                       </Badge>
                     ) : (
                       <div
