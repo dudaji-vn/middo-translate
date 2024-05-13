@@ -239,28 +239,31 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               <AnimatePresence>
                 {isPending && <PendingStatus />}
               </AnimatePresence>
-              {message?.content && (
-                <MessageItemLinks isMe={isMe} message={message} />
-              )}
-              {pinnedBy && (
-                <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
-              )}
-              {message.forwardOf && (
-                <MessageItemForward
-                  hasParent={!!message.content}
-                  message={message.forwardOf}
-                  isMe={isMe}
-                />
-              )}
-              {!discussionDisabled && message.hasChild && showReply && (
-                <MessageItemReply isMe={isMe} messageId={message._id} />
-              )}
-
-              {showReactionBar &&
-                message?.reactions &&
-                message.reactions.length > 0 && (
-                  <MessageItemReactionBar isMe={isMe} message={message} />
+              <div className={cn(!isMe ? 'pl-7' : '')}>
+                {message?.content && (
+                  <MessageItemLinks isMe={isMe} message={message} />
                 )}
+
+                {message.forwardOf && (
+                  <MessageItemForward
+                    hasParent={!!message.content}
+                    message={message.forwardOf}
+                    isMe={isMe}
+                  />
+                )}
+
+                {pinnedBy && (
+                  <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
+                )}
+                {!discussionDisabled && message.hasChild && showReply && (
+                  <MessageItemReply isMe={isMe} messageId={message._id} />
+                )}
+                {showReactionBar &&
+                  message?.reactions &&
+                  message.reactions.length > 0 && (
+                    <MessageItemReactionBar isMe={isMe} message={message} />
+                  )}
+              </div>
 
               {isSendBySpaceMember && (
                 <span
