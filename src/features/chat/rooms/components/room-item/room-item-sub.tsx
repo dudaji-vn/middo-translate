@@ -303,7 +303,7 @@ const ItemSub = ({
 
   return (
     <div className="flex items-center">
-      <div className="flex w-full flex-row items-center justify-between gap-1">
+      <div className="flex w-full flex-row items-center justify-between gap-1 ">
         <Typography
           className={cn(
             'line-clamp-1 flex-1 break-all',
@@ -312,8 +312,8 @@ const ItemSub = ({
         >
           {preMessage} {contentDisplay}
         </Typography>
-        {isExpired && <Clock9 className=" size-4 text-error-500" />}
-        {isVisitorLeft && <LogOut className=" size-4 text-error-500" />}
+        {isExpired && <Clock9 className=" ml-1 size-4 text-error-500" />}
+        {isVisitorLeft && <LogOut className=" ml-1 size-4 text-error-500" />}
       </div>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
       {readByUsers.length > 0 && !isBusiness && (
