@@ -216,7 +216,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
         }
       />
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-h-[600px] min-h-fit  max-w-[500px] flex-row gap-0 p-0">
+        <DialogContent className="!max-h-[80vh] min-h-fit max-w-[calc(100vw-32px)] flex-row gap-0 rounded-[12px] p-0 md:max-w-[500px] ">
           <div className="flex flex-row items-center justify-between p-3">
             <Typography className="font-semibold text-neutral-800">
               Filter by
