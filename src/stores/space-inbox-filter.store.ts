@@ -18,6 +18,14 @@ export type SpaceInboxFilterState = {
   setSelectedFilters: (
     selectedFilters: SpaceInboxFilterState['selectedFilters'],
   ) => void;
+  appliedFilters?: {
+    domains: string[];
+    tags: string[];
+    countries: string[];
+  };
+  setFilterApplied: (
+    applyFilters: SpaceInboxFilterState['appliedFilters'],
+  ) => void;
 };
 
 export const useSpaceInboxFilterStore = create<SpaceInboxFilterState>()(
@@ -30,6 +38,7 @@ export const useSpaceInboxFilterStore = create<SpaceInboxFilterState>()(
     setFilterOptions: (filterOptions) =>
       set(() => ({
         filterOptions,
+        isFilterApplied: false,
       })),
     selectedFilters: {
       domains: [],
@@ -39,6 +48,11 @@ export const useSpaceInboxFilterStore = create<SpaceInboxFilterState>()(
     setSelectedFilters: (selectedFilters) =>
       set(() => ({
         selectedFilters,
+      })),
+    appliedFilters: undefined,
+    setFilterApplied: (appliedFilters) =>
+      set(() => ({
+        appliedFilters,
       })),
   }),
 );

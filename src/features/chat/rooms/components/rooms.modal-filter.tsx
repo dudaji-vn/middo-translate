@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/actions';
@@ -15,16 +15,15 @@ import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import { Checkbox } from '@/components/form/checkbox';
 import { cn } from '@/utils/cn';
 import { Badge } from '@/components/ui/badge';
-import {
-  LANGUAGE_CODES_MAP,
-  SUPPORTED_LANGUAGES,
-} from '@/configs/default-language';
+import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { Global } from 'recharts';
+import { isEmpty } from 'lodash';
 
 export type RoomsFilterOption = {
   value: string;
   icon?: React.ReactNode;
   props?: React.ComponentPropsWithoutRef<'div'>;
+  name?: string;
 };
 type FilterSectionProps = {
   title: string;
@@ -114,7 +113,7 @@ const FilterSection: React.FC<FilterSectionProps> = ({ title, name }) => {
                         )}
                         {...item.props}
                       >
-                        {item.value}
+                        {item.name || item.value}
                       </Badge>
                     ) : (
                       <div
@@ -145,12 +144,15 @@ export interface RoomsFilterProps
 export const RoomsModalFilter = (props: RoomsFilterProps) => {
   const { t } = useTranslation('common');
   const [open, setOpen] = useState(false);
-  const { filterOptions, setSelectedFilters, selectedFilters } =
-    useSpaceInboxFilterStore();
+  const {
+    filterOptions,
+    setSelectedFilters,
+    selectedFilters,
+    setFilterApplied,
+  } = useSpaceInboxFilterStore();
 
   const onUpdateFilterOptions = () => {
-    console.log('Update filter options: ', filterOptions);
-    // TODO: refetch inbox list with new filter options
+    setFilterApplied(selectedFilters);
     setOpen(false);
   };
   const onDeselectAll = () => {
