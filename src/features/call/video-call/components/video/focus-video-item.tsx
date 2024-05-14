@@ -49,6 +49,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
 
   useEffect(() => {
     const handleFullScreenEsc = () => {
+      console.log('handleFullScreenEsc')
       const isFullScreen = document.fullscreenElement;
       if(!isFullScreen && isExpandFull){
         setIsExpandFull(false)

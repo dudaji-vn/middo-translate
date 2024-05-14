@@ -38,7 +38,9 @@ export default function useHandleDoodle() {
             setPinDoodle(true);
             setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
         }
-    },[participants, setDoodle, setDoodleImage, setLayout, setPinDoodle, t])
+    // Remove t from dependencies => language change will not trigger this function
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[participants, setDoodle, setDoodleImage, setLayout, setPinDoodle])
 
     const doodleEnd = useCallback((name: string) => {
         toast.success(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
@@ -48,7 +50,9 @@ export default function useHandleDoodle() {
         setDoodleImage('');
         setPinDoodle(false);
         setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
-    },[setDoodle, setDoodleImage, setDrawing, setLayout, setMyOldDoodle, setPinDoodle, t])
+    // Remove t from dependencies => language change will not trigger this function
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[setDoodle, setDoodleImage, setDrawing, setLayout, setMyOldDoodle, setPinDoodle])
     
     useEffect(() => {
         socket.on(SOCKET_CONFIG.EVENTS.CALL.START_DOODLE, doodleStart);
