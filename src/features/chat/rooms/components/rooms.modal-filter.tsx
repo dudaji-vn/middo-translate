@@ -11,7 +11,7 @@ import { FilterSection, RoomsFilterOption } from './filter/filter-section';
 
 type RoomsFilterName = 'countries' | 'domains' | 'tags';
 
-const FILTER_SECTIONS: RoomsFilterName[] = ['countries', 'domains', 'tags'];
+const FILTER_SECTIONS: RoomsFilterName[] = ['domains', 'countries', 'tags'];
 export interface RoomsFilterProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
