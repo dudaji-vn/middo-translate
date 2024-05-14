@@ -11,24 +11,7 @@ import { FilterSection, RoomsFilterOption } from './filter/filter-section';
 
 type RoomsFilterName = 'countries' | 'domains' | 'tags';
 
-type TFilterSection = {
-  name: RoomsFilterName;
-  label: string;
-};
-const FILTER_SECTIONS: TFilterSection[] = [
-  {
-    name: 'countries',
-    label: 'FILTERS.COUNTRIES',
-  },
-  {
-    name: 'domains',
-    label: 'FILTERS.DOMAINS',
-  },
-  {
-    name: 'tags',
-    label: 'FILTERS.TAGS',
-  },
-];
+const FILTER_SECTIONS: RoomsFilterName[] = ['countries', 'domains', 'tags'];
 export interface RoomsFilterProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -96,14 +79,14 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
     setOpen(isOpen);
   };
 
-  const onSelectSection = (sectionName: TFilterSection['name']) => {
+  const onSelectSection = (sectionName: RoomsFilterName) => {
     const options: RoomsFilterOption[] = filterOptions[sectionName] || [];
     setSelectedFilters({
       ...selectedFilters,
       [sectionName]: options.map((option) => option.value),
     });
   };
-  const onDeselectSection = (sectionName: TFilterSection['name']) => {
+  const onDeselectSection = (sectionName: RoomsFilterName) => {
     setSelectedFilters({
       ...selectedFilters,
       [sectionName]: [],
@@ -156,12 +139,13 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
               className="h-full w-full max-w-full p-0 transition-all duration-500  "
               defaultValue={['countries', 'domains', 'tags']}
             >
-              {FILTER_SECTIONS.map(({ label, name }) => {
+              {FILTER_SECTIONS.map((name) => {
                 const nameFilter = name as RoomsFilterName;
+                const translatedTitleKey = `FILTERS.${name.toUpperCase()}`;
                 return (
                   <FilterSection
                     key={name}
-                    title={t(label)}
+                    title={t(translatedTitleKey)}
                     name={name}
                     options={filterOptions[name] || []}
                     selectedValues={selectedFilters[nameFilter] || []}
