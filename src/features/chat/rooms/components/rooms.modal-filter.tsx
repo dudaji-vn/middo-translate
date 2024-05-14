@@ -159,10 +159,10 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
               })}
             </Accordion>
           </div>
-          <div className="w-full rounded-b-[12px] p-3  ">
+          <div className="w-full flex flex-row gap-3 justify-end rounded-b-[12px] p-3  ">
             <Button
               className="w-full"
-              size={'xs'}
+              size={'lg'}
               shape={'square'}
               onClick={onUpdateFilterOptions}
               disabled={disabledFilter}
@@ -171,7 +171,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
             </Button>
             <Button
               className="mt-3 w-full"
-              size={'xs'}
+              size={'lg'}
               shape={'square'}
               color={'default'}
               variant={'ghost'}
