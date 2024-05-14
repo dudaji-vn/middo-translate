@@ -1,4 +1,4 @@
-import { RoomsFilterOption } from '@/features/chat/rooms/components/rooms.modal-filter';
+import { RoomsFilterOption } from '@/features/chat/rooms/components/filter/filter-section';
 import { create } from 'zustand';
 
 export type SpaceInboxFilterState = {

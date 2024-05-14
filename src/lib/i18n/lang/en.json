@@ -548,8 +548,9 @@
     "CONVERSATIONS": "General",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
+    "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
-    "SCRIPTS": "Conversation Script",
+    "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
     "REPORT": "Report",
     "CLIENT_LIST": "Clients List",
@@ -558,6 +559,15 @@
       "AVERAGERATING": "Customer Rating",
       "COMPLETEDCONVERSATION": "Completed Conversations",
       "RESPONSECHAT": "Average Response Time"
+    },
+    "SCRIPT": {
+      "PAGE_TITLE": "Scripts Management",
+      "SEARCH": "Search for scripts"
+    },
+    "CLIENT": {
+      "PAGE_TITLE": "Clients Management",
+      "SEARCH": "Search for clients",
+      "EXPORT_XLSX": "Export to XLSX"
     }
   },
   "DESKTOP_LOGIN": {

@@ -550,6 +550,7 @@
     "CONVERSATIONS": "Chung",
     "COMPLETED": "Hoàn thành",
     "ARCHIVED": "Lưu trữ",
+    "CLIENTS": "Khách hàng",
     "STATISTICS": "Thống kê",
     "SCRIPTS": "Kịch bản trò chuyện",
     "SETTINGS": "Cài đặt",
@@ -560,6 +561,15 @@
       "AVERAGERATING": "Đánh giá khách hàng",
       "COMPLETEDCONVERSATION": "Cuộc trò chuyện hoàn thành",
       "RESPONSECHAT": "Thời gian phản hồi trung bình"
+    },
+    "SCRIPT": {
+      "PAGE_TITLE": "Kịch bản trò chuyện",
+      "SEARCH": "Tìm kiếm kịch bản"
+    },
+    "CLIENT": {
+      "PAGE_TITLE": "Danh sách khách hàng",
+      "SEARCH": "Tìm kiếm khách hàng",
+      "EXPORT_XLSX": "Xuất danh sách khách hàng"
     }
   },
   "DESKTOP_LOGIN": {

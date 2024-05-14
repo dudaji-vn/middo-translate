@@ -44,7 +44,7 @@ export function NavigationBreadcrumb({
     <Breadcrumb
       {...props}
       className={cn(
-        '!h-[42px] w-full bg-primary-100 px-4 py-3 text-neutral-500',
+        '!h-[42px] w-full bg-white px-4 py-3 text-neutral-500 border-b border-neutral-50',
         props.className,
       )}
     >

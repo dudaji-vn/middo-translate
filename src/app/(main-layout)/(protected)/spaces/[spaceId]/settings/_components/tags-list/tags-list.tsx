@@ -10,7 +10,7 @@ import {
   Trash2,
 } from 'lucide-react';
 
-import TableSearch from '../../../statistics/_components/clients-table/table-search';
+import TableSearch from '../../../clients/clients-table/table-search';
 import { Button } from '@/components/actions';
 import { TConversationTag } from '../../../_components/business-spaces';
 import { cn } from '@/utils/cn';
