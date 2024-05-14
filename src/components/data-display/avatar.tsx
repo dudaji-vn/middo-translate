@@ -49,10 +49,7 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           alt={alt}
           sizes="(max-width: 640px) 100px, 200px"
           className="object-cover"
-          src={
-            src ||
-            'https://res.cloudinary.com/devemail/image/upload/v1689673231/avatar/jys86gp3rnklfb6e6rzr.jpg'
-          }
+          src={src || '/anonymous_avt.png'}
         />
       </div>
     );
