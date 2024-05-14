@@ -85,7 +85,7 @@ const SelectPageLanguage = () => {
       >
         <Globe2 size={20} />
       </Button.Icon>
-      <span className="ml-4 block text-base font-medium flex-1">
+      <span className="ml-4 block text-base flex-1">
         {t('ACCOUNT_SETTING.DISPLAY_LANGUAGE')}
       </span>
       <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>

@@ -1,11 +1,19 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { forwardRef, useEffect, useMemo } from 'react';
+import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { SelectedFile, useMediaUpload } from './media-upload';
 import { Button } from './actions';
 import { PlayCircleIcon, PlusCircleIcon, XIcon } from 'lucide-react';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
 import { Editor } from '@tiptap/react';
+import Lightbox, { Slide } from 'yet-another-react-lightbox';
+import Download from 'yet-another-react-lightbox/plugins/download';
+import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import Video from 'yet-another-react-lightbox/plugins/video';
+import getThumbnailForVideo from '@/utils/get-thumbnail-for-video';
+import { MediaPreview } from './media-preview';
+
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor?: Editor | null;
@@ -16,11 +24,14 @@ export const AttachmentSelection = forwardRef<
   AttachmentSelectionProps
 >(({ editor }, ref) => {
   const { files, removeFile, open } = useMediaUpload();
+  const [index, setIndex] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (files.length > 0) editor?.commands.focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files.length]);
+
+  
   return (
     <AnimatePresence>
       {files.length > 0 && (
@@ -35,8 +46,9 @@ export const AttachmentSelection = forwardRef<
             <PlusCircleIcon />
           </Button.Icon>
           <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
+            <MediaPreview files={files} index={index} close={()=>setIndex(undefined)} />
             <AnimatePresence>
-              {files.map((file) => {
+              {files.map((file, index) => {
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -45,7 +57,9 @@ export const AttachmentSelection = forwardRef<
                     key={file.url}
                     className="group relative aspect-square h-[60px] w-[60px]"
                   >
-                    <div className="aspect-square h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl shadow">
+                    <div 
+                      className="aspect-square h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl shadow cursor-pointer" 
+                      onClick={() => setIndex(index - 1)}>
                       <MediaItem file={file} />
                     </div>
                     <button

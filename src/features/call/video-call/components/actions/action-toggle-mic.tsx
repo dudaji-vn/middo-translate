@@ -49,7 +49,6 @@ const ActionToggleMic = ({ handleChangeCameraOrMic }: ActionToggleMicProps) => {
     >
       <Tooltip
         title={isTurnOnMic ? t('TOOL_TIP.TURN_OFF_MICROPHONE') : t('TOOL_TIP.TURN_ON_MICROPHONE')}
-        contentProps={{ className: 'text-black font-normal ' }}
         triggerItem={isTurnOnMic ? <Mic /> : <MicOff />}
       />
     </Button.Icon>

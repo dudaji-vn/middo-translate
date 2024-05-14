@@ -30,9 +30,6 @@ export default function VideoCallHeader() {
       <span className="line-clamp-1 flex-1 font-semibold">{room?.name}</span>
       <Tooltip
         title={isFullScreen ? t('TOOL_TIP.MINIMIZE') : t('TOOL_TIP.MAXIMIZE')}
-        contentProps={{
-          className: 'text-neutral-800'
-        }}
         triggerItem={
           <Button.Icon
             variant="default"

@@ -67,7 +67,7 @@ export default function UpdateUserAvatar() {
             <Camera size={20}/>
           </div>
           <span className="ml-4 block text-center text-base">
-              {t('ACCOUNT_SETTING.AVATAR')}
+              {t('ACCOUNT_SETTING.CHANGE_AVATAR')}
             </span>
         </AlertDialogTrigger>
         <AlertDialogContent className="md:max-w-[80vw] xl:max-w-[70vw]">
