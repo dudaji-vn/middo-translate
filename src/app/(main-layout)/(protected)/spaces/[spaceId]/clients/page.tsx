@@ -99,7 +99,7 @@ const Page = ({
               className="w-full"
               onChange={(e) => onSearchChange(e.target.value)}
               onClear={() => onSearchChange('')}
-              placeholder={t('BUSINESS.SCRIPT.SEARCH')}
+              placeholder={t('BUSINESS.CLIENT.SEARCH')}
             />
           </div>
           <div className="h-fit w-fit flex-none ">
@@ -116,7 +116,6 @@ const Page = ({
           </div>
         </div>
       </div>
-
       <div className="w-full overflow-x-auto rounded-md px-10 py-3">
         <DataTable
           dividerRow
