@@ -47,7 +47,7 @@ export const MAPPED_CHARTS_INFO_KEY: Record<
 
 export const ROWS_PER_PAGE_OPTIONS = [5, 25, 75, 100];
 export const DEFAULT_CLIENTS_PAGINATION = {
-  limit: ROWS_PER_PAGE_OPTIONS[0],
+  limit: ROWS_PER_PAGE_OPTIONS[1],
   currentPage: 1,
   search: '',
 }
