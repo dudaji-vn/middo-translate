@@ -11,6 +11,7 @@ import { ESPaceRoles } from '../../settings/_components/space-setting/setting-it
 import {
   Archive,
   Circle,
+  GitFork,
   LineChartIcon,
   MessagesSquare,
   Settings,
@@ -43,6 +44,10 @@ const sidebarContents: Array<{
   {
     title: 'statistics',
     icon: <LineChartIcon />,
+  },
+  {
+    title: 'scripts',
+    icon: <GitFork />,
   },
   {
     title: 'settings',
@@ -115,7 +120,7 @@ const BusinessSidebarContent = ({
                   'relative scale-y-0 p-0',
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
-                    : 'min-w-[100px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
+                    : 'min-w-[160px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
                   isSelected ? 'text-white ' : 'text-neutral-600',
                 )}
               >

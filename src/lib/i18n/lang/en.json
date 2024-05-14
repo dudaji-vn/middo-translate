@@ -541,6 +541,7 @@
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
     "STATISTICS": "Statistics",
+    "SCRIPTS": "Conversation Script",
     "SETTINGS": "Settings",
     "REPORT": "Report",
     "CLIENT_LIST": "Clients List",
