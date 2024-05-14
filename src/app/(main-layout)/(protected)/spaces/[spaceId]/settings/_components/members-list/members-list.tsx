@@ -16,7 +16,7 @@ import {
 } from '@/services/business-space.service';
 import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import TableSearch from '../../../statistics/_components/clients-table/table-search';
+import TableSearch from '../../../clients/clients-table/table-search';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/actions';
 import { isEmpty } from 'lodash';
@@ -279,11 +279,11 @@ const MembersList = ({ space }: { space: TSpace }) => {
   const { adminsData, membersData } = useMemo(() => {
     const filteredMembers = search
       ? members?.filter((member) => {
-          return (
-            member.email.toLowerCase().includes(search.toLowerCase()) ||
-            member.role.toLowerCase().includes(search.toLowerCase())
-          );
-        })
+        return (
+          member.email.toLowerCase().includes(search.toLowerCase()) ||
+          member.role.toLowerCase().includes(search.toLowerCase())
+        );
+      })
       : members;
     return filteredMembers.reduce(
       (acc, member: Member) => {

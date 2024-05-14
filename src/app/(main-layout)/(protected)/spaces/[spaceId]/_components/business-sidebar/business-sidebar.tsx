@@ -11,6 +11,7 @@ import { ESPaceRoles } from '../../settings/_components/space-setting/setting-it
 import {
   Archive,
   Circle,
+  Contact,
   GitFork,
   LineChartIcon,
   MessagesSquare,
@@ -40,6 +41,10 @@ const sidebarContents: Array<{
   {
     title: 'archived',
     icon: <Archive />,
+  },
+  {
+    title: 'clients',
+    icon: <Contact />,
   },
   {
     title: 'statistics',
