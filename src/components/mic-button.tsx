@@ -17,6 +17,7 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
 import { Editor } from '@tiptap/react';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 export interface MicButtonProps {
   className?: string;
   editor: Editor | null;
@@ -32,6 +33,7 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
     const [transcribing, setTranscribing] = useState(false);
     const enableTranscribing = () => setTranscribing(true);
     const disableTranscribing = () => setTranscribing(false);
+    const { postMessage } = useReactNativePostMessage();
 
     const {
       listening,
@@ -66,6 +68,10 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
     }, [listening, stopSpeechToText]);
 
     const handleToggleListening = () => {
+      postMessage({
+        type: 'Trigger',
+        data: { type: 'SpeechToText', value: !listening },
+      });
       listening ? handleStopListening() : handleStartListening();
     };
 
