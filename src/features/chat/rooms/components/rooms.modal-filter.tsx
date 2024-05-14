@@ -9,7 +9,7 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import { FilterSection, RoomsFilterOption } from './filter/filter-section';
 
-type RoomsFilterName = 'countries' | 'domains' | 'tags';
+export type RoomsFilterName = 'countries' | 'domains' | 'tags';
 
 const FILTER_SECTIONS: RoomsFilterName[] = ['domains', 'countries', 'tags'];
 export interface RoomsFilterProps

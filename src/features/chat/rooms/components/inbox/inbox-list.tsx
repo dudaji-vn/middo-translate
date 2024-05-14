@@ -25,6 +25,7 @@ import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
 import { User } from '@/features/users/types';
 import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
+import ViewSpaceInboxFilter from './view-space-inbox-filter';
 
 interface InboxListProps {
   type: InboxType;
