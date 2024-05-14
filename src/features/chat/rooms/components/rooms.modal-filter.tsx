@@ -151,7 +151,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
                     selectedValues={selectedFilters[nameFilter] || []}
                     onSelectAll={() => onSelectSection(nameFilter)}
                     onDeselectAll={() => onDeselectSection(nameFilter)}
-                    onToggleFilter={(value) =>
+                    onToggleOption={(value) =>
                       onToggleFilterItem(value, nameFilter)
                     }
                   />

@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/data-display/accordion';
-import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import { Checkbox } from '@/components/form/checkbox';
 import { cn } from '@/utils/cn';
 import { Badge } from '@/components/ui/badge';
@@ -24,9 +23,48 @@ type FilterSectionProps = {
   selectedValues: string[];
   onSelectAll: () => void;
   onDeselectAll: () => void;
-  onToggleFilter: (value: string) => void;
+  onToggleOption: (value: string) => void;
 };
 
+const OptionLabel = ({
+  icon,
+  type = 'default',
+  label,
+  value,
+  ...props
+}: RoomsFilterOption & {
+  type: 'badge' | 'default';
+}) => {
+  if (type === 'badge') {
+    return (
+      <Badge
+        variant="default"
+        className={cn(
+          'line-clamp-1 max-w-[380px] cursor-pointer  capitalize max-sm:max-w-[200px]',
+          {
+            hidden: !value,
+          },
+        )}
+        {...props}
+      >
+        {label || value}
+      </Badge>
+    );
+  }
+  return (
+    <div
+      className={
+        'mt-0 flex cursor-pointer flex-row items-center gap-2 [&_svg]:!size-4 '
+      }
+      {...props}
+    >
+      {icon}
+      <span className="line-clamp-1  max-w-[380px] flex-1 break-words text-base font-normal max-sm:max-w-[200px] ">
+        {label || value}
+      </span>
+    </div>
+  );
+};
 export const FilterSection: React.FC<FilterSectionProps> = ({
   title,
   name,
@@ -34,14 +72,9 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
   selectedValues,
   onSelectAll,
   onDeselectAll,
-  onToggleFilter,
+  onToggleOption,
 }) => {
-//   const { filterOptions, selectedFilters, setSelectedFilters } =
-//     useSpaceInboxFilterStore();
-  //   const options = filterOptions[name] || [];
-  //   const selectedValues = selectedFilters[name] || [];
   const hasSelected = !!selectedValues.length;
-
 
   return (
     <AccordionItem value={name} className="w-full p-0">
@@ -74,45 +107,27 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
       </AccordionTrigger>
       <AccordionContent className="accordion-up 0.2s w-full p-0  ease-out">
         <div className="flex flex-col gap-0 px-6">
-          {options.map((item, index) => {
+          {options.map(({ value, label, icon, props }, index) => {
             const displayText =
               name === 'countries'
-                ? SUPPORTED_LANGUAGES.find((l) => l.code === item.value)?.name
-                : item.value;
+                ? SUPPORTED_LANGUAGES.find((l) => l.code === value)?.name
+                : value;
             return (
               <div
                 key={index}
                 className="my-0 flex h-fit !w-full cursor-pointer flex-row items-center justify-between p-3"
-                onClick={() => onToggleFilter(item.value)}
+                onClick={() => onToggleOption(value)}
               >
                 <Checkbox
-                  checked={selectedValues.includes(item.value)}
+                  checked={selectedValues.includes(value)}
                   label={
-                    name === 'tags' ? (
-                      <Badge
-                        variant="default"
-                        className={cn(
-                          'line-clamp-1 max-w-[380px] cursor-pointer  capitalize max-sm:max-w-[200px]',
-                          {
-                            hidden: !item.value,
-                          },
-                        )}
-                        {...item.props}
-                      >
-                        {item.label || item.value}
-                      </Badge>
-                    ) : (
-                      <div
-                        className={
-                          'mt-0 flex cursor-pointer flex-row items-center gap-2 [&_svg]:!size-4 '
-                        }
-                      >
-                        {item.icon}
-                        <span className="line-clamp-1  max-w-[380px] flex-1 break-words text-base font-normal max-sm:max-w-[200px] ">
-                          {displayText}
-                        </span>
-                      </div>
-                    )
+                    <OptionLabel
+                      type={name === 'tags' ? 'badge' : 'default'}
+                      value={value}
+                      label={displayText}
+                      icon={icon}
+                      {...props}
+                    />
                   }
                 />
               </div>
