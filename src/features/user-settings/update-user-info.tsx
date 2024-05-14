@@ -6,7 +6,7 @@ import {
   AlertDialogContent,
   AlertDialogTrigger,
 } from '@/components/feedback';
-import { Button } from '@/components/actions'
+import { Button } from '@/components/actions';
 import { AlertError } from '@/components/alert/alert-error';
 import { UserRound } from 'lucide-react';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
@@ -100,11 +100,11 @@ export default function UpdateUserInfo() {
     <>
       {loading && <PageLoading />}
       <AlertDialog open={open} onOpenChange={onModalChange}>
-        <AlertDialogTrigger className='w-full flex items-center px-5 py-4 border-b border-b-[#F2F2F2] bg-white md:hover:bg-primary-100'>
-          <div className='relative bg-primary-200 rounded-xl !w-10 !h-10 flex items-center justify-center text-primary'>
+        <AlertDialogTrigger className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4 md:hover:bg-primary-100">
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
             <UserRound size={20} />
           </div>
-          <span className="ml-4 block text-center text-base">
+          <span className="ml-4 block text-center text-base font-medium">
             {t('ACCOUNT_SETTING.PROFILE')}
           </span>
         </AlertDialogTrigger>

@@ -27,7 +27,7 @@ export const Item = ({
         className,
         onClick && 'cursor-pointer hover:bg-primary-100 active:bg-primary-200',
         danger && 'text-error',
-        onClick && danger && 'hover:bg-error-100/20 active:bg-error-200',
+        onClick && danger && 'hover:bg-error-100/20 active:bg-error-100/60',
       )}
       onClick={onClick}
     >

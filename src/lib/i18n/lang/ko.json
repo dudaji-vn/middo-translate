@@ -64,7 +64,9 @@
     "DRAFT": "임시",
     "TRANSLATED_FROM": "번역됨",
     "EDITING": "편집 중",
-    "EDITED": "편집됨"
+    "EDITED": "편집됨",
+    "SURE": "물론이죠",
+    "DELETE_ACCOUNT": "계정 삭제"
   },
   "MESSAGE": {
     "ERROR": {
@@ -395,6 +397,12 @@
     "SIGN_OUT": {
       "TITLE": "로그아웃 하시겠습니까?",
       "DESCRIPTION": "앱에서 로그아웃되며 다시 로그인해야 합니다."
+    },
+    "DELETE_ACCOUNT": {
+      "TITLE": "계정 삭제",
+      "DESCRIPTION": "계정을 삭제하면 모든 데이터가 삭제됩니다. 계정을 삭제하시겠습니까?",
+      "CONFIRM_RETYPE": "확인을 위해 이 <strong>{{code}}</strong> 를 다시 타이핑해 주세요.",
+      "CONFIRM": "내 계정을 삭제하고 싶습니다"
     },
     "ADD_USER": {
       "TITLE": "멤버 추가"

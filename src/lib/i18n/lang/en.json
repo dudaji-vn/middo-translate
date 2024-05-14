@@ -64,7 +64,9 @@
     "DRAFT": "Draft",
     "TRANSLATED_FROM": "Translated from",
     "EDITED": "Edited",
-    "EDITING": "Editing"
+    "EDITING": "Editing",
+    "SURE": "Sure",
+    "DELETE_ACCOUNT": "Delete Account"
   },
   "MESSAGE": {
     "ERROR": {
@@ -395,6 +397,12 @@
     "SIGN_OUT": {
       "TITLE": "Do you want to sign out?",
       "DESCRIPTION": "You will be signed out of the app and need to log in again."
+    },
+    "DELETE_ACCOUNT": {
+      "TITLE": "Delete Account",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete your account?",
+      "CONFIRM_RETYPE": "Please retype this <strong>{{code}}</strong> to confirm",
+      "CONFIRM": "I want to delete my account"
     },
     "ADD_USER": {
       "TITLE": "Add Member"

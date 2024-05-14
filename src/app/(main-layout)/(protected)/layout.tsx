@@ -16,12 +16,21 @@ export default function ProtectedLayout({
   if (!isLoaded || !user)
     return (
       <div className="fixed bottom-0 left-0 right-0 top-0 flex items-center justify-center">
-        <Image src='/loading-middo.gif' alt="Loading" width={100} height={100} />
+        <Image
+          src="/loading-middo.gif"
+          alt="Loading"
+          width={100}
+          height={100}
+        />
       </div>
     );
 
   if (isLoaded && user.status == 'unset' && pathname !== '/create-account') {
     router.push('/create-account');
+    return;
+  }
+  if (user.status == 'deleted' && pathname !== '/account-deleted') {
+    router.push('/account-deleted');
     return;
   }
   return <>{children}</>;
