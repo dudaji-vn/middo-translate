@@ -560,6 +560,10 @@
       "AVERAGERATING": "Đánh giá khách hàng",
       "COMPLETEDCONVERSATION": "Cuộc trò chuyện hoàn thành",
       "RESPONSECHAT": "Thời gian phản hồi trung bình"
+    },
+    "SCRIPT": {
+      "PAGE_TITLE": "Kịch bản trò chuyện",
+      "SEARCH": "Tìm kiếm kịch bản"
     }
   },
   "DESKTOP_LOGIN": {

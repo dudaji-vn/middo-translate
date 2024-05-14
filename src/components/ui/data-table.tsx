@@ -140,7 +140,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
               {dividerRow && (
                 <div
-                  className="h-4 w-full bg-white"
+                  className="h-2 w-full bg-white"
                   {...dividerProps}
                   {...dividerRowProps}
                 />

@@ -32,7 +32,7 @@ const Page = ({
   const { t } = useTranslation('common');
 
   return (
-    <section className="relative w-full space-y-4">
+    <section className="relative w-full">
       <div className="flex  flex-col justify-center gap-4  px-4 py-3 font-medium md:flex-row md:items-center md:px-10">
         <span>Scripts Management</span>
         <em className="max-md:hidden md:w-1/6 xl:w-1/5" />
@@ -42,7 +42,7 @@ const Page = ({
               className="w-full"
               onChange={(e) => onSearchChange(e.target.value)}
               onClear={() => onSearchChange('')}
-              placeholder={t('SEARCH')}
+              placeholder={t('BUSINESS.SCRIPT.SEARCH')}
             />
           </div>
           <div className="h-fit w-fit flex-none ">
@@ -52,7 +52,8 @@ const Page = ({
               size="md"
               startIcon={<Plus />}
             >
-              Add <span className="max-md:hidden">New Script </span>
+              Add&nbsp;
+              <span className="max-md:hidden">New Script </span>
             </Button>
           </div>
         </div>

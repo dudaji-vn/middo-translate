@@ -558,6 +558,10 @@
       "AVERAGERATING": "고객 평가",
       "COMPLETEDCONVERSATION": "완료된 대화",
       "RESPONSECHAT": "평균 응답 시간"
+    },
+    "SCRIPT": {
+      "PAGE_TITLE": "채팅 스크립트",
+      "SEARCH": "검색"
     }
   },
   "DESKTOP_LOGIN": {

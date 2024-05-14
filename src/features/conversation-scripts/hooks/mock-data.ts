@@ -4,6 +4,12 @@ export const mockScriptData: ChatScript[] = [
   {
     _id: '1',
     name: 'Shoe Store',
+    createdBy: {
+      _id: '12',
+      email: 'linh',
+      name: 'Linh',
+      status: 'active',
+    },
     lastEditedBy: {
       _id: '11',
       email: 'hi',
@@ -20,6 +26,12 @@ export const mockScriptData: ChatScript[] = [
   {
     _id: '2',
     name: 'Marketing Milk Tea',
+    createdBy: {
+      _id: '123',
+      email: 'hoan',
+      name: 'Kim Hoan',
+      status: 'active',
+    },
     lastEditedBy: {
       _id: '22',
       email: 'hi',
