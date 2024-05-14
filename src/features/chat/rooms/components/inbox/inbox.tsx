@@ -11,8 +11,9 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-export interface InboxProps {
-}
+import ViewSpaceInboxFilter from './view-space-inbox-filter';
+import { cn } from '@/utils/cn';
+export interface InboxProps {}
 export type InboxType = 'all' | 'group' | 'help-desk' | 'unread-help-desk';
 
 export const inboxTabMap: Record<
@@ -41,7 +42,10 @@ export const inboxTabMap: Record<
 };
 
 const normalInboxTabs = [inboxTabMap.all, inboxTabMap.group];
-const businessInboxTabs = [inboxTabMap['help-desk'], inboxTabMap['unread-help-desk']];
+const businessInboxTabs = [
+  inboxTabMap['help-desk'],
+  inboxTabMap['unread-help-desk'],
+];
 
 export const Inbox = (props: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
@@ -52,7 +56,9 @@ export const Inbox = (props: InboxProps) => {
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
     (_, matchedKeys) => {
       setType(
-        isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB) ? tabs[0].value : tabs[1].value,
+        isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB)
+          ? tabs[0].value
+          : tabs[1].value,
       );
     },
   );
@@ -75,6 +81,11 @@ export const Inbox = (props: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
+          <ViewSpaceInboxFilter
+            className={cn('w-full', {
+              hidden: !isBusiness,
+            })}
+          />
           <InboxList type={type} />
         </div>
       </div>
