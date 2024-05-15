@@ -60,12 +60,11 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
 
   const disabledFilter = useMemo(() => {
     const flattenSelection = Object.values(selectedFilters).flat().sort();
-    const flattenFilterOptions = Object.values(filterOptions)
+    const flattenAppliedFilters = Object.values(appliedFilters || {})
       .flat()
-      .map((f) => f.value)
       .sort();
-    return flattenSelection.join() === flattenFilterOptions.join();
-  }, [selectedFilters, filterOptions]);
+    return flattenSelection.join() === flattenAppliedFilters.join();
+  }, [selectedFilters, appliedFilters]);
 
   const onCancel = () => {
     if (appliedFilters) {
