@@ -6,13 +6,14 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
 import { Globe } from 'lucide-react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { RoomsFilterOption } from '../filter/filter-section';
 
 const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
-  const { selectedFilters, setSelectedFilters, filterOptions } =
+  const { selectedFilters, setFilterApplied, filterOptions } =
     useSpaceInboxFilterStore();
 
   const onClearAllFilters = () => {
-    setSelectedFilters({
+    setFilterApplied({
       countries: [],
       domains: [],
       tags: [],
@@ -20,13 +21,13 @@ const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
   };
   const onRemoveFilterItem = (name: string, value: string) => {
     const selectedValues = selectedFilters[name as RoomsFilterName] || [];
-    setSelectedFilters({
+    setFilterApplied({
       ...selectedFilters,
       [name]: selectedValues.filter((val) => val !== value),
     });
   };
   const onRemoveFilterSection = (name: string) => {
-    setSelectedFilters({
+    setFilterApplied({
       ...selectedFilters,
       [name]: [],
     });
@@ -37,7 +38,7 @@ const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
         acc[tag.value as string] = tag;
         return acc;
       },
-      {} as Record<string, any>,
+      {} as Record<string, RoomsFilterOption>,
     );
   const renderValue = (section: string, value: string) => {
     const params = getParams(section as RoomsFilterName) || {};
