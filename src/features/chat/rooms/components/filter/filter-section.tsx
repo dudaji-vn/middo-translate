@@ -111,7 +111,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
             const displayText =
               name === 'countries'
                 ? SUPPORTED_LANGUAGES.find((l) => l.code === value)?.name
-                : value;
+                : label || value;
             return (
               <div
                 key={index}

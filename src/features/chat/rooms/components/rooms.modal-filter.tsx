@@ -39,8 +39,8 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
     };
   }, [filterOptions, selectedFilters]);
 
-  const onUpdateFilterOptions = () => {
-    setFilterApplied(isSelectAll ? undefined : selectedFilters);
+  const onApplyFilter = () => {
+    setFilterApplied(selectedFilters);
     setOpen(false);
   };
   const onDeselectAll = () => {
@@ -175,7 +175,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
             <Button
               size={'lg'}
               shape={'square'}
-              onClick={onUpdateFilterOptions}
+              onClick={onApplyFilter}
               disabled={disabledFilter}
             >
               Filter

@@ -45,6 +45,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (data) {
+      console.log('data', data)
       setFilterOptions(getRoomsFilterOptionsFromSpace(data));
       setSpace(data);
     }

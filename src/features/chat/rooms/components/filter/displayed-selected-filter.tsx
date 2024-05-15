@@ -6,7 +6,7 @@ import { ChevronDown, XIcon } from 'lucide-react';
 import React from 'react';
 
 const DisplayedSelectedFilter = ({
-  filterData,
+  filterData = {},
   onClearFilter,
   onRemoveItem,
   onRemoveSection,
@@ -14,7 +14,7 @@ const DisplayedSelectedFilter = ({
   renderValue,
   ...props
 }: {
-  filterData: Record<string, string[]>;
+  filterData?: Record<string, string[]>;
   onClearFilter: () => void;
   onRemoveItem: (filterField: string, value: string) => void;
   onRemoveSection: (filterField: string) => void;
@@ -74,11 +74,11 @@ const DisplayedSelectedFilter = ({
             hidden && 'hidden',
           )}
         >
-          {sections.map((div) => {
-            const values = filterData[div];
+          {sections.map((section) => {
+            const values = filterData[section];
             return (
               <div
-                key={div}
+                key={section}
                 className={cn(
                   'flex flex-row justify-between gap-2 rounded-[16px] bg-[#FAFAFA] p-1',
                   {
@@ -94,21 +94,21 @@ const DisplayedSelectedFilter = ({
                         key={value}
                         color={'default'}
                         shape={'square'}
-                        onClick={() => onRemoveItem(div, value)}
+                        onClick={() => onRemoveItem(section, value)}
                         className="relative flex w-fit flex-row justify-between gap-2  pr-6"
                       >
-                        {renderValue?.(div, value) || (
+                        {renderValue?.(section, value) || (
                           <span className=" max-w-full flex-1  !truncate text-ellipsis text-sm font-semibold ">
                             {value}
                           </span>
                         )}
-                        <XIcon className="absolute right-2 inset-y !size-4" />
+                        <XIcon className="inset-y absolute right-2 !size-4" />
                       </Button>
                     );
                   })}
                 </div>
                 <Button.Icon
-                  onClick={() => onRemoveSection(div)}
+                  onClick={() => onRemoveSection(section)}
                   variant="ghost"
                   color="default"
                   size={'xs'}
