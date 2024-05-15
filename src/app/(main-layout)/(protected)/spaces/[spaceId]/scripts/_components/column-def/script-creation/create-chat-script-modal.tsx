@@ -159,7 +159,10 @@ const CreateChatScriptModal = () => {
       spaceId,
     };
     try {
-      await createOrEditChatScript(payload);
+      const res = await createOrEditChatScript(payload);
+      if (res?.data) {
+        toast.success('Chat script created successfully');
+      }
       setOpen(false);
     } catch (error) {
       toast.error('Error on creating chat script');

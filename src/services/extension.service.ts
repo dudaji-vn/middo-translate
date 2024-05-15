@@ -8,7 +8,7 @@ export const createExtension = (data: {
   firstMessage: string;
   spaceId: string;
 }) => {
-  return put('/help-desk/create-or-edit-extension', data);
+  return put(`/help-desk/spaces/${data.spaceId}/extensions`, data);
 };
 
 export const deleteExtension = (extensionId: string) => {
@@ -22,7 +22,7 @@ export const startAGuestConversation = (data: {
   fromDomain?: string;
   email: string;
 }) => {
-  return post('/help-desk/create-client', data);
+  return post('/help-desk/clients', data);
 };
 
 export const endConversation = (data: { roomId: string; senderId: string }) => {

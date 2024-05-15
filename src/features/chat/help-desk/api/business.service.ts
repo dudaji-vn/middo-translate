@@ -1,5 +1,5 @@
 import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
-import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
 import { User } from '@/features/users/types';
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
@@ -264,7 +264,7 @@ class BusinessAPI {
           toDate: custom.toDate,
         }),
       }).toString();
-      const path = `${this.basePath}/help-desk/analytics?${query}`;
+      const path = `${this.basePath}/help-desk/spaces/${spaceId}/analytics?${query}`;
       const response = await fetch(path, {
         method: 'GET',
         headers: {
@@ -284,10 +284,12 @@ class BusinessAPI {
   }
 
   async getMyClients({
+    spaceId,
     search = '',
     limit = DEFAULT_CLIENTS_PAGINATION.limit,
     currentPage = DEFAULT_CLIENTS_PAGINATION.currentPage,
   }: {
+    spaceId: string;
     search: string;
     limit?: number;
     currentPage?: number;
@@ -296,7 +298,8 @@ class BusinessAPI {
     totalPage: number;
   }> {
     const cookieStore = cookies();
-    const path = `${this.basePath}/help-desk/my-clients?q=${search}&limit=${limit}&currentPage=${currentPage}`;
+    const path = `${this.basePath}/help-desk/spaces/${spaceId}/my-
+clients?q=${search}&limit=${limit}&currentPage=${currentPage}`;
     try {
       const response = await fetch(path, {
         method: 'GET',

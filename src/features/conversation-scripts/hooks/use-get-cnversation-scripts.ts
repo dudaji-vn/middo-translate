@@ -23,16 +23,16 @@ export const useGetConversationScripts = ({
     ],
     queryFn: async () => {
       try {
-        return { items: mockScriptData };
-        // TODO: remove Mock-data and replace with actual API call
-        const response = await axios.get(`/help-desk/scripts`, {
-          params: {
-            q: search,
-            limit,
-            currentPage: currentPage,
-            spaceId,
+        const response = await axios.get(
+          `/help-desk/spaces/${spaceId}/scripts`,
+          {
+            params: {
+              q: search,
+              limit,
+              currentPage: currentPage,
+            },
           },
-        });
+        );
         return response.data;
       } catch (error) {
         console.error(
