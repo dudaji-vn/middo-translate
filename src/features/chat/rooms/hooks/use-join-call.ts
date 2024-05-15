@@ -12,14 +12,19 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 
 export const useJoinCall = () => {
   const { user } = useAuthStore();
-  const { setRoom, room, setTempRoom, tmpRoom,clearRequestCall } = useVideoCallStore();
+  const { postMessage } = useReactNativePostMessage();
+  const { setRoom, room, setTempRoom, tmpRoom, clearRequestCall } =
+    useVideoCallStore();
   const router = useRouter();
-  const {t} = useTranslation('common')
+  const { t } = useTranslation('common');
   const { room: roomChatBox, updateRoom } = useChatBox();
-  const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
+  const addParticipant = useParticipantVideoCallStore(
+    (state) => state.addParticipant,
+  );
   const createRoomMeeting = useCallback(async () => {
     const res = await roomApi.createRoom({
       participants: roomChatBox.participants.map((p) => p._id),
@@ -32,8 +37,15 @@ export const useJoinCall = () => {
 
   const startVideoCall = useCallback(
     async (roomId: string) => {
+      postMessage({
+        type: 'Trigger',
+        data: {
+          event: 'start-call',
+          roomId: roomId,
+        },
+      });
       if (room?.roomId == roomId) return;
-      if(room && !tmpRoom) {
+      if (room && !tmpRoom) {
         setTempRoom(roomId);
         return;
       }
@@ -55,18 +67,35 @@ export const useJoinCall = () => {
         data.call.type === CALL_TYPE.DIRECT
       ) {
         // Get participants id except me
-        const inviteParticipant = data?.room?.participants.filter((p: any) => p._id !== user?._id)
+        const inviteParticipant = data?.room?.participants.filter(
+          (p: any) => p._id !== user?._id,
+        );
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
           users: [...inviteParticipant],
           room: data?.call,
           user: user,
         });
         setTimeout(() => {
-          addParticipant({ user: inviteParticipant[0], socketId: inviteParticipant._id, status: 'WAITING' });
+          addParticipant({
+            user: inviteParticipant[0],
+            socketId: inviteParticipant._id,
+            status: 'WAITING',
+          });
         }, 500);
       }
     },
-    [addParticipant, clearRequestCall, createRoomMeeting, room, setRoom, setTempRoom, t, tmpRoom, user],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      addParticipant,
+      clearRequestCall,
+      createRoomMeeting,
+      room,
+      setRoom,
+      setTempRoom,
+      t,
+      tmpRoom,
+      user,
+    ],
   );
 
   return startVideoCall;

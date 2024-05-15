@@ -1,19 +1,19 @@
 'use client';
 
-import { ArrowLeft, LogOut, LogOutIcon } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 
 import { Button } from '@/components/actions';
-import { CircleFlag } from 'react-circle-flags';
-import Image from 'next/image';
 import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
 import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
 import UpdateUserInfo from '@/features/user-settings/update-user-info';
 import UpdateUserPassword from '@/features/user-settings/update-user-password';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
-import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { CircleFlag } from 'react-circle-flags';
 import { useTranslation } from 'react-i18next';
 import SelectPageLanguage from './_components/select-page-language';
+import { DeleteAccount } from '@/features/user-settings/delete-account';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -36,7 +36,7 @@ export default function AccountSettings() {
               alt={user?.name || 'Anonymous'}
               width={500}
               height={500}
-              className="h-full w-full overflow-hidden rounded-full object-cover border border-neutral-50"
+              className="h-full w-full overflow-hidden rounded-full border border-neutral-50 object-cover"
             ></Image>
             {user?.language && (
               <div className="absolute -bottom-1 -right-1 mt-2 flex items-center justify-center overflow-hidden rounded-full border-4 border-[#FCFCFC]">
@@ -67,21 +67,21 @@ export default function AccountSettings() {
           <SelectPageLanguage />
         </div>
         <div
-          className="flex w-full cursor-pointer items-center bg-white px-5 py-4 md:hover:bg-error-100/20"
+          className="flex w-full cursor-pointer items-center bg-white px-5 py-4 md:hover:bg-neutral-100/20"
           onClick={signOut}
         >
           <Button.Icon
-            variant={'ghost'}
-            color={'error'}
+            color={'default'}
             size={'sm'}
-            className="relative rounded-xl bg-error-100 !w-10 !h-10"
+            className="relative !h-10 !w-10 rounded-xl"
           >
             <LogOut size={20} />
           </Button.Icon>
-          <span className="ml-4 block text-center text-base text-error-400-main">
+          <span className="ml-4 block text-center text-base font-medium ">
             {t('ACCOUNT_SETTING.SIGN_OUT')}
           </span>
         </div>
+        <DeleteAccount />
       </div>
     </div>
   );

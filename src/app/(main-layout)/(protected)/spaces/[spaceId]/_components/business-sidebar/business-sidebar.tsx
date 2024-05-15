@@ -11,6 +11,8 @@ import { ESPaceRoles } from '../../settings/_components/space-setting/setting-it
 import {
   Archive,
   Circle,
+  Contact,
+  GitFork,
   LineChartIcon,
   MessagesSquare,
   Settings,
@@ -41,8 +43,16 @@ const sidebarContents: Array<{
     icon: <Archive />,
   },
   {
+    title: 'clients',
+    icon: <Contact />,
+  },
+  {
     title: 'statistics',
     icon: <LineChartIcon />,
+  },
+  {
+    title: 'scripts',
+    icon: <GitFork />,
   },
   {
     title: 'settings',
@@ -115,7 +125,7 @@ const BusinessSidebarContent = ({
                   'relative scale-y-0 p-0',
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
-                    : 'min-w-[100px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
+                    : 'min-w-[160px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
                   isSelected ? 'text-white ' : 'text-neutral-600',
                 )}
               >
@@ -189,10 +199,10 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
         onMouseEnter={expandSheet}
       >
         <SheetContent
-          overlayProps={{ className: ' top-[93px]' }}
+          overlayProps={{ className: ' top-[94px]' }}
           side={'left'}
           onMouseLeave={shinkSheet}
-          className="bottom-0  top-[93px]  w-fit p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          className="bottom-0  top-[94px]  w-fit p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
         >
           <div className="h-full  w-full" onMouseLeave={shinkSheet}>
             <BusinessSidebarContent

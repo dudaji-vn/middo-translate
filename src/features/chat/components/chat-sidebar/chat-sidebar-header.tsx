@@ -103,7 +103,6 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               </div>
             }
           />
-          {isBusiness && <RoomsModalFilter />}
           <Tooltip
             title={t('TOOL_TIP.SETTINGS')}
             triggerItem={
@@ -119,6 +118,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
       <div
         className={cn(
           'flex items-center gap-1 ',
+          { 'gap-3': isBusiness && !isSearch },
           pathname?.includes('statistics') && 'hidden',
         )}
       >
@@ -155,6 +155,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               onClear={handleBack}
             />
           </motion.div>
+          {!isSearch && isBusiness && <RoomsModalFilter />}
         </AnimatePresence>
       </div>
     </div>

@@ -5,7 +5,8 @@ type UserStatus =
   | 'banned'
   | 'unset'
   | 'inactive'
-  | 'anonymous';
+  | 'anonymous'
+  | 'deleted';
 export type User = {
   _id: string;
   name: string;

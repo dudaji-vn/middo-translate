@@ -11,6 +11,9 @@ import { axios } from '@/lib/axios';
 import queryString from 'query-string';
 import { uploadImage } from '@/utils/upload-img';
 import { InboxType } from '../components/inbox/inbox';
+import { t } from 'i18next';
+import { convertRoomsFilterOptionsToString } from '@/utils/get-rooms-filter-options';
+import { SpaceInboxFilterState } from '@/stores/space-inbox-filter.store';
 
 const basePath = '/rooms';
 
@@ -24,11 +27,21 @@ export const roomApi = {
       type: InboxType;
       status?: string | null;
       spaceId?: string;
+      filterOptions?: {
+        domains?: string[];
+        countries?: string[];
+        tags?: string[];
+      };
     },
   ) {
+    const { filterOptions, ...restParams } = params;
+    const queryParams = {
+      ...restParams,
+      ...convertRoomsFilterOptionsToString(filterOptions),
+    };
     const path = queryString.stringifyUrl({
       url: basePath,
-      query: params,
+      query: queryParams,
     });
     const res: Response<ListResponse<Room, CursorPagination>> =
       await axios.get(path);
@@ -172,6 +185,19 @@ export const roomApi = {
   async getPinned(spaceId?: string) {
     const res: Response<Room[]> = await axios.get(
       `${basePath}/pin` + (spaceId ? `?spaceId=${spaceId}` : ''),
+    );
+    return res.data;
+  },
+
+  async toggleArchive({
+    roomId,
+    archive,
+  }: {
+    roomId: string;
+    archive: boolean;
+  }) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/${archive ? 'archive' : 'unarchive'}`,
     );
     return res.data;
   },

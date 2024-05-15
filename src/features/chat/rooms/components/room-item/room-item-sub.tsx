@@ -12,6 +12,7 @@ import { generateSystemMessageContent } from '@/features/chat/messages/utils';
 import { messageApi } from '@/features/chat/messages/api';
 import { Room } from '../../types';
 import { Clock9, LogOut } from 'lucide-react';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 const ItemSub = ({
   message,
@@ -29,6 +30,7 @@ const ItemSub = ({
   const currentUserId = currentUser?._id;
   const isMe = message.sender._id === currentUserId;
   const userLanguage = currentUser.language;
+  const { isBusiness } = useBusinessNavigationData();
   const isRead = message.readBy?.includes(currentUserId);
   const { t } = useTranslation('common');
   const messageContent = useMemo(
@@ -301,7 +303,7 @@ const ItemSub = ({
 
   return (
     <div className="flex items-center">
-      <div className="flex w-full flex-row items-center justify-between gap-1">
+      <div className="flex w-full flex-row items-center justify-between gap-1 ">
         <Typography
           className={cn(
             'line-clamp-1 flex-1 break-all',
@@ -310,11 +312,11 @@ const ItemSub = ({
         >
           {preMessage} {contentDisplay}
         </Typography>
-        {isExpired && <Clock9 className=" size-4 text-error-500" />}
-        {isVisitorLeft && <LogOut className=" size-4 text-error-500" />}
+        {isExpired && <Clock9 className=" ml-1 size-4 text-error-500" />}
+        {isVisitorLeft && <LogOut className=" ml-1 size-4 text-error-500" />}
       </div>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
-      {readByUsers.length > 0 && (
+      {readByUsers.length > 0 && !isBusiness && (
         <div className="ml-auto flex items-center pl-2">
           <AvatarGroup
             avatarClassName="w-4 h-4"

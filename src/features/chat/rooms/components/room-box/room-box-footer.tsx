@@ -154,9 +154,24 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       const isConversationEndedByVisitor =
         room.lastMessage?.type === 'action' &&
         room.lastMessage.action === 'leaveHelpDesk';
-
-      return isConversationExpired || isConversationEndedByVisitor;
-    }, [room.expiredAt, room.lastMessage]);
+      let isOtherUserDeleted = false;
+      if (!room.isGroup) {
+        isOtherUserDeleted = room.participants.some(
+          (p) => p._id !== currentUser?._id && p.status === 'deleted',
+        );
+      }
+      return (
+        isConversationExpired ||
+        isConversationEndedByVisitor ||
+        isOtherUserDeleted
+      );
+    }, [
+      room.expiredAt,
+      room.lastMessage,
+      room.isGroup,
+      room.participants,
+      currentUser?._id,
+    ]);
 
     return (
       <div

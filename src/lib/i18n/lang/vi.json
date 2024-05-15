@@ -64,7 +64,9 @@
     "EDIT": "Chỉnh sửa",
     "DOWNLOAD": "Tải xuống",
     "EDITING": "Đang chỉnh sửa",
-    "EDITED": "Đã chỉnh sửa"
+    "EDITED": "Đã chỉnh sửa",
+    "SURE": "Chắc chắn",
+    "DELETE_ACCOUNT": "Xoá tài khoản"
   },
   "MESSAGE": {
     "ERROR": {
@@ -398,6 +400,12 @@
       "TITLE": "Bạn có muốn đăng xuất không?",
       "DESCRIPTION": "Bạn sẽ đăng xuất khỏi ứng dụng và cần đăng nhập lại."
     },
+    "DELETE_ACCOUNT": {
+      "TITLE": "Xoá tài khoản",
+      "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu và không thể khôi phục lại. Bạn có chắc chắn muốn xoá tài khoản không?",
+      "CONFIRM_RETYPE": "Vui lòng nhập lại <strong>{{code}}</strong> này để xác nhận",
+      "CONFIRM": "Xoá tài khoản"
+    },
     "ADD_USER": {
       "TITLE": "Thêm thành viên"
     },
@@ -542,7 +550,9 @@
     "CONVERSATIONS": "Chung",
     "COMPLETED": "Hoàn thành",
     "ARCHIVED": "Lưu trữ",
+    "CLIENTS": "Khách hàng",
     "STATISTICS": "Thống kê",
+    "SCRIPTS": "Kịch bản trò chuyện",
     "SETTINGS": "Cài đặt",
     "REPORT": "Báo cáo",
     "CLIENT_LIST": "Danh sách khách hàng",
@@ -551,6 +561,15 @@
       "AVERAGERATING": "Đánh giá khách hàng",
       "COMPLETEDCONVERSATION": "Cuộc trò chuyện hoàn thành",
       "RESPONSECHAT": "Thời gian phản hồi trung bình"
+    },
+    "SCRIPT": {
+      "PAGE_TITLE": "Kịch bản trò chuyện",
+      "SEARCH": "Tìm kiếm kịch bản"
+    },
+    "CLIENT": {
+      "PAGE_TITLE": "Danh sách khách hàng",
+      "SEARCH": "Tìm kiếm khách hàng",
+      "EXPORT_XLSX": "Xuất danh sách khách hàng"
     }
   },
   "DESKTOP_LOGIN": {

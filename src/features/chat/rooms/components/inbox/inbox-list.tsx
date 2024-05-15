@@ -24,6 +24,8 @@ import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
 import { User } from '@/features/users/types';
+import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
+import ViewSpaceInboxFilter from './view-space-inbox-filter';
 
 interface InboxListProps {
   type: InboxType;
@@ -39,11 +41,19 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       isBusiness,
     } = useBusinessNavigationData();
     const { businessExtension } = useBusinessExtensionStore();
+    const { selectedFilters, appliedFilters } = useSpaceInboxFilterStore();
     const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
-    const key = useMemo(() => ['rooms', type, status], [type, status]);
+    const key = useMemo(() => {
+      if (spaceId) {
+        return ['rooms', type, spaceId, status, appliedFilters];
+      }
+      return ['rooms', type, status];
+      // Must not include selectedFilters, don't add it to the dependency array. It should update when isFilterApplied change.
+    }, [type, status, appliedFilters, spaceId]);
+
     const onlineList = useChatStore((state) => state.onlineList);
 
     const {
@@ -64,6 +74,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
           type,
           status,
           spaceId,
+          filterOptions: spaceId ? appliedFilters : undefined,
         }),
     });
     const { rooms: pinnedRooms, refetch: refetchPinned } =

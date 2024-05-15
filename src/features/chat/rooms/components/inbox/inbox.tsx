@@ -2,34 +2,62 @@
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 
-import InboxList from './inbox-list';
-import { RoomActions } from '../room-actions';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { RoomActions } from '../room-actions';
+import InboxList from './inbox-list';
 
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-export interface InboxProps {
-}
-export type InboxType = 'all' | 'group' | 'help-desk' | 'unread-help-desk';
+import { cn } from '@/utils/cn';
+import {
+  ArchiveIcon,
+  MessageSquareDashed,
+  MessageSquareDashedIcon,
+  MessagesSquareIcon,
+  UsersRoundIcon,
+} from 'lucide-react';
+import ViewSpaceInboxFilter from './view-space-inbox-filter';
+export interface InboxProps {}
+export type InboxType =
+  | 'all'
+  | 'group'
+  | 'help-desk'
+  | 'unread-help-desk'
+  | 'archived'
+  | 'waiting';
 
 export const inboxTabMap: Record<
   InboxType,
   {
     label: string;
     value: InboxType;
+    icon?: React.ReactNode;
   }
 > = {
   all: {
     label: 'COMMON.ALL',
     value: 'all',
+    icon: <MessagesSquareIcon size={16} />,
   },
   group: {
     label: 'COMMON.GROUP',
     value: 'group',
+    icon: <UsersRoundIcon size={16} />,
   },
+  archived: {
+    label: 'COMMON.ARCHIVE',
+    value: 'archived',
+    icon: <ArchiveIcon size={16} />,
+  },
+  waiting: {
+    label: 'COMMON.WAITING',
+    value: 'waiting',
+    icon: <MessageSquareDashedIcon size={16} />,
+  },
+
   'help-desk': {
     label: 'COMMON.ALL',
     value: 'help-desk',
@@ -40,8 +68,16 @@ export const inboxTabMap: Record<
   },
 };
 
-const normalInboxTabs = [inboxTabMap.all, inboxTabMap.group];
-const businessInboxTabs = [inboxTabMap['help-desk'], inboxTabMap['unread-help-desk']];
+const normalInboxTabs = [
+  inboxTabMap.all,
+  inboxTabMap.group,
+  inboxTabMap.archived,
+  inboxTabMap.waiting,
+];
+const businessInboxTabs = [
+  inboxTabMap['help-desk'],
+  inboxTabMap['unread-help-desk'],
+];
 
 export const Inbox = (props: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
@@ -52,7 +88,9 @@ export const Inbox = (props: InboxProps) => {
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
     (_, matchedKeys) => {
       setType(
-        isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB) ? tabs[0].value : tabs[1].value,
+        isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB)
+          ? tabs[0].value
+          : tabs[1].value,
       );
     },
   );
@@ -70,11 +108,20 @@ export const Inbox = (props: InboxProps) => {
                   onClick={() => setType(tab.value)}
                   className="!rounded-none"
                 >
-                  {t(tab.label)}
+                  {type === tab.value ? (
+                    <>{t(tab.label)}</>
+                  ) : (
+                    <div className="h-5"> {tab?.icon || t(tab.label)}</div>
+                  )}
                 </TabsTrigger>
               ))}
             </TabsList>
           </Tabs>
+          <ViewSpaceInboxFilter
+            className={cn('w-full', {
+              hidden: !isBusiness,
+            })}
+          />
           <InboxList type={type} />
         </div>
       </div>

@@ -67,11 +67,15 @@ export const SideEffectProvider = () => {
     // for get user profile when tab is visible if user is logged in other tab with same browser
     const handleVisibilityChange = async () => {
       if (document.visibilityState === 'visible') {
-        const res = await getProfileService();
-        const user = res.data;
-        setData({
-          user,
-        });
+        try {
+          const res = await getProfileService();
+          const user = res.data;
+          setData({
+            user,
+          });
+        } catch (error) {
+          console.error('error in getProfileService', error);
+        }
       }
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);

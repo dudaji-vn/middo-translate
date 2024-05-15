@@ -64,7 +64,9 @@
     "DRAFT": "Draft",
     "TRANSLATED_FROM": "Translated from",
     "EDITED": "Edited",
-    "EDITING": "Editing"
+    "EDITING": "Editing",
+    "SURE": "Sure",
+    "DELETE_ACCOUNT": "Delete Account"
   },
   "MESSAGE": {
     "ERROR": {
@@ -396,6 +398,12 @@
       "TITLE": "Do you want to sign out?",
       "DESCRIPTION": "You will be signed out of the app and need to log in again."
     },
+    "DELETE_ACCOUNT": {
+      "TITLE": "Delete Account",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete your account?",
+      "CONFIRM_RETYPE": "Please retype this <strong>{{code}}</strong> to confirm",
+      "CONFIRM": "Delete Account"
+    },
     "ADD_USER": {
       "TITLE": "Add Member"
     },
@@ -540,7 +548,9 @@
     "CONVERSATIONS": "General",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
+    "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
+    "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
     "REPORT": "Report",
     "CLIENT_LIST": "Clients List",
@@ -549,6 +559,15 @@
       "AVERAGERATING": "Customer Rating",
       "COMPLETEDCONVERSATION": "Completed Conversations",
       "RESPONSECHAT": "Average Response Time"
+    },
+    "SCRIPT": {
+      "PAGE_TITLE": "Scripts Management",
+      "SEARCH": "Search for scripts"
+    },
+    "CLIENT": {
+      "PAGE_TITLE": "Clients Management",
+      "SEARCH": "Search for clients",
+      "EXPORT_XLSX": "Export to XLSX"
     }
   },
   "DESKTOP_LOGIN": {

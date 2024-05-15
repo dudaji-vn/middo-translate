@@ -9,6 +9,7 @@ import {
   PropsWithChildren,
   cloneElement,
   forwardRef,
+  useCallback,
   useMemo,
   useState,
 } from 'react';
@@ -53,6 +54,8 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'leave',
   'delete',
   'none',
+  'archive',
+  'unarchive',
 ];
 
 const checkAllowedActions = ({
@@ -113,9 +116,19 @@ export const RoomItemActionWrapper = forwardRef<
       })
       .map((item) => ({
         ...item,
-        onAction: () => onAction(item.action, room._id),
+        onAction: () => onAction(item.action, room._id, isBusiness),
       }));
-  }, [actionItems, isMuted, onAction, room._id, room.isGroup, room.isPinned]);
+  }, [
+    actionItems,
+    businessConversationType,
+    isBusiness,
+    isMuted,
+    onAction,
+    room._id,
+    room.isGroup,
+    room.isPinned,
+    room.status,
+  ]);
 
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>
@@ -150,7 +163,7 @@ const MobileWrapper = ({
       >
         {items.map(({ renderItem, ...item }) => {
           if (renderItem) {
-            return renderItem({ item, room });
+            return renderItem({ item, room, setOpen: () => {} });
           }
           return (
             <LongPressMenu.Item
@@ -178,6 +191,10 @@ const DesktopWrapper = ({
   }) => {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
+  const onOpenChange = useCallback((open: boolean) => {
+    setOpen(open);
+  }, []);
+
   return (
     <div className="group relative flex-1">
       {children}
@@ -196,7 +213,7 @@ const DesktopWrapper = ({
           <DropdownMenuContent>
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
-                return renderItem({ item, room });
+                return renderItem({ item, room, setOpen: onOpenChange });
               }
               return (
                 <DropdownMenuItem
