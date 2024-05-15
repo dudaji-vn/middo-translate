@@ -22,7 +22,3 @@ export const useGetMyBusinessNotifications = () => {
     enabled: true,
   });
 };
-
-// PATCH   {{SERVER_URL}}/api/help-desk/notifications/read/{{notificationId}}
-// ####
-// GET {{SERVER_URL}}/api/help-desk/notifications?spaceId=
