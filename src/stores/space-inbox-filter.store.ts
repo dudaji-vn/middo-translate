@@ -1,6 +1,11 @@
 import { RoomsFilterOption } from '@/features/chat/rooms/components/filter/filter-section';
 import { create } from 'zustand';
 
+const DEFAULT_FILTERS = {
+  domains: [],
+  tags: [],
+  countries: [],
+};
 export type SpaceInboxFilterState = {
   filterOptions: {
     domains: RoomsFilterOption[];
@@ -30,25 +35,13 @@ export type SpaceInboxFilterState = {
 
 export const useSpaceInboxFilterStore = create<SpaceInboxFilterState>()(
   (set) => ({
-    filterOptions: {
-      domains: [],
-      tags: [],
-      countries: [],
-    },
+    filterOptions: DEFAULT_FILTERS,
     setFilterOptions: (filterOptions) =>
       set(() => ({
         filterOptions,
-        selectedFilters: {
-          domains: filterOptions?.domains?.map((d) => d.value) || [],
-          tags: filterOptions?.tags?.map((t) => t.value) || [],
-          countries: filterOptions?.countries?.map((c) => c.value) || [],
-        },
+        selectedFilters: DEFAULT_FILTERS,
       })),
-    selectedFilters: {
-      domains: [],
-      tags: [],
-      countries: [],
-    },
+    selectedFilters: DEFAULT_FILTERS,
     setSelectedFilters: (selectedFilters) =>
       set(() => ({
         selectedFilters,
