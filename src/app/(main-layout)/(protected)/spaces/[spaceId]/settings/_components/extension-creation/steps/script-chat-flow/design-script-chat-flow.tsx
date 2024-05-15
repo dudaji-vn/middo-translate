@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import ReactFlow, {
   addEdge,
   Background,
@@ -12,65 +12,23 @@ import ReactFlow, {
   applyNodeChanges,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
-import { nodeTypes } from './custom-nodes/node-types';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { FLOW_KEYS, nodeTypes } from './custom-nodes/node-types';
+import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
-import { isEmpty, isEqual } from 'lodash';
+import { isEmpty } from 'lodash';
 import { deepDeleteNodes } from './nodes.utils';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { Media } from '@/types';
-import { useParams } from 'next/navigation';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-
-const schemaFlow = z.object({
-  nodes: z.array(
-    z.object({
-      id: z.string(),
-      type: z.string(),
-      data: z
-        .object({
-          label: z.string().optional(),
-          content: z.string().min(1, {
-            message: 'Please enter content!',
-          }),
-          link: z.string().optional(),
-          media: z.array(z.any()).optional(),
-        })
-        .refine(
-          (data) => {
-            if (data.link && !data.link.trim().length) {
-              return false;
-            }
-            return true;
-          },
-          {
-            message: 'Link should not be empty',
-          },
-        ),
-      position: z.object({
-        x: z.number(),
-        y: z.number(),
-      }),
-    }),
-  ),
-  edges: z.array(
-    z.object({
-      id: z.string(),
-      source: z.string(),
-      target: z.string(),
-      label: z.string(),
-    }),
-  ),
-  flowErrors: z.array(z.object({ id: z.string(), message: z.string() })),
-});
-
-type FormDataErrors = z.infer<typeof schemaFlow>['flowErrors'];
+import {
+  TScriptFormValues,
+  initialChatFlowNodes,
+} from '../../../../../scripts/_components/column-def/script-creation/create-chat-script-modal';
 
 export type FlowItemType =
   | 'button'
@@ -88,70 +46,31 @@ export type FlowNode = Node<{
 }> & {
   type: FlowItemType;
 };
-export const initialChatFlowNodes: FlowNode[] = [
-  {
-    id: '1',
-    data: { label: 'Start conversation', content: 'start conversation' },
-    position: { x: 0, y: 0 },
-    className: 'light',
-    type: 'root',
-  },
-  {
-    id: '2',
-    data: {
-      label: 'option',
-      content: 'Option',
-    },
-    type: 'option',
-    position: { x: 200, y: 6 },
-    className: 'light',
-  },
-];
-
-const initialEdges: Edge[] = [
-  {
-    id: 'e1-2',
-    source: '1',
-    target: '2',
-    animated: true,
-    label: 'Start conversation',
-  },
-];
 
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
-const NestedFlow = ({
-  onSaveToForm,
-  savedFlow,
+const DesignScriptChatFlow = ({
+  initialChatFlow,
 }: {
-  onSaveToForm: (data: { nodes: FlowNode[]; edges: Edge[] }) => void;
-  savedFlow?: {
+  initialChatFlow?: {
     nodes: FlowNode[];
     edges: Edge[];
   };
 }) => {
   const [checkingMode, setCheckingMode] = useState(false);
-  const control = useForm({
-    mode: 'onChange',
-    defaultValues: {
-      nodes: initialChatFlowNodes,
-      edges: initialEdges,
-      flowErrors: [],
-    },
-    resolver: zodResolver(schemaFlow),
-  });
+
+  const control = useFormContext();
 
   const { setValue, watch, trigger, formState } = control;
   const { spaceId } = useBusinessNavigationData();
   const { errors } = formState;
-  const nodes = watch('nodes');
-  const edges = watch('edges');
-  const flowErrors = watch('flowErrors');
+  const nodes = watch(FLOW_KEYS.NODES);
+  const edges = watch(FLOW_KEYS.EDGES);
+  const flowErrors = watch(FLOW_KEYS.FLOW_ERRORS);
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
-      const watchNodes = watch('nodes');
-      if (changes.every(({ type }) => ALLOWED_CHANGES.includes(type))) {
-        // @ts-ignore
-        setValue('nodes', applyNodeChanges(changes, watchNodes));
+      const watchedNodes = watch(FLOW_KEYS.NODES);
+      if (changes?.every(({ type }) => ALLOWED_CHANGES.includes(type))) {
+        setValue(FLOW_KEYS.NODES, applyNodeChanges(changes, watchedNodes));
       }
     },
     [setValue, watch],
@@ -159,8 +78,7 @@ const NestedFlow = ({
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
       if (changes.some(({ type }) => ALLOWED_CHANGES.includes(type))) {
-        // @ts-ignore
-        setValue('edges', applyEdgeChanges(changes, edges));
+        setValue(FLOW_KEYS.EDGES, applyEdgeChanges(changes, edges));
       }
     },
     [setValue, edges],
@@ -176,14 +94,13 @@ const NestedFlow = ({
         return;
       }
       const newNodes = deepDeleteNodes(nodes, nodesToDelete, edges);
-      setValue('nodes', newNodes as FlowNode[]);
+      setValue(FLOW_KEYS.NODES, newNodes as FlowNode[]);
     },
     [setValue, nodes, edges],
   );
 
   const onConnect = (connection: Edge | Connection) => {
-    // @ts-ignore
-    setValue('edges', addEdge(connection, edges));
+    setValue(FLOW_KEYS.EDGES, addEdge(connection, edges));
   };
   const redirectToPreview = () => {
     localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
@@ -202,21 +119,13 @@ const NestedFlow = ({
     }, 500);
   };
 
-  const checkingErrors = () => {
-    const flowErrors: FormDataErrors = [];
+  const checkingErrors = useCallback(() => {
+    const flowErrors: TScriptFormValues['chatFlow']['flowErrors'] = [];
     nodes.forEach((node: FlowNode) => {
       switch (node.type) {
         case 'option':
-          // const connected = edges.filter((edge) => edge.source === node.id);
-          // if (connected.length === 0) {
-          //     flowErrors.push({ id: node.id, message: 'Please add your answer for this selection!' });
-          // }
           break;
         case 'container':
-          // const childrens = nodes.filter((n: FlowNode) => n.parentNode === node.id);
-          // if (childrens.length === 0) {
-          //     flowErrors.push({ id: node.id, message: 'Actions should have at least one option' });
-          // }
           break;
         case 'button':
           if (!node.data?.content?.trim()?.length) {
@@ -233,46 +142,28 @@ const NestedFlow = ({
       }
     });
     // @ts-ignore
-    setValue('flowErrors', flowErrors);
+    setValue('chatFlow.flowErrors', flowErrors);
     return flowErrors;
-  };
+  }, [nodes, setValue]);
+
   useEffect(() => {
     if (checkingMode) {
       checkingErrors();
     } else {
       // @ts-ignore
-      setValue('flowErrors', []);
+      setValue('chatFlow.flowErrors', []);
     }
-  }, [nodes, edges, checkingMode]);
+  }, [nodes, edges, checkingMode, checkingErrors, setValue]);
 
   useEffect(() => {
-    if (savedFlow && (savedFlow?.nodes || savedFlow?.edges)) {
-      setValue('nodes', savedFlow.nodes);
-      setValue('edges', savedFlow.edges);
+    if (initialChatFlow && (initialChatFlow?.nodes || initialChatFlow?.edges)) {
+      setValue(FLOW_KEYS.NODES, initialChatFlow.nodes);
+      setValue(FLOW_KEYS.NODES, initialChatFlow.edges);
     }
   }, []);
 
-  useEffect(() => {
-    if (
-      savedFlow?.nodes &&
-      savedFlow?.edges &&
-      isEqual(initialChatFlowNodes, nodes) &&
-      isEqual(initialEdges, edges)
-    ) {
-      return;
-    }
-
-    if (isEqual(savedFlow?.nodes, nodes) && isEqual(savedFlow?.edges, edges)) {
-      return;
-    }
-    onSaveToForm({
-      nodes,
-      edges,
-    });
-  }, [formState, savedFlow, nodes, edges]);
-
   const onPreviewClick = () => {
-    trigger('nodes');
+    trigger(FLOW_KEYS.NODES);
     if (!checkingMode) {
       const error = checkingErrors();
       if (error.length) {
@@ -292,17 +183,10 @@ const NestedFlow = ({
     }
 
     redirectToPreview();
-    onSaveToForm({
-      nodes,
-      edges,
-    });
   };
   return (
     <>
-      <div className="flex min-h-fit flex-row items-center justify-between py-2">
-        <label className="text-sm font-semibold">
-          Create your own chat flow
-        </label>
+      <div className="flex min-h-fit flex-row items-center justify-end py-2">
         <Button
           onClick={onPreviewClick}
           shape={'square'}
@@ -314,7 +198,7 @@ const NestedFlow = ({
           Preview <Eye />
         </Button>
       </div>
-      <div className="h-[calc(100vh-400px)]  max-h-[calc(100vh-400px)]  min-h-[400px] w-full bg-gray-200">
+      <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200">
         <Form {...control}>
           <ReactFlow
             nodes={nodes}
@@ -339,4 +223,4 @@ const NestedFlow = ({
   );
 };
 
-export default NestedFlow;
+export default DesignScriptChatFlow;

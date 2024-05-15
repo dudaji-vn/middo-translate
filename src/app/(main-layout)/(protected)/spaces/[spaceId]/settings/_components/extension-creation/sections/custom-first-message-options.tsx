@@ -9,7 +9,7 @@ import { Check } from 'lucide-react';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { translateWithDetection } from '@/services/languages.service';
 import { useFormContext } from 'react-hook-form';
-import NestedFlow, { FlowNode } from '../steps/script-chat-flow/nested-flow';
+import DesignScriptChatFlow, { FlowNode } from '../steps/script-chat-flow/design-script-chat-flow';
 import { Edge } from 'reactflow';
 import { cn } from '@/utils/cn';
 
@@ -120,28 +120,6 @@ const CustomFirstMessageOptions = ({
               : 'opacity-50 border-neutral-200 ring-neutral-200',
         }}
       />
-      <div className="flex items-center space-x-2">
-        <RadioGroupItem
-          value="script"
-          id="r2"
-          iconProps={{ className: 'h-full w-full' }}
-          className="border-neutral-200 ring-neutral-200"
-        >
-          <Check
-            className="absolute left-[1px] top-[1px] h-[14px] w-3"
-            stroke="white"
-          />
-        </RadioGroupItem>
-        <Label htmlFor="r2">Script</Label>
-      </div>
-      {selectedRadioFM === 'script' && (
-        <div className={cn('')}>
-          <NestedFlow
-            onSaveToForm={onSaveChatFlow}
-            savedFlow={scriptChatFlow}
-          />
-        </div>
-      )}
     </RadioGroup>
   );
 };

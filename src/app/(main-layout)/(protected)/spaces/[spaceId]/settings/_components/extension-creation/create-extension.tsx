@@ -23,7 +23,7 @@ import StartingMessageStep from './steps/starting-message-step';
 import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
 import { isEqual } from 'lodash';
-import { FlowNode } from './steps/script-chat-flow/nested-flow';
+import { FlowNode } from './steps/script-chat-flow/design-script-chat-flow';
 import { translateWithDetection } from '@/services/languages.service';
 import { Edge } from 'reactflow';
 import { getUserSpaceRole } from '../space-setting/role.util';
@@ -50,12 +50,12 @@ type TFormValues = {
     };
   };
   chatFlow:
-    | {
-        nodes: FlowNode[];
-        edges: Edge[];
-      }
-    | null
-    | undefined;
+  | {
+    nodes: FlowNode[];
+    edges: Edge[];
+  }
+  | null
+  | undefined;
 };
 
 export default function CreateExtension({
@@ -163,7 +163,7 @@ export default function CreateExtension({
       !chatFlow?.edges?.find((edge) => isEmpty(edge));
     const chatFLowPayload =
       chatFlow && watch('selectedRadioFM') === 'script' && isValidateChatFlow
-        ? {chatFlow}
+        ? { chatFlow }
         : null;
     try {
       const payload = {
@@ -211,14 +211,14 @@ export default function CreateExtension({
         !isEqual(editingChatFlow?.edges, initialData?.chatFlow?.edges));
 
     const isFirstMessageUpdated =
-      !isEqual(firstMessage, initialData?.firstMessage)  &&
+      !isEqual(firstMessage, initialData?.firstMessage) &&
       (selectedRadioFM === 'default' || selectedRadioFM === 'custom');
 
     return Boolean(
       isEqual(customColor, initialData?.color) &&
-        isEqual(domains, initialData?.domains) &&
-        !isChatFlowUpdated &&
-        !isFirstMessageUpdated,
+      isEqual(domains, initialData?.domains) &&
+      !isChatFlowUpdated &&
+      !isFirstMessageUpdated,
     );
   }, [
     editingChatFlow,
@@ -231,14 +231,14 @@ export default function CreateExtension({
   const hasInvalidChatFlow = useMemo(() => {
     return Boolean(
       selectedRadioFM === 'script' &&
-        (nodeLength < 2 ||
-          edgeLength < 1 ||
-          editingChatFlow?.nodes?.find(
-            (node: FlowNode) =>
-              isEmpty(node) ||
-              (isEmpty(node?.data?.content) && node.type !== 'option') ||
-              (node.type === 'option' && nodeLength == 2),
-          )),
+      (nodeLength < 2 ||
+        edgeLength < 1 ||
+        editingChatFlow?.nodes?.find(
+          (node: FlowNode) =>
+            isEmpty(node) ||
+            (isEmpty(node?.data?.content) && node.type !== 'option') ||
+            (node.type === 'option' && nodeLength == 2),
+        )),
     );
   }, [selectedRadioFM, nodeLength, edgeLength, editingChatFlow]);
 
