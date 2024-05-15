@@ -142,10 +142,19 @@ const CreateChatScriptModal = () => {
     formState: { errors, isDirty },
   } = form;
 
-  const submit = async (values: { name: string; chatFlow: any }) => {
+  const submit = async ({
+    name,
+    chatFlow,
+  }: {
+    name: string;
+    chatFlow: any;
+  }) => {
     const payload = {
-      name: values.name,
-      chatFlow: values.chatFlow,
+      name: name,
+      chatFlow: {
+        nodes: chatFlow.nodes,
+        edges: chatFlow.edges,
+      },
       spaceId,
     };
     try {
