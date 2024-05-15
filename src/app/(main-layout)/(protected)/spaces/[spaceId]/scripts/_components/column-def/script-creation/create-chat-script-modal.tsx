@@ -5,12 +5,10 @@ import {
   AlertDialog,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogFooter,
   AlertDialogHeader,
 } from '@/components/feedback';
-import { cn } from '@/utils/cn';
 import { Plus } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DesignScriptChatFlow, {
   FlowNode,
 } from '../../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
@@ -102,39 +100,31 @@ const createChatScriptSchema = z.object({
       .optional(),
   }),
 });
-type TFormValues = z.infer<typeof createChatScriptSchema>;
+export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
 const CreateChatScriptModal = () => {
   const [open, setOpen] = useState(false);
   const onOpenChange = () => setOpen(!open);
-  const form = useForm<TFormValues>({
+  const form = useForm<TScriptFormValues>({
     mode: 'onChange',
     defaultValues: {
       name: '',
       chatFlow: {
         nodes: initialChatFlowNodes,
-        edges: initialEdges as TFormValues['chatFlow']['edges'],
+        edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
         flowErrors: [],
       },
     },
     resolver: zodResolver(createChatScriptSchema),
   });
   const {
-    watch,
-    setValue,
     handleSubmit,
-    formState: { errors, isValid },
+    trigger,
+    formState: { errors },
   } = form;
-  const scriptChatFlow = watch('chatFlow');
-
-  // const onSaveChatFlow = (chatFlow: { nodes: FlowNode[]; edges: Edge[] }) => {
-  //   setValue('chatFlow', chatFlow);
-  // };
-
-  const submit = (values: TFormValues) => {
-    console.log('CREATE SCRIPT', values);
+  const submit = async (values: any) => {
+    console.log('CREATE SCRIPT :>>', values);
   };
-  console.log('errors', errors, isValid, scriptChatFlow);
   return (
     <>
       <Button
@@ -151,7 +141,7 @@ const CreateChatScriptModal = () => {
         <Form {...form}>
           <form onSubmit={handleSubmit(submit)}>
             <AlertDialogContent className="max-w-screen z-[100] flex h-[calc(100vh-2rem)] !w-[calc(100vw-2rem)] flex-col justify-stretch gap-1">
-              <AlertDialogHeader className="flex w-full flex-row items-center justify-between gap-3 text-base">
+              <AlertDialogHeader className="flex h-fit w-full flex-row items-start justify-between gap-3 text-base">
                 <RHFInputField
                   name="name"
                   formItemProps={{

@@ -69,7 +69,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
           </div>
         </div>
         <RHFTextAreaField
-          name={`nodes.${nodeIndex}.data.content`}
+          name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
           textareaProps={{
             placeholder: 'Type your message here...',
             rows: 3,
@@ -79,8 +79,8 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
         <MediaUploadProvider>
           <MediaUploadDropzone>
             <NodeMessageToolbar
-              nameFieldImg={`nodes.${nodeIndex}.data.media`}
-              nameFiledContent={`nodes.${nodeIndex}.data.content`}
+              nameFieldImg={`${FLOW_KEYS.NODES}.${nodeIndex}.data.media`}
+              nameFiledContent={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
             />
           </MediaUploadDropzone>
         </MediaUploadProvider>

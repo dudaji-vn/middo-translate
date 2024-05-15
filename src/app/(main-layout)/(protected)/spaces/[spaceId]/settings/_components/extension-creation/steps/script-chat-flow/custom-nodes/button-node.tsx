@@ -169,7 +169,7 @@ function ButtonNode(node: CustomNodeProps) {
         open={Boolean(isUpdating)}
         onOpenChange={setIsUpdating}
       >
-        <div className="flex flex-col gap-4 p-2">
+        <div className="z-30 flex flex-col gap-4 p-2">
           <div className="flex flex-row items-center  justify-between px-2">
             <FormLabel className="font-semibold text-neutral-800">
               Button
@@ -181,7 +181,7 @@ function ButtonNode(node: CustomNodeProps) {
             </div>
           </div>
           <RHFInputField
-            name={`nodes.${nodeIndex}.data.content`}
+            name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
             inputProps={{
               placeholder: 'Button name',
               className: 'w-full h-full',
@@ -191,7 +191,7 @@ function ButtonNode(node: CustomNodeProps) {
             formItemProps={{
               className: isLink ? 'block' : 'hidden',
             }}
-            name={`nodes.${nodeIndex}.data.link`}
+            name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.link`}
             inputProps={{
               disabled: !isLink,
               placeholder: 'https://',

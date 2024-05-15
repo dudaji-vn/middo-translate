@@ -17,7 +17,7 @@ import { CustomNodeProps, FLOW_KEYS } from './node-types';
 function ContainerNode(node: CustomNodeProps) {
   const { data, isConnectable } = node;
   const { watch, setValue } = useFormContext();
-  const flowErrors = watch('flowErrors');
+  const flowErrors = watch(FLOW_KEYS.FLOW_ERRORS);
   const errorMessage = flowErrors.find(
     (error: { id: string }) => error.id === node.id,
   )?.message;
@@ -87,7 +87,7 @@ function ContainerNode(node: CustomNodeProps) {
     setValue(FLOW_KEYS.NODES, [...newNodes, updatedNode]);
   };
 
-  const formFieldId = `nodes.${currentNodeIndex}.data.content`;
+  const formFieldId = `${FLOW_KEYS.NODES}.${currentNodeIndex}.data.content`;
 
   return (
     <div

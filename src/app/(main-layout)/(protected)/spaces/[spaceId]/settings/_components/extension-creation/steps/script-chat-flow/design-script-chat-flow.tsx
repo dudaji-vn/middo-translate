@@ -25,51 +25,10 @@ import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { Media } from '@/types';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { initialChatFlowNodes } from '../../../../../scripts/_components/column-def/script-creation/create-chat-script-modal';
-
-const schemaFlow = z.object({
-  nodes: z.array(
-    z.object({
-      id: z.string(),
-      type: z.string(),
-      data: z
-        .object({
-          label: z.string().optional(),
-          content: z.string().min(1, {
-            message: 'Please enter content!',
-          }),
-          link: z.string().optional(),
-          media: z.array(z.any()).optional(),
-        })
-        .refine(
-          (data) => {
-            if (data.link && !data.link.trim().length) {
-              return false;
-            }
-            return true;
-          },
-          {
-            message: 'Link should not be empty',
-          },
-        ),
-      position: z.object({
-        x: z.number(),
-        y: z.number(),
-      }),
-    }),
-  ),
-  edges: z.array(
-    z.object({
-      id: z.string(),
-      source: z.string(),
-      target: z.string(),
-      label: z.string(),
-    }),
-  ),
-  flowErrors: z.array(z.object({ id: z.string(), message: z.string() })),
-});
-
-type FormDataErrors = z.infer<typeof schemaFlow>['flowErrors'];
+import {
+  TScriptFormValues,
+  initialChatFlowNodes,
+} from '../../../../../scripts/_components/column-def/script-creation/create-chat-script-modal';
 
 export type FlowItemType =
   | 'button'
@@ -161,7 +120,7 @@ const DesignScriptChatFlow = ({
   };
 
   const checkingErrors = useCallback(() => {
-    const flowErrors: FormDataErrors = [];
+    const flowErrors: TScriptFormValues['chatFlow']['flowErrors'] = [];
     nodes.forEach((node: FlowNode) => {
       switch (node.type) {
         case 'option':
@@ -183,7 +142,7 @@ const DesignScriptChatFlow = ({
       }
     });
     // @ts-ignore
-    setValue('flowErrors', flowErrors);
+    setValue('chatFlow.flowErrors', flowErrors);
     return flowErrors;
   }, [nodes, setValue]);
 
@@ -192,7 +151,7 @@ const DesignScriptChatFlow = ({
       checkingErrors();
     } else {
       // @ts-ignore
-      setValue('flowErrors', []);
+      setValue('chatFlow.flowErrors', []);
     }
   }, [nodes, edges, checkingMode, checkingErrors, setValue]);
 

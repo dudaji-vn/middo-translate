@@ -25,7 +25,7 @@ export type CustomNodeProps = {
 export enum FLOW_KEYS {
   NODES = 'chatFlow.nodes',
   EDGES = 'chatFlow.edges',
-  FLOW_ERRORS = 'flowErrors',
+  FLOW_ERRORS = 'chatFlow.flowErrors',
 }
 
 const nodeTypes = {
