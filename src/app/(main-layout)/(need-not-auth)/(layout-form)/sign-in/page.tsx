@@ -149,7 +149,7 @@ export default function SignIn() {
 
   return (
     <>
-      {loading || (isAuthentication && userData) && <PageLoading />}
+      {(loading || (isAuthentication && userData)) && <PageLoading />}
       <form className="flex w-full flex-col items-center" onSubmit={handleSubmitForm}>
         <Typography variant={'h1'} className="text-center text-2xl font-semibold text-primary mb-8">
           {t('SIGN_IN.TITLE')}

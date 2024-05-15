@@ -57,6 +57,7 @@
     "cookies": "^0.8.0",
     "copy-image-clipboard": "^2.1.2",
     "date-fns": "^3.6.0",
+    "downloadjs": "^1.4.7",
     "embla-carousel-react": "^8.0.1",
     "emoji-mart": "^5.5.2",
     "emoji-picker-react": "^4.5.16",
@@ -114,6 +115,7 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
     "@types/cookies": "^0.7.10",
+    "@types/downloadjs": "^1.4.6",
     "@types/html-to-text": "^9.0.4",
     "@types/http-errors": "^2.0.4",
     "@types/http-proxy": "^1.17.14",

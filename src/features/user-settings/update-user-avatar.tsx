@@ -66,9 +66,9 @@ export default function UpdateUserAvatar() {
           <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
             <Camera size={20} />
           </div>
-          <span className="ml-4 block text-center text-base font-medium">
-            {t('ACCOUNT_SETTING.AVATAR')}
-          </span>
+          <span className="ml-4 block text-center text-base">
+              {t('ACCOUNT_SETTING.CHANGE_AVATAR')}
+            </span>
         </AlertDialogTrigger>
         <AlertDialogContent className="md:max-w-[80vw] xl:max-w-[70vw]">
           <form

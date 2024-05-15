@@ -12,6 +12,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
 import { useAppStore } from '@/stores/app.store';
+import { MediaPreview } from '@/components/media-preview';
 
 export interface RoomMediaProps {}
 
@@ -44,16 +45,6 @@ export const RoomMedia = () => {
   }, [items]);
 
   const [index, setIndex] = useState<number | undefined>(undefined);
-  const slides = useMemo(
-    () =>
-      media.map((img) => ({
-        src: img.url,
-        title: img.name,
-        width: 1000,
-        height: 1000,
-      })),
-    [media],
-  );
 
   return (
     <>
@@ -61,36 +52,26 @@ export const RoomMedia = () => {
         {media.map((media, index) => (
           <div
             key={media.url}
-            onClick={() => setIndex(index)}
+            onClick={() => setIndex(index - 1)}
             className="relative aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"
           >
-            <Image
+            {media.type === 'video' && <video src={media.url} className="h-full w-full" /> }
+            {media.type === 'image' && <Image
               src={media.url}
               alt={media.name || media.url}
               quality={50}
               fill
               className="object-cover"
-            />
+            />}
+            
           </div>
         ))}
       </div>
-      <Lightbox
-        slides={slides}
-        index={index}
-        open={index !== undefined}
-        carousel={{
-          finite: false,
-        }}
-        on={{
-          view: ({ index }) => {
-            setIndex(index);
-            if (index >= media.length - 1) {
-              fetchNextPage();
-            }
-          },
-        }}
-        close={() => setIndex(undefined)}
-        plugins={[Download, Thumbnails, Zoom]}
+      <MediaPreview 
+        files={media} 
+        index={index} 
+        close={() => setIndex(undefined)} 
+        fetchNextPage={hasNextPage ? fetchNextPage : undefined}
       />
       {hasNextPage && (
         <Button

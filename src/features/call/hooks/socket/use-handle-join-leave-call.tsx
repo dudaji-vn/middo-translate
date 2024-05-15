@@ -51,7 +51,9 @@ export default function useHandleJoinLeaveCall() {
             itemShareScreen.peer.destroy();
             removePeerShareScreen(socketId);
         }
-    }, [participants, peerShareScreen, removeParticipant, removePeerShareScreen, setLayout, t])
+    // Remove t from dependencies => language change will not trigger this function
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [participants, peerShareScreen, removeParticipant, removePeerShareScreen, setLayout])
 
     const saveSignal = useCallback((payload: IReturnSignal) => {
         const participant = participants.find((p: ParticipantInVideoCall) =>

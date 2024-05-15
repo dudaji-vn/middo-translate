@@ -57,7 +57,7 @@ const HomeTemplate = ({
             animate={{ opacity: 1, x: 0 }}
             transition={{ type: 'spring', duration: 1 }}
             className={cn(
-              'fixed right-0 top-0 z-50 w-full border-l bg-background md:top-[52px] md:z-auto md:w-1/3 xl:w-1/4',
+              'fixed right-0 top-0 z-50 w-full border-l bg-background md:top-[52px] md:w-1/3 xl:w-1/4',
               isMobile ? 'full-screen-height' : 'container-height',
             )}
           >
