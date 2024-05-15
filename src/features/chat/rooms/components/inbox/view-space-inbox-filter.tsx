@@ -5,6 +5,7 @@ import { RoomsFilterName } from '../rooms.modal-filter';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
 import { Globe } from 'lucide-react';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
   const { selectedFilters, setSelectedFilters, filterOptions } =
@@ -54,16 +55,21 @@ const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
       );
     }
     return (
-      <div
-        className={
-          'mt-0 flex cursor-pointer flex-row items-center gap-2 [&_svg]:!size-4 '
+      <Tooltip
+        title={params[value]?.label || value}
+        triggerItem={
+          <div
+            className={
+              'mt-0 flex cursor-pointer flex-row items-center gap-2 [&_svg]:!size-4 '
+            }
+          >
+            {params[value].icon}
+            <span className="line-clamp-1 max-w-[100px] flex-1 break-words text-base font-normal ">
+              {params[value]?.label || value}
+            </span>
+          </div>
         }
-      >
-        {params[value].icon}
-        <span className="line-clamp-1 max-w-14 flex-1 break-words text-base font-normal max-sm:max-w-[200px] ">
-          {params[value]?.label || value}
-        </span>
-      </div>
+      />
     );
   };
   return (

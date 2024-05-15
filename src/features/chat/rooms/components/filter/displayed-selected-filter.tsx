@@ -24,6 +24,10 @@ const DisplayedSelectedFilter = ({
   const [expanded, setExpanded] = React.useState(false);
   const sections = Object.keys(filterData);
 
+  if (Object.values(filterData).flat().length === 0) {
+    return null;
+  }
+
   return (
     <>
       <section
@@ -40,7 +44,12 @@ const DisplayedSelectedFilter = ({
           <Typography className="text-sm text-neutral-300">
             Filter by
           </Typography>
-          <Button variant="ghost" shape={'square'} size={'xs'}>
+          <Button
+            variant="ghost"
+            shape={'square'}
+            size={'xs'}
+            onClick={onClearFilter}
+          >
             Clear filter
           </Button>
         </div>
@@ -60,7 +69,12 @@ const DisplayedSelectedFilter = ({
         </Button.Icon>
       </section>
       {expanded && (
-        <div className="flex h-fit max-h-[400px] w-full flex-col gap-3 pb-2">
+        <div
+          className={cn(
+            'flex h-fit max-h-[400px] w-full flex-col gap-3 overflow-y-auto overflow-x-hidden pb-2 transition-all duration-300',
+            hidden && 'hidden',
+          )}
+        >
           {sections.map((section) => {
             const values = filterData[section];
             return (
@@ -70,7 +84,14 @@ const DisplayedSelectedFilter = ({
                   hidden: values.length === 0,
                 })}
               >
-                <div className="row-span-1 grid  w-[90%] grid-cols-3 gap-1">
+                <div
+                  className="row-span-1 grid  max-w-[92%] gap-1"
+                  style={{
+                    gridTemplateColumns: `repeat(auto-fill, minmax(100px, 170px))`,
+                    gridAutoFlow: 'col dense',
+                    gridTemplateRows: 'auto',
+                  }}
+                >
                   {values.map((value) => {
                     return (
                       <Button
