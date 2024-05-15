@@ -40,6 +40,7 @@ const fakeSender: User = {
   email: '',
   status: 'active',
   createdAt: new Date().toString(),
+  username: 'john_doe',
 };
 const baseMessage: Message = {
   _id: '',
