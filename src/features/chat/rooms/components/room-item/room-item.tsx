@@ -159,7 +159,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                       <>
                         {room.participants.filter(
                           (user) => user._id !== currentUserId,
-                        )[0]?.email || 'you'}
+                        )[0]?.username || 'you'}
                       </>
                     )}
                   </span>

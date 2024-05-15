@@ -30,7 +30,7 @@ export function generateRoomDisplay(
   return {
     ...room,
     name: participant.name,
-    subtitle: participant.email,
+    subtitle: participant.username,
     avatar: participant.avatar,
     link: inCludeLink ? link : '',
   };
