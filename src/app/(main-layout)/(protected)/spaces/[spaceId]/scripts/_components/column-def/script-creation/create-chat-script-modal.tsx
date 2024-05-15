@@ -19,6 +19,8 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { isEmpty } from 'lodash';
+import { createOrEditChatScript } from '@/services/scripts.service';
+import { useParams } from 'next/navigation';
 
 export const initialChatFlowNodes: FlowNode[] = [
   {
@@ -104,6 +106,7 @@ export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
 const CreateChatScriptModal = () => {
   const [open, setOpen] = useState(false);
+  const spaceId = useParams()?.spaceId as string;
   const form = useForm<TScriptFormValues>({
     mode: 'onChange',
     defaultValues: {
@@ -143,8 +146,13 @@ const CreateChatScriptModal = () => {
     const payload = {
       name: values.name,
       chatFlow: values.chatFlow,
+      spaceId,
     };
-    console.log('CREATE SCRIPT :>>', payload);
+    try {
+      await createOrEditChatScript(payload);
+    } catch (error) {
+      console.error('Error on creating chat script: ', error);
+    }
   };
   return (
     <>
