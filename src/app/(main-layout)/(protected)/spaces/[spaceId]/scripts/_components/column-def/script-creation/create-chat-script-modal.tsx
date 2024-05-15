@@ -21,6 +21,7 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { isEmpty } from 'lodash';
 import { createOrEditChatScript } from '@/services/scripts.service';
 import { useParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 export const initialChatFlowNodes: FlowNode[] = [
   {
@@ -159,7 +160,9 @@ const CreateChatScriptModal = () => {
     };
     try {
       await createOrEditChatScript(payload);
+      setOpen(false);
     } catch (error) {
+      toast.error('Error on creating chat script');
       console.error('Error on creating chat script: ', error);
     }
   };
