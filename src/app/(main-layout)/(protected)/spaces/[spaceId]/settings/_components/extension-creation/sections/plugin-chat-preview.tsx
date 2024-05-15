@@ -11,7 +11,7 @@ import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_compon
 import { TimeDisplay } from '@/features/chat/messages/components/time-display';
 import { PreviewReceivedMessage } from './preview-received-message';
 import { isEmpty } from 'lodash';
-import { FlowNode } from '../steps/script-chat-flow/nested-flow';
+import { FlowNode } from '../steps/script-chat-flow/design-script-chat-flow';
 
 export type PluginChatPreviewProps = {
   content: string;

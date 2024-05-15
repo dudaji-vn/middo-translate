@@ -10,6 +10,7 @@ import { scriptsColumns } from './_components/column-def/scripts-columns';
 import { Plus } from 'lucide-react';
 import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-cnversation-scripts';
 import { SearchInput } from '@/components/data-entry';
+import CreateChatScriptModal from './_components/column-def/script-creation/create-chat-script-modal';
 
 const Page = ({
   params: { spaceId },
@@ -46,15 +47,7 @@ const Page = ({
             />
           </div>
           <div className="h-fit w-fit flex-none ">
-            <Button
-              className="min-w-fit"
-              shape={'square'}
-              size="md"
-              startIcon={<Plus />}
-            >
-              Add&nbsp;
-              <span className="max-md:hidden">New Script </span>
-            </Button>
+            <CreateChatScriptModal />
           </div>
         </div>
       </div>
