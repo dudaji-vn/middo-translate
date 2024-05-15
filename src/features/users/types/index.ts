@@ -15,4 +15,5 @@ export type User = {
   language: string;
   status: UserStatus;
   phoneNumber?: string;
+  username: string;
 } & BaseEntity;

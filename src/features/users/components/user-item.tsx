@@ -40,7 +40,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
               </div>
             </div>
             <Typography className="line-clamp-1 break-all text-sm text-text/50">
-              {subContent ? subContent : user?.email}
+              {subContent ? subContent : user?.username}
             </Typography>
           </div>
           {rightElement}
