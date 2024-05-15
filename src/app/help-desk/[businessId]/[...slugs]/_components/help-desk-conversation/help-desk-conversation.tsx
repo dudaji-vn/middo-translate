@@ -24,11 +24,11 @@ import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { cn } from '@/utils/cn';
 import { Edge } from 'reactflow';
 import FakeTyping from '@/app/(main-layout)/(need-not-auth)/test-it-out/_components/fake-typing';
-import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { useAppStore } from '@/stores/app.store';
 import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/room-side-tabs/room-side-tabs.hook';
 import { Allotment } from 'allotment';
 import { MessageActions } from '@/features/chat/messages/components/message-actions';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 
 const HelpDeskConversation = ({
   room,
