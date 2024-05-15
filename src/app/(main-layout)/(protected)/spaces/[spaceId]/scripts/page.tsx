@@ -1,16 +1,29 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { DataTable } from '@/components/ui/data-table';
 
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/actions';
 import { scriptsColumns } from './_components/column-def/scripts-columns';
-import { Plus } from 'lucide-react';
 import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-cnversation-scripts';
 import { SearchInput } from '@/components/data-entry';
 import CreateChatScriptModal from './_components/column-def/script-creation/create-chat-script-modal';
+import { cn } from '@/utils/cn';
+import { getUserSpaceRole } from '../settings/_components/space-setting/role.util';
+import { useAuthStore } from '@/stores/auth.store';
+import {
+  ERoleActions,
+  ESPaceRoles,
+} from '../settings/_components/space-setting/setting-items';
+import { useRouter } from 'next/navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
+
+const MANAGE_SCRIPTS_ROLES: Record<ERoleActions, Array<ESPaceRoles>> = {
+  edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
+  delete: [ESPaceRoles.Owner],
+  view: Array.from(Object.values(ESPaceRoles)),
+};
 
 const Page = ({
   params: { spaceId },
@@ -20,18 +33,29 @@ const Page = ({
   };
 }) => {
   const [search, setSearch] = useState('');
+  const router = useRouter();
   const { data, isLoading } = useGetConversationScripts({
     search,
     spaceId,
   });
-  const items = data?.items || [];
 
+  const { user: currentUser, space } = useAuthStore();
+  const myRole = useMemo(() => {
+    return getUserSpaceRole(currentUser, space);
+  }, [currentUser, space]);
+  const items = data?.items || [];
   const onSearchChange = (search: string) => {
     setSearch(search);
   };
 
   const { t } = useTranslation('common');
-
+  if (
+    space &&
+    currentUser &&
+    !MANAGE_SCRIPTS_ROLES.edit.includes(myRole as ESPaceRoles)
+  ) {
+    router.push(`${ROUTE_NAMES.SPACES}/${spaceId}/conversations`);
+  }
   return (
     <section className="relative w-full">
       <div className="flex  flex-col justify-center gap-4  px-4 py-3 font-medium md:flex-row md:items-center md:px-10">
@@ -46,7 +70,13 @@ const Page = ({
               placeholder={t('BUSINESS.SCRIPT.SEARCH')}
             />
           </div>
-          <div className="h-fit w-fit flex-none ">
+          <div
+            className={cn('h-fit w-fit flex-none ', {
+              hidden: !MANAGE_SCRIPTS_ROLES.edit.includes(
+                myRole as ESPaceRoles,
+              ),
+            })}
+          >
             <CreateChatScriptModal />
           </div>
         </div>
