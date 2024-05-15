@@ -83,7 +83,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
     const options: RoomsFilterOption[] = filterOptions[sectionName] || [];
     setSelectedFilters({
       ...selectedFilters,
-      [sectionName]: options.map((option) => option.value),
+      [sectionName]: options?.map((option) => option.value),
     });
   };
   const onDeselectSection = (sectionName: RoomsFilterName) => {
@@ -139,7 +139,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
               className="h-full w-full max-w-full p-0 transition-all duration-500  "
               defaultValue={['countries', 'domains', 'tags']}
             >
-              {FILTER_SECTIONS.map((name) => {
+              {FILTER_SECTIONS?.map((name) => {
                 const nameFilter = name as RoomsFilterName;
                 const translatedTitleKey = `FILTERS.${name.toUpperCase()}`;
                 return (
