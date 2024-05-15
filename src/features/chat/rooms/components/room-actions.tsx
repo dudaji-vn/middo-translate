@@ -19,6 +19,7 @@ import { usePinRoom } from '../hooks/use-pin-room';
 import { RoomModalChangeStatus } from './room.modal-change-status';
 import RoomAssignTag from './room-assign-tag';
 import { Room } from '../types';
+import { useToggleArchiveRoom } from '../hooks/use-toggle-archive-room';
 
 export type Action =
   | 'delete'
@@ -45,7 +46,7 @@ export type ActionItem = {
   }) => JSX.Element | ReactNode;
 };
 export interface RoomActionsContextProps {
-  onAction: (action: Action, id: string) => void;
+  onAction: (action: Action, id: string, isBusiness?: boolean) => void;
   actionItems: ActionItem[];
 }
 const RoomActionsContext = createContext<RoomActionsContextProps | undefined>(
@@ -62,11 +63,34 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const [id, setId] = useState<string>('');
   const [action, setAction] = useState<Action>('none');
   const { mutate: pin } = usePinRoom();
-  const onAction = (action: Action, id: string) => {
+  const { toggleArchive } = useToggleArchiveRoom();
+  const onAction = (action: Action, id: string, isBusiness?: boolean) => {
     switch (action) {
       case 'pin':
       case 'unpin':
         pin(id);
+        break;
+      case 'archive':
+        if (isBusiness) {
+          setAction('archive');
+          setId(id);
+          return;
+        }
+        toggleArchive({
+          roomId: id,
+          archive: true,
+        });
+        break;
+      case 'unarchive':
+        if (isBusiness) {
+          setAction('unarchive');
+          setId(id);
+          return;
+        }
+        toggleArchive({
+          roomId: id,
+          archive: false,
+        });
         break;
       default:
         setAction(action);
@@ -147,12 +171,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         label: 'COMMON.LEAVE',
         icon: <LogOut />,
       },
-      {
-        action: 'delete',
-        label: 'COMMON.DELETE',
-        icon: <TrashIcon />,
-        color: 'error',
-      },
+
       {
         action: 'archive',
         label: 'Archive',
@@ -162,6 +181,12 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         action: 'unarchive',
         label: 'Unarchive',
         icon: <ArchiveX />,
+      },
+      {
+        action: 'delete',
+        label: 'COMMON.DELETE',
+        icon: <TrashIcon />,
+        color: 'error',
       },
     ] as ActionItem[];
   }, []);

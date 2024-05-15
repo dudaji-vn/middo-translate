@@ -189,6 +189,19 @@ export const roomApi = {
     return res.data;
   },
 
+  async toggleArchive({
+    roomId,
+    archive,
+  }: {
+    roomId: string;
+    archive: boolean;
+  }) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/${archive ? 'archive' : 'unarchive'}`,
+    );
+    return res.data;
+  },
+
   async changeTagRoom({
     roomId,
     tagId,

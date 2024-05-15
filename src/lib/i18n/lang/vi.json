@@ -404,7 +404,7 @@
       "TITLE": "Xoá tài khoản",
       "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu và không thể khôi phục lại. Bạn có chắc chắn muốn xoá tài khoản không?",
       "CONFIRM_RETYPE": "Vui lòng nhập lại <strong>{{code}}</strong> này để xác nhận",
-      "CONFIRM": "Tôi muốn xoá tài khoản"
+      "CONFIRM": "Xoá tài khoản"
     },
     "ADD_USER": {
       "TITLE": "Thêm thành viên"

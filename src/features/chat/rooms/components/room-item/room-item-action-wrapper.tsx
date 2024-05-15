@@ -54,6 +54,8 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'leave',
   'delete',
   'none',
+  'archive',
+  'unarchive',
 ];
 
 const checkAllowedActions = ({
@@ -114,9 +116,19 @@ export const RoomItemActionWrapper = forwardRef<
       })
       .map((item) => ({
         ...item,
-        onAction: () => onAction(item.action, room._id),
+        onAction: () => onAction(item.action, room._id, isBusiness),
       }));
-  }, [actionItems, isMuted, onAction, room._id, room.isGroup, room.isPinned]);
+  }, [
+    actionItems,
+    businessConversationType,
+    isBusiness,
+    isMuted,
+    onAction,
+    room._id,
+    room.isGroup,
+    room.isPinned,
+    room.status,
+  ]);
 
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>

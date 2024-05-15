@@ -402,7 +402,7 @@
       "TITLE": "Delete Account",
       "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete your account?",
       "CONFIRM_RETYPE": "Please retype this <strong>{{code}}</strong> to confirm",
-      "CONFIRM": "I want to delete my account"
+      "CONFIRM": "Delete Account"
     },
     "ADD_USER": {
       "TITLE": "Add Member"
