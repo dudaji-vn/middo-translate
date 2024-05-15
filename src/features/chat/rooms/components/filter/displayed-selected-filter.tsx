@@ -19,7 +19,7 @@ const DisplayedSelectedFilter = ({
   onRemoveItem: (filterField: string, value: string) => void;
   onRemoveSection: (filterField: string) => void;
   hidden?: boolean;
-  renderValue?: (section: string, value: string) => React.ReactNode;
+  renderValue?: (div: string, value: string) => React.ReactNode;
 } & React.HTMLAttributes<HTMLElement>) => {
   const [expanded, setExpanded] = React.useState(false);
   const sections = Object.keys(filterData);
@@ -29,11 +29,11 @@ const DisplayedSelectedFilter = ({
   }
 
   return (
-    <>
-      <section
+    <section className="space-y-3 bg-[#FCFCFC] p-3">
+      <div
         {...props}
         className={cn(
-          'flex w-full scale-y-100 flex-row items-center px-3 py-2 transition-all duration-300',
+          'flex w-full scale-y-100 flex-row items-center transition-all duration-300',
           hidden && 'hidden scale-y-0',
           props.className,
         )}
@@ -56,7 +56,6 @@ const DisplayedSelectedFilter = ({
         <Button.Icon
           onClick={() => setExpanded(!expanded)}
           variant="ghost"
-          shape={'square'}
           color="default"
           size={'xs'}
         >
@@ -67,31 +66,27 @@ const DisplayedSelectedFilter = ({
             )}
           />
         </Button.Icon>
-      </section>
+      </div>
       {expanded && (
         <div
           className={cn(
-            'flex h-fit max-h-[400px] w-full flex-col gap-3 overflow-y-auto overflow-x-hidden pb-2 transition-all duration-300',
+            'flex h-fit max-h-[400px] w-full flex-col gap-3 overflow-y-auto overflow-x-hidden transition-all duration-300',
             hidden && 'hidden',
           )}
         >
-          {sections.map((section) => {
-            const values = filterData[section];
+          {sections.map((div) => {
+            const values = filterData[div];
             return (
               <div
-                key={section}
-                className={cn('flex flex-row justify-between gap-2', {
-                  hidden: values.length === 0,
-                })}
+                key={div}
+                className={cn(
+                  'flex flex-row justify-between gap-2 rounded-[16px] bg-[#FAFAFA] p-1',
+                  {
+                    hidden: values.length === 0,
+                  },
+                )}
               >
-                <div
-                  className="row-span-1 grid  max-w-[92%] gap-1"
-                  style={{
-                    gridTemplateColumns: `repeat(auto-fill, minmax(100px, 170px))`,
-                    gridAutoFlow: 'col dense',
-                    gridTemplateRows: 'auto',
-                  }}
-                >
+                <div className="flex flex-1 flex-row flex-wrap gap-2 ">
                   {values.map((value) => {
                     return (
                       <Button
@@ -99,24 +94,22 @@ const DisplayedSelectedFilter = ({
                         key={value}
                         color={'default'}
                         shape={'square'}
-                        onClick={() => onRemoveItem(section, value)}
-                        className="relative flex w-full flex-row justify-between gap-2 "
+                        onClick={() => onRemoveItem(div, value)}
+                        className="relative flex w-fit flex-row justify-between gap-2  pr-6"
                       >
-                        {renderValue?.(section, value) || (
+                        {renderValue?.(div, value) || (
                           <span className=" max-w-full flex-1  !truncate text-ellipsis text-sm font-semibold ">
                             {value}
                           </span>
                         )}
-                        <em />
-                        <XIcon className="absolute right-2 top-3 !size-4" />
+                        <XIcon className="absolute right-2 inset-y !size-4" />
                       </Button>
                     );
                   })}
                 </div>
                 <Button.Icon
-                  onClick={() => onRemoveSection(section)}
+                  onClick={() => onRemoveSection(div)}
                   variant="ghost"
-                  shape={'square'}
                   color="default"
                   size={'xs'}
                 >
@@ -127,7 +120,7 @@ const DisplayedSelectedFilter = ({
           })}
         </div>
       )}
-    </>
+    </section>
   );
 };
 
