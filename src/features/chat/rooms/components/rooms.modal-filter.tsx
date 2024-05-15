@@ -58,16 +58,20 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
     });
   };
 
-  const disabledFilter =
-    selectedFilters.countries.length === 0 &&
-    selectedFilters.domains.length === 0 &&
-    selectedFilters.tags.length === 0;
+  const disabledFilter = useMemo(() => {
+    const flattenSelection = Object.values(selectedFilters).flat().sort();
+    const flattenFilterOptions = Object.values(filterOptions)
+      .flat()
+      .map((f) => f.value)
+      .sort();
+    return flattenSelection.join() === flattenFilterOptions.join();
+  }, [selectedFilters, filterOptions]);
 
   const onCancel = () => {
     if (appliedFilters) {
       setSelectedFilters(appliedFilters);
     } else {
-      onSelectAll();
+      onDeselectAll();
     }
     setOpen(false);
   };
