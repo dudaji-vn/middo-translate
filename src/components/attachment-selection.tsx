@@ -6,12 +6,6 @@ import { PlayCircleIcon, PlusCircleIcon, XIcon } from 'lucide-react';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
 import { Editor } from '@tiptap/react';
-import Lightbox, { Slide } from 'yet-another-react-lightbox';
-import Download from 'yet-another-react-lightbox/plugins/download';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import Video from 'yet-another-react-lightbox/plugins/video';
-import getThumbnailForVideo from '@/utils/get-thumbnail-for-video';
 import { MediaPreview } from './media-preview';
 
 export interface AttachmentSelectionProps

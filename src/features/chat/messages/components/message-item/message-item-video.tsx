@@ -2,8 +2,10 @@ import { Button } from '@/components/actions';
 import { useAppStore } from '@/stores/app.store';
 import { Media } from '@/types';
 import { cn } from '@/utils/cn';
-import { ExpandIcon, Pause, PlayIcon, X } from 'lucide-react';
+import { DownloadIcon, ExpandIcon, Pause, PlayIcon, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
+import download from 'downloadjs';
+
 export interface MessageItemVideoProps {
   file: Media;
 }
@@ -13,7 +15,9 @@ export const MessageItemVideo = ({ file }: MessageItemVideoProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const isMobile = useAppStore((state) => state.isMobile);
   const [isPlaying, setIsPlaying] = useState(false);
-  const toggleVideoPlay = () => {
+  const toggleVideoPlay = (e: any) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (isPlaying) {
       videoRef.current?.pause();
     } else {
@@ -22,6 +26,11 @@ export const MessageItemVideo = ({ file }: MessageItemVideoProps) => {
     setIsPlaying(!isPlaying);
   }
 
+  const downloadFile = () => {
+    // Download video file on new tab
+    download(file.url, file.name)
+  }
+  
   // Add on end video event
   useEffect(() => {
     const handleEnd = () => {
@@ -72,17 +81,27 @@ export const MessageItemVideo = ({ file }: MessageItemVideoProps) => {
         </Button.Icon>
       </div>
       {/* Button expand */}
-      <Button.Icon
-        variant={'default'}
-        color={'primary'}
-        size={'ss'}
-        shape={'default'}
-        className={cn(isFullScreen ? 'z-[51] fixed top-1 right-1' : 'absolute bottom-1 right-1 z-10 opacity-70 transition-opacity duration-300')}
-        onClick={() => setIsFullScreen(!isFullScreen)}
-      >
-        {isFullScreen ? <X /> : <ExpandIcon />}
-      </Button.Icon>
-
+      <div className={cn('flex item-center justify-center gap-1', isFullScreen ? 'z-[51] fixed top-1 right-1' : 'absolute bottom-1 right-1 z-10 opacity-70 transition-opacity duration-300')}>
+        {/* Button download */}
+        <Button.Icon
+            variant={'default'}
+            color={'primary'}
+            size={'ss'}
+            shape={'default'}
+            onClick={downloadFile}
+          >
+          <DownloadIcon />
+        </Button.Icon>
+        <Button.Icon
+          variant={'default'}
+          color={'primary'}
+          size={'ss'}
+          shape={'default'}
+          onClick={() => setIsFullScreen(!isFullScreen)}
+        >
+          {isFullScreen ? <X /> : <ExpandIcon />}
+        </Button.Icon>
+      </div>
     </div>
   );
 };
