@@ -60,11 +60,11 @@ const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
         triggerItem={
           <div
             className={
-              'mt-0 flex cursor-pointer flex-row items-center gap-2 [&_svg]:!size-4 '
+              'mt-0 flex cursor-pointer flex-row items-center gap-1 [&_svg]:!size-4 '
             }
           >
             {params[value].icon}
-            <span className="line-clamp-1 max-w-[100px] flex-1 break-words text-base font-normal ">
+            <span className="line-clamp-1 max-w-[100px] flex-1 break-words text-left text-base font-normal ">
               {params[value]?.label || value}
             </span>
           </div>
