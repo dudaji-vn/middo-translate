@@ -104,7 +104,6 @@ export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
 const CreateChatScriptModal = () => {
   const [open, setOpen] = useState(false);
-  const onOpenChange = () => setOpen(!open);
   const form = useForm<TScriptFormValues>({
     mode: 'onChange',
     defaultValues: {
@@ -117,13 +116,35 @@ const CreateChatScriptModal = () => {
     },
     resolver: zodResolver(createChatScriptSchema),
   });
+  const resetFormData = () => {
+    form.reset({
+      name: '',
+      chatFlow: {
+        nodes: initialChatFlowNodes,
+        edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
+        flowErrors: [],
+      },
+    });
+  };
+  const onOpenChange = () => {
+    if (!open) {
+      resetFormData();
+    }
+    setOpen(!open);
+  };
+
   const {
     handleSubmit,
     trigger,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = form;
-  const submit = async (values: any) => {
-    console.log('CREATE SCRIPT :>>', values);
+
+  const submit = async (values: { name: string; chatFlow: any }) => {
+    const payload = {
+      name: values.name,
+      chatFlow: values.chatFlow,
+    };
+    console.log('CREATE SCRIPT :>>', payload);
   };
   return (
     <>
@@ -139,41 +160,40 @@ const CreateChatScriptModal = () => {
       </Button>
       <AlertDialog open={open} onOpenChange={onOpenChange}>
         <Form {...form}>
-          <form onSubmit={handleSubmit(submit)}>
-            <AlertDialogContent className="max-w-screen z-[100] flex h-[calc(100vh-2rem)] !w-[calc(100vw-2rem)] flex-col justify-stretch gap-1">
-              <AlertDialogHeader className="flex h-fit w-full flex-row items-start justify-between gap-3 text-base">
-                <RHFInputField
-                  name="name"
-                  formItemProps={{
-                    className: 'w-full',
-                  }}
-                  inputProps={{
-                    placeholder: 'Enter script name',
-                    required: true,
-                  }}
-                />
-                <Button
-                  shape={'square'}
-                  size={'md'}
-                  disabled={!isEmpty(errors)}
-                  type="submit"
-                >
-                  Save
+          <AlertDialogContent className="max-w-screen z-[100] flex h-[calc(100vh-2rem)] !w-[calc(100vw-2rem)] flex-col justify-stretch gap-1">
+            <AlertDialogHeader className="flex h-fit w-full flex-row items-start justify-between gap-3 text-base">
+              <RHFInputField
+                name="name"
+                formItemProps={{
+                  className: 'w-full',
+                }}
+                inputProps={{
+                  placeholder: 'Enter script name',
+                  required: true,
+                }}
+              />
+              <Button
+                shape={'square'}
+                size={'md'}
+                disabled={!isEmpty(errors) || !isDirty}
+                type="submit"
+                onClick={() => handleSubmit(submit)()}
+              >
+                Save
+              </Button>
+              <AlertDialogCancel className="flex-none p-0">
+                <Button shape={'square'} variant={'ghost'} size={'md'}>
+                  Cancel
                 </Button>
-                <AlertDialogCancel className="flex-none p-0">
-                  <Button shape={'square'} variant={'ghost'} size={'md'}>
-                    Cancel
-                  </Button>
-                </AlertDialogCancel>
-              </AlertDialogHeader>
-              <section className="flex-grow">
-                <p className="text-error-500">
-                  {errors.chatFlow?.nodes?.message}
-                </p>
-                <DesignScriptChatFlow />
-              </section>
-            </AlertDialogContent>
-          </form>
+              </AlertDialogCancel>
+            </AlertDialogHeader>
+            <section className="flex-grow">
+              <p className="text-error-500">
+                {errors.chatFlow?.nodes?.message}
+              </p>
+              <DesignScriptChatFlow />
+            </section>
+          </AlertDialogContent>
         </Form>
       </AlertDialog>
     </>
