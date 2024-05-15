@@ -8,10 +8,10 @@ import { Handle, Position } from 'reactflow';
 import { Button } from '@/components/actions';
 import { Link, MessageSquare, Plus, Zap } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { FlowNode } from '../nested-flow';
+import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import Ping from '../ping';
-import { CustomNodeProps } from './node-types';
+import { CustomNodeProps, FLOW_KEYS } from './node-types';
 
 
 
@@ -19,7 +19,7 @@ import { CustomNodeProps } from './node-types';
 
 function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
     const { watch, setValue } = useFormContext();
-    const nodes = watch('nodes');
+    const nodes = watch(FLOW_KEYS.NODES);
     // const flowErrors = watch('flowErrors');
     // const errorMessage = flowErrors.find((error: { id: string; }) => error.id === node.id)?.message || '';
 
@@ -39,7 +39,7 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
             }
         };
         const nodesWithoutCurrent = nodes.filter((n: { id: string; }) => n.id !== node.id);
-        setValue('nodes', [...nodesWithoutCurrent, newContainerNode]);
+        setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newContainerNode]);
     }
 
 
@@ -54,7 +54,7 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
             }
         };
         const nodesWithoutCurrent = nodes.filter((n: { id: string; }) => n.id !== node.id);
-        setValue('nodes', [...nodesWithoutCurrent, newMessageNode]);
+        setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newMessageNode]);
     }
     const convertOptionToLink = () => {
         const currentNode = nodes.find((n: { id: string; }) => n.id === node.id);
@@ -66,7 +66,7 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
             }
         };
         const nodesWithoutCurrent = nodes.filter((n: { id: string; }) => n.id !== node.id);
-        setValue('nodes', [...nodesWithoutCurrent, newLinkNode]);
+        setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newLinkNode]);
     }
 
     return (

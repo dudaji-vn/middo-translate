@@ -3,7 +3,7 @@
 import { User } from '@/features/users/types';
 import { ColumnDef } from '@tanstack/react-table';
 import { Edge } from 'reactflow';
-import { FlowNode } from '../../../settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { FlowNode } from '../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { Button } from '@/components/actions';
 import { Eye, Pen, Trash2 } from 'lucide-react';
 import { Avatar } from '@/components/data-display';
@@ -92,7 +92,7 @@ export const scriptsColumns: ColumnDef<ChatScript>[] = [
           <Button.Icon variant={'ghost'} size={'xs'} color={'default'}>
             <Pen />
           </Button.Icon>
-          <Button.Icon variant={'ghost'} size={'xs'} color={'default'}> 
+          <Button.Icon variant={'ghost'} size={'xs'} color={'default'}>
             <Trash2 className="text-error" />
           </Button.Icon>
         </div>

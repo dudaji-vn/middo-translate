@@ -5,14 +5,14 @@ import PluginChatPreview from '../sections/plugin-chat-preview';
 import { TThemeOption } from '../sections/options';
 import { useFormContext } from 'react-hook-form';
 import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
-import { FlowNode } from './script-chat-flow/nested-flow';
+import { FlowNode } from './script-chat-flow/design-script-chat-flow';
 
 const CustomChatThemeStep = ({ space }: { space: TSpace }) => {
   const {
     trigger,
     watch,
     setValue,
-    formState: {},
+    formState: { },
   } = useFormContext();
 
   const selectedRadioFM = watch('selectedRadioFM');
@@ -21,8 +21,8 @@ const CustomChatThemeStep = ({ space }: { space: TSpace }) => {
   const firstButtonNode =
     selectedRadioFM === 'script'
       ? editingChatFlow?.nodes?.find(
-          (n: FlowNode) => n?.type === 'button' && n?.data?.content,
-        )
+        (n: FlowNode) => n?.type === 'button' && n?.data?.content,
+      )
       : undefined;
   return (
     <div className=" max-w-screen-md  md:max-w-full   [&_h3]:text-[1.25rem]">

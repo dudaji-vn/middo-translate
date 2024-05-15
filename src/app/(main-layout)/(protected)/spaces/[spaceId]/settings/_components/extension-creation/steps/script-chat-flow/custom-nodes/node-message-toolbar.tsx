@@ -6,7 +6,7 @@ import 'reactflow/dist/style.css';
 import { Button } from '@/components/actions';
 import { MessageSquare, Smile, Trash2 } from 'lucide-react';
 import { cn } from '@/utils/cn';
-import { FlowNode } from '../nested-flow';
+import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { CustomNodeProps } from './node-types';
