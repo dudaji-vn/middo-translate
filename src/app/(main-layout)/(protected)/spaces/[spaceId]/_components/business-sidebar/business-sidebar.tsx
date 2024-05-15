@@ -53,6 +53,7 @@ const sidebarContents: Array<{
   {
     title: 'scripts',
     icon: <GitFork />,
+    roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
   },
   {
     title: 'settings',
