@@ -1,4 +1,5 @@
 import { RoomsFilterOption } from '@/features/chat/rooms/components/filter/filter-section';
+import { isEmpty, isEqual } from 'lodash';
 import { create } from 'zustand';
 
 const DEFAULT_FILTERS = {
@@ -48,8 +49,19 @@ export const useSpaceInboxFilterStore = create<SpaceInboxFilterState>()(
       })),
     appliedFilters: undefined,
     setFilterApplied: (appliedFilters) =>
-      set(() => ({
-        appliedFilters,
-      })),
+      set(({ selectedFilters }) => {
+        if (
+          !isEqual(selectedFilters, appliedFilters) &&
+          !isEmpty(appliedFilters)
+        ) {
+          return {
+            selectedFilters: appliedFilters,
+            appliedFilters,
+          };
+        }
+        return {
+          appliedFilters,
+        };
+      }),
   }),
 );
