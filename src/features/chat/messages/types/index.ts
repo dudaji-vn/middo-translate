@@ -38,6 +38,7 @@ export type MessageStatus = Pick<
 >['status'];
 type Call = {
   endTime: string | null;
+  startTime: string | null;
   type: 'DIRECT' | 'GROUP';
 } & BaseEntity;
 export type Message = {
