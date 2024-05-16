@@ -1,4 +1,4 @@
-import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { Room } from '@/features/chat/rooms/types';
 import { Edge } from 'reactflow';
