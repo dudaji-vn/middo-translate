@@ -70,7 +70,7 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
     const handleToggleListening = () => {
       postMessage({
         type: 'Trigger',
-        data: { type: 'SpeechToText', value: !listening },
+        data: { type: 'mic', value: !listening },
       });
       listening ? handleStopListening() : handleStartListening();
     };

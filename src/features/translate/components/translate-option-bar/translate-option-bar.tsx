@@ -17,6 +17,7 @@ import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
 import { useTranslation } from 'react-i18next';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,10 +29,20 @@ export const TranslateOptionBar = forwardRef<
   TranslateOptionBarProps
 >(({ sourceLang, ...props }, ref) => {
   const { width } = useWindowSize();
+  const { postMessage } = useReactNativePostMessage();
   const isMobile = width < 768;
-  let { listening, interimTranscript, startSpeechToText, stopSpeechToText, finalTranscript, resetTranscript } = useSpeechRecognizer(SUPPORTED_VOICE_MAP[sourceLang as keyof typeof SUPPORTED_VOICE_MAP]);
+  let {
+    listening,
+    interimTranscript,
+    startSpeechToText,
+    stopSpeechToText,
+    finalTranscript,
+    resetTranscript,
+  } = useSpeechRecognizer(
+    SUPPORTED_VOICE_MAP[sourceLang as keyof typeof SUPPORTED_VOICE_MAP],
+  );
   const { setParam, removeParam } = useSetParams();
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const { setValue, isListening, setIsListening, isFocused } =
     useTranslateStore((state) => {
       return {
@@ -63,6 +74,10 @@ export const TranslateOptionBar = forwardRef<
     removeParam('query');
     setIsListening(true);
     startSpeechToText();
+    postMessage({
+      type: 'Trigger',
+      data: { type: 'mic', value: !listening },
+    });
   };
   const handleStopListening = useCallback(() => {
     setIsListening(false);
@@ -74,21 +89,19 @@ export const TranslateOptionBar = forwardRef<
       stopSpeechToText();
       // resetTranscript();
     } catch {}
-  }, [interimTranscript, setIsListening, setParam, setValue, stopSpeechToText])
+  }, [interimTranscript, setIsListening, setParam, setValue, stopSpeechToText]);
 
   useKeyboardShortcut([SHORTCUTS.TOGGLE_SPEECH_TO_TEXT], () =>
     isListening ? handleStopListening() : handleStartListening(),
   );
-  
-  
-  useEffect(()=>{
-    return ()=> {
+
+  useEffect(() => {
+    return () => {
       setIsListening(false);
       stopSpeechToText();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sourceLang])
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sourceLang]);
 
   useEffect(() => {
     if (!isListening) {

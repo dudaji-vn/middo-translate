@@ -59,7 +59,7 @@ export default function AccountSettings() {
           </p>
           <CopyZoneClick text={user?.username || ''}>
             <Button color="secondary" size="xs" shape="square">
-              {user?.username}
+              @{user?.username}
             </Button>
           </CopyZoneClick>
         </div>

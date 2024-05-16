@@ -9,10 +9,7 @@ import { InputField } from '@/components/form/Input-field';
 import Link from 'next/link';
 
 import { ROUTE_NAMES } from '@/configs/route-name';
-import {
-  loginService,
-  setCookieService,
-} from '@/services/auth.service';
+import { loginService, setCookieService } from '@/services/auth.service';
 import toast from 'react-hot-toast';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
@@ -27,6 +24,8 @@ import { PageLoading } from '@/components/feedback';
 import { Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
 import { UserRound } from 'lucide-react';
+import { usePlatformStore } from '@/features/platform/stores';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 
 interface DataResponseToken {
   token: string;
@@ -35,10 +34,12 @@ interface DataResponseToken {
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
+  const { postMessage } = useReactNativePostMessage();
+  const isMobile = usePlatformStore((state) => state.platform === 'mobile');
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const { isElectron, ipcRenderer } = useElectron();
-  const {t} = useTranslation("common");
+  const { t } = useTranslation('common');
   const {
     register,
     watch,
@@ -51,26 +52,28 @@ export default function SignIn() {
       email: '',
       password: '',
     },
-    resolver: yupResolver(yup
-      .object()
-      .shape({
-        email: yup
-          .string()
-          .trim()
-          .required({
+    resolver: yupResolver(
+      yup
+        .object()
+        .shape({
+          email: yup
+            .string()
+            .trim()
+            .required({
+              value: true,
+              message: t('MESSAGE.ERROR.REQUIRED'),
+            })
+            .email({
+              value: true,
+              message: t('MESSAGE.ERROR.INVALID_EMAIL'),
+            }),
+          password: yup.string().required({
             value: true,
             message: t('MESSAGE.ERROR.REQUIRED'),
-          })
-          .email({
-            value: true,
-            message: t('MESSAGE.ERROR.INVALID_EMAIL'),
           }),
-        password: yup.string().required({
-          value: true,
-          message: t('MESSAGE.ERROR.REQUIRED'),
-        }),
-      })
-      .required()),
+        })
+        .required(),
+    ),
   });
 
   const {
@@ -91,12 +94,22 @@ export default function SignIn() {
         password: watch('password'),
       };
       const data = await loginService(formData);
+      if (isMobile) {
+        postMessage({
+          type: 'Trigger',
+          data: {
+            event: 'login',
+            payload: data,
+          },
+        });
+        return;
+      }
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
       toast.success(t('MESSAGE.SUCCESS.LOGIN'));
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage( t('MESSAGE.ERROR.INVALID_ACCOUNT'));
+      setErrorMessage(t('MESSAGE.ERROR.INVALID_ACCOUNT'));
     } finally {
       setLoading(false);
       // reset();
@@ -110,9 +123,9 @@ export default function SignIn() {
   const saveCookie = useCallback((data: DataResponseToken) => {
     const { token, refresh_token } = data;
     const setCookieData: DataRequestSetCookie[] = [
-      {key: 'access_token', value: token},
-      {key: 'refresh_token', value: refresh_token},
-    ]
+      { key: 'access_token', value: token },
+      { key: 'refresh_token', value: refresh_token },
+    ];
     setCookieService(setCookieData)
       .then((_) => {
         window.location.reload();
@@ -150,10 +163,18 @@ export default function SignIn() {
   return (
     <>
       {(loading || (isAuthentication && userData)) && <PageLoading />}
-      <form className="flex w-full flex-col items-center" onSubmit={handleSubmitForm}>
-        <Typography variant={'h1'} className="text-center text-2xl font-semibold text-primary mb-8">
-          {t('SIGN_IN.TITLE')}
-        </Typography>
+      <form
+        className="flex w-full flex-col items-center"
+        onSubmit={handleSubmitForm}
+      >
+        {!isMobile && (
+          <Typography
+            variant={'h1'}
+            className="mb-8 text-center text-2xl font-semibold text-primary"
+          >
+            {t('SIGN_IN.TITLE')}
+          </Typography>
+        )}
         <InputField
           placeholder={t('COMMON.EMAIL_PLACEHOLDER')}
           register={{ ...register('email') }}
@@ -168,8 +189,9 @@ export default function SignIn() {
           type="password"
         />
         <Link
-          className="text-neutral-700 ml-auto mt-3 inline-block rounded-xl font-semibold py-2 px-3 md:hover:bg-neutral-50 active:bg-neutral-100"
-          href={ROUTE_NAMES.FORGOT_PASSWORD}>
+          className="ml-auto mt-3 inline-block rounded-xl px-3 py-2 font-semibold text-neutral-700 active:bg-neutral-100 md:hover:bg-neutral-50"
+          href={ROUTE_NAMES.FORGOT_PASSWORD}
+        >
           {t('SIGN_IN.FORGOT_PASSWORD')}
         </Link>
         <AlertError errorMessage={errorMessage}></AlertError>
@@ -178,47 +200,73 @@ export default function SignIn() {
           size={'md'}
           shape={'square'}
           color={'primary'}
-          className='w-full mt-5'
-          type='submit'
-        >{t('SIGN_IN.TITLE')}</Button>
+          className="mt-5 w-full"
+          type="submit"
+        >
+          {t('SIGN_IN.TITLE')}
+        </Button>
       </form>
       <div className="mx-auto my-10 h-[1px] w-full bg-neutral-50"></div>
-      <Typography variant={'h2'} className="mb-5 text-center text-neutral-800 font-normal text-base">{t('SIGN_IN.NO_ACCOUNT')}</Typography>
-      <Link href={ROUTE_NAMES.SIGN_UP} className='mb-4 block'>
+      <Typography
+        variant={'h2'}
+        className="mb-5 text-center text-base font-normal text-neutral-800"
+      >
+        {t('SIGN_IN.NO_ACCOUNT')}
+      </Typography>
+      <Link href={ROUTE_NAMES.SIGN_UP} className="mb-4 block">
         <Button
           variant={'default'}
           size={'md'}
           shape={'square'}
           color={'default'}
-          startIcon={<UserRound className='size-4'/>}
-          className='w-full'>
+          startIcon={<UserRound className="size-4" />}
+          className="w-full"
+        >
           {t('SIGN_IN.SIGN_UP')}
         </Button>
       </Link>
-      {isElectron ? (
-        <Button
-          variant={'default'}
-          size={'md'}
-          shape={'square'}
-          color={'default'}
-          onClick={handleLoginGoogle}
-          className='w-full'>
-          <Image src="/images/google-icon.svg" alt="Google" width={16} height={16} className='mr-2'/>
-          {t('SIGN_IN.GOOGLE_LOGIN')}
-        </Button>
-      ) : (
-        <Link href="/api/auth/google">
-          <Button
-            variant={'default'}
-            size={'md'}
-            shape={'square'}
-            color={'default'}
-            className='w-full'>
-            <Image src="/images/google-icon.svg" alt="Google" width={16} height={16} className='mr-2'/>
-            {t('SIGN_IN.GOOGLE_LOGIN')}
-          </Button>
-        </Link>
-      )}  
+      {!isMobile && (
+        <>
+          {isElectron ? (
+            <Button
+              variant={'default'}
+              size={'md'}
+              shape={'square'}
+              color={'default'}
+              onClick={handleLoginGoogle}
+              className="w-full"
+            >
+              <Image
+                src="/images/google-icon.svg"
+                alt="Google"
+                width={16}
+                height={16}
+                className="mr-2"
+              />
+              {t('SIGN_IN.GOOGLE_LOGIN')}
+            </Button>
+          ) : (
+            <Link href="/api/auth/google">
+              <Button
+                variant={'default'}
+                size={'md'}
+                shape={'square'}
+                color={'default'}
+                className="w-full"
+              >
+                <Image
+                  src="/images/google-icon.svg"
+                  alt="Google"
+                  width={16}
+                  height={16}
+                  className="mr-2"
+                />
+                {t('SIGN_IN.GOOGLE_LOGIN')}
+              </Button>
+            </Link>
+          )}
+        </>
+      )}
     </>
   );
 }

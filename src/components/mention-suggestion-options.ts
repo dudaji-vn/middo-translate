@@ -36,7 +36,7 @@ export const mentionSuggestionOptions = (
             image: item.image,
           }))
           .filter((item) =>
-            item.label.toLowerCase().startsWith(query.toLowerCase()),
+            item.label.toLowerCase().includes(query.toLowerCase()),
           ),
       );
     },
