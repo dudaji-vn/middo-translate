@@ -29,11 +29,11 @@ const DisplayedSelectedFilter = ({
   }
 
   return (
-    <>
+    <section className="relative space-y-3 bg-[#FCFCFC] p-3">
       <div
         {...props}
         className={cn(
-          'absolute right-0 top-0 z-10 flex w-full scale-y-100 flex-row items-center bg-[#FCFCFC] p-3 transition-all duration-300 ',
+          'flex w-full scale-y-100 flex-row items-center transition-all duration-300',
           hidden && 'hidden scale-y-0',
           props.className,
         )}
@@ -68,9 +68,9 @@ const DisplayedSelectedFilter = ({
         </Button.Icon>
       </div>
       {expanded && (
-        <section
+        <div
           className={cn(
-            'relative flex h-fit w-full flex-col gap-3 space-y-3  overflow-hidden bg-[#FCFCFC] p-3 pt-0 transition-all duration-300',
+            'flex h-fit  w-full flex-col gap-3 overflow-hidden transition-all duration-300',
             hidden && 'hidden',
           )}
         >
@@ -118,9 +118,9 @@ const DisplayedSelectedFilter = ({
               </div>
             );
           })}
-        </section>
+        </div>
       )}
-    </>
+    </section>
   );
 };
 

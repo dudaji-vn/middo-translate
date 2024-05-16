@@ -129,7 +129,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         <div
           id="scrollableDiv"
           ref={scrollRef}
-          className={cn('h-full gap-2 overflow-y-auto', showFilter && 'pt-16')}
+          className={cn('h-full gap-2 overflow-y-auto')}
         >
           <ViewSpaceInboxFilter
             className={cn('w-full', {
