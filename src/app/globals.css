@@ -226,6 +226,10 @@
     @apply h-[0.7rem] w-[0.7rem];
   }
 
+  .platform-mobile ::-webkit-scrollbar {
+    @apply w-0;
+  }
+
   ::-webkit-scrollbar-thumb {
     border: 3px solid transparent;
   }

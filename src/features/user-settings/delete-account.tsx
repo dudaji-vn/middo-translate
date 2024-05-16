@@ -10,6 +10,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/feedback';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 import { deleteAccount } from '@/services/auth.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useMutation } from '@tanstack/react-query';
@@ -29,6 +30,7 @@ export const DeleteAccount = (props: DeleteAccountProps) => {
   const [step, setStep] = useState(0);
   const [input, setInput] = useState('');
   const router = useRouter();
+  const { postMessage } = useReactNativePostMessage();
 
   const { mutate } = useMutation({
     mutationFn: deleteAccount,
@@ -45,6 +47,7 @@ export const DeleteAccount = (props: DeleteAccountProps) => {
       });
       toast.success('delete account success');
       router.push('/account-deleted');
+      postMessage({ type: 'Trigger', data: { event: 'sign-out' } });
     },
   });
 
