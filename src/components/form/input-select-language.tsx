@@ -2,21 +2,18 @@ import {
   LANGUAGE_CODES_MAP,
   SUPPORTED_LANGUAGES,
 } from '@/configs/default-language';
+import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from '../data-entry';
-import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 
+import { SelectProps } from '@radix-ui/react-select';
 import { AlertCircleIcon } from 'lucide-react';
 import { CircleFlag } from 'react-circle-flags';
-import Image from 'next/image';
-import { useFieldArray } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { SelectProps } from '@radix-ui/react-select';
 
 interface InputSelectLanguageProps {
   className?: string;
@@ -33,14 +30,18 @@ interface InputSelect {
   value: string;
   title: string;
 }
-export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: InputSelectLanguageProps) => {
+export const InputSelectLanguage = ({
+  labelProps,
+  selectProps,
+  ...props
+}: InputSelectLanguageProps) => {
   const id = useId();
   const [valueSelect, setValueSelect] = useState<InputSelect>({
     value: '',
     title: '',
   });
   const { errors, className, setValue, field, trigger, defaultValue } = props;
-  const {t} = useTranslation("common");
+  const { t } = useTranslation('common');
   const languageOptions = useMemo(() => {
     return SUPPORTED_LANGUAGES.map((language) => {
       return {
@@ -70,13 +71,15 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
 
   return (
     <div className={className}>
-      <label className="mb-2 ml-5 inline-block" htmlFor={id} {...labelProps}>
+      <label className="mb-2 inline-block" htmlFor={id} {...labelProps}>
         {t('COMMON.LANGUAGE')}
       </label>
       <Select onValueChange={handleSelectChange} {...selectProps}>
-        <SelectTrigger className="flex w-full px-5 rounded-xl">
+        <SelectTrigger className="flex w-full rounded-xl px-5">
           {!valueSelect?.value && (
-            <span className="opacity-60">{t('COMMON.LANGUAGE_PLACEHOLDER')}</span>
+            <span className="opacity-60">
+              {t('COMMON.LANGUAGE_PLACEHOLDER')}
+            </span>
           )}
           {valueSelect?.value && (
             <>
@@ -84,9 +87,11 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
                 countryCode={LANGUAGE_CODES_MAP[
                   valueSelect.value as keyof typeof LANGUAGE_CODES_MAP
                 ].toLowerCase()}
-                className="mr-2 inline-block h-5 w-5 rounded-full overflow-hidden"
+                className="mr-2 inline-block h-5 w-5 overflow-hidden rounded-full"
               />
-              <span className="flex-1 text-left">{t('LANGUAGE.' + valueSelect.title)}</span>
+              <span className="flex-1 text-left">
+                {t('LANGUAGE.' + valueSelect.title)}
+              </span>
             </>
           )}
         </SelectTrigger>
@@ -103,7 +108,7 @@ export const InputSelectLanguage = ({ labelProps, selectProps, ...props }: Input
                     countryCode={LANGUAGE_CODES_MAP[
                       option.value as keyof typeof LANGUAGE_CODES_MAP
                     ].toLowerCase()}
-                    className="mr-2 inline-block h-5 w-5 rounded-full overflow-hidden"
+                    className="mr-2 inline-block h-5 w-5 overflow-hidden rounded-full"
                   />
                   <span>{t('LANGUAGE.' + option.title)}</span>
                 </SelectItem>

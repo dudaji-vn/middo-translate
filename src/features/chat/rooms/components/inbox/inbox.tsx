@@ -37,22 +37,22 @@ export const inboxTabMap: Record<
   all: {
     label: 'COMMON.ALL',
     value: 'all',
-    icon: <MessagesSquareIcon size={16} />,
+    icon: <MessagesSquareIcon className="size-5 md:size-4" />,
   },
   group: {
     label: 'COMMON.GROUP',
     value: 'group',
-    icon: <UsersRoundIcon size={16} />,
+    icon: <UsersRoundIcon className="size-5 md:size-4" />,
   },
   archived: {
     label: 'COMMON.ARCHIVE',
     value: 'archived',
-    icon: <ArchiveIcon size={16} />,
+    icon: <ArchiveIcon className="size-5 md:size-4" />,
   },
   waiting: {
     label: 'COMMON.WAITING',
     value: 'waiting',
-    icon: <MessageSquareDashedIcon size={16} />,
+    icon: <MessageSquareDashedIcon className="size-5 md:size-4" />,
   },
 
   'help-desk': {

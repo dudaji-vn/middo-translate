@@ -113,7 +113,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
 SearchInput.displayName = 'SearchInput';
 
 export interface SearchButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> { }
+  extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 const SearchButton = forwardRef<HTMLButtonElement, SearchButtonProps>(
   ({ className, ...props }, ref) => {

@@ -122,11 +122,15 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           pathname?.includes('statistics') && 'hidden',
         )}
       >
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {isSearch && (
             <motion.div
+              layout="size"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+              }}
               exit={{ scale: 0, opacity: 0 }}
             >
               <Button.Icon
@@ -139,7 +143,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               </Button.Icon>
             </motion.div>
           )}
-          <motion.div key="search-input-main" className="w-full transition-all">
+          <motion.div key="search-input-main" className="w-full">
             <SearchInput
               ref={searchInputRef}
               defaultValue={searchValue || ''}
@@ -155,8 +159,8 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               onClear={handleBack}
             />
           </motion.div>
-          {!isSearch && isBusiness && <RoomsModalFilter />}
         </AnimatePresence>
+        {!isSearch && isBusiness && <RoomsModalFilter />}
       </div>
     </div>
   );

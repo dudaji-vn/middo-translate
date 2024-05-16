@@ -64,6 +64,7 @@ export default function UpdateUserInfo() {
     handleSubmit,
     trigger,
     setValue,
+    reset,
     formState: { errors, isValid, isSubmitting, isDirty },
   } = form;
   const { name, language, username } = watch();
@@ -181,10 +182,16 @@ export default function UpdateUserInfo() {
               />
               <AlertError errorMessage={errorMessage}></AlertError>
               <div className="mt-6 flex items-center justify-end">
-                <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
+                <AlertDialogCancel
+                  onClick={() => {
+                    reset();
+                  }}
+                  className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
+                >
                   <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>
                 <Button
+                  size="md"
                   shape="square"
                   disabled={
                     (user.name == watch().name &&

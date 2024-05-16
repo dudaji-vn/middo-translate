@@ -174,12 +174,12 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
 
       {
         action: 'archive',
-        label: 'Archive',
+        label: 'COMMON.ARCHIVE',
         icon: <Archive />,
       },
       {
         action: 'unarchive',
-        label: 'Unarchive',
+        label: 'COMMON.UNARCHIVE',
         icon: <ArchiveX />,
       },
       {
