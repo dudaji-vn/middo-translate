@@ -20,8 +20,6 @@ import { CustomNodeProps, FLOW_KEYS } from './node-types';
 function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
     const { watch, setValue } = useFormContext();
     const nodes = watch(FLOW_KEYS.NODES);
-    // const flowErrors = watch('flowErrors');
-    // const errorMessage = flowErrors.find((error: { id: string; }) => error.id === node.id)?.message || '';
 
     const [open, setOpen] = useState(false);
     const onOpen = () => setOpen(true);
