@@ -38,6 +38,8 @@
     "SIGN_OUT": "Đăng xuất",
     "NAME": "Tên",
     "NAME_PLACEHOLDER": "Nhập tên của bạn",
+    "USERNAME": "Tên người dùng",
+    "USERNAME_PLACEHOLDER": "Nhập tên người dùng của bạn",
     "EMAIL": "Email",
     "EMAIL_PLACEHOLDER": "Nhập email của bạn",
     "PHONE": "Số điện thoại",
@@ -93,7 +95,10 @@
       "DECLINE_CALL": "{{name}} đã từ chối cuộc gọi!",
       "BROWSER_NOT_SUPPORT_SPEAKER": "Trình duyệt của bạn không hỗ trợ thiết lập loa!",
       "NOT_ALLOW_CAMERA": "Bạn chưa cho phép truy cập vào camera!",
-      "NOT_ALLOW_MICROPHONE": "Bạn chưa cho phép truy cập vào microphone!"
+      "NOT_ALLOW_MICROPHONE": "Bạn chưa cho phép truy cập vào microphone!",
+      "USERNAME_MIN": "Tên người dùng phải có ít nhất 3 ký tự!",
+      "USERNAME_MAX": "Tên người dùng phải có tối đa 15 ký tự!",
+      "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",
@@ -590,7 +595,8 @@
     "TIP_DESCRIPTION_GROUP": "Nhóm là một cuộc trò chuyện có ít nhất 3 thành viên",
     "TIP_TITLE_GROUP": "Cách sử dụng \"Nhóm\"",
     "TITLE_GROUP": "Hiện tại, bạn không có Cuộc trò chuyện Nhóm nào",
-    "DESCRIPTION_GROUP": "Nhấp vào nút dưới đây để tạo một cuộc trò chuyện mới hoặc yêu cầu Quản trị viên của một Cuộc trò chuyện Nhóm thêm bạn vào"
+    "DESCRIPTION_GROUP": "Nhấp vào nút dưới đây để tạo một cuộc trò chuyện mới hoặc yêu cầu Quản trị viên của một Cuộc trò chuyện Nhóm thêm bạn vào",
+    "MESSAGE": "Chưa có tin nhắn nào"
   },
   "OFFLINE": {
     "TITLE": "Bạn đang ngoại tuyến",

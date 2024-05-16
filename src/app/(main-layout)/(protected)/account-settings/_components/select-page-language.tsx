@@ -81,16 +81,16 @@ const SelectPageLanguage = () => {
         variant={'ghost'}
         color={'default'}
         size={'sm'}
-        className="relative rounded-xl bg-neutral-50 !w-10 !h-10"
+        className="relative !h-10 !w-10 rounded-xl bg-neutral-50"
       >
         <Globe2 size={20} />
       </Button.Icon>
-      <span className="ml-4 block text-base flex-1">
+      <span className="ml-4 block flex-1 text-base font-medium">
         {t('ACCOUNT_SETTING.DISPLAY_LANGUAGE')}
       </span>
       <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
         <DropdownMenuTrigger>
-          <div className="relative flex w-full items-center gap-1 rounded-xl px-3 py-1 group">
+          <div className="group relative flex w-full items-center gap-1 rounded-xl px-3 py-1">
             {valueSelect?.value && (
               <>
                 <CircleFlag
@@ -99,17 +99,19 @@ const SelectPageLanguage = () => {
                   ].toLowerCase()}
                   className="inline-block h-5 w-5 overflow-hidden rounded-full"
                 />
-                <div className={cn('relative left-0 flex items-center justify-center rounded-full md:group-hover:rotate-90 transition-all md:group-active:rotate-90', isOpenDropdown ? 'rotate-90' : '')}>
+                <div
+                  className={cn(
+                    'relative left-0 flex items-center justify-center rounded-full transition-all md:group-hover:rotate-90 md:group-active:rotate-90',
+                    isOpenDropdown ? 'rotate-90' : '',
+                  )}
+                >
                   <ChevronRight className="opacity-60" />
                 </div>
               </>
             )}
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          onClick={() => setOpenDropdown(false)}
-        >
+        <DropdownMenuContent align="end" onClick={() => setOpenDropdown(false)}>
           {I18N_SUPPORTED_LANGUAGES?.length > 0 &&
             I18N_SUPPORTED_LANGUAGES?.map((option: InputSelect) => {
               return (

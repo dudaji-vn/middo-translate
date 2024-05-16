@@ -2,7 +2,7 @@
 
 import { LogOut } from 'lucide-react';
 
-import { Button } from '@/components/actions';
+import { Button, CopyZoneClick } from '@/components/actions';
 import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
 import UpdateUserAvatar from '@/features/user-settings/update-user-avatar';
 import UpdateUserInfo from '@/features/user-settings/update-user-info';
@@ -28,7 +28,7 @@ export default function AccountSettings() {
   return (
     <div className="container-height overflow-auto">
       <div className="mx-auto w-full bg-[#FCFCFC] md:my-8 md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2">
-        <div className="p-10">
+        <div className="flex flex-col items-center p-10">
           <div className="relative mx-auto h-24 w-24 ">
             <Image
               src={user?.avatar || '/person.svg'}
@@ -54,9 +54,14 @@ export default function AccountSettings() {
           <h2 className="mt-5 w-full break-words px-4  text-center text-lg text-neutral-800">
             {user?.name || 'Anonymous'}
           </h2>
-          <p className="text-center text-sm font-light text-neutral-800">
+          <p className="mb-3 text-center text-sm font-light text-neutral-800">
             {user?.email || ''}
           </p>
+          <CopyZoneClick text={user?.username || ''}>
+            <Button color="secondary" size="xs" shape="square">
+              {user?.username}
+            </Button>
+          </CopyZoneClick>
         </div>
         <div className="">
           <UpdateUserInfo />
