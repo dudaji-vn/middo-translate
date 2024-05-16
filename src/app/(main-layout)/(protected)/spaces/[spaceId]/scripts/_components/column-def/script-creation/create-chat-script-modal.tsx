@@ -9,16 +9,12 @@ import {
 } from '@/components/feedback';
 import { Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import DesignScriptChatFlow, {
-  FlowNode,
-} from '../../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
+import DesignScriptChatFlow from '../../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Edge } from 'reactflow';
 import { z } from 'zod';
-import { Form, FormMessage } from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
-import { isEmpty } from 'lodash';
 import { createOrEditChatScript } from '@/services/scripts.service';
 import { useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -28,7 +24,6 @@ import {
   initialChatFlowNodes,
   initialEdges,
 } from './schema';
-import { isValid } from 'date-fns';
 import { FLOW_KEYS } from '../../../../settings/_components/extension-creation/steps/script-chat-flow/custom-nodes/node-types';
 
 export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
