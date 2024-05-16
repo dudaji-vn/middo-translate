@@ -192,6 +192,7 @@ function VideoPlayer({ file, className }: VideoProps) {
           variant={'default'}
           color={'default'}
           shape={'default'}
+          size={isFullScreen ? 'md' : 'sm'}
           className={cn('shadow-2', isPlaying ? 'opacity-0' : '', isPlaying && isFullScreen && '!opacity-0')}
         >
           {
@@ -203,7 +204,7 @@ function VideoPlayer({ file, className }: VideoProps) {
       <div className={cn('absolute inset-0 bg-black/20 pointer-events-none duration-500', (isPlaying || isFullScreen) ? 'opacity-0' : '')}></div>
 
       {/* Actions */}
-      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-between p-1 bg-black/40 duration-500 gap-2 md:rounded-xl rounded-2xl', isFullScreen ? 'p-2' : '', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
+      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-between p-1 px-2 bg-black/40 duration-500 gap-2 md:rounded-xl rounded-2xl', isFullScreen ? 'p-2' : '', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
       onClick={(e)=>{e.stopPropagation()}}>
         <span className="text-sm text-white">{formatVideoTimer}</span>
         <div className='flex-1 mx-2 py-2 relative' ref={durationBarRef}>
@@ -252,7 +253,7 @@ function VideoPlayer({ file, className }: VideoProps) {
             <Button.Icon
               variant={'default'}
               color={'default'}
-              size={isFullScreen ? 'sm' : 'ss'}
+              size={isFullScreen ? 'xs' : 'ss'}
               shape={'default'}
               onClick={() => {
                 if(isOpenVolume && volume > 0) {
@@ -308,7 +309,7 @@ function VideoPlayer({ file, className }: VideoProps) {
         <Button.Icon
           variant={'default'}
           color={'default'}
-          size={isFullScreen ? 'sm' : 'ss'}
+          size={isFullScreen ? 'xs' : 'ss'}
           shape={'default'}
           className={cn(isFullScreen ? '' : 'hidden')}
           onClick={downloadFile}
@@ -318,7 +319,7 @@ function VideoPlayer({ file, className }: VideoProps) {
         <Button.Icon
           variant={'default'}
           color={'default'}
-          size={isFullScreen ? 'sm' : 'ss'}
+          size={isFullScreen ? 'xs' : 'ss'}
           shape={'default'}
           onClick={() => setIsFullScreen(!isFullScreen)}
         >
