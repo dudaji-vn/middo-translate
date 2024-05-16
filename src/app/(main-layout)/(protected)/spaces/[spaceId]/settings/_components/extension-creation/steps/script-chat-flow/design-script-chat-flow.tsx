@@ -24,8 +24,8 @@ import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { Media } from '@/types';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { initialChatFlowNodes } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/column-def/script-creation/schema';
-import { type TScriptFormValues } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/column-def/script-creation/create-chat-script-modal';
+import { initialChatFlowNodes } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/script-creation/schema';
+import { type TScriptFormValues } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/script-creation/create-chat-script-modal';
 import { cn } from '@/utils/cn';
 
 export type FlowItemType =
@@ -122,14 +122,14 @@ const DesignScriptChatFlow = ({
       switch (node.type) {
         case 'button':
           if (!node.data?.content?.trim()?.length) {
-            mappedFlowErrors.push({
+            mappedFlowErrors?.push({
               id: node.id,
               message: 'Button should have a label',
             });
           }
           break;
         case 'option':
-          mappedFlowErrors.push({
+          mappedFlowErrors?.push({
             id: node.id,
             message:
               'Please complete the flow! your action button is missing response!',
@@ -168,7 +168,7 @@ const DesignScriptChatFlow = ({
     if (!valid) {
       return;
     }
-    if (mappedFlowErrors.length || !isEmpty(errors)) {
+    if (mappedFlowErrors?.length || !isEmpty(errors)) {
       return;
     }
     redirectToPreview();

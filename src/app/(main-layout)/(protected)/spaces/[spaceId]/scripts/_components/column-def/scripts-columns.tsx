@@ -22,91 +22,101 @@ export type ChatScript = {
   };
 };
 
-export const scriptsColumns: ColumnDef<ChatScript>[] = [
-  {
-    accessorKey: 'name',
-    header: 'Name',
-  },
-  {
-    accessorKey: 'createdBy',
-    header: 'Created By',
-    cell(props) {
-      return (
-        <div className="flex gap-2" {...props}>
-          <Avatar
-            src={props.row?.original?.createdBy?.avatar || '/avatar.svg'}
-            alt={String(props.row?.original?.createdBy?.name)}
-            className="h-6 w-6 rounded-full"
-          />
-          <span>{props?.row?.original?.createdBy?.name}</span>
-        </div>
-      );
+export const scriptsColumns = ({
+  onView,
+  onDelete,
+  onEdit,
+}: {
+  onView: (id: string) => void;
+  onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
+}) =>
+  [
+    {
+      accessorKey: 'name',
+      header: 'Name',
     },
-  },
-  {
-    accessorKey: 'createdAt',
-    header: 'Created On',
-    cell(props) {
-      const displayTime = moment(props?.row?.original?.createdAt).format(
-        'DD/MM/YYYY HH:mm A',
-      );
-      return (
-        <div className="flex gap-2" {...props}>
-          <span>{displayTime}</span>
-        </div>
-      );
+    {
+      accessorKey: 'createdBy',
+      header: 'Created By',
+      cell(props) {
+        return (
+          <div className="flex gap-2" {...props}>
+            <Avatar
+              src={props.row?.original?.createdBy?.avatar || '/avatar.svg'}
+              alt={String(props.row?.original?.createdBy?.name)}
+              className="h-6 w-6 rounded-full"
+            />
+            <span>{props?.row?.original?.createdBy?.name}</span>
+          </div>
+        );
+      },
     },
-  },
-  {
-    accessorKey: 'updatedAt',
-    header: 'Updated At',
-    cell(props) {
-      const displayTime = moment(props?.row?.original?.createdAt).format(
-        'DD/MM/YYYY HH:mm A',
-      );
-      return (
-        <div className="flex gap-2" {...props}>
-          <span>{displayTime}</span>
-        </div>
-      );
+    {
+      accessorKey: 'createdAt',
+      header: 'Created On',
+      cell(props) {
+        const displayTime = moment(props?.row?.original?.createdAt).format(
+          'DD/MM/YYYY HH:mm A',
+        );
+        return (
+          <div className="flex gap-2" {...props}>
+            <span>{displayTime}</span>
+          </div>
+        );
+      },
     },
-  },
-  {
-    accessorKey: 'lastEditedBy',
-    header: 'Last Edited',
-    cell(props) {
-      const displayTime = moment(props?.row?.original?.updatedAt).format(
-        'DD/MM/YYYY HH:mm A',
-      );
-      return (
-        <div className="flex gap-2" {...props}>
-          <Avatar
-            src={props.row?.original?.lastEditedBy?.avatar || '/avatar.svg'}
-            alt={String(props.row?.original?.lastEditedBy?.name)}
-            className="h-6 w-6 rounded-full"
-          />
-          <span>{displayTime}</span>
-        </div>
-      );
+    {
+      accessorKey: 'lastEditedBy',
+      header: 'Last Edited',
+      cell(props) {
+        const displayTime = moment(props?.row?.original?.updatedAt).format(
+          'DD/MM/YYYY HH:mm A',
+        );
+        return (
+          <div className="flex gap-2" {...props}>
+            <Avatar
+              src={props.row?.original?.lastEditedBy?.avatar || '/avatar.svg'}
+              alt={String(props.row?.original?.lastEditedBy?.name)}
+              className="h-6 w-6 rounded-full"
+            />
+            <span>{displayTime}</span>
+          </div>
+        );
+      },
     },
-  },
-  {
-    accessorKey: '_id',
-    header: 'Actions',
-    cell(props) {
-      return (
-        <div className="flex gap-2" {...props}>
-          <Button.Icon variant={'ghost'} size={'xs'} color={'default'}>
-            <Eye />
-          </Button.Icon>
-          <Button.Icon variant={'ghost'} size={'xs'} color={'default'}>
-            <Pen />
-          </Button.Icon>
-          <Button.Icon variant={'ghost'} size={'xs'} color={'default'}>
-            <Trash2 className="text-error" />
-          </Button.Icon>
-        </div>
-      );
+    {
+      accessorKey: '_id',
+      header: 'Actions',
+      cell(props) {
+        return (
+          <div className="flex gap-2" {...props}>
+            <Button.Icon
+              variant={'ghost'}
+              size={'xs'}
+              color={'default'}
+              onClick={() => onView(props.row.original._id)}
+            >
+              <Eye />
+            </Button.Icon>
+            <Button.Icon
+              variant={'ghost'}
+              size={'xs'}
+              color={'default'}
+              onClick={() => onEdit(props.row.original._id)}
+            >
+              <Pen />
+            </Button.Icon>
+            <Button.Icon
+              variant={'ghost'}
+              size={'xs'}
+              color={'default'}
+              onClick={() => onDelete(props.row.original._id)}
+            >
+              <Trash2 className="text-error" />
+            </Button.Icon>
+          </div>
+        );
+      },
     },
-  },
-];
+  ] as ColumnDef<ChatScript>[];

@@ -18,7 +18,7 @@ function ContainerNode(node: CustomNodeProps) {
   const { data, isConnectable } = node;
   const { watch, setValue } = useFormContext();
   const mappedFlowErrors = watch(FLOW_KEYS.FLOW_ERRORS);
-  const errorMessage = mappedFlowErrors.find(
+  const errorMessage = mappedFlowErrors?.find(
     (error: { id: string }) => error.id === node.id,
   )?.message;
   const nodes = watch(FLOW_KEYS.NODES);

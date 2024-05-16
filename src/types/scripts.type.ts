@@ -16,6 +16,6 @@ export type TChatFlow = {
 
 export type TChatScript = BaseEntity & {
   name: string;
-  spaceId: string;
+  spaceId?: string;
   chatFlow: TChatFlow;
 };
