@@ -6,6 +6,7 @@ import { Button } from "../actions";
 import { DownloadIcon, Maximize2Icon, Pause, PlayIcon, Volume1Icon, Volume2, Volume2Icon, VolumeX, VolumeXIcon, X } from "lucide-react";
 import { Direction, Range } from "react-range";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../data-display";
+import { useOnClickOutside } from "usehooks-ts";
 
 interface VideoProps {
     file: Media;
@@ -18,6 +19,7 @@ function VideoPlayer({ file, className }: VideoProps) {
   const videoThumbnailRef = useRef<HTMLVideoElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const durationBarRef = useRef<HTMLDivElement>(null);
+  const rangeVolumeRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoDuration, setVideoDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -158,6 +160,13 @@ function VideoPlayer({ file, className }: VideoProps) {
     }
   }, [isOpenVolume])
 
+
+  // Use clickout side to close volume
+
+  useOnClickOutside(rangeVolumeRef, () => {
+    setIsOpenVolume(false);
+  })
+
   const formatVideoTimer = useMemo(() => {
     return new Date(currentTime * 1000).toISOString().substr(14, 5);
   }, [currentTime]);
@@ -238,15 +247,21 @@ function VideoPlayer({ file, className }: VideoProps) {
             />
           </div>
         </div>
-        <DropdownMenu open={isOpenVolume} onOpenChange={setIsOpenVolume}>
+        <DropdownMenu open={isOpenVolume}>
           <DropdownMenuTrigger>
             <Button.Icon
               variant={'default'}
               color={'default'}
               size={isFullScreen ? 'sm' : 'ss'}
               shape={'default'}
-              onClick={(e) => {
-                e.stopPropagation();
+              onClick={() => {
+                if(isOpenVolume && volume > 0) {
+                  setVolume(0);
+                } else if(isOpenVolume && volume == 0) {
+                  setVolume(1);
+                } else {
+                  setIsOpenVolume(true);
+                }
               }}
             >
               {volume == 0 && <VolumeXIcon />}
@@ -259,31 +274,35 @@ function VideoPlayer({ file, className }: VideoProps) {
             side="top"
             className="bg-black/20 !min-w-1 px-[10px] py-4 max-w-6 border-none flex item-center justify-center z-[52]"
             onClick={() => setIsOpenVolume(false)}
+            
           >
             {/* Range Volume */}
-              <Range
-                direction={Direction.Up}
-                step={0.01}
-                min={0}
-                max={1}
-                values={[volume]}
-                onChange={(values) => {
-                  setVolume(values[0]);
-                }}
-                renderTrack={({ props, children }) => (
-                  <div {...props} className={cn("h-[80px] w-1 rounded bg-neutral-500 relative")}>
-                    <div className="left-0 right-0 bottom-0 bg-primary absolute rounded" style={{height: `${volume * 100}%`}}/>
-                    {children}
-                  </div>
-                )}
-                renderThumb={({ props }) => (
-                  <div
-                    {...props}
-                    className="h-4 w-4 rounded-full bg-white"
-                    key="1"
-                  ></div>
-                )}
-              />
+              <div ref={rangeVolumeRef}>
+                <Range
+                  direction={Direction.Up}
+                  step={0.01}
+                  min={0}
+                  max={1}
+                  values={[volume]}
+                  onChange={(values) => {
+                    setVolume(values[0]);
+                  }}
+                  renderTrack={({ props, children }) => (
+                    <div {...props} className={cn("h-[80px] w-1 rounded bg-neutral-500 relative")}>
+                      <div className="left-0 right-0 bottom-0 bg-primary absolute rounded" style={{height: `${volume * 100}%`}}/>
+                      {children}
+                    </div>
+                  )}
+                  renderThumb={({ props }) => (
+                    <div
+                      {...props}
+                      className="h-4 w-4 rounded-full bg-white"
+                      key="1"
+                    ></div>
+                  )}
+                />
+              </div>
+              
           </DropdownMenuContent>
         </DropdownMenu>
         <Button.Icon
