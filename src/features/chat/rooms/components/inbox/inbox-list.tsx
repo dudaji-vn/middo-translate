@@ -41,7 +41,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       isBusiness,
     } = useBusinessNavigationData();
     const { businessExtension } = useBusinessExtensionStore();
-    const { selectedFilters, appliedFilters } = useSpaceInboxFilterStore();
+    const { appliedFilters } = useSpaceInboxFilterStore();
     const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
@@ -51,7 +51,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         return ['rooms', type, spaceId, status, appliedFilters];
       }
       return ['rooms', type, status];
-      // Must not include selectedFilters, don't add it to the dependency array. It should update when isFilterApplied change.
     }, [type, status, appliedFilters, spaceId]);
 
     const onlineList = useChatStore((state) => state.onlineList);
@@ -119,16 +118,24 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!rooms.length && !isLoading && !pinnedRooms?.length) {
       return <EmptyInbox type={type} />;
     }
+    const showFilter =
+      Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
     return (
       <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
         {isScrolled && (
           <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
         )}
+
         <div
           id="scrollableDiv"
           ref={scrollRef}
-          className={cn('h-full gap-2 overflow-y-auto')}
+          className={cn('h-full gap-2 overflow-y-auto', showFilter && 'pt-16')}
         >
+          <ViewSpaceInboxFilter
+            className={cn('w-full', {
+              hidden: !showFilter,
+            })}
+          />
           <InfiniteScroll
             onLoadMore={fetchNextPage}
             hasMore={hasNextPage || false}

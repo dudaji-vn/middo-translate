@@ -8,6 +8,8 @@ import { Globe } from 'lucide-react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { RoomsFilterOption } from '../filter/filter-section';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
+import { Button } from '@/components/actions';
+import { Typography } from '@/components/data-display';
 
 const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
   const { appliedFilters, setFilterApplied, filterOptions } =
@@ -81,14 +83,16 @@ const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
     );
   };
   return (
-    <DisplayedSelectedFilter
-      filterData={appliedFilters}
-      onClearFilter={onClearAllFilters}
-      onRemoveItem={onRemoveFilterItem}
-      onRemoveSection={onRemoveFilterSection}
-      {...props}
-      renderValue={renderValue}
-    />
+    <>
+      <DisplayedSelectedFilter
+        filterData={appliedFilters}
+        onClearFilter={onClearAllFilters}
+        onRemoveItem={onRemoveFilterItem}
+        onRemoveSection={onRemoveFilterSection}
+        {...props}
+        renderValue={renderValue}
+      />
+    </>
   );
 };
 
