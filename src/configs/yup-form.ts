@@ -167,6 +167,7 @@ export const createExtensionSchema = z.object({
       color: z.string().optional(),
     })
     .optional(),
+  currentScript: z.string().optional(),
 });
 
 export const createGuestInfoSchema = z.object({

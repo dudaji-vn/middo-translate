@@ -8,6 +8,7 @@ import { Button } from '@/components/actions';
 import { Eye, Pen, Trash2 } from 'lucide-react';
 import { Avatar } from '@/components/data-display';
 import moment from 'moment';
+import { Checkbox } from '@/components/form/checkbox';
 
 export type ChatScript = {
   _id: string;
@@ -26,12 +27,43 @@ export const scriptsColumns = ({
   onView,
   onDelete,
   onEdit,
+  enableSelectAll = true,
 }: {
   onView: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
+  enableSelectAll?: boolean;
 }) =>
   [
+    {
+      id: 'select',
+      header: ({ table }) => {
+        if (enableSelectAll) {
+          return (
+            <Checkbox
+              checked={
+                table.getIsAllPageRowsSelected() ||
+                (table.getIsSomePageRowsSelected() && 'indeterminate')
+              }
+              onCheckedChange={(value) =>
+                table.toggleAllPageRowsSelected(!!value)
+              }
+              aria-label="Select all"
+            />
+          );
+        }
+        return '';
+      },
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
     {
       accessorKey: 'name',
       header: 'Name',
@@ -41,14 +73,14 @@ export const scriptsColumns = ({
       header: 'Created By',
       cell(props) {
         return (
-          <div className="flex gap-2" {...props}>
+          <td className="flex gap-2" {...props}>
             <Avatar
               src={props.row?.original?.createdBy?.avatar || '/avatar.svg'}
               alt={String(props.row?.original?.createdBy?.name)}
               className="h-6 w-6 rounded-full"
             />
             <span>{props?.row?.original?.createdBy?.name}</span>
-          </div>
+          </td>
         );
       },
     },
@@ -60,9 +92,9 @@ export const scriptsColumns = ({
           'DD/MM/YYYY HH:mm A',
         );
         return (
-          <div className="flex gap-2" {...props}>
+          <td className="flex gap-2" {...props}>
             <span>{displayTime}</span>
-          </div>
+          </td>
         );
       },
     },
@@ -74,14 +106,14 @@ export const scriptsColumns = ({
           'DD/MM/YYYY HH:mm A',
         );
         return (
-          <div className="flex gap-2" {...props}>
+          <td className="flex gap-2" {...props}>
             <Avatar
               src={props.row?.original?.lastEditedBy?.avatar || '/avatar.svg'}
               alt={String(props.row?.original?.lastEditedBy?.name)}
               className="h-6 w-6 rounded-full"
             />
             <span>{displayTime}</span>
-          </div>
+          </td>
         );
       },
     },
@@ -90,7 +122,7 @@ export const scriptsColumns = ({
       header: 'Actions',
       cell(props) {
         return (
-          <div className="flex gap-2" {...props}>
+          <td className="flex gap-2" {...props}>
             <Button.Icon
               variant={'ghost'}
               size={'xs'}
@@ -115,7 +147,7 @@ export const scriptsColumns = ({
             >
               <Trash2 className="text-error" />
             </Button.Icon>
-          </div>
+          </td>
         );
       },
     },
