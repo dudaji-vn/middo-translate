@@ -194,7 +194,7 @@ function VideoPlayer({ file, className }: VideoProps) {
       <div className={cn('absolute inset-0 bg-black/20 pointer-events-none duration-500', (isPlaying || isFullScreen) ? 'opacity-0' : '')}></div>
 
       {/* Actions */}
-      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-between p-1 bg-black/40 duration-500 gap-2 rounded-xl', isFullScreen ? 'p-2' : '', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
+      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-between p-1 bg-black/40 duration-500 gap-2 md:rounded-xl rounded-2xl', isFullScreen ? 'p-2' : '', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
       onClick={(e)=>{e.stopPropagation()}}>
         <span className="text-sm text-white">{formatVideoTimer}</span>
         <div className='flex-1 mx-2 py-2 relative' ref={durationBarRef}>
@@ -243,7 +243,7 @@ function VideoPlayer({ file, className }: VideoProps) {
             <Button.Icon
               variant={'default'}
               color={'default'}
-              size={'ss'}
+              size={isFullScreen ? 'sm' : 'ss'}
               shape={'default'}
               onClick={(e) => {
                 e.stopPropagation();
@@ -289,7 +289,7 @@ function VideoPlayer({ file, className }: VideoProps) {
         <Button.Icon
           variant={'default'}
           color={'default'}
-          size={'ss'}
+          size={isFullScreen ? 'sm' : 'ss'}
           shape={'default'}
           className={cn(isFullScreen ? '' : 'hidden')}
           onClick={downloadFile}
@@ -299,7 +299,7 @@ function VideoPlayer({ file, className }: VideoProps) {
         <Button.Icon
           variant={'default'}
           color={'default'}
-          size={'ss'}
+          size={isFullScreen ? 'sm' : 'ss'}
           shape={'default'}
           onClick={() => setIsFullScreen(!isFullScreen)}
         >
