@@ -155,7 +155,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         room.lastMessage?.type === 'action' &&
         room.lastMessage.action === 'leaveHelpDesk';
       let isOtherUserDeleted = false;
-      if (!room.isGroup) {
+      if (!room.isGroup && !room.isHelpDesk) {
         isOtherUserDeleted = room.participants.some(
           (p) => p._id !== currentUser?._id && p.status === 'deleted',
         );
