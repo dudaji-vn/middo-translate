@@ -9,20 +9,23 @@ const DeleteScriptModal = ({
   onclose,
   open,
 }: {
-  script: TChatScript;
+  script?: TChatScript;
   open: boolean;
   onclose: () => void;
 }) => {
   const spaceId = useParams()?.spaceId as string;
   const { mutateAsync } = useDeleteScript();
   const onSubmit = async () => {
-    mutateAsync({ spaceId, scriptId: script._id });
-    onclose();
+    if (!script) return;
+    try {
+      mutateAsync({ spaceId, scriptId: script?._id });
+      onclose();
+    } catch (error) {}
   };
   return (
     <ConfirmAlertModal
       title={`Delete script`}
-      description={`Are you sure you want to delete the script ${script.name}?`}
+      description={`Are you sure you want to delete the script ${script?.name}?`}
       open={open}
       onConfirm={onSubmit}
       onCancel={onclose}

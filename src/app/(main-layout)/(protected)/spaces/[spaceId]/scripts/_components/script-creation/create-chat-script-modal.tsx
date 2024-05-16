@@ -106,9 +106,12 @@ const CreateOrEditChatScriptModal = ({
       },
       spaceId,
     };
-    await mutateAsync(payload).then(() => {
-      isSuccess && onClose();
-    });
+    try {
+      await mutateAsync(payload);
+      onClose();
+    } catch (error) {
+      console.error('Error while creating script', error);
+    }
   };
 
   return (

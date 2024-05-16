@@ -157,7 +157,7 @@ const Page = ({
       />
       <DeleteScriptModal
         open={modalState?.modalType === 'delete' && !!modalState?.initialData}
-        script={modalState?.initialData!}
+        script={modalState?.initialData}
         onclose={() => setModalState(null)}
       />
     </section>
