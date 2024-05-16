@@ -2,6 +2,7 @@
 
 import {
   ColumnDef,
+  TableOptions,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -35,6 +36,8 @@ export interface DataTableProps<TData, TValue> {
   dividerRowProps?: React.HTMLAttributes<HTMLDivElement>;
   dividerColProps?: React.HTMLAttributes<HTMLDivElement>;
   dividerProps?: React.HTMLAttributes<HTMLDivElement>;
+
+  tableInitialParams?: Partial<TableOptions<TData>>;
 }
 interface SkeletonRowProps {
   columns: number;
@@ -73,11 +76,13 @@ export function DataTable<TData, TValue>({
   dividerProps,
   loading,
   skeletonsRows,
+  tableInitialParams,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    ...tableInitialParams,
   });
 
   return (

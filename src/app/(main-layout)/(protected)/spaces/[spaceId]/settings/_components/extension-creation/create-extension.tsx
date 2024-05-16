@@ -22,7 +22,7 @@ import StepWrapper from './steps/step-wrapper';
 import StartingMessageStep from './steps/starting-message-step';
 import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
-import { isEqual } from 'lodash';
+import { isEqual, set } from 'lodash';
 import { FlowNode } from './steps/script-chat-flow/design-script-chat-flow';
 import { translateWithDetection } from '@/services/languages.service';
 import { Edge } from 'reactflow';
@@ -35,6 +35,8 @@ import { TSpace } from '../../../_components/business-spaces';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { TChatScript } from '@/types/scripts.type';
+import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-conversation-scripts';
+import { ChatScript } from '../../../scripts/_components/column-def/scripts-columns';
 
 type TFormValues = {
   addingDomain: string;
@@ -57,7 +59,7 @@ export default function CreateExtension({
   isEditing = false,
 }: {
   open: boolean;
-  initialData?: TBusinessExtensionData;
+  initialData?: TBusinessExtensionData & { currentScript?: TChatScript['_id'] };
   title?: string;
   space: TSpace;
   isEditing?: boolean;
@@ -68,6 +70,10 @@ export default function CreateExtension({
   const params = useParams();
   const currentUser = useAuthStore((s) => s.user);
   const myRole = getUserSpaceRole(currentUser, space);
+  const { data, isLoading } = useGetConversationScripts({
+    spaceId: params?.spaceId as string,
+  });
+  const scripts: ChatScript[] = data?.items || [];
   const router = useRouter();
 
   const form = useForm<TFormValues>({
@@ -82,6 +88,7 @@ export default function CreateExtension({
         firstMessageEnglish: DEFAULT_FIRST_MESSAGE.contentEnglish,
         color: DEFAULT_THEME,
       },
+      currentScript: undefined,
     },
     resolver: zodResolver(createExtensionSchema),
   });
@@ -106,17 +113,16 @@ export default function CreateExtension({
 
     if (!isEmpty(initialData)) {
       setValue('domains', initialData.domains);
-      setValue('custom', {
-        language: initialData.language,
-        firstMessage: initialData.firstMessage || DEFAULT_FIRST_MESSAGE.content,
-        firstMessageEnglish:
-          initialData.firstMessageEnglish ||
-          DEFAULT_FIRST_MESSAGE.contentEnglish ||
-          '',
-        color: initialData.color || DEFAULT_THEME,
-      });
+      setValue('custom.language', initialData.language);
+      setValue('custom.color', initialData.color || DEFAULT_THEME);
+      setValue('custom.firstMessage', initialData.firstMessage || '');
+      if (initialData.currentScript) {
+        setValue('currentScript', initialData.currentScript);
+        setValue('startingMessageType', 'script');
+        setValue('custom.firstMessage', '');
+        return;
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialData, open]);
 
   const submit = async (values: TFormValues) => {
@@ -139,6 +145,9 @@ export default function CreateExtension({
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
+        ...(values.startingMessageType === 'script' && {
+          currentScript: values.currentScript,
+        }),
       };
       await createExtension(String(params?.spaceId), payload)
         .then((res) => {
@@ -150,7 +159,7 @@ export default function CreateExtension({
             err?.response?.data?.message || 'Create extension failed!',
           );
         });
-      router.refresh();
+      router.push(pathname + '?tab=extension');
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -158,7 +167,6 @@ export default function CreateExtension({
   const extensionRoles = SPACE_SETTING_TAB_ROLES.find(
     (item) => item.name === 'extension',
   )?.roles;
-
 
   const hasNoPermissionToEdit = !extensionRoles?.edit.includes(
     myRole as ESPaceRoles,
@@ -214,7 +222,7 @@ export default function CreateExtension({
               className: isEditing ? 'hidden' : '',
             }}
           >
-            <StartingMessageStep />
+            <StartingMessageStep scripts={scripts} />
           </StepWrapper>
           <StepWrapper
             value="2"
