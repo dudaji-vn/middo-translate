@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
 } from '@/components/feedback';
 import { Plus } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DesignScriptChatFlow, {
   FlowNode,
 } from '../../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
@@ -16,97 +16,28 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Edge } from 'reactflow';
 import { z } from 'zod';
-import { Form } from '@/components/ui/form';
+import { Form, FormMessage } from '@/components/ui/form';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { isEmpty } from 'lodash';
 import { createOrEditChatScript } from '@/services/scripts.service';
 import { useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import {
+  createChatScriptSchema,
+  initialChatFlowNodes,
+  initialEdges,
+} from './schema';
+import { isValid } from 'date-fns';
+import { FLOW_KEYS } from '../../../../settings/_components/extension-creation/steps/script-chat-flow/custom-nodes/node-types';
 
-export const initialChatFlowNodes: FlowNode[] = [
-  {
-    id: '1',
-    data: { label: 'Start conversation', content: 'start conversation' },
-    position: { x: 0, y: 0 },
-    className: 'light',
-    type: 'root',
-  },
-  {
-    id: '2',
-    data: {
-      label: 'option',
-      content: 'Option',
-    },
-    type: 'option',
-    position: { x: 200, y: 6 },
-    className: 'light',
-  },
-];
-
-const initialEdges: Edge[] = [
-  {
-    id: 'e1-2',
-    source: '1',
-    target: '2',
-    animated: true,
-    label: 'Start conversation',
-  },
-];
-const createChatScriptSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  chatFlow: z.object({
-    nodes: z
-      .array(
-        z.object({
-          id: z.string(),
-          type: z.string(),
-          data: z
-            .object({
-              label: z.string().optional(),
-              content: z.string().min(1, {
-                message: 'Please enter content!',
-              }),
-              link: z.string().optional(),
-              media: z.array(z.any()).optional(),
-            })
-            .refine(
-              (data) => {
-                if (data.link && !data.link.trim().length) {
-                  return false;
-                }
-                return true;
-              },
-              {
-                message: 'Link should not be empty',
-              },
-            ),
-          position: z.object({
-            x: z.number(),
-            y: z.number(),
-          }),
-        }),
-      )
-      .min(2, 'Chat flow is required'),
-    edges: z
-      .array(
-        z.object({
-          id: z.string(),
-          source: z.string(),
-          target: z.string(),
-          label: z.string(),
-          animated: z.boolean().optional(),
-        }),
-      )
-      .min(1, 'Chat flow is required'),
-    flowErrors: z
-      .array(z.object({ id: z.string(), message: z.string() }))
-      .optional(),
-  }),
-});
 export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
-const CreateChatScriptModal = () => {
+const CreateOrEditChatScriptModal = ({
+  currentScript,
+}: {
+  currentScript?: TScriptFormValues;
+}) => {
   const [open, setOpen] = useState(false);
   const spaceId = useParams()?.spaceId as string;
   const router = useRouter();
@@ -117,7 +48,7 @@ const CreateChatScriptModal = () => {
       chatFlow: {
         nodes: initialChatFlowNodes,
         edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
-        flowErrors: [],
+        mappedFlowErrors: [],
       },
     },
     resolver: zodResolver(createChatScriptSchema),
@@ -128,10 +59,17 @@ const CreateChatScriptModal = () => {
       chatFlow: {
         nodes: initialChatFlowNodes,
         edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
-        flowErrors: [],
+        mappedFlowErrors: [],
       },
     });
   };
+  const {
+    setValue,
+    handleSubmit,
+    trigger,
+    watch,
+    formState: { errors, isDirty, isValid, isSubmitting },
+  } = form;
   const onOpenChange = () => {
     if (!open) {
       resetFormData();
@@ -139,11 +77,12 @@ const CreateChatScriptModal = () => {
     setOpen(!open);
   };
 
-  const {
-    handleSubmit,
-    trigger,
-    formState: { errors, isDirty },
-  } = form;
+  useEffect(() => {
+    if (open && currentScript) {
+      setValue('name', currentScript.name);
+      setValue('chatFlow', currentScript.chatFlow);
+    }
+  }, [open, currentScript]);
 
   const submit = async ({
     name,
@@ -152,6 +91,7 @@ const CreateChatScriptModal = () => {
     name: string;
     chatFlow: any;
   }) => {
+    trigger(FLOW_KEYS.CHAT_FLOW);
     const payload = {
       name: name,
       chatFlow: {
@@ -164,14 +104,15 @@ const CreateChatScriptModal = () => {
       const res = await createOrEditChatScript(payload);
       if (res?.data) {
         toast.success('Chat script created successfully');
-        router.refresh();
       }
       setOpen(false);
+      router.refresh();
     } catch (error) {
       toast.error('Error on creating chat script');
       console.error('Error on creating chat script: ', error);
     }
   };
+
   return (
     <>
       <Button
@@ -200,8 +141,9 @@ const CreateChatScriptModal = () => {
               />
               <Button
                 shape={'square'}
+                color={isValid ? 'primary' : 'secondary'}
                 size={'md'}
-                disabled={!isEmpty(errors) || !isDirty}
+                loading={isSubmitting}
                 type="submit"
                 onClick={() => handleSubmit(submit)()}
               >
@@ -213,10 +155,7 @@ const CreateChatScriptModal = () => {
                 </Button>
               </AlertDialogCancel>
             </AlertDialogHeader>
-            <section className="flex-grow">
-              <p className="text-error-500">
-                {errors.chatFlow?.nodes?.message}
-              </p>
+            <section className="flex-grow pb-8">
               <DesignScriptChatFlow />
             </section>
           </AlertDialogContent>
@@ -226,4 +165,4 @@ const CreateChatScriptModal = () => {
   );
 };
 
-export default CreateChatScriptModal;
+export default CreateOrEditChatScriptModal;

@@ -15,11 +15,11 @@ const CustomChatThemeStep = ({ space }: { space: TSpace }) => {
     formState: { },
   } = useFormContext();
 
-  const selectedRadioFM = watch('selectedRadioFM');
+  const startingMessageType = watch('startingMessageType');
   const editingChatFlow = watch('custom.chatFlow');
 
   const firstButtonNode =
-    selectedRadioFM === 'script'
+    startingMessageType === 'script'
       ? editingChatFlow?.nodes?.find(
         (n: FlowNode) => n?.type === 'button' && n?.data?.content,
       )

@@ -11,15 +11,12 @@ import { RoomActions } from '../room-actions';
 import InboxList from './inbox-list';
 
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { cn } from '@/utils/cn';
 import {
   ArchiveIcon,
-  MessageSquareDashed,
   MessageSquareDashedIcon,
   MessagesSquareIcon,
   UsersRoundIcon,
 } from 'lucide-react';
-import ViewSpaceInboxFilter from './view-space-inbox-filter';
 export interface InboxProps {}
 export type InboxType =
   | 'all'
@@ -117,11 +114,6 @@ export const Inbox = (props: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
-          <ViewSpaceInboxFilter
-            className={cn('w-full', {
-              hidden: !isBusiness,
-            })}
-          />
           <InboxList type={type} />
         </div>
       </div>

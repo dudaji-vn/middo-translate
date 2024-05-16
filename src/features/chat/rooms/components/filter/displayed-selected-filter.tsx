@@ -29,7 +29,7 @@ const DisplayedSelectedFilter = ({
   }
 
   return (
-    <section className="space-y-3 bg-[#FCFCFC] p-3">
+    <section className="relative space-y-3 bg-[#FCFCFC] p-3">
       <div
         {...props}
         className={cn(
@@ -70,7 +70,7 @@ const DisplayedSelectedFilter = ({
       {expanded && (
         <div
           className={cn(
-            'flex h-fit max-h-[400px] w-full flex-col gap-3 overflow-y-auto overflow-x-hidden transition-all duration-300',
+            'flex h-fit  w-full flex-col gap-3 overflow-hidden transition-all duration-300',
             hidden && 'hidden',
           )}
         >

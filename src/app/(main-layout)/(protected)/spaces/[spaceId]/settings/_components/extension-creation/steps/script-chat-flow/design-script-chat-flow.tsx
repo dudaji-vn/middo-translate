@@ -14,8 +14,7 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { FLOW_KEYS, nodeTypes } from './custom-nodes/node-types';
 import { useFormContext } from 'react-hook-form';
-import { z } from 'zod';
-import { Form } from '@/components/ui/form';
+import { Form, FormMessage } from '@/components/ui/form';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/actions';
 import { Eye } from 'lucide-react';
@@ -25,10 +24,9 @@ import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { Media } from '@/types';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import {
-  TScriptFormValues,
-  initialChatFlowNodes,
-} from '../../../../../scripts/_components/column-def/script-creation/create-chat-script-modal';
+import { initialChatFlowNodes } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/column-def/script-creation/schema';
+import { type TScriptFormValues } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/column-def/script-creation/create-chat-script-modal';
+import { cn } from '@/utils/cn';
 
 export type FlowItemType =
   | 'button'
@@ -56,8 +54,6 @@ const DesignScriptChatFlow = ({
     edges: Edge[];
   };
 }) => {
-  const [checkingMode, setCheckingMode] = useState(false);
-
   const control = useFormContext();
 
   const { setValue, watch, trigger, formState } = control;
@@ -65,7 +61,7 @@ const DesignScriptChatFlow = ({
   const { errors } = formState;
   const nodes = watch(FLOW_KEYS.NODES);
   const edges = watch(FLOW_KEYS.EDGES);
-  const flowErrors = watch(FLOW_KEYS.FLOW_ERRORS);
+  const mappedFlowErrors = watch(FLOW_KEYS.FLOW_ERRORS);
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
       const watchedNodes = watch(FLOW_KEYS.NODES);
@@ -120,20 +116,26 @@ const DesignScriptChatFlow = ({
   };
 
   const checkingErrors = useCallback(() => {
-    const flowErrors: TScriptFormValues['chatFlow']['flowErrors'] = [];
+    const mappedFlowErrors: TScriptFormValues['chatFlow']['mappedFlowErrors'] =
+      [];
     nodes.forEach((node: FlowNode) => {
       switch (node.type) {
-        case 'option':
-          break;
-        case 'container':
-          break;
         case 'button':
           if (!node.data?.content?.trim()?.length) {
-            flowErrors.push({
+            mappedFlowErrors.push({
               id: node.id,
               message: 'Button should have a label',
             });
           }
+          break;
+        case 'option':
+          mappedFlowErrors.push({
+            id: node.id,
+            message:
+              'Please complete the flow! your action button is missing response!',
+          });
+          break;
+        case 'container':
           break;
         case 'message':
           break;
@@ -141,19 +143,17 @@ const DesignScriptChatFlow = ({
           break;
       }
     });
-    // @ts-ignore
-    setValue('chatFlow.flowErrors', flowErrors);
-    return flowErrors;
+    setValue(FLOW_KEYS.FLOW_ERRORS, mappedFlowErrors);
+    return mappedFlowErrors;
   }, [nodes, setValue]);
 
-  useEffect(() => {
-    if (checkingMode) {
-      checkingErrors();
-    } else {
-      // @ts-ignore
-      setValue('chatFlow.flowErrors', []);
-    }
-  }, [nodes, edges, checkingMode, checkingErrors, setValue]);
+  // useEffect(() => {
+  //   if (checkingMode) {
+  //     checkingErrors();
+  //   } else {
+  //     setValue(FLOW_KEYS.FLOW_ERRORS, []);
+  //   }
+  // }, [nodes, edges, checkingMode, checkingErrors, setValue]);
 
   useEffect(() => {
     if (initialChatFlow && (initialChatFlow?.nodes || initialChatFlow?.edges)) {
@@ -162,31 +162,31 @@ const DesignScriptChatFlow = ({
     }
   }, []);
 
-  const onPreviewClick = () => {
-    trigger(FLOW_KEYS.NODES);
-    if (!checkingMode) {
-      const error = checkingErrors();
-      if (error.length) {
-        toast.error('Please complete the flow!');
-        return;
-      }
-      setCheckingMode(true);
-    }
-    if (checkingMode && flowErrors.length) {
-      toast.error('Please complete the flow!');
+  const onPreviewClick = async () => {
+    checkingErrors();
+    const valid = await trigger(FLOW_KEYS.CHAT_FLOW);
+    if (!valid) {
       return;
     }
-    if (!isEmpty(errors)) {
-      console.log('errors', errors);
-      toast.error('Please complete the flow!');
+    if (mappedFlowErrors.length || !isEmpty(errors)) {
       return;
     }
-
     redirectToPreview();
   };
+  const chatFlowError =
+    watch(FLOW_KEYS.FLOW_ERRORS)?.[0]?.message ||
+    errors?.chatFlow?.message ||
+    errors?.chatFlow?.root?.message;
   return (
     <>
-      <div className="flex min-h-fit flex-row items-center justify-end py-2">
+      <div className="flex min-h-fit flex-row items-center justify-between py-2">
+        <FormMessage
+          className={cn('text-normal pl-4 text-left font-normal text-red-500', {
+            invisible: !chatFlowError,
+          })}
+        >
+          {chatFlowError?.toString() || <em />}
+        </FormMessage>
         <Button
           onClick={onPreviewClick}
           shape={'square'}

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { scriptsColumns } from './_components/column-def/scripts-columns';
 import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-cnversation-scripts';
 import { SearchInput } from '@/components/data-entry';
-import CreateChatScriptModal from './_components/column-def/script-creation/create-chat-script-modal';
+import CreateOrEditChatScriptModal from './_components/column-def/script-creation/create-chat-script-modal';
 import { cn } from '@/utils/cn';
 import { getUserSpaceRole } from '../settings/_components/space-setting/role.util';
 import { useAuthStore } from '@/stores/auth.store';
@@ -77,7 +77,7 @@ const Page = ({
               ),
             })}
           >
-            <CreateChatScriptModal />
+            <CreateOrEditChatScriptModal />
           </div>
         </div>
       </div>

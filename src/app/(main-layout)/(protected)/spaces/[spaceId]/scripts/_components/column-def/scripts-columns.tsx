@@ -60,6 +60,16 @@ export const scriptsColumns: ColumnDef<ChatScript>[] = [
   {
     accessorKey: 'updatedAt',
     header: 'Updated At',
+    cell(props) {
+      const displayTime = moment(props?.row?.original?.createdAt).format(
+        'DD/MM/YYYY HH:mm A',
+      );
+      return (
+        <div className="flex gap-2" {...props}>
+          <span>{displayTime}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: 'lastEditedBy',
