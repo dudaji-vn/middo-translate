@@ -34,28 +34,19 @@ import {
 import { TSpace } from '../../../_components/business-spaces';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/actions';
+import { TChatScript } from '@/types/scripts.type';
 
 type TFormValues = {
   addingDomain: string;
   domains: Array<string>;
-  selectedRadioFM?: string;
+  startingMessageType?: string;
   custom: {
     language: string;
     firstMessage: string;
     firstMessageEnglish: string;
     color: string;
-    chatFlow?: {
-      nodes: any[];
-      edges: any[];
-    };
   };
-  chatFlow:
-  | {
-    nodes: FlowNode[];
-    edges: Edge[];
-  }
-  | null
-  | undefined;
+  currentScript?: TChatScript['_id'];
 };
 
 export default function CreateExtension({
@@ -84,13 +75,12 @@ export default function CreateExtension({
     defaultValues: {
       addingDomain: '',
       domains: [],
-      selectedRadioFM: 'default',
+      startingMessageType: 'default',
       custom: {
         language: currentUser?.language,
         firstMessage: DEFAULT_FIRST_MESSAGE.content,
         firstMessageEnglish: DEFAULT_FIRST_MESSAGE.contentEnglish,
         color: DEFAULT_THEME,
-        chatFlow: undefined,
       },
     },
     resolver: zodResolver(createExtensionSchema),
@@ -102,7 +92,7 @@ export default function CreateExtension({
     trigger,
     reset,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    formState: { isValid, isSubmitting },
   } = form;
 
   useEffect(() => {
@@ -126,19 +116,6 @@ export default function CreateExtension({
         color: initialData.color || DEFAULT_THEME,
       });
     }
-    if (
-      initialData?.chatFlow &&
-      initialData?.chatFlow?.nodes?.length > 1 &&
-      initialData?.chatFlow?.edges?.length > 0 &&
-      !initialData?.chatFlow?.nodes?.find((node) => isEmpty(node)) &&
-      !initialData?.chatFlow?.edges?.find((edge) => isEmpty(edge))
-    ) {
-      setValue('custom.chatFlow', {
-        nodes: initialData?.chatFlow?.nodes || [],
-        edges: initialData?.chatFlow?.edges || [],
-      });
-      setValue('selectedRadioFM', 'script');
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialData, open]);
 
@@ -153,27 +130,17 @@ export default function CreateExtension({
         ? translatedFirstMess
         : translatedFirstMess?.translatedText;
 
-    const chatFlow = watch('custom.chatFlow');
     const spaceId = params?.spaceId;
     if (!spaceId) {
       return;
     }
-    const isValidateChatFlow =
-      !chatFlow?.nodes?.find((node) => isEmpty(node)) &&
-      !chatFlow?.edges?.find((edge) => isEmpty(edge));
-    const chatFLowPayload =
-      chatFlow && watch('selectedRadioFM') === 'script' && isValidateChatFlow
-        ? { chatFlow }
-        : null;
     try {
       const payload = {
         domains: values.domains,
         ...values.custom,
         firstMessageEnglish,
-        spaceId: String(params?.spaceId),
-        ...chatFLowPayload,
       };
-      await createExtension(payload)
+      await createExtension(String(params?.spaceId), payload)
         .then((res) => {
           router.push(pathname + '?tab=extension');
           toast.success('Create extension success!');
@@ -192,55 +159,10 @@ export default function CreateExtension({
     (item) => item.name === 'extension',
   )?.roles;
 
-  const customColor = watch('custom.color');
-  const domains = watch('domains');
-  const firstMessage = watch('custom.firstMessage');
-  const selectedRadioFM = watch('selectedRadioFM');
-  const editingChatFlow = watch('custom.chatFlow');
-
-  const nodeLength = editingChatFlow?.nodes?.length || 0;
-  const edgeLength = editingChatFlow?.edges?.length || 0;
 
   const hasNoPermissionToEdit = !extensionRoles?.edit.includes(
     myRole as ESPaceRoles,
   );
-  const extensionHasNoUpdate = useMemo(() => {
-    const isChatFlowUpdated =
-      selectedRadioFM === 'script' &&
-      (!isEqual(editingChatFlow?.nodes, initialData?.chatFlow?.nodes) ||
-        !isEqual(editingChatFlow?.edges, initialData?.chatFlow?.edges));
-
-    const isFirstMessageUpdated =
-      !isEqual(firstMessage, initialData?.firstMessage) &&
-      (selectedRadioFM === 'default' || selectedRadioFM === 'custom');
-
-    return Boolean(
-      isEqual(customColor, initialData?.color) &&
-      isEqual(domains, initialData?.domains) &&
-      !isChatFlowUpdated &&
-      !isFirstMessageUpdated,
-    );
-  }, [
-    editingChatFlow,
-    initialData,
-    selectedRadioFM,
-    firstMessage,
-    customColor,
-    domains,
-  ]);
-  const hasInvalidChatFlow = useMemo(() => {
-    return Boolean(
-      selectedRadioFM === 'script' &&
-      (nodeLength < 2 ||
-        edgeLength < 1 ||
-        editingChatFlow?.nodes?.find(
-          (node: FlowNode) =>
-            isEmpty(node) ||
-            (isEmpty(node?.data?.content) && node.type !== 'option') ||
-            (node.type === 'option' && nodeLength == 2),
-        )),
-    );
-  }, [selectedRadioFM, nodeLength, edgeLength, editingChatFlow]);
 
   if (!isClient || !open || hasNoPermissionToEdit) return null;
 
@@ -320,12 +242,7 @@ export default function CreateExtension({
               size={'sm'}
               loading={isSubmitting}
               type="submit"
-              disabled={
-                !isValid ||
-                extensionHasNoUpdate ||
-                isSubmitting ||
-                hasInvalidChatFlow
-              }
+              disabled={!isValid || isSubmitting}
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
             >
               Save Change

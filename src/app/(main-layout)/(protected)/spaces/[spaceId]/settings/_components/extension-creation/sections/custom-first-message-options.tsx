@@ -22,7 +22,7 @@ const CustomFirstMessageOptions = ({
   const { setValue, watch } = useFormContext();
   const firstMessage = watch('custom.firstMessage');
   const scriptChatFlow = watch('custom.chatFlow');
-  const selectedRadioFM = watch('selectedRadioFM') || 'default';
+  const startingMessageType = watch('startingMessageType') || 'default';
 
   const onSaveChatFlow = (chatFlow: { nodes: FlowNode[]; edges: Edge[] }) => {
     const root = chatFlow.nodes.find((node) => node.type === 'root');
@@ -60,9 +60,9 @@ const CustomFirstMessageOptions = ({
               setValue('custom.chatFlow', null);
             break;
         }
-        setValue('selectedRadioFM', value);
+        setValue('startingMessageType', value);
       }}
-      value={selectedRadioFM}
+      value={startingMessageType}
     >
       <div className="flex items-center space-x-2">
         <RadioGroupItem
@@ -80,11 +80,11 @@ const CustomFirstMessageOptions = ({
       </div>
       <Input
         name="firstMessage"
-        disabled={selectedRadioFM !== 'default'}
+        disabled={startingMessageType !== 'default'}
         readOnly
         wrapperProps={{
           className: cn({
-            hidden: selectedRadioFM !== 'default',
+            hidden: startingMessageType !== 'default',
           }),
         }}
         value={DEFAULT_FIRST_MESSAGE.content}
@@ -106,16 +106,16 @@ const CustomFirstMessageOptions = ({
       <RHFTextAreaField
         formItemProps={{
           className: cn({
-            hidden: selectedRadioFM !== 'custom',
+            hidden: startingMessageType !== 'custom',
           }),
         }}
         name={'custom.firstMessage'}
         textareaProps={{
-          hidden: selectedRadioFM !== 'custom',
+          hidden: startingMessageType !== 'custom',
           placeholder: 'Type your custom first message',
-          disabled: selectedRadioFM !== 'custom',
+          disabled: startingMessageType !== 'custom',
           className:
-            selectedRadioFM === 'custom'
+            startingMessageType === 'custom'
               ? 'border-primary ring-primary px-2'
               : 'opacity-50 border-neutral-200 ring-neutral-200',
         }}

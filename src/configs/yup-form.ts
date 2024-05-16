@@ -141,7 +141,7 @@ export const updateInforSchema = z.object({
   }),
 });
 export const createExtensionSchema = z.object({
-  selectedRadioFM: z.string().optional(),
+  startingMessageType: z.string().optional(),
   addingDomain: z
     .string()
     .refine(
@@ -165,12 +165,6 @@ export const createExtensionSchema = z.object({
       }),
       firstMessageEnglish: z.string().optional(),
       color: z.string().optional(),
-      chatFlow: z
-        .object({
-          nodes: z.array(z.object({})).optional(),
-          edges: z.array(z.object({})).optional(),
-        })
-        .optional()
     })
     .optional(),
 });
