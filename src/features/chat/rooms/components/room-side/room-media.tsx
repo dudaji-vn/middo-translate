@@ -5,14 +5,10 @@ import { Media } from '@/types';
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Lightbox from 'yet-another-react-lightbox';
-import Download from 'yet-another-react-lightbox/plugins/download';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
-import { useAppStore } from '@/stores/app.store';
 import { MediaPreview } from '@/components/media-preview';
+import { PlayIcon } from 'lucide-react';
 
 export interface RoomMediaProps {}
 
@@ -52,10 +48,20 @@ export const RoomMedia = () => {
         {media.map((media, index) => (
           <div
             key={media.url}
-            onClick={() => setIndex(index - 1)}
+            onClick={() => setIndex(index)}
             className="relative aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"
           >
-            {media.type === 'video' && <video src={media.url} className="h-full w-full" /> }
+            {media.type === 'video' && <div className="h-full w-full relative" >
+              <video src={media.url} className="h-full w-full" />
+              <Button.Icon 
+                size={'ss'}
+                variant={'default'}
+                className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-50'
+                color={'default'}
+              >
+                <PlayIcon />
+              </Button.Icon>
+            </div> }
             {media.type === 'image' && <Image
               src={media.url}
               alt={media.name || media.url}
