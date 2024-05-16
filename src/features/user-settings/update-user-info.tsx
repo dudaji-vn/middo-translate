@@ -36,6 +36,7 @@ export default function UpdateUserInfo() {
     defaultValues: {
       name: user?.name || '',
       language: user?.language || '',
+      username: user?.username || '',
     },
     resolver: zodResolver(
       z
@@ -46,6 +47,13 @@ export default function UpdateUserInfo() {
           language: z.string().min(1, {
             message: t('MESSAGE.ERROR.REQUIRED'),
           }),
+          username: z
+            .string()
+            .min(3, { message: t('MESSAGE.ERROR.USERNAME_MIN') })
+            .max(15, { message: t('MESSAGE.ERROR.USERNAME_MAX') })
+            .regex(/^[a-z0-9_]+$/, {
+              message: t('MESSAGE.ERROR.USERNAME_PATTERN'),
+            }),
         })
         .optional(),
     ),
@@ -56,21 +64,32 @@ export default function UpdateUserInfo() {
     handleSubmit,
     trigger,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isValid, isSubmitting, isDirty },
   } = form;
-  const { name, language } = watch();
+  const { name, language, username } = watch();
   const submit = async (values: z.infer<typeof schema>) => {
     trigger();
     if (!isValid) return;
-    if (name == user?.name && language == user?.language) return;
+    if (
+      name == user?.name &&
+      language == user?.language &&
+      username == user?.language
+    )
+      return;
     try {
       setLoading(true);
-      let res = await updateInfoUserService({ name: name.trim(), language });
+      let res = await updateInfoUserService({
+        name: name.trim(),
+        language,
+        username,
+      });
+      console.log(res.data);
       setDataAuth({
         user: {
           ...user,
           name: res.data.name,
           language: res.data.language,
+          username: res.data.username,
         },
       });
       toast.success(t('MESSAGE.SUCCESS.PROFILE_UPDATED'));
@@ -133,6 +152,25 @@ export default function UpdateUserInfo() {
                   },
                 }}
               />
+              <RHFInputField
+                name="username"
+                formLabel={t('COMMON.USERNAME')}
+                inputProps={{
+                  placeholder: t('COMMON.USERNAME_PLACEHOLDER'),
+                  suffix: (
+                    <span className="text-sm text-gray-400">{`${username?.length}/15`}</span>
+                  ),
+                  onKeyDown: (e) => {
+                    if (
+                      name?.length >= 60 &&
+                      e.key !== 'Backspace' &&
+                      e.key !== 'Delete'
+                    ) {
+                      e.preventDefault();
+                    }
+                  },
+                }}
+              />
               <InputSelectLanguage
                 className="mt-5"
                 field="language"
@@ -150,7 +188,8 @@ export default function UpdateUserInfo() {
                   shape="square"
                   disabled={
                     (user.name == watch().name &&
-                      user.language == watch().language) ||
+                      user.language == watch().language &&
+                      user.username == watch().username) ||
                     isSubmitting
                   }
                   type="submit"

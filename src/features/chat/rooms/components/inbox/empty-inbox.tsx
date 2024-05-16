@@ -1,7 +1,7 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import Tip from '@/components/data-display/tip/tip';
-import { PenSquareIcon, Users2Icon } from 'lucide-react';
+import { Frown, FrownIcon, PenSquareIcon, Users2Icon } from 'lucide-react';
 
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -41,6 +41,17 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type]);
+
+    if (type === 'archived' || type === 'waiting') {
+      return (
+        <div className="mt-3 flex h-full flex-col items-center justify-center bg-card px-4 text-base">
+          <FrownIcon className="-mt-10 h-12 w-12 text-neutral-400" />
+          <p className="my-3 text-center font-medium text-neutral-600">
+            {t(`INBOX_EMPTY.MESSAGE${translateExtension}`)}
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="mt-3 h-full bg-card px-4 text-base">
         <Tip

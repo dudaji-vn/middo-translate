@@ -40,6 +40,8 @@
     "SIGN_OUT": "로그아웃",
     "NAME": "이름",
     "NAME_PLACEHOLDER": "이름을 입력하세요",
+    "USERNAME": "사용자 이름",
+    "USERNAME_PLACEHOLDER": "사용자 이름을 입력하세요",
     "EMAIL": "이메일",
     "EMAIL_PLACEHOLDER": "이메일을 입력하세요",
     "PHONE": "전화번호",
@@ -93,7 +95,10 @@
       "DECLINE_CALL": "{{name}}는 전화를 거절했습니다!",
       "BROWSER_NOT_SUPPORT_SPEAKER": "브라우저가 스피커 설정을 지원하지 않습니다!",
       "NOT_ALLOW_CAMERA": "카메라에 대한 액세스를 허용하지 않았습니다!",
-      "NOT_ALLOW_MICROPHONE": "마이크에 대한 액세스를 허용하지 않았습니다!"
+      "NOT_ALLOW_MICROPHONE": "마이크에 대한 액세스를 허용하지 않았습니다!",
+      "USERNAME_MIN": "사용자 이름은 최소 3자 이상이어야 합니다!",
+      "USERNAME_MAX": "사용자 이름은 최대 15자까지만 허용됩니다!",
+      "USERNAME_PATTERN": "사용자 이름은 문자, 숫자, 밑줄 및 하이픈만 포함할 수 있습니다!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "프로필이 성공적으로 업데이트되었습니다!",
@@ -588,7 +593,8 @@
     "TIP_DESCRIPTION_GROUP": "그룹은 적어도 3명 이상의 구성원이 있는 대화입니다.",
     "TIP_TITLE_GROUP": "\"그룹\" 사용 방법",
     "TITLE_GROUP": "현재 그룹 대화가 없습니다",
-    "DESCRIPTION_GROUP": "아래 버튼을 클릭하여 새로운 대화를 만들거나 그룹 대화의 관리자에게 추가해달라고 요청하세요."
+    "DESCRIPTION_GROUP": "아래 버튼을 클릭하여 새로운 대화를 만들거나 그룹 대화의 관리자에게 추가해달라고 요청하세요.",
+    "MESSAGE": "아직 메시지 없음."
   },
   "OFFLINE": {
     "TITLE": "인터넷 연결이 끊어졌습니다",
