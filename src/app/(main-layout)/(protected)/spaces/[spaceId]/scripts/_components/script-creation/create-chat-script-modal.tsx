@@ -23,6 +23,7 @@ import {
 import { FLOW_KEYS } from '../../../settings/_components/extension-creation/steps/script-chat-flow/custom-nodes/node-types';
 import { useCreateOrEditScript } from '@/features/conversation-scripts/hooks/use-create-or-edit-script';
 import { TChatScript } from '@/types/scripts.type';
+import { Typography } from '@/components/data-display';
 
 export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
@@ -30,10 +31,12 @@ const CreateOrEditChatScriptModal = ({
   open,
   onClose,
   currentScript,
+  viewOnly,
 }: {
   open: boolean;
   onClose: () => void;
   currentScript?: TChatScript;
+  viewOnly?: boolean;
 }) => {
   const spaceId = useParams()?.spaceId as string;
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditScript();
@@ -120,16 +123,22 @@ const CreateOrEditChatScriptModal = ({
         <Form {...form}>
           <AlertDialogContent className="max-w-screen z-[100] flex h-[calc(100vh-2rem)] !w-[calc(100vw-2rem)] flex-col justify-stretch gap-1">
             <AlertDialogHeader className="flex h-fit w-full flex-row items-start justify-between gap-3 text-base">
-              <RHFInputField
-                name="name"
-                formItemProps={{
-                  className: 'w-full',
-                }}
-                inputProps={{
-                  placeholder: 'Enter script name',
-                  required: true,
-                }}
-              />
+              {viewOnly ? (
+                <Typography className="text-lg font-semibold text-neutral-900">
+                  {currentScript?.name}
+                </Typography>
+              ) : (
+                <RHFInputField
+                  name="name"
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                  inputProps={{
+                    placeholder: 'Enter script name',
+                    required: true,
+                  }}
+                />
+              )}
               <Button
                 shape={'square'}
                 color={isValid ? 'primary' : 'secondary'}
@@ -137,6 +146,7 @@ const CreateOrEditChatScriptModal = ({
                 loading={isLoading || isSubmitting}
                 type="submit"
                 onClick={() => handleSubmit(submit)()}
+                className={viewOnly ? 'hidden' : ''}
               >
                 Save
               </Button>
@@ -147,12 +157,12 @@ const CreateOrEditChatScriptModal = ({
                   size={'md'}
                   disabled={isSubmitting}
                 >
-                  Cancel
+                  {viewOnly ? 'Close' : 'Cancel'}
                 </Button>
               </AlertDialogCancel>
             </AlertDialogHeader>
             <section className="flex-grow pb-8">
-              <DesignScriptChatFlow />
+              <DesignScriptChatFlow viewOnly={viewOnly} />
             </section>
           </AlertDialogContent>
         </Form>

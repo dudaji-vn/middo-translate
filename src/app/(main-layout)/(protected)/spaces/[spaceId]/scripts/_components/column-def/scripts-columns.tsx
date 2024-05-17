@@ -9,6 +9,8 @@ import { Eye, Pen, Trash2 } from 'lucide-react';
 import { Avatar } from '@/components/data-display';
 import moment from 'moment';
 import { Checkbox } from '@/components/form/checkbox';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { Badge } from '@/components/ui/badge';
 
 export type ChatScript = {
   _id: string;
@@ -17,6 +19,7 @@ export type ChatScript = {
   createdBy: Partial<User>;
   createdAt: string;
   updatedAt: string;
+  isUsing: boolean;
   chatFlow: {
     nodes: FlowNode[];
     edges: Edge[];
@@ -28,11 +31,13 @@ export const scriptsColumns = ({
   onDelete,
   onEdit,
   enableSelectAll = true,
+  enableDeletion = true,
 }: {
   onView: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
   enableSelectAll?: boolean;
+  enableDeletion?: boolean;
 }) =>
   [
     {
@@ -67,6 +72,21 @@ export const scriptsColumns = ({
     {
       accessorKey: 'name',
       header: 'Name',
+      cell(props) {
+        return (
+          <td className="flex gap-2" {...props}>
+            <span>{props?.row?.original?.name}</span>
+            {props?.row?.original?.isUsing && (
+              <Badge
+                variant="outline"
+                className="text-xs text-success-700 border-success-500-main "
+              >
+                In Use
+              </Badge>
+            )}
+          </td>
+        );
+      },
     },
     {
       accessorKey: 'createdBy',
@@ -121,32 +141,55 @@ export const scriptsColumns = ({
       accessorKey: '_id',
       header: 'Actions',
       cell(props) {
+        console.log('p', props.row.original);
         return (
           <td className="flex gap-2" {...props}>
-            <Button.Icon
-              variant={'ghost'}
-              size={'xs'}
-              color={'default'}
-              onClick={() => onView(props.row.original._id)}
-            >
-              <Eye />
-            </Button.Icon>
-            <Button.Icon
-              variant={'ghost'}
-              size={'xs'}
-              color={'default'}
-              onClick={() => onEdit(props.row.original._id)}
-            >
-              <Pen />
-            </Button.Icon>
-            <Button.Icon
-              variant={'ghost'}
-              size={'xs'}
-              color={'default'}
-              onClick={() => onDelete(props.row.original._id)}
-            >
-              <Trash2 className="text-error" />
-            </Button.Icon>
+            <Tooltip
+              title={'View'}
+              triggerItem={
+                <Button.Icon
+                  variant={'ghost'}
+                  size={'xs'}
+                  color={'default'}
+                  onClick={() => onView(props.row.original._id)}
+                >
+                  <Eye />
+                </Button.Icon>
+              }
+            />
+            <Tooltip
+              title={'Edit'}
+              triggerItem={
+                <Button.Icon
+                  variant={'ghost'}
+                  size={'xs'}
+                  color={'default'}
+                  onClick={() => onEdit(props.row.original._id)}
+                >
+                  <Pen />
+                </Button.Icon>
+              }
+            />
+            {enableDeletion && (
+              <Tooltip
+                title={
+                  props.row.original.isUsing
+                    ? 'Cannot delete script in use'
+                    : 'Delete'
+                }
+                triggerItem={
+                  <Button.Icon
+                    variant={'ghost'}
+                    size={'xs'}
+                    disabled={props.row.original.isUsing}
+                    color={'default'}
+                    onClick={() => onDelete(props.row.original._id)}
+                  >
+                    <Trash2 className="text-error" />
+                  </Button.Icon>
+                }
+              />
+            )}
           </td>
         );
       },

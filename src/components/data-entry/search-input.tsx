@@ -18,7 +18,7 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 
-interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
   btnDisabled?: boolean;
   onClear?: () => void;

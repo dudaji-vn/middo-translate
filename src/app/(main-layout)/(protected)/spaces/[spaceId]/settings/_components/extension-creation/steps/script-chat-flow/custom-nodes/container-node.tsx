@@ -108,6 +108,7 @@ function ContainerNode(node: CustomNodeProps) {
           <div className="flex flex-row items-center gap-2  text-primary-500-main">
             <Button.Icon
               color={'error'}
+              disabled={data?.readonly}
               size={'xs'}
               onClick={convertContainerToOption}
               className="text-neutral-600 hover:text-error-500"
@@ -122,6 +123,7 @@ function ContainerNode(node: CustomNodeProps) {
           textareaProps={{
             placeholder: 'Type your message here...',
             rows: 3,
+            disabled: data?.readonly,
             className: 'w-full h-full',
           }}
         />
@@ -130,6 +132,7 @@ function ContainerNode(node: CustomNodeProps) {
         <Button
           shape={'square'}
           className="w-full"
+          disabled={data?.readonly}
           color={'secondary'}
           size={'xs'}
           onClick={onAddNode}

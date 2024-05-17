@@ -1,7 +1,6 @@
 import { axios } from '@/lib/axios';
 import { DEFAULT_SCRIPTS_PAGINATION } from '@/types/scripts.type';
 import { useQuery } from '@tanstack/react-query';
-import { mockScriptData } from './mock-data';
 
 export const GET_CONVERSATION_SCRIPTS_KEY = 'get-conversation-scripts';
 
