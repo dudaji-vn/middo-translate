@@ -210,7 +210,8 @@
     "DISPLAY_LANGUAGE": "Display Language",
     "SIGN_OUT": "Sign Out",
     "EDIT_PROFILE": "Edit Profile",
-    "CHANGE_AVATAR": "Change avatar"
+    "CHANGE_AVATAR": "Change avatar",
+    "APP_PERMISSION": "App's permission"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",

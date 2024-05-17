@@ -210,7 +210,8 @@
     "DISPLAY_LANGUAGE": "Ngôn ngữ hiển thị",
     "SIGN_OUT": "Đăng xuất",
     "EDIT_PROFILE": "Chỉnh sửa hồ sơ",
-    "CHANGE_AVATAR": "Thay đổi hình đại diện"
+    "CHANGE_AVATAR": "Thay đổi hình đại diện",
+    "APP_PERMISSION": "Quyền ứng dụng"
   },
   "SIGN_IN": {
     "TITLE": "Đăng nhập",

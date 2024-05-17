@@ -210,7 +210,8 @@
     "DISPLAY_LANGUAGE": "표시 언어",
     "SIGN_OUT": "로그아웃",
     "EDIT_PROFILE": "프로필 편집",
-    "CHANGE_AVATAR": "아바타 변경"
+    "CHANGE_AVATAR": "아바타 변경",
+    "APP_PERMISSION": "앱 권한"
   },
   "SIGN_IN": {
     "TITLE": "로그인",
