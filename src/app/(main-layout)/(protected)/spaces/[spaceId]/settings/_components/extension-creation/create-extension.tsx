@@ -37,6 +37,7 @@ import { Button } from '@/components/actions';
 import { TChatScript } from '@/types/scripts.type';
 import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-conversation-scripts';
 import { ChatScript } from '../../../scripts/_components/column-def/scripts-columns';
+import { color } from 'framer-motion';
 
 type TFormValues = {
   addingDomain: string;
@@ -70,10 +71,7 @@ export default function CreateExtension({
   const params = useParams();
   const currentUser = useAuthStore((s) => s.user);
   const myRole = getUserSpaceRole(currentUser, space);
-  const { data, isLoading } = useGetConversationScripts({
-    spaceId: params?.spaceId as string,
-  });
-  const scripts: ChatScript[] = data?.items || [];
+
   const router = useRouter();
 
   const form = useForm<TFormValues>({
@@ -110,16 +108,24 @@ export default function CreateExtension({
       reset();
       return;
     }
-
     if (!isEmpty(initialData)) {
       setValue('domains', initialData.domains);
       setValue('custom.language', initialData.language);
       setValue('custom.color', initialData.color || DEFAULT_THEME);
-      setValue('custom.firstMessage', initialData.firstMessage || '');
       if (initialData.currentScript) {
         setValue('currentScript', initialData.currentScript);
         setValue('startingMessageType', 'script');
         setValue('custom.firstMessage', '');
+        return;
+      }
+      if (initialData.firstMessage) {
+        setValue('custom.firstMessage', initialData.firstMessage);
+        setValue(
+          'startingMessageType',
+          initialData.firstMessage === DEFAULT_FIRST_MESSAGE.content
+            ? 'default'
+            : 'custom',
+        );
         return;
       }
     }
@@ -127,28 +133,38 @@ export default function CreateExtension({
 
   const submit = async (values: TFormValues) => {
     trigger();
-    const translatedFirstMess = await translateWithDetection(
-      values.custom.firstMessage,
-      'en',
-    );
-    const firstMessageEnglish =
-      typeof translatedFirstMess === 'string'
-        ? translatedFirstMess
-        : translatedFirstMess?.translatedText;
 
     const spaceId = params?.spaceId;
     if (!spaceId) {
       return;
     }
     try {
-      const payload = {
+      let payload: any = {
         domains: values.domains,
-        ...values.custom,
-        firstMessageEnglish,
-        ...(values.startingMessageType === 'script' && {
-          currentScript: values.currentScript,
-        }),
+        color: values.custom.color,
+        language: values.custom.language,
       };
+      if (values.startingMessageType === 'script') {
+        payload = {
+          ...payload,
+          currentScript: values.currentScript,
+        };
+      } else {
+        const translatedFirstMess = await translateWithDetection(
+          values.custom.firstMessage,
+          'en',
+        );
+        const firstMessageEnglish =
+          typeof translatedFirstMess === 'string'
+            ? translatedFirstMess
+            : translatedFirstMess?.translatedText;
+        payload = {
+          ...payload,
+          firstMessage: values.custom.firstMessage,
+          firstMessageEnglish,
+        };
+      }
+
       await createExtension(String(params?.spaceId), payload)
         .then((res) => {
           router.push(pathname + '?tab=extension');
@@ -222,7 +238,7 @@ export default function CreateExtension({
               className: isEditing ? 'hidden' : '',
             }}
           >
-            <StartingMessageStep scripts={scripts} />
+            <StartingMessageStep />
           </StepWrapper>
           <StepWrapper
             value="2"

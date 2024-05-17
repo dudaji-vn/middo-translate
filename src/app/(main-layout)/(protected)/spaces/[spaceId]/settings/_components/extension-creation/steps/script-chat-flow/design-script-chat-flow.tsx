@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactFlow, {
   addEdge,
   Background,
@@ -37,6 +37,7 @@ export type FlowItemType =
   | 'link';
 
 export type FlowNode = Node<{
+  readonly?: boolean;
   content: string;
   label?: string;
   media?: Media[];
@@ -48,14 +49,15 @@ export type FlowNode = Node<{
 const ALLOWED_CHANGES = ['position', 'reset', 'select', 'dimensions'];
 const DesignScriptChatFlow = ({
   initialChatFlow,
+  viewOnly = false,
 }: {
   initialChatFlow?: {
     nodes: FlowNode[];
     edges: Edge[];
   };
+  viewOnly?: boolean;
 }) => {
   const control = useFormContext();
-
   const { setValue, watch, trigger, formState } = control;
   const { spaceId } = useBusinessNavigationData();
   const { errors } = formState;
@@ -64,6 +66,9 @@ const DesignScriptChatFlow = ({
   const mappedFlowErrors = watch(FLOW_KEYS.FLOW_ERRORS);
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => {
+      if (viewOnly) {
+        return;
+      }
       const watchedNodes = watch(FLOW_KEYS.NODES);
       if (changes?.every(({ type }) => ALLOWED_CHANGES.includes(type))) {
         setValue(FLOW_KEYS.NODES, applyNodeChanges(changes, watchedNodes));
@@ -73,6 +78,9 @@ const DesignScriptChatFlow = ({
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
+      if (viewOnly) {
+        return;
+      }
       if (changes.some(({ type }) => ALLOWED_CHANGES.includes(type))) {
         setValue(FLOW_KEYS.EDGES, applyEdgeChanges(changes, edges));
       }
@@ -82,6 +90,9 @@ const DesignScriptChatFlow = ({
 
   const onNodesDelete = useCallback(
     (nodesToDelete: Node[]) => {
+      if (viewOnly) {
+        return;
+      }
       if (
         nodesToDelete.some((node) =>
           initialChatFlowNodes.find((n) => n.id === node.id),
@@ -96,6 +107,9 @@ const DesignScriptChatFlow = ({
   );
 
   const onConnect = (connection: Edge | Connection) => {
+    if (viewOnly) {
+      return;
+    }
     setValue(FLOW_KEYS.EDGES, addEdge(connection, edges));
   };
   const redirectToPreview = () => {
@@ -147,14 +161,6 @@ const DesignScriptChatFlow = ({
     return mappedFlowErrors;
   }, [nodes, setValue]);
 
-  // useEffect(() => {
-  //   if (checkingMode) {
-  //     checkingErrors();
-  //   } else {
-  //     setValue(FLOW_KEYS.FLOW_ERRORS, []);
-  //   }
-  // }, [nodes, edges, checkingMode, checkingErrors, setValue]);
-
   useEffect(() => {
     if (initialChatFlow && (initialChatFlow?.nodes || initialChatFlow?.edges)) {
       setValue(FLOW_KEYS.NODES, initialChatFlow.nodes);
@@ -177,6 +183,18 @@ const DesignScriptChatFlow = ({
     watch(FLOW_KEYS.FLOW_ERRORS)?.[0]?.message ||
     errors?.chatFlow?.message ||
     errors?.chatFlow?.root?.message;
+
+  const displayNodes = useMemo(() => {
+    if (!viewOnly) return watch(FLOW_KEYS.NODES);
+    return nodes.map((node: FlowNode) => ({
+      ...node,
+      data: {
+        ...node.data,
+        readonly: true,
+      },
+    }));
+  }, [viewOnly, watch]);
+
   return (
     <>
       <div className="flex min-h-fit flex-row items-center justify-between py-2">
@@ -201,7 +219,7 @@ const DesignScriptChatFlow = ({
       <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200">
         <Form {...control}>
           <ReactFlow
-            nodes={nodes}
+            nodes={displayNodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}

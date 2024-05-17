@@ -60,6 +60,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
             <Button.Icon
               color={'error'}
               size={'xs'}
+              disabled={data?.readonly}
               variant={'ghost'}
               onClick={convertMessageToOption}
               className="text-neutral-600 hover:text-error-500"
@@ -74,6 +75,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
             placeholder: 'Type your message here...',
             rows: 3,
             className: 'w-full h-full',
+            disabled: data?.readonly,
           }}
         />
         <MediaUploadProvider>

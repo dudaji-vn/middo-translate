@@ -26,12 +26,10 @@ const Page = ({
   const scripts: ChatScript[] = data?.items || [];
   return (
     <ScriptsList
-      enableSelectAll
       scripts={scripts}
       onSearchChange={onSearchChange}
       search={search}
       isLoading={isLoading}
-      
     />
   );
 };

@@ -155,6 +155,7 @@ function ButtonNode(node: CustomNodeProps) {
         startIcon={isLink ? <Link className="h-4  w-4" /> : <></>}
         className="flex-flow flex h-10 w-full gap-3 px-2"
         shape={'square'}
+        disabled={data?.readonly}
         onClick={openEdit}
       >
         <span className="max-w-[160px] truncate">{content}</span>
@@ -205,7 +206,7 @@ function ButtonNode(node: CustomNodeProps) {
             className="flex-flow flex h-10 gap-3 px-3"
             shape={'square'}
             variant={'default'}
-            color={'secondary'}
+            disabled={data?.readonly}
             onClick={() => {
               setIsUpdating(false);
             }}
@@ -216,6 +217,7 @@ function ButtonNode(node: CustomNodeProps) {
             size={'xs'}
             className="flex-flow flex h-10 gap-3 px-2"
             shape={'square'}
+            disabled={data?.readonly}
             onClick={() => {
               localStorage.removeItem('before-changes');
               setIsUpdating(false);
@@ -228,6 +230,7 @@ function ButtonNode(node: CustomNodeProps) {
       <Button.Icon
         color={'default'}
         size={'xs'}
+        disabled={data?.readonly}
         onClick={onRemoveNode}
         className="mr-3 text-neutral-600 hover:text-error-500"
       >

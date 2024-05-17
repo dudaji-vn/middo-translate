@@ -24,6 +24,7 @@ import { ChatScript, scriptsColumns } from '../column-def/scripts-columns';
 import CreateOrEditChatScriptModal from '../script-creation/create-chat-script-modal';
 import DeleteScriptModal from '../script-deletion/delete-script-modal';
 import { useParams } from 'next/dist/client/components/navigation';
+import ScriptsHeader, { ScriptsHeaderProps } from './scripts-header';
 
 const MANAGE_SCRIPTS_ROLES: Record<ERoleActions, Array<ESPaceRoles>> = {
   edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -34,30 +35,27 @@ const MANAGE_SCRIPTS_ROLES: Record<ERoleActions, Array<ESPaceRoles>> = {
 const ScriptsList = ({
   titleProps,
   headerProps,
-  enableSelectAll = true,
   tableProps,
   scripts,
+  enableDeletion = true,
   search,
   onSearchChange,
   isLoading,
-
 }: {
   titleProps?: React.HTMLProps<HTMLSpanElement>;
-  headerProps?: React.HTMLProps<HTMLDivElement>;
+  headerProps?: Partial<ScriptsHeaderProps>;
   tableProps?: Partial<DataTableProps<ChatScript, any>>;
-    enableSelectAll?: boolean;
-    scripts: ChatScript[];
-    search: string;
-    onSearchChange: (value: string) => void;
-    isLoading: boolean;
-
+  scripts: ChatScript[];
+  search: string;
+  onSearchChange: (value: string) => void;
+  isLoading: boolean;
+  enableDeletion?: boolean;
 }) => {
   const [modalState, setModalState] = useState<{
-    modalType: 'create' | 'edit' | 'delete';
+    modalType: 'create' | 'edit' | 'delete' | 'view';
     initialData?: TChatScript;
   } | null>(null);
   const [rowSelection, setRowSelection] = React.useState({});
-  // const [search, setSearch] = useState('');
   const router = useRouter();
   const spaceId = useParams()?.spaceId as string;
 
@@ -94,45 +92,23 @@ const ScriptsList = ({
   };
   const onView = (id: string) => {
     const currentScript = scripts.find((s) => s._id === id);
-    console.log('View', currentScript);
+    if (currentScript)
+      setModalState({
+        modalType: 'view',
+        initialData: currentScript as TChatScript,
+      });
   };
 
   return (
     <section className="relative w-full">
-      <div
+      <ScriptsHeader
+        titleProps={titleProps}
+        onSearchChange={onSearchChange}
+        onCreateClick={() => setModalState({ modalType: 'create' })}
+        allowedRoles={MANAGE_SCRIPTS_ROLES}
+        myRole={myRole}
         {...headerProps}
-        className="flex  flex-col justify-center gap-4  px-4 py-3 font-medium md:flex-row md:items-center md:px-10"
-      >
-        <span {...titleProps}>Scripts Management</span>
-        <div className="flex grow gap-4">
-          <div className="h-12 grow">
-            <SearchInput
-              className="w-full"
-              onChange={(e) => onSearchChange(e.target.value)}
-              onClear={() => onSearchChange('')}
-              placeholder={t('BUSINESS.SCRIPT.SEARCH')}
-            />
-          </div>
-          <div
-            className={cn('h-fit w-fit flex-none ', {
-              hidden: !MANAGE_SCRIPTS_ROLES.edit.includes(
-                myRole as ESPaceRoles,
-              ),
-            })}
-          >
-            <Button
-              className="min-w-fit"
-              shape={'square'}
-              size="md"
-              startIcon={<Plus />}
-              onClick={() => setModalState({ modalType: 'create' })}
-            >
-              Add&nbsp;
-              <span className="max-md:hidden">New Script</span>
-            </Button>
-          </div>
-        </div>
-      </div>
+      />
       <div className="w-full overflow-x-auto rounded-md px-10 py-3">
         <DataTable
           dividerRow
@@ -143,12 +119,17 @@ const ScriptsList = ({
             state: {
               rowSelection,
             },
+            enableRowSelection(row) {
+              return !row.original?.isUsing;
+            },
           }}
           columns={scriptsColumns({
             onDelete,
             onEdit,
             onView,
-            enableSelectAll,
+            enableDeletion,
+            singleRowSelection:
+              !tableProps?.tableInitialParams?.enableMultiRowSelection,
           })}
           data={scripts}
           tableHeadProps={{
@@ -169,8 +150,11 @@ const ScriptsList = ({
       </div>
       <CreateOrEditChatScriptModal
         open={
-          modalState?.modalType === 'create' || modalState?.modalType === 'edit'
+          modalState?.modalType === 'create' ||
+          modalState?.modalType === 'edit' ||
+          modalState?.modalType === 'view'
         }
+        viewOnly={modalState?.modalType === 'view'}
         currentScript={modalState?.initialData!}
         onClose={() => setModalState(null)}
       />
