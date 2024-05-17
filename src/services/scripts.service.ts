@@ -10,12 +10,16 @@ export const createOrEditChatScript = (data: Partial<TChatScript>) => {
   return put(apiURL, rest);
 };
 
-export const deleteChatScript = (data: {
+export const deleteChatScripts = (data: {
   spaceId: string;
-  scriptId: string;
+  scriptIds: string[];
 }) => {
-  const { spaceId, scriptId } = data;
-  return axios.delete(`${baseUrl}${spaceId}/scripts/${scriptId}`);
+  const { spaceId, scriptIds } = data;
+  return axios.delete(`${baseUrl}${spaceId}/scripts`, {
+    data: {
+      scriptIds,
+    },
+  });
 };
 
 export const getChatScript = (spaceId: string, scriptId: string) => {

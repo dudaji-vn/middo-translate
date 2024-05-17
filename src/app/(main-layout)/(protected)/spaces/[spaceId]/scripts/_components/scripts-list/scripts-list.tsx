@@ -73,15 +73,6 @@ const ScriptsList = ({
     router.push(`${ROUTE_NAMES.SPACES}/${spaceId}/conversations`);
   }
 
-  const onDelete = (id: string) => {
-    const script = scripts.find((s) => s._id === id);
-    if (script) {
-      setModalState({
-        modalType: 'delete',
-        initialData: script as TChatScript,
-      });
-    }
-  };
   const onEdit = (id: string) => {
     const currentScript = scripts.find((s) => s._id === id);
     if (currentScript)
@@ -122,14 +113,17 @@ const ScriptsList = ({
             enableRowSelection(row) {
               return !row.original?.isUsing;
             },
+            getRowId: (row) => row._id,
           }}
           columns={scriptsColumns({
-            onDelete,
             onEdit,
             onView,
             enableDeletion,
             singleRowSelection:
               tableProps?.tableInitialParams?.enableMultiRowSelection === false,
+            onDeleteRowSelections: () => {
+              setModalState({ modalType: 'delete' });
+            },
           })}
           data={scripts}
           tableHeadProps={{
@@ -159,8 +153,8 @@ const ScriptsList = ({
         onClose={() => setModalState(null)}
       />
       <DeleteScriptModal
-        open={modalState?.modalType === 'delete' && !!modalState?.initialData}
-        script={modalState?.initialData}
+        open={modalState?.modalType === 'delete' && !!rowSelection}
+        scriptIds={Object.keys(rowSelection)}
         onclose={() => setModalState(null)}
       />
     </section>

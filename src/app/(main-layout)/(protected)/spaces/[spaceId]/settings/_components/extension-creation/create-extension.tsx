@@ -189,7 +189,9 @@ export default function CreateExtension({
   );
 
   if (!isClient || !open || hasNoPermissionToEdit) return null;
-
+  const noScript =
+    watch('startingMessageType') === 'script' &&
+    isEmpty(watch('currentScript'));
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
@@ -266,7 +268,7 @@ export default function CreateExtension({
               size={'sm'}
               loading={isSubmitting}
               type="submit"
-              disabled={!isValid || isSubmitting}
+              disabled={!isValid || isSubmitting || noScript}
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
             >
               Save Change

@@ -29,22 +29,23 @@ export type ChatScript = {
 
 export const scriptsColumns = ({
   onView,
-  onDelete,
   onEdit,
   enableDeletion = true,
   singleRowSelection = false,
+  onDeleteRowSelections = () => {},
 }: {
   onView: (id: string) => void;
-  onDelete: (id: string) => void;
   onEdit: (id: string) => void;
   enableDeletion?: boolean;
   singleRowSelection?: boolean;
+  onDeleteRowSelections?: () => void;
 }) =>
   [
     {
       id: 'select',
       header: ({ table }) => {
-        if (singleRowSelection) {
+        const noData = table.getRowCount() === 0;
+        if (singleRowSelection || noData) {
           return null;
         }
         return (
@@ -89,8 +90,8 @@ export const scriptsColumns = ({
             <span>{props?.row?.original?.name}</span>
             {props?.row?.original?.isUsing && (
               <Badge
-                variant="outline"
-                className="border-success-500-main text-xs text-success-700 "
+                variant="default"
+                className="bg-success-100 text-xs font-semibold text-success-700 "
               >
                 In Use
               </Badge>
@@ -150,7 +151,26 @@ export const scriptsColumns = ({
     },
     {
       accessorKey: '_id',
-      header: 'Actions',
+      header(props) {
+        const table = props.table;
+        const isManySelected =
+          table.getIsSomePageRowsSelected() || table.getIsAllRowsSelected();
+
+        return (
+          <th className="flex flex-row items-center gap-2">
+            <p className="min-w-20"> Actions</p>
+            <Button.Icon
+              variant={'ghost'}
+              size={'xs'}
+              color={isManySelected ? 'error' : 'disabled'}
+              disabled={!isManySelected || !enableDeletion}
+              onClick={onDeleteRowSelections}
+            >
+              <Trash2 />
+            </Button.Icon>
+          </th>
+        );
+      },
       cell(props) {
         return (
           <td className="flex gap-2" {...props}>
@@ -180,26 +200,6 @@ export const scriptsColumns = ({
                 </Button.Icon>
               }
             />
-            {enableDeletion && (
-              <Tooltip
-                title={
-                  props.row.original.isUsing
-                    ? 'Cannot delete script in use'
-                    : 'Delete'
-                }
-                triggerItem={
-                  <Button.Icon
-                    variant={'ghost'}
-                    size={'xs'}
-                    disabled={props.row.original.isUsing}
-                    color={'default'}
-                    onClick={() => onDelete(props.row.original._id)}
-                  >
-                    <Trash2 className="text-error" />
-                  </Button.Icon>
-                }
-              />
-            )}
           </td>
         );
       },
