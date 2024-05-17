@@ -14,6 +14,7 @@ import { CircleFlag } from 'react-circle-flags';
 import { useTranslation } from 'react-i18next';
 import SelectPageLanguage from './_components/select-page-language';
 import { DeleteAccount } from '@/features/user-settings/delete-account';
+import { AppPermission } from '@/features/user-settings/app-permission';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -70,6 +71,7 @@ export default function AccountSettings() {
         </div>
         <div className="my-4">
           <SelectPageLanguage />
+          <AppPermission />
         </div>
         <div
           className="flex w-full cursor-pointer items-center bg-white px-5 py-4 md:hover:bg-neutral-100/20"
