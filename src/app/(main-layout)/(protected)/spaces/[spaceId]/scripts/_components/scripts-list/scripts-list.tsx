@@ -129,7 +129,7 @@ const ScriptsList = ({
             onView,
             enableDeletion,
             singleRowSelection:
-              !tableProps?.tableInitialParams?.enableMultiRowSelection,
+              tableProps?.tableInitialParams?.enableMultiRowSelection === false,
           })}
           data={scripts}
           tableHeadProps={{

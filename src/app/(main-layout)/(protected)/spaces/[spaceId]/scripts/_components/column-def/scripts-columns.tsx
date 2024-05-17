@@ -71,7 +71,7 @@ export const scriptsColumns = ({
               selectAble
                 ? 'cursor-pointer'
                 : 'cursor-not-allowed border-neutral-300',
-              singleRowSelection ? 'rounded-full' : 'block',
+              singleRowSelection ? 'rounded-full' : '',
             )}
             disabled={!selectAble}
           />
