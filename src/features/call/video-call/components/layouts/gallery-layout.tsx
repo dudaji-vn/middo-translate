@@ -1,7 +1,7 @@
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
-import { Fragment, useMemo, useRef } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 import DoodleItem from '../doodle/doodle-item';
 import VideoItem from '../video/video-item';
 import { cn } from '@/utils/cn';
@@ -60,7 +60,24 @@ const GalleryLayout = () => {
     return members.length;
   }, [participants]);
 
+  const [containerHeight, setContainerHeight] = useState(0);
   const { members } = useGetMemberInRoom({roomId: room.roomId});
+
+
+  useEffect(() => {
+    let height = videoGridRef.current?.clientHeight || 0;
+    setContainerHeight(height);
+    // On Resize
+    const onResize = () => {
+      height = videoGridRef.current?.clientHeight || 0;
+      setContainerHeight(height);
+    }
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    }
+  }, [isFullScreen]);
+
 
   const renderLayout = () => {
     // CASE NOT FULL SCREEN
@@ -114,7 +131,7 @@ const GalleryLayout = () => {
       result.push(<div 
         className={cn('flex justify-center items-center h-full', numRow > 1 && `md:h-1/${numRow}`)} key={i}
         style={{
-          height: isMobile ? ( numberItem > 1 ? `${(((videoGridRef.current?.clientHeight || 0) - 16) / 2)}px` : '100%')  : `calc(100% / ${numRow})`,
+          height: isMobile ? ( numberItem > 1 ? `${(((containerHeight || 0) - 16) / 2)}px` : '100%')  : `calc(100% / ${numRow})`,
         }}
         >{html}</div>)
     }
