@@ -1,7 +1,7 @@
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useMemo, useRef } from 'react';
 import DoodleItem from '../doodle/doodle-item';
 import VideoItem from '../video/video-item';
 import { cn } from '@/utils/cn';
@@ -13,6 +13,7 @@ import useGetMemberInRoom from '@/features/call/hooks/use-get-member-in-room';
 
 const GalleryLayout = () => {
   const isMobile = useAppStore(state => state.isMobile);
+  const videoGridRef = useRef<HTMLDivElement>(null);
   const participants = useParticipantVideoCallStore(state => state.participants);
   const isDoodle = useVideoCallStore(state => state.isDoodle);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
@@ -105,14 +106,15 @@ const GalleryLayout = () => {
         if(!participants[index]) continue;
         html.push(<div
           key={participants[index].socketId  + participants[index].isShareScreen}
-          className={cn('w-full h-full', numColumn > 1 && `w-1/${numColumn}` )}>
+          className={cn('w-full h-full', numColumn > 1 && `w-1/${numColumn}`)}
+        >
           <VideoItem isGalleryView participant={participants[index]} />
         </div>)
       }
       result.push(<div 
         className={cn('flex justify-center items-center h-full', numRow > 1 && `md:h-1/${numRow}`)} key={i}
         style={{
-          height: isMobile ? '100%' : `calc(100% / ${numRow})`
+          height: isMobile ? ( numberItem > 1 ? `${(((videoGridRef.current?.clientHeight || 0) - 16) / 2)}px` : '100%')  : `calc(100% / ${numRow})`,
         }}
         >{html}</div>)
     }
@@ -123,9 +125,9 @@ const GalleryLayout = () => {
   if(participants.length === 0) return <Fragment></Fragment>
 
   return (
-    <div className="h-full w-full overflow-auto md:overflow-hidden">
+    <div className="h-full w-full overflow-auto md:overflow-hidden" ref={videoGridRef}>
       <div
-        className={`w-full min-h-full grid md:block md:h-full p-2 `}
+        className='w-full min-h-full grid md:block md:h-full p-2'
       >
         { renderLayout() }
 
