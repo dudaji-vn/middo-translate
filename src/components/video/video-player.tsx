@@ -8,13 +8,16 @@ import { Direction, Range } from "react-range";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../data-display";
 import { useOnClickOutside } from "usehooks-ts";
 import { useMediaSettingStore } from "@/stores/media-setting.store";
+import getThumbnailForVideo from "@/utils/get-thumbnail-for-video";
+import Image from "next/image";
 
 interface VideoProps {
     file: Media;
     className?: string;
+    onDisableLongPress?: (val: boolean) => void;
 }
 
-function VideoPlayer({ file, className }: VideoProps) {
+function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
   const [isFullScreen, setIsFullScreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoThumbnailRef = useRef<HTMLVideoElement>(null);
@@ -22,6 +25,7 @@ function VideoPlayer({ file, className }: VideoProps) {
   const durationBarRef = useRef<HTMLDivElement>(null);
   const rangeVolumeRef = useRef<HTMLDivElement>(null);
   const buttonVolumeRef = useRef<HTMLDivElement>(null);
+  const actionMenuRef = useRef<HTMLDivElement>(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoDuration, setVideoDuration] = useState(0);
@@ -60,7 +64,7 @@ function VideoPlayer({ file, className }: VideoProps) {
     videoRef.current?.addEventListener('ended', handleEnd);
     // Add duration video
     videoRef.current?.addEventListener('loadedmetadata', () => {
-      setVideoDuration(videoRef.current?.duration || 0);
+      setVideoDuration(videoRef.current?.duration || 0.1);
     });
     return () => {
       videoRef.current?.removeEventListener('ended', handleEnd);
@@ -165,9 +169,23 @@ function VideoPlayer({ file, className }: VideoProps) {
     }
   }, [isOpenVolume])
 
+  useEffect(() => {
+    const handleMouseEnter = () => {
+      onDisableLongPress && onDisableLongPress(true);
+    }
+    const handleMouseLeave = () => {
+      onDisableLongPress && onDisableLongPress(false);
+    }
+    actionMenuRef.current?.addEventListener('mouseenter', handleMouseEnter);
+    actionMenuRef.current?.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      actionMenuRef.current?.removeEventListener('mouseenter', handleMouseEnter);
+      actionMenuRef.current?.removeEventListener('mouseleave', handleMouseLeave);
+    }
+  }, [onDisableLongPress])
+
 
   // Use clickout side to close volume
-
   useOnClickOutside([rangeVolumeRef, buttonVolumeRef], () => {
     if(isOpenVolume) setIsOpenVolume(false);
   })
@@ -218,10 +236,11 @@ function VideoPlayer({ file, className }: VideoProps) {
       <div className={cn('absolute inset-0 bg-black/20 pointer-events-none duration-500', (isPlaying || isFullScreen) ? 'opacity-0' : '')}></div>
 
       {/* Actions */}
-      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-between p-1 px-2 bg-black/40 duration-500 gap-2 md:rounded-xl rounded-2xl', isFullScreen ? 'p-2' : '', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
+      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-between p-1 px-2  duration-500 gap-2 md:rounded-xl rounded-2xl bg-black/40', isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
+      ref={actionMenuRef}
       onClick={(e)=>{e.stopPropagation()}}>
-        <span className="text-sm text-white">{formatVideoTimer}</span>
-        <div className='flex-1 mx-2 py-2 relative' ref={durationBarRef}>
+        <span className={cn('md:block hidden text-sm text-white', isFullScreen && 'block')}>{formatVideoTimer}</span>
+        <div className={cn('flex-1 mx-2 py-2 relative md:block hidden', isFullScreen && 'block')} ref={durationBarRef}>
           <Range
             step={0.01}
             min={0}
@@ -265,7 +284,7 @@ function VideoPlayer({ file, className }: VideoProps) {
         </div>
         <DropdownMenu open={isOpenVolume}>
           <DropdownMenuTrigger>
-            <div ref={buttonVolumeRef}>
+            <div ref={buttonVolumeRef} className={cn('md:block hidden', isFullScreen && 'block')}>
               <ButtonVolume 
                 isFullScreen={isFullScreen}
                 isOpenVolume={isOpenVolume}
