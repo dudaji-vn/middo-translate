@@ -184,8 +184,7 @@ const DesignScriptChatFlow = ({
     errors?.chatFlow?.message ||
     errors?.chatFlow?.root?.message;
 
-  const displayNodes = useMemo(() => {
-    if (!viewOnly) return watch(FLOW_KEYS.NODES);
+  const viewOnlyNodes = useMemo(() => {
     return nodes.map((node: FlowNode) => ({
       ...node,
       data: {
@@ -193,7 +192,7 @@ const DesignScriptChatFlow = ({
         readonly: true,
       },
     }));
-  }, [viewOnly, watch]);
+  }, [nodes]);
 
   return (
     <>
@@ -219,7 +218,7 @@ const DesignScriptChatFlow = ({
       <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200">
         <Form {...control}>
           <ReactFlow
-            nodes={displayNodes}
+            nodes={viewOnly ? viewOnlyNodes : nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}

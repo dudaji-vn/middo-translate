@@ -180,7 +180,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                   </span>
                   <Globe
                     size={11}
-                    className={cn('text-primary-500-main', {
+                    className={cn('ml-1 text-primary-500-main', {
                       hidden: !room.fromDomain,
                     })}
                   />
