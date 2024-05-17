@@ -167,12 +167,12 @@ export default function CreateExtension({
 
       await createExtension(String(params?.spaceId), payload)
         .then((res) => {
-          router.push(pathname + '?tab=extension');
-          toast.success('Create extension success!');
+          toast.success(`${isEditing ? 'Edit' : 'Create'} extension success!`);
         })
         .catch((err) => {
           toast.error(
-            err?.response?.data?.message || 'Create extension failed!',
+            err?.response?.data?.message ||
+              `${isEditing ? 'Edit' : 'Create'}  extension failed!`,
           );
         });
       router.push(pathname + '?tab=extension');
@@ -224,8 +224,8 @@ export default function CreateExtension({
           </StepWrapper>
           <StepWrapper
             value="1"
-            canNext={watch('custom.firstMessage').length > 0}
-            canPrev={watch('custom.firstMessage').length > 0}
+            canNext={watch('custom.firstMessage')?.length > 0}
+            canPrev={watch('custom.firstMessage')?.length > 0}
             onNextStep={() => setTabValue(2)}
             onPrevStep={() => setTabValue(0)}
             nextProps={{
