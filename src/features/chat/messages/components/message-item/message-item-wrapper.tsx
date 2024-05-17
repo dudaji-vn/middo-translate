@@ -35,6 +35,8 @@ import { actionItems, useMessageActions } from '../message-actions';
 import { MessageEmojiPicker } from '../message-emoji-picker';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
+import { listenEvent } from '@/features/call/utils/custom-event.util';
+import { CUSTOM_EVENTS } from '@/configs/custom-event';
 
 const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
 
@@ -150,7 +152,7 @@ export const MessageItemWrapper = ({
           case 'reply':
             return !discussionDisabled;
           case 'download':
-            return message.type === 'media' && message?.media?.[0].type === 'video';
+            return message.type === 'media' && (message?.media?.[0].type === 'video' || message?.media?.[0].type === 'document');
           case 'edit':
             const timeDiff = moment().diff(message.createdAt);
             return (
@@ -264,21 +266,39 @@ const MobileWrapper = ({
     setValue: changeShowEmoji,
     setTrue: openEmoji,
   } = useBoolean(false);
+  const {
+    value: isDisableLongPress,
+    setValue: changeDisableLongPress,
+  } = useBoolean(false);
+
   const { mutateAsync } = useReactMessage();
   const handleEmojiClick = async (emoji: string) => {
     await mutateAsync({ id: message._id, emoji });
     hideEmoji();
   };
-
+  // console.log('message', message);
   const translatedFrom = useTranslatedFromText({
     languageCode: message.language,
   });
+
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    if(message.type === 'media' && (message?.media?.[0].type === 'video' )) {
+      cleanup = listenEvent(CUSTOM_EVENTS.MESSAGE.CHANGE_ALLOW_LONG_PRESS + message?.media?.[0]?.url, (event: {detail: boolean}) => {
+        changeDisableLongPress(event.detail);
+      });
+    }
+    return () => {
+      cleanup && cleanup();
+    };
+  }, [message._id, message?.media, message.type]);
 
   return (
     <>
       <LongPressMenu
         isOpen={value}
         hasBackdrop={false}
+        isDisabled={isDisableLongPress}
         onOpenChange={(isOpen) => {
           setValue(isOpen);
           setActive(isOpen);

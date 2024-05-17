@@ -223,7 +223,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                             />
                           )}
                           {message.media[0].type === 'video' && (
-                            <MessageItemVideo file={message.media[0]} />
+                            <MessageItemVideo file={message.media[0]}/>
                           )}
                         </Fragment>
                       )}
