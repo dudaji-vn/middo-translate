@@ -234,12 +234,14 @@ export const InputCropImage = forwardRef<
       </div>
       <div className="flex items-center justify-end gap-3">
         <AlertDialogCancel
-          onClick={removeDragData}
+          onClick={() => {
+            reset();
+          }}
           className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
         >
-          <p>{t("COMMON.CANCEL")}</p>
+          <p>{t('COMMON.CANCEL')}</p>
         </AlertDialogCancel>
-        <Button shape="square" disabled={isLoading} type="submit" {...saveBtnProps}>
+        <Button size="md" shape="square" disabled={isLoading} type="submit" {...saveBtnProps}>
           {t("COMMON.SAVE")}
         </Button>
       </div>

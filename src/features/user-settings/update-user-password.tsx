@@ -139,16 +139,22 @@ export default function UpdateUserPassword() {
               />
               <AlertError errorMessage={errorMessage} />
               <div className="mt-6 flex items-center justify-end">
-                <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
+                <AlertDialogCancel
+                  onClick={() => {
+                    reset();
+                  }}
+                  className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
+                >
                   <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>
-                <button
+                <Button
+                  size="md"
+                  shape="square"
                   disabled={isSubmitting}
-                  className="rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background disabled:bg-stone-300 disabled:hover:opacity-100 md:max-w-[320px] md:hover:opacity-80"
                   type="submit"
                 >
                   {t('COMMON.SAVE')}
-                </button>
+                </Button>
               </div>
             </form>
           </Form>

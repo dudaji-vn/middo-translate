@@ -146,12 +146,12 @@ export default function Landing() {
               className="mt-8"
               onClick={downloadApp}
             >
-              Download App
-              {system === 'mac' ? <div className='ml-2 relative bottom-[2px]'>
+              {system === 'mac' ? <div className='mr-2 relative bottom-[2px]'>
                 <Image  src="/landing-page/apple.svg" width="20" height="20" alt='Apple' />
-              </div> : <div className='ml-2'>
+              </div> : <div className='mr-2'>
                 <Image  src="/landing-page/window.svg" width="20" height="20" alt='Window' />
               </div>}
+              Download App
             </Button>}
         </div>
       </div>
