@@ -232,14 +232,15 @@ function VideoPlayer({ file, className }: VideoProps) {
               setCurrentTime(videoRef.current!.currentTime);
             }}
             renderTrack={({ props, children }) => (
-              <div {...props} className={cn("h-1 w-full rounded bg-neutral-500 relative")}>
-                <div className="left-0 top-0 bottom-0 bg-primary absolute rounded" style={{width: `${(currentTime/videoDuration) * 100}%`}}/>
+              <div {...props} className={cn("w-full h-4 rounded relative")}>
+                <div className="left-0 top-1/2 -translate-y-1/2 h-1 bg-neutral-500 absolute rounded w-full"/>
+                <div className="left-0 top-1/2 -translate-y-1/2 h-1 bg-primary absolute rounded " style={{width: `${(currentTime/videoDuration) * 100}%`}}/>
                 {children}
               </div>
             )}
             renderThumb={({ props }) => (
               <div
-                {...props}
+                {...props}  
                 className="h-4 w-4 rounded-full bg-white"
                 key="1"
               ></div>
