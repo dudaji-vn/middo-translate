@@ -3,6 +3,7 @@ import HelpDeskConversation from './_components/help-desk-conversation/help-desk
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import ExpiredRoom from './_components/expired-room/expired-room';
 
 const HelpDeskConversationPage = async ({
   params: { businessId, slugs },
@@ -21,7 +22,11 @@ const HelpDeskConversationPage = async ({
   const room = await businessAPI.getChatRoom(roomId, anonymousUserId);
 
   if (!room || !room?._id || !anonymousUserId) {
-    redirect(`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${businessId}`);
+    return (
+      <ExpiredRoom
+        redirectPath={`${ROUTE_NAMES.HELPDESK_CONVERSATION}/${businessId}`}
+      />
+    );
   }
   const anonymousUser = room.participants.find(
     (p: { _id: string }) => p._id === anonymousUserId,
