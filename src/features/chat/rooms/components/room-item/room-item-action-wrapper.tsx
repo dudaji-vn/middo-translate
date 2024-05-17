@@ -198,7 +198,7 @@ const DesktopWrapper = ({
   return (
     <div className="group relative flex-1">
       {children}
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
+      <div className={cn('absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100', isOpen && 'opacity-100')}>
         <DropdownMenu open={isOpen} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon
@@ -217,7 +217,7 @@ const DesktopWrapper = ({
               }
               return (
                 <DropdownMenuItem
-                  className="flex items-center"
+                  className="flex items-center active:bg-primary-200"
                   key={item.action}
                   disabled={item.disabled}
                   onClick={item.onAction}

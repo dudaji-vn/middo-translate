@@ -291,7 +291,7 @@ const MobileWrapper = ({
     return () => {
       cleanup && cleanup();
     };
-  }, [message._id, message?.media, message.type]);
+  }, [changeDisableLongPress, message._id, message?.media, message.type]);
 
   return (
     <>
