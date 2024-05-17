@@ -2,30 +2,40 @@ import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { useDeleteScript } from '@/features/conversation-scripts/hooks/use-delete-script';
 import { TChatScript } from '@/types/scripts.type';
 import { useParams } from 'next/navigation';
-import React from 'react';
+import React, { useMemo } from 'react';
+import toast from 'react-hot-toast';
 
 const DeleteScriptModal = ({
-  script,
   onclose,
   open,
+  scriptIds = [],
 }: {
-  script?: TChatScript;
   open: boolean;
   onclose: () => void;
+  scriptIds?: string[];
 }) => {
   const spaceId = useParams()?.spaceId as string;
+  const { title, description, idsToDelete } = useMemo(() => {
+    return {
+      title: 'Delete selected scripts',
+      description: `Are you sure you want to delete ${scriptIds.length} script${scriptIds.length > 1 ? 's' : ''}?`,
+      idsToDelete: scriptIds,
+    };
+  }, [scriptIds]);
+
   const { mutateAsync, isLoading } = useDeleteScript();
   const onSubmit = async () => {
-    if (!script) return;
     try {
-      await mutateAsync({ spaceId, scriptId: script?._id });
+      await mutateAsync({ spaceId, scriptIds: idsToDelete });
       onclose();
-    } catch (error) {}
+    } catch (error) {
+      toast.error(`Failed to ${title.toLowerCase()}`);
+    }
   };
   return (
     <ConfirmAlertModal
-      title={`Delete script`}
-      description={`Are you sure you want to delete the script ${script?.name}?`}
+      title={title}
+      description={description}
       open={open}
       onConfirm={onSubmit}
       onCancel={onclose}

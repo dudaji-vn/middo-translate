@@ -38,6 +38,7 @@ export interface DataTableProps<TData, TValue> {
   dividerProps?: React.HTMLAttributes<HTMLDivElement>;
 
   tableInitialParams?: Partial<TableOptions<TData>>;
+  customEmpty?: React.ReactNode;
 }
 interface SkeletonRowProps {
   columns: number;
@@ -77,6 +78,7 @@ export function DataTable<TData, TValue>({
   loading,
   skeletonsRows,
   tableInitialParams,
+  customEmpty,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -156,10 +158,13 @@ export function DataTable<TData, TValue>({
           <TableRow className="border-none" {...rowProps}>
             <TableCell
               colSpan={columns.length}
-              className="h-24 text-center"
               {...cellProps}
+              className={cn(
+                cellProps?.className,
+                'mx-auto  border-none  text-center',
+              )}
             >
-              No results.
+              {customEmpty || 'No results found'}
             </TableCell>
           </TableRow>
         )}

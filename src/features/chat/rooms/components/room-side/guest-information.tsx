@@ -81,7 +81,7 @@ const GuestInformation = (guestData: GuestInformation) => {
             <Typography className="capitalize text-neutral-600">
               {mappedLabel[field]}
             </Typography>
-            <Typography className="flex flex-row items-center gap-2 font-medium capitalize text-neutral-800">
+            <Typography className="flex flex-row items-center gap-2 font-medium text-neutral-800">
               {guestData[field]}
               {editable && <Pen size={20} />}
             </Typography>

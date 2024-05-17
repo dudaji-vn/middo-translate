@@ -58,11 +58,7 @@ export const createOrEditTag = (data: {
   tagId?: string;
   spaceId: string;
 }) => {
-  return put(
-    `help-desk/spaces/${data.spaceId}/tags` +
-      (data.tagId ? `/${data.tagId}` : ''),
-    data,
-  );
+  return put(`help-desk/spaces/${data.spaceId}/tags`, data);
 };
 
 export const deleteTag = ({
