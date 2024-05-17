@@ -35,7 +35,6 @@ const MANAGE_SCRIPTS_ROLES: Record<ERoleActions, Array<ESPaceRoles>> = {
 const ScriptsList = ({
   titleProps,
   headerProps,
-  enableSelectAll = true,
   tableProps,
   scripts,
   enableDeletion = true,
@@ -46,7 +45,6 @@ const ScriptsList = ({
   titleProps?: React.HTMLProps<HTMLSpanElement>;
   headerProps?: Partial<ScriptsHeaderProps>;
   tableProps?: Partial<DataTableProps<ChatScript, any>>;
-  enableSelectAll?: boolean;
   scripts: ChatScript[];
   search: string;
   onSearchChange: (value: string) => void;
@@ -121,13 +119,17 @@ const ScriptsList = ({
             state: {
               rowSelection,
             },
+            enableRowSelection(row) {
+              return !row.original?.isUsing;
+            },
           }}
           columns={scriptsColumns({
             onDelete,
             onEdit,
             onView,
-            enableSelectAll,
             enableDeletion,
+            singleRowSelection:
+              !tableProps?.tableInitialParams?.enableMultiRowSelection,
           })}
           data={scripts}
           tableHeadProps={{

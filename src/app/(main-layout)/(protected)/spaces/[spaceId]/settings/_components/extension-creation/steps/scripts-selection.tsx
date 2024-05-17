@@ -61,7 +61,6 @@ const ScriptsSelection = () => {
           getRowId: (row) => row._id,
         },
       }}
-      enableSelectAll={false}
       enableDeletion={false}
       scripts={data?.items || []}
       search={search}

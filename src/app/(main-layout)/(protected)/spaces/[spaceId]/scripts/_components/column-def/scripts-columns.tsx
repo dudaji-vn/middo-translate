@@ -6,11 +6,14 @@ import { Edge } from 'reactflow';
 import { FlowNode } from '../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { Button } from '@/components/actions';
 import { Eye, Pen, Trash2 } from 'lucide-react';
-import { Avatar } from '@/components/data-display';
+import { Avatar, Label } from '@/components/data-display';
 import moment from 'moment';
 import { Checkbox } from '@/components/form/checkbox';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Badge } from '@/components/ui/badge';
+import { Radio } from '@radix-ui/react-radio-group';
+import { RadioGroupItem } from '@/components/data-entry';
+import { cn } from '@/utils/cn';
 
 export type ChatScript = {
   _id: string;
@@ -30,42 +33,52 @@ export const scriptsColumns = ({
   onView,
   onDelete,
   onEdit,
-  enableSelectAll = true,
   enableDeletion = true,
+  singleRowSelection = false,
 }: {
   onView: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
-  enableSelectAll?: boolean;
   enableDeletion?: boolean;
+  singleRowSelection?: boolean;
 }) =>
   [
     {
       id: 'select',
       header: ({ table }) => {
-        if (enableSelectAll) {
-          return (
-            <Checkbox
-              checked={
-                table.getIsAllPageRowsSelected() ||
-                (table.getIsSomePageRowsSelected() && 'indeterminate')
-              }
-              onCheckedChange={(value) =>
-                table.toggleAllPageRowsSelected(!!value)
-              }
-              aria-label="Select all"
-            />
-          );
+        if (singleRowSelection) {
+          return null;
         }
-        return '';
+        return (
+          <Checkbox
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && 'indeterminate')
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        );
       },
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      ),
+      cell: ({ row }) => {
+        const selectAble = row?.getCanSelect();
+        return (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+            className={cn(
+              selectAble
+                ? 'cursor-pointer'
+                : 'cursor-not-allowed border-neutral-300',
+              singleRowSelection ? 'rounded-full' : 'block',
+            )}
+            disabled={!selectAble}
+          />
+        );
+      },
       enableSorting: false,
       enableHiding: false,
     },
@@ -79,7 +92,7 @@ export const scriptsColumns = ({
             {props?.row?.original?.isUsing && (
               <Badge
                 variant="outline"
-                className="text-xs text-success-700 border-success-500-main "
+                className="border-success-500-main text-xs text-success-700 "
               >
                 In Use
               </Badge>
@@ -141,7 +154,6 @@ export const scriptsColumns = ({
       accessorKey: '_id',
       header: 'Actions',
       cell(props) {
-        console.log('p', props.row.original);
         return (
           <td className="flex gap-2" {...props}>
             <Tooltip
