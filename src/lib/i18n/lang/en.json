@@ -1,5 +1,7 @@
 {
   "COMMON": {
+    "OFFLINE": "Offline",
+    "ONLINE": "Online",
     "INPUT_YOUR_TEXT_HERE": "Enter your text here",
     "PLEASE_SPEAK": "Please speak",
     "CLEAR_ALL": "Clear all",

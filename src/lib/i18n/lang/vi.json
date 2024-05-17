@@ -1,5 +1,7 @@
 {
   "COMMON": {
+    "OFFLINE": "Ngoại tuyến",
+    "ONLINE": "Trực tuyến",
     "INPUT_YOUR_TEXT_HERE": "Nhập văn bản của bạn ở đây",
     "PLEASE_SPEAK": "Xin hãy nói",
     "CLEAR_ALL": "Xóa tất cả",

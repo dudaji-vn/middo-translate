@@ -1,5 +1,7 @@
 {
   "COMMON": {
+    "OFFLINE": "오프라인",
+    "ONLINE": "온라인",
     "INPUT_YOUR_TEXT_HERE": "여기에 텍스트 입력",
     "PLEASE_SPEAK": "말씀해주세요",
     "CLEAR_ALL": "모두 지우기",
