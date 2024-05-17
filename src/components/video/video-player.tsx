@@ -1,12 +1,13 @@
 import { Media } from "@/types";
 import { cn } from "@/utils/cn";
 import download from "downloadjs";
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../actions";
 import { DownloadIcon, Maximize2Icon, Pause, PlayIcon, Volume1Icon, Volume2, Volume2Icon, VolumeX, VolumeXIcon, X } from "lucide-react";
 import { Direction, Range } from "react-range";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../data-display";
 import { useOnClickOutside } from "usehooks-ts";
+import { useMediaSettingStore } from "@/stores/media-setting.store";
 
 interface VideoProps {
     file: Media;
@@ -20,26 +21,25 @@ function VideoPlayer({ file, className }: VideoProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const durationBarRef = useRef<HTMLDivElement>(null);
   const rangeVolumeRef = useRef<HTMLDivElement>(null);
+  const buttonVolumeRef = useRef<HTMLDivElement>(null);
+
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoDuration, setVideoDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [isHoverDurationBar, setIsHoverDurationBar] = useState(false);
   const [thumbnailLeft, setThumbnailLeft] = useState<number>(0);
   const [isOpenVolume, setIsOpenVolume] = useState(false);
-  const [volume, setVolume] = useState(1);
   const [isShowActionBar, setIsShowActionBar] = useState(false);
+  const {volume, setVolume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
 
-
-  const toggleVideoPlay = (e: any) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const toggleVideoPlay = useCallback(() => {
     if (isPlaying) {
       videoRef.current?.pause();
     } else {
       videoRef.current?.play();
     }
-    setIsPlaying(!isPlaying);
-  }
+    setIsPlaying(prev=>!prev);
+  }, [isPlaying]);
 
   const downloadFile = () => {
     var x=new XMLHttpRequest();
@@ -77,18 +77,23 @@ function VideoPlayer({ file, className }: VideoProps) {
       videoRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
     }
   }, [])
-
+  
   useEffect(() => {
+    if(!isFullScreen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.code === 'Escape') {
         setIsFullScreen(false);
+      }
+      if(e.code === 'Space') {
+        e.preventDefault();
+        toggleVideoPlay();
       }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [])
+  }, [isFullScreen, toggleVideoPlay])
 
   // Add event listener for duration bar to get time and get thumbnail
   useEffect(() => {
@@ -163,13 +168,14 @@ function VideoPlayer({ file, className }: VideoProps) {
 
   // Use clickout side to close volume
 
-  useOnClickOutside(rangeVolumeRef, () => {
-    setIsOpenVolume(false);
+  useOnClickOutside([rangeVolumeRef, buttonVolumeRef], () => {
+    if(isOpenVolume) setIsOpenVolume(false);
   })
 
   const formatVideoTimer = useMemo(() => {
     return new Date(currentTime * 1000).toISOString().substr(14, 5);
   }, [currentTime]);
+
 
   return (
     <div
@@ -187,13 +193,21 @@ function VideoPlayer({ file, className }: VideoProps) {
         className={cn("h-full w-full")}
       />
       {/* Button play */}
-      <div className='absolute group inset-3 flex items-center justify-center z-10' onClick={toggleVideoPlay} onDoubleClick={()=>setIsFullScreen(prev=>!prev)}>
+      <div className='absolute group inset-3 flex items-center justify-center z-10' onClick={(e)=>{
+        e.stopPropagation();
+        e.preventDefault();
+        toggleVideoPlay();
+      }} onDoubleClick={()=>setIsFullScreen(prev=>!prev)}>
         <Button.Icon
           variant={'default'}
           color={'default'}
           shape={'default'}
           size={isFullScreen ? 'md' : 'sm'}
-          className={cn('shadow-2', isPlaying ? 'opacity-0' : '', isPlaying && isFullScreen && '!opacity-0')}
+          className={cn(
+            'shadow-2', 
+            isPlaying ? 'opacity-0' : '', 
+            isPlaying && isFullScreen && '!opacity-0'
+          )}
         >
           {
             isPlaying ? <Pause /> : <PlayIcon />
@@ -250,62 +264,25 @@ function VideoPlayer({ file, className }: VideoProps) {
         </div>
         <DropdownMenu open={isOpenVolume}>
           <DropdownMenuTrigger>
-            <Button.Icon
-              variant={'default'}
-              color={'default'}
-              size={isFullScreen ? 'xs' : 'ss'}
-              shape={'default'}
-              onClick={() => {
-                if(isOpenVolume && volume > 0) {
-                  setVolume(0);
-                } else if(isOpenVolume && volume == 0) {
-                  setVolume(1);
-                } else {
-                  setIsOpenVolume(true);
-                }
-              }}
-            >
-              {volume == 0 && <VolumeXIcon />}
-              {(volume > 0 && volume < 0.5 && <Volume1Icon />)}
-              {(volume >= 0.5 && <Volume2Icon />)}
-            </Button.Icon>
+            <div ref={buttonVolumeRef}>
+              <ButtonVolume 
+                isFullScreen={isFullScreen}
+                isOpenVolume={isOpenVolume}
+                setIsOpenVolume={setIsOpenVolume}/>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="center"
             side="top"
             className="bg-black/20 !min-w-1 px-[10px] py-4 max-w-6 border-none flex item-center justify-center z-[52]"
             onClick={() => setIsOpenVolume(false)}
-            
           >
-            {/* Range Volume */}
-              <div ref={rangeVolumeRef}>
-                <Range
-                  direction={Direction.Up}
-                  step={0.01}
-                  min={0}
-                  max={1}
-                  values={[volume]}
-                  onChange={(values) => {
-                    setVolume(values[0]);
-                  }}
-                  renderTrack={({ props, children }) => (
-                    <div {...props} className={cn("h-[80px] w-1 rounded bg-neutral-500 relative")}>
-                      <div className="left-0 right-0 bottom-0 bg-primary absolute rounded" style={{height: `${volume * 100}%`}}/>
-                      {children}
-                    </div>
-                  )}
-                  renderThumb={({ props }) => (
-                    <div
-                      {...props}
-                      className="h-4 w-4 rounded-full bg-white"
-                      key="1"
-                    ></div>
-                  )}
-                />
-              </div>
-              
+            <div ref={rangeVolumeRef}>
+              <RangeVolume />
+            </div>
           </DropdownMenuContent>
         </DropdownMenu>
+        {/* Download */}
         <Button.Icon
           variant={'default'}
           color={'default'}
@@ -316,6 +293,7 @@ function VideoPlayer({ file, className }: VideoProps) {
         >
           <DownloadIcon />
         </Button.Icon>
+        {/* Full Screen */}
         <Button.Icon
           variant={'default'}
           color={'default'}
@@ -326,14 +304,76 @@ function VideoPlayer({ file, className }: VideoProps) {
           {isFullScreen ? <X /> : <Maximize2Icon />}
         </Button.Icon>
       </div>
-      {/* Button expand */}
-
     </div>
   );
 };
 
+interface ButtonVolumeProps {
+  isFullScreen: boolean;
+  isOpenVolume: boolean;
+  setIsOpenVolume: (value: boolean) => void;
+}
+const ButtonVolume = memo(({
+  isFullScreen,
+  isOpenVolume,
+  setIsOpenVolume
+} : ButtonVolumeProps) => {
+  const {volume, setVolume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
 
+  const onClickVolume = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if(!isOpenVolume) {
+      setIsOpenVolume(true);
+      return;
+    }
+    if(isOpenVolume && volume > 0) {
+      setVolume(0);
+    } else if(isOpenVolume && volume == 0) {
+      setVolume(1);
+    }
+  }
+  return <Button.Icon
+    variant={'default'}
+    color={'default'}
+    size={isFullScreen ? 'xs' : 'ss'}
+    shape={'default'}
+    onClick={onClickVolume}
+  >
+    {volume == 0 && <VolumeXIcon />}
+    {(volume > 0 && volume < 0.5 && <Volume1Icon />)}
+    {(volume >= 0.5 && <Volume2Icon />)}
+  </Button.Icon>
+})
+ButtonVolume.displayName = 'ButtonVolume';
 
+const RangeVolume = memo(() => {
+  const {volume, setVolume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
+  return <Range
+    direction={Direction.Up}
+    step={0.01}
+    min={0}
+    max={1}
+    values={[volume]}
+    onChange={(values) => {
+      setVolume(values[0]);
+    }}
+    renderTrack={({ props, children }) => (
+      <div {...props} className={cn("h-[80px] w-1 rounded bg-neutral-500 relative")}>
+        <div className="left-0 right-0 bottom-0 bg-primary absolute rounded" style={{height: `${volume * 100}%`}}/>
+        {children}
+      </div>
+    )}
+    renderThumb={({ props }) => (
+      <div
+        {...props}
+        className="h-4 w-4 rounded-full bg-white"
+        key="1"
+      ></div>
+    )}
+  />
+})
+RangeVolume.displayName = 'RangeVolume';
 
 
 export default memo(VideoPlayer);

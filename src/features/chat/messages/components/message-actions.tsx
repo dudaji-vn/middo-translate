@@ -131,7 +131,6 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
           x.open( "GET", media.url , true);
           x.responseType="blob";
           x.onload= function(e: any){
-            console.log('e', e);
             if(e?.target?.response) download(e?.target?.response, media.name, media.type);
           };
           x.send();
