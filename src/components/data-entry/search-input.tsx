@@ -18,7 +18,7 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 
-interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
   btnDisabled?: boolean;
   onClear?: () => void;
@@ -113,7 +113,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
 SearchInput.displayName = 'SearchInput';
 
 export interface SearchButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement> { }
+  extends ButtonHTMLAttributes<HTMLButtonElement> {}
 
 const SearchButton = forwardRef<HTMLButtonElement, SearchButtonProps>(
   ({ className, ...props }, ref) => {

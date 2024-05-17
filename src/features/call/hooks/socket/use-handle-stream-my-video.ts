@@ -71,8 +71,9 @@ export default function useHandleStreamMyVideo() {
             setTurnOnCamera(DEFAULT_USER_CALL_STATE.isTurnOnCamera);
             setTurnOnMic(DEFAULT_USER_CALL_STATE.isTurnOnMic);
         };
+    // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, room?._id, room?.roomId, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t, user?._id]);
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, room?._id, room?.roomId, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, user?._id]);
 
     // Add my stream to all participants
     useEffect(()=>{

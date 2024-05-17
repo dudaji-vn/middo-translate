@@ -20,7 +20,7 @@ export const MainLayout = forwardRef<HTMLDivElement, MainLayoutProps>(
         )}
       >
         {!isMobile && <Header />}
-        <div className="container-height overflow-y-auto">{props.children}</div>
+        <div className="container-height overflow-y-auto ">{props.children}</div>
       </div>
     );
   },

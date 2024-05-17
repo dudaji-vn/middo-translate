@@ -7,7 +7,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/feedback';
 
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { changePasswordUserService } from '@/services/user.service';
 import toast from 'react-hot-toast';
 import { use, useEffect, useState } from 'react';
@@ -99,12 +99,12 @@ export default function UpdateUserPassword() {
     <>
       {isSubmitting && <PageLoading />}
       <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger className='w-full flex items-center px-5 py-4 border-b border-b-[#F2F2F2] bg-white md:hover:bg-primary-100'>
-          <div className='relative bg-primary-200 rounded-xl !w-10 !h-10 flex items-center justify-center text-primary'>
+        <AlertDialogTrigger className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4 md:hover:bg-primary-100">
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
             <KeyRound size={20} />
           </div>
-          <span className="ml-4 block text-center text-base">
-          {t('ACCOUNT_SETTING.CHANGE_PASSWORD')}
+          <span className="ml-4 block text-center text-base font-medium">
+            {t('ACCOUNT_SETTING.CHANGE_PASSWORD')}
           </span>
         </AlertDialogTrigger>
         <AlertDialogContent>
@@ -139,16 +139,22 @@ export default function UpdateUserPassword() {
               />
               <AlertError errorMessage={errorMessage} />
               <div className="mt-6 flex items-center justify-end">
-                <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
+                <AlertDialogCancel
+                  onClick={() => {
+                    reset();
+                  }}
+                  className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
+                >
                   <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>
-                <button
+                <Button
+                  size="md"
+                  shape="square"
                   disabled={isSubmitting}
-                  className="rounded-full border border-transparent bg-primary px-8 py-4 font-semibold text-background active:!border-transparent active:!bg-shading active:!text-background disabled:bg-stone-300 disabled:hover:opacity-100 md:max-w-[320px] md:hover:opacity-80"
                   type="submit"
                 >
                   {t('COMMON.SAVE')}
-                </button>
+                </Button>
               </div>
             </form>
           </Form>

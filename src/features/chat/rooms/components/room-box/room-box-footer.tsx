@@ -18,6 +18,7 @@ import { useChatBox } from '../../contexts/chat-box-context';
 import { Message } from '@/features/chat/messages/types';
 import { CreateMessage } from '@/features/chat/messages/api';
 import { useMessageActions } from '@/features/chat/messages/components/message-actions';
+import { cn } from '@/utils/cn';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -148,9 +149,38 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       return true;
     }, [action, room._id, message?.room?._id]);
 
+    const isBlockedConversation = useMemo(() => {
+      const isConversationExpired = new Date(room.expiredAt || '') < new Date();
+      const isConversationEndedByVisitor =
+        room.lastMessage?.type === 'action' &&
+        room.lastMessage.action === 'leaveHelpDesk';
+      let isOtherUserDeleted = false;
+      if (!room.isGroup && !room.isHelpDesk) {
+        isOtherUserDeleted = room.participants.some(
+          (p) => p._id !== currentUser?._id && p.status === 'deleted',
+        );
+      }
+      return (
+        isConversationExpired ||
+        isConversationEndedByVisitor ||
+        isOtherUserDeleted
+      );
+    }, [
+      room.expiredAt,
+      room.lastMessage,
+      room.isGroup,
+      room.participants,
+      currentUser?._id,
+    ]);
+
     return (
-      <div className="relative w-full border-t p-2">
+      <div
+        className={cn('relative w-full border-t p-2', {
+          'bg-primary-100': isBlockedConversation,
+        })}
+      >
         <MessageEditor
+          isBlocked={isBlockedConversation}
           isEditing={isEdit}
           onEditSubmit={updateMessage}
           roomId={room._id}

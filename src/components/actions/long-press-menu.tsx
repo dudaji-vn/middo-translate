@@ -32,17 +32,21 @@ export const LongPressMenu = ({
   onPressed,
   onOpenChange,
   isOpen,
+  isDisabled
 }: PropsWithChildren & {
   isOpen?: boolean;
   hasBackdrop?: boolean;
   onPressed?: () => void;
   onOpenChange?: (isOpen: boolean) => void;
+  isDisabled?: boolean;
 }) => {
   const { setFalse, setTrue, value, setValue } = useBoolean(false);
   const bind = useLongPress((event) => {
+    if(isDisabled) return;
     onPressed && onPressed();
     setTrue();
     navigator?.vibrate(8);
+    console.log('long press');
     onOpenChange && onOpenChange(true);
   });
 

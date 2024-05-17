@@ -6,7 +6,7 @@ import { Button } from '@/components/form/button';
 import { InputField } from '@/components/form/Input-field';
 import { InputImage } from '@/components/form/input-image';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { addInfoUserService } from '@/services/auth.service';
 import { uploadImage } from '@/utils/upload-img';
@@ -109,9 +109,9 @@ export default function CreateNewAccount() {
   }, [name,setValue]);
 
   return (
-    <div className="flex flex-col items-center bg-background bg-cover bg-center bg-no-repeat md:!bg-[url('/bg_auth.png')]">
+    <div className="flex flex-col items-center">
       {loading && <PageLoading />}
-      <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6 md:shadow-2">
+      <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6">
         <h4 className="relative mb-8 pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
           {t('CREATE_ACCOUNT.TITLE')}
         </h4>

@@ -2,6 +2,7 @@ export enum ESPaceRoles {
   Owner = 'owner',
   Admin = 'admin',
   Member = 'member',
+  Viewer = 'viewer',
 }
 export enum ERoleActions {
   VIEW = 'view',

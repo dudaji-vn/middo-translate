@@ -1,4 +1,6 @@
+import { CALL_TYPE } from '@/features/call/constant/call-type';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import usePlayAudio from '@/features/call/hooks/use-play-audio';
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
@@ -15,10 +17,10 @@ export default function UserStatus({isForgeShow, participant}: UserStatusProps) 
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const layout = useVideoCallStore(state => state.layout);
   const notShow = layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen && !isForgeShow;
+  
   switch (participant.status) {
     case 'WAITING':
-      if(notShow) return null;
-      return <WaitingStatus/>
+      return <WaitingStatus notShow={notShow}/>
     case 'DECLINE':
       return <DeclineStatus participant={participant} notShow={notShow}/>
     default:
@@ -26,10 +28,22 @@ export default function UserStatus({isForgeShow, participant}: UserStatusProps) 
   }
 }
 
-const WaitingStatus = () => {
+const WaitingStatus = ({notShow} : {notShow: boolean}) => {
   const {t} = useTranslation('common')
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  const room = useVideoCallStore(state => state.room);
+  const { playAudio, stopAudio } = usePlayAudio('/mp3/incoming.mp3')
+  useEffect(()=> {
+    if(room?.type === CALL_TYPE.DIRECT) {
+      playAudio()
+    }
+    return () => {
+      stopAudio()
+    }
+  }, [playAudio, room?.type, stopAudio])
 
+  if(notShow) return null;
+  
   return (
     <div className="absolute inset-0">
       <div className={cn("absolute right-0 top-0 bg-primary-100 p-2 px-3 rounded-bl-xl flex items-center justify-end gap-2")}>

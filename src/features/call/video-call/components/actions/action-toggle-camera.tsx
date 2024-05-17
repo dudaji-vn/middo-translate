@@ -42,19 +42,18 @@ const ActionToggleCamera = ({
   }, [ipcRenderer, isElectron, onToggleCamera])
 
   return (
-    <Button.Icon
+    <Tooltip
+      title={isTurnOnCamera ? t('TOOL_TIP.TURN_OFF_CAMERA') : t('TOOL_TIP.TURN_ON_CAMERA')}
+      triggerItem={<Button.Icon
         variant="default"
         size="xs"
         color={isTurnOnCamera ? 'primary' : 'default'}
         disabled={isLoadingStream}
         onClick={onToggleCamera}
-    >
-      <Tooltip
-        title={isTurnOnCamera ? t('TOOL_TIP.TURN_OFF_CAMERA') : t('TOOL_TIP.TURN_ON_CAMERA')}
-        contentProps={{ className: 'text-black font-normal ' }}
-        triggerItem={isTurnOnCamera ? <Video /> : <VideoOff />}
-      />
-    </Button.Icon>
+      >
+        {isTurnOnCamera ? <Video /> : <VideoOff />}
+      </Button.Icon>
+    } />
   );
 };
 

@@ -14,29 +14,29 @@ import toast from 'react-hot-toast';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useNotificationStore } from '@/features/notification/store';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { usePlatformStore } from '@/features/platform/stores';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
   const { t } = useTranslation('common');
   const { isShowConfirmLogout, setShowConfirmLogout } = useAppStore();
-  const platform = usePlatformStore((state) => state.platform);
   const resetNotification = useNotificationStore((state) => state.reset);
-  const router = useRouter();
-
+  const { postMessage } = useReactNativePostMessage();
   const handleLogout = async () => {
     try {
+      postMessage({
+        type: 'Trigger',
+        data: {
+          event: 'sign-out',
+        },
+      });
       await signOutService();
       setDataAuth({ user: null, isAuthentication: false });
       resetNotification();
       toast.success(t('MESSAGE.SUCCESS.SIGN_OUT'));
       const { deleteFCMToken } = await import('@/lib/firebase');
       await deleteFCMToken();
-      if (platform === 'mobile') {
-        router.push('/sign-out');
-      }
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -50,7 +50,7 @@ export const ConfirmLogoutModal = () => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('MODAL.SIGN_OUT.TITLE')}</AlertDialogTitle>
-          <AlertDialogDescription className='mt-2 md:mt-0'>
+          <AlertDialogDescription className="mt-2 md:mt-0">
             {t('MODAL.SIGN_OUT.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

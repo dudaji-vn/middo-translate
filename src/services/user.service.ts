@@ -12,7 +12,10 @@ export const updateInfoGuestService = (data: {
   roomId?: Room['_id'];
   spaceId: string;
 }) => {
-  return patch('/help-desk/edit-client-profile', { ...data });
+  const { spaceId, ...rest } = data;
+  return patch(`/help-desk/spaces/${spaceId}/edit-client-profile`, {
+    ...rest,
+  });
 };
 
 export const changePasswordUserService = (data: {

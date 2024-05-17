@@ -10,6 +10,7 @@ type ItemProps = {
   className?: string;
   onClick?: () => void;
   danger?: boolean;
+  neutral?: boolean;
 };
 
 export const Item = ({
@@ -19,20 +20,26 @@ export const Item = ({
   className,
   onClick,
   danger,
+  neutral,
 }: ItemProps) => {
   return (
     <div
       className={cn(
         'flex w-full items-center gap-2 bg-white px-3 py-3',
         className,
-        onClick && 'cursor-pointer hover:bg-primary-100 active:bg-primary-200',
+        onClick &&
+          'cursor-pointer active:bg-primary-200 md:hover:bg-primary-100',
         danger && 'text-error',
-        onClick && danger && 'hover:bg-error-100/20 active:bg-error-200',
+        onClick && danger && 'active:bg-error-100/60 md:hover:bg-error-100/20',
+        neutral && 'text-neutral-800',
+        onClick &&
+          neutral &&
+          'bg-white active:bg-neutral-100/60 md:hover:bg-neutral-100/20',
       )}
       onClick={onClick}
     >
       {leftIcon && (
-        <IconWrapper danger={danger} size="sm">
+        <IconWrapper danger={danger} neutral={neutral} size="sm">
           {leftIcon}
         </IconWrapper>
       )}
@@ -69,6 +76,7 @@ type IconWrapperProps = {
   className?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'unset';
   danger?: boolean;
+  neutral?: boolean;
 };
 
 export const IconWrapper = ({
@@ -77,12 +85,14 @@ export const IconWrapper = ({
   className,
   size,
   danger,
+  neutral,
 }: IconWrapperProps) => {
   return (
     <div
       className={cn(
         'flex size-10 items-center justify-center rounded-xl bg-primary-100 text-primary',
         danger && 'bg-error-100 text-error',
+        neutral && 'bg-neutral-50 text-neutral-800',
       )}
     >
       {Children.map(children, (child) => {

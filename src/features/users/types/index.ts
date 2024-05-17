@@ -5,7 +5,8 @@ type UserStatus =
   | 'banned'
   | 'unset'
   | 'inactive'
-  | 'anonymous';
+  | 'anonymous'
+  | 'deleted';
 export type User = {
   _id: string;
   name: string;
@@ -14,4 +15,5 @@ export type User = {
   language: string;
   status: UserStatus;
   phoneNumber?: string;
+  username: string;
 } & BaseEntity;

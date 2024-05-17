@@ -6,11 +6,11 @@ import {
   AlertDialogContent,
   AlertDialogTrigger,
 } from '@/components/feedback';
-import { Button } from '@/components/actions'
+import { Button } from '@/components/actions';
 import { AlertError } from '@/components/alert/alert-error';
 import { UserRound } from 'lucide-react';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
-import { PageLoading } from '@/components/loading/page-loading';
+import { PageLoading } from '@/components/feedback';
 import { updateInforSchema as schema } from '@/configs/yup-form';
 import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
@@ -36,6 +36,7 @@ export default function UpdateUserInfo() {
     defaultValues: {
       name: user?.name || '',
       language: user?.language || '',
+      username: user?.username || '',
     },
     resolver: zodResolver(
       z
@@ -46,6 +47,13 @@ export default function UpdateUserInfo() {
           language: z.string().min(1, {
             message: t('MESSAGE.ERROR.REQUIRED'),
           }),
+          username: z
+            .string()
+            .min(3, { message: t('MESSAGE.ERROR.USERNAME_MIN') })
+            .max(15, { message: t('MESSAGE.ERROR.USERNAME_MAX') })
+            .regex(/^[a-z0-9_]+$/, {
+              message: t('MESSAGE.ERROR.USERNAME_PATTERN'),
+            }),
         })
         .optional(),
     ),
@@ -56,21 +64,33 @@ export default function UpdateUserInfo() {
     handleSubmit,
     trigger,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    reset,
+    formState: { errors, isValid, isSubmitting, isDirty },
   } = form;
-  const { name, language } = watch();
+  const { name, language, username } = watch();
   const submit = async (values: z.infer<typeof schema>) => {
     trigger();
     if (!isValid) return;
-    if (name == user?.name && language == user?.language) return;
+    if (
+      name == user?.name &&
+      language == user?.language &&
+      username == user?.language
+    )
+      return;
     try {
       setLoading(true);
-      let res = await updateInfoUserService({ name: name.trim(), language });
+      let res = await updateInfoUserService({
+        name: name.trim(),
+        language,
+        username,
+      });
+      console.log(res.data);
       setDataAuth({
         user: {
           ...user,
           name: res.data.name,
           language: res.data.language,
+          username: res.data.username,
         },
       });
       toast.success(t('MESSAGE.SUCCESS.PROFILE_UPDATED'));
@@ -100,11 +120,11 @@ export default function UpdateUserInfo() {
     <>
       {loading && <PageLoading />}
       <AlertDialog open={open} onOpenChange={onModalChange}>
-        <AlertDialogTrigger className='w-full flex items-center px-5 py-4 border-b border-b-[#F2F2F2] bg-white md:hover:bg-primary-100'>
-          <div className='relative bg-primary-200 rounded-xl !w-10 !h-10 flex items-center justify-center text-primary'>
+        <AlertDialogTrigger className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4 md:hover:bg-primary-100">
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
             <UserRound size={20} />
           </div>
-          <span className="ml-4 block text-center text-base">
+          <span className="ml-4 block text-center text-base font-medium">
             {t('ACCOUNT_SETTING.PROFILE')}
           </span>
         </AlertDialogTrigger>
@@ -133,6 +153,25 @@ export default function UpdateUserInfo() {
                   },
                 }}
               />
+              <RHFInputField
+                name="username"
+                formLabel={t('COMMON.USERNAME')}
+                inputProps={{
+                  placeholder: t('COMMON.USERNAME_PLACEHOLDER'),
+                  suffix: (
+                    <span className="text-sm text-gray-400">{`${username?.length}/15`}</span>
+                  ),
+                  onKeyDown: (e) => {
+                    if (
+                      name?.length >= 60 &&
+                      e.key !== 'Backspace' &&
+                      e.key !== 'Delete'
+                    ) {
+                      e.preventDefault();
+                    }
+                  },
+                }}
+              />
               <InputSelectLanguage
                 className="mt-5"
                 field="language"
@@ -143,14 +182,21 @@ export default function UpdateUserInfo() {
               />
               <AlertError errorMessage={errorMessage}></AlertError>
               <div className="mt-6 flex items-center justify-end">
-                <AlertDialogCancel className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent">
+                <AlertDialogCancel
+                  onClick={() => {
+                    reset();
+                  }}
+                  className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
+                >
                   <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>
                 <Button
+                  size="md"
                   shape="square"
                   disabled={
                     (user.name == watch().name &&
-                      user.language == watch().language) ||
+                      user.language == watch().language &&
+                      user.username == watch().username) ||
                     isSubmitting
                   }
                   type="submit"

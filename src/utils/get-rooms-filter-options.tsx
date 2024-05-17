@@ -8,6 +8,8 @@ import { Globe } from 'lucide-react';
 import { CircleFlag } from 'react-circle-flags';
 import { getContrastingTextColor } from './color-generator';
 import { getCountryCode } from './language-fn';
+import { SpaceInboxFilterState } from '@/stores/space-inbox-filter.store';
+import { isEmpty } from 'lodash';
 
 export const getRoomsFilterOptionsFromSpace = (data: TSpace) => {
   return {
@@ -27,8 +29,9 @@ export const getRoomsFilterOptionsFromSpace = (data: TSpace) => {
           />
         ),
       })) || [],
-    tags: data?.tags?.map(({ name, color }: TConversationTag) => ({
-      value: name,
+    tags: data?.tags?.map(({ _id, name, color }: TConversationTag) => ({
+      value: _id,
+      label: name,
       props: {
         style: {
           backgroundColor: color,
@@ -37,4 +40,25 @@ export const getRoomsFilterOptionsFromSpace = (data: TSpace) => {
       },
     })),
   };
+};
+
+export const convertRoomsFilterOptionsToString = (filterOptions?: {
+  domains?: string[];
+  countries?: string[];
+  tags?: string[];
+}) => {
+  if (!filterOptions) {
+    return {};
+  }
+  return Object.entries(filterOptions).reduce(
+    (acc, [key, value]) => {
+      if (isEmpty(value)) {
+        return acc;
+      } else {
+        acc[key] = value.join(',');
+        return acc;
+      }
+    },
+    {} as Record<string, string>,
+  );
 };

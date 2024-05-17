@@ -226,6 +226,10 @@
     @apply h-[0.7rem] w-[0.7rem];
   }
 
+  .platform-mobile ::-webkit-scrollbar {
+    @apply w-0;
+  }
+
   ::-webkit-scrollbar-thumb {
     border: 3px solid transparent;
   }
@@ -521,7 +525,7 @@ body {
 }
 
 .extension-container-height {
-  height: calc(100dvh - 104px);
+  height: calc(100dvh - 98px);
 }
 
 .platform-electron .container-height {

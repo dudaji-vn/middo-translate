@@ -31,12 +31,13 @@ export const CallMessage = ({
     subContent?: string;
   } => {
     if (call?.endTime) {
+
       return {
         content: t('CONVERSATION.CALL_END_AT', {time: moment(call.endTime).format('HH:mm')}),
         subContent: convertToTimeReadable(
-          call.createdAt as string,
+          call.startTime || call.endTime,
           call.endTime,
-        ),
+        ) || '0s',
         icon: (
           <PhoneIcon className="mr-2 inline-block h-4 w-4 rotate-[135deg]" />
         ),
@@ -69,7 +70,7 @@ export const CallMessage = ({
         >
           {icon}
           {content}
-          <div className="mt-1 text-sm font-light">{subContent}</div>
+          <div className="mt-1 text-sm font-light opacity-70">{subContent}</div>
         </span>
       </div>
     </div>

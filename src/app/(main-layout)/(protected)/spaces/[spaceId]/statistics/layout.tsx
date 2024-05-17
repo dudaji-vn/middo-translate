@@ -4,11 +4,9 @@ import ChartFilterDropdown from './_components/report/report-chart/chart-filter-
 
 const StatisticLayout = ({
   report,
-  clients,
   children,
 }: {
   report: JSX.Element;
-  clients: JSX.Element;
   children: JSX.Element;
 }) => {
   return (
@@ -20,7 +18,6 @@ const StatisticLayout = ({
         </Typography>
         {report}
       </section>
-      {clients}
     </main>
   );
 };

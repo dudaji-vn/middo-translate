@@ -31,7 +31,7 @@ function RHFFormItem({
     <FormItem className="space-y-2" {...formItemProps}>
       {formLabel && (
         <FormLabel
-        className="mb-1 ml-5 inline-block text-neutral-900 text-[1rem] font-normal"
+          className="inline-block text-[1rem] font-normal text-neutral-900"
           {...formLabelProps}
         >
           {formLabel}
@@ -46,10 +46,10 @@ function RHFFormItem({
           {description}
         </FormDescription>
       )}
-        <FormMessage
-          className="text-normal pl-4 text-left font-normal text-red-500"
-          {...formMessageProps}
-        />
+      <FormMessage
+        className="text-normal pl-4 text-left font-normal text-red-500"
+        {...formMessageProps}
+      />
     </FormItem>
   );
 }

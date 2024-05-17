@@ -1,5 +1,6 @@
 import {
   CopyIcon,
+  DownloadIcon,
   ForwardIcon,
   MessageSquareQuoteIcon,
   PenIcon,
@@ -16,6 +17,7 @@ import { usePinMessage } from '../hooks/use-pin-message';
 import { Message } from '../types';
 import { ForwardModal } from './forward-modal';
 import { MessageModalRemove } from './message-modal-remove';
+import download from 'downloadjs';
 
 type Action =
   | 'remove'
@@ -45,7 +47,11 @@ export const actionItems: ActionItem[] = [
     label: 'CONVERSATION.REPLY_IN_DISCUSSION',
     icon: <MessageSquareQuoteIcon />,
   },
-
+  {
+    action: 'download',
+    label: 'COMMON.DOWNLOAD',
+    icon: <DownloadIcon />,
+  },
   {
     action: 'edit',
     label: 'COMMON.EDIT',
@@ -121,14 +127,15 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
       case 'download':
         if (!message?.media) return;
         message.media.forEach((media) => {
-          const link = document.createElement('a');
-          link.href = media.url;
-          link.download = media.name || `file from ${NEXT_PUBLIC_NAME}`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          let x = new XMLHttpRequest();
+          x.open( "GET", media.url , true);
+          x.responseType="blob";
+          x.onload= function(e: any){
+            if(e?.target?.response) download(e?.target?.response, media.name, media.type);
+          };
+          x.send();
         });
-
+        break;
       default:
         setAction(action);
         setMessage(message);

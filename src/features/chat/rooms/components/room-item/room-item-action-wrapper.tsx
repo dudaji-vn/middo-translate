@@ -9,6 +9,7 @@ import {
   PropsWithChildren,
   cloneElement,
   forwardRef,
+  useCallback,
   useMemo,
   useState,
 } from 'react';
@@ -53,6 +54,8 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'leave',
   'delete',
   'none',
+  'archive',
+  'unarchive',
 ];
 
 const checkAllowedActions = ({
@@ -113,9 +116,19 @@ export const RoomItemActionWrapper = forwardRef<
       })
       .map((item) => ({
         ...item,
-        onAction: () => onAction(item.action, room._id),
+        onAction: () => onAction(item.action, room._id, isBusiness),
       }));
-  }, [actionItems, isMuted, onAction, room._id, room.isGroup, room.isPinned]);
+  }, [
+    actionItems,
+    businessConversationType,
+    isBusiness,
+    isMuted,
+    onAction,
+    room._id,
+    room.isGroup,
+    room.isPinned,
+    room.status,
+  ]);
 
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>
@@ -150,7 +163,7 @@ const MobileWrapper = ({
       >
         {items.map(({ renderItem, ...item }) => {
           if (renderItem) {
-            return renderItem({ item, room });
+            return renderItem({ item, room, setOpen: () => {} });
           }
           return (
             <LongPressMenu.Item
@@ -178,10 +191,14 @@ const DesktopWrapper = ({
   }) => {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
+  const onOpenChange = useCallback((open: boolean) => {
+    setOpen(open);
+  }, []);
+
   return (
     <div className="group relative flex-1">
       {children}
-      <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100">
+      <div className={cn('absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100', isOpen && 'opacity-100')}>
         <DropdownMenu open={isOpen} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon
@@ -196,11 +213,11 @@ const DesktopWrapper = ({
           <DropdownMenuContent>
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
-                return renderItem({ item, room });
+                return renderItem({ item, room, setOpen: onOpenChange });
               }
               return (
                 <DropdownMenuItem
-                  className="flex items-center"
+                  className="flex items-center active:bg-primary-200"
                   key={item.action}
                   disabled={item.disabled}
                   onClick={item.onAction}

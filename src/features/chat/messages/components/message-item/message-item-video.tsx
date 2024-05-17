@@ -1,26 +1,24 @@
+
+import VideoPlayer from '@/components/video/video-player';
+import { CUSTOM_EVENTS } from '@/configs/custom-event';
+import { sendEvent } from '@/features/call/utils/custom-event.util';
 import { Media } from '@/types';
-import { useRef } from 'react';
+
 export interface MessageItemVideoProps {
   file: Media;
 }
 
 export const MessageItemVideo = ({ file }: MessageItemVideoProps) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const onDisableLongPress = (val: boolean) => {
+    sendEvent(CUSTOM_EVENTS.MESSAGE.CHANGE_ALLOW_LONG_PRESS + file.url, val);
+  }
 
   return (
-    <div
-      onDoubleClick={() => {
-        videoRef.current?.requestFullscreen();
-      }}
-      className="group relative h-fit w-[280px] overflow-hidden rounded-lg bg-neutral-50"
-    >
-      <video
-        ref={videoRef}
-        src={file.url}
-        controls
-        disablePictureInPicture
-        className="h-full w-full"
-      />
-    </div>
+    <VideoPlayer 
+      file={file} 
+      className='max-w-[280px] overflow-hidden h-fit rounded-lg'
+      onDisableLongPress={onDisableLongPress}
+    />
   );
 };

@@ -1,5 +1,5 @@
 import DataRequestSetCookie from '@/types/set-cookie-data.interface';
-import { get, patch, post, put } from './api.service';
+import { get, patch, post, put, remove } from './api.service';
 
 import { AuthData } from '@/types';
 
@@ -34,7 +34,11 @@ export const signOutService = () => {
 };
 export const setCookieService = (data: DataRequestSetCookie[]) => {
   return post('/auth/set-cookie', data);
-}
+};
 export const getCookieService = (keys: string[]) => {
   return post('/auth/get-cookie', { keys });
-}
+};
+
+export const deleteAccount = () => {
+  return remove('/auth/account', {});
+};

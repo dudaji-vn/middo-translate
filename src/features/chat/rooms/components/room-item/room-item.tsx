@@ -101,7 +101,6 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     params?.spaceId,
   ]);
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
-
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
@@ -158,9 +157,10 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                       </>
                     ) : (
                       <>
-                        {room.participants.filter(
-                          (user) => user._id !== currentUserId,
-                        )[0]?.email || 'you'}
+                        {'@' +
+                          room.participants.filter(
+                            (user) => user._id !== currentUserId,
+                          )[0]?.username || 'you'}
                       </>
                     )}
                   </span>
@@ -180,7 +180,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                   </span>
                   <Globe
                     size={11}
-                    className={cn('text-primary-500-main', {
+                    className={cn('ml-2 text-primary-500-main', {
                       hidden: !room.fromDomain,
                     })}
                   />
@@ -236,6 +236,7 @@ const RenderItemSub = () => {
   if (!data.lastMessage) return null;
   return (
     <ItemSub
+      expiredAt={data.expiredAt}
       currentUser={currentUser}
       isGroup={data.isGroup}
       message={data.lastMessage}

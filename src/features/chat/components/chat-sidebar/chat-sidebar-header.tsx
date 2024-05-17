@@ -103,7 +103,6 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               </div>
             }
           />
-          {isBusiness && <RoomsModalFilter />}
           <Tooltip
             title={t('TOOL_TIP.SETTINGS')}
             triggerItem={
@@ -119,14 +118,19 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
       <div
         className={cn(
           'flex items-center gap-1 ',
+          { 'gap-3': isBusiness && !isSearch },
           pathname?.includes('statistics') && 'hidden',
         )}
       >
-        <AnimatePresence>
+        <AnimatePresence mode="popLayout">
           {isSearch && (
             <motion.div
+              layout="size"
               initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+              }}
               exit={{ scale: 0, opacity: 0 }}
             >
               <Button.Icon
@@ -139,7 +143,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
               </Button.Icon>
             </motion.div>
           )}
-          <motion.div key="search-input-main" className="w-full transition-all">
+          <motion.div key="search-input-main" className="w-full">
             <SearchInput
               ref={searchInputRef}
               defaultValue={searchValue || ''}
@@ -156,6 +160,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             />
           </motion.div>
         </AnimatePresence>
+        {!isSearch && isBusiness && <RoomsModalFilter />}
       </div>
     </div>
   );

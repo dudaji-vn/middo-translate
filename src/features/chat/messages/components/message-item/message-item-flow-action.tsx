@@ -1,6 +1,5 @@
 'use client';
 
-import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/nested-flow';
 import { Button } from '@/components/actions';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
@@ -9,6 +8,7 @@ import { messageApi } from '../../api';
 import { useMessagesBox } from '../message-box';
 import { createLocalMessage } from '../../utils';
 import { Message } from '../../types';
+import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 
 export type MessageNode = Omit<FlowNode, 'position' | 'data'> & {
   data: FlowNode['data'] & { translations?: { [key: string]: string } };

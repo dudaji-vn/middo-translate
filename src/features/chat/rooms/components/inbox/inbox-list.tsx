@@ -24,6 +24,8 @@ import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
 import { User } from '@/features/users/types';
+import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
+import ViewSpaceInboxFilter from './view-space-inbox-filter';
 
 interface InboxListProps {
   type: InboxType;
@@ -39,11 +41,18 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       isBusiness,
     } = useBusinessNavigationData();
     const { businessExtension } = useBusinessExtensionStore();
+    const { appliedFilters } = useSpaceInboxFilterStore();
     const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
-    const key = useMemo(() => ['rooms', type, status], [type, status]);
+    const key = useMemo(() => {
+      if (spaceId) {
+        return ['rooms', type, spaceId, status, appliedFilters];
+      }
+      return ['rooms', type, status];
+    }, [type, status, appliedFilters, spaceId]);
+
     const onlineList = useChatStore((state) => state.onlineList);
 
     const {
@@ -64,6 +73,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
           type,
           status,
           spaceId,
+          filterOptions: spaceId ? appliedFilters : undefined,
         }),
     });
     const { rooms: pinnedRooms, refetch: refetchPinned } =
@@ -72,6 +82,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const queryClient = useQueryClient();
 
     const updateRoom = (room: Partial<Room> & { _id: string }) => {
+      console.log('update room', room);
       refetch();
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
     };
@@ -108,17 +119,24 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!rooms.length && !isLoading && !pinnedRooms?.length) {
       return <EmptyInbox type={type} />;
     }
-
+    const showFilter =
+      Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
     return (
       <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
         {isScrolled && (
           <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
         )}
+
         <div
           id="scrollableDiv"
           ref={scrollRef}
           className={cn('h-full gap-2 overflow-y-auto')}
         >
+          <ViewSpaceInboxFilter
+            className={cn('w-full', {
+              hidden: !showFilter,
+            })}
+          />
           <InfiniteScroll
             onLoadMore={fetchNextPage}
             hasMore={hasNextPage || false}

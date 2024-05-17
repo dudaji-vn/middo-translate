@@ -78,17 +78,25 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
               {room.name}
             </p>
             <p className="text-sm font-light">
-              {room.subtitle == 'Group' ? t('COMMON.GROUP') : room.subtitle}
+              {room.isHelpDesk
+                ? isOnline
+                  ? t('COMMON.ONLINE')
+                  : t('COMMON.OFFLINE')
+                : room.subtitle == 'Group'
+                  ? t('COMMON.GROUP')
+                  : room.subtitle}
             </p>
           </div>
         </div>
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">
         {allowCall && <VideoCall />}
-        {room.isGroup && <Tooltip
-          title={t('TOOL_TIP.ADD_MEMBER') }
-          triggerItem={ <RoomAddMember /> }
-        />}
+        {room.isGroup && (
+          <Tooltip
+            title={t('TOOL_TIP.ADD_MEMBER')}
+            triggerItem={<RoomAddMember />}
+          />
+        )}
         <Tooltip title={t('TOOL_TIP.INFO')} triggerItem={<ActionBar />} />
       </div>
     </div>

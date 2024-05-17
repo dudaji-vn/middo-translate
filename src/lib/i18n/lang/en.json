@@ -1,5 +1,7 @@
 {
   "COMMON": {
+    "OFFLINE": "Offline",
+    "ONLINE": "Online",
     "INPUT_YOUR_TEXT_HERE": "Enter your text here",
     "PLEASE_SPEAK": "Please speak",
     "CLEAR_ALL": "Clear all",
@@ -40,6 +42,8 @@
     "SIGN_OUT": "Sign Out",
     "NAME": "Name",
     "NAME_PLACEHOLDER": "Enter your name",
+    "USERNAME": "Username",
+    "USERNAME_PLACEHOLDER": "Enter your username",
     "EMAIL": "Email",
     "EMAIL_PLACEHOLDER": "Enter your email",
     "PHONE": "Phone number",
@@ -64,7 +68,9 @@
     "DRAFT": "Draft",
     "TRANSLATED_FROM": "Translated from",
     "EDITED": "Edited",
-    "EDITING": "Editing"
+    "EDITING": "Editing",
+    "SURE": "Sure",
+    "DELETE_ACCOUNT": "Delete Account"
   },
   "MESSAGE": {
     "ERROR": {
@@ -77,6 +83,8 @@
       "PASSWORD_THE_SAME": "New password must be different from current password!",
       "INVALID_EMAIL": "Please enter a valid email address!",
       "INVALID_ACCOUNT": "Invalid email or password!",
+      "AT_LEAST_ONE_CAPITAL": "At least 1 capital letter",
+      "AT_LEAST_CHARACTERS": "At least {{num}} characters",
       "DEVICE_NOT_SUPPORTED": "Your device does not support this feature!",
       "NO_ACCESS_MEDIA": "Unable to access your camera or microphone!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File too large or not supported!",
@@ -89,7 +97,10 @@
       "DECLINE_CALL": "{{name}} declined the call!",
       "BROWSER_NOT_SUPPORT_SPEAKER": "Your browser does not support speaker settings!",
       "NOT_ALLOW_CAMERA": "You have not allowed access to the camera!",
-      "NOT_ALLOW_MICROPHONE": "You have not allowed access to the microphone!"
+      "NOT_ALLOW_MICROPHONE": "You have not allowed access to the microphone!",
+      "USERNAME_MIN": "Username must be at least 3 characters!",
+      "USERNAME_MAX": "Username must be at most 15 characters!",
+      "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -199,14 +210,15 @@
     "DISPLAY_LANGUAGE": "Display Language",
     "SIGN_OUT": "Sign Out",
     "EDIT_PROFILE": "Edit Profile",
-    "CHANGE_AVATAR": "Change Avatar"
+    "CHANGE_AVATAR": "Change avatar",
+    "APP_PERMISSION": "App's permission"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",
     "FORGOT_PASSWORD": "Forgot Password?",
-    "NO_ACCOUNT": "Don't have an account?",
-    "SIGN_UP_HERE": "Sign Up Here",
-    "SOCIAL_LOGIN": "Or sign in with"
+    "NO_ACCOUNT": "Not have account yet?",
+    "SIGN_UP": "Sign Up",
+    "GOOGLE_LOGIN": "Sign in with Google"
   },
   "SIGN_UP": {
     "TITLE": "Sign Up",
@@ -221,11 +233,11 @@
   },
   "RESET_PASSWORD_SENDED": {
     "TITLE": "Reset Password",
-    "MESSAGE": "A reset password link has been sent to"
+    "MESSAGE": "A reset password link has been sent to <strong>{{email}}</strong>. If you don't see the email, please check your spam folder"
   },
   "SIGN_UP_SUCCESS": {
     "TITLE": "Verify Your Email Address",
-    "MESSAGE": "A link has been sent to <strong>{{email}}</strong> because you used it as your login method. <br /> <br /> Please verify this email address to complete your Middo account registration.",
+    "MESSAGE": "A link has been sent to <strong>{{email}}</strong>. Verify this email address to complete registration. </br></br>If you don't see the email, check your spam folder or click the button below to resend the email.",
     "RESEND": "Resend",
     "RESEND_AFTER": "Resend after {{time}} seconds"
   },
@@ -245,6 +257,10 @@
     "TITLE": "Create a New Account"
   },
   "CONVERSATION": {
+    "BLOCKED": {
+      "MESSAGE": "Currently, you can not reply to this conversation.",
+      "LEARN_MORE": "Learn more"
+    },
     "WELCOME_TITLE": "Welcome to Middo conversation!",
     "WELCOME_CONTENT": "Start a conversation with your team or group. You can also create a group chat to discuss and share files.",
     "TITLE": "Conversation",
@@ -390,6 +406,12 @@
       "TITLE": "Do you want to sign out?",
       "DESCRIPTION": "You will be signed out of the app and need to log in again."
     },
+    "DELETE_ACCOUNT": {
+      "TITLE": "Delete Account",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete your account?",
+      "CONFIRM_RETYPE": "Please retype this <strong>{{code}}</strong> to confirm",
+      "CONFIRM": "Delete Account"
+    },
     "ADD_USER": {
       "TITLE": "Add Member"
     },
@@ -534,7 +556,9 @@
     "CONVERSATIONS": "General",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
+    "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
+    "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
     "REPORT": "Report",
     "CLIENT_LIST": "Clients List",
@@ -543,6 +567,15 @@
       "AVERAGERATING": "Customer Rating",
       "COMPLETEDCONVERSATION": "Completed Conversations",
       "RESPONSECHAT": "Average Response Time"
+    },
+    "SCRIPT": {
+      "PAGE_TITLE": "Scripts Management",
+      "SEARCH": "Search for scripts"
+    },
+    "CLIENT": {
+      "PAGE_TITLE": "Clients Management",
+      "SEARCH": "Search for clients",
+      "EXPORT_XLSX": "Export to XLSX"
     }
   },
   "DESKTOP_LOGIN": {
@@ -563,7 +596,8 @@
     "TIP_DESCRIPTION_GROUP": "Group is a conversation which has at least 3 members",
     "TIP_TITLE_GROUP": "How to use \"Group\"",
     "TITLE_GROUP": "Currently, you have no Group Conversation",
-    "DESCRIPTION_GROUP": "Click button below to create a new one or ask Administrator of a Group Conversation add you in"
+    "DESCRIPTION_GROUP": "Click button below to create a new one or ask Administrator of a Group Conversation add you in",
+    "MESSAGE": "No messages yet"
   },
   "OFFLINE": {
     "TITLE": "You're offline",

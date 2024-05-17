@@ -1,14 +1,16 @@
 import { axios } from '@/lib/axios';
 import { get, post, put } from './api.service';
 
-export const createExtension = (data: {
-  domains: Array<string>;
-  color: string;
-  language: string;
-  firstMessage: string;
-  spaceId: string;
-}) => {
-  return put('/help-desk/create-or-edit-extension', data);
+export const createExtension = (
+  spaceId: string,
+  data: {
+    domains: Array<string>;
+    color: string;
+    language: string;
+    firstMessage: string;
+  },
+) => {
+  return put(`/help-desk/spaces/${spaceId}/extensions`, data);
 };
 
 export const deleteExtension = (extensionId: string) => {
@@ -22,7 +24,7 @@ export const startAGuestConversation = (data: {
   fromDomain?: string;
   email: string;
 }) => {
-  return post('/help-desk/create-client', data);
+  return post('/help-desk/clients', data);
 };
 
 export const endConversation = (data: { roomId: string; senderId: string }) => {

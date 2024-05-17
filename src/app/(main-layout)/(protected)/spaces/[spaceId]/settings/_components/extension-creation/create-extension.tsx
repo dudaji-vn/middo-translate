@@ -22,8 +22,8 @@ import StepWrapper from './steps/step-wrapper';
 import StartingMessageStep from './steps/starting-message-step';
 import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
-import { isEqual } from 'lodash';
-import { FlowNode } from './steps/script-chat-flow/nested-flow';
+import { isEqual, set } from 'lodash';
+import { FlowNode } from './steps/script-chat-flow/design-script-chat-flow';
 import { translateWithDetection } from '@/services/languages.service';
 import { Edge } from 'reactflow';
 import { getUserSpaceRole } from '../space-setting/role.util';
@@ -34,28 +34,22 @@ import {
 import { TSpace } from '../../../_components/business-spaces';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/actions';
+import { TChatScript } from '@/types/scripts.type';
+import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-conversation-scripts';
+import { ChatScript } from '../../../scripts/_components/column-def/scripts-columns';
+import { color } from 'framer-motion';
 
 type TFormValues = {
   addingDomain: string;
   domains: Array<string>;
-  selectedRadioFM?: string;
+  startingMessageType?: string;
   custom: {
     language: string;
     firstMessage: string;
     firstMessageEnglish: string;
     color: string;
-    chatFlow?: {
-      nodes: any[];
-      edges: any[];
-    };
   };
-  chatFlow:
-    | {
-        nodes: FlowNode[];
-        edges: Edge[];
-      }
-    | null
-    | undefined;
+  currentScript?: TChatScript['_id'];
 };
 
 export default function CreateExtension({
@@ -66,7 +60,7 @@ export default function CreateExtension({
   isEditing = false,
 }: {
   open: boolean;
-  initialData?: TBusinessExtensionData;
+  initialData?: TBusinessExtensionData & { currentScript?: TChatScript['_id'] };
   title?: string;
   space: TSpace;
   isEditing?: boolean;
@@ -77,6 +71,7 @@ export default function CreateExtension({
   const params = useParams();
   const currentUser = useAuthStore((s) => s.user);
   const myRole = getUserSpaceRole(currentUser, space);
+
   const router = useRouter();
 
   const form = useForm<TFormValues>({
@@ -84,14 +79,14 @@ export default function CreateExtension({
     defaultValues: {
       addingDomain: '',
       domains: [],
-      selectedRadioFM: 'default',
+      startingMessageType: 'default',
       custom: {
         language: currentUser?.language,
         firstMessage: DEFAULT_FIRST_MESSAGE.content,
         firstMessageEnglish: DEFAULT_FIRST_MESSAGE.contentEnglish,
         color: DEFAULT_THEME,
-        chatFlow: undefined,
       },
+      currentScript: undefined,
     },
     resolver: zodResolver(createExtensionSchema),
   });
@@ -102,7 +97,7 @@ export default function CreateExtension({
     trigger,
     reset,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    formState: { isValid, isSubmitting },
   } = form;
 
   useEffect(() => {
@@ -113,77 +108,74 @@ export default function CreateExtension({
       reset();
       return;
     }
-
     if (!isEmpty(initialData)) {
       setValue('domains', initialData.domains);
-      setValue('custom', {
-        language: initialData.language,
-        firstMessage: initialData.firstMessage || DEFAULT_FIRST_MESSAGE.content,
-        firstMessageEnglish:
-          initialData.firstMessageEnglish ||
-          DEFAULT_FIRST_MESSAGE.contentEnglish ||
-          '',
-        color: initialData.color || DEFAULT_THEME,
-      });
+      setValue('custom.language', initialData.language);
+      setValue('custom.color', initialData.color || DEFAULT_THEME);
+      if (initialData.currentScript) {
+        setValue('currentScript', initialData.currentScript);
+        setValue('startingMessageType', 'script');
+        setValue('custom.firstMessage', '');
+        return;
+      }
+      if (initialData.firstMessage) {
+        setValue('custom.firstMessage', initialData.firstMessage);
+        setValue(
+          'startingMessageType',
+          initialData.firstMessage === DEFAULT_FIRST_MESSAGE.content
+            ? 'default'
+            : 'custom',
+        );
+        return;
+      }
     }
-    if (
-      initialData?.chatFlow &&
-      initialData?.chatFlow?.nodes?.length > 1 &&
-      initialData?.chatFlow?.edges?.length > 0 &&
-      !initialData?.chatFlow?.nodes?.find((node) => isEmpty(node)) &&
-      !initialData?.chatFlow?.edges?.find((edge) => isEmpty(edge))
-    ) {
-      setValue('custom.chatFlow', {
-        nodes: initialData?.chatFlow?.nodes || [],
-        edges: initialData?.chatFlow?.edges || [],
-      });
-      setValue('selectedRadioFM', 'script');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialData, open]);
 
   const submit = async (values: TFormValues) => {
     trigger();
-    const translatedFirstMess = await translateWithDetection(
-      values.custom.firstMessage,
-      'en',
-    );
-    const firstMessageEnglish =
-      typeof translatedFirstMess === 'string'
-        ? translatedFirstMess
-        : translatedFirstMess?.translatedText;
 
-    const chatFlow = watch('custom.chatFlow');
     const spaceId = params?.spaceId;
     if (!spaceId) {
       return;
     }
-    const isValidateChatFlow =
-      !chatFlow?.nodes?.find((node) => isEmpty(node)) &&
-      !chatFlow?.edges?.find((edge) => isEmpty(edge));
-    const chatFLowPayload =
-      chatFlow && watch('selectedRadioFM') === 'script' && isValidateChatFlow
-        ? {chatFlow}
-        : null;
     try {
-      const payload = {
+      let payload: any = {
         domains: values.domains,
-        ...values.custom,
-        firstMessageEnglish,
-        spaceId: String(params?.spaceId),
-        ...chatFLowPayload,
+        color: values.custom.color,
+        language: values.custom.language,
       };
-      await createExtension(payload)
+      if (values.startingMessageType === 'script') {
+        payload = {
+          ...payload,
+          currentScript: values.currentScript,
+        };
+      } else {
+        const translatedFirstMess = await translateWithDetection(
+          values.custom.firstMessage,
+          'en',
+        );
+        const firstMessageEnglish =
+          typeof translatedFirstMess === 'string'
+            ? translatedFirstMess
+            : translatedFirstMess?.translatedText;
+        payload = {
+          ...payload,
+          firstMessage: values.custom.firstMessage,
+          firstMessageEnglish,
+        };
+      }
+
+      await createExtension(String(params?.spaceId), payload)
         .then((res) => {
-          router.push(pathname + '?tab=extension');
-          toast.success('Create extension success!');
+          toast.success(`${isEditing ? 'Edit' : 'Create'} extension success!`);
         })
         .catch((err) => {
           toast.error(
-            err?.response?.data?.message || 'Create extension failed!',
+            err?.response?.data?.message ||
+              `${isEditing ? 'Edit' : 'Create'}  extension failed!`,
           );
         });
-      router.refresh();
+      router.push(pathname + '?tab=extension');
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
@@ -192,58 +184,14 @@ export default function CreateExtension({
     (item) => item.name === 'extension',
   )?.roles;
 
-  const customColor = watch('custom.color');
-  const domains = watch('domains');
-  const firstMessage = watch('custom.firstMessage');
-  const selectedRadioFM = watch('selectedRadioFM');
-  const editingChatFlow = watch('custom.chatFlow');
-
-  const nodeLength = editingChatFlow?.nodes?.length || 0;
-  const edgeLength = editingChatFlow?.edges?.length || 0;
-
   const hasNoPermissionToEdit = !extensionRoles?.edit.includes(
     myRole as ESPaceRoles,
   );
-  const extensionHasNoUpdate = useMemo(() => {
-    const isChatFlowUpdated =
-      selectedRadioFM === 'script' &&
-      (!isEqual(editingChatFlow?.nodes, initialData?.chatFlow?.nodes) ||
-        !isEqual(editingChatFlow?.edges, initialData?.chatFlow?.edges));
-
-    const isFirstMessageUpdated =
-      !isEqual(firstMessage, initialData?.firstMessage)  &&
-      (selectedRadioFM === 'default' || selectedRadioFM === 'custom');
-
-    return Boolean(
-      isEqual(customColor, initialData?.color) &&
-        isEqual(domains, initialData?.domains) &&
-        !isChatFlowUpdated &&
-        !isFirstMessageUpdated,
-    );
-  }, [
-    editingChatFlow,
-    initialData,
-    selectedRadioFM,
-    firstMessage,
-    customColor,
-    domains,
-  ]);
-  const hasInvalidChatFlow = useMemo(() => {
-    return Boolean(
-      selectedRadioFM === 'script' &&
-        (nodeLength < 2 ||
-          edgeLength < 1 ||
-          editingChatFlow?.nodes?.find(
-            (node: FlowNode) =>
-              isEmpty(node) ||
-              (isEmpty(node?.data?.content) && node.type !== 'option') ||
-              (node.type === 'option' && nodeLength == 2),
-          )),
-    );
-  }, [selectedRadioFM, nodeLength, edgeLength, editingChatFlow]);
 
   if (!isClient || !open || hasNoPermissionToEdit) return null;
-
+  const noScript =
+    watch('startingMessageType') === 'script' &&
+    isEmpty(watch('currentScript'));
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
@@ -278,8 +226,8 @@ export default function CreateExtension({
           </StepWrapper>
           <StepWrapper
             value="1"
-            canNext={watch('custom.firstMessage').length > 0}
-            canPrev={watch('custom.firstMessage').length > 0}
+            canNext={watch('custom.firstMessage')?.length > 0}
+            canPrev={watch('custom.firstMessage')?.length > 0}
             onNextStep={() => setTabValue(2)}
             onPrevStep={() => setTabValue(0)}
             nextProps={{
@@ -320,12 +268,7 @@ export default function CreateExtension({
               size={'sm'}
               loading={isSubmitting}
               type="submit"
-              disabled={
-                !isValid ||
-                extensionHasNoUpdate ||
-                isSubmitting ||
-                hasInvalidChatFlow
-              }
+              disabled={!isValid || isSubmitting || noScript}
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
             >
               Save Change

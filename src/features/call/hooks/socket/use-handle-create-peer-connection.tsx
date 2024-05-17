@@ -104,8 +104,9 @@ export default function useHandleCreatePeerConnection() {
         } else {
             addParticipant(newUser);
         }
-        
-    },[myStream, participants, addParticipant, updatePeerParticipant, updateParticipant, setLayout, isPinDoodle, t, setPinShareScreen])
+    // Remove t from dependencies => language change will not trigger this function
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[myStream, participants, addParticipant, updatePeerParticipant, updateParticipant, setLayout, isPinDoodle, setPinShareScreen])
 
     
     // useEffect when myStream change
