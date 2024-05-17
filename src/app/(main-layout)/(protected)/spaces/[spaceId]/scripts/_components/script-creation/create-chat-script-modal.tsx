@@ -56,21 +56,12 @@ const CreateOrEditChatScriptModal = ({
     },
     resolver: zodResolver(createChatScriptSchema),
   });
-  const resetFormData = () => {
-    form.reset({
-      name: '',
-      chatFlow: {
-        nodes: initialChatFlowNodes,
-        edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
-        mappedFlowErrors: [],
-      },
-    });
-  };
+
   const {
     setValue,
     handleSubmit,
     trigger,
-    formState: { isValid, isSubmitting },
+    formState: { isValid, isSubmitting, errors },
   } = form;
 
   useEffect(() => {
@@ -87,9 +78,7 @@ const CreateOrEditChatScriptModal = ({
       );
       return;
     }
-    if (!open) {
-      resetFormData();
-    }
+
   }, [open, currentScript]);
 
   const submit = async ({

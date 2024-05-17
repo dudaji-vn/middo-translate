@@ -84,7 +84,7 @@ export const createChatScriptSchema = z.object({
             id: z.string(),
             source: z.string(),
             target: z.string(),
-            label: z.string(),
+            label: z.string().optional(),
             animated: z.boolean().optional(),
           }),
         )
