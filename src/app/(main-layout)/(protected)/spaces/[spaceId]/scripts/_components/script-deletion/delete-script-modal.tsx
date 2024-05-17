@@ -14,11 +14,11 @@ const DeleteScriptModal = ({
   onclose: () => void;
 }) => {
   const spaceId = useParams()?.spaceId as string;
-  const { mutateAsync } = useDeleteScript();
+  const { mutateAsync, isLoading } = useDeleteScript();
   const onSubmit = async () => {
     if (!script) return;
     try {
-      mutateAsync({ spaceId, scriptId: script?._id });
+      await mutateAsync({ spaceId, scriptId: script?._id });
       onclose();
     } catch (error) {}
   };
@@ -29,6 +29,13 @@ const DeleteScriptModal = ({
       open={open}
       onConfirm={onSubmit}
       onCancel={onclose}
+      cancelProps={{
+        disabled: isLoading,
+      }}
+      actionProps={{
+        disabled: isLoading,
+        children: 'Delete',
+      }}
     />
   );
 };
