@@ -66,7 +66,6 @@ const CreateOrEditChatScriptModal = ({
 
   useEffect(() => {
     if (open && currentScript) {
-      console.log('currentScript', currentScript);
       setValue('name', currentScript.name);
       setValue(
         'chatFlow.edges',
@@ -99,6 +98,7 @@ const CreateOrEditChatScriptModal = ({
     chatFlow: any;
   }) => {
     trigger(FLOW_KEYS.CHAT_FLOW);
+    console.log('errors', isValid, errors);
     const payload = {
       ...(isEditing && { scriptId }),
       name: name,

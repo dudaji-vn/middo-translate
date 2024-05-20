@@ -29,7 +29,7 @@ export const createLocalMessage = ({
   };
 };
 
-export const formatFileSize = (size: number) => {
+export const formatFileSize = (size: number = 0) => {
   const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
   let index = 0;
   while (size >= 1024) {
