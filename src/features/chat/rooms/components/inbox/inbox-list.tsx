@@ -8,12 +8,14 @@ import {
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/stores';
+import { User } from '@/features/users/types';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth.store';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import useStore from '@/stores/use-store';
 import { cn } from '@/utils/cn';
 import { useQueryClient } from '@tanstack/react-query';
@@ -23,8 +25,6 @@ import { PinnedRoom } from '../pinned-room';
 import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
-import { User } from '@/features/users/types';
-import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import ViewSpaceInboxFilter from './view-space-inbox-filter';
 
 interface InboxListProps {
@@ -113,11 +113,17 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    const showEmptyInbox = useMemo(() => {
+      if (rooms.length || isLoading) return false;
+      if (type === 'all' || type === 'group') {
+        if (pinnedRooms?.length) return false;
+      }
+      return true;
+    }, [rooms, isLoading, type, pinnedRooms]);
 
     if (!currentUser) return null;
-    if ((type === 'all' || type === 'group') && !pinnedRooms?.length)
-      return <EmptyInbox type={type} />;
-    if (!rooms.length && !isLoading) {
+
+    if (showEmptyInbox) {
       return <EmptyInbox type={type} />;
     }
 
