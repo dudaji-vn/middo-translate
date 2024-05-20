@@ -102,6 +102,8 @@ const Menu = ({ isMe, message }: { isMe: boolean; message: Message }) => {
             return message.isPinned;
           case 'remove':
             return false;
+          case 'download':
+            return message.type === 'media' && (message?.media?.[0].type === 'video' || message?.media?.[0].type === 'document');
           default:
             return true;
         }
