@@ -1,6 +1,5 @@
 import { Media } from "@/types";
 import { cn } from "@/utils/cn";
-import download from "downloadjs";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../actions";
 import { DownloadIcon, Maximize2Icon, Pause, PlayIcon, Volume1Icon, Volume2, Volume2Icon, VolumeX, VolumeXIcon, X } from "lucide-react";
@@ -8,8 +7,7 @@ import { Direction, Range } from "react-range";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../data-display";
 import { useOnClickOutside } from "usehooks-ts";
 import { useMediaSettingStore } from "@/stores/media-setting.store";
-import getThumbnailForVideo from "@/utils/get-thumbnail-for-video";
-import Image from "next/image";
+import downloadFile from "@/utils/download-file";
 
 interface VideoProps {
     file: Media;
@@ -34,7 +32,7 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
   const [thumbnailLeft, setThumbnailLeft] = useState<number>(0);
   const [isOpenVolume, setIsOpenVolume] = useState(false);
   const [isShowActionBar, setIsShowActionBar] = useState(false);
-  const {volume, setVolume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
+  const {volume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
 
   const toggleVideoPlay = useCallback(() => {
     if (isPlaying) {
@@ -45,14 +43,12 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
     setIsPlaying(prev=>!prev);
   }, [isPlaying]);
 
-  const downloadFile = () => {
-    var x=new XMLHttpRequest();
-    x.open( "GET", file.url , true);
-    x.responseType="blob";
-    x.onload= function(e: any){
-      if(e?.target?.response) download(e?.target?.response, file.name, file.type);
-    };
-    x.send();
+  const download = () => {
+    downloadFile({
+      url: file.url,
+      fileName: file.name,
+      mimeType: file.type,
+    });
   }
   
   // Add on end video event
@@ -309,7 +305,7 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
           size={isFullScreen ? 'xs' : 'ss'}
           shape={'default'}
           className={cn(isFullScreen ? '' : 'hidden')}
-          onClick={downloadFile}
+          onClick={download}
         >
           <DownloadIcon />
         </Button.Icon>
