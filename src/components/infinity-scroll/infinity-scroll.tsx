@@ -2,15 +2,26 @@ import { forwardRef, useEffect } from 'react';
 
 import { useIntersectionObserver } from 'usehooks-ts';
 import { Spinner } from '../feedback';
+import { cn } from '@/utils/cn';
 
 interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {
   onLoadMore: () => void;
   isFetching?: boolean;
   hasMore: boolean;
+  scrollDirection?: 'to-top' | 'to-bottom';
 }
 
 export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
-  ({ hasMore, onLoadMore, isFetching, ...props }, ref) => {
+  (
+    {
+      hasMore,
+      onLoadMore,
+      isFetching,
+      scrollDirection = 'to-bottom',
+      ...props
+    },
+    ref,
+  ) => {
     const { isIntersecting, ref: triggerRef } = useIntersectionObserver({
       threshold: 1,
     });
@@ -29,7 +40,13 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
           </div>
         )}
         <div className="relative h-[1px] w-[1px]">
-          <div ref={triggerRef} className="absolute top-80"></div>
+          <div
+            ref={triggerRef}
+            className={cn('absolute h-1 w-1', {
+              'top-20': scrollDirection === 'to-top',
+              'bottom-20': scrollDirection === 'to-bottom',
+            })}
+          />
         </div>
       </div>
     );

@@ -156,6 +156,7 @@ export const MessageBox = ({
   return (
     <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
       <InfiniteScroll
+        scrollDirection="to-top"
         hasMore={hasNextPage || false}
         onLoadMore={loadMoreMessages}
         isFetching={isFetching}
