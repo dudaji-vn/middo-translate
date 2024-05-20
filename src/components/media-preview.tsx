@@ -7,6 +7,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import { Media } from '@/types';
 import { SelectedFile } from './media-upload';
+import MediaLightBox from './media-light-box';
 
 export interface MediaPreviewProps {
     files: (SelectedFile | Media )[];

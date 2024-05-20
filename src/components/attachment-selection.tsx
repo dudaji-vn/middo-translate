@@ -7,6 +7,7 @@ import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
 import { Editor } from '@tiptap/react';
 import { MediaPreview } from './media-preview';
+import MediaLightBox from './media-light-box';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -26,6 +27,20 @@ export const AttachmentSelection = forwardRef<
   }, [files.length]);
 
   
+  const sliders = useMemo(() => {
+    return files.filter((file) => {
+      const type = file.file.type.split('/')[0];
+      return type === 'image' || type === 'video';
+    }).map((file) => {
+      const type = file.file.type.split('/')[0];
+      return {
+        url: file.url,
+        type: type,
+        name: file.file.name || ''
+      }
+    });
+  }, [files]);
+
   return (
     <AnimatePresence>
       {files.length > 0 && (
@@ -40,9 +55,9 @@ export const AttachmentSelection = forwardRef<
             <PlusCircleIcon />
           </Button.Icon>
           <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
-            <MediaPreview files={files} index={index} close={()=>setIndex(undefined)} />
+            <MediaLightBox files={sliders} index={index} close={()=>setIndex(undefined)} key={index} />
             <AnimatePresence>
-              {files.map((file, index) => {
+              {files.map((file, i) => {
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -53,7 +68,7 @@ export const AttachmentSelection = forwardRef<
                   >
                     <div 
                       className="aspect-square h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl shadow cursor-pointer" 
-                      onClick={() => setIndex(index - 1)}>
+                      onClick={() => setIndex(i)}>
                       <MediaItem file={file} />
                     </div>
                     <button

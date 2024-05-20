@@ -5,9 +5,9 @@ import Lightbox from 'yet-another-react-lightbox';
 import { Media } from '@/types';
 import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 import useRotate from '@/components/data-display/rotate';
-
+import MediaLightBox from '@/components/media-light-box';
 export interface ImageGalleryProps
   extends React.HTMLAttributes<HTMLDivElement> {
   images: Media[];
@@ -19,15 +19,8 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
     const isMultiple = length > 1;
     const num = length > 3 ? 3 : length;
     const width = 360 / num;
+    const [index, setIndex] = useState<number | undefined>();
 
-    const { slides, index, setIndex, Rotate } = useRotate(
-      images.map((img) => ({
-        src: img.url,
-        title: img.name,
-        width: img.width,
-        height: img.height,
-      })),
-    );
     return (
       <>
         {isMultiple ? (
@@ -81,14 +74,23 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             />
           </div>
         )}
-        <Lightbox
+        {/* <Lightbox
           slides={slides}
           index={index}
           open={index !== undefined}
           close={() => setIndex(undefined)}
           plugins={[Download, Rotate, Thumbnails, Zoom]}
           render={{ slide: LightImage }}
-        />
+        /> */}
+        <MediaLightBox
+          files={images.map((img) => ({
+            url: img.url,
+            type: 'image',
+            name: img.name || '',
+          }))}
+          index={index}
+          close={() => setIndex(undefined)}
+          />
       </>
     );
   },
