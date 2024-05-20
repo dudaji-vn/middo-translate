@@ -100,7 +100,8 @@
       "NOT_ALLOW_MICROPHONE": "Bạn chưa cho phép truy cập vào microphone!",
       "USERNAME_MIN": "Tên người dùng phải có ít nhất 3 ký tự!",
       "USERNAME_MAX": "Tên người dùng phải có tối đa 15 ký tự!",
-      "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!"
+      "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!",
+      "NOT_SUPPORT_PREVIEW": "Nội dung file quá lớn hoặc không được hỗ trợ để xem trước! <br /> Vui lòng tải xuống để xem."
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",

@@ -7,8 +7,8 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
-import { MediaPreview } from '@/components/media-preview';
 import { PlayIcon } from 'lucide-react';
+import MediaLightBox from '@/components/media-light-box';
 
 export interface RoomMediaProps {}
 
@@ -73,12 +73,13 @@ export const RoomMedia = () => {
           </div>
         ))}
       </div>
-      <MediaPreview 
+      <MediaLightBox 
         files={media} 
         index={index} 
+        key={index}
         close={() => setIndex(undefined)} 
         fetchNextPage={hasNextPage ? fetchNextPage : undefined}
-      />
+      /> 
       {hasNextPage && (
         <Button
           onClick={() => fetchNextPage()}

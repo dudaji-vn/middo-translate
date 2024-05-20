@@ -100,7 +100,8 @@
       "NOT_ALLOW_MICROPHONE": "You have not allowed access to the microphone!",
       "USERNAME_MIN": "Username must be at least 3 characters!",
       "USERNAME_MAX": "Username must be at most 15 characters!",
-      "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!"
+      "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
+      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view."
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",

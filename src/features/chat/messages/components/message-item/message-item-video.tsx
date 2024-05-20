@@ -16,7 +16,7 @@ export const MessageItemVideo = ({ file }: MessageItemVideoProps) => {
 
   return (
     <VideoPlayer 
-      file={file} 
+      file={{ url: file.url, type: 'video', name: file.name || ''}} 
       className='max-w-[280px] overflow-hidden h-fit rounded-lg'
       onDisableLongPress={onDisableLongPress}
     />
