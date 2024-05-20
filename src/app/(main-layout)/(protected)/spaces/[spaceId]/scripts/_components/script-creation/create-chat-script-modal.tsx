@@ -49,7 +49,7 @@ const CreateOrEditChatScriptModal = ({
     defaultValues: {
       name: '',
       chatFlow: {
-        nodes: initialChatFlowNodes,
+        nodes: initialChatFlowNodes as TScriptFormValues['chatFlow']['nodes'],
         edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
         mappedFlowErrors: [],
       },
@@ -78,7 +78,17 @@ const CreateOrEditChatScriptModal = ({
       );
       return;
     }
-
+    if (open && !currentScript) {
+      setValue('name', '');
+      setValue(
+        'chatFlow.nodes',
+        initialChatFlowNodes as TScriptFormValues['chatFlow']['nodes'],
+      );
+      setValue(
+        'chatFlow.edges',
+        initialEdges as TScriptFormValues['chatFlow']['edges'],
+      );
+    }
   }, [open, currentScript]);
 
   const submit = async ({

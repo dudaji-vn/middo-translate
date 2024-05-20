@@ -49,7 +49,25 @@ const checkIncludingOption = (nodes: FlowNode[]) => {
   const hasOption = nodes?.find((node) => node.type === 'option');
   return hasOption;
 };
-
+/* 
+ id: string;
+    position: XYPosition;
+    data: T;
+    type?: U;
+    style?: CSSProperties;
+    className?: string;
+    sourcePosition?: Position;
+    targetPosition?: Position;
+    hidden?: boolean;
+    selected?: boolean;
+    dragging?: boolean;
+    draggable?: boolean;
+    selectable?: boolean;
+    connectable?: boolean;
+    deletable?: boolean;
+    dragHandle?: string;
+    width?: number | null;
+    height?: number | null;*/
 export const createChatScriptSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   chatFlow: z
@@ -60,6 +78,15 @@ export const createChatScriptSchema = z.object({
             id: z.string(),
             type: z.string(),
             parentNode: z.string().optional(),
+            parentId: z.string().optional(),
+            style: z.any().optional(),
+            className: z.string().optional(),
+            width: z.number().optional(),
+            height: z.number().optional(),
+            deletable: z.boolean().optional(),
+            draggable: z.boolean().optional(),
+            sourcePosition: z.string().optional(),
+            targetPosition: z.string().optional(),
             data: z
               .object({
                 label: z.string().optional(),
