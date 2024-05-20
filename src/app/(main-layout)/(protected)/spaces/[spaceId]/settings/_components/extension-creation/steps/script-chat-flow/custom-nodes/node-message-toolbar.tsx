@@ -44,7 +44,7 @@ const NodeMessageToolbar = ({
     if (uploadedFiles) {
       const media = uploadedFiles.map((file) => ({
         ...file,
-        type: file.file?.type?.split('/')[0] || 'document',
+        type: file.metadata.resource_type || 'document',
       }));
       setValue(mediasNameField, media);
     }
