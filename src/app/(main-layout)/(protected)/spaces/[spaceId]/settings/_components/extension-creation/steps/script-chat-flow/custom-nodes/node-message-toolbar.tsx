@@ -26,11 +26,13 @@ const allowedMediaTypes: Record<string, string> = {
   document: 'document',
 };
 const NodeMessageToolbar = ({
+  readonly = false,
   mediasNameField = '',
-  nameFiledContent = '',
+  contentNameField = '',
 }: {
   mediasNameField: string;
-  nameFiledContent: string;
+  contentNameField: string;
+  readonly?: boolean;
 }) => {
   const { t } = useTranslation('common');
   const { files, uploadedFiles, loadSavedFilesContext } = useMediaUpload();
@@ -66,7 +68,11 @@ const NodeMessageToolbar = ({
           <Skeleton className="h-1 w-full rounded-md bg-primary-200" />
         )}
         {currentNodeMedias && <AttachmentSelection />}
-        <div className="flex flex-row">
+        <div
+          className={cn('flex flex-row', {
+            hidden: readonly,
+          })}
+        >
           <MessageEditorToolbarFile />
           <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
             <PopoverTrigger asChild>
@@ -86,8 +92,8 @@ const NodeMessageToolbar = ({
               <Picker
                 theme="light"
                 onEmojiSelect={(emoji: any) => {
-                  const text = watch(nameFiledContent);
-                  setValue(nameFiledContent, text + emoji.native);
+                  const text = watch(contentNameField);
+                  setValue(contentNameField, text + emoji.native);
                 }}
                 skinTonePosition="none"
                 previewPosition="none"

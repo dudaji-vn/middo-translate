@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import 'reactflow/dist/style.css';
 
 import { Handle, Position } from 'reactflow';
@@ -38,7 +38,6 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
     );
     setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newMessageNode]);
   };
-
 
   return (
     <div
@@ -83,7 +82,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
           <MediaUploadDropzone>
             <NodeMessageToolbar
               mediasNameField={`${FLOW_KEYS.NODES}.${nodeIndex}.data.media`}
-              nameFiledContent={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
+              contentNameField={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
             />
           </MediaUploadDropzone>
         </MediaUploadProvider>
