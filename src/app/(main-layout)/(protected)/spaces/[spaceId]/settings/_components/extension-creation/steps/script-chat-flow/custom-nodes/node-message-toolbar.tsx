@@ -67,16 +67,17 @@ const NodeMessageToolbar = ({
         {isLoading && (
           <Skeleton className="h-1 w-full rounded-md bg-primary-200" />
         )}
-        {currentNodeMedias && <AttachmentSelection />}
-        <div
-          className={cn('flex flex-row', {
-            hidden: readonly,
-          })}
-        >
-          <MessageEditorToolbarFile />
+        {currentNodeMedias && <AttachmentSelection readonly={readonly} />}
+        <div className={cn('flex flex-row')}>
+          <MessageEditorToolbarFile disabled={readonly} />
           <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
             <PopoverTrigger asChild>
-              <Button.Icon variant="ghost" color="default" size="xs">
+              <Button.Icon
+                variant="ghost"
+                color="default"
+                size="xs"
+                disabled={readonly}
+              >
                 <Smile />
               </Button.Icon>
             </PopoverTrigger>
@@ -91,6 +92,7 @@ const NodeMessageToolbar = ({
             >
               <Picker
                 theme="light"
+                disabled={readonly}
                 onEmojiSelect={(emoji: any) => {
                   const text = watch(contentNameField);
                   setValue(contentNameField, text + emoji.native);
