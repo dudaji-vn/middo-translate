@@ -115,10 +115,12 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     }, []);
 
     if (!currentUser) return null;
-
-    if (!rooms.length && !isLoading && !pinnedRooms?.length) {
+    if ((type === 'all' || type === 'group') && !pinnedRooms?.length)
+      return <EmptyInbox type={type} />;
+    if (!rooms.length && !isLoading) {
       return <EmptyInbox type={type} />;
     }
+
     const showFilter =
       Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
     return (
