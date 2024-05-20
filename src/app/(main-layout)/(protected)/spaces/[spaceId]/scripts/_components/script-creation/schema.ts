@@ -59,6 +59,7 @@ export const createChatScriptSchema = z.object({
           z.object({
             id: z.string(),
             type: z.string(),
+            parentNode: z.string().optional(),
             data: z
               .object({
                 label: z.string().optional(),
