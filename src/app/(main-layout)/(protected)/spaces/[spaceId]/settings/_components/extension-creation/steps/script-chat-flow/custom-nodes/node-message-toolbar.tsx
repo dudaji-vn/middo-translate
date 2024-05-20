@@ -1,24 +1,22 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import 'reactflow/dist/style.css';
 
 import { Button } from '@/components/actions';
 import { Smile } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useFormContext } from 'react-hook-form';
-import {
-  useMediaUpload,
-} from '@/components/media-upload';
+import { useMediaUpload } from '@/components/media-upload';
 import { MessageEditorToolbarFile } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-file';
 import { useTranslation } from 'react-i18next';
-import {
-  AttachmentSelection,
-} from '@/components/attachment-selection';
+import { AttachmentSelection } from '@/components/attachment-selection';
 import { useAppStore } from '@/stores/app.store';
 import { Popover, PopoverTrigger } from '@/components/data-display/popover';
 import { PopoverContent } from '@radix-ui/react-popover';
 import Picker from '@emoji-mart/react';
+import { FLOW_KEYS } from './node-types';
+import { isEmpty, isEqual } from 'lodash';
 
 const allowedMediaTypes: Record<string, string> = {
   image: 'image',
@@ -26,19 +24,30 @@ const allowedMediaTypes: Record<string, string> = {
   document: 'document',
 };
 const NodeMessageToolbar = ({
-  nameFieldImg = '',
+  mediasNameField = '',
   nameFiledContent = '',
 }: {
-  nameFieldImg: string;
+  mediasNameField: string;
   nameFiledContent: string;
 }) => {
   const { t } = useTranslation('common');
-  const { files, uploadedFiles } = useMediaUpload();
+  const { files, uploadedFiles, loadSavedFiles } = useMediaUpload();
   const { setValue, watch } = useFormContext();
   const isMobile = useAppStore((state) => state.isMobile);
   const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
 
+  const currentNodeMedias = watch(mediasNameField);
+
   useEffect(() => {
+    if (isEmpty(uploadedFiles) && !isEmpty(currentNodeMedias)) {
+      loadSavedFiles(currentNodeMedias);
+    }
+    const oldUrls = currentNodeMedias?.map((med) => med.url)?.sort();
+    const changedUrls = uploadedFiles?.map((media) => media.url)?.sort();
+
+    console.log('oldUrls', oldUrls);
+    console.log('changedUrls', changedUrls);
+    if (isEqual(oldUrls, changedUrls)) return;
     if (uploadedFiles) {
       const media = uploadedFiles.map((file) => ({
         ...file,
@@ -46,9 +55,9 @@ const NodeMessageToolbar = ({
           allowedMediaTypes[file.file?.type?.split('/')[0] as string] ||
           'document',
       }));
-      setValue(nameFieldImg, media);
+      setValue(mediasNameField, media);
     }
-  }, [uploadedFiles, files, setValue, nameFieldImg]);
+  }, [uploadedFiles, files, setValue, currentNodeMedias, mediasNameField]);
 
   return (
     <>

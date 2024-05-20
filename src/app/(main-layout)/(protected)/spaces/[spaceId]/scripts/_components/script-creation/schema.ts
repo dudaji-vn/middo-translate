@@ -75,7 +75,17 @@ export const createChatScriptSchema = z.object({
                   message: 'Please enter content!',
                 }),
                 link: z.string().optional(),
-                media: z.array(z.any()).optional(),
+                media: z
+                  .array(
+                    z.object({
+                      file: z.any(),
+                      localUrl: z.string().optional(),
+                      metadata: z.any(),
+                      type: z.string(),
+                      url: z.string(),
+                    }),
+                  )
+                  .optional(),
               })
               .refine(checkNodeDataEmptyLink, {
                 message: 'Link should not be empty',
