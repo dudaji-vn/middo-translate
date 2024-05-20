@@ -49,16 +49,14 @@ export const InputField = (props: InputFieldProps) => {
       )}
       <div
         className={cn(
-          `flex h-[50px] w-full items-center justify-start rounded-xl border px-4 pr-1`,
+          `flex h-[48px] w-full items-center justify-start rounded-xl border px-4 pr-1`,
           isTouched && !errors ? 'border-green-500' : '',
         )}
       >
         <input
           {...register}
           className="w-full px-1 ring-0 focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
-          type={
-            type === 'password' && isShowPassword ? 'text' : type || 'text'
-          }
+          type={type === 'password' && isShowPassword ? 'text' : type || 'text'}
           id={id}
           spellCheck="false"
           placeholder={placeholder}
@@ -67,7 +65,7 @@ export const InputField = (props: InputFieldProps) => {
           <Button.Icon
             variant={'ghost'}
             size={'sm'}
-            onClick={() => setIsShowPassword(!isShowPassword)}  
+            onClick={() => setIsShowPassword(!isShowPassword)}
           >
             {isShowPassword ? (
               <EyeIcon className="text-slate-600 opacity-60" />
