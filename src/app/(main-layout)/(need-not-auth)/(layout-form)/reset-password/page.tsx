@@ -7,7 +7,7 @@ import { AlertError } from '@/components/alert/alert-error';
 import { InputField } from '@/components/form/Input-field';
 import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { resetPasswordService, setCookieService } from '@/services/auth.service';
+import { checkTokenResetPassword, resetPasswordService, setCookieService } from '@/services/auth.service';
 import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -68,10 +68,27 @@ export default function ResetPassword() {
 
   useEffect(() => {
     const token = searchParams?.get('token');
+    const checkToken = async () => {
+      try {
+        await setCookieService([{key: ACCESS_TOKEN_NAME, value: token || '', time: 15 }]);
+        const res = await checkTokenResetPassword();
+        const {data} = res;
+        if(data?.isValid) return;
+        router.push(ROUTE_NAMES.SIGN_IN);
+      } catch (_: unknown) {
+        router.push(ROUTE_NAMES.SIGN_IN);
+      } finally {
+        setLoading(false);
+      }
+    }
     if (!token) {
       router.push(ROUTE_NAMES.SIGN_IN);
+    } else {
+      // Check Token
+      checkToken();
+
     }
-  }, [router, searchParams]);
+  }, [router, searchParams, t]);
 
   const handleSubmitForm = async (e: React.FormEvent) => {
     e.preventDefault();

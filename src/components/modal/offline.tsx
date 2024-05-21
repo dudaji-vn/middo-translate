@@ -1,8 +1,6 @@
 'use client';
 
 import { useNetworkStatus } from '@/utils/use-network-status';
-import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/actions';
