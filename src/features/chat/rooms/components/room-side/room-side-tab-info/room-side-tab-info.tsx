@@ -39,7 +39,7 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
           {room.isGroup && (
             <RoomMember members={room.participants} adminId={room.admin?._id} />
           )}
-          <RoomCloud room={room} />
+          {/* <RoomCloud room={room} /> */}
         </div>
         <div className="mt-5 divide-y-[1px] divide-neutral-50 bg-white">
           {room.isGroup && <RoomLeave roomId={room._id} />}
