@@ -3,7 +3,7 @@ import socket from "@/lib/socket-io";
 import { useCallback, useEffect } from "react";
 import { useVideoCallStore } from "../../store/video-call.store";
 import toast from "react-hot-toast";
-import ParticipantInVideoCall from "../../interfaces/participant";
+import ParticipantInVideoCall, { StatusParticipant } from "../../interfaces/participant";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { useMyVideoCallStore } from "../../store/me.store";
@@ -46,6 +46,7 @@ export default function useHandleCreatePeerConnection() {
                 user: user.user,
                 socketId: user.id,
                 isShareScreen: false,
+
             });
         });
         
@@ -80,6 +81,7 @@ export default function useHandleCreatePeerConnection() {
             user: payload.user,
             isShareScreen: payload.isShareScreen,
             isElectron: payload?.isElectron || false,
+            status: StatusParticipant.JOINED,
         };
         if (!payload.isShareScreen) {
             newUser.isTurnOnMic = payload.isTurnOnMic;

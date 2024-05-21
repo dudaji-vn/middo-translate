@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
 import { PlayIcon } from 'lucide-react';
-import MediaLightBox from '@/components/media-light-box';
+import MediaLightBox from '@/components/media-light-box/media-light-box';
 
 export interface RoomMediaProps {}
 

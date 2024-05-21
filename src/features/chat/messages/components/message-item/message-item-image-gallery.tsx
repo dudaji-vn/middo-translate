@@ -7,7 +7,7 @@ import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import { forwardRef, useState } from 'react';
 import useRotate from '@/components/data-display/rotate';
-import MediaLightBox from '@/components/media-light-box';
+import MediaLightBox from '@/components/media-light-box/media-light-box';
 export interface ImageGalleryProps
   extends React.HTMLAttributes<HTMLDivElement> {
   images: Media[];
