@@ -1,30 +1,41 @@
-import { Typography } from '@/components/data-display';
-import { ChatSidebar } from '@/features/chat/components/chat-sidebar';
-import ChatSidebarHeader from '@/features/chat/components/chat-sidebar/chat-sidebar-header';
-import { businessAPI } from '@/features/chat/help-desk/api/business.service';
-import { notFound } from 'next/navigation'
-export enum EStatisticErrors {
-  NO_ANALYSTIC_DATA = "NO_ANALYSTIC_DATA",
-  NEXT_NOT_FOUND = "NEXT_NOT_FOUND"
-}
+'use client';
 
-const StatisticPage = async ({
-  params: {
-    spaceId
-  }
+import React, { use } from 'react';
+import { StatisticData, TChartKey } from '@/types/business-statistic.type';
+import useClient from '@/hooks/use-client';
+import { useTranslation } from 'react-i18next';
+import ReportCards from './_components/report/report-cards';
+import { BusinessLineChart } from './_components/report/report-charts/business-line-chart';
+import ReportHeader from './_components/report/report-header/report-header';
+import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
+
+const ReportPage = ({
+  params: { spaceId },
 }: {
   params: {
     spaceId: string;
-  }
+  };
 }) => {
-  const spaceData = await businessAPI.getSpaceBySpaceID(spaceId);
-  if (!spaceData) {
-    notFound();
-  }
-  return <div className='md:hidden flex flex-row gap-2 items-center max-h-full w-full overflow-y-auto' >
-    <ChatSidebarHeader />
-    <Typography variant="h6">Statistics </Typography>
-  </div>
-}
+  const isClient = useClient();
+  const { t } = useTranslation('common');
+  const [chartKey, setChartKey] = React.useState<TChartKey>('client');
+  const data: StatisticData = useGetSpaceAnalytic({ spaceId }).data;
 
-export default StatisticPage
+  if (!data || !isClient) return null;
+  const handleChartKeyChange = (key: TChartKey) => {
+    setChartKey(key);
+  };
+
+  return (
+    <>
+      <ReportCards
+        data={data}
+        chartKey={chartKey}
+        onKeyChange={handleChartKeyChange}
+      />
+      <BusinessLineChart reportData={data} keyData={chartKey} />
+    </>
+  );
+};
+
+export default ReportPage;
