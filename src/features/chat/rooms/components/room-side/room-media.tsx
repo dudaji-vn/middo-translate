@@ -41,7 +41,7 @@ export const RoomMedia = () => {
   }, [items]);
 
   const [index, setIndex] = useState<number | undefined>(undefined);
-
+  if (media.length === 0) return null;
   return (
     <>
       <div className="mb-3 grid w-full grid-cols-4 flex-wrap gap-1">
@@ -51,32 +51,35 @@ export const RoomMedia = () => {
             onClick={() => setIndex(index)}
             className="relative aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"
           >
-            {media.type === 'video' && <div className="h-full w-full relative" >
-              <video src={media.url} className="h-full w-full" />
-              <Button.Icon 
-                size={'ss'}
-                variant={'default'}
-                className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-50'
-                color={'default'}
-              >
-                <PlayIcon />
-              </Button.Icon>
-            </div> }
-            {media.type === 'image' && <Image
-              src={media.url}
-              alt={media.name || media.url}
-              quality={50}
-              fill
-              className="object-cover"
-            />}
-            
+            {media.type === 'video' && (
+              <div className="relative h-full w-full">
+                <video src={media.url} className="h-full w-full" />
+                <Button.Icon
+                  size={'ss'}
+                  variant={'default'}
+                  className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform opacity-50"
+                  color={'default'}
+                >
+                  <PlayIcon />
+                </Button.Icon>
+              </div>
+            )}
+            {media.type === 'image' && (
+              <Image
+                src={media.url}
+                alt={media.name || media.url}
+                quality={50}
+                fill
+                className="object-cover"
+              />
+            )}
           </div>
         ))}
       </div>
-      <MediaPreview 
-        files={media} 
-        index={index} 
-        close={() => setIndex(undefined)} 
+      <MediaPreview
+        files={media}
+        index={index}
+        close={() => setIndex(undefined)}
         fetchNextPage={hasNextPage ? fetchNextPage : undefined}
       />
       {hasNextPage && (

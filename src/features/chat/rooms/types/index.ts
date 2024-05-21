@@ -10,7 +10,9 @@ export type RoomStatus =
   | 'temporary'
   | 'deleted'
   | 'cannot_message'
-  | 'archived';
+  | 'archived'
+  | 'blocked'
+  | 'blocked_by_you';
 export type Room = {
   name?: string;
   subtitle?: string;

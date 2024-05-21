@@ -48,7 +48,7 @@ const HeaderProfile = ({
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
             <DropdownMenuTrigger>
-              <div className="relative flex gap-2 rounded-xl bg-neutral-50 px-3 py-[6px] active:!bg-neutral-200 active:!text-shading md:py-1 md:hover:bg-neutral-100">
+              <div className="relative flex h-9 items-center gap-2 rounded-xl bg-neutral-50 px-3 py-[6px] active:!bg-neutral-200 active:!text-shading md:py-1 md:hover:bg-neutral-100">
                 <Avatar
                   src={user.avatar || '/person.svg'}
                   size="xs"

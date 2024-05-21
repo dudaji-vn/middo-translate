@@ -70,7 +70,9 @@
     "EDITING": "Đang chỉnh sửa",
     "EDITED": "Đã chỉnh sửa",
     "SURE": "Chắc chắn",
-    "DELETE_ACCOUNT": "Xoá tài khoản"
+    "DELETE_ACCOUNT": "Xoá tài khoản",
+    "BLOCK": "Chặn",
+    "UNBLOCK": "Bỏ chặn"
   },
   "MESSAGE": {
     "ERROR": {

@@ -7,44 +7,48 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/feedback';
 
-import { Button } from '@/components/actions';
-import { Trash2 } from 'lucide-react';
-import { cn } from '@/utils/cn';
-import { useDeleteConversation } from '../../hooks/use-delete-conversation';
 import { useTranslation } from 'react-i18next';
-import { Item } from '@/components/data-display';
+import { User } from '@/features/users/types';
+import { Checkbox } from '@/components/form/checkbox';
+import { Label } from '@/components/ui/label';
 
-export interface RoomDeleteConversationProps {
-  roomId: string;
-  isGroup?: boolean;
+export interface UserBlockModalProps {
+  user: User;
+  onClosed?: () => void;
 }
 
-export const RoomDeleteConversation = ({
-  isGroup,
-  roomId,
-}: RoomDeleteConversationProps) => {
-  const { mutate } = useDeleteConversation();
+export const UserBlockModal = (props: UserBlockModalProps) => {
   const { t } = useTranslation('common');
+  console.log('props', props.user.name);
+
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <div>
-          <Item danger leftIcon={<Trash2 />}>
-            {t('MODAL.DELETE_CONVERSATION.TITLE')}
-          </Item>
-        </div>
-      </AlertDialogTrigger>
+    <AlertDialog
+      defaultOpen
+      onOpenChange={(open) => {
+        if (!open) {
+          props.onClosed?.();
+        }
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('MODAL.DELETE_CONVERSATION.TITLE')} ?
+            {t('MODAL.BLOCK_USER.TITLE', {
+              name: props.user.name,
+            })}
           </AlertDialogTitle>
+
           <AlertDialogDescription>
-            {t('MODAL.DELETE_CONVERSATION.DESCRIPTION')}
+            {t('MODAL.BLOCK_USER.DESCRIPTION')}
           </AlertDialogDescription>
+          <div className="mt-3 flex items-center gap-2">
+            <Checkbox id={props.user._id + 'block-check'} />
+            <Label htmlFor={props.user._id + 'block-check'}>
+              {t('MODAL.BLOCK_USER.ADDITIONAL_OPTION_1')}
+            </Label>
+          </div>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="sm:mr-3">
@@ -53,11 +57,8 @@ export const RoomDeleteConversation = ({
           <AlertDialogAction
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
-            onClick={() => {
-              mutate(roomId);
-            }}
           >
-            {t('COMMON.DELETE')}
+            {t('COMMON.BLOCK')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

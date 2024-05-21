@@ -1,9 +1,9 @@
 import {
   Archive,
   ArchiveX,
+  BanIcon,
   BellIcon,
   BellOffIcon,
-  CheckSquare,
   LogOut,
   PinIcon,
   PinOffIcon,
@@ -20,6 +20,8 @@ import { RoomModalChangeStatus } from './room.modal-change-status';
 import RoomAssignTag from './room-assign-tag';
 import { Room } from '../types';
 import { useToggleArchiveRoom } from '../hooks/use-toggle-archive-room';
+import { UserBlockModal } from '@/features/users/components/user-block-modal';
+import { useAuthStore } from '@/stores/auth.store';
 
 export type Action =
   | 'delete'
@@ -31,7 +33,9 @@ export type Action =
   | 'unnotify'
   | 'archive'
   | 'tag'
-  | 'unarchive';
+  | 'unarchive'
+  | 'block'
+  | 'unblock';
 
 export type ActionItem = {
   action: Action;
@@ -45,8 +49,14 @@ export type ActionItem = {
     setOpen: (value: boolean) => void;
   }) => JSX.Element | ReactNode;
 };
+
+type OnActionParams = {
+  action: Action;
+  room: Room;
+  isBusiness?: boolean;
+};
 export interface RoomActionsContextProps {
-  onAction: (action: Action, id: string, isBusiness?: boolean) => void;
+  onAction: (params: OnActionParams) => void;
   actionItems: ActionItem[];
 }
 const RoomActionsContext = createContext<RoomActionsContextProps | undefined>(
@@ -60,50 +70,54 @@ export const useRoomActions = () => {
   return context;
 };
 export const RoomActions = ({ children }: { children: React.ReactNode }) => {
-  const [id, setId] = useState<string>('');
+  const [room, setRoom] = useState<Room | null>(null);
+  const currentUserId = useAuthStore((state) => state.user?._id);
   const [action, setAction] = useState<Action>('none');
   const { mutate: pin } = usePinRoom();
   const { toggleArchive } = useToggleArchiveRoom();
-  const onAction = (action: Action, id: string, isBusiness?: boolean) => {
+  const onAction = ({ action, room, isBusiness }: OnActionParams) => {
+    const roomId = room?._id;
     switch (action) {
       case 'pin':
       case 'unpin':
-        pin(id);
+        pin(roomId);
         break;
       case 'archive':
         if (isBusiness) {
           setAction('archive');
-          setId(id);
+          setRoom(room);
           return;
         }
         toggleArchive({
-          roomId: id,
+          roomId,
           archive: true,
         });
         break;
       case 'unarchive':
         if (isBusiness) {
           setAction('unarchive');
-          setId(id);
+          setRoom(room);
           return;
         }
         toggleArchive({
-          roomId: id,
+          roomId,
           archive: false,
         });
         break;
       default:
         setAction(action);
-        setId(id);
+        setRoom(room);
         break;
     }
   };
   const reset = () => {
     setAction('none');
-    setId('');
+    setRoom(null);
   };
 
   const Modal = useMemo(() => {
+    if (!room) return null;
+    const id = room._id;
     switch (action) {
       case 'delete':
         return <RoomModalDelete onClosed={reset} id={id} />;
@@ -120,12 +134,18 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         return (
           <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />
         );
+      case 'block':
+        const otherUser = room.participants.find(
+          (participant) => participant._id !== currentUserId,
+        );
+        if (!otherUser) return null;
+        return <UserBlockModal onClosed={reset} user={otherUser} />;
       case 'tag':
         return null;
       default:
         return null;
     }
-  }, [action, id]);
+  }, [action, currentUserId, room]);
 
   const actionItems: ActionItem[] = useMemo(() => {
     return [
@@ -181,6 +201,17 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         action: 'unarchive',
         label: 'COMMON.UNARCHIVE',
         icon: <ArchiveX />,
+      },
+      {
+        action: 'block',
+        label: 'COMMON.BLOCK',
+        icon: <BanIcon />,
+        color: 'error',
+      },
+      {
+        action: 'unblock',
+        label: 'COMMON.UNBLOCK',
+        icon: <BanIcon />,
       },
       {
         action: 'delete',

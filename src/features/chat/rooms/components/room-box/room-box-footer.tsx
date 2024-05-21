@@ -19,6 +19,7 @@ import { Message } from '@/features/chat/messages/types';
 import { CreateMessage } from '@/features/chat/messages/api';
 import { useMessageActions } from '@/features/chat/messages/components/message-actions';
 import { cn } from '@/utils/cn';
+import { RoomBlockContent } from './room-block-content';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -167,8 +168,10 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       );
     }, [
       room.expiredAt,
-      room.lastMessage,
+      room.lastMessage?.type,
+      room.lastMessage?.action,
       room.isGroup,
+      room.isHelpDesk,
       room.participants,
       currentUser?._id,
     ]);
@@ -179,6 +182,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
           'bg-primary-100': isBlockedConversation,
         })}
       >
+        {/* <RoomBlockContent room={room} /> */}
         <MessageEditor
           isBlocked={isBlockedConversation}
           isEditing={isEdit}

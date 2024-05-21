@@ -70,7 +70,9 @@
     "EDITED": "Edited",
     "EDITING": "Editing",
     "SURE": "Sure",
-    "DELETE_ACCOUNT": "Delete Account"
+    "DELETE_ACCOUNT": "Delete Account",
+    "BLOCK": "Block",
+    "UNBLOCK": "Unblock"
   },
   "MESSAGE": {
     "ERROR": {
@@ -446,6 +448,11 @@
     "LEAVE_GROUP": {
       "TITLE": "Leave Group",
       "DESCRIPTION": "You will no longer be able to view messages from this group. Are you sure you want to leave?"
+    },
+    "BLOCK_USER": {
+      "TITLE": "Block {{name}}",
+      "DESCRIPTION": "You will not receive any message or call from them until you unblock. Are you sure?",
+      "ADDITIONAL_OPTION_1": "Also delete conversation history (can not be undone)"
     },
     "VERIFY": {
       "SUCCESS": {

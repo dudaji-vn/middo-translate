@@ -56,6 +56,8 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'none',
   'archive',
   'unarchive',
+  'block',
+  'unblock',
 ];
 
 const checkAllowedActions = ({
@@ -95,28 +97,38 @@ export const RoomItemActionWrapper = forwardRef<
           action: item.action,
           currentStatus: room.status,
         });
+        if (!isAllowed) return false;
         switch (item.action) {
           case 'notify':
-            return isAllowed && isMuted;
+            return isMuted;
           case 'unnotify':
-            return isAllowed && !isMuted;
+            return !isMuted;
           case 'pin':
-            return isAllowed && !room.isPinned;
+            return !room.isPinned;
           case 'unpin':
-            return isAllowed && room.isPinned;
+            return room.isPinned;
           case 'leave':
-            return isAllowed && room.isGroup;
+            return room.isGroup;
           case 'archive':
-            return isAllowed && room.status === 'active';
+            return room.status === 'active';
           case 'unarchive':
-            return isAllowed && room.status === 'archived';
+            return room.status === 'archived';
+          case 'block':
+            return !room.isGroup;
+          case 'unblock':
+            return !room.isGroup;
           default:
             return isAllowed;
         }
       })
       .map((item) => ({
         ...item,
-        onAction: () => onAction(item.action, room._id, isBusiness),
+        onAction: () =>
+          onAction({
+            action: item.action,
+            room,
+            isBusiness,
+          }),
       }));
   }, [
     actionItems,
@@ -124,10 +136,7 @@ export const RoomItemActionWrapper = forwardRef<
     isBusiness,
     isMuted,
     onAction,
-    room._id,
-    room.isGroup,
-    room.isPinned,
-    room.status,
+    room,
   ]);
 
   return (
@@ -198,7 +207,12 @@ const DesktopWrapper = ({
   return (
     <div className="group relative flex-1">
       {children}
-      <div className={cn('absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100', isOpen && 'opacity-100')}>
+      <div
+        className={cn(
+          'absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100',
+          isOpen && 'opacity-100',
+        )}
+      >
         <DropdownMenu open={isOpen} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon

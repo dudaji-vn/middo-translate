@@ -29,9 +29,15 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
             checked={!isMuted}
             onCheckedChange={(checked) => {
               if (checked) {
-                onAction('notify', _room._id);
+                onAction({
+                  action: 'notify',
+                  room: _room,
+                });
               } else {
-                onAction('unnotify', _room._id);
+                onAction({
+                  action: 'unnotify',
+                  room: _room,
+                });
               }
             }}
           />
@@ -46,7 +52,10 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
           <Switch
             checked={isPinned}
             onCheckedChange={(checked) => {
-              onAction('pin', _room._id);
+              onAction({
+                action: checked ? 'pin' : 'unpin',
+                room: _room,
+              });
               setIsPinned(checked);
             }}
           />
