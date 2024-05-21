@@ -1,30 +1,59 @@
-import { Typography } from '@/components/data-display';
-import { ChatSidebar } from '@/features/chat/components/chat-sidebar';
-import ChatSidebarHeader from '@/features/chat/components/chat-sidebar/chat-sidebar-header';
-import { businessAPI } from '@/features/chat/help-desk/api/business.service';
-import { notFound } from 'next/navigation'
-export enum EStatisticErrors {
-  NO_ANALYSTIC_DATA = "NO_ANALYSTIC_DATA",
-  NEXT_NOT_FOUND = "NEXT_NOT_FOUND"
-}
+'use client';
 
-const StatisticPage = async ({
-  params: {
-    spaceId
-  }
+import React from 'react';
+import useClient from '@/hooks/use-client';
+import { useTranslation } from 'react-i18next';
+import ReportCards from './_components/report/report-cards';
+import { BusinessLineChart } from './_components/report/report-charts/business-line-chart';
+import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
+import { mockChartData } from './mock-data';
+
+const ReportPage = ({
+  params: { spaceId },
+  searchParams,
 }: {
   params: {
     spaceId: string;
-  }
+  };
+  searchParams: {
+    type: string;
+    fromDate: string;
+    toDate: string;
+  };
 }) => {
-  const spaceData = await businessAPI.getSpaceBySpaceID(spaceId);
-  if (!spaceData) {
-    notFound();
-  }
-  return <div className='md:hidden flex flex-row gap-2 items-center max-h-full w-full overflow-y-auto' >
-    <ChatSidebarHeader />
-    <Typography variant="h6">Statistics </Typography>
-  </div>
-}
+  const isClient = useClient();
+  const { t } = useTranslation('common');
+  const { data, isFetching } = useGetSpaceAnalytic({
+    spaceId,
+    type: searchParams.type as any, // This type 'any' will be fixed in the next PR
+    custom:
+      searchParams?.fromDate && searchParams?.toDate
+        ? {
+            fromDate: searchParams.fromDate,
+            toDate: searchParams.toDate,
+          }
+        : undefined,
+  });
 
-export default StatisticPage
+  if (!isClient) return null;
+
+  return (
+    <section className="relative h-fit w-full space-y-4">
+      <ReportCards data={data} loading={isFetching} />
+      <BusinessLineChart
+        title={t('BUSINESS.CHART.NEWVISITOR')}
+        data={mockChartData['newVisitor']}
+        unit="visitor"
+        nameField="newVisitor"
+      />
+      <BusinessLineChart
+        title={t('BUSINESS.CHART.OPENEDCONVERSATION')}
+        data={mockChartData['openedConversation']}
+        unit="conversation"
+        nameField="openedConversation"
+      />
+    </section>
+  );
+};
+
+export default ReportPage;

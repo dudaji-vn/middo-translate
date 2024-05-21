@@ -49,25 +49,6 @@ const checkIncludingOption = (nodes: FlowNode[]) => {
   const hasOption = nodes?.find((node) => node.type === 'option');
   return hasOption;
 };
-/* 
- id: string;
-    position: XYPosition;
-    data: T;
-    type?: U;
-    style?: CSSProperties;
-    className?: string;
-    sourcePosition?: Position;
-    targetPosition?: Position;
-    hidden?: boolean;
-    selected?: boolean;
-    dragging?: boolean;
-    draggable?: boolean;
-    selectable?: boolean;
-    connectable?: boolean;
-    deletable?: boolean;
-    dragHandle?: string;
-    width?: number | null;
-    height?: number | null;*/
 export const createChatScriptSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   chatFlow: z
@@ -94,7 +75,17 @@ export const createChatScriptSchema = z.object({
                   message: 'Please enter content!',
                 }),
                 link: z.string().optional(),
-                media: z.array(z.any()).optional(),
+                media: z
+                  .array(
+                    z.object({
+                      file: z.any(),
+                      localUrl: z.string().optional(),
+                      metadata: z.any(),
+                      type: z.string(),
+                      url: z.string(),
+                    }),
+                  )
+                  .optional(),
               })
               .refine(checkNodeDataEmptyLink, {
                 message: 'Link should not be empty',

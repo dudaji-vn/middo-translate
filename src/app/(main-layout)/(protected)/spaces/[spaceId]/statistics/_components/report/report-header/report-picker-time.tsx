@@ -1,28 +1,28 @@
 'use client';
 
 import { Button } from '@/components/actions';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/data-display';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { Calendar } from '@/components/ui/calendar';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { cn } from '@/utils/cn';
 import { addDays, format } from 'date-fns';
-import { CalendarIcon, ChevronDown } from 'lucide-react';
-import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
+import ReportDropdown, { DropdownOption } from '../../report-dropdown';
+import { generateHref } from './href.util';
 
-export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
+export type TimePickerType =
+  | 'last-week'
+  | 'last-month'
+  | 'last-year'
+  | 'custom';
+
 export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
-export type AnalyticsOptions = {
-  type: AnalyticsType;
+
+export type TimePickerOptions = {
+  type: TimePickerType;
   spaceId: string;
 } & (
   | {
@@ -37,42 +37,24 @@ export type AnalyticsOptions = {
       custom?: never;
     }
 );
-const filterOptions: Record<AnalyticsOptions['type'], string> = {
+
+const filterOptions: Record<TimePickerOptions['type'], string> = {
   'last-week': 'Last week',
   'last-month': 'Last month',
   'last-year': 'Last year',
   custom: 'Custom',
 };
+
 const defaultOption = 'last-week';
-const generateHref = (
-  type: AnalyticsType,
-  custom: { fromDate: string; toDate: string },
-  search: string,
-) => {
-  if (!filterOptions[type]) {
-    return null;
-  }
-  if (type === 'custom' && custom.fromDate && !custom.toDate) {
-    return `/statistics?${new URLSearchParams({
-      type: type || defaultOption,
-      fromDate: custom.fromDate,
-      toDate: custom.toDate,
-      search: search || '',
-    }).toString()}`;
-  } else if (type !== 'custom') {
-    return `/statistics?${new URLSearchParams({
-      type,
-      search: search || '',
-    }).toString()}`;
-  }
-  return null;
-};
-export type ChartFilterDropdownProps = {};
-const ChartFilterDropdown = ({
-  // searchParams,
-  ...props
-}: ChartFilterDropdownProps) => {
+
+export type ReportPickerTimeProps = {};
+
+const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
   const searchParams = useSearchParams();
+  const current = new URLSearchParams(
+    Array.from(searchParams?.entries() || []),
+  );
+
   const type = searchParams?.get('type');
   const fromDate = searchParams?.get('fromDate') || '';
   const toDate = searchParams?.get('toDate') || '';
@@ -88,10 +70,6 @@ const ChartFilterDropdown = ({
     to: toDate ? new Date(toDate) : new Date(),
   });
 
-  const current = new URLSearchParams(
-    Array.from(searchParams?.entries() || []),
-  );
-
   const onConfirmRangeFilter = () => {
     current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
     current.set('toDate', format(date?.to || new Date(), 'yyyy-MM-dd'));
@@ -101,70 +79,53 @@ const ChartFilterDropdown = ({
     setOpenDatePickerModal(false);
   };
 
-  const displayCurentFilterValue = useMemo(() => {
+  const displayCurrentValue = useMemo(() => {
     if (type === 'custom') {
       return `${format(date?.from || new Date(), 'yyyy/MM/dd')} - ${format(date?.to || new Date(), 'yyyy/MM/dd')}`;
     }
-    return filterOptions[(type || defaultOption) as AnalyticsType];
+    return filterOptions[(type || defaultOption) as TimePickerType];
   }, [type, date]);
+
+  const options: DropdownOption[] = Object.entries(filterOptions).map(
+    ([key, value]) => {
+      const href =
+        `${ROUTE_NAMES.SPACES}/${params?.spaceId}` +
+          generateHref(
+            key as TimePickerType,
+            { fromDate, toDate },
+            search,
+            filterOptions,
+            defaultOption,
+          ) || '#';
+      return {
+        name: value,
+        value: key,
+        href: key === 'custom' ? undefined : href,
+        onClick:
+          key === 'custom' ? () => setOpenDatePickerModal(true) : undefined,
+      };
+    },
+  );
 
   return (
     <>
-      <span className="text-base font-normal">{t('BUSINESS.REPORT')}</span>
-      <DropdownMenu onOpenChange={setOpenDropdown} open={openDropdown}>
-        <DropdownMenuTrigger
-          asChild
-          onClick={() => {
-            setOpenDropdown((prev) => !prev);
-          }}
-        >
-          <div className="relative flex flex-row items-center gap-2  rounded-xl bg-neutral-50 px-3 py-2 text-neutral-800 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100">
-            <span className="text-neutral-800">{displayCurentFilterValue}</span>
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          className="overflow-hidden rounded-2xl border bg-background p-0 shadow-3 "
-          onClick={() => setOpenDropdown(false)}
-        >
-          {Object.entries(filterOptions).map(([key, value]) => {
-            const href =
-              `${ROUTE_NAMES.SPACES}/${params?.spaceId}` +
-                generateHref(
-                  key as AnalyticsType,
-                  { fromDate, toDate },
-                  search,
-                ) || '#';
-            if (key === 'custom')
-              return (
-                <DropdownMenuItem
-                  key={key}
-                  className=" rounded-none  py-2 text-neutral-700 outline-none hover:bg-neutral-100  hover:text-neutral-500"
-                  onClick={() => {
-                    setOpenDatePickerModal(true);
-                  }}
-                >
-                  Custom
-                </DropdownMenuItem>
-              );
-            return (
-              <Link
-                key={key}
-                href={href}
-                className={cn('block text-neutral-700 ', {
-                  'bg-neutral-100 text-neutral-900': type === key,
-                })}
-              >
-                {' '}
-                <DropdownMenuItem className="flex items-center rounded-none outline-none">
-                  {value}
-                </DropdownMenuItem>
-              </Link>
-            );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <ReportDropdown
+        open={openDropdown}
+        displayCurrentValue={displayCurrentValue}
+        onOpenChange={setOpenDropdown}
+        selectedOption={options.find((opt) => opt.value === type) || options[0]}
+        onSelectChange={(option) => {
+          if (option.href) {
+            router.push(option.href);
+          }
+          if (option.value === 'custom') {
+            setOpenDatePickerModal(true);
+          }
+        }}
+        options={options}
+        startIcon={<CalendarIcon />}
+      />
+
       <ConfirmAlertModal
         title="Pick a date range"
         titleProps={{
@@ -219,4 +180,4 @@ const ChartFilterDropdown = ({
   );
 };
 
-export default ChartFilterDropdown;
+export default ReportPickerTime;

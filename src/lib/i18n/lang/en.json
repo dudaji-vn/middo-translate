@@ -566,9 +566,12 @@
     "CLIENT_LIST": "Clients List",
     "CHART": {
       "CLIENT": "New Clients",
-      "AVERAGERATING": "Customer Rating",
-      "COMPLETEDCONVERSATION": "Completed Conversations",
-      "RESPONSECHAT": "Average Response Time"
+      "NEWVISITOR": "New Visitors",
+      "RESPONSETIME": "Response Time",
+      "OPENEDCONVERSATION": "Opened Conversations",
+      "DROPRATE": "Drop Rate",
+      "RESPONSEMESSAGE": "Response Message",
+      "CUSTOMERRATING": "Customer Rating"
     },
     "SCRIPT": {
       "PAGE_TITLE": "Scripts Management",
