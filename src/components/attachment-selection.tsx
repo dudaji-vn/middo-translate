@@ -8,6 +8,7 @@ import Image from 'next/image';
 import { Editor } from '@tiptap/react';
 
 import MediaLightBox from './media-light-box/media-light-box';
+import { cn } from '@/utils/cn';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
