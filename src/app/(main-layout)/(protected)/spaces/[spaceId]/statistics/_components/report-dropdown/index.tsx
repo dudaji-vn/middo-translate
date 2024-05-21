@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import React from 'react';
+import React, { ReactElement, cloneElement } from 'react';
 import { ChevronDown, Grid2X2 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/utils/cn';
@@ -25,14 +25,14 @@ const ReportDropdown = ({
   onSelectChange,
   open,
   onOpenChange = () => {},
-  startIcon = <Grid2X2 className="size-4" />,
-  endIcon = <ChevronDown className="size-4" />,
+  startIcon = <Grid2X2 />,
+  endIcon = <ChevronDown />,
   triggerLabel,
   displayCurrentValue,
 }: {
   open: boolean;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
+  startIcon?: ReactElement;
+  endIcon?: ReactElement;
   onOpenChange: (open: boolean) => void;
   selectedOption: DropdownOption;
   onSelectChange: (option: DropdownOption) => void;
@@ -49,14 +49,20 @@ const ReportDropdown = ({
         }}
       >
         <div className="relative flex h-12 flex-row items-center justify-between gap-2 rounded-[12px] border border-neutral-50 p-0 text-neutral-800 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100 [&_div]:px-3 [&_div]:py-2">
-          <div className="h-full rounded-l-[12px]  bg-primary-100">
-            {startIcon}
+          <div className="flex h-full items-center rounded-l-[12px] bg-primary-100">
+            {cloneElement(startIcon, {
+              size: 20,
+              ...startIcon.props,
+            })}
           </div>
           <div className="line-clamp-1 flex w-full  min-w-40 flex-row items-center justify-between xl:min-w-80">
             <span className="text-neutral-800">
               {displayCurrentValue || selectedOption?.name || triggerLabel}
             </span>
-            {endIcon}
+            {cloneElement(endIcon, {
+              size: 20,
+              ...endIcon.props,
+            })}
           </div>
         </div>
       </DropdownMenuTrigger>

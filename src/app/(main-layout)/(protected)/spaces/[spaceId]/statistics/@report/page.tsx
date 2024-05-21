@@ -41,7 +41,7 @@ const StatiscticReport = async ({ searchParams, params: {
     ...(type === 'custom' && { custom: { fromDate, toDate } })
   }
   const statiscticData: StatisticData = await businessAPI.getAnalytics(params as AnalyticsOptions);
-  console.log('statiscticData', statiscticData)
+
   return (
     <Report data={statiscticData || emptyStatisticData} />
   )
