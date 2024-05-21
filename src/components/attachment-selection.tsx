@@ -6,9 +6,8 @@ import { PlayCircleIcon, PlusCircleIcon, XIcon } from 'lucide-react';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
 import { Editor } from '@tiptap/react';
-import { MediaPreview } from './media-preview';
-import MediaLightBox from './media-light-box';
-import { cn } from '@/utils/cn';
+
+import MediaLightBox from './media-light-box/media-light-box';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {

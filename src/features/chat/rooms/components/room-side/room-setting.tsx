@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, PinIcon } from 'lucide-react';
+import { Bell, Files, PinIcon } from 'lucide-react';
 
 import { Item } from '@/components/data-display';
 import { Room } from '@/features/chat/rooms/types';
@@ -9,6 +9,7 @@ import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { useRoomActions } from '../room-actions';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useRoomSidebarTabs } from './room-side-tabs/room-side-tabs.hook';
 
 export interface RoomSettingProps {
   room: Room;
@@ -16,6 +17,7 @@ export interface RoomSettingProps {
 
 export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
   const { isMuted } = useIsMutedRoom(_room._id);
+  const { toggleTab } = useRoomSidebarTabs();
   const { onAction } = useRoomActions();
   const [isPinned, setIsPinned] = useState(_room.isPinned);
   const { t } = useTranslation('common');
@@ -53,6 +55,13 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
         }
       >
         {t('CONVERSATION.PIN_CONVERSATION')}
+      </Item>
+      <Item
+        className="truncate"
+        onClick={() => toggleTab('files')}
+        leftIcon={<Files />}
+      >
+        {t('CONVERSATION.FILE_MEDIA_AND_LINK')}
       </Item>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useSetParams } from '@/hooks/use-set-params';
 // SPK = Search Params Key
-export type RoomSidebarTabs = 'info' | 'discussion' | 'pinned';
+export type RoomSidebarTabs = 'info' | 'discussion' | 'pinned' | 'files';
 const SPK_ROOM_TAB = 'r_tab';
 export const useRoomSidebarTabs = () => {
   const { searchParams, removeParam, pushParam, ...rest } = useSetParams();

@@ -56,8 +56,8 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
     };
   }, [data]);
   return (
-    <div className="mt-5 bg-white p-3">
-      <Tabs defaultValue="all" value={currentTab} className="w-full">
+    <div className="bg-white pt-0 p-3 h-full flex flex-col">
+      <Tabs defaultValue="all" value={currentTab} className="w-full h-fit">
         <TabsList className="overflow-x-auto">
           {tabs.map((tab) => (
             <TabsTrigger
@@ -76,7 +76,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
           ))}
         </TabsList>
       </Tabs>
-      <div className="mt-3">{ComponentMap[currentTab]}</div>
+      <div className="mt-3 flex-1 overflow-hidden">{ComponentMap[currentTab]}</div>
     </div>
   );
 };

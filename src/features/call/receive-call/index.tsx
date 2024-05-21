@@ -48,7 +48,13 @@ const ReceiveVideoCall = () => {
   const acceptCall = useCallback(() => {
     removeRequestCall();
     setRoom(requestCall[0]?.call);
-  }, [removeRequestCall, requestCall, setRoom]);
+    setTimeout(() => {
+      socket.emit(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, {
+        roomId: requestCall[0]?.call.roomId,
+        userId: me?._id,
+      });
+    }, 3000);
+  }, [me?._id, removeRequestCall, requestCall, setRoom]);
 
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, listenToCall);
