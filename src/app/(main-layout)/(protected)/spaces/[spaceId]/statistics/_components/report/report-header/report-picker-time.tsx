@@ -11,13 +11,19 @@ import React, { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
 import ReportDropdown, { DropdownOption } from '../../report-dropdown';
+import { Typography } from '@/components/data-display';
+import { generateHref } from './href.util';
 
-export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
+export type TimePickerType =
+  | 'last-week'
+  | 'last-month'
+  | 'last-year'
+  | 'custom';
 
 export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
 
-export type AnalyticsOptions = {
-  type: AnalyticsType;
+export type TimePickerOptions = {
+  type: TimePickerType;
   spaceId: string;
 } & (
   | {
@@ -33,7 +39,7 @@ export type AnalyticsOptions = {
     }
 );
 
-const filterOptions: Record<AnalyticsOptions['type'], string> = {
+const filterOptions: Record<TimePickerOptions['type'], string> = {
   'last-week': 'Last week',
   'last-month': 'Last month',
   'last-year': 'Last year',
@@ -42,33 +48,9 @@ const filterOptions: Record<AnalyticsOptions['type'], string> = {
 
 const defaultOption = 'last-week';
 
-const generateHref = (
-  type: AnalyticsType,
-  custom: { fromDate: string; toDate: string },
-  search: string,
-) => {
-  if (!filterOptions[type]) {
-    return null;
-  }
-  if (type === 'custom' && custom.fromDate && !custom.toDate) {
-    return `/statistics?${new URLSearchParams({
-      type: type || defaultOption,
-      fromDate: custom.fromDate,
-      toDate: custom.toDate,
-      search: search || '',
-    }).toString()}`;
-  } else if (type !== 'custom') {
-    return `/statistics?${new URLSearchParams({
-      type,
-      search: search || '',
-    }).toString()}`;
-  }
-  return null;
-};
+export type ReportPickerTimeProps = {};
 
-export type ChartFilterDropdownProps = {};
-
-const ChartFilterDropdown = ({ ...props }: ChartFilterDropdownProps) => {
+const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
   const searchParams = useSearchParams();
   const type = searchParams?.get('type');
   const fromDate = searchParams?.get('fromDate') || '';
@@ -102,15 +84,20 @@ const ChartFilterDropdown = ({ ...props }: ChartFilterDropdownProps) => {
     if (type === 'custom') {
       return `${format(date?.from || new Date(), 'yyyy/MM/dd')} - ${format(date?.to || new Date(), 'yyyy/MM/dd')}`;
     }
-    return filterOptions[(type || defaultOption) as AnalyticsType];
+    return filterOptions[(type || defaultOption) as TimePickerType];
   }, [type, date]);
 
   const options: DropdownOption[] = Object.entries(filterOptions).map(
     ([key, value]) => {
       const href =
         `${ROUTE_NAMES.SPACES}/${params?.spaceId}` +
-          generateHref(key as AnalyticsType, { fromDate, toDate }, search) ||
-        '#';
+          generateHref(
+            key as TimePickerType,
+            { fromDate, toDate },
+            search,
+            filterOptions,
+            defaultOption,
+          ) || '#';
       return {
         name: value,
         value: key,
@@ -123,7 +110,6 @@ const ChartFilterDropdown = ({ ...props }: ChartFilterDropdownProps) => {
 
   return (
     <>
-      <span className="text-base font-normal">{t('BUSINESS.REPORT')}</span>
       <ReportDropdown
         open={openDropdown}
         displayCurrentValue={displayCurrentValue}
@@ -141,6 +127,7 @@ const ChartFilterDropdown = ({ ...props }: ChartFilterDropdownProps) => {
         startIcon={<Grid2X2 />}
         endIcon={<ChevronDown className="size-4" />}
       />
+
       <ConfirmAlertModal
         title="Pick a date range"
         titleProps={{
@@ -195,4 +182,4 @@ const ChartFilterDropdown = ({ ...props }: ChartFilterDropdownProps) => {
   );
 };
 
-export default ChartFilterDropdown;
+export default ReportPickerTime;
