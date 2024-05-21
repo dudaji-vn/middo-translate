@@ -565,9 +565,12 @@
     "CLIENT_LIST": "고객 목록",
     "CHART": {
       "CLIENT": "신규 고객",
-      "AVERAGERATING": "고객 평가",
-      "COMPLETEDCONVERSATION": "완료된 대화",
-      "RESPONSECHAT": "평균 응답 시간"
+      "NEW_VISITOR": "신규 방문자",
+      "RESPONSETIME": "응답 시간",
+      "OPENEDCONVERSATION": "열린 대화",
+      "DROPRATE": "드랍 비율",
+      "RESPONSEMESSAGE": "응답 메시지",
+      "CUSTOMERRATING": "고객 평가"
     },
     "SCRIPT": {
       "PAGE_TITLE": "채팅 스크립트",

@@ -12,7 +12,7 @@ import { DropdownMenuItemProps } from '@radix-ui/react-dropdown-menu';
 
 export type DropdownOption = {
   name: string;
-  value: string;
+  value: string | null;
   href?: string;
   renderOption?: (
     option: Omit<DropdownOption, 'renderOption'>,

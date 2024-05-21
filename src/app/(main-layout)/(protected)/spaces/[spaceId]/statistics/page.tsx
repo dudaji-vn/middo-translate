@@ -1,40 +1,58 @@
 'use client';
 
-import React, { use } from 'react';
-import { StatisticData, TChartKey } from '@/types/business-statistic.type';
+import React from 'react';
 import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
 import ReportCards from './_components/report/report-cards';
 import { BusinessLineChart } from './_components/report/report-charts/business-line-chart';
-import ReportHeader from './_components/report/report-header/report-header';
 import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
+import { mockChartData } from './mock-data';
 
 const ReportPage = ({
   params: { spaceId },
+  searchParams,
 }: {
   params: {
     spaceId: string;
   };
+  searchParams: {
+    type: string;
+    fromDate: string;
+    toDate: string;
+  };
 }) => {
   const isClient = useClient();
   const { t } = useTranslation('common');
-  const [chartKey, setChartKey] = React.useState<TChartKey>('client');
-  const data: StatisticData = useGetSpaceAnalytic({ spaceId }).data;
+  const { data, isFetching } = useGetSpaceAnalytic({
+    spaceId,
+    type: searchParams.type as any, // This type 'any' will be fixed in the next PR
+    custom:
+      searchParams?.fromDate && searchParams?.toDate
+        ? {
+            fromDate: searchParams.fromDate,
+            toDate: searchParams.toDate,
+          }
+        : undefined,
+  });
 
-  if (!data || !isClient) return null;
-  const handleChartKeyChange = (key: TChartKey) => {
-    setChartKey(key);
-  };
+  if (!isClient) return null;
 
   return (
-    <>
-      <ReportCards
-        data={data}
-        chartKey={chartKey}
-        onKeyChange={handleChartKeyChange}
+    <section className="relative h-fit w-full space-y-4">
+      <ReportCards data={data} loading={isFetching} />
+      <BusinessLineChart
+        title={t('BUSINESS.CHART.NEWVISITOR')}
+        data={mockChartData['newVisitor']}
+        unit="visitor"
+        nameField="newVisitor"
       />
-      <BusinessLineChart reportData={data} keyData={chartKey} />
-    </>
+      <BusinessLineChart
+        title={t('BUSINESS.CHART.OPENEDCONVERSATION')}
+        data={mockChartData['openedConversation']}
+        unit="conversation"
+        nameField="openedConversation"
+      />
+    </section>
   );
 };
 

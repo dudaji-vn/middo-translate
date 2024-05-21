@@ -12,6 +12,7 @@ import { accurateHumanize } from '@/utils/moment';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import CardsLoading from './cards-loading';
 const StarRating = ({ value }: { value: number }) => {
   const fillCount = ceil(value || 0);
   const emptyCount = Math.max(5 - fillCount, 0);
@@ -81,24 +82,23 @@ const Percentage = ({
     </p>
   );
 };
-const tooltipContent = {
-  client: 'The number of new clients in the picked time range',
-  completedConversation:
-    'The number of conversations that have been completed in the picked time range',
-  responseChat:
-    'The average response time of the chat in the picked time range',
-  averageRating: 'The average rating of the customer in the picked time range',
+const tooltipContent: Record<TChartKey, string> = {
+  //TODO: Add translation
+  newVisitor: 'The number of new visitors to your website',
+  openedConversation: 'The number of opened conversations',
+  dropRate: 'The rate of dropped conversations',
+  responseTime: 'The average response time',
+  customerRating: 'The average customer rating',
+  responseMessage: 'The average response message',
 };
 
 const cardContents: Array<{
   name: TChartKey;
-  title: string;
   renderDetail?: (value: number) => JSX.Element;
   renderPercentage?: (value: any) => JSX.Element;
 }> = [
   {
-    name: 'client',
-    title: 'New Clients',
+    name: 'newVisitor',
     renderDetail: (value: number) => (
       <Typography variant={'h6'} className="text-[2rem]">
         {value}
@@ -107,8 +107,7 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: 'completedConversation',
-    title: 'Completed conversations',
+    name: 'openedConversation',
     renderDetail: (value: number) => (
       <Typography variant={'h6'} className="text-[2rem]">
         {value}
@@ -117,8 +116,16 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: 'responseChat',
-    title: 'Response time',
+    name: 'dropRate',
+    renderDetail: (value: number) => (
+      <Typography variant={'h6'} className="text-[2rem]">
+        {value}&nbsp;%
+      </Typography>
+    ),
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+  {
+    name: 'responseTime',
     renderDetail: (value: number) => {
       const displayTime =
         accurateHumanize(moment.duration(value, 'milliseconds'), 1)
@@ -132,45 +139,47 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: 'averageRating',
-    title: 'Customer rating',
+    name: 'customerRating',
     renderDetail: (value: number) => <StarRating value={value} />,
-    // renderPercentage: (value: string) => <Percentage suffix={''} prefix={''} value={value} />,
+  },
+
+  {
+    name: 'responseMessage',
+    renderDetail: (value: number) => (
+      <Typography variant={'h6'} className="text-[2rem]">
+        {value}
+      </Typography>
+    ),
+    renderPercentage: (value: number) => <Percentage value={value} />,
   },
 ];
 const ReportCards = ({
   data,
-  chartKey,
-  onKeyChange,
+  loading,
 }: {
   data: StatisticData;
-  chartKey: TChartKey;
-  onKeyChange: (key: TChartKey) => void;
+  loading: boolean;
 }) => {
   const { t } = useTranslation('common');
+  if (loading) return <CardsLoading title={t('BUSINESS.REPORT')} />;
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-4">
-      {cardContents.map(
-        ({ name, renderDetail, title, renderPercentage }, index) => {
-          // @ts-ignore
-          let detailValue = data[name]?.count || 0;
-          // @ts-ignore
-          let percentage = data[name]?.rate || 0;
-          if (name === 'responseChat') {
-            detailValue = data.responseChat?.averageTime;
-          }
+    <section className="relative w-full space-y-4">
+      <Typography className=" flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
+        {t('BUSINESS.REPORT')}
+      </Typography>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
+        {cardContents.map(({ name, renderDetail, renderPercentage }, index) => {
+          let detailValue = data[name]?.value || 0;
+          let percentage = data[name]?.growth * 100 || 0;
+
           const displayTitle = t(`BUSINESS.CHART.${name.toUpperCase()}`);
           return (
             <Card
               key={index}
               className={cn(
                 'borderrounded-[12px] cursor-pointer gap-2 border-solid p-5 transition-all duration-300 ease-in-out hover:border-primary-300',
-                name === chartKey &&
-                  'border-primary-500-main shadow-[2px_6px_16px_2px_#1616161A]',
+                // name === chartKey &&'border-primary-500-main shadow-[2px_6px_16px_2px_#1616161A]',
               )}
-              onClick={() => {
-                onKeyChange(name);
-              }}
             >
               <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600">
                 <CardTitle className="text-base font-normal leading-[18px]">
@@ -196,9 +205,9 @@ const ReportCards = ({
               </CardContent>
             </Card>
           );
-        },
-      )}
-    </div>
+        })}
+      </div>
+    </section>
   );
 };
 

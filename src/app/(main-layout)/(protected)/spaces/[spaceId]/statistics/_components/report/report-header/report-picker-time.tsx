@@ -3,15 +3,14 @@
 import { Button } from '@/components/actions';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { Calendar } from '@/components/ui/calendar';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { addDays, format } from 'date-fns';
-import { CalendarIcon, ChevronDown, Grid2X2 } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
 import ReportDropdown, { DropdownOption } from '../../report-dropdown';
-import { Typography } from '@/components/data-display';
 import { generateHref } from './href.util';
 
 export type TimePickerType =
@@ -52,6 +51,10 @@ export type ReportPickerTimeProps = {};
 
 const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
   const searchParams = useSearchParams();
+  const current = new URLSearchParams(
+    Array.from(searchParams?.entries() || []),
+  );
+
   const type = searchParams?.get('type');
   const fromDate = searchParams?.get('fromDate') || '';
   const toDate = searchParams?.get('toDate') || '';
@@ -66,10 +69,6 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
     from: fromDate ? new Date(fromDate) : addDays(new Date(), -7),
     to: toDate ? new Date(toDate) : new Date(),
   });
-
-  const current = new URLSearchParams(
-    Array.from(searchParams?.entries() || []),
-  );
 
   const onConfirmRangeFilter = () => {
     current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
@@ -124,8 +123,7 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
           }
         }}
         options={options}
-        startIcon={<Grid2X2 />}
-        endIcon={<ChevronDown className="size-4" />}
+        startIcon={<CalendarIcon />}
       />
 
       <ConfirmAlertModal

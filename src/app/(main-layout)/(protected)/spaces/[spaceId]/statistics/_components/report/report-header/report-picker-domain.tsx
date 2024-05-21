@@ -1,9 +1,10 @@
 'use client';
 
-import { ChevronDown, Grid2X2 } from 'lucide-react';
+import { Globe } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ReportDropdown, { DropdownOption } from '../../report-dropdown';
+import { useAuthStore } from '@/stores/auth.store';
 
 export type DomainPickerType = string;
 
@@ -15,34 +16,35 @@ export type DomainPickerOptions = {
 };
 
 export type ReportPickerDomainProps = {};
+const OPTION_ALL = {
+  name: 'All domains',
+  value: null,
+};
 
 const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
-  const router = useRouter();
-  const params = useParams();
-
-  // TODO: Implement member picker options
-  const options: DropdownOption[] = [
-    {
-      name: 'DUDAJI VN',
-      value: 'dudaji-vn',
-    },
-  ];
+  const { space } = useAuthStore();
+  const [selectedDomain, setSelectedDomain] =
+    useState<DropdownOption>(OPTION_ALL);
+  const options = useMemo(() => {
+    return (space?.extension?.domains?.map((domain: string) => ({
+      name: domain,
+      value: domain,
+    })) || []) as DropdownOption[];
+  }, [space]);
 
   return (
     <>
       <ReportDropdown
         open={openDropdown}
         onOpenChange={setOpenDropdown}
-        selectedOption={options[0]}
+        selectedOption={selectedDomain}
         onSelectChange={(option) => {
-          if (option.href) {
-            router.push(option.href);
-          }
+          console.log(option);
+          setSelectedDomain(option);
         }}
-        options={options}
-        startIcon={<Grid2X2 />}
-        endIcon={<ChevronDown className="size-4" />}
+        options={[OPTION_ALL, ...options] as DropdownOption[]}
+        startIcon={<Globe />}
       />
     </>
   );
