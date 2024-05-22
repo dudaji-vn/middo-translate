@@ -5,8 +5,20 @@ import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
 import ReportCards from './_components/report/report-cards';
 import { BusinessLineChart } from './_components/report/report-charts/business-line-chart';
-import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
+import {
+  AnalyticsType,
+  useGetSpaceAnalytic,
+} from '@/features/business-spaces/hooks/use-get-space-analytic';
 import { mockChartData } from './mock-data';
+import { TChartKey } from '@/types/business-statistic.type';
+
+const charts: Array<TChartKey> = [
+  'newVisitor',
+  'openedConversation',
+  'dropRate',
+  'responseTime',
+  'customerRating',
+];
 
 const ReportPage = ({
   params: { spaceId },
@@ -23,35 +35,35 @@ const ReportPage = ({
 }) => {
   const isClient = useClient();
   const { t } = useTranslation('common');
+  const hasValidDateRange = searchParams.fromDate && searchParams.toDate;
   const { data, isFetching } = useGetSpaceAnalytic({
     spaceId,
-    type: searchParams.type as any, // This type 'any' will be fixed in the next PR
-    custom:
-      searchParams?.fromDate && searchParams?.toDate
-        ? {
-            fromDate: searchParams.fromDate,
-            toDate: searchParams.toDate,
-          }
-        : undefined,
+    type: String(searchParams.type) as any,
+    ...(hasValidDateRange && {
+      custom: {
+        fromDate: searchParams.fromDate,
+        toDate: searchParams.toDate,
+      },
+    }),
   });
 
   if (!isClient) return null;
+  console.log('data???', data);
 
   return (
     <section className="relative h-fit w-full space-y-4">
-      <ReportCards data={data} loading={isFetching} />
-      <BusinessLineChart
-        title={t('BUSINESS.CHART.NEWVISITOR')}
-        data={mockChartData['newVisitor']}
-        unit="visitor"
-        nameField="newVisitor"
-      />
-      <BusinessLineChart
-        title={t('BUSINESS.CHART.OPENEDCONVERSATION')}
-        data={mockChartData['openedConversation']}
-        unit="conversation"
-        nameField="openedConversation"
-      />
+      <ReportCards data={data?.analysis} loading={isFetching} />
+      {charts.map((chart) => {
+        return (
+          <BusinessLineChart
+            key={chart}
+            title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
+            data={data?.chart?.[chart] || []}
+            unit={chart === 'responseTime' ? 's' : 'message'}
+            nameField={chart}
+          />
+        );
+      })}
     </section>
   );
 };

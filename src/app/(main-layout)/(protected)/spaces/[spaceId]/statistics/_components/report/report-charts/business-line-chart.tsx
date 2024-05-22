@@ -47,7 +47,7 @@ export function BusinessLineChart({
   }>;
   title: string;
 }) {
-  console.log('data', data);
+  if (!data) return null;
   return (
     <section className="relative w-full space-y-4">
       <Typography className="flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">

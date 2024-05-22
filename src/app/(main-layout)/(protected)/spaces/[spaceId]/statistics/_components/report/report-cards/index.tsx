@@ -3,7 +3,7 @@
 import React, { ReactNode, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { ArrowDown, ArrowUp, Info, Star, StarHalf } from 'lucide-react';
-import { StatisticData, TChartKey } from '@/types/business-statistic.type';
+import { AnalysisData, TChartKey } from '@/types/business-statistic.type';
 import { ceil } from 'lodash';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
@@ -157,11 +157,12 @@ const ReportCards = ({
   data,
   loading,
 }: {
-  data: StatisticData;
+  data?: AnalysisData;
   loading: boolean;
 }) => {
   const { t } = useTranslation('common');
   if (loading) return <CardsLoading title={t('BUSINESS.REPORT')} />;
+  if (!data) return null;
   return (
     <section className="relative w-full space-y-4">
       <Typography className=" flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
