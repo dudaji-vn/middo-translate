@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
+import { StatusParticipant } from '@/features/call/interfaces/participant';
 
 export const useJoinCall = () => {
   const { user } = useAuthStore();
@@ -79,7 +80,7 @@ export const useJoinCall = () => {
           addParticipant({
             user: inviteParticipant[0],
             socketId: inviteParticipant._id,
-            status: 'WAITING',
+            status: StatusParticipant.WAITING,
           });
         }, 500);
       }

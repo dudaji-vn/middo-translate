@@ -294,7 +294,7 @@ function VideoPlayer(props: VideoProps) {
           </div>
         </div>
         {isShowVolume && <DropdownMenu open={isOpenVolume}>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild={true}>
             <div ref={buttonVolumeRef} className={cn('md:block hidden', isFullScreen && 'block')}>
               <ButtonVolume 
                 isFullScreen={isFullScreen}
