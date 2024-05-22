@@ -1,10 +1,11 @@
 'use client';
 
 import { Globe } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
-import React, { useMemo, useState } from 'react';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useMemo, useState } from 'react';
 import ReportDropdown, { DropdownOption } from '../../report-dropdown';
 import { useAuthStore } from '@/stores/auth.store';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 export type DomainPickerType = string;
 
@@ -32,6 +33,28 @@ const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
       value: domain,
     })) || []) as DropdownOption[];
   }, [space]);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const current = new URLSearchParams(
+    Array.from(searchParams?.entries() || []),
+  );
+  const currentDomain = searchParams?.get('domain');
+
+  const onSelectDomain = (option: DropdownOption) => {
+    if (option.value) {
+      current.set('domain', option.value);
+    } else {
+      current.delete('domain');
+    }
+    const href = `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`;
+    console.log('href', href);
+    router.push(href);
+  };
+  useEffect(() => {
+    setSelectedDomain(
+      options.find((option) => option.value === currentDomain) || OPTION_ALL,
+    );
+  }, [currentDomain]);
 
   return (
     <>
@@ -39,10 +62,7 @@ const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
         open={openDropdown}
         onOpenChange={setOpenDropdown}
         selectedOption={selectedDomain}
-        onSelectChange={(option) => {
-          console.log(option);
-          setSelectedDomain(option);
-        }}
+        onSelectChange={onSelectDomain}
         options={[OPTION_ALL, ...options] as DropdownOption[]}
         startIcon={<Globe />}
       />

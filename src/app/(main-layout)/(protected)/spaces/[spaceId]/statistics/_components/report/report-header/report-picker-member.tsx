@@ -24,38 +24,37 @@ const OPTION_ALL = {
 
 const ReportPickerMember = ({ ...props }: ReportPickerMemberProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
+  const { space } = useAuthStore();
+  const options = useMemo(() => {
+    return (space?.members.map((member) => ({
+      name: member.email,
+      value: member.user,
+    })) || []) as DropdownOption[];
+  }, [space]);
   const searchParams = useSearchParams();
   const current = new URLSearchParams(
     Array.from(searchParams?.entries() || []),
   );
-  const currentMember = searchParams?.get('member');
-  const { space } = useAuthStore();
+  const currentMember = searchParams?.get('memberId');
+
   const router = useRouter();
-  const [selectedMember, setSelectedMember] = useState<DropdownOption>();
-  const options = useMemo(() => {
-    return (space?.members.map((member) => ({
-      name: member.email,
-      value: member._id,
-    })) || []) as DropdownOption[];
-  }, [space]);
+  const [selectedMember, setSelectedMember] =
+    useState<DropdownOption>(OPTION_ALL);
 
   const onSelectMember = (option: DropdownOption) => {
     if (option.value) {
-      current.set('member', option.value);
+      current.set('memberId', option.value);
     } else {
-      current.delete('member');
+      current.delete('memberId');
     }
     const href = `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`;
+    console.log('href', href);
     router.push(href);
   };
   useEffect(() => {
-    if (currentMember) {
-      setSelectedMember(
-        options.find((option) => option.value === currentMember),
-      );
-    } else {
-      setSelectedMember(OPTION_ALL);
-    }
+    setSelectedMember(
+      options.find((option) => option.value === currentMember) || OPTION_ALL,
+    );
   }, [currentMember]);
 
   return (
