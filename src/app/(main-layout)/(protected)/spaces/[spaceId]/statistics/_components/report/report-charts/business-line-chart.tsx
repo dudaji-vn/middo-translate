@@ -63,7 +63,7 @@ export default function BusinessLineChart({
                 margin={{
                   top: 15,
                   right: 0,
-                  left: 0,
+                  left: 32,
                   bottom: 15,
                 }}
               >

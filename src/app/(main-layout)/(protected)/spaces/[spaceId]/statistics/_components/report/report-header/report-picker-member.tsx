@@ -49,14 +49,15 @@ const ReportPickerMember = ({}: ReportPickerMemberProps) => {
       current.delete(nameField);
     }
     const href = `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`;
-    console.log('href', href);
     router.push(href);
   };
   useEffect(() => {
-    setSelectedMember(
-      options.find((option) => option.value === currentMember) || OPTION_ALL,
-    );
-  }, [currentMember]);
+    if (currentMember && options?.length > 0) {
+      setSelectedMember(
+        options.find((option) => option.value === currentMember) || OPTION_ALL,
+      );
+    }
+  }, [currentMember, options]);
 
   return (
     <>

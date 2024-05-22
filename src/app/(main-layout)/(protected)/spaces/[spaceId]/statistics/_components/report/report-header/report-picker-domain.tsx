@@ -49,14 +49,15 @@ const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
       current.delete(nameField);
     }
     const href = `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`;
-    console.log('href', href);
     router.push(href);
   };
   useEffect(() => {
-    setSelectedDomain(
-      options.find((option) => option.value === currentDomain) || OPTION_ALL,
-    );
-  }, [currentDomain]);
+    if (currentDomain && options?.length > 0) {
+      setSelectedDomain(
+        options.find((option) => option.value === currentDomain) || OPTION_ALL,
+      );
+    }
+  }, [currentDomain, options]);
 
   return (
     <>

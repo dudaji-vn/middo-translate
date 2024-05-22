@@ -5,20 +5,19 @@ export const generateHref = (
   custom: { fromDate: string; toDate: string },
   filterOptions: Record<TimePickerType, string>,
   defaultOption: string,
+  current: URLSearchParams,
 ) => {
   if (!filterOptions[type]) {
     return null;
   }
   if (type === 'custom' && custom.fromDate && !custom.toDate) {
-    return `/statistics?${new URLSearchParams({
-      type: type || defaultOption,
-      fromDate: custom.fromDate,
-      toDate: custom.toDate,
-    }).toString()}`;
+    current.set('fromDate', custom.fromDate);
+    current.set('toDate', custom.toDate);
+    current.set('type', type || defaultOption);
+    return `/statistics?${current.toString()}`;
   } else if (type !== 'custom') {
-    return `/statistics?${new URLSearchParams({
-      type,
-    }).toString()}`;
+    current.set('type', type);
+    return `/statistics?${current.toString()}`;
   }
   return null;
 };

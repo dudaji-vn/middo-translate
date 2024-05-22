@@ -7,6 +7,7 @@ import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-sp
 import { TChartKey } from '@/types/business-statistic.type';
 import { BusinessLineChart } from './_components/report/report-charts';
 import { ReportCards } from './_components/report/report-cards';
+import { MAPPED_CHART_UNIT, getMaxUnit } from './_utils/get-humanized-unit';
 
 const charts: Array<TChartKey> = [
   'newVisitor',
@@ -14,16 +15,19 @@ const charts: Array<TChartKey> = [
   'dropRate',
   'responseTime',
   'customerRating',
+  'responseMessage',
 ];
 
 const ReportPage = ({
   params: { spaceId },
-  searchParams,
+  searchParams: { domain, memberId, type, fromDate, toDate },
 }: {
   params: {
     spaceId: string;
   };
   searchParams: {
+    domain: string;
+    memberId: string;
     type: string;
     fromDate: string;
     toDate: string;
@@ -31,18 +35,20 @@ const ReportPage = ({
 }) => {
   const isClient = useClient();
   const { t } = useTranslation('common');
-  const hasValidDateRange = searchParams.fromDate && searchParams.toDate;
+  const hasValidDateRange = fromDate && toDate;
   const { data, isFetching } = useGetSpaceAnalytic({
     spaceId,
-    ...(!!searchParams.type && {
-      type: searchParams.type as any,
+    ...(!!type && {
+      type: type as any,
     }),
     ...(hasValidDateRange && {
       custom: {
-        fromDate: searchParams.fromDate,
-        toDate: searchParams.toDate,
+        fromDate: fromDate,
+        toDate: toDate,
       },
     }),
+    ...(!!domain && { domain }),
+    ...(!!memberId && { memberId }),
   });
 
   if (!isClient) return null;
@@ -52,12 +58,31 @@ const ReportPage = ({
     <section className="relative h-fit w-full space-y-4">
       <ReportCards data={data?.analysis} loading={isFetching} />
       {charts.map((chart) => {
+        let chartUnit = MAPPED_CHART_UNIT[chart];
+        const chartData = data?.chart?.[chart] || [];
+        if (chart === 'responseTime') {
+          const { unit, ratio } = getMaxUnit(chartData);
+          chartData.forEach((item) => {
+            item.value = Number((item.value / ratio).toFixed(0));
+          }, []);
+          chartUnit = unit;
+        }
+        if (chart === 'dropRate') {
+          chartData.forEach((item) => {
+            item.value = item.value * 100;
+          }, []);
+        }
+        if (chart === 'customerRating') {
+          chartData.forEach((item) => {
+            item.value = item.value * 5;
+          }, []);
+        }
         return (
           <BusinessLineChart
             key={chart}
             title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
             data={data?.chart?.[chart] || []}
-            unit={chart === 'responseTime' ? 's' : 'message'}
+            unit={chartUnit}
             nameField={chart}
           />
         );

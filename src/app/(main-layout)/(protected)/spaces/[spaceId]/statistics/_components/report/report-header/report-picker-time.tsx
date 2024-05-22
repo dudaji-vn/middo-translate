@@ -7,7 +7,7 @@ import { Calendar as CalendarIcon } from 'lucide-react';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { addDays, format } from 'date-fns';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
 import { ReportDropdown } from '../../report-dropdown';
@@ -52,24 +52,45 @@ export type ReportPickerTimeProps = {};
 
 const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const params = useParams();
+  const { t } = useTranslation('common');
   const current = new URLSearchParams(
     Array.from(searchParams?.entries() || []),
   );
-
   const type = searchParams?.get('type');
   const fromDate = searchParams?.get('fromDate') || '';
   const toDate = searchParams?.get('toDate') || '';
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openDatePickerModal, setOpenDatePickerModal] = useState(false);
-  const router = useRouter();
-  const params = useParams();
-  const { t } = useTranslation('common');
+  const options: DropdownOption[] = Object.entries(filterOptions).map(
+    ([key, value]) => {
+      const href =
+        `${ROUTE_NAMES.SPACES}/${params?.spaceId}` +
+          generateHref(
+            key as TimePickerType,
+            { fromDate, toDate },
+            filterOptions,
+            defaultOption,
+            current
+          ) || '#';
+      return {
+        name: value,
+        value: key,
+        href: key === 'custom' ? undefined : href,
+        onClick:
+          key === 'custom' ? () => setOpenDatePickerModal(true) : undefined,
+      };
+    },
+  );
+  const [selectedOption, setSelectedOption] = useState<DropdownOption | null>(
+    options[0],
+  );
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: fromDate ? new Date(fromDate) : addDays(new Date(), -7),
     to: toDate ? new Date(toDate) : new Date(),
   });
-
   const onConfirmRangeFilter = () => {
     current.set(
       'fromDate',
@@ -89,25 +110,20 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
     return filterOptions[(type || defaultOption) as TimePickerType];
   }, [type, date]);
 
-  const options: DropdownOption[] = Object.entries(filterOptions).map(
-    ([key, value]) => {
-      const href =
-        `${ROUTE_NAMES.SPACES}/${params?.spaceId}` +
-          generateHref(
-            key as TimePickerType,
-            { fromDate, toDate },
-            filterOptions,
-            defaultOption,
-          ) || '#';
-      return {
-        name: value,
-        value: key,
-        href: key === 'custom' ? undefined : href,
-        onClick:
-          key === 'custom' ? () => setOpenDatePickerModal(true) : undefined,
-      };
-    },
-  );
+  useEffect(() => {
+    if (!type) {
+      return;
+    }
+    if (filterOptions[type as TimePickerType]) {
+      setSelectedOption(
+        options.find((opt) => opt.value === type) || options[0],
+      );
+    } else {
+      current.set('type', defaultOption);
+      const href = `${ROUTE_NAMES.SPACES}/${params?.spaceId}/statistics?${current.toString()}`;
+      router.push(href);
+    }
+  }, [type]);
 
   return (
     <>
@@ -115,7 +131,7 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
         open={openDropdown}
         displayCurrentValue={displayCurrentValue}
         onOpenChange={setOpenDropdown}
-        selectedOption={options.find((opt) => opt.value === type) || options[0]}
+        selectedOption={selectedOption || options[0]}
         onSelectChange={(option) => {
           if (option.href) {
             router.push(option.href);
