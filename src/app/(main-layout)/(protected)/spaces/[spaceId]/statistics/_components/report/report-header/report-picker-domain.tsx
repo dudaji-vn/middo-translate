@@ -3,9 +3,10 @@
 import { Globe } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
-import ReportDropdown, { DropdownOption } from '../../report-dropdown';
 import { useAuthStore } from '@/stores/auth.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { ReportDropdown } from '../../report-dropdown';
+import { DropdownOption } from '../../report-dropdown/report-dropdown';
 
 export type DomainPickerType = string;
 

@@ -10,7 +10,8 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
-import ReportDropdown, { DropdownOption } from '../../report-dropdown';
+import { ReportDropdown } from '../../report-dropdown';
+import { DropdownOption } from '../../report-dropdown/report-dropdown';
 import { generateHref } from './href.util';
 
 export type TimePickerType =

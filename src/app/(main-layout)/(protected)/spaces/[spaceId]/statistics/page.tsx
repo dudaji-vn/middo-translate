@@ -3,10 +3,10 @@
 import React from 'react';
 import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
-import ReportCards from './_components/report/report-cards';
 import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
 import { TChartKey } from '@/types/business-statistic.type';
 import { BusinessLineChart } from './_components/report/report-charts';
+import { ReportCards } from './_components/report/report-cards';
 
 const charts: Array<TChartKey> = [
   'newVisitor',
