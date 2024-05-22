@@ -14,6 +14,11 @@ export type AnalysisData = Record<
   }
 >;
 export type ChartData = Record<string, Array<{ label: string; value: number }>>;
+export type TLanguageRank = Array<{
+  language: string;
+  count: number;
+  total: number;
+}>;
 
 export const MAPPED_CHARTS_INFO: Record<TChartKey, string> = {
   newVisitor: 'New Visitors',

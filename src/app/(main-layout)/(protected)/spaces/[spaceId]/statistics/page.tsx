@@ -8,6 +8,7 @@ import { TChartKey } from '@/types/business-statistic.type';
 import { ReportCards } from './_components/report/report-cards';
 import { MAPPED_CHART_UNIT, getMaxUnit } from './_utils/get-humanized-unit';
 import { BusinessLineChart } from './_components/report/report-charts';
+import LanguageRank from './_components/report/report-charts/languages-rank/language-rank';
 
 const charts: Array<TChartKey> = [
   'newVisitor',
@@ -52,11 +53,14 @@ const ReportPage = ({
   });
 
   if (!isClient) return null;
-  console.log('data???', data);
 
   return (
     <section className="relative h-fit w-full space-y-4">
       <ReportCards data={data?.analysis} loading={isFetching} />
+      <LanguageRank
+        data={data?.conversationLanguage || []}
+        isLoading={isFetching}
+      />
       {charts.map((chart) => {
         let chartUnit = MAPPED_CHART_UNIT[chart];
         const chartData = data?.chart?.[chart] || [];

@@ -48,7 +48,7 @@ export default function BusinessLineChart({
   if (!data) return null;
   const hasNoLine = useMemo(() => data.length === 1, [data]);
   return (
-    <section className="relative w-full space-y-4">
+    <section className="relative w-full space-y-4  py-5">
       <Typography className="flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
         {title}
       </Typography>
