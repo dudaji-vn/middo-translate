@@ -51,6 +51,7 @@ export interface MessageItemWrapperProps {
   hideDetail?: () => void;
   toggleDetail?: () => void;
   setIsMenuOpen?: (isOpen: boolean) => void;
+  isMenuOpen?: boolean;
 }
 
 const MessageDetail = ({
@@ -228,6 +229,7 @@ export const MessageItemWrapper = ({
         items={items}
         hideDetail={hideDetail}
         setIsMenuOpen={setIsMenuOpen}
+        isMenuOpen={isMenuOpen}
       >
         {props.children}
       </Wrapper>
@@ -392,6 +394,7 @@ const DesktopWrapper = ({
   isMe,
   message,
   setIsMenuOpen,
+  isMenuOpen
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
   const { t } = useTranslation('common');
@@ -404,6 +407,7 @@ const DesktopWrapper = ({
           isMe
             ? '-left-4 -translate-x-full'
             : '-right-4 translate-x-full flex-row-reverse',
+          isMenuOpen && 'opacity-100',
         )}
       >
         <DropdownMenu onOpenChange={setIsMenuOpen}>
