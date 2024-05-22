@@ -21,21 +21,21 @@ const OPTION_ALL = {
   name: 'All members',
   value: null,
 };
-
-const ReportPickerMember = ({ ...props }: ReportPickerMemberProps) => {
+const nameField = 'memberId';
+const ReportPickerMember = ({}: ReportPickerMemberProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const { space } = useAuthStore();
   const options = useMemo(() => {
     return (space?.members.map((member) => ({
       name: member.email,
-      value: member.user,
+      value: member._id,
     })) || []) as DropdownOption[];
   }, [space]);
   const searchParams = useSearchParams();
   const current = new URLSearchParams(
     Array.from(searchParams?.entries() || []),
   );
-  const currentMember = searchParams?.get('memberId');
+  const currentMember = searchParams?.get(nameField);
 
   const router = useRouter();
   const [selectedMember, setSelectedMember] =
@@ -43,9 +43,9 @@ const ReportPickerMember = ({ ...props }: ReportPickerMemberProps) => {
 
   const onSelectMember = (option: DropdownOption) => {
     if (option.value) {
-      current.set('memberId', option.value);
+      current.set(nameField, option.value);
     } else {
-      current.delete('memberId');
+      current.delete(nameField);
     }
     const href = `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`;
     console.log('href', href);

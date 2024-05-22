@@ -37,7 +37,7 @@ export type TimePickerOptions = {
       custom?: never;
     }
 );
-
+const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd';
 const filterOptions: Record<TimePickerOptions['type'], string> = {
   'last-week': 'Last week',
   'last-month': 'Last month',
@@ -70,8 +70,11 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
   });
 
   const onConfirmRangeFilter = () => {
-    current.set('fromDate', format(date?.from || new Date(), 'yyyy-MM-dd'));
-    current.set('toDate', format(date?.to || new Date(), 'yyyy-MM-dd'));
+    current.set(
+      'fromDate',
+      format(date?.from || new Date(), DEFAULT_DATE_FORMAT),
+    );
+    current.set('toDate', format(date?.to || new Date(), DEFAULT_DATE_FORMAT));
     current.set('type', 'custom');
     const href = `${ROUTE_NAMES.SPACES}/${params?.spaceId}/statistics?${current.toString()}`;
     router.push(href);

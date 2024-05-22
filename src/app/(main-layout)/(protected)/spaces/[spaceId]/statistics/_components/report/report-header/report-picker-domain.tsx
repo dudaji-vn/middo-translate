@@ -22,6 +22,7 @@ const OPTION_ALL = {
   value: null,
 };
 
+const nameField = 'domain';
 const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const { space } = useAuthStore();
@@ -38,13 +39,13 @@ const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
   const current = new URLSearchParams(
     Array.from(searchParams?.entries() || []),
   );
-  const currentDomain = searchParams?.get('domain');
+  const currentDomain = searchParams?.get(nameField);
 
   const onSelectDomain = (option: DropdownOption) => {
     if (option.value) {
-      current.set('domain', option.value);
+      current.set(nameField, option.value);
     } else {
-      current.delete('domain');
+      current.delete(nameField);
     }
     const href = `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`;
     console.log('href', href);

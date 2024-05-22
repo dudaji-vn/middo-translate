@@ -1,6 +1,6 @@
 'use client';
 
-import React, {  } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@/components/data-display';
 import ReportPickerDomain from './report-picker-domain';
@@ -19,7 +19,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
       </Typography>
       <div className="flex w-full flex-row justify-between gap-2">
         <ReportPickerDomain />
-        <ReportPickerMember />
+        <ReportPickerMember  />
         <ReportPickerTime />
       </div>
     </>
