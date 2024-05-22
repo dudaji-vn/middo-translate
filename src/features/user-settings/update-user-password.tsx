@@ -89,7 +89,7 @@ export default function UpdateUserPassword() {
       setOpen(false);
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       reset();
     }

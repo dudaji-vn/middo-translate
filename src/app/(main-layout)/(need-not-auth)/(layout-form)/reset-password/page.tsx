@@ -103,7 +103,7 @@ export default function ResetPassword() {
       toast.success(t('MESSAGE.SUCCESS.CHANGE_PASSWORD'));
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
     }

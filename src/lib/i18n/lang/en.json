@@ -612,5 +612,19 @@
   "404": {
     "TITLE": "Page not found",
     "DESCRIPTION": "We can't find the page you're looking for"
+  },
+  "BACKEND": {
+    "MESSAGE": {
+      "SOMETHING_WRONG": "Something went wrong, please try again later!",
+      "ERROR": "Has error, please try again later!",
+      "PASSWORD_PATTERN": "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!",
+      "EMAIL_EXIST": "Email already exists!",
+      "USERNAME_EXIST": "Username already exists!",
+      "ACCOUNT_ALREADY_ACTIVE": "Your account is already active!",
+      "EMAIL_NOT_SIGNUP": "This email is not registered!",
+      "INVALID_PASSWORD": "Invalid password!",
+      "NEW_PASSWORD_SAME_OLD_PASSWORD": "New password must be different from current password!",
+      "INVALID_TOKEN": "Invalid token!"
+    }
   }
 }
