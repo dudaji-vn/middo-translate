@@ -83,13 +83,13 @@ const Percentage = ({
   );
 };
 const tooltipContent: Record<TChartKey, string> = {
-  //TODO: Add translation
   newVisitor: 'The number of new visitors to your website',
   openedConversation: 'The number of opened conversations',
   dropRate: 'The rate of dropped conversations',
   responseTime: 'The average response time',
   customerRating: 'The average customer rating',
   responseMessage: 'The average response message',
+  languageRank: 'The rank of languages',
 };
 
 const cardContents: Array<{

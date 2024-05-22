@@ -7,6 +7,7 @@ export const MAPPED_CHART_UNIT: Record<TChartKey, string> = {
   responseTime: 'ms',
   customerRating: 'star',
   responseMessage: 'message',
+  languageRank: 'language',
 };
 export const getMaxUnit = (data: { value: number }[] = []) => {
   const min = Math.min(
