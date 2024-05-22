@@ -13,7 +13,7 @@ const LoadingLanguageRank = () => {
     <section className="relative w-full space-y-4 py-5">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800">
-          Conversation's Language
+          Conversation&apos;s Language
         </Typography>
         <SelectLimitNumber value={3} onChange={() => {}} />
       </div>
@@ -52,7 +52,7 @@ const LanguageRank = ({
     <section className="relative w-full space-y-4 py-5">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800">
-          Conversation's Language
+          Conversation&apos;s Language
         </Typography>
         <SelectLimitNumber value={top} onChange={setTop} />
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactElement } from 'react';
+import React from 'react';
 import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
 import {
@@ -12,7 +12,6 @@ import { ReportCards } from './_components/report/report-cards';
 import { MAPPED_CHART_UNIT, getMaxUnit } from './_utils/get-humanized-unit';
 import { BusinessLineChart } from './_components/report/report-charts';
 import LanguageRank from './_components/report/report-charts/languages-rank/language-rank';
-import { Globe, User } from 'lucide-react';
 
 const chartsOrderList: Array<TChartKey> = [
   'newVisitor',
@@ -75,6 +74,7 @@ const ReportPage = ({
         if (chart === 'languageRank')
           return (
             <LanguageRank
+              key={chart}
               data={data?.conversationLanguage || []}
               isLoading={isFetching}
             />
