@@ -4,9 +4,9 @@ import React from 'react';
 import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
 import ReportCards from './_components/report/report-cards';
-import { BusinessLineChart } from './_components/report/report-charts/business-line-chart';
 import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
 import { TChartKey } from '@/types/business-statistic.type';
+import { BusinessLineChart } from './_components/report/report-charts';
 
 const charts: Array<TChartKey> = [
   'newVisitor',

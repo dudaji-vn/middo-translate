@@ -19,7 +19,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
       </Typography>
       <div className="flex w-full flex-row justify-between gap-2">
         <ReportPickerDomain />
-        <ReportPickerMember  />
+        <ReportPickerMember />
         <ReportPickerTime />
       </div>
     </>

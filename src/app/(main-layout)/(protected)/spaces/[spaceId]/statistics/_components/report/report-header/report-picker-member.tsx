@@ -1,8 +1,8 @@
 'use client';
 
 import { User } from 'lucide-react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import React, { use, useEffect, useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useEffect, useMemo, useState } from 'react';
 import ReportDropdown, { DropdownOption } from '../../report-dropdown';
 import { useAuthStore } from '@/stores/auth.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
