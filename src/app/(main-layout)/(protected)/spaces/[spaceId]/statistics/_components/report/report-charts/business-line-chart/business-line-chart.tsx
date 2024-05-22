@@ -10,7 +10,6 @@ import {
   YAxis,
 } from 'recharts';
 
-import { Card, CardContent } from '@/components/ui/card';
 import { ReactElement, ReactNode, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { AnalyticsOptions } from '@/features/business-spaces/hooks/use-get-space-analytic';
@@ -61,7 +60,6 @@ export default function BusinessLineChart({
   filterByKey?: string;
 }) {
   const { space } = useAuthStore();
-  if (!data) return null;
   const hasNoLine = useMemo(() => data.length === 1, [data]);
   const displayFilterBy = useMemo(() => {
     switch (filterByKey) {
@@ -72,6 +70,7 @@ export default function BusinessLineChart({
     }
     return filterBy;
   }, [filterBy, filterByKey, space]);
+  if (!data) return null;
   return (
     <section className="relative w-full space-y-4  py-5">
       <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
@@ -88,47 +87,39 @@ export default function BusinessLineChart({
           {displayFilterBy}
         </span>
       </Typography>
-      <Card className="border-none p-0">
-        <CardContent className="p-0">
-          <div className="h-80 min-h-[200px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={data}
-                margin={{
-                  top: 15,
-                  right: 0,
-                  left: 32,
-                  bottom: 15,
-                }}
-              >
-                <XAxis dataKey={chartLabel} padding={'gap'} className="py-4" />
-                <YAxis axisLine={false} tickLine={false} />
-                <CartesianGrid
-                  stroke="#E6E6E6"
-                  vertical={false}
-                  className="8"
-                />
-                <Tooltip content={<CustomTooltip unit={unit} />} />
-                <Line
-                  type="monotone"
-                  strokeWidth={2}
-                  dataKey={chartDataKey}
-                  activeDot={{
-                    r: 8,
-                    className:
-                      'fill-primary-500-main stroke-primary-500-main w-[1rem] h-[1rem]',
-                  }}
-                  dot={{
-                    r: hasNoLine ? 4 : 0,
-                    className: 'fill-primary-500-main stroke-primary-500-main',
-                  }}
-                  className=" stroke-primary-500-main"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="h-80 min-h-[200px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={data}
+            margin={{
+              top: 15,
+              right: 0,
+              left: 32,
+              bottom: 15,
+            }}
+          >
+            <XAxis dataKey={chartLabel} padding={'gap'} className="py-4" />
+            <YAxis axisLine={false} tickLine={false} />
+            <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
+            <Tooltip content={<CustomTooltip unit={unit} />} />
+            <Line
+              type="monotone"
+              strokeWidth={2}
+              dataKey={chartDataKey}
+              activeDot={{
+                r: 8,
+                className:
+                  'fill-primary-500-main stroke-primary-500-main w-[1rem] h-[1rem]',
+              }}
+              dot={{
+                r: hasNoLine ? 4 : 0,
+                className: 'fill-primary-500-main stroke-primary-500-main',
+              }}
+              className=" stroke-primary-500-main"
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </section>
   );
 }
