@@ -22,7 +22,7 @@ const ReceiveVideoCall = () => {
     (state) => state.removeRequestCall,
   );
   const setRoom = useVideoCallStore((state) => state.setRoom);
-
+  const room = useVideoCallStore((state) => state.room);
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
 
   const listenToCall = useCallback(
@@ -30,11 +30,12 @@ const ReceiveVideoCall = () => {
       if (user._id == me?._id) return;
       const isHave = requestCall.find((item: any) => item.id == call.roomId);
       if (isHave) return;
+      if(room && room.roomId === call.roomId) return;
       if (requestCall.length == 0) {
         addRequestCall({ id: call.roomId, call, user });
       }
     },
-    [addRequestCall, me?._id, requestCall],
+    [addRequestCall, me?._id, requestCall, room],
   );
 
   const declineCall = useCallback(() => {
