@@ -1,6 +1,7 @@
 'use client';
 
 import { axios } from '@/lib/axios';
+import { AnalysisData, ChartData } from '@/types/business-statistic.type';
 import { useQuery } from '@tanstack/react-query';
 
 export const GET_SPACE_ANALYST_KEY = 'get-space-analytic';
@@ -11,11 +12,16 @@ export type AnalyticsFilterDate = {
 };
 export type AnalyticsType = 'last-week' | 'last-month' | 'last-year' | 'custom';
 export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
+type TData = {
+  analysis: AnalysisData;
+  chart: ChartData;
+};
 export type AnalyticsOptions = {
   type: AnalyticsType;
-  member?: string;
-  domain?: string;
   spaceId: string;
+
+  memberId?: string;
+  domain?: string;
 } & (
   | {
       type: 'custom';
@@ -30,9 +36,14 @@ export const useGetSpaceAnalytic = ({
   type = 'last-week',
   custom,
   spaceId,
+  domain,
+  memberId,
 }: AnalyticsOptions) => {
   return useQuery({
-    queryKey: [GET_SPACE_ANALYST_KEY, { spaceId, type, custom }],
+    queryKey: [
+      GET_SPACE_ANALYST_KEY,
+      { spaceId, type, custom, domain, memberId },
+    ],
     queryFn: async () => {
       try {
         if (!analyticsType.includes(type)) {
@@ -48,15 +59,20 @@ export const useGetSpaceAnalytic = ({
             fromDate: custom.fromDate,
             toDate: custom.toDate,
           }),
+          ...(domain && { domain }),
+          ...(memberId && { memberId }),
         }).toString();
         const path = `/help-desk/spaces/${spaceId}/analytics?${query}`;
         const response = await axios.get(path);
-        return response.data;
+        return response.data as TData;
       } catch (error) {
         console.error(
           `Error fetching space ${spaceId}: ${(error as Error).message}`,
         );
-        return {};
+        return {
+          analysis: {},
+          chart: {},
+        } as TData;
       }
     },
     enabled: true,

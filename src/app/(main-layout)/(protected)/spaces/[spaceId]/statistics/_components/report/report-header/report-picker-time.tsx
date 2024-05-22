@@ -58,7 +58,6 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
   const type = searchParams?.get('type');
   const fromDate = searchParams?.get('fromDate') || '';
   const toDate = searchParams?.get('toDate') || '';
-  const search = searchParams?.get('search') || '';
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openDatePickerModal, setOpenDatePickerModal] = useState(false);
@@ -93,7 +92,6 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
           generateHref(
             key as TimePickerType,
             { fromDate, toDate },
-            search,
             filterOptions,
             defaultOption,
           ) || '#';

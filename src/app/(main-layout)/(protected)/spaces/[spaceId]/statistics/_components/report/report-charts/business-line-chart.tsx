@@ -47,7 +47,8 @@ export function BusinessLineChart({
   }>;
   title: string;
 }) {
-  console.log('data', data);
+  if (!data) return null;
+  const hasNoLine = useMemo(() => data.length === 1, [data]);
   return (
     <section className="relative w-full space-y-4">
       <Typography className="flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
@@ -84,8 +85,8 @@ export function BusinessLineChart({
                       'fill-primary-500-main stroke-primary-500-main w-[1rem] h-[1rem]',
                   }}
                   dot={{
-                    r: 0,
-                    className: 'fill-none stroke-primary-500-main ',
+                    r: hasNoLine ? 4 : 0,
+                    className: 'fill-primary-500-main stroke-primary-500-main',
                   }}
                   className=" stroke-primary-500-main"
                 />

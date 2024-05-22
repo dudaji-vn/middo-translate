@@ -5,7 +5,7 @@ export type TChartKey =
   | 'responseTime'
   | 'customerRating'
   | 'responseMessage';
-export type StatisticData = Record<
+export type AnalysisData = Record<
   TChartKey,
   {
     value: number;
@@ -13,6 +13,7 @@ export type StatisticData = Record<
     growth: number;
   }
 >;
+export type ChartData = Record<string, Array<{ label: string; value: number }>>;
 
 export const MAPPED_CHARTS_INFO: Record<TChartKey, string> = {
   newVisitor: 'New Visitors',
