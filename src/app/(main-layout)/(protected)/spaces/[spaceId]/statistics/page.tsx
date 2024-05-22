@@ -38,7 +38,9 @@ const ReportPage = ({
   const hasValidDateRange = searchParams.fromDate && searchParams.toDate;
   const { data, isFetching } = useGetSpaceAnalytic({
     spaceId,
-    type: String(searchParams.type) as any,
+    ...(!!searchParams.type && {
+      type: searchParams.type as any,
+    }),
     ...(hasValidDateRange && {
       custom: {
         fromDate: searchParams.fromDate,
