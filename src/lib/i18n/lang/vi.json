@@ -568,6 +568,7 @@
     "CLIENT_LIST": "Danh sách khách hàng",
     "CHART": {
       "CLIENT": "Khách hàng mới",
+      "LANGUAGERANK": "Xếp hạng ngôn ngữ",
       "NEWVISITOR": "Khách hàng mới",
       "RESPONSETIME": "Thời gian phản hồi",
       "OPENEDCONVERSATION": "Cuộc trò chuyện mở",

@@ -11,8 +11,12 @@ import {
 } from 'recharts';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { useMemo } from 'react';
+import { ReactElement, ReactNode, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
+import { AnalyticsOptions } from '@/features/business-spaces/hooks/use-get-space-analytic';
+import { Globe, User } from 'lucide-react';
+import { cn } from '@/utils/cn';
+import { useAuthStore } from '@/stores/auth.store';
 
 const CustomTooltip = ({ active, payload, label, unit }: any) => {
   const { value } = payload?.[0] || {};
@@ -33,26 +37,56 @@ const CustomTooltip = ({ active, payload, label, unit }: any) => {
 };
 const chartLabel = 'label';
 const chartDataKey = 'value';
+const mappedFilterByIcon: Partial<
+  Record<keyof AnalyticsOptions, ReactElement>
+> = {
+  domain: <Globe size={16} className="text-primary-500-main" />,
+  memberId: <User size={16} className="text-primary-500-main" />,
+};
+
 export default function BusinessLineChart({
   data = [],
-  nameField,
   unit,
   title,
+  filterBy = '',
+  filterByKey = '',
 }: {
-  nameField: string;
   unit: string;
   data: Array<{
     label: string;
     value: number;
   }>;
   title: string;
+  filterBy?: string;
+  filterByKey?: string;
 }) {
+  const { space } = useAuthStore();
   if (!data) return null;
   const hasNoLine = useMemo(() => data.length === 1, [data]);
+  const displayFilterBy = useMemo(() => {
+    switch (filterByKey) {
+      case 'domain':
+        return filterBy;
+      case 'memberId':
+        return space?.members?.find((m) => m._id === filterBy)?.email;
+    }
+    return filterBy;
+  }, [filterBy, filterByKey, space]);
   return (
-    <section className="relative w-full space-y-4">
-      <Typography className="flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
+    <section className="relative w-full space-y-4  py-5">
+      <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
         {title}
+        <span
+          className={cn(
+            'flex flex-row items-center gap-2 font-normal text-neutral-800',
+            {
+              hidden: !displayFilterBy,
+            },
+          )}
+        >
+          {mappedFilterByIcon[filterByKey as keyof AnalyticsOptions]}
+          {displayFilterBy}
+        </span>
       </Typography>
       <Card className="border-none p-0">
         <CardContent className="p-0">

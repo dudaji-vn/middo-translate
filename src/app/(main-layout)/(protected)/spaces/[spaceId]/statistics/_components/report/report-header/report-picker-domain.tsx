@@ -52,10 +52,22 @@ const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
     router.push(href);
   };
   useEffect(() => {
-    if (currentDomain && options?.length > 0) {
-      setSelectedDomain(
-        options.find((option) => option.value === currentDomain) || OPTION_ALL,
+    if (options?.length > 0) {
+      if (!currentDomain) {
+        setSelectedDomain(OPTION_ALL);
+        return;
+      }
+      const foundOption = options.find(
+        (option) => option.value === currentDomain,
       );
+      if (!foundOption) {
+        current.delete(nameField);
+        router.push(
+          `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`,
+        );
+        return;
+      }
+      setSelectedDomain(foundOption);
     }
   }, [currentDomain, options]);
 

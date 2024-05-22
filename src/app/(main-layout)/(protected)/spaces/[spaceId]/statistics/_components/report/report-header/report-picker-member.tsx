@@ -52,10 +52,22 @@ const ReportPickerMember = ({}: ReportPickerMemberProps) => {
     router.push(href);
   };
   useEffect(() => {
-    if (currentMember && options?.length > 0) {
-      setSelectedMember(
-        options.find((option) => option.value === currentMember) || OPTION_ALL,
+    if (options?.length > 0) {
+      if (!currentMember) {
+        setSelectedMember(OPTION_ALL);
+        return;
+      }
+      const foundOption = options.find(
+        (option) => option.value === currentMember,
       );
+      if (!foundOption) {
+        current.delete(nameField);
+        router.push(
+          `${ROUTE_NAMES.SPACES}/${space?._id}/statistics?${current.toString()}`,
+        );
+        return;
+      }
+      setSelectedMember(foundOption);
     }
   }, [currentMember, options]);
 

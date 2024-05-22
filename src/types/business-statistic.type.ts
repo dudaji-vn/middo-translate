@@ -1,6 +1,7 @@
 export type TChartKey =
   | 'newVisitor'
   | 'openedConversation'
+  | 'languageRank'
   | 'dropRate'
   | 'responseTime'
   | 'customerRating'
@@ -14,11 +15,17 @@ export type AnalysisData = Record<
   }
 >;
 export type ChartData = Record<string, Array<{ label: string; value: number }>>;
+export type TLanguageRank = Array<{
+  language: string;
+  count: number;
+  total: number;
+}>;
 
 export const MAPPED_CHARTS_INFO: Record<TChartKey, string> = {
   newVisitor: 'New Visitors',
   openedConversation: 'Opened conversations',
   dropRate: 'Response time',
+  languageRank: "Conversation's language",
   responseTime: 'Customer rating',
   customerRating: 'Customer rating',
   responseMessage: 'Response time',

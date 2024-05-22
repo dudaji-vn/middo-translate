@@ -73,7 +73,7 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
             { fromDate, toDate },
             filterOptions,
             defaultOption,
-            current
+            current,
           ) || '#';
       return {
         name: value,

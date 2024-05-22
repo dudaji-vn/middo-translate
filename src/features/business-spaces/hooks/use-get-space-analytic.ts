@@ -1,7 +1,11 @@
 'use client';
 
 import { axios } from '@/lib/axios';
-import { AnalysisData, ChartData } from '@/types/business-statistic.type';
+import {
+  AnalysisData,
+  ChartData,
+  TLanguageRank,
+} from '@/types/business-statistic.type';
 import { useQuery } from '@tanstack/react-query';
 
 export const GET_SPACE_ANALYST_KEY = 'get-space-analytic';
@@ -15,6 +19,7 @@ export const analyticsType = ['last-week', 'last-month', 'last-year', 'custom'];
 type TData = {
   analysis: AnalysisData;
   chart: ChartData;
+  conversationLanguage: TLanguageRank;
 };
 export type AnalyticsOptions = {
   type: AnalyticsType;
@@ -39,7 +44,7 @@ export const useGetSpaceAnalytic = ({
   domain,
   memberId,
 }: AnalyticsOptions) => {
-  return useQuery({
+  return useQuery<unknown, unknown, TData>({
     queryKey: [
       GET_SPACE_ANALYST_KEY,
       { spaceId, type, custom, domain, memberId },
@@ -72,7 +77,8 @@ export const useGetSpaceAnalytic = ({
         return {
           analysis: {},
           chart: {},
-        } as TData;
+          conversationLanguage: [],
+        };
       }
     },
     enabled: true,

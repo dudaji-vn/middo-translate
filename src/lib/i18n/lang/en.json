@@ -566,6 +566,7 @@
     "CLIENT_LIST": "Clients List",
     "CHART": {
       "CLIENT": "New Clients",
+      "LANGUAGERANK": "Conversation's Language",
       "NEWVISITOR": "New Visitors",
       "RESPONSETIME": "Response Time",
       "OPENEDCONVERSATION": "Opened Conversations",
