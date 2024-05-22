@@ -5,9 +5,9 @@ import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
 import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
 import { TChartKey } from '@/types/business-statistic.type';
-import { BusinessLineChart } from './_components/report/report-charts';
 import { ReportCards } from './_components/report/report-cards';
 import { MAPPED_CHART_UNIT, getMaxUnit } from './_utils/get-humanized-unit';
+import { BusinessLineChart } from './_components/report/report-charts';
 
 const charts: Array<TChartKey> = [
   'newVisitor',
@@ -63,7 +63,7 @@ const ReportPage = ({
         if (chart === 'responseTime') {
           const { unit, ratio } = getMaxUnit(chartData);
           chartData.forEach((item) => {
-            item.value = Number((item.value / ratio).toFixed(0));
+            item.value = Number((item.value / ratio).toFixed(1));
           }, []);
           chartUnit = unit;
         }
@@ -83,7 +83,6 @@ const ReportPage = ({
             title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
             data={data?.chart?.[chart] || []}
             unit={chartUnit}
-            nameField={chart}
           />
         );
       })}

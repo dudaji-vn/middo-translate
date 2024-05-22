@@ -35,11 +35,9 @@ const chartLabel = 'label';
 const chartDataKey = 'value';
 export default function BusinessLineChart({
   data = [],
-  nameField,
   unit,
   title,
 }: {
-  nameField: string;
   unit: string;
   data: Array<{
     label: string;

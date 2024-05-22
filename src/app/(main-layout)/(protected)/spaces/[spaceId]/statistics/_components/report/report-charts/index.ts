@@ -1,1 +1,1 @@
-export { default as BusinessLineChart } from './business-line-chart';
+export { BusinessLineChart } from './business-line-chart';
