@@ -33,7 +33,7 @@ const CustomTooltip = ({ active, payload, label, unit }: any) => {
 };
 const chartLabel = 'label';
 const chartDataKey = 'value';
-export function BusinessLineChart({
+export default function BusinessLineChart({
   data = [],
   nameField,
   unit,
@@ -63,7 +63,7 @@ export function BusinessLineChart({
                 margin={{
                   top: 15,
                   right: 0,
-                  left: 0,
+                  left: 32,
                   bottom: 15,
                 }}
               >

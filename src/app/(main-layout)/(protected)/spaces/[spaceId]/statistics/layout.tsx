@@ -1,5 +1,5 @@
 import React from 'react';
-import ReportHeader from './_components/report/report-header/report-header';
+import { ReportHeader } from './_components/report/report-header';
 
 const StatisticLayout = ({ children }: { children: JSX.Element }) => {
   return (

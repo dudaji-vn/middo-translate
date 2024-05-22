@@ -1,6 +1,6 @@
 'use client';
 
-import React, {  } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@/components/data-display';
 import ReportPickerDomain from './report-picker-domain';
