@@ -5,11 +5,7 @@ import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
 import ReportCards from './_components/report/report-cards';
 import { BusinessLineChart } from './_components/report/report-charts/business-line-chart';
-import {
-  AnalyticsType,
-  useGetSpaceAnalytic,
-} from '@/features/business-spaces/hooks/use-get-space-analytic';
-import { mockChartData } from './mock-data';
+import { useGetSpaceAnalytic } from '@/features/business-spaces/hooks/use-get-space-analytic';
 import { TChartKey } from '@/types/business-statistic.type';
 
 const charts: Array<TChartKey> = [
