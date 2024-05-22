@@ -88,7 +88,7 @@ export default function SignUp() {
       router.push(ROUTE_NAMES.SIGN_UP_SUCCESS);
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
       // reset();

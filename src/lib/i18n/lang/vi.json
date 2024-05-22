@@ -614,5 +614,19 @@
   "404": {
     "TITLE": "Trang không tìm thấy",
     "DESCRIPTION": "Chúng tôi không thể tìm thấy trang bạn đang tìm kiếm"
+  },
+  "BACKEND": {
+    "MESSAGE": {
+      "SOMETHING_WRONG": "Có lỗi, vui lòng thử lại sau!",
+      "ERROR": "Có lỗi, vui lòng thử lại sau!",
+      "PASSWORD_PATTERN": "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường và 1 số!",
+      "EMAIL_EXIST": "Email đã tồn tại!",
+      "USERNAME_EXIST": "Tên người dùng đã tồn tại!",
+      "ACCOUNT_ALREADY_ACTIVE": "Tài khoản của bạn đã được kích hoạt!",
+      "EMAIL_NOT_SIGNUP": "Email này chưa được đăng ký!",
+      "INVALID_PASSWORD": "Mật khẩu không hợp lệ!",
+      "NEW_PASSWORD_SAME_OLD_PASSWORD": "Mật khẩu mới phải khác với mật khẩu hiện tại!",
+      "INVALID_TOKEN": "Liên kết xác minh đã hết hạn!"
+    }
   }
 }
