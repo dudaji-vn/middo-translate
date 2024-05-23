@@ -10,6 +10,8 @@ import ReceiveVideoCallContent from './components/receive-call-content';
 import ReceiveVideoCallActions from './components/receive-call-actions';
 import usePlayAudio from '../hooks/use-play-audio';
 import { motion, useDragControls } from 'framer-motion';
+import { useElectron } from '@/hooks/use-electron';
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
 
 const ReceiveVideoCall = () => {
   const constraintsRef = useRef<HTMLDivElement>(null);
@@ -24,7 +26,7 @@ const ReceiveVideoCall = () => {
   const setRoom = useVideoCallStore((state) => state.setRoom);
   const room = useVideoCallStore((state) => state.room);
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
-
+  const { isElectron, ipcRenderer } = useElectron();
   const listenToCall = useCallback(
     ({ call, user }: any) => {
       if (user._id == me?._id) return;
@@ -32,10 +34,14 @@ const ReceiveVideoCall = () => {
       if (isHave) return;
       if(room && room.roomId === call.roomId) return;
       if (requestCall.length == 0) {
-        addRequestCall({ id: call.roomId, call, user });
+        const data = { id: call.roomId, call, user }
+        addRequestCall(data);
+        if(isElectron && ipcRenderer) {
+          ipcRenderer.send(ELECTRON_EVENTS.RECEIVE_CALL_INVITE, data);
+        }
       }
     },
-    [addRequestCall, me?._id, requestCall, room],
+    [addRequestCall, ipcRenderer, isElectron, me?._id, requestCall, room],
   );
 
   const declineCall = useCallback(() => {
@@ -85,6 +91,41 @@ const ReceiveVideoCall = () => {
       clearTimeout(timeout);
     };
   }, [declineCall, me?._id, requestCall, stopAudio]);
+
+  // Event electron receive call
+  useEffect(() => {
+    const handleReceiveCall = (response : ('DECLINE' | 'ACCEPT')) => {
+      switch (response) {
+        case 'DECLINE':
+          declineCall();
+          break;
+        case 'ACCEPT':
+          acceptCall();
+          break;
+        default:
+          break;
+      }
+    }
+    if(isElectron && ipcRenderer) {
+      ipcRenderer.on(ELECTRON_EVENTS.CALL_RESPONSE, handleReceiveCall);
+    }
+    return () => {
+      if(isElectron && ipcRenderer) {
+        ipcRenderer.off(ELECTRON_EVENTS.CALL_RESPONSE, handleReceiveCall);
+      }
+    };
+  }, [isElectron, ipcRenderer, declineCall, acceptCall]);
+
+
+  // Add on event no call
+  useEffect(() => {
+    if(requestCall.length === 0) {
+      if(isElectron && ipcRenderer) {
+        ipcRenderer.send(ELECTRON_EVENTS.NO_CALL);
+      }
+    }
+  }, [ipcRenderer, isElectron, requestCall.length]);
+
 
   if (requestCall.length === 0) return null;
 

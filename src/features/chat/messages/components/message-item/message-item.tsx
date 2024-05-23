@@ -124,7 +124,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           setActive,
         }}
       >
-        {/* {!isDraw && <SeenTracker guestId={guestId} />} */}
+        {!isDraw && <SeenTracker guestId={guestId} />}
         {isSystemMessage ? (
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (

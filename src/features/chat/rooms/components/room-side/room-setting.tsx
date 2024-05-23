@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Files, PinIcon } from 'lucide-react';
+import { Bell, ImagePlayIcon, PinIcon } from 'lucide-react';
 
 import { Item } from '@/components/data-display';
 import { Room } from '@/features/chat/rooms/types';
@@ -59,7 +59,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
       <Item
         className="truncate"
         onClick={() => toggleTab('files')}
-        leftIcon={<Files />}
+        leftIcon={<ImagePlayIcon />}
       >
         {t('CONVERSATION.FILE_MEDIA_AND_LINK')}
       </Item>
