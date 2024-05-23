@@ -47,7 +47,7 @@ const getHeatGroups = (dataset: any) => {
   if (remaining.length > 0) {
     heatGroups.push({
       label: `< ${breakpoints.pop()?.temp}`,
-      color: '#003D8F',
+      color: '#00275C',
       data: remaining,
     });
   }
@@ -55,7 +55,7 @@ const getHeatGroups = (dataset: any) => {
   return heatGroups;
 };
 
-const CustomShape = ({ width = 50, height = 50, ...props }: RectangleProps) => {
+const CustomShape = ({ width = 50, height = 44, ...props }: RectangleProps) => {
   const x = (props.x || 0) - Math.floor(width / 2) + 4;
   const y = (props.y || 0) - 20;
   return (
@@ -94,8 +94,7 @@ const HeatMap = ({
   const { width } = useWindowSize();
   const shapeWidth = useMemo(() => {
     if (width) {
-      const ratio = width / 1500;
-      return Number((50 * ratio).toFixed(0));
+      return Number(((width - 342) / 24).toFixed(0));
     }
     return 50;
   }, [width]);
@@ -109,8 +108,8 @@ const HeatMap = ({
     <ScatterChart
       height={420}
       margin={{
-        top: 15,
-        right: 0,
+        top: 25,
+        right: 60,
         left: 14,
         bottom: 15,
       }}
@@ -147,7 +146,7 @@ const HeatMap = ({
           data={group.data}
           fill={group.color}
           shape={(props: RectangleProps) => {
-            return <CustomShape {...props} width={shapeWidth} height={50} />;
+            return <CustomShape {...props} width={shapeWidth} height={48} />;
           }}
         />
       ))}

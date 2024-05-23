@@ -83,13 +83,15 @@ export default function BusinessScatter({
                     <div
                       key={`tooltip-${x}-${y}`}
                       id="tooltip"
-                      className="border-primary-200/80 rounded-2xl bg-neutral-800/50 p-3 text-white"
+                      className="border-primary-200/80 rounded-[12px] border border-neutral-50 bg-white/95 p-4 text-neutral-300 shadow-md"
                     >
-                      <p>Weekday: {`${formatWeekday(y)}`}</p>
-                      <p>Time range: {`${fromTime}h30 - ${toTime}h30`}</p>
+                      <p>Opened conversation</p>
+                      <p className="font-semibold text-neutral-800">
+                        {density}
+                      </p>
                       <p>
-                        Density: {density && density.toFixed(0)}
-                        &nbsp;opened&nbsp; conversation
+                        Time range:&nbsp;
+                        {`${fromTime}h30 - ${toTime}h30 on ${formatWeekday(y)}`}
                       </p>
                     </div>
                   );
@@ -97,7 +99,18 @@ export default function BusinessScatter({
               />
             }
             yAxisProps={{
+              label: {
+                value: 'Day of week',
+                position: 'top',
+              },
               tickFormatter: (value: number) => formatWeekday(value),
+            }}
+            xAxisProps={{
+              label: {
+                value: 'Hourly',
+                position: 'right',
+              },
+              tickFormatter: (value: number) => `${value}h`,
             }}
           />
         </ResponsiveContainer>
