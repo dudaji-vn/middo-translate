@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { use, useCallback, useEffect, useRef } from 'react';
 import { useVideoCallStore } from '../store/video-call.store';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -51,7 +51,6 @@ const ReceiveVideoCall = () => {
     });
     removeRequestCall();
   }, [me?._id, removeRequestCall, requestCall]);
-
   const acceptCall = useCallback(() => {
     removeRequestCall();
     setRoom(requestCall[0]?.call);
@@ -92,20 +91,20 @@ const ReceiveVideoCall = () => {
     };
   }, [declineCall, me?._id, requestCall, stopAudio]);
 
+  const handleReceiveCall = useCallback((response : ('DECLINE' | 'ACCEPT')) => {
+    switch (response) {
+      case 'DECLINE':
+        declineCall();
+        break;
+      case 'ACCEPT':
+        acceptCall();
+        break;
+      default:
+        break;
+    }
+  }, [acceptCall, declineCall]);
   // Event electron receive call
   useEffect(() => {
-    const handleReceiveCall = (response : ('DECLINE' | 'ACCEPT')) => {
-      switch (response) {
-        case 'DECLINE':
-          declineCall();
-          break;
-        case 'ACCEPT':
-          acceptCall();
-          break;
-        default:
-          break;
-      }
-    }
     if(isElectron && ipcRenderer) {
       ipcRenderer.on(ELECTRON_EVENTS.CALL_RESPONSE, handleReceiveCall);
     }
@@ -114,7 +113,7 @@ const ReceiveVideoCall = () => {
         ipcRenderer.off(ELECTRON_EVENTS.CALL_RESPONSE, handleReceiveCall);
       }
     };
-  }, [isElectron, ipcRenderer, declineCall, acceptCall]);
+  }, [handleReceiveCall, ipcRenderer, isElectron]);
 
 
   // Add on event no call
