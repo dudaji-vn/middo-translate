@@ -77,6 +77,7 @@ const ReportPage = ({
 
   if (!isClient) return null;
 
+  console.log('charData', data?.analysis);
   return (
     <section className="relative h-fit w-full space-y-4">
       <ReportCards data={data?.analysis} loading={isFetching} />
@@ -93,21 +94,17 @@ const ReportPage = ({
         const chartData = [...(data?.chart?.[chart] || [])];
         if (chart === ESpaceChart.RESPONSE_TIME) {
           const { unit, ratio } = getProposedTimeUnit(chartData);
-          chartData.forEach((item) => {
-            item.value = Number((item.value / ratio).toFixed(1));
+          chartData.forEach((item, index) => {
+            chartData[index].value = Number((item.value / ratio).toFixed(1));
           }, []);
           chartUnit = unit;
         }
         if (chart === ESpaceChart.DROP_RATE) {
-          chartData.forEach((item) => {
-            item.value = Number((item.value * 100).toFixed(0));
-          }, []);
+          // chartData.forEach((item, index) => {
+          //   chartData[index].value = Number((item.value * 100).toFixed(0));
+          // }, []);
         }
-        if (chart === ESpaceChart.CUSTOMER_RATING) {
-          chartData.forEach((item) => {
-            item.value = item.value * 5;
-          }, []);
-        }
+
         const filterBy =
           searchParams[
             CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams

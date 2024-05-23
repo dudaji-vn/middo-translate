@@ -94,7 +94,7 @@ const tooltipContent: Record<ESpaceChart, string> = {
 
 const cardContents: Array<{
   name: ESpaceChart;
-  renderDetail?: (value: number) => JSX.Element;
+  renderDetail?: (value: number, total?: number) => JSX.Element;
   renderPercentage?: (value: any) => JSX.Element;
 }> = [
   {
@@ -117,11 +117,15 @@ const cardContents: Array<{
   },
   {
     name: ESpaceChart.DROP_RATE,
-    renderDetail: (value: number) => (
-      <Typography variant={'h6'} className="text-[2rem]">
-        {value}&nbsp;%
-      </Typography>
-    ),
+    renderDetail: (value: number, total?: number) => {
+      const displayValue = total ? (value / total) * 100 : 0;
+      return (
+        <Typography variant={'h6'} className="text-[2rem]">
+          {displayValue}&nbsp;
+          {total && <span>%</span>}
+        </Typography>
+      );
+    },
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
@@ -170,7 +174,6 @@ const ReportCards = ({
       </Typography>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
         {cardContents.map(({ name, renderDetail, renderPercentage }, index) => {
-          let detailValue = data[name]?.value || 0;
           let percentage = data[name]?.growth * 100 || 0;
 
           const displayTitle = t(`BUSINESS.CHART.${name.toUpperCase()}`);
@@ -199,7 +202,8 @@ const ReportCards = ({
               </CardHeader>
               <CardContent className="p-0">
                 <div className="flex min-h-[48px]  flex-row items-end justify-between space-x-4">
-                  {renderDetail && renderDetail(detailValue)}
+                  {renderDetail &&
+                    renderDetail(data[name]?.value || 0, data[name]?.total)}
                   {renderPercentage && renderPercentage(percentage)}
                 </div>
               </CardContent>
