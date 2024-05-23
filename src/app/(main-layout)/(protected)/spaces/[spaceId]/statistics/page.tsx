@@ -25,6 +25,12 @@ const chartsOrderList: Array<TChartKey> = [
   ESpaceChart.CUSTOMER_RATING,
   ESpaceChart.RESPONSE_MESSAGE,
 ];
+const ALLOW_DECIMALS: Array<TChartKey> = [
+  ESpaceChart.RESPONSE_TIME,
+  ESpaceChart.DROP_RATE,
+  ESpaceChart.CUSTOMER_RATING,
+  ESpaceChart.RESPONSE_MESSAGE,
+];
 const CHART_AFFECTED_PARAMS: Partial<
   Record<TChartKey, keyof AnalyticsOptions>
 > = {
@@ -84,7 +90,7 @@ const ReportPage = ({
             />
           );
         let chartUnit = MAPPED_CHART_UNIT[chart];
-        const chartData = data?.chart?.[chart] || [];
+        const chartData = [...(data?.chart?.[chart] || [])];
         if (chart === ESpaceChart.RESPONSE_TIME) {
           const { unit, ratio } = getProposedTimeUnit(chartData);
           chartData.forEach((item) => {
@@ -94,7 +100,7 @@ const ReportPage = ({
         }
         if (chart === ESpaceChart.DROP_RATE) {
           chartData.forEach((item) => {
-            item.value = item.value * 100;
+            item.value = Number((item.value * 100).toFixed(0));
           }, []);
         }
         if (chart === ESpaceChart.CUSTOMER_RATING) {
@@ -114,6 +120,9 @@ const ReportPage = ({
             title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
             data={chartData}
             unit={chartUnit}
+            yAxisProps={{
+              allowDecimals: ALLOW_DECIMALS.includes(chart),
+            }}
           />
         );
       })}

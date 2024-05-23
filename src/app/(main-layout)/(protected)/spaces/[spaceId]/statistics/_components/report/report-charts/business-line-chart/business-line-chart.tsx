@@ -7,7 +7,9 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
+  XAxisProps,
   YAxis,
+  YAxisProps,
 } from 'recharts';
 
 import { ReactElement, useMemo } from 'react';
@@ -49,6 +51,9 @@ export default function BusinessLineChart({
   title,
   filterBy = '',
   filterByKey = '',
+  unitType = 'number',
+  yAxisProps,
+  xAxisProps,
 }: {
   unit: string;
   data: Array<{
@@ -58,6 +63,9 @@ export default function BusinessLineChart({
   title: string;
   filterBy?: string;
   filterByKey?: string;
+  unitType?: 'number' | 'category';
+  yAxisProps?: YAxisProps;
+  xAxisProps?: XAxisProps;
 }) {
   const { space } = useAuthStore();
   const hasNoLine = useMemo(() => data.length === 1, [data]);
@@ -87,24 +95,39 @@ export default function BusinessLineChart({
           {displayFilterBy}
         </span>
       </Typography>
-      <div className="h-80 min-h-[200px]">
+      <div className="h-72 min-h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
             margin={{
               top: 15,
               right: 0,
-              left: 28,
+              left: 24,
               bottom: 15,
             }}
           >
-            <XAxis dataKey={chartLabel} padding={'gap'} className="py-4" />
-            <YAxis axisLine={false} tickLine={false} />
+            <XAxis
+              dataKey={chartLabel}
+              padding="no-gap"
+              className="py-10"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={24}
+              {...xAxisProps}
+            />
+            <YAxis
+              tickCount={6}
+              minTickGap={3}
+              axisLine={false}
+              tickLine={false}
+              tickMargin={10}
+              type={unitType}
+              {...yAxisProps}
+            />
             <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
             <Tooltip content={<TooltipContent unit={unit} />} />
             <Line
               type="monotone"
-              strokeWidth={2}
               dataKey={chartDataKey}
               activeDot={{
                 r: 8,
@@ -114,7 +137,8 @@ export default function BusinessLineChart({
                 r: hasNoLine ? 4 : 0,
                 className: 'fill-primary-500-main stroke-primary-500-main',
               }}
-              className=" stroke-primary-500-main"
+              stroke="#3D88ED"
+              strokeWidth={1}
             />
           </LineChart>
         </ResponsiveContainer>
