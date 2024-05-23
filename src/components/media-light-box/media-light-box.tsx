@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "../actions";
 import { ChevronLeft, ChevronRight, DownloadIcon, EyeIcon, MinusIcon, PlayIcon, PlusIcon, RotateCcwIcon, RotateCwIcon, XIcon } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -31,26 +31,30 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const [current, setCurrent] = useState(index || 0);
   const [zoom, setZoom] = useState(1);
   const [rotate, setRotate] = useState(0);
+  const [downloading, setDownloading] = useState(false);
   const onDownload = () => {
     const file = files[current || 0];
     if(!file) return;
+    setDownloading(true);
     downloadFile({
       url: file.url,
       fileName: file?.name || '',
-      mimeType: file.file?.type || ''
+      mimeType: file.file?.type || '',
+      successCallback: () => {
+        setDownloading(false);
+      }
     })
+    
   }
   const onClose = () => {
     close && close();
   }
-  const onPrev = () => {
-    if(current === 0) return;
-    setCurrent((prev) => prev - 1);
-  }
-  const onNext = () => {
-    if(current === files.length - 1) return;
-    setCurrent((prev) => prev + 1);
-  }
+  const onPrev = useCallback(() => {
+    setCurrent((prev) => prev == 0 ? prev :prev - 1);
+  }, []);
+  const onNext = useCallback(() => {
+    setCurrent((prev) => (prev == files.length - 1) ? prev : prev + 1);
+  }, [files.length]);
   
   const onRotateLeft = () => {
     if(imageRef.current) {
@@ -101,6 +105,21 @@ function MediaLightBox(props: MediaLightBoxProps) {
     }
   }, [zoom, rotate]);
 
+  // Add keydown event (left and right) to change image
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if(e.key === 'ArrowLeft') {
+        onPrev();
+      }else if(e.key === 'ArrowRight') {
+        onNext();
+      }
+      console.log(e.key);
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  }, [current, onNext, onPrev]);
 
 
   useEffect(() => {
