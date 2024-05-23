@@ -30,6 +30,11 @@ export type TLanguageRank = Array<{
   count: number;
   total: number;
 }>;
+export type TTraficTrack = Array<{
+  x: number;
+  y: number;
+  density: number;
+}>;
 
 export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {
   newVisitor: 'New Visitors',

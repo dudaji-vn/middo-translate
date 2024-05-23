@@ -15,6 +15,7 @@ import {
 } from './_utils/get-humanized-unit';
 import { BusinessLineChart } from './_components/report/report-charts';
 import LanguageRank from './_components/report/report-charts/languages-rank/language-rank';
+import BusinessScatter from './_components/report/report-charts/scatter-visit/business-scatter';
 
 const chartsOrderList: Array<TChartKey> = [
   ESpaceChart.NEW_VISITOR,
@@ -76,11 +77,11 @@ const ReportPage = ({
   });
 
   if (!isClient) return null;
-
-  console.log('charData', data?.analysis);
+  console.log('data?.trafficTrack', data?.trafficTrack);
   return (
     <section className="relative h-fit w-full space-y-4">
       <ReportCards data={data?.analysis} loading={isFetching} />
+      <BusinessScatter data={data?.trafficTrack || []} displayFilterBy="" />
       {chartsOrderList.map((chart) => {
         if (chart === ESpaceChart.LANGUAGE_RANK)
           return (
@@ -99,12 +100,6 @@ const ReportPage = ({
           }, []);
           chartUnit = unit;
         }
-        if (chart === ESpaceChart.DROP_RATE) {
-          // chartData.forEach((item, index) => {
-          //   chartData[index].value = Number((item.value * 100).toFixed(0));
-          // }, []);
-        }
-
         const filterBy =
           searchParams[
             CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
