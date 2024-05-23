@@ -55,8 +55,8 @@ const getHeatGroups = (dataset: any) => {
   return heatGroups;
 };
 
-const CustomShape = (props: RectangleProps) => {
-  const x = (props.x || 0) - 20;
+const CustomShape = ({ width = 50, height = 50, ...props }: RectangleProps) => {
+  const x = (props.x || 0) - Math.floor(width / 2) + 4;
   const y = (props.y || 0) - 20;
   return (
     <Rectangle
@@ -64,7 +64,8 @@ const CustomShape = (props: RectangleProps) => {
       stroke="white"
       radius={4}
       {...props}
-      height={50}
+      height={height}
+      width={width}
       x={x}
       y={y}
     />
@@ -93,10 +94,10 @@ const HeatMap = ({
   const { width } = useWindowSize();
   const shapeWidth = useMemo(() => {
     if (width) {
-      const ratio = width / 1400;
-      return Number((48 * ratio).toFixed(0));
+      const ratio = width / 1500;
+      return Number((50 * ratio).toFixed(0));
     }
-    return 48;
+    return 50;
   }, [width]);
   console.log('shapeWidth', shapeWidth);
   const dataset = weeklyVariance.map((i) => ({
@@ -118,7 +119,7 @@ const HeatMap = ({
       <XAxis
         dataKey="x"
         domain={[0, 23]}
-        minTickGap={8}
+        minTickGap={1}
         type="number"
         tickCount={25}
         tickLine={false}
@@ -130,7 +131,7 @@ const HeatMap = ({
         reversed
         tickCount={8}
         interval={0}
-        minTickGap={10}
+        minTickGap={1}
         padding={{ top: 25 }}
         tickLine={false}
         tick={{ fontSize: 16 }}
@@ -146,7 +147,7 @@ const HeatMap = ({
           data={group.data}
           fill={group.color}
           shape={(props: RectangleProps) => {
-            return <CustomShape {...props} width={shapeWidth} />;
+            return <CustomShape {...props} width={shapeWidth} height={50} />;
           }}
         />
       ))}
