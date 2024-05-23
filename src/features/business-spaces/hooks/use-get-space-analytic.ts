@@ -24,7 +24,6 @@ type TData = {
 export type AnalyticsOptions = {
   type: AnalyticsType;
   spaceId: string;
-
   memberId?: string;
   domain?: string;
 } & (

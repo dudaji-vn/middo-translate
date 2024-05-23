@@ -10,16 +10,16 @@ import {
   YAxis,
 } from 'recharts';
 
-import { ReactElement, ReactNode, useMemo } from 'react';
+import { ReactElement, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { AnalyticsOptions } from '@/features/business-spaces/hooks/use-get-space-analytic';
 import { Globe, User } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 
-const CustomTooltip = ({ active, payload, label, unit }: any) => {
+const TooltipContent = ({ active, payload, label, unit }: any) => {
   const { value } = payload?.[0] || {};
-  const suffix = unit ? `(${unit}${value <= 1 ? '' : 's'})` : '';
+  const suffix = unit;
   if (active && payload && payload.length) {
     return (
       <div className="rounded-lg border border-neutral-200 bg-white p-4">
@@ -94,22 +94,21 @@ export default function BusinessLineChart({
             margin={{
               top: 15,
               right: 0,
-              left: 32,
+              left: 28,
               bottom: 15,
             }}
           >
             <XAxis dataKey={chartLabel} padding={'gap'} className="py-4" />
             <YAxis axisLine={false} tickLine={false} />
             <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
-            <Tooltip content={<CustomTooltip unit={unit} />} />
+            <Tooltip content={<TooltipContent unit={unit} />} />
             <Line
               type="monotone"
               strokeWidth={2}
               dataKey={chartDataKey}
               activeDot={{
                 r: 8,
-                className:
-                  'fill-primary-500-main stroke-primary-500-main w-[1rem] h-[1rem]',
+                className: 'fill-primary-500-main stroke-primary-500-main',
               }}
               dot={{
                 r: hasNoLine ? 4 : 0,

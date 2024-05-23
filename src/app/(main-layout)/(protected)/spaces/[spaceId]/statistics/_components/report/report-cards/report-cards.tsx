@@ -3,7 +3,7 @@
 import React, { ReactNode, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { ArrowDown, ArrowUp, Info, Star, StarHalf } from 'lucide-react';
-import { AnalysisData, TChartKey } from '@/types/business-statistic.type';
+import { AnalysisData, ESpaceChart } from '@/types/business-statistic.type';
 import { ceil } from 'lodash';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
@@ -82,7 +82,7 @@ const Percentage = ({
     </p>
   );
 };
-const tooltipContent: Record<TChartKey, string> = {
+const tooltipContent: Record<ESpaceChart, string> = {
   newVisitor: 'The number of new visitors to your website',
   openedConversation: 'The number of opened conversations',
   dropRate: 'The rate of dropped conversations',
@@ -93,12 +93,12 @@ const tooltipContent: Record<TChartKey, string> = {
 };
 
 const cardContents: Array<{
-  name: TChartKey;
+  name: ESpaceChart;
   renderDetail?: (value: number) => JSX.Element;
   renderPercentage?: (value: any) => JSX.Element;
 }> = [
   {
-    name: 'newVisitor',
+    name: ESpaceChart.NEW_VISITOR,
     renderDetail: (value: number) => (
       <Typography variant={'h6'} className="text-[2rem]">
         {value}
@@ -107,7 +107,7 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: 'openedConversation',
+    name: ESpaceChart.CUSTOMER_RATING,
     renderDetail: (value: number) => (
       <Typography variant={'h6'} className="text-[2rem]">
         {value}
@@ -116,7 +116,7 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: 'dropRate',
+    name: ESpaceChart.DROP_RATE,
     renderDetail: (value: number) => (
       <Typography variant={'h6'} className="text-[2rem]">
         {value}&nbsp;%
@@ -125,7 +125,7 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: 'responseTime',
+    name: ESpaceChart.RESPONSE_TIME,
     renderDetail: (value: number) => {
       const displayTime =
         accurateHumanize(moment.duration(value, 'milliseconds'), 1)
@@ -139,12 +139,12 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: 'customerRating',
+    name: ESpaceChart.CUSTOMER_RATING,
     renderDetail: (value: number) => <StarRating value={value} />,
   },
 
   {
-    name: 'responseMessage',
+    name: ESpaceChart.RESPONSE_MESSAGE,
     renderDetail: (value: number) => (
       <Typography variant={'h6'} className="text-[2rem]">
         {value}
@@ -178,8 +178,7 @@ const ReportCards = ({
             <Card
               key={index}
               className={cn(
-                'borderrounded-[12px] cursor-pointer gap-2 border-solid p-5 transition-all duration-300 ease-in-out hover:border-primary-300',
-                // name === chartKey &&'border-primary-500-main shadow-[2px_6px_16px_2px_#1616161A]',
+                'cursor-pointer gap-2 rounded-[12px] border border-solid p-5 transition-all duration-300 ease-in-out hover:border-primary-300',
               )}
             >
               <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600">
