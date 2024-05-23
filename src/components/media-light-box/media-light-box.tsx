@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Range } from "react-range";
 import { cn } from "@/utils/cn";
 import { useAppStore } from "@/stores/app.store";
+import { Spinner } from "../feedback";
 interface Media {
   url: string;
   file?: File;
@@ -113,7 +114,6 @@ function MediaLightBox(props: MediaLightBoxProps) {
       }else if(e.key === 'ArrowRight') {
         onNext();
       }
-      console.log(e.key);
     }
     document.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -147,8 +147,9 @@ function MediaLightBox(props: MediaLightBoxProps) {
          size={'xs'}
          shape={'default'}
          onClick={onDownload}
+         disabled={downloading}
         >
-          <DownloadIcon />
+          {downloading ? <Spinner /> : <DownloadIcon />}
         </Button.Icon>
         <Button.Icon
          variant={'default'}
