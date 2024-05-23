@@ -5,6 +5,7 @@ import {
   AnalysisData,
   ChartData,
   TLanguageRank,
+  TTraficTrack,
 } from '@/types/business-statistic.type';
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,6 +21,7 @@ type TData = {
   analysis: AnalysisData;
   chart: ChartData;
   conversationLanguage: TLanguageRank;
+  trafficTrack: TTraficTrack;
 };
 export type AnalyticsOptions = {
   type: AnalyticsType;
