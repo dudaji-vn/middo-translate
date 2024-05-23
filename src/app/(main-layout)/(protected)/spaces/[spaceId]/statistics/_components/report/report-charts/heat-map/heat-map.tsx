@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   ScatterChart,
   Scatter,
@@ -9,6 +9,7 @@ import {
   YAxisProps,
   XAxisProps,
 } from 'recharts';
+import { useWindowSize } from 'usehooks-ts';
 const breakpoints = [
   { temp: -10, color: '#FFFFFF' },
   { temp: 0, color: '#FCFCFC' },
@@ -60,13 +61,12 @@ const CustomShape = (props: RectangleProps) => {
   return (
     <Rectangle
       key={`${props.x}-${props.y}`}
-      {...props}
-      height={48}
-      x={x}
-      width={48}
-      y={y}
       stroke="white"
       radius={4}
+      {...props}
+      height={50}
+      x={x}
+      y={y}
     />
   );
 };
@@ -90,6 +90,15 @@ const HeatMap = ({
   xAxisProps?: XAxisProps;
   tooltip: React.ReactNode;
 }) => {
+  const { width } = useWindowSize();
+  const shapeWidth = useMemo(() => {
+    if (width) {
+      const ratio = width / 1400;
+      return Number((48 * ratio).toFixed(0));
+    }
+    return 48;
+  }, [width]);
+  console.log('shapeWidth', shapeWidth);
   const dataset = weeklyVariance.map((i) => ({
     ...i,
     density: baseDensity + i.density,
@@ -98,7 +107,6 @@ const HeatMap = ({
   return (
     <ScatterChart
       height={420}
-      width={1200}
       margin={{
         top: 15,
         right: 0,
@@ -137,7 +145,9 @@ const HeatMap = ({
           key={`${group.label}-${index}`}
           data={group.data}
           fill={group.color}
-          shape={CustomShape}
+          shape={(props: RectangleProps) => {
+            return <CustomShape {...props} width={shapeWidth} />;
+          }}
         />
       ))}
       {tooltip}
