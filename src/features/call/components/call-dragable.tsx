@@ -31,7 +31,7 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
         dragControls={controls}
         dragMomentum={false}
         ref={dragContainerRef}
-        className={cn("pointer-events-auto absolute h-full cursor-auto shadow-glow md:bottom-4 md:left-4 w-[336px] rounded-xl", className)}
+        className={cn("pointer-events-auto absolute h-full cursor-auto shadow-glow md:bottom-4 md:left-4 w-[304px] rounded-xl", className)}
         onDoubleClick={() => {
           dragContainerRef.current?.removeAttribute('style');
         }}
