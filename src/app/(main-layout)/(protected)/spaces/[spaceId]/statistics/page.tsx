@@ -7,29 +7,39 @@ import {
   AnalyticsOptions,
   useGetSpaceAnalytic,
 } from '@/features/business-spaces/hooks/use-get-space-analytic';
-import { TChartKey } from '@/types/business-statistic.type';
+import { ESpaceChart, TChartKey } from '@/types/business-statistic.type';
 import { ReportCards } from './_components/report/report-cards';
-import { MAPPED_CHART_UNIT, getMaxUnit } from './_utils/get-humanized-unit';
+import {
+  MAPPED_CHART_UNIT,
+  getProposedTimeUnit,
+} from './_utils/get-humanized-unit';
 import { BusinessLineChart } from './_components/report/report-charts';
 import LanguageRank from './_components/report/report-charts/languages-rank/language-rank';
 
 const chartsOrderList: Array<TChartKey> = [
-  'newVisitor',
-  'openedConversation',
-  'languageRank',
-  'dropRate',
-  'responseTime',
-  'customerRating',
-  'responseMessage',
+  ESpaceChart.NEW_VISITOR,
+  ESpaceChart.OPENED_CONVERSATION,
+  ESpaceChart.LANGUAGE_RANK,
+  ESpaceChart.DROP_RATE,
+  ESpaceChart.RESPONSE_TIME,
+  ESpaceChart.CUSTOMER_RATING,
+  ESpaceChart.RESPONSE_MESSAGE,
 ];
-const KEY_FILTER_OF_CHART: Partial<Record<TChartKey, keyof AnalyticsOptions>> =
-  {
-    newVisitor: 'domain',
-    openedConversation: 'domain',
-    dropRate: 'domain',
-    responseMessage: 'memberId',
-    responseTime: 'memberId',
-  };
+const ALLOW_DECIMALS: Array<TChartKey> = [
+  ESpaceChart.RESPONSE_TIME,
+  ESpaceChart.DROP_RATE,
+  ESpaceChart.CUSTOMER_RATING,
+  ESpaceChart.RESPONSE_MESSAGE,
+];
+const CHART_AFFECTED_PARAMS: Partial<
+  Record<TChartKey, keyof AnalyticsOptions>
+> = {
+  [ESpaceChart.NEW_VISITOR]: 'domain',
+  [ESpaceChart.OPENED_CONVERSATION]: 'domain',
+  [ESpaceChart.DROP_RATE]: 'domain',
+  [ESpaceChart.RESPONSE_MESSAGE]: 'memberId',
+  [ESpaceChart.RESPONSE_TIME]: 'memberId',
+};
 
 const ReportPage = ({
   params: { spaceId },
@@ -67,11 +77,12 @@ const ReportPage = ({
 
   if (!isClient) return null;
 
+  console.log('charData', data?.analysis);
   return (
     <section className="relative h-fit w-full space-y-4">
       <ReportCards data={data?.analysis} loading={isFetching} />
       {chartsOrderList.map((chart) => {
-        if (chart === 'languageRank')
+        if (chart === ESpaceChart.LANGUAGE_RANK)
           return (
             <LanguageRank
               key={chart}
@@ -80,34 +91,35 @@ const ReportPage = ({
             />
           );
         let chartUnit = MAPPED_CHART_UNIT[chart];
-        const chartData = data?.chart?.[chart] || [];
-        if (chart === 'responseTime') {
-          const { unit, ratio } = getMaxUnit(chartData);
-          chartData.forEach((item) => {
-            item.value = Number((item.value / ratio).toFixed(1));
+        const chartData = [...(data?.chart?.[chart] || [])];
+        if (chart === ESpaceChart.RESPONSE_TIME) {
+          const { unit, ratio } = getProposedTimeUnit(chartData);
+          chartData.forEach((item, index) => {
+            chartData[index].value = Number((item.value / ratio).toFixed(1));
           }, []);
           chartUnit = unit;
         }
-        if (chart === 'dropRate') {
-          chartData.forEach((item) => {
-            item.value = item.value * 100;
-          }, []);
+        if (chart === ESpaceChart.DROP_RATE) {
+          // chartData.forEach((item, index) => {
+          //   chartData[index].value = Number((item.value * 100).toFixed(0));
+          // }, []);
         }
-        if (chart === 'customerRating') {
-          chartData.forEach((item) => {
-            item.value = item.value * 5;
-          }, []);
-        }
+
         const filterBy =
-          searchParams[KEY_FILTER_OF_CHART[chart] as keyof typeof searchParams];
+          searchParams[
+            CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
+          ];
         return (
           <BusinessLineChart
             key={chart}
-            filterByKey={KEY_FILTER_OF_CHART[chart]}
+            filterByKey={CHART_AFFECTED_PARAMS[chart]}
             filterBy={filterBy}
             title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
-            data={data?.chart?.[chart] || []}
+            data={chartData}
             unit={chartUnit}
+            yAxisProps={{
+              allowDecimals: ALLOW_DECIMALS.includes(chart),
+            }}
           />
         );
       })}

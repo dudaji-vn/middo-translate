@@ -44,7 +44,6 @@ export function accurateHumanize(
       const finalTime = moment
         .localeData()
         .relativeTime(value, true, key, true);
-      console.log('finalTime', finalTime);
       return finalTime;
     });
 

@@ -6,8 +6,18 @@ export type TChartKey =
   | 'responseTime'
   | 'customerRating'
   | 'responseMessage';
+export enum ESpaceChart {
+  NEW_VISITOR = 'newVisitor',
+  OPENED_CONVERSATION = 'openedConversation',
+  LANGUAGE_RANK = 'languageRank',
+  DROP_RATE = 'dropRate',
+  RESPONSE_TIME = 'responseTime',
+  CUSTOMER_RATING = 'customerRating',
+  RESPONSE_MESSAGE = 'responseMessage',
+}
+
 export type AnalysisData = Record<
-  TChartKey,
+  ESpaceChart,
   {
     value: number;
     total?: number;
@@ -21,7 +31,7 @@ export type TLanguageRank = Array<{
   total: number;
 }>;
 
-export const MAPPED_CHARTS_INFO: Record<TChartKey, string> = {
+export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {
   newVisitor: 'New Visitors',
   openedConversation: 'Opened conversations',
   dropRate: 'Response time',
