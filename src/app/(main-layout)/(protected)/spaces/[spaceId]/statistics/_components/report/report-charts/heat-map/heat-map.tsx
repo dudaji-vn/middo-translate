@@ -57,7 +57,7 @@ const getHeatGroups = (dataset: any) => {
 
 const CustomShape = ({ width = 50, height = 44, ...props }: RectangleProps) => {
   const x = (props.x || 0) - Math.floor(width / 2) + 4;
-  const y = (props.y || 0) - 20;
+  const y = (props.y || 0) - 19;
   return (
     <Rectangle
       key={`${props.x}-${props.y}`}
@@ -98,7 +98,6 @@ const HeatMap = ({
     }
     return 50;
   }, [width]);
-  console.log('shapeWidth', shapeWidth);
   const dataset = weeklyVariance.map((i) => ({
     ...i,
     density: baseDensity + i.density,
