@@ -103,7 +103,7 @@ const Menu = ({ isMe, message }: { isMe: boolean; message: Message }) => {
           case 'remove':
             return false;
           case 'download':
-            return message.type === 'media' && (message?.media?.[0].type === 'video' || message?.media?.[0].type === 'document');
+            return message.type === 'media';
           default:
             return true;
         }

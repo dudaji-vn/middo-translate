@@ -153,7 +153,7 @@ export const MessageItemWrapper = ({
           case 'reply':
             return !discussionDisabled;
           case 'download':
-            return message.type === 'media' && (message?.media?.[0].type === 'video' || message?.media?.[0].type === 'document');
+            return message.type === 'media';
           case 'edit':
             const timeDiff = moment().diff(message.createdAt);
             return (

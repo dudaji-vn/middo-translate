@@ -83,7 +83,7 @@ const GalleryLayout = () => {
     // CASE NOT FULL SCREEN
     if(!isFullScreen) {
 
-      return <div className='grid grid-cols-4'>
+      return <div className='grid grid-cols-4 gap-y-2'>
         {isDoodle && <DoodleItem />}
         {participants.map(
           (participant: ParticipantInVideoCall, index: number) => {
