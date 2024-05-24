@@ -117,7 +117,7 @@ export const InputSelectLanguage = ({
         </SelectContent>
       </Select>
       {errors && (
-        <div className="mt-2 flex items-center gap-2 pl-5 text-error ">
+        <div className="mt-2 flex items-center gap-2 text-error text-sm text-left font-normal ">
           <AlertCircleIcon className="h-7 w-5 min-w-[20px] " />
           {(errors?.message?.message as string) || (errors?.message as string)}
         </div>

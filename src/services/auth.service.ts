@@ -45,3 +45,6 @@ export const deleteAccount = () => {
 export const checkTokenResetPassword = () => {
   return get('/auth/check-token-reset-password');
 };
+export const checkUsernameExistService = (username: string) => {
+  return post('/users/check-username-exist', { username });
+};
