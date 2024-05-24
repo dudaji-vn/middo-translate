@@ -54,34 +54,25 @@ const LanguageRank = ({
   piesData: any;
 }) => {
   const [showOthers, setShowOthers] = useState(false);
-  const { dataSlice, others, pies } = useMemo(() => {
-    const pies = piesData?.slice(0, 3).concat({
-      label: 'Others',
-      value: data.slice(3).reduce((acc, item) => acc + item.count, 0),
-    });
-
-    if (showOthers)
+  const { dataSlice, others, otherPercentage } = useMemo(() => {
+    const others = data.slice(3) || [];
+    const otherTotal = others.reduce((acc, item) => acc + item.total, 0);
+    const otherCount = others.reduce((acc, item) => acc + item.count, 0);
+    const otherPercentage = otherTotal ? (otherCount * 100) / otherTotal : 0;
+    if (showOthers || data.length <= 3)
       return {
         dataSlice: data || [],
         others: [],
-        pies,
+        otherPercentage,
       };
 
-    if (data.length > 3) {
-      const dataSlice = data.slice(0, 3) || [];
-      const others = data.slice(3);
-      return {
-        dataSlice,
-        others,
-        pies,
-      };
-    }
+    const dataSlice = data.slice(0, 3) || [];
     return {
-      dataSlice: data,
-      others: [],
-      pies,
+      dataSlice,
+      others,
+      otherPercentage,
     };
-  }, [data, showOthers, piesData]);
+  }, [data, showOthers]);
 
   if (isLoading) return <LoadingLanguageRank />;
   const toggleShowOthers = () => {
@@ -96,7 +87,7 @@ const LanguageRank = ({
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <div className="flex  h-[240px] w-[100vw] justify-center md:h-[220px] md:w-[220px] md:justify-end">
-          <LanguagePieChart data={pies} />
+          <LanguagePieChart data={piesData} />
         </div>
         <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
           {dataSlice.map((item, index) => {
@@ -154,9 +145,14 @@ const LanguageRank = ({
               </div>
               <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
                 <div
-                  className="h-2 rounded-l-full bg-primary-500-main transition-all  duration-1000"
+                  className={cn(
+                    'h-2 rounded-l-full bg-primary-500-main transition-all  duration-1000',
+                    {
+                      'rounded-r-full': otherPercentage === 100,
+                    },
+                  )}
                   style={{
-                    width: '100%',
+                    width: `${otherPercentage}%`,
                   }}
                 />
               </div>
