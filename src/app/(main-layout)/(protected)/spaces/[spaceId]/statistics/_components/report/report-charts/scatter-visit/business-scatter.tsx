@@ -5,27 +5,39 @@ import { ResponsiveContainer, Tooltip } from 'recharts';
 import HeatMap from '../heat-map/heat-map';
 
 const formatWeekday = (weekday: number) => {
-  return ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][weekday] || '';
+  return ['', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][weekday] || '';
 };
 
-const weeklyVarianceCal = (
-  densityData: {
+const parsingDataFromUTC = (
+  data: {
     x: number;
     y: number;
     density: number;
   }[],
 ) => {
-  const densities = densityData.reduce(
+  const timeZoneOffset = new Date().getTimezoneOffset() / 60;
+  const densities = data.reduce(
     (acc, d) => {
-      const key = `${d.x}-${d.y}`;
-      acc[key] = d.density;
+      const clientTime = d.x - timeZoneOffset;
+      const dayPlus = clientTime > 24 ? 1 : 0;
+      const dayMinus = clientTime < 0 ? -1 : 0;
+      const clientDay = d.y + dayPlus + dayMinus;
+      const actualPosition = {
+        x: clientTime % 24,
+        y:
+          clientDay <= 7 && clientDay > 0
+            ? clientDay
+            : ((clientDay + 7) % 7) + 1,
+      };
+      const positionKey = `${actualPosition.x}-${actualPosition.y}`;
+      acc[positionKey] = d.density;
       return acc;
     },
     {} as Record<string, number>,
   );
   return Array.from({ length: 7 * 24 }, (_, i) => {
     const x = i % 24;
-    const y = Math.floor(i / 24);
+    const y = Math.floor(i / 24) + 1;
     const density = densities[`${x}-${y}`] || 0;
     return {
       x: x,
@@ -49,10 +61,10 @@ export default function BusinessScatter({
   const dataset = useMemo(() => {
     return {
       baseDensity: 0,
-      weeklyVariance: data ? weeklyVarianceCal(data) : [],
+      weeklyVariance: data ? parsingDataFromUTC(data) : [],
     };
   }, [data]);
-
+  console.log('dataset==>', dataset);
   return (
     <section className="relative w-full space-y-4  py-5">
       <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
@@ -103,6 +115,7 @@ export default function BusinessScatter({
                 value: 'Day of week',
                 position: 'top',
               },
+              domain: [0, 7],
               tickFormatter: (value: number) => formatWeekday(value),
             }}
             xAxisProps={{
@@ -110,7 +123,8 @@ export default function BusinessScatter({
                 value: 'Hourly',
                 position: 'right',
               },
-              tickFormatter: (value: number) => `${value}h`,
+              domain: [0, 23],
+              tickFormatter: (value: number) => `${value}`,
             }}
           />
         </ResponsiveContainer>

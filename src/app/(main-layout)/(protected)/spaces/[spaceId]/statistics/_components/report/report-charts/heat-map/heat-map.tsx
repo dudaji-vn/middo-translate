@@ -116,7 +116,6 @@ const HeatMap = ({
     >
       <XAxis
         dataKey="x"
-        domain={[0, 23]}
         minTickGap={1}
         type="number"
         tickCount={25}
@@ -126,14 +125,12 @@ const HeatMap = ({
       />
       <YAxis
         dataKey="y"
-        reversed
         tickCount={8}
         interval={0}
         minTickGap={1}
         padding={{ top: 25 }}
         tickLine={false}
         tick={{ fontSize: 16 }}
-        domain={[0, 7]}
         {...yAxisProps}
       />
 

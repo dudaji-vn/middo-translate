@@ -118,7 +118,7 @@ const cardContents: Array<{
   {
     name: ESpaceChart.DROP_RATE,
     renderDetail: (value: number, total?: number) => {
-      const displayValue = total ? (value / total) * 100 : 0;
+      const displayValue = total ? Number((value / total).toFixed(0)) * 100 : 0;
       return (
         <Typography variant={'h6'} className="text-[2rem]">
           {displayValue}&nbsp;
