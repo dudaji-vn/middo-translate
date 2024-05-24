@@ -6,7 +6,7 @@ export const MAPPED_CHART_UNIT: Record<TChartKey, string> = {
   dropRate: 'conversation',
   responseTime: 'millisecond',
   customerRating: 'star',
-  responseMessage: 'message',
+  responsedMessage: 'message',
   languageRank: 'language',
 };
 export const getProposedTimeUnit = (data: { value: number }[] = []) => {
