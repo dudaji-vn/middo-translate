@@ -108,7 +108,7 @@ const cardContents: Array<{
     renderPercentage: (value: number) => <Percentage value={value} />,
   },
   {
-    name: ESpaceChart.CUSTOMER_RATING,
+    name: ESpaceChart.OPENED_CONVERSATION,
     renderDetail: (value: number) => (
       <Typography variant={'h6'} className="text-[2rem]">
         {value}
