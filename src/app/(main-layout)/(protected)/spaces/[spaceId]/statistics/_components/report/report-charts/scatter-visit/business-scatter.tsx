@@ -3,6 +3,7 @@ import { cn } from '@/utils/cn';
 import React, { useMemo } from 'react';
 import { ResponsiveContainer, Tooltip } from 'recharts';
 import HeatMap from '../heat-map/heat-map';
+import { mappedFilterByIcon } from '../business-line-chart/business-line-chart';
 
 const formatWeekday = (weekday: number) => {
   return ['', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][weekday] || '';
@@ -77,6 +78,7 @@ export default function BusinessScatter({
             },
           )}
         >
+          {mappedFilterByIcon['domain']}
           {displayFilterBy}
         </span>
       </Typography>

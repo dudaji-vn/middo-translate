@@ -21,6 +21,7 @@ const chartsOrderList: Array<TChartKey> = [
   ESpaceChart.NEW_VISITOR,
   ESpaceChart.OPENED_CONVERSATION,
   ESpaceChart.LANGUAGE_RANK,
+  ESpaceChart.TRAFFIC_TRACK,
   ESpaceChart.DROP_RATE,
   ESpaceChart.RESPONSE_TIME,
   ESpaceChart.CUSTOMER_RATING,
@@ -30,7 +31,6 @@ const ALLOW_DECIMALS: Array<TChartKey> = [
   ESpaceChart.RESPONSE_TIME,
   ESpaceChart.DROP_RATE,
   ESpaceChart.CUSTOMER_RATING,
-  ESpaceChart.RESPONSE_MESSAGE,
 ];
 const CHART_AFFECTED_PARAMS: Partial<
   Record<TChartKey, keyof AnalyticsOptions>
@@ -77,12 +77,19 @@ const ReportPage = ({
   });
 
   if (!isClient) return null;
-  console.log('data?.trafficTrack', data?.trafficTrack);
   return (
     <section className="relative h-fit w-full space-y-4">
       <ReportCards data={data?.analysis} loading={isFetching} />
-      <BusinessScatter data={data?.trafficTrack || []} displayFilterBy="" />
       {chartsOrderList.map((chart) => {
+        if (chart === ESpaceChart.TRAFFIC_TRACK) {
+          return (
+            <BusinessScatter
+              key={chart}
+              data={data?.trafficTrack || []}
+              displayFilterBy={searchParams.domain}
+            />
+          );
+        }
         if (chart === ESpaceChart.LANGUAGE_RANK)
           return (
             <LanguageRank
@@ -97,7 +104,7 @@ const ReportPage = ({
         if (chart === ESpaceChart.RESPONSE_TIME) {
           const { unit, ratio } = getProposedTimeUnit(chartData);
           chartData.forEach((item, index) => {
-            chartData[index].value = Number((item.value / ratio).toFixed(1));
+            chartData[index].value = Number((item.value / ratio).toFixed(0));
           }, []);
           chartUnit = unit;
         }
