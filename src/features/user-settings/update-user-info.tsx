@@ -43,6 +43,9 @@ export default function UpdateUserInfo() {
         .object({
           name: z.string().min(1, {
             message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .refine((data) => data.trim().length > 0, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
           }),
           language: z.string().min(1, {
             message: t('MESSAGE.ERROR.REQUIRED'),
@@ -197,7 +200,8 @@ export default function UpdateUserInfo() {
                     (user.name == watch().name &&
                       user.language == watch().language &&
                       user.username == watch().username) ||
-                    isSubmitting
+                    isSubmitting ||
+                    Object.keys(errors).length > 0
                   }
                   type="submit"
                 >
