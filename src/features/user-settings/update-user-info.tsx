@@ -127,7 +127,7 @@ export default function UpdateUserInfo() {
           <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
             <UserRound size={20} />
           </div>
-          <span className="ml-4 block text-center text-base font-medium">
+          <span className="ml-4 block text-left text-base font-medium">
             {t('ACCOUNT_SETTING.PROFILE')}
           </span>
         </AlertDialogTrigger>
@@ -161,6 +161,7 @@ export default function UpdateUserInfo() {
                 formLabel={t('COMMON.USERNAME')}
                 inputProps={{
                   placeholder: t('COMMON.USERNAME_PLACEHOLDER'),
+                  prefixEl: '@',
                   suffix: (
                     <span className="text-sm text-gray-400">{`${username?.length}/15`}</span>
                   ),

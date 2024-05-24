@@ -212,7 +212,8 @@
     "SIGN_OUT": "Đăng xuất",
     "EDIT_PROFILE": "Chỉnh sửa hồ sơ",
     "CHANGE_AVATAR": "Thay đổi hình đại diện",
-    "APP_PERMISSION": "Quyền ứng dụng"
+    "APP_PERMISSION": "Quyền ứng dụng",
+    "RESTRICT_MESSAGE": "Hạn chế người gửi không xác định"
   },
   "SIGN_IN": {
     "TITLE": "Đăng nhập",
@@ -403,7 +404,8 @@
     "TURN_ON_MICROPHONE": "Bật microphone",
     "TURN_OFF_MICROPHONE": "Tắt microphone",
     "MINIMIZE": "Thu nhỏ",
-    "MAXIMIZE": "Phóng to"
+    "MAXIMIZE": "Phóng to",
+    "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
     "SIGN_OUT": {

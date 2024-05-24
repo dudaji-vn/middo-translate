@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut } from 'lucide-react';
+import { CopyIcon, LogOut } from 'lucide-react';
 
 import { Button, CopyZoneClick } from '@/components/actions';
 import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import SelectPageLanguage from './_components/select-page-language';
 import { DeleteAccount } from '@/features/user-settings/delete-account';
 import { AppPermission } from '@/features/user-settings/app-permission';
+import RestrictMessage from '@/features/user-settings/restrict-message';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -59,7 +60,7 @@ export default function AccountSettings() {
             {user?.email || ''}
           </p>
           <CopyZoneClick text={user?.username || ''}>
-            <Button color="secondary" size="xs" shape="square">
+            <Button color="secondary" size="xs" shape="square" endIcon={<CopyIcon />} >
               @{user?.username}
             </Button>
           </CopyZoneClick>
@@ -68,6 +69,7 @@ export default function AccountSettings() {
           <UpdateUserInfo />
           <UpdateUserAvatar />
           <UpdateUserPassword />
+          <RestrictMessage />
         </div>
         <div className="my-4">
           <SelectPageLanguage />
