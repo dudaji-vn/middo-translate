@@ -89,7 +89,7 @@ const LanguageRank = ({
         <div className="flex  h-[240px] w-[100vw] justify-center md:h-[220px] md:w-[220px] md:justify-end">
           <LanguagePieChart data={piesData} />
         </div>
-        <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
+        <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000 md:pt-5">
           {dataSlice.map((item, index) => {
             const percentage = item?.total
               ? (item.count * 100) / item?.total
@@ -113,16 +113,18 @@ const LanguageRank = ({
                 <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
                   <div
                     className={cn(
-                      'h-2 rounded-l-full bg-primary-500-main transition-all  duration-1000',
+                      'h-2 rounded-l-full transition-all  duration-1000',
                       { 'rounded-r-full': percentage === 100 },
                     )}
                     style={{
                       width: `${percentage}%`,
+                      backgroundColor: index < 3 ? COLORS[index] : COLORS[3],
                     }}
                   />
                 </div>
+
                 <span className=" w-10 text-end text-neutral-800">
-                  {item.total}
+                  {`${item.count}/${item.total}`}
                 </span>
               </div>
             );
@@ -146,13 +148,14 @@ const LanguageRank = ({
               <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
                 <div
                   className={cn(
-                    'h-2 rounded-l-full bg-primary-500-main transition-all  duration-1000',
+                    'h-2 rounded-l-full transition-all  duration-1000',
                     {
                       'rounded-r-full': otherPercentage === 100,
                     },
                   )}
                   style={{
                     width: `${otherPercentage}%`,
+                    backgroundColor: COLORS[3],
                   }}
                 />
               </div>
