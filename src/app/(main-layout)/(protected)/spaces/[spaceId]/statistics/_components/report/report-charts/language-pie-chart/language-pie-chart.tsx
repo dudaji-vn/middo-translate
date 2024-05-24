@@ -30,11 +30,12 @@ export default function LanguagePieChart({
 }) {
   const isMobile = useAppStore((state) => state.isMobile);
   if (!data) return null;
+  const pies = data.length ? data : [{ label: 'None', value: 1 }];
   return (
     <ResponsiveContainer width="100%">
       <PieChart width={200} height={200}>
         <Pie
-          data={data}
+          data={pies}
           outerRadius={isMobile ? 115 : 105}
           startAngle={95}
           endAngle={-270}
