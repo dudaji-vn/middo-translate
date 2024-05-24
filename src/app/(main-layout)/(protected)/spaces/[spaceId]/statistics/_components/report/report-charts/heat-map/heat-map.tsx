@@ -117,14 +117,16 @@ const HeatMap = ({
       <XAxis
         dataKey="x"
         minTickGap={1}
+        axisLine={false}
         type="number"
         tickCount={25}
         tickLine={false}
-        padding={{ left: 40, right: 30 }}
+        padding={{ left: Math.max(shapeWidth - 20, 10), right: 30 }}
         {...xAxisProps}
       />
       <YAxis
         dataKey="y"
+        axisLine={false}
         tickCount={8}
         interval={0}
         minTickGap={1}
