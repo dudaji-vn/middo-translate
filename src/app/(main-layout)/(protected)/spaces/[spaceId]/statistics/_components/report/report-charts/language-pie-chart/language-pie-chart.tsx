@@ -37,7 +37,7 @@ export default function LanguagePieChart({
         <Pie
           data={pies}
           outerRadius={isMobile ? 115 : 105}
-          startAngle={95}
+          startAngle={90}
           endAngle={-270}
           innerRadius={isMobile ? 90 : 80}
           fill="#8884d8"
