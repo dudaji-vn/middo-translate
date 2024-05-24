@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut } from 'lucide-react';
+import { CopyIcon, LogOut } from 'lucide-react';
 
 import { Button, CopyZoneClick } from '@/components/actions';
 import { LANGUAGE_CODES_MAP } from '@/configs/default-language';
@@ -59,7 +59,7 @@ export default function AccountSettings() {
             {user?.email || ''}
           </p>
           <CopyZoneClick text={user?.username || ''}>
-            <Button color="secondary" size="xs" shape="square">
+            <Button color="secondary" size="xs" shape="square" endIcon={<CopyIcon />} >
               @{user?.username}
             </Button>
           </CopyZoneClick>

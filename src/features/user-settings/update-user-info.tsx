@@ -161,6 +161,7 @@ export default function UpdateUserInfo() {
                 formLabel={t('COMMON.USERNAME')}
                 inputProps={{
                   placeholder: t('COMMON.USERNAME_PLACEHOLDER'),
+                  prefixEl: '@',
                   suffix: (
                     <span className="text-sm text-gray-400">{`${username?.length}/15`}</span>
                   ),
