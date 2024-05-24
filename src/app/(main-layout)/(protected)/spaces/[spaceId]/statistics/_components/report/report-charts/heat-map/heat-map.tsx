@@ -10,43 +10,42 @@ import {
   XAxisProps,
 } from 'recharts';
 import { useWindowSize } from 'usehooks-ts';
+import { CHART_COLORS } from '../chart-colors';
 const breakpoints = [
-  { temp: -10, color: '#FFFFFF' },
-  { temp: 0, color: '#FCFCFC' },
+  { point: -10 },
+  { point: 0 },
   {
-    temp: 1,
-    color: '#D0DEF1',
+    point: 1,
   },
   {
-    temp: 2,
-    color: '#A4C2EA',
+    point: 2,
   },
-  { temp: 3, color: '#72A5E9' },
-  { temp: 5, color: '#3D88ED' },
-  { temp: 8, color: '#FCFCFC' },
-  { temp: 13, color: '#096AEC' },
-  { temp: 21, color: '#003D8F' },
+  { point: 3 },
+  { point: 5 },
+  { point: 8 },
+  { point: 13 },
+  { point: 21 },
   {
-    temp: 34,
-    color: '#00275C',
+    point: 34,
   },
 ];
 const getHeatGroups = (dataset: any) => {
   let remaining = [...dataset];
   const heatGroups = [];
 
-  breakpoints.forEach(({ temp, color }, index) => {
+  breakpoints.forEach(({ point }, index) => {
+    const cellColor = CHART_COLORS[index % CHART_COLORS.length];
     heatGroups.push({
-      label: `>= ${temp}`,
-      color,
-      data: remaining.filter((d) => d.density >= temp),
+      label: `>= ${point}`,
+      color: cellColor,
+      data: remaining.filter((d) => d.density >= point),
     });
 
-    remaining = remaining.filter((d) => d.density > temp);
+    remaining = remaining.filter((d) => d.density > point);
   });
   if (remaining.length > 0) {
     heatGroups.push({
-      label: `< ${breakpoints.pop()?.temp}`,
+      label: `< ${breakpoints.pop()?.point}`,
       color: '#00275C',
       data: remaining,
     });
