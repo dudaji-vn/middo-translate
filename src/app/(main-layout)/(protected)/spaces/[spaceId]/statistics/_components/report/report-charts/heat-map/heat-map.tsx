@@ -110,7 +110,7 @@ const HeatMap = ({
         top: 25,
         right: 60,
         left: 14,
-        bottom: 15,
+        bottom: 0,
       }}
       {...props}
     >
@@ -130,7 +130,7 @@ const HeatMap = ({
         tickCount={8}
         interval={0}
         minTickGap={1}
-        padding={{ top: 25 }}
+        padding={{ top: 30 }}
         tickLine={false}
         tick={{ fontSize: 16 }}
         {...yAxisProps}
