@@ -87,6 +87,7 @@ const ReportPage = ({
           return (
             <LanguageRank
               key={chart}
+              piesData={data?.chart?.conversationLanguage || []}
               data={data?.conversationLanguage || []}
               isLoading={isFetching}
             />

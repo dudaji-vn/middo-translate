@@ -5,7 +5,7 @@ export type TChartKey =
   | 'dropRate'
   | 'responseTime'
   | 'customerRating'
-  | 'responseMessage';
+  | 'responsedMessage';
 export enum ESpaceChart {
   NEW_VISITOR = 'newVisitor',
   OPENED_CONVERSATION = 'openedConversation',
@@ -13,7 +13,7 @@ export enum ESpaceChart {
   DROP_RATE = 'dropRate',
   RESPONSE_TIME = 'responseTime',
   CUSTOMER_RATING = 'customerRating',
-  RESPONSE_MESSAGE = 'responseMessage',
+  RESPONSE_MESSAGE = 'responsedMessage',
 }
 
 export type AnalysisData = Record<
@@ -43,7 +43,7 @@ export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {
   languageRank: "Conversation's language",
   responseTime: 'Customer rating',
   customerRating: 'Customer rating',
-  responseMessage: 'Response time',
+  responsedMessage: 'Response time',
 };
 
 export const ROWS_PER_PAGE_OPTIONS = [5, 25, 75, 100];

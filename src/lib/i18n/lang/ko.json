@@ -573,7 +573,7 @@
       "RESPONSETIME": "응답 시간",
       "OPENEDCONVERSATION": "열린 대화",
       "DROPRATE": "드랍 비율",
-      "RESPONSEMESSAGE": "응답 메시지",
+      "RESPONSEDMESSAGE": "응답 메시지",
       "CUSTOMERRATING": "고객 평가"
     },
     "SCRIPT": {

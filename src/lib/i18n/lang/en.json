@@ -573,7 +573,7 @@
       "RESPONSETIME": "Response Time",
       "OPENEDCONVERSATION": "Opened Conversations",
       "DROPRATE": "Drop Rate",
-      "RESPONSEMESSAGE": "Response Message",
+      "RESPONSEDMESSAGE": "Responsed Message",
       "CUSTOMERRATING": "Customer Rating"
     },
     "SCRIPT": {
