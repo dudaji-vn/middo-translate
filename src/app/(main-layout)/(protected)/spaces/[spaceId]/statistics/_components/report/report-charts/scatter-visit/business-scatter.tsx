@@ -68,7 +68,7 @@ export default function BusinessScatter({
           {displayFilterBy}
         </span>
       </Typography>
-      <div className="h-[400px] min-h-[440px] overflow-x-auto">
+      <div className="h-[400px] min-h-[440px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <HeatMap
             data={dataset}
