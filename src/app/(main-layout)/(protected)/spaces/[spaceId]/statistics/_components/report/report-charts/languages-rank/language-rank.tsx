@@ -86,7 +86,7 @@ const LanguageRank = ({
         </Typography>
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
-        <div className="flex  h-[240px] w-[100vw] justify-center md:h-[220px] md:w-[220px] md:justify-end">
+        <div className="flex h-[240px] w-full justify-center md:h-[220px] md:w-[220px]">
           <LanguagePieChart data={piesData} />
         </div>
         <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000 md:pt-5">

@@ -90,74 +90,74 @@ const tooltipContent: Record<ESpaceChart, string> = {
   customerRating: 'The average customer rating',
   responsedMessage: 'The average response message',
   languageRank: 'The rank of languages',
+  trafficTrack: 'The traffic track of conversations',
 };
-
 
 const cardContents: Array<{
   name: ESpaceChart;
   renderDetail?: (value: number, total?: number) => JSX.Element;
   renderPercentage?: (value: any) => JSX.Element;
 }> = [
-    {
-      name: ESpaceChart.NEW_VISITOR,
-      renderDetail: (value: number) => (
+  {
+    name: ESpaceChart.NEW_VISITOR,
+    renderDetail: (value: number) => (
+      <Typography variant={'h6'} className="text-[2rem]">
+        {value}
+      </Typography>
+    ),
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+  {
+    name: ESpaceChart.CUSTOMER_RATING,
+    renderDetail: (value: number) => (
+      <Typography variant={'h6'} className="text-[2rem]">
+        {value}
+      </Typography>
+    ),
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+  {
+    name: ESpaceChart.DROP_RATE,
+    renderDetail: (value: number, total?: number) => {
+      const displayValue = total ? Number((value / total).toFixed(0)) * 100 : 0;
+      return (
         <Typography variant={'h6'} className="text-[2rem]">
-          {value}
+          {displayValue}&nbsp;
+          {total && <span>%</span>}
         </Typography>
-      ),
-      renderPercentage: (value: number) => <Percentage value={value} />,
+      );
     },
-    {
-      name: ESpaceChart.CUSTOMER_RATING,
-      renderDetail: (value: number) => (
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+  {
+    name: ESpaceChart.RESPONSE_TIME,
+    renderDetail: (value: number) => {
+      const displayTime =
+        accurateHumanize(moment.duration(value, 'milliseconds'), 1)
+          .accuratedTime || '0';
+      return (
         <Typography variant={'h6'} className="text-[2rem]">
-          {value}
+          {displayTime}
         </Typography>
-      ),
-      renderPercentage: (value: number) => <Percentage value={value} />,
+      );
     },
-    {
-      name: ESpaceChart.DROP_RATE,
-      renderDetail: (value: number, total?: number) => {
-        const displayValue = total ? Number((value / total).toFixed(0)) * 100 : 0;
-        return (
-          <Typography variant={'h6'} className="text-[2rem]">
-            {displayValue}&nbsp;
-            {total && <span>%</span>}
-          </Typography>
-        );
-      },
-      renderPercentage: (value: number) => <Percentage value={value} />,
-    },
-    {
-      name: ESpaceChart.RESPONSE_TIME,
-      renderDetail: (value: number) => {
-        const displayTime =
-          accurateHumanize(moment.duration(value, 'milliseconds'), 1)
-            .accuratedTime || '0';
-        return (
-          <Typography variant={'h6'} className="text-[2rem]">
-            {displayTime}
-          </Typography>
-        );
-      },
-      renderPercentage: (value: number) => <Percentage value={value} />,
-    },
-    {
-      name: ESpaceChart.CUSTOMER_RATING,
-      renderDetail: (value: number) => <StarRating value={value} />,
-    },
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+  {
+    name: ESpaceChart.CUSTOMER_RATING,
+    renderDetail: (value: number) => <StarRating value={value} />,
+  },
 
-    {
-      name: ESpaceChart.RESPONSE_MESSAGE,
-      renderDetail: (value: number) => (
-        <Typography variant={'h6'} className="text-[2rem]">
-          {value}
-        </Typography>
-      ),
-      renderPercentage: (value: number) => <Percentage value={value} />,
-    },
-  ];
+  {
+    name: ESpaceChart.RESPONSE_MESSAGE,
+    renderDetail: (value: number) => (
+      <Typography variant={'h6'} className="text-[2rem]">
+        {value}
+      </Typography>
+    ),
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+];
 const ReportCards = ({
   data,
   loading,

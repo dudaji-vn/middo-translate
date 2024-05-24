@@ -2,6 +2,7 @@ export type TChartKey =
   | 'newVisitor'
   | 'openedConversation'
   | 'languageRank'
+  | 'trafficTrack'
   | 'dropRate'
   | 'responseTime'
   | 'customerRating'
@@ -10,6 +11,7 @@ export enum ESpaceChart {
   NEW_VISITOR = 'newVisitor',
   OPENED_CONVERSATION = 'openedConversation',
   LANGUAGE_RANK = 'languageRank',
+  TRAFFIC_TRACK = 'trafficTrack',
   DROP_RATE = 'dropRate',
   RESPONSE_TIME = 'responseTime',
   CUSTOMER_RATING = 'customerRating',
@@ -44,6 +46,7 @@ export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {
   responseTime: 'Customer rating',
   customerRating: 'Customer rating',
   responsedMessage: 'Response time',
+  trafficTrack: 'Traffic track',
 };
 
 export const ROWS_PER_PAGE_OPTIONS = [5, 25, 75, 100];

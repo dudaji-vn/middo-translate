@@ -19,8 +19,16 @@ import { Globe, User } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 
-const TooltipContent = ({ active, payload, label, unit }: any) => {
-  const { value } = payload?.[0] || {};
+const TooltipContent = ({
+  active,
+  payload,
+  label,
+  unit,
+  allowDecimals,
+}: any) => {
+  const value = allowDecimals
+    ? Number(payload?.[0]?.value).toFixed(1)
+    : payload?.[0]?.value;
   const suffix = unit;
   if (active && payload && payload.length) {
     return (
@@ -38,7 +46,7 @@ const TooltipContent = ({ active, payload, label, unit }: any) => {
 };
 const chartLabel = 'label';
 const chartDataKey = 'value';
-const mappedFilterByIcon: Partial<
+export const mappedFilterByIcon: Partial<
   Record<keyof AnalyticsOptions, ReactElement>
 > = {
   domain: <Globe size={16} className="text-primary-500-main" />,
@@ -125,7 +133,14 @@ export default function BusinessLineChart({
               {...yAxisProps}
             />
             <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
-            <Tooltip content={<TooltipContent unit={unit} />} />
+            <Tooltip
+              content={
+                <TooltipContent
+                  allowDecimals={yAxisProps?.allowDecimals}
+                  unit={unit}
+                />
+              }
+            />
             <Line
               type="monotone"
               dataKey={chartDataKey}
