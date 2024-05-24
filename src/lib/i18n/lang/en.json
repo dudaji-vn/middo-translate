@@ -212,7 +212,8 @@
     "SIGN_OUT": "Sign Out",
     "EDIT_PROFILE": "Edit Profile",
     "CHANGE_AVATAR": "Change avatar",
-    "APP_PERMISSION": "App's permission"
+    "APP_PERMISSION": "App's permission",
+    "RESTRICT_MESSAGE": "Restrict unknown senders"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",
@@ -401,7 +402,8 @@
     "TURN_ON_MICROPHONE": "Turn On Microphone",
     "TURN_OFF_MICROPHONE": "Turn Off Microphone",
     "MINIMIZE": "Minimize",
-    "MAXIMIZE": "Maximize"
+    "MAXIMIZE": "Maximize",
+    "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
     "SIGN_OUT": {
