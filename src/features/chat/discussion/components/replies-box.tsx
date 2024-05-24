@@ -191,11 +191,6 @@ export const RepliesBox = () => {
                         message={message}
                         sender={isMe ? 'me' : 'other'}
                         readByUsers={usersReadMessageMap[message._id] ?? []}
-                        showTime={
-                          !isSystem &&
-                          message._id ===
-                            group.messages[group.messages.length - 1]._id
-                        }
                       />
                     );
                   })}
