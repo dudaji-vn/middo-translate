@@ -66,11 +66,20 @@ export const ReactNativeProvider = () => {
       }
     };
 
-    window.addEventListener('message', handleMessage);
+    const isUIWebView = () => {
+      return navigator.userAgent
+        .toLowerCase()
+        .match(/\(ip.*applewebkit(?!.*(version|crios))/);
+    };
+
+    const receiver = isUIWebView() ? window : document;
+
+    receiver.addEventListener('message', handleMessage);
 
     return () => {
-      window.removeEventListener('message', handleMessage);
+      receiver.removeEventListener('message', handleMessage);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return <></>;
 };
