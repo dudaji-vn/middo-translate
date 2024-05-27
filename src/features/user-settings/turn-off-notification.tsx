@@ -1,3 +1,4 @@
+'use client';
 import { Item } from '@/components/data-display';
 import { Switch } from '@/components/data-entry';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
@@ -13,8 +14,6 @@ export const TurnOffNotification = (props: TurnOffNotificationProps) => {
   const { isSubscribed, fcmToken, retrieveToken, turnOff } = useNotification();
   const platform = usePlatformStore((state) => state.platform);
   const { postMessage } = useReactNativePostMessage();
-  console.log('isSubscribed', isSubscribed);
-  console.log('fcmToken', fcmToken);
 
   const handleToggle = async () => {
     if (isSubscribed) {

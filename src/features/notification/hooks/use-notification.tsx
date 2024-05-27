@@ -2,7 +2,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { notificationApi } from '../api';
-import { requestForToken } from '@/lib/firebase';
 import { useNotificationStore } from '../store';
 import toast from 'react-hot-toast';
 
@@ -30,6 +29,7 @@ export const useNotification = () => {
   const checkSubscription = async () => {
     if (isUnsubscribed) return;
     try {
+      const { requestForToken } = await import('@/lib/firebase');
       const currentToken = await requestForToken();
       if (currentToken) {
         const isSubscribed =
@@ -63,6 +63,7 @@ export const useNotification = () => {
         setPermission(permission);
         // Check if permission is granted before retrieving the token
         if (permission === 'granted') {
+          const { requestForToken } = await import('@/lib/firebase');
           const currentToken = await requestForToken();
           if (currentToken) {
             await notificationApi.subscribe(currentToken);
