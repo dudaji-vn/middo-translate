@@ -15,9 +15,10 @@ import {
 import { ReactElement, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { AnalyticsOptions } from '@/features/business-spaces/hooks/use-get-space-analytic';
-import { Globe, User } from 'lucide-react';
+import { Globe, Info, User } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
+import { Button } from '@/components/actions';
 
 const TooltipContent = ({
   active,
@@ -62,6 +63,7 @@ export default function BusinessLineChart({
   unitType = 'number',
   yAxisProps,
   xAxisProps,
+  total,
 }: {
   unit: string;
   data: Array<{
@@ -74,6 +76,7 @@ export default function BusinessLineChart({
   unitType?: 'number' | 'category';
   yAxisProps?: YAxisProps;
   xAxisProps?: XAxisProps;
+  total?: string;
 }) {
   const { space } = useAuthStore();
   const hasNoLine = useMemo(() => data.length === 1, [data]);
@@ -89,20 +92,36 @@ export default function BusinessLineChart({
   if (!data) return null;
   return (
     <section className="relative w-full space-y-4 bg-white px-4 py-5 md:px-10">
-      <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
-        {title}
-        <span
-          className={cn(
-            'flex flex-row items-center gap-2 font-normal text-neutral-800',
-            {
-              hidden: !displayFilterBy,
-            },
-          )}
-        >
-          {mappedFilterByIcon[filterByKey as keyof AnalyticsOptions]}
-          {displayFilterBy}
-        </span>
-      </Typography>
+      <div className="flex w-full flex-row items-center justify-between">
+        <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
+          {title}
+          <span
+            className={cn(
+              'flex flex-row items-center gap-2 font-normal text-neutral-800',
+              {
+                hidden: !displayFilterBy,
+              },
+            )}
+          >
+            {mappedFilterByIcon[filterByKey as keyof AnalyticsOptions]}
+            {displayFilterBy}
+            <span
+              className={cn('font-light text-neutral-600', {
+                hidden: filterByKey !== 'memberId',
+              })}
+            >
+              (Member)
+            </span>
+          </span>
+        </Typography>
+        {total && (
+          <Typography className="flex flex-row items-center justify-end gap-1 text-base font-semibold text-neutral-800">
+            <Button.Icon color={'default'} size={'xs'} variant={'ghost'}>
+              <Info size={16} className="text-neutral-800" />
+            </Button.Icon>
+          </Typography>
+        )}
+      </div>
       <div className="h-72 min-h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart

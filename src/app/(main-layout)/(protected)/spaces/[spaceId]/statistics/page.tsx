@@ -79,7 +79,9 @@ const ReportPage = ({
   if (!isClient) return null;
   return (
     <section className="relative h-fit w-full space-y-4 bg-[#FCFCFC]">
-      <ReportCards data={data?.analysis} loading={isFetching}
+      <ReportCards
+        data={data?.analysis}
+        loading={isFetching}
         domain={searchParams.domain}
         memberId={searchParams.memberId}
       />
@@ -118,6 +120,7 @@ const ReportPage = ({
         return (
           <BusinessLineChart
             key={chart}
+            total={`${data?.analysis[chart]?.total || 0}`}
             filterByKey={CHART_AFFECTED_PARAMS[chart]}
             filterBy={filterBy}
             title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
