@@ -10,12 +10,16 @@ export type RoomStatus =
   | 'temporary'
   | 'deleted'
   | 'cannot_message'
-  | 'archived';
+  | 'waiting'
+  | 'archived'
+  | 'blocked'
+  | 'blocked_by_you';
 export type Room = {
   name?: string;
   subtitle?: string;
   avatar?: string;
   participants: User[];
+  waitingUsers?: User[];
   lastMessage?: Message;
   isGroup: boolean;
   newMessageAt?: string;

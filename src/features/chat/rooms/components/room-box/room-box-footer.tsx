@@ -2,23 +2,27 @@
 
 import { forwardRef, useCallback, useMemo, useState } from 'react';
 
+import BlockChatBar from '@/components/block-chat-bar';
 import {
   MessageEditor,
   MessageEditorSubmitData,
 } from '@/components/message-editor';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import { CreateMessage } from '@/features/chat/messages/api';
+import { useMessageActions } from '@/features/chat/messages/components/message-actions';
 import { useMessagesBox } from '@/features/chat/messages/components/message-box';
 import { useSendImageMessage } from '@/features/chat/messages/hooks/use-send-image-message';
 import { useSendMediaMessages } from '@/features/chat/messages/hooks/use-send-media-messages';
 import { useSendTextMessage } from '@/features/chat/messages/hooks/use-send-text-message';
+import { Message } from '@/features/chat/messages/types';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth.store';
+import { useTranslation } from 'react-i18next';
 import { useChatBox } from '../../contexts/chat-box-context';
-import { Message } from '@/features/chat/messages/types';
-import { CreateMessage } from '@/features/chat/messages/api';
-import { useMessageActions } from '@/features/chat/messages/components/message-actions';
-import { cn } from '@/utils/cn';
+import { RoomBlockContent } from './room-block-content';
+import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
+// import { RoomResponseContent } from './room-response-content';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -32,8 +36,10 @@ export interface ChatBoxFooterProps
 
 export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
   ({ isAnonymous, guest, ...props }, ref) => {
+    const { t } = useTranslation('common');
     const currentUser = useAuthStore((s) => s.user);
     const { room, updateRoom } = useChatBox();
+    const { relationshipStatus } = useCheckRoomRelationship(room);
     const [roomId, setRoomId] = useState<string>(room._id);
     const { addMessage, replaceMessage, updateMessage } = useMessagesBox();
     const onSuccessfulSend = (data: Message, variables: CreateMessage) => {
@@ -163,36 +169,52 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       return (
         isConversationExpired ||
         isConversationEndedByVisitor ||
-        isOtherUserDeleted
+        isOtherUserDeleted ||
+        room.status === 'cannot_message'
       );
     }, [
       room.expiredAt,
-      room.lastMessage,
+      room.lastMessage?.type,
+      room.lastMessage?.action,
       room.isGroup,
+      room.isHelpDesk,
+      room.status,
       room.participants,
       currentUser?._id,
     ]);
 
+    if (isBlockedConversation || relationshipStatus === 'blocked') {
+      return (
+        <div className="relative w-full border-t bg-primary-100 p-2">
+          <BlockChatBar
+            blockContent={t('CONVERSATION.BLOCKED.MESSAGE')}
+            learnMoreLink={'#'}
+            learnMoreText={t('CONVERSATION.BLOCKED.LEARN_MORE')}
+          />
+        </div>
+      );
+    }
+
     return (
-      <div
-        className={cn('relative w-full border-t p-2', {
-          'bg-primary-100': isBlockedConversation,
-        })}
-      >
-        <MessageEditor
-          isBlocked={isBlockedConversation}
-          isEditing={isEdit}
-          onEditSubmit={updateMessage}
-          roomId={room._id}
-          userMentions={room.isGroup ? room.participants : []}
-          onSubmitValue={handleSubmit}
-          onTypingChange={(isTyping) => {
-            socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {
-              roomId: room._id,
-              isTyping,
-            });
-          }}
-        />
+      <div className={'relative w-full border-t p-2'}>
+        {relationshipStatus === 'blocking' && <RoomBlockContent room={room} />}
+        {/* <RoomWaitingContent room={room} /> */}
+        {/* <RoomResponseContent room={room} /> */}
+        {relationshipStatus === 'none' && (
+          <MessageEditor
+            isEditing={isEdit}
+            onEditSubmit={updateMessage}
+            roomId={room._id}
+            userMentions={room.isGroup ? room.participants : []}
+            onSubmitValue={handleSubmit}
+            onTypingChange={(isTyping) => {
+              socket.emit(SOCKET_CONFIG.EVENTS.TYPING.UPDATE.SERVER, {
+                roomId: room._id,
+                isTyping,
+              });
+            }}
+          />
+        )}
       </div>
     );
   },

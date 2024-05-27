@@ -26,7 +26,9 @@ export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Item leftIcon={<LogOut />}>{t('MODAL.LEAVE_ROOM.TITLE')}</Item>
+        <div>
+          <Item leftIcon={<LogOut />}>{t('MODAL.LEAVE_ROOM.TITLE')}</Item>
+        </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

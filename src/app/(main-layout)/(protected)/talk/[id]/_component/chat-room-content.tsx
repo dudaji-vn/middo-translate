@@ -10,6 +10,7 @@ import {
 } from '@/features/chat/messages/components/message-box';
 import { ChatBoxHeader, RoomSide } from '@/features/chat/rooms/components';
 import { PinnedBar } from '@/features/chat/rooms/components/pin-message-bar';
+import { RoomBlockContent } from '@/features/chat/rooms/components/room-box/room-block-content';
 import { ChatBoxFooter } from '@/features/chat/rooms/components/room-box/room-box-footer';
 import { RoomTyping } from '@/features/chat/rooms/components/room-box/room-typing';
 import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/room-side-tabs/room-side-tabs.hook';

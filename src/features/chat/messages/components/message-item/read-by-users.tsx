@@ -8,10 +8,11 @@ export interface ReadByUsersProps extends React.HTMLAttributes<HTMLDivElement> {
   readByUsers?: User[];
   isDiscussion?: boolean;
   isMe?: boolean;
+  roomId?: string;
 }
 
 export const ReadByUsers = forwardRef<HTMLDivElement, ReadByUsersProps>(
-  ({ readByUsers, className, isMe, isDiscussion, ...props }, ref) => {
+  ({ readByUsers, className, isMe, isDiscussion, roomId, ...props }, ref) => {
     const { isOnBusinessChat } = useBusinessNavigationData();
     const showUsers = useMemo(() => {
       if (isOnBusinessChat) {
@@ -27,7 +28,11 @@ export const ReadByUsers = forwardRef<HTMLDivElement, ReadByUsersProps>(
             <motion.div
               title={user.name}
               key={user._id}
-              layoutId={isDiscussion ? `dc-${user._id}` : `msg-${user._id}`}
+              layoutId={
+                isDiscussion
+                  ? `dc-${user._id}-${roomId}`
+                  : `msg-${user._id}-${roomId}`
+              }
             >
               <Avatar
                 key={user._id}
