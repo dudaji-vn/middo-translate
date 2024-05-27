@@ -11,7 +11,11 @@ import {
   StarHalf,
   User,
 } from 'lucide-react';
-import { AnalysisData, ESpaceChart } from '@/types/business-statistic.type';
+import {
+  AnalysisData,
+  CHART_TOOLTIP_CONTENT,
+  ESpaceChart,
+} from '@/types/business-statistic.type';
 import { ceil } from 'lodash';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
@@ -90,16 +94,6 @@ const Percentage = ({
       <span className="ml-[2px]">{suffix}</span>
     </p>
   );
-};
-const tooltipContent: Record<ESpaceChart, string> = {
-  newVisitor: 'The number of new visitors to your website',
-  openedConversation: 'The number of opened conversations',
-  dropRate: 'The rate of dropped conversations',
-  responseTime: 'The average response time',
-  customerRating: 'The average customer rating',
-  responsedMessage: 'The average response message',
-  languageRank: 'The rank of languages',
-  trafficTrack: 'The traffic track of conversations',
 };
 
 const contentsByDomain: Array<{
@@ -185,7 +179,7 @@ const ReportCards = ({
   const displayMember = useMemo(() => {
     return space?.members?.find((m) => m._id === memberId)?.email;
   }, [memberId, space]);
-  if (loading) return <CardsLoading  />;
+  if (loading) return <CardsLoading />;
   if (!data) return null;
   return (
     <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
@@ -217,9 +211,9 @@ const ReportCards = ({
                     {displayTitle}
                   </CardTitle>
                   <Tooltip
-                    title={tooltipContent[name]}
+                    title={CHART_TOOLTIP_CONTENT[name]}
                     contentProps={{
-                      className: 'text-neutral-800',
+                      className: 'text-white',
                     }}
                     triggerItem={
                       <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
@@ -269,9 +263,9 @@ const ReportCards = ({
                     {displayTitle}
                   </CardTitle>
                   <Tooltip
-                    title={tooltipContent[name]}
+                    title={CHART_TOOLTIP_CONTENT[name]}
                     contentProps={{
-                      className: 'text-neutral-800',
+                      className: 'text-white',
                     }}
                     triggerItem={
                       <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
