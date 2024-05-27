@@ -20,11 +20,12 @@ export const useNotification = () => {
     setIsUnsubscribed,
   } = useNotificationStore((state) => state);
   const isShowRequestPermission = useMemo(() => {
+    if (isUnsubscribed) return false;
     if (isDenied) return false;
     if (permission === 'default') return true;
     if (permission === 'granted' && !isSubscribed) return true;
     return false;
-  }, [isDenied, isSubscribed, permission]);
+  }, [isDenied, isSubscribed, isUnsubscribed, permission]);
 
   const checkSubscription = async () => {
     if (isUnsubscribed) return;
