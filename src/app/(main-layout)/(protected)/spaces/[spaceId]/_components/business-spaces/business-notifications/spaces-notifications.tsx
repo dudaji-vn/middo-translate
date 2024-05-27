@@ -26,6 +26,7 @@ export type TSpacesNotification = {
   description: string;
   deleteAble?: boolean;
   createdAt: string;
+  onDeleteSuccess?: () => void;
   unRead?: boolean;
   link?: string;
 };
@@ -38,13 +39,17 @@ const Notification = ({
   createdAt,
   unRead = true,
   link,
+  onDeleteSuccess,
 }: TSpacesNotification) => {
   const timeDiff = moment().diff(createdAt, 'days');
   const router = useRouter();
-  const { mutateAsync: deleteNotifications, isLoading } =
-    useDeleteNotifications();
+  const {
+    mutateAsync: deleteNotifications,
+    isLoading,
+    isSuccess,
+  } = useDeleteNotifications();
   const onDelete = (notificationId: TSpacesNotification['_id']) => {
-    deleteNotifications(notificationId);
+    deleteNotifications(notificationId).then(onDeleteSuccess);
   };
 
   const displayTime =
@@ -56,6 +61,7 @@ const Notification = ({
     if (isLoading) return;
     router.push(link || '/');
   };
+  if (isSuccess) return null;
 
   return (
     <div
@@ -90,7 +96,8 @@ const Notification = ({
       <Button.Icon
         variant={'default'}
         color={'default'}
-        disabled={isLoading}
+        loading={isLoading}
+        disabled={isSuccess}
         size={'xs'}
         className={deleteAble ? '' : 'invisible'}
         onClick={(e) => {
@@ -107,7 +114,11 @@ const Notification = ({
 
 const SpacesNotifications = ({}: {}) => {
   const [open, setOpen] = React.useState(false);
-  const { data: notifications, refetch } = useGetMyBusinessNotifications();
+  const {
+    data: notifications,
+    refetch,
+    isLoading,
+  } = useGetMyBusinessNotifications();
 
   const { mutateAsync: readNotifications } = useReadNotifications();
 
@@ -156,7 +167,13 @@ const SpacesNotifications = ({}: {}) => {
         className="flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4"
       >
         {notifications?.map((item: TSpacesNotification) => (
-          <Notification {...item} key={item._id} />
+          <Notification
+            {...item}
+            key={item._id}
+            onDeleteSuccess={() => {
+              refetch();
+            }}
+          />
         ))}
         {notifications?.length === 0 && (
           <Typography className="mx-auto py-3 text-center font-light italic text-neutral-400">
