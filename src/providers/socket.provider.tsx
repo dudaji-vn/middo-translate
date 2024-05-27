@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import socket from '@/lib/socket-io';
 import { useAppStore } from '@/stores/app.store';
@@ -10,23 +10,22 @@ import { useChatStore } from '@/features/chat/stores';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { useParams } from 'next/navigation';
 
 const SocketProvider = () => {
   const { isElectron, ipcRenderer } = useElectron();
   const user = useAuthStore((state) => state.user);
-  const { anonymousId, isHelpDesk, extensionId } = useBusinessNavigationData();
+  const { anonymousId } = useBusinessNavigationData();
   const setOnlineList = useChatStore((state) => state.setOnlineList);
   const setSocketConnected = useAppStore((state) => state.setSocketConnected);
-
 
   useEffect(() => {
     function onConnect() {
       const clientId = anonymousId || user?._id;
-      const clientTempId = localStorage.getItem('clientTempId');
+      console.log('socket.onConnect');
       setSocketConnected(true);
       if (clientId) {
-        socket.emit(SOCKET_CONFIG.EVENTS.CLIENT.JOIN, clientId || clientTempId);
+        console.log('connected', clientId);
+        socket.emit(SOCKET_CONFIG.EVENTS.CLIENT.JOIN, clientId);
         socket.on(SOCKET_CONFIG.EVENTS.CLIENT.LIST, (data) => {
           setOnlineList(data);
         });
