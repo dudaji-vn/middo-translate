@@ -52,26 +52,22 @@ export default function LanguagePieChart({
     value: number;
   } | null>(null);
   if (!data) return null;
-  const pies = data.length ? data : [{ label: 'None', value: 1 }];
 
+  const pies = data.length ? data : [{ label: 'None', value: 1 }];
   const onTogglePie = (entry: { label: string; value: number }) => {
-    if (selectedPie === entry) {
-      setSelectedPie(null);
-    } else {
-      setSelectedPie(entry);
-    }
+    setSelectedPie(entry);
   };
 
   return (
     <ResponsiveContainer width="100%">
-      <PieChart width={200} height={200} className={'relative'}>
+      <PieChart width={220} height={220} className={'relative'}>
         <Pie
           data={pies}
           outerRadius={isMobile ? 110 : 100}
           startAngle={90}
           endAngle={-270}
           innerRadius={isMobile ? 85 : 75}
-          fill="#8884d8"
+          fill={COLORS[4]}
           dataKey="value"
         >
           {data.map((entry, index) => {
@@ -86,37 +82,6 @@ export default function LanguagePieChart({
               </>
             );
           })}
-          {selectedPie && (
-            // <Label
-            //   value={selectedPie.label}
-            //   content={({ value }) => {
-            //     console.log('value', value);
-            //     return (
-            //       <CircleFlag
-            //         countryCode={getCountryCode(selectedPie.label) || 'US'}
-            //         height={isMobile ? 20 : 16}
-            //         width={isMobile ? 20 : 16}
-            //       />
-            //     );
-            //   }}
-            //   position="center"
-            //   fill="#000"
-            //   fontSize={isMobile ? 20 : 16}
-            // />
-            <>
-              {/* <Label
-                value={getCountryNameByCode(selectedPie.label)}
-                position="centerBottom"
-                className="label-top"
-                fontSize="14px"
-              />
-              <Label
-                value={(selectedPie.value * 100)?.toFixed(2) + '%'}
-                position="centerTop"
-                fontSize="14px"
-              /> */}
-            </>
-          )}
           {selectedPie && (
             <Label
               width={30}

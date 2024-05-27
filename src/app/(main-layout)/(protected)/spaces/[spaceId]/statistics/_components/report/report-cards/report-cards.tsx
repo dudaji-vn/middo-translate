@@ -169,7 +169,7 @@ const ReportCards = ({
   if (loading) return <CardsLoading title={t('BUSINESS.REPORT')} />;
   if (!data) return null;
   return (
-    <section className="relative w-full space-y-4">
+    <section className="relative w-full space-y-4 bg-white  px-4 md:px-10">
       <Typography className=" flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
         {t('BUSINESS.REPORT')}
       </Typography>

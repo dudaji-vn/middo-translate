@@ -67,7 +67,7 @@ export default function BusinessScatter({
   }, [data]);
   console.log('dataset==>', dataset);
   return (
-    <section className="relative w-full space-y-4  py-5">
+    <section className="relative w-full bg-white  space-y-4  px-4  py-5 md:px-10">
       <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
         Traffic track
         <span
