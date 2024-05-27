@@ -2,7 +2,6 @@ import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useIntersectionObserver } from 'usehooks-ts';
 import { Spinner } from '../feedback';
 import { cn } from '@/utils/cn';
-import { motion } from 'framer-motion';
 
 interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {
   onLoadMore: () => void;
@@ -48,13 +47,14 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
     };
 
     const handleTouchMove = (event: React.TouchEvent) => {
-      if (!pullToRefresh) return;
+      if (!pullToRefresh || window.scrollY > 0) return;
       const startY = startYRef.current;
       if (startY !== null) {
         const currentY = event.touches[0].clientY;
         const distance = currentY - startY;
 
         if (distance > 0) {
+          event.preventDefault();
           setRefreshPosition(Math.min(distance, 130));
         }
       }
