@@ -4,8 +4,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { notificationApi } from '../api';
 import { useNotificationStore } from '../store';
 import toast from 'react-hot-toast';
+import { useElectron } from '@/hooks/use-electron';
 
 export const useNotification = () => {
+  const { isElectron } = useElectron();
   const [permission, setPermission] = useState<NotificationPermission | null>(
     null,
   );
@@ -20,12 +22,13 @@ export const useNotification = () => {
     setIsUnsubscribed,
   } = useNotificationStore((state) => state);
   const isShowRequestPermission = useMemo(() => {
+    if (isElectron) return false;
     if (isUnsubscribed) return false;
     if (isDenied) return false;
     if (permission === 'default') return true;
     if (permission === 'granted' && !isSubscribed) return true;
     return false;
-  }, [isDenied, isSubscribed, isUnsubscribed, permission]);
+  }, [isDenied, isElectron, isSubscribed, isUnsubscribed, permission]);
 
   const checkSubscription = async () => {
     if (isUnsubscribed) return;
