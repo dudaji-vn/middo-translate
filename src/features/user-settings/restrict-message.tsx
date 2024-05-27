@@ -21,7 +21,7 @@ export default function RestrictMessage() {
           {t('ACCOUNT_SETTING.RESTRICT_MESSAGE')}
         </span>
         <span className='flex-1'>
-          <Tooltip
+          {/* <Tooltip
             title={t('TOOL_TIP.RESTRICT_MESSAGE')}
             triggerItem={
               <HelpCircleIcon className='size-4 mx-1 md:mx-3 color-primary text-primary'/>
@@ -29,7 +29,15 @@ export default function RestrictMessage() {
             contentProps={{
               className: 'max-w-[200px]',
             }}
-          />
+            isShowMobile={true}
+          /> */}
+          <span className='relative group w-5 block'>
+            <div className='absolute bottom-[110%] w-[200px] right-1/2 translate-x-1/4 md:translate-x-1/2 max-w-[200px] py-[6px] px-3 rounded-lg bg-black/60 text-white text-xs opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300'>
+              <p>{t('TOOL_TIP.RESTRICT_MESSAGE')}</p>
+            </div>
+            <div className='absolute bottom-full h-[10%] w-[200px] right-1/2 translate-x-1/4 md:translate-x-1/2 max-w-[200px]bg-transparent'></div>
+            <HelpCircleIcon className='size-4 mx-1 md:mx-3 color-primary text-primary cursor-pointer'/>
+          </span>
 
         </span>
         <Switch className='cursor-pointer'></Switch>
