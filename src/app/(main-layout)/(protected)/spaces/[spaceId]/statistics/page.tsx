@@ -78,8 +78,13 @@ const ReportPage = ({
 
   if (!isClient) return null;
   return (
-    <section className="relative h-fit w-full space-y-4">
-      <ReportCards data={data?.analysis} loading={isFetching} />
+    <section className="relative h-fit w-full space-y-4 bg-[#FCFCFC]">
+      <ReportCards
+        data={data?.analysis}
+        loading={isFetching}
+        domain={searchParams.domain}
+        memberId={searchParams.memberId}
+      />
       {chartsOrderList.map((chart) => {
         if (chart === ESpaceChart.TRAFFIC_TRACK) {
           return (
@@ -115,6 +120,7 @@ const ReportPage = ({
         return (
           <BusinessLineChart
             key={chart}
+            total={`${data?.analysis[chart]?.total || 0}`}
             filterByKey={CHART_AFFECTED_PARAMS[chart]}
             filterBy={filterBy}
             title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}

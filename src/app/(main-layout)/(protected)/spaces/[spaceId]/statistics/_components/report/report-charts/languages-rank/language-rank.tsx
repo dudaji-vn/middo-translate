@@ -12,6 +12,7 @@ import LanguagePieChart from '../language-pie-chart/language-pie-chart';
 import { Button } from '@/components/actions';
 import { ChevronUpIcon } from 'lucide-react';
 import { CHART_COLORS } from '../chart-colors';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 const COLORS = [...CHART_COLORS].reverse();
 const LoadingLanguageRank = () => {
@@ -79,17 +80,17 @@ const LanguageRank = ({
     setShowOthers(!showOthers);
   };
   return (
-    <section className="relative w-full space-y-4 py-5">
+    <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800">
           Conversation&apos;s Language
         </Typography>
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
-        <div className="flex h-[240px] w-full justify-center md:h-[220px] md:w-[220px]">
+        <div className="flex h-[240px] w-full justify-center md:w-[220px] md:flex-col md:items-start">
           <LanguagePieChart data={piesData} />
         </div>
-        <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000 md:pt-5">
+        <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
           {dataSlice.map((item, index) => {
             const percentage = item?.total
               ? (item.count * 100) / item?.total
@@ -113,18 +114,23 @@ const LanguageRank = ({
                 <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
                   <div
                     className={cn(
-                      'h-2 rounded-l-full transition-all  duration-1000',
+                      'relative h-2 rounded-l-full transition-all duration-1000',
                       { 'rounded-r-full': percentage === 100 },
                     )}
                     style={{
                       width: `${percentage}%`,
                       backgroundColor: index < 3 ? COLORS[index] : COLORS[3],
                     }}
-                  />
+                  >
+                    <Tooltip
+                      title={`${item.count} of ${item.total}`}
+                      contentProps={{}}
+                      triggerItem={<div className={cn('absolute inset-0 ')} />}
+                    />
+                  </div>
                 </div>
-
                 <span className=" w-10 text-end text-neutral-800">
-                  {`${item.count}/${item.total}`}
+                  {item.total}
                 </span>
               </div>
             );
@@ -133,17 +139,15 @@ const LanguageRank = ({
             <div className="flex w-full flex-row items-center gap-1 md:gap-5">
               <div className="flex h-fit w-36 flex-row items-center gap-2">
                 <CircleFlag countryCode={'unknown'} height={20} width={20} />
-                <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800">
-                  <Button
-                    variant={'ghost'}
-                    color={'default'}
-                    shape={'square'}
-                    size="xs"
-                    onClick={toggleShowOthers}
-                  >
-                    Others
-                  </Button>
-                </Typography>
+                <Button
+                  variant={'ghost'}
+                  color={'default'}
+                  shape={'square'}
+                  size="xs"
+                  onClick={toggleShowOthers}
+                >
+                  Others
+                </Button>
               </div>
               <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
                 <div

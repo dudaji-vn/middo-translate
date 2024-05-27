@@ -1,25 +1,43 @@
 'use client';
 
-import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
+import { Cell, Label, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { CHART_COLORS } from '../chart-colors';
 import { useAppStore } from '@/stores/app.store';
+import { useState } from 'react';
+import { getCountryNameByCode } from '@/utils/language-fn';
 const COLORS = [...CHART_COLORS].reverse();
-const TooltipContent = ({ active, payload, label, unit }: any) => {
-  const { value } = payload?.[0] || {};
-  const suffix = unit;
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-lg border border-neutral-200 bg-white p-4">
-        <p className="text-sm text-neutral-600">{`${label}`}</p>
-        <p className="flex flex-row gap-1 text-base text-neutral-800">
-          {`${value}`}
-          <span>{suffix}</span>
-        </p>
-      </div>
-    );
-  }
-  return null;
-};
+function CustomLabel(props: any) {
+  const { cx, cy } = props.viewBox;
+  return (
+    <>
+      <text
+        x={cx}
+        y={cy - 5}
+        fill="rgba(0, 0, 0, 0.87)"
+        className="recharts-text recharts-label"
+        textAnchor="middle"
+        dominantBaseline="central"
+      >
+        <tspan alignmentBaseline="middle" fontSize="28px" fontFamily="Roboto">
+          {props.value1}
+        </tspan>
+      </text>
+      <text
+        x={cx}
+        y={cy + 20}
+        fill="rgba(0, 0, 0, 0.54)"
+        className="recharts-text recharts-label"
+        textAnchor="middle"
+        dominantBaseline="central"
+      >
+        <tspan fontSize="16px" fontFamily="Roboto">
+          {props.value2}
+        </tspan>
+      </text>
+    </>
+  );
+}
+
 export default function LanguagePieChart({
   data = [],
 }: {
@@ -29,23 +47,53 @@ export default function LanguagePieChart({
   }>;
 }) {
   const isMobile = useAppStore((state) => state.isMobile);
+  const [selectedPie, setSelectedPie] = useState<{
+    label: string;
+    value: number;
+  } | null>(null);
   if (!data) return null;
+
   const pies = data.length ? data : [{ label: 'None', value: 1 }];
+  const onTogglePie = (entry: { label: string; value: number }) => {
+    setSelectedPie(entry);
+  };
+
   return (
     <ResponsiveContainer width="100%">
-      <PieChart width={200} height={200}>
+      <PieChart width={220} height={220} className={'relative'}>
         <Pie
           data={pies}
-          outerRadius={isMobile ? 115 : 105}
+          outerRadius={isMobile ? 110 : 100}
           startAngle={90}
           endAngle={-270}
-          innerRadius={isMobile ? 90 : 80}
-          fill="#8884d8"
+          innerRadius={isMobile ? 85 : 75}
+          fill={COLORS[4]}
           dataKey="value"
         >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
+          {data.map((entry, index) => {
+            return (
+              <>
+                <Cell
+                  onClick={() => onTogglePie(entry)}
+                  key={`cell-${index}`}
+                  className="cursor-pointer"
+                  fill={COLORS[index % COLORS.length]}
+                />
+              </>
+            );
+          })}
+          {selectedPie && (
+            <Label
+              width={30}
+              position="center"
+              content={
+                <CustomLabel
+                  value1={getCountryNameByCode(selectedPie?.label)}
+                  value2={(selectedPie.value * 100)?.toFixed(0) + '%'}
+                />
+              }
+            ></Label>
+          )}
         </Pie>
       </PieChart>
     </ResponsiveContainer>
