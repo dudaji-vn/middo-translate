@@ -108,7 +108,7 @@ const HeatMap = ({
       margin={{
         top: 25,
         right: 60,
-        left: 14,
+        left: 20,
         bottom: 0,
       }}
       {...props}
