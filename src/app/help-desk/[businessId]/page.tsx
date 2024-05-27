@@ -36,6 +36,11 @@ const HelpDeskStartConversationPage = async ({
   if (!allowedDomain && !isRedirectedFromRatePage) {
     // notFound();
   }
+  try {
+    
+  } catch (error) {
+    
+  }
   return (
     <StartAConversation
       visitorData={headersList}

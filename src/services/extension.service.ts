@@ -27,6 +27,32 @@ export const startAGuestConversation = (data: {
   return post('/help-desk/clients', data);
 };
 
+export const trackGuest = async ({
+  extensionId,
+  domain,
+}: {
+  domain: string;
+  extensionId: string;
+}) => {
+  try {
+    const response = await fetch(`/help-desk/${extensionId}/visitor`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ domain }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.message);
+    }
+    return data?.data;
+  } catch (error) {
+    console.error('Error in track visitor on domain', error);
+    return undefined;
+  }
+};
+
 export const endConversation = (data: { roomId: string; senderId: string }) => {
   return post('/messages/end-conversation', data);
 };

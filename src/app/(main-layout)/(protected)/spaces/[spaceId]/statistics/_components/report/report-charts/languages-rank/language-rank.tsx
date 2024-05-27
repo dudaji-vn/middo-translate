@@ -10,7 +10,7 @@ import { cn } from '@/utils/cn';
 import { Skeleton } from '@/components/ui/skeleton';
 import LanguagePieChart from '../language-pie-chart/language-pie-chart';
 import { Button } from '@/components/actions';
-import { ChevronUpIcon } from 'lucide-react';
+import { ChevronDown, ChevronUpIcon } from 'lucide-react';
 import { CHART_COLORS } from '../chart-colors';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
@@ -89,6 +89,7 @@ const LanguageRank = ({
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <LanguagePieChart
           languagesRank={dataSlice}
+          othersCount={others.reduce((acc, item) => acc + item.count, 0)}
           data={piesData}
           className="flex h-[250px] w-full justify-start md:w-[250px] md:flex-col md:items-start"
         />
@@ -140,12 +141,12 @@ const LanguageRank = ({
           {others.length > 0 && (
             <div className="flex w-full flex-row items-center gap-1 md:gap-5">
               <div className="flex h-fit w-36 flex-row items-center gap-2">
-                <CircleFlag countryCode={'unknown'} height={20} width={20} />
                 <Button
                   variant={'ghost'}
                   color={'default'}
                   shape={'square'}
                   size="xs"
+                  startIcon={<ChevronDown />}
                   onClick={toggleShowOthers}
                 >
                   Others
@@ -179,7 +180,7 @@ const LanguageRank = ({
               onClick={toggleShowOthers}
               startIcon={<ChevronUpIcon />}
             >
-              hide
+              Show less
             </Button>
           </div>
         </div>
