@@ -1,6 +1,6 @@
 import { Avatar } from '@/components/data-display';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
-import ParticipantInVideoCall from '@/features/call/interfaces/participant';
+import ParticipantInVideoCall, { StatusParticipant } from '@/features/call/interfaces/participant';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
 import React, { useMemo } from 'react';
@@ -19,9 +19,12 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
 
   const isGalleryView = layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW
   const statusClass = useMemo(()=> {
-    if(participant?.status == 'WAITING') return 'opacity-10'
-    if(participant?.status == 'DECLINE') return 'opacity-10'
-    return ''
+    switch (participant?.status) {
+      case StatusParticipant.WAITING:
+      case StatusParticipant.DECLINE:
+        return 'opacity-10'
+      default:
+    }
   }, [participant?.status])
   return (
     <div

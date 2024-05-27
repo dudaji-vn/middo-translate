@@ -28,13 +28,13 @@ export const Item = ({
         'flex w-full items-center gap-2 bg-white px-3 py-3',
         className,
         onClick &&
-          'cursor-pointer active:bg-primary-200 md:hover:bg-primary-100',
+          'cursor-pointer md:hover:bg-primary-100 active:!bg-primary-200',
         danger && 'text-error',
-        onClick && danger && 'active:bg-error-100/60 md:hover:bg-error-100/20',
+        onClick && danger && 'active:!bg-error-100/60 md:hover:bg-error-100/20',
         neutral && 'text-neutral-800',
         onClick &&
           neutral &&
-          'bg-white active:bg-neutral-100/60 md:hover:bg-neutral-100/20',
+          'bg-white active:!bg-neutral-100/60 md:hover:bg-neutral-100/20',
       )}
       onClick={onClick}
     >

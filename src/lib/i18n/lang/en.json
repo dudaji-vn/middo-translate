@@ -102,7 +102,8 @@
       "NOT_ALLOW_MICROPHONE": "You have not allowed access to the microphone!",
       "USERNAME_MIN": "Username must be at least 3 characters!",
       "USERNAME_MAX": "Username must be at most 15 characters!",
-      "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!"
+      "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
+      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view."
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -213,7 +214,9 @@
     "SIGN_OUT": "Sign Out",
     "EDIT_PROFILE": "Edit Profile",
     "CHANGE_AVATAR": "Change avatar",
-    "APP_PERMISSION": "App's permission"
+    "APP_PERMISSION": "App's permission",
+    "RESTRICT_MESSAGE": "Restrict unknown senders",
+    "NOTIFICATION": "Notification"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",
@@ -297,6 +300,7 @@
     "DISCUSSION": "Discussion",
     "NOTIFICATION": "Notification",
     "PIN_CONVERSATION": "Pin conversation",
+    "FILE_MEDIA_AND_LINK": "Media, files and links",
     "ADMIN": "Admin",
     "MEMBERS": "Members",
     "SHOW_ALL": "Show all",
@@ -401,7 +405,8 @@
     "TURN_ON_MICROPHONE": "Turn On Microphone",
     "TURN_OFF_MICROPHONE": "Turn Off Microphone",
     "MINIMIZE": "Minimize",
-    "MAXIMIZE": "Maximize"
+    "MAXIMIZE": "Maximize",
+    "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
     "SIGN_OUT": {
@@ -571,9 +576,13 @@
     "CLIENT_LIST": "Clients List",
     "CHART": {
       "CLIENT": "New Clients",
-      "AVERAGERATING": "Customer Rating",
-      "COMPLETEDCONVERSATION": "Completed Conversations",
-      "RESPONSECHAT": "Average Response Time"
+      "LANGUAGERANK": "Conversation's Language",
+      "NEWVISITOR": "New Visitors",
+      "RESPONSETIME": "Response Time",
+      "OPENEDCONVERSATION": "Opened Conversations",
+      "DROPRATE": "Drop Rate",
+      "RESPONSEDMESSAGE": "Responsed Message",
+      "CUSTOMERRATING": "Customer Rating"
     },
     "SCRIPT": {
       "PAGE_TITLE": "Scripts Management",
@@ -614,5 +623,19 @@
   "404": {
     "TITLE": "Page not found",
     "DESCRIPTION": "We can't find the page you're looking for"
+  },
+  "BACKEND": {
+    "MESSAGE": {
+      "SOMETHING_WRONG": "Something went wrong, please try again later!",
+      "ERROR": "Has error, please try again later!",
+      "PASSWORD_PATTERN": "Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number!",
+      "EMAIL_EXIST": "Email already exists!",
+      "USERNAME_EXIST": "Username already exists!",
+      "ACCOUNT_ALREADY_ACTIVE": "Your account is already active!",
+      "EMAIL_NOT_SIGNUP": "This email is not registered!",
+      "INVALID_PASSWORD": "Invalid password!",
+      "NEW_PASSWORD_SAME_OLD_PASSWORD": "New password must be different from current password!",
+      "INVALID_TOKEN": "Invalid token!"
+    }
   }
 }

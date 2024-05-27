@@ -12,6 +12,7 @@ import { DropzoneRootProps, useDropzone, DropzoneState } from 'react-dropzone';
 
 interface MediaUploadContextProps extends DropzoneState {
   files: SelectedFile[];
+  loadSavedFilesContext: (uploadedFiles: UploadedFile[]) => void;
   uploadedFiles: UploadedFile[];
   getInputProps: <T extends DropzoneRootProps>(props?: T | undefined) => T;
   getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T;
@@ -67,6 +68,20 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
       type: 'error',
     });
   };
+  const loadSavedFilesContext = (uploadedFiles: UploadedFile[]) => {
+    setUploadedFiles(uploadedFiles);
+    setFiles(
+      uploadedFiles.map((file) => ({
+        url: file.url,
+        file: {
+          ...file.file,
+          type: file.metadata.resource_type,
+          size: file.metadata.bytes,
+          name: file.metadata.original_filename,
+        },
+      })),
+    );
+  };
   const handlePasteFile = (
     e: React.ClipboardEvent<HTMLDivElement | HTMLTextAreaElement>,
   ) => {
@@ -91,6 +106,7 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
       handleReject(rejectedFiles);
     }
   };
+
   const handleClipboardEvent = (e: ClipboardEvent) => {
     const items = e.clipboardData?.items;
     if (!items) return;
@@ -156,6 +172,7 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
       value={{
         files,
         uploadedFiles,
+        loadSavedFilesContext,
         removeFile,
         handlePasteFile,
         handleClipboardEvent,
@@ -178,6 +195,7 @@ export const useMediaUpload = () => {
 };
 
 const crateFile = (file: File): SelectedFile => {
+  console.log('file', file);
   return {
     url: URL.createObjectURL(file),
     file,

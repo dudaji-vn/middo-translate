@@ -22,9 +22,7 @@ export default function VideoCallHeader() {
   
   return (
     <div
-      className={`flex items-center gap-1 bg-primary-100 py-2 pl-3 pr-1 text-primary ${
-        !isFullScreen && 'cursor-grab active:cursor-grabbing'
-      }`}
+      className={`flex items-center gap-1 bg-primary-100 py-2 pl-3 pr-1 text-primary cursor-grab active:cursor-grabbing`}
     >
       <Phone className="h-4 w-4 stroke-current" />
       <span className="line-clamp-1 flex-1 font-semibold">{room?.name}</span>

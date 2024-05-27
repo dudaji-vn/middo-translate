@@ -47,7 +47,7 @@ function RHFFormItem({
         </FormDescription>
       )}
       <FormMessage
-        className="text-normal pl-4 text-left font-normal text-red-500"
+        className="text-normal text-left font-normal text-red-500"
         {...formMessageProps}
       />
     </FormItem>

@@ -1,33 +1,21 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Edge, useReactFlow, getConnectedEdges, addEdge } from 'reactflow';
+import { Edge, useReactFlow, getConnectedEdges } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import { useCallback } from 'react';
 import { Handle, Position } from 'reactflow';
 import { Button } from '@/components/actions';
-import {
-  Link,
-  MessageSquare,
-  MessagesSquare,
-  Pen,
-  Plus,
-  Trash2,
-  Zap,
-} from 'lucide-react';
-import { cn } from '@/utils/cn';
+import { Link, Trash2 } from 'lucide-react';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
-import Ping from '../ping';
-import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { deepDeleteNodes } from '../nodes.utils';
 import { CustomNodeProps, FLOW_KEYS } from './node-types';
 import UpdatingNodeWrapper from './updating-node-wrapper';
 import { FormLabel } from '@/components/ui/form';
 import { Switch } from '@/components/data-entry';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
-import { add, set } from 'lodash';
 import toast from 'react-hot-toast';
 
 function ButtonNode(node: CustomNodeProps) {
@@ -164,9 +152,10 @@ function ButtonNode(node: CustomNodeProps) {
         type="source"
         className={currentNode?.data?.link ? 'hidden' : ''}
         position={Position.Right}
-        isConnectable={isConnectable}
+        isConnectable={isConnectable && !isLink && !data?.readonly}
       />
       <UpdatingNodeWrapper
+        data={data}
         open={Boolean(isUpdating)}
         onOpenChange={setIsUpdating}
       >
@@ -178,7 +167,11 @@ function ButtonNode(node: CustomNodeProps) {
             <div className="flex flex-row items-center gap-1 text-neutral-600">
               <Link size={16} />
               <FormLabel>Link</FormLabel>
-              <Switch checked={isLink} onCheckedChange={onIsLinkChange} />
+              <Switch
+                checked={isLink}
+                onCheckedChange={onIsLinkChange}
+                disabled={data?.readonly}
+              />
             </div>
           </div>
           <RHFInputField

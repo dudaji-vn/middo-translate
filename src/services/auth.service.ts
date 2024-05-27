@@ -42,3 +42,9 @@ export const getCookieService = (keys: string[]) => {
 export const deleteAccount = () => {
   return remove('/auth/account', {});
 };
+export const checkTokenResetPassword = () => {
+  return get('/auth/check-token-reset-password');
+};
+export const checkUsernameExistService = (username: string) => {
+  return post('/users/check-username-exist', { username });
+};

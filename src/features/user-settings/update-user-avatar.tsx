@@ -51,8 +51,8 @@ export default function UpdateUserAvatar() {
       });
       toast.success(t('MESSAGE.SUCCESS.UPDATED_AVATAR'));
       setOpen(false);
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+    } catch (_: unknown) {
+      toast.error(t('BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
     }

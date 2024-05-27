@@ -22,10 +22,10 @@ import data from '@emoji-mart/data';
 import { init } from 'emoji-mart';
 import Offline from '@/components/modal/offline';
 import { I18nInitProvider } from './I18nInit.provider';
+import { ReactNativeProvider } from './react-native.provider';
 init({ data });
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
-
   return (
     <>
       <I18nextProvider i18n={i18next}>
@@ -54,6 +54,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
         <ModalProvider />
         <I18nInitProvider />
       </I18nextProvider>
+      <ReactNativeProvider />
     </>
   );
 };

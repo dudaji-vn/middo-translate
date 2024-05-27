@@ -1,24 +1,24 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useMemo, useState } from 'react';
 import 'reactflow/dist/style.css';
 
 import { Button } from '@/components/actions';
 import { Smile } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useFormContext } from 'react-hook-form';
-import {
-  useMediaUpload,
-} from '@/components/media-upload';
+import { useMediaUpload } from '@/components/media-upload';
 import { MessageEditorToolbarFile } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-file';
 import { useTranslation } from 'react-i18next';
-import {
-  AttachmentSelection,
-} from '@/components/attachment-selection';
+import { AttachmentSelection } from '@/components/attachment-selection';
 import { useAppStore } from '@/stores/app.store';
 import { Popover, PopoverTrigger } from '@/components/data-display/popover';
 import { PopoverContent } from '@radix-ui/react-popover';
 import Picker from '@emoji-mart/react';
+import { FLOW_KEYS } from './node-types';
+import { isEmpty, isEqual } from 'lodash';
+import { Spinner } from '@/components/feedback';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const allowedMediaTypes: Record<string, string> = {
   image: 'image',
@@ -26,39 +26,58 @@ const allowedMediaTypes: Record<string, string> = {
   document: 'document',
 };
 const NodeMessageToolbar = ({
-  nameFieldImg = '',
-  nameFiledContent = '',
+  readonly = false,
+  mediasNameField = '',
+  contentNameField = '',
 }: {
-  nameFieldImg: string;
-  nameFiledContent: string;
+  mediasNameField: string;
+  contentNameField: string;
+  readonly?: boolean;
 }) => {
   const { t } = useTranslation('common');
-  const { files, uploadedFiles } = useMediaUpload();
+  const { files, uploadedFiles, loadSavedFilesContext } = useMediaUpload();
   const { setValue, watch } = useFormContext();
   const isMobile = useAppStore((state) => state.isMobile);
   const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
+
+  const currentNodeMedias = watch(mediasNameField);
 
   useEffect(() => {
     if (uploadedFiles) {
       const media = uploadedFiles.map((file) => ({
         ...file,
-        type:
-          allowedMediaTypes[file.file?.type?.split('/')[0] as string] ||
-          'document',
+        type: file.metadata.resource_type || 'document',
       }));
-      setValue(nameFieldImg, media);
+      setValue(mediasNameField, media);
     }
-  }, [uploadedFiles, files, setValue, nameFieldImg]);
+  }, [uploadedFiles, files, setValue, currentNodeMedias, mediasNameField]);
+
+  useEffect(() => {
+    if (!isEmpty(currentNodeMedias)) {
+      loadSavedFilesContext(currentNodeMedias);
+    }
+  }, []);
+  const isLoading = useMemo(() => {
+    return currentNodeMedias?.length !== files?.length;
+  }, [currentNodeMedias, files]);
 
   return (
     <>
       <div className="flex flex-col">
-        <AttachmentSelection />
-        <div className="flex flex-row">
-          <MessageEditorToolbarFile />
+        {isLoading && (
+          <Skeleton className="h-1 w-full rounded-md bg-primary-200" />
+        )}
+        {currentNodeMedias && <AttachmentSelection readonly={readonly} />}
+        <div className={cn('flex flex-row')}>
+          <MessageEditorToolbarFile disabled={readonly} />
           <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>
             <PopoverTrigger asChild>
-              <Button.Icon variant="ghost" color="default" size="xs">
+              <Button.Icon
+                variant="ghost"
+                color="default"
+                size="xs"
+                disabled={readonly}
+              >
                 <Smile />
               </Button.Icon>
             </PopoverTrigger>
@@ -73,9 +92,10 @@ const NodeMessageToolbar = ({
             >
               <Picker
                 theme="light"
+                disabled={readonly}
                 onEmojiSelect={(emoji: any) => {
-                  const text = watch(nameFiledContent);
-                  setValue(nameFiledContent, text + emoji.native);
+                  const text = watch(contentNameField);
+                  setValue(contentNameField, text + emoji.native);
                 }}
                 skinTonePosition="none"
                 previewPosition="none"

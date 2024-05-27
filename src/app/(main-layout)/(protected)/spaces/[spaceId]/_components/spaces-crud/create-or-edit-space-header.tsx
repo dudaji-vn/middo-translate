@@ -84,7 +84,7 @@ const CreateOrEditSpaceHeader = ({
         <div
           style={{ width: `${stepPercentage}%` }}
           className="absolute  left-0 top-0 !z-10 h-[50%] border-b-[2px] border-b-neutral-200 transition-all duration-1000"
-        ></div>
+        />
         {createSpaceSteps.map((item, index) => {
           const isActive = step === index;
           const isAfterCurrent = step < index;

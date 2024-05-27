@@ -9,22 +9,25 @@ import {
 import { PopoverContentProps, PopoverProps } from '@radix-ui/react-popover';
 import { Button } from '@/components/actions';
 import { Pen } from 'lucide-react';
+import { FlowNode } from '../design-script-chat-flow';
 
 const UpdatingNodeWrapper = ({
   children,
   open,
   onOpenChange,
   popoverContentProps = {},
+  data,
 }: {
   children: React.ReactNode;
   open: boolean;
   onOpenChange: PopoverProps['onOpenChange'];
   popoverContentProps?: PopoverContentProps;
+  data?: FlowNode['data'];
 }) => {
   return (
     <Popover open={open} onOpenChange={onOpenChange}>
       <PopoverTrigger asChild>
-        <Button.Icon color={'default'} size={'xs'}>
+        <Button.Icon color={'default'} size={'xs'} disabled={data?.readonly}>
           <Pen size={18} />
         </Button.Icon>
       </PopoverTrigger>

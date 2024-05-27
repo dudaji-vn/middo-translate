@@ -6,17 +6,20 @@ import { PlayCircleIcon, PlusCircleIcon, XIcon } from 'lucide-react';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
 import { Editor } from '@tiptap/react';
-import { MediaPreview } from './media-preview';
+
+import MediaLightBox from './media-light-box/media-light-box';
+import { cn } from '@/utils/cn';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor?: Editor | null;
+  readonly?: boolean;
 }
 
 export const AttachmentSelection = forwardRef<
   HTMLDivElement,
   AttachmentSelectionProps
->(({ editor }, ref) => {
+>(({ editor, readonly }, ref) => {
   const { files, removeFile, open } = useMediaUpload();
   const [index, setIndex] = useState<number | undefined>(undefined);
 
@@ -25,7 +28,22 @@ export const AttachmentSelection = forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files.length]);
 
-  
+  const sliders = useMemo(() => {
+    return files
+      .filter((file) => {
+        const type = file.file.type.split('/')[0];
+        return type === 'image' || type === 'video';
+      })
+      .map((file) => {
+        const type = file.file.type.split('/')[0];
+        return {
+          url: file.url,
+          type: type,
+          name: file.file.name || '',
+        };
+      });
+  }, [files]);
+
   return (
     <AnimatePresence>
       {files.length > 0 && (
@@ -35,14 +53,22 @@ export const AttachmentSelection = forwardRef<
             type="button"
             color="secondary"
             size="lg"
-            className="rounded-2xl"
+            disabled={readonly}
+            className={cn('rounded-2xl', {
+              hidden: readonly,
+            })}
           >
             <PlusCircleIcon />
           </Button.Icon>
           <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
-            <MediaPreview files={files} index={index} close={()=>setIndex(undefined)} />
+            <MediaLightBox
+              files={sliders}
+              index={index}
+              close={() => setIndex(undefined)}
+              key={index}
+            />
             <AnimatePresence>
-              {files.map((file, index) => {
+              {files.map((file, i) => {
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -51,15 +77,17 @@ export const AttachmentSelection = forwardRef<
                     key={file.url}
                     className="group relative aspect-square h-[60px] w-[60px]"
                   >
-                    <div 
-                      className="aspect-square h-[60px] w-[60px] shrink-0 overflow-hidden rounded-xl shadow cursor-pointer" 
-                      onClick={() => setIndex(index - 1)}>
+                    <div
+                      className="aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow"
+                      onClick={() => setIndex(i)}
+                    >
                       <MediaItem file={file} />
                     </div>
                     <button
                       tabIndex={-1}
                       type="button"
                       onClick={() => removeFile(file)}
+                      disabled={readonly}
                     >
                       <div className="absolute -right-1 -top-1 rounded-full border bg-background opacity-0 shadow-1 transition-all group-hover:opacity-100">
                         <XIcon width={16} height={16} />

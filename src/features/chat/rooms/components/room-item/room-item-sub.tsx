@@ -101,10 +101,11 @@ const ItemSub = ({
     message.sender.name,
     message.type,
     message.call?.endTime,
+    message.action,
     message.status,
-    messageContent,
     message.forwardOf,
     currentUserId,
+    messageContent,
     isGroup,
     t,
   ]);

@@ -102,7 +102,8 @@
       "NOT_ALLOW_MICROPHONE": "Bạn chưa cho phép truy cập vào microphone!",
       "USERNAME_MIN": "Tên người dùng phải có ít nhất 3 ký tự!",
       "USERNAME_MAX": "Tên người dùng phải có tối đa 15 ký tự!",
-      "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!"
+      "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!",
+      "NOT_SUPPORT_PREVIEW": "Nội dung file quá lớn hoặc không được hỗ trợ để xem trước! <br /> Vui lòng tải xuống để xem."
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",
@@ -213,7 +214,9 @@
     "SIGN_OUT": "Đăng xuất",
     "EDIT_PROFILE": "Chỉnh sửa hồ sơ",
     "CHANGE_AVATAR": "Thay đổi hình đại diện",
-    "APP_PERMISSION": "Quyền ứng dụng"
+    "APP_PERMISSION": "Quyền ứng dụng",
+    "RESTRICT_MESSAGE": "Hạn chế người gửi không xác định",
+    "NOTIFICATION": "Thông báo"
   },
   "SIGN_IN": {
     "TITLE": "Đăng nhập",
@@ -299,6 +302,7 @@
     "DISCUSSION": "Thảo luận",
     "NOTIFICATION": "Thông báo",
     "PIN_CONVERSATION": "Ghim hội thoại",
+    "FILE_MEDIA_AND_LINK": "Phương tiện, tệp và liên kết",
     "ADMIN": "Quản trị viên",
     "MEMBERS": "Thành viên",
     "SHOW_ALL": "Xem tất cả",
@@ -403,7 +407,8 @@
     "TURN_ON_MICROPHONE": "Bật microphone",
     "TURN_OFF_MICROPHONE": "Tắt microphone",
     "MINIMIZE": "Thu nhỏ",
-    "MAXIMIZE": "Phóng to"
+    "MAXIMIZE": "Phóng to",
+    "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
     "SIGN_OUT": {
@@ -568,9 +573,13 @@
     "CLIENT_LIST": "Danh sách khách hàng",
     "CHART": {
       "CLIENT": "Khách hàng mới",
-      "AVERAGERATING": "Đánh giá khách hàng",
-      "COMPLETEDCONVERSATION": "Cuộc trò chuyện hoàn thành",
-      "RESPONSECHAT": "Thời gian phản hồi trung bình"
+      "LANGUAGERANK": "Xếp hạng ngôn ngữ",
+      "NEWVISITOR": "Khách hàng mới",
+      "RESPONSETIME": "Thời gian phản hồi",
+      "OPENEDCONVERSATION": "Cuộc trò chuyện mở",
+      "DROPRATE": "Tỷ lệ bỏ cuộc",
+      "RESPONSEDMESSAGE": "Tin nhắn phản hồi",
+      "CUSTOMERRATING": "Đánh giá khách hàng"
     },
     "SCRIPT": {
       "PAGE_TITLE": "Kịch bản trò chuyện",
@@ -611,5 +620,19 @@
   "404": {
     "TITLE": "Trang không tìm thấy",
     "DESCRIPTION": "Chúng tôi không thể tìm thấy trang bạn đang tìm kiếm"
+  },
+  "BACKEND": {
+    "MESSAGE": {
+      "SOMETHING_WRONG": "Có lỗi, vui lòng thử lại sau!",
+      "ERROR": "Có lỗi, vui lòng thử lại sau!",
+      "PASSWORD_PATTERN": "Mật khẩu phải chứa ít nhất 1 chữ cái viết hoa, 1 chữ cái viết thường và 1 số!",
+      "EMAIL_EXIST": "Email đã tồn tại!",
+      "USERNAME_EXIST": "Tên người dùng đã tồn tại!",
+      "ACCOUNT_ALREADY_ACTIVE": "Tài khoản của bạn đã được kích hoạt!",
+      "EMAIL_NOT_SIGNUP": "Email này chưa được đăng ký!",
+      "INVALID_PASSWORD": "Mật khẩu không hợp lệ!",
+      "NEW_PASSWORD_SAME_OLD_PASSWORD": "Mật khẩu mới phải khác với mật khẩu hiện tại!",
+      "INVALID_TOKEN": "Liên kết xác minh đã hết hạn!"
+    }
   }
 }

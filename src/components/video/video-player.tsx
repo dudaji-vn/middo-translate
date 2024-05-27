@@ -10,12 +10,27 @@ import { useMediaSettingStore } from "@/stores/media-setting.store";
 import downloadFile from "@/utils/download-file";
 
 interface VideoProps {
-    file: Media;
+    file: {
+      url: string;
+      name: string;
+      type: string;
+    };
     className?: string;
     onDisableLongPress?: (val: boolean) => void;
+    isShowFullScreen?: boolean;
+    isShowDownload?: boolean;
+    isShowVolume?: boolean;
 }
 
-function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
+function VideoPlayer(props: VideoProps) {
+  const { 
+    file, 
+    className, 
+    isShowDownload = true, 
+    isShowFullScreen = true, 
+    isShowVolume = true,
+    onDisableLongPress,
+  } = props
   const [isFullScreen, setIsFullScreen] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoThumbnailRef = useRef<HTMLVideoElement>(null);
@@ -194,7 +209,7 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
   return (
     <div
       className={cn(
-        "group relative bg-neutral-50", 
+        "group relative bg-neutral-50 overflow-hidden", 
         className,
         isFullScreen ? 'fixed inset-0 bg-black/90 z-[51] w-full max-w-full h-full rounded-none' : '', )}
       ref={wrapperRef}
@@ -204,7 +219,7 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
         src={file.url}
         controls={false}
         disablePictureInPicture
-        className={cn("h-full w-full")}
+        className={cn("h-full w-full object-contain")}
       />
       {/* Button play */}
       <div className='absolute group inset-3 flex items-center justify-center z-10' onClick={(e)=>{
@@ -278,8 +293,8 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
             />
           </div>
         </div>
-        <DropdownMenu open={isOpenVolume}>
-          <DropdownMenuTrigger>
+        {isShowVolume && <DropdownMenu open={isOpenVolume}>
+          <DropdownMenuTrigger asChild={true}>
             <div ref={buttonVolumeRef} className={cn('md:block hidden', isFullScreen && 'block')}>
               <ButtonVolume 
                 isFullScreen={isFullScreen}
@@ -297,9 +312,9 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
               <RangeVolume />
             </div>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu>}
         {/* Download */}
-        <Button.Icon
+        {isShowDownload && <Button.Icon
           variant={'default'}
           color={'default'}
           size={isFullScreen ? 'xs' : 'ss'}
@@ -308,9 +323,9 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
           onClick={download}
         >
           <DownloadIcon />
-        </Button.Icon>
+        </Button.Icon>}
         {/* Full Screen */}
-        <Button.Icon
+        {isShowFullScreen && <Button.Icon
           variant={'default'}
           color={'default'}
           size={isFullScreen ? 'xs' : 'ss'}
@@ -318,7 +333,7 @@ function VideoPlayer({ file, className, onDisableLongPress }: VideoProps) {
           onClick={() => setIsFullScreen(!isFullScreen)}
         >
           {isFullScreen ? <X /> : <Maximize2Icon />}
-        </Button.Icon>
+        </Button.Icon>}
       </div>
     </div>
   );

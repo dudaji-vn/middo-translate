@@ -17,7 +17,7 @@ import { usePinMessage } from '../hooks/use-pin-message';
 import { Message } from '../types';
 import { ForwardModal } from './forward-modal';
 import { MessageModalRemove } from './message-modal-remove';
-import downloadFile from '@/utils/download-file';
+import { IDownloadFile, downloadFiles } from '@/utils/download-file';
 
 type Action =
   | 'remove'
@@ -126,9 +126,13 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
         break;
       case 'download':
         if (!message?.media) return;
+        let files: IDownloadFile[] = []
+
         message.media.forEach((media) => {
-          downloadFile({ url: media.url, fileName: media.name, mimeType: media.type });
+          files.push({ url: media.url, fileName: media.name, mimeType: media.type });
         });
+
+        downloadFiles(files);
         break;
       default:
         setAction(action);

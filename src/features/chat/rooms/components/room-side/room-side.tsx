@@ -12,11 +12,13 @@ import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
 import { AnimatePresence } from 'framer-motion';
 import { Sideslip } from '@/components/animations';
+import { RoomSideTabFiles } from './room-side-tab-files';
 
 const tabsMap: Record<RoomSidebarTabs, React.ReactNode> = {
   info: <RoomSideTabInfo />,
   discussion: <RoomSideTabDiscussion />,
   pinned: <RoomSideTabPinned />,
+  files: <RoomSideTabFiles />,
 };
 
 export interface RoomSideProps extends React.HTMLAttributes<HTMLDivElement> {}
