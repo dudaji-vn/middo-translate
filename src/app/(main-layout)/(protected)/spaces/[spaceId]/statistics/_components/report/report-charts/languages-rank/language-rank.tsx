@@ -87,9 +87,11 @@ const LanguageRank = ({
         </Typography>
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
-        <div className="flex h-[240px] w-full justify-start md:w-[220px] md:flex-col md:items-start">
-          <LanguagePieChart data={piesData} />
-        </div>
+        <LanguagePieChart
+          languagesRank={dataSlice}
+          data={piesData}
+          className="flex h-[250px] w-full justify-start md:w-[250px] md:flex-col md:items-start"
+        />
         <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
           {dataSlice.map((item, index) => {
             const percentage = item?.total
