@@ -1,5 +1,6 @@
 import { axios } from '@/lib/axios';
 import { get, post, put } from './api.service';
+import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
 export const createExtension = (
   spaceId: string,
@@ -30,23 +31,28 @@ export const startAGuestConversation = (data: {
 export const trackGuest = async ({
   extensionId,
   domain,
+  trackingId,
 }: {
   domain: string;
   extensionId: string;
+  trackingId?: string;
 }) => {
   try {
-    const response = await fetch(`/help-desk/${extensionId}/visitor`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
+    console.log('tracking-Guest', extensionId, domain, trackingId);
+    const response = await fetch(
+      `${NEXT_PUBLIC_URL}/api/help-desk/${extensionId}/visitor`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          domain: 'http://localhost:3000/',
+          ...(trackingId && { trackingId }),
+        }),
       },
-      body: JSON.stringify({ domain }),
-    });
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message);
-    }
-    return data?.data;
+    );
+    return await response.json();
   } catch (error) {
     console.error('Error in track visitor on domain', error);
     return undefined;

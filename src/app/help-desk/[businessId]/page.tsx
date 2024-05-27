@@ -3,6 +3,7 @@ import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { headers } from 'next/headers';
 import { getAllowedDomain } from '@/utils/allowed-domains';
 import StartAConversation from './[...slugs]/_components/start-conversation/start-a-conversation';
+import TrackGuest from './rate/[roomId]/[userId]/_components/track-guest';
 
 const HelpDeskStartConversationPage = async ({
   params: { slugs, businessId },
@@ -37,16 +38,18 @@ const HelpDeskStartConversationPage = async ({
     // notFound();
   }
   try {
-    
-  } catch (error) {
-    
-  }
+  } catch (error) {}
   return (
-    <StartAConversation
-      visitorData={headersList}
-      extensionData={extensionData}
-      fromDomain={isRedirectedFromRatePage ? originReferer : allowedDomain}
-    />
+    <TrackGuest
+      extensionId={businessId}
+      domain={String(isRedirectedFromRatePage ? originReferer : allowedDomain)}
+    >
+      <StartAConversation
+        visitorData={headersList}
+        extensionData={extensionData}
+        fromDomain={isRedirectedFromRatePage ? originReferer : allowedDomain}
+      />
+    </TrackGuest>
   );
 };
 
