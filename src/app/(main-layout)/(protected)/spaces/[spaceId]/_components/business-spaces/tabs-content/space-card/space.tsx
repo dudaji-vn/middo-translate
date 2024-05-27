@@ -97,7 +97,7 @@ const Space = ({
                 : 'invisible'
             }
             startIcon={<MessageSquare className="h-4 w-4" />}
-          >{`${totalNewMessages} new messages`}</Button>
+          >{`${totalNewMessages} new conversations`}</Button>
         </div>
       </CardContent>
     </Card>

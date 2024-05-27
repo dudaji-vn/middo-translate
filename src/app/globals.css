@@ -554,3 +554,9 @@ body {
 .editor-view.isEditing p {
   opacity: 0.2;
 }
+
+/* Hide eye icon on input password Edge, Firefox,... */
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}

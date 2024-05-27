@@ -108,7 +108,8 @@ export default function VideoCallActions() {
           setLoadingStream(false);
         }, 1000);
       });
-  }, [audioSetting?.deviceId, isLoadingStream, isTurnOnCamera, isTurnOnMic, myStream, participants, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t, videoSetting?.deviceId]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [audioSetting?.deviceId, isLoadingStream, isTurnOnCamera, isTurnOnMic, myStream, participants, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, videoSetting?.deviceId]);
 
   return (
     <section className="relative z-20 flex items-center justify-between bg-primary-100 p-2">

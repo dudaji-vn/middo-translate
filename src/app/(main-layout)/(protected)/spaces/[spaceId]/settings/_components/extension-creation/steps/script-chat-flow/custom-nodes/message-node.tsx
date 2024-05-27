@@ -81,8 +81,9 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
         <MediaUploadProvider>
           <MediaUploadDropzone>
             <NodeMessageToolbar
-              nameFieldImg={`${FLOW_KEYS.NODES}.${nodeIndex}.data.media`}
-              nameFiledContent={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
+              readonly={data?.readonly}
+              mediasNameField={`${FLOW_KEYS.NODES}.${nodeIndex}.data.media`}
+              contentNameField={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
             />
           </MediaUploadDropzone>
         </MediaUploadProvider>

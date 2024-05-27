@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/components/form/button';
 import { InputField } from '@/components/form/Input-field';
 import { InputImage } from '@/components/form/input-image';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
 import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { addInfoUserService } from '@/services/auth.service';
+import { addInfoUserService, checkUsernameExistService } from '@/services/auth.service';
 import { uploadImage } from '@/utils/upload-img';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
@@ -18,6 +17,9 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
+import { Typography } from '@/components/data-display';
+import { Button } from '@/components/actions';
+import { AlertError } from '@/components/alert/alert-error';
 
 export default function CreateNewAccount() {
   const [loading, setLoading] = useState(false);
@@ -37,11 +39,12 @@ export default function CreateNewAccount() {
   }, [router, user]);
 
   const form = useForm({
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       name: '',
       avatar: undefined,
       language: '',
+      username: '',
     },
     resolver: zodResolver(z
       .object({
@@ -54,15 +57,23 @@ export default function CreateNewAccount() {
           }),
         avatar: z
           .any()
-          .refine((value: any) => value?.length > 0 || value?.size > 0, {
-            message: t('MESSAGE.ERROR.REQUIRED'),
-          })
-          .refine((value: any) => value?.size < 3000000, {
+          // .refine((value: any) => value?.length > 0 || value?.size > 0, {
+          //   message: t('MESSAGE.ERROR.REQUIRED'),
+          // })
+          .refine((value: any) => value?.size ? (value?.size < 3000000) :true, {
             message: t('MESSAGE.ERROR.FILE_SIZE', {val: '3MB'}),
-          }),
+          })
+          .optional(),
         language: z.string().min(1, {
           message: t('MESSAGE.ERROR.REQUIRED'),
         }),
+        username: z
+            .string()
+            .min(3, { message: t('MESSAGE.ERROR.USERNAME_MIN') })
+            .max(15, { message: t('MESSAGE.ERROR.USERNAME_MAX') })
+            .regex(/^[a-z0-9_]+$/, {
+              message: t('MESSAGE.ERROR.USERNAME_PATTERN'),
+            }),
       })
       .optional()),
   });
@@ -73,10 +84,13 @@ export default function CreateNewAccount() {
     watch,
     trigger,
     handleSubmit,
+    setError,
+    clearErrors,
+    getFieldState,
     formState: { errors, isValid },
   } = form;
   
-  const { avatar, name, language } = watch();
+  const { avatar, name, language, username } = watch();
 
   const submit = async (values: any) => {
     // e.preventDefault();
@@ -92,12 +106,13 @@ export default function CreateNewAccount() {
         avatar: img.secure_url,
         name,
         language,
+        username,
       });
       setDataAuthStore({ user: res.data });
       router.push(ROUTE_NAMES.ROOT);
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage(t(err?.response?.data?.message));
     } finally {
       setLoading(false);
     }
@@ -108,13 +123,30 @@ export default function CreateNewAccount() {
     }
   }, [name,setValue]);
 
+  const onBlurUsername = async () => {
+    let {error} = getFieldState('username');
+    if(error) return;
+
+    try {
+      await checkUsernameExistService(username);
+    } catch (err: any) {
+      setError('username', {
+        type: 'manual',
+        message: t(err?.response?.data?.message),
+      });
+    }
+  }
+
   return (
     <div className="flex flex-col items-center">
       {loading && <PageLoading />}
       <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6">
-        <h4 className="relative mb-8 pl-4 leading-tight text-primary before:absolute before:bottom-0 before:left-0 before:top-0 before:w-1 before:rounded-md before:bg-primary before:content-['']">
-          {t('CREATE_ACCOUNT.TITLE')}
-        </h4>
+          <Typography
+            variant={'h1'}
+            className="mb-8 text-center text-2xl font-semibold text-primary"
+          >
+            {t('CREATE_ACCOUNT.TITLE')}
+          </Typography>
         <Form {...form}>
           <form onSubmit={handleSubmit(submit)}>
             <InputImage
@@ -143,6 +175,29 @@ export default function CreateNewAccount() {
                     },
                   }}
                 />
+            <div className="mt-5">
+              <RHFInputField
+                name="username"
+                formLabel={t('COMMON.USERNAME')}
+                inputProps={{
+                  placeholder: t('COMMON.USERNAME_PLACEHOLDER'),
+                  suffix: (
+                    <span className="text-sm text-gray-400">{`${username?.length}/15`}</span>
+                  ),
+                  onKeyDown: (e) => {
+                    if (
+                      username?.length >= 60 &&
+                      e.key !== 'Backspace' &&
+                      e.key !== 'Delete'
+                    ) {
+                      e.preventDefault();
+                    }
+                  },
+                  onBlur: () => {onBlurUsername()},
+                }}
+              />
+            </div>
+            
             {/* <InputField
               className="mt-5"
               label="Name"
@@ -158,8 +213,22 @@ export default function CreateNewAccount() {
               errors={errors.language}
               trigger={trigger}
             ></InputSelectLanguage>
-            <p className="mt-2 text-sm text-red-500">{errorMessage}</p>
-            <Button type="submit">{t('COMMON.CREATE')}</Button>
+            <AlertError errorMessage={errorMessage}></AlertError>
+            <Button
+              variant={'default'}
+              size={'md'}
+              shape={'square'}
+              color={'primary'}
+              className="mt-5 w-full max-w-[360px] mx-auto block"
+              type="submit"
+              disabled={
+                (!watch().name || !watch().language || !watch().username) ||
+                loading ||
+                Object.keys(errors).length > 0
+              }
+            >
+              {t('COMMON.CREATE')}
+            </Button>
           </form>
         </Form>
 

@@ -114,19 +114,60 @@ const MessageNode = ({
         actions: nextNode.type === 'message' ? undefined : childrenActions,
       });
       if (nextNode?.data?.media) {
-        onSendBotMessage({
-          ...createLocalMessage({
-            sender: bot!,
-            content: '',
-            language: bot?.language,
-          }),
-          status: 'sent',
-          roomId: room?._id,
-          type: nextNode.type === 'option' ? 'flow-actions' : 'text',
-          mentions: [],
-          actions: nextNode.type === 'message' ? undefined : childrenActions,
-          media: nextNode.data?.media,
-        });
+        const images = nextNode?.data?.media?.filter(
+          (media) => media.type === 'image',
+        );
+        const videos = nextNode?.data?.media?.filter(
+          (media) => media.type === 'video',
+        );
+        const documents = nextNode?.data?.media?.filter(
+          (media) => media.type === 'document',
+        );
+        if (images.length > 0) {
+          onSendBotMessage({
+            ...createLocalMessage({
+              sender: bot!,
+              content: '',
+              language: bot?.language,
+            }),
+            status: 'sent',
+            roomId: room?._id,
+            type: 'media',
+            mentions: [],
+            actions: nextNode.type === 'message' ? undefined : childrenActions,
+            media: images,
+          });
+        }
+        if (documents?.length) {
+          onSendBotMessage({
+            ...createLocalMessage({
+              sender: bot!,
+              content: '',
+              language: bot?.language,
+            }),
+            status: 'sent',
+            roomId: room?._id,
+            type: 'media',
+            mentions: [],
+            actions: nextNode.type === 'message' ? undefined : childrenActions,
+            media: documents,
+          });
+        }
+        if (videos?.length) {
+          onSendBotMessage({
+            ...createLocalMessage({
+              sender: bot!,
+              content: '',
+              language: bot?.language,
+            }),
+            status: 'sent',
+            roomId: room?._id,
+            type: 'media',
+            mentions: [],
+            actions: nextNode.type === 'message' ? undefined : childrenActions,
+            media: videos,
+          });
+        }
       }
     }
   };
@@ -136,7 +177,7 @@ const MessageNode = ({
       <a target="_blank" href={link}>
         <Button
           disabled={disabled}
-          className={'h-9 rounded-full w-fit'}
+          className={'h-9 w-fit rounded-full'}
           variant={'outline'}
           color={'primary'}
           shape={'square'}
@@ -150,7 +191,7 @@ const MessageNode = ({
   return (
     <Button
       disabled={disabled || !!roomSendingState}
-      className={'h-9 rounded-full w-fit'}
+      className={'h-9 w-fit rounded-full'}
       variant={'outline'}
       color={'primary'}
       shape={'default'}

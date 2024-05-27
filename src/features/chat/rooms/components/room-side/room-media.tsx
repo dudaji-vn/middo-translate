@@ -3,12 +3,16 @@ import { Message } from '@/features/chat/messages/types';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { Media } from '@/types';
 import Image from 'next/image';
-import { useMemo, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
-import { MediaPreview } from '@/components/media-preview';
 import { PlayIcon } from 'lucide-react';
+import MediaLightBox from '@/components/media-light-box/media-light-box';
+import { InfiniteScroll } from '@/components/infinity-scroll';
+import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
+import { InfiniteScrollWithLoading } from '@/components/infinity-scroll/infinity-scroll-with-loading';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export interface RoomMediaProps {}
 
@@ -16,20 +20,19 @@ export const RoomMedia = () => {
   const { room } = useChatBox();
   const roomId = room._id;
   const roomStatus = room.status;
-  const { t } = useTranslation('common');
-  const { items, hasNextPage, fetchNextPage } =
+
+  const { items, hasNextPage, fetchNextPage, status } =
     useCursorPaginationQuery<Message>({
       queryKey: ['media', roomId],
       queryFn: ({ pageParam }) =>
         roomApi.getMedia({
           roomId: roomId,
-          params: { cursor: pageParam, limit: 8 },
+          params: { cursor: pageParam, limit: 12 },
         }),
       config: {
         enabled: roomStatus !== 'temporary',
       },
     });
-
   const media = useMemo<Media[]>(() => {
     const media: Media[] = [];
     items.forEach((message) => {
@@ -44,42 +47,55 @@ export const RoomMedia = () => {
 
   return (
     <>
-      <div className="mb-3 grid w-full grid-cols-4 flex-wrap gap-1">
-        {media.map((media, index) => (
-          <div
-            key={media.url}
-            onClick={() => setIndex(index)}
-            className="relative aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"
-          >
-            {media.type === 'video' && <div className="h-full w-full relative" >
-              <video src={media.url} className="h-full w-full" />
-              <Button.Icon 
-                size={'ss'}
-                variant={'default'}
-                className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-50'
-                color={'default'}
-              >
-                <PlayIcon />
-              </Button.Icon>
-            </div> }
-            {media.type === 'image' && <Image
-              src={media.url}
-              alt={media.name || media.url}
-              quality={50}
-              fill
-              className="object-cover"
-            />}
-            
-          </div>
-        ))}
+      <div className="h-full w-full">
+        <InfiniteScrollWithLoading 
+          onLoadMore={fetchNextPage}
+          hasMore={hasNextPage || false}
+          className="w-full h-full overflow-y-auto -mb-2">
+            <div className='grid w-full grid-cols-4 gap-1'>
+              {media.map((media, index) => (
+                <div
+                  key={media.url}
+                  onClick={() => setIndex(index)}
+                  className="relative aspect-square block cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"
+                >
+                  {media.type === 'video' && <div className="h-full w-full relative" >
+                    <video src={media.url} className="h-full w-full" />
+                    <Button.Icon 
+                      size={'ss'}
+                      variant={'default'}
+                      className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-50'
+                      color={'default'}
+                    >
+                      <PlayIcon />
+                    </Button.Icon>
+                  </div> }
+                  {media.type === 'image' && 
+                  <Suspense fallback={<h1>Hello</h1>}><Image
+                  src={media.url}
+                  alt={media.name || media.url}
+                  quality={50}
+                  fill
+                  className="object-cover"
+                /></Suspense>}
+                </div>
+              ))}
+              {status === 'loading' && (
+                new Array(12).fill(0).map((_, index) => {
+                  return <Skeleton key={index} className="relative aspect-square block cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"/>
+                })
+              )}
+            </div>
+        </InfiniteScrollWithLoading>
       </div>
-      <MediaPreview 
+      <MediaLightBox 
         files={media} 
         index={index} 
+        key={index}
         close={() => setIndex(undefined)} 
         fetchNextPage={hasNextPage ? fetchNextPage : undefined}
-      />
-      {hasNextPage && (
+      /> 
+      {/* {hasNextPage && (
         <Button
           onClick={() => fetchNextPage()}
           shape="square"
@@ -89,7 +105,7 @@ export const RoomMedia = () => {
         >
           {t('COMMON.SHOW_MORE')}
         </Button>
-      )}
+      )} */}
     </>
   );
 };

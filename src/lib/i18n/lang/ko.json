@@ -100,7 +100,8 @@
       "NOT_ALLOW_MICROPHONE": "마이크에 대한 액세스를 허용하지 않았습니다!",
       "USERNAME_MIN": "사용자 이름은 최소 3자 이상이어야 합니다!",
       "USERNAME_MAX": "사용자 이름은 최대 15자까지만 허용됩니다!",
-      "USERNAME_PATTERN": "사용자 이름은 문자, 숫자, 밑줄 및 하이픈만 포함할 수 있습니다!"
+      "USERNAME_PATTERN": "사용자 이름은 문자, 숫자, 밑줄 및 하이픈만 포함할 수 있습니다!",
+      "NOT_SUPPORT_PREVIEW": "파일이 너무 크거나 미리보기를 지원하지 않습니다! <br />보려면 다운로드하세요."
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "프로필이 성공적으로 업데이트되었습니다!",
@@ -211,7 +212,9 @@
     "SIGN_OUT": "로그아웃",
     "EDIT_PROFILE": "프로필 편집",
     "CHANGE_AVATAR": "아바타 변경",
-    "APP_PERMISSION": "앱 권한"
+    "APP_PERMISSION": "앱 권한",
+    "RESTRICT_MESSAGE": "알 수 없는 발신자 제한",
+    "NOTIFICATION": "알림"
   },
   "SIGN_IN": {
     "TITLE": "로그인",
@@ -295,6 +298,7 @@
     "DISCUSSION": "토론",
     "NOTIFICATION": "알림",
     "PIN_CONVERSATION": "대화 고정",
+    "FILE_MEDIA_AND_LINK": "미디어, 파일 및 링크",
     "ADMIN": "관리자",
     "MEMBERS": "구성원",
     "SHOW_ALL": "모두 보기",
@@ -399,7 +403,8 @@
     "TURN_ON_MICROPHONE": "마이크 켜기",
     "TURN_OFF_MICROPHONE": "마이크 끄기",
     "MINIMIZE": "최소화",
-    "MAXIMIZE": "최대화"
+    "MAXIMIZE": "최대화",
+    "RESTRICT_MESSAGE": "이 기능을 활성화하면 알 수 없는 발신자는 문자 메시지만 보낼 수 있으며 해당 메시지는 '대기 중' 탭으로 이동됩니다."
   },
   "MODAL": {
     "SIGN_OUT": {
@@ -564,9 +569,13 @@
     "CLIENT_LIST": "고객 목록",
     "CHART": {
       "CLIENT": "신규 고객",
-      "AVERAGERATING": "고객 평가",
-      "COMPLETEDCONVERSATION": "완료된 대화",
-      "RESPONSECHAT": "평균 응답 시간"
+      "LANGUAGERANK": "대화 언어",
+      "NEW_VISITOR": "신규 방문자",
+      "RESPONSETIME": "응답 시간",
+      "OPENEDCONVERSATION": "열린 대화",
+      "DROPRATE": "드랍 비율",
+      "RESPONSEDMESSAGE": "응답 메시지",
+      "CUSTOMERRATING": "고객 평가"
     },
     "SCRIPT": {
       "PAGE_TITLE": "채팅 스크립트",
@@ -607,5 +616,19 @@
   "404": {
     "TITLE": "페이지를 찾을 수 없음",
     "DESCRIPTION": "찾을 수 없는 페이지입니다"
+  },
+  "BACKEND": {
+    "MESSAGE": {
+      "SOMETHING_WRONG": "오류가 발생했습니다. 나중에 다시 시도하세요!",
+      "ERROR": "오류가 발생했습니다. 나중에 다시 시도하세요!",
+      "PASSWORD_PATTERN": "비밀번호에는 적어도 1개의 대문자, 1개의 소문자 및 1개의 숫자가 포함되어야 합니다!",
+      "EMAIL_EXIST": "이메일이 이미 존재합니다!",
+      "USERNAME_EXIST": "사용자 이름이 이미 존재합니다!",
+      "ACCOUNT_ALREADY_ACTIVE": "계정이 이미 활성화되었습니다!",
+      "EMAIL_NOT_SIGNUP": "이메일이 가입되지 않았습니다!",
+      "INVALID_PASSWORD": "잘못된 비밀번호!",
+      "NEW_PASSWORD_SAME_OLD_PASSWORD": "새 비밀번호는 이전 비밀번호와 동일할 수 없습니다!",
+      "INVALID_TOKEN": "유효하지 않은 토큰!"
+    }
   }
 }

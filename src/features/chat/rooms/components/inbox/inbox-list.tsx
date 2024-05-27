@@ -146,6 +146,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             })}
           />
           <InfiniteScroll
+            pullToRefresh
+            onRefresh={refetch}
             onLoadMore={fetchNextPage}
             hasMore={hasNextPage || false}
             isFetching={isLoading}

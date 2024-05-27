@@ -1,7 +1,7 @@
 import { CALL_TYPE } from '@/features/call/constant/call-type';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
 import usePlayAudio from '@/features/call/hooks/use-play-audio';
-import ParticipantInVideoCall from '@/features/call/interfaces/participant';
+import ParticipantInVideoCall, { StatusParticipant } from '@/features/call/interfaces/participant';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
@@ -19,9 +19,9 @@ export default function UserStatus({isForgeShow, participant}: UserStatusProps) 
   const notShow = layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen && !isForgeShow;
   
   switch (participant.status) {
-    case 'WAITING':
+    case StatusParticipant.WAITING:
       return <WaitingStatus notShow={notShow}/>
-    case 'DECLINE':
+    case StatusParticipant.DECLINE:
       return <DeclineStatus participant={participant} notShow={notShow}/>
     default:
       return null;

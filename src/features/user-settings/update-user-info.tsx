@@ -43,6 +43,9 @@ export default function UpdateUserInfo() {
         .object({
           name: z.string().min(1, {
             message: t('MESSAGE.ERROR.REQUIRED'),
+          })
+          .refine((data) => data.trim().length > 0, {
+            message: t('MESSAGE.ERROR.REQUIRED'),
           }),
           language: z.string().min(1, {
             message: t('MESSAGE.ERROR.REQUIRED'),
@@ -97,7 +100,7 @@ export default function UpdateUserInfo() {
       setErrorMessage('');
       setOpen(false);
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
       setValue('name', user.name);
@@ -124,7 +127,7 @@ export default function UpdateUserInfo() {
           <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
             <UserRound size={20} />
           </div>
-          <span className="ml-4 block text-center text-base font-medium">
+          <span className="ml-4 block text-left text-base font-medium">
             {t('ACCOUNT_SETTING.PROFILE')}
           </span>
         </AlertDialogTrigger>
@@ -158,12 +161,13 @@ export default function UpdateUserInfo() {
                 formLabel={t('COMMON.USERNAME')}
                 inputProps={{
                   placeholder: t('COMMON.USERNAME_PLACEHOLDER'),
+                  prefixEl: '@',
                   suffix: (
                     <span className="text-sm text-gray-400">{`${username?.length}/15`}</span>
                   ),
                   onKeyDown: (e) => {
                     if (
-                      name?.length >= 60 &&
+                      username?.length >= 60 &&
                       e.key !== 'Backspace' &&
                       e.key !== 'Delete'
                     ) {
@@ -197,7 +201,8 @@ export default function UpdateUserInfo() {
                     (user.name == watch().name &&
                       user.language == watch().language &&
                       user.username == watch().username) ||
-                    isSubmitting
+                    isSubmitting ||
+                    Object.keys(errors).length > 0
                   }
                   type="submit"
                 >

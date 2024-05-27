@@ -1,7 +1,4 @@
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
-import ParticipantInVideoCall from '@/features/call/interfaces/participant';
-import { useMyVideoCallStore } from '@/features/call/store/me.store';
-import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
 import { LayoutGrid } from 'lucide-react';

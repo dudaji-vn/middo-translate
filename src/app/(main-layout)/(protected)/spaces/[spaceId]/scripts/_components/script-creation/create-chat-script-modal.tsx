@@ -49,33 +49,23 @@ const CreateOrEditChatScriptModal = ({
     defaultValues: {
       name: '',
       chatFlow: {
-        nodes: initialChatFlowNodes,
+        nodes: initialChatFlowNodes as TScriptFormValues['chatFlow']['nodes'],
         edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
         mappedFlowErrors: [],
       },
     },
     resolver: zodResolver(createChatScriptSchema),
   });
-  const resetFormData = () => {
-    form.reset({
-      name: '',
-      chatFlow: {
-        nodes: initialChatFlowNodes,
-        edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
-        mappedFlowErrors: [],
-      },
-    });
-  };
+
   const {
     setValue,
     handleSubmit,
     trigger,
-    formState: { isValid, isSubmitting },
+    formState: { isValid, isSubmitting, errors },
   } = form;
 
   useEffect(() => {
     if (open && currentScript) {
-      console.log('currentScript', currentScript);
       setValue('name', currentScript.name);
       setValue(
         'chatFlow.edges',
@@ -87,8 +77,16 @@ const CreateOrEditChatScriptModal = ({
       );
       return;
     }
-    if (!open) {
-      resetFormData();
+    if (open && !currentScript) {
+      setValue('name', '');
+      setValue(
+        'chatFlow.nodes',
+        initialChatFlowNodes as TScriptFormValues['chatFlow']['nodes'],
+      );
+      setValue(
+        'chatFlow.edges',
+        initialEdges as TScriptFormValues['chatFlow']['edges'],
+      );
     }
   }, [open, currentScript]);
 
@@ -100,6 +98,7 @@ const CreateOrEditChatScriptModal = ({
     chatFlow: any;
   }) => {
     trigger(FLOW_KEYS.CHAT_FLOW);
+    console.log('errors', isValid, errors);
     const payload = {
       ...(isEditing && { scriptId }),
       name: name,

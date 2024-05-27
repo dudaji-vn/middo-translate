@@ -46,33 +46,34 @@ const HomeTemplate = ({
       <AnimatePresence>
         <div
           className={
-            isValidTab ? 'h-fit w-full max-md:invisible md:w-3/4' : 'h-full'
+            isValidTab ? 'w-full flex' : 'h-full'
           }
         >
           {children}
+          {isValidTab && (
+            <motion.div
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ type: 'spring', duration: 0.5 }}
+              className={cn(
+                'right-0 top-0 z-50 w-full border-l bg-background md:top-[52px] md:w-1/3 ',
+                isMobile ? 'fixed full-screen-height' : 'container-height',
+              )}
+            >
+              <Phrases
+                isSelected={currentTab === 'phrases'}
+                onClose={onCloseTab}
+                searchParams={searchParams}
+              />
+              <History
+                isSelected={currentTab === 'history'}
+                onClose={onCloseTab}
+                searchParams={searchParams}
+              />
+            </motion.div>
+          )}
         </div>
-        {isValidTab && (
-          <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ type: 'spring', duration: 1 }}
-            className={cn(
-              'fixed right-0 top-0 z-50 w-full border-l bg-background md:top-[52px] md:w-1/3 xl:w-1/4',
-              isMobile ? 'full-screen-height' : 'container-height',
-            )}
-          >
-            <Phrases
-              isSelected={currentTab === 'phrases'}
-              onClose={onCloseTab}
-              searchParams={searchParams}
-            />
-            <History
-              isSelected={currentTab === 'history'}
-              onClose={onCloseTab}
-              searchParams={searchParams}
-            />
-          </motion.div>
-        )}
+        
       </AnimatePresence>
     </main>
   );

@@ -49,7 +49,6 @@ const checkIncludingOption = (nodes: FlowNode[]) => {
   const hasOption = nodes?.find((node) => node.type === 'option');
   return hasOption;
 };
-
 export const createChatScriptSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   chatFlow: z
@@ -59,6 +58,16 @@ export const createChatScriptSchema = z.object({
           z.object({
             id: z.string(),
             type: z.string(),
+            parentNode: z.string().optional(),
+            parentId: z.string().optional(),
+            style: z.any().optional(),
+            className: z.string().optional(),
+            width: z.number().optional(),
+            height: z.number().optional(),
+            deletable: z.boolean().optional(),
+            draggable: z.boolean().optional(),
+            sourcePosition: z.string().optional(),
+            targetPosition: z.string().optional(),
             data: z
               .object({
                 label: z.string().optional(),
@@ -66,7 +75,17 @@ export const createChatScriptSchema = z.object({
                   message: 'Please enter content!',
                 }),
                 link: z.string().optional(),
-                media: z.array(z.any()).optional(),
+                media: z
+                  .array(
+                    z.object({
+                      file: z.any(),
+                      localUrl: z.string().optional(),
+                      metadata: z.any(),
+                      type: z.string(),
+                      url: z.string(),
+                    }),
+                  )
+                  .optional(),
               })
               .refine(checkNodeDataEmptyLink, {
                 message: 'Link should not be empty',
@@ -84,7 +103,7 @@ export const createChatScriptSchema = z.object({
             id: z.string(),
             source: z.string(),
             target: z.string(),
-            label: z.string(),
+            label: z.string().optional(),
             animated: z.boolean().optional(),
           }),
         )

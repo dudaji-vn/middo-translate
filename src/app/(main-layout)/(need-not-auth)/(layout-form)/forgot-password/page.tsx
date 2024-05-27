@@ -57,7 +57,7 @@ export default function ForgotPassword() {
       router.push(ROUTE_NAMES.RESET_PASSWORD_SENDED);
       setErrorMessage('');
     } catch (err: any) {
-      setErrorMessage(err?.response?.data?.message);
+      setErrorMessage(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
     }

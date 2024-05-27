@@ -51,6 +51,7 @@ export interface MessageItemWrapperProps {
   hideDetail?: () => void;
   toggleDetail?: () => void;
   setIsMenuOpen?: (isOpen: boolean) => void;
+  isMenuOpen?: boolean;
 }
 
 const MessageDetail = ({
@@ -152,7 +153,7 @@ export const MessageItemWrapper = ({
           case 'reply':
             return !discussionDisabled;
           case 'download':
-            return message.type === 'media' && (message?.media?.[0].type === 'video' || message?.media?.[0].type === 'document');
+            return message.type === 'media';
           case 'edit':
             const timeDiff = moment().diff(message.createdAt);
             return (
@@ -228,6 +229,7 @@ export const MessageItemWrapper = ({
         items={items}
         hideDetail={hideDetail}
         setIsMenuOpen={setIsMenuOpen}
+        isMenuOpen={isMenuOpen}
       >
         {props.children}
       </Wrapper>
@@ -392,6 +394,7 @@ const DesktopWrapper = ({
   isMe,
   message,
   setIsMenuOpen,
+  isMenuOpen
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
   const { t } = useTranslation('common');
@@ -404,6 +407,7 @@ const DesktopWrapper = ({
           isMe
             ? '-left-4 -translate-x-full'
             : '-right-4 translate-x-full flex-row-reverse',
+          isMenuOpen && 'opacity-100',
         )}
       >
         <DropdownMenu onOpenChange={setIsMenuOpen}>
