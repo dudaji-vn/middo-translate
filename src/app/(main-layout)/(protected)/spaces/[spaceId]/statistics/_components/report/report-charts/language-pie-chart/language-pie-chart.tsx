@@ -12,12 +12,14 @@ const COLORS = [...CHART_COLORS].reverse();
 export default function LanguagePieChart({
   data = [],
   languagesRank = [],
+  othersCount,
   ...props
 }: {
   data: Array<{
     label: string;
     value: number;
   }>;
+  othersCount?: number;
   languagesRank: TLanguageRank;
 } & React.HTMLAttributes<HTMLDivElement>) {
   const [selectedPie, setSelectedPie] = useState<{
@@ -35,11 +37,17 @@ export default function LanguagePieChart({
       return acc + cur.value;
     }, 0);
     const end = start + (selectedPie?.value || 0);
+    const isOthers = selectedPie?.label === 'others';
     return {
       startAngle: 90 - start * 360,
       endAngle: 90 - end * 360,
-      count: languagesRank?.find((e) => e.language === selectedPie?.label)
-        ?.count,
+      count: isOthers
+        ? othersCount
+        : languagesRank?.find((e) => e.language === selectedPie?.label)?.count,
+      flag: isOthers ? null : getCountryCode(selectedPie?.label),
+      countryName: isOthers
+        ? 'Others'
+        : getCountryNameByCode(selectedPie?.label),
     };
   }, [selectedPie, pies]);
   const onTogglePie = (
@@ -97,13 +105,15 @@ export default function LanguagePieChart({
           })}
         >
           <div className=" flex flex-row items-center gap-1 font-normal ">
-            <CircleFlag
-              countryCode={getCountryCode(selectedPie?.label) || 'us'}
-              height={20}
-              width={20}
-            />
+            {outlinePie?.flag && (
+              <CircleFlag
+                countryCode={outlinePie?.flag || 'us'}
+                height={20}
+                width={20}
+              />
+            )}
             <p className="text-base text-neutral-800">
-              {getCountryNameByCode(selectedPie?.label || 'unknown') || 'None'}
+              {outlinePie?.countryName}
             </p>
           </div>
           <p className="text-2xl font-bold text-neutral-800">

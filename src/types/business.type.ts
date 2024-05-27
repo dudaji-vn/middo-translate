@@ -35,3 +35,5 @@ export enum EBusinessSidebarKeys {
 export const LSK_VISITOR_ID = 'visitor_id';
 export const LSK_VISITOR_ROOM_ID = 'visitor_room_id';
 export const LSK_VISITOR_DATA = 'visitor_data';
+export const LSK_TRACKING_VISIT_ID = 'tracking_visit_id';
+export const LSK_FROM_DOMAIN = 'from_domain';
