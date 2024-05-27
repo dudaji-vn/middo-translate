@@ -97,9 +97,9 @@ export default function BusinessLineChart({
 
   if (!data) return null;
   return (
-    <section className="relative w-full space-y-4 bg-white px-4 py-5 md:px-10">
+    <section className="relative w-full space-y-4 bg-white px-4 py-5 md:p-10">
       <div className="flex w-full flex-row items-center justify-between">
-        <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
+        <Typography className="flex flex-col items-start justify-start gap-2 text-base font-semibold text-neutral-800 md:flex-row md:items-center">
           {title}
           <span
             className={cn(
