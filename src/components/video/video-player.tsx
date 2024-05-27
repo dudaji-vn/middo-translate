@@ -247,7 +247,7 @@ function VideoPlayer(props: VideoProps) {
       <div className={cn('absolute inset-0 bg-black/20 pointer-events-none duration-500', (isPlaying || isFullScreen) ? 'opacity-0' : '')}></div>
 
       {/* Actions */}
-      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-between p-1 px-2  duration-500 gap-2 md:rounded-xl rounded-2xl bg-black/40', isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
+      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-end p-1 px-2  duration-500 gap-2 md:rounded-xl rounded-2xl bg-black/40', isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
       ref={actionMenuRef}
       onClick={(e)=>{e.stopPropagation()}}>
         <span className={cn('md:block hidden text-sm text-white', isFullScreen && 'block')}>{formatVideoTimer}</span>
