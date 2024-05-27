@@ -16,6 +16,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useNotificationStore } from '@/features/notification/store';
 import { useTranslation } from 'react-i18next';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
+import { notificationApi } from '@/features/notification/api';
 
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
@@ -31,6 +32,16 @@ export const ConfirmLogoutModal = () => {
           event: 'sign-out',
         },
       });
+      if (typeof window !== 'undefined' && 'Notification' in window) {
+        const currentPermission = Notification.permission;
+        if (currentPermission === 'granted') {
+          const { requestForToken } = await import('@/lib/firebase');
+          const token = await requestForToken();
+          if (token) {
+            await notificationApi.unsubscribe(token);
+          }
+        }
+      }
       await signOutService();
       setDataAuth({ user: null, isAuthentication: false });
       resetNotification();

@@ -213,7 +213,8 @@
     "EDIT_PROFILE": "Edit Profile",
     "CHANGE_AVATAR": "Change avatar",
     "APP_PERMISSION": "App's permission",
-    "RESTRICT_MESSAGE": "Restrict unknown senders"
+    "RESTRICT_MESSAGE": "Restrict unknown senders",
+    "NOTIFICATION": "Notification"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",
