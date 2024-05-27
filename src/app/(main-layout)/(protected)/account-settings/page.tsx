@@ -16,6 +16,7 @@ import SelectPageLanguage from './_components/select-page-language';
 import { DeleteAccount } from '@/features/user-settings/delete-account';
 import { AppPermission } from '@/features/user-settings/app-permission';
 import RestrictMessage from '@/features/user-settings/restrict-message';
+import { TurnOffNotification } from '@/features/user-settings/turn-off-notification';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -60,7 +61,12 @@ export default function AccountSettings() {
             {user?.email || ''}
           </p>
           <CopyZoneClick text={user?.username || ''}>
-            <Button color="secondary" size="xs" shape="square" endIcon={<CopyIcon />} >
+            <Button
+              color="secondary"
+              size="xs"
+              shape="square"
+              endIcon={<CopyIcon />}
+            >
               @{user?.username}
             </Button>
           </CopyZoneClick>
@@ -73,6 +79,7 @@ export default function AccountSettings() {
         </div>
         <div className="my-4">
           <SelectPageLanguage />
+          <TurnOffNotification />
           <AppPermission />
         </div>
         <div

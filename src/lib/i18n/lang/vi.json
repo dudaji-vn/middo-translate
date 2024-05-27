@@ -213,7 +213,8 @@
     "EDIT_PROFILE": "Chỉnh sửa hồ sơ",
     "CHANGE_AVATAR": "Thay đổi hình đại diện",
     "APP_PERMISSION": "Quyền ứng dụng",
-    "RESTRICT_MESSAGE": "Hạn chế người gửi không xác định"
+    "RESTRICT_MESSAGE": "Hạn chế người gửi không xác định",
+    "NOTIFICATION": "Thông báo"
   },
   "SIGN_IN": {
     "TITLE": "Đăng nhập",
