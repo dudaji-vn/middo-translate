@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { EBusinessConversationKeys } from '@/types/business.type';
 import { RoomItem } from '.';
+import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
 export interface RoomItemActionWrapperProps
   extends React.HTMLAttributes<HTMLDivElement> {
   room: Room;
@@ -87,6 +88,7 @@ export const RoomItemActionWrapper = forwardRef<
   const isMobile = useAppStore((state) => state.isMobile);
   const Wrapper = isMobile ? MobileWrapper : DesktopWrapper;
   const { isBusiness, businessConversationType } = useBusinessNavigationData();
+  const { relationshipStatus } = useCheckRoomRelationship(room);
   const { onAction, actionItems } = useRoomActions();
   const items = useMemo(() => {
     return actionItems
@@ -114,9 +116,9 @@ export const RoomItemActionWrapper = forwardRef<
           case 'unarchive':
             return room.status === 'archived';
           case 'block':
-            return !room.isGroup;
+            return !room.isGroup && relationshipStatus !== 'blocking';
           case 'unblock':
-            return !room.isGroup;
+            return !room.isGroup && relationshipStatus === 'blocking';
           default:
             return isAllowed;
         }
@@ -136,6 +138,7 @@ export const RoomItemActionWrapper = forwardRef<
     isBusiness,
     isMuted,
     onAction,
+    relationshipStatus,
     room,
   ]);
 

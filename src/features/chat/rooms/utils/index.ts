@@ -1,4 +1,4 @@
-import { Room } from '@/features/chat/rooms/types';
+import { Room, RoomStatus } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
 import moment from 'moment';
 
@@ -8,11 +8,20 @@ export function generateRoomDisplay(
   inCludeLink?: boolean,
   overridePath?: string | null,
 ): Room {
-  const { participants, isGroup, name } = room;
+  const { participants, isGroup, name, waitingUsers = [] } = room;
+  const combinedParticipants = participants.concat(waitingUsers || []);
+
   const link = inCludeLink ? overridePath || `/talk/${room._id}` : '';
+  let status: RoomStatus = room.status;
+  if (status !== 'temporary') {
+    if (!room.isGroup && !room.isHelpDesk && waitingUsers?.length > 0) {
+      status = 'waiting';
+    }
+  }
+  room.status = status;
   if (isGroup) {
     if (!name) {
-      room.name = participants
+      room.name = combinedParticipants
         .map((participant) => participant.name.split(' ')[0])
         .join(', ');
     }
@@ -20,11 +29,11 @@ export function generateRoomDisplay(
     room.subtitle = 'Group';
     return room;
   }
-  let [participant] = participants.filter(
+  let [participant] = combinedParticipants.filter(
     (participant) => participant._id !== currentUserId,
   );
   if (!participant) {
-    participant = participants[0];
+    participant = combinedParticipants[0];
   }
 
   return {

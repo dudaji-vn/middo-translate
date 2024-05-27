@@ -198,16 +198,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       document.getElementById(`input-${editorId}`)?.focus();
       editor?.commands.focus('end');
     };
-
-    if (isBlocked) {
-      return (
-        <BlockChatBar
-          blockContent={t('CONVERSATION.BLOCKED.MESSAGE')}
-          learnMoreLink={'#'}
-          learnMoreText={t('CONVERSATION.BLOCKED.LEARN_MORE')}
-        />
-      );
-    }
     return (
       <>
         <TranslationHelper

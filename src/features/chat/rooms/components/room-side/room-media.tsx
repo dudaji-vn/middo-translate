@@ -1,18 +1,15 @@
 import { Button } from '@/components/actions';
+import { InfiniteScrollWithLoading } from '@/components/infinity-scroll/infinity-scroll-with-loading';
+import MediaLightBox from '@/components/media-light-box/media-light-box';
+import { Skeleton } from '@/components/ui/skeleton';
 import { Message } from '@/features/chat/messages/types';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { Media } from '@/types';
+import { PlayIcon } from 'lucide-react';
 import Image from 'next/image';
 import { Suspense, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
-import { PlayIcon } from 'lucide-react';
-import MediaLightBox from '@/components/media-light-box/media-light-box';
-import { InfiniteScroll } from '@/components/infinity-scroll';
-import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
-import { InfiniteScrollWithLoading } from '@/components/infinity-scroll/infinity-scroll-with-loading';
-import { Skeleton } from '@/components/ui/skeleton';
 
 export interface RoomMediaProps {}
 
