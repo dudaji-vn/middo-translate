@@ -14,10 +14,10 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
 
   return (
     <>
-      <Typography className=" flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
+      <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800">
         {t('BUSINESS.REPORT')}
       </Typography>
-      <div className="flex w-full md:flex-row flex-col justify-between gap-2">
+      <div className="flex w-full flex-col justify-between gap-2 pb-4 md:flex-row">
         <ReportPickerDomain />
         <ReportPickerMember />
         <ReportPickerTime />
