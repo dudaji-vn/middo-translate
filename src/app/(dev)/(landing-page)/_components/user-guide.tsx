@@ -765,7 +765,7 @@ export default function UserGuide() {
         {guides.map(guide => (
             <AccordionItem key={guide.id} value={guide.id} id={'guide' + guide.id}>
                 <AccordionTrigger 
-                className={cn('rounded-xl bg-[#fafafa] px-5 text-xl md:hover:no-underline', 'guide' + guide.id)}>
+                className={cn('rounded-xl bg-[#fafafa] px-5 text-xl hover:no-underline text-left', 'guide' + guide.id)}>
                     {guide.title}
                 </AccordionTrigger>
                 <AccordionContent className="px-5 py-5 text-base">
@@ -851,7 +851,7 @@ const MultiAccordion = ({data, onChangeAccordion} : MultiAccordionProps) => {
         {data.map((item) => {
             return <AccordionItem value={item.id} key={item.id} id={'guide_1' + item.id}>
                 <AccordionTrigger 
-                className={cn('rounded-xl bg-primary-100 px-5 text-lg md:hover:no-underline',
+                className={cn('rounded-xl bg-primary-100 px-5 text-lg hover:no-underline text-left',
                     'guide_1' + item.id
                 )}>
                     {item.title}
@@ -922,7 +922,7 @@ const MultiStepAccordion = ({paragraph, steps, onChangeAccordion} : MultiStepAcc
             {steps.map(step => {
                 return <AccordionItem value={step.id} key={step.id}>
                         <AccordionTrigger 
-                            className={cn('rounded-xl bg-primary-100 px-5 text-lg md:hover:no-underline',
+                            className={cn('rounded-xl bg-primary-100 px-5 text-lg md:hover:no-underline text-left',
                             'guide_1' + step.id)}
                         >
                             {step.title}
