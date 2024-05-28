@@ -5,7 +5,7 @@ import Image from 'next/image';
 import React, { ReactNode, forwardRef, useState } from 'react';
 import PhraseItemViewOptions from './phrase-item-view-options';
 import { phraseOptionNames } from './options';
-import { SearchParams } from '../../page';
+import { SearchParams } from '../../translation/page';
 import filter from 'lodash/filter';
 import Tip from '@/components/data-display/tip/tip';
 import { useTranslation } from 'react-i18next';

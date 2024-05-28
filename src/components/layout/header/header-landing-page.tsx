@@ -1,17 +1,12 @@
 'use client';
 
-import { Blocks, Minus } from 'lucide-react';
-import { Typography } from '@/components/data-display';
 import { navLandingPageItems } from '@/components/layout/header/header.config';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import useClient from '@/hooks/use-client';
 import { cn } from '@/utils/cn';
 import Image from 'next/image';
 import Link from 'next/link';
-import { HeaderNav } from './header-nav';
 import HeaderProfile from './header-profile';
-import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 import { HeaderNavMobile } from './header-nav.mobile';
 import { usePlatformStore } from '@/features/platform/stores';
 import { NavItem } from './nav-item';
@@ -25,10 +20,12 @@ export const HeaderLandingPage = (props: Props) => {
   const pathName = usePathname();
   if (!isClient) return null;
   if (platform === 'mobile') return null;
+
   const isCurrentPath = (href: string) =>
   href == ROUTE_NAMES.ROOT
     ? pathName === ROUTE_NAMES.ROOT
     : pathName?.includes(href);
+
   return (
     <div
       className={cn(

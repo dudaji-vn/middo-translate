@@ -1,32 +1,24 @@
 'use client';
-import { Button } from '@/components/actions';
 import { JayTextAnimation } from '@/components/jay-text-animation';
-import { HeaderNavLandingMobile } from '@/components/layout/header/header-nav-landing.mobile';
-import { navLandingPageItems } from '@/components/layout/header/header.config';
-import { NEXT_PUBLIC_URL } from '@/configs/env.public';
-import { ROUTE_NAMES } from '@/configs/route-name';
-import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
-import { Header } from '@/components/layout/header/headerv2';
-import { ArrowRightFromLine, Sparkles, StarIcon, Play } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Sparkles, StarIcon, Play } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import { HeaderLandingPage } from '@/components/layout/header/header-landing-page';
-const WINDOW_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.exe';
-const MAC_DOWNLOAD_URL = 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.dmg';
+
+import UserGuide from './_components/user-guide';
+import DownloadAppButton from './_components/download-app-button';
+
 export default function Landing() {
   const [isScrollDown, setScrollDown] = useState(false);
-  const [system, setSystem] = useState<'mac' | 'window' | 'linux' | 'ios' | 'android' | ''>('');
-  const isMobile = useAppStore((state) => state.isMobile);
+  
   const videoRef = useRef<any>();
   const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
   useEffect(() => {
     const changeClass = () => {
       const scrollValue = document.documentElement.scrollTop;
-      if (scrollValue > 10) {
+      if (scrollValue > 10 && !isScrollDown) {
         setScrollDown(true);
-      } else {
+      } else if (scrollValue <= 10 && isScrollDown) {
         setScrollDown(false);
       }
     };
@@ -35,7 +27,8 @@ export default function Landing() {
     return () => {
       window.removeEventListener('scroll', changeClass);
     };
-  }, []);
+  }, [isScrollDown]);
+
   useEffect(() => {
     if (!videoRef.current) {
       return;
@@ -45,31 +38,10 @@ export default function Landing() {
     });
   }, []);
 
-  const handleScroll = (href: string) => {
-    const targetElement = document.getElementById(href);
-    if (!targetElement) {
-      return;
-    }
-    targetElement.scrollIntoView({ behavior: 'smooth' });
-  };
-  
-
-  const downloadApp = () => {
-    if (system === 'mac') {
-      window.open(MAC_DOWNLOAD_URL, '_blank');
-    } else {
-      window.open(WINDOW_DOWNLOAD_URL, '_blank');
-    }
-  };
-
   useEffect(() => {
-    const userAgent = window.navigator.userAgent;
-    const isMacOS = userAgent.includes('Mac OS')
-    if (isMacOS) {
-      setSystem('mac');
-    } else {
-      setSystem('window');
-    }
+    document.body.style.overflow = 'unset';
+    // Change title to home
+    
   }, []);
 
 
@@ -88,7 +60,7 @@ export default function Landing() {
         )} */}
         <HeaderLandingPage />
       </div>
-      <div className="h-fit w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
+      <div className="w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
         <div className="relative h-fit md:w-[44%] md:min-w-[44%]">
           {!isPlayVideo && (
             <div
@@ -117,42 +89,16 @@ export default function Landing() {
             Your browser does not support the video tag.
           </video>
         </div>
-        
+
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">
           <JayTextAnimation />
           <p className="mt-8 text-center text-neutral-600 md:text-left">
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
           </p>
-          {isMobile ? <Link 
-            href={NEXT_PUBLIC_URL} 
-          >
-            <Button
-              size="lg"
-              shape="square"
-              variant="default"
-              color="primary"
-              className="mt-8"
-            >
-              Explore Product
-              <ArrowRightFromLine className="ml-2" />
-            </Button>
-          </Link> : 
-            <Button
-              size="lg"
-              shape="square"
-              variant="default"
-              color="primary"
-              className="mt-8"
-              onClick={downloadApp}
-            >
-              {system === 'mac' ? <div className='mr-2 relative bottom-[2px]'>
-                <Image  src="/landing-page/apple.svg" width="20" height="20" alt='Apple' />
-              </div> : <div className='mr-2'>
-                <Image  src="/landing-page/window.svg" width="20" height="20" alt='Window' />
-              </div>}
-              Download App
-            </Button>}
+          <div className='mt-8'>
+            <DownloadAppButton />
+          </div>
         </div>
       </div>
       <div id="solution">
@@ -291,6 +237,64 @@ export default function Landing() {
             </div>
           </div>
         </div>
+        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 md:flex-row-reverse md:justify-between md:pt-[5vw]">
+          <div className="flex h-full items-end md:w-[48%]">
+            {
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src="/landing-page/extension.png" alt="extension" />
+            }
+          </div>
+          <div className="flex-1 items-center justify-center px-5 md:flex md:!px-0 md:!pl-[5vw]">
+            <div>
+              <div className="flex items-center justify-start gap-3 text-primary">
+                <Sparkles className="size-7" />
+                <h3>Solution</h3>
+              </div>
+              <h1 className="text-[48px]">Extension</h1>
+              <p className="mt-2 text-neutral-600">
+                Transform your website with Middo Extension in just a few
+                clicks. Capture leads, provide real-time support, and boost your
+                business – all within your website.
+              </p>
+              <div className="mt-8 flex flex-col items-start justify-start gap-8">
+                <div className="flex items-center gap-3">
+                  <StarIcon className="size-7 text-primary-500-main" />
+                  <span className="font-semibold">
+                    Integrated Middo conversation
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <StarIcon className="size-7 text-primary-500-main" />
+                  <span className="font-semibold">
+                    Easily manage clients list
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <StarIcon className="size-7 text-primary-500-main" />
+                  <span className="font-semibold">
+                    Grow your business with a powerful report tool
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <StarIcon className="size-7 text-primary-500-main" />
+                  <span className="font-semibold">
+                    Create your own script for any conversation with clients
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="FAQ" className="bg-white px-5 py-12 md:px-[5vw] md:py-[72px]">
+        <div className="flex w-full items-center justify-center gap-3 text-primary">
+          <Sparkles className="size-7" />
+          <h3>Help Center</h3>
+        </div>
+        <h1 className="w-full text-center text-[48px]">User Guide</h1>
+        <div className="mt-10">
+          <UserGuide />
+        </div>
       </div>
       <div
         id="about-us"
@@ -317,18 +321,9 @@ export default function Landing() {
       </div>
       <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.jpg')] px-5 py-12">
         <h1 className="text-primary-500-main">Ready to get started?</h1>
-        <a href={NEXT_PUBLIC_URL}>
-          <Button
-            size="lg"
-            shape="square"
-            variant="default"
-            color="primary"
-            className="mt-5"
-          >
-            Explore Product
-            <ArrowRightFromLine className="ml-2" />
-          </Button>
-        </a>
+          <div className='mt-8'>
+            <DownloadAppButton />
+          </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-3 p-5 md:flex-row md:justify-between">
         <span className="font-semibold">

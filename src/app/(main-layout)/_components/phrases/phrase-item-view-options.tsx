@@ -10,7 +10,7 @@ import { cn } from '@/utils/cn';
 import { ArrowLeft, Star, XIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
-import { SearchParams } from '../../page';
+import { SearchParams } from '../../translation/page';
 import { FAVORITE_OPTION_NAME, phraseOptions } from './options';
 
 export type PhraseItemViewOptionsProps = {
