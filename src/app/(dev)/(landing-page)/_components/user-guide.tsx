@@ -774,7 +774,6 @@ export default function UserGuide() {
         setTimeout(()=>{
             if(accordion) {
                 const el = document.querySelector(`.${accordion}`);
-                console.log('kakakak')
                 if(el) {
                     window.scrollTo({
                         top: el.getBoundingClientRect().top - 52,
