@@ -215,4 +215,17 @@ export const roomApi = {
     );
     return res.data;
   },
+
+  async accept(roomId: string) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/accept`,
+    );
+    return res.data;
+  },
+  async reject(roomId: string) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/reject`,
+    );
+    return res.data;
+  },
 };

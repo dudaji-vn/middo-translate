@@ -20,6 +20,7 @@ export type Room = {
   avatar?: string;
   participants: User[];
   waitingUsers?: User[];
+  rejectedUsers?: User[];
   lastMessage?: Message;
   isGroup: boolean;
   newMessageAt?: string;

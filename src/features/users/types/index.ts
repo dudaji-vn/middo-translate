@@ -17,4 +17,5 @@ export type User = {
   status: UserStatus;
   phoneNumber?: string;
   username: string;
+  allowUnknown: boolean;
 } & BaseEntity;

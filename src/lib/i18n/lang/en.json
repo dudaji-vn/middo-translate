@@ -72,7 +72,9 @@
     "SURE": "Sure",
     "DELETE_ACCOUNT": "Delete Account",
     "BLOCK": "Block",
-    "UNBLOCK": "Unblock"
+    "UNBLOCK": "Unblock",
+    "REJECTED": "Rejected",
+    "PENDING": "Pending"
   },
   "MESSAGE": {
     "ERROR": {
@@ -266,6 +268,10 @@
       "MESSAGE": "Currently, you can not reply to this conversation.",
       "LEARN_MORE": "Learn more"
     },
+    "BLOCK_RESPONSE": {
+      "TITLE": "Currently, you can not reply to this conversation.",
+      "LEARN_MORE": "Learn more"
+    },
     "WELCOME_TITLE": "Welcome to Middo conversation!",
     "WELCOME_CONTENT": "Start a conversation with your team or group. You can also create a group chat to discuss and share files.",
     "TITLE": "Conversation",
@@ -449,6 +455,10 @@
     "DELETE_CONVERSATION": {
       "TITLE": "Delete Conversation",
       "DESCRIPTION": "You will lose all your messages and files. Others can still view your messages. Are you sure you want to delete?"
+    },
+    "REJECT_GROUP": {
+      "TITLE": "Reject Invitation",
+      "DESCRIPTION": "You will not be able to view messages from this group, also you will not be able to join this group again. Are you sure you want to reject?"
     },
     "LEAVE_GROUP": {
       "TITLE": "Leave Group",

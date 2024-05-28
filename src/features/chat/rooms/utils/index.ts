@@ -13,21 +13,34 @@ export function generateRoomDisplay(
 
   const link = inCludeLink ? overridePath || `/talk/${room._id}` : '';
   let status: RoomStatus = room.status;
-  if (status !== 'temporary') {
-    if (!room.isGroup && !room.isHelpDesk && waitingUsers?.length > 0) {
+
+  if (status !== 'temporary' && !room.isHelpDesk) {
+    if (isGroup) {
+      const isInWaitingList = waitingUsers.some(
+        (user) => user._id.toString() === currentUserId,
+      );
+      if (isInWaitingList) {
+        status = 'waiting';
+      }
+    } else if (waitingUsers.length > 0) {
       status = 'waiting';
     }
   }
-  room.status = status;
+
   if (isGroup) {
-    if (!name) {
-      room.name = combinedParticipants
-        .map((participant) => participant.name.split(' ')[0])
-        .join(', ');
-    }
-    room.link = link;
-    room.subtitle = 'Group';
-    return room;
+    return {
+      ...room,
+      link,
+      subtitle: 'Group',
+      status,
+      ...(name
+        ? { name }
+        : {
+            name: combinedParticipants
+              .map((participant) => participant.name.split(' ')[0])
+              .join(', '),
+          }),
+    };
   }
   let [participant] = combinedParticipants.filter(
     (participant) => participant._id !== currentUserId,
@@ -42,6 +55,7 @@ export function generateRoomDisplay(
     subtitle: '@' + participant.username,
     avatar: participant.avatar,
     link: inCludeLink ? link : '',
+    status,
   };
 }
 

@@ -35,3 +35,7 @@ export const unblock = (userId: User['_id']) => {
 export const checkRelationship = (userId: User['_id']) => {
   return get(`/users/${userId}/relation`);
 };
+
+export const toggleAllowUnknown = () => {
+  return patch('/users/allow-unknown', {});
+};

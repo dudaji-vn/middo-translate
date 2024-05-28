@@ -82,7 +82,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const queryClient = useQueryClient();
 
     const updateRoom = (room: Partial<Room> & { _id: string }) => {
-      console.log('update room', room);
       refetch();
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
     };

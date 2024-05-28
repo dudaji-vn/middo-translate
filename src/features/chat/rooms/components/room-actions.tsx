@@ -23,6 +23,8 @@ import { useToggleArchiveRoom } from '../hooks/use-toggle-archive-room';
 import { UserBlockModal } from '@/features/users/components/user-block-modal';
 import { useAuthStore } from '@/stores/auth.store';
 import { useUnBlockUser } from '@/features/users/hooks/use-unblock-user';
+import { useAccept } from '../hooks/use-accept';
+import { RoomModalReject } from './room.modal-reject';
 
 export type Action =
   | 'delete'
@@ -36,7 +38,9 @@ export type Action =
   | 'tag'
   | 'unarchive'
   | 'block'
-  | 'unblock';
+  | 'unblock'
+  | 'accept'
+  | 'reject';
 
 export type ActionItem = {
   action: Action;
@@ -75,6 +79,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const currentUserId = useAuthStore((state) => state.user?._id);
   const [action, setAction] = useState<Action>('none');
   const { mutate: pin } = usePinRoom();
+  const { accept } = useAccept();
   const { toggleArchive } = useToggleArchiveRoom();
   const { mutate: unblock } = useUnBlockUser();
   const onAction = ({ action, room, isBusiness }: OnActionParams) => {
@@ -114,6 +119,9 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         if (!otherUser) return;
         unblock(otherUser._id);
         break;
+      case 'accept':
+        accept(roomId);
+        break;
       default:
         setAction(action);
         setRoom(room);
@@ -150,6 +158,8 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         );
         if (!otherUser) return null;
         return <UserBlockModal room={room} onClosed={reset} user={otherUser} />;
+      case 'reject':
+        return <RoomModalReject onClosed={reset} id={id} />;
       case 'unblock':
         return null;
       case 'tag':
