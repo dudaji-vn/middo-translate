@@ -5,7 +5,7 @@ import { cn } from "@/utils/cn";
 import Image from "next/image";
  
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface FAQ {
     id: string;
@@ -16,31 +16,42 @@ export default function UserGuide() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-   
-    const onChangeAccordion = (value:string, level: number) => {
+    const [guide, setGuide] = useState<{
+        guide: string;
+        guide_1: string;
+        guide_2: string;
+    }>({
+        guide: '',
+        guide_1: '',
+        guide_2: '',
+    })
+    const onChangeAccordion = (value:string, level: 0 | 1 | 2) => {
         if(!searchParams || !router) return;
+        const currentGuide = {...guide};
         const current = new URLSearchParams(Array.from(searchParams.entries()));
-        const param = level === 0 ? "guide" : `guide_${level}`;
+        const param : 'guide' | 'guide_1' | 'guide_2' = level === 0 ? "guide" : `guide_${level}`;
         if (!value) {
-            current.delete(param);
+            currentGuide[param] = '';
         } else {
-            current.set(param, value);
+            currentGuide[param] = value;
         }
         for (let i = level + 1; i < 3; i++) {
-            current.delete(`guide_${i}`);
+            const p = i === 0 ? "guide" : `guide_${i}`;
+            //@ts-ignore
+            currentGuide[p] = '';
+            current.delete(p);
         }
-        const search = current.toString();
-        const query = search ? `?${search}` : "";
-        router.push(`${pathname}${query}`, {
-            scroll: false
-        });
-        // const el = document.querySelector(`.${param}${value}`);
-        // if(el) {
-        //     window.scrollTo({
-        //         top: el.getBoundingClientRect().top - 52,
-        //         behavior: 'smooth'
-        //     });
-        // }
+        
+        setGuide(currentGuide);
+        let url = pathname + '?';
+        for (const [key, value] of Object.entries(currentGuide)) {
+            if (value) {
+                url += `${key}=${value}&`;
+            }
+        }
+        window.history.pushState({ path: url }, '', url);
+
+        // let className = param + value;
     }
 
     const guides = [
@@ -58,6 +69,7 @@ export default function UserGuide() {
             id: 'how-to-use-translation',
             title: "How to use Translation",
             content: <MultiAccordion
+            guide={guide}
             onChangeAccordion={onChangeAccordion}
             data={[
                 {
@@ -218,6 +230,7 @@ export default function UserGuide() {
             id: 'how-to-use-conversation',
             title: "How to use Conversation?",
             content: <MultiAccordion 
+                guide={guide}
                 onChangeAccordion={onChangeAccordion}
                 data={[
                 {
@@ -618,6 +631,7 @@ export default function UserGuide() {
                     content: <>
                         <p>Adding the embed code to your website may vary depending on the type of website platform you are using. Here are some basic instructions for some popular platforms:</p>
                         <ContentMultiStep 
+                            guide={guide}
                             steps={[
                                 {
                                     id: "embed-into-the-html-source-code-of-your-website",
@@ -686,12 +700,14 @@ export default function UserGuide() {
                     </>
                 }
             ]}
-            onChangeAccordion={onChangeAccordion}/>
+            onChangeAccordion={onChangeAccordion}
+            guide={guide}/>
         },
         {
             id: 'how-to-manage-your-script-conversation',
             title: "How to manage your Script Conversation?",
             content: <MultiStepAccordion 
+            guide={guide}
             paragraph={<p>Script Conversation guides for representatives to get the ball rolling in conversations. But Script Conversation can also double up as proactive messages in high-performing pages. You can use these messages to start conversations with website visitors even before they reach out to you.</p>}
             steps={[
                 {
@@ -739,6 +755,14 @@ export default function UserGuide() {
     useEffect(()=> {
         if(!searchParams) return;
         let accordion: any
+        let data = {
+            guide: '',
+            guide_1: '',
+            guide_2: '',
+        };
+        data.guide_2 = searchParams.get('guide_2') || '';
+        data.guide_1 = searchParams.get('guide_1') || '';
+        data.guide = searchParams.get('guide') || '';
         if(searchParams.get('guide_2')) {
             accordion = `guide_2${searchParams.get('guide_2')}`;
         } else if(searchParams.get('guide_1')) {
@@ -746,21 +770,25 @@ export default function UserGuide() {
         } else if(searchParams.get('guide')) {
             accordion = `guide${searchParams.get('guide')}`;
         }
-        if(accordion) {
-            const el = document.querySelector(`.${accordion}`);
-            if(el) {
-                window.scrollTo({
-                    top: el.getBoundingClientRect().top - 52,
-                    behavior: 'smooth'
-                });
+        setGuide(data);
+        setTimeout(()=>{
+            if(accordion) {
+                const el = document.querySelector(`.${accordion}`);
+                console.log('kakakak')
+                if(el) {
+                    window.scrollTo({
+                        top: el.getBoundingClientRect().top - 52,
+                        behavior: 'smooth'
+                    });
+                }
             }
-        }
+        }, 500)
         
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return  <Accordion type="single" collapsible className="flex flex-col gap-5"
-        value={searchParams?.get('guide') || ''}
+        value={guide.guide}
         onValueChange={(val: string)=>onChangeAccordion(val, 0)}>
         {guides.map(guide => (
             <AccordionItem key={guide.id} value={guide.id} id={'guide' + guide.id}>
@@ -835,17 +863,20 @@ interface MultiAccordion {
 }
 interface MultiAccordionProps {
     data: MultiAccordion[];
-    onChangeAccordion: (value: string, level: number) => void;
+    onChangeAccordion: (value: string, level: 0 | 1 | 2) => void;
+    guide: {
+        guide: string;
+        guide_1: string;
+        guide_2: string;
+    };
 }
 
-const MultiAccordion = ({data, onChangeAccordion} : MultiAccordionProps) => {
-    const searchParams = useSearchParams();
-
+const MultiAccordion = ({data, onChangeAccordion, guide} : MultiAccordionProps) => {
     return <Accordion
           type="single"
           collapsible
           className="flex flex-col gap-3"
-          value={searchParams?.get('guide_1') || ''}
+          value={guide.guide_1 || ''}
           onValueChange={(value: string) => onChangeAccordion(value, 1)}
         >
         {data.map((item) => {
@@ -867,7 +898,7 @@ const MultiAccordion = ({data, onChangeAccordion} : MultiAccordionProps) => {
                                 type="single"
                                 collapsible
                                 className="flex flex-col gap-3"
-                                value={searchParams?.get('guide_2') || ''}
+                                value={guide.guide_2}
                                 onValueChange={(value: string) => onChangeAccordion(value, 2)}
                             >
                                 {item.subItems.map((subItem, index) => {
@@ -903,11 +934,15 @@ interface MultiStepAccordion {
         }[],
         content?: React.ReactNode
     }[],
-    onChangeAccordion: (value: string, level: number) => void;
+    onChangeAccordion: (value: string, level: 0 | 1 | 2) => void;
+    guide: {
+        guide: string;
+        guide_1: string;
+        guide_2: string;
+    };
 }
 
-const MultiStepAccordion = ({paragraph, steps, onChangeAccordion} : MultiStepAccordion) => {
-    const searchParams = useSearchParams();
+const MultiStepAccordion = ({paragraph, steps, onChangeAccordion, guide} : MultiStepAccordion) => {
     return <div>
         <div className="mb-5">
             {paragraph}
@@ -916,7 +951,7 @@ const MultiStepAccordion = ({paragraph, steps, onChangeAccordion} : MultiStepAcc
             type="single"
             collapsible
             className="flex flex-col gap-3"
-            value={searchParams?.get('guide_1') || ''}
+            value={guide.guide_1}
             onValueChange={(value: string) => onChangeAccordion(value, 1)}
         >
             {steps.map(step => {
@@ -954,16 +989,20 @@ interface ContentMultiStepProps {
         title: string,
         content: React.ReactNode
     }[],
-    onChangeAccordion: (value: string, level: number) => void;
+    onChangeAccordion: (value: string, level: 0 | 1 | 2) => void;
+    guide: {
+        guide: string;
+        guide_1: string;
+        guide_2: string;
+    };
 }
-const ContentMultiStep = ({steps, onChangeAccordion}: ContentMultiStepProps) => {
-    const searchParams = useSearchParams();
+const ContentMultiStep = ({steps, onChangeAccordion, guide}: ContentMultiStepProps) => {
     return <>
         <Accordion
             type="single"
             collapsible
             className="flex flex-col gap-3"
-            value={searchParams?.get('guide_2') || ''}
+            value={guide.guide_2}
             onValueChange={(value: string) => onChangeAccordion(value, 2)}
         >
             {steps.map(step => {

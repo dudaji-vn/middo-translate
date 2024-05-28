@@ -104,7 +104,7 @@ const PlayStoreDownloadButton = ({...props}) => {
     {...props}
   >
     <Image
-        src="/landing-page/play-store-dark.png"
+        src="/landing-page/google-play-dark.png"
         width="200"
         height="50"
         alt="Download on the Play Store"

@@ -40,8 +40,6 @@ export default function Landing() {
 
   useEffect(() => {
     document.body.style.overflow = 'unset';
-    // Change title to home
-    
   }, []);
 
 
