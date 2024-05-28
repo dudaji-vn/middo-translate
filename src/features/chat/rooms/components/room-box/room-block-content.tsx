@@ -16,9 +16,9 @@ export const RoomBlockContent = ({ room }: RoomBlockContentProps) => {
   const { t } = useTranslation();
   const { mutate } = useUnBlockUser();
   const currentUser = useAuthStore((state) => state.user);
-  const user = room.participants.find(
-    (participant) => participant._id !== currentUser?._id,
-  ) as User;
+  const user = room.participants
+    .concat(room.waitingUsers || [])
+    .find((participant) => participant._id !== currentUser?._id) as User;
   const handleUnblock = () => {
     mutate(user._id);
   };

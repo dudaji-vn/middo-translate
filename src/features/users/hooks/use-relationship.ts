@@ -23,8 +23,10 @@ export const useRelationship = (
 export const useCheckRoomRelationship = (room: Room) => {
   const isP2P = room.isGroup === false;
   const currentUser = useAuthStore((s) => s.user);
+  const users = room.participants.concat(room.waitingUsers || []);
+
   const userId = isP2P
-    ? room.participants.find((u) => u._id !== currentUser!._id)?._id
+    ? users.find((u) => u._id !== currentUser!._id)?._id
     : '';
   const { data, error } = useRelationship(userId!, {
     enabled: !!userId,

@@ -10,14 +10,16 @@ import {
 } from '@/features/chat/messages/components/message-box';
 import { ChatBoxHeader, RoomSide } from '@/features/chat/rooms/components';
 import { PinnedBar } from '@/features/chat/rooms/components/pin-message-bar';
-import { RoomBlockContent } from '@/features/chat/rooms/components/room-box/room-block-content';
 import { ChatBoxFooter } from '@/features/chat/rooms/components/room-box/room-box-footer';
 import { RoomTyping } from '@/features/chat/rooms/components/room-box/room-typing';
 import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/room-side-tabs/room-side-tabs.hook';
+import { useChatBox } from '@/features/chat/rooms/contexts';
+import { Room } from '@/features/chat/rooms/types';
 import { useAppStore } from '@/stores/app.store';
 import { Allotment } from 'allotment';
 
-const ChatRoomContent = ({ room }: { room: any }) => {
+const ChatRoomContent = () => {
+  const { room } = useChatBox();
   const isMobile = useAppStore((state) => state.isMobile);
   const { currentSide } = useRoomSidebarTabs();
   return (
@@ -43,7 +45,7 @@ const ChatRoomContent = ({ room }: { room: any }) => {
   );
 };
 
-const ChatRoomMain = ({ room }: { room: any }) => {
+const ChatRoomMain = ({ room }: { room: Room }) => {
   return (
     <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
       <ChatBoxHeader />
@@ -52,8 +54,14 @@ const ChatRoomMain = ({ room }: { room: any }) => {
         <MediaUploadDropzone>
           <MessagesBoxProvider room={room}>
             <MessageActions>
-              <MessageBox room={room} />
-              <RoomTyping />
+              {room.status === 'waiting' && room.isGroup ? (
+                <div className="flex-1" />
+              ) : (
+                <>
+                  <MessageBox room={room} />
+                  <RoomTyping />
+                </>
+              )}
               <ChatBoxFooter />
             </MessageActions>
           </MessagesBoxProvider>

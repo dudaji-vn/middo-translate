@@ -72,7 +72,9 @@
     "SURE": "물론이죠",
     "DELETE_ACCOUNT": "계정 삭제",
     "BLOCK": "차단",
-    "UNBLOCK": "차단 해제"
+    "UNBLOCK": "차단 해제",
+    "REJECTED": "거부됨",
+    "PENDING": "대기 중"
   },
   "MESSAGE": {
     "ERROR": {

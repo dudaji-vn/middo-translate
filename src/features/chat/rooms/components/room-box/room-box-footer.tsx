@@ -22,7 +22,9 @@ import { useTranslation } from 'react-i18next';
 import { useChatBox } from '../../contexts/chat-box-context';
 import { RoomBlockContent } from './room-block-content';
 import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
-// import { RoomResponseContent } from './room-response-content';
+import { RoomWaitingContent } from './room-waiting-content';
+import { RoomResponseContent } from './room-response-content';
+import { RoomActions } from '../room-actions';
 
 export interface ChatBoxFooterProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -182,6 +184,12 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
       room.participants,
       currentUser?._id,
     ]);
+    const isAdmin = room.admin._id === currentUser?._id;
+    const isShowEditor = useMemo(() => {
+      if (relationshipStatus === 'blocking' || isBlockedConversation)
+        return false;
+      return true;
+    }, [isBlockedConversation, relationshipStatus]);
 
     if (isBlockedConversation || relationshipStatus === 'blocked') {
       return (
@@ -198,10 +206,21 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     return (
       <div className={'relative w-full border-t p-2'}>
         {relationshipStatus === 'blocking' && <RoomBlockContent room={room} />}
-        {/* <RoomWaitingContent room={room} /> */}
-        {/* <RoomResponseContent room={room} /> */}
-        {relationshipStatus === 'none' && (
+        {room.status === 'waiting' && relationshipStatus !== 'blocking' && (
+          <>
+            {isAdmin ? (
+              <RoomWaitingContent room={room} />
+            ) : (
+              <RoomActions>
+                <RoomResponseContent room={room} />
+              </RoomActions>
+            )}
+          </>
+        )}
+
+        {isShowEditor && (
           <MessageEditor
+            isMediaDisabled={room.status === 'waiting'}
             isEditing={isEdit}
             onEditSubmit={updateMessage}
             roomId={room._id}

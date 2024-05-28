@@ -72,7 +72,9 @@
     "SURE": "Chắc chắn",
     "DELETE_ACCOUNT": "Xoá tài khoản",
     "BLOCK": "Chặn",
-    "UNBLOCK": "Bỏ chặn"
+    "UNBLOCK": "Bỏ chặn",
+    "REJECTED": "Đã từ chối",
+    "PENDING": "Đang chờ"
   },
   "MESSAGE": {
     "ERROR": {

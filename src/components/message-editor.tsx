@@ -46,6 +46,7 @@ export interface MessageEditorProps
   isBlocked?: boolean;
   isEditing?: boolean;
   onEditSubmit?: (message: Message) => void;
+  isMediaDisabled?: boolean;
 }
 
 export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
@@ -58,6 +59,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       roomId,
       isEditing,
       isBlocked = false,
+      isMediaDisabled = false,
       onEditSubmit,
       ...props
     },
@@ -96,7 +98,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     const sendButtonId = useId();
     const editor = useEditor({
       placeholder: t('CONVERSATION.TYPE_A_MESSAGE'),
-      onClipboardEvent: handleClipboardEvent,
+      onClipboardEvent: isMediaDisabled ? undefined : handleClipboardEvent,
       mentionSuggestions,
       onEnterTrigger: handleEnterTrigger,
       enterToSubmit: !isMobileDevice,
@@ -228,7 +230,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
               className="flex min-h-[82px] w-full flex-col rounded-xl border border-primary p-1 px-3 pb-3 shadow-sm"
             >
               <div className="-ml-2">
-                {!isEditing && <AttachmentButton />}
+                {!isEditing && !isMediaDisabled && <AttachmentButton />}
                 <EmojiButton editor={editor} />
                 <MicButton ref={micRef} editor={editor} />
                 {mentionSuggestions.length > 0 && (

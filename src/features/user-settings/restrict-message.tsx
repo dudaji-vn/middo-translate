@@ -1,15 +1,26 @@
 'use client';
 
-
 import { HelpCircleIcon, ShieldIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Switch } from '@/components/data-entry';
-import Tooltip  from '@/components/data-display/custom-tooltip/tooltip';
+import { useMutation } from '@tanstack/react-query';
+import { toggleAllowUnknown } from '@/services/user.service';
+import { getProfileService } from '@/services/auth.service';
+import { useAuthStore } from '@/stores/auth.store';
 
 export default function RestrictMessage() {
- 
   const { t } = useTranslation('common');
-  
+  const { setData, user } = useAuthStore();
+  const { mutate } = useMutation({
+    mutationFn: toggleAllowUnknown,
+    onSuccess: async () => {
+      const res = await getProfileService();
+      const user = res.data;
+      setData({
+        user,
+      });
+    },
+  });
 
   return (
     <>
@@ -20,7 +31,7 @@ export default function RestrictMessage() {
         <span className="ml-4 block text-left text-base font-medium ">
           {t('ACCOUNT_SETTING.RESTRICT_MESSAGE')}
         </span>
-        <span className='flex-1'>
+        <span className="flex-1">
           {/* <Tooltip
             title={t('TOOL_TIP.RESTRICT_MESSAGE')}
             triggerItem={
@@ -31,16 +42,19 @@ export default function RestrictMessage() {
             }}
             isShowMobile={true}
           /> */}
-          <span className='relative group w-5 block'>
-            <div className='absolute bottom-[110%] w-[200px] right-1/2 translate-x-1/4 md:translate-x-1/2 max-w-[200px] py-[6px] px-3 rounded-lg bg-black/60 text-white text-xs opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-300'>
+          <span className="group relative block w-5">
+            <div className="pointer-events-none absolute bottom-[110%] right-1/2 w-[200px] max-w-[200px] translate-x-1/4 rounded-lg bg-black/60 px-3 py-[6px] text-xs text-white opacity-0 transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100 md:translate-x-1/2">
               <p>{t('TOOL_TIP.RESTRICT_MESSAGE')}</p>
             </div>
-            <div className='absolute bottom-full h-[10%] w-[200px] right-1/2 translate-x-1/4 md:translate-x-1/2 max-w-[200px]bg-transparent'></div>
-            <HelpCircleIcon className='size-4 mx-1 md:mx-3 color-primary text-primary cursor-pointer'/>
+            <div className="max-w-[200px]bg-transparent absolute bottom-full right-1/2 h-[10%] w-[200px] translate-x-1/4 md:translate-x-1/2"></div>
+            <HelpCircleIcon className="color-primary mx-1 size-4 cursor-pointer text-primary md:mx-3" />
           </span>
-
         </span>
-        <Switch className='cursor-pointer'></Switch>
+        <Switch
+          checked={!user?.allowUnknown}
+          onCheckedChange={() => mutate()}
+          className="cursor-pointer"
+        />
       </div>
     </>
   );

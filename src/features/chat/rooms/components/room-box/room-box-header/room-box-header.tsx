@@ -7,7 +7,6 @@ import { useCallback, useMemo } from 'react';
 import { useChatBox } from '../../../contexts';
 import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
 import { useJoinCall } from '../../../hooks/use-join-call';
-import { generateRoomDisplay } from '../../../utils';
 import { RoomAvatar } from '../../room-avatar';
 import { useRoomSidebarTabs } from '../../room-side/room-side-tabs/room-side-tabs.hook';
 import { RoomBoxHeaderNavigation } from './room-box-header-navigation';
@@ -20,10 +19,9 @@ import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { RoomAddMember } from '../../room-side/room-add-member';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { EBusinessConversationKeys } from '@/types/business.type';
 
 export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
-  const { room: _room } = useChatBox();
+  const { room } = useChatBox();
   const currentUser = useAuthStore((s) => s.user)!;
   const onlineList = useChatStore((state) => state.onlineList);
   const { t } = useTranslation('common');
@@ -31,10 +29,6 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
     useBusinessNavigationData();
   const { toggleTab } = useRoomSidebarTabs();
   const allowCall = !isBusiness;
-  const room = useMemo(
-    () => generateRoomDisplay(_room, currentUser._id, true),
-    [_room, currentUser],
-  );
 
   const participants = room.participants.filter(
     (user) => user._id !== currentUser._id,
@@ -50,7 +44,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
       return visitor && onlineList.includes(visitor._id);
     }
     return participants.some((user) => onlineList.includes(user._id));
-  }, []);
+  }, [isBusiness, onlineList, participants]);
 
   return (
     <div
@@ -72,7 +66,12 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
           className="flex items-center gap-2 active:opacity-30 md:cursor-pointer"
           onClick={handleToggleInfo}
         >
-          <RoomAvatar showStatus isOnline={isOnline} room={room} size={36} />
+          <RoomAvatar
+            showStatus={room.status === 'active'}
+            isOnline={isOnline}
+            room={room}
+            size={36}
+          />
           <div>
             <p className="break-word-mt line-clamp-1 font-medium">
               {room.name}
@@ -90,8 +89,8 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
         </div>
       </div>
       <div className="ml-auto mr-1 flex items-center gap-1">
-        {allowCall && <VideoCall />}
-        {room.isGroup && (
+        {allowCall && room.status == 'active' && <VideoCall />}
+        {room.isGroup && room.status == 'active' && (
           <Tooltip
             title={t('TOOL_TIP.ADD_MEMBER')}
             triggerItem={<RoomAddMember />}
