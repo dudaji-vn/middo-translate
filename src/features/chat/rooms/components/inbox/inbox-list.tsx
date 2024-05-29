@@ -64,6 +64,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       updateItem,
       addItem,
       refetch,
+      isRefetching,
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
@@ -145,6 +146,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             })}
           />
           <InfiniteScroll
+            isRefreshing={isRefetching}
             pullToRefresh
             onRefresh={refetch}
             onLoadMore={fetchNextPage}
