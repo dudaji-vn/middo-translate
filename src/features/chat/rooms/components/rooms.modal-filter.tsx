@@ -170,7 +170,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
               variant={'ghost'}
               onClick={onCancel}
             >
-              Cancel
+              {t('COMMON.CANCEL')}
             </Button>
             <Button
               size={'lg'}
@@ -178,7 +178,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
               onClick={onApplyFilter}
               disabled={disabledFilter}
             >
-              Filter
+              {t('FILTERS.BUTTONS.FILTER')}
             </Button>
           </div>
         </DialogContent>
