@@ -26,18 +26,25 @@ import { useAuthStore } from '@/stores/auth.store';
 import { usePathname, useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ReactNativeProvider } from './react-native.provider';
+import { usePlatformStore } from '@/features/platform/stores';
 init({ data });
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
   const { user, isLoaded } = useAuthStore();
+  const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const pathname = usePathname();
   const router = useRouter();
   useEffect(() => {
     if (user && isLoaded && pathname == ROUTE_NAMES.ROOT) {
+      if (isMobile) {
+        router.push(ROUTE_NAMES.TRANSLATION);
+        return;
+      }
       router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isLoaded, pathname]);
+  }, [user, isLoaded, isMobile]);
+
   return (
     <ReactQueryProvider>
       <SocketProvider />
