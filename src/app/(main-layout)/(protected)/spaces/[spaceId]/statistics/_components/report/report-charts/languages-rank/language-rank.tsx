@@ -17,29 +17,36 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 const COLORS = [...CHART_COLORS].reverse();
 const LoadingLanguageRank = () => {
   return (
-    <section className="relative w-full space-y-4 py-5">
+    <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800">
           Conversation&apos;s Language
         </Typography>
         <SelectLimitNumber value={3} onChange={() => {}} />
       </div>
-      <div className="flex h-fit min-h-40 flex-col gap-4 transition-all  duration-1000">
-        {Array.from({ length: 3 }).map((_, index) => {
-          return (
-            <div
-              className="flex w-full flex-row items-center gap-1 md:gap-5"
-              key={index}
-            >
-              <div className="flex h-fit w-36 flex-row items-center gap-2">
-                <Skeleton className="h-5 w-5 rounded-full bg-neutral-100" />
-                <Skeleton className="h-5 w-32 rounded-md bg-neutral-100" />
+      <div className="flex w-full flex-col gap-4 md:flex-row">
+        <div>
+          <Skeleton className="relative h-60 w-60 rounded-full bg-primary-200">
+            <div className="absolute inset-6 rounded-full bg-white" />
+          </Skeleton>
+        </div>
+        <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
+          {Array.from({ length: 3 }).map((_, index) => {
+            return (
+              <div
+                className="flex w-full flex-row items-center gap-1 md:gap-5"
+                key={index}
+              >
+                <div className="flex h-fit w-36 flex-row items-center gap-2">
+                  <Skeleton className="h-5 w-5 rounded-full bg-neutral-100" />
+                  <Skeleton className="h-5 w-32 rounded-md bg-neutral-100" />
+                </div>
+                <Skeleton className=" h-2 w-full flex-grow rounded-full bg-primary-200 " />
+                <Skeleton className="h-5 w-5 rounded-md " />
               </div>
-              <Skeleton className=" h-2 w-full flex-grow rounded-full bg-primary-200 " />
-              <Skeleton className="h-5 w-5 rounded-md " />
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </section>
   );
@@ -79,8 +86,10 @@ const LanguageRank = ({
   const toggleShowOthers = () => {
     setShowOthers(!showOthers);
   };
+  const isEmpty = dataSlice.length === 0;
+  if (isEmpty) return null;
   return (
-    <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
+    <section className="relative w-full space-y-4  bg-white px-3 py-4 md:px-10">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800">
           Conversation&apos;s Language

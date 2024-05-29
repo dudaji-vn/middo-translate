@@ -91,11 +91,24 @@ const HeatMap = ({
   tooltip: React.ReactNode;
 }) => {
   const { width } = useWindowSize();
-  const shapeWidth = useMemo(() => {
-    if (width) {
-      return Number(((width - 342) / 24).toFixed(0));
+  const { shapeWidth, shapeHeight } = useMemo(() => {
+    const isMobile = width < 756;
+    if (isMobile) {
+      return {
+        shapeWidth: 40,
+        shapeHeight: 40,
+      };
     }
-    return 50;
+    if (width) {
+      return {
+        shapeWidth: Number(((width - 342) / 24).toFixed(0)),
+        shapeHeight: 48,
+      };
+    }
+    return {
+      shapeWidth: 50,
+      shapeHeight: 48,
+    };
   }, [width]);
   const dataset = weeklyVariance.map((i) => ({
     ...i,
@@ -143,7 +156,9 @@ const HeatMap = ({
           data={group.data}
           fill={group.color}
           shape={(props: RectangleProps) => {
-            return <CustomShape {...props} width={shapeWidth} height={48} />;
+            return (
+              <CustomShape {...props} width={shapeWidth} height={shapeHeight} />
+            );
           }}
         />
       ))}

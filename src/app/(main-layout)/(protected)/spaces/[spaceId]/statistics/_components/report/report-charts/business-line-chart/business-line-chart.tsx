@@ -21,6 +21,7 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
 import { CHART_TOOLTIP_CONTENT } from '@/types/business-statistic.type';
+import { useAppStore } from '@/stores/app.store';
 
 const TooltipContent = ({
   active,
@@ -84,6 +85,7 @@ export default function BusinessLineChart({
   tooltipContent?: string;
 }) {
   const { space } = useAuthStore();
+  const isMobile = useAppStore((state) => state.isMobile);
   const hasNoLine = useMemo(() => data.length === 1, [data]);
   const displayFilterBy = useMemo(() => {
     switch (filterByKey) {
@@ -97,7 +99,7 @@ export default function BusinessLineChart({
 
   if (!data) return null;
   return (
-    <section className="relative w-full space-y-4 bg-white px-4 py-5 md:p-10">
+    <section className="relative w-full space-y-4 bg-white px-3 py-4 md:p-10">
       <div className="flex w-full flex-row items-center justify-between">
         <Typography className="flex flex-col items-start justify-start gap-2 text-base font-semibold text-neutral-800 md:flex-row md:items-center">
           {title}
@@ -135,18 +137,19 @@ export default function BusinessLineChart({
           <LineChart
             data={data}
             margin={{
-              top: 15,
-              right: 0,
-              left: 24,
-              bottom: 15,
+              top: 16,
+              right: isMobile ? 32 : 16,
+              left: 16,
+              bottom: isMobile ? 40 : 16,
             }}
           >
             <XAxis
               dataKey={chartLabel}
               padding="no-gap"
-              className="py-10"
               tickLine={false}
               axisLine={false}
+              fontSize={isMobile ? 14 : 16}
+              angle={isMobile ? -45 : 0}
               tickMargin={24}
               {...xAxisProps}
             />
@@ -157,6 +160,7 @@ export default function BusinessLineChart({
               tickLine={false}
               tickMargin={10}
               type={unitType}
+              fontSize={isMobile ? 14 : 16}
               {...yAxisProps}
             />
             <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />

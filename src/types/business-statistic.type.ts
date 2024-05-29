@@ -46,6 +46,10 @@ export type TTraficTrack = Array<{
   x: number;
   y: number;
   density: number;
+  openedConversation: Array<{
+    count: number;
+    language: string;
+  }>;
 }>;
 
 export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {

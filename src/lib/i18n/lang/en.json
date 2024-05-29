@@ -74,7 +74,8 @@
     "BLOCK": "Block",
     "UNBLOCK": "Unblock",
     "REJECTED": "Rejected",
-    "PENDING": "Pending"
+    "PENDING": "Pending",
+    "MEMBER": "Member"
   },
   "MESSAGE": {
     "ERROR": {
