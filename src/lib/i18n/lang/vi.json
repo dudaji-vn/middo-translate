@@ -269,6 +269,12 @@
       "MESSAGE": "Hiện tại bạn không thể trả lời cuộc trò chuyện này.",
       "LEARN_MORE": "Tìm hiểu thêm"
     },
+
+    "BLOCK_CONTENT": {
+      "TITLE": "Bạn đã chặn",
+      "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ."
+    },
+
     "WELCOME_TITLE": "Chào mừng bạn đến với trò chuyện Middo!",
     "WELCOME_CONTENT": "Bắt đầu một cuộc trò chuyện với đồng đội của bạn hoặc nhóm. Bạn cũng có thể tạo một nhóm trò chuyện để thảo luận và chia sẻ tệp.",
     "TITLE": "Hội thoại",
@@ -459,6 +465,13 @@
       "TITLE": "Rời nhóm",
       "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của nhóm này nữa. Bạn có chắc chắn muốn rời nhóm không?"
     },
+
+    "BLOCK_USER": {
+      "TITLE": "Chặn {{name}}",
+      "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ cho đến khi bạn bỏ chặn. Bạn có chắc chắn không?",
+      "ADDITIONAL_OPTION_1": "Cũng xóa lịch sử cuộc trò chuyện (không thể hoàn tác)"
+    },
+
     "VERIFY": {
       "SUCCESS": {
         "TITLE": "Xác minh thành công",

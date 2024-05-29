@@ -13,7 +13,7 @@ export interface RoomBlockContentProps {
 }
 
 export const RoomBlockContent = ({ room }: RoomBlockContentProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
   const { mutate } = useUnBlockUser();
   const currentUser = useAuthStore((state) => state.user);
   const user = room.participants
@@ -25,10 +25,10 @@ export const RoomBlockContent = ({ room }: RoomBlockContentProps) => {
   return (
     <div className="relative flex flex-col items-center gap-2 py-1">
       <span className="font-semibold text-error md:text-sm">
-        You have blocked {user?.name}
+        {t('CONVERSATION.BLOCK_CONTENT.TITLE')} {user?.name}
       </span>
       <span className="text-neutral-600 md:text-sm">
-        You will not receive any message or call from them.
+        {t('CONVERSATION.BLOCK_CONTENT.DESCRIPTION')}
       </span>
       <Button
         onClick={handleUnblock}
@@ -38,7 +38,7 @@ export const RoomBlockContent = ({ room }: RoomBlockContentProps) => {
         className="my-5"
         startIcon={<UnlockIcon />}
       >
-        Unblock
+        {t('COMMON.UNBLOCK')}
       </Button>
     </div>
   );

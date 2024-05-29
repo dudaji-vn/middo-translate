@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useRoomActions } from '../room-actions';
 import { useAuthStore } from '@/stores/auth.store';
+import { User } from '@/features/users/types';
 
 export interface RoomResponseContentProps {
   room: Room;
@@ -17,9 +18,9 @@ export interface RoomResponseContentProps {
 
 export const RoomResponseContent = ({ room }: RoomResponseContentProps) => {
   const currentUserId = useAuthStore((state) => state.user?._id);
-  const otherUser = room?.waitingUsers?.find(
-    (user) => user._id !== currentUserId,
-  );
+  const user = room.participants
+    .concat(room.waitingUsers || [])
+    .find((participant) => participant._id !== currentUserId) as User;
   const { t } = useTranslation('common');
   const { onAction } = useRoomActions();
   if (room.isGroup) {
@@ -71,7 +72,7 @@ export const RoomResponseContent = ({ room }: RoomResponseContentProps) => {
   return (
     <div className=" relative flex w-full flex-col items-center gap-2">
       <span className="font-semibold text-primary md:text-sm">
-        {otherUser?.name}
+        {user?.name}
         isn’t in your contacts yet.
       </span>
       <div className="prose my-0 text-center text-sm text-neutral-600">
