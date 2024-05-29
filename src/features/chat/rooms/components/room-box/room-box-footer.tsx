@@ -188,8 +188,9 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
     const isShowEditor = useMemo(() => {
       if (relationshipStatus === 'blocking' || isBlockedConversation)
         return false;
+      if (room.status === 'waiting' && room.isGroup) return false;
       return true;
-    }, [isBlockedConversation, relationshipStatus]);
+    }, [isBlockedConversation, relationshipStatus, room.isGroup, room.status]);
 
     if (isBlockedConversation || relationshipStatus === 'blocked') {
       return (

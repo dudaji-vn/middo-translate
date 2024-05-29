@@ -61,6 +61,14 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'unblock',
 ];
 
+const WAITING_ALLOWED_ACTIONS: Action[] = [
+  'accept',
+  'reject',
+  'block',
+  'unblock',
+  'delete',
+];
+
 const checkAllowedActions = ({
   isBusinessRoom,
   businessConversationType,
@@ -72,6 +80,8 @@ const checkAllowedActions = ({
   action: Action;
   currentStatus: Room['status'];
 }) => {
+  if (currentStatus === 'waiting')
+    return WAITING_ALLOWED_ACTIONS.includes(action);
   if (currentStatus === 'archived')
     return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
   if (isBusinessRoom)
@@ -100,6 +110,7 @@ export const RoomItemActionWrapper = forwardRef<
           currentStatus: room.status,
         });
         if (!isAllowed) return false;
+
         switch (item.action) {
           case 'notify':
             return isMuted;
@@ -119,6 +130,8 @@ export const RoomItemActionWrapper = forwardRef<
             return !room.isGroup && relationshipStatus !== 'blocking';
           case 'unblock':
             return !room.isGroup && relationshipStatus === 'blocking';
+          case 'reject':
+            return room.isGroup;
           default:
             return isAllowed;
         }
