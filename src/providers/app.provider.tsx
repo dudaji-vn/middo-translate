@@ -33,11 +33,11 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
   const pathname = usePathname();
   const router = useRouter();
   useEffect(() => {
-    if(user && isLoaded && pathname == ROUTE_NAMES.ROOT) {
+    if (user && isLoaded && pathname == ROUTE_NAMES.ROOT) {
       router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isLoaded]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, isLoaded, pathname]);
   return (
     <ReactQueryProvider>
       <SocketProvider />
