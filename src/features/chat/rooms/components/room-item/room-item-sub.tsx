@@ -316,7 +316,7 @@ const ItemSub = ({
         </Typography>
       </div>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
-      {isExpired && (
+      {!isVisitorLeft && isExpired && (
         <Tooltip
           title={
             'This conversation is expired because the visitor not active for a long time'
