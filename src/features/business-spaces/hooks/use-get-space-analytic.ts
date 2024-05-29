@@ -22,6 +22,7 @@ type TData = {
   chart: ChartData;
   conversationLanguage: TLanguageRank;
   trafficTrack: TTraficTrack;
+  isNotEnoughData: boolean;
 };
 export type AnalyticsOptions = {
   type: AnalyticsType;

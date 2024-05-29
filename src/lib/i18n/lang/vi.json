@@ -74,7 +74,8 @@
     "BLOCK": "Chặn",
     "UNBLOCK": "Bỏ chặn",
     "REJECTED": "Đã từ chối",
-    "PENDING": "Đang chờ"
+    "PENDING": "Đang chờ",
+    "MEMBER": "Thành viên"
   },
   "MESSAGE": {
     "ERROR": {

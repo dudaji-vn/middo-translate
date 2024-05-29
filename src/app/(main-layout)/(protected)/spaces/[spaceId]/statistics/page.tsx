@@ -22,6 +22,8 @@ import LanguageRank from './_components/report/report-charts/languages-rank/lang
 import BusinessScatter from './_components/report/report-charts/scatter-visit/business-scatter';
 import { accurateHumanize } from '@/utils/moment';
 import moment from 'moment';
+import EmptyReport from './_components/report/empty-report/empty-repor';
+import { ReportHeader } from './_components/report/report-header';
 
 const chartsOrderList: Array<TChartKey> = [
   ESpaceChart.NEW_VISITOR,
@@ -81,103 +83,113 @@ const ReportPage = ({
   });
 
   if (!isClient) return null;
+  const isNotEnoughData = data?.isNotEnoughData;
+  if (isNotEnoughData) {
+    return <EmptyReport />;
+  }
   return (
-    <section className="relative h-fit w-full space-y-4 bg-[#FCFCFC]">
-      <ReportCards
-        data={data?.analysis}
-        loading={isFetching}
-        domain={searchParams.domain}
-        memberId={searchParams.memberId}
-      />
-      {chartsOrderList.map((chart) => {
-        let chartUnit = MAPPED_CHART_UNIT[chart];
-        const chartData = [...(data?.chart?.[chart] || [])];
-        let formattedTotal: number | string = data?.analysis[chart]?.total || 0;
-        const filterBy =
-          searchParams[
-            CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
-          ];
-        switch (chart) {
-          case ESpaceChart.OPENED_CONVERSATION: {
-            return (
-              <div className="flex flex-col" key={chart}>
-                <BusinessLineChart
-                  key={chart}
-                  tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
-                  total={`${formattedTotal}`}
-                  filterByKey={CHART_AFFECTED_PARAMS[chart]}
-                  filterBy={filterBy}
-                  title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
-                  data={chartData}
-                  unit={chartUnit}
-                  yAxisProps={{
-                    allowDecimals: ALLOW_DECIMALS.includes(chart),
-                  }}
-                />
-                <LanguageRank
-                  key={chart}
-                  piesData={data?.chart?.conversationLanguage || []}
-                  data={data?.conversationLanguage || []}
-                  isLoading={isFetching}
-                />
-                <BusinessScatter
-                  key={chart}
-                  data={data?.trafficTrack || []}
-                  displayFilterBy={searchParams.domain}
-                />
-              </div>
-            );
+    <>
+      <ReportHeader />
+      <section className="relative h-fit w-full bg-[#FCFCFC] md:space-y-4">
+        <ReportCards
+          data={data?.analysis}
+          loading={isFetching}
+          domain={searchParams.domain}
+          memberId={searchParams.memberId}
+        />
+        {chartsOrderList.map((chart) => {
+          let chartUnit = MAPPED_CHART_UNIT[chart];
+          const chartData = [...(data?.chart?.[chart] || [])];
+          let formattedTotal: number | string =
+            data?.analysis[chart]?.total || 0;
+          const filterBy =
+            searchParams[
+              CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
+            ];
+          switch (chart) {
+            case ESpaceChart.OPENED_CONVERSATION: {
+              return (
+                <div className="flex flex-col" key={chart}>
+                  <BusinessLineChart
+                    key={chart}
+                    tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+                    total={`${formattedTotal}`}
+                    filterByKey={CHART_AFFECTED_PARAMS[chart]}
+                    filterBy={filterBy}
+                    title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
+                    data={chartData}
+                    unit={chartUnit}
+                    yAxisProps={{
+                      allowDecimals: ALLOW_DECIMALS.includes(chart),
+                    }}
+                  />
+                  <LanguageRank
+                    key={chart}
+                    piesData={data?.chart?.conversationLanguage || []}
+                    data={data?.conversationLanguage || []}
+                    isLoading={isFetching}
+                  />
+                  <BusinessScatter
+                    key={chart}
+                    data={data?.trafficTrack || []}
+                    displayFilterBy={searchParams.domain}
+                  />
+                </div>
+              );
+            }
+            case ESpaceChart.RESPONSE_TIME:
+              {
+                const { unit, ratio } = getProposedTimeUnit(chartData);
+                chartData.forEach((item, index) => {
+                  chartData[index].value = Number(
+                    (item.value / ratio).toFixed(0),
+                  );
+                }, []);
+                formattedTotal =
+                  accurateHumanize(
+                    moment.duration(formattedTotal, 'milliseconds'),
+                    1,
+                  ).accuratedTime || 0;
+                chartUnit = unit;
+              }
+              break;
+            case ESpaceChart.CUSTOMER_RATING:
+            case ESpaceChart.NEW_VISITOR:
+            case ESpaceChart.RESPONSE_MESSAGE:
+              formattedTotal = `${formattedTotal} ${chartUnit}`;
+              break;
+            case ESpaceChart.DROP_RATE:
+              {
+                const { value, total } = data?.analysis[chart] || {
+                  value: 0,
+                  total: 1,
+                };
+                const rate = total
+                  ? Number((value / total).toFixed(0)) * 100
+                  : 0;
+                formattedTotal = `${rate}%`;
+              }
+              break;
           }
-          case ESpaceChart.RESPONSE_TIME:
-            {
-              const { unit, ratio } = getProposedTimeUnit(chartData);
-              chartData.forEach((item, index) => {
-                chartData[index].value = Number(
-                  (item.value / ratio).toFixed(0),
-                );
-              }, []);
-              formattedTotal =
-                accurateHumanize(
-                  moment.duration(formattedTotal, 'milliseconds'),
-                  1,
-                ).accuratedTime || 0;
-              chartUnit = unit;
-            }
-            break;
-          case ESpaceChart.CUSTOMER_RATING:
-          case ESpaceChart.NEW_VISITOR:
-          case ESpaceChart.RESPONSE_MESSAGE:
-            formattedTotal = `${formattedTotal} ${chartUnit}`;
-            break;
-          case ESpaceChart.DROP_RATE:
-            {
-              const { value, total } = data?.analysis[chart] || {
-                value: 0,
-                total: 1,
-              };
-              const rate = total ? Number((value / total).toFixed(0)) * 100 : 0;
-              formattedTotal = `${rate}%`;
-            }
-            break;
-        }
 
-        return (
-          <BusinessLineChart
-            key={chart}
-            tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
-            total={`${formattedTotal}`}
-            filterByKey={CHART_AFFECTED_PARAMS[chart]}
-            filterBy={filterBy}
-            title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
-            data={chartData}
-            unit={chartUnit}
-            yAxisProps={{
-              allowDecimals: ALLOW_DECIMALS.includes(chart),
-            }}
-          />
-        );
-      })}
-    </section>
+          return (
+            <BusinessLineChart
+              key={chart}
+              tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+              total={`${formattedTotal}`}
+              filterByKey={CHART_AFFECTED_PARAMS[chart]}
+              filterBy={filterBy}
+              title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
+              data={chartData}
+              unit={chartUnit}
+              yAxisProps={{
+                allowDecimals: ALLOW_DECIMALS.includes(chart),
+              }}
+            />
+          );
+        })}
+      </section>
+    </>
   );
 };
 

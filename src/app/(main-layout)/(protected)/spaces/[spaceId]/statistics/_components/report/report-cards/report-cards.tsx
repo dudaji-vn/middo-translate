@@ -122,7 +122,9 @@ const contentsByDomain: Array<{
   {
     name: ESpaceChart.DROP_RATE,
     renderDetail: (value: number, total?: number) => {
-      const displayValue = total ? Number((value / total).toFixed(0)) * 100 : 0;
+      const displayValue = total
+        ? Number(((value * 100) / total).toFixed(2))
+        : 0;
       return (
         <Typography variant={'h6'} className="text-[2rem]">
           {displayValue}&nbsp;
@@ -195,58 +197,6 @@ const ReportCards = ({
         {domain}
       </p>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
-        {contentsByMember.map(
-          ({ name, renderDetail, renderPercentage }, index) => {
-            let percentage = data[name]?.growth * 100 || 0;
-            const displayTitle = t(`BUSINESS.CHART.${name.toUpperCase()}`);
-            return (
-              <Card
-                key={index}
-                className={cn(
-                  'cursor-pointer gap-2 rounded-[12px] border border-solid p-5 transition-all duration-300 ease-in-out hover:border-primary-300',
-                )}
-              >
-                <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600">
-                  <CardTitle className="text-base font-normal leading-[18px]">
-                    {displayTitle}
-                  </CardTitle>
-                  <Tooltip
-                    title={CHART_TOOLTIP_CONTENT[name]}
-                    contentProps={{
-                      className: 'text-white',
-                    }}
-                    triggerItem={
-                      <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
-                        <Info size={20} className="" />
-                      </div>
-                    }
-                  />
-                </CardHeader>
-                <CardContent className="p-0">
-                  <div className="flex min-h-[48px]  flex-row items-end justify-between space-x-4">
-                    {renderDetail && renderDetail(data[name]?.value || 0)}
-                    {renderPercentage && renderPercentage(percentage)}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          },
-        )}
-      </div>
-      {memberId && (
-        <p
-          className={cn(
-            'flex flex-row items-center gap-2 font-normal text-neutral-800',
-            {
-              hidden: !displayMember,
-            },
-          )}
-        >
-          <User className="text-neutral-800" size={15} />
-          {displayMember}
-        </p>
-      )}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
         {contentsByDomain.map(
           ({ name, renderDetail, renderPercentage }, index) => {
             let percentage = data[name]?.growth * 100 || 0;
@@ -278,6 +228,61 @@ const ReportCards = ({
                   <div className="flex min-h-[48px]  flex-row items-end justify-between space-x-4">
                     {renderDetail &&
                       renderDetail(data[name]?.value || 0, data[name]?.total)}
+                    {renderPercentage && renderPercentage(percentage)}
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          },
+        )}
+      </div>
+      {memberId && (
+        <p
+          className={cn(
+            'flex flex-row items-center gap-2 font-normal text-neutral-800',
+            {
+              hidden: !displayMember,
+            },
+          )}
+        >
+          <User className="text-neutral-800 font-normal" size={15} />
+          {displayMember}
+          <span className="font-light capitalize text-neutral-500">
+            ({t('COMMON.MEMBER')})
+          </span>
+        </p>
+      )}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
+        {contentsByMember.map(
+          ({ name, renderDetail, renderPercentage }, index) => {
+            let percentage = data[name]?.growth * 100 || 0;
+            const displayTitle = t(`BUSINESS.CHART.${name.toUpperCase()}`);
+            return (
+              <Card
+                key={index}
+                className={cn(
+                  'cursor-pointer gap-2 rounded-[12px] border border-solid p-5 transition-all duration-300 ease-in-out hover:border-primary-300',
+                )}
+              >
+                <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600">
+                  <CardTitle className="text-base font-normal leading-[18px]">
+                    {displayTitle}
+                  </CardTitle>
+                  <Tooltip
+                    title={CHART_TOOLTIP_CONTENT[name]}
+                    contentProps={{
+                      className: 'text-white',
+                    }}
+                    triggerItem={
+                      <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
+                        <Info size={20} className="" />
+                      </div>
+                    }
+                  />
+                </CardHeader>
+                <CardContent className="p-0">
+                  <div className="flex min-h-[48px]  flex-row items-end justify-between space-x-4">
+                    {renderDetail && renderDetail(data[name]?.value || 0)}
                     {renderPercentage && renderPercentage(percentage)}
                   </div>
                 </CardContent>

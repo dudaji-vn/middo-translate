@@ -47,7 +47,7 @@ export const trackGuest = async ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          domain: 'http://localhost:3000/',
+          domain,
           ...(trackingId && { trackingId }),
         }),
       },

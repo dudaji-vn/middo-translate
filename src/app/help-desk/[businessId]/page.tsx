@@ -37,8 +37,6 @@ const HelpDeskStartConversationPage = async ({
   if (!allowedDomain && !isRedirectedFromRatePage) {
     // notFound();
   }
-  try {
-  } catch (error) {}
   return (
     <TrackGuest
       extensionId={businessId}
