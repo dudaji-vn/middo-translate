@@ -74,7 +74,8 @@
     "BLOCK": "차단",
     "UNBLOCK": "차단 해제",
     "REJECTED": "거부됨",
-    "PENDING": "대기 중"
+    "PENDING": "대기 중",
+    "MEMBER": "구성원"
   },
   "MESSAGE": {
     "ERROR": {
