@@ -1,6 +1,7 @@
 'use client'
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/data-display/accordion";
+import MediaLightBox from "@/components/media-light-box/media-light-box";
 import { cn } from "@/utils/cn";
 import Image from "next/image";
  
@@ -16,6 +17,9 @@ export default function UserGuide() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
+    const [index, setIndex] = useState<number | undefined>()
+    const [imagePreview, setImagePreview] = useState<string | undefined>()
+
     const [guide, setGuide] = useState<{
         guide: string;
         guide_1: string;
@@ -54,6 +58,11 @@ export default function UserGuide() {
         // let className = param + value;
     }
 
+    const onPreviewImage = (url: string) => {
+        setImagePreview(url);
+        setIndex(0);
+    }
+
     const guides = [
         {
             id: 'what-is-middo',
@@ -69,6 +78,7 @@ export default function UserGuide() {
             id: 'how-to-use-translation',
             title: "How to use Translation",
             content: <MultiAccordion
+            onPreviewImage={onPreviewImage}
             guide={guide}
             onChangeAccordion={onChangeAccordion}
             data={[
@@ -230,6 +240,7 @@ export default function UserGuide() {
             id: 'how-to-use-conversation',
             title: "How to use Conversation?",
             content: <MultiAccordion 
+                onPreviewImage={onPreviewImage}
                 guide={guide}
                 onChangeAccordion={onChangeAccordion}
                 data={[
@@ -573,6 +584,7 @@ export default function UserGuide() {
             id: 'how-to-embed-conversation-to-your-website',
             title: "How to embed Conversation to your website?",
             content: <MultiStepAccordion 
+            onPreviewImage={onPreviewImage}
             steps={[
                 {
                     id: 'step-1-create-a-space',
@@ -639,7 +651,7 @@ export default function UserGuide() {
                                     content: <div>
                                         <p>If you have access to the HTML source code of your website, you can directly paste the embed code there. For example:</p>
                                         <div className="w-full mt-2">
-                                            <Image src="/landing-page/3.i.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
+                                            <Image onClick={()=>onPreviewImage('/landing-page/3.i.png')} src="/landing-page/3.i.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
                                         </div>
                                     </div>
                                 },
@@ -654,13 +666,13 @@ export default function UserGuide() {
                                             <li>
                                                 <span>Click on “Pages”</span>
                                                 <div className="w-full mt-2">
-                                                    <Image src="/landing-page/3.j.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
+                                                    <Image onClick={()=>onPreviewImage('/landing-page/3.j.png')} src="/landing-page/3.j.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
                                                 </div>
                                             </li>
                                             <li>
                                                 <span>Click on the page you want your chat, or click on &quot;Add new page”</span>
                                                 <div className="w-full mt-2">
-                                                    <Image src="/landing-page/3.k.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
+                                                    <Image onClick={()=>onPreviewImage('/landing-page/3.k.png')} src="/landing-page/3.k.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
                                                 </div>
                                             </li>
 
@@ -670,19 +682,19 @@ export default function UserGuide() {
                                             <li>
                                                 <span>Click on the &quot;+&quot; icon.</span>
                                                 <div className="w-full mt-2">
-                                                    <Image src="/landing-page/3.l.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
+                                                    <Image onClick={()=>onPreviewImage('/landing-page/3.l.png')} src="/landing-page/3.l.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
                                                 </div>
                                             </li>
                                             <li>
                                                 <span>Search for &quot;Custom HTML&quot; and click it</span>
                                                 <div className="w-full mt-2">
-                                                    <Image src="/landing-page/3.m.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
+                                                    <Image onClick={()=>onPreviewImage('/landing-page/3.m.png')} src="/landing-page/3.m.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
                                                 </div>
                                             </li>
                                             <li>
                                                 <span>Paste your Code inside the HTML block. </span>
                                                 <div className="w-full mt-2">
-                                                    <Image src="/landing-page/3.n.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
+                                                    <Image onClick={()=>onPreviewImage('/landing-page/3.n.png')} src="/landing-page/3.n.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
                                                 </div>
                                             </li>
                                         </ul>
@@ -707,6 +719,7 @@ export default function UserGuide() {
             id: 'how-to-manage-your-script-conversation',
             title: "How to manage your Script Conversation?",
             content: <MultiStepAccordion 
+            onPreviewImage={onPreviewImage}
             guide={guide}
             paragraph={<p>Script Conversation guides for representatives to get the ball rolling in conversations. But Script Conversation can also double up as proactive messages in high-performing pages. You can use these messages to start conversations with website visitors even before they reach out to you.</p>}
             steps={[
@@ -747,7 +760,7 @@ export default function UserGuide() {
         {
             id: 'why-i-can-not-reply-to-a-conversation',
             title: "Why I can NOT reply to a conversation?",
-            content: <WhyCanNotReplyConversation />
+            content: <WhyCanNotReplyConversation onPreviewImage={onPreviewImage}/>
         }
     ]
 
@@ -786,13 +799,14 @@ export default function UserGuide() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return  <Accordion type="single" collapsible className="flex flex-col gap-5"
+    return  <>
+    <Accordion type="single" collapsible className="flex flex-col gap-5"
         value={guide.guide}
         onValueChange={(val: string)=>onChangeAccordion(val, 0)}>
         {guides.map(guide => (
             <AccordionItem key={guide.id} value={guide.id} id={'guide' + guide.id}>
                 <AccordionTrigger 
-                className={cn('rounded-xl bg-[#fafafa] px-5 text-xl hover:no-underline text-left', 'guide' + guide.id)}>
+                className={cn('rounded-xl bg-[#fafafa] px-5 text-base md:text-xl hover:no-underline text-left ', 'guide' + guide.id)}>
                     {guide.title}
                 </AccordionTrigger>
                 <AccordionContent className="px-5 py-5 text-base">
@@ -801,6 +815,19 @@ export default function UserGuide() {
             </AccordionItem>
         ))}
   </Accordion>
+    <MediaLightBox  
+        index={index} 
+        close={()=>{
+            setIndex(undefined)
+        }}
+        files={[
+            {
+                url: imagePreview || '',
+                type: "image"
+            }
+        ]}
+    />
+    </>
 }
 
 const WhatIsMiddo = () => {
@@ -833,7 +860,9 @@ const WhatIsESLTranslation = () => {
     </p>
 }
 
-const WhyCanNotReplyConversation = () => {
+const WhyCanNotReplyConversation = ({onPreviewImage}: {
+    onPreviewImage: (image: string) => void
+}) => {
     return <div>
         <p>Sometimes, you will can NOT reply to a conversation if</p>
         <ul className="ml-5 mt-5 flex list-disc flex-col gap-3">
@@ -841,7 +870,7 @@ const WhyCanNotReplyConversation = () => {
             <li><span className="font-semibold">In Extension page:</span> The user you want to send message has left the conversation, or this conversation is timed out</li>
         </ul>
         <div className="w-full mt-2">
-            <Image src="/landing-page/5.a.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
+            <Image onClick={()=>onPreviewImage('/landing-page/5.a.png')} src="/landing-page/5.a.png" alt="" width={1000} height={500} className="block mx-auto w-full"/>
         </div>
     </div>
 }
@@ -863,6 +892,7 @@ interface MultiAccordion {
 interface MultiAccordionProps {
     data: MultiAccordion[];
     onChangeAccordion: (value: string, level: 0 | 1 | 2) => void;
+    onPreviewImage: (image: string) => void;
     guide: {
         guide: string;
         guide_1: string;
@@ -870,7 +900,7 @@ interface MultiAccordionProps {
     };
 }
 
-const MultiAccordion = ({data, onChangeAccordion, guide} : MultiAccordionProps) => {
+const MultiAccordion = ({data, onChangeAccordion, guide, onPreviewImage} : MultiAccordionProps) => {
     return <Accordion
           type="single"
           collapsible
@@ -881,7 +911,7 @@ const MultiAccordion = ({data, onChangeAccordion, guide} : MultiAccordionProps) 
         {data.map((item) => {
             return <AccordionItem value={item.id} key={item.id} id={'guide_1' + item.id}>
                 <AccordionTrigger 
-                className={cn('rounded-xl bg-primary-100 px-5 text-lg hover:no-underline text-left',
+                className={cn('rounded-xl bg-primary-100 px-5 text-base md:text-lg hover:no-underline text-left',
                     'guide_1' + item.id
                 )}>
                     {item.title}
@@ -890,7 +920,7 @@ const MultiAccordion = ({data, onChangeAccordion, guide} : MultiAccordionProps) 
                     {item?.header}
                     <div className="mt-5 flex justify-start gap-10 flex-col md:flex-row">
                         <div className="md:w-1/2">
-                            <Image src={item.image} alt="" width={500} height={500} />
+                            <Image onClick={()=>onPreviewImage(item.image)} src={item.image} alt="" width={500} height={500} />
                         </div>
                         <div className="flex md:w-1/2 flex-col gap-3">
                             <Accordion
@@ -903,7 +933,7 @@ const MultiAccordion = ({data, onChangeAccordion, guide} : MultiAccordionProps) 
                                 {item.subItems.map((subItem, index) => {
                                     return <AccordionItem value={subItem.id} key={subItem.id}>
                                         <AccordionTrigger 
-                                        className={cn('rounded-xl border border-neutral-50 bg-white px-5 md:hover:no-underline text-left', 'guide_2' + subItem.id)}>
+                                        className={cn('rounded-xl border border-neutral-50 bg-white px-5 hover:no-underline text-left', 'guide_2' + subItem.id)}>
                                             {index + 1} . {subItem.title}
                                         </AccordionTrigger>
                                         <AccordionContent className="px-2 py-2 text-base">
@@ -934,6 +964,7 @@ interface MultiStepAccordion {
         content?: React.ReactNode
     }[],
     onChangeAccordion: (value: string, level: 0 | 1 | 2) => void;
+    onPreviewImage: (image: string) => void;
     guide: {
         guide: string;
         guide_1: string;
@@ -941,7 +972,7 @@ interface MultiStepAccordion {
     };
 }
 
-const MultiStepAccordion = ({paragraph, steps, onChangeAccordion, guide} : MultiStepAccordion) => {
+const MultiStepAccordion = ({paragraph, steps, onChangeAccordion, onPreviewImage,  guide} : MultiStepAccordion) => {
     return <div>
         <div className="mb-5">
             {paragraph}
@@ -956,7 +987,7 @@ const MultiStepAccordion = ({paragraph, steps, onChangeAccordion, guide} : Multi
             {steps.map(step => {
                 return <AccordionItem value={step.id} key={step.id}>
                         <AccordionTrigger 
-                            className={cn('rounded-xl bg-primary-100 px-5 text-lg md:hover:no-underline text-left',
+                            className={cn('rounded-xl bg-primary-100 px-5 text-base md:text-lg hover:no-underline text-left',
                             'guide_1' + step.id)}
                         >
                             {step.title}
@@ -967,7 +998,7 @@ const MultiStepAccordion = ({paragraph, steps, onChangeAccordion, guide} : Multi
                                     return <div key={item.image}>
                                         {item.content}
                                         <div className="w-full mt-2">
-                                            <Image src={item.image} alt="" width={1000} height={500} className="block mx-auto w-full"/>
+                                            <Image onClick={()=>onPreviewImage(item.image)} src={item.image} alt="" width={1000} height={500} className="block mx-auto w-full"/>
                                         </div>
                                     </div>
                                 })
@@ -1007,7 +1038,7 @@ const ContentMultiStep = ({steps, onChangeAccordion, guide}: ContentMultiStepPro
             {steps.map(step => {
                 return <AccordionItem value={step.id} key={step.id}>
                         <AccordionTrigger 
-                            className={cn('rounded-xl border border-neutral-50 bg-white px-5 md:hover:no-underline text-left',
+                            className={cn('rounded-xl border border-neutral-50 bg-white px-5 hover:no-underline text-left',
                             'guide_2' + step.id)}
                         >
                             {step.title}
