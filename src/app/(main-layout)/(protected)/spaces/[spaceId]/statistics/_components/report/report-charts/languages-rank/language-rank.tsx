@@ -79,6 +79,8 @@ const LanguageRank = ({
   const toggleShowOthers = () => {
     setShowOthers(!showOthers);
   };
+  const isEmpty = dataSlice.length === 0;
+  if (isEmpty) return null;
   return (
     <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
       <div className="flex flex-row items-center justify-between">

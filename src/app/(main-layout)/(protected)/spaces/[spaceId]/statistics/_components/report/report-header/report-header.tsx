@@ -13,7 +13,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
   const { t } = useTranslation('common');
 
   return (
-    <>
+    <section className="relative w-full space-y-4 px-4 md:px-10">
       <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800">
         {t('BUSINESS.REPORT')}
       </Typography>
@@ -22,7 +22,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
         <ReportPickerMember />
         <ReportPickerTime />
       </div>
-    </>
+    </section>
   );
 };
 
