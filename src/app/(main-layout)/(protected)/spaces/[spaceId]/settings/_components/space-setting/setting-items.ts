@@ -26,7 +26,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
   roles: Record<ERoleActions, Array<ESPaceRoles>>;
 }> = [
   {
-    label: 'Members Management',
+    label: 'EXTENSION.SETTING.MEMBERS_MANAGEMENT',
     name: 'members',
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -35,7 +35,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
     },
   },
   {
-    label: 'Tags Management',
+    label: 'EXTENSION.SETTING.TAGS_MANAGEMENT',
     name: 'tags',
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -44,7 +44,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
     },
   },
   {
-    label: 'Conversation Extension',
+    label: 'EXTENSION.SETTING.CONVERSATION_EXTENSION',
     name: 'extension',
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],

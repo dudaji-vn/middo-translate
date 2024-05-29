@@ -6,7 +6,7 @@ import { createExtensionSchema } from '@/configs/yup-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import React, { use, useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { createExtension } from '@/services/extension.service';
@@ -22,10 +22,7 @@ import StepWrapper from './steps/step-wrapper';
 import StartingMessageStep from './steps/starting-message-step';
 import CustomChatThemeStep from './steps/custom-chat-theme-step';
 import AddingDomainsStep from './steps/adding-domains-step';
-import { isEqual, set } from 'lodash';
-import { FlowNode } from './steps/script-chat-flow/design-script-chat-flow';
 import { translateWithDetection } from '@/services/languages.service';
-import { Edge } from 'reactflow';
 import { getUserSpaceRole } from '../space-setting/role.util';
 import {
   ESPaceRoles,
@@ -35,9 +32,6 @@ import { TSpace } from '../../../_components/business-spaces';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { TChatScript } from '@/types/scripts.type';
-import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-conversation-scripts';
-import { ChatScript } from '../../../scripts/_components/column-def/scripts-columns';
-import { color } from 'framer-motion';
 
 type TFormValues = {
   addingDomain: string;

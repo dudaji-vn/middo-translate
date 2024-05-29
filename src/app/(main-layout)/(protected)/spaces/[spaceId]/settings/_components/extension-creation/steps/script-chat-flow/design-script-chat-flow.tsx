@@ -27,6 +27,7 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 import { initialChatFlowNodes } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/script-creation/schema';
 import { type TScriptFormValues } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/script-creation/create-chat-script-modal';
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 export type FlowItemType =
   | 'button'
@@ -58,6 +59,7 @@ const DesignScriptChatFlow = ({
   viewOnly?: boolean;
 }) => {
   const control = useFormContext();
+  const { t } = useTranslation('common');
   const { setValue, watch, trigger, formState } = control;
   const { spaceId } = useBusinessNavigationData();
   const { errors } = formState;
@@ -212,7 +214,9 @@ const DesignScriptChatFlow = ({
           color={'secondary'}
           className="flex flex-row gap-2"
         >
-          Preview <Eye />
+          {t('COMMON.PREVIEW')}
+          &nbsp;
+          <Eye />
         </Button>
       </div>
       <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200">

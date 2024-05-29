@@ -20,7 +20,7 @@ import {
   ESPaceRoles,
 } from '../../../settings/_components/space-setting/setting-items';
 import { getUserSpaceRole } from '../../../settings/_components/space-setting/role.util';
-import { ChatScript, scriptsColumns } from '../column-def/scripts-columns';
+import { ChatScript, makeScriptsColumns } from '../column-def/scripts-columns';
 import CreateOrEditChatScriptModal from '../script-creation/create-chat-script-modal';
 import DeleteScriptModal from '../script-deletion/delete-script-modal';
 import { useParams } from 'next/dist/client/components/navigation';
@@ -115,7 +115,8 @@ const ScriptsList = ({
             },
             getRowId: (row) => row._id,
           }}
-          columns={scriptsColumns({
+          columns={makeScriptsColumns({
+            t,
             onEdit,
             onView,
             enableDeletion,

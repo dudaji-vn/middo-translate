@@ -1,7 +1,14 @@
 {
   "COMMON": {
+    "INVITE": "초대",
+    "APPLY": "적용",
+    "PREVIEW": "미리보기",
+    "FAILED_TO": "{{action}}할 수 없습니다",
+    "SUCCESS_TO": "{{action}}되었습니다",
+    "NO_DATA": "데이터 없음",
     "OFFLINE": "오프라인",
     "ONLINE": "온라인",
+    "IN_USE": "사용 중",
     "INPUT_YOUR_TEXT_HERE": "여기에 텍스트 입력",
     "PLEASE_SPEAK": "말씀해주세요",
     "CLEAR_ALL": "모두 지우기",
@@ -9,6 +16,7 @@
     "SAVE": "저장",
     "CONFIRM": "확인",
     "CREATE": "생성",
+    "CREATED_BY": "생성자",
     "ADD": "추가",
     "SHARE": "공유",
     "LEAVE": "나가기",
@@ -75,7 +83,17 @@
     "UNBLOCK": "차단 해제",
     "REJECTED": "거부됨",
     "PENDING": "대기 중",
-    "MEMBER": "구성원"
+    "MEMBER": "구성원",
+    "SPACE": "공간",
+    "TIME": {
+      "CREATED_ON": "생성일",
+      "UPDATED_ON": "업데이트일",
+      "DELETED_ON": "삭제일",
+      "LAST_WEEK": "지난 주",
+      "LAST_MONTH": "지난 달",
+      "LAST_YEAR": "작년",
+      "CUSTOM": "사용자 정의"
+    }
   },
   "MESSAGE": {
     "ERROR": {
@@ -416,6 +434,15 @@
     "RESTRICT_MESSAGE": "이 기능을 활성화하면 알 수 없는 발신자는 문자 메시지만 보낼 수 있으며 해당 메시지는 '대기 중' 탭으로 이동됩니다."
   },
   "MODAL": {
+    "CREATE_SPACE": {
+      "TITLE": "<span class='text-primary-500-main'>당신의 공간</span>에 정보를 제공하세요",
+      "DESCRIPTION": "이 공간에 이름을 지정하고 공간 아바타 또는 회사 로고를 추가하여 당신의 업무를 쉽게 인식할 수 있도록 도와주세요 <span class='font-light'>(선택 사항)</span>."
+    },
+    "DELETE_SPACE": {
+      "TITLE": "공간 삭제",
+      "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
+      "CONFIRM": "공간 삭제"
+    },
     "SIGN_OUT": {
       "TITLE": "로그아웃 하시겠습니까?",
       "DESCRIPTION": "앱에서 로그아웃되며 다시 로그인해야 합니다."
@@ -486,6 +513,11 @@
       "TITLE": "방 나가기",
       "DESCRIPTION": "이 방의 메시지를 더 이상 볼 수 없게 됩니다. 정말 방을 나가시겠습니까?"
     },
+    "CHANGE_ROOM_STATUS": {
+      "TITLE": "{{action}} 대화",
+      "DESCRIPTION": "이 대화를 {{action}}하시겠습니까?",
+      "FAILED_TO": "대화를 {{action}}하는 데 실패했습니다"
+    },
     "NOTIFICATION": {
       "ON": {
         "TITLE": "알림 켜기",
@@ -519,6 +551,7 @@
     }
   },
   "FILTERS": {
+    "FILTER_BY": "필터 기준",
     "DOMAINS": "도메인",
     "COUNTRIES": "국가",
     "TAGS": "태그",
@@ -572,7 +605,26 @@
     "START_STOP_SCREEN_DOODLE": "화면 드로잉 시작/정지",
     "TOGGLE_LIVE_CAPTION": "라이브 자막 보기/숨기기"
   },
-  "BUSINESS": {
+  "EXTENSION": {
+    "ALL_DOMAINS": "모든 도메인",
+    "ALL_MEMBERS": "모든 구성원",
+    "SPACE": {
+      "WELCOME": "안녕하세요, 환영합니다",
+      "ALL_SPACE": "모든 공간",
+      "JOINED_SPACE": "가입한 공간",
+      "MY_SPACE": "내 공간",
+      "CREATE_SPACE": "새로운 공간 만들기",
+      "SPACE_INFOR": "공간 정보"
+    },
+    "BREADCRUMB": {
+      "HOME": "홈"
+    },
+    "TAG": {
+      "SEARCH": "태그 검색",
+      "CREATE": "새로운 태그 만들기",
+      "EDIT": "태그 수정",
+      "DELETE": "태그 삭제"
+    },
     "CONVERSATIONS": "일반",
     "COMPLETED": "완료됨",
     "ARCHIVED": "보관됨",
@@ -585,21 +637,64 @@
     "CHART": {
       "CLIENT": "신규 고객",
       "LANGUAGERANK": "대화 언어",
-      "NEW_VISITOR": "신규 방문자",
+      "NEWVISITOR": "신규 방문자",
       "RESPONSETIME": "응답 시간",
       "OPENEDCONVERSATION": "열린 대화",
       "DROPRATE": "드랍 비율",
       "RESPONSEDMESSAGE": "응답 메시지",
       "CUSTOMERRATING": "고객 평가"
     },
+    "SETTING": {
+      "TAGS_MANAGEMENT": "태그 관리",
+      "MEMBERS_MANAGEMENT": "멤버 관리",
+      "CONVERSATION_EXTENSION": "대화 확장"
+    },
     "SCRIPT": {
-      "PAGE_TITLE": "채팅 스크립트",
-      "SEARCH": "검색"
+      "PAGE_TITLE": "스크립트 관리",
+      "SEARCH": "스크립트 검색",
+      "ADD_SCRIPT": "새 스크립트 추가",
+      "EDIT_SCRIPT": "스크립트 수정",
+      "DELETE_SCRIPT": "스크립트 삭제",
+      "VIEW_SCRIPT": "스크립트 보기",
+      "PREVIEW_FLOW": "흐름 미리 보기",
+      "NO_SCRIPT": "스크립트를 찾을 수 없습니다",
+      "NAME": "이름",
+      "DESCRIPTION": "설명",
+      "CREATE_BY": "작성자",
+      "CREATE_ON": "작성 날짜",
+      "LAST_EDITED": "최근 편집",
+      "ACTIONS": "조치"
     },
     "CLIENT": {
-      "PAGE_TITLE": "고객",
-      "SEARCH": "검색",
-      "EXPORT_XLSX": "XLSX로 내보내기"
+      "PAGE_TITLE": "고객 관리",
+      "SEARCH": "고객 검색",
+      "EXPORT_XLSX": "XLSX로 내보내기",
+      "NAME": "이름",
+      "EMAIL": "이메일",
+      "PHONE": "전화번호",
+      "FIRST_CONNECT_DATE": "첫 연결 날짜",
+      "LAST_CONNECT_DATE": "마지막 연결 날짜",
+      "NO_CLIENT": "고객을 찾을 수 없습니다"
+    },
+    "MEMBER": {
+      "YOU": "나",
+      "SEARCH": "회원 검색",
+      "NAME": "이름",
+      "EMAIL": "이메일",
+      "STATUS": "상태",
+      "PHONE": "전화번호",
+      "ROLE": "역할",
+      "ACTIONS": "조치",
+      "NO_MEMBER": "회원을 찾을 수 없습니다",
+      "NO_ADMIN": "관리자를 찾을 수 없습니다",
+      "INVITE_MEMBER": "회원 초대"
+    },
+    "ROLE": {
+      "ADMIN": "관리자",
+      "MEMBER": "회원",
+      "VIEWER": "뷰어",
+      "ADMIN_ROLE": "관리자 역할",
+      "MEMBER_ROLE": "회원 역할"
     }
   },
   "DESKTOP_LOGIN": {

@@ -10,6 +10,7 @@ import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useTranslation } from 'react-i18next';
 
 const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
   variants: {
@@ -21,8 +22,8 @@ const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
   },
 });
 const MAPPED_TAGS = {
-  my: 'My spaces',
-  joined: 'Joined spaces',
+  my: 'EXTENSION.SPACE.MY_SPACE',
+  joined: 'EXTENSION.SPACE.JOINED_SPACE',
 };
 const Space = ({
   data: { name, members = [], totalNewMessages = 0, createdAt, avatar, _id },
@@ -33,6 +34,7 @@ const Space = ({
   tag: 'my' | 'joined';
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const hasNotification = totalNewMessages > 0;
+  const { t } = useTranslation('common');
   const router = useRouter();
   return (
     <Card
@@ -64,9 +66,11 @@ const Space = ({
         />
       </div>
       <CardHeader className="!m-0 flex flex-row items-center justify-between p-0 text-neutral-600">
-        <Badge className={tagsVariants({ tag })}>{MAPPED_TAGS[tag]}</Badge>
+        <Badge className={tagsVariants({ tag })}>{t(MAPPED_TAGS[tag])}</Badge>
         <span className="text-sm font-light leading-[18px] text-neutral-600">
-          <span className="max-[320px]:hidden">Created on:</span>{' '}
+          <span className="max-[320px]:hidden">
+            {t('COMMON.TIME.CREATED_ON')}
+          </span>
           {` ${moment(createdAt).format('DD/MM/YYYY')}`}
         </span>
       </CardHeader>
@@ -81,7 +85,7 @@ const Space = ({
           <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] sm:max-w-44  xl:max-w-56">
             {name}
           </CardTitle>
-          <span className="text-sm font-light leading-[18px] text-neutral-600">{`${members?.length} members`}</span>
+          <span className="text-sm font-light leading-[18px] text-neutral-600">{`${members?.length} ${t('COMMON.MEMBER')}`}</span>
           <Button
             size={'xs'}
             shape={'square'}
@@ -97,7 +101,7 @@ const Space = ({
                 : 'invisible'
             }
             startIcon={<MessageSquare className="h-4 w-4" />}
-          >{`${totalNewMessages} new conversations`}</Button>
+          >{`${totalNewMessages} ${t('TOOL_TIP.NEW_CONVERSATION')}`}</Button>
         </div>
       </CardContent>
     </Card>

@@ -15,12 +15,14 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import toast from 'react-hot-toast';
 import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import { getRoomsFilterOptionsFromSpace } from '@/utils/get-rooms-filter-options';
+import { useTranslation } from 'react-i18next';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
   const { data, isLoading } = useGetSpaceData({ spaceId });
   const { isOnBusinessChat } = useBusinessNavigationData();
   const { setFilterOptions } = useSpaceInboxFilterStore();
+  const { t } = useTranslation('common');
   const pathname = usePathname();
   const router = useRouter();
 
@@ -28,7 +30,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const breadcrumbItems = useMemo(() => {
     return [
       {
-        label: 'Home',
+        label: t('EXTENSION.BREADCRUMB.HOME'),
         path: '/spaces',
         href: '/spaces',
         icon: <HomeIcon />,
@@ -41,7 +43,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
         href: `/spaces/${spaceId}/conversations`,
       },
     ].filter((item) => pathname?.includes(item.path));
-  }, [pathname, data, spaceId]);
+  }, [pathname, data, spaceId, t]);
 
   useEffect(() => {
     if (data) {

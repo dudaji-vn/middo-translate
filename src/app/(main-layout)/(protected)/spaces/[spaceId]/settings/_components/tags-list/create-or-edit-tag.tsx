@@ -62,7 +62,7 @@ export const CreateOrEditTag = ({
 }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
-  const action = initTag ? 'Edit' : 'Create';
+  const action = initTag ? t('EXTENSION.TAG.EDIT') : t('EXTENSION.TAG.CREATE');
   const methods = useForm<TCreateOrEditTagFormValues>({
     mode: 'onBlur',
     resolver: zodResolver(createOrEditTagSchema),
@@ -100,21 +100,19 @@ export const CreateOrEditTag = ({
         color,
         name,
         tagId: initTag?._id,
-      })
-        .then((res) => {
-          if (res.data) {
-            toast.success(`${action} tag successfully`);
-            router.refresh();
-            onCreateSuccess && onCreateSuccess(res.data);
-            onOpenChange(false);
-            return;
-          }
-        })
-        .catch((err) => {
-          toast.error(`Error on ${action} tag. Please try again`);
-        });
+      }).then((res) => {
+        if (res.data) {
+          toast.success(
+            t(`COMMON.SUCCESS_TO`, { action: action.toLowerCase() }),
+          );
+          router.refresh();
+          onCreateSuccess && onCreateSuccess(res.data);
+          onOpenChange(false);
+          return;
+        }
+      });
     } catch (error) {
-      toast.error(`Error on ${action} tag. Please try again`);
+      toast.error(t(`COMMON.FAILED_TO`, { action: action.toLowerCase() }));
       console.error(error);
     }
   };
@@ -142,7 +140,7 @@ export const CreateOrEditTag = ({
         <Pen size={15} />
       </Button.Icon>
       <ConfirmAlertModal
-        title={`${action} Tag`}
+        title={t(`${action}`)}
         open={open}
         onOpenChange={onOpenChange}
         footerProps={{
@@ -174,7 +172,7 @@ export const CreateOrEditTag = ({
                   shape={'square'}
                   size={'sm'}
                 >
-                  Cancel
+                  {t('COMMON.CANCEL')}
                 </Button>
                 <Button
                   type="button"
@@ -188,7 +186,7 @@ export const CreateOrEditTag = ({
                   loading={isSubmitting}
                   disabled={!submitAble}
                 >
-                  Save
+                  {t('COMMON.SAVE')}
                 </Button>
               </div>
             </div>

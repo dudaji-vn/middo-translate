@@ -86,7 +86,7 @@ const BusinessSidebarContent = ({
         const isSelected = selectedItem?.title === title;
         const displayTitle = shrink
           ? title
-          : t(`business.${title}`.toUpperCase());
+          : t(`extension.${title}`.toUpperCase());
         return (
           <div key={index} className="size-fit p-2">
             <Button

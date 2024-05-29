@@ -167,7 +167,7 @@ const RoomAssignTag = ({
                 )}
                 onClick={onRedirectToTagsManagement}
               >
-                Tags management
+                {t('EXTENSION.SETTING.TAGS_MANAGEMENT')}
               </div>
             </div>
           </div>

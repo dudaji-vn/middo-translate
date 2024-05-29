@@ -14,12 +14,13 @@ import {
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { DataTable, DataTableProps } from '@/components/ui/data-table';
-import { Member, membersColumns } from './members-columns';
+import { Member, makeMembersColumns } from './members-columns';
 import toast from 'react-hot-toast';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 import { isEmpty } from 'lodash';
 import { ESPaceRoles } from '../../../settings/_components/space-setting/setting-items';
+import { useTranslation } from 'react-i18next';
 
 export enum ESPaceMemberStatus {
   Invited = 'invited',
@@ -75,6 +76,7 @@ const InviteMembers = ({
   ...props
 }: InviteMembersProps) => {
   const currentUser = useAuthStore((state) => state.user);
+  const { t } = useTranslation('common');
   const addingSchema = z.object({
     email: z
       .string()
@@ -200,7 +202,7 @@ const InviteMembers = ({
         <div className="flex w-full flex-row items-start justify-between gap-3">
           <RHFInputField
             name="email"
-            formLabel="Email"
+            formLabel={t('EXTENSION.MEMBER.EMAIL')}
             formLabelProps={{
               className: 'text-neutral-600',
             }}
@@ -214,7 +216,9 @@ const InviteMembers = ({
           />
           <DropdownMenu>
             <DropdownMenuTrigger className="flex flex-col gap-3 py-2">
-              <FormLabel className="text-neutral-600">Role</FormLabel>
+              <FormLabel className="text-neutral-600">
+                {t('EXTENSION.MEMBER.ROLE')}
+              </FormLabel>
               <Button
                 endIcon={<ChevronDown className="h-4 w-4" />}
                 shape={'square'}
@@ -222,9 +226,13 @@ const InviteMembers = ({
                 disabled={formAdding.formState.isSubmitting}
                 color={'default'}
                 size={'xs'}
-                className="px-4 capitalize"
+                className="w-40 px-4 capitalize"
               >
-                {formAdding.watch('role') || 'Select a role'}
+                {formAdding.watch('role')
+                  ? t(
+                      `EXTENSION.ROLE.${formAdding.watch('role')?.toUpperCase()}`,
+                    )
+                  : 'Select a role'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
@@ -237,7 +245,7 @@ const InviteMembers = ({
                   className="flex flex-row gap-2 capitalize text-neutral-600"
                 >
                   {option.icon}
-                  {option.name}
+                  {t(`EXTENSION.ROLE.${option.name?.toUpperCase()}`)}
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
@@ -253,7 +261,7 @@ const InviteMembers = ({
               className="h-10"
               disabled={disabledInviteBtn as boolean}
             >
-              Add
+              {t('COMMON.ADD')}
             </Button>
           </div>
         </div>
@@ -283,7 +291,8 @@ const InviteMembers = ({
           rowProps={{
             className: 'rounded-full bg-primary-100',
           }}
-          columns={membersColumns({
+          columns={makeMembersColumns({
+            t,
             onDelete: (member) => {
               setMembers(
                 invitedMembers.filter((m) => m.email !== member.email),

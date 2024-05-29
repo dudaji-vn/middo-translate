@@ -24,6 +24,7 @@ import { FLOW_KEYS } from '../../../settings/_components/extension-creation/step
 import { useCreateOrEditScript } from '@/features/conversation-scripts/hooks/use-create-or-edit-script';
 import { TChatScript } from '@/types/scripts.type';
 import { Typography } from '@/components/data-display';
+import { useTranslation } from 'react-i18next';
 
 export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
@@ -39,6 +40,7 @@ const CreateOrEditChatScriptModal = ({
   viewOnly?: boolean;
 }) => {
   const spaceId = useParams()?.spaceId as string;
+  const { t } = useTranslation('common');
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditScript();
   const [isEditing, scriptId] = useMemo(() => {
     return [Boolean(currentScript), currentScript?._id];
@@ -145,9 +147,9 @@ const CreateOrEditChatScriptModal = ({
                 loading={isLoading || isSubmitting}
                 type="submit"
                 onClick={() => handleSubmit(submit)()}
-                className={viewOnly ? 'hidden' : ''}
+                className={viewOnly ? 'hidden' : 'w-32'}
               >
-                Save
+                {t('COMMON.SAVE')}
               </Button>
               <AlertDialogCancel className="flex-none p-0">
                 <Button
@@ -156,7 +158,7 @@ const CreateOrEditChatScriptModal = ({
                   size={'md'}
                   disabled={isSubmitting}
                 >
-                  {viewOnly ? 'Close' : 'Cancel'}
+                  {viewOnly ? t('COMMON.CLOSE') : t('COMMON.CANCEL')}
                 </Button>
               </AlertDialogCancel>
             </AlertDialogHeader>

@@ -1,4 +1,3 @@
-
 import { Room, RoomStatus } from '../types';
 import { useChangeStatusConversation } from '../hooks/use-change-status-conversation';
 import { useMemo, useState } from 'react';
@@ -8,7 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import toast from 'react-hot-toast';
-
+import { useTranslation } from 'react-i18next';
 
 export interface RoomModalChangeStatusProps {
   id: Room['_id'];
@@ -16,36 +15,50 @@ export interface RoomModalChangeStatusProps {
   actionName: string;
 }
 const MAPPED_ACTION_STATUS: Record<string, RoomStatus> = {
-  'archive': 'archived',
-  'unarchive': 'active',
-}
+  archive: 'archived',
+  unarchive: 'active',
+};
 
-
-export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalChangeStatusProps) => {
+export const RoomModalChangeStatus = ({
+  id,
+  actionName,
+  onClosed,
+}: RoomModalChangeStatusProps) => {
   const { mutateAsync, isLoading } = useChangeStatusConversation();
   const [open, setOpen] = useState(true);
   const { businessConversationType } = useBusinessNavigationData();
+  const { t } = useTranslation('common');
   const router = useRouter();
   const params = useParams();
-  const {
-    modalTitle,
-    modalDescription,
-  } = useMemo(() => {
+  const { modalTitle, modalDescription } = useMemo(() => {
     setOpen(true);
     return {
-      modalTitle: `${actionName} Conversation`,
-      modalDescription: `Are you sure to ${actionName} this conversation?`,
-    }
+      modalTitle: t(`MODAL.CHANGE_ROOM_STATUS.TITLE`, {
+        action: t(`COMMON.${actionName?.toUpperCase()}`),
+      }),
+      modalDescription: t(`MODAL.CHANGE_ROOM_STATUS.DESCRIPTION`, {
+        action: t(`COMMON.${actionName?.toUpperCase()}`),
+      }),
+    };
   }, [actionName, id]);
   const onConfirm = async () => {
-    mutateAsync({ roomId: id, status: MAPPED_ACTION_STATUS[actionName] }).then(() => {
-      router.push(`${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}`);
-    }).catch(() => {
-      toast.error(`Failed to ${actionName} conversation!`);
-    }).finally(() => {
-      setOpen(false);
-    });
-  }
+    mutateAsync({ roomId: id, status: MAPPED_ACTION_STATUS[actionName] })
+      .then(() => {
+        router.push(
+          `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}`,
+        );
+      })
+      .catch(() => {
+        toast.error(
+          t('MODAL.CHANGE_ROOM_STATUS.FAILED_TO', {
+            action: t(`COMMON.${actionName?.toUpperCase()}`),
+          }),
+        );
+      })
+      .finally(() => {
+        setOpen(false);
+      });
+  };
 
   if (!MAPPED_ACTION_STATUS[actionName]) return null;
   return (
@@ -55,9 +68,12 @@ export const RoomModalChangeStatus = ({ id, actionName, onClosed }: RoomModalCha
       open={open}
       onConfirm={onConfirm}
       titleProps={{ className: 'capitalize' }}
-      onCancel={() => { onClosed?.(); }}
+      onCancel={() => {
+        onClosed?.();
+      }}
       actionProps={{
-        className: 'bg-primary-500-main text-white active:!bg-primary-400 md:hover:bg-primary-600',
+        className:
+          'bg-primary-500-main text-white active:!bg-primary-400 md:hover:bg-primary-600',
       }}
       isLoading={isLoading}
     />
