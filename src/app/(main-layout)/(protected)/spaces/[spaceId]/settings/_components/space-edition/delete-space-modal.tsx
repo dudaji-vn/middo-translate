@@ -68,9 +68,14 @@ export const DeleteSpaceModal = ({
       >
         <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
           <div className="flex w-full flex-col gap-3">
-            <Typography className="text-left">
-              {t('MODAL.DELETE_SPACE.DESCRIPTION', { name: space.name })}
-            </Typography>
+            <p
+              className="text-left"
+              dangerouslySetInnerHTML={{
+                __html: t('MODAL.DELETE_SPACE.DESCRIPTION', {
+                  name: space.name,
+                }),
+              }}
+            ></p>
             <div className="flex w-full flex-row items-center justify-end gap-3">
               <Button
                 onClick={() => setOpen(false)}
@@ -78,7 +83,7 @@ export const DeleteSpaceModal = ({
                 shape={'square'}
                 size={'sm'}
               >
-                Cancel
+                {t('COMMON.CANCEL')}
               </Button>
               <Button
                 type="button"
@@ -92,7 +97,7 @@ export const DeleteSpaceModal = ({
                 loading={form.formState.isSubmitting}
                 disabled={!!errors['name']}
               >
-                Delete
+                {t('COMMON.DELETE')}
               </Button>
             </div>
           </div>

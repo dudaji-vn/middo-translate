@@ -1,11 +1,13 @@
 {
   "COMMON": {
     "INVITE": "Invite",
+    "PREVIEW": "Preview",
     "FAILED_TO": "Failed to {{action}}",
     "SUCCESS_TO": "Successfully {{action}}",
     "NO_DATA": "No data",
     "OFFLINE": "Offline",
     "ONLINE": "Online",
+    "IN_USE": "In use",
     "INPUT_YOUR_TEXT_HERE": "Enter your text here",
     "PLEASE_SPEAK": "Please speak",
     "CLEAR_ALL": "Clear all",
@@ -13,6 +15,7 @@
     "SAVE": "Save",
     "CONFIRM": "Confirm",
     "CREATE": "Create",
+    "CREATED_BY": "Created by",
     "ADD": "Add",
     "SHARE": "Share",
     "LEAVE": "Leave",
@@ -597,6 +600,8 @@
     "TOGGLE_LIVE_CAPTION": "Show/Hide Live Caption"
   },
   "EXTENSION": {
+    "ALL_DOMAINS": "All Domains",
+    "ALL_MEMBERS": "All Members",
     "SPACE": {
       "WELCOME": "Hi, welcome back",
       "ALL_SPACE": "All space",
@@ -634,7 +639,19 @@
     },
     "SCRIPT": {
       "PAGE_TITLE": "Scripts Management",
-      "SEARCH": "Search for scripts"
+      "SEARCH": "Search for scripts",
+      "ADD_SCRIPT": "Add new script",
+      "EDIT_SCRIPT": "Edit script",
+      "DELETE_SCRIPT": "Delete script",
+      "VIEW_SCRIPT": "View script",
+      "PREVIEW_FLOW": "Preview flow",
+      "NO_SCRIPT": "No scripts found",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "CREATE_BY": "Create by",
+      "CREATE_ON": "Create on",
+      "LAST_EDITED": "Last edited",
+      "ACTIONS": "Actions"
     },
     "CLIENT": {
       "PAGE_TITLE": "Clients Management",

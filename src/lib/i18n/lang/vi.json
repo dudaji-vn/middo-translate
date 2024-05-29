@@ -1,11 +1,13 @@
 {
   "COMMON": {
     "INVITE": "Mời",
+    "PREVIEW": "Xem trước",
     "FAILED_TO": "Không thể {{action}}",
     "SUCCESS_TO": "{{action}} thành công",
     "NO_DATA": "Không có dữ liệu",
     "OFFLINE": "Ngoại tuyến",
     "ONLINE": "Trực tuyến",
+    "IN_USE": "Đang sử dụng",
     "INPUT_YOUR_TEXT_HERE": "Nhập văn bản của bạn ở đây",
     "PLEASE_SPEAK": "Xin hãy nói",
     "CLEAR_ALL": "Xóa tất cả",
@@ -13,6 +15,7 @@
     "SAVE": "Lưu",
     "CONFIRM": "Xác nhận",
     "CREATE": "Tạo",
+    "CREATED_BY": "Được tạo bởi",
     "ADD": "Thêm",
     "SHARE": "Chia sẻ",
     "LEAVE": "Rời khỏi",
@@ -586,6 +589,8 @@
     "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
   },
   "EXTENSION": {
+    "ALL_DOMAINS": "Tất cả miền",
+    "ALL_MEMBERS": "Tất cả thành viên",
     "SPACE": {
       "WELCOME": "Chào, mừng bạn trở lại",
       "ALL_SPACE": "Tất cả không gian",
@@ -623,8 +628,20 @@
       "CUSTOMERRATING": "Đánh giá khách hàng"
     },
     "SCRIPT": {
-      "PAGE_TITLE": "Kịch bản trò chuyện",
-      "SEARCH": "Tìm kiếm kịch bản"
+      "PAGE_TITLE": "Quản lý Kịch bản",
+      "SEARCH": "Tìm kiếm kịch bản",
+      "ADD_SCRIPT": "Thêm kịch bản mới",
+      "EDIT_SCRIPT": "Chỉnh sửa kịch bản",
+      "DELETE_SCRIPT": "Xoá kịch bản",
+      "VIEW_SCRIPT": "Xem kịch bản",
+      "PREVIEW_FLOW": "Xem trước luồng",
+      "NO_SCRIPT": "Không tìm thấy kịch bản",
+      "NAME": "Tên",
+      "DESCRIPTION": "Mô tả",
+      "CREATE_BY": "Tạo bởi",
+      "CREATE_ON": "Tạo vào ngày",
+      "LAST_EDITED": "Chỉnh sửa lần cuối",
+      "ACTIONS": "Hành động"
     },
     "CLIENT": {
       "PAGE_TITLE": "Quản lý khách hàng",
