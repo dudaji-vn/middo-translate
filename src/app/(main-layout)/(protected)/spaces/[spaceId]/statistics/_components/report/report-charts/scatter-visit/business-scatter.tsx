@@ -4,19 +4,30 @@ import React, { useMemo } from 'react';
 import { ResponsiveContainer, Tooltip } from 'recharts';
 import HeatMap from '../heat-map/heat-map';
 import { mappedFilterByIcon } from '../business-line-chart/business-line-chart';
+import {
+  getCountryCode,
+  getCountryNameByCode,
+  getLanguageByCode,
+} from '@/utils/language-fn';
+import { CircleFlag } from 'react-circle-flags';
 
 const formatWeekday = (weekday: number) => {
   return ['', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][weekday] || '';
 };
-
+type CountConversation = {
+  count: number;
+  language: string;
+};
 const parsingDataFromUTC = (
   data: {
     x: number;
     y: number;
     density: number;
+    openedConversation: CountConversation[];
   }[],
 ) => {
   const timeZoneOffset = new Date().getTimezoneOffset() / 60;
+  let countOpened: Record<string, CountConversation[]> = {};
   const densities = data.reduce(
     (acc, d) => {
       const clientTime = d.x - timeZoneOffset;
@@ -32,6 +43,7 @@ const parsingDataFromUTC = (
       };
       const positionKey = `${actualPosition.x}-${actualPosition.y}`;
       acc[positionKey] = d.density;
+      countOpened[positionKey] = d.openedConversation;
       return acc;
     },
     {} as Record<string, number>,
@@ -39,11 +51,13 @@ const parsingDataFromUTC = (
   return Array.from({ length: 7 * 24 }, (_, i) => {
     const x = i % 24;
     const y = Math.floor(i / 24) + 1;
-    const density = densities[`${x}-${y}`] || 0;
+    const positionKey = `${x}-${y}`;
+    const density = densities[positionKey] || 0;
     return {
       x: x,
       y: y,
       density: density,
+      openedConversation: countOpened[positionKey] || [],
     };
   });
 };
@@ -56,10 +70,15 @@ export default function BusinessScatter({
     x: number;
     y: number;
     density: number;
+    openedConversation: Array<{
+      count: number;
+      language: string;
+    }>;
   }[];
   displayFilterBy?: string;
 }) {
   const dataset = useMemo(() => {
+    console.log('data', data);
     return {
       baseDensity: 0,
       weeklyVariance: data ? parsingDataFromUTC(data) : [],
@@ -90,23 +109,48 @@ export default function BusinessScatter({
                 <Tooltip
                   content={({ payload }) => {
                     const data = payload && payload[0] && payload[0].payload;
-                    const { y, x, density } = data || {};
+                    const { y, x, density, openedConversation } = data || {};
                     const fromTime = x - 1 < 0 ? 23 : x - 1;
                     const toTime = x;
                     return (
                       <div
                         key={`tooltip-${x}-${y}`}
                         id="tooltip"
-                        className="border-primary-200/80 rounded-[12px] border border-neutral-50 bg-white/95 p-4 text-neutral-300 shadow-md"
+                        className="border-primary-200/80 h-fit rounded-[12px] border border-neutral-50 bg-white/95 p-4 text-neutral-300  shadow-md"
                       >
-                        <p>Opened conversation</p>
+                        <p className="font-medium">Opened conversation</p>
                         <p className="font-semibold text-neutral-800">
                           {density}
                         </p>
                         <p>
-                          Time range:&nbsp;
                           {`${fromTime}h30 - ${toTime}h30 on ${formatWeekday(y)}`}
                         </p>
+                        {openedConversation && (
+                          <div className="flex flex-col gap-2 py-2">
+                            {openedConversation.map(
+                              ({ count, language }: CountConversation) => (
+                                <div
+                                  key={language}
+                                  className="flex flex-row items-center gap-2"
+                                >
+                                  <CircleFlag
+                                    countryCode={
+                                      getCountryCode(language) || 'us'
+                                    }
+                                    height={20}
+                                    width={20}
+                                  />
+                                  <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800">
+                                    {getCountryNameByCode(language)}
+                                  </Typography>
+                                  <Typography className="text-base font-normal text-neutral-800">
+                                    {count}
+                                  </Typography>
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        )}
                       </div>
                     );
                   }}
