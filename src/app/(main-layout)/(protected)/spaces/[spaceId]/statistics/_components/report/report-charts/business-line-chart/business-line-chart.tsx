@@ -21,6 +21,7 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
 import { CHART_TOOLTIP_CONTENT } from '@/types/business-statistic.type';
+import { useAppStore } from '@/stores/app.store';
 
 const TooltipContent = ({
   active,
@@ -84,6 +85,7 @@ export default function BusinessLineChart({
   tooltipContent?: string;
 }) {
   const { space } = useAuthStore();
+  const isMobile = useAppStore((state) => state.isMobile);
   const hasNoLine = useMemo(() => data.length === 1, [data]);
   const displayFilterBy = useMemo(() => {
     switch (filterByKey) {
@@ -135,18 +137,19 @@ export default function BusinessLineChart({
           <LineChart
             data={data}
             margin={{
-              top: 15,
-              right: 0,
+              top: 16,
+              right: isMobile ? 32 : 16,
               left: 24,
-              bottom: 15,
+              bottom: isMobile ? 40 : 16,
             }}
           >
             <XAxis
               dataKey={chartLabel}
               padding="no-gap"
-              className="py-10"
               tickLine={false}
               axisLine={false}
+              fontSize={isMobile ? 12 : 16}
+              angle={isMobile ? -45 : 0}
               tickMargin={24}
               {...xAxisProps}
             />
