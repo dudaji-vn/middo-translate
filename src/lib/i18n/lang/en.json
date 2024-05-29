@@ -1,6 +1,7 @@
 {
   "COMMON": {
     "INVITE": "Invite",
+    "APPLY": "Apply",
     "PREVIEW": "Preview",
     "FAILED_TO": "Failed to {{action}}",
     "SUCCESS_TO": "Successfully {{action}}",
@@ -87,7 +88,11 @@
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
-      "DELETED_ON": "Deleted on"
+      "DELETED_ON": "Deleted on",
+      "LAST_WEEK": "Last week",
+      "LAST_MONTH": "Last month",
+      "LAST_YEAR": "Last year",
+      "CUSTOM": "Custom"
     }
   },
   "MESSAGE": {
@@ -637,6 +642,11 @@
       "RESPONSEDMESSAGE": "Responsed Message",
       "CUSTOMERRATING": "Customer Rating"
     },
+    "SETTING": {
+      "TAGS_MANAGEMENT": "Tags Management",
+      "MEMBERS_MANAGEMENT": "Members Management",
+      "CONVERSATION_EXTENSION": "Conversation Extension"
+    },
     "SCRIPT": {
       "PAGE_TITLE": "Scripts Management",
       "SEARCH": "Search for scripts",
@@ -665,6 +675,7 @@
       "NO_CLIENT": "No clients found"
     },
     "MEMBER": {
+      "YOU": "You",
       "SEARCH": "Search for members",
       "NAME": "Name",
       "EMAIL": "Email",

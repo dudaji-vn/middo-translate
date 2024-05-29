@@ -87,7 +87,7 @@ const ReportDropdown = ({
                 })}
               >
                 <DropdownMenuItem className="text-md flex items-center rounded-none px-4 py-3 outline-none">
-                  {value}
+                  {name}
                 </DropdownMenuItem>
               </Link>
             );

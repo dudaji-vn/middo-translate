@@ -29,10 +29,10 @@ import { Form } from '@/components/ui/form';
 import EditSpaceImage from '../space-edition/edit-space-image';
 import { DeleteSpaceModal } from '../space-edition/delete-space-modal';
 import TagsList from '../tags-list/tags-list';
-import { t } from 'i18next';
 import { useAuthStore } from '@/stores/auth.store';
 import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from './setting-items';
 import { getUserSpaceRole } from './role.util';
+import { useTranslation } from 'react-i18next';
 
 export enum ESettingTabs {
   'MEMBERS' = 'members',
@@ -84,6 +84,7 @@ const SpaceSetting = ({
 }: SpaceSettingProps) => {
   const searchParams = useSearchParams();
   const params = useParams();
+  const { t } = useTranslation('common');
   const currentUser = useAuthStore((state) => state.user);
   const currentUserRole = getUserSpaceRole(currentUser, space);
   const modalType: ExtensionModalType = searchParams?.get(
@@ -136,7 +137,8 @@ const SpaceSetting = ({
                   {isSpaceOwner && <EditSpaceModal space={space} />}
                 </div>
                 <Typography className="text-sm font-normal leading-[18px] text-neutral-400">
-                  {space?.members?.length || 0} Members
+                  {space?.members?.length || 0}&nbsp;
+                  {t('COMMON.MEMBER')}
                 </Typography>
               </div>
             </div>
@@ -163,7 +165,7 @@ const SpaceSetting = ({
                         ),
                     })}
                   >
-                    {item.label}
+                    {t(item.label)}
                   </TabsTrigger>
                 );
               })}

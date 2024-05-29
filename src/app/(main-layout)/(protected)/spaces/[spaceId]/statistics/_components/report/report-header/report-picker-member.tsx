@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ReportDropdown } from '../../report-dropdown';
 import { DropdownOption } from '../../report-dropdown/report-dropdown';
+import { useTranslation } from 'react-i18next';
 
 export type MemberPickerType = string;
 
@@ -18,14 +19,16 @@ export type MemberPickerOptions = {
 };
 
 export type ReportPickerMemberProps = {};
-const OPTION_ALL = {
-  name: 'All members',
-  value: null,
-};
+
 const nameField = 'memberId';
 const ReportPickerMember = ({}: ReportPickerMemberProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
+  const { t } = useTranslation('common');
   const { space } = useAuthStore();
+  const OPTION_ALL = {
+    name: t('EXTENSION.ALL_MEMBERS'),
+    value: null,
+  };
   const options = useMemo(() => {
     return (space?.members.map((member) => ({
       name: member.email,

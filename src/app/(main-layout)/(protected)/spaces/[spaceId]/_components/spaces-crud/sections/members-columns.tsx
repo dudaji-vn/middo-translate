@@ -31,7 +31,9 @@ export const makeMembersColumns = ({
           <Typography className="text-gray-500">
             {props.getValue() as string}
             <span className="font-light">
-              {props.row.original.role === ESPaceRoles.Owner && ' (you)'}
+              {(props.row.original.role === ESPaceRoles.Owner &&
+                ` ${t('EXTENSION.MEMBER.YOU')}`) ||
+                ''}
             </span>
           </Typography>
         );

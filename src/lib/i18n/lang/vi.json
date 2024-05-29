@@ -1,6 +1,7 @@
 {
   "COMMON": {
     "INVITE": "Mời",
+    "APPLY": "Áp dụng",
     "PREVIEW": "Xem trước",
     "FAILED_TO": "Không thể {{action}}",
     "SUCCESS_TO": "{{action}} thành công",
@@ -85,9 +86,13 @@
     "MEMBER": "Thành viên",
     "SPACE": "Không gian",
     "TIME": {
-      "CREATED_ON": "Tạo vào",
-      "UPDATED_ON": "Cập nhật vào",
-      "DELETED_ON": "Xóa vào"
+      "CREATED_ON": "Tạo vào",
+      "UPDATED_ON": "Cập nhật vào",
+      "DELETED_ON": "Xoá vào",
+      "LAST_WEEK": "Tuần trước",
+      "LAST_MONTH": "Tháng trước",
+      "LAST_YEAR": "Năm trước",
+      "CUSTOM": "Tùy chỉnh"
     }
   },
   "MESSAGE": {
@@ -627,6 +632,11 @@
       "RESPONSEDMESSAGE": "Tin nhắn phản hồi",
       "CUSTOMERRATING": "Đánh giá khách hàng"
     },
+    "SETTING": {
+      "TAGS_MANAGEMENT": "Quản lý thẻ",
+      "MEMBERS_MANAGEMENT": "Quản lý thành viên",
+      "CONVERSATION_EXTENSION": "Mở rộng trò chuyện"
+    },
     "SCRIPT": {
       "PAGE_TITLE": "Quản lý Kịch bản",
       "SEARCH": "Tìm kiếm kịch bản",
@@ -655,6 +665,7 @@
       "NO_CLIENT": "Không tìm thấy khách hàng"
     },
     "MEMBER": {
+      "YOU": "Bạn",
       "SEARCH": "Tìm kiếm thành viên",
       "NAME": "Tên",
       "STATUS": "Trạng thái",

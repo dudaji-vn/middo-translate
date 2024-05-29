@@ -2,13 +2,10 @@ import React, { useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import {
   GripVertical,
-  Plus,
   RotateCcw,
-  Search,
   Trash2,
   UserCog,
   UserRound,
-  UserRoundPlus,
 } from 'lucide-react';
 import {
   removeMemberFromSpace,
@@ -16,7 +13,6 @@ import {
 } from '@/services/business-space.service';
 import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import TableSearch from '../../../clients/clients-table/table-search';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/actions';
 import { isEmpty } from 'lodash';
@@ -58,6 +54,7 @@ const MemberItem = ({
   const roles = SPACE_SETTING_TAB_ROLES.find(
     (setting) => setting.name === 'members',
   )?.roles;
+  const { t } = useTranslation('common');
   const deleteAble =
     !isLoading && roles?.delete.includes(myRole as ESPaceRoles) && !isOwnerRow;
 
@@ -76,7 +73,9 @@ const MemberItem = ({
         <div className="flex h-auto w-[400px] flex-row items-center justify-start gap-3 break-words rounded-l-[12px] px-3 md:w-[500px] xl:w-[800px]">
           <Typography className="text-neutral-800">{email}</Typography>
           {isOwnerRow && <Badge className="bg-primary text-white">Owner</Badge>}
-          {isMe && <span className="font-light text-neutral-500">(You)</span>}
+          {isMe && (
+            <span className="font-light text-neutral-500">{`(${t('EXTENSION.MEMBER.YOU')})`}</span>
+          )}
         </div>
         <div className="flex w-fit flex-row items-center  justify-start  gap-6 py-1">
           <Typography

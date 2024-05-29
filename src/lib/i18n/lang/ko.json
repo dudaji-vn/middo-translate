@@ -1,6 +1,7 @@
 {
   "COMMON": {
     "INVITE": "초대",
+        "APPLY": "적용",
     "PREVIEW": "미리보기",
     "FAILED_TO": "{{action}}할 수 없습니다",
     "SUCCESS_TO": "{{action}}되었습니다",
@@ -86,8 +87,12 @@
     "SPACE": "공간",
     "TIME": {
       "CREATED_ON": "생성일",
-      "UPDATED_ON": "업데이트됨",
-      "DELETED_ON": "삭제됨"
+      "UPDATED_ON": "업데이트일",
+      "DELETED_ON": "삭제일",
+      "LAST_WEEK": "지난 주",
+      "LAST_MONTH": "지난 달",
+      "LAST_YEAR": "작년",
+      "CUSTOM": "사용자 정의"
     }
   },
   "MESSAGE": {
@@ -625,6 +630,11 @@
       "RESPONSEDMESSAGE": "응답 메시지",
       "CUSTOMERRATING": "고객 평가"
     },
+    "SETTING": {
+      "TAGS_MANAGEMENT": "태그 관리",
+      "MEMBERS_MANAGEMENT": "멤버 관리",
+      "CONVERSATION_EXTENSION": "대화 확장"
+    },
     "SCRIPT": {
       "PAGE_TITLE": "스크립트 관리",
       "SEARCH": "스크립트 검색",
@@ -653,6 +663,7 @@
       "NO_CLIENT": "고객을 찾을 수 없습니다"
     },
     "MEMBER": {
+      "YOU": "나",
       "SEARCH": "회원 검색",
       "NAME": "이름",
       "EMAIL": "이메일",
