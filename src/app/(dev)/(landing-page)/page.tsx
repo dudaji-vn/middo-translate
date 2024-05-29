@@ -1,18 +1,23 @@
 'use client';
 import { JayTextAnimation } from '@/components/jay-text-animation';
-import { cn } from '@/utils/cn';
-import { Sparkles, StarIcon, Play } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
 import { HeaderLandingPage } from '@/components/layout/header/header-landing-page';
+import { cn } from '@/utils/cn';
+import { Play, Sparkles, StarIcon } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 
-import UserGuide from './_components/user-guide';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { usePlatformStore } from '@/features/platform/stores';
+import { useRouter } from 'next/navigation';
 import DownloadAppButton from './_components/download-app-button';
+import UserGuide from './_components/user-guide';
 
 export default function Landing() {
+  const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const [isScrollDown, setScrollDown] = useState(false);
-  
+
   const videoRef = useRef<any>();
   const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
+  const router = useRouter();
   useEffect(() => {
     const changeClass = () => {
       const scrollValue = document.documentElement.scrollTop;
@@ -42,6 +47,14 @@ export default function Landing() {
     document.body.style.overflow = 'unset';
   }, []);
 
+  useEffect(() => {
+    if (isMobile) {
+      router.push(ROUTE_NAMES.TRANSLATION);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile]);
+
+  if (isMobile) return;
 
   return (
     <div className="relative overflow-x-hidden">
@@ -94,7 +107,7 @@ export default function Landing() {
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
           </p>
-          <div className='mt-8'>
+          <div className="mt-8">
             <DownloadAppButton />
           </div>
         </div>
@@ -319,9 +332,9 @@ export default function Landing() {
       </div>
       <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.jpg')] px-5 py-12">
         <h1 className="text-primary-500-main">Ready to get started?</h1>
-          <div className='mt-8'>
-            <DownloadAppButton />
-          </div>
+        <div className="mt-8">
+          <DownloadAppButton />
+        </div>
       </div>
       <div className="flex flex-col items-center justify-center gap-3 p-5 md:flex-row md:justify-between">
         <span className="font-semibold">
