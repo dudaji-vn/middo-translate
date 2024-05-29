@@ -4,11 +4,15 @@ import {
   BanIcon,
   BellIcon,
   BellOffIcon,
+  CheckCheckIcon,
+  CheckCircle2Icon,
+  CheckCircleIcon,
   LogOut,
   PinIcon,
   PinOffIcon,
   Tag,
   TrashIcon,
+  XCircleIcon,
 } from 'lucide-react';
 import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 
@@ -223,6 +227,16 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         action: 'unarchive',
         label: 'COMMON.UNARCHIVE',
         icon: <ArchiveX />,
+      },
+      {
+        action: 'accept',
+        label: 'COMMON.ACCEPT',
+        icon: <CheckCircle2Icon />,
+      },
+      {
+        action: 'reject',
+        label: 'COMMON.REJECT',
+        icon: <XCircleIcon />,
       },
       {
         action: 'block',

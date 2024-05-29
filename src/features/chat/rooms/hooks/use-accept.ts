@@ -8,7 +8,8 @@ export const useAccept = () => {
   const { mutate: accept, ...rest } = useMutation({
     mutationFn: roomApi.accept,
     onSuccess: (data) => {
-      toast.success(t('ROOMS.ACCEPT_SUCCESS'));
+      // toast.success(t());
+      toast.success('You joined the room successfully');
     },
   });
   return {

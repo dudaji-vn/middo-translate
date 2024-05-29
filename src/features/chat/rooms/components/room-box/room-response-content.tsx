@@ -20,11 +20,11 @@ export const RoomResponseContent = ({ room }: RoomResponseContentProps) => {
   const otherUser = room?.waitingUsers?.find(
     (user) => user._id !== currentUserId,
   );
-  const { t } = useTranslation();
+  const { t } = useTranslation('common');
   const { onAction } = useRoomActions();
   if (room.isGroup) {
     return (
-      <div className=" relative flex w-full flex-col items-center gap-2">
+      <div className="relative mt-60 flex w-full flex-col items-center gap-2">
         <span className="font-semibold text-primary md:text-sm">
           You are invited to join the group.
         </span>
