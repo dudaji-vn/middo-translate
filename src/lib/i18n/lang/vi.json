@@ -1,5 +1,9 @@
 {
   "COMMON": {
+    "INVITE": "Mời",
+    "FAILED_TO": "Không thể {{action}}",
+    "SUCCESS_TO": "{{action}} thành công",
+    "NO_DATA": "Không có dữ liệu",
     "OFFLINE": "Ngoại tuyến",
     "ONLINE": "Trực tuyến",
     "INPUT_YOUR_TEXT_HERE": "Nhập văn bản của bạn ở đây",
@@ -420,6 +424,11 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "DELETE_SPACE": {
+      "TITLE": "Xoá không gian",
+      "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu của mình và không thể hoàn tác. Bạn có chắc chắn muốn xoá <strong>{{name}}</strong> không?",
+      "CONFIRM": "Xoá không gian"
+    },
     "SIGN_OUT": {
       "TITLE": "Bạn có muốn đăng xuất không?",
       "DESCRIPTION": "Bạn sẽ đăng xuất khỏi ứng dụng và cần đăng nhập lại."
@@ -484,11 +493,10 @@
       "TITLE": "Rời phòng",
       "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của phòng này nữa. Bạn có chắc chắn muốn rời phòng không?"
     },
-
     "CHANGE_ROOM_STATUS": {
       "TITLE": "{{action}} cuộc trò chuyện",
       "DESCRIPTION": "Bạn có chắc chắn muốn {{action}} cuộc trò chuyện này không?",
-      "FAIL_TO": "Không thể {{action}} cuộc trò chuyện"
+      "FAILED_TO": "Không thể {{action}} cuộc trò chuyện"
     },
     "NOTIFICATION": {
       "ON": {
@@ -583,10 +591,17 @@
       "ALL_SPACE": "Tất cả không gian",
       "JOINED_SPACE": "Không gian đã tham gia",
       "MY_SPACE": "Không gian của tôi",
-      "CREATE_SPACE": "Tạo không gian mới"
+      "CREATE_SPACE": "Tạo không gian mới",
+      "SPACE_INFOR": "Thông tin không gian"
     },
     "BREADCRUMB": {
       "HOME": "Trang chủ"
+    },
+    "TAG": {
+      "SEARCH": "Tìm kiếm thẻ",
+      "CREATE": "Tạo thẻ mới",
+      "EDIT": "Chỉnh sửa thẻ",
+      "DELETE": "Xoá thẻ"
     },
     "CONVERSATIONS": "Chung",
     "COMPLETED": "Hoàn thành",
@@ -625,11 +640,21 @@
     "MEMBER": {
       "SEARCH": "Tìm kiếm thành viên",
       "NAME": "Tên",
+      "STATUS": "Trạng thái",
       "EMAIL": "Email",
       "PHONE": "Số điện thoại",
       "ROLE": "Vai trò",
       "ACTIONS": "Hành động",
-      "NO_MEMBER": "Không tìm thấy thành viên"
+      "NO_MEMBER": "Không tìm thấy thành viên",
+      "NO_ADMIN": "Không tìm thấy quản trị viên",
+      "INVITE_MEMBER": "Mời thành viên"
+    },
+    "ROLE": {
+      "ADMIN": "Quản trị viên",
+      "MEMBER": "Thành viên",
+      "VIEWER": "Người xem",
+      "ADMIN_ROLE": "Quản trị viên",
+      "MEMBER_ROLE": "Thành viên"
     }
   },
   "DESKTOP_LOGIN": {

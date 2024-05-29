@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/utils/cn';
 import { Skeleton } from './skeleton';
+import { useTranslation } from 'react-i18next';
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -86,7 +87,7 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     ...tableInitialParams,
   });
-
+  const { t } = useTranslation('common');
   return (
     <Table
       {...tableProps}
@@ -164,7 +165,7 @@ export function DataTable<TData, TValue>({
                 'mx-auto  border-none  text-center',
               )}
             >
-              {customEmpty || 'No results found'}
+              {customEmpty || t('COMMON.NO_DATA')}
             </TableCell>
           </TableRow>
         )}

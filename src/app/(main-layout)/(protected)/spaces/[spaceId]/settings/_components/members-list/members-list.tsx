@@ -146,6 +146,7 @@ const ListItems = ({
   };
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({});
+  const { t } = useTranslation('common');
   const params = useParams();
   const currentUser = useAuthStore((state) => state.user);
   const router = useRouter();
@@ -211,7 +212,9 @@ const ListItems = ({
           !isEmptyData && 'hidden',
         )}
       >
-        {isAdmin ? 'No admin founded' : 'No member founded'}
+        {isAdmin
+          ? t('EXTENSION.MEMBER.NO_ADMIN')
+          : t('EXTENSION.MEMBER.NO_MEMBER')}
       </p>
       <div
         className={cn(
@@ -222,7 +225,7 @@ const ListItems = ({
         <div className="invisible !w-[50px]"></div>
         <div className="flex  h-auto w-[400px] flex-row items-center justify-start break-words px-3 md:w-[500px] xl:w-[800px]">
           <Typography className="text-sm  font-light text-neutral-800">
-            Email
+            {t('EXTENSION.MEMBER.EMAIL')}
           </Typography>
         </div>
         <Typography
@@ -230,7 +233,7 @@ const ListItems = ({
             'w-[100px] text-sm font-light capitalize text-gray-500',
           )}
         >
-          status
+          {t('EXTENSION.MEMBER.STATUS')}
         </Typography>
       </div>
       {data?.map((member, index) => {
@@ -279,11 +282,11 @@ const MembersList = ({ space }: { space: TSpace }) => {
   const { adminsData, membersData } = useMemo(() => {
     const filteredMembers = search
       ? members?.filter((member) => {
-        return (
-          member.email.toLowerCase().includes(search.toLowerCase()) ||
-          member.role.toLowerCase().includes(search.toLowerCase())
-        );
-      })
+          return (
+            member.email.toLowerCase().includes(search.toLowerCase()) ||
+            member.role.toLowerCase().includes(search.toLowerCase())
+          );
+        })
       : members;
     return filteredMembers.reduce(
       (acc, member: Member) => {
@@ -309,7 +312,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
             className="flex-1"
             onChange={(e) => onSearchChange(e.target.value)}
             onClear={() => onSearchChange('')}
-            placeholder={t('SEARCH')}
+            placeholder={t('EXTENSION.MEMBER.SEARCH')}
           />
         </div>
 
@@ -321,14 +324,18 @@ const MembersList = ({ space }: { space: TSpace }) => {
       <div className="flex w-full flex-col gap-1">
         <div className="flex  w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]">
           <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
-          <Typography className="text-primary-500-main ">Admin role</Typography>
+          <Typography className="text-primary-500-main ">
+            {t('EXTENSION.ROLE.ADMIN_ROLE')}
+          </Typography>
         </div>
         <ListItems data={adminsData} owner={owner} isAdmin myRole={myRole} />
       </div>
       <div className="flex w-full flex-col gap-1">
         <div className="flex w-full flex-row  items-center gap-3  bg-[#fafafa] py-4 font-semibold  sm:p-[20px_40px]">
           <UserRound size={16} className="stroke-[3px] text-primary-500-main" />
-          <Typography className="text-primary-500-main">Member role</Typography>
+          <Typography className="text-primary-500-main">
+            {t('EXTENSION.ROLE.MEMBER_ROLE')}
+          </Typography>
         </div>
         <ListItems data={membersData} owner={owner} myRole={myRole} />
       </div>

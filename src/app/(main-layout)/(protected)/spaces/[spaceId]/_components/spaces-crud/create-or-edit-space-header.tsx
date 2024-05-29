@@ -32,7 +32,7 @@ export const createSpaceSteps = [
     requiredFields: ['information.name', 'information.avatar'],
   },
   {
-    title: 'Invite Members',
+    title: 'EXTENSION.MEMBER.INVITE_MEMBER',
     value: 1,
     nameField: 'members',
     requiredFields: ['members'],

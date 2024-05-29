@@ -1,5 +1,9 @@
 {
   "COMMON": {
+    "INVITE": "초대",
+    "FAILED_TO": "{{action}}할 수 없습니다",
+    "SUCCESS_TO": "{{action}}되었습니다",
+    "NO_DATA": "데이터 없음",
     "OFFLINE": "오프라인",
     "ONLINE": "온라인",
     "INPUT_YOUR_TEXT_HERE": "여기에 텍스트 입력",
@@ -418,6 +422,11 @@
     "RESTRICT_MESSAGE": "이 기능을 활성화하면 알 수 없는 발신자는 문자 메시지만 보낼 수 있으며 해당 메시지는 '대기 중' 탭으로 이동됩니다."
   },
   "MODAL": {
+    "DELETE_SPACE": {
+      "TITLE": "공간 삭제",
+      "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
+      "CONFIRM": "공간 삭제"
+    },
     "SIGN_OUT": {
       "TITLE": "로그아웃 하시겠습니까?",
       "DESCRIPTION": "앱에서 로그아웃되며 다시 로그인해야 합니다."
@@ -485,7 +494,7 @@
     "CHANGE_ROOM_STATUS": {
       "TITLE": "{{action}} 대화",
       "DESCRIPTION": "이 대화를 {{action}}하시겠습니까?",
-      "FAIL_TO": "대화를 {{action}}하는 데 실패했습니다"
+      "FAILED_TO": "대화를 {{action}}하는 데 실패했습니다"
     },
     "NOTIFICATION": {
       "ON": {
@@ -580,10 +589,17 @@
       "ALL_SPACE": "모든 공간",
       "JOINED_SPACE": "가입한 공간",
       "MY_SPACE": "내 공간",
-      "CREATE_SPACE": "새로운 공간 만들기"
+      "CREATE_SPACE": "새로운 공간 만들기",
+      "SPACE_INFOR": "공간 정보"
     },
     "BREADCRUMB": {
       "HOME": "홈"
+    },
+    "TAG": {
+      "SEARCH": "태그 검색",
+      "CREATE": "새로운 태그 만들기",
+      "EDIT": "태그 수정",
+      "DELETE": "태그 삭제"
     },
     "CONVERSATIONS": "일반",
     "COMPLETED": "완료됨",
@@ -623,10 +639,20 @@
       "SEARCH": "회원 검색",
       "NAME": "이름",
       "EMAIL": "이메일",
+      "STATUS": "상태",
       "PHONE": "전화번호",
       "ROLE": "역할",
       "ACTIONS": "조치",
-      "NO_MEMBER": "회원을 찾을 수 없습니다"
+      "NO_MEMBER": "회원을 찾을 수 없습니다",
+      "NO_ADMIN": "관리자를 찾을 수 없습니다",
+      "INVITE_MEMBER": "회원 초대"
+    },
+    "ROLE": {
+      "ADMIN": "관리자",
+      "MEMBER": "회원",
+      "VIEWER": "뷰어",
+      "ADMIN_ROLE": "관리자 역할",
+      "MEMBER_ROLE": "회원 역할"
     }
   },
   "DESKTOP_LOGIN": {

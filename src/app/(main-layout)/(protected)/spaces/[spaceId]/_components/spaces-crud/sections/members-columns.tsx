@@ -6,6 +6,7 @@ import { cn } from '@/utils/cn';
 import { ColumnDef } from '@tanstack/react-table';
 import { Trash2 } from 'lucide-react';
 import { ESPaceRoles } from '../../../settings/_components/space-setting/setting-items';
+import { TFunction } from 'i18next';
 
 export type Member = {
   _id?: string;
@@ -14,15 +15,17 @@ export type Member = {
   status?: 'joined' | 'invited' | 'deleted';
 };
 
-export const membersColumns = ({
+export const makeMembersColumns = ({
   onDelete,
+  t,
 }: {
   onDelete: (member: Member) => void;
+  t: TFunction;
 }) =>
   [
     {
       accessorKey: 'email',
-      header: 'Email',
+      header: t('EXTENSION.MEMBER.EMAIL'),
       cell(props) {
         return (
           <Typography className="text-gray-500">
@@ -36,7 +39,7 @@ export const membersColumns = ({
     },
     {
       accessorKey: 'role',
-      header: 'Role',
+      header: t('EXTENSION.MEMBER.ROLE'),
       cell(props) {
         return (
           <Typography

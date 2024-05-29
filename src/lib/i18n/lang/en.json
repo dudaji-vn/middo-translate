@@ -1,5 +1,9 @@
 {
   "COMMON": {
+    "INVITE": "Invite",
+    "FAILED_TO": "Failed to {{action}}",
+    "SUCCESS_TO": "Successfully {{action}}",
+    "NO_DATA": "No data",
     "OFFLINE": "Offline",
     "ONLINE": "Online",
     "INPUT_YOUR_TEXT_HERE": "Enter your text here",
@@ -422,6 +426,11 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "DELETE_SPACE": {
+      "TITLE": "Delete Space",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
+      "CONFIRM": "Delete Space"
+    },
     "SIGN_OUT": {
       "TITLE": "Do you want to sign out?",
       "DESCRIPTION": "You will be signed out of the app and need to log in again."
@@ -498,7 +507,7 @@
     "CHANGE_ROOM_STATUS": {
       "TITLE": "{{action}} conversation",
       "DESCRIPTION": " Are you sure you want to {{action}} this conversation?",
-      "FAIL_TO": "Failed to {{action}} conversation"
+      "FAILED_TO": "Failed to {{action}} conversation"
     },
     "NOTIFICATION": {
       "ON": {
@@ -593,10 +602,17 @@
       "ALL_SPACE": "All space",
       "JOINED_SPACE": "joined space",
       "MY_SPACE": "My space",
-      "CREATE_SPACE": "Create new space"
+      "CREATE_SPACE": "Create new space",
+      "SPACE_INFOR": "Space information"
     },
     "BREADCRUMB": {
       "HOME": "Home"
+    },
+    "TAG": {
+      "SEARCH": "Search for tags",
+      "CREATE": "Create new tag",
+      "EDIT": "Edit tag",
+      "DELETE": "Delete tag"
     },
     "CONVERSATIONS": "General",
     "COMPLETED": "Completed",
@@ -606,7 +622,6 @@
     "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
     "REPORT": "Report",
-
     "CHART": {
       "CLIENT": "New Clients",
       "LANGUAGERANK": "Conversation's Language",
@@ -636,10 +651,20 @@
       "SEARCH": "Search for members",
       "NAME": "Name",
       "EMAIL": "Email",
+      "STATUS": "Status",
       "PHONE": "Phone Number",
       "ROLE": "Role",
       "ACTIONS": "Actions",
-      "NO_MEMBER": "No members found"
+      "NO_MEMBER": "No members found",
+      "NO_ADMIN": "No admin found",
+      "INVITE_MEMBER": "Invite member"
+    },
+    "ROLE": {
+      "ADMIN": "Admin",
+      "MEMBER": "Member",
+      "VIEWER": "Viewer",
+      "ADMIN_ROLE": "Admin role",
+      "MEMBER_ROLE": "Member role"
     }
   },
   "DESKTOP_LOGIN": {
