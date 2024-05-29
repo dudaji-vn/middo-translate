@@ -21,12 +21,23 @@ import { useTranslation } from 'react-i18next';
 
 export interface RoomMemberProps {
   members: User[];
+  pendingMembers?: User[];
+  rejectedMembers?: User[];
   adminId: string;
 }
 
+type MemberWithStatus = User & {
+  inviteStatus: 'none' | 'pending' | 'rejected';
+};
+
 const INITIAL_SHOW_MEMBERS = 3;
 
-export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
+export const RoomMember = ({
+  members,
+  adminId,
+  pendingMembers,
+  rejectedMembers,
+}: RoomMemberProps) => {
   const { room } = useChatBox();
   const userId = useAuthStore((state) => state.user?._id);
   const [showMembers, setShowMembers] = useState(INITIAL_SHOW_MEMBERS);
@@ -43,13 +54,40 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
   const { mutate } = useRemoveMember();
 
   const membersToShow = useMemo(() => {
-    const uniqueMembers = members?.filter(
+    const combinedMembers: MemberWithStatus[] = members?.map((member) => ({
+      ...member,
+      inviteStatus: 'none',
+    }));
+    pendingMembers?.forEach((member) => {
+      const index = combinedMembers.findIndex((m) => m._id === member._id);
+      if (index !== -1) {
+        combinedMembers[index].inviteStatus = 'pending';
+      } else {
+        combinedMembers.push({
+          ...member,
+          inviteStatus: 'pending',
+        });
+      }
+    });
+    rejectedMembers?.forEach((member) => {
+      const index = combinedMembers.findIndex((m) => m._id === member._id);
+      if (index !== -1) {
+        combinedMembers[index].inviteStatus = 'rejected';
+      } else {
+        combinedMembers.push({
+          ...member,
+          inviteStatus: 'rejected',
+        });
+      }
+    });
+
+    const uniqueMembers = combinedMembers?.filter(
       (member, index, self) =>
         index === self.findIndex((m) => m._id === member._id),
     );
     if (isShowAll) return uniqueMembers;
     return uniqueMembers?.slice(0, showMembers) || [];
-  }, [isShowAll, members, showMembers]);
+  }, [isShowAll, members, pendingMembers, rejectedMembers, showMembers]);
 
   return (
     <div className="mt-5 bg-white pb-3">
@@ -76,10 +114,23 @@ export const RoomMember = ({ members, adminId }: RoomMemberProps) => {
           return (
             <div key={member._id} className="flex items-center justify-between">
               <UserItem
-                wrapperClassName="hover:!bg-background cursor-default"
+                wrapperClassName="hover:!bg-background flex-1 cursor-default"
                 subContent={subContent}
                 key={member._id}
                 user={member}
+                rightElement={
+                  <div className="ml-auto">
+                    {member.inviteStatus === 'pending' ? (
+                      <span className="rounded bg-neutral-50 p-0.5 px-1 text-xs text-neutral-600">
+                        {t('COMMON.PENDING')}
+                      </span>
+                    ) : member.inviteStatus === 'rejected' ? (
+                      <span className="rounded bg-error-100/20 p-0.5 px-1 text-xs text-error">
+                        {t('COMMON.REJECTED')}
+                      </span>
+                    ) : undefined}
+                  </div>
+                }
               />
               {userId !== member._id && (
                 <>

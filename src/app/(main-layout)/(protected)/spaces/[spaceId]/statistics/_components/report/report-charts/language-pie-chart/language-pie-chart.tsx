@@ -2,52 +2,128 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { CHART_COLORS } from '../chart-colors';
-import { useAppStore } from '@/stores/app.store';
+import { useMemo, useState } from 'react';
+import { getCountryNameByCode, getCountryCode } from '@/utils/language-fn';
+import { cn } from '@/utils/cn';
+import { CircleFlag } from 'react-circle-flags';
+import { TLanguageRank } from '@/types/business-statistic.type';
 const COLORS = [...CHART_COLORS].reverse();
-const TooltipContent = ({ active, payload, label, unit }: any) => {
-  const { value } = payload?.[0] || {};
-  const suffix = unit;
-  if (active && payload && payload.length) {
-    return (
-      <div className="rounded-lg border border-neutral-200 bg-white p-4">
-        <p className="text-sm text-neutral-600">{`${label}`}</p>
-        <p className="flex flex-row gap-1 text-base text-neutral-800">
-          {`${value}`}
-          <span>{suffix}</span>
-        </p>
-      </div>
-    );
-  }
-  return null;
-};
+
 export default function LanguagePieChart({
   data = [],
+  languagesRank = [],
+  othersCount,
+  ...props
 }: {
   data: Array<{
     label: string;
     value: number;
   }>;
-}) {
-  const isMobile = useAppStore((state) => state.isMobile);
+  othersCount?: number;
+  languagesRank: TLanguageRank;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  const [selectedPie, setSelectedPie] = useState<{
+    label: string;
+    value: number;
+    index?: number;
+  } | null>(null);
+  const pies = useMemo(
+    () => (data.length ? data : [{ label: 'None', value: 1 }]),
+    [data],
+  );
+  const outlinePie = useMemo(() => {
+    if (!selectedPie) return null;
+    const start = pies.slice(0, selectedPie?.index).reduce((acc, cur) => {
+      return acc + cur.value;
+    }, 0);
+    const end = start + (selectedPie?.value || 0);
+    const isOthers = selectedPie?.label === 'others';
+    return {
+      startAngle: 90 - start * 360,
+      endAngle: 90 - end * 360,
+      count: isOthers
+        ? othersCount
+        : languagesRank?.find((e) => e.language === selectedPie?.label)?.count,
+      flag: isOthers ? null : getCountryCode(selectedPie?.label),
+      countryName: isOthers
+        ? 'Others'
+        : getCountryNameByCode(selectedPie?.label),
+    };
+  }, [selectedPie, pies]);
+  const onTogglePie = (
+    entry: { label: string; value: number },
+    index: number,
+  ) => {
+    setSelectedPie({ ...entry, index });
+  };
+
   if (!data) return null;
-  const pies = data.length ? data : [{ label: 'None', value: 1 }];
   return (
-    <ResponsiveContainer width="100%">
-      <PieChart width={200} height={200}>
-        <Pie
-          data={pies}
-          outerRadius={isMobile ? 115 : 105}
-          startAngle={90}
-          endAngle={-270}
-          innerRadius={isMobile ? 90 : 80}
-          fill="#8884d8"
-          dataKey="value"
+    <div {...props} className={cn('relative', props.className)}>
+      <ResponsiveContainer width="100%">
+        <PieChart width={250} height={250} className={'relative'}>
+          <Pie
+            data={pies}
+            outerRadius={112}
+            startAngle={90}
+            endAngle={-270}
+            innerRadius={88}
+            fill={COLORS[4]}
+            dataKey="value"
+          >
+            {data.map((entry, index) => {
+              return (
+                <>
+                  <Cell
+                    onClick={() => onTogglePie(entry, index)}
+                    key={`cell-${index}`}
+                    className="cursor-pointer"
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                </>
+              );
+            })}
+          </Pie>
+          {selectedPie && outlinePie && (
+            <Pie
+              animationDuration={500}
+              animationBegin={outlinePie.startAngle}
+              data={[{ value: selectedPie.value }]}
+              outerRadius={124}
+              innerRadius={116}
+              fill={COLORS[(selectedPie.index || 0) % COLORS.length]}
+              dataKey="value"
+              {...outlinePie}
+            />
+          )}
+        </PieChart>
+      </ResponsiveContainer>
+      <div className="absolute inset-16 rounded-full">
+        <div
+          className={cn('flex size-full flex-col items-center justify-center', {
+            hidden: !selectedPie,
+          })}
         >
-          {data.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
-      </PieChart>
-    </ResponsiveContainer>
+          <div className=" flex flex-row items-center gap-1 font-normal ">
+            {outlinePie?.flag && (
+              <CircleFlag
+                countryCode={outlinePie?.flag || 'us'}
+                height={20}
+                width={20}
+              />
+            )}
+            <p className="text-base text-neutral-800">
+              {outlinePie?.countryName}
+            </p>
+          </div>
+          <p className="text-2xl font-bold text-neutral-800">
+            {outlinePie?.count}
+          </p>
+          <p className="text-base  text-neutral-600">
+            {`${((selectedPie?.value || 0) * 100)?.toFixed(0) || 0}%`}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

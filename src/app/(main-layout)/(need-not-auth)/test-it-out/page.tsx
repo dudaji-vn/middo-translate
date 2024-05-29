@@ -41,6 +41,7 @@ const fakeSender: User = {
   status: 'active',
   createdAt: new Date().toString(),
   username: 'john_doe',
+  allowUnknown: false,
 };
 const baseMessage: Message = {
   _id: '',

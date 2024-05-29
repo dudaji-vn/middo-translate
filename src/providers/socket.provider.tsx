@@ -10,6 +10,8 @@ import { useChatStore } from '@/features/chat/stores';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useQueryClient } from '@tanstack/react-query';
+import { USE_RELATION_KEY } from '@/features/users/hooks/use-relationship';
 
 const SocketProvider = () => {
   const { isElectron, ipcRenderer } = useElectron();
@@ -17,6 +19,7 @@ const SocketProvider = () => {
   const { anonymousId } = useBusinessNavigationData();
   const setOnlineList = useChatStore((state) => state.setOnlineList);
   const setSocketConnected = useAppStore((state) => state.setSocketConnected);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     function onConnect() {
@@ -39,7 +42,15 @@ const SocketProvider = () => {
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.connect();
-
+    socket.on(
+      SOCKET_CONFIG.EVENTS.USER.RELATIONSHIP.UPDATE,
+      ({ userIds }: { userIds: string[] }) => {
+        const otherUserId = userIds.find((id) => id !== user?._id);
+        if (otherUserId) {
+          queryClient.invalidateQueries([USE_RELATION_KEY, otherUserId]);
+        }
+      },
+    );
     return () => {
       socket.off('connect', onConnect);
       socket.off('disconnect', onDisconnect);

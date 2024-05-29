@@ -1,6 +1,7 @@
 import { TSpacesNotification } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/business-notifications/spaces-notifications';
 import { axios } from '@/lib/axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { GET_NOTI_KEY } from './use-get-notification';
 
 export const useReadNotifications = () => {
   const queryClient = useQueryClient();
@@ -14,7 +15,7 @@ export const useReadNotifications = () => {
       );
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['get-my-business-notifications']);
+      queryClient.invalidateQueries([GET_NOTI_KEY]);
       //   router.refresh();
     },
   });

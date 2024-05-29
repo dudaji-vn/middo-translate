@@ -1,9 +1,11 @@
 import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
 import I18N_SUPPORTED_LANGUAGES from '@/lib/i18n/support_language';
+import { useAppStore } from '@/stores/app.store';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const I18nInitProvider = () => {
+  const setLanguage = useAppStore(state => state.setLanguage);
   const { i18n } = useTranslation('common');
   useEffect(() => {
     const currentLanguage = localStorage.getItem('i18nLng');
@@ -28,6 +30,7 @@ export const I18nInitProvider = () => {
       lang = isSupport ? currentLanguage : 'en';
     }
     i18n.changeLanguage(lang);
-  }, [i18n]);
+    setLanguage(lang);
+  }, [i18n, setLanguage]);
   return <></>;
 };

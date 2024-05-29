@@ -13,6 +13,7 @@ import { messageApi } from '@/features/chat/messages/api';
 import { Room } from '../../types';
 import { Clock9, LogOut } from 'lucide-react';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 
 const ItemSub = ({
   message,
@@ -313,10 +314,22 @@ const ItemSub = ({
         >
           {preMessage} {contentDisplay}
         </Typography>
-        {isExpired && <Clock9 className=" ml-1 size-4 text-error-500" />}
-        {isVisitorLeft && <LogOut className=" ml-1 size-4 text-error-500" />}
       </div>
       {!isRead && <div className="ml-auto h-3 w-3 rounded-full bg-primary" />}
+      {!isVisitorLeft && isExpired && (
+        <Tooltip
+          title={
+            'This conversation is expired because the visitor not active for a long time'
+          }
+          triggerItem={<Clock9 className=" ml-1 size-4 text-error-500" />}
+        />
+      )}
+      {isVisitorLeft && (
+        <Tooltip
+          title={'Visitor left this conversation'}
+          triggerItem={<LogOut className=" ml-1 size-4 text-error-500" />}
+        />
+      )}
       {readByUsers.length > 0 && !isBusiness && (
         <div className="ml-auto flex items-center pl-2">
           <AvatarGroup

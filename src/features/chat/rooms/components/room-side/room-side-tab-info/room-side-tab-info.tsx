@@ -1,6 +1,5 @@
 import { Button } from '@/components/actions';
 import { useChatBox } from '../../../contexts';
-import { RoomCloud } from '../room-cloud';
 import { RoomDeleteConversation } from '../room-delete-conversation';
 import { RoomInfo } from '../room-info';
 import { RoomLeave } from '../room-leave';
@@ -37,9 +36,13 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
         <div className={isBusiness ? 'mb-8' : 'my-5'}>
           {!isBusiness && <RoomSetting room={room} />}
           {room.isGroup && (
-            <RoomMember members={room.participants} adminId={room.admin?._id} />
+            <RoomMember
+              members={room.participants}
+              pendingMembers={room.waitingUsers}
+              rejectedMembers={room.rejectedUsers}
+              adminId={room.admin?._id}
+            />
           )}
-          {/* <RoomCloud room={room} /> */}
         </div>
         <div className="mt-5 divide-y-[1px] divide-neutral-50 bg-white">
           {room.isGroup && <RoomLeave roomId={room._id} />}
