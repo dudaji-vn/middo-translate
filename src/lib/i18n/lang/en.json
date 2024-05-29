@@ -75,7 +75,13 @@
     "UNBLOCK": "Unblock",
     "REJECTED": "Rejected",
     "PENDING": "Pending",
-    "MEMBER": "Member"
+    "MEMBER": "Member",
+    "SPACE": "Space",
+    "TIME": {
+      "CREATED_ON": "Created on",
+      "UPDATED_ON": "Updated on",
+      "DELETED_ON": "Deleted on"
+    }
   },
   "MESSAGE": {
     "ERROR": {
@@ -489,6 +495,11 @@
       "TITLE": "Leave Room",
       "DESCRIPTION": "You will no longer be able to view messages from this room. Are you sure you want to leave?"
     },
+    "CHANGE_ROOM_STATUS": {
+      "TITLE": "{{action}} conversation",
+      "DESCRIPTION": " Are you sure you want to {{action}} this conversation?",
+      "FAIL_TO": "Failed to {{action}} conversation"
+    },
     "NOTIFICATION": {
       "ON": {
         "TITLE": "Turn On Notifications",
@@ -522,6 +533,7 @@
     }
   },
   "FILTERS": {
+    "FILTER_BY": "Filter by",
     "DOMAINS": "Domains",
     "COUNTRIES": "Countries",
     "TAGS": "Tags",
@@ -575,7 +587,17 @@
     "START_STOP_SCREEN_DOODLE": "Start/Stop Screen Doodle",
     "TOGGLE_LIVE_CAPTION": "Show/Hide Live Caption"
   },
-  "BUSINESS": {
+  "EXTENSION": {
+    "SPACE": {
+      "WELCOME": "Hi, welcome back",
+      "ALL_SPACE": "All space",
+      "JOINED_SPACE": "joined space",
+      "MY_SPACE": "My space",
+      "CREATE_SPACE": "Create new space"
+    },
+    "BREADCRUMB": {
+      "HOME": "Home"
+    },
     "CONVERSATIONS": "General",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",

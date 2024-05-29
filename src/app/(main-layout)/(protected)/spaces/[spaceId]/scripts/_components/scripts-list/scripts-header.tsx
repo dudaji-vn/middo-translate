@@ -34,7 +34,7 @@ const ScriptsHeader = ({
             className="w-full"
             onChange={(e) => onSearchChange(e.target.value)}
             onClear={() => onSearchChange('')}
-            placeholder={t('BUSINESS.SCRIPT.SEARCH')}
+            placeholder={t('EXTENSION.SCRIPT.SEARCH')}
           />
         </div>
         <div

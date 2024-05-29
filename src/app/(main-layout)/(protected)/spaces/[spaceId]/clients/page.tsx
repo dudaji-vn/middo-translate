@@ -99,7 +99,7 @@ const Page = ({
               className="w-full"
               onChange={(e) => onSearchChange(e.target.value)}
               onClear={() => onSearchChange('')}
-              placeholder={t('BUSINESS.CLIENT.SEARCH')}
+              placeholder={t('EXTENSION.CLIENT.SEARCH')}
             />
           </div>
           <div className="h-fit w-fit flex-none ">

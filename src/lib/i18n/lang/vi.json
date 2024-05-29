@@ -75,7 +75,13 @@
     "UNBLOCK": "Bỏ chặn",
     "REJECTED": "Đã từ chối",
     "PENDING": "Đang chờ",
-    "MEMBER": "Thành viên"
+    "MEMBER": "Thành viên",
+    "SPACE": "Không gian",
+    "TIME": {
+      "CREATED_ON": "Tạo vào",
+      "UPDATED_ON": "Cập nhật vào",
+      "DELETED_ON": "Xóa vào"
+    }
   },
   "MESSAGE": {
     "ERROR": {
@@ -478,6 +484,12 @@
       "TITLE": "Rời phòng",
       "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của phòng này nữa. Bạn có chắc chắn muốn rời phòng không?"
     },
+
+    "CHANGE_ROOM_STATUS": {
+      "TITLE": "{{action}} cuộc trò chuyện",
+      "DESCRIPTION": "Bạn có chắc chắn muốn {{action}} cuộc trò chuyện này không?",
+      "FAIL_TO": "Không thể {{action}} cuộc trò chuyện"
+    },
     "NOTIFICATION": {
       "ON": {
         "TITLE": "Bật thông báo",
@@ -511,6 +523,7 @@
     }
   },
   "FILTERS": {
+    "FILTER_BY": "Lọc theo",
     "DOMAINS": "Miền",
     "COUNTRIES": "Quốc gia",
     "TAGS": "Thẻ",
@@ -564,7 +577,17 @@
     "START_STOP_SCREEN_DOODLE": "Bắt đầu/Dừng vẽ trên màn hình",
     "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
   },
-  "BUSINESS": {
+  "EXTENSION": {
+    "SPACE": {
+      "WELCOME": "Chào, mừng bạn trở lại",
+      "ALL_SPACE": "Tất cả không gian",
+      "JOINED_SPACE": "Không gian đã tham gia",
+      "MY_SPACE": "Không gian của tôi",
+      "CREATE_SPACE": "Tạo không gian mới"
+    },
+    "BREADCRUMB": {
+      "HOME": "Trang chủ"
+    },
     "CONVERSATIONS": "Chung",
     "COMPLETED": "Hoàn thành",
     "ARCHIVED": "Lưu trữ",

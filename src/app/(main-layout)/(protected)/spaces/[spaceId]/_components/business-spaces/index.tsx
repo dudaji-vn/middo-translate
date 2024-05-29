@@ -23,6 +23,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { Member } from '../spaces-crud/sections/members-columns';
 import SpacesNotifications from './business-notifications/spaces-notifications';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
+import { useTranslation } from 'react-i18next';
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
@@ -52,26 +53,28 @@ export type TSpace = BaseEntity & {
   countries?: string[];
   bot?: string;
 };
+
 const tabItems: BusinessTabItem[] = [
   {
     value: 'all_spaces',
-    label: 'All spaces',
+    label: 'ALL_SPACE',
     componentProps: {
       className: '',
     },
   },
   {
     value: 'my_spaces',
-    label: 'My spaces',
+    label: 'MY_SPACE',
   },
   {
     value: 'joined_spaces',
-    label: 'Joined spaces',
+    label: 'JOINED_SPACE',
   },
 ];
 const BusinessSpaces = () => {
   const [tab, setTab] = React.useState<BusinessTabType>('all_spaces');
   const currentUser = useAuthStore((s) => s.user);
+  const { t } = useTranslation('common');
   const searchParams = useSearchParams();
 
   const { data: spaces_list, isLoading } = useGetSpaces({
@@ -101,7 +104,7 @@ const BusinessSpaces = () => {
             />
             <div className="flex w-full flex-col gap-2">
               <Typography className="min-w-fit text-base font-normal leading-[18px] text-neutral-600">
-                Hi, welcome back
+                {t('EXTENSION.SPACE.WELCOME')}
               </Typography>
               <Typography className="text-base font-semibold text-primary-500-main">
                 {currentUser?.name}
@@ -138,7 +141,7 @@ const BusinessSpaces = () => {
                 value={item.value}
                 className="max-w-fit px-8"
               >
-                {item.label}
+                {t(`EXTENSION.SPACE.${item.label}`)}
               </TabsTrigger>
             ))}
           </TabsList>

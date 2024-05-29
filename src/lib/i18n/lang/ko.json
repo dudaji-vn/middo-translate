@@ -75,7 +75,13 @@
     "UNBLOCK": "차단 해제",
     "REJECTED": "거부됨",
     "PENDING": "대기 중",
-    "MEMBER": "구성원"
+    "MEMBER": "구성원",
+    "SPACE": "공간",
+    "TIME": {
+      "CREATED_ON": "생성일",
+      "UPDATED_ON": "업데이트됨",
+      "DELETED_ON": "삭제됨"
+    }
   },
   "MESSAGE": {
     "ERROR": {
@@ -476,6 +482,11 @@
       "TITLE": "방 나가기",
       "DESCRIPTION": "이 방의 메시지를 더 이상 볼 수 없게 됩니다. 정말 방을 나가시겠습니까?"
     },
+    "CHANGE_ROOM_STATUS": {
+      "TITLE": "{{action}} 대화",
+      "DESCRIPTION": "이 대화를 {{action}}하시겠습니까?",
+      "FAIL_TO": "대화를 {{action}}하는 데 실패했습니다"
+    },
     "NOTIFICATION": {
       "ON": {
         "TITLE": "알림 켜기",
@@ -509,6 +520,7 @@
     }
   },
   "FILTERS": {
+    "FILTER_BY": "필터 기준",
     "DOMAINS": "도메인",
     "COUNTRIES": "국가",
     "TAGS": "태그",
@@ -562,7 +574,17 @@
     "START_STOP_SCREEN_DOODLE": "화면 드로잉 시작/정지",
     "TOGGLE_LIVE_CAPTION": "라이브 자막 보기/숨기기"
   },
-  "BUSINESS": {
+  "EXTENSION": {
+    "SPACE": {
+      "WELCOME": "안녕하세요, 환영합니다",
+      "ALL_SPACE": "모든 공간",
+      "JOINED_SPACE": "가입한 공간",
+      "MY_SPACE": "내 공간",
+      "CREATE_SPACE": "새로운 공간 만들기"
+    },
+    "BREADCRUMB": {
+      "HOME": "홈"
+    },
     "CONVERSATIONS": "일반",
     "COMPLETED": "완료됨",
     "ARCHIVED": "보관됨",

@@ -35,7 +35,7 @@ export interface RoomItemActionWrapperProps
 type Item = Omit<ActionItem, 'onAction'> & {
   onAction: () => void;
 };
-const BUSINESS_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
+const EXTENSION_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
   conversations: [
     'archive',
     'notify',
@@ -83,9 +83,9 @@ const checkAllowedActions = ({
   if (currentStatus === 'waiting')
     return WAITING_ALLOWED_ACTIONS.includes(action);
   if (currentStatus === 'archived')
-    return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
+    return EXTENSION_ALLOWED_ACTIONS.archived.includes(action);
   if (isBusinessRoom)
-    return BUSINESS_ALLOWED_ACTIONS[
+    return EXTENSION_ALLOWED_ACTIONS[
       businessConversationType as EBusinessConversationKeys
     ]?.includes(action);
   return TALK_ALLOWED_ACTIONS.includes(action);
@@ -188,7 +188,7 @@ const MobileWrapper = ({
       >
         {items.map(({ renderItem, ...item }) => {
           if (renderItem) {
-            return renderItem({ item, room, setOpen: () => {} });
+            return renderItem({ item, room, setOpen: () => { } });
           }
           return (
             <LongPressMenu.Item
