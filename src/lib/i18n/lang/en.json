@@ -606,7 +606,7 @@
     "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
     "REPORT": "Report",
-    "CLIENT_LIST": "Clients List",
+
     "CHART": {
       "CLIENT": "New Clients",
       "LANGUAGERANK": "Conversation's Language",
@@ -624,7 +624,22 @@
     "CLIENT": {
       "PAGE_TITLE": "Clients Management",
       "SEARCH": "Search for clients",
-      "EXPORT_XLSX": "Export to XLSX"
+      "EXPORT_XLSX": "Export to XLSX",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone Number",
+      "FIRST_CONNECT_DATE": "First Connect Date",
+      "LAST_CONNECT_DATE": "Last Connect Date",
+      "NO_CLIENT": "No clients found"
+    },
+    "MEMBER": {
+      "SEARCH": "Search for members",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone Number",
+      "ROLE": "Role",
+      "ACTIONS": "Actions",
+      "NO_MEMBER": "No members found"
     }
   },
   "DESKTOP_LOGIN": {

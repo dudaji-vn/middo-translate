@@ -609,9 +609,24 @@
       "SEARCH": "검색"
     },
     "CLIENT": {
-      "PAGE_TITLE": "고객",
-      "SEARCH": "검색",
-      "EXPORT_XLSX": "XLSX로 내보내기"
+      "PAGE_TITLE": "고객 관리",
+      "SEARCH": "고객 검색",
+      "EXPORT_XLSX": "XLSX로 내보내기",
+      "NAME": "이름",
+      "EMAIL": "이메일",
+      "PHONE": "전화번호",
+      "FIRST_CONNECT_DATE": "첫 연결 날짜",
+      "LAST_CONNECT_DATE": "마지막 연결 날짜",
+      "NO_CLIENT": "고객을 찾을 수 없습니다"
+    },
+    "MEMBER": {
+      "SEARCH": "회원 검색",
+      "NAME": "이름",
+      "EMAIL": "이메일",
+      "PHONE": "전화번호",
+      "ROLE": "역할",
+      "ACTIONS": "조치",
+      "NO_MEMBER": "회원을 찾을 수 없습니다"
     }
   },
   "DESKTOP_LOGIN": {

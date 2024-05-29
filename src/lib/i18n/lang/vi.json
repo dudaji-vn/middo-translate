@@ -612,9 +612,24 @@
       "SEARCH": "Tìm kiếm kịch bản"
     },
     "CLIENT": {
-      "PAGE_TITLE": "Danh sách khách hàng",
+      "PAGE_TITLE": "Quản lý khách hàng",
       "SEARCH": "Tìm kiếm khách hàng",
-      "EXPORT_XLSX": "Xuất danh sách khách hàng"
+      "EXPORT_XLSX": "Xuất sang XLSX",
+      "NAME": "Tên",
+      "EMAIL": "Email",
+      "PHONE": "Số điện thoại",
+      "FIRST_CONNECT_DATE": "Ngày kết nối đầu tiên",
+      "LAST_CONNECT_DATE": "Ngày kết nối cuối cùng",
+      "NO_CLIENT": "Không tìm thấy khách hàng"
+    },
+    "MEMBER": {
+      "SEARCH": "Tìm kiếm thành viên",
+      "NAME": "Tên",
+      "EMAIL": "Email",
+      "PHONE": "Số điện thoại",
+      "ROLE": "Vai trò",
+      "ACTIONS": "Hành động",
+      "NO_MEMBER": "Không tìm thấy thành viên"
     }
   },
   "DESKTOP_LOGIN": {
