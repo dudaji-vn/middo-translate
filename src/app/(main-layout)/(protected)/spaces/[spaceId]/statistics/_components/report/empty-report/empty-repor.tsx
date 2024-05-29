@@ -9,7 +9,7 @@ const EmptyReport = () => {
     <section className="flex h-full w-full flex-col justify-between ">
       <div className="w-full flex-none px-4 md:px-10">
         <Typography className=" flex flex-row items-center justify-between text-base font-semibold text-neutral-800">
-          {t('BUSINESS.REPORT')}
+          {t('EXTENSION.REPORT')}
         </Typography>
       </div>
       <div className="m-auto flex flex-grow flex-col justify-center space-y-4">

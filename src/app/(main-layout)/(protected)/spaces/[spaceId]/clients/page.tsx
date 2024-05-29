@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { DataTable } from '@/components/ui/data-table';
-import { clientsColumns as columns } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/clients/clients-table/clients-columns';
+import { makeClientsColumns } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/clients/clients-table/clients-columns';
 import moment from 'moment';
 import { User } from '@/features/users/types';
 import {
@@ -20,6 +20,11 @@ import ClientsPagination, {
   ClientPagination,
 } from './clients-table/pagination/clients-pagination';
 import { useGetClients } from '@/features/statistics/hooks/use-get-clients';
+import { Typography } from '@/components/data-display';
+import { Menu } from 'lucide-react';
+import { cn } from '@/utils/cn';
+import { useSidebarStore } from '@/stores/sidebar.store';
+import { Button } from '@/components/actions';
 
 export type Client = Pick<User, '_id' | 'email' | 'name' | 'phoneNumber'> & {
   firstConnectDate: string;
@@ -46,6 +51,8 @@ const Page = ({
   const [currentPage, setCurrentPage] = useState(
     DEFAULT_CLIENTS_PAGINATION.currentPage,
   );
+  const { setOpenSidebar, openSidebar } = useSidebarStore();
+  const { t } = useTranslation('common');
   const [limit, setLimit] = useState(getClientsTablePerpage());
   const [search, setSearch] = useState('');
   const { data, isLoading, isError } = useGetClients({
@@ -80,7 +87,6 @@ const Page = ({
     setSearch(search);
   };
 
-  const { t } = useTranslation('common');
   const exportData = items.map((item) => ({
     Name: item.name,
     Email: item.email,
@@ -91,7 +97,20 @@ const Page = ({
   return (
     <section className="relative w-full">
       <div className="flex  flex-col justify-center gap-4  px-4 py-3 font-medium md:flex-row md:items-center md:px-10">
-        <span>Clients List</span>
+        <div className="flex flex-row items-center justify-start">
+          <Button.Icon
+            onClick={() => setOpenSidebar(!openSidebar, true)}
+            color="default"
+            size="xs"
+            variant={'ghost'}
+            className={cn('md:hidden')}
+          >
+            <Menu />
+          </Button.Icon>
+          <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800">
+            {t(`EXTENSION.CLIENT.PAGE_TITLE`)}
+          </Typography>
+        </div>
         <em className="max-md:hidden md:w-1/6 xl:w-1/5" />
         <div className="flex grow gap-4">
           <div className="h-12 grow">
@@ -99,7 +118,7 @@ const Page = ({
               className="w-full"
               onChange={(e) => onSearchChange(e.target.value)}
               onClear={() => onSearchChange('')}
-              placeholder={t('BUSINESS.CLIENT.SEARCH')}
+              placeholder={t('EXTENSION.CLIENT.SEARCH')}
             />
           </div>
           <div className="h-fit w-fit flex-none ">
@@ -119,7 +138,7 @@ const Page = ({
       <div className="w-full overflow-x-auto rounded-md px-10 py-3">
         <DataTable
           dividerRow
-          columns={columns}
+          columns={makeClientsColumns(t)}
           data={items}
           tableHeadProps={{
             className: 'bg-white  border-none',
