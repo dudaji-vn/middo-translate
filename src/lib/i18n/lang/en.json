@@ -434,6 +434,10 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "CREATE_SPACE": {
+      "TITLE": "Give <span class='text-primary-500-main'> your space </span> some information",
+      "DESCRIPTION": "Help your crews to recognize your business easier by naming this space, adding space avatar or company's logo <span class='font-light'>(optional)</span>."
+    },
     "DELETE_SPACE": {
       "TITLE": "Delete Space",
       "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",

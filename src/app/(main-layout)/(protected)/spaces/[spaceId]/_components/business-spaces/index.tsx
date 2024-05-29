@@ -123,7 +123,7 @@ const BusinessSpaces = () => {
               }}
               size={'xs'}
             >
-              Create New Space
+              {t('EXTENSION.SPACE.CREATE_SPACE')}
             </Button>
             <SpacesNotifications />
           </div>

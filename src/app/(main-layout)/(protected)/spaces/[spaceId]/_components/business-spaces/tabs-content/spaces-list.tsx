@@ -10,6 +10,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import SpacesListSkeletons from '../skeletons/spaces-list-skeletons';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
+import { useTranslation } from 'react-i18next';
 
 function EmptyContent({
   createProps,
@@ -18,6 +19,7 @@ function EmptyContent({
   createProps?: Omit<LinkProps, 'href'> &
     React.HTMLAttributes<HTMLAnchorElement>;
 } & React.HTMLAttributes<HTMLDivElement>) {
+  const { t } = useTranslation('common');
   return (
     <div
       {...props}
@@ -47,7 +49,7 @@ function EmptyContent({
           shape={'square'}
           className={'mt-5 w-fit'}
         >
-          Create New Space
+          {t('EXTENSION.SPACE.CREATE_SPACE')}
         </Button>
       </Link>
     </div>

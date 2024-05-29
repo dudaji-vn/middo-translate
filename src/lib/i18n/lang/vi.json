@@ -432,6 +432,10 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "CREATE_SPACE": {
+      "TITLE": "Cung cấp thông tin cho <span class='text-primary-500-main'> không gian của bạn </span>",
+      "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>."
+    },
     "DELETE_SPACE": {
       "TITLE": "Xoá không gian",
       "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu của mình và không thể hoàn tác. Bạn có chắc chắn muốn xoá <strong>{{name}}</strong> không?",
