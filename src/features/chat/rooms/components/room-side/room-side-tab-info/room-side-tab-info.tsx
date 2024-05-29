@@ -9,6 +9,7 @@ import { ArrowLeftIcon } from 'lucide-react';
 import { useRoomSidebarTabs } from '../room-side-tabs/room-side-tabs.hook';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import useClient from '@/hooks/use-client';
+import { RoomBlock } from '../room-block';
 export interface RoomSideTabInfoProps {}
 
 export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
@@ -46,6 +47,7 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
         </div>
         <div className="mt-5 divide-y-[1px] divide-neutral-50 bg-white">
           {room.isGroup && <RoomLeave roomId={room._id} />}
+          {!room.isGroup && <RoomBlock room={room} />}
           <RoomDeleteConversation isGroup={room.isGroup} roomId={room._id} />
         </div>
       </div>
