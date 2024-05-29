@@ -11,6 +11,8 @@ import { Range } from "react-range";
 import { cn } from "@/utils/cn";
 import { useAppStore } from "@/stores/app.store";
 import { Spinner } from "../feedback";
+import { TransformWrapper, TransformComponent,useControls  } from "react-zoom-pan-pinch";
+
 interface Media {
   url: string;
   file?: File;
@@ -33,6 +35,8 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const [zoom, setZoom] = useState(1);
   const [rotate, setRotate] = useState(0);
   const [downloading, setDownloading] = useState(false);
+  const [paintingStart, setPaintingStart] = useState<number>(0);
+
   const onDownload = () => {
     const file = files[current || 0];
     if(!file) return;
@@ -81,7 +85,25 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const renderMediaMain = () => {
     switch(files[current].type) {
       case "image":
-        return <Image ref={imageRef} className="w-full h-full object-contain" src={files[current].url} alt={files[current]?.file?.name || ''} width={500} height={500}/>
+        return <TransformWrapper
+        initialScale={1}
+        minScale={1}
+        maxScale={1}
+        smooth={true}
+        centerOnInit={true}
+        panning={{ disabled: zoom === 1 }}
+      >
+        {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+          <>
+            <Controls zoom={zoom}/>
+            <TransformComponent
+              contentClass="!w-full !h-full" 
+              wrapperClass="!w-full !h-full">
+              <Image ref={imageRef} className="w-full h-full object-contain" src={files[current].url} alt={files[current]?.file?.name || ''} width={500} height={500}/>
+            </TransformComponent>
+          </>
+        )}
+      </TransformWrapper>
       case "video":
         return <VideoPlayer 
             file={{
@@ -133,8 +155,18 @@ function MediaLightBox(props: MediaLightBoxProps) {
     }
   }, [current, fetchNextPage, files.length]);
 
+  useEffect(() => {
+    if(index == undefined) {
+      setCurrent(0);
+      setDownloading(false);
+      setZoom(1);
+      setRotate(0);
+    }
+  }, [index]);
+
   if(files.length === 0 || index == undefined) return null;
 
+  // on component unmount reset all state 
   
 
   return (
@@ -174,11 +206,56 @@ function MediaLightBox(props: MediaLightBoxProps) {
           <ChevronLeft />
         </Button.Icon>}
         {/* Image main */}
-        <div className="w-full h-full flex justify-center items-center overflow-auto no-scrollbar focus:scroll-auto">
+        
+        <div className="w-full h-full flex justify-center items-center overflow-auto no-scrollbar focus:scroll-auto select-none">
           {/* <div className="absolute z-[-1] inset-0 flex items-center justify-center">
             <Image src="/loading-middo.gif" width={50} height={50} alt="Loading"/>
           </div> */}
-          {renderMediaMain()}
+          <TransformWrapper
+            initialScale={1}
+            minScale={0.4}
+            maxScale={2}
+            smooth={true}
+            centerOnInit={true}
+            panning={{
+              disabled: true,
+            }}
+            onPanningStart={(_, e: MouseEvent | TouchEvent) => {
+              let offsetX = 0;
+              if(e instanceof MouseEvent) {
+                offsetX = e.offsetX;
+              } else {
+                offsetX = e.touches[0].clientX;
+              }
+              setPaintingStart(offsetX || 0)
+            }}
+            onPanningStop={(ref, e: MouseEvent | TouchEvent) => {
+              const THRESHOLD = 50;
+              let offsetX = 0;
+              if(e instanceof MouseEvent) {
+                offsetX = e.offsetX;
+              } else {
+                offsetX = e.touches[0].clientX;
+              }
+              let threshold = paintingStart - offsetX;
+              if(threshold > THRESHOLD) {
+                onNext();
+              } else if(threshold < -THRESHOLD) {
+                onPrev();
+              }
+            }}
+          >
+            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+              <>
+                <TransformComponent 
+                  contentClass="!w-full !h-full" 
+                  wrapperClass="!w-full !h-full">
+                  {renderMediaMain()}
+                </TransformComponent>
+              </>
+            )}
+          </TransformWrapper>
+          
         </div>
         {/* Button next */}
         {current < files.length - 1 && files?.length > 1 && <Button.Icon
@@ -353,6 +430,11 @@ const ThumbnailList = memo(({files, current, setCurrent}: ThumbnailListProps) =>
 })
 ThumbnailList.displayName = 'ThumbnailList';
 
+const Controls = ({zoom}: {zoom: number}) => {
+  const { setTransform,  } = useControls();
+  // setTransform(0, 0, zoom);
+  return <></>
+}
 
 
 export default memo(MediaLightBox);
