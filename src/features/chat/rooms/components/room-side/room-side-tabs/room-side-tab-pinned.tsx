@@ -16,6 +16,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import {
+  Clock9Icon,
   MessageSquareDashedIcon,
   MoreVerticalIcon,
   PinIcon,
@@ -26,6 +27,7 @@ import { useRoomId } from '../../../hooks/use-roomId';
 import { RoomSideTabLayout } from './room-side-tab-layout';
 import { useRoomSidebarTabs } from './room-side-tabs.hook';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 
 export interface RoomSideTabPinnedProps {}
 
@@ -46,7 +48,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
           <div className="flex h-full flex-col items-center  justify-center bg-white/80 backdrop-blur-lg">
             <MessageSquareDashedIcon className="mb-4 size-16 text-[#c5dcfa]" />
             <span className="w-[72%] text-center text-sm font-light">
-            {t('CONVERSATION.NO_PIN')}
+              {t('CONVERSATION.NO_PIN')}
             </span>
           </div>
         )}
@@ -62,9 +64,17 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                 key={pin._id}
                 className="group relative flex flex-col items-center p-3"
               >
-                <span className="break-word-mt  ml-auto text-xs font-light text-neutral-800">
-                  {t('CONVERSATION.PINED_BY', {name: isMe ? t('CONVERSATION.YOU') : pin.pinnedBy.name})}
-                </span>
+                <div className="flex w-full justify-end">
+                  <span className="break-word-mt  ml-auto text-xs font-light text-neutral-800">
+                    {t('CONVERSATION.PINED_BY', {
+                      name: isMe ? t('CONVERSATION.YOU') : pin.pinnedBy.name,
+                    })}
+                  </span>
+                  <span className="break-word-mt flex items-center whitespace-nowrap text-xs font-light text-neutral-800">
+                    &nbsp;at&nbsp;
+                    {moment(pin.createdAt).format('ll')}
+                  </span>
+                </div>
                 <div
                   key={pin._id}
                   className="group relative flex w-full flex-1 items-center"
