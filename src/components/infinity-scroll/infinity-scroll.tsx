@@ -35,8 +35,9 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
       threshold: 1,
     });
     const { currentY } = usePullToRefresh({
-      ref: ref as React.RefObject<HTMLElement>,
+      ref: ref,
       onRefresh,
+      disable: !pullToRefresh,
     });
 
     useEffect(() => {

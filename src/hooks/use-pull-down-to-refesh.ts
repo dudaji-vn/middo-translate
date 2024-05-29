@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 export function usePullToRefresh({
   ref,
   onRefresh,
-  isRefreshing,
+  disable,
 }: {
   ref: React.RefObject<HTMLElement>;
   onRefresh?: () => void;
-  isRefreshing?: boolean;
+  disable?: boolean;
 }) {
   const [indicatorState, setIndicatorState] = useState<
     'visible' | 'invisible' | 'transform'
   >('invisible');
   const [currentY, setCurrentY] = useState(0);
   useEffect(() => {
+    if (disable) return;
     const el = ref?.current;
     if (!el) return;
 
@@ -100,7 +100,7 @@ export function usePullToRefresh({
       el.removeEventListener('touchstart', handleTouchStart);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref]);
+  }, [ref, disable]);
   function addPullIndicator(el: HTMLDivElement) {
     setIndicatorState('visible');
   }
