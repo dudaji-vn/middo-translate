@@ -22,12 +22,9 @@ const SkeletonCard = () => {
   );
 };
 
-const CardsLoading = ({ title }: { title: string }) => {
+const CardsLoading = () => {
   return (
-    <section className="relative w-full space-y-4">
-      <Typography className=" flex flex-row items-center justify-between space-y-0 text-base font-semibold text-neutral-800">
-        {title}
-      </Typography>
+    <section className="relative w-full space-y-4 bg-white px-4 py-5 md:px-10">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
         {[...Array(6)].map((_, index) => (
           <SkeletonCard key={index} />

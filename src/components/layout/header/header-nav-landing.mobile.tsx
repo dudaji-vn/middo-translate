@@ -7,6 +7,9 @@ import { usePathname } from 'next/navigation';
 import { forwardRef } from 'react';
 import { useBoolean } from 'usehooks-ts';
 import { NavItem } from './header.config';
+import Link from 'next/link';
+import { useElectron } from '@/hooks/use-electron';
+import { useTranslation } from 'react-i18next';
 
 export interface HeaderNavMobileProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -48,6 +51,8 @@ const MobileLandingNav = ({
   pathName: string | null;
   navItems: NavItem[];
 }) => {
+  const {t} = useTranslation('common');
+  const {isElectron} = useElectron();
   useDisableScrollWhenMount();
   const handleScroll = (href: string) => {
     const targetElement = document.getElementById(href);
@@ -94,12 +99,19 @@ const MobileLandingNav = ({
                 },
               }}
             >
-              <div
-                onClick={() => handleScroll(item.href)}
-                className="block h-full w-full cursor-pointer px-[5vw] py-4"
+              <Link
+                href={item.href}
+                target={isElectron ? '_self' : (item.target || '_self')}
+                {
+                  ...(item.type === 'scroll' ? {onClick: (e) => {
+                    e.preventDefault();
+                    handleScroll(item.href);
+                  }} : {})
+                }
+                className='block h-full w-full cursor-pointer px-[5vw] py-4'
               >
-                {item.name}
-              </div>
+                {t(item.name)}
+              </Link>
             </motion.div>
           );
         })}

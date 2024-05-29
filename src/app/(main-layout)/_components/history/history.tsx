@@ -11,7 +11,7 @@ import { useAppStore } from '@/stores/app.store';
 import { SvgSpinnersGooeyBalls1 } from '@/components/icons';
 import { usePathname, useRouter } from 'next/navigation';
 import { isEqual } from 'lodash';
-import { SearchParams } from '../../page';
+import { SearchParams } from '../../translation/page';
 import { useTranslateStore } from '@/stores/translate.store';
 import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';

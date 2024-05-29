@@ -17,8 +17,7 @@ import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 type Props = {};
 
 export const Header = (props: Props) => {
-  const { isBusiness, isPreviewChatflowPage } =
-    useBusinessNavigationData();
+  const { isBusiness, isPreviewChatflowPage } = useBusinessNavigationData();
   const platform = usePlatformStore((state) => state.platform);
   const isClient = useClient();
   const hideNavigation = isBusiness;
@@ -44,7 +43,6 @@ export const Header = (props: Props) => {
             : '',
         )}
       >
-
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
         {isBusiness && (
           <Typography
@@ -52,7 +50,6 @@ export const Header = (props: Props) => {
               'flex flex-row items-center pl-2 font-semibold text-primary-500-main'
             }
           >
-            {' '}
             <Blocks /> Extension
           </Typography>
         )}

@@ -18,6 +18,16 @@ export enum ESpaceChart {
   RESPONSE_MESSAGE = 'responsedMessage',
 }
 
+export const CHART_TOOLTIP_CONTENT: Record<ESpaceChart, string> = {
+  newVisitor: 'The number of new visitors to your website',
+  openedConversation: 'The number of opened conversations',
+  dropRate: 'The rate of dropped conversations',
+  responseTime: 'The average response time',
+  customerRating: 'The average customer rating',
+  responsedMessage: 'The average response message',
+  languageRank: 'The rank of languages',
+  trafficTrack: 'The traffic track of conversations',
+};
 export type AnalysisData = Record<
   ESpaceChart,
   {
@@ -36,6 +46,10 @@ export type TTraficTrack = Array<{
   x: number;
   y: number;
   density: number;
+  openedConversation: Array<{
+    count: number;
+    language: string;
+  }>;
 }>;
 
 export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {

@@ -5,7 +5,7 @@ import { cn } from '@/utils/cn';
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useCallback, useEffect } from 'react';
-import { SearchParams } from '../page';
+import { SearchParams } from '../translation/page';
 import History from './history/history';
 import Phrases from './phrases/phrases';
 

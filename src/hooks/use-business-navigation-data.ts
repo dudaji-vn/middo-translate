@@ -21,6 +21,7 @@ export const useBusinessNavigationData = () => {
   const isBusiness = pathname?.includes(EPageType.SPACES);
   const businessSlugs = params?.slugs || [];
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
+  const extensionId = params?.businessId;
   const isPreviewChatflowPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
   const isOnBusinessChat =
     params?.[PK_BUSINESS_SPACES] && businessSlugs?.length > 0;
@@ -48,6 +49,7 @@ export const useBusinessNavigationData = () => {
     businessConversationType,
     spaceId,
     isPreviewChatflowPage,
+    extensionId,
     inboxStatus:
       MAPPED_INBOX_STATUS[
         (businessConversationType || '') as EBusinessConversationKeys

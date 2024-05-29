@@ -6,6 +6,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
@@ -16,6 +17,8 @@ import { useRouter } from 'next/navigation';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useNetworkStatus } from '@/utils/use-network-status';
 import { useAppStore } from '@/stores/app.store';
+import { generateRoomDisplay } from '../utils';
+import { useAuthStore } from '@/stores/auth.store';
 
 interface ChatBoxContextProps {
   room: Room;
@@ -31,17 +34,20 @@ export const ChatBoxProvider = ({
   room: _room,
 }: PropsWithChildren<{ room: Room }>) => {
   const notifyToken = usePlatformStore((state) => state.notifyToken);
+  const currentUserId = useAuthStore((state) => state.user?._id);
   const { isOnline } = useNetworkStatus();
   const { socketConnected } = useAppStore();
 
   const [room, setRoom] = useState<Room>(_room);
+  const roomDisplay = useMemo(
+    () => generateRoomDisplay(room, currentUserId || ''),
+    [currentUserId, room],
+  );
   const updateRoom = useCallback((room: Partial<Room>) => {
     setRoom((old) => ({ ...old, ...room }));
   }, []);
   const router = useRouter();
-
   // socket events
-
   const handleForceLeaveRoom = useCallback(
     (roomId: string) => {
       if (roomId !== room._id) return;
@@ -77,7 +83,12 @@ export const ChatBoxProvider = ({
   }, [handleForceLeaveRoom, room._id, updateRoom]);
 
   return (
-    <ChatBoxContext.Provider value={{ room, updateRoom }}>
+    <ChatBoxContext.Provider
+      value={{
+        room: roomDisplay,
+        updateRoom,
+      }}
+    >
       {children}
     </ChatBoxContext.Provider>
   );

@@ -124,7 +124,7 @@ export default function ShortcutsGuide() {
   const { t } = useTranslation('common');
   const defaultValue: string = room
     ? t('SHORTCUT.TABS.CALL')
-    : pathname === ROUTE_NAMES.ROOT
+    : pathname === ROUTE_NAMES.TRANSLATION
       ? t('SHORTCUT.TABS.TRANSLATION')
       : t('SHORTCUT.TABS.CONVERSATION');
 

@@ -1,15 +1,12 @@
 import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
-import React, { use } from 'react';
+import React from 'react';
 import DisplayedSelectedFilter from '../filter/displayed-selected-filter';
 import { RoomsFilterName } from '../rooms.modal-filter';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
-import { Globe } from 'lucide-react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { RoomsFilterOption } from '../filter/filter-section';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
-import { Button } from '@/components/actions';
-import { Typography } from '@/components/data-display';
 
 const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
   const { appliedFilters, setFilterApplied, filterOptions } =
