@@ -83,7 +83,7 @@ const ReportPage = ({
   });
 
   if (!isClient) return null;
-  const isNotEnoughData = !data?.isNotEnoughData;
+  const isNotEnoughData = data?.isNotEnoughData;
   if (isNotEnoughData) {
     return <EmptyReport />;
   }
