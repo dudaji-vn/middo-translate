@@ -20,7 +20,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
 
   return (
     <section className="relative w-full space-y-4 px-4 md:px-10">
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-start">
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}
           color="default"
