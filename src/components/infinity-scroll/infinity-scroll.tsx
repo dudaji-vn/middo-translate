@@ -34,7 +34,7 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
     const { isIntersecting, ref: triggerRef } = useIntersectionObserver({
       threshold: 1,
     });
-    const { currentY } = usePullToRefresh({
+    usePullToRefresh({
       ref: ref,
       onRefresh,
       disable: !pullToRefresh,
@@ -47,7 +47,7 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
     }, [isIntersecting, hasMore, onLoadMore]);
     return (
       <>
-        <IndicatorAnimation isRefreshing={isRefreshing} input={currentY} />
+        {/* <IndicatorAnimation isRefreshing={isRefreshing} input={currentY} /> */}
         <div ref={ref} {...props} className={cn('relative', props.className)}>
           {isFetching && (
             <div
@@ -107,9 +107,7 @@ const IndicatorAnimation = ({
   const rotate = useTransform(x, [0, 300], [0, 360]);
   return (
     <div className="absolute left-0 right-0 z-50 flex w-full justify-center">
-      {isRefreshing ? // <div
-      //   className={cn(
-      //     'absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary',
+      {isRefreshing ? //     'absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary', //   className={cn( // <div
       //   )}
       // >
       //   <Spinner size="sm" />
