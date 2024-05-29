@@ -269,6 +269,10 @@
       "MESSAGE": "현재는 이 대화에 답장할 수 없습니다.",
       "LEARN_MORE": "자세히 알아보기"
     },
+    "BLOCK_CONTENT": {
+      "TITLE": "차단되었습니다",
+      "DESCRIPTION": "그들로부터 메시지나 전화를 받지 않습니다."
+    },
     "WELCOME_TITLE": "Middo 대화에 오신 것을 환영합니다!",
     "WELCOME_CONTENT": "팀 또는 그룹과 대화를 시작하세요. 또한 토론하고 파일을 공유하기 위해 그룹 채팅을 생성할 수 있습니다.",
     "TITLE": "대화",
@@ -456,6 +460,12 @@
     "LEAVE_GROUP": {
       "TITLE": "그룹 나가기",
       "DESCRIPTION": "이 그룹의 메시지를 더 이상 볼 수 없게 됩니다. 정말 그룹에서 나가시겠습니까?"
+    },
+
+    "BLOCK_USER": {
+      "TITLE": "{{name}} 차단",
+      "DESCRIPTION": "차단 해제할 때까지 그들로부터 메시지나 전화를 받지 않습니다. 정말로 차단하시겠습니까?",
+      "ADDITIONAL_OPTION_1": "대화 기록도 삭제 (복구 불가)"
     },
     "VERIFY": {
       "SUCCESS": {
