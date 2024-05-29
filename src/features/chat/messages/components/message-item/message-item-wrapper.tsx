@@ -32,7 +32,7 @@ import { MessageItem } from '.';
 import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
 import { actionItems, useMessageActions } from '../message-actions';
-import { MessageEmojiPicker } from '../message-emoji-picker';
+import { EMOJI_LANG_SUPPORT, MessageEmojiPicker } from '../message-emoji-picker';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 import { listenEvent } from '@/features/call/utils/custom-event.util';
@@ -268,6 +268,7 @@ const MobileWrapper = ({
     setValue: changeShowEmoji,
     setTrue: openEmoji,
   } = useBoolean(false);
+  const language = useAppStore(state => state.language);
   const {
     value: isDisableLongPress,
     setValue: changeDisableLongPress,
@@ -367,11 +368,34 @@ const MobileWrapper = ({
           ))}
         </LongPressMenu.Menu>
       </LongPressMenu>
-      <Drawer open={showEmoji} onOpenChange={changeShowEmoji}>
+      {showEmoji && <div className='fixed top-0 left-0 right-0 bottom-0 z-50 bg-neutral-200/80 backdrop-blur-md flex flex-col'>
+          <div className='flex-1 w-full' onClick={()=>changeShowEmoji(false)}></div>
+          <motion.div 
+            initial={{ opacity: 0, top: 200 }}
+            animate={{
+              opacity: 1,
+              top: 0,
+              transition: {
+                delay: 0,
+              },
+            }}
+            exit={{ opacity: 0, top: 200 }}
+          className='bg-white flex items-center justify-center rounded-tl-3xl rounded-tr-3xl border-t border-neutral-100 relative'>
+            <EmojiPicker
+              locale={EMOJI_LANG_SUPPORT.includes(language) ?  language : 'en'}
+              theme="light"
+              onEmojiSelect={(emoji: any) => {
+                handleEmojiClick(emoji.native);
+              }}
+              skinTonePosition="none"
+              previewPosition="none"
+            />
+          </motion.div>
+        </div>}
+      {/* <Drawer open={showEmoji} onOpenChange={changeShowEmoji} >
         <DrawerContent>
           <div
-            data-vaul-no-drag
-            className="custom-emoji-picker flex justify-center"
+            className="custom-emoji-picker flex justify-center overflow-auto"
           >
             <EmojiPicker
               theme="light"
@@ -383,7 +407,7 @@ const MobileWrapper = ({
             />
           </div>
         </DrawerContent>
-      </Drawer>
+      </Drawer> */}
     </>
   );
 };

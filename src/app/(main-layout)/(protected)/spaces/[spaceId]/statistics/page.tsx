@@ -7,7 +7,11 @@ import {
   AnalyticsOptions,
   useGetSpaceAnalytic,
 } from '@/features/business-spaces/hooks/use-get-space-analytic';
-import { ESpaceChart, TChartKey } from '@/types/business-statistic.type';
+import {
+  CHART_TOOLTIP_CONTENT,
+  ESpaceChart,
+  TChartKey,
+} from '@/types/business-statistic.type';
 import { ReportCards } from './_components/report/report-cards';
 import {
   MAPPED_CHART_UNIT,
@@ -16,12 +20,12 @@ import {
 import { BusinessLineChart } from './_components/report/report-charts';
 import LanguageRank from './_components/report/report-charts/languages-rank/language-rank';
 import BusinessScatter from './_components/report/report-charts/scatter-visit/business-scatter';
+import { accurateHumanize } from '@/utils/moment';
+import moment from 'moment';
 
 const chartsOrderList: Array<TChartKey> = [
   ESpaceChart.NEW_VISITOR,
   ESpaceChart.OPENED_CONVERSATION,
-  ESpaceChart.LANGUAGE_RANK,
-  ESpaceChart.TRAFFIC_TRACK,
   ESpaceChart.DROP_RATE,
   ESpaceChart.RESPONSE_TIME,
   ESpaceChart.CUSTOMER_RATING,
@@ -78,43 +82,90 @@ const ReportPage = ({
 
   if (!isClient) return null;
   return (
-    <section className="relative h-fit w-full space-y-4">
-      <ReportCards data={data?.analysis} loading={isFetching} />
+    <section className="relative h-fit w-full space-y-4 bg-[#FCFCFC]">
+      <ReportCards
+        data={data?.analysis}
+        loading={isFetching}
+        domain={searchParams.domain}
+        memberId={searchParams.memberId}
+      />
       {chartsOrderList.map((chart) => {
-        if (chart === ESpaceChart.TRAFFIC_TRACK) {
-          return (
-            <BusinessScatter
-              key={chart}
-              data={data?.trafficTrack || []}
-              displayFilterBy={searchParams.domain}
-            />
-          );
-        }
-        if (chart === ESpaceChart.LANGUAGE_RANK)
-          return (
-            <LanguageRank
-              key={chart}
-              piesData={data?.chart?.conversationLanguage || []}
-              data={data?.conversationLanguage || []}
-              isLoading={isFetching}
-            />
-          );
         let chartUnit = MAPPED_CHART_UNIT[chart];
         const chartData = [...(data?.chart?.[chart] || [])];
-        if (chart === ESpaceChart.RESPONSE_TIME) {
-          const { unit, ratio } = getProposedTimeUnit(chartData);
-          chartData.forEach((item, index) => {
-            chartData[index].value = Number((item.value / ratio).toFixed(0));
-          }, []);
-          chartUnit = unit;
-        }
+        let formattedTotal: number | string = data?.analysis[chart]?.total || 0;
         const filterBy =
           searchParams[
             CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
           ];
+        switch (chart) {
+          case ESpaceChart.OPENED_CONVERSATION: {
+            return (
+              <div className="flex flex-col" key={chart}>
+                <BusinessLineChart
+                  key={chart}
+                  tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+                  total={`${formattedTotal}`}
+                  filterByKey={CHART_AFFECTED_PARAMS[chart]}
+                  filterBy={filterBy}
+                  title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
+                  data={chartData}
+                  unit={chartUnit}
+                  yAxisProps={{
+                    allowDecimals: ALLOW_DECIMALS.includes(chart),
+                  }}
+                />
+                <LanguageRank
+                  key={chart}
+                  piesData={data?.chart?.conversationLanguage || []}
+                  data={data?.conversationLanguage || []}
+                  isLoading={isFetching}
+                />
+                <BusinessScatter
+                  key={chart}
+                  data={data?.trafficTrack || []}
+                  displayFilterBy={searchParams.domain}
+                />
+              </div>
+            );
+          }
+          case ESpaceChart.RESPONSE_TIME:
+            {
+              const { unit, ratio } = getProposedTimeUnit(chartData);
+              chartData.forEach((item, index) => {
+                chartData[index].value = Number(
+                  (item.value / ratio).toFixed(0),
+                );
+              }, []);
+              formattedTotal =
+                accurateHumanize(
+                  moment.duration(formattedTotal, 'milliseconds'),
+                  1,
+                ).accuratedTime || 0;
+              chartUnit = unit;
+            }
+            break;
+          case ESpaceChart.CUSTOMER_RATING:
+          case ESpaceChart.NEW_VISITOR:
+          case ESpaceChart.RESPONSE_MESSAGE:
+            formattedTotal = `${formattedTotal} ${chartUnit}`;
+            break;
+          case ESpaceChart.DROP_RATE:
+            {
+              const { value, total } = data?.analysis[chart] || {
+                value: 0,
+                total: 1,
+              };
+              const rate = total ? Number((value / total).toFixed(0)) * 100 : 0;
+              formattedTotal = `${rate}%`;
+            }
+            break;
+        }
+
         return (
           <BusinessLineChart
             key={chart}
+            tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+            total={`${formattedTotal}`}
             filterByKey={CHART_AFFECTED_PARAMS[chart]}
             filterBy={filterBy}
             title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}

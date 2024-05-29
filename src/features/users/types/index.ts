@@ -1,4 +1,5 @@
 import { BaseEntity } from '@/types';
+export type UserRelationshipStatus = 'none' | 'blocking' | 'blocked';
 type UserStatus =
   | 'pending'
   | 'active'
@@ -16,4 +17,5 @@ export type User = {
   status: UserStatus;
   phoneNumber?: string;
   username: string;
+  allowUnknown: boolean;
 } & BaseEntity;

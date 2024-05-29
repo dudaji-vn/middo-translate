@@ -4,7 +4,6 @@ import {
   RoomItemActionWrapperDisabled,
 } from './room-item-action-wrapper';
 
-import { Typography } from '@/components/data-display';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';

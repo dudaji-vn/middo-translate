@@ -95,5 +95,10 @@ export const SOCKET_CONFIG = {
       },
       REMOVE_MEMBER: 'space.member.remove',
     },
+    USER: {
+      RELATIONSHIP: {
+        UPDATE: 'user.relationship.update',
+      },
+    },
   },
 };

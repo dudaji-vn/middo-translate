@@ -4,11 +4,13 @@ import { convert } from 'html-to-text';
 import { Message } from '../types';
 
 export const useCopyMessage = () => {
-  const userLanguage = useAuthStore((state) => state.user?.language);
+  const user = useAuthStore((state) => state.user);
+  const userLanguage = user?.language;
   const { copy } = useTextCopy();
   const copyMessage = async (message: Message) => {
     let content = message.content;
-    if (message.translations && message.translations[userLanguage!]) {
+    const isMe = message.sender._id === user?._id;
+    if (message.translations && message.translations[userLanguage!] && !isMe) {
       content = message.translations[userLanguage!];
     }
     const plaintext = convert(content, {

@@ -65,9 +65,8 @@ export default function BusinessScatter({
       weeklyVariance: data ? parsingDataFromUTC(data) : [],
     };
   }, [data]);
-  console.log('dataset==>', dataset);
   return (
-    <section className="relative w-full space-y-4  py-5">
+    <section className="relative w-full space-y-4  bg-white  px-4  py-5 md:px-10">
       <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
         Traffic track
         <span
@@ -114,7 +113,7 @@ export default function BusinessScatter({
             }
             yAxisProps={{
               label: {
-                value: 'Day of week',
+                value: 'Days of week',
                 position: 'top',
               },
               domain: [0, 7],

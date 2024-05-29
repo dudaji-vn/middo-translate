@@ -7,32 +7,43 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/feedback';
 
-import { Button } from '@/components/actions';
-import { LogOut } from 'lucide-react';
-import { useLeaveRoom } from '../../hooks/use-leave-room';
+import { roomApi } from '../api';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { Item } from '@/components/data-display';
+import { useRouter } from 'next/navigation';
 
-export interface RoomLeaveProps {
-  roomId: string;
+export interface RoomModalRejectProps {
+  id: string;
+  onClosed?: () => void;
 }
 
-export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
-  const { mutate } = useLeaveRoom();
+export const RoomModalReject = (props: RoomModalRejectProps) => {
   const { t } = useTranslation('common');
+  const router = useRouter();
+  const { mutate } = useMutation({
+    mutationFn: roomApi.reject,
+    onSuccess: () => {
+      router.replace(ROUTE_NAMES.ONLINE_CONVERSATION);
+    },
+  });
+
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Item leftIcon={<LogOut />}>{t('CONVERSATION.LEAVE_GROUP')}</Item>
-      </AlertDialogTrigger>
+    <AlertDialog
+      defaultOpen
+      onOpenChange={(open) => {
+        if (!open) {
+          props.onClosed?.();
+        }
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t('MODAL.LEAVE_ROOM.TITLE')}?</AlertDialogTitle>
+          <AlertDialogTitle>{t('MODAL.REJECT_GROUP.TITLE')}</AlertDialogTitle>
           <AlertDialogDescription>
-            {t('MODAL.LEAVE_ROOM.DESCRIPTION')}
+            {t('MODAL.REJECT_GROUP.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -43,10 +54,10 @@ export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
             onClick={() => {
-              mutate(roomId);
+              mutate(props.id);
             }}
           >
-            {t('COMMON.LEAVE')}
+            {t('COMMON.REJECT')}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

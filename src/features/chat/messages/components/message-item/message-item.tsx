@@ -130,7 +130,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
         ) : (
           <>
             {direction === 'bottom' && !isOnHelpDeskChat && (
-              <ReadByUsers readByUsers={readByUsers} isMe={isMe} />
+              <ReadByUsers
+                roomId={message.room?._id}
+                readByUsers={readByUsers}
+                isMe={isMe}
+              />
             )}
             <div
               className={cn(
@@ -223,7 +227,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                             />
                           )}
                           {message.media[0].type === 'video' && (
-                            <MessageItemVideo file={message.media[0]}/>
+                            <MessageItemVideo file={message.media[0]} />
                           )}
                         </Fragment>
                       )}

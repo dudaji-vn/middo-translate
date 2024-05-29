@@ -18,6 +18,7 @@ import { forwardRef, useState } from 'react';
 import { useReactMessage } from '../../hooks';
 import { cn } from '@/utils/cn';
 
+export const EMOJI_LANG_SUPPORT = ['en', 'ar', 'be', 'cs', 'de', 'es', 'fa', 'fi', 'fr', 'hi', 'it', 'ja', 'ko', 'nl', 'pl', 'pt', 'ru', 'sa', 'tr', 'uk', 'vi', 'zh']
 export interface MessageEmojiPickerProps
   extends React.HTMLAttributes<HTMLDivElement> {
   messageId: string;
@@ -66,7 +67,8 @@ export const MessageEmojiPicker = forwardRef<
       onEmojiClick && onEmojiClick(emoji);
     };
     const isMobile = useAppStore((state) => state.isMobile);
-
+    const language = useAppStore(state => state.language);
+    
     return (
       <div
         onClick={(e) => e.stopPropagation()}
@@ -125,6 +127,7 @@ export const MessageEmojiPicker = forwardRef<
               )}
             >
               <Picker
+                locale={EMOJI_LANG_SUPPORT.includes(language) ?  language : 'en'}
                 theme="light"
                 onEmojiSelect={(emoji: any) => {
                   handleEmojiClick(emoji.native);

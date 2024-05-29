@@ -39,7 +39,8 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoaded]);
   return (
-    <>
+    <ReactQueryProvider>
+      <SocketProvider />
       <I18nextProvider i18n={i18next}>
         <Offline />
         <Toaster
@@ -53,12 +54,9 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
             },
           }}
         />
-        <SocketProvider />
         <BootstrapProvider />
         <CommonComponent />
-        <TooltipProvider>
-          <ReactQueryProvider>{props.children}</ReactQueryProvider>
-        </TooltipProvider>
+        <TooltipProvider>{props.children}</TooltipProvider>
         <ElectronProvider />
         <Suspense>
           <SideEffectProvider />
@@ -67,6 +65,6 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
         <I18nInitProvider />
       </I18nextProvider>
       <ReactNativeProvider />
-    </>
+    </ReactQueryProvider>
   );
 };

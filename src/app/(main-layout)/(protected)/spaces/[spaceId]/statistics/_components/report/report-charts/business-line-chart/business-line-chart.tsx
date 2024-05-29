@@ -5,19 +5,22 @@ import {
   Line,
   LineChart,
   ResponsiveContainer,
-  Tooltip,
+  Tooltip as ChartTooltip,
   XAxis,
   XAxisProps,
   YAxis,
   YAxisProps,
 } from 'recharts';
 
-import { ReactElement, useMemo } from 'react';
+import { ReactElement, use, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { AnalyticsOptions } from '@/features/business-spaces/hooks/use-get-space-analytic';
-import { Globe, User } from 'lucide-react';
+import { Globe, Info, User } from 'lucide-react';
 import { cn } from '@/utils/cn';
+import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useAuthStore } from '@/stores/auth.store';
+import { Button } from '@/components/actions';
+import { CHART_TOOLTIP_CONTENT } from '@/types/business-statistic.type';
 
 const TooltipContent = ({
   active,
@@ -62,6 +65,9 @@ export default function BusinessLineChart({
   unitType = 'number',
   yAxisProps,
   xAxisProps,
+  total,
+  tooltipContent,
+  ...props
 }: {
   unit: string;
   data: Array<{
@@ -74,6 +80,8 @@ export default function BusinessLineChart({
   unitType?: 'number' | 'category';
   yAxisProps?: YAxisProps;
   xAxisProps?: XAxisProps;
+  total: string;
+  tooltipContent?: string;
 }) {
   const { space } = useAuthStore();
   const hasNoLine = useMemo(() => data.length === 1, [data]);
@@ -86,23 +94,42 @@ export default function BusinessLineChart({
     }
     return filterBy;
   }, [filterBy, filterByKey, space]);
+
   if (!data) return null;
   return (
-    <section className="relative w-full space-y-4  py-5">
-      <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
-        {title}
-        <span
-          className={cn(
-            'flex flex-row items-center gap-2 font-normal text-neutral-800',
-            {
-              hidden: !displayFilterBy,
-            },
-          )}
-        >
-          {mappedFilterByIcon[filterByKey as keyof AnalyticsOptions]}
-          {displayFilterBy}
-        </span>
-      </Typography>
+    <section className="relative w-full space-y-4 bg-white px-4 py-5 md:p-10">
+      <div className="flex w-full flex-row items-center justify-between">
+        <Typography className="flex flex-col items-start justify-start gap-2 text-base font-semibold text-neutral-800 md:flex-row md:items-center">
+          {title}
+          <span
+            className={cn(
+              'flex flex-row items-center gap-2 font-normal text-neutral-800',
+              {
+                hidden: !displayFilterBy,
+              },
+            )}
+          >
+            {mappedFilterByIcon[filterByKey as keyof AnalyticsOptions]}
+            {displayFilterBy}
+            <span
+              className={cn('font-light text-neutral-600', {
+                hidden: filterByKey !== 'memberId',
+              })}
+            >
+              (Member)
+            </span>
+          </span>
+        </Typography>
+        {total && (
+          <Typography className="flex flex-row items-center justify-end gap-1 text-base font-semibold text-neutral-800">
+            {total}
+            <Tooltip
+              title={`${tooltipContent}`}
+              triggerItem={<Info size={16} className="text-neutral-800" />}
+            />
+          </Typography>
+        )}
+      </div>
       <div className="h-72 min-h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -133,7 +160,7 @@ export default function BusinessLineChart({
               {...yAxisProps}
             />
             <CartesianGrid stroke="#E6E6E6" vertical={false} className="8" />
-            <Tooltip
+            <ChartTooltip
               content={
                 <TooltipContent
                   allowDecimals={yAxisProps?.allowDecimals}
