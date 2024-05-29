@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
+
 export function usePullToRefresh({
   ref,
   onRefresh,
@@ -8,10 +10,6 @@ export function usePullToRefresh({
   onRefresh?: () => void;
   disable?: boolean;
 }) {
-  const [indicatorState, setIndicatorState] = useState<
-    'visible' | 'invisible' | 'transform'
-  >('invisible');
-  const [currentY, setCurrentY] = useState(0);
   useEffect(() => {
     if (disable) return;
     const el = ref?.current;
@@ -24,6 +22,9 @@ export function usePullToRefresh({
       const el = ref.current;
       if (!el) return;
 
+      // Check if the element is scrolled to the top
+      if (el.scrollTop > 0) return;
+
       // get the initial Y position
       const initialY = startEvent.touches[0].clientY;
 
@@ -35,13 +36,13 @@ export function usePullToRefresh({
         if (!el) return;
 
         // get the current Y position
-
         const currentY = moveEvent.touches[0].clientY;
 
         // get the difference
         const dy = currentY - initialY;
-        setCurrentY(dy);
+
         const parentEl = el.parentNode as HTMLDivElement;
+
         if (dy > TRIGGER_THRESHOLD) {
           flipArrow(parentEl);
         } else if (dy > SHOW_INDICATOR_THRESHOLD) {
@@ -54,7 +55,6 @@ export function usePullToRefresh({
 
         // now we are using the `appr` function
         el.style.transform = `translateY(${appr(dy)}px)`;
-        setCurrentY(dy);
       }
 
       function handleTouchEnd(endEvent: TouchEvent) {
@@ -72,6 +72,7 @@ export function usePullToRefresh({
         const y = endEvent.changedTouches[0].clientY;
         const dy = y - initialY;
         if (dy > TRIGGER_THRESHOLD) {
+          toast.success('Refreshing...');
           onRefresh?.();
         }
 
@@ -82,6 +83,7 @@ export function usePullToRefresh({
         el.removeEventListener('touchmove', handleTouchMove);
         el.removeEventListener('touchend', handleTouchEnd);
       }
+
       function onTransitionEnd() {
         const el = ref.current;
         if (!el) return;
@@ -91,7 +93,6 @@ export function usePullToRefresh({
 
         // cleanup
         el.removeEventListener('transitionend', onTransitionEnd);
-        setCurrentY(0);
       }
     }
 
@@ -99,24 +100,24 @@ export function usePullToRefresh({
       // let's not forget to cleanup
       el.removeEventListener('touchstart', handleTouchStart);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ref, disable]);
+
   function addPullIndicator(el: HTMLDivElement) {
-    setIndicatorState('visible');
+    //
   }
 
   function removePullIndicator(el: HTMLDivElement) {
-    setIndicatorState('invisible');
+    //
   }
 
   function flipArrow(el: HTMLDivElement) {
-    setIndicatorState('transform');
+    //
   }
-  return { indicatorState, currentY };
 }
 
 const MAX = 128;
 const k = 0.4;
+
 function appr(x: number) {
   return MAX * (1 - Math.exp((-k * x) / MAX));
 }
