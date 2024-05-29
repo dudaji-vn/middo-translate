@@ -50,15 +50,15 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
     const newFiles = files.map((file) => crateFile(file));
     setFiles((old) => [...old, ...newFiles]);
     const multipleRes = await uploadMultiMedia(files);
-    // const newUploadedFiles = multipleRes.map((res, index) => {
-    //   return {
-    //     localUrl: newFiles[index].url,
-    //     url: res.secure_url,
-    //     file: files[index],
-    //     metadata: res,
-    //   };
-    // });
-    // setUploadedFiles((old) => [...old, ...newUploadedFiles]);
+    const newUploadedFiles = multipleRes.map((res, index) => {
+      return {
+        localUrl: newFiles[index].url,
+        url: res.secure_url,
+        file: files[index],
+        metadata: res,
+      };
+    });
+    setUploadedFiles((old) => [...old, ...newUploadedFiles]);
   };
   const show = useModalStore((state) => state.show);
   const handleReject = (files: File[]) => {

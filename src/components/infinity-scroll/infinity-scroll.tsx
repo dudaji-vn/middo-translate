@@ -107,15 +107,14 @@ const IndicatorAnimation = ({
   const rotate = useTransform(x, [0, 300], [0, 360]);
   return (
     <div className="absolute left-0 right-0 z-50 flex w-full justify-center">
-      {isRefreshing ? (
-        <div
-          className={cn(
-            'absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary',
-          )}
-        >
-          <Spinner size="sm" />
-        </div>
-      ) : (
+      {isRefreshing ? // <div
+      //   className={cn(
+      //     'absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary',
+      //   )}
+      // >
+      //   <Spinner size="sm" />
+      // </div>
+      null : (
         <motion.div
           style={{
             translateY: -36,
