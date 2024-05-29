@@ -25,6 +25,7 @@ export const useSendMediaMessages = ({
   }, [_roomId, _parentId]);
 
   const { uploadedFiles, removeUploadedFile } = useMediaUpload();
+
   const sendMediaMessages = useCallback(
     async ({
       media,
