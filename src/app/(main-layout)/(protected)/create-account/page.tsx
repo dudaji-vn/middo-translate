@@ -34,7 +34,7 @@ export default function CreateNewAccount() {
       user?.language &&
       user?.status != 'unset'
     ) {
-      router.push(ROUTE_NAMES.ROOT);
+      router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
     }
   }, [router, user]);
 
@@ -109,7 +109,7 @@ export default function CreateNewAccount() {
         username,
       });
       setDataAuthStore({ user: res.data });
-      router.push(ROUTE_NAMES.ROOT);
+      router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
       setErrorMessage('');
     } catch (err: any) {
       setErrorMessage(t(err?.response?.data?.message));

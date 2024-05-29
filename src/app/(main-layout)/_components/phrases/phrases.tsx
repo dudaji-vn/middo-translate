@@ -7,7 +7,7 @@ import { ArrowLeft, SparklesIcon, XIcon } from 'lucide-react';
 
 import React, { forwardRef } from 'react';
 import PhrasesListItems from './phrase-list-items';
-import { SearchParams } from '../../page';
+import { SearchParams } from '../../translation/page';
 import { useTranslation } from 'react-i18next';
 
 export interface PhrasesProps extends React.HTMLAttributes<HTMLDivElement> {
