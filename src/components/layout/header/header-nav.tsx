@@ -22,7 +22,7 @@ export const HeaderNav = forwardRef<HTMLDivElement, HeaderNavProps>(
         : pathName?.includes(href);
 
     return (
-      <div {...props} className={cn("flex-1 z-0 md:block hidden", props.className)}>
+      <div {...props} className={cn("flex-1 z-0 block", props.className)}>
           <div className="md:flex w-screen flex-row items-stretch md:gap-1 lg:gap-5 shadow-none md:!ml-0 md:w-auto md:items-center justify-center hidden">
           {navItems.map((item) => {
               if(!item.isShowOnDesktop && isElectron) return;

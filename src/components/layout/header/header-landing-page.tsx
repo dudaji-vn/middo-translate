@@ -44,18 +44,17 @@ export const HeaderLandingPage = (props: Props) => {
       >
         <Image src="/logo.png" priority alt="logo" width={500} height={500} />
       </Link>
-          {!isMobile && 
         <div className={cn("flex-1 z-0")}>
-            <div className="md:flex w-screen flex-row items-stretch md:gap-1 lg:gap-5 shadow-none md:!ml-0 md:w-auto md:items-center justify-center hidden">
-            {navLandingPageItems.map((item) => {
-                return <NavItem
-                        isActive={isCurrentPath(item.href)}
-                        key={item.name}
-                        item={item}
-                      />
-              })}
-            </div>
-        </div>}
+          <div className="md:flex w-screen flex-row items-stretch md:gap-1 lg:gap-5 shadow-none md:!ml-0 md:w-auto md:items-center justify-center hidden">
+          {navLandingPageItems.map((item) => {
+              return <NavItem
+                      isActive={isCurrentPath(item.href)}
+                      key={item.name}
+                      item={item}
+                    />
+            })}
+          </div>
+        </div>
       <HeaderProfile />
     </div>
   );
