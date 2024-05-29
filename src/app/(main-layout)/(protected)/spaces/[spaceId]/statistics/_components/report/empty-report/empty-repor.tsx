@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 const EmptyReport = () => {
   const { t } = useTranslation('common');
   return (
-    <section className="flex h-full w-full flex-col justify-between  p-4">
+    <section className="flex h-full w-full flex-col justify-between ">
       <div className="w-full flex-none px-4 md:px-10">
         <Typography className=" flex flex-row items-center justify-between text-base font-semibold text-neutral-800">
           {t('BUSINESS.REPORT')}
