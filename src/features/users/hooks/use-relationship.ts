@@ -26,7 +26,7 @@ export const useCheckRoomRelationship = (room: Room) => {
   const users = room.participants.concat(room.waitingUsers || []);
 
   const userId = isP2P
-    ? users.find((u) => u._id !== currentUser!._id)?._id
+    ? users.find((u) => u._id !== currentUser?._id)?._id
     : '';
   const { data, error } = useRelationship(userId!, {
     enabled: !!userId,
