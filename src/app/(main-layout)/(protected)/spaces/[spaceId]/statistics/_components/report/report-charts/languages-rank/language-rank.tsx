@@ -89,7 +89,7 @@ const LanguageRank = ({
   const isEmpty = dataSlice.length === 0;
   if (isEmpty) return null;
   return (
-    <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
+    <section className="relative w-full space-y-4  bg-white px-3 py-4 md:px-10">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800">
           Conversation&apos;s Language

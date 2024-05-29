@@ -66,7 +66,7 @@ export default function BusinessScatter({
     };
   }, [data]);
   return (
-    <section className="relative w-full space-y-4  bg-white  px-4  py-5 md:px-10">
+    <section className="relative  w-full space-y-4  bg-white  px-3  py-4 md:px-10">
       <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
         Traffic track
         <span
@@ -81,54 +81,56 @@ export default function BusinessScatter({
           {displayFilterBy}
         </span>
       </Typography>
-      <div className="h-[400px] min-h-[440px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <HeatMap
-            data={dataset}
-            tooltip={
-              <Tooltip
-                content={({ payload }) => {
-                  const data = payload && payload[0] && payload[0].payload;
-                  const { y, x, density } = data || {};
-                  const fromTime = x - 1 < 0 ? 23 : x - 1;
-                  const toTime = x;
-                  return (
-                    <div
-                      key={`tooltip-${x}-${y}`}
-                      id="tooltip"
-                      className="border-primary-200/80 rounded-[12px] border border-neutral-50 bg-white/95 p-4 text-neutral-300 shadow-md"
-                    >
-                      <p>Opened conversation</p>
-                      <p className="font-semibold text-neutral-800">
-                        {density}
-                      </p>
-                      <p>
-                        Time range:&nbsp;
-                        {`${fromTime}h30 - ${toTime}h30 on ${formatWeekday(y)}`}
-                      </p>
-                    </div>
-                  );
-                }}
-              />
-            }
-            yAxisProps={{
-              label: {
-                value: 'Days of week',
-                position: 'top',
-              },
-              domain: [0, 7],
-              tickFormatter: (value: number) => formatWeekday(value),
-            }}
-            xAxisProps={{
-              label: {
-                value: 'Hourly',
-                position: 'right',
-              },
-              domain: [0, 23],
-              tickFormatter: (value: number) => `${value}`,
-            }}
-          />
-        </ResponsiveContainer>
+      <div className="max-md:overflow-x-auto">
+        <div className="h-[400px] min-h-[440px] w-full  min-w-[756px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <HeatMap
+              data={dataset}
+              tooltip={
+                <Tooltip
+                  content={({ payload }) => {
+                    const data = payload && payload[0] && payload[0].payload;
+                    const { y, x, density } = data || {};
+                    const fromTime = x - 1 < 0 ? 23 : x - 1;
+                    const toTime = x;
+                    return (
+                      <div
+                        key={`tooltip-${x}-${y}`}
+                        id="tooltip"
+                        className="border-primary-200/80 rounded-[12px] border border-neutral-50 bg-white/95 p-4 text-neutral-300 shadow-md"
+                      >
+                        <p>Opened conversation</p>
+                        <p className="font-semibold text-neutral-800">
+                          {density}
+                        </p>
+                        <p>
+                          Time range:&nbsp;
+                          {`${fromTime}h30 - ${toTime}h30 on ${formatWeekday(y)}`}
+                        </p>
+                      </div>
+                    );
+                  }}
+                />
+              }
+              yAxisProps={{
+                label: {
+                  value: 'Days of week',
+                  position: 'top',
+                },
+                domain: [0, 7],
+                tickFormatter: (value: number) => formatWeekday(value),
+              }}
+              xAxisProps={{
+                label: {
+                  value: 'Hourly',
+                  position: 'right',
+                },
+                domain: [0, 23],
+                tickFormatter: (value: number) => `${value}`,
+              }}
+            />
+          </ResponsiveContainer>
+        </div>
       </div>
     </section>
   );
