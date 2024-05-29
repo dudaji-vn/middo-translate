@@ -104,7 +104,7 @@ const ReportPage = ({
             data?.analysis[chart]?.total || 0;
           const filterBy =
             searchParams[
-              CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
+            CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
             ];
           switch (chart) {
             case ESpaceChart.OPENED_CONVERSATION: {
@@ -116,7 +116,7 @@ const ReportPage = ({
                     total={`${formattedTotal}`}
                     filterByKey={CHART_AFFECTED_PARAMS[chart]}
                     filterBy={filterBy}
-                    title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
+                    title={t(`EXTENSION.CHART.${chart.toUpperCase()}`)}
                     data={chartData}
                     unit={chartUnit}
                     yAxisProps={{
@@ -179,7 +179,7 @@ const ReportPage = ({
               total={`${formattedTotal}`}
               filterByKey={CHART_AFFECTED_PARAMS[chart]}
               filterBy={filterBy}
-              title={t(`BUSINESS.CHART.${chart.toUpperCase()}`)}
+              title={t(`EXTENSION.CHART.${chart.toUpperCase()}`)}
               data={chartData}
               unit={chartUnit}
               yAxisProps={{

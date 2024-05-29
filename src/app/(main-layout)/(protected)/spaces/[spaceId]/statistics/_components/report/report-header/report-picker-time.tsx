@@ -39,15 +39,17 @@ export type TimePickerOptions = {
     }
 );
 const DEFAULT_DATE_FORMAT = 'yyyy-MM-dd';
-const filterOptions: Record<TimePickerOptions['type'], string> = {
-  'last-week': 'Last week',
-  'last-month': 'Last month',
-  'last-year': 'Last year',
-  custom: 'Custom',
-};
 
 const defaultOption = 'last-week';
-
+export const reportDateFilterOptions: Record<
+  TimePickerOptions['type'],
+  string
+> = {
+  'last-week': 'COMMON.TIME.LAST_WEEK',
+  'last-month': 'COMMON.TIME.LAST_MONTH',
+  'last-year': 'COMMON.TIME.LAST_YEAR',
+  custom: 'COMMON.TIME.CUSTOM',
+};
 export type ReportPickerTimeProps = {};
 
 const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
@@ -64,19 +66,19 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openDatePickerModal, setOpenDatePickerModal] = useState(false);
-  const options: DropdownOption[] = Object.entries(filterOptions).map(
+  const options: DropdownOption[] = Object.entries(reportDateFilterOptions).map(
     ([key, value]) => {
       const href =
         `${ROUTE_NAMES.SPACES}/${params?.spaceId}` +
           generateHref(
             key as TimePickerType,
             { fromDate, toDate },
-            filterOptions,
+            reportDateFilterOptions,
             defaultOption,
             current,
           ) || '#';
       return {
-        name: value,
+        name: t(value),
         value: key,
         href: key === 'custom' ? undefined : href,
         onClick:
@@ -107,14 +109,16 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
     if (type === 'custom') {
       return `${format(date?.from || new Date(), 'yyyy/MM/dd')} - ${format(date?.to || new Date(), 'yyyy/MM/dd')}`;
     }
-    return filterOptions[(type || defaultOption) as TimePickerType];
+    const contentKey =
+      reportDateFilterOptions[(type || defaultOption) as TimePickerType];
+    return t(contentKey);
   }, [type, date]);
 
   useEffect(() => {
     if (!type) {
       return;
     }
-    if (filterOptions[type as TimePickerType]) {
+    if (reportDateFilterOptions[type as TimePickerType]) {
       setSelectedOption(
         options.find((opt) => opt.value === type) || options[0],
       );
@@ -190,7 +194,7 @@ const ReportPickerTime = ({ ...props }: ReportPickerTimeProps) => {
             size={'xs'}
             onClick={onConfirmRangeFilter}
           >
-            Apply
+            {t('COMMON.APPLY')}
           </Button>
         </div>
       </ConfirmAlertModal>

@@ -31,7 +31,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
           <Menu />
         </Button.Icon>
         <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800">
-          {t('BUSINESS.REPORT')}
+          {t('EXTENSION.REPORT')}
         </Typography>
       </div>
       <div className="flex w-full flex-col justify-between gap-2 pb-4 md:flex-row">

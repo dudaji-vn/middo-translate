@@ -143,7 +143,7 @@ const TagsList = ({
             className="flex-1"
             onChange={(e) => onSearchChange(e.target.value)}
             onClear={() => onSearchChange('')}
-            placeholder={t('SEARCH')}
+            placeholder={t('EXTENSION.TAG.SEARCH')}
           />
         </div>
         <Button
@@ -162,7 +162,7 @@ const TagsList = ({
           disabled={!roles.edit.find((role) => role === myRole)}
           startIcon={<Plus />}
         >
-          Add Tag
+          {t('EXTENSION.TAG.CREATE')}
         </Button>
       </div>
       <div className="w-full overflow-x-auto p-0">

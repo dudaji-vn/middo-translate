@@ -12,6 +12,7 @@ import { Checkbox } from '@/components/form/checkbox';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
+import { TFunction } from 'i18next';
 
 export type ChatScript = {
   _id: string;
@@ -27,18 +28,20 @@ export type ChatScript = {
   };
 };
 
-export const scriptsColumns = ({
+export const makeScriptsColumns = ({
   onView,
   onEdit,
   enableDeletion = true,
   singleRowSelection = false,
   onDeleteRowSelections = () => {},
+  t,
 }: {
   onView: (id: string) => void;
   onEdit: (id: string) => void;
   enableDeletion?: boolean;
   singleRowSelection?: boolean;
   onDeleteRowSelections?: () => void;
+  t: TFunction;
 }) =>
   [
     {
@@ -83,7 +86,7 @@ export const scriptsColumns = ({
     },
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: t('EXTENSION.SCRIPT.NAME'),
       cell(props) {
         return (
           <td className="flex gap-2" {...props}>
@@ -93,7 +96,7 @@ export const scriptsColumns = ({
                 variant="default"
                 className="bg-success-100 text-xs font-semibold text-success-700 "
               >
-                In Use
+                {t('COMMON.IN_USE')}
               </Badge>
             )}
           </td>
@@ -102,7 +105,7 @@ export const scriptsColumns = ({
     },
     {
       accessorKey: 'createdBy',
-      header: 'Created By',
+      header: t('COMMON.CREATED_BY'),
       cell(props) {
         return (
           <td className="flex gap-2" {...props}>
@@ -118,7 +121,7 @@ export const scriptsColumns = ({
     },
     {
       accessorKey: 'createdAt',
-      header: 'Created On',
+      header: t('EXTENSION.SCRIPT.CREATE_ON'),
       cell(props) {
         const displayTime = moment(props?.row?.original?.createdAt).format(
           'DD/MM/YYYY HH:mm A',
@@ -132,7 +135,7 @@ export const scriptsColumns = ({
     },
     {
       accessorKey: 'lastEditedBy',
-      header: 'Last Edited',
+      header: t('EXTENSION.SCRIPT.LAST_EDITED'),
       cell(props) {
         const displayTime = moment(props?.row?.original?.updatedAt).format(
           'DD/MM/YYYY HH:mm A',
@@ -158,7 +161,7 @@ export const scriptsColumns = ({
 
         return (
           <th className="flex flex-row items-center gap-2">
-            <p className="min-w-20"> Actions</p>
+            <p className="min-w-20">{t('EXTENSION.SCRIPT.ACTIONS')}</p>
             <Button.Icon
               variant={'ghost'}
               size={'xs'}
@@ -175,7 +178,7 @@ export const scriptsColumns = ({
         return (
           <td className="flex gap-2" {...props}>
             <Tooltip
-              title={'View'}
+              title={t('COMMON.VIEW')}
               triggerItem={
                 <Button.Icon
                   variant={'ghost'}
@@ -188,7 +191,7 @@ export const scriptsColumns = ({
               }
             />
             <Tooltip
-              title={'Edit'}
+              title={t('COMMON.EDIT')}
               triggerItem={
                 <Button.Icon
                   variant={'ghost'}
