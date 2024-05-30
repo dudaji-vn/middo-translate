@@ -74,14 +74,6 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             />
           </div>
         )}
-        {/* <Lightbox
-          slides={slides}
-          index={index}
-          open={index !== undefined}
-          close={() => setIndex(undefined)}
-          plugins={[Download, Rotate, Thumbnails, Zoom]}
-          render={{ slide: LightImage }}
-        /> */}
         <MediaLightBox
           files={images.map((img) => ({
             url: img.url,

@@ -36,6 +36,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const [rotate, setRotate] = useState(0);
   const [downloading, setDownloading] = useState(false);
   const [paintingStart, setPaintingStart] = useState<number>(0);
+  const [isVideoFullScreen, setIsVideoFullScreen] = useState(false);
 
   const onDownload = () => {
     const file = files[current || 0];
@@ -51,9 +52,10 @@ function MediaLightBox(props: MediaLightBoxProps) {
     })
     
   }
-  const onClose = () => {
+  const onClose = useCallback(() => {
     close && close();
-  }
+  }, [close]);
+
   const onPrev = useCallback(() => {
     setCurrent((prev) => prev == 0 ? prev :prev - 1);
   }, []);
@@ -86,9 +88,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
     switch(files[current].type) {
       case "image":
         return <TransformWrapper
-        initialScale={1}
-        minScale={1}
-        maxScale={1}
+        doubleClick={{disabled: true}}
         smooth={true}
         centerOnInit={true}
         panning={{ disabled: zoom === 1 }}
@@ -105,15 +105,22 @@ function MediaLightBox(props: MediaLightBoxProps) {
         )}
       </TransformWrapper>
       case "video":
-        return <VideoPlayer 
-            file={{
-              url: files[current].url,
-              type: 'video',
-              name: files[current].file?.name || ''
-            }} 
-            // isShowFullScreen={false}
-            className='w-full h-full bg-transparent'
-          />
+        const props = {
+          file: {
+            url: files[current].url,
+            type: 'video',
+            name: files[current].file?.name || ''
+          },
+          onFullScreenChange: (value: boolean) => {
+            if(value != isVideoFullScreen) setIsVideoFullScreen(value);
+          },
+          className: 'w-full h-full bg-transparent',
+          isFullScreenVideo: isVideoFullScreen
+        }
+        if(isVideoFullScreen) {
+          return createPortal(<VideoPlayer {...props}/>, document.body)
+        }
+        return <VideoPlayer {...props}/>
       default:
         return <div className="w-full h-full flex items-center justify-center">
           <p className="text-center text-white" dangerouslySetInnerHTML={{__html: t('MESSAGE.ERROR.NOT_SUPPORT_PREVIEW')}}></p>
@@ -135,14 +142,20 @@ function MediaLightBox(props: MediaLightBoxProps) {
         onPrev();
       }else if(e.key === 'ArrowRight') {
         onNext();
+      }else if(e.key === 'Escape' && !isVideoFullScreen) {
+        onClose();
       }
     }
     document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     }
-  }, [current, onNext, onPrev]);
+  }, [current, isVideoFullScreen, onClose, onNext, onPrev]);
 
+  // On Change current image => 
+  useEffect(() => {
+    setIsVideoFullScreen(false);
+  }, [current])
 
   useEffect(() => {
     if(current === files.length - 1 && fetchNextPage) {
@@ -200,7 +213,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
          color={'default'}
          size={'xs'}
          shape={'default'}
-         className="absolute top-1/2 left-0 transform -translate-y-1/2 z-50"
+         className="absolute top-1/2 left-0 transform -translate-y-1/2 z-50 opacity-40"
          onClick={onPrev}
         >
           <ChevronLeft />
@@ -213,8 +226,8 @@ function MediaLightBox(props: MediaLightBoxProps) {
           </div> */}
           <TransformWrapper
             initialScale={1}
-            minScale={0.4}
-            maxScale={2}
+            minScale={1}
+            maxScale={1}
             smooth={true}
             centerOnInit={true}
             panning={{
@@ -230,6 +243,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
               setPaintingStart(offsetX || 0)
             }}
             onPanningStop={(ref, e: MouseEvent | TouchEvent) => {
+              if(zoom != 1) return;
               const THRESHOLD = 50;
               let offsetX = 0;
               if(e instanceof MouseEvent) {
@@ -263,7 +277,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
          color={'default'}
          size={'xs'}
          shape={'default'}
-         className="absolute top-1/2 right-0 transform -translate-y-1/2 z-50"
+         className="absolute top-1/2 right-0 transform -translate-y-1/2 z-50 opacity-40"
          onClick={onNext}
         >
           <ChevronRight />

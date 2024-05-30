@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../data-
 import { useOnClickOutside } from "usehooks-ts";
 import { useMediaSettingStore } from "@/stores/media-setting.store";
 import downloadFile from "@/utils/download-file";
+import { createPortal } from "react-dom";
 
 interface VideoProps {
     file: {
@@ -16,10 +17,12 @@ interface VideoProps {
       type: string;
     };
     className?: string;
-    onDisableLongPress?: (val: boolean) => void;
     isShowFullScreen?: boolean;
     isShowDownload?: boolean;
     isShowVolume?: boolean;
+    isFullScreenVideo?: boolean;
+    onDisableLongPress?: (val: boolean) => void;
+    onFullScreenChange?: (isFullScreen: boolean) => void;
 }
 
 function VideoPlayer(props: VideoProps) {
@@ -29,9 +32,11 @@ function VideoPlayer(props: VideoProps) {
     isShowDownload = true, 
     isShowFullScreen = true, 
     isShowVolume = true,
+    isFullScreenVideo = false,
     onDisableLongPress,
+    onFullScreenChange
   } = props
-  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [isFullScreen, setIsFullScreen] = useState(isFullScreenVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoThumbnailRef = useRef<HTMLVideoElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -196,7 +201,11 @@ function VideoPlayer(props: VideoProps) {
   }, [onDisableLongPress])
 
 
-  // Use clickout side to close volume
+  useEffect(() => {
+    onFullScreenChange && onFullScreenChange(isFullScreen);
+  }, [isFullScreen, onFullScreenChange])
+
+  // Use click out side to close volume
   useOnClickOutside([rangeVolumeRef, buttonVolumeRef], () => {
     if(isOpenVolume) setIsOpenVolume(false);
   })
@@ -204,7 +213,6 @@ function VideoPlayer(props: VideoProps) {
   const formatVideoTimer = useMemo(() => {
     return new Date(currentTime * 1000).toISOString().substr(14, 5);
   }, [currentTime]);
-
 
   return (
     <div
