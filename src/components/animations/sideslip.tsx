@@ -8,11 +8,11 @@ export const Sideslip = forwardRef<HTMLDivElement, SideslipProps>(
     return (
       <motion.div
         ref={ref}
-        initial={{ x: '100%' }}
-        animate={{ x: 0 }}
-        exit={{ x: '100%' }}
-        transition={{ duration: 0.2 }}
-        className={props.className}
+          initial={{ left: '100%' }}
+          animate={{ left: 0 }}
+          exit={{ left: '100%' }}
+          transition={{ duration: 0.2 }}
+        className={props.className + ' relative'}
       >
         {props.children}
       </motion.div>
