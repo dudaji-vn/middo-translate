@@ -88,6 +88,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             type: 'image',
             name: img.name || '',
           }))}
+          key={index}
           index={index}
           close={() => setIndex(undefined)}
           />
