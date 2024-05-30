@@ -90,7 +90,7 @@ function VideoPlayer(props: VideoProps) {
   // Add on time update event
   useEffect(() => {
     const handleTimeUpdate = () => {
-      setCurrentTime(videoRef.current!.currentTime);
+      setCurrentTime(videoRef.current?.currentTime || 0);
     }
     videoRef.current?.addEventListener('timeupdate', handleTimeUpdate);
     return () => {
