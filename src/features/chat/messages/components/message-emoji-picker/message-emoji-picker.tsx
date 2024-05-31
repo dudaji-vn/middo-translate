@@ -123,7 +123,7 @@ export const MessageEmojiPicker = forwardRef<
               align={align}
               alignOffset={-12}
               className={cn(
-                '-mt-12 w-fit border-none !bg-transparent p-0 shadow',
+                '-mt-12 w-fit border-none !bg-transparent p-0 shadow message-emoji-picker',
               )}
             >
               <Picker
