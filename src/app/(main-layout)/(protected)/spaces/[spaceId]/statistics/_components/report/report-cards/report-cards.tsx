@@ -11,11 +11,7 @@ import {
   StarHalf,
   User,
 } from 'lucide-react';
-import {
-  AnalysisData,
-  CHART_TOOLTIP_CONTENT,
-  ESpaceChart,
-} from '@/types/business-statistic.type';
+import { AnalysisData, ESpaceChart } from '@/types/business-statistic.type';
 import { ceil } from 'lodash';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
@@ -101,40 +97,40 @@ const contentsByDomain: Array<{
   renderDetail?: (value: number, total?: number) => JSX.Element;
   renderPercentage?: (value: any) => JSX.Element;
 }> = [
-    {
-      name: ESpaceChart.NEW_VISITOR,
-      renderDetail: (value: number) => (
+  {
+    name: ESpaceChart.NEW_VISITOR,
+    renderDetail: (value: number) => (
+      <Typography variant={'h6'} className="text-[2rem]">
+        {value}
+      </Typography>
+    ),
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+  {
+    name: ESpaceChart.OPENED_CONVERSATION,
+    renderDetail: (value: number) => (
+      <Typography variant={'h6'} className="text-[2rem]">
+        {value}
+      </Typography>
+    ),
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+  {
+    name: ESpaceChart.DROP_RATE,
+    renderDetail: (value: number, total?: number) => {
+      const displayValue = total
+        ? Number(((value * 100) / total).toFixed(2))
+        : 0;
+      return (
         <Typography variant={'h6'} className="text-[2rem]">
-          {value}
+          {displayValue}&nbsp;
+          {total && <span>%</span>}
         </Typography>
-      ),
-      renderPercentage: (value: number) => <Percentage value={value} />,
+      );
     },
-    {
-      name: ESpaceChart.OPENED_CONVERSATION,
-      renderDetail: (value: number) => (
-        <Typography variant={'h6'} className="text-[2rem]">
-          {value}
-        </Typography>
-      ),
-      renderPercentage: (value: number) => <Percentage value={value} />,
-    },
-    {
-      name: ESpaceChart.DROP_RATE,
-      renderDetail: (value: number, total?: number) => {
-        const displayValue = total
-          ? Number(((value * 100) / total).toFixed(2))
-          : 0;
-        return (
-          <Typography variant={'h6'} className="text-[2rem]">
-            {displayValue}&nbsp;
-            {total && <span>%</span>}
-          </Typography>
-        );
-      },
-      renderPercentage: (value: number) => <Percentage value={value} />,
-    },
-  ];
+    renderPercentage: (value: number) => <Percentage value={value} />,
+  },
+];
 const contentsByMember = [
   {
     name: ESpaceChart.RESPONSE_TIME,
@@ -213,7 +209,7 @@ const ReportCards = ({
                     {displayTitle}
                   </CardTitle>
                   <Tooltip
-                    title={CHART_TOOLTIP_CONTENT[name]}
+                    title={t(`EXTENSION.CHART_TOOLTIP.${name?.toUpperCase()}`)}
                     contentProps={{
                       className: 'text-white',
                     }}
@@ -245,7 +241,7 @@ const ReportCards = ({
             },
           )}
         >
-          <User className="text-neutral-800 font-normal" size={15} />
+          <User className="font-normal text-neutral-800" size={15} />
           {displayMember}
           <span className="font-light capitalize text-neutral-500">
             ({t('COMMON.MEMBER')})
@@ -269,7 +265,7 @@ const ReportCards = ({
                     {displayTitle}
                   </CardTitle>
                   <Tooltip
-                    title={CHART_TOOLTIP_CONTENT[name]}
+                    title={t(`EXTENSION.CHART_TOOLTIP.${name?.toUpperCase()}`)}
                     contentProps={{
                       className: 'text-white',
                     }}

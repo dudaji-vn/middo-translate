@@ -7,21 +7,12 @@ import {
   AnalyticsOptions,
   useGetSpaceAnalytic,
 } from '@/features/business-spaces/hooks/use-get-space-analytic';
-import {
-  CHART_TOOLTIP_CONTENT,
-  ESpaceChart,
-  TChartKey,
-} from '@/types/business-statistic.type';
+import { ESpaceChart, TChartKey } from '@/types/business-statistic.type';
 import { ReportCards } from './_components/report/report-cards';
-import {
-  MAPPED_CHART_UNIT,
-  getProposedTimeUnit,
-} from './_utils/get-humanized-unit';
+import { getProposedTimeUnit } from './_utils/get-humanized-unit';
 import { BusinessLineChart } from './_components/report/report-charts';
 import LanguageRank from './_components/report/report-charts/languages-rank/language-rank';
 import BusinessScatter from './_components/report/report-charts/scatter-visit/business-scatter';
-import { accurateHumanize } from '@/utils/moment';
-import moment from 'moment';
 import EmptyReport from './_components/report/empty-report/empty-repor';
 import { ReportHeader } from './_components/report/report-header';
 
@@ -98,13 +89,14 @@ const ReportPage = ({
           memberId={searchParams.memberId}
         />
         {chartsOrderList.map((chart) => {
-          let chartUnit = MAPPED_CHART_UNIT[chart];
+          let chartUnit =
+            t(`EXTENSION.CHART_UNIT.${chart.toUpperCase()}`) || '';
           const chartData = [...(data?.chart?.[chart] || [])];
           let formattedTotal: number | string =
             data?.analysis[chart]?.total || 0;
           const filterBy =
             searchParams[
-            CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
+              CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
             ];
           switch (chart) {
             case ESpaceChart.OPENED_CONVERSATION: {
@@ -112,7 +104,9 @@ const ReportPage = ({
                 <div className="flex flex-col" key={chart}>
                   <BusinessLineChart
                     key={chart}
-                    tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+                    tooltipContent={t(
+                      `EXTENSION.CHART_TOOLTIP.${chart.toUpperCase()}`,
+                    )}
                     total={`${formattedTotal}`}
                     filterByKey={CHART_AFFECTED_PARAMS[chart]}
                     filterBy={filterBy}
@@ -137,22 +131,18 @@ const ReportPage = ({
                 </div>
               );
             }
-            case ESpaceChart.RESPONSE_TIME:
-              {
-                const { unit, ratio } = getProposedTimeUnit(chartData);
-                chartData.forEach((item, index) => {
-                  chartData[index].value = Number(
-                    (item.value / ratio).toFixed(0),
-                  );
-                }, []);
-                formattedTotal =
-                  accurateHumanize(
-                    moment.duration(formattedTotal, 'milliseconds'),
-                    1,
-                  ).accuratedTime || 0;
-                chartUnit = unit;
-              }
-              break;
+            case ESpaceChart.RESPONSE_TIME: {
+              const { unit, ratio } = getProposedTimeUnit(chartData);
+              chartData.forEach((item, index) => {
+                chartData[index].value = Number(
+                  (item.value / ratio).toFixed(0),
+                );
+              }, []);
+              formattedTotal = chartData.reduce((acc, item) => {
+                return acc + item.value;
+              }, 0);
+              chartUnit = t(`EXTENSION.CHART_UNIT.${unit.toUpperCase()}`) || '';
+            }
             case ESpaceChart.CUSTOMER_RATING:
             case ESpaceChart.NEW_VISITOR:
             case ESpaceChart.RESPONSE_MESSAGE:
@@ -175,7 +165,9 @@ const ReportPage = ({
           return (
             <BusinessLineChart
               key={chart}
-              tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+              tooltipContent={t(
+                `EXTENSION.CHART_TOOLTIP.${chart.toUpperCase()}`,
+              )}
               total={`${formattedTotal}`}
               filterByKey={CHART_AFFECTED_PARAMS[chart]}
               filterBy={filterBy}

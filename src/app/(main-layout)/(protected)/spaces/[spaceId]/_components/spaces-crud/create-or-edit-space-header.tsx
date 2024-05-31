@@ -20,9 +20,7 @@ const headerVariants = cva('w-full flex flex-row', {
     },
   },
 });
-const mappedTitle = {
-  'create-space': 'Create Space',
-};
+
 export const createSpaceSteps = [
   {
     title: 'EXTENSION.SPACE.SPACE_INFOR',
@@ -76,7 +74,7 @@ const CreateOrEditSpaceHeader = ({
           <ArrowLeft className="" />
         </Button.Icon>
         <Typography className="min-w-max capitalize text-neutral-600">
-          {mappedTitle[modalType || 'create-space']}
+          {t('MODAL.CREATE_SPACE.HEADING')}
         </Typography>
       </div>
       <TabsList className="relative max-w-[600px] justify-between gap-5 border-none md:mx-10 xl:mx-14">

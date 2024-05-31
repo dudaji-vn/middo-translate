@@ -20,8 +20,8 @@ import { cn } from '@/utils/cn';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
-import { CHART_TOOLTIP_CONTENT } from '@/types/business-statistic.type';
 import { useAppStore } from '@/stores/app.store';
+import { useTranslation } from 'react-i18next';
 
 const TooltipContent = ({
   active,
@@ -50,6 +50,15 @@ const TooltipContent = ({
 };
 const chartLabel = 'label';
 const chartDataKey = 'value';
+const labelsNeedTranslations = [
+  'MONDAY',
+  'TUESDAY',
+  'WEDNESDAY',
+  'THURSDAY',
+  'FRIDAY',
+  'SATURDAY',
+  'SUNDAY',
+];
 export const mappedFilterByIcon: Partial<
   Record<keyof AnalyticsOptions, ReactElement>
 > = {
@@ -85,6 +94,7 @@ export default function BusinessLineChart({
   tooltipContent?: string;
 }) {
   const { space } = useAuthStore();
+  const { t } = useTranslation('common');
   const isMobile = useAppStore((state) => state.isMobile);
   const hasNoLine = useMemo(() => data.length === 1, [data]);
   const displayFilterBy = useMemo(() => {
@@ -96,7 +106,14 @@ export default function BusinessLineChart({
     }
     return filterBy;
   }, [filterBy, filterByKey, space]);
-
+  const processData = useMemo(() => {
+    return data.map((d) => ({
+      ...d,
+      label: labelsNeedTranslations.includes(d.label?.toLocaleUpperCase())
+        ? t(`COMMON.WEEKDAY.${d.label?.toUpperCase()?.substring(0, 3)}`)
+        : d.label,
+    }));
+  }, [data, t]);
   if (!data) return null;
   return (
     <section className="relative w-full space-y-4 bg-white px-3 py-4 md:p-10">
@@ -135,7 +152,7 @@ export default function BusinessLineChart({
       <div className="h-72 min-h-[200px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={data}
+            data={processData}
             margin={{
               top: 16,
               right: isMobile ? 32 : 16,

@@ -43,6 +43,8 @@
     "UPLOAD_IMAGE": "Tải ảnh lên",
     "SUGGESTION": "Gợi ý",
     "SHOW_MORE": "Xem thêm",
+    "OTHERS": "Khác",
+    "SHOW_LESS": "Ẩn bớt",
     "CLOSE": "Đóng",
     "FORWARD": "Chuyển tiếp",
     "SIGN_OUT": "Đăng xuất",
@@ -93,7 +95,28 @@
       "LAST_MONTH": "Tháng trước",
       "LAST_YEAR": "Năm trước",
       "CUSTOM": "Tùy chỉnh"
+    },
+    "WEEKDAY": {
+      "SUN": "Chủ nhật",
+      "MON": "Thứ hai",
+      "TUE": "Thứ ba",
+      "WED": "Thứ tư",
+      "THU": "Thứ năm",
+      "FRI": "Thứ sáu",
+      "SAT": "Thứ bảy",
+      "TITLE": "Ngày trong tuần"
+    },
+    "HOURLY": {
+      "TITLE": "Theo giờ"
     }
+  },
+  "PAGINATION": {
+    "PREV": "Trước",
+    "NEXT": "Tiếp",
+    "PAGE": "Trang",
+    "PER_PAGE": "Mỗi trang",
+    "ITEMS": "mục",
+    "ITEMS_PER_PAGE": "Mục mỗi trang"
   },
   "MESSAGE": {
     "ERROR": {
@@ -439,8 +462,10 @@
   },
   "MODAL": {
     "CREATE_SPACE": {
+      "HEADING": "Tạo không gian",
       "TITLE": "Cung cấp thông tin cho <span class='text-primary-500-main'> không gian của bạn </span>",
-      "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>."
+      "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
+      "PLACEHOLDERS": { "NAME": "Tên không gian" }
     },
     "DELETE_SPACE": {
       "TITLE": "Xoá không gian",
@@ -614,12 +639,20 @@
     "ALL_DOMAINS": "Tất cả miền",
     "ALL_MEMBERS": "Tất cả thành viên",
     "SPACE": {
-      "WELCOME": "Chào, mừng bạn trở lại",
+      "WELCOME": "Xin chào, mừng bạn trở lại",
       "ALL_SPACE": "Tất cả không gian",
       "JOINED_SPACE": "Không gian đã tham gia",
       "MY_SPACE": "Không gian của tôi",
       "CREATE_SPACE": "Tạo không gian mới",
-      "SPACE_INFOR": "Thông tin không gian"
+      "SPACE_INFOR": "Thông tin không gian",
+      "UPLOAD_IMAGE": "Tải lên ảnh đại diện không gian",
+      "CREATE_BUTTON": "Tạo không gian và mời thành viên",
+      "ERRORS": {
+        "NAME_REQUIRED": "Tên không gian là bắt buộc",
+        "NAME_MAX_LENGTH": "Tên không gian phải ít hơn 50 ký tự",
+        "AVATAR_REQUIRED": "Ảnh đại diện không gian là bắt buộc",
+        "INVALID_EMAIL_MEMBER": "Thành viên email không hợp lệ"
+      }
     },
     "BREADCRUMB": {
       "HOME": "Trang chủ"
@@ -642,12 +675,38 @@
     "CHART": {
       "CLIENT": "Khách hàng mới",
       "LANGUAGERANK": "Xếp hạng ngôn ngữ",
-      "NEWVISITOR": "Khách hàng mới",
+      "NEWVISITOR": "Khách hàng ghé thăm",
       "RESPONSETIME": "Thời gian phản hồi",
       "OPENEDCONVERSATION": "Cuộc trò chuyện mở",
       "DROPRATE": "Tỷ lệ bỏ cuộc",
       "RESPONSEDMESSAGE": "Tin nhắn phản hồi",
-      "CUSTOMERRATING": "Đánh giá khách hàng"
+      "CUSTOMERRATING": "Đánh giá khách hàng",
+      "TRAFFICTRACK": "Lưu lượng truy cập"
+    },
+    "CHART_TOOLTIP": {
+      "CLIENT": "Số lượng khách hàng mới",
+      "LANGUAGERANK": "Xếp hạng ngôn ngữ được sử dụng nhiều nhất",
+      "NEWVISITOR": "Số lượng khách truy cập mới vào trang web của bạn",
+      "RESPONSETIME": "Thời gian phản hồi trung bình của nhóm của bạn",
+      "OPENEDCONVERSATION": "Số lượng cuộc trò chuyện đã được mở qua trang web của bạn",
+      "DROPRATE": "Tỷ lệ cuộc trò chuyện bị bỏ rơi",
+      "RESPONSEDMESSAGE": "Số lượng tin nhắn đã được nhóm của bạn phản hồi",
+      "CUSTOMERRATING": "Đánh giá trung bình của khách hàng",
+      "TRAFFICTRACK": "Theo dõi lưu lượng của các cuộc trò chuyện đã được mở"
+    },
+    "CHART_UNIT": {
+      "NEWVISITOR": "lần",
+      "OPENEDCONVERSATION": "cuộc trò chuyện",
+      "DROPRATE": "cuộc trò chuyện",
+      "CUSTOMERRATING": "sao",
+      "RESPONSEDMESSAGE": "tin nhắn",
+      "LANGUAGERANK": "ngôn ngữ",
+      "TRAFFICTRACK": "cuộc trò chuyện đã mở",
+      "DAY": "ngày",
+      "HOUR": "giờ",
+      "MINUTE": "phút",
+      "SECOND": "giây",
+      "MILLISECOND": "mili giây"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Quản lý thẻ",
@@ -668,7 +727,8 @@
       "CREATE_BY": "Tạo bởi",
       "CREATE_ON": "Tạo vào ngày",
       "LAST_EDITED": "Chỉnh sửa lần cuối",
-      "ACTIONS": "Hành động"
+      "ACTIONS": "Hành động",
+      "ENTER_SCRIPT_NAME": "Nhập tên kịch bản"
     },
     "CLIENT": {
       "PAGE_TITLE": "Quản lý khách hàng",
