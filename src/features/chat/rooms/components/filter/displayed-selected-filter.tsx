@@ -1,9 +1,12 @@
+'use client';
+
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/utils/cn';
 import { ChevronDown, XIcon } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const DisplayedSelectedFilter = ({
   filterData = {},
@@ -21,6 +24,7 @@ const DisplayedSelectedFilter = ({
   hidden?: boolean;
   renderValue?: (div: string, value: string) => React.ReactNode;
 } & React.HTMLAttributes<HTMLElement>) => {
+  const { t } = useTranslation('common');
   const [expanded, setExpanded] = React.useState(false);
   const sections = Object.keys(filterData);
 
@@ -42,7 +46,7 @@ const DisplayedSelectedFilter = ({
           className={cn('flex w-full flex-row items-center justify-between')}
         >
           <Typography className="text-sm text-neutral-300">
-            Filter by
+            {t('FILTERS.FILTER_BY')}
           </Typography>
           <Button
             variant="ghost"

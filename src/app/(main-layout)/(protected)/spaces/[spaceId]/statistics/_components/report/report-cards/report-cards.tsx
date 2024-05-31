@@ -91,16 +91,6 @@ const Percentage = ({
     </p>
   );
 };
-const tooltipContent: Record<ESpaceChart, string> = {
-  newVisitor: 'The number of new visitors to your website',
-  openedConversation: 'The number of opened conversations',
-  dropRate: 'The rate of dropped conversations',
-  responseTime: 'The average response time',
-  customerRating: 'The average customer rating',
-  responsedMessage: 'The average response message',
-  languageRank: 'The rank of languages',
-  trafficTrack: 'The traffic track of conversations',
-};
 
 const contentsByDomain: Array<{
   name: ESpaceChart;
@@ -128,7 +118,9 @@ const contentsByDomain: Array<{
   {
     name: ESpaceChart.DROP_RATE,
     renderDetail: (value: number, total?: number) => {
-      const displayValue = total ? Number((value / total).toFixed(0)) * 100 : 0;
+      const displayValue = total
+        ? Number(((value * 100) / total).toFixed(2))
+        : 0;
       return (
         <Typography variant={'h6'} className="text-[2rem]">
           {displayValue}&nbsp;
@@ -185,7 +177,7 @@ const ReportCards = ({
   const displayMember = useMemo(() => {
     return space?.members?.find((m) => m._id === memberId)?.email;
   }, [memberId, space]);
-  if (loading) return <CardsLoading  />;
+  if (loading) return <CardsLoading />;
   if (!data) return null;
   return (
     <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
@@ -201,10 +193,10 @@ const ReportCards = ({
         {domain}
       </p>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
-        {contentsByMember.map(
+        {contentsByDomain.map(
           ({ name, renderDetail, renderPercentage }, index) => {
             let percentage = data[name]?.growth * 100 || 0;
-            const displayTitle = t(`BUSINESS.CHART.${name.toUpperCase()}`);
+            const displayTitle = t(`EXTENSION.CHART.${name.toUpperCase()}`);
             return (
               <Card
                 key={index}
@@ -217,9 +209,9 @@ const ReportCards = ({
                     {displayTitle}
                   </CardTitle>
                   <Tooltip
-                    title={tooltipContent[name]}
+                    title={t(`EXTENSION.CHART_TOOLTIP.${name?.toUpperCase()}`)}
                     contentProps={{
-                      className: 'text-neutral-800',
+                      className: 'text-white',
                     }}
                     triggerItem={
                       <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
@@ -230,7 +222,8 @@ const ReportCards = ({
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="flex min-h-[48px]  flex-row items-end justify-between space-x-4">
-                    {renderDetail && renderDetail(data[name]?.value || 0)}
+                    {renderDetail &&
+                      renderDetail(data[name]?.value || 0, data[name]?.total)}
                     {renderPercentage && renderPercentage(percentage)}
                   </div>
                 </CardContent>
@@ -248,15 +241,18 @@ const ReportCards = ({
             },
           )}
         >
-          <User className="text-neutral-800" size={15} />
+          <User className="font-normal text-neutral-800" size={15} />
           {displayMember}
+          <span className="font-light capitalize text-neutral-500">
+            ({t('COMMON.MEMBER')})
+          </span>
         </p>
       )}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
-        {contentsByDomain.map(
+        {contentsByMember.map(
           ({ name, renderDetail, renderPercentage }, index) => {
             let percentage = data[name]?.growth * 100 || 0;
-            const displayTitle = t(`BUSINESS.CHART.${name.toUpperCase()}`);
+            const displayTitle = t(`EXTENSION.CHART.${name.toUpperCase()}`);
             return (
               <Card
                 key={index}
@@ -269,9 +265,9 @@ const ReportCards = ({
                     {displayTitle}
                   </CardTitle>
                   <Tooltip
-                    title={tooltipContent[name]}
+                    title={t(`EXTENSION.CHART_TOOLTIP.${name?.toUpperCase()}`)}
                     contentProps={{
-                      className: 'text-neutral-800',
+                      className: 'text-white',
                     }}
                     triggerItem={
                       <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
@@ -282,8 +278,7 @@ const ReportCards = ({
                 </CardHeader>
                 <CardContent className="p-0">
                   <div className="flex min-h-[48px]  flex-row items-end justify-between space-x-4">
-                    {renderDetail &&
-                      renderDetail(data[name]?.value || 0, data[name]?.total)}
+                    {renderDetail && renderDetail(data[name]?.value || 0)}
                     {renderPercentage && renderPercentage(percentage)}
                   </div>
                 </CardContent>

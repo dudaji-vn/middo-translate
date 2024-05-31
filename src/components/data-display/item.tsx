@@ -1,5 +1,4 @@
-import { Children, cloneElement, isValidElement } from 'react';
-
+import { Children, cloneElement, isValidElement, forwardRef } from 'react';
 import { cn } from '@/utils/cn';
 import { cva } from 'class-variance-authority';
 
@@ -13,41 +12,40 @@ type ItemProps = {
   neutral?: boolean;
 };
 
-export const Item = ({
-  children,
-  leftIcon,
-  right,
-  className,
-  onClick,
-  danger,
-  neutral,
-}: ItemProps) => {
-  return (
-    <div
-      className={cn(
-        'flex w-full items-center gap-2 bg-white px-3 py-3',
-        className,
-        onClick &&
-          'cursor-pointer md:hover:bg-primary-100 active:!bg-primary-200',
-        danger && 'text-error',
-        onClick && danger && 'active:!bg-error-100/60 md:hover:bg-error-100/20',
-        neutral && 'text-neutral-800',
-        onClick &&
-          neutral &&
-          'bg-white active:!bg-neutral-100/60 md:hover:bg-neutral-100/20',
-      )}
-      onClick={onClick}
-    >
-      {leftIcon && (
-        <IconWrapper danger={danger} neutral={neutral} size="sm">
-          {leftIcon}
-        </IconWrapper>
-      )}
-      {children}
-      <div className="ml-auto flex">{right}</div>
-    </div>
-  );
-};
+export const Item = forwardRef<HTMLDivElement, ItemProps>(
+  ({ children, leftIcon, right, className, onClick, danger, neutral }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'flex w-full items-center gap-2 bg-white px-3 py-3',
+          className,
+          onClick &&
+            'cursor-pointer active:!bg-primary-200 md:hover:bg-primary-100',
+          danger && 'text-error',
+          onClick &&
+            danger &&
+            'active:!bg-error-100/60 md:hover:bg-error-100/20',
+          neutral && 'text-neutral-800',
+          onClick &&
+            neutral &&
+            'bg-white active:!bg-neutral-100/60 md:hover:bg-neutral-100/20',
+        )}
+        onClick={onClick}
+      >
+        {leftIcon && (
+          <IconWrapper danger={danger} neutral={neutral} size="sm">
+            {leftIcon}
+          </IconWrapper>
+        )}
+        {children}
+        <div className="ml-auto flex">{right}</div>
+      </div>
+    );
+  },
+);
+
+Item.displayName = 'Item';
 
 export const IconWrapperVariants = cva('inline-block', {
   variants: {

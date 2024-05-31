@@ -27,7 +27,7 @@ const ChatBoxPage = async (props: {
   }
   return (
     <ChatBoxProvider room={room}>
-      <ChatRoomContent room={room} />
+      <ChatRoomContent />
     </ChatBoxProvider>
   );
 };

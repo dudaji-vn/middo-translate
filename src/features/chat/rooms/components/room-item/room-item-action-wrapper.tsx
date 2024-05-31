@@ -25,6 +25,7 @@ import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { EBusinessConversationKeys } from '@/types/business.type';
 import { RoomItem } from '.';
+import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
 export interface RoomItemActionWrapperProps
   extends React.HTMLAttributes<HTMLDivElement> {
   room: Room;
@@ -34,7 +35,7 @@ export interface RoomItemActionWrapperProps
 type Item = Omit<ActionItem, 'onAction'> & {
   onAction: () => void;
 };
-const BUSINESS_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
+const EXTENSION_ALLOWED_ACTIONS: Record<EBusinessConversationKeys, Action[]> = {
   conversations: [
     'archive',
     'notify',
@@ -56,6 +57,16 @@ const TALK_ALLOWED_ACTIONS: Action[] = [
   'none',
   'archive',
   'unarchive',
+  'block',
+  'unblock',
+];
+
+const WAITING_ALLOWED_ACTIONS: Action[] = [
+  'accept',
+  'reject',
+  'block',
+  'unblock',
+  'delete',
 ];
 
 const checkAllowedActions = ({
@@ -69,10 +80,12 @@ const checkAllowedActions = ({
   action: Action;
   currentStatus: Room['status'];
 }) => {
+  if (currentStatus === 'waiting')
+    return WAITING_ALLOWED_ACTIONS.includes(action);
   if (currentStatus === 'archived')
-    return BUSINESS_ALLOWED_ACTIONS.archived.includes(action);
+    return EXTENSION_ALLOWED_ACTIONS.archived.includes(action);
   if (isBusinessRoom)
-    return BUSINESS_ALLOWED_ACTIONS[
+    return EXTENSION_ALLOWED_ACTIONS[
       businessConversationType as EBusinessConversationKeys
     ]?.includes(action);
   return TALK_ALLOWED_ACTIONS.includes(action);
@@ -85,6 +98,7 @@ export const RoomItemActionWrapper = forwardRef<
   const isMobile = useAppStore((state) => state.isMobile);
   const Wrapper = isMobile ? MobileWrapper : DesktopWrapper;
   const { isBusiness, businessConversationType } = useBusinessNavigationData();
+  const { relationshipStatus } = useCheckRoomRelationship(room);
   const { onAction, actionItems } = useRoomActions();
   const items = useMemo(() => {
     return actionItems
@@ -95,28 +109,41 @@ export const RoomItemActionWrapper = forwardRef<
           action: item.action,
           currentStatus: room.status,
         });
+        if (!isAllowed) return false;
+
         switch (item.action) {
           case 'notify':
-            return isAllowed && isMuted;
+            return isMuted;
           case 'unnotify':
-            return isAllowed && !isMuted;
+            return !isMuted;
           case 'pin':
-            return isAllowed && !room.isPinned;
+            return !room.isPinned;
           case 'unpin':
-            return isAllowed && room.isPinned;
+            return room.isPinned;
           case 'leave':
-            return isAllowed && room.isGroup;
+            return room.isGroup;
           case 'archive':
-            return isAllowed && room.status === 'active';
+            return room.status === 'active';
           case 'unarchive':
-            return isAllowed && room.status === 'archived';
+            return room.status === 'archived';
+          case 'block':
+            return !room.isGroup && relationshipStatus !== 'blocking';
+          case 'unblock':
+            return !room.isGroup && relationshipStatus === 'blocking';
+          case 'reject':
+            return room.isGroup;
           default:
             return isAllowed;
         }
       })
       .map((item) => ({
         ...item,
-        onAction: () => onAction(item.action, room._id, isBusiness),
+        onAction: () =>
+          onAction({
+            action: item.action,
+            room,
+            isBusiness,
+          }),
       }));
   }, [
     actionItems,
@@ -124,10 +151,8 @@ export const RoomItemActionWrapper = forwardRef<
     isBusiness,
     isMuted,
     onAction,
-    room._id,
-    room.isGroup,
-    room.isPinned,
-    room.status,
+    relationshipStatus,
+    room,
   ]);
 
   return (
@@ -163,7 +188,7 @@ const MobileWrapper = ({
       >
         {items.map(({ renderItem, ...item }) => {
           if (renderItem) {
-            return renderItem({ item, room, setOpen: () => {} });
+            return renderItem({ item, room, setOpen: () => { } });
           }
           return (
             <LongPressMenu.Item
@@ -198,7 +223,12 @@ const DesktopWrapper = ({
   return (
     <div className="group relative flex-1">
       {children}
-      <div className={cn('absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100', isOpen && 'opacity-100')}>
+      <div
+        className={cn(
+          'absolute right-3 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100',
+          isOpen && 'opacity-100',
+        )}
+      >
         <DropdownMenu open={isOpen} onOpenChange={setOpen}>
           <DropdownMenuTrigger asChild>
             <Button.Icon

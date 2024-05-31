@@ -3,13 +3,12 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { cva } from 'class-variance-authority';
-import { ArrowLeft, Check, Info } from 'lucide-react';
+import { ArrowLeft, Check } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { use, useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { cn } from '@/utils/cn';
-import { TabsList, TabsTrigger } from '@/components/navigation';
-import { useFormContext } from 'react-hook-form';
-import { on } from 'events';
+import { TabsList } from '@/components/navigation';
+import { useTranslation } from 'react-i18next';
 enum BusinessModalType {
   CreateSpace = 'create-space',
 }
@@ -21,18 +20,16 @@ const headerVariants = cva('w-full flex flex-row', {
     },
   },
 });
-const mappedTitle = {
-  'create-space': 'Create Space',
-};
+
 export const createSpaceSteps = [
   {
-    title: 'Space Information',
+    title: 'EXTENSION.SPACE.SPACE_INFOR',
     value: 0,
     nameField: 'information',
     requiredFields: ['information.name', 'information.avatar'],
   },
   {
-    title: 'Invite Members',
+    title: 'EXTENSION.MEMBER.INVITE_MEMBER',
     value: 1,
     nameField: 'members',
     requiredFields: ['members'],
@@ -50,6 +47,7 @@ const CreateOrEditSpaceHeader = ({
 }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { t } = useTranslation('common');
   const modalType: BusinessModalType = searchParams?.get(
     'modal',
   ) as BusinessModalType;
@@ -76,7 +74,7 @@ const CreateOrEditSpaceHeader = ({
           <ArrowLeft className="" />
         </Button.Icon>
         <Typography className="min-w-max capitalize text-neutral-600">
-          {mappedTitle[modalType || 'create-space']}
+          {t('MODAL.CREATE_SPACE.HEADING')}
         </Typography>
       </div>
       <TabsList className="relative max-w-[600px] justify-between gap-5 border-none md:mx-10 xl:mx-14">
@@ -136,8 +134,7 @@ const CreateOrEditSpaceHeader = ({
                     isError && 'text-error-500',
                   )}
                 >
-                  {' '}
-                  {item.title}
+                  {t(item.title)}
                 </p>
               </Button>
             </div>

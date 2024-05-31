@@ -1,5 +1,5 @@
 import { User } from '@/features/users/types';
-import { patch } from './api.service';
+import { get, patch } from './api.service';
 import { Room } from '@/features/chat/rooms/types';
 
 export const updateInfoUserService = (data: any) => {
@@ -23,4 +23,19 @@ export const changePasswordUserService = (data: {
   newPassword: string;
 }) => {
   return patch('/users/change-password', { ...data });
+};
+
+export const block = (userId: User['_id']) => {
+  return patch(`/users/${userId}/block`, {});
+};
+export const unblock = (userId: User['_id']) => {
+  return patch(`/users/${userId}/unblock`, {});
+};
+
+export const checkRelationship = (userId: User['_id']) => {
+  return get(`/users/${userId}/relation`);
+};
+
+export const toggleAllowUnknown = () => {
+  return patch('/users/allow-unknown', {});
 };

@@ -31,9 +31,11 @@ export const RoomDeleteConversation = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Item danger leftIcon={<Trash2 />}>
-          {t('MODAL.DELETE_CONVERSATION.TITLE')}
-        </Item>
+        <div>
+          <Item danger leftIcon={<Trash2 />}>
+            {t('MODAL.DELETE_CONVERSATION.TITLE')}
+          </Item>
+        </div>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

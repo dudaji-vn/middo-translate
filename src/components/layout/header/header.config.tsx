@@ -7,11 +7,12 @@ export type NavItem = {
   isShowOnDesktop?: boolean;
   target?: string;
   icon?: JSX.Element;
+  type?: 'redirect' | 'scroll' | 'external';
 };
 const items: NavItem[] = [
   {
     name: 'HEADER.TRANSLATION',
-    href: ROUTE_NAMES.ROOT,
+    href: ROUTE_NAMES.TRANSLATION,
     isShowOnDesktop: true,
     target: '_self',
     icon: <LanguagesIcon size={16}/>
@@ -23,36 +24,36 @@ const items: NavItem[] = [
     target: '_self',
     icon: <MessagesSquareIcon size={16}/>
   },
-  // {
-  //   name: 'HEADER.EXTENSION',
-  //   href: ROUTE_NAMES.EXTENSION,
-  //   isShowOnDesktop: true,
-  //   target: '_blank',
-  //   icon: <BlocksIcon size={16}/>
-  // },
   {
-    name: 'HEADER.DOWNLOAD',
-    href: ROUTE_NAMES.LANDING_PAGE,
-    isShowOnDesktop: false,
+    name: 'HEADER.EXTENSION',
+    href: ROUTE_NAMES.EXTENSION,
+    isShowOnDesktop: true,
     target: '_blank',
-    icon: <DownloadIcon size={16}/>
+    icon: <BlocksIcon size={16}/>
   },
+  // {
+  //   name: 'HEADER.DOWNLOAD',
+  //   href: ROUTE_NAMES.ROOT,
+  //   isShowOnDesktop: false,
+  //   target: '_blank',
+  //   icon: <DownloadIcon size={16}/>
+  // },
 ];
 const landingPageItems: NavItem[] = [
   {
     name: 'Solution',
     href: 'solution',
-    target: '_self',
+    type: 'scroll',
   },
   {
-    name: 'Pricing',
-    href: 'pricing',
-    target: '_self',
+    name: 'Products',
+    href: ROUTE_NAMES.TRANSLATION,
+    type: 'redirect',
   },
   {
     name: 'Contact us',
-    href: 'contact-us',
-    target: '_self',
+    href: 'https://dudaji.vn/#contact',
+    target: '_blank',
   },
 ];
 

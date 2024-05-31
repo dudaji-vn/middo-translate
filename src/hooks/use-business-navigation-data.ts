@@ -2,7 +2,7 @@
 
 import {
   EBusinessConversationKeys,
-  PK_BUSINESS_SPACES,
+  PK_EXTENSION_SPACES,
   PK_SPACE_KEY,
 } from '@/types/business.type';
 import { useParams, usePathname } from 'next/navigation';
@@ -21,9 +21,10 @@ export const useBusinessNavigationData = () => {
   const isBusiness = pathname?.includes(EPageType.SPACES);
   const businessSlugs = params?.slugs || [];
   const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
+  const extensionId = params?.businessId;
   const isPreviewChatflowPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
   const isOnBusinessChat =
-    params?.[PK_BUSINESS_SPACES] && businessSlugs?.length > 0;
+    params?.[PK_EXTENSION_SPACES] && businessSlugs?.length > 0;
   const isOnHelpDeskChat =
     isHelpDesk && businessSlugs?.length === 2 && !pathname?.includes('/rate/');
   const isUserChattingWithGuest = isBusiness && businessSlugs?.length == 1;
@@ -31,7 +32,7 @@ export const useBusinessNavigationData = () => {
   const guestId = isUserChattingWithGuest ? businessSlugs?.[0] : null;
   const anonymousId = isOnHelpDeskChat ? businessSlugs?.[1] : null;
   const businessConversationType = isBusiness
-    ? params?.[PK_BUSINESS_SPACES]
+    ? params?.[PK_EXTENSION_SPACES]
     : null;
 
   const spaceId = params?.[PK_SPACE_KEY];
@@ -48,6 +49,7 @@ export const useBusinessNavigationData = () => {
     businessConversationType,
     spaceId,
     isPreviewChatflowPage,
+    extensionId,
     inboxStatus:
       MAPPED_INBOX_STATUS[
         (businessConversationType || '') as EBusinessConversationKeys

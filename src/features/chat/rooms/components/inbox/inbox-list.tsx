@@ -64,6 +64,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       updateItem,
       addItem,
       refetch,
+      isRefetching,
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
@@ -82,7 +83,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const queryClient = useQueryClient();
 
     const updateRoom = (room: Partial<Room> & { _id: string }) => {
-      console.log('update room', room);
       refetch();
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
     };
@@ -140,12 +140,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
           ref={scrollRef}
           className={cn('h-full gap-2 overflow-y-auto')}
         >
-          <ViewSpaceInboxFilter
-            className={cn('w-full', {
-              hidden: !showFilter,
-            })}
-          />
           <InfiniteScroll
+            isRefreshing={isRefetching}
             pullToRefresh
             onRefresh={refetch}
             onLoadMore={fetchNextPage}
@@ -153,6 +149,11 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             isFetching={isLoading}
             className="flex flex-col"
           >
+            <ViewSpaceInboxFilter
+              className={cn('z-[60] w-full', {
+                hidden: !showFilter,
+              })}
+            />
             <PinnedRoom
               type={type}
               rooms={pinnedRooms}

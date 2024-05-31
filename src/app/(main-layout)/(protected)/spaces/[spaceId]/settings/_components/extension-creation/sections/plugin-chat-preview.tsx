@@ -12,6 +12,7 @@ import { TimeDisplay } from '@/features/chat/messages/components/time-display';
 import { PreviewReceivedMessage } from './preview-received-message';
 import { isEmpty } from 'lodash';
 import { FlowNode } from '../steps/script-chat-flow/design-script-chat-flow';
+import { useTranslation } from 'react-i18next';
 
 export type PluginChatPreviewProps = {
   content: string;
@@ -79,6 +80,7 @@ const PluginChatPreview = ({
   space,
   ...props
 }: PluginChatPreviewProps) => {
+  const { t } = useTranslation('common');
   const [selectedDevice, setSelectedDevice] =
     React.useState<TPreviewDevice>('desktop');
   const [isStarted, setIsStarted] = React.useState(false);
@@ -93,7 +95,7 @@ const PluginChatPreview = ({
     >
       <div className="flex  flex-row items-center justify-start gap-3 px-3 py-2">
         <Typography className="text-sm font-medium leading-[18px] text-neutral-800">
-          Preview
+          {t('COMMON.PREVIEW')}
         </Typography>
         <div className="flex flex-row items-center gap-1 rounded-[8px] bg-neutral-50 p-1">
           {devices.map((device, index) => {

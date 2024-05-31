@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ReportDropdown } from '../../report-dropdown';
 import { DropdownOption } from '../../report-dropdown/report-dropdown';
+import { useTranslation } from 'react-i18next';
 
 export type DomainPickerType = string;
 
@@ -18,15 +19,16 @@ export type DomainPickerOptions = {
 };
 
 export type ReportPickerDomainProps = {};
-const OPTION_ALL = {
-  name: 'All domains',
-  value: null,
-};
 
 const nameField = 'domain';
 const ReportPickerDomain = ({ ...props }: ReportPickerDomainProps) => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const { space } = useAuthStore();
+  const { t } = useTranslation('common');
+  const OPTION_ALL = {
+    name: t('EXTENSION.ALL_DOMAINS'),
+    value: null,
+  };
   const [selectedDomain, setSelectedDomain] =
     useState<DropdownOption>(OPTION_ALL);
   const options = useMemo(() => {

@@ -1,7 +1,14 @@
 {
   "COMMON": {
+    "INVITE": "Invite",
+    "APPLY": "Apply",
+    "PREVIEW": "Preview",
+    "FAILED_TO": "Failed to {{action}}",
+    "SUCCESS_TO": "Successfully {{action}}",
+    "NO_DATA": "No data",
     "OFFLINE": "Offline",
     "ONLINE": "Online",
+    "IN_USE": "In use",
     "INPUT_YOUR_TEXT_HERE": "Enter your text here",
     "PLEASE_SPEAK": "Please speak",
     "CLEAR_ALL": "Clear all",
@@ -9,6 +16,7 @@
     "SAVE": "Save",
     "CONFIRM": "Confirm",
     "CREATE": "Create",
+    "CREATED_BY": "Created by",
     "ADD": "Add",
     "SHARE": "Share",
     "LEAVE": "Leave",
@@ -35,6 +43,8 @@
     "UPLOAD_IMAGE": "Upload Image",
     "SUGGESTION": "Suggestion",
     "SHOW_MORE": "Show More",
+    "OTHERS": "Others",
+    "SHOW_LESS": "Show Less",
     "CLOSE": "Close",
     "FORWARD": "Forward",
     "EDIT": "Edit",
@@ -70,7 +80,43 @@
     "EDITED": "Edited",
     "EDITING": "Editing",
     "SURE": "Sure",
-    "DELETE_ACCOUNT": "Delete Account"
+    "DELETE_ACCOUNT": "Delete Account",
+    "BLOCK": "Block",
+    "UNBLOCK": "Unblock",
+    "REJECTED": "Rejected",
+    "PENDING": "Pending",
+    "MEMBER": "Member",
+    "SPACE": "Space",
+    "TIME": {
+      "CREATED_ON": "Created on",
+      "UPDATED_ON": "Updated on",
+      "DELETED_ON": "Deleted on",
+      "LAST_WEEK": "Last week",
+      "LAST_MONTH": "Last month",
+      "LAST_YEAR": "Last year",
+      "CUSTOM": "Custom"
+    },
+    "WEEKDAY": {
+      "SUN": "Sunday",
+      "MON": "Monday",
+      "TUE": "Tuesday",
+      "WED": "Wednesday",
+      "THU": "Thursday",
+      "FRI": "Friday",
+      "SAT": "Saturday",
+      "TITLE": "Day of week"
+    },
+    "HOURLY": {
+      "TITLE": "Hourly"
+    }
+  },
+  "PAGINATION": {
+    "PREV": "Previous",
+    "NEXT": "Next",
+    "PAGE": "Page",
+    "PER_PAGE": "Per page",
+    "ITEMS": "items",
+    "ITEMS_PER_PAGE": "Items per page"
   },
   "MESSAGE": {
     "ERROR": {
@@ -264,6 +310,14 @@
       "MESSAGE": "Currently, you can not reply to this conversation.",
       "LEARN_MORE": "Learn more"
     },
+    "BLOCK_RESPONSE": {
+      "TITLE": "Currently, you can not reply to this conversation.",
+      "LEARN_MORE": "Learn more"
+    },
+    "BLOCK_CONTENT": {
+      "TITLE": "You have blocked",
+      "DESCRIPTION": "You will not receive any message or call from them."
+    },
     "WELCOME_TITLE": "Welcome to Middo conversation!",
     "WELCOME_CONTENT": "Start a conversation with your team or group. You can also create a group chat to discuss and share files.",
     "TITLE": "Conversation",
@@ -407,6 +461,19 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "CREATE_SPACE": {
+      "HEADING": "Create Space",
+      "TITLE": "Give <span class='text-primary-500-main'> your space </span> some information",
+      "DESCRIPTION": "Help your crews to recognize your business easier by naming this space, adding space avatar or company's logo <span class='font-light'>(optional)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Enter space name"
+      }
+    },
+    "DELETE_SPACE": {
+      "TITLE": "Delete Space",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
+      "CONFIRM": "Delete Space"
+    },
     "SIGN_OUT": {
       "TITLE": "Do you want to sign out?",
       "DESCRIPTION": "You will be signed out of the app and need to log in again."
@@ -448,9 +515,18 @@
       "TITLE": "Delete Conversation",
       "DESCRIPTION": "You will lose all your messages and files. Others can still view your messages. Are you sure you want to delete?"
     },
+    "REJECT_GROUP": {
+      "TITLE": "Reject Invitation",
+      "DESCRIPTION": "You will not be able to view messages from this group, also you will not be able to join this group again. Are you sure you want to reject?"
+    },
     "LEAVE_GROUP": {
       "TITLE": "Leave Group",
       "DESCRIPTION": "You will no longer be able to view messages from this group. Are you sure you want to leave?"
+    },
+    "BLOCK_USER": {
+      "TITLE": "Block {{name}}",
+      "DESCRIPTION": "You will not receive any message or call from them until you unblock. Are you sure?",
+      "ADDITIONAL_OPTION_1": "Also delete conversation history (can not be undone)"
     },
     "VERIFY": {
       "SUCCESS": {
@@ -470,6 +546,11 @@
     "LEAVE_ROOM": {
       "TITLE": "Leave Room",
       "DESCRIPTION": "You will no longer be able to view messages from this room. Are you sure you want to leave?"
+    },
+    "CHANGE_ROOM_STATUS": {
+      "TITLE": "{{action}} conversation",
+      "DESCRIPTION": " Are you sure you want to {{action}} this conversation?",
+      "FAILED_TO": "Failed to {{action}} conversation"
     },
     "NOTIFICATION": {
       "ON": {
@@ -504,6 +585,7 @@
     }
   },
   "FILTERS": {
+    "FILTER_BY": "Filter by",
     "DOMAINS": "Domains",
     "COUNTRIES": "Countries",
     "TAGS": "Tags",
@@ -557,7 +639,34 @@
     "START_STOP_SCREEN_DOODLE": "Start/Stop Screen Doodle",
     "TOGGLE_LIVE_CAPTION": "Show/Hide Live Caption"
   },
-  "BUSINESS": {
+  "EXTENSION": {
+    "ALL_DOMAINS": "All Domains",
+    "ALL_MEMBERS": "All Members",
+    "SPACE": {
+      "WELCOME": "Hi, welcome back",
+      "ALL_SPACE": "All space",
+      "JOINED_SPACE": "Joined space",
+      "MY_SPACE": "My space",
+      "CREATE_SPACE": "Create new space",
+      "SPACE_INFOR": "Space information",
+      "UPLOAD_IMAGE": "Upload Space Avatar",
+      "CREATE_BUTTON": "Create Space and invite members",
+      "ERRORS": {
+        "NAME_REQUIRED": "Space name is required",
+        "NAME_MAX_LENGTH": "Space name must be less than 50 characters",
+        "AVATAR_REQUIRED": "Space avatar is required",
+        "INVALID_EMAIL_MEMBER": "Invalid email member"
+      }
+    },
+    "BREADCRUMB": {
+      "HOME": "Home"
+    },
+    "TAG": {
+      "SEARCH": "Search for tags",
+      "CREATE": "Create new tag",
+      "EDIT": "Edit tag",
+      "DELETE": "Delete tag"
+    },
     "CONVERSATIONS": "General",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
@@ -566,25 +675,94 @@
     "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
     "REPORT": "Report",
-    "CLIENT_LIST": "Clients List",
     "CHART": {
       "CLIENT": "New Clients",
       "LANGUAGERANK": "Conversation's Language",
-      "NEWVISITOR": "New Visitors",
+      "NEWVISITOR": "Visitors",
       "RESPONSETIME": "Response Time",
       "OPENEDCONVERSATION": "Opened Conversations",
       "DROPRATE": "Drop Rate",
       "RESPONSEDMESSAGE": "Responsed Message",
-      "CUSTOMERRATING": "Customer Rating"
+      "CUSTOMERRATING": "Customer Rating",
+      "TRAFFICTRACK": "Traffic Track"
+    },
+    "CHART_TOOLTIP": {
+      "CLIENT": "The number of new clients",
+      "LANGUAGERANK": "The rank of most used languages",
+      "NEWVISITOR": "The number of new visitors that visit your website",
+      "RESPONSETIME": "The average response time of your team",
+      "OPENEDCONVERSATION": "The number of conversations that have been opened through your website",
+      "DROPRATE": "The rate of dropped conversations",
+      "RESPONSEDMESSAGE": "The  number of messages that have been response by your team",
+      "CUSTOMERRATING": "The average rating of your customers",
+      "TRAFFICTRACK": "The traffic track of opened conversations"
+    },
+    "CHART_UNIT": {
+      "NEWVISITOR": "times",
+      "OPENEDCONVERSATION": "conversation",
+      "DROPRATE": "conversation",
+      "CUSTOMERRATING": "star",
+      "RESPONSEDMESSAGE": "message",
+      "LANGUAGERANK": "language",
+      "TRAFFICTRACK": "opened conversation",
+      "DAY": "day",
+      "HOUR": "hour",
+      "MINUTE": "minute",
+      "SECOND": "second",
+      "MILLISECOND": "millisecond"
+    },
+    "SETTING": {
+      "TAGS_MANAGEMENT": "Tags Management",
+      "MEMBERS_MANAGEMENT": "Members Management",
+      "CONVERSATION_EXTENSION": "Conversation Extension"
     },
     "SCRIPT": {
       "PAGE_TITLE": "Scripts Management",
-      "SEARCH": "Search for scripts"
+      "SEARCH": "Search for scripts",
+      "ADD_SCRIPT": "Add new script",
+      "EDIT_SCRIPT": "Edit script",
+      "DELETE_SCRIPT": "Delete script",
+      "VIEW_SCRIPT": "View script",
+      "PREVIEW_FLOW": "Preview flow",
+      "NO_SCRIPT": "No scripts found",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "CREATE_BY": "Create by",
+      "CREATE_ON": "Create on",
+      "LAST_EDITED": "Last edited",
+      "ACTIONS": "Actions",
+      "ENTER_SCRIPT_NAME": "Enter script name"
     },
     "CLIENT": {
       "PAGE_TITLE": "Clients Management",
       "SEARCH": "Search for clients",
-      "EXPORT_XLSX": "Export to XLSX"
+      "EXPORT_XLSX": "Export to XLSX",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "PHONE": "Phone Number",
+      "FIRST_CONNECT_DATE": "First Connect Date",
+      "LAST_CONNECT_DATE": "Last Connect Date",
+      "NO_CLIENT": "No clients found"
+    },
+    "MEMBER": {
+      "YOU": "You",
+      "SEARCH": "Search for members",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "STATUS": "Status",
+      "PHONE": "Phone Number",
+      "ROLE": "Role",
+      "ACTIONS": "Actions",
+      "NO_MEMBER": "No members found",
+      "NO_ADMIN": "No admin found",
+      "INVITE_MEMBER": "Invite member"
+    },
+    "ROLE": {
+      "ADMIN": "Admin",
+      "MEMBER": "Member",
+      "VIEWER": "Viewer",
+      "ADMIN_ROLE": "Admin role",
+      "MEMBER_ROLE": "Member role"
     }
   },
   "DESKTOP_LOGIN": {

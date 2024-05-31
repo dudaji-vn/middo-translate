@@ -130,7 +130,9 @@ export default function UploadSpaceImage({
         <AlertDialogContent className="md:h-[80vh] md:max-w-[80vw] xl:max-w-[70vw]">
           <MediaUploadProvider>
             <MediaUploadDropzone>
-              <h3 className="text-[24px]">Upload space Image</h3>
+              <h3 className="text-[24px]">
+                {t('EXTENSION.SPACE.UPLOAD_IMAGE')}
+              </h3>
               <InputCropImage
                 ref={inputCropImage}
                 open={open}

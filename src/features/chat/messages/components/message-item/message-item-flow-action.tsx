@@ -105,7 +105,7 @@ const MessageNode = ({
         ...createLocalMessage({
           sender: bot!,
           content: nextNode.data?.content,
-          language: bot?.language,
+          language: '',
         }),
         status: 'sent',
         roomId: room?._id,
@@ -128,7 +128,7 @@ const MessageNode = ({
             ...createLocalMessage({
               sender: bot!,
               content: '',
-              language: bot?.language,
+              language: ""
             }),
             status: 'sent',
             roomId: room?._id,
@@ -143,7 +143,7 @@ const MessageNode = ({
             ...createLocalMessage({
               sender: bot!,
               content: '',
-              language: bot?.language,
+              language: ''
             }),
             status: 'sent',
             roomId: room?._id,
@@ -158,7 +158,7 @@ const MessageNode = ({
             ...createLocalMessage({
               sender: bot!,
               content: '',
-              language: bot?.language,
+              language: ''
             }),
             status: 'sent',
             roomId: room?._id,

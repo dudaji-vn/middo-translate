@@ -44,7 +44,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                     width,
                     height: width,
                   }}
-                  className="relative cursor-pointer overflow-hidden rounded-xl border border-neutral-50"
+                  className="relative cursor-pointer overflow-hidden rounded-xl border aspect-square border-neutral-50 max-w-full"
                 >
                   <Image
                     priority
@@ -52,7 +52,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                     src={img.url}
                     fill
                     quality={50}
-                    className="disable-ios-img-tap aspect-square object-cover"
+                    className="disable-ios-img-tap aspect-square object-cover max-w-full"
                   />
                 </div>
               );

@@ -21,8 +21,8 @@ import { cn } from '@/utils/cn';
 
 import { PageLoading } from '@/components/feedback';
 import { TranslationTab } from '@/types/translationstab.type';
-import { THistoryItem } from './_components/history/history';
-import HomeTemplate from './_components/home-template';
+import { THistoryItem } from '../_components/history/history';
+import HomeTemplate from '../_components/home-template';
 
 export interface SearchParams {
   query?: string;

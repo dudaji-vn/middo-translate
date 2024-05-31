@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/configs/env.private.ts", 
-    "src/app/(main-layout)/(protected)/spaces/[spaceId]/statistics/@report/error.tsx"  ],
+    "src/configs/env.private.ts",
+    "src/app/(main-layout)/(protected)/spaces/[spaceId]/statistics/@report/error.tsx"
+  ],
   "exclude": ["node_modules"]
 }

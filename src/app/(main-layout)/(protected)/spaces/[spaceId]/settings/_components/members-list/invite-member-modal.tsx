@@ -11,6 +11,7 @@ import { inviteMembersToSpace } from '@/services/business-space.service';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { ESPaceRoles } from '../space-setting/setting-items';
+import { useTranslation } from 'react-i18next';
 
 const InviteMemberModal = ({
   space,
@@ -19,6 +20,7 @@ const InviteMemberModal = ({
   space: TSpace;
   myRole?: ESPaceRoles;
 }) => {
+  const { t } = useTranslation('common');
   const [members, setMembers] = React.useState<Member[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -58,12 +60,12 @@ const InviteMemberModal = ({
         size={'xs'}
         startIcon={<UserRoundPlus />}
       >
-        Invite Member
+        {t('EXTENSION.MEMBER.INVITE_MEMBER')}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex h-fit  max-h-[80vh] min-h-fit max-w-screen-md flex-col justify-start overflow-y-auto">
           <DialogTitle className="flex flex-row items-center justify-between text-2xl font-semibold tracking-tight">
-            Invite Members
+            {t('EXTENSION.MEMBER.INVITE_MEMBER')}
           </DialogTitle>
           <InviteMembers
             className="h-auto max-h-[400px] overflow-y-auto"
@@ -89,7 +91,7 @@ const InviteMemberModal = ({
               shape={'square'}
               size={'sm'}
             >
-              Cancel
+              {t('COMMON.CANCEL')}
             </Button>
             <Button
               onClick={onInviteUsers}
@@ -99,7 +101,7 @@ const InviteMemberModal = ({
               loading={loading}
               size={'sm'}
             >
-              Invite
+              {t('COMMON.INVITE')}
             </Button>
           </div>
         </DialogContent>
