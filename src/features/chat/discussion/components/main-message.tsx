@@ -39,7 +39,7 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
     >
       <div className="flex items-center gap-2">
         <Avatar size="xs" src={sender.avatar} alt={sender.name} />
-        <span className="max-w-80 break-words text-sm font-semibold">
+        <span className="max-w-80 flex-1 overflow-hidden break-words text-sm font-semibold">
           {sender.name}
         </span>
       </div>

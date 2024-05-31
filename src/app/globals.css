@@ -560,3 +560,9 @@ input::-ms-reveal,
 input::-ms-clear {
   display: none;
 }
+@media (max-height: 550px) {
+  .message-emoji-picker {
+    max-height: 200px;
+    overflow: auto;
+  }
+}

@@ -18,11 +18,12 @@ import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth.store';
 import { useQueryClient } from '@tanstack/react-query';
 import { convert } from 'html-to-text';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { roomApi } from '../../../rooms/api';
 import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { MessageActions } from '../message-actions';
 import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -53,6 +54,7 @@ export const MessagesBoxProvider = ({
   guestId?: string;
 }>) => {
   const key = ['messages', room._id];
+  const router = useRouter();
   const queryClient = useQueryClient();
   const {
     isFetching,
@@ -105,6 +107,16 @@ export const MessagesBoxProvider = ({
         console.log(`socket.on(${SOCKET_CONFIG.EVENTS.MESSAGE.NEW})`, message);
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
+
+        // In case of have someones remove you from group
+        if(message.action === 'removeUser') {
+          // If you are in the room, and you had been deleted => redirect to online conversation
+          if(message.targetUsers?.find(user => user._id === userId) && message.room?._id == room._id) {
+            router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
+            return;
+          }
+        }
+
         const targetText = message.room?.isGroup
           ? message.room?.name
             ? message.room?.name
