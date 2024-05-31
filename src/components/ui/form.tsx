@@ -13,6 +13,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { cn } from '@/utils/cn';
 import { AlertCircleIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const Form = FormProvider;
 
@@ -144,8 +145,10 @@ FormDescription.displayName = 'FormDescription';
 
 const FormMessage = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLParagraphElement>
->(({ className, children, ...props }, ref) => {
+  React.HTMLAttributes<HTMLParagraphElement> & {
+    render?: (props: any) => React.ReactNode;
+  }
+>(({ className, render = () => null, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message) : children;
 
@@ -155,16 +158,16 @@ const FormMessage = React.forwardRef<
 
   return (
     <div
-        ref={ref}
-        id={formMessageId}
-        className={cn('flex flex-row gap-3 items-center text-sm font-medium text-destructive', className)}
-        {...props}
+      ref={ref}
+      id={formMessageId}
+      className={cn(
+        'flex flex-row items-center gap-3 text-sm font-medium text-destructive',
+        className,
+      )}
+      {...props}
     >
       <AlertCircleIcon className="h-7 w-5 min-w-[20px] " />
-      <p
-      >
-        {body}
-      </p>
+      <p>{render?.({ message: body }) || body}</p>
     </div>
   );
 });

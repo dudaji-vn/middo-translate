@@ -462,8 +462,12 @@
   },
   "MODAL": {
     "CREATE_SPACE": {
+      "HEADING": "Create Space",
       "TITLE": "Give <span class='text-primary-500-main'> your space </span> some information",
-      "DESCRIPTION": "Help your crews to recognize your business easier by naming this space, adding space avatar or company's logo <span class='font-light'>(optional)</span>."
+      "DESCRIPTION": "Help your crews to recognize your business easier by naming this space, adding space avatar or company's logo <span class='font-light'>(optional)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Enter space name"
+      }
     },
     "DELETE_SPACE": {
       "TITLE": "Delete Space",
@@ -641,10 +645,18 @@
     "SPACE": {
       "WELCOME": "Hi, welcome back",
       "ALL_SPACE": "All space",
-      "JOINED_SPACE": "joined space",
+      "JOINED_SPACE": "Joined space",
       "MY_SPACE": "My space",
       "CREATE_SPACE": "Create new space",
-      "SPACE_INFOR": "Space information"
+      "SPACE_INFOR": "Space information",
+      "UPLOAD_IMAGE": "Upload Space Avatar",
+      "CREATE_BUTTON": "Create Space and invite members",
+      "ERRORS": {
+        "NAME_REQUIRED": "Space name is required",
+        "NAME_MAX_LENGTH": "Space name must be less than 50 characters",
+        "AVATAR_REQUIRED": "Space avatar is required",
+        "INVALID_EMAIL_MEMBER": "Invalid email member"
+      }
     },
     "BREADCRUMB": {
       "HOME": "Home"
@@ -718,7 +730,8 @@
       "CREATE_BY": "Create by",
       "CREATE_ON": "Create on",
       "LAST_EDITED": "Last edited",
-      "ACTIONS": "Actions"
+      "ACTIONS": "Actions",
+      "ENTER_SCRIPT_NAME": "Enter script name"
     },
     "CLIENT": {
       "PAGE_TITLE": "Clients Management",

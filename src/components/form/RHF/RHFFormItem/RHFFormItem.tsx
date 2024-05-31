@@ -14,7 +14,9 @@ export type TRHFFormItemProps = {
   description?: React.ReactNode;
   formItemProps?: React.HTMLAttributes<HTMLDivElement>;
   formLabelProps?: React.HTMLAttributes<HTMLLabelElement>;
-  formMessageProps?: React.HTMLAttributes<HTMLParagraphElement>;
+  formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & {
+    render?: (props: any) => React.ReactNode;
+  };
   descriptionProps?: React.HTMLAttributes<HTMLParagraphElement>;
 };
 

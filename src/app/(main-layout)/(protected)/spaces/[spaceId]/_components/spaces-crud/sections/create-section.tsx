@@ -34,8 +34,18 @@ const CreateSpaceForm = () => {
           formItemProps={{
             className: 'w-full',
           }}
+          formMessageProps={{
+            render: ({ message }) => {
+              console.log('message', message);
+              return (
+                <Typography className="text-sm text-red-500">
+                  {t(message)}
+                </Typography>
+              );
+            },
+          }}
           inputProps={{
-            placeholder: 'Enter space name',
+            placeholder: t('MODAL.CREATE_SPACE.PLACEHOLDERS.NAME'),
             required: true,
           }}
         />

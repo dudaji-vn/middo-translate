@@ -462,8 +462,10 @@
   },
   "MODAL": {
     "CREATE_SPACE": {
+      "HEADING": "Tạo không gian",
       "TITLE": "Cung cấp thông tin cho <span class='text-primary-500-main'> không gian của bạn </span>",
-      "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>."
+      "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
+      "PLACEHOLDERS": { "NAME": "Tên không gian" }
     },
     "DELETE_SPACE": {
       "TITLE": "Xoá không gian",
@@ -637,12 +639,20 @@
     "ALL_DOMAINS": "Tất cả miền",
     "ALL_MEMBERS": "Tất cả thành viên",
     "SPACE": {
-      "WELCOME": "Chào, mừng bạn trở lại",
+      "WELCOME": "Xin chào, mừng bạn trở lại",
       "ALL_SPACE": "Tất cả không gian",
       "JOINED_SPACE": "Không gian đã tham gia",
       "MY_SPACE": "Không gian của tôi",
       "CREATE_SPACE": "Tạo không gian mới",
-      "SPACE_INFOR": "Thông tin không gian"
+      "SPACE_INFOR": "Thông tin không gian",
+      "UPLOAD_IMAGE": "Tải lên ảnh đại diện không gian",
+      "CREATE_BUTTON": "Tạo không gian và mời thành viên",
+      "ERRORS": {
+        "NAME_REQUIRED": "Tên không gian là bắt buộc",
+        "NAME_MAX_LENGTH": "Tên không gian phải ít hơn 50 ký tự",
+        "AVATAR_REQUIRED": "Ảnh đại diện không gian là bắt buộc",
+        "INVALID_EMAIL_MEMBER": "Thành viên email không hợp lệ"
+      }
     },
     "BREADCRUMB": {
       "HOME": "Trang chủ"
@@ -717,7 +727,8 @@
       "CREATE_BY": "Tạo bởi",
       "CREATE_ON": "Tạo vào ngày",
       "LAST_EDITED": "Chỉnh sửa lần cuối",
-      "ACTIONS": "Hành động"
+      "ACTIONS": "Hành động",
+      "ENTER_SCRIPT_NAME": "Nhập tên kịch bản"
     },
     "CLIENT": {
       "PAGE_TITLE": "Quản lý khách hàng",
