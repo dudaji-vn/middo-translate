@@ -105,6 +105,9 @@
       "FRI": "금요일",
       "SAT": "토요일",
       "TITLE": "대화"
+    },
+    "HOURLY": {
+      "TITLE": "시간"
     }
   },
   "PAGINATION": {
@@ -676,7 +679,20 @@
       "CUSTOMERRATING": "고객의 평균 평가",
       "TRAFFICTRACK": "열린 대화의 트래픽 추적"
     },
-
+    "CHART_UNIT": {
+      "NEWVISITOR": "회",
+      "OPENEDCONVERSATION": "대화",
+      "DROPRATE": "대화",
+      "CUSTOMERRATING": "별",
+      "RESPONSEDMESSAGE": "메시지",
+      "LANGUAGERANK": "언어",
+      "TRAFFICTRACK": "열린 대화",
+      "DAY": "일",
+      "HOUR": "시간",
+      "MINUTE": "분",
+      "SECOND": "초",
+      "MILLISECOND": "밀리초"
+    },
     "SETTING": {
       "TAGS_MANAGEMENT": "태그 관리",
       "MEMBERS_MANAGEMENT": "멤버 관리",

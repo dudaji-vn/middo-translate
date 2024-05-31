@@ -112,18 +112,25 @@ export default function BusinessScatter({
                     const { y, x, density, openedConversation } = data || {};
                     const fromTime = x - 1 < 0 ? 23 : x - 1;
                     const toTime = x;
+
+                    const formattedY = formatWeekday(y);
+                    const labelWeekday = formattedY
+                      ? t(`COMMON.WEEKDAY.${formattedY.toUpperCase()}`)
+                      : '';
                     return (
                       <div
                         key={`tooltip-${x}-${y}`}
                         id="tooltip"
                         className="border-primary-200/80 h-fit rounded-[12px] border border-neutral-50 bg-white/95 p-4 text-neutral-300  shadow-md"
                       >
-                        <p className="font-medium">Opened conversation</p>
+                        <p className="font-medium">
+                          {t('EXTENSION.CHART.OPENEDCONVERSATION')}
+                        </p>
                         <p className="font-semibold text-neutral-800">
                           {density}
                         </p>
                         <p>
-                          {`${fromTime}h30 - ${toTime}h30 on ${formatWeekday(y)}`}
+                          {`${labelWeekday} | ${fromTime}h30 - ${toTime}h30`}
                         </p>
                         {openedConversation && (
                           <div className="flex flex-col gap-2 py-2">
@@ -166,7 +173,7 @@ export default function BusinessScatter({
               }}
               xAxisProps={{
                 label: {
-                  value: 'Hourly',
+                  value: t('COMMON.HOURLY.TITLE'),
                   position: 'right',
                 },
                 domain: [0, 23],

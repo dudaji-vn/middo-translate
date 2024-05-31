@@ -105,6 +105,9 @@
       "FRI": "Friday",
       "SAT": "Saturday",
       "TITLE": "Day of week"
+    },
+    "HOURLY": {
+      "TITLE": "Hourly"
     }
   },
   "PAGINATION": {
@@ -681,6 +684,20 @@
       "RESPONSEDMESSAGE": "The  number of messages that have been response by your team",
       "CUSTOMERRATING": "The average rating of your customers",
       "TRAFFICTRACK": "The traffic track of opened conversations"
+    },
+    "CHART_UNIT": {
+      "NEWVISITOR": "times",
+      "OPENEDCONVERSATION": "conversation",
+      "DROPRATE": "conversation",
+      "CUSTOMERRATING": "star",
+      "RESPONSEDMESSAGE": "message",
+      "LANGUAGERANK": "language",
+      "TRAFFICTRACK": "opened conversation",
+      "DAY": "day",
+      "HOUR": "hour",
+      "MINUTE": "minute",
+      "SECOND": "second",
+      "MILLISECOND": "millisecond"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Tags Management",

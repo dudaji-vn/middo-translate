@@ -105,6 +105,9 @@
       "FRI": "Thứ sáu",
       "SAT": "Thứ bảy",
       "TITLE": "Ngày trong tuần"
+    },
+    "HOURLY": {
+      "TITLE": "Theo giờ"
     }
   },
   "PAGINATION": {
@@ -680,6 +683,20 @@
       "RESPONSEDMESSAGE": "Số lượng tin nhắn đã được nhóm của bạn phản hồi",
       "CUSTOMERRATING": "Đánh giá trung bình của khách hàng",
       "TRAFFICTRACK": "Theo dõi lưu lượng của các cuộc trò chuyện đã được mở"
+    },
+    "CHART_UNIT": {
+      "NEWVISITOR": "lần",
+      "OPENEDCONVERSATION": "cuộc trò chuyện",
+      "DROPRATE": "cuộc trò chuyện",
+      "CUSTOMERRATING": "sao",
+      "RESPONSEDMESSAGE": "tin nhắn",
+      "LANGUAGERANK": "ngôn ngữ",
+      "TRAFFICTRACK": "cuộc trò chuyện đã mở",
+      "DAY": "ngày",
+      "HOUR": "giờ",
+      "MINUTE": "phút",
+      "SECOND": "giây",
+      "MILLISECOND": "mili giây"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Quản lý thẻ",
