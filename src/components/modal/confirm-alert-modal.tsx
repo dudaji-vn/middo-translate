@@ -18,6 +18,7 @@ import {
 } from '../feedback';
 import { cn } from '@/utils/cn';
 import useClient from '@/hooks/use-client';
+import { useTranslation } from 'react-i18next';
 
 export const ConfirmAlertModal = ({
   header,
@@ -59,6 +60,7 @@ export const ConfirmAlertModal = ({
   isLoading?: boolean;
 } & AlertDialogProps) => {
   const isClient = useClient();
+  const { t } = useTranslation('common');
 
   if (!isClient) return null;
 
@@ -88,7 +90,7 @@ export const ConfirmAlertModal = ({
                 }}
                 className={cn('sm:mr-3', cancelProps?.className)}
               >
-                Cancel
+                {t('COMMON.CANCEL')}
               </AlertDialogCancel>
               <AlertDialogAction
                 disabled={isLoading}
@@ -102,7 +104,7 @@ export const ConfirmAlertModal = ({
                   actionProps?.className,
                 )}
               >
-                Yes
+                {t('COMMON.CONFIRM')}
                 {isLoading && <Spinner size="sm" className="ml-2 text-white" />}
               </AlertDialogAction>
             </>
