@@ -20,7 +20,6 @@ import { cn } from '@/utils/cn';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useAuthStore } from '@/stores/auth.store';
 import { Button } from '@/components/actions';
-import { CHART_TOOLTIP_CONTENT } from '@/types/business-statistic.type';
 import { useAppStore } from '@/stores/app.store';
 
 const TooltipContent = ({

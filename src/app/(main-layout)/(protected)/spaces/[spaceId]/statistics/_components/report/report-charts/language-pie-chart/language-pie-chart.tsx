@@ -2,7 +2,7 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { CHART_COLORS } from '../chart-colors';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { getCountryNameByCode, getCountryCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
 import { CircleFlag } from 'react-circle-flags';
@@ -27,6 +27,8 @@ export default function LanguagePieChart({
     value: number;
     index?: number;
   } | null>(null);
+
+
   const pies = useMemo(
     () => (data.length ? data : [{ label: 'None', value: 1 }]),
     [data],
@@ -75,6 +77,7 @@ export default function LanguagePieChart({
               return (
                 <>
                   <Cell
+                    style={{ outline: 'none' }}
                     onClick={() => onTogglePie(entry, index)}
                     key={`cell-${index}`}
                     className="cursor-pointer"
@@ -86,7 +89,7 @@ export default function LanguagePieChart({
           </Pie>
           {selectedPie && outlinePie && (
             <Pie
-              animationDuration={500}
+              animationDuration={800}
               animationBegin={outlinePie.startAngle}
               data={[{ value: selectedPie.value }]}
               outerRadius={124}

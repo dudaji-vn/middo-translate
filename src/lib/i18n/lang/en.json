@@ -43,6 +43,8 @@
     "UPLOAD_IMAGE": "Upload Image",
     "SUGGESTION": "Suggestion",
     "SHOW_MORE": "Show More",
+    "OTHERS": "Others",
+    "SHOW_LESS": "Show Less",
     "CLOSE": "Close",
     "FORWARD": "Forward",
     "EDIT": "Edit",
@@ -93,7 +95,25 @@
       "LAST_MONTH": "Last month",
       "LAST_YEAR": "Last year",
       "CUSTOM": "Custom"
+    },
+    "WEEKDAY": {
+      "SUN": "Sunday",
+      "MON": "Monday",
+      "TUE": "Tuesday",
+      "WED": "Wednesday",
+      "THU": "Thursday",
+      "FRI": "Friday",
+      "SAT": "Saturday",
+      "TITLE": "Day of week"
     }
+  },
+  "PAGINATION": {
+    "PREV": "Previous",
+    "NEXT": "Next",
+    "PAGE": "Page",
+    "PER_PAGE": "Per page",
+    "ITEMS": "items",
+    "ITEMS_PER_PAGE": "Items per page"
   },
   "MESSAGE": {
     "ERROR": {
@@ -648,7 +668,19 @@
       "OPENEDCONVERSATION": "Opened Conversations",
       "DROPRATE": "Drop Rate",
       "RESPONSEDMESSAGE": "Responsed Message",
-      "CUSTOMERRATING": "Customer Rating"
+      "CUSTOMERRATING": "Customer Rating",
+      "TRAFFICTRACK": "Traffic Track"
+    },
+    "CHART_TOOLTIP": {
+      "CLIENT": "The number of new clients",
+      "LANGUAGERANK": "The rank of most used languages",
+      "NEWVISITOR": "The number of new visitors that visit your website",
+      "RESPONSETIME": "The average response time of your team",
+      "OPENEDCONVERSATION": "The number of conversations that have been opened through your website",
+      "DROPRATE": "The rate of dropped conversations",
+      "RESPONSEDMESSAGE": "The  number of messages that have been response by your team",
+      "CUSTOMERRATING": "The average rating of your customers",
+      "TRAFFICTRACK": "The traffic track of opened conversations"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Tags Management",

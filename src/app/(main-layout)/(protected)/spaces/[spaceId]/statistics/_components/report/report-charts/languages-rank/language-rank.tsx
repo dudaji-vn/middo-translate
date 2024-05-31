@@ -13,6 +13,7 @@ import { Button } from '@/components/actions';
 import { ChevronDown, ChevronUpIcon } from 'lucide-react';
 import { CHART_COLORS } from '../chart-colors';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
+import { useTranslation } from 'react-i18next';
 
 const COLORS = [...CHART_COLORS].reverse();
 const LoadingLanguageRank = () => {
@@ -61,6 +62,7 @@ const LanguageRank = ({
   isLoading: boolean;
   piesData: any;
 }) => {
+  const { t } = useTranslation('common');
   const [showOthers, setShowOthers] = useState(false);
   const { dataSlice, others, otherPercentage } = useMemo(() => {
     const others = data.slice(3) || [];
@@ -92,7 +94,7 @@ const LanguageRank = ({
     <section className="relative w-full space-y-4  bg-white px-3 py-4 md:px-10">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800">
-          Conversation&apos;s Language
+          {t('EXTENSION.CHART.LANGUAGERANK')}
         </Typography>
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
@@ -163,7 +165,7 @@ const LanguageRank = ({
                   startIcon={<ChevronDown />}
                   onClick={toggleShowOthers}
                 >
-                  Others
+                  {t('COMMON.OTHERS')}...
                 </Button>
               </div>
               <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
@@ -194,7 +196,7 @@ const LanguageRank = ({
               onClick={toggleShowOthers}
               startIcon={<ChevronUpIcon />}
             >
-              Show less
+              {t('COMMON.SHOW_LESS')}
             </Button>
           </div>
         </div>

@@ -7,11 +7,7 @@ import {
   AnalyticsOptions,
   useGetSpaceAnalytic,
 } from '@/features/business-spaces/hooks/use-get-space-analytic';
-import {
-  CHART_TOOLTIP_CONTENT,
-  ESpaceChart,
-  TChartKey,
-} from '@/types/business-statistic.type';
+import { ESpaceChart, TChartKey } from '@/types/business-statistic.type';
 import { ReportCards } from './_components/report/report-cards';
 import {
   MAPPED_CHART_UNIT,
@@ -104,7 +100,7 @@ const ReportPage = ({
             data?.analysis[chart]?.total || 0;
           const filterBy =
             searchParams[
-            CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
+              CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
             ];
           switch (chart) {
             case ESpaceChart.OPENED_CONVERSATION: {
@@ -112,7 +108,9 @@ const ReportPage = ({
                 <div className="flex flex-col" key={chart}>
                   <BusinessLineChart
                     key={chart}
-                    tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+                    tooltipContent={t(
+                      `EXTENSION.CHART_TOOLTIP.${chart.toUpperCase()}`,
+                    )}
                     total={`${formattedTotal}`}
                     filterByKey={CHART_AFFECTED_PARAMS[chart]}
                     filterBy={filterBy}
@@ -175,7 +173,9 @@ const ReportPage = ({
           return (
             <BusinessLineChart
               key={chart}
-              tooltipContent={CHART_TOOLTIP_CONTENT[chart]}
+              tooltipContent={t(
+                `EXTENSION.CHART_TOOLTIP.${chart.toUpperCase()}`,
+              )}
               total={`${formattedTotal}`}
               filterByKey={CHART_AFFECTED_PARAMS[chart]}
               filterBy={filterBy}

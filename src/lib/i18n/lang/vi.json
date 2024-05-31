@@ -43,6 +43,8 @@
     "UPLOAD_IMAGE": "Tải ảnh lên",
     "SUGGESTION": "Gợi ý",
     "SHOW_MORE": "Xem thêm",
+    "OTHERS": "Khác",
+    "SHOW_LESS": "Ẩn bớt",
     "CLOSE": "Đóng",
     "FORWARD": "Chuyển tiếp",
     "SIGN_OUT": "Đăng xuất",
@@ -93,7 +95,25 @@
       "LAST_MONTH": "Tháng trước",
       "LAST_YEAR": "Năm trước",
       "CUSTOM": "Tùy chỉnh"
+    },
+    "WEEKDAY": {
+      "SUN": "Chủ nhật",
+      "MON": "Thứ hai",
+      "TUE": "Thứ ba",
+      "WED": "Thứ tư",
+      "THU": "Thứ năm",
+      "FRI": "Thứ sáu",
+      "SAT": "Thứ bảy",
+      "TITLE": "Ngày trong tuần"
     }
+  },
+  "PAGINATION": {
+    "PREV": "Trước",
+    "NEXT": "Tiếp",
+    "PAGE": "Trang",
+    "PER_PAGE": "Mỗi trang",
+    "ITEMS": "mục",
+    "ITEMS_PER_PAGE": "Mục mỗi trang"
   },
   "MESSAGE": {
     "ERROR": {
@@ -647,7 +667,19 @@
       "OPENEDCONVERSATION": "Cuộc trò chuyện mở",
       "DROPRATE": "Tỷ lệ bỏ cuộc",
       "RESPONSEDMESSAGE": "Tin nhắn phản hồi",
-      "CUSTOMERRATING": "Đánh giá khách hàng"
+      "CUSTOMERRATING": "Đánh giá khách hàng",
+      "TRAFFICTRACK": "Lưu lượng truy cập"
+    },
+    "CHART_TOOLTIP": {
+      "CLIENT": "Số lượng khách hàng mới",
+      "LANGUAGERANK": "Xếp hạng ngôn ngữ được sử dụng nhiều nhất",
+      "NEWVISITOR": "Số lượng khách truy cập mới vào trang web của bạn",
+      "RESPONSETIME": "Thời gian phản hồi trung bình của nhóm của bạn",
+      "OPENEDCONVERSATION": "Số lượng cuộc trò chuyện đã được mở qua trang web của bạn",
+      "DROPRATE": "Tỷ lệ cuộc trò chuyện bị bỏ rơi",
+      "RESPONSEDMESSAGE": "Số lượng tin nhắn đã được nhóm của bạn phản hồi",
+      "CUSTOMERRATING": "Đánh giá trung bình của khách hàng",
+      "TRAFFICTRACK": "Theo dõi lưu lượng của các cuộc trò chuyện đã được mở"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Quản lý thẻ",

@@ -43,6 +43,8 @@
     "UPLOAD_IMAGE": "이미지 업로드",
     "SUGGESTION": "제안",
     "SHOW_MORE": "더 보기",
+    "OTHERS": "기타",
+    "SHOW_LESS": "간략히",
     "CLOSE": "닫기",
     "FORWARD": "전달",
     "EDIT": "편집",
@@ -93,7 +95,25 @@
       "LAST_MONTH": "지난 달",
       "LAST_YEAR": "작년",
       "CUSTOM": "사용자 정의"
+    },
+    "WEEKDAY": {
+      "SUN": "일요일",
+      "MON": "월요일",
+      "TUE": "화요일",
+      "WED": "수요일",
+      "THU": "목요일",
+      "FRI": "금요일",
+      "SAT": "토요일",
+      "TITLE": "대화"
     }
+  },
+  "PAGINATION": {
+    "PREV": "이전",
+    "NEXT": "다음",
+    "PAGE": "페이지",
+    "PER_PAGE": "페이지당",
+    "ITEMS": "항목",
+    "ITEMS_PER_PAGE": "페이지당 항목 수"
   },
   "MESSAGE": {
     "ERROR": {
@@ -642,8 +662,21 @@
       "OPENEDCONVERSATION": "열린 대화",
       "DROPRATE": "드랍 비율",
       "RESPONSEDMESSAGE": "응답 메시지",
-      "CUSTOMERRATING": "고객 평가"
+      "CUSTOMERRATING": "고객 평가",
+      "TRAFFICTRACK": "트래픽 추적"
     },
+    "CHART_TOOLTIP": {
+      "CLIENT": "새로운 고객 수",
+      "LANGUAGERANK": "가장 많이 사용되는 언어 순위",
+      "NEWVISITOR": "귀하의 웹사이트를 방문한 새로운 방문자 수",
+      "RESPONSETIME": "팀의 평균 응답 시간",
+      "OPENEDCONVERSATION": "웹사이트를 통해 열린 대화 수",
+      "DROPRATE": "중단된 대화 비율",
+      "RESPONSEDMESSAGE": "팀이 응답한 메시지 수",
+      "CUSTOMERRATING": "고객의 평균 평가",
+      "TRAFFICTRACK": "열린 대화의 트래픽 추적"
+    },
+
     "SETTING": {
       "TAGS_MANAGEMENT": "태그 관리",
       "MEMBERS_MANAGEMENT": "멤버 관리",
