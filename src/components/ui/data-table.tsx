@@ -53,13 +53,16 @@ const SkeletonRow: React.FC<SkeletonRowProps> = ({
   rowProps,
 }) => {
   return (
-    <TableRow {...rowProps}>
-      {[...Array(columns)].map((_, index) => (
-        <TableCell key={index} {...cellProps}>
-          <Skeleton className="h-full min-h-[25px] w-11/12 rounded-none" />
-        </TableCell>
-      ))}
-    </TableRow>
+    <>
+      <TableRow {...rowProps}>
+        {[...Array(columns)].map((_, index) => (
+          <TableCell key={index} {...cellProps}>
+            <Skeleton className="h-full min-h-[25px] w-11/12 rounded-none" />
+          </TableCell>
+        ))}
+      </TableRow>
+      <div key={Date.now()} className="h-2 w-full bg-white" />
+    </>
   );
 };
 export function DataTable<TData, TValue>({
