@@ -119,9 +119,14 @@ const LanguageRank = ({
                     height={20}
                     width={20}
                   />
-                  <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800">
-                    {getCountryNameByCode(item.language)}
-                  </Typography>
+                  <Tooltip
+                    title={getCountryNameByCode(item.language)}
+                    triggerItem={
+                      <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800">
+                        {getCountryNameByCode(item.language)}
+                      </Typography>
+                    }
+                  />
                 </div>
                 <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
                   <div

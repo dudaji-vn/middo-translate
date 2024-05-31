@@ -52,17 +52,6 @@ export type TTraficTrack = Array<{
   }>;
 }>;
 
-export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {
-  newVisitor: 'New Visitors',
-  openedConversation: 'Opened conversations',
-  dropRate: 'Response time',
-  languageRank: "Conversation's language",
-  responseTime: 'Customer rating',
-  customerRating: 'Customer rating',
-  responsedMessage: 'Response time',
-  trafficTrack: 'Traffic track',
-};
-
 export const ROWS_PER_PAGE_OPTIONS = [5, 25, 75, 100];
 export const DEFAULT_CLIENTS_PAGINATION = {
   limit: ROWS_PER_PAGE_OPTIONS[1],

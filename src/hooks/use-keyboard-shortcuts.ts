@@ -47,7 +47,7 @@ export const useKeyboardShortcut = (
                   MAPPED_WIN_KEYS[key] &&
                   MAPPED_WIN_KEYS[key]?.toLowerCase() ===
                     event?.key?.toLowerCase()) ||
-                (keyByOS === 'esc' && event?.key.toLowerCase() === 'escape');
+                (keyByOS === 'esc' && event?.key?.toLowerCase() === 'escape');
 
               return isMatched;
             })

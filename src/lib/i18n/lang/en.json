@@ -643,7 +643,7 @@
     "CHART": {
       "CLIENT": "New Clients",
       "LANGUAGERANK": "Conversation's Language",
-      "NEWVISITOR": "New Visitors",
+      "NEWVISITOR": "Visitors",
       "RESPONSETIME": "Response Time",
       "OPENEDCONVERSATION": "Opened Conversations",
       "DROPRATE": "Drop Rate",

@@ -1,7 +1,7 @@
 import { TChartKey } from '@/types/business-statistic.type';
 
 export const MAPPED_CHART_UNIT: Record<TChartKey, string> = {
-  newVisitor: 'people',
+  newVisitor: 'times',
   openedConversation: 'conversation',
   dropRate: 'conversation',
   responseTime: 'millisecond',
