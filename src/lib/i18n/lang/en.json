@@ -461,6 +461,10 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "INVITE_MEMBERS": {
+      "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span>other to join your space&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
+      "DESCRIPTION": "You can only invite 2 members in a Free plan account.<span class='font-normal text-primary-500-main'>upgrade plan.</span>"
+    },
     "CREATE_SPACE": {
       "HEADING": "Create Space",
       "TITLE": "Give <span class='text-primary-500-main'> your space </span> some information",
