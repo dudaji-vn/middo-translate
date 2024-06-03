@@ -48,7 +48,7 @@ const ReportDropdown = ({
           onOpenChange(!open);
         }}
       >
-        <div className="relative flex h-12 flex-row items-center justify-between gap-2 rounded-[12px] border border-neutral-50 p-0 text-neutral-800 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100 [&_div]:px-3 [&_div]:py-2">
+        <div className="relative flex-1 flex h-12 flex-row items-center justify-between gap-2 rounded-[12px] border border-neutral-50 p-0 text-neutral-800 active:!bg-neutral-200 active:!text-shading md:hover:bg-neutral-100 [&_div]:px-3 [&_div]:py-2">
           <div className="flex h-full items-center rounded-l-[12px] bg-primary-100">
             {cloneElement(startIcon, {
               size: 20,
@@ -67,8 +67,8 @@ const ReportDropdown = ({
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align="end"
-        className=" min-w-40 overflow-hidden rounded-2xl  border bg-background p-0 shadow-3 xl:min-w-80"
+        align="start"
+        className=" min-w-48 max-w-full overflow-hidden rounded-2xl  border bg-background p-0 shadow-3 xl:min-w-80"
         onClick={() => onOpenChange(false)}
       >
         {options.map((option) => {

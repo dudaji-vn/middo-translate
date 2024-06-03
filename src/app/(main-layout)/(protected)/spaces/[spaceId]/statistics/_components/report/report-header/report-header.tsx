@@ -34,7 +34,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
           {t('EXTENSION.REPORT')}
         </Typography>
       </div>
-      <div className="flex w-full flex-col justify-between gap-2 pb-4 md:flex-row">
+      <div className="flex w-full flex-col justify-between gap-4 pb-4 md:flex-row">
         <ReportPickerDomain />
         <ReportPickerMember />
         <ReportPickerTime />

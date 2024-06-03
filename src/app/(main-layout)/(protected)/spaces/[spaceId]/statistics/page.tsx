@@ -145,8 +145,7 @@ const ReportPage = ({
             }
             case ESpaceChart.CUSTOMER_RATING:
               formattedTotal =
-                (data?.analysis[chart]?.value || 0) /
-                  (data?.analysis[chart]?.total || 1) || 0;
+                (data?.analysis[chart]?.value || 0).toFixed(1) || 0;
             case ESpaceChart.NEW_VISITOR:
             case ESpaceChart.RESPONSE_MESSAGE:
               formattedTotal = `${formattedTotal} ${chartUnit}`;
