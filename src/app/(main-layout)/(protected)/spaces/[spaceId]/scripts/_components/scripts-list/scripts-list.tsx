@@ -89,6 +89,9 @@ const ScriptsList = ({
         initialData: currentScript as TChatScript,
       });
   };
+  const isSomeRowCanDelete = useMemo(() => {
+    return scripts?.some((s) => !s.isUsing);
+  }, [scripts]);
 
   return (
     <section className="relative w-full">
@@ -117,6 +120,7 @@ const ScriptsList = ({
           }}
           columns={makeScriptsColumns({
             t,
+            isSomeRowCanDelete,
             onEdit,
             onView,
             enableDeletion,

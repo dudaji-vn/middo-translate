@@ -33,11 +33,13 @@ export const makeScriptsColumns = ({
   onEdit,
   enableDeletion = true,
   singleRowSelection = false,
+  isSomeRowCanDelete = false,
   onDeleteRowSelections = () => {},
   t,
 }: {
   onView: (id: string) => void;
   onEdit: (id: string) => void;
+  isSomeRowCanDelete?: boolean;
   enableDeletion?: boolean;
   singleRowSelection?: boolean;
   onDeleteRowSelections?: () => void;
@@ -48,7 +50,7 @@ export const makeScriptsColumns = ({
       id: 'select',
       header: ({ table }) => {
         const noData = table.getRowCount() === 0;
-        if (singleRowSelection || noData) {
+        if (singleRowSelection || noData || !isSomeRowCanDelete) {
           return null;
         }
         return (

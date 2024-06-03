@@ -184,13 +184,21 @@ const InviteMembers = ({
               className="text-[32px] font-semibold leading-9 text-neutral-800"
               {...headerTitleProps}
             >
-              {t('MODAL.INVITE_MEMBERS.TITLE')}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: t('MODAL.INVITE_MEMBERS.TITLE'),
+                }}
+              ></span>
             </Typography>
             <Typography
               className="flex gap-2 font-light text-neutral-600"
               {...headerDescriptionProps}
             >
-              <span>{t('MODAL.INVITE_MEMBERS.DESCRIPTION')}</span>
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: t('MODAL.INVITE_MEMBERS.DESCRIPTION'),
+                }}
+              />
             </Typography>
           </div>
         )}
@@ -253,7 +261,7 @@ const InviteMembers = ({
               onClick={onAddUser}
               loading={formAdding.formState.isSubmitting}
               endIcon={<Plus className="mr-1 h-4 w-4" />}
-              className="h-10"
+              className="h-10 min-w-28"
               disabled={disabledInviteBtn as boolean}
             >
               {t('COMMON.ADD')}

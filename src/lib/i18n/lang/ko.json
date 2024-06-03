@@ -458,8 +458,8 @@
   },
   "MODAL": {
     "INVITE_MEMBERS": {
-      "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span>other to join your space&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
-      "DESCRIPTION": "You can only invite 2 members in a Free plan account.<span class='font-normal text-primary-500-main'>upgrade plan.</span>"
+      "TITLE": "<span class='mr-2 text-primary-500-main'>초대</span>하여 공간에 참여시키세요&nbsp;<span class='text-[24px] font-normal'>(선택 사항)</span>",
+      "DESCRIPTION": "무료 플랜 계정에서는 최대 2명의 멤버만 초대할 수 있습니다. <span class='font-normal text-primary-500-main'>플랜 업그레이드.</span>"
     },
     "CREATE_SPACE": {
       "HEADING": "공간 생성",
