@@ -150,7 +150,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
               size={'sm'}
               onClick={() => handleStepChange(1)}
             >
-              {t('COMMON.NEXT')}
+              {t('PAGINATION.NEXT')}
             </Button>
           </div>
         </StepWrapper>
