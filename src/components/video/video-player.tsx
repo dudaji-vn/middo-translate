@@ -72,13 +72,20 @@ function VideoPlayer(props: VideoProps) {
       setIsPlaying(false);
       videoRef.current!.currentTime = 0;
     }
+
+    const handleLoadedData = () => {
+      setVideoDuration(videoRef.current?.duration || 0.1);
+    }
+
     videoRef.current?.addEventListener('ended', handleEnd);
     // Add duration video
-    videoRef.current?.addEventListener('loadedmetadata', () => {
-      setVideoDuration(videoRef.current?.duration || 0.1);
-    });
+    videoRef.current?.addEventListener('loadedmetadata', handleLoadedData);
+    if(videoRef?.current?.duration) {
+      handleLoadedData();
+    }
     return () => {
       videoRef.current?.removeEventListener('ended', handleEnd);
+      videoRef.current?.removeEventListener('loadedmetadata', handleLoadedData);
     }
   }, [])
 

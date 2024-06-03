@@ -1,6 +1,6 @@
 import { useChatBox } from '../../../contexts';
 import { RoomCloud } from '../room-cloud';
-import { FilesIcon } from 'lucide-react';
+import { ImagePlay } from 'lucide-react';
 import { useRoomSidebarTabs } from '../room-side-tabs/room-side-tabs.hook';
 import useClient from '@/hooks/use-client';
 import { RoomSideTabLayout } from '../room-side-tabs/room-side-tab-layout';
@@ -17,8 +17,9 @@ export const RoomSideTabFiles = ({}: RoomSideTabFilesProps) => {
   return (
     <RoomSideTabLayout
         title={t('CONVERSATION.FILE_MEDIA_AND_LINK')}
-        icon={<FilesIcon />}
+        icon={<ImagePlay />}
         onBack={()=>toggleTab("info")}
+        type="back"
       >
       <div className="flex w-full flex-col divide-y divide-neutral-100 overflow-x-hidden  overflow-y-scroll pb-3 h-full">
         <RoomCloud room={room} />
