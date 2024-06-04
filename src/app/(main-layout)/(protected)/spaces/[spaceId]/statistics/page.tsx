@@ -142,8 +142,14 @@ const ReportPage = ({
                 return acc + item.value;
               }, 0);
               chartUnit = t(`EXTENSION.CHART_UNIT.${unit.toUpperCase()}`) || '';
+              formattedTotal = `${formattedTotal} ${chartUnit}`;
+              break;
             }
             case ESpaceChart.CUSTOMER_RATING:
+              formattedTotal =
+                (data?.analysis[chart]?.value || 0).toFixed(1) || 0;
+              formattedTotal = `${formattedTotal} ${chartUnit}`;
+              break;
             case ESpaceChart.NEW_VISITOR:
             case ESpaceChart.RESPONSE_MESSAGE:
               formattedTotal = `${formattedTotal} ${chartUnit}`;

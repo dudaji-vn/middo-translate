@@ -74,7 +74,6 @@ const ReceiveVideoCall = () => {
       stopAudio();
     }
   }, [playAudio, requestCall?.id, stopAudio]);
-  // incase call end => not have in meetingList
   useEffect(() => {
     if(!requestCall?.call?.roomId) return
     if(!meetingList.includes(requestCall?.call?.roomId)) {
