@@ -5,12 +5,16 @@ import ParticipantInVideoCall from "@/features/call/interfaces/participant";
 import VideoItem from "../video/video-item";
 import { DoodleArea } from "../doodle/doodle-area";
 import FocusVideoItem from "../video/focus-video-item";
+import { useMemo } from "react";
 
 
 const FocusScreenLayout = () => {
     const isDoodle = useVideoCallStore(state => state.isDoodle);
     const isPinDoodle = useVideoCallStore(state => state.isPinDoodle);
     const participants = useParticipantVideoCallStore(state => state.participants)
+    const participantPin = useMemo(()=> {
+        return participants.find((participant: ParticipantInVideoCall) => participant.pin)
+    }, [participants]);
     return (
         <div className="relative flex w-full h-full p-1">
             <div className="flex flex-col w-full h-full gap-1">
@@ -36,7 +40,7 @@ const FocusScreenLayout = () => {
                 <section className="focus-view relative flex h-full w-full flex-1 overflow-hidden ">
                     <div className="flex h-full w-full relative">
                         {isDoodle && isPinDoodle && <DoodleArea />}
-                        {!isPinDoodle && <FocusVideoItem participant={participants.find((participant: any) => participant.pin)} />}
+                        {!isPinDoodle && participantPin && <FocusVideoItem participant={participantPin} />}
                     </div>
                 </section>
             </div>

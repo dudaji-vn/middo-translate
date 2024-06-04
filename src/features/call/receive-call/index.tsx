@@ -1,7 +1,7 @@
 'use client';
 
 import { use, useCallback, useEffect, useRef } from 'react';
-import { useVideoCallStore } from '../store/video-call.store';
+import { IRequestCall, useVideoCallStore } from '../store/video-call.store';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useAuthStore } from '@/stores/auth.store';
@@ -27,7 +27,7 @@ const ReceiveVideoCall = () => {
   const meetingList = useChatStore(state => state.meetingList)
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
   const { isElectron, ipcRenderer } = useElectron();
-  const listenToCall = useCallback(({ call, user }: any) => {
+  const listenToCall = useCallback(({ call, user }: IRequestCall) => {
       if (user._id == me?._id) return;
       if (requestCall) return;
       if(room && room.roomId === call.roomId) return;
@@ -74,13 +74,12 @@ const ReceiveVideoCall = () => {
       stopAudio();
     }
   }, [playAudio, requestCall?.id, stopAudio]);
-
-  // incase call end => not have in meetingList
   useEffect(() => {
-    if(!meetingList.includes(requestCall?.call.roomId)) {
+    if(!requestCall?.call?.roomId) return
+    if(!meetingList.includes(requestCall?.call?.roomId)) {
       setRequestCall();
     }
-  }, [meetingList, requestCall?.call.roomId, setRequestCall])
+  }, [meetingList, requestCall?.call?.roomId, setRequestCall])
 
   // Auto decline call after 30s
   useEffect(() => {

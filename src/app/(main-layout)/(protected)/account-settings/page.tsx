@@ -12,11 +12,12 @@ import { useAuthStore } from '@/stores/auth.store';
 import Image from 'next/image';
 import { CircleFlag } from 'react-circle-flags';
 import { useTranslation } from 'react-i18next';
-import SelectPageLanguage from './_components/select-page-language';
 import { DeleteAccount } from '@/features/user-settings/delete-account';
 import { AppPermission } from '@/features/user-settings/app-permission';
 import RestrictMessage from '@/features/user-settings/restrict-message';
 import { TurnOffNotification } from '@/features/user-settings/turn-off-notification';
+import SelectPageLanguage from '@/features/user-settings/select-page-language';
+import SelectTheme from '@/features/user-settings/select-theme';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -80,6 +81,7 @@ export default function AccountSettings() {
         <div className="my-4">
           <SelectPageLanguage />
           <TurnOffNotification />
+          <SelectTheme />
           <AppPermission />
         </div>
         <div

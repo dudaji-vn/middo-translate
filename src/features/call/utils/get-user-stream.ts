@@ -38,7 +38,7 @@ export default async function getUserStream({isTurnOnCamera , isTurnOnMic, camer
         // create audio and video streams separately
         let videoStream: (MediaStream | undefined) = undefined;
         let audioStream: (MediaStream | undefined) = undefined;
-        let combineArr: any[] = []
+        let combineArr: MediaStreamTrack[] = []
         if(isTurnOnCamera) {
             videoStream = await navigator.mediaDevices.getUserMedia(constraintsVideo)
             combineArr = [...videoStream.getVideoTracks()]

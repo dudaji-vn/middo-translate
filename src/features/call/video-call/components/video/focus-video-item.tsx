@@ -16,8 +16,9 @@ import ChangeToGalleryView from './components/change-to-gallery-view';
 import FullScreenButton from './components/full-screen-button';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 interface FocusVideoItemProps {
-  participant?: any;
+  participant: ParticipantInVideoCall;
 }
 const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   const {t} = useTranslation('common')
@@ -49,7 +50,6 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
 
   useEffect(() => {
     const handleFullScreenEsc = () => {
-      console.log('handleFullScreenEsc')
       const isFullScreen = document.fullscreenElement;
       if(!isFullScreen && isExpandFull){
         setIsExpandFull(false)

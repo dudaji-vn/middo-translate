@@ -11,7 +11,7 @@ import {
 import I18N_SUPPORTED_LANGUAGES from '@/lib/i18n/support_language';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
-import { ChevronDownIcon, ChevronRight, Globe2 } from 'lucide-react';
+import { ChevronDownIcon, ChevronRight, Globe2, MoonIcon } from 'lucide-react';
 import moment from 'moment';
 import 'moment/locale/vi';
 import 'moment/locale/ko';
@@ -21,60 +21,46 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { CircleFlag } from 'react-circle-flags';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/actions';
+const themes = [
+    {
+        value: 'light',
+        title: 'COMMON.OFF'
+    },
+    {
+        value: 'dark',
+        title: 'COMMON.ON'
+    }
+]
 interface InputSelect {
   value: string;
   title: string;
 }
 
-const SelectPageLanguage = () => {
-  const { language, setLanguage } = useAppStore();
-  moment.locale(language);
+const SelectTheme = () => {
+  const { theme, setTheme } = useAppStore();
   const [isOpenDropdown, setOpenDropdown] = useState(false);
   const [valueSelect, setValueSelect] = useState<InputSelect>({
     value: '',
     title: '',
   });
-  // import change language function
-  const { i18n, t } = useTranslation('common');
-  const handleSelectChange = useCallback(
-    (value: any) => {
-      let itemSelected = I18N_SUPPORTED_LANGUAGES?.find(
-        (item: any) => item.value === value,
-      );
-      setValueSelect(itemSelected as InputSelect);
-      localStorage.setItem('i18nLng', value);
-      setLanguage(value);
-      i18n.changeLanguage(value);
-      setOpenDropdown(false);
-    },
-    [i18n, setLanguage],
-  );
+  const { t } = useTranslation('common');
+  const handleSelectChange = useCallback((value: any) => {
+    
+    setTheme(value);    
+    setOpenDropdown(false);
+  }, [setTheme]);
 
   useEffect(() => {
-    const currentLanguage = localStorage.getItem('i18nLng');
-    let lang = '';
-    if (!currentLanguage) {
-      const browserLanguage = navigator.language;
-      let deceiveLanguage = 'en';
-      for (const [key, value] of Object.entries(SUPPORTED_VOICE_MAP)) {
-        if (value == browserLanguage) {
-          deceiveLanguage = key;
-          break;
-        }
-      }
-      const isSupport = I18N_SUPPORTED_LANGUAGES.find(
-        (item) => item.value === deceiveLanguage,
-      );
-      lang = isSupport ? deceiveLanguage : 'en';
-    } else {
-      const isSupport = I18N_SUPPORTED_LANGUAGES.find(
-        (item) => item.value === currentLanguage,
-      );
-      lang = isSupport ? currentLanguage : 'en';
+    let itemSelected = themes?.find(
+        (item: any) => item.value === theme,
+    );
+    if(!itemSelected) {
+        itemSelected = themes[0];
     }
-    handleSelectChange(lang);
-    setLanguage(lang);
-  }, [handleSelectChange, i18n, setLanguage]);
+    setValueSelect(itemSelected);
+  }, [theme]);
+
+
   return (
     <div className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4">
       <Button.Icon
@@ -83,22 +69,17 @@ const SelectPageLanguage = () => {
         size={'sm'}
         className="relative !h-10 !w-10 rounded-xl bg-neutral-50"
       >
-        <Globe2 size={20} />
+        <MoonIcon size={20} />
       </Button.Icon>
       <span className="ml-4 block flex-1 text-base font-medium">
-        {t('ACCOUNT_SETTING.DISPLAY_LANGUAGE')}
+        {t('ACCOUNT_SETTING.THEME')}
       </span>
       <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
         <DropdownMenuTrigger>
           <div className="group relative flex w-full items-center gap-1 rounded-xl px-3 py-1">
             {valueSelect?.value && (
               <>
-                <CircleFlag
-                  countryCode={LANGUAGE_CODES_MAP[
-                    valueSelect.value as keyof typeof LANGUAGE_CODES_MAP
-                  ].toLowerCase()}
-                  className="inline-block h-5 w-5 overflow-hidden rounded-full"
-                />
+                <span>{t(valueSelect?.title)}</span>
                 <div
                   className={cn(
                     'relative left-0 flex items-center justify-center rounded-full transition-all md:group-hover:rotate-90 md:group-active:rotate-90',
@@ -112,8 +93,7 @@ const SelectPageLanguage = () => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" onClick={() => setOpenDropdown(false)}>
-          {I18N_SUPPORTED_LANGUAGES?.length > 0 &&
-            I18N_SUPPORTED_LANGUAGES?.map((option: InputSelect) => {
+          {themes?.map((option: InputSelect) => {
               return (
                 <DropdownMenuItem
                   className={cn(
@@ -125,13 +105,7 @@ const SelectPageLanguage = () => {
                   onClick={() => handleSelectChange(option.value)}
                   key={option.value}
                 >
-                  <CircleFlag
-                    countryCode={LANGUAGE_CODES_MAP[
-                      option.value as keyof typeof LANGUAGE_CODES_MAP
-                    ].toLowerCase()}
-                    className="mr-2 inline-block h-5 overflow-hidden rounded-full"
-                  />
-                  <span className="pr-4">{option.title}</span>
+                  <span className="pr-4">{t(option.title)}</span>
                 </DropdownMenuItem>
               );
             })}
@@ -141,4 +115,4 @@ const SelectPageLanguage = () => {
   );
 };
 
-export default SelectPageLanguage;
+export default SelectTheme;

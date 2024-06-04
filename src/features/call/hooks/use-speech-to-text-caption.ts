@@ -8,9 +8,9 @@ interface WordRecognized {
 export default function useSpeechToTextCaption(language?: string, stream?: MediaStream) {
   const [finalTranscript, setFinalTranscript] = useState<string>('');
   const [isListening, setIsListening] = useState(false);
-  const processorRef = useRef<any>();
-  const audioContextRef = useRef<any>();
-  const audioInputRef = useRef<any>();
+  const processorRef = useRef<AudioWorkletNode>();
+  const audioContextRef = useRef<AudioContext>();
+  const audioInputRef = useRef<MediaStreamAudioSourceNode>();
   
   const receiveAudioText = useCallback((data: WordRecognized) => {
     // remove /n in data.text
@@ -84,7 +84,7 @@ export default function useSpeechToTextCaption(language?: string, stream?: Media
 
       audioInputRef.current.connect(processorRef.current);
 
-      processorRef.current.port.onmessage = (event: any) => {
+      processorRef.current.port.onmessage = (event: MessageEvent) => {
         const audioData = event.data;
         socket.emit(SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.SEND_AUDIO, {
           audio: audioData,

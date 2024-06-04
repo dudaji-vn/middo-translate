@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next';
 
 export const I18nInitProvider = () => {
   const setLanguage = useAppStore(state => state.setLanguage);
+  const language = useAppStore(state => state.language);
   const { i18n } = useTranslation('common');
   useEffect(() => {
-    const currentLanguage = localStorage.getItem('i18nLng');
     let lang = '';
-    if (!currentLanguage) {
+    if (!language) {
       const browserLanguage = navigator.language;
       let deceiveLanguage = 'en';
       for (const [key, value] of Object.entries(SUPPORTED_VOICE_MAP)) {
@@ -25,12 +25,11 @@ export const I18nInitProvider = () => {
       lang = isSupport ? deceiveLanguage : 'en';
     } else {
       const isSupport = I18N_SUPPORTED_LANGUAGES.find(
-        (item) => item.value === currentLanguage,
+        (item) => item.value === language,
       );
-      lang = isSupport ? currentLanguage : 'en';
+      lang = isSupport ? language : 'en';
     }
     i18n.changeLanguage(lang);
-    setLanguage(lang);
-  }, [i18n, setLanguage]);
+  }, [i18n, language, setLanguage]);
   return <></>;
 };

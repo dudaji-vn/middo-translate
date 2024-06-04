@@ -21,12 +21,18 @@ export default function usePeerEvent() {
   const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
   const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
   useEffect(() => {
-    let listeners: any = {};
+    let listeners: Record<number, { 
+      stream: (stream: MediaStream) => void; 
+      error: (error: Error) => void; 
+      close: () => void; 
+      signal: (signal: SignalData) => void; 
+      data: (data: Uint8Array) => void; 
+    }> = {};
+
     participants.forEach(
       (participant: ParticipantInVideoCall, index: number) => {
         if (!participant.peer) return;
-        const receiveStreamListener = (stream: any) => {
-          console.log('receiveStreamListener', stream);
+        const receiveStreamListener = (stream: MediaStream) => {
           setStreamForParticipant(
             stream,
             participant.socketId,
@@ -36,8 +42,7 @@ export default function usePeerEvent() {
           setLoadingStream(false);
         };
         const errorListener = (error: Error) => {
-          console.log('errorListener', error);
-          participant.peer.destroy();
+          participant.peer?.destroy()
           setStreamForParticipant(
             new MediaStream(),
             participant.socketId,
@@ -46,7 +51,7 @@ export default function usePeerEvent() {
         };
         const closeListener = () => {
           console.log('closeListener');
-          participant.peer.destroy();
+          participant.peer?.destroy();
         };
         const signalListener = (signal: SignalData) => {
           console.log('signalListener', signal);
@@ -80,7 +85,7 @@ export default function usePeerEvent() {
               break;
           }
         };
-        const receiveDataListener = (data: any) => {
+        const receiveDataListener = (data: Uint8Array) => {
             const decodeData = decoderData(data);
             switch (decodeData.type) {
                 case 'STOP_STREAM':

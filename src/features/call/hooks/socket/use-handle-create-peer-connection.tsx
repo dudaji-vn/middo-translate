@@ -11,6 +11,7 @@ import { addPeer, createPeer } from "../../utils/peer-action.util";
 import { IJoinCallPayload } from "../../interfaces/socket/join.interface";
 import { MonitorUpIcon, LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { User } from "@/features/users/types";
 
 export default function useHandleCreatePeerConnection() {
     const {t} = useTranslation('common')
@@ -31,14 +32,14 @@ export default function useHandleCreatePeerConnection() {
     const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
     
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
-    const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: any[], doodleImage: string}) => {
+    const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: { id: string; user: User }[], doodleImage: string}) => {
         if(!socket.id) return;
         if(users.length === 0) {
             setLoadingVideo(false);
             setLoadingStream(false);
         }
         // Loop and create peer connection for each user
-        users.forEach((user: { id: string; user: any }) => {
+        users.forEach((user: { id: string; user: User }) => {
             if (user.id === socket.id) return;
             const peer = createPeer(myStream);
             addParticipant({
@@ -71,7 +72,7 @@ export default function useHandleCreatePeerConnection() {
         );
         if (oldParticipant) {
             // Update peer User
-            oldParticipant.peer.destroy();
+            oldParticipant.peer?.destroy();
             updatePeerParticipant(peer, payload.callerId);
             return;
         }

@@ -2,7 +2,7 @@ import { SOCKET_CONFIG } from "@/configs/socket";
 import socket from "@/lib/socket-io";
 import { useVideoCallStore } from "../../store/video-call.store";
 import toast from "react-hot-toast";
-import { useParticipantVideoCallStore } from "../../store/participant.store";
+import { IPeerShareScreen, useParticipantVideoCallStore } from "../../store/participant.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import { useCallback, useEffect } from "react";
@@ -13,6 +13,7 @@ import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
+import { User } from "@/features/users/types";
 
 export default function useHandleShareScreen() {
     const {t} = useTranslation('common');
@@ -37,7 +38,7 @@ export default function useHandleShareScreen() {
     const removeShareScreen = useCallback((socketId: string) => {
         const item = participants.find((p: ParticipantInVideoCall) => p.socketId === socketId && p.isShareScreen);
         if (item) {
-            item.peer.destroy();
+            item.peer?.destroy();
             removeParticipantShareScreen(socketId);
             toast.success(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
         }
@@ -47,9 +48,9 @@ export default function useHandleShareScreen() {
         }
     }, [participants, removeParticipantShareScreen, setLayout, setShareScreen, t])
 
-    const createPeerShareScreenConnection = useCallback((users: any[]) => {
+    const createPeerShareScreenConnection = useCallback((users: { id: string; user: User }[]) => {
         if (!shareScreenStream) return;
-        users.forEach((u: { id: string; user: any }) => {
+        users.forEach((u: { id: string; user: User }) => {
             if (!socket.id) return;
             const peer = createPeer(shareScreenStream);
             peer.on("signal", (signal) => {
@@ -87,7 +88,7 @@ export default function useHandleShareScreen() {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN);
             socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN);
             if (!shareScreenStream) return;
-            shareScreenStream.getTracks().forEach((track: any) => {
+            shareScreenStream.getTracks().forEach((track: MediaStreamTrack) => {
                 track.stop();
             });
         };
@@ -109,7 +110,7 @@ export default function useHandleShareScreen() {
     const stopShareScreen = useCallback(() => {
         if (!socket.id) return;
         if (shareScreenStream) {
-            shareScreenStream.getTracks().forEach((track: any) => {
+            shareScreenStream.getTracks().forEach((track: MediaStreamTrack) => {
                 track.stop();
             });
         }
@@ -122,7 +123,7 @@ export default function useHandleShareScreen() {
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
         socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN);
         socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN);
-        peerShareScreen.forEach((peer: any) => {
+        peerShareScreen.forEach((peer: IPeerShareScreen) => {
             if (!peer.peer) return;
             peer.peer.destroy();
         });
@@ -138,7 +139,7 @@ export default function useHandleShareScreen() {
             stopShareScreen();
             return;
         }
-        const navigator = window.navigator as any;
+        const navigator: Navigator = window.navigator as Navigator
         if(isElectron) {
             setChooseScreen(true);
             ipcRenderer.send(ELECTRON_EVENTS.GET_SCREEN_SOURCE);
