@@ -64,16 +64,17 @@ const LanguageRank = ({
 }) => {
   const { t } = useTranslation('common');
   const [showOthers, setShowOthers] = useState(false);
-  const { dataSlice, others, otherPercentage } = useMemo(() => {
+  const { dataSlice, others, otherPercentage, total } = useMemo(() => {
     const others = data.slice(3) || [];
-    const otherTotal = others.reduce((acc, item) => acc + item.total, 0);
+    const entireTotal = data.reduce((acc, item) => acc + item.count, 0);
     const otherCount = others.reduce((acc, item) => acc + item.count, 0);
-    const otherPercentage = otherTotal ? (otherCount * 100) / otherTotal : 0;
+    const otherPercentage = entireTotal ? (otherCount * 100) / entireTotal : 0;
     if (showOthers || data.length <= 3)
       return {
         dataSlice: data || [],
         others: [],
         otherPercentage,
+        total: entireTotal || 0,
       };
 
     const dataSlice = data.slice(0, 3) || [];
@@ -81,6 +82,7 @@ const LanguageRank = ({
       dataSlice,
       others,
       otherPercentage,
+      total: entireTotal || 0,
     };
   }, [data, showOthers]);
 
@@ -106,9 +108,7 @@ const LanguageRank = ({
         />
         <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
           {dataSlice.map((item, index) => {
-            const percentage = item?.total
-              ? (item.count * 100) / item?.total
-              : 0 || 0;
+            const percentage = total ? (item.count * 100) / total : 0 || 0;
             if (!item) return null;
             return (
               <div
@@ -140,16 +140,10 @@ const LanguageRank = ({
                       width: `${percentage}%`,
                       backgroundColor: index < 3 ? COLORS[index] : COLORS[3],
                     }}
-                  >
-                    <Tooltip
-                      title={`${item.count} of ${item.total}`}
-                      contentProps={{}}
-                      triggerItem={<div className={cn('absolute inset-0 ')} />}
-                    />
-                  </div>
+                  />
                 </div>
                 <span className=" w-10 text-end text-neutral-800">
-                  {item.total}
+                  {item?.count}
                 </span>
               </div>
             );
@@ -183,7 +177,7 @@ const LanguageRank = ({
                 />
               </div>
               <span className=" w-10 text-end text-neutral-800">
-                {others.reduce((acc, item) => acc + item.total, 0)}
+                {others.reduce((acc, item) => acc + item.count, 0)}
               </span>
             </div>
           )}
