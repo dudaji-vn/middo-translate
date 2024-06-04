@@ -30,8 +30,7 @@ interface Item {
 
 const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   const pathname = usePathname();
-  const { expand,  openNavigator, setOpenNavigator } =
-    useSidebarStore();
+  const { expand, openNavigator, setOpenNavigator } = useSidebarStore();
 
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -63,7 +62,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   const onChangeSpace = (href: string) => {
     router.push(href);
   };
-  if (isLoading || !space) {
+  if (isLoading || !space || !pathname?.includes(space?._id)) {
     return (
       <div
         className={cn(
@@ -71,7 +70,9 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           props.className,
         )}
       >
-        <Skeleton className="size-[48px] rounded-[8px] bg-primary-100" />
+        <Skeleton className="relative size-[50px] rounded-[8px] bg-primary-100">
+          <div className="absolute inset-2 rounded-full border border-neutral-50 bg-white" />
+        </Skeleton>
       </div>
     );
   }

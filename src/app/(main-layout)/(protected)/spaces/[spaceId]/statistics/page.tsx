@@ -15,6 +15,8 @@ import LanguageRank from './_components/report/report-charts/languages-rank/lang
 import BusinessScatter from './_components/report/report-charts/scatter-visit/business-scatter';
 import EmptyReport from './_components/report/empty-report/empty-repor';
 import { ReportHeader } from './_components/report/report-header';
+import { accurateHumanize } from '@/utils/moment';
+import moment from 'moment';
 
 const chartsOrderList: Array<TChartKey> = [
   ESpaceChart.NEW_VISITOR,
@@ -139,7 +141,11 @@ const ReportPage = ({
                 );
               }, []);
               chartUnit = t(`EXTENSION.CHART_UNIT.${unit.toUpperCase()}`) || '';
-              formattedDisplayValue = `${formattedDisplayValue} ${chartUnit}`;
+              const value = data?.analysis.responseTime.value || 0;
+              const displayTime =
+                accurateHumanize(moment.duration(value, 'milliseconds'), 1)
+                  .accuratedTime || '0';
+              formattedDisplayValue = displayTime;
               break;
             }
             case ESpaceChart.CUSTOMER_RATING:
@@ -150,7 +156,7 @@ const ReportPage = ({
               formattedDisplayValue = `${formattedDisplayValue} ${chartUnit}`;
               break;
             case ESpaceChart.DROP_RATE:
-              formattedDisplayValue = `${data?.analysis.dropRate.value || 0} %`;
+              formattedDisplayValue = `${(Number(data?.analysis.dropRate.value) * 100) / (data?.analysis.dropRate.total || 1) || 0} %`;
               break;
           }
 

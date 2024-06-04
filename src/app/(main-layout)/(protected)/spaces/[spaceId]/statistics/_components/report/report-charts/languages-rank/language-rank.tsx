@@ -3,7 +3,6 @@
 import { Typography } from '@/components/data-display';
 import { TLanguageRank } from '@/types/business-statistic.type';
 import React, { useMemo, useState } from 'react';
-import { SelectLimitNumber } from './select-limit-number';
 import { CircleFlag } from 'react-circle-flags';
 import { getCountryCode, getCountryNameByCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
@@ -23,7 +22,6 @@ const LoadingLanguageRank = () => {
         <Typography className="text-base font-semibold text-neutral-800">
           Conversation&apos;s Language
         </Typography>
-        <SelectLimitNumber value={3} onChange={() => {}} />
       </div>
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <div>
