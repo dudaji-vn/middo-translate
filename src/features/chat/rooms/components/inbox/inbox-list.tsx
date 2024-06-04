@@ -26,6 +26,7 @@ import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
 import ViewSpaceInboxFilter from './view-space-inbox-filter';
+import { isEmpty } from 'lodash';
 
 interface InboxListProps {
   type: InboxType;
@@ -45,7 +46,12 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
-
+    const helpDeskEmptyType = useMemo(() => {
+      if (!isBusiness) return undefined;
+      if (!isEmpty(Object.keys(appliedFilters || {})))
+        return 'help-desk-filtered';
+      return type;
+    }, [appliedFilters, isBusiness]);
     const key = useMemo(() => {
       if (spaceId) {
         return ['rooms', type, spaceId, status, appliedFilters];
@@ -124,12 +130,11 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!currentUser) return null;
 
     if (showEmptyInbox) {
-      return <EmptyInbox type={type} />;
+      return <EmptyInbox type={helpDeskEmptyType || type} />;
     }
 
     const showFilter =
       Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
-    
 
     const renderChatList = () => {
       switch (type) {
@@ -154,10 +159,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                 businessId={businessExtension?._id}
               />
             );
-          })
-
+          });
       }
-    }
+    };
     return (
       <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
         {isScrolled && (
