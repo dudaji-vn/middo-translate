@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import IDrawDoodle from '../interfaces/draw-doodle.interface';
 import { useDoodleContext } from '../context/doodle-context-context';
+import { User } from '@/features/users/types';
 
 interface ImageParticipantsProps {
   width: number;
@@ -31,7 +32,7 @@ const ImageParticipants = ({ width, height }: ImageParticipantsProps) => {
 
   const listenOldDoodleImage = useCallback(
     async (
-      payload: Record<string, { user: any; image: string; color: string }>,
+      payload: Record<string, { user: User; image: string; color: string }>,
     ) => {
       const currentImagesCanvas = { ...imagesCanvas };
       for (const [key, value] of Object.entries(payload)) {

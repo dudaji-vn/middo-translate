@@ -34,7 +34,6 @@ const SocketProvider = () => {
           setOnlineList(data);
         });
         socket.on(SOCKET_CONFIG.EVENTS.MEETING.LIST, (meetingIds) => {
-          console.log('meetingIds::', meetingIds);
           setMeetingList(meetingIds);
         })
       }

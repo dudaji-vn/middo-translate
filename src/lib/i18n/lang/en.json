@@ -88,6 +88,8 @@
     "PENDING": "Pending",
     "MEMBER": "Member",
     "SPACE": "Space",
+    "ON": "On",
+    "OFF": "Off",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
@@ -180,7 +182,8 @@
     "SIGN_IN": "Sign In",
     "ACCOUNT_SETTING": "Account Settings",
     "MIDDO_EXTENSION": "Middo Extension",
-    "SIGN_OUT": "Sign Out"
+    "SIGN_OUT": "Sign Out",
+    "SETTINGS": "Settings"
   },
   "TRANSLATION": {
     "HISTORY": "History",
@@ -261,7 +264,8 @@
     "CHANGE_AVATAR": "Change avatar",
     "APP_PERMISSION": "App's permission",
     "RESTRICT_MESSAGE": "Restrict unknown senders",
-    "NOTIFICATION": "Notification"
+    "NOTIFICATION": "Notification",
+    "THEME": "Dark mode"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",

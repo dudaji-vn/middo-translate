@@ -18,7 +18,7 @@ export const ConfirmStopDoodle = () => {
     
     const handleStop = () => {
         setMeDoodle(false);
-        setMyOldDoodle(null)
+        setMyOldDoodle([])
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE, user?.name);
     };
 

@@ -13,6 +13,7 @@ import { useMyVideoCallStore } from "../../store/me.store";
 import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
+import { User } from "@/features/users/types";
 
 export default function useHandleDoodle() {
     const {t} = useTranslation('common');
@@ -45,7 +46,7 @@ export default function useHandleDoodle() {
     const doodleEnd = useCallback((name: string) => {
         toast.success(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
         setDoodle(false);
-        setMyOldDoodle(null)
+        setMyOldDoodle([])
         setDrawing(false);
         setDoodleImage('');
         setPinDoodle(false);
@@ -64,7 +65,7 @@ export default function useHandleDoodle() {
     }, [doodleEnd, doodleStart]);
 
     // Listen event doodle share screen
-    const doodleShareScreen = useCallback((payload: { image: string; user: any })=>{
+    const doodleShareScreen = useCallback((payload: { image: string; user: User })=>{
         if(isElectron) {
             ipcRenderer.send(ELECTRON_EVENTS.SEND_DOODLE_SHARE_SCREEN, payload);
         }

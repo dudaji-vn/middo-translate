@@ -42,7 +42,7 @@ export default function useHandleStreamMyVideo() {
         getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic, cameraDeviceId: video?.deviceId || undefined, micDeviceId: audio?.deviceId || undefined})
         .then((stream: MediaStream) => {
             myVideoStream = stream;
-        }).catch((err: any) =>  {
+        }).catch(_ =>  {
             setTurnOnCamera(false);
             setTurnOnMic(false);
             toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
@@ -52,7 +52,7 @@ export default function useHandleStreamMyVideo() {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
                 callId: room?._id,
                 user,
-                roomId: room.roomId,
+                roomId: room?.roomId,
             });
         });
 

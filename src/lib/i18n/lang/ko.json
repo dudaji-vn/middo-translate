@@ -88,6 +88,8 @@
     "PENDING": "대기 중",
     "MEMBER": "구성원",
     "SPACE": "공간",
+    "ON": "켜기",
+    "OFF": "끄기",
     "TIME": {
       "CREATED_ON": "생성일",
       "UPDATED_ON": "업데이트일",
@@ -180,7 +182,8 @@
     "SIGN_IN": "로그인",
     "ACCOUNT_SETTING": "계정 설정",
     "MIDDO_EXTENSION": "Middo 확장",
-    "SIGN_OUT": "로그아웃"
+    "SIGN_OUT": "로그아웃",
+    "SETTINGS": "설정"
   },
   "TRANSLATION": {
     "HISTORY": "역사",
@@ -261,7 +264,8 @@
     "CHANGE_AVATAR": "아바타 변경",
     "APP_PERMISSION": "앱 권한",
     "RESTRICT_MESSAGE": "알 수 없는 발신자 제한",
-    "NOTIFICATION": "알림"
+    "NOTIFICATION": "알림",
+    "THEME": "다크 모드"
   },
   "SIGN_IN": {
     "TITLE": "로그인",

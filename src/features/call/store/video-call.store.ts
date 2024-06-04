@@ -3,14 +3,26 @@ import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 import getRandomColor from '../utils/get-random-color.util';
 import CaptionInterface from '../interfaces/caption.interface';
 import { User } from '@/features/users/types';
+export interface IRoom {
+  _id: string;
+  name: string;
+  roomId: string;
+  type: 'GROUP' | 'DIRECT';
+  startTime: string;
+  endTime: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface IRequestCall {
   id: string;
-  call: any;
+  call: IRoom;
   user: User;
-  room?: any;
+  room?: IRoom;
 }
 export type VideoCallState = {
-  room: any;
+  room: IRoom | null | undefined;
   layout: string;
   confirmLeave: boolean;
   isDoodle: boolean;
@@ -31,7 +43,7 @@ export type VideoCallState = {
   captions: CaptionInterface[];
   messageId: string;
   showChooseScreen: boolean;
-  setRoom: (room: any) => void;
+  setRoom: (room?: IRoom) => void;
   setLayout: (layout?: string) => void;
   setConfirmLeave: (confirmLeave: boolean) => void;
   setDoodle: (isDoodle: boolean) => void;
@@ -79,7 +91,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   captions: [],
   messageId: '',
   showChooseScreen: false,
-  setRoom: (room: any) => {
+  setRoom: (room?: IRoom) => {
     set(() => ({ room }));
   },
   setLayout: (layout?: string) => {

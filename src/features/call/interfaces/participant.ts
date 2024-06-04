@@ -1,3 +1,4 @@
+import Peer from 'simple-peer';
 import { User } from "@/features/users/types";
 
 export const StatusParticipant: {
@@ -12,7 +13,7 @@ export const StatusParticipant: {
 
 export type StatusParticipantType = keyof typeof StatusParticipant;
 export default interface ParticipantInVideoCall {
-    peer?: any;
+    peer?: Peer.Instance;
     user: User;
     isMe?: boolean;
     stream?: MediaStream;

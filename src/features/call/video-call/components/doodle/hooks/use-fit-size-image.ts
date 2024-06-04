@@ -1,6 +1,6 @@
 import debounce from "@/utils/debounce";
 import { useEffect, useState } from "react";
-import { ReactSketchCanvasRef } from "react-sketch-canvas";
+import { CanvasPath, Point, ReactSketchCanvasRef } from "react-sketch-canvas";
 interface IUseFitSizeImage {
     imageRef: React.RefObject<HTMLImageElement>;
     canvasRef: React.RefObject<ReactSketchCanvasRef>;
@@ -20,12 +20,12 @@ export default function useFitSizeImage({imageRef, canvasRef}:IUseFitSizeImage) 
             setCanvasSize({width, height})
 
             // Re calculate paths of canvas
-            const paths = await canvasRef.current?.exportPaths();
+            const paths: CanvasPath[] | undefined = await canvasRef.current?.exportPaths();
             if(!paths || paths.length === 0) return;
-            const newPaths = paths.map((path: any) => {
+            const newPaths = paths.map((path: CanvasPath) => {
                 return {
                     ...path,
-                    paths: path.paths.map((p: any) => {
+                    paths: path.paths.map((p: Point) => {
                         return {
                             ...p,
                             x: p.x/(canvasSize.width || 1) * width,

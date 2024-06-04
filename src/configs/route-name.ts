@@ -20,4 +20,5 @@ export const ROUTE_NAMES = {
   DESKTOP_LOGIN: '/login-google-electron',
   EXTENSION: '/spaces',
   LANDING_PAGE: '/landing',
+  SETTINGS: '/settings',
 };

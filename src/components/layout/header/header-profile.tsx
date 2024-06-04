@@ -8,8 +8,10 @@ import React, { HtmlHTMLAttributes, useState } from 'react';
 import {
   Blocks,
   ChevronDownIcon,
+  LogInIcon,
   LogOutIcon,
   SettingsIcon,
+  UserRoundIcon,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -22,7 +24,6 @@ import { Avatar } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
 import { useAppStore } from '@/stores/app.store';
 import { useTranslation } from 'react-i18next';
-import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 const HeaderProfile = ({
   className,
   ...props
@@ -91,26 +92,53 @@ const HeaderProfile = ({
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Link
-            href={ROUTE_NAMES.SIGN_IN}
-            className="group flex size-9 items-center rounded-full bg-neutral-50 py-[6px] active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl md:px-4 md:py-1 md:hover:bg-neutral-100"
-          >
-            <Image
-              src="/hero_avatar.png"
-              priority
-              className="block md:hidden"
-              alt="logo"
-              width={500}
-              height={500}
-            />
-            <span
-              className={
-                'hidden  whitespace-nowrap font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
-              }
+          <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
+            <DropdownMenuTrigger>
+              <div className="relative flex h-9 items-center gap-2 rounded-xl bg-neutral-50 px-3 py-[6px] active:!bg-neutral-200 active:!text-shading md:py-1 md:hover:bg-neutral-100">
+                <UserRoundIcon size={16}/>
+                <div className="bottom-0 right-0 flex items-center justify-center rounded-full">
+                  <ChevronDownIcon className="opacity-60" />
+                </div>
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              onClick={() => setOpenDropdown(false)}
             >
-              {t('HEADER.SIGN_IN')}
-            </span>
-          </Link>
+              <Link href={ROUTE_NAMES.SIGN_IN}>
+                <DropdownMenuItem className="flex items-center">
+                  <LogInIcon className="mr-2 size-4" />
+                  <span>{t('HEADER.SIGN_IN')}</span>
+                </DropdownMenuItem>
+              </Link>
+              <Link href={ROUTE_NAMES.SETTINGS}>
+                <DropdownMenuItem className="flex items-center">
+                  <SettingsIcon className="mr-2 size-4" />
+                  <span> {t('HEADER.SETTINGS')}</span>
+                </DropdownMenuItem>
+              </Link>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          // <Link
+          //   href={ROUTE_NAMES.SIGN_IN}
+          //   className="group flex size-9 items-center rounded-full bg-neutral-50 py-[6px] active:!bg-neutral-200 active:!text-shading md:size-fit md:gap-2 md:rounded-xl md:px-4 md:py-1 md:hover:bg-neutral-100"
+          // >
+          //   <Image
+          //     src="/hero_avatar.png"
+          //     priority
+          //     className="block md:hidden"
+          //     alt="logo"
+          //     width={500}
+          //     height={500}
+          //   />
+          //   <span
+          //     className={
+          //       'hidden  whitespace-nowrap font-medium active:bg-background-darker active:!text-shading md:inline md:!p-0 md:active:!bg-transparent md:group-hover:text-primary-500-main'
+          //     }
+          //   >
+          //     {t('HEADER.SIGN_IN')}
+          //   </span>
+          // </Link>
         )}
       </div>
     </div>
