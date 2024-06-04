@@ -8,7 +8,7 @@ import {
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { DropdownMenuTriggerProps } from '@radix-ui/react-dropdown-menu';
-import { HomeIcon } from 'lucide-react';
+import { ChevronDown, HomeIcon } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ import { useGetSpaces } from '../hooks/use-get-spaces';
 import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 import { isActive } from '@tiptap/react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/actions';
 
 interface Item {
   name: string | React.ReactNode;
@@ -43,7 +44,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
         href: `/spaces/${s._id}/conversations`,
         pathToInclude: `/spaces/${s._id}`,
         isActive: pathname?.includes(`/spaces/${s._id}`),
-        space,
+        space: s,
       })) ?? []
     );
   }, [space, spaces, pathname]);
@@ -70,14 +71,21 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
       <DropdownMenuTrigger
         {...props}
         className={cn(
-          'flex !h-[42px] w-full flex-row items-center justify-start border-b border-neutral-50 bg-white px-4 py-3 text-neutral-500',
+          'flex !h-[42px] w-full  border-b border-neutral-50 bg-primary-100 px-4 py-1 font-semibold text-neutral-800',
           props.className,
         )}
       >
-        {space?.avatar && (
-          <Avatar alt={space.name ?? ''} size="sm" src={String(space.avatar)} />
-        )}
-        <p>{space?.name}</p>
+        <div className="flex h-full min-w-[300px] max-w-[400px]  flex-row items-center justify-start gap-4 rounded-[12px] ">
+          {space?.avatar && (
+            <Avatar
+              alt={space.name ?? ''}
+              size="sm"
+              src={String(space.avatar)}
+            />
+          )}
+          <p>{space?.name}</p>
+          <ChevronDown className="h-4 w-4" />
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" onClick={() => setOpen(false)}>
         {items?.map((option: Item) => (
