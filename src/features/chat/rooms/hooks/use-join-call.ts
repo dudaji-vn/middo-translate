@@ -18,7 +18,7 @@ import { StatusParticipant } from '@/features/call/interfaces/participant';
 export const useJoinCall = () => {
   const { user } = useAuthStore();
   const { postMessage } = useReactNativePostMessage();
-  const { setRoom, room, setTempRoom, tmpRoom, clearRequestCall } =
+  const { setRoom, room, setTempRoom, tmpRoom, setRequestCall } =
     useVideoCallStore();
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -61,7 +61,7 @@ export const useJoinCall = () => {
         toast.error(t('MESSAGE.ERROR.JOIN_ROOM'));
         return;
       }
-      clearRequestCall();
+      setRequestCall();
       setRoom(data?.call);
       if (
         data.type == JOIN_TYPE.NEW_CALL &&
@@ -88,7 +88,7 @@ export const useJoinCall = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       addParticipant,
-      clearRequestCall,
+      setRequestCall,
       createRoomMeeting,
       room,
       setRoom,

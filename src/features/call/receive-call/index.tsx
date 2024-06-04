@@ -12,55 +12,53 @@ import usePlayAudio from '../hooks/use-play-audio';
 import { motion, useDragControls } from 'framer-motion';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
+import { useChatStore } from '@/features/chat/stores';
 
 const ReceiveVideoCall = () => {
   const constraintsRef = useRef<HTMLDivElement>(null);
   const controls = useDragControls();
 
   const requestCall = useVideoCallStore((state) => state.requestCall);
-  const addRequestCall = useVideoCallStore((state) => state.addRequestCall);
+  const setRequestCall = useVideoCallStore((state) => state.setRequestCall);
   const me = useAuthStore((state) => state.user);
-  const removeRequestCall = useVideoCallStore(
-    (state) => state.removeRequestCall,
-  );
+  
   const setRoom = useVideoCallStore((state) => state.setRoom);
   const room = useVideoCallStore((state) => state.room);
+  const meetingList = useChatStore(state => state.meetingList)
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
   const { isElectron, ipcRenderer } = useElectron();
-  const listenToCall = useCallback(
-    ({ call, user }: any) => {
+  const listenToCall = useCallback(({ call, user }: any) => {
       if (user._id == me?._id) return;
-      const isHave = requestCall.find((item: any) => item.id == call.roomId);
-      if (isHave) return;
+      if (requestCall) return;
       if(room && room.roomId === call.roomId) return;
-      if (requestCall.length == 0) {
-        const data = { id: call.roomId, call, user }
-        addRequestCall(data);
-        if(isElectron && ipcRenderer) {
-          ipcRenderer.send(ELECTRON_EVENTS.RECEIVE_CALL_INVITE, data);
-        }
+      const data = { id: call.roomId, call, user }
+      setRequestCall(data);
+      if(isElectron && ipcRenderer) {
+        ipcRenderer.send(ELECTRON_EVENTS.RECEIVE_CALL_INVITE, data);
       }
     },
-    [addRequestCall, ipcRenderer, isElectron, me?._id, requestCall, room],
+    [ipcRenderer, isElectron, me?._id, requestCall, room, setRequestCall],
   );
 
   const declineCall = useCallback(() => {
     socket.emit(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, {
-      roomId: requestCall[0]?.call.roomId,
+      roomId: requestCall?.call.roomId,
       userId: me?._id,
     });
-    removeRequestCall();
-  }, [me?._id, removeRequestCall, requestCall]);
+    setRequestCall();
+  }, [me?._id, requestCall?.call.roomId, setRequestCall]);
+
   const acceptCall = useCallback(() => {
-    removeRequestCall();
-    setRoom(requestCall[0]?.call);
+    setRequestCall();
+    setRoom(requestCall?.call);
     setTimeout(() => {
+      // Auto decline call to avoid hangup on another devices
       socket.emit(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, {
-        roomId: requestCall[0]?.call.roomId,
+        roomId: requestCall?.call.roomId,
         userId: me?._id,
       });
     }, 3000);
-  }, [me?._id, removeRequestCall, requestCall, setRoom]);
+  }, [me?._id, requestCall?.call, setRequestCall, setRoom]);
 
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, listenToCall);
@@ -70,17 +68,24 @@ const ReceiveVideoCall = () => {
   }, [listenToCall]);
 
   useEffect(() => {
-    if (requestCall.length > 0) {
+    if (requestCall?.id) {
       playAudio();
     } else {
       stopAudio();
     }
-  }, [playAudio, requestCall.length, stopAudio]);
+  }, [playAudio, requestCall?.id, stopAudio]);
+
+  // incase call end => not have in meetingList
+  useEffect(() => {
+    if(!meetingList.includes(requestCall?.call.roomId)) {
+      setRequestCall();
+    }
+  }, [meetingList, requestCall?.call.roomId, setRequestCall])
 
   // Auto decline call after 30s
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    if (requestCall.length > 0) {
+    if (requestCall) {
       timeout = setTimeout(() => {
         stopAudio();
         declineCall();
@@ -103,6 +108,7 @@ const ReceiveVideoCall = () => {
         break;
     }
   }, [acceptCall, declineCall]);
+
   // Event electron receive call
   useEffect(() => {
     if(isElectron && ipcRenderer) {
@@ -118,15 +124,15 @@ const ReceiveVideoCall = () => {
 
   // Add on event no call
   useEffect(() => {
-    if(requestCall.length === 0) {
+    if(!requestCall) {
       if(isElectron && ipcRenderer) {
         ipcRenderer.send(ELECTRON_EVENTS.NO_CALL);
       }
     }
-  }, [ipcRenderer, isElectron, requestCall.length]);
+  }, [ipcRenderer, isElectron, requestCall]);
 
 
-  if (requestCall.length === 0) return null;
+  if (!requestCall) return null;
 
   return (
     <motion.div

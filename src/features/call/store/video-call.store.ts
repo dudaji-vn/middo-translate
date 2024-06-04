@@ -2,7 +2,13 @@ import { create } from 'zustand';
 import { VIDEOCALL_LAYOUTS } from '../constant/layout';
 import getRandomColor from '../utils/get-random-color.util';
 import CaptionInterface from '../interfaces/caption.interface';
-
+import { User } from '@/features/users/types';
+export interface IRequestCall {
+  id: string;
+  call: any;
+  user: User;
+  room?: any;
+}
 export type VideoCallState = {
   room: any;
   layout: string;
@@ -19,7 +25,7 @@ export type VideoCallState = {
   tmpRoom: string | null;
   isShowChat: boolean;
   isShowCaption: boolean;
-  requestCall: any[];
+  requestCall?: IRequestCall;
   isShowModalAddUser: boolean;
   isShowModalAudioVideoSetting: boolean;
   captions: CaptionInterface[];
@@ -39,15 +45,13 @@ export type VideoCallState = {
   setTempRoom: (tmpRoom: string | null) => void;
   setShowChat: (isShowChat: boolean) => void;
   setShowCaption: (isShowCaption: boolean) => void;
-  addRequestCall: (data: any) => void;
-  removeRequestCall: (roomId?: string) => void;
+  setRequestCall: (requestCall?: IRequestCall) => void;
   setModalAddUser: (isShowModalAddUser: boolean) => void;
   setModalAudioVideoSetting: (isShowModalAudioVideoSetting: boolean) => void;
   addCaption: (caption: CaptionInterface) => void;
   clearCaption: () => void;
   setMessageId: (messageId: string) => void;
   clearStateVideoCall: () => void;
-  clearRequestCall: () => void;
   setChooseScreen: (showChooseScreen: boolean) => void;
 };
 
@@ -69,7 +73,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   tmpRoom: null,
   isShowChat: true,
   isShowCaption: false,
-  requestCall: [],
+  requestCall: undefined,
   isShowModalAddUser: false,
   isShowModalAudioVideoSetting: false,
   captions: [],
@@ -119,18 +123,8 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   setShowCaption: (isShowCaption: boolean) => {
     set(() => ({ isShowCaption }));
   },
-  addRequestCall: (data: any) => {
-    set((state) => ({ requestCall: [...state.requestCall, data] }));
-  },
-  removeRequestCall: (roomId?: string) => {
-    if (roomId)
-      set((state) => ({
-        requestCall: state.requestCall.filter((item) => item.id !== roomId),
-      }));
-    else set((state) => ({ requestCall: state.requestCall.slice(1) }));
-  },
-  clearRequestCall: () => {
-    set(() => ({ requestCall: [] }));
+  setRequestCall: (requestCall?: IRequestCall) => {
+    set(() => ({ requestCall }));
   },
   setModalAddUser: (isShowModalAddUser: boolean) => {
     set(() => ({ isShowModalAddUser }));
@@ -166,7 +160,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
       tmpRoom: null,
       isShowChat: true,
       isShowCaption: false,
-      requestCall: [],
+      requestCall: undefined,
       isShowModalAddUser: false,
       captions: [],
       messageId: '',

@@ -129,6 +129,35 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const showFilter =
       Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
+    
+
+    const renderChatList = () => {
+      switch (type) {
+        case 'contact':
+          return 'CONTACT';
+        default:
+          return rooms.map((room) => {
+            const isOnline = isRoomOnline({
+              currentUser,
+              room,
+              onlineList,
+              isBusiness,
+            });
+
+            return (
+              <RoomItem
+                isOnline={isOnline}
+                key={room._id}
+                data={room}
+                isActive={currentRoomId === room._id}
+                currentRoomId={currentRoomId as string}
+                businessId={businessExtension?._id}
+              />
+            );
+          })
+
+      }
+    }
     return (
       <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
         {isScrolled && (
@@ -159,25 +188,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               rooms={pinnedRooms}
               currentRoomId={currentRoomId as string}
             />
-            {rooms.map((room) => {
-              const isOnline = isRoomOnline({
-                currentUser,
-                room,
-                onlineList,
-                isBusiness,
-              });
-
-              return (
-                <RoomItem
-                  isOnline={isOnline}
-                  key={room._id}
-                  data={room}
-                  isActive={currentRoomId === room._id}
-                  currentRoomId={currentRoomId as string}
-                  businessId={businessExtension?._id}
-                />
-              );
-            })}
+            {renderChatList()}
           </InfiniteScroll>
         </div>
       </div>
