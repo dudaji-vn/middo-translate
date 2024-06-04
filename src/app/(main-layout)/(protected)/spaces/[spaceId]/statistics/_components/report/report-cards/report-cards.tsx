@@ -150,7 +150,6 @@ const contentsByMember = [
     name: ESpaceChart.CUSTOMER_RATING,
     renderDetail: (value: number) => <StarRating value={value} />,
   },
-
   {
     name: ESpaceChart.RESPONSE_MESSAGE,
     renderDetail: (value: number) => (
