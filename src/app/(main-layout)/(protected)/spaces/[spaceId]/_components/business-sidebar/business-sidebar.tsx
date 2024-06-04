@@ -171,7 +171,7 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
     setExpandSidebar(true);
   };
   const shrinkSheet = () => {
-    if (openNavigator) return;
+    if (openNavigator || isMobile) return;
     setExpandSidebar(false);
   };
   const onSelectedChange = (item: { title: string; icon: React.ReactNode }) => {
