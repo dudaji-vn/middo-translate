@@ -784,6 +784,14 @@
     "BACK_TO_HOME": "Back to home"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "Currently you don't have any conversation",
+      "DESCRIPTION": "You have no client conversation yet."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 results",
+      "DESCRIPTION": "Check your keyword or filter again"
+    },
     "TIP_DESCRIPTION": "You can search for a person or a group by typing person's mail, person's name or groups' name",
     "TIP_TITLE": "Search bar",
     "TITLE": "Currently you don't have any conversation",

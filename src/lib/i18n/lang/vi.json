@@ -315,12 +315,10 @@
       "MESSAGE": "Hiện tại bạn không thể trả lời cuộc trò chuyện này.",
       "LEARN_MORE": "Tìm hiểu thêm"
     },
-
     "BLOCK_CONTENT": {
       "TITLE": "Bạn đã chặn",
       "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ."
     },
-
     "WELCOME_TITLE": "Chào mừng bạn đến với trò chuyện Middo!",
     "WELCOME_CONTENT": "Bắt đầu một cuộc trò chuyện với đồng đội của bạn hoặc nhóm. Bạn cũng có thể tạo một nhóm trò chuyện để thảo luận và chia sẻ tệp.",
     "TITLE": "Hội thoại",
@@ -474,7 +472,9 @@
       "HEADING": "Tạo không gian",
       "TITLE": "Cung cấp thông tin cho <span class='text-primary-500-main'> không gian của bạn </span>",
       "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
-      "PLACEHOLDERS": { "NAME": "Tên không gian" }
+      "PLACEHOLDERS": {
+        "NAME": "Tên không gian"
+      }
     },
     "DELETE_SPACE": {
       "TITLE": "Xoá không gian",
@@ -526,13 +526,11 @@
       "TITLE": "Rời nhóm",
       "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của nhóm này nữa. Bạn có chắc chắn muốn rời nhóm không?"
     },
-
     "BLOCK_USER": {
       "TITLE": "Chặn {{name}}",
       "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ cho đến khi bạn bỏ chặn. Bạn có chắc chắn không?",
       "ADDITIONAL_OPTION_1": "Cũng xóa lịch sử cuộc trò chuyện (không thể hoàn tác)"
     },
-
     "VERIFY": {
       "SUCCESS": {
         "TITLE": "Xác minh thành công",
@@ -781,6 +779,14 @@
     "BACK_TO_HOME": "Đi đến trang chủ"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "Hiện tại bạn không có cuộc trò chuyện nào",
+      "DESCRIPTION": "Bạn chưa có cuộc trò chuyện với khách hàng nào."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 kết quả phù hợp",
+      "DESCRIPTION": "Vui lòng kiểm tra lại từ khoá hoặc thay đổi bộ lọc"
+    },
     "TIP_DESCRIPTION": "Bạn có thể tìm kiếm một người hoặc một nhóm bằng cách nhập email của người đó, tên của người đó hoặc tên của nhóm",
     "TIP_TITLE": "Thanh tìm kiếm",
     "TITLE": "Hiện tại bạn không có cuộc trò chuyện nào",

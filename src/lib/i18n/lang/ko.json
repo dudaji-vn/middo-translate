@@ -524,7 +524,6 @@
       "TITLE": "그룹 나가기",
       "DESCRIPTION": "이 그룹의 메시지를 더 이상 볼 수 없게 됩니다. 정말 그룹에서 나가시겠습니까?"
     },
-
     "BLOCK_USER": {
       "TITLE": "{{name}} 차단",
       "DESCRIPTION": "차단 해제할 때까지 그들로부터 메시지나 전화를 받지 않습니다. 정말로 차단하시겠습니까?",
@@ -778,6 +777,14 @@
     "BACK_TO_HOME": "홈으로 돌아가기"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "현재 대화가 없습니다",
+      "DESCRIPTION": "아직 고객 대화가 없습니다."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 결과",
+      "DESCRIPTION": "키워드를 다시 확인하거나 필터를 변경하세요"
+    },
     "TIP_DESCRIPTION": "사람 또는 그룹을 찾으려면 해당 사람의 메일, 이름 또는 그룹 이름을 입력하세요.",
     "TIP_TITLE": "검색 바",
     "TITLE": "현재 대화가 없습니다",
