@@ -44,13 +44,21 @@ const ClientsPagination = ({
         <PaginationContent className="gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <DropdownMenuLabel className="flex flex-row items-center gap-1 font-normal ">
-                {t('PAGINATION.ITEMS_PER_PAGE')}&nbsp;
+              <Button
+                size={'xs'}
+                variant={'ghost'}
+                color={'default'}
+                shape={'square'}
+                className="flex flex-row items-center gap-1 font-normal "
+                endIcon={<ChevronDown className="h-4 w-4" />}
+              >
+                <span className="max-md:hidden">
+                  {t('PAGINATION.ITEMS_PER_PAGE')}&nbsp;
+                </span>
                 <span className="flex flex-row items-center gap-1 font-medium ">
                   {limit}
-                  <ChevronDown className="h-4 w-4" />
                 </span>
-              </DropdownMenuLabel>
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {limitOptions.map((option) => (
