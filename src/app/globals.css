@@ -525,7 +525,7 @@ body {
 }
 
 .extension-container-height {
-  height: calc(100dvh - 98px);
+  height: calc(100dvh - 52px);
 }
 
 .platform-electron .container-height {

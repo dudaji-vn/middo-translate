@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth.store';
 import { getUserSpaceRole } from '../../settings/_components/space-setting/role.util';
 import { TSpace } from '../business-spaces';
+import SpaceNavigator from '@/features/business-spaces/space-navigator/space-navigator';
 
 interface SidebarContent {
   title: string;
@@ -126,7 +127,7 @@ const BusinessSidebarContent = ({
                   'relative scale-y-0 p-0',
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
-                    : 'min-w-[160px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
+                    : 'min-w-[300px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
                   isSelected ? 'text-white ' : 'text-neutral-600',
                 )}
               >
@@ -149,8 +150,13 @@ const BusinessSidebarContent = ({
 
 const BusinessSidebar = ({ space }: { space: TSpace }) => {
   const { isMobile } = useAppStore();
-  const { openSidebar, setOpenSidebar, expand, setExpandSidebar } =
-    useSidebarStore();
+  const {
+    openSidebar,
+    setOpenSidebar,
+    openNavigator,
+    expand,
+    setExpandSidebar,
+  } = useSidebarStore();
 
   const params = useParams();
   const pathname = usePathname();
@@ -164,7 +170,8 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
   const expandSheet = () => {
     setExpandSidebar(true);
   };
-  const shinkSheet = () => {
+  const shrinkSheet = () => {
+    if (openNavigator) return;
     setExpandSidebar(false);
   };
   const onSelectedChange = (item: { title: string; icon: React.ReactNode }) => {
@@ -200,12 +207,13 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
         onMouseEnter={expandSheet}
       >
         <SheetContent
-          overlayProps={{ className: ' top-[94px]' }}
+          overlayProps={{ className: 'top-[52px]' }}
           side={'left'}
-          onMouseLeave={shinkSheet}
-          className="bottom-0  top-[94px]  w-fit p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          className="bottom-0  top-[52px] w-fit  p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          onMouseLeave={shrinkSheet}
         >
-          <div className="h-full  w-full" onMouseLeave={shinkSheet}>
+          <SpaceNavigator />
+          <div className="h-full  w-full">
             <BusinessSidebarContent
               shrink={!expand}
               selectedItem={selected}
