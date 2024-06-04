@@ -12,26 +12,12 @@ import { useNetworkStatus } from '@/utils/use-network-status';
 import { CUSTOM_EVENTS } from '@/configs/custom-event';
 
 const CallVideoModalContainer = () => {
-  const removeRequestCall = useVideoCallStore(state => state.removeRequestCall);
   const clearStateVideoCall = useVideoCallStore(state => state.clearStateVideoCall);
   const room = useVideoCallStore(state => state.room);
   const setRoom = useVideoCallStore(state => state.setRoom);
 
   const { isOnline } = useNetworkStatus();
-  useEffect(() => {
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.MEETING_END, (roomIdEnd: string) => {
-      removeRequestCall(roomIdEnd);
-      sendEvent(CUSTOM_EVENTS.CALL.MEETING_END, roomIdEnd);
-    });
-    socket.on(SOCKET_CONFIG.EVENTS.CALL.START, (roomIdStart: string) => {
-      sendEvent(CUSTOM_EVENTS.CALL.MEETING_START, roomIdStart);
-    });
-    return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.CALL.MEETING_END);
-      socket.off(SOCKET_CONFIG.EVENTS.CALL.START);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  
   if(!isOnline) {
     if(room) {
       setRoom(null)
