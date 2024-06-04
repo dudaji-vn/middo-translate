@@ -1,7 +1,7 @@
 'use client';
 
 import { cn } from '@/utils/cn';
-import { motion, useDragControls } from 'framer-motion';
+import { motion, useAnimationControls, useDragControls } from 'framer-motion';
 import { PropsWithChildren, useEffect, useRef } from 'react';
 import { useVideoCallStore } from '../store/video-call.store';
 
@@ -12,14 +12,17 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
   const constraintsRef = useRef<HTMLDivElement>(null);
   const dragContainerRef = useRef<HTMLDivElement>(null);
   const controls = useDragControls();
+  const animationControls = useAnimationControls();
+
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
+  const isAllowDrag = useVideoCallStore(state => state.isAllowDrag);
   useEffect(() => {
-    if(isFullScreen) {
-      setTimeout(() => {
-        dragContainerRef.current?.removeAttribute('style');
-      }, 1);
-    }
-  }, [isFullScreen]);
+    animationControls.set({
+      x:0,
+      y:0
+    })
+  }, [animationControls, isFullScreen]);
+
   return (
     <motion.div
       ref={constraintsRef}
@@ -30,7 +33,9 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
         {...(isFullScreen ? {} : { dragConstraints: constraintsRef }) }
         dragControls={controls}
         dragMomentum={false}
+        animate={animationControls}
         ref={dragContainerRef}
+        dragListener={isAllowDrag}
         className={cn("pointer-events-auto absolute h-full cursor-auto shadow-glow md:bottom-4 md:left-4 w-[304px] rounded-xl", className)}
         onDoubleClick={() => {
           dragContainerRef.current?.removeAttribute('style');
