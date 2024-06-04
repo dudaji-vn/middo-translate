@@ -100,5 +100,8 @@ export const SOCKET_CONFIG = {
         UPDATE: 'user.relationship.update',
       },
     },
+    MEETING: {
+      LIST: 'meeting.list',
+    }
   },
 };

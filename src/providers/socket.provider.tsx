@@ -18,6 +18,7 @@ const SocketProvider = () => {
   const user = useAuthStore((state) => state.user);
   const { anonymousId } = useBusinessNavigationData();
   const setOnlineList = useChatStore((state) => state.setOnlineList);
+  const setMeetingList = useChatStore((state) => state.setMeetingList);
   const setSocketConnected = useAppStore((state) => state.setSocketConnected);
   const queryClient = useQueryClient();
 
@@ -32,6 +33,10 @@ const SocketProvider = () => {
         socket.on(SOCKET_CONFIG.EVENTS.CLIENT.LIST, (data) => {
           setOnlineList(data);
         });
+        socket.on(SOCKET_CONFIG.EVENTS.MEETING.LIST, (meetingIds) => {
+          console.log('meetingIds::', meetingIds);
+          setMeetingList(meetingIds);
+        })
       }
     }
 
@@ -56,6 +61,7 @@ const SocketProvider = () => {
       socket.off('disconnect', onDisconnect);
       socket.disconnect();
       socket.off(SOCKET_CONFIG.EVENTS.CLIENT.LIST);
+      socket.off(SOCKET_CONFIG.EVENTS.MEETING.LIST);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anonymousId, user?._id]);

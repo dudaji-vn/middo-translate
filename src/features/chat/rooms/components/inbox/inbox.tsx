@@ -13,6 +13,7 @@ import InboxList from './inbox-list';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import {
   ArchiveIcon,
+  ContactRoundIcon,
   MessageSquareDashedIcon,
   MessagesSquareIcon,
   UsersRoundIcon,
@@ -20,6 +21,7 @@ import {
 export interface InboxProps {}
 export type InboxType =
   | 'all'
+  | 'contact'
   | 'group'
   | 'help-desk'
   | 'unread-help-desk'
@@ -38,6 +40,11 @@ export const inboxTabMap: Record<
     label: 'COMMON.ALL',
     value: 'all',
     icon: <MessagesSquareIcon className="size-5 md:size-4" />,
+  },
+  contact: {
+    label: 'COMMON.CONTACT',
+    value: 'contact',
+    icon: <ContactRoundIcon className="size-5 md:size-4" />,
   },
   group: {
     label: 'COMMON.GROUP',
@@ -67,6 +74,7 @@ export const inboxTabMap: Record<
 
 const normalInboxTabs = [
   inboxTabMap.all,
+  inboxTabMap.contact,
   inboxTabMap.group,
   inboxTabMap.archived,
   inboxTabMap.waiting,

@@ -16,17 +16,17 @@ const ReceiveVideoCallContent = () => {
         <Avatar
           size={isMobile ? '4xl' : 'lg'}
           src={
-            requestCall[0]?.call?.avatar ||
-            requestCall[0]?.user?.avatar ||
+            requestCall?.call?.avatar ||
+            requestCall?.user?.avatar ||
             '/person.svg'
           }
           alt="avatar"
         />
-        {requestCall[0]?.room?.participants?.length > 2 && (
-          <p className="truncate">{requestCall[0]?.call?.name}</p>
+        {requestCall?.room?.participants?.length > 2 && (
+          <p className="truncate">{requestCall?.call?.name}</p>
         )}
       </div>
-      <p className="mt-3 text-center" dangerouslySetInnerHTML={{__html: t('CONVERSATION.CALLING', {name: requestCall[0]?.user?.name})}}>
+      <p className="mt-3 text-center" dangerouslySetInnerHTML={{__html: t('CONVERSATION.CALLING', {name: requestCall?.user?.name})}}>
       </p>
     </div>
   );

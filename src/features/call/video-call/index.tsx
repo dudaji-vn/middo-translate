@@ -21,7 +21,7 @@ export default function VideoCall() {
   const setFullScreen = useVideoCallStore(state => state.setFullScreen);
   const participants = useParticipantVideoCallStore(state => state.participants)
   const user = useAuthStore(state => state.user)
-  const removeRequestCall = useVideoCallStore(state => state.removeRequestCall)
+  const setRequestCall = useVideoCallStore(state => state.setRequestCall)
   const updateStatusParticipant = useParticipantVideoCallStore(state => state.updateStatusParticipant)
   const isMobile = useAppStore(state => state.isMobile)
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function VideoCall() {
           }
         }
         if(userId === user?._id) {
-          removeRequestCall(roomId)
+          setRequestCall()
         }
       })
     }
@@ -47,7 +47,7 @@ export default function VideoCall() {
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, declineCall)
     }
-  }, [participants, removeRequestCall, room, updateStatusParticipant, user?._id]);
+  }, [participants, room?._id, room?.roomId, setRequestCall, updateStatusParticipant, user?._id]);
 
   useEffect(() => {
     if(isMobile) {
