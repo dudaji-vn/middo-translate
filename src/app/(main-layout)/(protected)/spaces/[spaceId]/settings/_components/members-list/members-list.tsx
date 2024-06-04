@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Typography } from '@/components/data-display';
 import {
   GripVertical,
@@ -29,6 +29,7 @@ import { Badge } from '@/components/ui/badge';
 import { getUserSpaceRole } from '../space-setting/role.util';
 import { SearchInput } from '@/components/data-entry';
 import { useTranslation } from 'react-i18next';
+import { Reorder, useDragControls } from 'framer-motion';
 
 type MemberItemProps = {
   isOwnerRow: boolean;
@@ -235,18 +236,21 @@ const ListItems = ({
           {t('EXTENSION.MEMBER.STATUS')}
         </Typography>
       </div>
+
       {data?.map((member, index) => {
         return (
-          <div className="grid w-full grid-cols-[48px_auto]" key={member.email}>
+          <div className="grid w-full grid-cols-[48px_auto]" key={member._id}>
             <div className="!w-fit bg-white p-1 py-2 ">
-              <Button.Icon
-                size={'xs'}
-                shape={'square'}
-                variant={'ghost'}
-                color={'default'}
-              >
-                <GripVertical className="fill-neutral-500 stroke-neutral-500" />
-              </Button.Icon>
+              <Reorder.Item key={member._id} value={member._id}>
+                <Button.Icon
+                  size={'xs'}
+                  shape={'square'}
+                  variant={'ghost'}
+                  color={'default'}
+                >
+                  <GripVertical className="fill-neutral-500 stroke-neutral-500" />
+                </Button.Icon>
+              </Reorder.Item>
             </div>
             <MemberItem
               {...member}
@@ -268,6 +272,7 @@ const ListItems = ({
 const MembersList = ({ space }: { space: TSpace }) => {
   const [search, setSearch] = React.useState('');
   const { members, owner } = space;
+  const [order, setOrder] = useState(members || []);
   const { t } = useTranslation('common');
   const currentUser = useAuthStore((state) => state.user);
   const myRole = getUserSpaceRole(currentUser, space);
@@ -277,8 +282,11 @@ const MembersList = ({ space }: { space: TSpace }) => {
   const onSearchChange = (search: string) => {
     setSearch(search.trim());
   };
+  const onMemberRoleChange = (params: any) => {
+    console.log('params', params);
+  };
 
-  const { adminsData, membersData } = useMemo(() => {
+  useEffect(() => {
     const filteredMembers = search
       ? members?.filter((member) => {
           return (
@@ -287,20 +295,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
           );
         })
       : members;
-    return filteredMembers.reduce(
-      (acc, member: Member) => {
-        if (member.role === ESPaceRoles.Admin) {
-          acc.adminsData.push(member);
-        } else {
-          acc.membersData.push(member);
-        }
-        return acc;
-      },
-      {
-        adminsData: [] as Member[],
-        membersData: [] as Member[],
-      },
-    );
+    setOrder(filteredMembers || []);
   }, [members, search]);
 
   return (
@@ -319,25 +314,46 @@ const MembersList = ({ space }: { space: TSpace }) => {
           myRole as ESPaceRoles,
         ) && <InviteMemberModal space={space} myRole={myRole} />}
       </div>
-
-      <div className="flex w-full flex-col gap-1">
-        <div className="flex  w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]">
-          <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
-          <Typography className="text-primary-500-main ">
-            {t('EXTENSION.ROLE.ADMIN_ROLE')}
-          </Typography>
+      <Reorder.Group
+        values={order.map((member) => member._id)}
+        onReorder={(values) => {
+          setOrder(
+            values.map((id) => order.find((m) => m._id === id) as Member),
+          );
+        }}
+        className=" w-full"
+      >
+        <div className="flex w-full flex-col gap-1">
+          <div className="flex  w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]">
+            <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
+            <Typography className="text-primary-500-main ">
+              {t('EXTENSION.ROLE.ADMIN_ROLE')}
+            </Typography>
+          </div>
+          <ListItems
+            data={order.filter((member) => member.role !== ESPaceRoles.Member)}
+            owner={owner}
+            isAdmin
+            myRole={myRole}
+          />
         </div>
-        <ListItems data={adminsData} owner={owner} isAdmin myRole={myRole} />
-      </div>
-      <div className="flex w-full flex-col gap-1">
-        <div className="flex w-full flex-row  items-center gap-3  bg-[#fafafa] py-4 font-semibold  sm:p-[20px_40px]">
-          <UserRound size={16} className="stroke-[3px] text-primary-500-main" />
-          <Typography className="text-primary-500-main">
-            {t('EXTENSION.ROLE.MEMBER_ROLE')}
-          </Typography>
+        <div className="mt-3 flex w-full flex-col gap-1">
+          <div className="flex w-full flex-row  items-center gap-3  bg-[#fafafa] py-4 font-semibold  sm:p-[20px_40px]">
+            <UserRound
+              size={16}
+              className="stroke-[3px] text-primary-500-main"
+            />
+            <Typography className="text-primary-500-main">
+              {t('EXTENSION.ROLE.MEMBER_ROLE')}
+            </Typography>
+          </div>
+          <ListItems
+            data={order.filter((member) => member.role === ESPaceRoles.Member)}
+            owner={owner}
+            myRole={myRole}
+          />
         </div>
-        <ListItems data={membersData} owner={owner} myRole={myRole} />
-      </div>
+      </Reorder.Group>
     </section>
   );
 };
