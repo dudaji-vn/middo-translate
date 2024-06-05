@@ -32,6 +32,8 @@ import { TSpace } from '../../../_components/business-spaces';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { TChatScript } from '@/types/scripts.type';
+import { useTranslation } from 'react-i18next';
+import { isEqual } from 'lodash';
 
 type TFormValues = {
   addingDomain: string;
@@ -61,9 +63,11 @@ export default function CreateExtension({
 }) {
   const isClient = useClient();
   const [tabValue, setTabValue] = React.useState<number>(0);
+  const { t } = useTranslation('common');
   const pathname = usePathname() || '';
   const params = useParams();
   const currentUser = useAuthStore((s) => s.user);
+  const [compareData, setCompareData] = React.useState<any>();
   const myRole = getUserSpaceRole(currentUser, space);
 
   const router = useRouter();
@@ -89,9 +93,10 @@ export default function CreateExtension({
     watch,
     handleSubmit,
     trigger,
+    getValues,
     reset,
     setValue,
-    formState: { isValid, isSubmitting },
+    formState: { isValid, isSubmitting, errors },
   } = form;
 
   useEffect(() => {
@@ -109,10 +114,15 @@ export default function CreateExtension({
       if (initialData.currentScript) {
         setValue('currentScript', initialData.currentScript);
         setValue('startingMessageType', 'script');
-        setValue('custom.firstMessage', '');
+        setValue('custom.firstMessage', initialData.currentScript);
+        setCompareData({
+          step1: initialData.domains,
+          step2: initialData.currentScript,
+          step3: initialData.color || DEFAULT_THEME,
+        });
         return;
       }
-      if (initialData.firstMessage) {
+      if (initialData.firstMessage?.length) {
         setValue('custom.firstMessage', initialData.firstMessage);
         setValue(
           'startingMessageType',
@@ -120,6 +130,11 @@ export default function CreateExtension({
             ? 'default'
             : 'custom',
         );
+        setCompareData({
+          step1: initialData.domains,
+          step2: initialData.firstMessage,
+          step3: initialData.color || DEFAULT_THEME,
+        });
         return;
       }
     }
@@ -186,6 +201,25 @@ export default function CreateExtension({
   const noScript =
     watch('startingMessageType') === 'script' &&
     isEmpty(watch('currentScript'));
+  const nothingChanged = isEqual(
+    {
+      step1: watch('domains'),
+      step2:
+        watch('startingMessageType') === 'script'
+          ? watch('currentScript')
+          : watch('custom.firstMessage'),
+      step3: watch('custom.color'),
+    },
+    compareData,
+  );
+  console.log(
+    '!isValid || isSubmitting || noScript, errr',
+    !isValid,
+    isSubmitting,
+    noScript,
+    errors,
+    getValues(),
+  );
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
@@ -262,10 +296,10 @@ export default function CreateExtension({
               size={'sm'}
               loading={isSubmitting}
               type="submit"
-              disabled={!isValid || isSubmitting || noScript}
+              disabled={!isValid || isSubmitting || noScript || nothingChanged}
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
             >
-              Save Change
+              {t('COMMON.SAVE_CHANGE')}
             </Button>
           </div>
         </Tabs>
