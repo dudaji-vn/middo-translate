@@ -462,6 +462,10 @@
     "RESTRICT_MESSAGE": "이 기능을 활성화하면 알 수 없는 발신자는 문자 메시지만 보낼 수 있으며 해당 메시지는 '대기 중' 탭으로 이동됩니다."
   },
   "MODAL": {
+    "ROLE_CHANGE": {
+      "TITLE": "역할 변경",
+      "DESCRIPTION": "<strong>{{name}}</strong>의 역할을 <strong>{{role}}</strong>(으)로 변경하시겠습니까?"
+    },
     "INVITE_MEMBERS": {
       "TITLE": "<span class='mr-2 text-primary-500-main'>초대</span>하여 공간에 참여시키세요&nbsp;<span class='text-[24px] font-normal'>(선택 사항)</span>",
       "DESCRIPTION": "무료 플랜 계정에서는 최대 2명의 멤버만 초대할 수 있습니다. <span class='font-normal text-primary-500-main'>플랜 업그레이드.</span>"

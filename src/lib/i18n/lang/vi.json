@@ -464,6 +464,10 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "ROLE_CHANGE": {
+      "TITLE": "Thay đổi vai trò",
+      "DESCRIPTION": "Bạn có chắc chắn muốn thay đổi vai trò của <strong>{{name}}</strong> thành <strong>{{role}}</strong> không?"
+    },
     "INVITE_MEMBERS": {
       "TITLE": "<span class='mr-2 text-primary-500-main'>Mời</span> người khác tham gia không gian của bạn&nbsp;<span class='text-[24px] font-normal'>(tuỳ chọn)</span>",
       "DESCRIPTION": "Bạn chỉ có thể mời 2 thành viên trong tài khoản gói Miễn phí. <span class='font-normal text-primary-500-main'>Nâng cấp gói.</span>"

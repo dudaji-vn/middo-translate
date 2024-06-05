@@ -73,7 +73,7 @@ export const deleteTag = ({
   });
 };
 
-export const changeRole = (data: {
+export const changeRoleMember = (data: {
   email: string;
   role: string;
   spaceId: string;

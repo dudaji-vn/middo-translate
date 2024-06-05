@@ -12,6 +12,8 @@ import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { ESPaceRoles } from '../space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_SPACE_DATA_KEY } from '@/features/business-spaces/hooks/use-get-space-data';
 
 const InviteMemberModal = ({
   space,
@@ -22,6 +24,7 @@ const InviteMemberModal = ({
 }) => {
   const { t } = useTranslation('common');
   const [members, setMembers] = React.useState<Member[]>([]);
+  const queryClient = useQueryClient();
   const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
   const router = useRouter();
@@ -35,6 +38,12 @@ const InviteMemberModal = ({
       toast.success('Members invited successfully');
       setMembers([]);
       setOpen(false);
+      queryClient.invalidateQueries([
+        GET_SPACE_DATA_KEY,
+        {
+          spaceId: space._id,
+        },
+      ]);
       router.refresh();
     } catch (error) {
       console.log(error);
