@@ -24,7 +24,7 @@ export default function InviteTooltip() {
   return (
     <>
       {participants.length == 1 &&
-        room.type === CALL_TYPE.GROUP &&
+        room?.type === CALL_TYPE.GROUP &&
         isShowInvite &&
         isFullScreen && (
           <div className="absolute bottom-full left-0 right-0 flex h-[300px] flex-col bg-gradient-to-t from-black/80 px-3 py-5  md:hidden">

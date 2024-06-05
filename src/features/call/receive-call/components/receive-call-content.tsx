@@ -22,7 +22,7 @@ const ReceiveVideoCallContent = () => {
           }
           alt="avatar"
         />
-        {requestCall?.room?.participants?.length > 2 && (
+        {requestCall?.room?.participants && requestCall?.room?.participants?.length > 2 && (
           <p className="truncate">{requestCall?.call?.name}</p>
         )}
       </div>

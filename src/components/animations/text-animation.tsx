@@ -16,7 +16,7 @@ const TextAnimation = (props: TextAnimationProps) => {
       setIndex((prevIndex) => (prevIndex + 1) % arrayText.length);
     }, 2000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [arrayText.length]);
   useEffect(() => {
     setText(arrayText[index]);
 
