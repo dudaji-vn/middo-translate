@@ -75,7 +75,7 @@ export const inboxTabMap: Record<
 const normalInboxTabs = [
   inboxTabMap.all,
   inboxTabMap.contact,
-  inboxTabMap.group,
+  // inboxTabMap.group,
   inboxTabMap.archived,
   inboxTabMap.waiting,
 ];

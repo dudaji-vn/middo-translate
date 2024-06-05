@@ -8,9 +8,11 @@ import {
   CheckCircle2Icon,
   CheckCircleIcon,
   LogOut,
+  MessagesSquareIcon,
   PinIcon,
   PinOffIcon,
   Tag,
+  Trash2Icon,
   TrashIcon,
   XCircleIcon,
 } from 'lucide-react';
@@ -29,6 +31,10 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useUnBlockUser } from '@/features/users/hooks/use-unblock-user';
 import { useAccept } from '../hooks/use-accept';
 import { RoomModalReject } from './room.modal-reject';
+import { useRoomItem } from './room-item/room-item';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { RoomModalDeleteContact } from './room.modal-delete-contact';
+import { useRouter } from 'next/navigation';
 
 export type Action =
   | 'delete'
@@ -44,7 +50,10 @@ export type Action =
   | 'block'
   | 'unblock'
   | 'accept'
-  | 'reject';
+  | 'reject'
+  | 'talk'
+  | 'delete-contact'
+;
 
 export type ActionItem = {
   action: Action;
@@ -80,6 +89,7 @@ export const useRoomActions = () => {
 };
 export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const [room, setRoom] = useState<Room | null>(null);
+  const router = useRouter();
   const currentUserId = useAuthStore((state) => state.user?._id);
   const [action, setAction] = useState<Action>('none');
   const { mutate: pin } = usePinRoom();
@@ -126,6 +136,9 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
       case 'accept':
         accept(roomId);
         break;
+      case 'talk':
+        router.push(`${ROUTE_NAMES.ONLINE_CONVERSATION}/${roomId}`);
+        break;
       default:
         setAction(action);
         setRoom(room);
@@ -168,6 +181,8 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         return null;
       case 'tag':
         return null;
+      case 'delete-contact':
+        return <RoomModalDeleteContact onClosed={reset} id={id} />;;
       default:
         return null;
     }
@@ -175,6 +190,11 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
 
   const actionItems: ActionItem[] = useMemo(() => {
     return [
+      {
+        action: 'talk',
+        label: 'CONVERSATION.TALK',
+        icon: <MessagesSquareIcon />,
+      },
       {
         action: 'pin',
         label: 'CONVERSATION.PIN',
@@ -255,6 +275,13 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         icon: <TrashIcon />,
         color: 'error',
       },
+      
+      {
+        action: 'delete-contact',
+        label: 'CONVERSATION.DELETE_CONTACT',
+        icon: <Trash2Icon />,
+        color: 'error',
+      }
     ] as ActionItem[];
   }, []);
 

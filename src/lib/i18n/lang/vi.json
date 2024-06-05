@@ -350,6 +350,8 @@
     "DOWNLOAD": "Tải xuống",
     "PIN": "Ghim",
     "LEAVE": "Rời khỏi",
+    "TALK": "Bắt đầu hội thoại",
+    "DELETE_CONTACT": "Xóa liên hệ",
     "ON": "Bật",
     "OFF": "Tắt",
     "UNPIN": "Bỏ ghim",
@@ -587,6 +589,10 @@
       "VIDEO": "Hình ảnh",
       "SPEAKER": "Loa",
       "NO_DEVICE": "Không có thiết bị"
+    },
+    "DELETE_CONTACT": {
+      "TITLE": "Xoá liên hệ",
+      "DESCRIPTION": "Bạn có chắc muốn xoá liên hệ?"
     }
   },
   "FILTERS": {
@@ -790,7 +796,8 @@
     "TIP_TITLE_GROUP": "Cách sử dụng \"Nhóm\"",
     "TITLE_GROUP": "Hiện tại, bạn không có Cuộc trò chuyện Nhóm nào",
     "DESCRIPTION_GROUP": "Nhấp vào nút dưới đây để tạo một cuộc trò chuyện mới hoặc yêu cầu Quản trị viên của một Cuộc trò chuyện Nhóm thêm bạn vào",
-    "MESSAGE": "Chưa có tin nhắn nào"
+    "MESSAGE": "Chưa có tin nhắn nào",
+    "MESSAGE_CONTACT": "Chưa có liên hệ nào"
   },
   "OFFLINE": {
     "TITLE": "Bạn đang ngoại tuyến",

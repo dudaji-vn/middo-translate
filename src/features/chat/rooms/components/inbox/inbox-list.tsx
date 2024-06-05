@@ -52,7 +52,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       }
       return ['rooms', type, status];
     }, [type, status, appliedFilters, spaceId]);
-
     const onlineList = useChatStore((state) => state.onlineList);
 
     const {
@@ -130,34 +129,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const showFilter =
       Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
     
-
-    const renderChatList = () => {
-      switch (type) {
-        case 'contact':
-          return 'CONTACT';
-        default:
-          return rooms.map((room) => {
-            const isOnline = isRoomOnline({
-              currentUser,
-              room,
-              onlineList,
-              isBusiness,
-            });
-
-            return (
-              <RoomItem
-                isOnline={isOnline}
-                key={room._id}
-                data={room}
-                isActive={currentRoomId === room._id}
-                currentRoomId={currentRoomId as string}
-                businessId={businessExtension?._id}
-              />
-            );
-          })
-
-      }
-    }
     return (
       <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
         {isScrolled && (
@@ -188,7 +159,29 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               rooms={pinnedRooms}
               currentRoomId={currentRoomId as string}
             />
-            {renderChatList()}
+            {
+              rooms.map((room) => {
+                const isOnline = isRoomOnline({
+                  currentUser,
+                  room,
+                  onlineList,
+                  isBusiness,
+                });
+    
+                return (
+                  <RoomItem
+                    showTime={type !== 'contact'}
+                    type={type}
+                    isOnline={isOnline}
+                    key={room._id}
+                    data={room}
+                    isActive={currentRoomId === room._id}
+                    currentRoomId={currentRoomId as string}
+                    businessId={businessExtension?._id}
+                  />
+                );
+              })
+            }
           </InfiniteScroll>
         </div>
       </div>

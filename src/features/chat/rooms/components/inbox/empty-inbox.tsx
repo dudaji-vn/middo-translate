@@ -21,6 +21,8 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
           return '';
         case 'group':
           return '_GROUP';
+        case 'contact':
+          return '_CONTACT';
         default:
           return '';
       }
@@ -42,7 +44,7 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type]);
 
-    if (type === 'archived' || type === 'waiting') {
+    if (type === 'archived' || type === 'waiting' || type === 'contact') {
       return (
         <div className="mt-3 flex h-full flex-col items-center justify-center bg-card px-4 text-base">
           <FrownIcon className="-mt-10 h-12 w-12 text-neutral-400" />

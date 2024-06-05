@@ -7,6 +7,7 @@ export interface RoomWaitingContentProps {
 }
 
 export const RoomWaitingContent = ({ room }: RoomWaitingContentProps) => {
+  console.log('RoomWaitingContent', room);
   const currentUserId = useAuthStore((state) => state.user?._id);
   const otherUser = room?.waitingUsers?.find(
     (user) => user._id !== currentUserId,

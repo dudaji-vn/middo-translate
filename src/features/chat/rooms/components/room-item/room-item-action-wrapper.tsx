@@ -6,7 +6,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import {
+  Fragment,
   PropsWithChildren,
+  ReactNode,
   cloneElement,
   forwardRef,
   useCallback,
@@ -26,10 +28,14 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 import { EBusinessConversationKeys } from '@/types/business.type';
 import { RoomItem } from '.';
 import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
+import { useRoomItem } from './room-item';
+import { InboxType } from '../inbox/inbox';
+import Link from 'next/link';
 export interface RoomItemActionWrapperProps
   extends React.HTMLAttributes<HTMLDivElement> {
   room: Room;
   isMuted?: boolean;
+  type?: InboxType;
 }
 
 type Item = Omit<ActionItem, 'onAction'> & {
@@ -69,17 +75,27 @@ const WAITING_ALLOWED_ACTIONS: Action[] = [
   'delete',
 ];
 
+const CONTACT_ALLOWED_ACTIONS: Action[] = [
+  'talk',
+  'block', 
+  'delete-contact',
+];
+
 const checkAllowedActions = ({
   isBusinessRoom,
   businessConversationType,
   action,
   currentStatus,
+  tab
 }: {
   isBusinessRoom: boolean;
   businessConversationType: string;
   action: Action;
   currentStatus: Room['status'];
+  tab?: InboxType
 }) => {
+  if(tab === 'contact') 
+    return CONTACT_ALLOWED_ACTIONS.includes(action);
   if (currentStatus === 'waiting')
     return WAITING_ALLOWED_ACTIONS.includes(action);
   if (currentStatus === 'archived')
@@ -94,7 +110,7 @@ const checkAllowedActions = ({
 export const RoomItemActionWrapper = forwardRef<
   HTMLDivElement,
   RoomItemActionWrapperProps
->(({ room, isMuted, children }, ref) => {
+>(({ room, isMuted, children, type }, ref) => {
   const isMobile = useAppStore((state) => state.isMobile);
   const Wrapper = isMobile ? MobileWrapper : DesktopWrapper;
   const { isBusiness, businessConversationType } = useBusinessNavigationData();
@@ -108,6 +124,7 @@ export const RoomItemActionWrapper = forwardRef<
           businessConversationType: String(businessConversationType),
           action: item.action,
           currentStatus: room.status,
+          tab: type
         });
         if (!isAllowed) return false;
 
@@ -145,15 +162,7 @@ export const RoomItemActionWrapper = forwardRef<
             isBusiness,
           }),
       }));
-  }, [
-    actionItems,
-    businessConversationType,
-    isBusiness,
-    isMuted,
-    onAction,
-    relationshipStatus,
-    room,
-  ]);
+  }, [actionItems, businessConversationType, isBusiness, isMuted, onAction, relationshipStatus, room, type]);
 
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>
