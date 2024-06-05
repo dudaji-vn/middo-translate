@@ -93,10 +93,9 @@ export default function CreateExtension({
     watch,
     handleSubmit,
     trigger,
-    getValues,
     reset,
     setValue,
-    formState: { isValid, isSubmitting, errors },
+    formState: { isValid, isSubmitting },
   } = form;
 
   useEffect(() => {
@@ -212,14 +211,7 @@ export default function CreateExtension({
     },
     compareData,
   );
-  console.log(
-    '!isValid || isSubmitting || noScript, errr',
-    !isValid,
-    isSubmitting,
-    noScript,
-    errors,
-    getValues(),
-  );
+
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
