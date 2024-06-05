@@ -69,6 +69,7 @@ const HeaderProfile = ({
             <DropdownMenuContent
               align="end"
               onClick={() => setOpenDropdown(false)}
+              className='dark:bg-neutral-900 dark:border-neutral-800'
             >
               <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
                 <DropdownMenuItem className="flex items-center">
@@ -104,7 +105,7 @@ const HeaderProfile = ({
             <DropdownMenuContent
               align="end"
               onClick={() => setOpenDropdown(false)}
-              className='bg-neutral-900 border-neutral-800'
+              className='dark:bg-neutral-900 dark:border-neutral-800'
             >
               <Link href={ROUTE_NAMES.SIGN_IN}>
                 <DropdownMenuItem className="flex items-center">
