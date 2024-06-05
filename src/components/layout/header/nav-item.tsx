@@ -38,7 +38,7 @@ export const NavItem = ({
           }
         : {})}
       className={cn(
-        'flex h-9 items-center justify-center gap-2 rounded-xl py-2 font-semibold leading-[18px] text-neutral-700 md:px-2 md:hover:bg-primary-200 md:hover:text-primary md:active:bg-primary-300 lg:px-3',
+        'flex h-9 items-center justify-center gap-2 rounded-xl py-2 font-semibold leading-[18px] text-neutral-700 dark:text-neutral-100 md:px-2 md:hover:bg-primary-200 dark:md:hover:bg-neutral-600 md:hover:text-primary dark:md:hover:text-neutral-50 md:active:bg-primary-300 lg:px-3',
         isActive ? '!bg-primary !text-white' : '',
       )}
     >

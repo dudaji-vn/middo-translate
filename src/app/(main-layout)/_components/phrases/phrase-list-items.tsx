@@ -40,9 +40,9 @@ const PhraseItem = ({
   return (
     <Button
       className={cn(
-        'w-fill relative flex-col justify-start  h-full w-full  items-start border border-neutral-50/50 flex place-items-start gap-y-2 rounded-xl !p-3  ',
+        'w-fill relative flex-col justify-start  h-full w-full  items-start border border-neutral-50/50 dark:border-transparent flex place-items-start gap-y-2 rounded-xl !p-3  ',
         isOpened ? ' border border-primary-500-main !shadow-lg' : '',
-        'z-50 bg-neutral-50/50 hover:border md:hover:!border-primary-500-main hover:!bg-transparent',
+        'z-50 bg-neutral-50/50 dark:bg-neutral-900/50 hover:border md:hover:!border-primary-500-main hover:!bg-transparent',
       )}
       style={{
         backgroundPosition: 'right',
@@ -57,7 +57,7 @@ const PhraseItem = ({
       </span>
       <Typography
         {...nameProps}
-        className="w-full text-left leading-normal md:text-[0.85em] lg:text-[0.95em] xl:text-[1.1em]"
+        className="w-full text-left leading-normal md:text-[0.85em] lg:text-[0.95em] xl:text-[1.1em] dark:text-neutral-50"
       >
         {name}
       </Typography>

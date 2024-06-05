@@ -70,7 +70,7 @@ export const TranslateMiddle = ({
   );
 
   return (
-    <div className="relative rounded-[8px] bg-background-darker p-3">
+    <div className="relative rounded-[8px] bg-background-darker dark:bg-neutral-800 p-3">
       <div className="flex">
         <CircleFlag
           className="countryCircleIcon mr-2"

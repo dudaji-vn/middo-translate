@@ -30,7 +30,7 @@ const Phrases = forwardRef<HTMLDivElement, PhrasesProps>(
             : 'hidden',
         )}
       >
-        <div className=' flex w-full flex-row items-center md:flex-row-reverse border-b p-1 md:pl-3'>
+        <div className=' flex w-full flex-row items-center md:flex-row-reverse border-b p-1 md:pl-3 dark:border-neutral-900'>
           <Button.Icon
             onClick={onClose}
             variant={'ghost'}

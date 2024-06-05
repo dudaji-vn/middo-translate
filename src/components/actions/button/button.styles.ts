@@ -11,13 +11,13 @@ export const buttonVariants = cva(
       },
       color: {
         default:
-          'bg-neutral-50 text-neutral-700 md:hover:bg-neutral-100 active:bg-neutral-200 md:active:bg-neutral-200 dark:bg-gray-700  dark:hover:bg-gray-800',
+          'bg-neutral-50 text-neutral-700 md:hover:bg-neutral-100 active:bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-100 dark:active:bg-neutral-700',
         primary:
-          'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200',
+          'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 dark:text-neutral-100',
         secondary:
-          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-15 ',
+          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-15 dark:bg-primary-900 dark:text-primary-500 dark:md:hover:bg-primary-700 dark:md:active:bg-primary-400',
         success:
-          'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker',
+          'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker dark:bg-success-700 dark:text-neutral-50 dark:md:hover:bg-success-600 active:!bg-success-400',
         error:
           'bg-error md:hover:bg-error-500 text-background active:!bg-error-600 disabled:bg-error-200 ',
         disabled:
@@ -52,13 +52,13 @@ export const buttonVariants = cva(
         variant: 'ghost',
         color: 'default',
         className:
-          'bg-transparent text-neutral-700 md:hover:bg-neutral-50 active:!bg-neutral-100 disabled:!bg-transparent disabled:text-neutral-100',
+          'bg-transparent text-neutral-700 md:hover:bg-neutral-50 active:!bg-neutral-100 dark:active:!bg-neutral-700 disabled:!bg-transparent disabled:text-neutral-100',
       },
       {
         variant: 'ghost',
         color: 'primary',
         className:
-          'bg-transparent text-primary md:hover:bg-primary-200 active:!bg-primary-300 disabled:!bg-transparent disabled:text-primary-200',
+          'bg-transparent text-primary md:hover:bg-primary-200 active:!bg-primary-300 disabled:!bg-transparent disabled:text-primary-200 dark:md:hover:bg-neutral-800 dark:md:active:!bg-neutral-700',
       },
       {
         variant: 'ghost',
