@@ -240,18 +240,20 @@ const ListItems = ({
       {data?.map((member, index) => {
         if (member.role === 'divider') {
           return (
-            <div
-              key={'divider'}
-              className="mt-3 flex w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]"
-            >
-              <UserCog
-                size={16}
-                className="stroke-[3px] text-primary-500-main"
-              />
-              <Typography className="text-primary-500-main ">
-                {t('EXTENSION.ROLE.MEMBER_ROLE')}
-              </Typography>
-            </div>
+            <Reorder.Item key={member.email} value={member.email}>
+              <div
+                key={'divider'}
+                className="mt-3 flex w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]"
+              >
+                <UserCog
+                  size={16}
+                  className="stroke-[3px] text-primary-500-main"
+                />
+                <Typography className="text-primary-500-main ">
+                  {t('EXTENSION.ROLE.MEMBER_ROLE')}
+                </Typography>
+              </div>
+            </Reorder.Item>
           );
         }
         return (
@@ -372,24 +374,44 @@ const MembersList = ({ space }: { space: TSpace }) => {
           const newDividerIndex = values.findIndex(
             (email) => email === 'divider',
           );
-          const membersAboveDivider = values.slice(0, newDividerIndex);
-          const membersBelowDivider = values.slice(newDividerIndex + 1);
-          const membersBecomeAdmin = membersAboveDivider.filter(
-            (email) =>
-              members.find((member) => member.email === email)?.role ===
-              ESPaceRoles.Member,
+          const { membersAboveDivider, membersBelowDivider } = values.reduce(
+            (acc, email, index) => {
+              if (index < newDividerIndex) {
+                acc.membersAboveDivider.push(email);
+              } else if (index > newDividerIndex) {
+                acc.membersBelowDivider.push(email);
+              }
+              return acc;
+            },
+            {
+              membersAboveDivider: [] as string[],
+              membersBelowDivider: [] as string[],
+            },
           );
-          const adminsBecomeMember = membersBelowDivider.filter((email) => {
+          console.log('membersAboveDivider', membersAboveDivider);
+          console.log('membersBelowDivider', membersBelowDivider);
+          const memberBecomeAdmin = membersAboveDivider.find((email) => {
             const member = members.find((member) => member.email === email);
-            return member?.role === ESPaceRoles.Admin;
+            return member?.role === ESPaceRoles.Member;
           });
-          if (membersBecomeAdmin.length && newDividerIndex > oldDividerIndex) {
-            onMemberRoleChange(membersBecomeAdmin[0], ESPaceRoles.Admin);
-          } else if (
-            adminsBecomeMember.length &&
-            newDividerIndex < oldDividerIndex
-          ) {
-            onMemberRoleChange(adminsBecomeMember[0], ESPaceRoles.Member);
+          const adminBecomeMember = membersBelowDivider.find((email) => {
+            const member = members.find((member) => member.email === email);
+            return (
+              member?.role === ESPaceRoles.Admin &&
+              member?.email !== owner.email
+            );
+          });
+          console.log(
+            'memberBecomeAdmin',
+            memberBecomeAdmin,
+            newDividerIndex,
+            oldDividerIndex,
+          );
+          console.log('adminBecomeMember', adminBecomeMember);
+          if (memberBecomeAdmin && newDividerIndex > oldDividerIndex) {
+            onMemberRoleChange(memberBecomeAdmin, ESPaceRoles.Admin);
+          } else if (adminBecomeMember && newDividerIndex < oldDividerIndex) {
+            onMemberRoleChange(adminBecomeMember, ESPaceRoles.Member);
           }
         }}
         className=" w-full"
