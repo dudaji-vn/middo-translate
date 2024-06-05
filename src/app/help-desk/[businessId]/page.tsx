@@ -7,7 +7,7 @@ import TrackGuest from './rate/[roomId]/[userId]/_components/track-guest';
 
 const HelpDeskStartConversationPage = async ({
   params: { slugs, businessId },
-  searchParams: { originReferer },
+  searchParams: { originReferer, domain },
   ...props
 }: {
   params: {
@@ -16,6 +16,7 @@ const HelpDeskStartConversationPage = async ({
   };
   searchParams: {
     originReferer: string;
+    domain: string;
   };
 }) => {
   const extensionData = await businessAPI.getExtensionByBusinessId(businessId);
@@ -23,20 +24,21 @@ const HelpDeskStartConversationPage = async ({
     notFound();
   }
 
+  console.log('domain', domain);
   const headersList = headers();
-  const referer = headersList.get('referer');
+  const referer = domain || headersList.get('referer');
   const allowedDomain = getAllowedDomain({
     refer: referer,
     allowedDomains: extensionData.domains,
   });
-  const isRedirectedFromRatePage =
-    referer?.startsWith(
-      `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
-    ) && originReferer;
+  const isRedirectedFromRatePage = referer?.startsWith(
+    `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
+  );
 
   if (!allowedDomain && !isRedirectedFromRatePage) {
     notFound();
   }
+
   return (
     <TrackGuest
       extensionId={businessId}
