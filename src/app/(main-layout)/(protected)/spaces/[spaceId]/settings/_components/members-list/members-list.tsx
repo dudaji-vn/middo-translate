@@ -208,14 +208,6 @@ const ListItems = ({
 
   return (
     <div className="flex flex-col gap-1 overflow-x-auto md:min-w-[400px]">
-      <p
-        className={cn(
-          'w-full py-1 text-center text-sm font-light italic text-neutral-500',
-          !isEmptyData && 'hidden',
-        )}
-      >
-        {t('EXTENSION.MEMBER.NO_MEMBER')}
-      </p>
       <div
         className={cn(
           'flex w-full flex-row items-center justify-start py-2 ',
@@ -363,6 +355,12 @@ const MembersList = ({ space }: { space: TSpace }) => {
           myRole as ESPaceRoles,
         ) && <InviteMemberModal space={space} myRole={myRole} />}
       </div>
+      <div className="flex  w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]">
+        <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
+        <Typography className="text-primary-500-main ">
+          {t('EXTENSION.ROLE.ADMIN_ROLE')}
+        </Typography>
+      </div>
       <Reorder.Group
         values={order.map((member) => member.email)}
         onReorder={(values) => {
@@ -426,12 +424,6 @@ const MembersList = ({ space }: { space: TSpace }) => {
         }}
         className=" w-full"
       >
-        <div className="flex  w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]">
-          <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
-          <Typography className="text-primary-500-main ">
-            {t('EXTENSION.ROLE.ADMIN_ROLE')}
-          </Typography>
-        </div>
         <ListItems data={order} owner={owner} myRole={myRole} />
       </Reorder.Group>
     </section>
