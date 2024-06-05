@@ -239,6 +239,60 @@ const MembersList = ({ space }: { space: TSpace }) => {
     setOrder([...ads, { email: 'divider', role: 'divider' }, ...mems]);
   }, [members, search]);
 
+  const onReorder = (values: string[]) => {
+    const oldDividerIndex = order.findIndex(
+      (member) => member.email === 'divider',
+    );
+    const newDividerIndex = values.findIndex((email) => email === 'divider');
+    const { membersAboveDivider, membersBelowDivider } = values.reduce(
+      (acc, email, index) => {
+        if (index < newDividerIndex) {
+          acc.membersAboveDivider.push(email);
+        } else if (index > newDividerIndex) {
+          acc.membersBelowDivider.push(email);
+        }
+        return acc;
+      },
+      {
+        membersAboveDivider: [] as string[],
+        membersBelowDivider: [] as string[],
+      },
+    );
+    console.log('membersAboveDivider', membersAboveDivider);
+    console.log('membersBelowDivider', membersBelowDivider);
+    const memberBecomeAdmin = membersAboveDivider.find((email) => {
+      const member = members.find((member) => member.email === email);
+      return member?.role === ESPaceRoles.Member;
+    });
+    const adminBecomeMember = membersBelowDivider.find((email) => {
+      const member = members.find((member) => member.email === email);
+      return (
+        member?.role === ESPaceRoles.Admin && member?.email !== owner.email
+      );
+    });
+    console.log(
+      'memberBecomeAdmin',
+      memberBecomeAdmin,
+      newDividerIndex,
+      oldDividerIndex,
+    );
+    console.log('adminBecomeMember', adminBecomeMember);
+    if (memberBecomeAdmin && newDividerIndex > oldDividerIndex) {
+      onMemberRoleChange(memberBecomeAdmin, ESPaceRoles.Admin);
+      setOrder(
+        values.map(
+          (email) => order.find((member) => member.email === email) as Member,
+        ),
+      );
+    } else if (adminBecomeMember && newDividerIndex < oldDividerIndex) {
+      onMemberRoleChange(adminBecomeMember, ESPaceRoles.Member);
+      setOrder(
+        values.map(
+          (email) => order.find((member) => member.email === email) as Member,
+        ),
+      );
+    }
+  };
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
       <div className="flex w-full flex-row items-center justify-between gap-5 px-10">
@@ -258,65 +312,7 @@ const MembersList = ({ space }: { space: TSpace }) => {
 
       <Reorder.Group
         values={order.map((member) => member.email)}
-        onReorder={(values) => {
-          const oldDividerIndex = order.findIndex(
-            (member) => member.email === 'divider',
-          );
-          const newDividerIndex = values.findIndex(
-            (email) => email === 'divider',
-          );
-          const { membersAboveDivider, membersBelowDivider } = values.reduce(
-            (acc, email, index) => {
-              if (index < newDividerIndex) {
-                acc.membersAboveDivider.push(email);
-              } else if (index > newDividerIndex) {
-                acc.membersBelowDivider.push(email);
-              }
-              return acc;
-            },
-            {
-              membersAboveDivider: [] as string[],
-              membersBelowDivider: [] as string[],
-            },
-          );
-          console.log('membersAboveDivider', membersAboveDivider);
-          console.log('membersBelowDivider', membersBelowDivider);
-          const memberBecomeAdmin = membersAboveDivider.find((email) => {
-            const member = members.find((member) => member.email === email);
-            return member?.role === ESPaceRoles.Member;
-          });
-          const adminBecomeMember = membersBelowDivider.find((email) => {
-            const member = members.find((member) => member.email === email);
-            return (
-              member?.role === ESPaceRoles.Admin &&
-              member?.email !== owner.email
-            );
-          });
-          console.log(
-            'memberBecomeAdmin',
-            memberBecomeAdmin,
-            newDividerIndex,
-            oldDividerIndex,
-          );
-          console.log('adminBecomeMember', adminBecomeMember);
-          if (memberBecomeAdmin && newDividerIndex > oldDividerIndex) {
-            onMemberRoleChange(memberBecomeAdmin, ESPaceRoles.Admin);
-            setOrder(
-              values.map(
-                (email) =>
-                  order.find((member) => member.email === email) as Member,
-              ),
-            );
-          } else if (adminBecomeMember && newDividerIndex < oldDividerIndex) {
-            onMemberRoleChange(adminBecomeMember, ESPaceRoles.Member);
-            setOrder(
-              values.map(
-                (email) =>
-                  order.find((member) => member.email === email) as Member,
-              ),
-            );
-          }
-        }}
+        onReorder={onReorder}
         className=" w-full"
       >
         <ListItems data={order} owner={owner} myRole={myRole} />
