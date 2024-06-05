@@ -257,22 +257,20 @@ const ListItems = ({
           );
         }
         return (
-          <>
+          <Reorder.Item key={member.email} value={member.email}>
             <div
               className="grid w-full grid-cols-[48px_auto] pr-10"
               key={member.email}
             >
               <div className="!w-fit bg-white p-1 py-2 ">
-                <Reorder.Item key={member.email} value={member.email}>
-                  <Button.Icon
-                    size={'xs'}
-                    shape={'square'}
-                    variant={'ghost'}
-                    color={'default'}
-                  >
-                    <GripVertical className="fill-neutral-500 stroke-neutral-500" />
-                  </Button.Icon>
-                </Reorder.Item>
+                <Button.Icon
+                  size={'xs'}
+                  shape={'square'}
+                  variant={'ghost'}
+                  color={'default'}
+                >
+                  <GripVertical className="fill-neutral-500 stroke-neutral-500" />
+                </Button.Icon>
               </div>
               <MemberItem
                 {...member}
@@ -285,7 +283,7 @@ const ListItems = ({
                 {...props}
               />
             </div>
-          </>
+          </Reorder.Item>
         );
       })}
     </div>
@@ -410,8 +408,20 @@ const MembersList = ({ space }: { space: TSpace }) => {
           console.log('adminBecomeMember', adminBecomeMember);
           if (memberBecomeAdmin && newDividerIndex > oldDividerIndex) {
             onMemberRoleChange(memberBecomeAdmin, ESPaceRoles.Admin);
+            setOrder(
+              values.map(
+                (email) =>
+                  order.find((member) => member.email === email) as Member,
+              ),
+            );
           } else if (adminBecomeMember && newDividerIndex < oldDividerIndex) {
             onMemberRoleChange(adminBecomeMember, ESPaceRoles.Member);
+            setOrder(
+              values.map(
+                (email) =>
+                  order.find((member) => member.email === email) as Member,
+              ),
+            );
           }
         }}
         className=" w-full"
