@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Typography } from '@/components/data-display';
-import { GripVertical, UserCog } from 'lucide-react';
+import { GripVertical } from 'lucide-react';
 import {
-  changeRoleMember,
   removeMemberFromSpace,
   resendInvitation,
 } from '@/services/business-space.service';
@@ -15,71 +13,52 @@ import { Button } from '@/components/actions';
 import { useAuthStore } from '@/stores/auth.store';
 import { Member } from '../../../_components/spaces-crud/sections/members-columns';
 import InviteMemberModal from './invite-member-modal';
-import { TSpace } from '../../../_components/business-spaces';
 import {
   ESPaceRoles,
   MANAGE_SPACE_ROLES,
-  SPACE_SETTING_TAB_ROLES,
 } from '../space-setting/setting-items';
 import { getUserSpaceRole } from '../space-setting/role.util';
 import { SearchInput } from '@/components/data-entry';
 import { useTranslation } from 'react-i18next';
 import MemberItem from './member-item';
-
-const Divider = ({ role }: { role: ESPaceRoles }) => {
-  const { t } = useTranslation('common');
-  return (
-    <>
-      <div
-        className={cn(
-          'flex w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]',
-        )}
-      >
-        <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
-        <Typography className="text-primary-500-main ">
-          {role === ESPaceRoles.Admin
-            ? t('EXTENSION.ROLE.ADMIN_ROLE')
-            : t('EXTENSION.ROLE.MEMBER_ROLE')}
-        </Typography>
-      </div>
-      <div
-        className={cn('flex w-full flex-row items-center justify-start py-2 ')}
-      >
-        <div className="invisible !w-[50px]" />
-        <div className="flex  h-auto w-[400px] flex-row items-center justify-start break-words px-3 md:w-[500px] xl:w-[800px]">
-          <Typography className="text-sm  font-light text-neutral-800">
-            {t('EXTENSION.MEMBER.EMAIL')}
-          </Typography>
-        </div>
-        <Typography
-          className={cn(
-            'w-[100px] text-sm font-light capitalize text-gray-500',
-          )}
-        >
-          {t('EXTENSION.MEMBER.STATUS')}
-        </Typography>
-      </div>
-    </>
-  );
-};
+import { CategoryHeader } from './category-header';
+import { ChangeMemberRoleModal } from './change-member-role-modal';
+import { isEmpty } from 'lodash';
+import { useQueryClient } from '@tanstack/react-query';
+import {
+  GET_SPACE_DATA_KEY,
+  useGetSpaceData,
+} from '@/features/business-spaces/hooks/use-get-space-data';
+import { Spinner } from '@/components/feedback';
 
 const ReorderList = ({
   data,
   owner,
   myRole,
   isAdmin = false,
+  spaceId,
   ...props
 }: {
   isAdmin?: boolean;
   myRole?: ESPaceRoles;
   data: Member[];
+  spaceId: string;
   owner: {
     _id: string;
     email: string;
   };
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({});
-
+  const queryClient = useQueryClient();
+  const [modal, setModal] = useState<{
+    open: boolean;
+    props?: Member & {
+      onCancel: () => void;
+      onSucceed: () => void;
+    };
+  }>({
+    open: false,
+  });
   const [categories, setCategories] = useState([
     { _id: ESPaceRoles.Admin },
     { _id: ESPaceRoles.Member },
@@ -88,7 +67,7 @@ const ReorderList = ({
   const { t } = useTranslation('common');
   const params = useParams();
   const currentUser = useAuthStore((state) => state.user);
-  const router = useRouter();
+  console.log(data, 'data');
   const onDelete = async (member: Member) => {
     setIsLoading((prev) => ({
       ...prev,
@@ -106,7 +85,7 @@ const ReorderList = ({
       });
       if (res.data) {
         toast.success('Member removed successfully');
-        router.refresh();
+        queryClient.invalidateQueries([GET_SPACE_DATA_KEY, { spaceId }]);
         return;
       }
     } catch (error) {
@@ -120,7 +99,7 @@ const ReorderList = ({
       [member.email]: true,
     }));
     try {
-      const res = await resendInvitation({
+      await resendInvitation({
         email: member.email,
         spaceId: params?.spaceId as string,
         role: member.role,
@@ -131,7 +110,7 @@ const ReorderList = ({
         }));
       });
       toast.success('Invitation resent successfully');
-      router.refresh();
+      queryClient.invalidateQueries([GET_SPACE_DATA_KEY, { spaceId }]);
     } catch (error) {
       console.error('Error on ResendInvitation:', error);
       toast.error('Error on Resend invitation');
@@ -141,6 +120,10 @@ const ReorderList = ({
       [member.email]: false,
     }));
   };
+
+  useEffect(() => {
+    setItems(data);
+  }, [data]);
 
   const rearrangeTheList = (
     arr: any[],
@@ -164,141 +147,167 @@ const ReorderList = ({
         rearrangeTheList(categories, source.index, destination.index),
       );
     } else if (destination.droppableId !== source.droppableId) {
-      setItems((items) =>
-        items.map((item) => {
-          if (item.email === result.draggableId) {
-            changeRoleMember({
-              email: item.email,
-              role: destination.droppableId,
-              spaceId: params?.spaceId as string,
-            }).then(() => {
-              toast.success('Role changed successfully');
-              router.refresh();
-            });
-            return {
-              ...item,
-              role: destination.droppableId,
-            };
-          }
-          return item;
+      setItems((prev) =>
+        prev.map((item) => {
+          return item.email === result.draggableId
+            ? {
+                ...item,
+                role: destination.droppableId,
+              }
+            : item;
         }),
       );
+      items.forEach((item, index) => {
+        if (item.email === result.draggableId) {
+          setModal({
+            open: true,
+            props: {
+              ...item,
+              role: destination.droppableId,
+              onCancel: () => {
+                const newArr = [...items];
+                newArr[index].role = source.droppableId;
+                setItems(items);
+              },
+              onSucceed: () => {
+                const newArr = [...items];
+                newArr[index].role = destination.droppableId;
+                setItems(newArr);
+              },
+            },
+          });
+        }
+      });
     } else {
       setItems(rearrangeTheList(items, source.index, destination.index));
     }
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="Categories" type="droppableItem">
-        {(provided) => (
-          <div ref={provided.innerRef}>
-            {categories.map((category, index) => (
-              <Draggable
-                draggableId={`category-${category._id}`}
-                key={`category-${category._id}`}
-                index={index}
-              >
-                {(parentProvider) => (
-                  <div
-                    ref={parentProvider.innerRef}
-                    {...parentProvider.draggableProps}
-                  >
-                    <Droppable droppableId={category._id.toString()}>
-                      {(provided) => (
-                        <div ref={provided.innerRef}>
-                          <ul
-                            className={cn(
-                              'list-unstyled mb-3 ',
-                              'flex flex-col gap-1 overflow-x-auto  md:min-w-[400px]',
-                            )}
-                          >
-                            <Divider role={category._id} />
-                            {items
-                              .filter((item) => item.role === category._id)
-                              .map((item, index) => (
-                                <Draggable
-                                  draggableId={item.email}
-                                  key={item.email.toString()}
-                                  isDragDisabled={item.email === owner.email}
-                                  index={index}
-                                >
-                                  {(provided) => (
-                                    <div
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      className={cn(
-                                        'grid w-full grid-cols-[48px_auto] pr-10 ',
-                                        {
-                                          'cursor-not-allowed':
-                                            item.email === owner.email ||
-                                            myRole === ESPaceRoles.Member,
-                                        },
-                                      )}
-                                      key={item.email}
-                                    >
-                                      <div className="!w-fit bg-white p-1 py-2 ">
-                                        <Button.Icon
-                                          size={'xs'}
-                                          shape={'square'}
-                                          variant={'ghost'}
-                                          color={'default'}
-                                        >
-                                          <GripVertical className="fill-neutral-500 stroke-neutral-500" />
-                                        </Button.Icon>
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="Categories" type="droppableItem">
+          {(provided) => (
+            <div ref={provided.innerRef}>
+              {categories.map((category, index) => (
+                <Draggable
+                  draggableId={`category-${category._id}`}
+                  key={`category-${category._id}`}
+                  index={index}
+                >
+                  {(parentProvider) => (
+                    <div
+                      ref={parentProvider.innerRef}
+                      {...parentProvider.draggableProps}
+                    >
+                      <Droppable droppableId={category._id.toString()}>
+                        {(provided) => (
+                          <div ref={provided.innerRef}>
+                            <ul
+                              className={cn(
+                                'list-unstyled mb-3 ',
+                                'flex flex-col gap-1 overflow-x-auto  md:min-w-[400px]',
+                              )}
+                            >
+                              <CategoryHeader role={category._id} />
+                              {items
+                                .filter((item) => item.role === category._id)
+                                .map((item, index) => (
+                                  <Draggable
+                                    draggableId={item.email}
+                                    key={item.email.toString()}
+                                    isDragDisabled={item.email === owner.email}
+                                    index={index}
+                                  >
+                                    {(provided) => (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        className={cn(
+                                          'grid w-full grid-cols-[48px_auto] pr-10 ',
+                                          {
+                                            'cursor-not-allowed':
+                                              item.email === owner.email ||
+                                              myRole === ESPaceRoles.Member,
+                                          },
+                                        )}
+                                        key={item.email}
+                                      >
+                                        <div className="!w-fit bg-white p-1 py-2 ">
+                                          <Button.Icon
+                                            size={'xs'}
+                                            shape={'square'}
+                                            variant={'ghost'}
+                                            color={'default'}
+                                          >
+                                            <GripVertical className="fill-neutral-500 stroke-neutral-500" />
+                                          </Button.Icon>
+                                        </div>
+
+                                        <MemberItem
+                                          {...item}
+                                          myRole={myRole}
+                                          isMe={
+                                            item.email === currentUser?.email
+                                          }
+                                          isOwnerRow={
+                                            item.email === owner.email
+                                          }
+                                          onResendInvitation={
+                                            onResendInvitation
+                                          }
+                                          onDelete={onDelete}
+                                          isLoading={isLoading[item.email]}
+                                          {...props}
+                                        />
                                       </div>
+                                    )}
+                                  </Draggable>
+                                ))}
+                              {provided.placeholder}
+                            </ul>
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
+                  )}
+                </Draggable>
+              ))}
 
-                                      <MemberItem
-                                        {...item}
-                                        myRole={myRole}
-                                        isMe={item.email === currentUser?.email}
-                                        isOwnerRow={item.email === owner.email}
-                                        onResendInvitation={onResendInvitation}
-                                        onDelete={onDelete}
-                                        isLoading={isLoading[item.email]}
-                                        {...props}
-                                      />
-                                    </div>
-                                  )}
-                                </Draggable>
-                              ))}
-                            {provided.placeholder}
-                          </ul>
-                        </div>
-                      )}
-                    </Droppable>
-                  </div>
-                )}
-              </Draggable>
-            ))}
-
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-    </DragDropContext>
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
+      {modal.open && modal.props && (
+        <ChangeMemberRoleModal
+          {...modal.props}
+          onClosed={() => setModal({ open: false, props: undefined })}
+          _id={modal.props._id || ''}
+          role={modal.props.role as ESPaceRoles}
+        />
+      )}
+    </>
   );
 };
 
-const MembersList = ({ space }: { space: TSpace }) => {
+const MembersList = () => {
   const [search, setSearch] = React.useState('');
-  const router = useRouter();
-  const { members, owner } = space;
-  const [data, setData] = useState<Member[]>(members || []);
+  const spaceId = useParams()?.spaceId as string;
+  const { space } = useAuthStore();
+  const [data, setData] = useState<Member[]>([]);
   const { t } = useTranslation('common');
   const currentUser = useAuthStore((state) => state.user);
   const myRole = getUserSpaceRole(currentUser, space);
-  const editMemberRoles =
-    SPACE_SETTING_TAB_ROLES.find((setting) => setting.name === 'members')?.roles
-      .edit || [];
   const onSearchChange = (search: string) => {
     setSearch(search.trim());
   };
 
   useEffect(() => {
+    const members = space?.members || [];
     const filteredMembers = search
-      ? members?.filter((member) => {
+      ? members?.filter((member: Member) => {
           return (
             member.email.toLowerCase().includes(search.toLowerCase()) ||
             member.role.toLowerCase().includes(search.toLowerCase())
@@ -306,7 +315,21 @@ const MembersList = ({ space }: { space: TSpace }) => {
         })
       : members;
     setData(filteredMembers || []);
-  }, [members, search]);
+  }, [space, search]);
+
+  if (!space || isEmpty(data))
+    return (
+      <>
+        <CategoryHeader role={ESPaceRoles.Admin} />
+        <div className="flex h-10 w-full justify-center">
+          <Spinner size={'md'} className="m-auto  text-neutral-100" />
+        </div>
+        <CategoryHeader role={ESPaceRoles.Member} />
+        <div className="flex h-10 w-full justify-center">
+          <Spinner size={'md'} className="m-auto text-neutral-100" />
+        </div>
+      </>
+    );
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
@@ -324,7 +347,12 @@ const MembersList = ({ space }: { space: TSpace }) => {
         ) && <InviteMemberModal space={space} myRole={myRole} />}
       </div>
       <div className="w-full">
-        <ReorderList data={data} owner={owner} myRole={myRole} />
+        <ReorderList
+          data={data}
+          owner={space.owner}
+          myRole={myRole}
+          spaceId={spaceId}
+        />
       </div>
     </section>
   );
