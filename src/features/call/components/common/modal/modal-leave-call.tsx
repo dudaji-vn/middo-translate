@@ -33,7 +33,7 @@ export const ConfirmLeaveRoomModal = () => {
       }
       removeParticipant(participant.socketId);
     });
-    setRoom(null);
+    setRoom();
     if(isElectron) {
       ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
     }

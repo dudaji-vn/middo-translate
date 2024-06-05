@@ -73,28 +73,30 @@ function VideoPlayer(props: VideoProps) {
   
   // Add on end video event
   useEffect(() => {
+    const ref = videoRef.current
     const handleEnd = () => {
       setIsPlaying(false);
-      videoRef.current!.currentTime = 0;
+      ref!.currentTime = 0;
     }
-    videoRef.current?.addEventListener('ended', handleEnd);
+    ref?.addEventListener('ended', handleEnd);
     // Add duration video
-    videoRef.current?.addEventListener('loadedmetadata', () => {
-      setVideoDuration(videoRef.current?.duration || 0.1);
+    ref?.addEventListener('loadedmetadata', () => {
+      setVideoDuration(ref?.duration || 0.1);
     });
     return () => {
-      videoRef.current?.removeEventListener('ended', handleEnd);
+      ref?.removeEventListener('ended', handleEnd);
     }
   }, [])
 
   // Add on time update event
   useEffect(() => {
+    const ref = videoRef.current
     const handleTimeUpdate = () => {
-      setCurrentTime(videoRef.current?.currentTime || 0);
+      setCurrentTime(ref?.currentTime || 0);
     }
-    videoRef.current?.addEventListener('timeupdate', handleTimeUpdate);
+    ref?.addEventListener('timeupdate', handleTimeUpdate);
     return () => {
-      videoRef.current?.removeEventListener('timeupdate', handleTimeUpdate);
+      ref?.removeEventListener('timeupdate', handleTimeUpdate);
     }
   }, [])
   
@@ -117,6 +119,7 @@ function VideoPlayer(props: VideoProps) {
 
   // Add event listener for duration bar to get time and get thumbnail
   useEffect(() => {
+    const ref = durationBarRef.current
     const onMove = async (e: MouseEvent) => {
       setIsHoverDurationBar(true);
       // Get x position of mouse in duration bar => percent = x / width
@@ -133,12 +136,12 @@ function VideoPlayer(props: VideoProps) {
       setIsHoverDurationBar(false);
     }
 
-    durationBarRef.current?.addEventListener('mousemove', onMove);
-    durationBarRef.current?.addEventListener('mouseleave', onLeave);
+    ref?.addEventListener('mousemove', onMove);
+    ref?.addEventListener('mouseleave', onLeave);
 
     return () => {
-      durationBarRef.current?.removeEventListener('mousemove', onMove);
-      durationBarRef.current?.removeEventListener('mouseleave', onLeave);
+      ref?.removeEventListener('mousemove', onMove);
+      ref?.removeEventListener('mouseleave', onLeave);
     }
 
   }, [file.url, thumbnailLeft, videoDuration])
@@ -151,12 +154,12 @@ function VideoPlayer(props: VideoProps) {
   // isShowActionBar when hover to videoRef, and hide after 3s if not hover or not mouse move
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null;
+    const ref = wrapperRef.current
     const handleMouseMove = () => {
       if(timeout) clearTimeout(timeout);
       setIsShowActionBar(true);
       timeout = setTimeout(() => {
         if(!isOpenVolume) {
-          console.log('hide');
           setIsShowActionBar(false);
         }
       }, 2000);
@@ -171,32 +174,33 @@ function VideoPlayer(props: VideoProps) {
         setIsShowActionBar(false);
       }
     }
-    wrapperRef.current?.addEventListener('mouseenter', handleMouseEnter);
-    wrapperRef.current?.addEventListener('mouseleave', handleMouseLeave);
+    ref?.addEventListener('mouseenter', handleMouseEnter);
+    ref?.addEventListener('mouseleave', handleMouseLeave);
     // Move stop mouse inside video
-    wrapperRef.current?.addEventListener('mousemove', handleMouseMove);
+    ref?.addEventListener('mousemove', handleMouseMove);
 
     return () => {
-      wrapperRef.current?.removeEventListener('mouseenter', handleMouseEnter);
-      wrapperRef.current?.removeEventListener('mouseleave', handleMouseLeave);
-      wrapperRef.current?.removeEventListener('mousemove', handleMouseMove);
+      ref?.removeEventListener('mouseenter', handleMouseEnter);
+      ref?.removeEventListener('mouseleave', handleMouseLeave);
+      ref?.removeEventListener('mousemove', handleMouseMove);
 
       if(timeout) clearTimeout(timeout);
     }
   }, [isOpenVolume])
 
   useEffect(() => {
+    const ref = actionMenuRef.current
     const handleMouseEnter = () => {
       onDisableLongPress && onDisableLongPress(true);
     }
     const handleMouseLeave = () => {
       onDisableLongPress && onDisableLongPress(false);
     }
-    actionMenuRef.current?.addEventListener('mouseenter', handleMouseEnter);
-    actionMenuRef.current?.addEventListener('mouseleave', handleMouseLeave);
+    ref?.addEventListener('mouseenter', handleMouseEnter);
+    ref?.addEventListener('mouseleave', handleMouseLeave);
     return () => {
-      actionMenuRef.current?.removeEventListener('mouseenter', handleMouseEnter);
-      actionMenuRef.current?.removeEventListener('mouseleave', handleMouseLeave);
+      ref?.removeEventListener('mouseenter', handleMouseEnter);
+      ref?.removeEventListener('mouseleave', handleMouseLeave);
     }
   }, [onDisableLongPress])
 

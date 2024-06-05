@@ -54,6 +54,7 @@ export const InputCropImage = forwardRef<
       return;
     }
     if (!isEmpty(files?.[0])) processImageFiles(files[0]?.file);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files, open]);
 
   const {t} = useTranslation("common");
