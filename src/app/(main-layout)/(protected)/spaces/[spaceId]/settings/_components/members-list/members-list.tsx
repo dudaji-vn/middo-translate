@@ -67,7 +67,6 @@ const ReorderList = ({
   const { t } = useTranslation('common');
   const params = useParams();
   const currentUser = useAuthStore((state) => state.user);
-  console.log(data, 'data');
   const onDelete = async (member: Member) => {
     setIsLoading((prev) => ({
       ...prev,
