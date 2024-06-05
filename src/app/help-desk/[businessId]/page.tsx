@@ -29,13 +29,17 @@ const HelpDeskStartConversationPage = async ({
     refer: referer,
     allowedDomains: extensionData.domains,
   });
-  const isRedirectedFromRatePage =
-    referer?.startsWith(
-      `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
-    ) && originReferer;
+  const isRedirectedFromRatePage = referer?.startsWith(
+    `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
+  );
 
   if (!allowedDomain && !isRedirectedFromRatePage) {
     notFound();
+  }
+  if (isRedirectedFromRatePage && !originReferer) {
+    redirect(
+      `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}?originReferer=${referer}`,
+    );
   }
   return (
     <TrackGuest
