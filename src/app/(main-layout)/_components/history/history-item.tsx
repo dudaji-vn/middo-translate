@@ -14,6 +14,7 @@ import { cn } from '@/utils/cn';
 import { useTextCopy } from '@/hooks/use-text-copy';
 import { getFlagEmoji } from '@/utils/get-flag-emoji';
 import { useTranslation } from 'react-i18next';
+import { useAppStore } from '@/stores/app.store';
 
 type TDisplayedItem = {
   languageCode: string;
@@ -30,18 +31,19 @@ const DisplayedItem = ({
 }: TDisplayedItem) => {
   const flag = getCountryCode(languageCode);
   const language = getLanguageByCode(languageCode);
+  const theme = useAppStore(state => state.theme)
   const {t} = useTranslation('common');
   return (
     <div {...props} className={cn("flex w-full flex-col py-[6px] ", props.className)}>
       <div className="flex flex-row items-start justify-between ">
         <div className='flex-col'>
-          <Typography className="flex flex-row items-center gap-2 text-[14px] text-sm font-light leading-[18px] text-neutral-400">
+          <Typography className="flex flex-row items-center gap-2 text-[14px] text-sm font-light leading-[18px] text-neutral-400 dark:text-neutral-400">
             <CircleFlag countryCode={flag as string} className="h-4 w-4" />
             {t('LANGUAGE.' + language?.name)}
           </Typography>
           <Text
             value={content}
-            className=" break-words text-sm font-normal text-neutral-800 leading-[18px] px-1"
+            className=" break-words text-sm font-normal text-neutral-800 dark:text-neutral-50 leading-[18px] px-1"
           />
         </div>
         <CopyZoneClick text={content}>
@@ -56,11 +58,11 @@ const DisplayedItem = ({
       {isShowMiddle && middleTranslation && (
         <div className="relative">
           <TriangleSmall
-            fill={'#f2f2f2'}
+            fill={theme == "dark" ? "#333"  :'#f2f2f2'}
             position="top"
             className="absolute left-4 top-[18px]  -translate-y-full"
           />
-          <div className="mb-1 mt-2 rounded-xl bg-neutral-50 p-3 text-neutral-600 flex gap-2 flex-row items-start">
+          <div className="mb-1 mt-2 rounded-xl bg-neutral-50 dark:bg-neutral-800  p-3 text-neutral-600 dark:text-neutral-50 flex gap-2 flex-row items-start">
             <CircleFlag countryCode={'uk'} className="h-5 w-5 mt-1" />
             <div>
               <Text
@@ -117,7 +119,7 @@ const HistoryItem = ({
   return (
     <motion.div
       className={cn(
-        'flex flex-col bg-white rounded-2xl border cursor-pointer overflow-hidden border-primary-200 [&>*]:p-3 s',
+        'flex flex-col bg-white dark:bg-neutral-950 rounded-2xl border cursor-pointer overflow-hidden border-primary-200 dark:border-primary-800 [&>*]:p-3 s',
         isPresent ? 'static' : 'absolute',
 
       )}
@@ -133,7 +135,7 @@ const HistoryItem = ({
         content={src.content}
         middleTranslation={src.englishContent}
         isShowMiddle={isShowMiddle}
-        className="border-b  border-neutral-50 "
+        className="border-b  border-neutral-50 dark:border-neutral-800"
       />
       <DisplayedItem
         languageCode={dest.language}
@@ -142,7 +144,7 @@ const HistoryItem = ({
         isShowMiddle={isShowMiddle}
       />
 
-      <div className="flex items-center justify-end gap-2 bg-primary-100 py-2 rounded-b-xl">
+      <div className="flex items-center justify-end gap-2 bg-primary-100 dark:bg-primary-900 py-2 rounded-b-xl">
         <Button.Icon
           variant={'default'}
           color={'secondary'}

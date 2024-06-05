@@ -93,7 +93,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
         )}
         <Typography
           className={cn(
-            'relative flex  h-11 w-full flex-row items-center gap-2 border-b px-3 pr-1 py-1 text-left font-semibold text-primary-500-main',
+            'relative flex  h-11 w-full flex-row items-center gap-2 border-b dark:border-neutral-900 px-3 pr-1 py-1 text-left font-semibold text-primary-500-main',
             'max-md:justify-center',
           )}
         >

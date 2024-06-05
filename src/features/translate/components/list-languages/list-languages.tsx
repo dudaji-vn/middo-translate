@@ -165,15 +165,15 @@ const Item = ({
       onClick={onClick}
       key={language.code}
       className={cn(
-        'flex w-full items-center px-5 py-3 active:bg-stroke md:w-1/3 md:hover:bg-background-darker',
-        selected && 'bg-lighter text-primary disabled:bg-lighter',
+        'flex w-full items-center px-5 py-3 active:bg-stroke md:w-1/3 dark:text-neutral-200 ',
+        selected ? 'bg-lighter text-primary disabled:bg-lighter dark:bg-primary-800' : ' md:hover:bg-background-darker dark:md:hover:bg-neutral-800 dark:md:active:bg-neutral-700',
       )}
     >
       {rightElement}
       <span className={cn(selected && 'font-semibold text-primary')}>
         {t('LANGUAGE.' + language.name)}
       </span>
-      {selected && <CheckCircle2Icon className="ml-auto h-5 w-5 " />}
+      {selected && <CheckCircle2Icon className="ml-auto h-5 w-5 dark:text-primary" />}
     </button>
   );
 };

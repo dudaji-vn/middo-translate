@@ -126,7 +126,7 @@ export const TranslateOptionBar = forwardRef<
         ref={ref}
         {...props}
         className={cn(
-          'toolWrapper relative',
+          'toolWrapper relative dark:bg-neutral-950 dark:border-neutral-900 dark:border dark:shadow-3',
           listening ? 'animate' : '',
           isFocused && '!hidden md:!block',
         )}
