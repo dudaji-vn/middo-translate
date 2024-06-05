@@ -38,7 +38,12 @@ const InviteMemberModal = ({
       toast.success('Members invited successfully');
       setMembers([]);
       setOpen(false);
-      queryClient.invalidateQueries([GET_SPACE_DATA_KEY, { spaceId }]);
+      queryClient.invalidateQueries([
+        GET_SPACE_DATA_KEY,
+        {
+          spaceId: space._id,
+        },
+      ]);
       router.refresh();
     } catch (error) {
       console.log(error);
