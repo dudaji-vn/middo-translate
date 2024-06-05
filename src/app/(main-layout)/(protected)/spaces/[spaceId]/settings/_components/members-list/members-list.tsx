@@ -8,6 +8,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import {
+  changeRole,
   removeMemberFromSpace,
   resendInvitation,
 } from '@/services/business-space.service';
@@ -15,7 +16,7 @@ import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { cn } from '@/utils/cn';
 import { Button } from '@/components/actions';
-import { isEmpty } from 'lodash';
+import { isEmpty, set } from 'lodash';
 import { useAuthStore } from '@/stores/auth.store';
 import { Member } from '../../../_components/spaces-crud/sections/members-columns';
 import InviteMemberModal from './invite-member-modal';
@@ -145,6 +146,7 @@ const ListItems = ({
     email: string;
   };
 } & React.HTMLAttributes<HTMLDivElement>) => {
+  console.log('data', data);
   const [isLoading, setIsLoading] = React.useState<Record<string, boolean>>({});
   const { t } = useTranslation('common');
   const params = useParams();
@@ -205,16 +207,14 @@ const ListItems = ({
   const isEmptyData = isEmpty(data);
 
   return (
-    <div className="flex flex-col gap-1 overflow-x-auto pr-10 md:min-w-[400px]">
+    <div className="flex flex-col gap-1 overflow-x-auto md:min-w-[400px]">
       <p
         className={cn(
           'w-full py-1 text-center text-sm font-light italic text-neutral-500',
           !isEmptyData && 'hidden',
         )}
       >
-        {isAdmin
-          ? t('EXTENSION.MEMBER.NO_ADMIN')
-          : t('EXTENSION.MEMBER.NO_MEMBER')}
+        {t('EXTENSION.MEMBER.NO_MEMBER')}
       </p>
       <div
         className={cn(
@@ -222,7 +222,7 @@ const ListItems = ({
           isEmptyData && 'hidden',
         )}
       >
-        <div className="invisible !w-[50px]"></div>
+        <div className="invisible !w-[50px]" />
         <div className="flex  h-auto w-[400px] flex-row items-center justify-start break-words px-3 md:w-[500px] xl:w-[800px]">
           <Typography className="text-sm  font-light text-neutral-800">
             {t('EXTENSION.MEMBER.EMAIL')}
@@ -238,31 +238,52 @@ const ListItems = ({
       </div>
 
       {data?.map((member, index) => {
-        return (
-          <div className="grid w-full grid-cols-[48px_auto]" key={member._id}>
-            <div className="!w-fit bg-white p-1 py-2 ">
-              <Reorder.Item key={member._id} value={member._id}>
-                <Button.Icon
-                  size={'xs'}
-                  shape={'square'}
-                  variant={'ghost'}
-                  color={'default'}
-                >
-                  <GripVertical className="fill-neutral-500 stroke-neutral-500" />
-                </Button.Icon>
-              </Reorder.Item>
+        if (member.role === 'divider') {
+          return (
+            <div
+              key={'divider'}
+              className="mt-3 flex w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]"
+            >
+              <UserCog
+                size={16}
+                className="stroke-[3px] text-primary-500-main"
+              />
+              <Typography className="text-primary-500-main ">
+                {t('EXTENSION.ROLE.MEMBER_ROLE')}
+              </Typography>
             </div>
-            <MemberItem
-              {...member}
-              myRole={myRole}
-              isMe={member.email === currentUser?.email}
-              isOwnerRow={member.email === owner.email}
-              onResendInvitation={onResendInvitation}
-              onDelete={onDelete}
-              isLoading={isLoading[member.email]}
-              {...props}
-            />
-          </div>
+          );
+        }
+        return (
+          <>
+            <div
+              className="grid w-full grid-cols-[48px_auto] pr-10"
+              key={member.email}
+            >
+              <div className="!w-fit bg-white p-1 py-2 ">
+                <Reorder.Item key={member.email} value={member.email}>
+                  <Button.Icon
+                    size={'xs'}
+                    shape={'square'}
+                    variant={'ghost'}
+                    color={'default'}
+                  >
+                    <GripVertical className="fill-neutral-500 stroke-neutral-500" />
+                  </Button.Icon>
+                </Reorder.Item>
+              </div>
+              <MemberItem
+                {...member}
+                myRole={myRole}
+                isMe={member.email === currentUser?.email}
+                isOwnerRow={member.email === owner.email}
+                onResendInvitation={onResendInvitation}
+                onDelete={onDelete}
+                isLoading={isLoading[member.email]}
+                {...props}
+              />
+            </div>
+          </>
         );
       })}
     </div>
@@ -271,6 +292,7 @@ const ListItems = ({
 
 const MembersList = ({ space }: { space: TSpace }) => {
   const [search, setSearch] = React.useState('');
+  const router = useRouter();
   const { members, owner } = space;
   const [order, setOrder] = useState(members || []);
   const { t } = useTranslation('common');
@@ -282,8 +304,21 @@ const MembersList = ({ space }: { space: TSpace }) => {
   const onSearchChange = (search: string) => {
     setSearch(search.trim());
   };
-  const onMemberRoleChange = (params: any) => {
-    console.log('params', params);
+  const onMemberRoleChange = (id: string, role: ESPaceRoles) => {
+    console.log('CHANG ROLE OF id', id, 'role', role);
+    changeRole({
+      email: id,
+      role,
+      spaceId: space._id,
+    })
+      .then(() => {
+        toast.success('Role changed successfully');
+        router.refresh();
+      })
+      .catch((err) => {
+        console.error('Error on changeRole:', err);
+        toast.error('Error on change role');
+      });
   };
 
   useEffect(() => {
@@ -295,7 +330,21 @@ const MembersList = ({ space }: { space: TSpace }) => {
           );
         })
       : members;
-    setOrder(filteredMembers || []);
+    const sortedMembers = filteredMembers?.sort((a, b) =>
+      a.role === ESPaceRoles.Owner || a.role === ESPaceRoles.Admin ? 1 : -1,
+    );
+    const { ads, mems } = sortedMembers.reduce(
+      (acc, member) => {
+        if (member.role === ESPaceRoles.Admin) {
+          acc.ads.push(member);
+        } else {
+          acc.mems.push(member);
+        }
+        return acc as { ads: Member[]; mems: Member[] };
+      },
+      { ads: [] as Member[], mems: [] as Member[] },
+    );
+    setOrder([...ads, { email: 'divider', role: 'divider' }, ...mems]);
   }, [members, search]);
 
   return (
@@ -315,44 +364,43 @@ const MembersList = ({ space }: { space: TSpace }) => {
         ) && <InviteMemberModal space={space} myRole={myRole} />}
       </div>
       <Reorder.Group
-        values={order.map((member) => member._id)}
+        values={order.map((member) => member.email)}
         onReorder={(values) => {
-          setOrder(
-            values.map((id) => order.find((m) => m._id === id) as Member),
+          const oldDividerIndex = order.findIndex(
+            (member) => member.email === 'divider',
           );
+          const newDividerIndex = values.findIndex(
+            (email) => email === 'divider',
+          );
+          const membersAboveDivider = values.slice(0, newDividerIndex);
+          const membersBelowDivider = values.slice(newDividerIndex + 1);
+          const membersBecomeAdmin = membersAboveDivider.filter(
+            (email) =>
+              members.find((member) => member.email === email)?.role ===
+              ESPaceRoles.Member,
+          );
+          const adminsBecomeMember = membersBelowDivider.filter((email) => {
+            const member = members.find((member) => member.email === email);
+            return member?.role === ESPaceRoles.Admin;
+          });
+          if (membersBecomeAdmin.length && newDividerIndex > oldDividerIndex) {
+            onMemberRoleChange(membersBecomeAdmin[0], ESPaceRoles.Admin);
+          } else if (
+            adminsBecomeMember.length &&
+            newDividerIndex < oldDividerIndex
+          ) {
+            onMemberRoleChange(adminsBecomeMember[0], ESPaceRoles.Member);
+          }
         }}
         className=" w-full"
       >
-        <div className="flex w-full flex-col gap-1">
-          <div className="flex  w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]">
-            <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
-            <Typography className="text-primary-500-main ">
-              {t('EXTENSION.ROLE.ADMIN_ROLE')}
-            </Typography>
-          </div>
-          <ListItems
-            data={order.filter((member) => member.role !== ESPaceRoles.Member)}
-            owner={owner}
-            isAdmin
-            myRole={myRole}
-          />
+        <div className="flex  w-full flex-row items-center gap-3 bg-[#fafafa] py-4 font-semibold sm:p-[20px_40px]">
+          <UserCog size={16} className="stroke-[3px] text-primary-500-main" />
+          <Typography className="text-primary-500-main ">
+            {t('EXTENSION.ROLE.ADMIN_ROLE')}
+          </Typography>
         </div>
-        <div className="mt-3 flex w-full flex-col gap-1">
-          <div className="flex w-full flex-row  items-center gap-3  bg-[#fafafa] py-4 font-semibold  sm:p-[20px_40px]">
-            <UserRound
-              size={16}
-              className="stroke-[3px] text-primary-500-main"
-            />
-            <Typography className="text-primary-500-main">
-              {t('EXTENSION.ROLE.MEMBER_ROLE')}
-            </Typography>
-          </div>
-          <ListItems
-            data={order.filter((member) => member.role === ESPaceRoles.Member)}
-            owner={owner}
-            myRole={myRole}
-          />
-        </div>
+        <ListItems data={order} owner={owner} myRole={myRole} />
       </Reorder.Group>
     </section>
   );
