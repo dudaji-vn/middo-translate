@@ -31,7 +31,7 @@ export const FakeMessage = ({
         messageVariants({
           sender: 'me',
         }),
-        'my-1',
+        'my-2',
       )}
     >
       <div
