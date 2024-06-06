@@ -644,6 +644,12 @@
     "START_STOP_SCREEN_DOODLE": "화면 드로잉 시작/정지",
     "TOGGLE_LIVE_CAPTION": "라이브 자막 보기/숨기기"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "확장 프로그램을 로드할 수 없음",
+      "DESCRIPTION": "임베드 코드를 다시 확인하거나 도메인이 목록에 추가되었는지 확인하세요."
+    }
+  },
   "EXTENSION": {
     "ALL_DOMAINS": "모든 도메인",
     "ALL_MEMBERS": "모든 구성원",

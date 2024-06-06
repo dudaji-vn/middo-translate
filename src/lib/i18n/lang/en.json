@@ -652,6 +652,12 @@
     "START_STOP_SCREEN_DOODLE": "Start/Stop Screen Doodle",
     "TOGGLE_LIVE_CAPTION": "Show/Hide Live Caption"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "Can not load extension",
+      "DESCRIPTION": "Please check if your extension script is correct, or your domain is in the list of allowed domains."
+    }
+  },
   "EXTENSION": {
     "ALL_DOMAINS": "All Domains",
     "ALL_MEMBERS": "All Members",
