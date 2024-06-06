@@ -37,14 +37,14 @@ const HelpDeskConversationPage = async ({
   const chatFlow = room?.chatFlow;
 
   return (
-    <HelpDeskConversation
-      chatFlow={chatFlow}
-      params={{ slugs }}
-      anonymousUser={anonymousUser}
-      room={room}
-      className={theme.name}
-      isAnonymousPage
-    />
+      <HelpDeskConversation
+        chatFlow={chatFlow}
+        params={{ slugs }}
+        anonymousUser={anonymousUser}
+        room={room}
+        className={theme.name}
+        isAnonymousPage
+      />
   );
 };
 

@@ -525,6 +525,9 @@ body {
   height: calc(100dvh - 52px);
 }
 
+.helpdesk-widget-height {
+  height: calc(100dvh - 64px);
+}
 .extension-container-height {
   height: calc(100dvh - 52px);
 }

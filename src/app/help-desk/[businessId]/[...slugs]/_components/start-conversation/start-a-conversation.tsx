@@ -158,8 +158,10 @@ const StartAConversation = ({
   return (
     <div
       className={cn(
-        'flex h-full w-full flex-col justify-between px-4 py-3',
-        isAfterDoneAConversation ? 'my-auto max-h-60' : 'container-height pb-5',
+        'flex !h-[87%]  w-full  flex-col justify-between rounded-b-xl  px-4 py-3 shadow-md',
+        isAfterDoneAConversation
+          ? 'my-auto max-h-full'
+          : 'container-height pb-5',
       )}
     >
       {isAfterDoneAConversation ? (

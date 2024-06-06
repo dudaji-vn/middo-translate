@@ -219,12 +219,11 @@ const TestItOut = ({
   if (!currentUser || !flow || !nodes || !edges || !spaceId) return null;
 
   return (
-    <>
-      <main className="container-height relative w-full  bg-primary-100 bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
-        <div className="absolute inset-0 bg-neutral-100 bg-opacity-25" />
+      <main className="container-height relative w-full   bg-opacity-0 bg-cover bg-no-repeat">
+        <div className="absolute inset-0   bg-opacity-0 " />
         <div
           className={cn(
-            'fixed bottom-2 right-0 flex h-fit w-full flex-col gap-4 divide-y divide-neutral-50 sm:right-10 sm:w-[410px]',
+            'fixed bottom-2 right-0 flex h-fit w-full flex-col gap-4 sm:right-10 sm:w-[410px]',
           )}
         >
           <div
@@ -360,7 +359,6 @@ const TestItOut = ({
           </div>
         </div>
       </main>
-    </>
   );
 };
 

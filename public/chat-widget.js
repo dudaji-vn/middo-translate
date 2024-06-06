@@ -67,7 +67,7 @@
                   border-radius: 9999px;
                   color: white;
                   cursor: pointer;
-                  background-color: var(--grey-color); /* Use custom color variable */
+                  // background-color: var(--grey-color); /* Use custom color variable */
                   border-style: none;
               }
               .h-7 {
@@ -129,48 +129,47 @@
       icon_close: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-7 h-7"><line x1="18" x2="6" y1="6" y2="18"></line><line x1="6" x2="18" y1="6" y2="18"></line></svg>`,
       icon_message: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square w-6 h-6"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5Z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>`,
     };
+
     const domain = window.location.host;
     chatWidget.id = 'chat-widget';
     const srcWithDomain = `${chatSRC}?domain=${domain}`;
     chatWidget.innerHTML = `
               <iframe 
-                id="chat-frame-widget" 
+                id="chat-frame-widget"
                 src="${srcWithDomain}"
                 class="ring-1 rounded-lg iframe_inset" 
-                style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+                style="
                   border: none; 
                   position: fixed; 
                   width: 400px;
-                  height: 540px; 
+                  height: 640px; 
                   opacity: 1; 
                   color-scheme: none; 
-                  background: white !important; margin: 0px; max-height: 100vh;
+                  background: margin: 0px; max-height: 100vh;
                   max-width: 100vw; transform: translateY(0px);                   
                   visibility: visible; 
                   z-index: 999999999 !important;">
                   </iframe>
-              <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="245,456.701 490,33.299 0,33.299 "></polygon> </g></svg>
-              <button id="btn-trigger-chat" class="shadow-xl ring-1">${components.icon_message}</button>
               `;
 
     document.head.insertAdjacentHTML('beforeend', styleTag);
     document.body.appendChild(chatWidget);
 
-    const btn = document.getElementById('btn-trigger-chat');
+    // const btn = document.getElementById('btn-trigger-chat');
     const frameWidget = document.getElementById('chat-frame-widget');
-    const triangleWidget = document.getElementById('widget_triangle');
+    // const triangleWidget = document.getElementById('widget_triangle');
     // frameWidget.style.display = 'none';
-    btn.addEventListener('click', () => {
-      if (btn.innerHTML === components.icon_message) {
-        btn.innerHTML = components.icon_close;
-        frameWidget.classList.add('active');
-        triangleWidget.classList.add('active');
-      } else {
-        btn.innerHTML = components.icon_message;
-        frameWidget.classList.remove('active');
-        triangleWidget.classList.remove('active');
-      }
-    });
+    // btn.addEventListener('click', () => {
+    //   if (btn.innerHTML === components.icon_message) {
+    //     btn.innerHTML = components.icon_close;
+    frameWidget.classList.add('active');
+    //     triangleWidget.classList.add('active');
+    //   } else {
+    //     btn.innerHTML = components.icon_message;
+    //     frameWidget.classList.remove('active');
+    //     triangleWidget.classList.remove('active');
+    //   }
+    // });
   }
 
   window.ChatWidget = {
