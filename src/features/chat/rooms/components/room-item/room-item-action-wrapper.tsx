@@ -76,7 +76,7 @@ const WAITING_ALLOWED_ACTIONS: Action[] = [
 ];
 
 const CONTACT_ALLOWED_ACTIONS: Action[] = [
-  'talk',
+  'copy_username',
   'block', 
   'delete-contact',
 ];

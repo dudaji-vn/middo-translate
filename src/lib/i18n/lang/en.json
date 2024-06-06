@@ -350,6 +350,7 @@
     "FORWARD": "Forward",
     "PIN": "Pin",
     "LEAVE": "Leave",
+    "COPY_USERNAME": "Copy username",
     "TALK": "Start conversation",
     "DELETE_CONTACT": "Delete contact",
     "ON": "On",

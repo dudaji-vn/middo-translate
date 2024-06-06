@@ -19,6 +19,7 @@ import { useNetworkStatus } from '@/utils/use-network-status';
 import { useAppStore } from '@/stores/app.store';
 import { generateRoomDisplay } from '../utils';
 import { useAuthStore } from '@/stores/auth.store';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ChatBoxContextProps {
   room: Room;
@@ -37,7 +38,7 @@ export const ChatBoxProvider = ({
   const currentUserId = useAuthStore((state) => state.user?._id);
   const { isOnline } = useNetworkStatus();
   const { socketConnected } = useAppStore();
-
+  const queryClient = useQueryClient();
   const [room, setRoom] = useState<Room>(_room);
   const roomDisplay = useMemo(
     () => generateRoomDisplay(room, currentUserId || ''),
@@ -55,6 +56,11 @@ export const ChatBoxProvider = ({
     },
     [room._id, router],
   );
+  const handleDeleteContact = useCallback(()=> {
+    queryClient.invalidateQueries(['rooms', 'contact']);
+    queryClient.invalidateQueries(['rooms', 'waiting']);
+  }, [queryClient]);
+
   useEffect(() => {
     if (socketConnected) {
       socket.emit(SOCKET_CONFIG.EVENTS.CHAT.JOIN, {
@@ -70,17 +76,19 @@ export const ChatBoxProvider = ({
       });
     };
   }, [notifyToken, room._id, isOnline, socketConnected]);
-
+  
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.UPDATE, updateRoom);
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, handleForceLeaveRoom);
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.LEAVE, handleForceLeaveRoom);
+    socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE_CONTACT, handleDeleteContact);
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.ROOM.UPDATE, updateRoom);
       socket.off(SOCKET_CONFIG.EVENTS.ROOM.DELETE);
       socket.off(SOCKET_CONFIG.EVENTS.ROOM.LEAVE);
+      socket.off(SOCKET_CONFIG.EVENTS.ROOM.DELETE_CONTACT);
     };
-  }, [handleForceLeaveRoom, room._id, updateRoom]);
+  }, [handleDeleteContact, handleForceLeaveRoom, room._id, updateRoom]);
 
   return (
     <ChatBoxContext.Provider

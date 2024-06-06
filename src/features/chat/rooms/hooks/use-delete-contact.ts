@@ -6,8 +6,8 @@ export const useDeleteContact = () => {
   return useMutation({
     mutationFn: roomApi.deleteContact,
     onSuccess: (_, roomId) => {
-      queryClient.invalidateQueries(['rooms', 'contact', undefined]);
-      queryClient.invalidateQueries(['rooms', 'waiting', undefined]);
+      queryClient.invalidateQueries(['rooms', 'contact']);
+      queryClient.invalidateQueries(['rooms', 'waiting']);
     },
   });
 };

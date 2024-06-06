@@ -4,11 +4,9 @@ import {
   BanIcon,
   BellIcon,
   BellOffIcon,
-  CheckCheckIcon,
   CheckCircle2Icon,
-  CheckCircleIcon,
+  CopyIcon,
   LogOut,
-  MessagesSquareIcon,
   PinIcon,
   PinOffIcon,
   Tag,
@@ -31,10 +29,8 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useUnBlockUser } from '@/features/users/hooks/use-unblock-user';
 import { useAccept } from '../hooks/use-accept';
 import { RoomModalReject } from './room.modal-reject';
-import { useRoomItem } from './room-item/room-item';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import { RoomModalDeleteContact } from './room.modal-delete-contact';
-import { useRouter } from 'next/navigation';
+import { useTextCopy } from '@/hooks/use-text-copy';
 
 export type Action =
   | 'delete'
@@ -51,7 +47,7 @@ export type Action =
   | 'unblock'
   | 'accept'
   | 'reject'
-  | 'talk'
+  | 'copy_username'
   | 'delete-contact'
 ;
 
@@ -89,9 +85,9 @@ export const useRoomActions = () => {
 };
 export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const [room, setRoom] = useState<Room | null>(null);
-  const router = useRouter();
   const currentUserId = useAuthStore((state) => state.user?._id);
   const [action, setAction] = useState<Action>('none');
+  const { copy } = useTextCopy();
   const { mutate: pin } = usePinRoom();
   const { accept } = useAccept();
   const { toggleArchive } = useToggleArchiveRoom();
@@ -136,8 +132,12 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
       case 'accept':
         accept(roomId);
         break;
-      case 'talk':
-        router.push(`${ROUTE_NAMES.ONLINE_CONVERSATION}/${roomId}`);
+      case 'copy_username':
+        const username = room.participants.find(
+          (participant) => participant._id !== currentUserId,
+        )?.username;
+        if (!username) return;
+        copy(username);
         break;
       default:
         setAction(action);
@@ -191,9 +191,9 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const actionItems: ActionItem[] = useMemo(() => {
     return [
       {
-        action: 'talk',
-        label: 'CONVERSATION.TALK',
-        icon: <MessagesSquareIcon />,
+        action: 'copy_username',
+        label: 'CONVERSATION.COPY_USERNAME',
+        icon: <CopyIcon />,
       },
       {
         action: 'pin',

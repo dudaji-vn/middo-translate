@@ -20,7 +20,7 @@ export function generateRoomDisplay(
         (user) => user._id.toString() === currentUserId,
       );
       if (isInWaitingList) {
-        status = 'waiting';
+        status = 'waiting_group';
       }
     } else if (waitingUsers.length > 0) {
       status = 'waiting';

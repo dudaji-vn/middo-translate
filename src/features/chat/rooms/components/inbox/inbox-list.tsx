@@ -1,4 +1,4 @@
-import { forwardRef, memo, useEffect, useMemo } from 'react';
+import { Fragment, forwardRef, memo, useEffect, useMemo } from 'react';
 
 import { InfiniteScroll } from '@/components/infinity-scroll';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -30,7 +30,9 @@ import ViewSpaceInboxFilter from './view-space-inbox-filter';
 interface InboxListProps {
   type: InboxType;
 }
-
+const TAB_SORT_BY_NAME = [
+  'contact'
+]
 const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
   ({ type }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
@@ -45,7 +47,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
-
+    const isSortByName = TAB_SORT_BY_NAME.includes(type)
+    
     const key = useMemo(() => {
       if (spaceId) {
         return ['rooms', type, spaceId, status, appliedFilters];
@@ -76,8 +79,28 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
           filterOptions: spaceId ? appliedFilters : undefined,
         }),
     });
+
+    const sortedRooms = useMemo(() => {
+      if(!isSortByName) return rooms;
+      let roomsClone = [...rooms];
+      roomsClone.sort((a, b) => {
+        const aParticipants = a.participants.find((p) => p._id !== currentUser?._id);
+        const bParticipants = b.participants.find((p) => p._id !== currentUser?._id);
+        if(!aParticipants || !bParticipants) return 0;
+        return aParticipants?.name?.toLowerCase() < bParticipants?.name?.toLowerCase() ? -1 : 1
+      })
+      return roomsClone.map(r => {
+        if(r.name) return r;
+        const anotherUser = r.participants.find((p) => p._id !== currentUser?._id);
+        return { ...r, name: anotherUser?.name }
+      })
+    }, [currentUser?._id, isSortByName, rooms]);
+    
+    let isShowChar = true;
+
     const { rooms: pinnedRooms, refetch: refetchPinned } =
       useGetPinnedRooms(spaceId);
+    
 
     const queryClient = useQueryClient();
 
@@ -112,6 +135,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
     const showEmptyInbox = useMemo(() => {
       if (rooms.length || isLoading) return false;
       if (type === 'all' || type === 'group') {
@@ -125,7 +149,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (showEmptyInbox) {
       return <EmptyInbox type={type} />;
     }
-
+    
     const showFilter =
       Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
     
@@ -160,25 +184,43 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               currentRoomId={currentRoomId as string}
             />
             {
-              rooms.map((room) => {
+              sortedRooms.map((room, index) => {
                 const isOnline = isRoomOnline({
                   currentUser,
                   room,
                   onlineList,
                   isBusiness,
                 });
-    
+
+                const nextRoom = sortedRooms[index + 1];
+                const isCurrentShow = isShowChar
+                if (
+                  nextRoom 
+                  && nextRoom.name?.charAt(0).toLowerCase() === room.name?.charAt(0).toLowerCase()) {
+                  isShowChar = false;
+                } else {
+                  isShowChar = true;
+                }
+                
                 return (
-                  <RoomItem
-                    showTime={type !== 'contact'}
-                    type={type}
-                    isOnline={isOnline}
-                    key={room._id}
-                    data={room}
-                    isActive={currentRoomId === room._id}
-                    currentRoomId={currentRoomId as string}
-                    businessId={businessExtension?._id}
-                  />
+                  <Fragment key={room._id}>
+                    {
+                      isSortByName && isCurrentShow && <span className="block px-3 py-1 my-2 mx-3 text-neutral-500 text-xs border-b border-neutral-50">
+                        {room.name?.charAt(0).toUpperCase()}
+                      </span>
+                    }
+                    <RoomItem
+                      showTime={type !== 'contact'}
+                      type={type}
+                      isOnline={isOnline}
+                      
+                      data={room}
+                      isActive={currentRoomId === room._id}
+                      currentRoomId={currentRoomId as string}
+                      businessId={businessExtension?._id}
+                    />
+                  </Fragment>
+                  
                 );
               })
             }

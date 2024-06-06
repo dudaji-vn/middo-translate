@@ -54,7 +54,7 @@ const ChatRoomMain = ({ room }: { room: Room }) => {
         <MediaUploadDropzone>
           <MessagesBoxProvider room={room}>
             <MessageActions>
-              {room.status === 'waiting' && room.isGroup ? null : (
+              {room.status === 'waiting_group' && room.isGroup ? null : (
                 <>
                   <MessageBox room={room} />
                   <RoomTyping />
