@@ -18,7 +18,6 @@ export enum ESpaceChart {
   RESPONSE_MESSAGE = 'responsedMessage',
 }
 
-
 export type AnalysisData = Record<
   ESpaceChart,
   {
@@ -49,3 +48,5 @@ export const DEFAULT_CLIENTS_PAGINATION = {
   currentPage: 1,
   search: '',
 };
+
+export const DEFAULT_SCRIPTS_PAGINATION = DEFAULT_CLIENTS_PAGINATION;

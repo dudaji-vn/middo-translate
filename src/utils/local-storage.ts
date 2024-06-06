@@ -1,6 +1,10 @@
-
-import { ACCEPT_DIFF_RESULT, LIMIT_CLIENTS_TABLE } from '@/configs/store-key';
+import {
+  ACCEPT_DIFF_RESULT,
+  LIMIT_CLIENTS_TABLE,
+  LIMIT_SCRIPTS_TABLE,
+} from '@/configs/store-key';
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
+import { DEFAULT_SCRIPTS_PAGINATION } from '@/types/scripts.type';
 
 export const getAcceptDiffResult = () => {
   const diffResult = localStorage.getItem(ACCEPT_DIFF_RESULT);
@@ -21,10 +25,24 @@ export const getClientsTablePerpage = () => {
     const limit = parseInt(String(localStorage.getItem(LIMIT_CLIENTS_TABLE)));
     return limit ? limit : DEFAULT_CLIENTS_PAGINATION.limit;
   } catch (error) {
-    console.log('error', error)
+    console.log('error', error);
     return DEFAULT_CLIENTS_PAGINATION.limit;
   }
 };
 export const setClientsTablePerpage = (limit: number) => {
   localStorage.setItem(LIMIT_CLIENTS_TABLE, String(limit));
+};
+
+export const getScriptsTablePerpage = () => {
+  try {
+    const limit = parseInt(String(localStorage.getItem(LIMIT_SCRIPTS_TABLE)));
+    return limit ? limit : DEFAULT_SCRIPTS_PAGINATION.limit;
+  } catch (error) {
+    console.log('error', error);
+    return DEFAULT_SCRIPTS_PAGINATION.limit;
+  }
+};
+
+export const setScriptsTablePerpage = (limit: number) => {
+  localStorage.setItem(LIMIT_SCRIPTS_TABLE, String(limit));
 };
