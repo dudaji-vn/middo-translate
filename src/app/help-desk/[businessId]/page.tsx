@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { headers } from 'next/headers';
 import { getAllowedDomain } from '@/utils/allowed-domains';
@@ -21,28 +21,36 @@ const HelpDeskStartConversationPage = async ({
 }) => {
   const extensionData = await businessAPI.getExtensionByBusinessId(businessId);
   if (!extensionData) {
-    notFound();
+    return (
+      <section className="flex h-screen items-center justify-center">
+        <h1>Extension not found</h1>
+        <p>
+          Please check if your extension script is correct, or your domain is
+          allowed for this extension.
+        </p>
+      </section>
+    );
   }
-
-  console.log('domain', domain);
   const headersList = headers();
-  const referer = domain || headersList.get('referer');
+  const referer = domain || originReferer || headersList.get('referer');
   const allowedDomain = getAllowedDomain({
     refer: referer,
     allowedDomains: extensionData.domains,
   });
-  const isRedirectedFromRatePage = referer?.startsWith(
-    `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
-  );
+  const isRedirectedFromRatePage =
+    referer?.startsWith(
+      `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
+    ) && originReferer;
 
-  if (!allowedDomain && !isRedirectedFromRatePage) {
-    notFound();
-  }
+  // if (!allowedDomain && !isRedirectedFromRatePage) {
+  //   notFound();
+  // }
 
   return (
     <TrackGuest
       extensionId={businessId}
       domain={String(isRedirectedFromRatePage ? originReferer : allowedDomain)}
+      invalidDomain={!allowedDomain && !isRedirectedFromRatePage}
     >
       <StartAConversation
         visitorData={headersList}

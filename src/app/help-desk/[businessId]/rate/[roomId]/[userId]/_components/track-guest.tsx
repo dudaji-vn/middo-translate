@@ -6,8 +6,9 @@ import React, { useCallback, useEffect } from 'react';
 
 const TrackGuest = ({
   children,
+  invalidDomain = false,
   ...guestProps
-}: { extensionId: string; domain: string } & {
+}: { extensionId: string; domain: string; invalidDomain: boolean } & {
   children?: React.ReactNode;
 }) => {
   const onTrackingGuest = useCallback(
@@ -31,6 +32,18 @@ const TrackGuest = ({
     localStorage.setItem(LSK_FROM_DOMAIN, guestProps.domain);
     onTrackingGuest(guestProps);
   }, [guestProps, onTrackingGuest]);
+
+  if (invalidDomain) {
+    return (
+      <section className="flex h-screen items-center justify-center">
+        <h1>Extension not found</h1>
+        <p>
+          Please check if your extension script is correct, or your domain is
+          allowed for this extension.
+        </p>
+      </section>
+    );
+  }
 
   return <>{children}</>;
 };
