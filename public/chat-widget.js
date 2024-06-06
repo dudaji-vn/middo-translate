@@ -1,4 +1,5 @@
 (function () {
+
   function intChatInterface(chatSRC, primaryColor = 'default') {
     const colorMap = {
       default: '#3D88ED',
@@ -60,8 +61,8 @@
                   margin-left: auto;
                   margin-top: auto;
                   display: inline-flex;
-                  height: 3rem;
-                  width: 3rem;
+                  height: 56px;
+                  width: 56px;  
                   align-items: center;
                   justify-content: center;
                   border-radius: 9999px;
@@ -151,8 +152,14 @@
                   visibility: visible; 
                   z-index: 999999999 !important;">
                   </iframe>
-              <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="245,456.701 490,33.299 0,33.299 "></polygon> </g></svg>
-              <button id="btn-trigger-chat" class="shadow-xl ring-1">${components.icon_message}</button>
+                <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="245,456.701 490,33.299 0,33.299 "></polygon> </g></svg>
+                <div id="iframe-trigger" style="position: relative; width: 64px; height: 64px;">
+                    <iframe   src="http://localhost:3000/widget-button" style="position: relative; width: 100px; height: 100px; border: none;  ">
+                    </iframe>
+                    <button id="btn-trigger-chat" style="position: absolute; bottom: 0; right: 0; opacity: 0;"
+                    >
+                    </button>
+                </div>
               `;
 
     document.head.insertAdjacentHTML('beforeend', styleTag);
@@ -161,8 +168,8 @@
     const btn = document.getElementById('btn-trigger-chat');
     const frameWidget = document.getElementById('chat-frame-widget');
     const triangleWidget = document.getElementById('widget_triangle');
-    // frameWidget.style.display = 'none';
-    btn.addEventListener('click', () => {
+
+    document.getElementById('iframe-trigger').addEventListener('click', () => {
       if (btn.innerHTML === components.icon_message) {
         btn.innerHTML = components.icon_close;
         frameWidget.classList.add('active');
