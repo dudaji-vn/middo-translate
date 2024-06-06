@@ -131,19 +131,6 @@ const RoomAssignTag = ({
                     </div>
                     <Circle size={12} fill={color} stroke={color} />
                     <span className="text-base text-neutral-700">{name}</span>
-                    <Button.Icon
-                      size={'xs'}
-                      variant={'ghost'}
-                      color={'default'}
-                      className={cn(
-                        'invisible absolute inset-y-[2px] right-1',
-                        {
-                          visible: !isLoading && isCurrent,
-                        },
-                      )}
-                    >
-                      <XIcon />
-                    </Button.Icon>
                   </div>
                 );
               })}

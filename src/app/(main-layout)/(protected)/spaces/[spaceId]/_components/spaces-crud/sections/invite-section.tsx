@@ -288,6 +288,7 @@ const InviteMembers = ({
           </div>
         </div>
         <DataTable
+          customEmpty={t('EXTENSION.SPACE.NO_MEMBER')}
           tableHeadProps={{
             className: 'bg-transparent',
           }}
