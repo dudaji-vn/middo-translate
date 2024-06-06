@@ -100,7 +100,9 @@ const LanguageRank = ({
       <div className="flex w-full flex-col gap-4 md:flex-row">
         <LanguagePieChart
           languagesRank={dataSlice}
-          othersCount={others.reduce((acc, item) => acc + item.count, 0)}
+          othersCount={
+            (([...piesData].pop()?.value * total).toFixed(0) || 0) as number
+          }
           data={piesData}
           className="flex h-[250px] w-full justify-start md:w-[250px] md:flex-col md:items-start"
         />
