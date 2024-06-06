@@ -132,7 +132,9 @@ const StartAConversation = ({
   }, []);
 
   if (!isClient) return null;
-  const submit = async (values: z.infer<typeof createGuestInfoSchema>) => {
+  const submitStartAChat = async (
+    values: z.infer<typeof createGuestInfoSchema>,
+  ) => {
     try {
       setLoading(true);
       await startAGuestConversation({
@@ -196,7 +198,7 @@ const StartAConversation = ({
         >
           <Form {...methods}>
             <form
-              onSubmit={handleSubmit(submit)}
+              onSubmit={handleSubmit(submitStartAChat)}
               className="mx-auto flex max-w-md flex-col justify-center space-y-4"
             >
               <Typography className="w-full text-center text-2xl font-semibold leading-7 tracking-normal text-neutral-600">
