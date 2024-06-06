@@ -5,7 +5,7 @@ import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { MessagesSquare, Minus } from 'lucide-react';
+import { MessagesSquare, Minus, X } from 'lucide-react';
 import Image from 'next/image';
 import { Triangle } from '@/components/icons';
 import { TimeDisplay } from '@/features/chat/messages/components/time-display';
@@ -319,7 +319,7 @@ const TestItOut = ({
               </div>
               <div className="">
                 {isTyping && <FakeTyping name={space?.name} />}
-                <div className="relative w-full border-t p-2">
+                <div className="relative w-full  p-2">
                   <MessageActions>
                     <MediaUploadProvider>
                       <MessageEditor
@@ -351,7 +351,11 @@ const TestItOut = ({
               onClick={onTriggerBtnClick}
               className="relative w-fit  rounded-full bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]"
             >
-              <MessagesSquare className={`h-6 w-6`} stroke={themeColor} />
+              {shrinked ? (
+                <MessagesSquare className={`h-6 w-6`} stroke={themeColor} />
+              ) : (
+                <X className={`h-6 w-6`} stroke={themeColor} />
+              )}
             </button>
           </div>
         </div>
