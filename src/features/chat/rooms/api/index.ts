@@ -228,4 +228,11 @@ export const roomApi = {
     );
     return res.data;
   },
+
+  async deleteContact(roomId: string) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/delete-contact`,
+    );
+    return res.data;
+  }
 };

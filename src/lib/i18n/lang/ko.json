@@ -346,6 +346,9 @@
     "FORWARD": "전달",
     "PIN": "고정",
     "LEAVE": "나가기",
+    "COPY_USERNAME": "사용자 이름 복사",
+    "TALK": "대화 시작",
+    "DELETE_CONTACT": "연락처 삭제",
     "ON": "켜기",
     "OFF": "끄기",
     "UNPIN": "고정 해제",
@@ -587,6 +590,10 @@
       "VIDEO": "카메라",
       "SPEAKER": "스피커",
       "NO_DEVICE": "장치 없음"
+    },
+    "DELETE_CONTACT": {
+      "TITLE": "연락처 삭제",
+      "DESCRIPTION": "이 연락처를 삭제하시겠습니까?"
     }
   },
   "FILTERS": {
@@ -809,7 +816,8 @@
     "TIP_TITLE_GROUP": "\"그룹\" 사용 방법",
     "TITLE_GROUP": "현재 그룹 대화가 없습니다",
     "DESCRIPTION_GROUP": "아래 버튼을 클릭하여 새로운 대화를 만들거나 그룹 대화의 관리자에게 추가해달라고 요청하세요.",
-    "MESSAGE": "아직 메시지 없음."
+    "MESSAGE": "아직 메시지 없음.",
+    "MESSAGE_CONTACT": "아직 연락이 없습니다"
   },
   "OFFLINE": {
     "TITLE": "인터넷 연결이 끊어졌습니다",

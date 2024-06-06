@@ -11,6 +11,7 @@ export type RoomStatus =
   | 'deleted'
   | 'cannot_message'
   | 'waiting'
+  | 'waiting_group'
   | 'archived'
   | 'blocked'
   | 'blocked_by_you';

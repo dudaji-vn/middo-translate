@@ -26,6 +26,7 @@ import { getCountryCode } from '@/utils/language-fn';
 import RoomItemVisitorAvatar from './room-item-visitor-avatar';
 import { CircleFlag } from 'react-circle-flags';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
+import { InboxType } from '../inbox/inbox';
 
 export interface RoomItemProps {
   data: Room;
@@ -41,6 +42,7 @@ export interface RoomItemProps {
   className?: string;
   businessId?: string;
   isOnline?: boolean;
+  type?: InboxType;
 }
 
 const RoomItemContext = createContext<
@@ -66,6 +68,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     disabledRedirect,
     className,
     isOnline,
+    type,
   } = props;
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
@@ -120,9 +123,10 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         className,
       )}
     >
-      <Wrapper room={room} isMuted={isMuted}>
+      <Wrapper room={room} isMuted={isMuted} type={type}>
         <RoomItemContext.Provider
           value={{
+            type: type,
             data: room,
             isActive,
             currentUser,
@@ -165,7 +169,9 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                   </span>
                 </div>
               )}
-              <RenderItemSub />
+              {
+                type == 'contact' ?  <RenderItemUserName /> : <RenderItemSub />
+              }
               {room.isHelpDesk && (
                 <div className="flex flex-row items-center gap-1 text-sm font-light">
                   <CircleFlag
@@ -243,6 +249,16 @@ const RenderItemSub = () => {
     />
   );
 };
+
+const RenderItemUserName = () => {
+  const { data, currentUser } = useRoomItem();
+  
+  const user = data.participants.filter(p => p._id !== currentUser._id)[0];
+
+  if (!user) return null;
+
+  return <p className="text-neutral-800 text-sm font-light line-clamp-1">{'@' + user?.username}</p>;
+}
 
 const ItemSubDraft = ({ htmlContent }: { htmlContent: string }) => {
   const { t } = useTranslation('common');

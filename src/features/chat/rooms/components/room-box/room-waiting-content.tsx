@@ -8,13 +8,18 @@ export interface RoomWaitingContentProps {
 
 export const RoomWaitingContent = ({ room }: RoomWaitingContentProps) => {
   const currentUserId = useAuthStore((state) => state.user?._id);
-  const otherUser = room?.waitingUsers?.find(
+  let otherUser = room?.waitingUsers?.find(
     (user) => user._id !== currentUserId,
   );
+  if(!otherUser) {
+    otherUser = room?.participants?.find(
+      (user) => user._id !== currentUserId,
+    )
+  }
   return (
     <div className="prose relative mx-auto flex w-full flex-col items-center gap-2 py-1 pb-3">
       <span className="font-semibold text-primary md:text-sm">
-        {otherUser?.username} isn’t in your contacts yet.
+        {otherUser?.name}&nbsp;isn’t in your contacts yet.
       </span>
       <span className="text-center font-light text-neutral-600 md:text-sm">
         You will be not able to:

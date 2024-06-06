@@ -350,6 +350,9 @@
     "FORWARD": "Forward",
     "PIN": "Pin",
     "LEAVE": "Leave",
+    "COPY_USERNAME": "Copy username",
+    "TALK": "Start conversation",
+    "DELETE_CONTACT": "Delete contact",
     "ON": "On",
     "OFF": "Off",
     "UNPIN": "Unpin",
@@ -595,6 +598,10 @@
       "VIDEO": "Camera",
       "SPEAKER": "Speaker",
       "NO_DEVICE": "No device"
+    },
+    "DELETE_CONTACT": {
+      "TITLE": "Delete contact",
+      "DESCRIPTION": "Are you sure you want to delete this contact?"
     }
   },
   "FILTERS": {
@@ -816,7 +823,8 @@
     "TIP_TITLE_GROUP": "How to use \"Group\"",
     "TITLE_GROUP": "Currently, you have no Group Conversation",
     "DESCRIPTION_GROUP": "Click button below to create a new one or ask Administrator of a Group Conversation add you in",
-    "MESSAGE": "No messages yet"
+    "MESSAGE": "No messages yet",
+    "MESSAGE_CONTACT": "No contact yet"
   },
   "OFFLINE": {
     "TITLE": "You're offline",

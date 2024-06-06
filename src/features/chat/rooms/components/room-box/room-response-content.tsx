@@ -72,7 +72,7 @@ export const RoomResponseContent = ({ room }: RoomResponseContentProps) => {
   return (
     <div className=" relative flex w-full flex-col items-center gap-2">
       <span className="font-semibold text-primary md:text-sm">
-        {user?.name}
+        {user?.name}&nbsp;
         isn’t in your contacts yet.
       </span>
       <div className="prose my-0 text-center text-sm text-neutral-600">

@@ -4,13 +4,13 @@ import {
   BanIcon,
   BellIcon,
   BellOffIcon,
-  CheckCheckIcon,
   CheckCircle2Icon,
-  CheckCircleIcon,
+  CopyIcon,
   LogOut,
   PinIcon,
   PinOffIcon,
   Tag,
+  Trash2Icon,
   TrashIcon,
   XCircleIcon,
 } from 'lucide-react';
@@ -29,6 +29,8 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useUnBlockUser } from '@/features/users/hooks/use-unblock-user';
 import { useAccept } from '../hooks/use-accept';
 import { RoomModalReject } from './room.modal-reject';
+import { RoomModalDeleteContact } from './room.modal-delete-contact';
+import { useTextCopy } from '@/hooks/use-text-copy';
 
 export type Action =
   | 'delete'
@@ -44,7 +46,10 @@ export type Action =
   | 'block'
   | 'unblock'
   | 'accept'
-  | 'reject';
+  | 'reject'
+  | 'copy_username'
+  | 'delete-contact'
+;
 
 export type ActionItem = {
   action: Action;
@@ -82,6 +87,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
   const [room, setRoom] = useState<Room | null>(null);
   const currentUserId = useAuthStore((state) => state.user?._id);
   const [action, setAction] = useState<Action>('none');
+  const { copy } = useTextCopy();
   const { mutate: pin } = usePinRoom();
   const { accept } = useAccept();
   const { toggleArchive } = useToggleArchiveRoom();
@@ -126,6 +132,13 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
       case 'accept':
         accept(roomId);
         break;
+      case 'copy_username':
+        const username = room.participants.find(
+          (participant) => participant._id !== currentUserId,
+        )?.username;
+        if (!username) return;
+        copy(username);
+        break;
       default:
         setAction(action);
         setRoom(room);
@@ -168,6 +181,8 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         return null;
       case 'tag':
         return null;
+      case 'delete-contact':
+        return <RoomModalDeleteContact onClosed={reset} id={id} />;;
       default:
         return null;
     }
@@ -175,6 +190,11 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
 
   const actionItems: ActionItem[] = useMemo(() => {
     return [
+      {
+        action: 'copy_username',
+        label: 'CONVERSATION.COPY_USERNAME',
+        icon: <CopyIcon />,
+      },
       {
         action: 'pin',
         label: 'CONVERSATION.PIN',
@@ -255,6 +275,13 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         icon: <TrashIcon />,
         color: 'error',
       },
+      
+      {
+        action: 'delete-contact',
+        label: 'CONVERSATION.DELETE_CONTACT',
+        icon: <Trash2Icon />,
+        color: 'error',
+      }
     ] as ActionItem[];
   }, []);
 
