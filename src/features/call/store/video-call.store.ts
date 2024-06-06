@@ -25,6 +25,8 @@ export type VideoCallState = {
   captions: CaptionInterface[];
   messageId: string;
   showChooseScreen: boolean;
+  isAllowDrag: boolean;
+  setAllowDrag: (allowDrag: boolean) => void;
   setRoom: (room: any) => void;
   setLayout: (layout?: string) => void;
   setConfirmLeave: (confirmLeave: boolean) => void;
@@ -75,6 +77,10 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   captions: [],
   messageId: '',
   showChooseScreen: false,
+  isAllowDrag: false,
+  setAllowDrag: (allowDrag: boolean) => {
+    set(() => ({ isAllowDrag: allowDrag }));
+  },
   setRoom: (room: any) => {
     set(() => ({ room }));
   },
