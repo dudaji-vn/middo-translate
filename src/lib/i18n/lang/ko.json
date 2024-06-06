@@ -769,7 +769,10 @@
       "ACTIONS": "조치",
       "NO_MEMBER": "회원을 찾을 수 없습니다",
       "NO_ADMIN": "관리자를 찾을 수 없습니다",
-      "INVITE_MEMBER": "회원 초대"
+      "INVITE_MEMBER": "회원 초대",
+      "NO_EDIT_PERMISSION": "이 회원을 편집할 권한이 없습니다",
+      "NO_DELETE_PERMISSION": "이 회원을 삭제할 권한이 없습니다",
+      "NO_INVITE_PERMISSION": "회원을 초대할 권한이 없습니다"
     },
     "ROLE": {
       "ADMIN": "관리자",

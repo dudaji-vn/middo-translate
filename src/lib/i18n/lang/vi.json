@@ -771,7 +771,10 @@
       "ACTIONS": "Hành động",
       "NO_MEMBER": "Không tìm thấy thành viên",
       "NO_ADMIN": "Không tìm thấy quản trị viên",
-      "INVITE_MEMBER": "Mời thành viên"
+      "INVITE_MEMBER": "Mời thành viên",
+      "NO_EDIT_PERMISSION": "Bạn không có quyền chỉnh sửa thành viên này",
+      "NO_DELETE_PERMISSION": "Bạn không có quyền xoá thành viên này",
+      "NO_INVITE_PERMISSION": "Bạn không có quyền mời thành viên"
     },
     "ROLE": {
       "ADMIN": "Quản trị viên",

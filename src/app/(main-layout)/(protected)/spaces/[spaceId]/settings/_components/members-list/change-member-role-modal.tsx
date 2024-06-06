@@ -10,9 +10,10 @@ export const ChangeMemberRoleModal = ({
   _id,
   email,
   role,
-  onClosed,
-  onCancel,
-  onSucceed,
+  onClosed = () => {},
+  onCancel = () => {},
+  onSucceed = () => {},
+  onFailed = () => {},
 }: {
   _id: string;
   role: ESPaceRoles;
@@ -20,6 +21,7 @@ export const ChangeMemberRoleModal = ({
   onClosed: () => void;
   onCancel: () => void;
   onSucceed: () => void;
+  onFailed: () => void;
 }) => {
   const { mutateAsync, isLoading } = useChangeRoleMember();
   const { t } = useTranslation('common');
@@ -35,6 +37,7 @@ export const ChangeMemberRoleModal = ({
         onSucceed();
       })
       .catch((err) => {
+        onFailed();
         toast.error(
           err?.response?.data?.message ||
             'Failed to change role member. Please try again later.',
