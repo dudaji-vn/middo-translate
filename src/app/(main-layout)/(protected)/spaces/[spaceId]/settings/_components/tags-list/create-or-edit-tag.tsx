@@ -18,6 +18,7 @@ import RHFColorSelector, {
   COLOR_REGEX,
 } from '@/components/form/RHF-color-selector/rhf-color-selector';
 
+
 const createOrEditTagSchema = z.object({
   tagId: z.string().optional(),
   name: z
@@ -111,8 +112,13 @@ export const CreateOrEditTag = ({
           return;
         }
       });
-    } catch (error) {
-      toast.error(t(`COMMON.FAILED_TO`, { action: action.toLowerCase() }));
+    } catch (error: unknown) {
+      console.log(error);
+      // @ts-ignore
+      const msg = error?.response?.data?.message || error?.message;
+      toast.error(
+        `${t(`COMMON.FAILED_TO`, { action: action.toLowerCase() })}: ${msg}`,
+      );
       console.error(error);
     }
   };

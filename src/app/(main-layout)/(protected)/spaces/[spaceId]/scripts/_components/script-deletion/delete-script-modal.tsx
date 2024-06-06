@@ -28,8 +28,12 @@ const DeleteScriptModal = ({
     try {
       await mutateAsync({ spaceId, scriptIds: idsToDelete });
       onclose();
-    } catch (error) {
-      toast.error(`Failed to ${title.toLowerCase()}`);
+    } catch (error: unknown) {
+      console.log(error);
+      // @ts-ignore
+      const msg = error?.response?.data?.message || error?.message;
+      toast.error(msg || `Fail to delete script`);
+      console.error(error);
     }
   };
   return (
