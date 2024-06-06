@@ -9,6 +9,7 @@ import {
 } from '@/components/data-display';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { LSK_FROM_DOMAIN } from '@/types/business.type';
 import { LogOut, Menu } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
@@ -22,8 +23,7 @@ const HelpDeskDropdownMenu = () => {
   const roomId = params?.slugs?.[0];
   const router = useRouter();
   const items = useMemo(() => {
-    const originReferer = searchParams?.get('originReferer');
-    const queryParams = originReferer ? `?originReferer=${originReferer}` : ``;
+    const fromDomain = localStorage.getItem(LSK_FROM_DOMAIN);
     return [
       {
         name: 'End conversation',
@@ -31,8 +31,7 @@ const HelpDeskDropdownMenu = () => {
         onClick: () => {
           if (!userId) return;
           router.replace(
-            `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${roomId}/${userId}` +
-              queryParams,
+            `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${roomId}/${userId}?originReferer=${fromDomain}`,
           );
         },
       },

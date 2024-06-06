@@ -670,7 +670,8 @@
         "NAME_MAX_LENGTH": "Space name must be less than 50 characters",
         "AVATAR_REQUIRED": "Space avatar is required",
         "INVALID_EMAIL_MEMBER": "Invalid email member"
-      }
+      },
+      "NO_MEMBER": "No members"
     },
     "BREADCRUMB": {
       "HOME": "Home"

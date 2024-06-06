@@ -664,7 +664,8 @@
         "NAME_MAX_LENGTH": "Tên không gian phải ít hơn 50 ký tự",
         "AVATAR_REQUIRED": "Ảnh đại diện không gian là bắt buộc",
         "INVALID_EMAIL_MEMBER": "Thành viên email không hợp lệ"
-      }
+      },
+      "NO_MEMBER": "Không có thành viên nào"
     },
     "BREADCRUMB": {
       "HOME": "Trang chủ"
