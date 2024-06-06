@@ -34,8 +34,11 @@ export const ChangeMemberRoleModal = ({
       .then(() => {
         onSucceed();
       })
-      .catch(() => {
-        toast.error('Failed to change role member. Please try again later.');
+      .catch((err) => {
+        toast.error(
+          err?.response?.data?.message ||
+            'Failed to change role member. Please try again later.',
+        );
       })
       .finally(() => {
         onClosed();
