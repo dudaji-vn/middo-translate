@@ -55,10 +55,12 @@ const ReorderList = ({
     props?: Member & {
       onCancel: () => void;
       onSucceed: () => void;
+      onFailed: () => void;
     };
   }>({
     open: false,
   });
+  const disableChangeRole = myRole !== ESPaceRoles.Owner;
   const [categories, setCategories] = useState([
     { _id: ESPaceRoles.Admin },
     { _id: ESPaceRoles.Member },
@@ -158,6 +160,13 @@ const ReorderList = ({
       );
       items.forEach((item, index) => {
         if (item.email === result.draggableId) {
+          if (disableChangeRole) {
+            const newArr = [...items];
+            newArr[index].role = source.droppableId;
+            setItems(items);
+            toast.error(t('EXTENSION.MEMBER.NO_EDIT_PERMISSION'));
+            return;
+          }
           setModal({
             open: true,
             props: {
@@ -172,6 +181,11 @@ const ReorderList = ({
                 const newArr = [...items];
                 newArr[index].role = destination.droppableId;
                 setItems(newArr);
+              },
+              onFailed: () => {
+                const newArr = [...items];
+                newArr[index].role = source.droppableId;
+                setItems(items);
               },
             },
           });

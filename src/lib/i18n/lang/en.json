@@ -776,7 +776,10 @@
       "ACTIONS": "Actions",
       "NO_MEMBER": "No members found",
       "NO_ADMIN": "No admin found",
-      "INVITE_MEMBER": "Invite member"
+      "INVITE_MEMBER": "Invite member",
+      "NO_EDIT_PERMISSION": "You do not have permission to edit this member",
+      "NO_DELETE_PERMISSION": "You do not have permission to delete this member",
+      "NO_INVITE_PERMISSION": "You do not have permission to invite member"
     },
     "ROLE": {
       "ADMIN": "Admin",
