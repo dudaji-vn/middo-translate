@@ -66,7 +66,7 @@ const MobileNav = ({
             <motion.div
               onClick={toggleMenu}
               className={cn(
-                'bg-background font-semibold active:bg-background-darker active:!text-shading md:!p-0 md:hover:text-secondary md:active:!bg-transparent',
+                'bg-background font-semibold active:bg-background-darker active:!text-shading md:!p-0 md:hover:text-secondary md:active:!bg-transparent dark:bg-neutral-900',
                 pathName === item.href && '!bg-lighter text-primary',
               )}
               key={item.name}

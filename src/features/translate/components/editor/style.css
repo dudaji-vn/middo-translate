@@ -35,8 +35,11 @@
   background-color: hsl(var(--error), 0.4);
 }
 .translateTextWrapper.result {
-  background-color: white;
+  background-color: hsl(var(--background));
   border: solid 1px #f2f2f2;
+}
+.dark .translateTextWrapper.result {
+  border: solid 1px #333333;
 }
 .translateResultText {
   margin-top: 12px;

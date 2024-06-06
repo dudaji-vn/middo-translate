@@ -72,3 +72,11 @@ export const deleteTag = ({
     data: { spaceId },
   });
 };
+
+export const changeRoleMember = (data: {
+  email: string;
+  role: string;
+  spaceId: string;
+}) => {
+  return axios.patch(`/help-desk/spaces/${data.spaceId}/change-role`, data);
+};

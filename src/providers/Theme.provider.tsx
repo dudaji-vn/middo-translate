@@ -5,7 +5,6 @@ export const ThemeProvider = () => {
   const theme = useAppStore(state => state.theme);
   useEffect(() => {
     let currentTheme = '';
-    console.log('themetheme:::', theme)
     if (!theme || ['dark', 'light'].indexOf(theme) < 0) {
       const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
       if (isDarkMode) {
@@ -16,7 +15,6 @@ export const ThemeProvider = () => {
     } else {
       currentTheme = theme;
     }
-    console.log(currentTheme);
     if (currentTheme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {

@@ -9,6 +9,7 @@ import { Globe2Icon } from 'lucide-react';
 import { Triangle } from '@/components/icons';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
+import { useAppStore } from '@/stores/app.store';
 
 export interface TranslateEditorWrapperProps {
   prefixLanguage?: string;
@@ -36,6 +37,7 @@ export const TranslateEditorWrapper = ({
   footerElement,
 }: TranslateEditorWrapperProps) => {
   const language = getLanguageByCode(languageCode);
+  const theme = useAppStore((state) => state.theme);
   const {t} = useTranslation('common');
   return (
     <div
@@ -84,6 +86,7 @@ export const TranslateEditorWrapper = ({
           <Triangle
             position="top"
             className="absolute left-3 top-0 -translate-y-full"
+            {...theme == 'dark' && {...{fill: '#333'}}}
           />
           {bottomElement}
         </div>

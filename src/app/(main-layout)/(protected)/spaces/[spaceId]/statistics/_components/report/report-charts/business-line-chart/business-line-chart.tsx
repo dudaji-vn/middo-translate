@@ -100,9 +100,12 @@ export default function BusinessLineChart({
   const displayFilterBy = useMemo(() => {
     switch (filterByKey) {
       case 'domain':
-        return filterBy;
+        return filterBy || t('EXTENSION.ALL_DOMAINS');
       case 'memberId':
-        return space?.members?.find((m) => m._id === filterBy)?.email;
+        return (
+          space?.members?.find((m) => m._id === filterBy)?.email ||
+          t('EXTENSION.ALL_MEMBERS')
+        );
     }
     return filterBy;
   }, [filterBy, filterByKey, space]);
@@ -132,10 +135,12 @@ export default function BusinessLineChart({
             {displayFilterBy}
             <span
               className={cn('font-light text-neutral-600', {
-                hidden: filterByKey !== 'memberId',
+                hidden:
+                  filterByKey !== 'memberId' ||
+                  displayFilterBy === t('EXTENSION.ALL_MEMBERS'),
               })}
             >
-              (Member)
+              ({t('COMMON.MEMBER')})
             </span>
           </span>
         </Typography>

@@ -33,7 +33,7 @@ const DisplayedSelectedFilter = ({
   }
 
   return (
-    <section className="relative space-y-3 bg-[#FCFCFC] p-3">
+    <section className="relative space-y-3 bg-[#FCFCFC] p-3 w-full">
       <div
         {...props}
         className={cn(

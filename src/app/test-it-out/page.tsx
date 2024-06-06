@@ -19,9 +19,9 @@ import { isEmpty } from 'lodash';
 import { MessageEditor } from '@/components/message-editor';
 import { MediaUploadProvider } from '@/components/media-upload';
 import { Media } from '@/types';
-import { FlowNode } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
-import { PreviewReceivedMessage } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/preview-received-message';
-import { DEFAULT_THEME } from '../../(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
+import { FlowNode } from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
+import { PreviewReceivedMessage } from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/preview-received-message';
+import { DEFAULT_THEME } from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
 import { MessageActions } from '@/features/chat/messages/components/message-actions';
 

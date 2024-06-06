@@ -20,7 +20,7 @@ const ActionAddMembers = () => {
     setModalAddUser(!isShowModalAddUser);
   });
 
-  if(isFullScreen || room.type !== CALL_TYPE.GROUP) return null
+  if(isFullScreen || room?.type !== CALL_TYPE.GROUP) return null
 
   return (
     <Tooltip

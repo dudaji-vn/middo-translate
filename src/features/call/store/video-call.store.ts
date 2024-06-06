@@ -13,13 +13,20 @@ export interface IRoom {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  
 }
 
 export interface IRequestCall {
   id: string;
-  call: IRoom;
+  call: IRoom & {
+    avatar?: string;
+    participants?: User[];
+  };
   user: User;
-  room?: IRoom;
+  room?: IRoom & {
+    avatar?: string;
+    participants?: User[];
+  };
 }
 export type VideoCallState = {
   room: IRoom | null | undefined;

@@ -14,23 +14,24 @@ import HeaderProfile from './header-profile';
 import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 import { HeaderNavMobile } from './header-nav.mobile';
 import { usePlatformStore } from '@/features/platform/stores';
+import { useAppStore } from '@/stores/app.store';
 
 type Props = {};
 
 export const Header = (props: Props) => {
   const isClient = useClient();
   const platform = usePlatformStore((state) => state.platform);
+  const theme = useAppStore((state) => state.theme);
 
   const { isBusiness } = useBusinessNavigationData();
   const hideNavigation = isBusiness;
-
   if (!isClient) return null;
   if (platform === 'mobile') return null;
 
   return (
     <div
       className={cn(
-        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] md:gap-5 md:pl-[5vw]',
+        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] md:gap-5 md:pl-[5vw] dark:bg-neutral-900 dark:border-neutral-800',
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
@@ -40,7 +41,13 @@ export const Header = (props: Props) => {
           'flex w-[60px] flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
         )}
       >
-        <Image src="/logo.png" priority alt="logo" width={500} height={500} />
+        <Image 
+          src={theme == 'light' ? '/logo.png' : '/logo-dark.png'} 
+          priority 
+          alt="Middo logo" 
+          width={500} 
+          height={500} 
+        />
         {isBusiness && (
           <Typography
             className={

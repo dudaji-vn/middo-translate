@@ -469,6 +469,10 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "ROLE_CHANGE": {
+      "TITLE": "Change Role",
+      "DESCRIPTION": "Are you sure you want to change the role of <strong>{{name}}</strong> to <strong>{{role}}</strong>?"
+    },
     "INVITE_MEMBERS": {
       "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span>other to join your space&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
       "DESCRIPTION": "You can only invite 2 members in a Free plan account.<span class='font-normal text-primary-500-main'>upgrade plan.</span>"
@@ -655,6 +659,12 @@
     "START_STOP_SCREEN_DOODLE": "Start/Stop Screen Doodle",
     "TOGGLE_LIVE_CAPTION": "Show/Hide Live Caption"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "Can not load extension",
+      "DESCRIPTION": "Please check if your extension script is correct, or your domain is in the list of allowed domains."
+    }
+  },
   "EXTENSION": {
     "ALL_DOMAINS": "All Domains",
     "ALL_MEMBERS": "All Members",
@@ -664,6 +674,7 @@
       "JOINED_SPACE": "Joined space",
       "MY_SPACE": "My space",
       "CREATE_SPACE": "Create new space",
+      "DASHBOARD": "Dashboard",
       "SPACE_INFOR": "Space information",
       "UPLOAD_IMAGE": "Upload Space Avatar",
       "CREATE_BUTTON": "Create Space and invite members",
@@ -672,7 +683,8 @@
         "NAME_MAX_LENGTH": "Space name must be less than 50 characters",
         "AVATAR_REQUIRED": "Space avatar is required",
         "INVALID_EMAIL_MEMBER": "Invalid email member"
-      }
+      },
+      "NO_MEMBER": "No members"
     },
     "BREADCRUMB": {
       "HOME": "Home"
@@ -771,7 +783,10 @@
       "ACTIONS": "Actions",
       "NO_MEMBER": "No members found",
       "NO_ADMIN": "No admin found",
-      "INVITE_MEMBER": "Invite member"
+      "INVITE_MEMBER": "Invite member",
+      "NO_EDIT_PERMISSION": "You do not have permission to edit this member",
+      "NO_DELETE_PERMISSION": "You do not have permission to delete this member",
+      "NO_INVITE_PERMISSION": "You do not have permission to invite member"
     },
     "ROLE": {
       "ADMIN": "Admin",
@@ -790,6 +805,14 @@
     "BACK_TO_HOME": "Back to home"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "Currently you don't have any conversation",
+      "DESCRIPTION": "You have no client conversation yet."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 results",
+      "DESCRIPTION": "Check your keyword or filter again"
+    },
     "TIP_DESCRIPTION": "You can search for a person or a group by typing person's mail, person's name or groups' name",
     "TIP_TITLE": "Search bar",
     "TITLE": "Currently you don't have any conversation",

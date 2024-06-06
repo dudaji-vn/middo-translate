@@ -181,7 +181,7 @@ const SpaceSetting = ({
                 )?.roles.view.find((role) => role === currentUserRole),
             })}
           >
-            <MembersList space={space} />
+            <MembersList  />
           </TabsContent>
           <TabsContent
             value={ESettingTabs.TAGS}

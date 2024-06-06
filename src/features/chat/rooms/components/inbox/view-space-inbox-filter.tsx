@@ -53,7 +53,7 @@ const ViewSpaceInboxFilter = (props: React.HTMLAttributes<HTMLElement>) => {
         <Badge
           variant="default"
           className={cn(
-            'line-clamp-1 max-w-[380px] cursor-pointer  capitalize max-sm:max-w-[200px]',
+            'line-clamp-1 max-w-[380px]  cursor-pointer  capitalize max-sm:max-w-[200px]',
           )}
           {...params[value]?.props}
         >

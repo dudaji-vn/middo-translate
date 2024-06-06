@@ -105,7 +105,7 @@ export default function DropdownActions() {
       <DropdownMenuContent>
         <ActionToggleLayout />
         <ActionDoodle disabled={isDoodleDisabled} onDoodle={onDoodle} />
-        {room.type === CALL_TYPE.GROUP && (
+        {room?.type === CALL_TYPE.GROUP && (
           <DropdownMenuItem onClick={() => setModalAddUser(true)}>
             <UserPlus2 />
             <span className="ml-2">{t('CONVERSATION.ADD_MEMBER')}</span>

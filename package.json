@@ -18,6 +18,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@google-cloud/text-to-speech": "^5.0.1",
     "@google-cloud/translate": "^8.0.2",
+    "@hello-pangea/dnd": "^16.6.0",
     "@hookform/resolvers": "^3.3.4",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",

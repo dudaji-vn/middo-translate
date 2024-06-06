@@ -95,6 +95,7 @@ export const SOCKET_CONFIG = {
         NEW: 'space.notification.new',
       },
       REMOVE_MEMBER: 'space.member.remove',
+      UPDATE: 'space.update',
     },
     USER: {
       RELATIONSHIP: {

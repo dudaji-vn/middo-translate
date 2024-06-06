@@ -315,12 +315,10 @@
       "MESSAGE": "Hiện tại bạn không thể trả lời cuộc trò chuyện này.",
       "LEARN_MORE": "Tìm hiểu thêm"
     },
-
     "BLOCK_CONTENT": {
       "TITLE": "Bạn đã chặn",
       "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ."
     },
-
     "WELCOME_TITLE": "Chào mừng bạn đến với trò chuyện Middo!",
     "WELCOME_CONTENT": "Bắt đầu một cuộc trò chuyện với đồng đội của bạn hoặc nhóm. Bạn cũng có thể tạo một nhóm trò chuyện để thảo luận và chia sẻ tệp.",
     "TITLE": "Hội thoại",
@@ -468,6 +466,10 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "ROLE_CHANGE": {
+      "TITLE": "Thay đổi vai trò",
+      "DESCRIPTION": "Bạn có chắc chắn muốn thay đổi vai trò của <strong>{{name}}</strong> thành <strong>{{role}}</strong> không?"
+    },
     "INVITE_MEMBERS": {
       "TITLE": "<span class='mr-2 text-primary-500-main'>Mời</span> người khác tham gia không gian của bạn&nbsp;<span class='text-[24px] font-normal'>(tuỳ chọn)</span>",
       "DESCRIPTION": "Bạn chỉ có thể mời 2 thành viên trong tài khoản gói Miễn phí. <span class='font-normal text-primary-500-main'>Nâng cấp gói.</span>"
@@ -476,7 +478,9 @@
       "HEADING": "Tạo không gian",
       "TITLE": "Cung cấp thông tin cho <span class='text-primary-500-main'> không gian của bạn </span>",
       "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
-      "PLACEHOLDERS": { "NAME": "Tên không gian" }
+      "PLACEHOLDERS": {
+        "NAME": "Tên không gian"
+      }
     },
     "DELETE_SPACE": {
       "TITLE": "Xoá không gian",
@@ -528,13 +532,11 @@
       "TITLE": "Rời nhóm",
       "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của nhóm này nữa. Bạn có chắc chắn muốn rời nhóm không?"
     },
-
     "BLOCK_USER": {
       "TITLE": "Chặn {{name}}",
       "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ cho đến khi bạn bỏ chặn. Bạn có chắc chắn không?",
       "ADDITIONAL_OPTION_1": "Cũng xóa lịch sử cuộc trò chuyện (không thể hoàn tác)"
     },
-
     "VERIFY": {
       "SUCCESS": {
         "TITLE": "Xác minh thành công",
@@ -650,6 +652,12 @@
     "START_STOP_SCREEN_DOODLE": "Bắt đầu/Dừng vẽ trên màn hình",
     "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "Không thể tải cuôc trò chuyện",
+      "DESCRIPTION": "Vui lòng kiểm tra lại mã nhúng hoặc xem tên miền của bạn đã được thêm vào danh sách hay chưa."
+    }
+  },
   "EXTENSION": {
     "ALL_DOMAINS": "Tất cả miền",
     "ALL_MEMBERS": "Tất cả thành viên",
@@ -659,6 +667,7 @@
       "JOINED_SPACE": "Không gian đã tham gia",
       "MY_SPACE": "Không gian của tôi",
       "CREATE_SPACE": "Tạo không gian mới",
+      "DASHBOARD": "Trang tổng quan",
       "SPACE_INFOR": "Thông tin không gian",
       "UPLOAD_IMAGE": "Tải lên ảnh đại diện không gian",
       "CREATE_BUTTON": "Tạo không gian và mời thành viên",
@@ -667,7 +676,8 @@
         "NAME_MAX_LENGTH": "Tên không gian phải ít hơn 50 ký tự",
         "AVATAR_REQUIRED": "Ảnh đại diện không gian là bắt buộc",
         "INVALID_EMAIL_MEMBER": "Thành viên email không hợp lệ"
-      }
+      },
+      "NO_MEMBER": "Không có thành viên nào"
     },
     "BREADCRUMB": {
       "HOME": "Trang chủ"
@@ -767,7 +777,10 @@
       "ACTIONS": "Hành động",
       "NO_MEMBER": "Không tìm thấy thành viên",
       "NO_ADMIN": "Không tìm thấy quản trị viên",
-      "INVITE_MEMBER": "Mời thành viên"
+      "INVITE_MEMBER": "Mời thành viên",
+      "NO_EDIT_PERMISSION": "Bạn không có quyền chỉnh sửa thành viên này",
+      "NO_DELETE_PERMISSION": "Bạn không có quyền xoá thành viên này",
+      "NO_INVITE_PERMISSION": "Bạn không có quyền mời thành viên"
     },
     "ROLE": {
       "ADMIN": "Quản trị viên",
@@ -786,6 +799,14 @@
     "BACK_TO_HOME": "Đi đến trang chủ"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "Hiện tại bạn không có cuộc trò chuyện nào",
+      "DESCRIPTION": "Bạn chưa có cuộc trò chuyện với khách hàng nào."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 kết quả phù hợp",
+      "DESCRIPTION": "Vui lòng kiểm tra lại từ khoá hoặc thay đổi bộ lọc"
+    },
     "TIP_DESCRIPTION": "Bạn có thể tìm kiếm một người hoặc một nhóm bằng cách nhập email của người đó, tên của người đó hoặc tên của nhóm",
     "TIP_TITLE": "Thanh tìm kiếm",
     "TITLE": "Hiện tại bạn không có cuộc trò chuyện nào",

@@ -61,7 +61,7 @@ const GalleryLayout = () => {
   }, [participants]);
 
   const [containerHeight, setContainerHeight] = useState(0);
-  const { members } = useGetMemberInRoom({roomId: room.roomId});
+  const { members } = useGetMemberInRoom({roomId: room?.roomId});
 
 
   useEffect(() => {

@@ -15,6 +15,8 @@ import LanguageRank from './_components/report/report-charts/languages-rank/lang
 import BusinessScatter from './_components/report/report-charts/scatter-visit/business-scatter';
 import EmptyReport from './_components/report/empty-report/empty-repor';
 import { ReportHeader } from './_components/report/report-header';
+import { accurateHumanize } from '@/utils/moment';
+import moment from 'moment';
 
 const chartsOrderList: Array<TChartKey> = [
   ESpaceChart.NEW_VISITOR,
@@ -92,8 +94,8 @@ const ReportPage = ({
           let chartUnit =
             t(`EXTENSION.CHART_UNIT.${chart.toUpperCase()}`) || '';
           const chartData = [...(data?.chart?.[chart] || [])];
-          let formattedTotal: number | string =
-            data?.analysis[chart]?.total || 0;
+          let formattedDisplayValue: number | string =
+            data?.analysis[chart]?.value || 0;
           const filterBy =
             searchParams[
               CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
@@ -107,7 +109,7 @@ const ReportPage = ({
                     tooltipContent={t(
                       `EXTENSION.CHART_TOOLTIP.${chart.toUpperCase()}`,
                     )}
-                    total={`${formattedTotal}`}
+                    total={`${formattedDisplayValue}`}
                     filterByKey={CHART_AFFECTED_PARAMS[chart]}
                     filterBy={filterBy}
                     title={t(`EXTENSION.CHART.${chart.toUpperCase()}`)}
@@ -138,33 +140,23 @@ const ReportPage = ({
                   (item.value / ratio).toFixed(0),
                 );
               }, []);
-              formattedTotal = chartData.reduce((acc, item) => {
-                return acc + item.value;
-              }, 0);
               chartUnit = t(`EXTENSION.CHART_UNIT.${unit.toUpperCase()}`) || '';
-              formattedTotal = `${formattedTotal} ${chartUnit}`;
+              const value = data?.analysis.responseTime.value || 0;
+              const displayTime =
+                accurateHumanize(moment.duration(value, 'milliseconds'), 1)
+                  .accuratedTime || '0';
+              formattedDisplayValue = displayTime;
               break;
             }
             case ESpaceChart.CUSTOMER_RATING:
-              formattedTotal =
-                (data?.analysis[chart]?.value || 0).toFixed(1) || 0;
-              formattedTotal = `${formattedTotal} ${chartUnit}`;
+              formattedDisplayValue = `${formattedDisplayValue} ${chartUnit}`;
               break;
             case ESpaceChart.NEW_VISITOR:
             case ESpaceChart.RESPONSE_MESSAGE:
-              formattedTotal = `${formattedTotal} ${chartUnit}`;
+              formattedDisplayValue = `${formattedDisplayValue} ${chartUnit}`;
               break;
             case ESpaceChart.DROP_RATE:
-              {
-                const { value, total } = data?.analysis[chart] || {
-                  value: 0,
-                  total: 1,
-                };
-                const rate = total
-                  ? Number((value / total).toFixed(0)) * 100
-                  : 0;
-                formattedTotal = `${rate}%`;
-              }
+              formattedDisplayValue = `${(Number(data?.analysis.dropRate.value) * 100) / (data?.analysis.dropRate.total || 1) || 0} %`;
               break;
           }
 
@@ -174,7 +166,7 @@ const ReportPage = ({
               tooltipContent={t(
                 `EXTENSION.CHART_TOOLTIP.${chart.toUpperCase()}`,
               )}
-              total={`${formattedTotal}`}
+              total={`${formattedDisplayValue}`}
               filterByKey={CHART_AFFECTED_PARAMS[chart]}
               filterBy={filterBy}
               title={t(`EXTENSION.CHART.${chart.toUpperCase()}`)}

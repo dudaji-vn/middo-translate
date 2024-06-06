@@ -34,7 +34,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
     }
   }, [data, setFilterOptions, setSpace]);
 
-  const handleRefresh = useCallback(() => {
+  const handleRedirectToHome = useCallback(() => {
     toast.loading('You has been removed from this space. Refreshing...');
     setTimeout(() => {
       router.push(ROUTE_NAMES.SPACES);
@@ -42,16 +42,24 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
     }, 2000);
   }, [router]);
 
+  const handleRefresh = useCallback(() => {
+    router.refresh();
+  }, [router]);
+
   useEffect(() => {
-    socket.on(SOCKET_CONFIG.EVENTS.SPACE.REMOVE_MEMBER, handleRefresh);
+    socket.on(SOCKET_CONFIG.EVENTS.SPACE.REMOVE_MEMBER, handleRedirectToHome);
+    socket.on(SOCKET_CONFIG.EVENTS.SPACE.UPDATE, handleRefresh);
     return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.SPACE.REMOVE_MEMBER, handleRefresh);
+      socket.off(
+        SOCKET_CONFIG.EVENTS.SPACE.REMOVE_MEMBER,
+        handleRedirectToHome,
+      );
+      socket.off(SOCKET_CONFIG.EVENTS.SPACE.UPDATE, handleRefresh);
     };
-  }, [handleRefresh]);
+  }, [handleRedirectToHome, handleRefresh]);
 
   return (
-    <div className="flex h-main-container-height w-full flex-col gap-0  overflow-y-hidden ">
-      <SpaceNavigator />
+    <div className="h-main-container-height w-full overflow-y-hidden ">
       <div className="flex flex-row overflow-y-auto">
         <div
           className={cn('flex w-[74px] flex-col max-md:hidden', {

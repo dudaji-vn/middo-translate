@@ -26,6 +26,7 @@ import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
 import ViewSpaceInboxFilter from './view-space-inbox-filter';
+import { isEmpty } from 'lodash';
 
 interface InboxListProps {
   type: InboxType;
@@ -49,6 +50,12 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
     const isSortByName = TAB_SORT_BY_NAME.includes(type)
     
+    const helpDeskEmptyType = useMemo(() => {
+      if (!isBusiness) return undefined;
+      if (!isEmpty(Object.keys(appliedFilters || {})))
+        return 'help-desk-filtered';
+      return type;
+    }, [appliedFilters, isBusiness]);
     const key = useMemo(() => {
       if (spaceId) {
         return ['rooms', type, spaceId, status, appliedFilters];
@@ -147,7 +154,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     if (!currentUser) return null;
 
     if (showEmptyInbox) {
-      return <EmptyInbox type={type} />;
+      return <EmptyInbox type={helpDeskEmptyType || type} />;
     }
     
     const showFilter =
