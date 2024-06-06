@@ -646,6 +646,12 @@
     "START_STOP_SCREEN_DOODLE": "Bắt đầu/Dừng vẽ trên màn hình",
     "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "Không thể tải cuôc trò chuyện",
+      "DESCRIPTION": "Vui lòng kiểm tra lại mã nhúng hoặc xem tên miền của bạn đã được thêm vào danh sách hay chưa."
+    }
+  },
   "EXTENSION": {
     "ALL_DOMAINS": "Tất cả miền",
     "ALL_MEMBERS": "Tất cả thành viên",
