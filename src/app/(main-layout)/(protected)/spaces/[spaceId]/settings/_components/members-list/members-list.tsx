@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { GripVertical } from 'lucide-react';
+import { Typography } from '@/components/data-display';
+import {
+  GripVertical,
+  RotateCcw,
+  Trash2,
+  UserCog,
+  UserRound,
+} from 'lucide-react';
 import {
   removeMemberFromSpace,
   resendInvitation,

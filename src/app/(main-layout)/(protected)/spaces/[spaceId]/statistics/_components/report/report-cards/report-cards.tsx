@@ -97,40 +97,40 @@ const contentsByDomain: Array<{
   renderDetail?: (value: number, total?: number) => JSX.Element;
   renderPercentage?: (value: any) => JSX.Element;
 }> = [
-  {
-    name: ESpaceChart.NEW_VISITOR,
-    renderDetail: (value: number) => (
-      <Typography variant={'h6'} className="text-[2rem]">
-        {value}
-      </Typography>
-    ),
-    renderPercentage: (value: number) => <Percentage value={value} />,
-  },
-  {
-    name: ESpaceChart.OPENED_CONVERSATION,
-    renderDetail: (value: number) => (
-      <Typography variant={'h6'} className="text-[2rem]">
-        {value}
-      </Typography>
-    ),
-    renderPercentage: (value: number) => <Percentage value={value} />,
-  },
-  {
-    name: ESpaceChart.DROP_RATE,
-    renderDetail: (value: number, total?: number) => {
-      const displayValue = total
-        ? Number(((value * 100) / total).toFixed(2))
-        : 0;
-      return (
+    {
+      name: ESpaceChart.NEW_VISITOR,
+      renderDetail: (value: number) => (
         <Typography variant={'h6'} className="text-[2rem]">
-          {displayValue}&nbsp;
-          {total && <span>%</span>}
+          {value}
         </Typography>
-      );
+      ),
+      renderPercentage: (value: number) => <Percentage value={value} />,
     },
-    renderPercentage: (value: number) => <Percentage value={value} />,
-  },
-];
+    {
+      name: ESpaceChart.OPENED_CONVERSATION,
+      renderDetail: (value: number) => (
+        <Typography variant={'h6'} className="text-[2rem]">
+          {value}
+        </Typography>
+      ),
+      renderPercentage: (value: number) => <Percentage value={value} />,
+    },
+    {
+      name: ESpaceChart.DROP_RATE,
+      renderDetail: (value: number, total?: number) => {
+        const displayValue = total
+          ? Number(((value * 100) / total).toFixed(2))
+          : 0;
+        return (
+          <Typography variant={'h6'} className="text-[2rem]">
+            {displayValue}&nbsp;
+            {total && <span>%</span>}
+          </Typography>
+        );
+      },
+      renderPercentage: (value: number) => <Percentage value={value} />,
+    },
+  ];
 const contentsByMember = [
   {
     name: ESpaceChart.RESPONSE_TIME,

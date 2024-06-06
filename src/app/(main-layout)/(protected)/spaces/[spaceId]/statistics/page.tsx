@@ -98,7 +98,7 @@ const ReportPage = ({
             data?.analysis[chart]?.value || 0;
           const filterBy =
             searchParams[
-              CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
+            CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
             ];
           switch (chart) {
             case ESpaceChart.OPENED_CONVERSATION: {

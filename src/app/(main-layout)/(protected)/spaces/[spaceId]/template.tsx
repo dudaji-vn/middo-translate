@@ -23,9 +23,29 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const { data, isLoading } = useGetSpaceData({ spaceId });
   const { isOnBusinessChat } = useBusinessNavigationData();
   const { setFilterOptions } = useSpaceInboxFilterStore();
-  const router = useRouter();
 
   const { setSpace } = useAuthStore();
+  const { t } = useTranslation('common');
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const breadcrumbItems = useMemo(() => {
+    return [
+      {
+        label: t('EXTENSION.BREADCRUMB.HOME'),
+        path: '/spaces',
+        href: '/spaces',
+        icon: <HomeIcon />,
+      },
+      {
+        label: (
+          <span className="font-semibold text-neutral-800 ">{data?.name}</span>
+        ),
+        path: `/spaces/${spaceId}`,
+        href: `/spaces/${spaceId}/conversations`,
+      },
+    ].filter((item) => pathname?.includes(item.path));
+  }, [pathname, data, spaceId, t]);
 
   useEffect(() => {
     if (data) {

@@ -13,7 +13,6 @@ export interface IRoom {
   createdBy: string;
   createdAt: string;
   updatedAt: string;
-  
 }
 
 export interface IRequestCall {
@@ -51,6 +50,8 @@ export type VideoCallState = {
   messageId: string;
   showChooseScreen: boolean;
   setRoom: (room?: IRoom) => void;
+  isAllowDrag: boolean;
+  setAllowDrag: (allowDrag: boolean) => void;
   setLayout: (layout?: string) => void;
   setConfirmLeave: (confirmLeave: boolean) => void;
   setDoodle: (isDoodle: boolean) => void;
@@ -100,6 +101,10 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   showChooseScreen: false,
   setRoom: (room?: IRoom) => {
     set(() => ({ room }));
+  },
+  isAllowDrag: false,
+  setAllowDrag: (allowDrag: boolean) => {
+    set(() => ({ isAllowDrag: allowDrag }));
   },
   setLayout: (layout?: string) => {
     set(() => ({ layout: layout || VIDEOCALL_LAYOUTS.GALLERY_VIEW }));
@@ -184,5 +189,5 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
       captions: [],
       messageId: '',
     }));
-  }
+  },
 }));

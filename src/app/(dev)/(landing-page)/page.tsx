@@ -10,6 +10,7 @@ import { usePlatformStore } from '@/features/platform/stores';
 import { useRouter } from 'next/navigation';
 import DownloadAppButton from './_components/download-app-button';
 import UserGuide from './_components/user-guide';
+import VideoPlayer from '@/components/video/video-player';
 
 export default function Landing() {
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
@@ -34,14 +35,14 @@ export default function Landing() {
     };
   }, [isScrollDown]);
 
-  useEffect(() => {
-    if (!videoRef.current) {
-      return;
-    }
-    videoRef.current.addEventListener('play', () => {
-      setIsPlayVideo(true);
-    });
-  }, []);
+  // useEffect(() => {
+  //   if (!videoRef.current) {
+  //     return;
+  //   }
+  //   videoRef.current.addEventListener('play', () => {
+  //     setIsPlayVideo(true);
+  //   });
+  // }, []);
 
   useEffect(() => {
     document.body.style.overflow = 'unset';
@@ -73,7 +74,7 @@ export default function Landing() {
       </div>
       <div className="w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
         <div className="relative h-fit md:w-[44%] md:min-w-[44%]">
-          {!isPlayVideo && (
+          {/* {!isPlayVideo && (
             <div
               onClick={() => {
                 if (videoRef.current) videoRef.current.play();
@@ -84,21 +85,29 @@ export default function Landing() {
                 <Play className="size-7" color="white" />
               </div>
             </div>
-          )}
+          )} */}
 
-          <video
+          {/* <video
             ref={videoRef}
             className="video-intro w-full object-contain before:!bg-none"
             width="100%"
             height="auto"
             controls
-            autoPlay
+            // autoPlay
             loop
             poster="/landing-page/group.png"
           >
             <source src="/video/video-middo-intro.mp4" type="video/mp4" />
             Your browser does not support the video tag.
-          </video>
+          </video> */}
+          <VideoPlayer 
+            file={{
+              url: '/video/video-middo-intro.mp4',
+              name: 'Middo Intro Video',
+              type: 'video/mp4',
+            }}
+            className='rounded-2xl'
+          />
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">

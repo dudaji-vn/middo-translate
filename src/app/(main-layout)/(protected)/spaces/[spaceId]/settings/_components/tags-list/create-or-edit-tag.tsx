@@ -18,7 +18,6 @@ import RHFColorSelector, {
   COLOR_REGEX,
 } from '@/components/form/RHF-color-selector/rhf-color-selector';
 
-
 const createOrEditTagSchema = z.object({
   tagId: z.string().optional(),
   name: z

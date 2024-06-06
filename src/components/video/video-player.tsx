@@ -1,41 +1,56 @@
-import { Media } from "@/types";
-import { cn } from "@/utils/cn";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button } from "../actions";
-import { DownloadIcon, Maximize2Icon, Pause, PlayIcon, Volume1Icon, Volume2, Volume2Icon, VolumeX, VolumeXIcon, X } from "lucide-react";
-import { Direction, Range } from "react-range";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "../data-display";
-import { useOnClickOutside } from "usehooks-ts";
-import { useMediaSettingStore } from "@/stores/media-setting.store";
-import downloadFile from "@/utils/download-file";
-import { createPortal } from "react-dom";
+import { Media } from '@/types';
+import { cn } from '@/utils/cn';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Button } from '../actions';
+import {
+  DownloadIcon,
+  Maximize2Icon,
+  Pause,
+  PlayIcon,
+  Volume1Icon,
+  Volume2,
+  Volume2Icon,
+  VolumeX,
+  VolumeXIcon,
+  X,
+} from 'lucide-react';
+import { Direction, Range } from 'react-range';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from '../data-display';
+import { useOnClickOutside } from 'usehooks-ts';
+import { useMediaSettingStore } from '@/stores/media-setting.store';
+import downloadFile from '@/utils/download-file';
+import { createPortal } from 'react-dom';
 
 interface VideoProps {
-    file: {
-      url: string;
-      name: string;
-      type: string;
-    };
-    className?: string;
-    isShowFullScreen?: boolean;
-    isShowDownload?: boolean;
-    isShowVolume?: boolean;
-    isFullScreenVideo?: boolean;
-    onDisableLongPress?: (val: boolean) => void;
-    onFullScreenChange?: (isFullScreen: boolean) => void;
+  file: {
+    url: string;
+    name: string;
+    type: string;
+  };
+  className?: string;
+  isShowFullScreen?: boolean;
+  isShowDownload?: boolean;
+  isShowVolume?: boolean;
+  isFullScreenVideo?: boolean;
+  onDisableLongPress?: (val: boolean) => void;
+  onFullScreenChange?: (isFullScreen: boolean) => void;
 }
 
 function VideoPlayer(props: VideoProps) {
-  const { 
-    file, 
-    className, 
-    isShowDownload = true, 
-    isShowFullScreen = true, 
+  const {
+    file,
+    className,
+    isShowDownload = true,
+    isShowFullScreen = true,
     isShowVolume = true,
     isFullScreenVideo = false,
     onDisableLongPress,
-    onFullScreenChange
-  } = props
+    onFullScreenChange,
+  } = props;
   const [isFullScreen, setIsFullScreen] = useState(isFullScreenVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoThumbnailRef = useRef<HTMLVideoElement>(null);
@@ -52,7 +67,10 @@ function VideoPlayer(props: VideoProps) {
   const [thumbnailLeft, setThumbnailLeft] = useState<number>(0);
   const [isOpenVolume, setIsOpenVolume] = useState(false);
   const [isShowActionBar, setIsShowActionBar] = useState(false);
-  const {volume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
+  const { volume } = useMediaSettingStore((state) => ({
+    volume: state.volume,
+    setVolume: state.setVolume,
+  }));
 
   const toggleVideoPlay = useCallback(() => {
     if (isPlaying) {
@@ -60,7 +78,7 @@ function VideoPlayer(props: VideoProps) {
     } else {
       videoRef.current?.play();
     }
-    setIsPlaying(prev=>!prev);
+    setIsPlaying((prev) => !prev);
   }, [isPlaying]);
 
   const download = () => {
@@ -69,44 +87,51 @@ function VideoPlayer(props: VideoProps) {
       fileName: file.name,
       mimeType: file.type,
     });
-  }
-  
+  };
+
   // Add on end video event
   useEffect(() => {
-    const ref = videoRef.current
+    const ref = videoRef.current;
     const handleEnd = () => {
       setIsPlaying(false);
       ref!.currentTime = 0;
-    }
-    ref?.addEventListener('ended', handleEnd);
+    };
+
+    const handleLoadedData = () => {
+      setVideoDuration(videoRef.current?.duration || 0.1);
+    };
+
+    videoRef.current?.addEventListener('ended', handleEnd);
     // Add duration video
-    ref?.addEventListener('loadedmetadata', () => {
-      setVideoDuration(ref?.duration || 0.1);
-    });
-    return () => {
-      ref?.removeEventListener('ended', handleEnd);
+    videoRef.current?.addEventListener('loadedmetadata', handleLoadedData);
+    if (videoRef?.current?.duration) {
+      handleLoadedData();
     }
-  }, [])
+    return () => {
+      videoRef.current?.removeEventListener('ended', handleEnd);
+      videoRef.current?.removeEventListener('loadedmetadata', handleLoadedData);
+    };
+  }, []);
 
   // Add on time update event
   useEffect(() => {
-    const ref = videoRef.current
+    const ref = videoRef.current;
     const handleTimeUpdate = () => {
       setCurrentTime(ref?.currentTime || 0);
-    }
+    };
     ref?.addEventListener('timeupdate', handleTimeUpdate);
     return () => {
       ref?.removeEventListener('timeupdate', handleTimeUpdate);
-    }
-  }, [])
-  
+    };
+  }, []);
+
   useEffect(() => {
-    if(!isFullScreen) return;
+    if (!isFullScreen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
         setIsFullScreen(false);
       }
-      if(e.code === 'Space') {
+      if (e.code === 'Space') {
         e.preventDefault();
         toggleVideoPlay();
       }
@@ -115,11 +140,11 @@ function VideoPlayer(props: VideoProps) {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isFullScreen, toggleVideoPlay])
+  }, [isFullScreen, toggleVideoPlay]);
 
   // Add event listener for duration bar to get time and get thumbnail
   useEffect(() => {
-    const ref = durationBarRef.current
+    const ref = durationBarRef.current;
     const onMove = async (e: MouseEvent) => {
       setIsHoverDurationBar(true);
       // Get x position of mouse in duration bar => percent = x / width
@@ -130,11 +155,11 @@ function VideoPlayer(props: VideoProps) {
       let duration = Math.round((percent / 100) * videoDuration);
       videoThumbnailRef.current!.currentTime = duration;
       setThumbnailLeft(percent);
-    }
+    };
 
     const onLeave = () => {
       setIsHoverDurationBar(false);
-    }
+    };
 
     ref?.addEventListener('mousemove', onMove);
     ref?.addEventListener('mouseleave', onLeave);
@@ -142,38 +167,37 @@ function VideoPlayer(props: VideoProps) {
     return () => {
       ref?.removeEventListener('mousemove', onMove);
       ref?.removeEventListener('mouseleave', onLeave);
-    }
-
-  }, [file.url, thumbnailLeft, videoDuration])
+    };
+  }, [file.url, thumbnailLeft, videoDuration]);
 
   // On Video Volume Change
   useEffect(() => {
     videoRef.current!.volume = volume;
-  }, [volume])
+  }, [volume]);
 
   // isShowActionBar when hover to videoRef, and hide after 3s if not hover or not mouse move
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null;
-    const ref = wrapperRef.current
+    const ref = wrapperRef.current;
     const handleMouseMove = () => {
-      if(timeout) clearTimeout(timeout);
+      if (timeout) clearTimeout(timeout);
       setIsShowActionBar(true);
       timeout = setTimeout(() => {
-        if(!isOpenVolume) {
+        if (!isOpenVolume) {
           setIsShowActionBar(false);
         }
       }, 2000);
-    }
+    };
     const handleMouseEnter = () => {
-      if(timeout) clearTimeout(timeout);
-      setIsShowActionBar(true); 
-    }
+      if (timeout) clearTimeout(timeout);
+      setIsShowActionBar(true);
+    };
     const handleMouseLeave = () => {
-      if(timeout) clearTimeout(timeout);
-      if(!isOpenVolume) {
+      if (timeout) clearTimeout(timeout);
+      if (!isOpenVolume) {
         setIsShowActionBar(false);
       }
-    }
+    };
     ref?.addEventListener('mouseenter', handleMouseEnter);
     ref?.addEventListener('mouseleave', handleMouseLeave);
     // Move stop mouse inside video
@@ -184,35 +208,34 @@ function VideoPlayer(props: VideoProps) {
       ref?.removeEventListener('mouseleave', handleMouseLeave);
       ref?.removeEventListener('mousemove', handleMouseMove);
 
-      if(timeout) clearTimeout(timeout);
-    }
-  }, [isOpenVolume])
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isOpenVolume]);
 
   useEffect(() => {
-    const ref = actionMenuRef.current
+    const ref = actionMenuRef.current;
     const handleMouseEnter = () => {
       onDisableLongPress && onDisableLongPress(true);
-    }
+    };
     const handleMouseLeave = () => {
       onDisableLongPress && onDisableLongPress(false);
-    }
+    };
     ref?.addEventListener('mouseenter', handleMouseEnter);
     ref?.addEventListener('mouseleave', handleMouseLeave);
     return () => {
       ref?.removeEventListener('mouseenter', handleMouseEnter);
       ref?.removeEventListener('mouseleave', handleMouseLeave);
-    }
-  }, [onDisableLongPress])
-
+    };
+  }, [onDisableLongPress]);
 
   useEffect(() => {
     onFullScreenChange && onFullScreenChange(isFullScreen);
-  }, [isFullScreen, onFullScreenChange])
+  }, [isFullScreen, onFullScreenChange]);
 
   // Use click out side to close volume
   useOnClickOutside([rangeVolumeRef, buttonVolumeRef], () => {
-    if(isOpenVolume) setIsOpenVolume(false);
-  })
+    if (isOpenVolume) setIsOpenVolume(false);
+  });
 
   const formatVideoTimer = useMemo(() => {
     return new Date(currentTime * 1000).toISOString().substr(14, 5);
@@ -221,9 +244,12 @@ function VideoPlayer(props: VideoProps) {
   return (
     <div
       className={cn(
-        "group relative bg-neutral-50 overflow-hidden", 
+        'group relative overflow-hidden bg-neutral-50',
         className,
-        isFullScreen ? 'fixed inset-0 bg-black/90 z-[51] w-full max-w-full h-full rounded-none' : '', )}
+        isFullScreen
+          ? 'fixed inset-0 z-[51] h-full w-full max-w-full rounded-none bg-black/90'
+          : '',
+      )}
       ref={wrapperRef}
     >
       <video
@@ -231,39 +257,67 @@ function VideoPlayer(props: VideoProps) {
         src={file.url}
         controls={false}
         disablePictureInPicture
-        className={cn("h-full w-full object-contain")}
+        className={cn('h-full w-full object-contain')}
       />
       {/* Button play */}
-      <div className='absolute group inset-3 flex items-center justify-center z-10' onClick={(e)=>{
-        e.stopPropagation();
-        e.preventDefault();
-        toggleVideoPlay();
-      }} onDoubleClick={()=>setIsFullScreen(prev=>!prev)}>
+      <div
+        className="group absolute inset-3 z-10 flex items-center justify-center"
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          toggleVideoPlay();
+        }}
+        onDoubleClick={() => setIsFullScreen((prev) => !prev)}
+      >
         <Button.Icon
           variant={'default'}
           color={'default'}
           shape={'default'}
           size={isFullScreen ? 'md' : 'sm'}
           className={cn(
-            'shadow-2', 
-            isPlaying ? 'opacity-0' : '', 
-            isPlaying && isFullScreen && '!opacity-0'
+            'shadow-2',
+            isPlaying ? 'opacity-0' : '',
+            isPlaying && isFullScreen && '!opacity-0',
           )}
         >
-          {
-            isPlaying ? <Pause /> : <PlayIcon />
-          }
+          {isPlaying ? <Pause /> : <PlayIcon />}
         </Button.Icon>
       </div>
 
-      <div className={cn('absolute inset-0 bg-black/20 pointer-events-none duration-500', (isPlaying || isFullScreen) ? 'opacity-0' : '')}></div>
+      <div
+        className={cn(
+          'pointer-events-none absolute inset-0 bg-black/20 duration-500',
+          isPlaying || isFullScreen ? 'opacity-0' : '',
+        )}
+      ></div>
 
       {/* Actions */}
-      <div className={cn('z-10 absolute bottom-1 left-1 right-1 flex items-center justify-end p-1 px-2  duration-500 gap-2 md:rounded-xl rounded-2xl bg-black/40', isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40', isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]')}
-      ref={actionMenuRef}
-      onClick={(e)=>{e.stopPropagation()}}>
-        <span className={cn('md:block hidden text-sm text-white', isFullScreen && 'block')}>{formatVideoTimer}</span>
-        <div className={cn('flex-1 mx-2 py-2 relative md:block hidden', isFullScreen && 'block')} ref={durationBarRef}>
+      <div
+        className={cn(
+          'absolute bottom-1 left-1 right-1 z-10 flex items-center justify-end gap-2 rounded-2xl  bg-black/40 p-1 px-2 duration-500 md:rounded-xl',
+          isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40',
+          isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]',
+        )}
+        ref={actionMenuRef}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <span
+          className={cn(
+            'hidden text-sm text-white md:block',
+            isFullScreen && 'block',
+          )}
+        >
+          {formatVideoTimer}
+        </span>
+        <div
+          className={cn(
+            'relative mx-2 hidden flex-1 py-2 md:block',
+            isFullScreen && 'block',
+          )}
+          ref={durationBarRef}
+        >
           <Range
             step={0.01}
             min={0}
@@ -274,15 +328,18 @@ function VideoPlayer(props: VideoProps) {
               setCurrentTime(videoRef.current!.currentTime);
             }}
             renderTrack={({ props, children }) => (
-              <div {...props} className={cn("w-full h-4 rounded relative")}>
-                <div className="left-0 top-1/2 -translate-y-1/2 h-1 bg-neutral-500 absolute rounded w-full"/>
-                <div className="left-0 top-1/2 -translate-y-1/2 h-1 bg-primary absolute rounded " style={{width: `${(currentTime/videoDuration) * 100}%`}}/>
+              <div {...props} className={cn('relative h-4 w-full rounded')}>
+                <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 rounded bg-neutral-500" />
+                <div
+                  className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded bg-primary "
+                  style={{ width: `${(currentTime / videoDuration) * 100}%` }}
+                />
                 {children}
               </div>
             )}
             renderThumb={({ props }) => (
               <div
-                {...props}  
+                {...props}
                 className="h-4 w-4 rounded-full bg-white"
                 key="1"
               ></div>
@@ -290,133 +347,156 @@ function VideoPlayer(props: VideoProps) {
           />
 
           {/* Thumbnail Video */}
-          <div 
-            className={cn("absolute bottom-[calc(100%+16px)] bg-transparent w-[100px] aspect-video rounded-sm overflow-hidden -translate-x-1/2 transition-all pointer-events-none", isHoverDurationBar ? 'visible' : 'hidden')}
+          <div
+            className={cn(
+              'pointer-events-none absolute bottom-[calc(100%+16px)] aspect-video w-[100px] -translate-x-1/2 overflow-hidden rounded-sm bg-transparent transition-all',
+              isHoverDurationBar ? 'visible' : 'hidden',
+            )}
             style={{
               left: `${thumbnailLeft}%`,
-            }}>
+            }}
+          >
             <video
               ref={videoThumbnailRef}
               src={file.url}
               muted
               controls={false}
               disablePictureInPicture
-              className={cn("h-full w-full")}
+              className={cn('h-full w-full')}
             />
           </div>
         </div>
-        {isShowVolume && <DropdownMenu open={isOpenVolume}>
-          <DropdownMenuTrigger asChild={true}>
-            <div ref={buttonVolumeRef} className={cn('md:block hidden', isFullScreen && 'block')}>
-              <ButtonVolume 
-                isFullScreen={isFullScreen}
-                isOpenVolume={isOpenVolume}
-                setIsOpenVolume={setIsOpenVolume}/>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="center"
-            side="top"
-            className="bg-black/20 !min-w-1 px-[10px] py-4 max-w-6 border-none flex item-center justify-center z-[52]"
-            onClick={() => setIsOpenVolume(false)}
-          >
-            <div ref={rangeVolumeRef}>
-              <RangeVolume />
-            </div>
-          </DropdownMenuContent>
-        </DropdownMenu>}
+        {isShowVolume && (
+          <DropdownMenu open={isOpenVolume}>
+            <DropdownMenuTrigger asChild={true}>
+              <div
+                ref={buttonVolumeRef}
+                className={cn('hidden md:block', isFullScreen && 'block')}
+              >
+                <ButtonVolume
+                  isFullScreen={isFullScreen}
+                  isOpenVolume={isOpenVolume}
+                  setIsOpenVolume={setIsOpenVolume}
+                />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="center"
+              side="top"
+              className="item-center z-[52] flex !min-w-1 max-w-6 justify-center border-none bg-black/20 px-[10px] py-4"
+              onClick={() => setIsOpenVolume(false)}
+            >
+              <div ref={rangeVolumeRef}>
+                <RangeVolume />
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
         {/* Download */}
-        {isShowDownload && <Button.Icon
-          variant={'default'}
-          color={'default'}
-          size={isFullScreen ? 'xs' : 'ss'}
-          shape={'default'}
-          className={cn(isFullScreen ? '' : 'hidden')}
-          onClick={download}
-        >
-          <DownloadIcon />
-        </Button.Icon>}
+        {isShowDownload && (
+          <Button.Icon
+            variant={'default'}
+            color={'default'}
+            size={isFullScreen ? 'xs' : 'ss'}
+            shape={'default'}
+            className={cn(isFullScreen ? '' : 'hidden')}
+            onClick={download}
+          >
+            <DownloadIcon />
+          </Button.Icon>
+        )}
         {/* Full Screen */}
-        {isShowFullScreen && <Button.Icon
-          variant={'default'}
-          color={'default'}
-          size={isFullScreen ? 'xs' : 'ss'}
-          shape={'default'}
-          onClick={() => setIsFullScreen(!isFullScreen)}
-        >
-          {isFullScreen ? <X /> : <Maximize2Icon />}
-        </Button.Icon>}
+        {isShowFullScreen && (
+          <Button.Icon
+            variant={'default'}
+            color={'default'}
+            size={isFullScreen ? 'xs' : 'ss'}
+            shape={'default'}
+            onClick={() => setIsFullScreen(!isFullScreen)}
+          >
+            {isFullScreen ? <X /> : <Maximize2Icon />}
+          </Button.Icon>
+        )}
       </div>
     </div>
   );
-};
+}
 
 interface ButtonVolumeProps {
   isFullScreen: boolean;
   isOpenVolume: boolean;
   setIsOpenVolume: (value: boolean) => void;
 }
-const ButtonVolume = memo(({
-  isFullScreen,
-  isOpenVolume,
-  setIsOpenVolume
-} : ButtonVolumeProps) => {
-  const {volume, setVolume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
+const ButtonVolume = memo(
+  ({ isFullScreen, isOpenVolume, setIsOpenVolume }: ButtonVolumeProps) => {
+    const { volume, setVolume } = useMediaSettingStore((state) => ({
+      volume: state.volume,
+      setVolume: state.setVolume,
+    }));
 
-  const onClickVolume = (e: any) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if(!isOpenVolume) {
-      setIsOpenVolume(true);
-      return;
-    }
-    if(isOpenVolume && volume > 0) {
-      setVolume(0);
-    } else if(isOpenVolume && volume == 0) {
-      setVolume(1);
-    }
-  }
-  return <Button.Icon
-    variant={'default'}
-    color={'default'}
-    size={isFullScreen ? 'xs' : 'ss'}
-    shape={'default'}
-    onClick={onClickVolume}
-  >
-    {volume == 0 && <VolumeXIcon />}
-    {(volume > 0 && volume < 0.5 && <Volume1Icon />)}
-    {(volume >= 0.5 && <Volume2Icon />)}
-  </Button.Icon>
-})
+    const onClickVolume = (e: any) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!isOpenVolume) {
+        setIsOpenVolume(true);
+        return;
+      }
+      if (isOpenVolume && volume > 0) {
+        setVolume(0);
+      } else if (isOpenVolume && volume == 0) {
+        setVolume(1);
+      }
+    };
+    return (
+      <Button.Icon
+        variant={'default'}
+        color={'default'}
+        size={isFullScreen ? 'xs' : 'ss'}
+        shape={'default'}
+        onClick={onClickVolume}
+      >
+        {volume == 0 && <VolumeXIcon />}
+        {volume > 0 && volume < 0.5 && <Volume1Icon />}
+        {volume >= 0.5 && <Volume2Icon />}
+      </Button.Icon>
+    );
+  },
+);
 ButtonVolume.displayName = 'ButtonVolume';
 
 const RangeVolume = memo(() => {
-  const {volume, setVolume} = useMediaSettingStore(state => ({volume: state.volume, setVolume: state.setVolume}));
-  return <Range
-    direction={Direction.Up}
-    step={0.01}
-    min={0}
-    max={1}
-    values={[volume]}
-    onChange={(values) => {
-      setVolume(values[0]);
-    }}
-    renderTrack={({ props, children }) => (
-      <div {...props} className={cn("h-[80px] w-1 rounded bg-neutral-500 relative")}>
-        <div className="left-0 right-0 bottom-0 bg-primary absolute rounded" style={{height: `${volume * 100}%`}}/>
-        {children}
-      </div>
-    )}
-    renderThumb={({ props }) => (
-      <div
-        {...props}
-        className="h-4 w-4 rounded-full bg-white"
-        key="1"
-      ></div>
-    )}
-  />
-})
+  const { volume, setVolume } = useMediaSettingStore((state) => ({
+    volume: state.volume,
+    setVolume: state.setVolume,
+  }));
+  return (
+    <Range
+      direction={Direction.Up}
+      step={0.01}
+      min={0}
+      max={1}
+      values={[volume]}
+      onChange={(values) => {
+        setVolume(values[0]);
+      }}
+      renderTrack={({ props, children }) => (
+        <div
+          {...props}
+          className={cn('relative h-[80px] w-1 rounded bg-neutral-500')}
+        >
+          <div
+            className="absolute bottom-0 left-0 right-0 rounded bg-primary"
+            style={{ height: `${volume * 100}%` }}
+          />
+          {children}
+        </div>
+      )}
+      renderThumb={({ props }) => (
+        <div {...props} className="h-4 w-4 rounded-full bg-white" key="1"></div>
+      )}
+    />
+  );
+});
 RangeVolume.displayName = 'RangeVolume';
-
 
 export default memo(VideoPlayer);
