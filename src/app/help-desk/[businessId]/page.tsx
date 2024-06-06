@@ -42,15 +42,16 @@ const HelpDeskStartConversationPage = async ({
       `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
     ) && originReferer;
 
-  // if (!allowedDomain && !isRedirectedFromRatePage) {
-  //   notFound();
-  // }
+  const host = headersList.get('host');
 
   return (
     <TrackGuest
       extensionId={businessId}
       domain={String(isRedirectedFromRatePage ? originReferer : allowedDomain)}
-      invalidDomain={!allowedDomain && !isRedirectedFromRatePage}
+      invalidDomain={
+        (!allowedDomain && !isRedirectedFromRatePage) ||
+        host === process.env.NEXT_PUBLIC_URL
+      }
     >
       <StartAConversation
         visitorData={headersList}

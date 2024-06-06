@@ -2,6 +2,7 @@
 
 import { trackGuest } from '@/services/extension.service';
 import { LSK_FROM_DOMAIN, LSK_TRACKING_VISIT_ID } from '@/types/business.type';
+import Image from 'next/image';
 import React, { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,11 +38,14 @@ const TrackGuest = ({
 
   if (invalidDomain) {
     return (
-      <section className="flex h-screen items-center justify-center">
+      <section className="container flex h-screen flex-col items-center justify-center">
+        <div className="pb-4">
+          <Image src="/404.svg" alt="404" width={200} height={200} />
+        </div>
         <h4 className="text-2xl font-semibold text-primary-500-main">
           {t('EMBED_SCRIPT.INVALID_DOMAIN.TITLE')}
         </h4>
-        <p className="text-lg font-light text-neutral-800">
+        <p className="text-lg font-light text-neutral-800 max-w-[calc(100vw-64px)]">
           {t('EMBED_SCRIPT.INVALID_DOMAIN.DESCRIPTION')}
         </p>
       </section>
