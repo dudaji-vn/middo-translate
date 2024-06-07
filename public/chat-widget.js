@@ -1,5 +1,4 @@
 (function () {
-
   function intChatInterface(chatSRC, primaryColor = 'default') {
     const colorMap = {
       default: '#3D88ED',
@@ -138,7 +137,7 @@
     chatWidget.innerHTML = `
               <iframe 
                 id="chat-frame-widget" 
-                src="${srcWithDomain}"
+                src="/"
                 class="ring-1 rounded-lg iframe_inset" 
                 style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
                   border: none; 
@@ -168,7 +167,14 @@
     const btn = document.getElementById('btn-trigger-chat');
     const frameWidget = document.getElementById('chat-frame-widget');
     const triangleWidget = document.getElementById('widget_triangle');
-
+    // set No cors to fetch iframe
+    fetch(`${chatSRC}/check-host?host=${domain}`, {
+      mode: 'no-cors',
+    }).then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        frameWidget.src = srcWithDomain;
+      }
+    });
     document.getElementById('iframe-trigger').addEventListener('click', () => {
       if (btn.innerHTML === components.icon_message) {
         btn.innerHTML = components.icon_close;
