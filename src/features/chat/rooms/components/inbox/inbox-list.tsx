@@ -1,4 +1,4 @@
-import { Fragment, forwardRef, memo, useEffect, useMemo } from 'react';
+import { Fragment, forwardRef, memo, useEffect, useId, useMemo, useRef } from 'react';
 
 import { InfiniteScroll } from '@/components/infinity-scroll';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -27,6 +27,8 @@ import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
 import ViewSpaceInboxFilter from './view-space-inbox-filter';
 import { isEmpty } from 'lodash';
+import { ALPHABET_LIST, ALPHABET_SELECTOR, OTHER_CHARACTER } from '../../configs/alphabet-list';
+import { useTranslation } from 'react-i18next';
 
 interface InboxListProps {
   type: InboxType;
@@ -43,6 +45,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       businessRoomId,
       isBusiness,
     } = useBusinessNavigationData();
+    const {t} = useTranslation('common')
+    const charactersScrollBarRef = useRef<HTMLDivElement>(null);
     const { businessExtension } = useBusinessExtensionStore();
     const { appliedFilters } = useSpaceInboxFilterStore();
     const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
@@ -90,11 +94,20 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const sortedRooms = useMemo(() => {
       if(!isSortByName) return rooms;
       let roomsClone = [...rooms];
-      roomsClone.sort((a, b) => {
-        const aParticipants = a.participants.find((p) => p._id !== currentUser?._id);
-        const bParticipants = b.participants.find((p) => p._id !== currentUser?._id);
-        if(!aParticipants || !bParticipants) return 0;
-        return aParticipants?.name?.toLowerCase() < bParticipants?.name?.toLowerCase() ? -1 : 1
+      // Sorted by a-z , if not in ALPHABET_LIST, move to last
+      roomsClone.sort((a: Room, b: Room) => {
+        const aParticipantName = a.participants.find((p) => p._id !== currentUser?._id)?.name?.toLowerCase() || '';
+        const bParticipantName = b.participants.find((p) => p._id !== currentUser?._id)?.name?.toLowerCase() || '';
+        if(ALPHABET_LIST.includes(aParticipantName.charAt(0))) {
+          if(ALPHABET_LIST.includes(bParticipantName.charAt(0))) {
+            return aParticipantName.localeCompare(bParticipantName);
+          }
+          return -1;
+        }
+        if(ALPHABET_LIST.includes(bParticipantName.charAt(0))) {
+          return 1;
+        }
+        return aParticipantName.localeCompare(bParticipantName);
       })
       return roomsClone.map(r => {
         if(r.name) return r;
@@ -102,8 +115,29 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         return { ...r, name: anotherUser?.name }
       })
     }, [currentUser?._id, isSortByName, rooms]);
-    
-    let isShowChar = true;
+    const scrollToCharacter = (id: string) => {
+      const element = document.getElementById(ALPHABET_SELECTOR + id);
+      if (element) {
+        element.scrollIntoView();
+      }
+    }
+    useEffect(() => {
+      const ref = charactersScrollBarRef.current
+      if(!ref) return;
+      const handle = (e: TouchEvent) => {
+        const currentElement = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+        if(!currentElement) return;
+        if(!currentElement.closest('#characters')) return;
+        let char = currentElement?.innerHTML?.toString()?.toLowerCase();
+        if([...ALPHABET_LIST, OTHER_CHARACTER].includes(char)) {
+          scrollToCharacter(char);
+        }
+      }
+      document.addEventListener('touchmove', handle)
+      return () => {
+        document.removeEventListener('touchmove', handle)
+      }
+    }, [type]);
 
     const { rooms: pinnedRooms, refetch: refetchPinned } =
       useGetPinnedRooms(spaceId);
@@ -160,8 +194,10 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const showFilter =
       Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
     
+    
+
     return (
-      <div ref={ref} className="relative h-full w-full flex-1 overflow-hidden ">
+      <div ref={ref} className={cn("relative h-full w-full flex-1 overflow-hidden ", isSortByName && 'pr-3 md:pr-0 relative')}>
         {isScrolled && (
           <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
         )}
@@ -169,11 +205,11 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         <div
           id="scrollableDiv"
           ref={scrollRef}
-          className={cn('h-full gap-2 overflow-y-auto')}
+          className={cn('h-full gap-2 overflow-y-auto no-scrollbar')}
         >
           <InfiniteScroll
             isRefreshing={isRefetching}
-            pullToRefresh
+            pullToRefresh={!isSortByName}
             onRefresh={refetch}
             onLoadMore={fetchNextPage}
             hasMore={hasNextPage || false}
@@ -199,40 +235,62 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   isBusiness,
                 });
 
-                const nextRoom = sortedRooms[index + 1];
-                const isCurrentShow = isShowChar
-                if (
-                  nextRoom 
-                  && nextRoom.name?.charAt(0).toLowerCase() === room.name?.charAt(0).toLowerCase()) {
-                  isShowChar = false;
-                } else {
-                  isShowChar = true;
+                
+                let char: string | undefined;
+                if(isSortByName) {
+                  const prevRoom: Room | null = index > 0 ? sortedRooms[index - 1] : null;
+
+                  let prevFirstChar = prevRoom?.name?.charAt(0).toLowerCase();
+                  let currentFirstChar = room.name?.charAt(0).toLowerCase();
+                  if(!currentFirstChar) char = undefined;
+                  // CASE: First item
+                  else if(!prevFirstChar) char = ALPHABET_LIST.includes(currentFirstChar) ? currentFirstChar : OTHER_CHARACTER;
+                  // CASE: Previous item is not in alphabet => Already add Other character
+                  else if(prevFirstChar && !ALPHABET_LIST.includes(prevFirstChar)) char = undefined;
+                  // CASE: Previous item is in alphabet, and current item different with previous item
+                  else if(prevFirstChar && ALPHABET_LIST.includes(prevFirstChar) && currentFirstChar !== prevFirstChar) {
+                    char = ALPHABET_LIST.includes(currentFirstChar) ? currentFirstChar : OTHER_CHARACTER;
+                  }
+                  // CASE: Previous item is in alphabet, and current item same with previous item
+                  else if(prevFirstChar && ALPHABET_LIST.includes(prevFirstChar) && currentFirstChar === prevFirstChar) char = undefined;
                 }
+                
                 
                 return (
                   <Fragment key={room._id}>
                     {
-                      isSortByName && isCurrentShow && <span className="block px-3 py-1 my-2 mx-3 text-neutral-500 text-xs border-b border-neutral-50">
-                        {room.name?.charAt(0).toUpperCase()}
+                      isSortByName && char && <span className="block px-3 py-1 my-2 mx-3 text-neutral-500 text-xs border-b border-neutral-50" id={ALPHABET_SELECTOR + char}>
+                        {char.toUpperCase()}
                       </span>
                     }
                     <RoomItem
                       showTime={type !== 'contact'}
                       type={type}
                       isOnline={isOnline}
-                      
                       data={room}
                       isActive={currentRoomId === room._id}
                       currentRoomId={currentRoomId as string}
                       businessId={businessExtension?._id}
                     />
                   </Fragment>
-                  
                 );
               })
             }
           </InfiniteScroll>
+          {
+            isSortByName && <p className="text-center block px-3 py-1 my-2 mx-3 text-neutral-500 text-sm border-t border-neutral-50">{sortedRooms.length} {t('COMMON.CONTACTS')}</p>
+          }
         </div>
+        {isSortByName && <div className='absolute bottom-0 right-0 pr-1 top-0 flex flex-col justify-center md:hidden' ref={charactersScrollBarRef} id='characters'>
+          {
+            [...ALPHABET_LIST, OTHER_CHARACTER].map((char, _) => {
+              return <span 
+              key={char} 
+              className="text-xs text-neutral-500 transition-all text-center pl-5" 
+              onClick={()=>scrollToCharacter(char)}>{char.toLocaleUpperCase()}</span>
+            })
+          }
+        </div>}
       </div>
     );
   },
