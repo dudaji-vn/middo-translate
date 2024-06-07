@@ -673,7 +673,7 @@
       "CREATE_BUTTON": "Create Space and invite members",
       "ERRORS": {
         "NAME_REQUIRED": "Space name is required",
-        "NAME_MAX_LENGTH": "Space name must be less than 50 characters",
+        "NAME_MAX_LENGTH": "Space name must be less than 30 characters",
         "AVATAR_REQUIRED": "Space avatar is required",
         "INVALID_EMAIL_MEMBER": "Invalid email member"
       },

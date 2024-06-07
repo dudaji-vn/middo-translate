@@ -665,7 +665,7 @@
       "CREATE_BUTTON": "공간 만들기 및 멤버 초대",
       "ERRORS": {
         "NAME_REQUIRED": "공간 이름은 필수입니다",
-        "NAME_MAX_LENGTH": "공간 이름은 50자 이내여야 합니다",
+        "NAME_MAX_LENGTH": "공간 이름은 30자 이내여야 합니다",
         "AVATAR_REQUIRED": "공간 아바타는 필수입니다",
         "INVALID_EMAIL_MEMBER": "잘못된 이메일 멤버"
       },

@@ -31,7 +31,7 @@ const createSpaceSchema = z.object({
     .min(1, {
       message: 'EXTENSION.SPACE.ERRORS.NAME_REQUIRED',
     })
-    .max(50, {
+    .max(30, {
       message: 'EXTENSION.SPACE.ERRORS.NAME_MAX_LENGTH',
     }),
   avatar: z.string().min(1, {
