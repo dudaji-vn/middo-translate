@@ -28,6 +28,7 @@ import { InboxType } from './inbox';
 import ViewSpaceInboxFilter from './view-space-inbox-filter';
 import { isEmpty } from 'lodash';
 import { ALPHABET_LIST, ALPHABET_SELECTOR, OTHER_CHARACTER } from '../../configs/alphabet-list';
+import { useTranslation } from 'react-i18next';
 
 interface InboxListProps {
   type: InboxType;
@@ -44,6 +45,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       businessRoomId,
       isBusiness,
     } = useBusinessNavigationData();
+    const {t} = useTranslation('common')
     const charactersScrollBarRef = useRef<HTMLDivElement>(null);
     const { businessExtension } = useBusinessExtensionStore();
     const { appliedFilters } = useSpaceInboxFilterStore();
@@ -207,7 +209,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         >
           <InfiniteScroll
             isRefreshing={isRefetching}
-            pullToRefresh
+            pullToRefresh={!isSortByName}
             onRefresh={refetch}
             onLoadMore={fetchNextPage}
             hasMore={hasNextPage || false}
@@ -258,7 +260,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   <Fragment key={room._id}>
                     {
                       isSortByName && char && <span className="block px-3 py-1 my-2 mx-3 text-neutral-500 text-xs border-b border-neutral-50" id={ALPHABET_SELECTOR + char}>
-                        {char}
+                        {char.toUpperCase()}
                       </span>
                     }
                     <RoomItem
@@ -275,6 +277,9 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               })
             }
           </InfiniteScroll>
+          {
+            isSortByName && <p className="text-center block px-3 py-1 my-2 mx-3 text-neutral-500 text-sm border-t border-neutral-50">{sortedRooms.length} {t('COMMON.CONTACTS')}</p>
+          }
         </div>
         {isSortByName && <div className='absolute bottom-0 right-0 pr-1 top-0 flex flex-col justify-center md:hidden' ref={charactersScrollBarRef} id='characters'>
           {
