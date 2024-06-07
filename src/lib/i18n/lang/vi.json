@@ -32,7 +32,7 @@
     "REPLACE": "Thay thế",
     "UPDATE": "Cập nhật",
     "ALL": "Tất cả",
-    "CONTACT": "Liên hệ",
+    "CONTACT": "Danh bạ",
     "GROUP": "Nhóm",
     "UNREAD": "Chưa đọc",
     "SWITCH": "Chuyển",
@@ -594,7 +594,7 @@
     },
     "DELETE_CONTACT": {
       "TITLE": "Xoá liên hệ",
-      "DESCRIPTION": "Bạn có chắc muốn xoá liên hệ?"
+      "DESCRIPTION": "Bạn có chắc muốn xoá liên hệ này?"
     }
   },
   "FILTERS": {

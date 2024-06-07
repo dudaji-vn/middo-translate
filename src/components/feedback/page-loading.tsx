@@ -21,7 +21,7 @@ export const PageLoading = forwardRef<HTMLDivElement, PageLoadingProps>(
               'fixed bottom-0 left-0 right-0 top-0 z-[999] flex items-center justify-center bg-white/90',
             )}
           >
-            <Image src='/loading-middo.gif' alt="Loading" width={100} height={100} />
+            <Image src='/loading-middo.gif' alt="Loading" width={100} height={100} priority/>
           </div>
         )}
         <div className={isLoading ? 'hidden' : 'block'} {...props}>{props.children}</div>
