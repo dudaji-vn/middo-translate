@@ -20,6 +20,7 @@ import { useAppStore } from '@/stores/app.store';
 import { generateRoomDisplay } from '../utils';
 import { useAuthStore } from '@/stores/auth.store';
 import { useQueryClient } from '@tanstack/react-query';
+import { inboxTabMap } from '../components/inbox/inbox';
 
 interface ChatBoxContextProps {
   room: Room;
@@ -56,10 +57,13 @@ export const ChatBoxProvider = ({
     },
     [room._id, router],
   );
-  const handleDeleteContact = useCallback(()=> {
-    queryClient.invalidateQueries(['rooms', 'contact']);
-    queryClient.invalidateQueries(['rooms', 'waiting']);
-  }, [queryClient]);
+  const handleDeleteContact = useCallback((_room: Partial<Room>)=> {
+    Object.keys(inboxTabMap).forEach((tab) => {
+      queryClient.invalidateQueries(['rooms', tab]);
+    });
+    if(room._id !== _room._id) return;
+    setRoom((old) => ({ ...old, ..._room }));
+  }, [queryClient, room._id]);
 
   useEffect(() => {
     if (socketConnected) {

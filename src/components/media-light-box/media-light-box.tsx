@@ -221,9 +221,6 @@ function MediaLightBox(props: MediaLightBoxProps) {
         {/* Image main */}
         
         <div className="w-full h-full flex justify-center items-center overflow-auto no-scrollbar focus:scroll-auto select-none">
-          {/* <div className="absolute z-[-1] inset-0 flex items-center justify-center">
-            <Image src="/loading-middo.gif" width={50} height={50} alt="Loading"/>
-          </div> */}
           <TransformWrapper
             initialScale={1}
             minScale={1}
