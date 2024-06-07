@@ -13,7 +13,7 @@ const page = ({
 }) => {
   const hasNotification = true;
   return (
-    <div className="relative flex  h-screen w-screen flex-row items-end justify-end   bg-purple-100">
+    <div className="relative flex  h-screen w-screen flex-row items-end justify-end  ">
       <button className="relative m-2 w-fit rounded-full bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]">
         <Ping
           size={16}

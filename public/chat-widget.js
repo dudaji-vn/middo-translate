@@ -221,8 +221,6 @@
 
     const divTrigger = document.getElementById('iframe-trigger');
 
-    const visid = localStorage.getItem('visitor_room_id');
-
     divTrigger.addEventListener('click', () => {
       if (btn.innerHTML !== components.icon_close) {
         btn.innerHTML = components.icon_close;
@@ -247,11 +245,7 @@
           // btn.style.opacity = 0;
           btn.innerHTML = components.icon_message;
           divTrigger.disabled = false;
-          console.log('chat-widget loaded', visid);
-          if (visid) {
-            frameWidget.style.height = '500px';
-          } else {
-          }
+
           console.log('frameWidget loaded');
         }, 200);
       })
