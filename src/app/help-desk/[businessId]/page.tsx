@@ -42,9 +42,9 @@ const HelpDeskStartConversationPage = async ({
       `${process.env.NEXT_PUBLIC_URL}/help-desk/${businessId}/rate`,
     ) && originReferer;
 
-  // if (!allowedDomain && !isRedirectedFromRatePage) {
-  //   notFound();
-  // }
+  if (!allowedDomain && !isRedirectedFromRatePage) {
+    notFound();
+  }
 
   return (
     <TrackGuest

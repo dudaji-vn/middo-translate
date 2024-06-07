@@ -10,7 +10,7 @@ import {
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { LSK_FROM_DOMAIN } from '@/types/business.type';
-import { LogOut, Menu } from 'lucide-react';
+import { LogOut, Menu, Minus } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 
@@ -40,7 +40,7 @@ const HelpDeskDropdownMenu = () => {
   if (!isOnHelpDeskChat) return null;
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="p-3 text-neutral-300">
+      <DropdownMenuTrigger className="p-3 text-neutral-700">
         <Menu size={20} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
