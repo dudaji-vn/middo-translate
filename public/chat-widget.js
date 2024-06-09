@@ -237,9 +237,6 @@
         triangleWidget.classList.remove('active');
       }
     });
-    frameWidget.addEventListener('load', () => {
-      btnIframe.style.display = 'block';
-    });
 
     divTrigger.disabled = true;
 
@@ -257,6 +254,9 @@
       .catch((error) => {
         chatWidget.remove();
       });
+    frameWidget.addEventListener('load', () => {
+      btnIframe.style.display = 'block';
+    });
   }
   window.ChatWidget = {
     init: intChatInterface,
