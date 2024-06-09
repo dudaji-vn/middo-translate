@@ -23,6 +23,7 @@ const HelpDeskDropdownMenu = () => {
   const roomId = params?.slugs?.[0];
   const router = useRouter();
   const items = useMemo(() => {
+    if (typeof window === 'undefined') return [];
     const fromDomain = localStorage.getItem(LSK_FROM_DOMAIN);
     return [
       {
