@@ -21,4 +21,5 @@ export const ROUTE_NAMES = {
   EXTENSION: '/spaces',
   LANDING_PAGE: '/landing',
   SETTINGS: '/settings',
+  WIDGET_NOTIFICATION: '/widget-notification',
 };
