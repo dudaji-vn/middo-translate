@@ -72,7 +72,7 @@ const HeaderProfile = ({
               className='dark:bg-neutral-900 dark:border-neutral-800'
             >
               <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
-                <DropdownMenuItem className="flex items-center">
+                <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800">
                   <SettingsIcon className="mr-2 size-4" />
                   <span>{t('HEADER.ACCOUNT_SETTING')}</span>
                 </DropdownMenuItem>
@@ -86,7 +86,7 @@ const HeaderProfile = ({
                 </Link>
               )} */}
 
-              <DropdownMenuItem className="flex items-center" onClick={signOut}>
+              <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800" onClick={signOut}>
                 <LogOutIcon className="mr-2 size-4" />
                 <span> {t('HEADER.SIGN_OUT')}</span>
               </DropdownMenuItem>
@@ -108,13 +108,13 @@ const HeaderProfile = ({
               className='dark:bg-neutral-900 dark:border-neutral-800'
             >
               <Link href={ROUTE_NAMES.SIGN_IN}>
-                <DropdownMenuItem className="flex items-center">
+                <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800">
                   <LogInIcon className="mr-2 size-4" />
                   <span>{t('HEADER.SIGN_IN')}</span>
                 </DropdownMenuItem>
               </Link>
               <Link href={ROUTE_NAMES.SETTINGS}>
-                <DropdownMenuItem className="flex items-center">
+                <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800">
                   <SettingsIcon className="mr-2 size-4" />
                   <span> {t('HEADER.SETTINGS')}</span>
                 </DropdownMenuItem>

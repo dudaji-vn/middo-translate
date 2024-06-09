@@ -126,7 +126,7 @@ export const Content = ({
               )}
               pathProps={{
                 className:
-                  position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6]',
+                  position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6] dark:fill-neutral-800',
               }}
             />
             <div
@@ -146,7 +146,7 @@ export const Content = ({
                 <RichTextView
                   mentionClassName={position === 'right' ? 'right' : 'left'}
                   editorStyle={cn(
-                    'font-light translated text-base md:text-sm',
+                    'font-light translated text-base md:text-sm dark:text-neutral-50',
                     isEditing ? 'isEditing' : '',
                   )}
                   content={enContent || ''}

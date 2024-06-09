@@ -119,7 +119,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     <div
       className={cn(
         'group flex',
-        isActive ? 'bg-primary-200' : 'bg-white hover:bg-primary-100',
+        isActive ? 'bg-primary-200 dark:bg-primary-800' : 'bg-white dark:bg-neutral-950 hover:bg-primary-100 dark:hover:bg-primary-900',
         className,
       )}
     >
@@ -197,12 +197,12 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             </div>
 
             {rightElement}
-            {isMuted && (
+            {isMuted && type != 'contact' && (
               <div className="flex items-center">
                 <BellOffIcon className="size-4 fill-error stroke-error text-neutral-600" />
               </div>
             )}
-            {room?.isPinned && (
+            {room?.isPinned && type != 'contact' && (
               <div className="flex items-center">
                 <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
               </div>
@@ -257,7 +257,7 @@ const RenderItemUserName = () => {
 
   if (!user) return null;
 
-  return <p className="text-neutral-800 text-sm font-light line-clamp-1">{'@' + user?.username}</p>;
+  return <p className="text-neutral-800 text-sm font-light line-clamp-1 dark:text-neutral-50">{'@' + user?.username}</p>;
 }
 
 const ItemSubDraft = ({ htmlContent }: { htmlContent: string }) => {

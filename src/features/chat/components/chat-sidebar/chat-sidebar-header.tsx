@@ -83,7 +83,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
         >
           <Menu />
         </Button.Icon>
-        <Typography variant="h6">{t('CONVERSATION.TITLE')}</Typography>
+        <Typography variant="h6" className='dark:text-neutral-50'>{t('CONVERSATION.TITLE')}</Typography>
         <div className="flex gap-3">
           <Tooltip
             title={t('TOOL_TIP.NEW_CONVERSATION')}

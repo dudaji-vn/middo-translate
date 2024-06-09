@@ -440,7 +440,7 @@ const DesktopWrapper = ({
               <MoreVerticalIcon />
             </Button.Icon>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
             {items.map((item) => (
               <DropdownMenuItem
                 disabled={item.disabled}
@@ -449,6 +449,7 @@ const DesktopWrapper = ({
                   e.stopPropagation();
                   item.onAction();
                 }}
+                className='dark:hover:bg-neutral-800'
               >
                 {cloneElement(item.icon, {
                   size: 16,

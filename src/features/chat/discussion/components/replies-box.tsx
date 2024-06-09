@@ -124,7 +124,7 @@ export const RepliesBox = () => {
           <div className="h-[1px] flex-1 bg-neutral-100" />
           <div className="flex items-center justify-center">
             <div className="bg-primary/30 h-[1px]" />
-            <span className="text-xs font-light text-neutral-500">
+            <span className="text-xs font-light text-neutral-500 dark:text-neutral-200">
               {messages.length > 1
                 ? t('CONVERSATION.REPLIES', { num: messages.length })
                 : t('CONVERSATION.REPLY', { num: messages.length })}

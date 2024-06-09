@@ -272,7 +272,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
               {isSendBySpaceMember && (
                 <span
                   className={cn(
-                    'mt-1  block text-xs font-light text-neutral-500',
+                    'mt-1  block text-xs font-light text-neutral-500 dark:text-neutral-200',
                     isMe ? 'text-end' : 'pl-7 text-start',
                   )}
                 >

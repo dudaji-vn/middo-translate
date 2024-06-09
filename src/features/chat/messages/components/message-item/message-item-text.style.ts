@@ -3,7 +3,7 @@ import { cva } from 'class-variance-authority';
 export const wrapperVariants = cva('px-3 py-2 md:py-1', {
   variants: {
     position: {
-      left: 'bg-neutral-50',
+      left: 'bg-neutral-50 dark:bg-neutral-900',
       right: 'bg-primary',
     },
     status: {
@@ -45,8 +45,8 @@ export const wrapperMiddleVariants = cva(
   {
     variants: {
       position: {
-        left: 'bg-neutral-100/80',
-        right: 'bg-primary-400s bg-white/20',
+        left: 'bg-neutral-100/80 dark:bg-neutral-800',
+        right: 'bg-primary-400s bg-white/20 dark:bg-primary-400 dark:text-neutral-50',
       },
       status: {
         removed: 'bg-transparent',
