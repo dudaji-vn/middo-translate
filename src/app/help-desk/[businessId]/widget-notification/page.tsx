@@ -41,6 +41,9 @@ const EmbedButtonPage = () => {
   }, [room]);
 
   useEffect(() => {
+    if (typeof document !== 'undefined')
+      document.body.style.background = 'transparent';
+
     if (!idsFound) {
       const intervalId = setInterval(checkTheLocalStorage, 7000);
       return () => clearInterval(intervalId);
