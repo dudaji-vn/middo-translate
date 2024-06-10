@@ -19,7 +19,11 @@ export const SeenTracker = ({ onSeen, guestId, hidden }: SeenTrackProps) => {
   const userId = storeUserId || guestId;
   const isRead = message.readBy?.includes(userId!);
   const { mutate } = useMutation({
-    mutationFn: storeUserId ? messageApi.seen : messageApi.seenAnonymous,
+    mutationFn: (id: string) => {
+      return storeUserId
+        ? messageApi.seen(id)
+        : messageApi.seenAnonymous(id, userId!);
+    },
   });
 
   if (isRead || message.status === 'pending' || hidden) {
