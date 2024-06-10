@@ -180,7 +180,7 @@
     const paths = chatSRC.split('://');
     const rest = paths[1]?.split('/');
     const middoDomain = rest?.[0];
-    const srcButton = `${paths[0]}://${middoDomain}/widget-notification?businessId=${rest[2]}&domain=${domain}`;
+    const srcButton = `${chatSRC}/widget-notification`;
     chatWidget.innerHTML = `
               <iframe 
                 id="chat-frame-widget" 
@@ -198,7 +198,9 @@
                 <div
                   id="iframe-trigger" style="position: fixed; bottom: 22px;  right:  22px; width: 200px; height: 200px;
                   ">
-                    <iframe   src="${srcButton}"
+                    <iframe
+                    id="btn-trigger-chat-iframe"
+                    src="${srcButton}"
                      style="position: fixed; bottom: 22px;  right:  22px; width: 110px; height: 110px; border: none;  ">
                     </iframe>
                     <button id="btn-trigger-chat"
@@ -218,7 +220,8 @@
     const btn = document.getElementById('btn-trigger-chat');
     const frameWidget = document.getElementById('chat-frame-widget');
     const triangleWidget = document.getElementById('widget_triangle');
-
+    const btnIframe = document.getElementById('btn-trigger-chat-iframe');
+    btnIframe.style.display = 'none';
     const divTrigger = document.getElementById('iframe-trigger');
 
     divTrigger.addEventListener('click', () => {
@@ -245,13 +248,15 @@
           // btn.style.opacity = 0;
           btn.innerHTML = components.icon_message;
           divTrigger.disabled = false;
-
           console.log('frameWidget loaded');
         }, 200);
       })
       .catch((error) => {
         chatWidget.remove();
       });
+    frameWidget.addEventListener('load', () => {
+      btnIframe.style.display = 'block';
+    });
   }
   window.ChatWidget = {
     init: intChatInterface,
