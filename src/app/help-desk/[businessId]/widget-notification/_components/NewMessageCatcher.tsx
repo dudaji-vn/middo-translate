@@ -3,6 +3,7 @@
 import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useGetRoomData } from '@/features/business-spaces/hooks/use-get-chat-room';
+import { Message } from '@/features/chat/messages/types';
 import { Room } from '@/features/chat/rooms/types';
 import { usePlatformStore } from '@/features/platform/stores';
 import socket from '@/lib/socket-io';
@@ -11,14 +12,15 @@ import { cn } from '@/utils/cn';
 import { useNetworkStatus } from '@/utils/use-network-status';
 import { User } from '@sentry/nextjs';
 import React, { useEffect } from 'react';
-import { Message } from 'yup';
 
 const NewMessageCatcher = ({
   room,
   anonymousUser,
+  onRoomEnd,
 }: {
   room: Room;
   anonymousUser?: User;
+  onRoomEnd: () => void;
 }) => {
   const [isClient, setIsClient] = React.useState(false);
   const [showPing, setShowPing] = React.useState(false);
@@ -51,6 +53,16 @@ const NewMessageCatcher = ({
 
   useEffect(() => {
     socket.on(
+      SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE,
+      (message: { readBy: string[]; _id: string }) => {
+        console.log('Ping The update message', message);
+        const { readBy } = message || { readBy: [] };
+        if (readBy.includes(currentUserId)) {
+          setShowPing(false);
+        }
+      },
+    );
+    socket.on(
       SOCKET_CONFIG.EVENTS.MESSAGE.NEW,
       ({
         clientTempId,
@@ -59,17 +71,22 @@ const NewMessageCatcher = ({
         message: Message;
         clientTempId: string;
       }) => {
-        console.log('Ping The message', message);
-        setShowPing(true);
+        if (message.action === 'leaveHelpDesk') {
+          setShowPing(false);
+          onRoomEnd();
+        }
+        if (message.senderType !== 'anonymous') setShowPing(true);
       },
     );
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
   }, [room._id]);
   if (!isClient) {
     return null;
   }
+  console.log('showPing', showPing);
   return (
     <Ping
       size={16}

@@ -6,6 +6,7 @@ import { useHasFocus } from '@/features/chat/rooms/hooks/use-has-focus';
 import { useIntersectionObserver } from 'usehooks-ts';
 import { useMessageItem } from '.';
 import { useMutation } from '@tanstack/react-query';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface SeenTrackProps {
   onSeen?: () => void;
@@ -16,10 +17,15 @@ export interface SeenTrackProps {
 export const SeenTracker = ({ onSeen, guestId, hidden }: SeenTrackProps) => {
   const { message } = useMessageItem();
   const storeUserId = useAuthStore((state) => state?.user?._id);
+  const { isHelpDesk } = useBusinessNavigationData();
   const userId = storeUserId || guestId;
   const isRead = message.readBy?.includes(userId!);
   const { mutate } = useMutation({
-    mutationFn: storeUserId ? messageApi.seen : messageApi.seenAnonymous,
+    mutationFn: (id: string) => {
+      return isHelpDesk
+        ? messageApi.seenAnonymous(id, userId!)
+        : messageApi.seen(id);
+    },
   });
 
   if (isRead || message.status === 'pending' || hidden) {

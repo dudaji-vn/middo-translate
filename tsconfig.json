@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     "src/configs/env.private.ts",
     "src/app/(main-layout)/(protected)/spaces/[spaceId]/statistics/@report/error.tsx"
-  ],
+, "middleware.ts"  ],
   "exclude": ["node_modules"]
 }

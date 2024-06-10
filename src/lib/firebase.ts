@@ -69,7 +69,7 @@ export const deleteFCMToken = async () => {
   }
 };
 
-export const onMessageListener = () =>
+export const onMessageListener = (guestId?: string | null) =>
   new Promise((resolve) => {
     if (!messaging) {
       messaging = getMessaging(app);
@@ -82,8 +82,16 @@ export const onMessageListener = () =>
       }
       let isSeen = false;
       if (payload?.data?.messageId) {
-        const data = await messageApi.checkSeen(payload?.data?.messageId);
-        isSeen = data?.seen;
+        if (guestId) {
+          const data = await messageApi.checkSeenAnonymous(
+            payload?.data?.messageId,
+            guestId,
+          );
+          isSeen = data?.seen;
+        } else {
+          const data = await messageApi.checkSeen(payload?.data?.messageId);
+          isSeen = data?.seen;
+        }
       }
       if (isSeen) {
         return;
