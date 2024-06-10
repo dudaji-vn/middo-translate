@@ -51,6 +51,16 @@ const NewMessageCatcher = ({
 
   useEffect(() => {
     socket.on(
+      SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE,
+      (message: { readBy: string[]; _id: string }) => {
+        console.log('Ping The update message', message);
+        const { readBy } = message || { readBy: [] };
+        if (readBy.includes(currentUserId)) {
+          setShowPing(false);
+        }
+      },
+    );
+    socket.on(
       SOCKET_CONFIG.EVENTS.MESSAGE.NEW,
       ({
         clientTempId,
@@ -65,11 +75,13 @@ const NewMessageCatcher = ({
     );
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
   }, [room._id]);
   if (!isClient) {
     return null;
   }
+  console.log('showPing', showPing);
   return (
     <Ping
       size={16}

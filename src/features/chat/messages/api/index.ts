@@ -60,14 +60,18 @@ export const messageApi = {
     );
     return res.data;
   },
-  async seenAnonymous(id: string) {
-    // TODO: ask BE open this endpoint
-
-    // const res: Response<Message> = await axiosWithInterceptor.patch(
-    //   anonymousBasePath+ `/messages/help-desk/${id}/seen`,
-    // );
-    // return res.data;
-    return new Promise((resolve) => resolve({}));
+  async seenAnonymous(id: String, anonymousId: string) {
+    const res = await fetch(
+      anonymousBasePath + `/messages/help-desk/${id}/seen`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: anonymousId }),
+      },
+    );
+    return res.json();
   },
 
   async seen(id: string) {

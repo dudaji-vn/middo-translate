@@ -47,7 +47,7 @@ const EmbedButtonPage = ({
   }, [room]);
 
   return (
-    <div className="fixed inset-0 flex  h-screen w-screen flex-row items-end justify-end  ">
+    <div className="fixed inset-0 flex bg-transparent  h-screen w-screen flex-row items-end justify-end  ">
       <button className="relative m-2 w-fit rounded-full bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]">
         {anonymous && room && (
           <NewMessageCatcher room={room?.data} anonymousUser={anonymous} />
