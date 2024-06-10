@@ -2,9 +2,11 @@
 
 import { SPK_NOTIFY, SPK_PLATFORM } from '@/configs/search-param-key';
 import { usePlatformStore } from '@/features/platform/stores';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { getProfileService } from '@/services/auth.service';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
+import { LSK_VISITOR_ID } from '@/types/business.type';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
@@ -29,6 +31,7 @@ export const SideEffectProvider = () => {
   const searchParams = useSearchParams();
   const platform = searchParams?.get(SPK_PLATFORM) || 'web';
   const notify = searchParams?.get(SPK_NOTIFY);
+
   useEffect(() => {
     setMobile(isMobile);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,7 +48,12 @@ export const SideEffectProvider = () => {
         return;
       }
       const { onMessageListener } = await import('@/lib/firebase');
-      onMessageListener();
+      const guestId =
+        typeof window !== 'undefined'
+          ? localStorage.getItem(LSK_VISITOR_ID)
+          : '';
+      console.log('onMessageListener', guestId);
+      onMessageListener(guestId);
     };
     handleMessage();
   }, []);
