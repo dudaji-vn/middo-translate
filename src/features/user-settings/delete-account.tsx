@@ -57,7 +57,7 @@ export const DeleteAccount = (props: DeleteAccountProps) => {
         onClick={setTrue}
         danger
         leftIcon={<Trash2Icon />}
-        className="gap-4 px-5 font-medium"
+        className="gap-4 px-5 font-medium dark:bg-neutral-900 border-t dark:border-neutral-800"
       >
         {t('COMMON.DELETE_ACCOUNT')}
       </Item>

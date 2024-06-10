@@ -123,8 +123,8 @@ export default function UpdateUserInfo() {
     <>
       {loading && <PageLoading />}
       <AlertDialog open={open} onOpenChange={onModalChange}>
-        <AlertDialogTrigger className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4 md:hover:bg-primary-100">
-          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
+        <AlertDialogTrigger className="flex w-full items-center border-b bg-white dark:bg-neutral-900 dark:border-b-neutral-800 px-5 py-4 md:hover:bg-primary-100  dark:md:hover:bg-primary-800">
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900 text-primary">
             <UserRound size={20} />
           </div>
           <span className="ml-4 block text-left text-base font-medium">

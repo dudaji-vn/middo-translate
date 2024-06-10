@@ -23,7 +23,7 @@ export default function LayoutForm({ children }: PropsWithChildren) {
             initial={{ width: 0, opacity: 0}}
             animate={{ width: isMobile ? '100%' : 400, opacity: 1}}
             exit={{ width: 0, opacity: 0}}
-            className='bg-white h-full overflow-auto w-full md:w-[400px]'>
+            className='bg-white h-full overflow-auto w-full md:w-[400px] dark:bg-background'>
             <div className="p-5 pt-12">
                 {children}
             </div>

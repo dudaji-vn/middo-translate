@@ -72,7 +72,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   }
 
   return (
-    <div className="w-full px-3 pt-3">
+    <div className="w-full px-3 pt-3 bg-background">
       <div className="mb-3 flex items-center justify-between">
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}

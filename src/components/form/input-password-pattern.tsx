@@ -42,13 +42,13 @@ export const InputPasswordPattern = (props: InputPasswordPatternProps) => {
     <div className={`w-full ${className}`}>
       <div
         className={cn(
-          `flex h-[48px] w-full items-center justify-start rounded-xl border px-4 pr-1`,
+          `flex h-[48px] w-full items-center justify-start rounded-xl border px-4 pr-1 dark:border-neutral-800`,
           isTouched && !errors ? 'border-green-500' : '',
         )}
       >
         <input
           {...register}
-          className="w-full px-1 ring-0 focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
+          className="w-full px-1 ring-0 focus:outline-none focus:ring-offset-0 focus-visible:ring-0 bg-transparent"
           type={isShowPassword ? 'text' : 'password'}
           id={id}
           spellCheck="false"

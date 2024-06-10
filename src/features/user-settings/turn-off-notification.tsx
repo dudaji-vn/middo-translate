@@ -40,9 +40,9 @@ export const TurnOffNotification = (props: TurnOffNotificationProps) => {
 
   return (
     <Item
-      neutral
+      
       leftIcon={<SettingsIcon />}
-      className="gap-5 pl-5 font-medium"
+      className="gap-5 pl-5 font-medium dark:bg-neutral-900 dark:text-neutral-50 pr-5 border-b dark:border-b-neutral-800"
       right={<Switch checked={isSubscribed} onClick={handleToggle} />}
     >
       {t('ACCOUNT_SETTING.NOTIFICATION')}{' '}

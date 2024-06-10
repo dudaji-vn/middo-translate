@@ -90,7 +90,7 @@ export const RoomMember = ({
   }, [isShowAll, members, pendingMembers, rejectedMembers, showMembers]);
 
   return (
-    <div className="mt-5 bg-white pb-3">
+    <div className="mt-5 bg-white pb-3 dark:bg-background">
       <div className="flex items-center justify-between gap-2.5  p-3 pl-3">
         <div className="flex items-center gap-2">
           <IconWrapper>

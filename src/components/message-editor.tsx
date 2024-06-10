@@ -238,7 +238,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
                 )}
               </div>
               <EditorContent
-                className="max-h-[200px] min-h-[46] w-full overflow-y-auto"
+                className="max-h-[200px] min-h-[46] w-full overflow-y-auto dark:text-neutral-50"
                 editor={editor}
               />
               {!isEditing && <AttachmentSelection editor={editor} />}
