@@ -229,7 +229,7 @@ const ReactionItem = (props: {
   return (
     <div
       onClick={props.onClick}
-      className="flex h-5 cursor-pointer items-center justify-center rounded-full border border-neutral-50 bg-white"
+      className="flex h-5 cursor-pointer items-center justify-center rounded-full border border-neutral-50 bg-white dark:border-neutral-800 dark:dark:bg-neutral-900"
     >
       <Tooltip>
         <TooltipContent className="rounded-2xl">

@@ -41,12 +41,12 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     });
 
     return (
-      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
+      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px] dark:bg-background">
         <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           ref={ref}
-          className="w-full bg-neutral-white"
+          className="w-full bg-neutral-white dark:bg-background"
         >
           {data?.users && data.users.length > 0 && (
             <Section label={t('CONVERSATION.PEOPLE')}>

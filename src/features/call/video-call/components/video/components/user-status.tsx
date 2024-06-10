@@ -46,7 +46,7 @@ const WaitingStatus = ({notShow} : {notShow: boolean}) => {
   
   return (
     <div className="absolute inset-0">
-      <div className={cn("absolute right-0 top-0 bg-primary-100 p-2 px-3 rounded-bl-xl flex items-center justify-end gap-2")}>
+      <div className={cn("absolute right-0 top-0 bg-primary-100 dark:bg-neutral-800 p-2 px-3 rounded-bl-xl flex items-center justify-end gap-2")}>
       {isFullScreen && <span className='text-xs text-neutral-bg-neutral-600'>{t('COMMON.WAITING')}</span>}
         <div className='w-fit inline-flex space-x-[3px]'>
         <div className="h-1 w-1 animate-bounce rounded-full bg-neutral-600 [animation-delay:-0.2s]"></div>

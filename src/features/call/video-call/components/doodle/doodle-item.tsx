@@ -24,7 +24,7 @@ const DoodleItem = ({}: DoodleItemProps) => {
 
   return (
     <section className="relative flex h-full items-center justify-center overflow-hidden p-[2px]">
-      <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-50  ">
+      <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-50 dark:bg-neutral-900  ">
         <Image
           src={doodleImage || ''}
           width={1000}

@@ -19,6 +19,7 @@ const ActionToggleLayout = () =>  {
     <DropdownMenuItem
       disabled={layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW}
       onClick={changeLayout}
+      className='dark:hover:bg-neutral-800'
     >
       <LayoutGrid />
       <span className="ml-2">{t('CONVERSATION.GALLERY_VIEW')}</span>

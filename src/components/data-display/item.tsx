@@ -18,18 +18,18 @@ export const Item = forwardRef<HTMLDivElement, ItemProps>(
       <div
         ref={ref}
         className={cn(
-          'flex w-full items-center gap-2 bg-white px-3 py-3',
+          'flex w-full items-center gap-2 bg-white dark:bg-background px-3 py-3',
           className,
           onClick &&
-            'cursor-pointer active:!bg-primary-200 md:hover:bg-primary-100',
+            'cursor-pointer active:!bg-primary-200 md:hover:bg-primary-100 dark:md:hover:bg-neutral-900 dark:active:!bg-neutral-800',
           danger && 'text-error',
           onClick &&
             danger &&
-            'active:!bg-error-100/60 md:hover:bg-error-100/20',
+            'active:!bg-error-100/60 md:hover:bg-error-100/20 dark:md:hover:bg-error-900/60',
           neutral && 'text-neutral-800',
           onClick &&
             neutral &&
-            'bg-white active:!bg-neutral-100/60 md:hover:bg-neutral-100/20',
+            'bg-white active:!bg-neutral-100/60 md:hover:bg-neutral-100/20 dark:bg-background dark:md:hover:bg-neutral-900 dark:active:!bg-neutral-700',
         )}
         onClick={onClick}
       >
@@ -88,9 +88,9 @@ export const IconWrapper = ({
   return (
     <div
       className={cn(
-        'flex size-10 items-center justify-center rounded-xl bg-primary-100 text-primary',
-        danger && 'bg-error-100 text-error',
-        neutral && 'bg-neutral-50 text-neutral-800',
+        'flex size-10 items-center justify-center rounded-xl bg-primary-100 text-primary dark:bg-primary-900',
+        danger && 'bg-error-100 text-error  dark:bg-error-900',
+        neutral && 'bg-neutral-50 text-neutral-800 dark:bg-primary-900 dark:text-primary',
       )}
     >
       {Children.map(children, (child) => {

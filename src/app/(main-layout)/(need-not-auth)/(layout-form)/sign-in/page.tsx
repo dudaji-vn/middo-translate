@@ -189,7 +189,7 @@ export default function SignIn() {
           type="password"
         />
         <Link
-          className="ml-auto mt-3 inline-block rounded-xl px-3 py-2 font-semibold text-neutral-700 active:bg-neutral-100 md:hover:bg-neutral-50"
+          className="ml-auto mt-3 inline-block rounded-xl px-3 py-2 font-semibold text-neutral-700 active:bg-neutral-100 md:hover:bg-neutral-50 dark:text-neutral-50 dark:md:hover:bg-neutral-900 dark:md:active:bg-neutral-800"
           href={ROUTE_NAMES.FORGOT_PASSWORD}
         >
           {t('SIGN_IN.FORGOT_PASSWORD')}
@@ -206,10 +206,10 @@ export default function SignIn() {
           {t('SIGN_IN.TITLE')}
         </Button>
       </form>
-      <div className="mx-auto my-10 h-[1px] w-full bg-neutral-50"></div>
+      <div className="mx-auto my-10 h-[1px] w-full bg-neutral-50 dark:bg-neutral-900"></div>
       <Typography
         variant={'h2'}
-        className="mb-5 text-center text-base font-normal text-neutral-800"
+        className="mb-5 text-center text-base font-normal text-neutral-800 dark:text-neutral-50"
       >
         {t('SIGN_IN.NO_ACCOUNT')}
       </Typography>

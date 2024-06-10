@@ -84,7 +84,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       ref={parentRef}
       className={cn(
         'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-900 transition-all',
-        isTurnOnCamera ? 'bg-neutral-900' : 'bg-neutral-50',
+        isTurnOnCamera ? 'bg-neutral-900' : 'bg-neutral-50 dark:bg-neutral-900',
         isExpandFull && 'fixed top-0 left-0 right-0 bottom-0 z-50',
         // isShowChat && 'h-[200px] md:h-full',
       )}

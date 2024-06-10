@@ -39,7 +39,7 @@ export default function VideoCallHeader() {
 
   return (
     <div
-      className={`flex items-center gap-1 bg-primary-100 py-2 pl-3 pr-1 text-primary cursor-grab active:cursor-grabbing`}
+      className={`flex items-center gap-1 bg-primary-100 dark:bg-neutral-900 py-2 pl-3 pr-1 text-primary cursor-grab active:cursor-grabbing`}
       ref={ref}
     >
       <Phone className="h-4 w-4 stroke-current" />

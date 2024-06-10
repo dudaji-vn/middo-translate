@@ -42,8 +42,8 @@ export const PinnedBar = forwardRef<HTMLDivElement, PinnedBarProps>(
           isShowPinned ? 'hidden' : 'flex items-center border-b px-3 py-1'
         }
       >
-        <PinIcon className="size-4 text-neutral-600" />
-        <span className="ml-2 text-sm text-neutral-600">
+        <PinIcon className="size-4 text-neutral-600 dark:text-neutral-50" />
+        <span className="ml-2 text-sm text-neutral-600 dark:text-neutral-50">
           {data?.length > 1 ? t('CONVERSATION.PINED_MESSAGE', {num: data?.length || 0}) : t('CONVERSATION.PINED_MESSAGES', {num: data?.length || 0})}
         </span>
         <ViewPinButton />

@@ -123,7 +123,7 @@ export const GroupCreateHeader = ({
         <input
           placeholder={t('CONVERSATION.GROUP_NAME_PLACEHOLDER')}
           name="name"
-          className="flex-1 border-none px-0 outline-none ring-0 focus:border-none focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
+          className="flex-1 border-none px-0 outline-none ring-0 focus:border-none focus:outline-none focus:ring-offset-0 focus-visible:ring-0 bg-transparent"
         />
       </div>
       <div className="z-10 items-center gap-2 space-y-1 px-3 py-2 pb-3">

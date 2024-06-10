@@ -111,7 +111,7 @@ export const Inbox = (props: InboxProps) => {
                   key={tab.value}
                   value={tab.value}
                   onClick={() => setType(tab.value)}
-                  className="!rounded-none"
+                  className="!rounded-none dark:!text-neutral-50"
                 >
                   {type === tab.value ? (
                     <>{t(tab.label)}</>

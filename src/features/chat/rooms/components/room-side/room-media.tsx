@@ -55,7 +55,7 @@ export const RoomMedia = () => {
               <div
                 key={media.url}
                 onClick={() => setIndex(index)}
-                className="relative block aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50"
+                className="relative block aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50 dark:border-neutral-900"
               >
                 {media.type === 'video' && (
                   <div className="relative h-full w-full">

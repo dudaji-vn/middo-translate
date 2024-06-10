@@ -102,11 +102,11 @@ export default function DropdownActions() {
           <MoreVertical />
         </Button.Icon>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
         <ActionToggleLayout />
         <ActionDoodle disabled={isDoodleDisabled} onDoodle={onDoodle} />
         {room?.type === CALL_TYPE.GROUP && (
-          <DropdownMenuItem onClick={() => setModalAddUser(true)}>
+          <DropdownMenuItem onClick={() => setModalAddUser(true)} className='dark:hover:bg-neutral-800'>
             <UserPlus2 />
             <span className="ml-2">{t('CONVERSATION.ADD_MEMBER')}</span>
           </DropdownMenuItem>

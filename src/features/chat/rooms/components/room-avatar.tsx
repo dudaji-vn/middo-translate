@@ -131,7 +131,7 @@ export const RoomAvatar = ({
         )}
       </div>
       {showStatus && (
-        <div className="absolute -bottom-0.5 -right-0.5 z-50 h-3.5 w-3.5 rounded-full bg-white p-[2px]">
+        <div className="absolute -bottom-0.5 -right-0.5 z-50 h-3.5 w-3.5 rounded-full bg-white dark:bg-neutral-950 p-[2px]">
           <div
             className={cn(
               'h-full w-full rounded-full',

@@ -11,7 +11,7 @@ const ActionVideoAudioSetting = () => {
   
   return (
     <>
-      <DropdownMenuItem onClick={() => setModalAudioVideoSetting(true)}>
+      <DropdownMenuItem onClick={() => setModalAudioVideoSetting(true)} className="dark:hover:bg-neutral-800">
         <SlidersHorizontal />
         <span className="ml-2">{t('CONVERSATION.VIDEO_AUDIO_SETTINGS')}</span>
       </DropdownMenuItem>

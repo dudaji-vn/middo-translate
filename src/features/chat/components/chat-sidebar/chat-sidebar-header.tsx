@@ -72,7 +72,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   }
 
   return (
-    <div className="w-full px-3 pt-3">
+    <div className="w-full px-3 pt-3 bg-background">
       <div className="mb-3 flex items-center justify-between">
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}
@@ -83,7 +83,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
         >
           <Menu />
         </Button.Icon>
-        <Typography variant="h6">{t('CONVERSATION.TITLE')}</Typography>
+        <Typography variant="h6" className='dark:text-neutral-50'>{t('CONVERSATION.TITLE')}</Typography>
         <div className="flex gap-3">
           <Tooltip
             title={t('TOOL_TIP.NEW_CONVERSATION')}

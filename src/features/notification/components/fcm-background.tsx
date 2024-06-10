@@ -34,7 +34,7 @@ export const FCMBackground = (props: FCMBackgroundProps) => {
         ),
         {
           icon: <BellIcon size={20} className="mx-1" />,
-          className: '!max-w-none',
+          className: '!max-w-none dark:bg-neutral-900 dark:text-neutral-50 dark:border dark:border-neutral-600',
         },
       );
 

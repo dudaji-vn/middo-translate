@@ -22,7 +22,7 @@ export const RoomSetting = ({ room: _room }: RoomSettingProps) => {
   const [isPinned, setIsPinned] = useState(_room.isPinned);
   const { t } = useTranslation('common');
   return (
-    <div className="mt-0 flex flex-col items-center divide-y-[1px] divide-neutral-50 bg-white">
+    <div className="mt-0 flex flex-col items-center divide-y-[1px] divide-neutral-50 dark:divide-neutral-800 bg-white dark:bg-background">
       <Item
         className="truncate"
         leftIcon={<Bell />}

@@ -25,7 +25,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
           'flex cursor-pointer items-center justify-between px-3 py-2 transition-all',
           isActive
             ? 'bg-background-lightest'
-            : 'bg-transparent hover:bg-background-lighter',
+            : 'bg-transparent hover:bg-background-lighter dark:hover:bg-primary-900',
           wrapperClassName,
         )}
       >

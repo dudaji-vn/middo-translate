@@ -54,7 +54,7 @@ export default function SignUpSuccess() {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-background">
       {loading && <PageLoading />}
       <div className="w-full bg-background px-[5vw] py-8 md:my-10 md:w-[500px] md:rounded-3xl md:px-6">
         <div className="mx-auto w-[223px]">

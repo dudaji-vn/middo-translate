@@ -74,11 +74,11 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
           <div className="py-6">
             <Typography
               variant="default"
-              className="font-semibold text-neutral-800"
+              className="font-semibold text-neutral-800 dark:text-neutral-50"
             >
               {t(`INBOX_EMPTY.NO_CLIENT.TITLE${translateExtension}`)}
             </Typography>
-            <p className="my-3 text-neutral-600">
+            <p className="my-3 text-neutral-600  dark:text-neutral-50">
               {t(`INBOX_EMPTY.NO_CLIENT.DESCRIPTION${translateExtension}`)}
             </p>
           </div>
@@ -88,8 +88,8 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
     if (type === 'archived' || type === 'waiting' || type === 'contact') {
       return (
         <div className="mt-3 flex h-full flex-col items-center justify-center bg-card px-4 text-base">
-          <FrownIcon className="-mt-10 h-12 w-12 text-neutral-400" />
-          <p className="my-3 text-center font-medium text-neutral-600">
+          <FrownIcon className="-mt-10 h-12 w-12 text-neutral-400 dark:text-neutral-50" />
+          <p className="my-3 text-center font-medium text-neutral-600 dark:text-neutral-50">
             {t(`INBOX_EMPTY.MESSAGE${translateExtension}`)}
           </p>
         </div>
@@ -107,15 +107,15 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
         <div className="py-6">
           <Typography
             variant="default"
-            className="font-semibold text-neutral-800"
+            className="font-semibold text-neutral-800 dark:text-neutral-50"
           >
             {t(`INBOX_EMPTY.TITLE${translateExtension}`)}
           </Typography>
-          <p className="my-3 text-neutral-600">
+          <p className="my-3 text-neutral-600 dark:text-neutral-50">
             {t(`INBOX_EMPTY.DESCRIPTION${translateExtension}`)}
           </p>
           {type === 'all' && (
-            <ul className="ml-5 list-decimal space-y-4 text-neutral-400">
+            <ul className="ml-5 list-decimal space-y-4 text-neutral-400 dark:text-neutral-50">
               <li className="items-center">
                 <div className="flex items-center">
                   <span className="capitalize">

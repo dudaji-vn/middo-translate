@@ -43,7 +43,7 @@ export const RoomItemHead = ({ isRead, showTime, time }: RoomItemHeadProps) => {
       {time && showTime && (
         <RoomItemTime
           date={time}
-          className="ml-2 text-xs font-light text-neutral-500"
+          className="ml-2 text-xs font-light text-neutral-500 dark:text-neutral-200"
         />
       )}
     </div>

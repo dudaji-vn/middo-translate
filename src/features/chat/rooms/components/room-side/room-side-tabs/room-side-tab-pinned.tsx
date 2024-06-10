@@ -52,7 +52,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
             </span>
           </div>
         )}
-        <div className="flex w-full flex-col divide-y divide-neutral-100 overflow-x-hidden  overflow-y-scroll pb-3">
+        <div className="flex w-full flex-col divide-y divide-neutral-100 dark:divide-neutral-900 overflow-x-hidden  overflow-y-scroll pb-3">
           {data?.map((pin) => {
             const isMe = pin.pinnedBy._id === currentUserId;
             const message = {
@@ -65,12 +65,12 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
                 className="group relative flex flex-col items-center p-3"
               >
                 <div className="flex w-full justify-end">
-                  <span className="break-word-mt  ml-auto text-xs font-light text-neutral-800">
+                  <span className="break-word-mt  ml-auto text-xs font-light text-neutral-800 dark:text-neutral-50">
                     {t('CONVERSATION.PINED_BY', {
                       name: isMe ? t('CONVERSATION.YOU') : pin.pinnedBy.name,
                     })}
                   </span>
-                  <span className="break-word-mt flex items-center whitespace-nowrap text-xs font-light text-neutral-800">
+                  <span className="break-word-mt flex items-center whitespace-nowrap text-xs font-light text-neutral-800 dark:text-neutral-50">
                     &nbsp;at&nbsp;
                     {moment(pin.createdAt).format('ll')}
                   </span>
@@ -135,12 +135,13 @@ const Menu = ({ isMe, message }: { isMe: boolean; message: Message }) => {
           <MoreVerticalIcon />
         </Button.Icon>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className='dark:bg-neutral-900 dark:border-neutral-800'>
         {items.map((item) => (
           <DropdownMenuItem
             disabled={item.disabled}
             key={item.action}
             onClick={item.onAction}
+            className='dark:hover:bg-neutral-800'
           >
             {cloneElement(item.icon, {
               size: 16,

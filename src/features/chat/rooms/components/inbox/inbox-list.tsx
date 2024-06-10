@@ -259,7 +259,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                 return (
                   <Fragment key={room._id}>
                     {
-                      isSortByName && char && <span className="block px-3 py-1 my-2 mx-3 text-neutral-500 text-xs border-b border-neutral-50" id={ALPHABET_SELECTOR + char}>
+                      isSortByName && char && <span className="block px-3 py-1 my-2 mx-3 text-neutral-500 text-xs border-b border-neutral-50 dark:border-neutral-800" id={ALPHABET_SELECTOR + char}>
                         {char.toUpperCase()}
                       </span>
                     }
@@ -278,7 +278,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             }
           </InfiniteScroll>
           {
-            isSortByName && <p className="text-center block px-3 py-1 my-2 mx-3 text-neutral-500 text-sm border-t border-neutral-50">{sortedRooms.length} {t('COMMON.CONTACTS')}</p>
+            isSortByName && <p className="text-center block px-3 py-1 my-2 mx-3 text-neutral-500 text-sm border-t border-neutral-50 dark:text-neutral-800 dark:border-neutral-800">{sortedRooms.length} {t('COMMON.CONTACTS')}</p>
           }
         </div>
         {isSortByName && <div className='absolute bottom-0 right-0 pr-1 top-0 flex flex-col justify-center md:hidden' ref={charactersScrollBarRef} id='characters'>
