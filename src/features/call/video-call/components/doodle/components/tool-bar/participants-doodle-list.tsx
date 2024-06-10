@@ -13,7 +13,7 @@ export default function ParticipantDoodleList() {
   
   const { imagesCanvas } = useDoodleContext();
   return (
-    <ul className="max-h-[180px] max-w-[52px] overflow-x-hidden w-full flex-1 overflow-auto border-t border-neutral-50 pb-4 pt-4">
+    <ul className="max-h-[180px] max-w-[52px] overflow-x-hidden w-full flex-1 overflow-auto border-t border-neutral-50 dark:border-neutral-700 pb-4 pt-4">
       <ul className="flex w-full flex-col items-center justify-center gap-5 ">
         <li className="flex flex-col items-center justify-center gap-1">
           <div

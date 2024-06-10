@@ -44,7 +44,7 @@ export default function VideoItemText({
           )}
           <span>
             {isTurnOnMic ? (
-              <Mic size={16} className="text-neutral-500"></Mic>
+              <Mic size={16} className="text-neutral-500 dark:text-neutral-50"></Mic>
             ) : (
               <MicOff size={16} className="text-error"></MicOff>
             )}

@@ -68,9 +68,9 @@ export const InputField = (props: InputFieldProps) => {
             onClick={() => setIsShowPassword(!isShowPassword)}
           >
             {isShowPassword ? (
-              <EyeIcon className="text-slate-600 opacity-60" />
+              <EyeIcon className="text-slate-600 dark:text-neutral-50 dark:opacity-100 opacity-60" />
             ) : (
-              <EyeOffIcon className="text-slate-600 opacity-60" />
+              <EyeOffIcon className="text-slate-600 dark:text-neutral-50 dark:opacity-100 opacity-60" />
             )}
           </Button.Icon>
         )}

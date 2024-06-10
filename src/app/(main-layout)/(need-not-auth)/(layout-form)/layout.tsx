@@ -9,7 +9,7 @@ export default function LayoutForm({ children }: PropsWithChildren) {
     const isMobile = useAppStore((state) => state.isMobile);
   return (
     <div className="h-full relative">
-      <div className="md:!bg-[url('/images/auth-background.jpg')] bg-cover bg-center fixed inset-0 z-[-1]"></div>
+      <div className="md:!bg-[url('/images/auth-background.jpg')] bg-cover bg-center fixed inset-0 z-[-1] "></div>
       <div className="flex justify-center items-center h-full">
         <div className='md:flex items-center justify-center flex-1 hidden'>
           <div className='max-w-[60%]'>
@@ -23,7 +23,7 @@ export default function LayoutForm({ children }: PropsWithChildren) {
             initial={{ width: 0, opacity: 0}}
             animate={{ width: isMobile ? '100%' : 400, opacity: 1}}
             exit={{ width: 0, opacity: 0}}
-            className='bg-white h-full overflow-auto w-full md:w-[400px] dark:bg-background'>
+            className='bg-white h-full overflow-auto w-full md:w-[400px] dark:bg-background border-l dark:border-neutral-900'>
             <div className="p-5 pt-12">
                 {children}
             </div>

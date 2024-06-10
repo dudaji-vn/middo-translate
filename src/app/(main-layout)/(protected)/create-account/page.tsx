@@ -138,9 +138,9 @@ export default function CreateNewAccount() {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center dark:bg-background">
       {loading && <PageLoading />}
-      <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6">
+      <div className="mx-auto my-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6">
           <Typography
             variant={'h1'}
             className="mb-8 text-center text-2xl font-semibold text-primary"

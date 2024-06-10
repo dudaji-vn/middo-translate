@@ -75,7 +75,7 @@ export const InputSelectLanguage = ({
         {t('COMMON.LANGUAGE')}
       </label>
       <Select onValueChange={handleSelectChange} {...selectProps}>
-        <SelectTrigger className="flex w-full rounded-xl px-5">
+        <SelectTrigger className="flex w-full rounded-xl px-5 dark:bg-neutral-800 dark:hover:bg-neutral-900">
           {!valueSelect?.value && (
             <span className="opacity-60">
               {t('COMMON.LANGUAGE_PLACEHOLDER')}
@@ -95,14 +95,14 @@ export const InputSelectLanguage = ({
             </>
           )}
         </SelectTrigger>
-        <SelectContent className="max-h-[300px] overflow-y-auto">
+        <SelectContent className="max-h-[300px] overflow-y-auto dark:bg-neutral-900 dark:border-neutral-800">
           {languageOptions?.length > 0 &&
             languageOptions?.map((option: any) => {
               return (
                 <SelectItem
                   value={option.value}
                   key={option.value}
-                  className=""
+                  className="dark:hover:bg-neutral-800"
                 >
                   <CircleFlag
                     countryCode={LANGUAGE_CODES_MAP[

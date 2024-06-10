@@ -112,7 +112,7 @@ export default function VideoCallActions() {
   }, [audioSetting?.deviceId, isLoadingStream, isTurnOnCamera, isTurnOnMic, myStream, participants, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, videoSetting?.deviceId]);
 
   return (
-    <section className="relative z-20 flex items-center justify-between bg-primary-100 p-2">
+    <section className="relative z-20 flex items-center justify-between bg-primary-100 dark:bg-neutral-900 p-2">
       <div className="flex w-full md:justify-center justify-around md:gap-6">
         <DropdownActions />
         <ActionChat />

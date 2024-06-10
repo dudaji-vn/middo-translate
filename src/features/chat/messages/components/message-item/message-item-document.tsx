@@ -35,14 +35,14 @@ export const DocumentMessage = ({ file, isMe = false }: DocumentProps) => {
           title={file.name}
           className={cn(
             'max-w-44 truncate break-all text-sm font-semibold',
-            isMe && 'text-background',
+            isMe && 'text-background dark:text-neutral-50',
           )}
         >
           {file.name}
         </span>
 
         <span
-          className={cn('mt-1 text-xs', isMe ? 'text-background' : 'text-text')}
+          className={cn('mt-1 text-xs', isMe ? 'text-background dark:text-neutral-50' : 'text-text')}
         >
           {formatFileSize(file.size!)}
         </span>

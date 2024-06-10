@@ -51,7 +51,7 @@ const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) =
     >
       <div
         className={cn(
-          'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-50 transition-all',
+          'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-50 dark:bg-neutral-900 transition-all',
           // !isTurnOnCamera && !isFullScreen && 'aspect-square h-[60px] w-[60px]',
           isTurnOnCamera && !isGalleryView && 'w-[100px]',
           !isFullScreen && 'aspect-square h-[60px] w-[60px]',

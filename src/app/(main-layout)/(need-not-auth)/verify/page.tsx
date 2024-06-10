@@ -68,7 +68,7 @@ export default function Verify() {
 
   if (statusVerify == 'expired') {
     return (
-      <div className="">
+      <div className="bg-background">
         <div className="mx-auto mt-10 w-full px-[5vw] py-8 md:max-w-[500px] md:rounded-3xl md:px-6">
           <div className="mx-auto w-[223px]">
             <Image

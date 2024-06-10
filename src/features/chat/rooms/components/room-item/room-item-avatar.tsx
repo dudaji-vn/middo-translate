@@ -107,7 +107,7 @@ export const ItemAvatar = ({
         {avatars.length > MAX_AVATAR_COUNT && (
           <div
             className={cn(
-              'absolute bottom-0 flex h-1/2 w-full items-center justify-center bg-black/60 text-sm font-semibold text-background  ring-background',
+              'absolute bottom-0 flex h-1/2 w-full items-center justify-center bg-black/60 text-sm font-semibold text-background  ring-background dark:text-neutral-50',
             )}
           >
             +{avatars.length - MAX_AVATAR_COUNT}
@@ -115,7 +115,7 @@ export const ItemAvatar = ({
         )}
       </div>
       {isOnline && (
-        <div className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-white p-[2.4px]">
+        <div className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-white p-[2.4px] dark:bg-neutral-950">
           <div className="h-full w-full rounded-full bg-success"></div>
         </div>
       )}

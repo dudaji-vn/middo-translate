@@ -42,7 +42,7 @@ export const useEditor = ({
         return html.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1');
       },
       attributes: {
-        class: 'prose max-w-none w-full focus:outline-none',
+        class: 'prose max-w-none w-full focus:outline-none dark:text-neutral-50',
       },
       handlePaste: (_, e) => {
         onClipboardEvent?.(e);
