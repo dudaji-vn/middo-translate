@@ -7,6 +7,7 @@ import {
 } from '@/configs/env.public';
 
 import { AppProvider } from '@/providers/app.provider';
+import { cn } from '@/utils/cn';
 import type { Metadata, Viewport } from 'next';
 import { Open_Sans } from 'next/font/google';
 
@@ -40,7 +41,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={font.className} suppressHydrationWarning={true}>
+      <body
+        className={cn(font.className, 'bg-transparent')}
+        suppressHydrationWarning={true}
+      >
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
