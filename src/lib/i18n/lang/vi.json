@@ -91,6 +91,9 @@
     "SPACE": "Không gian",
     "ON": "Bật",
     "OFF": "Tắt",
+    "USER": "Người",
+    "MESSAGE": "Tin nhắn",
+    "SEARCH_HISTORY": "Lịch sử tìm kiếm",
     "TIME": {
       "CREATED_ON": "Tạo vào",
       "UPDATED_ON": "Cập nhật vào",

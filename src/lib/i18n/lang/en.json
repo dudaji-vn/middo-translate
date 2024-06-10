@@ -91,6 +91,9 @@
     "SPACE": "Space",
     "ON": "On",
     "OFF": "Off",
+    "USER": "User",
+    "MESSAGE": "Message",
+    "SEARCH_HISTORY": "Search history",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",

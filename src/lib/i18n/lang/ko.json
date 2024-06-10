@@ -91,6 +91,9 @@
     "SPACE": "공간",
     "ON": "켜기",
     "OFF": "끄기",
+    "USER": "사용자",
+    "MESSAGE": "메시지",
+    "SEARCH_HISTORY": "검색 기록",
     "TIME": {
       "CREATED_ON": "생성일",
       "UPDATED_ON": "업데이트일",
