@@ -177,9 +177,6 @@
     const domain = window.location.host;
     chatWidget.id = 'chat-widget';
     const srcWithDomain = `${chatSRC}?domain=${domain}`;
-    const paths = chatSRC.split('://');
-    const rest = paths[1]?.split('/');
-    const middoDomain = rest?.[0];
     const srcButton = `${chatSRC}/widget-notification`;
     chatWidget.innerHTML = `
               <iframe 

@@ -16,9 +16,11 @@ import React, { useEffect } from 'react';
 const NewMessageCatcher = ({
   room,
   anonymousUser,
+  onRoomEnd,
 }: {
   room: Room;
   anonymousUser?: User;
+  onRoomEnd: () => void;
 }) => {
   const [isClient, setIsClient] = React.useState(false);
   const [showPing, setShowPing] = React.useState(false);
@@ -69,7 +71,10 @@ const NewMessageCatcher = ({
         message: Message;
         clientTempId: string;
       }) => {
-        console.log('Ping The message', message);
+        if (message.action === 'leaveHelpDesk') {
+          setShowPing(false);
+          onRoomEnd();
+        }
         if (message.senderType !== 'anonymous') setShowPing(true);
       },
     );

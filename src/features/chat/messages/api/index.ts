@@ -82,10 +82,26 @@ export const messageApi = {
   },
 
   async checkSeen(id: string) {
-    const res: Response<{
-      seen: boolean;
-    }> = await axiosWithInterceptor.get(`${basePath}/${id}/seen`);
-    return res.data;
+    try {
+      const res: Response<{
+        seen: boolean;
+      }> = await axiosWithInterceptor.get(`${basePath}/${id}/seen`);
+
+      return res.data;
+    } catch (error) {
+      return { seen: false };
+    }
+  },
+
+  async checkSeenAnonymous(id: string, guestId: string) {
+    try {
+      const res = await fetch(
+        `${anonymousBasePath}/messages/help-desk/${id}/seen/${guestId}`,
+      );
+      return res.json();
+    } catch (error) {
+      return { seen: false };
+    }
   },
   async edit({
     id,
