@@ -98,7 +98,7 @@ export const MessageModalRemove = ({
 
         <AlertDialogFooter>
           <AlertDialogCancel>{t('COMMON.CANCEL')}</AlertDialogCancel>
-          <AlertDialogAction type="submit" onClick={handleSubmit} color="error">
+          <AlertDialogAction type="submit" onClick={handleSubmit} color="error" className="dark:text-neutral-50">
             {t('COMMON.DELETE')}
           </AlertDialogAction>
         </AlertDialogFooter>

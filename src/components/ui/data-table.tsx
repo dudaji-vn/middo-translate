@@ -57,11 +57,11 @@ const SkeletonRow: React.FC<SkeletonRowProps> = ({
       <TableRow {...rowProps}>
         {[...Array(columns)].map((_, index) => (
           <TableCell key={index} {...cellProps}>
-            <Skeleton className="h-full min-h-[25px] w-11/12 rounded-none" />
+            <Skeleton className="h-full min-h-[25px] w-11/12 rounded-none dark:bg-neutral-900" />
           </TableCell>
         ))}
       </TableRow>
-      <div key={Date.now()} className="h-2 w-full bg-white" />
+      <div key={Date.now()} className="h-2 w-full bg-white dark:bg-background" />
     </>
   );
 };
@@ -151,7 +151,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
               {dividerRow && (
                 <div
-                  className="h-2 w-full bg-white"
+                  className="h-2 w-full bg-white dark:bg-background"
                   {...dividerProps}
                   {...dividerRowProps}
                 />

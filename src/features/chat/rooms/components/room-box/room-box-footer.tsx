@@ -194,7 +194,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
     if (isBlockedConversation || relationshipStatus === 'blocked') {
       return (
-        <div className="relative w-full border-t bg-primary-100 p-2">
+        <div className="relative w-full border-t bg-primary-100 dark:bg-background p-2">
           <BlockChatBar
             blockContent={t('CONVERSATION.BLOCKED.MESSAGE')}
             learnMoreLink={'#'}

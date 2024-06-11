@@ -112,7 +112,7 @@ export const TranslateTool = ({
             transition={{ duration: 0.2, ease: 'backOut' }}
             className=""
           >
-            <div className="rounded-xl bg-primary-100 ">
+            <div className="rounded-xl bg-primary-100 dark:bg-neutral-900">
               <div className="flex items-center gap-3 p-3">
                 <CircleFlag countryCode="gb" height="20" width="20" />
                 <span className="text-sm font-medium text-neutral-600">

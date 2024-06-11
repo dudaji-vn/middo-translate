@@ -59,11 +59,12 @@ const ScriptsPagination = ({
                 </span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
               {limitOptions.map((option) => (
                 <DropdownMenuItem
                   key={option}
                   onSelect={() => onLimitChange(option)}
+                  className='dark:hover:bg-neutral-800'
                 >
                   {option}
                 </DropdownMenuItem>

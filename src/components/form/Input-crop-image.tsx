@@ -14,10 +14,10 @@ import {
 import { Range } from 'react-range';
 import { useMediaUpload } from '@/components/media-upload';
 import { cn } from '@/utils/cn';
-import { AlertDialogCancel } from '@radix-ui/react-alert-dialog';
 import { Button, ButtonProps } from '@/components/actions';
 import isEmpty from 'lodash/isEmpty';
 import { useTranslation } from 'react-i18next';
+import { AlertDialogCancel } from '../feedback';
 
 interface InputCropImageProps {
   isLoading?: boolean;
@@ -139,7 +139,7 @@ export const InputCropImage = forwardRef<
         {!image && (
           <label
             htmlFor={id}
-            className="flex border-spacing-3 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary p-4 py-32 transition-all hover:bg-slate-50 h-full"
+            className="flex border-spacing-3 cursor-pointer flex-col items-center justify-center rounded-lg border border-dashed border-primary p-4 py-32 transition-all hover:bg-slate-50 dark:hover:bg-neutral-900 h-full"
           >
             <span className="rounded-full p-4">
               <Upload width={24} height={24} className="stroke-primary" />
@@ -158,7 +158,7 @@ export const InputCropImage = forwardRef<
           <div className="relative rounded-lg">
             <label
               htmlFor={id}
-              className="z-100 absolute -top-[50px] right-0 block w-fit cursor-pointer rounded-full p-3 transition-all hover:bg-slate-100 "
+              className="z-100 absolute -top-[50px] right-0 block w-fit cursor-pointer rounded-full p-3 transition-all hover:bg-slate-100 dark:hover:bg-neutral-900 "
             >
               <RotateCcw />
             </label>
@@ -207,7 +207,7 @@ export const InputCropImage = forwardRef<
                   setZoom(values);
                 }}
                 renderTrack={({ props, children }) => (
-                  <div {...props} className="h-1 w-full rounded bg-gray-200">
+                  <div {...props} className="h-1 w-full rounded bg-gray-200 dark:bg-neutral-900">
                     {children}
                   </div>
                 )}
@@ -237,11 +237,10 @@ export const InputCropImage = forwardRef<
         <AlertDialogCancel
           onClick={() => {
             reset();
-          }}
-          className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
-        >
-          <p>{t('COMMON.CANCEL')}</p>
-        </AlertDialogCancel>
+          }} 
+          className="sm:mr-3">
+            {t('COMMON.CANCEL')}
+          </AlertDialogCancel>
         <Button size="md" shape="square" disabled={isLoading} type="submit" {...saveBtnProps}>
           {t("COMMON.SAVE")}
         </Button>

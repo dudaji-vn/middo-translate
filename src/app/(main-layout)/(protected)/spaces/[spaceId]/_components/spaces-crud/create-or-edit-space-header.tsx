@@ -57,7 +57,7 @@ const CreateOrEditSpaceHeader = ({
   return (
     <section
       className={cn(
-        'createSpaceSteps-center flex w-full flex-row items-center justify-between gap-3 bg-primary-100 px-4',
+        'createSpaceSteps-center flex w-full flex-row items-center justify-between gap-3 bg-primary-100 dark:bg-background px-4',
         headerVariants({ navigation: modalType || 'default' }),
       )}
     >
@@ -73,7 +73,7 @@ const CreateOrEditSpaceHeader = ({
         >
           <ArrowLeft className="" />
         </Button.Icon>
-        <Typography className="min-w-max capitalize text-neutral-600">
+        <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50">
           {t('MODAL.CREATE_SPACE.HEADING')}
         </Typography>
       </div>
@@ -106,8 +106,8 @@ const CreateOrEditSpaceHeader = ({
                 variant={'ghost'}
                 className={cn(
                   'flex flex-row gap-3',
-                  isActive && '!bg-neutral-50',
-                  isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100',
+                  isActive && '!bg-neutral-50 dark:!bg-neutral-800',
+                  isAfterCurrent && '!bg-neutral-50 dark:!bg-neutral-800  hover:bg-primary-100',
                   isDone &&
                     '!active:bg-success-200 !bg-success-100 hover:bg-success-200',
                   isError && '!bg-error-100',

@@ -18,7 +18,7 @@ export const MediaUploadDropzone = ({
     >
       {children}
       {isDragActive && (
-        <div className="absolute inset-0 bottom-0 left-0 z-10 flex flex-col items-center justify-center bg-white/80 backdrop-blur-lg">
+        <div className="absolute inset-0 bottom-0 left-0 z-10 flex flex-col items-center justify-center bg-white/80 dark:bg-neutral-900 backdrop-blur-lg">
           <FilePlus2Icon className="mb-4 size-32 text-primary" />
           <span>Drop files here to upload</span>
         </div>

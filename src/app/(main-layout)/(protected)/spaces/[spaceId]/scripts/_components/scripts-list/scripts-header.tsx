@@ -41,7 +41,7 @@ const ScriptsHeader = ({
           <Menu />
         </Button.Icon>
         <Typography
-          className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800"
+          className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800 dark:text-neutral-50"
           {...titleProps}
         >
           {t(`EXTENSION.SCRIPT.PAGE_TITLE`)}

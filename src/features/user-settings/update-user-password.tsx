@@ -143,7 +143,7 @@ export default function UpdateUserPassword() {
                   onClick={() => {
                     reset();
                   }}
-                  className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
+                  className="mr-2 border-0"
                 >
                   <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>

@@ -24,7 +24,7 @@ export const ModalSwitchRoom = () => {
                     <AlertDialogTitle>
                         {t('MODAL.SWITCH_ROOM.TITLE')}
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogDescription className="dark:text-neutral-50">
                         <span>{t('MODAL.SWITCH_ROOM.DESCRIPTION')}</span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>

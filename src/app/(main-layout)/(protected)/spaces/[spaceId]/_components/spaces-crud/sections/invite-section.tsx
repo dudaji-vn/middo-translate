@@ -181,7 +181,7 @@ const InviteMembers = ({
         ) : (
           <div className="flex w-full flex-col  gap-3" {...headerProps}>
             <Typography
-              className="text-[32px] font-semibold leading-9 text-neutral-800"
+              className="text-[32px] font-semibold leading-9 text-neutral-800 dark:text-neutral-50"
               {...headerTitleProps}
             >
               <span
@@ -191,7 +191,7 @@ const InviteMembers = ({
               ></span>
             </Typography>
             <Typography
-              className="flex gap-2 font-light text-neutral-600"
+              className="flex gap-2 font-light text-neutral-600 dark:text-neutral-100"
               {...headerDescriptionProps}
             >
               <span
@@ -207,7 +207,7 @@ const InviteMembers = ({
             name="email"
             formLabel={t('EXTENSION.MEMBER.EMAIL')}
             formLabelProps={{
-              className: 'text-neutral-600',
+              className: 'text-neutral-600 dark:text-neutral-50',
             }}
             inputProps={{
               placeholder: 'Enter email address',
@@ -219,7 +219,7 @@ const InviteMembers = ({
           />
           <DropdownMenu>
             <DropdownMenuTrigger className="flex flex-col gap-3 py-2">
-              <FormLabel className="text-neutral-600">
+              <FormLabel className="text-neutral-600 dark:text-neutral-50">
                 {t('EXTENSION.MEMBER.ROLE')}
               </FormLabel>
               <Button
@@ -238,14 +238,14 @@ const InviteMembers = ({
                   : 'Select a role'}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
               {rolesOptions.map((option) => (
                 <DropdownMenuItem
                   key={option.name}
                   onSelect={() => {
                     formAdding.setValue('role', option.name);
                   }}
-                  className="flex flex-row gap-2 capitalize text-neutral-600"
+                  className="flex flex-row gap-2 capitalize text-neutral-600 dark:text-neutral-50 dark:hover:bg-neutral-800"
                 >
                   {option.icon}
                   {t(`EXTENSION.ROLE.${option.name?.toUpperCase()}`)}
@@ -254,7 +254,7 @@ const InviteMembers = ({
             </DropdownMenuContent>
           </DropdownMenu>
           <div className="flex flex-col gap-3 py-2">
-            <FormLabel className="invisible text-neutral-600">Invite</FormLabel>
+            <FormLabel className="invisible text-neutral-600 dark:text-neutral-50">Invite</FormLabel>
             <Button
               color="secondary"
               shape="square"
@@ -269,7 +269,7 @@ const InviteMembers = ({
           </div>
         </div>
         <div
-          className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3"
+          className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 dark:bg-background p-3"
           {...spacePreviewProps}
         >
           <Avatar
@@ -279,10 +279,10 @@ const InviteMembers = ({
             className="size-[88px] cursor-pointer p-0"
           />
           <div className="flex w-full flex-col gap-1">
-            <Typography className="text-[18px] font-semibold text-neutral-800">
+            <Typography className="text-[18px] font-semibold text-neutral-800 dark:text-neutral-50">
               {space?.name}
             </Typography>
-            <Typography className="font-normal text-neutral-600">
+            <Typography className="font-normal text-neutral-600 dark:text-neutral-50">
               {space?.members?.length} members
             </Typography>
           </div>
@@ -290,10 +290,10 @@ const InviteMembers = ({
         <DataTable
           customEmpty={t('EXTENSION.SPACE.NO_MEMBER')}
           tableHeadProps={{
-            className: 'bg-transparent',
+            className: 'bg-transparent dark:bg-background dark:text-neutral-50',
           }}
           rowProps={{
-            className: 'rounded-full bg-primary-100',
+            className: 'rounded-full bg-primary-100 dark:bg-neutral-800 dark:text-neutral-50',
           }}
           columns={makeMembersColumns({
             t,

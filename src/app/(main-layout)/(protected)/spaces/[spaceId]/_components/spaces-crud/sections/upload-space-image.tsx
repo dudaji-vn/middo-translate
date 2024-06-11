@@ -122,7 +122,7 @@ export default function UploadSpaceImage({
               alt="avatar"
               className={cn(
                 'z-0 h-24 w-24 cursor-pointer p-0',
-                errors[nameField] && 'border border-red-500',
+                errors[nameField] && 'border border-red-500 dark:bg-neutral-800',
               )}
             />
           </AlertDialogTrigger>

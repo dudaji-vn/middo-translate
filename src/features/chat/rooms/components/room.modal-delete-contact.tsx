@@ -49,7 +49,7 @@ export const RoomModalDeleteContact = (props: RoomModalDeleteContactProps) => {
           <AlertDialogTitle>
             {t('MODAL.DELETE_CONTACT.TITLE')}
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.DELETE_CONTACT.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

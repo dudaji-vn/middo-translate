@@ -66,12 +66,12 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
     return (
       <div
         className={cn(
-          'flex h-fit  w-full flex-row items-center justify-start  bg-white p-2 text-neutral-500',
+          'flex h-fit  w-full flex-row items-center justify-start  bg-white dark:bg-neutral-900 p-2 text-neutral-500',
           props.className,
         )}
       >
         <Skeleton className="relative size-[50px] rounded-[8px] bg-primary-100">
-          <div className="absolute inset-2 rounded-full border border-neutral-50 bg-white" />
+          <div className="absolute inset-2 rounded-full border border-neutral-50 bg-white dark:bg-neutral-900 dark:border-neutral-800" />
         </Skeleton>
       </div>
     );
@@ -86,13 +86,13 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           expand && 'min-w-[376px]  max-w-full',
         )}
       >
-        <div className="relative flex w-full flex-row items-center justify-start gap-3  rounded-[12px] bg-primary-100 p-2">
+        <div className="relative flex w-full flex-row items-center justify-start gap-3  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
           {space?.avatar && (
             <Avatar
               alt={space.name ?? ''}
               size="sm"
               src={String(space.avatar)}
-              className="border border-neutral-50 bg-white"
+              className="border border-neutral-50 bg-white dark:bg-neutral-900 dark:border-neutral-900"
             />
           )}
           <div
@@ -118,14 +118,14 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="w-[360px] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A]"
+        className="w-[360px] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A] dark:bg-neutral-900 dark:border-neutral-800"
         sideOffset={-4}
         alignOffset={8}
       >
         {items?.map((option: Item) => (
           <DropdownMenuItem
             className={cn(
-              'relative flex w-full flex-row items-center justify-start gap-4 rounded-none bg-none',
+              'relative flex w-full flex-row items-center justify-start gap-4 rounded-none bg-none dark:hover:bg-neutral-800',
               option.isActive ? '!bg-primary !text-white' : '',
             )}
             onClick={() => onChangeSpace(option.href)}

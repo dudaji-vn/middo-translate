@@ -31,7 +31,7 @@ export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('MODAL.LEAVE_ROOM.TITLE')}?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.LEAVE_ROOM.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

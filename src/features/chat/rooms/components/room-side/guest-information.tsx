@@ -71,17 +71,17 @@ const GuestInformation = (guestData: GuestInformation) => {
           <div
             key={field}
             className={cn(
-              'flex w-full flex-row items-center justify-between gap-2 rounded-xl bg-neutral-50 px-3 py-3',
+              'flex w-full flex-row items-center justify-between gap-2 rounded-xl bg-neutral-50 dark:bg-neutral-800 px-3 py-3',
               editable && 'cursor-pointer',
             )}
             onClick={() => {
               if (editable) setOpen(true);
             }}
           >
-            <Typography className="capitalize text-neutral-600">
+            <Typography className="capitalize text-neutral-600 dark:text-neutral-50">
               {mappedLabel[field]}
             </Typography>
-            <Typography className="flex flex-row items-center gap-2 font-medium text-neutral-800">
+            <Typography className="flex flex-row items-center gap-2 font-medium text-neutral-800 dark:text-neutral-50">
               {guestData[field]}
               {editable && <Pen size={20} />}
             </Typography>

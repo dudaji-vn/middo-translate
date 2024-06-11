@@ -22,7 +22,7 @@ export default function Offline() {
 
   if(status !== 'OFFLINE') return null;
   return (
-    <section className="fixed inset-0 z-[100] bg-white">
+    <section className="fixed inset-0 z-[100] bg-white dark:bg-neutral-950">
       <div className="mx-auto flex h-full max-w-[600px] flex-col items-center justify-center px-[5vw]">
         <div className="mx-auto w-[223px]">
           <svg

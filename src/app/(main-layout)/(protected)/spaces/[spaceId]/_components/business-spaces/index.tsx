@@ -92,7 +92,7 @@ const BusinessSpaces = () => {
       <section className={modal ? 'hidden' : ''}>
         <div
           className={cn(
-            'flex w-full flex-col justify-between gap-4  bg-primary-100 px-[5vw] py-5 sm:gap-1 md:flex-row md:items-end',
+            'flex w-full flex-col justify-between gap-4  bg-primary-100 dark:bg-background px-[5vw] py-5 sm:gap-1 md:flex-row md:items-end',
           )}
         >
           <div className="flex w-full flex-row gap-3">
@@ -103,7 +103,7 @@ const BusinessSpaces = () => {
               variant={'outline'}
             />
             <div className="flex w-full flex-col gap-2">
-              <Typography className="min-w-fit text-base font-normal leading-[18px] text-neutral-600">
+              <Typography className="min-w-fit text-base font-normal leading-[18px] text-neutral-600 dark:text-neutral-50">
                 {t('EXTENSION.SPACE.WELCOME')}
               </Typography>
               <Typography className="text-base font-semibold text-primary-500-main">
@@ -139,7 +139,7 @@ const BusinessSpaces = () => {
               <TabsTrigger
                 key={item.value}
                 value={item.value}
-                className="max-w-fit px-8"
+                className="max-w-fit px-8 dark:text-neutral-50"
               >
                 {t(`EXTENSION.SPACE.${item.label}`)}
               </TabsTrigger>
