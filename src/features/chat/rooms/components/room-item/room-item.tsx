@@ -27,6 +27,7 @@ import RoomItemVisitorAvatar from './room-item-visitor-avatar';
 import { CircleFlag } from 'react-circle-flags';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { InboxType } from '../inbox/inbox';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 
 export interface RoomItemProps {
   data: Room;
@@ -102,6 +103,9 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     conversationType,
     params?.spaceId,
   ]);
+  const isHideRead = useSideChatStore((state) =>
+    state.filters.includes('unread'),
+  );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
@@ -115,11 +119,15 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     ? RoomItemActionWrapperDisabled
     : RoomItemActionWrapper;
 
+  if (isHideRead && isRead) return null;
+
   return (
     <div
       className={cn(
         'group flex',
-        isActive ? 'bg-primary-200 dark:bg-primary-800' : 'bg-white dark:bg-neutral-950 hover:bg-primary-100 dark:hover:bg-primary-900',
+        isActive
+          ? 'bg-primary-200 dark:bg-primary-800'
+          : 'bg-white hover:bg-primary-100 dark:bg-neutral-950 dark:hover:bg-primary-900',
         className,
       )}
     >
@@ -169,9 +177,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                   </span>
                 </div>
               )}
-              {
-                type == 'contact' ?  <RenderItemUserName /> : <RenderItemSub />
-              }
+              {type == 'contact' ? <RenderItemUserName /> : <RenderItemSub />}
               {room.isHelpDesk && (
                 <div className="flex flex-row items-center gap-1 text-sm font-light">
                   <CircleFlag
@@ -252,13 +258,17 @@ const RenderItemSub = () => {
 
 const RenderItemUserName = () => {
   const { data, currentUser } = useRoomItem();
-  
-  const user = data.participants.filter(p => p._id !== currentUser._id)[0];
+
+  const user = data.participants.filter((p) => p._id !== currentUser._id)[0];
 
   if (!user) return null;
 
-  return <p className="text-neutral-800 text-sm font-light line-clamp-1 dark:text-neutral-50">{'@' + user?.username}</p>;
-}
+  return (
+    <p className="line-clamp-1 text-sm font-light text-neutral-800 dark:text-neutral-50">
+      {'@' + user?.username}
+    </p>
+  );
+};
 
 const ItemSubDraft = ({ htmlContent }: { htmlContent: string }) => {
   const { t } = useTranslation('common');
