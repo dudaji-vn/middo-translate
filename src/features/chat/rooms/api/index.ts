@@ -32,9 +32,12 @@ export const roomApi = {
         countries?: string[];
         tags?: string[];
       };
+      isGroup?: boolean;
+      isUnread?: boolean;
     },
   ) {
     const { filterOptions, ...restParams } = params;
+    console.log(restParams);
     const queryParams = {
       ...restParams,
       ...convertRoomsFilterOptionsToString(filterOptions),
@@ -234,5 +237,5 @@ export const roomApi = {
       `${basePath}/${roomId}/delete-contact`,
     );
     return res.data;
-  }
+  },
 };

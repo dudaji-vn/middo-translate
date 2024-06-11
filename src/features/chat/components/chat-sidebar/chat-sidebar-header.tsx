@@ -26,6 +26,7 @@ import { ChatSettingMenu } from '../chat-setting';
 import { useAppStore } from '@/stores/app.store';
 import { useSideChatStore } from '../../stores/side-chat.store';
 import { RoomsModalFilter } from '../../rooms/components/rooms.modal-filter';
+import { InboxFilter } from '../../rooms/components/inbox/inbox-filter';
 
 export interface ChatSidebarHeaderProps {}
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
@@ -72,7 +73,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   }
 
   return (
-    <div className="w-full px-3 pt-3 bg-background">
+    <div className="w-full bg-background px-3 pt-3">
       <div className="mb-3 flex items-center justify-between">
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}
@@ -83,7 +84,9 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
         >
           <Menu />
         </Button.Icon>
-        <Typography variant="h6" className='dark:text-neutral-50'>{t('CONVERSATION.TITLE')}</Typography>
+        <Typography variant="h6" className="dark:text-neutral-50">
+          {t('CONVERSATION.TITLE')}
+        </Typography>
         <div className="flex gap-3">
           <Tooltip
             title={t('TOOL_TIP.NEW_CONVERSATION')}
@@ -160,7 +163,10 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             />
           </motion.div>
         </AnimatePresence>
-        {!isSearch && isBusiness && <RoomsModalFilter />}
+
+        {!isSearch && (
+          <>{isBusiness ? <RoomsModalFilter /> : <InboxFilter />}</>
+        )}
       </div>
     </div>
   );
