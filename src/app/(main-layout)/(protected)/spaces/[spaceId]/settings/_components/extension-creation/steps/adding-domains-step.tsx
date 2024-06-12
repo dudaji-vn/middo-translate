@@ -39,10 +39,10 @@ const AddingDomainsStep = () => {
       <div className="flex  flex-col gap-3 p-4 ">
         <Typography
           variant="h5"
-          className=" flex flex-col gap-3 text-[1rem]  text-neutral-800"
+          className=" flex flex-col gap-3 text-[1rem]  text-neutral-800 dark:text-neutral-50"
         >
           <span className="font-semibold">Add domain</span>
-          <span className="font-normal text-neutral-600">
+          <span className="font-normal text-neutral-600 dark:text-neutral-50">
             Add all of your website domains that you would like the extension to
             appear on.
           </span>
@@ -75,7 +75,7 @@ const AddingDomainsStep = () => {
       <div className="flex w-full flex-col p-4">
         {domains?.length > 0 && (
           <p
-            className="inline-block text-[1rem] font-semibold text-neutral-800"
+            className="inline-block text-[1rem] font-semibold text-neutral-800 dark:text-neutral-50"
           >
             Added domains
           </p>
@@ -98,10 +98,10 @@ const AddingDomainsStep = () => {
             <div
               key={index}
               className={cn(
-                'flex w-full flex-row items-center justify-between gap-4 border-b border-neutral-50 py-3 last:border-b-0',
+                'flex w-full flex-row items-center justify-between gap-4 border-b border-neutral-50 dark:border-neutral-800 py-3 last:border-b-0',
               )}
             >
-              <Typography className="text-[1rem] font-normal text-neutral-600 line-clamp-1 max-w-full truncate text-ellipsis">
+              <Typography className="text-[1rem] font-normal text-neutral-600 dark:text-neutral-50 line-clamp-1 max-w-full truncate text-ellipsis">
                 {domain}
               </Typography>
               <Button

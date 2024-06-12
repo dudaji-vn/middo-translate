@@ -82,7 +82,7 @@ const Space = ({
           className="size-[88px] border border-neutral-50 dark:border-neutral-800 p-1"
         />
         <div className="flex flex-col space-y-1">
-          <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] sm:max-w-44  xl:max-w-56">
+          <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] sm:max-w-44  xl:max-w-56 dark:text-neutral-50">
             {name}
           </CardTitle>
           <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${members?.length} ${t('COMMON.MEMBER')}`}</span>

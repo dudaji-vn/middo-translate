@@ -117,11 +117,11 @@ const SpaceSetting = ({
     <>
       <section
         className={
-          modalType ? 'hidden' : 'h-fit w-full bg-white px-3 py-5 md:px-10'
+          modalType ? 'hidden' : 'h-fit w-full bg-white dark:bg-background px-3 py-5 md:px-10'
         }
       >
         <Form {...formEditSpace}>
-          <div className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 p-3">
+          <div className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 dark:bg-neutral-900 p-3">
             <div
               className={cn(
                 'flex w-full flex-row items-center gap-3',
@@ -131,7 +131,7 @@ const SpaceSetting = ({
               <EditSpaceImage uploadAble={isSpaceOwner} />
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row items-center gap-2">
-                  <Typography className="text-[18px]  font-semibold  leading-5 text-neutral-800">
+                  <Typography className="text-[18px]  font-semibold  leading-5 text-neutral-800 dark:text-neutral-50">
                     {space?.name}
                   </Typography>
                   {isSpaceOwner && <EditSpaceModal space={space} />}
@@ -147,23 +147,24 @@ const SpaceSetting = ({
         </Form>
       </section>
       <section
-        className={modalType ? 'hidden' : 'w-full items-center bg-white'}
+        className={modalType ? 'hidden' : 'w-full items-center bg-white dark:bg-background'}
       >
         <Tabs defaultValue={defaultTab} className="m-0 w-full p-0">
-          <div className="w-full overflow-x-auto bg-white transition-all duration-300">
+          <div className="w-full overflow-x-auto bg-white dark:bg-background transition-all duration-300">
             <TabsList className="flex w-full  flex-row justify-start sm:px-10">
               {SPACE_SETTING_TAB_ROLES.map((item) => {
                 return (
                   <TabsTrigger
                     key={item.label}
                     value={item.name}
-                    className={cn('w-fit lg:px-10', {
+                    className={cn('w-fit lg:px-10 dark:text-neutral-200', {
                       hidden:
                         !currentUserRole ||
                         !item.roles.view.find(
                           (role) => role === currentUserRole,
                         ),
                     })}
+
                   >
                     {t(item.label)}
                   </TabsTrigger>
@@ -226,10 +227,10 @@ const SpaceSetting = ({
                 alt="empty-extensions"
                 className="mx-auto"
               />
-              <Typography className="text-lg font-semibold leading-5 text-neutral-800">
+              <Typography className="text-lg font-semibold leading-5 text-neutral-800 dark:text-neutral-50">
                 Your extension is almost here!
               </Typography>
-              <Typography className="text-neutral-600">
+              <Typography className="text-neutral-600 dark:text-neutral-200">
                 Create a conversation extension with the help of ready-made
                 theme or define a unique one on your own
               </Typography>

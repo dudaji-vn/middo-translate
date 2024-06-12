@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 const EmptyReport = () => {
   const { t } = useTranslation('common');
   return (
-    <section className="flex h-full w-full flex-col justify-between ">
+    <section className="flex h-full w-full flex-col justify-between dark:bg-background">
       <div className="w-full flex-none px-4 md:px-10">
-        <Typography className=" flex flex-row items-center justify-between text-base font-semibold text-neutral-800">
+        <Typography className=" flex flex-row items-center justify-between text-base font-semibold text-neutral-800 dark:text-neutral-50">
           {t('EXTENSION.REPORT')}
         </Typography>
       </div>
@@ -20,7 +20,7 @@ const EmptyReport = () => {
           alt="Empty-report"
           className="h-auto w-[500px] max-w-full"
         />
-        <Typography className="flex w-full items-center justify-center text-neutral-800">
+        <Typography className="flex w-full items-center justify-center text-neutral-800 dark:text-neutral-50">
           Empty data at this time
         </Typography>
       </div>

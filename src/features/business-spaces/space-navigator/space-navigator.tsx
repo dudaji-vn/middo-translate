@@ -70,7 +70,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           props.className,
         )}
       >
-        <Skeleton className="relative size-[50px] rounded-[8px] bg-primary-100">
+        <Skeleton className="relative size-[50px] rounded-[8px] bg-primary-100 dark:bg-neutral-800">
           <div className="absolute inset-2 rounded-full border border-neutral-50 bg-white dark:bg-neutral-900 dark:border-neutral-800" />
         </Skeleton>
       </div>

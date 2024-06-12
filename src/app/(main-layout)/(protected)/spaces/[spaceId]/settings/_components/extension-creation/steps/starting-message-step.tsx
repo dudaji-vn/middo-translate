@@ -23,7 +23,7 @@ const StartingMessageStep = ({
 
   return (
     <div className="flex flex-col gap-3 p-4">
-      <FormLabel className="mb-1 inline-block text-[1rem] font-semibold text-neutral-900">
+      <FormLabel className="mb-1 inline-block text-[1rem] font-semibold text-neutral-900 dark:text-neutral-50">
         Starting message
       </FormLabel>
       <RadioGroup
@@ -50,14 +50,14 @@ const StartingMessageStep = ({
             value="default"
             id="r1"
             iconProps={{ className: 'h-full w-full' }}
-            className="border-neutral-200 ring-neutral-200"
+            className="border-neutral-200 ring-neutral-200 dark:border-neutral-800 dark:ring-neutral-900"
           >
             <Check
               className="absolute left-[1px] top-[1px] h-[14px] w-3"
               stroke="white"
             />
           </RadioGroupItem>
-          <Label htmlFor="r1">Default</Label>
+          <Label htmlFor="r1" className="dark:text-neutral-50">Default</Label>
         </div>
         <Input
           name="custom.firstMessage"
@@ -75,14 +75,14 @@ const StartingMessageStep = ({
             value="custom"
             id="r2"
             iconProps={{ className: 'h-full w-full' }}
-            className="border-neutral-200 ring-neutral-200"
+            className="border-neutral-200 ring-neutral-200 dark:border-neutral-800 dark:ring-neutral-900"
           >
             <Check
               className="absolute left-[1px] top-[1px] h-[14px] w-3"
               stroke="white"
             />
           </RadioGroupItem>
-          <Label htmlFor="r2">Custom</Label>
+          <Label htmlFor="r2" className="dark:text-neutral-50">Custom</Label>
         </div>
         <RHFInputField
           formItemProps={{
@@ -106,14 +106,14 @@ const StartingMessageStep = ({
             value="script"
             id="r1"
             iconProps={{ className: 'h-full w-full' }}
-            className="border-neutral-200 ring-neutral-200"
+            className="border-neutral-200 ring-neutral-200 dark:border-neutral-800 dark:ring-neutral-900"
           >
             <Check
               className="absolute left-[1px] top-[1px] h-[14px] w-3"
               stroke="white"
             />
           </RadioGroupItem>
-          <Label htmlFor="r1">Scripted Conversation</Label>
+          <Label htmlFor="r1" className="dark:text-neutral-50">Scripted Conversation</Label>
         </div>
         <div
           className={cn(

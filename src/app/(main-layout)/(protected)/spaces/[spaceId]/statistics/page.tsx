@@ -83,7 +83,7 @@ const ReportPage = ({
   return (
     <>
       <ReportHeader />
-      <section className="relative h-fit w-full bg-[#FCFCFC] md:space-y-4">
+      <section className="relative h-fit w-full bg-[#FCFCFC] md:space-y-4 dark:bg-background-darker">
         <ReportCards
           data={data?.analysis}
           loading={isFetching}

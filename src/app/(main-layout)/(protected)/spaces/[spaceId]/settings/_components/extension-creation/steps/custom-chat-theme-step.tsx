@@ -26,15 +26,15 @@ const CustomChatThemeStep = ({ space }: { space: TSpace }) => {
       : undefined;
   return (
     <div className=" max-w-screen-md  md:max-w-full   [&_h3]:text-[1.25rem]">
-      <div className="flex h-full flex-row divide-x divide-neutral-50  border-neutral-50 ">
+      <div className="flex h-full flex-row divide-x divide-neutral-50  border-neutral-50 dark:border-neutral-900 dark:divide-neutral-900">
         <div className="flex  w-1/3 flex-col gap-3 p-4">
           <Typography
             variant="h5"
-            className="text-[1rem] font-semibold text-neutral-900"
+            className="text-[1rem] font-semibold text-neutral-900 dark:text-neutral-50"
           >
             Custom style
           </Typography>
-          <Typography className=" text-[1rem] font-normal text-neutral-500">
+          <Typography className=" text-[1rem] font-normal text-neutral-500 dark:text-neutral-50">
             Create your own extension style
           </Typography>
           <CustomExtension

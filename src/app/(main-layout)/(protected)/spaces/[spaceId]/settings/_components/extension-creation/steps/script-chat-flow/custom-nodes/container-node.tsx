@@ -91,7 +91,7 @@ function ContainerNode(node: CustomNodeProps) {
 
   return (
     <div
-      className="relative h-[500px] w-[400px] rounded-2xl border bg-white"
+      className="relative h-[500px] w-[400px] rounded-2xl border bg-white dark:bg-background dark:border dark:border-neutral-900 overflow-hidden"
       style={{ width, height }}
     >
       <Handle
@@ -99,7 +99,7 @@ function ContainerNode(node: CustomNodeProps) {
         position={Position.Left}
         isConnectable={isConnectable}
       />
-      <div className="flex flex-col gap-2 p-3">
+      <div className="flex flex-col gap-2 p-3 dark:bg-background">
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2 text-primary-500-main">
             <MessageSquare size={18} />
@@ -120,11 +120,14 @@ function ContainerNode(node: CustomNodeProps) {
         </div>
         <RHFTextAreaField
           name={formFieldId}
+          // formItemProps={{
+          //   className: "dark:bg-neutral-900"
+          // }}
           textareaProps={{
             placeholder: 'Type your message here...',
             rows: 3,
             disabled: data?.readonly,
-            className: 'w-full h-full',
+            className: 'w-full h-full dark:bg-neutral-900',
           }}
         />
       </div>
