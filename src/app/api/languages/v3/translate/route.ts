@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     });
 
     return Response.json({
-      data: text,
+      data: result.data.translations[0].translatedText,
     });
   } catch (error: any) {
     console.log('Error in translateText ❤️', error.message);
