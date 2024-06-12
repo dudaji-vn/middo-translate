@@ -53,6 +53,7 @@ export interface MessageProps
   isSendBySpaceMember?: boolean;
   isEditing?: boolean;
   isDiscussion?: boolean;
+  isLast?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -79,6 +80,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     {
       message,
       sender,
+      isLast,
       order,
       guestId,
       className,
@@ -268,8 +270,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     <MessageItemReactionBar isMe={isMe} message={message} />
                   )}
               </div>
-
-              {isSendBySpaceMember && (
+              {isSendBySpaceMember && isLast && (
                 <span
                   className={cn(
                     'mt-1  block text-xs font-light text-neutral-500 dark:text-neutral-200',

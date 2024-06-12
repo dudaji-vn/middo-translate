@@ -188,6 +188,7 @@ export const MessageBox = ({
               {isShowTimeGroup && (
                 <TimeDisplay time={group.lastMessage.createdAt} />
               )}
+
               {!isSystem && (
                 <div
                   className={cn(
@@ -205,7 +206,8 @@ export const MessageBox = ({
 
               <div className="flex w-full gap-1">
                 <MessageItemGroup>
-                  {group.messages.map((message) => {
+                  {group.messages.map((message, index) => {
+                    const isLast = index === 0;
                     const pinnedBy = pinnedMessages?.find(
                       (pinnedMessage) =>
                         pinnedMessage.message._id === message._id,
@@ -232,6 +234,7 @@ export const MessageBox = ({
                         spaceAvatar={
                           isAnonymous ? room.space?.avatar : undefined
                         }
+                        isLast={isLast}
                         isSendBySpaceMember={isSendBySpaceMember}
                         key={message?.clientTempId || message._id}
                         message={newMessage}
