@@ -15,7 +15,7 @@ import { SearchParams } from '../../translation/page';
 import { useTranslateStore } from '@/stores/translate.store';
 import useClient from '@/hooks/use-client';
 import { useTranslation } from 'react-i18next';
-
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 export interface HistoryProps extends React.HTMLAttributes<HTMLDivElement> {
   isSelected?: boolean;
@@ -36,11 +36,9 @@ export type THistoryListItems = THistoryItem[];
 
 const History = forwardRef<HTMLDivElement, HistoryProps>(
   ({ isSelected, searchParams, className, onClose, ...props }, ref) => {
-    const isClient = useClient()
+    const isClient = useClient();
     const router = useRouter();
-    const {
-      setValue: setTranslateEditorInputValue,
-    } = useTranslateStore();
+    const { setValue: setTranslateEditorInputValue } = useTranslateStore();
     const [historyListItems, clear, removeHistoryItem] = useHistoryStore(
       (state) => [state.historyListItems, state.clear, state.removeHistoryItem],
     );
@@ -63,14 +61,16 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
         source: src.language,
         target: dest.language,
         query: src.content.trim(),
-        ...isMobile ? {} : { tab: 'history' }
+        ...(isMobile ? {} : { tab: 'history' }),
       };
       if (!isEqual(searchParams, newParams)) {
         setIsLoading(true);
       }
-      router.replace(`/?${new URLSearchParams(newParams).toString()}`);
+      router.replace(
+        `/${ROUTE_NAMES.TRANSLATION}?${new URLSearchParams(newParams).toString()}`,
+      );
       setTranslateEditorInputValue(src.content.trim());
-    }
+    };
     return (
       <section
         ref={ref}
@@ -93,7 +93,7 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
         )}
         <Typography
           className={cn(
-            'relative flex  h-11 w-full flex-row items-center gap-2 border-b dark:border-neutral-900 px-3 pr-1 py-1 text-left font-semibold text-primary-500-main',
+            'relative flex  h-11 w-full flex-row items-center gap-2 border-b px-3 py-1 pr-1 text-left font-semibold text-primary-500-main dark:border-neutral-900',
             'max-md:justify-center',
           )}
         >
@@ -130,7 +130,9 @@ const History = forwardRef<HTMLDivElement, HistoryProps>(
         <div className="flex w-full flex-col gap-8  px-3 pb-8">
           {historyListItems?.map((item, index) => (
             <HistoryItem
-              onClick={() => { handleHistoryClick(item); }}
+              onClick={() => {
+                handleHistoryClick(item);
+              }}
               key={index}
               item={item}
               index={index}
