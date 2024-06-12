@@ -67,7 +67,7 @@ export const DeleteAccount = (props: DeleteAccountProps) => {
             <AlertDialogTitle>
               {t('MODAL.DELETE_ACCOUNT.TITLE')}
             </AlertDialogTitle>
-            <AlertDialogDescription className="mt-2 md:mt-0">
+            <AlertDialogDescription className="mt-2 md:mt-0 dark:text-neutral-50">
               {t('MODAL.DELETE_ACCOUNT.DESCRIPTION')}
             </AlertDialogDescription>
             {step !== 0 && (

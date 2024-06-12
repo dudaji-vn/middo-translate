@@ -31,9 +31,9 @@ const SpaceSettingPage = async ({
   }
 
   return (
-    <div className="h-full max-h-full w-full overflow-y-auto bg-white max-md:w-screen max-md:px-1">
+    <div className="h-full max-h-full w-full overflow-y-auto bg-white max-md:w-screen max-md:px-1 dark:bg-background">
       <SpaceSetting space={space} defaultTab={openTab} />
-      <div className="w-full bg-white">
+      <div className="w-full bg-white dark:bg-background">
         <CreateExtension
           space={space}
           open={Boolean(

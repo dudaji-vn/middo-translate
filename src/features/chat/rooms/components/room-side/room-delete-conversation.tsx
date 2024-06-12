@@ -42,7 +42,7 @@ export const RoomDeleteConversation = ({
           <AlertDialogTitle>
             {t('MODAL.DELETE_CONVERSATION.TITLE')} ?
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.DELETE_CONVERSATION.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

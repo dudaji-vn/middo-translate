@@ -106,7 +106,7 @@ export const ModalChooseScreen = () => {
                     <AlertDialogTitle>
                         {t('MODAL.SHARE_SCREEN.TITLE')}
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogDescription className="dark:text-neutral-50">
                         {t('MODAL.SHARE_SCREEN.DESCRIPTION')}
                     </AlertDialogDescription>
                     <div className='grid grid-cols-4 gap-3 mt-3 max-h-[60vh] overflow-auto'>

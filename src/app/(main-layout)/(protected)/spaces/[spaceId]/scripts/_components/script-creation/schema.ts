@@ -29,6 +29,7 @@ export const initialEdges: Edge[] = [
     target: '2',
     animated: true,
     label: 'Start conversation',
+    className: 'dark:[&_*]:fill-neutral-900 dark:[&_text]:fill-neutral-50',
   },
 ];
 

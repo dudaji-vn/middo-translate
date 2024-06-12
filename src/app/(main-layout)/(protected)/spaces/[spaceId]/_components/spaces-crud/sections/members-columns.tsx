@@ -28,7 +28,7 @@ export const makeMembersColumns = ({
       header: t('EXTENSION.MEMBER.EMAIL'),
       cell(props) {
         return (
-          <Typography className="text-gray-500">
+          <Typography className="text-gray-500 dark:text-neutral-50">
             {props.getValue() as string}
             <span className="font-light">
               {(props.row.original.role === ESPaceRoles.Owner &&
@@ -46,8 +46,8 @@ export const makeMembersColumns = ({
         return (
           <Typography
             className={cn(
-              'capitalize text-gray-500',
-              props.getValue() === ESPaceRoles.Admin && 'text-primary-500-main',
+              'capitalize text-gray-500 dark:text-neutral-50',
+              props.getValue() === ESPaceRoles.Admin && 'text-primary-500-main dark:text-primary',
             )}
           >
             {props.getValue() as string}

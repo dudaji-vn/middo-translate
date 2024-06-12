@@ -49,7 +49,7 @@ export const UserBlockModal = (props: UserBlockModalProps) => {
             })}
           </AlertDialogTitle>
 
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.BLOCK_USER.DESCRIPTION')}
           </AlertDialogDescription>
           <div className="mt-3 flex items-center gap-2">

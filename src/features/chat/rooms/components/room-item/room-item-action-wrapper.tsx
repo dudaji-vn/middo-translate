@@ -205,6 +205,7 @@ const MobileWrapper = ({
               startIcon={item.icon}
               color={item.color === 'error' ? 'error' : 'default'}
               onClick={item.onAction}
+              className='hover:bg-neutral-900'
             >
               {t(item.label)}
             </LongPressMenu.Item>

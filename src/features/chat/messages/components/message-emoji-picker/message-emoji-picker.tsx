@@ -128,7 +128,7 @@ export const MessageEmojiPicker = forwardRef<
             >
               <Picker
                 locale={EMOJI_LANG_SUPPORT.includes(language) ?  language : 'en'}
-                theme="light"
+                theme="dark"
                 onEmojiSelect={(emoji: any) => {
                   handleEmojiClick(emoji.native);
                 }}

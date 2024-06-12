@@ -56,7 +56,7 @@ const SettingSpeaker = ({ className }: SettingSpeakerProps) => {
           value={speaker?.deviceId || audioOutputDevices[0]?.deviceId || ''}
           onValueChange={onAudioOutputChange}
         >
-          <SelectTrigger className="w-full flex-1 rounded-xl bg-neutral-50 !py-2 shadow-none">
+          <SelectTrigger className="w-full flex-1 rounded-xl bg-neutral-50 dark:bg-neutral-900 dark:dark:bg-neutral-800 dark:active:text-neutral-50 !py-2 shadow-none">
             <SelectValue>
               {speaker
                 ? speaker.label
@@ -65,9 +65,9 @@ const SettingSpeaker = ({ className }: SettingSpeakerProps) => {
                   : ''}
             </SelectValue>
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className='dark:bg-neutral-900 dark:border-neutral-800'>
             {audioOutputDevices.map((device) => (
-              <SelectItem key={device.deviceId} value={device.deviceId}>
+              <SelectItem key={device.deviceId} value={device.deviceId} className="dark:hover:bg-neutral-800">
                 <span>{device.label}</span>
               </SelectItem>
             ))}

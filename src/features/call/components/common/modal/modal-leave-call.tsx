@@ -50,7 +50,7 @@ export const ConfirmLeaveRoomModal = () => {
           <AlertDialogTitle>
             {t('MODAL.LEAVE_CALL.TITLE')}
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             <span>
               {t('MODAL.LEAVE_CALL.DESCRIPTION')}
             </span>

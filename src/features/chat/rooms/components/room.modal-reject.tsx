@@ -42,7 +42,7 @@ export const RoomModalReject = (props: RoomModalRejectProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('MODAL.REJECT_GROUP.TITLE')}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.REJECT_GROUP.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

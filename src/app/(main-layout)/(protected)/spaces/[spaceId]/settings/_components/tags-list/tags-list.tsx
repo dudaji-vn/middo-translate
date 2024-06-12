@@ -46,7 +46,7 @@ const TagItem = ({
 }: TagItemProps) => {
   return (
     <div
-      className="flex w-full flex-row items-center justify-between gap-10 bg-primary-100 p-[8px_40px]"
+      className="flex w-full flex-row items-center justify-between gap-10 bg-primary-100 dark:bg-neutral-900 p-[8px_40px]"
       {...props}
     >
       <div className="flex w-full flex-row items-center justify-start  gap-10">
@@ -64,7 +64,7 @@ const TagItem = ({
           stroke={color}
           fill={color}
         />
-        <Typography className="text-base capitalize text-neutral-800">
+        <Typography className="text-base capitalize text-neutral-800 dark:text-neutral-50">
           {name}
         </Typography>
       </div>

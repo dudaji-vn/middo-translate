@@ -63,7 +63,7 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
           {room.name}
         </p>
         {!room.isGroup ? (
-          <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2">
+          <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2 dark:bg-neutral-800">
             <CircleFlag
               countryCode={language.countryCode?.toLowerCase() || 'gb'}
               height={20}

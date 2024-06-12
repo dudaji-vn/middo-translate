@@ -122,7 +122,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   return (
     <Tabs
       value={tabValue?.toString()}
-      className="w-full bg-primary-100"
+      className="w-full bg-primary-100 dark:bg-background"
       defaultValue={tabValue.toString()}
       onValueChange={(value) => {
         setTabValue(parseInt(value));
@@ -143,7 +143,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           }}
         >
           <CreateSpaceForm />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4">
+          <div className="flex h-fit w-full flex-col items-center bg-primary-100 dark:bg-background py-4">
             <Button
               color={canNext ? 'primary' : 'disabled'}
               shape={'square'}
@@ -159,7 +159,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           value="1"
           cardProps={{
             className:
-              'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none',
+              'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none dark:bg-background',
           }}
         >
           <InviteMembers
@@ -173,7 +173,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
             }
             allowedRoles={[ESPaceRoles.Admin, ESPaceRoles.Member]}
           />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4">
+          <div className="flex h-fit w-full flex-col items-center bg-primary-100 dark:bg-background py-4">
             <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>
               <Button
                 color={'primary'}

@@ -103,7 +103,7 @@ const BusinessSidebarContent = ({
                   'max-md:hidden': title === 'settings',
                 },
                 isSelected
-                  ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white'
+                  ? 'bg-primary-500-main hover:!bg-primary-500-main dark:bg-primary [&_svg]:stroke-white'
                   : 'hover:bg-primary-300',
                 {
                   'gap-0': shrink,
@@ -128,7 +128,7 @@ const BusinessSidebarContent = ({
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
                     : 'min-w-[300px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
-                  isSelected ? 'text-white ' : 'text-neutral-600',
+                  isSelected ? 'text-white ' : 'text-neutral-600 dark:text-neutral-50',
                 )}
               >
                 {displayTitle}

@@ -107,7 +107,7 @@ const Page = ({
           >
             <Menu />
           </Button.Icon>
-          <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800">
+          <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800 dark:text-neutral-50">
             {t(`EXTENSION.CLIENT.PAGE_TITLE`)}
           </Typography>
         </div>
@@ -141,7 +141,7 @@ const Page = ({
           columns={makeClientsColumns(t)}
           data={items}
           tableHeadProps={{
-            className: 'bg-white  border-none',
+            className: 'bg-white dark:bg-background dark:text-neutral-50 border-none',
           }}
           cellProps={{
             className:
@@ -149,7 +149,7 @@ const Page = ({
           }}
           rowProps={{
             className:
-              'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50',
+              'bg-white even:bg-primary-100 dark:even:bg-neutral-900 dark:bg-neutral-900 bg-primary-100 h-12 hover:bg-neutral-50 dark:hover:bg-neutral-800',
           }}
           loading={isLoading}
           skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}

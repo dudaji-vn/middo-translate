@@ -85,7 +85,7 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
             className="transition-transform duration-300 group-data-[state=open]:rotate-180"
           />
         }
-        className="flex h-fit w-full flex-row items-center justify-between  rounded-none !bg-primary-100 px-3 py-4"
+        className="flex h-fit w-full flex-row items-center justify-between  rounded-none !bg-primary-100 dark:!bg-neutral-900 px-3 py-4"
       >
         <div className="h flex w-full cursor-pointer flex-row items-center justify-start gap-2">
           <Checkbox
@@ -99,13 +99,13 @@ export const FilterSection: React.FC<FilterSectionProps> = ({
           />
           <Typography
             variant="h4"
-            className="text-base font-normal leading-[18px] text-neutral-800"
+            className="text-base font-normal leading-[18px] text-neutral-800 dark:text-neutral-50"
           >
             {title}
           </Typography>
         </div>
       </AccordionTrigger>
-      <AccordionContent className="accordion-up 0.2s w-full p-0  ease-out">
+      <AccordionContent className="accordion-up 0.2s w-full p-0  ease-out dark:bg-background">
         <div className="flex flex-col gap-0 px-6">
           {options.map(({ value, label, icon, props }, index) => {
             const displayText =

@@ -91,7 +91,7 @@ const CreateExtensionHeader = ({
   return (
     <section
       className={cn(
-        'createSpaceSteps-center flex w-full flex-row items-center justify-between gap-3 bg-primary-100 px-4',
+        'createSpaceSteps-center flex w-full flex-row items-center justify-between gap-3 bg-primary-100 dark:bg-background px-4',
         headerVariants({ navigation: modalType || 'default' }),
       )}
     >
@@ -107,7 +107,7 @@ const CreateExtensionHeader = ({
         >
           <ArrowLeft className="" />
         </Button.Icon>
-        <Typography className="min-w-max capitalize text-neutral-600">
+        <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50">
           {mappedTitle[modalType || 'create-extension']}
         </Typography>
       </div>
@@ -115,7 +115,7 @@ const CreateExtensionHeader = ({
         <div className="absolute inset-0 !z-0 h-[50%] w-full border-b-[1px] border-dashed border-b-neutral-50"></div>
         <div
           style={{ width: `${stepPercentage}%` }}
-          className="absolute  left-0 top-0 !z-10 h-[50%] border-b-[2px] border-b-neutral-200 transition-all duration-1000"
+          className="absolute  left-0 top-0 !z-10 h-[50%] border-b-[2px] border-b-neutral-200 transition-all duration-1000 dark:border-b-neutral-800"
         ></div>
         {createExtensionSteps.map((item, index) => {
           const isActive = step === index;
@@ -141,10 +141,10 @@ const CreateExtensionHeader = ({
                 variant={'ghost'}
                 className={cn(
                   'flex flex-row gap-3 px-3 py-2 font-light transition-all duration-300',
-                  isActive && '!bg-neutral-50',
-                  isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100',
+                  isActive && '!bg-neutral-50 dark:!bg-neutral-800',
+                  isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100 dark:!bg-neutral-800 dark:hover:bg-neutral-900',
                   isError && '!bg-error-100' && step === index,
-                  isDone && '!bg-success-100 active:!bg-success-200',
+                  isDone && '!bg-success-100 active:!bg-success-200 dark:!bg-success-900 dark:active:!bg-success-800',
                   {
                     'px-4 py-3 text-base font-semibold': isActive,
                   },

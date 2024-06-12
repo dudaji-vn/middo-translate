@@ -42,7 +42,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
   return (
     <div
       className={cn(
-        'left-[502px] top-[212px] h-auto w-[380px] gap-3 rounded-[12px] border  bg-white p-2 shadow-[2px_4px_16px_2px_#1616161A]',
+        'left-[502px] top-[212px] h-auto w-[380px] gap-3 rounded-[12px] border  bg-white dark:bg-background dark:border dark:border-neutral-900 p-2 shadow-[2px_4px_16px_2px_#1616161A]',
       )}
     >
       <Handle
@@ -74,7 +74,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
           textareaProps={{
             placeholder: 'Type your message here...',
             rows: 3,
-            className: 'w-full h-full',
+            className: 'w-full h-full dark:bg-neutral-900',
             disabled: data?.readonly,
           }}
         />

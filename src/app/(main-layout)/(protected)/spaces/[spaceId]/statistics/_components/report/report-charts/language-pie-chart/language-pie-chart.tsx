@@ -80,7 +80,7 @@ export default function LanguagePieChart({
                     style={{ outline: 'none' }}
                     onClick={() => onTogglePie(entry, index)}
                     key={`cell-${index}`}
-                    className="cursor-pointer"
+                    className="cursor-pointer dark:stroke-neutral-800"
                     fill={COLORS[index % COLORS.length]}
                   />
                 </>
@@ -96,6 +96,7 @@ export default function LanguagePieChart({
               innerRadius={116}
               fill={COLORS[(selectedPie.index || 0) % COLORS.length]}
               dataKey="value"
+              className='dark:stroke-neutral-800'
               {...outlinePie}
             />
           )}
@@ -115,14 +116,14 @@ export default function LanguagePieChart({
                 width={20}
               />
             )}
-            <p className="text-base text-neutral-800">
+            <p className="text-base text-neutral-800 dark:text-neutral-50">
               {outlinePie?.countryName}
             </p>
           </div>
-          <p className="text-2xl font-bold text-neutral-800">
+          <p className="text-2xl font-bold text-neutral-800 dark:text-neutral-50">
             {outlinePie?.count}
           </p>
-          <p className="text-base  text-neutral-600">
+          <p className="text-base  text-neutral-600 dark:text-neutral-50">
             {`${((selectedPie?.value || 0) * 100)?.toFixed(0) || 0}%`}
           </p>
         </div>

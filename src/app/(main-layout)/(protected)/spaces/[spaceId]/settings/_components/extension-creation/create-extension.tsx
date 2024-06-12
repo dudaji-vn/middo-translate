@@ -217,7 +217,7 @@ export default function CreateExtension({
       <form onSubmit={handleSubmit(submit)}>
         <Tabs
           value={tabValue?.toString()}
-          className="w-full bg-primary-100"
+          className="w-full bg-primary-100 dark:bg-[#030303]"
           defaultValue={tabValue.toString()}
           onValueChange={(value) => {
             setTabValue(parseInt(value));
@@ -239,7 +239,7 @@ export default function CreateExtension({
               endIcon: <ArrowRight />,
             }}
             cardProps={{
-              className: 'divide-y divide-neutral-50',
+              className: 'divide-y divide-neutral-50 dark:divide-neutral-900',
             }}
           >
             <AddingDomainsStep />

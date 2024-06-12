@@ -219,7 +219,7 @@ const DesignScriptChatFlow = ({
           <Eye />
         </Button>
       </div>
-      <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200">
+      <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200 dark:bg-neutral-800">
         <Form {...control}>
           <ReactFlow
             nodes={viewOnly ? viewOnlyNodes : nodes}
@@ -235,7 +235,7 @@ const DesignScriptChatFlow = ({
             <Background
               gap={16}
               variant={BackgroundVariant.Dots}
-              className="bg-white outline-none"
+              className="bg-white outline-none dark:bg-background"
             />
           </ReactFlow>
         </Form>

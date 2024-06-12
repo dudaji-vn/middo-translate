@@ -806,7 +806,7 @@ export default function UserGuide() {
         {guides.map(guide => (
             <AccordionItem key={guide.id} value={guide.id} id={'guide' + guide.id}>
                 <AccordionTrigger 
-                className={cn('rounded-xl bg-[#fafafa] px-5 text-base md:text-xl hover:no-underline text-left ', 'guide' + guide.id)}>
+                className={cn('rounded-xl bg-[#fafafa] dark:bg-neutral-900 px-5 text-base md:text-xl hover:no-underline text-left ', 'guide' + guide.id)}>
                     {guide.title}
                 </AccordionTrigger>
                 <AccordionContent className="px-5 py-5 text-base">
@@ -911,7 +911,7 @@ const MultiAccordion = ({data, onChangeAccordion, guide, onPreviewImage} : Multi
         {data.map((item) => {
             return <AccordionItem value={item.id} key={item.id} id={'guide_1' + item.id}>
                 <AccordionTrigger 
-                className={cn('rounded-xl bg-primary-100 px-5 text-base md:text-lg hover:no-underline text-left',
+                className={cn('rounded-xl bg-primary-100 dark:bg-neutral-800 px-5 text-base md:text-lg hover:no-underline text-left',
                     'guide_1' + item.id
                 )}>
                     {item.title}
@@ -933,7 +933,7 @@ const MultiAccordion = ({data, onChangeAccordion, guide, onPreviewImage} : Multi
                                 {item.subItems.map((subItem, index) => {
                                     return <AccordionItem value={subItem.id} key={subItem.id}>
                                         <AccordionTrigger 
-                                        className={cn('rounded-xl border border-neutral-50 bg-white px-5 hover:no-underline text-left', 'guide_2' + subItem.id)}>
+                                        className={cn('rounded-xl border border-neutral-50 bg-white dark:bg-neutral-700 dark:border-neutral-700 px-5 hover:no-underline text-left', 'guide_2' + subItem.id)}>
                                             {index + 1} . {subItem.title}
                                         </AccordionTrigger>
                                         <AccordionContent className="px-2 py-2 text-base">
@@ -987,7 +987,7 @@ const MultiStepAccordion = ({paragraph, steps, onChangeAccordion, onPreviewImage
             {steps.map(step => {
                 return <AccordionItem value={step.id} key={step.id}>
                         <AccordionTrigger 
-                            className={cn('rounded-xl bg-primary-100 px-5 text-base md:text-lg hover:no-underline text-left',
+                            className={cn('rounded-xl bg-primary-100 dark:bg-neutral-800 px-5 text-base md:text-lg hover:no-underline text-left',
                             'guide_1' + step.id)}
                         >
                             {step.title}

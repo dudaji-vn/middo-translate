@@ -40,7 +40,7 @@ const Space = ({
     <Card
       key={_id}
       className={cn(
-        'relative min-w-[320px] cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 p-3 transition-all duration-300 ease-in-out hover:border-primary-500-main',
+        'relative min-w-[320px] cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 dark:bg-neutral-900 dark:border-neutral-800 p-3 transition-all duration-300 ease-in-out hover:border-primary-500-main dark:hover:border-primary',
       )}
       onClick={() => {
         router.push(`${ROUTE_NAMES.SPACES}/${_id}/conversations`);
@@ -67,7 +67,7 @@ const Space = ({
       </div>
       <CardHeader className="!m-0 flex flex-row items-center justify-between p-0 text-neutral-600">
         <Badge className={tagsVariants({ tag })}>{t(MAPPED_TAGS[tag])}</Badge>
-        <span className="text-sm font-light leading-[18px] text-neutral-600">
+        <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">
           <span className="max-[320px]:hidden">
             {t('COMMON.TIME.CREATED_ON')}
           </span>
@@ -79,13 +79,13 @@ const Space = ({
           src={avatar || '/logo.png'}
           alt={'avatar-owner'}
           variant={'outline'}
-          className="size-[88px] border border-neutral-50 p-1"
+          className="size-[88px] border border-neutral-50 dark:border-neutral-800 p-1"
         />
         <div className="flex flex-col space-y-1">
-          <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] sm:max-w-44  xl:max-w-56">
+          <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] sm:max-w-44  xl:max-w-56 dark:text-neutral-50">
             {name}
           </CardTitle>
-          <span className="text-sm font-light leading-[18px] text-neutral-600">{`${members?.length} ${t('COMMON.MEMBER')}`}</span>
+          <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${members?.length} ${t('COMMON.MEMBER')}`}</span>
           <Button
             size={'xs'}
             shape={'square'}

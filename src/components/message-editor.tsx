@@ -263,7 +263,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             {editor && !isMobile && <Autofocus editor={editor} />}
           </div>
           {disabled && (
-            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80 max-md:text-sm" />
+            <div className="absolute left-0 top-0 h-full w-full bg-white dark:bg-neutral-900 opacity-80 max-md:text-sm" />
           )}
         </div>
       </>

@@ -88,7 +88,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
               props.onChange?.(e);
               setValue(e.target.value);
             }}
-            className={`w-full border-0 bg-inherit p-2  ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent dark:text-neutral-50 ${props.className}`}
+            className={`w-full border-0 bg-inherit p-2  ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent dark:text-neutral-50 dark:placeholder-neutral-800 ${props.className}`}
           />
           {canClear ? (
             <button
@@ -97,7 +97,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
                 'flex aspect-square h-full items-center justify-center p-2  disabled:text-text dark:text-neutral-50'
               }
             >
-              <XCircleIcon className="h-5 w-5 opacity-60" />
+              <XCircleIcon className="h-5 w-5 opacity-60 dark:text-neutral-50" />
             </button>
           ) : (
             <div className="flex h-11 w-11 items-center bg-inherit dark:text-neutral-50">

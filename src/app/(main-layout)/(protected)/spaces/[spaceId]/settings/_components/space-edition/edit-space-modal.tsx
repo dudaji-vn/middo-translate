@@ -67,7 +67,7 @@ export const EditSpaceModal = ({ space }: { space: Omit<TSpace, 'owner'> }) => {
           className: 'hidden',
         }}
       >
-        <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
+        <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem] dark:bg-background">
           <div className="flex w-full flex-col gap-3">
             <div className="flex w-full flex-row items-center gap-3 rounded-[12px]">
               <RHFInputField

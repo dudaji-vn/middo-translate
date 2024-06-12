@@ -21,6 +21,8 @@ export const HeaderLandingPage = (props: Props) => {
   const platform = usePlatformStore((state) => state.platform);
   const pathName = usePathname();
   const isMobile = useAppStore((state) => state.isMobile);
+  const theme = useAppStore((state) => state.theme);
+  
   if (!isClient) return null;
   if (platform === 'mobile') return null;
 
@@ -32,7 +34,7 @@ export const HeaderLandingPage = (props: Props) => {
   return (
     <div
       className={cn(
-        'relative z-50 flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100  py-4 pl-[1vw] pr-[5vw] md:gap-5 md:pl-[5vw]',
+        'relative z-50 flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 dark:bg-neutral-900 dark:border-neutral-800 py-4 pl-[1vw] pr-[5vw] md:gap-5 md:pl-[5vw]',
       )}
     >
       {isMobile && <HeaderNavLandingMobile navItems={navLandingPageItems} />}
@@ -42,7 +44,7 @@ export const HeaderLandingPage = (props: Props) => {
           'flex w-[60px] flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
         )}
       >
-        <Image src="/logo.png" priority alt="logo" width={500} height={500} />
+        <Image  src={theme == 'light' ? '/logo.png' : '/logo-dark.png'}  priority alt="logo" width={500} height={500} />
       </Link>
       <div className={cn('z-0 flex-1')}>
         <div className="hidden w-screen flex-row items-stretch justify-center shadow-none md:!ml-0 md:flex md:w-auto md:items-center md:gap-1 lg:gap-5">

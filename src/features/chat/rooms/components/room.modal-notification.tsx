@@ -54,7 +54,7 @@ export const RoomModalNotification = (props: RoomModalNotificationProps) => {
           <AlertDialogTitle>
             {t(modalContentMap[props.type].title)}
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t(modalContentMap[props.type].description)}
           </AlertDialogDescription>
         </AlertDialogHeader>

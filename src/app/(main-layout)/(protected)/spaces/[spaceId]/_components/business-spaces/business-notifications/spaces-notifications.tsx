@@ -68,8 +68,8 @@ const Notification = ({
       className={cn(
         'flex w-full flex-row items-center justify-stretch gap-3 p-4',
         {
-          'bg-white': unRead,
-          'cursor-pointer hover:bg-primary-100': !!link,
+          'bg-white dark:bg-neutral-950': unRead,
+          'cursor-pointer hover:bg-primary-100 dark:hover:bg-neutral-800': !!link,
         },
         { 'opacity-50': isLoading },
       )}
@@ -164,7 +164,7 @@ const SpacesNotifications = ({}: {}) => {
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4"
+        className="flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white dark:bg-neutral-900 px-0 py-4"
       >
         {notifications?.map((item: TSpacesNotification) => (
           <Notification

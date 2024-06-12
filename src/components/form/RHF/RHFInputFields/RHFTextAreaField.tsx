@@ -51,7 +51,7 @@ export default function RHFInputField({
             <FormControl>
               <div
                 className={
-                  'flex flex-1 rounded-xl border border-neutral-100 bg-white p-3'
+                  'flex flex-1 rounded-xl border border-neutral-100 bg-white dark:bg-neutral-900 dark:border-neutral-800 p-3'
                 }
               >
                 <textarea

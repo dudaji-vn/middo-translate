@@ -132,7 +132,7 @@ const ScriptsList = ({
           })}
           data={scripts}
           tableHeadProps={{
-            className: 'bg-white  border-none',
+            className: 'bg-white  border-none dark:bg-background dark:text-neutral-50',
           }}
           cellProps={{
             className:
@@ -140,7 +140,7 @@ const ScriptsList = ({
           }}
           rowProps={{
             className:
-              'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50',
+              'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50  dark:bg-neutral-900  dark:hover:bg-neutral-800 dark:text-neutral-50',
           }}
           loading={isLoading}
           skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}

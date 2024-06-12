@@ -11,7 +11,7 @@ export default function ActionToggleCaption() {
   return (
     <DropdownMenuItem
       onClick={() => setShowCaption(!isShowCaption)}
-      className={isShowCaption ? 'bg-primary-200' : 'dark:hover:bg-neutral-800'}
+      className={isShowCaption ? 'bg-primary-200 dark:bg-primary-900 dark:text-primary' : 'dark:hover:bg-neutral-800'}
     >
       <ScanText />
       <span className="ml-2">{t('CONVERSATION.CAPTION')}</span>
