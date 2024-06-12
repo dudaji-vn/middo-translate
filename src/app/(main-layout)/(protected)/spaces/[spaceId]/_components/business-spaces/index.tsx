@@ -3,7 +3,7 @@
 import { Button } from '@/components/actions';
 import { Avatar, Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
-import { Plus } from 'lucide-react';
+import { Blocks, Key, Plus, User as UserIcon } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import {
   Tabs,
@@ -16,7 +16,6 @@ import React, { useMemo } from 'react';
 import SpacesList from './tabs-content/spaces-list';
 import { TabsContentProps } from '@radix-ui/react-tabs';
 import { BaseEntity } from '@/types';
-import { User } from '@/features/users/types';
 import { useAuthStore } from '@/stores/auth.store';
 import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces';
 import { ROUTE_NAMES } from '@/configs/route-name';
@@ -24,12 +23,14 @@ import { Member } from '../spaces-crud/sections/members-columns';
 import SpacesNotifications from './business-notifications/spaces-notifications';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { useTranslation } from 'react-i18next';
+import { type User } from '@/features/users/types';
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
   value: BusinessTabType;
   label: string;
   componentProps?: Partial<TabsContentProps>;
+  icon?: React.ReactNode;
 };
 export type TSpaceTag = 'my' | 'joined' | undefined;
 export type TConversationTag = {
@@ -58,6 +59,7 @@ const tabItems: BusinessTabItem[] = [
   {
     value: 'all_spaces',
     label: 'ALL_SPACE',
+    icon: <Blocks />,
     componentProps: {
       className: '',
     },
@@ -65,10 +67,12 @@ const tabItems: BusinessTabItem[] = [
   {
     value: 'my_spaces',
     label: 'MY_SPACE',
+    icon: <Key />,
   },
   {
     value: 'joined_spaces',
     label: 'JOINED_SPACE',
+    icon: <UserIcon />,
   },
 ];
 const BusinessSpaces = () => {
@@ -92,7 +96,7 @@ const BusinessSpaces = () => {
       <section className={modal ? 'hidden' : ''}>
         <div
           className={cn(
-            'flex w-full flex-col justify-between gap-4  bg-primary-100 dark:bg-background px-[5vw] py-5 sm:gap-1 md:flex-row md:items-end',
+            'flex w-full flex-col justify-between gap-4  bg-primary-100 px-[5vw] py-5 dark:bg-background sm:gap-1 md:flex-row md:items-end',
           )}
         >
           <div className="flex w-full flex-row gap-3">
@@ -134,14 +138,17 @@ const BusinessSpaces = () => {
           value={tab}
           onValueChange={(val) => setTab(val as BusinessTabType)}
         >
-          <TabsList className="h-fit justify-start px-[5vw] max-md:overflow-x-auto">
+          <TabsList className="flex h-fit w-full flex-row items-center justify-between px-[5vw] max-md:gap-0 md:justify-start">
             {tabItems.map((item) => (
               <TabsTrigger
                 key={item.value}
                 value={item.value}
-                className="max-w-fit px-8 dark:text-neutral-50"
+                className="flex max-w-fit flex-row items-center gap-2 px-7 dark:text-neutral-50 max-md:flex-1 sm:px-9 md:px-8"
               >
-                {t(`EXTENSION.SPACE.${item.label}`)}
+                {item.icon}
+                <p className="max-sm:!hidden">
+                  {t(`EXTENSION.SPACE.${item.label}`)}
+                </p>
               </TabsTrigger>
             ))}
           </TabsList>

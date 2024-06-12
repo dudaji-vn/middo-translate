@@ -5,7 +5,7 @@ import { TSpace } from '../..';
 import { Badge } from '@/components/ui/badge';
 import moment from 'moment';
 import { Avatar, Typography } from '@/components/data-display';
-import { Circle, MessageSquare } from 'lucide-react';
+import { Circle, Key, MessageSquare, User } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
@@ -21,6 +21,10 @@ const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
     },
   },
 });
+const MAPPED_ICONS = {
+  my: <Key className="mr-2 h-4 w-4" />,
+  joined: <User className="mr-2 h-4 w-4" />,
+};
 const MAPPED_TAGS = {
   my: 'EXTENSION.SPACE.MY_SPACE',
   joined: 'EXTENSION.SPACE.JOINED_SPACE',
@@ -40,7 +44,7 @@ const Space = ({
     <Card
       key={_id}
       className={cn(
-        'relative min-w-[320px] cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 dark:bg-neutral-900 dark:border-neutral-800 p-3 transition-all duration-300 ease-in-out hover:border-primary-500-main dark:hover:border-primary',
+        'relative min-w-[280px] max-w-[84vw] cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 p-3 transition-all duration-300 ease-in-out hover:border-primary-500-main dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-primary',
       )}
       onClick={() => {
         router.push(`${ROUTE_NAMES.SPACES}/${_id}/conversations`);
@@ -66,7 +70,10 @@ const Space = ({
         />
       </div>
       <CardHeader className="!m-0 flex flex-row items-center justify-between p-0 text-neutral-600">
-        <Badge className={tagsVariants({ tag })}>{t(MAPPED_TAGS[tag])}</Badge>
+        <Badge className={tagsVariants({ tag })}>
+          {MAPPED_ICONS[tag]}
+          {t(MAPPED_TAGS[tag])}
+        </Badge>
         <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">
           <span className="max-[320px]:hidden">
             {t('COMMON.TIME.CREATED_ON')}
@@ -79,10 +86,10 @@ const Space = ({
           src={avatar || '/logo.png'}
           alt={'avatar-owner'}
           variant={'outline'}
-          className="size-[88px] border border-neutral-50 dark:border-neutral-800 p-1"
+          className="size-[88px] border border-neutral-50 p-1 dark:border-neutral-800"
         />
         <div className="flex flex-col space-y-1">
-          <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] sm:max-w-44  xl:max-w-56 dark:text-neutral-50">
+          <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] dark:text-neutral-50  sm:max-w-44 xl:max-w-56">
             {name}
           </CardTitle>
           <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${members?.length} ${t('COMMON.MEMBER')}`}</span>
