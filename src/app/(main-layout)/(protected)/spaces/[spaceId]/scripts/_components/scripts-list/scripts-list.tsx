@@ -103,7 +103,7 @@ const ScriptsList = ({
         myRole={myRole}
         {...headerProps}
       />
-      <div className="w-full overflow-x-auto rounded-md px-10 py-3">
+      <div className="w-full overflow-x-auto rounded-md px-2 py-3 max-md:max-h-[65vh] md:px-10">
         <DataTable
           dividerRow
           tableInitialParams={{
