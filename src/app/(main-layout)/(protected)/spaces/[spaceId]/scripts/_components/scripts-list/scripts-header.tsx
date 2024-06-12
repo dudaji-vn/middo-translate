@@ -27,7 +27,7 @@ const ScriptsHeader = ({
   const { setOpenSidebar, openSidebar } = useSidebarStore();
   return (
     <div
-      className="flex  flex-col justify-center gap-4 px-10 py-3 font-medium md:flex-row md:items-center  md:px-10"
+      className="flex  flex-col justify-center gap-4 px-1 py-3 font-medium md:flex-row md:items-center md:px-10"
       {...props}
     >
       <div className="flex flex-row items-center justify-start">
@@ -47,7 +47,7 @@ const ScriptsHeader = ({
           {t(`EXTENSION.SCRIPT.PAGE_TITLE`)}
         </Typography>
       </div>
-      <div className="flex grow justify-end gap-4">
+      <div className="flex grow justify-end gap-4 max-md:px-2">
         <div className={cn('h-12 max-w-xl grow')}>
           <SearchInput
             className="w-full"
@@ -62,13 +62,15 @@ const ScriptsHeader = ({
           })}
         >
           <Button
-            className="min-w-fit"
+            className=" min-w-fit max-md:h-12 max-md:w-16"
             shape={'square'}
             size="md"
             startIcon={<Plus />}
             onClick={() => onCreateClick()}
           >
-            {t('EXTENSION.SCRIPT.ADD_SCRIPT')}
+            <span className="max-md:hidden">
+              {t('EXTENSION.SCRIPT.ADD_SCRIPT')}
+            </span>
           </Button>
         </div>
       </div>

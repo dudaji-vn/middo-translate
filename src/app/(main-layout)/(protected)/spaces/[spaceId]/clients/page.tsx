@@ -96,7 +96,7 @@ const Page = ({
   }));
   return (
     <section className="relative w-full">
-      <div className="flex  flex-col justify-center gap-4  px-4 py-3 font-medium md:flex-row md:items-center md:px-10">
+      <div className="flex  flex-col justify-center gap-4  px-1 py-3 font-medium md:flex-row md:items-center md:px-10">
         <div className="flex flex-row items-center justify-start">
           <Button.Icon
             onClick={() => setOpenSidebar(!openSidebar, true)}
@@ -112,7 +112,7 @@ const Page = ({
           </Typography>
         </div>
         <em className="max-md:hidden md:w-1/6 xl:w-1/5" />
-        <div className="flex grow gap-4">
+        <div className="flex grow gap-4 px-2">
           <div className="h-12 grow">
             <SearchInput
               className="w-full"
@@ -135,7 +135,7 @@ const Page = ({
           </div>
         </div>
       </div>
-      <div className="w-full overflow-x-auto rounded-md px-10 py-3">
+      <div className="w-full overflow-x-auto rounded-md px-2 py-3 max-md:h-[calc(100vh-270px)] md:px-10">
         <DataTable
           dividerRow
           columns={makeClientsColumns(t)}
@@ -153,14 +153,17 @@ const Page = ({
           }}
           loading={isLoading}
           skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}
-        />
-        <ClientsPagination
-          pagination={pagination}
-          limitOptions={ROWS_PER_PAGE_OPTIONS}
-          onPageChange={onPageChange}
-          onLimitChange={onLimitChange}
+          bodyProps={{
+            className: ' max-md:overflow-auto ',
+          }}
         />
       </div>
+      <ClientsPagination
+        pagination={pagination}
+        limitOptions={ROWS_PER_PAGE_OPTIONS}
+        onPageChange={onPageChange}
+        onLimitChange={onLimitChange}
+      />
     </section>
   );
 };

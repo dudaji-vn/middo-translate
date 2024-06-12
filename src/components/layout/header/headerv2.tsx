@@ -27,39 +27,34 @@ export const Header = (props: Props) => {
   const hideNavigation = isBusiness;
   if (!isClient) return null;
   if (platform === 'mobile') return null;
+  const logoURL = isBusiness
+    ? '/power-by-middo.svg'
+    : theme == 'light'
+      ? '/logo.png'
+      : '/logo-dark.png';
 
   return (
     <div
       className={cn(
-        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] md:gap-5 md:pl-[5vw] dark:bg-neutral-900 dark:border-neutral-800',
+        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] dark:border-neutral-800 dark:bg-neutral-900 md:gap-5 md:pl-[5vw]',
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
       <Link
         href={ROUTE_NAMES.ROOT}
         className={cn(
-          'flex w-[60px] flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
+          'flex w-[60px] flex-row justify-start gap-2',
+          isBusiness && 'w-[100px]',
         )}
       >
-        <Image 
-          src={theme == 'light' ? '/logo.png' : '/logo-dark.png'} 
-          priority 
-          alt="Middo logo" 
-          width={500} 
-          height={500} 
+        <Image
+          src={logoURL}
+          priority
+          alt="Middo logo"
+          width={500}
+          height={500}
         />
-        {isBusiness && (
-          <Typography
-            className={
-              'flex flex-row items-center pl-2 font-semibold text-primary-500-main'
-            }
-          >
-            {' '}
-            <Blocks /> Extension
-          </Typography>
-        )}
       </Link>
-
       {!hideNavigation && <HeaderNav />}
       <HeaderProfile />
     </div>
