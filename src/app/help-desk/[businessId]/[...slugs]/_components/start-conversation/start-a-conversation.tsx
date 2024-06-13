@@ -256,7 +256,7 @@ const StartAConversation = ({
             </form>
           </Form>
         </SheetContent>
-        <SheetTrigger className="w-full p-5">
+        <SheetTrigger className="w-full p-5 pt-3">
           <Button
             className="mx-auto  w-full px-7 py-4"
             variant={'default'}
