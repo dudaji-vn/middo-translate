@@ -44,7 +44,7 @@ export const Header = (props: Props) => {
         href={ROUTE_NAMES.ROOT}
         className={cn(
           'flex w-[60px] flex-row justify-start gap-2',
-          isBusiness && 'w-[100px]',
+          isBusiness && 'w-[120px]',
         )}
       >
         <Image
