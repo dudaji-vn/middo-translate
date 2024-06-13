@@ -121,7 +121,7 @@ export const RoomAvatar = ({
         {avatars.length > MAX_AVATAR_COUNT && (
           <div
             className={cn(
-              'absolute bottom-0 flex h-1/2 w-full items-center justify-center bg-black/60 text-background  ring-background',
+              'absolute bottom-0 flex h-1/2 w-full items-center justify-center bg-black/60 text-background  ring-background dark:text-neutral-50',
 
               size > 36 ? 'text-base' : 'text-xs',
             )}

@@ -13,15 +13,15 @@ export const buttonVariants = cva(
         default:
           'bg-neutral-50 text-neutral-700 md:hover:bg-neutral-100 active:!bg-neutral-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 dark:text-neutral-100 dark:active:bg-neutral-700',
         primary:
-          'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 dark:text-neutral-100',
+          'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 dark:text-neutral-100 dark:disabled:bg-primary-900  dark:disabled:text-primary-800',
         secondary:
           'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-15 dark:bg-primary-900 dark:text-primary-500 dark:md:hover:bg-primary-700 dark:md:active:bg-primary-400',
         success:
           'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker dark:bg-success-700 dark:text-neutral-50 dark:md:hover:bg-success-600 active:!bg-success-400',
         error:
-          'bg-error md:hover:bg-error-500 text-background active:!bg-error-600 disabled:bg-error-200 ',
+          'bg-error md:hover:bg-error-500 text-background active:!bg-error-600 disabled:bg-error-200 dark:disabled:bg-error-900 dark:disabled:text-error-800 dark:text-neutral-50',
         disabled:
-          'bg-primary-100 text-primary-200 disabled:bg-primary-100 disabled:text-primary-200',
+          'bg-primary-100 text-primary-200 disabled:bg-primary-100 disabled:text-primary-200 dark:bg-neutral-800',
       },
       size: {
         ss: 'py-1 px-2',

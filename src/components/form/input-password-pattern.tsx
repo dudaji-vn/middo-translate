@@ -48,7 +48,7 @@ export const InputPasswordPattern = (props: InputPasswordPatternProps) => {
       >
         <input
           {...register}
-          className="w-full px-1 ring-0 focus:outline-none focus:ring-offset-0 focus-visible:ring-0 bg-transparent dark:placeholder-neutral-800"
+          className="w-full px-1 ring-0 focus:outline-none focus:ring-offset-0 focus-visible:ring-0 bg-transparent dark:placeholder-neutral-600"
           type={isShowPassword ? 'text' : 'password'}
           id={id}
           spellCheck="false"

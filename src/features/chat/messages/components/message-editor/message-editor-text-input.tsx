@@ -136,7 +136,7 @@ export const TextInput = forwardRef<
             setMiddleText('');
           }}
           className={cn(
-            ' w-[calc(100%-30px)] bg-transparent outline-none',
+            ' w-[calc(100%-30px)] bg-transparent outline-none dark:placeholder-neutral-600',
             !isToolbarShrink && isMobile
               ? 'line-clamp-1 truncate text-ellipsis'
               : '',

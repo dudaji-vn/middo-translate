@@ -88,7 +88,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
               props.onChange?.(e);
               setValue(e.target.value);
             }}
-            className={`w-full border-0 bg-inherit p-2  ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent dark:text-neutral-50 dark:placeholder-neutral-800 ${props.className}`}
+            className={`w-full border-0 bg-inherit p-2  ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent dark:text-neutral-50 dark:placeholder-neutral-600 ${props.className}`}
           />
           {canClear ? (
             <button
