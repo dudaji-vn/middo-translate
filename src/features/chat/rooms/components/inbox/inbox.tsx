@@ -18,6 +18,7 @@ import {
   MessagesSquareIcon,
   UsersRoundIcon,
 } from 'lucide-react';
+import InboxContactList from './inbox-contact-list';
 export interface InboxProps {}
 export type InboxType =
   | 'all'
@@ -122,7 +123,9 @@ export const Inbox = (props: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
-          <InboxList type={type} />
+          {
+            type == 'contact' ? <InboxContactList type={type} /> : <InboxList type={type} />
+          }
         </div>
       </div>
     </RoomActions>
