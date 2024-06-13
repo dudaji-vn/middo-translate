@@ -15,11 +15,11 @@ export const buttonVariants = cva(
         primary:
           'text-background bg-primary md:hover:bg-primary-600 md:active:bg-primary-700 disabled:bg-primary-100 disabled:text-primary-200 dark:text-neutral-100 dark:disabled:bg-primary-900  dark:disabled:text-primary-800',
         secondary:
-          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-15 dark:bg-primary-900 dark:text-primary-500 dark:md:hover:bg-primary-700 dark:md:active:bg-primary-400',
+          'text-primary bg-primary-200 md:hover:bg-primary-300 md:active:bg-primary-400 active:bg-primary-400 disabled:opacity-15 dark:bg-primary-900 dark:text-primary-500 dark:md:hover:bg-primary-800 dark:md:active:bg-primary-700',
         success:
-          'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker dark:bg-success-700 dark:text-neutral-50 dark:md:hover:bg-success-600 active:!bg-success-400',
+          'bg-success md:hover:bg-success-lighter text-background active:!bg-success-darker dark:bg-success-700 dark:text-neutral-50 dark:md:hover:bg-success-8000 active:!bg-success-400 dark:active:!bg-success-900 dark:disabled:bg-success-900 dark:disabled:text-success-800',
         error:
-          'bg-error md:hover:bg-error-500 text-background active:!bg-error-600 disabled:bg-error-200 dark:disabled:bg-error-900 dark:disabled:text-error-800 dark:text-neutral-50',
+          'bg-error md:hover:bg-error-500 text-background active:!bg-error-600 disabled:bg-error-200  dark:disabled:bg-error-900 dark:disabled:text-error-800 dark:text-neutral-50',
         disabled:
           'bg-primary-100 text-primary-200 disabled:bg-primary-100 disabled:text-primary-200 dark:bg-neutral-800',
       },

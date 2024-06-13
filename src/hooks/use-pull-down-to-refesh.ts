@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import toast from 'react-hot-toast';
-
+import toast, { Toast } from 'react-hot-toast';
 export function usePullToRefresh({
   ref,
   onRefresh,

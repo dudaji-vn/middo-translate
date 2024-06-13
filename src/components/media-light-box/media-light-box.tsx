@@ -94,14 +94,14 @@ function MediaLightBox(props: MediaLightBoxProps) {
         panning={{ disabled: zoom === 1 }}
       >
         {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-          <>
+          <div style={{width: '100%', height: '100%', position: 'relative'}}>
             <Controls zoom={zoom}/>
             <TransformComponent
               contentClass="!w-full !h-full" 
               wrapperClass="!w-full !h-full">
-              <Image ref={imageRef} className="w-full h-full object-contain" src={files[current].url} alt={files[current]?.file?.name || ''} width={500} height={500}/>
+              <Image ref={imageRef} className="w-full h-full object-contain" src={files[current].url} alt={files[current]?.file?.name || ''} layout='fill'/>
             </TransformComponent>
-          </>
+          </div>
         )}
       </TransformWrapper>
       case "video":

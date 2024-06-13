@@ -268,7 +268,7 @@
     "CHANGE_AVATAR": "Change avatar",
     "APP_PERMISSION": "App's permission",
     "RESTRICT_MESSAGE": "Restrict unknown senders",
-    "NOTIFICATION": "Notification",
+    "NOTIFICATION": "Turn off all notifications",
     "THEME": "Theme"
   },
   "SIGN_IN": {

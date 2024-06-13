@@ -76,7 +76,7 @@ export default function AccountSettings() {
           <UpdateUserInfo />
           <UpdateUserAvatar />
           <UpdateUserPassword />
-          <RestrictMessage />
+          {/* <RestrictMessage /> */}
           <TurnOffNotification />
         </div>
         <div className="my-4">

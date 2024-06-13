@@ -62,12 +62,14 @@ export const MessageEmojiPicker = forwardRef<
     ref,
   ) => {
     const { mutate } = useReactMessage();
+    
     const handleEmojiClick = (emoji: string) => {
       mutate({ id: messageId, emoji });
       onEmojiClick && onEmojiClick(emoji);
     };
     const isMobile = useAppStore((state) => state.isMobile);
     const language = useAppStore(state => state.language);
+    const theme = useAppStore((state) => state.theme);
     
     return (
       <div
@@ -128,7 +130,7 @@ export const MessageEmojiPicker = forwardRef<
             >
               <Picker
                 locale={EMOJI_LANG_SUPPORT.includes(language) ?  language : 'en'}
-                theme="dark"
+                theme={theme || 'light'}
                 onEmojiSelect={(emoji: any) => {
                   handleEmojiClick(emoji.native);
                 }}

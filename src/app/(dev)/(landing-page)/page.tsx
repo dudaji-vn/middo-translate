@@ -62,41 +62,10 @@ export default function Landing() {
           isScrollDown && 'bg-white/80 dark:bg-neutral-900 shadow-2 backdrop-blur-xl',
         )}
       >
-        {/* {isMobile ? (
-          <HeaderNavLandingMobile navItems={navLandingPageItems} />
-        ) : (
-          <Header></Header>
-        )} */}
         <HeaderLandingPage />
       </div>
-      <div className="w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
-        <div className="relative h-fit md:w-[44%] md:min-w-[44%]">
-          {/* {!isPlayVideo && (
-            <div
-              onClick={() => {
-                if (videoRef.current) videoRef.current.play();
-              }}
-              className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer"
-            >
-              <div className="hover:bg-primary-500-main/60 z-10 cursor-pointer rounded-full bg-white/60 p-3">
-                <Play className="size-7" color="white" />
-              </div>
-            </div>
-          )} */}
-
-          {/* <video
-            ref={videoRef}
-            className="video-intro w-full object-contain before:!bg-none"
-            width="100%"
-            height="auto"
-            controls
-            // autoPlay
-            loop
-            poster="/landing-page/group.png"
-          >
-            <source src="/video/video-middo-intro.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> */}
+      <div className="w-full bg-[#FAFAFA] dark:bg-[#050505] bg-[url('/landing-page/hero.png')] dark:bg-[url('/landing-page/hero-dark.png')] bg-contain bg-center bg-no-repeat px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
+        <div className="relative h-fit md:w-[48%] md:min-w-[48%]">
           <VideoPlayer 
             file={{
               url: '/video/video-middo-intro.mp4',
@@ -104,12 +73,13 @@ export default function Landing() {
               type: 'video/mp4',
             }}
             className='rounded-2xl'
+            poster='/landing-page/group.png'
           />
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">
           <JayTextAnimation />
-          <p className="mt-8 text-center text-neutral-600 md:text-left">
+          <p className="mt-8 text-center text-neutral-600 dark:text-neutral-200 md:text-left">
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
           </p>
@@ -119,7 +89,7 @@ export default function Landing() {
         </div>
       </div>
       <div id="solution">
-        <div className="flex flex-col-reverse gap-10 py-10 md:flex-row md:items-center md:py-[5vw] dark dark:bg-background">
+        <div className="flex flex-col-reverse gap-10 py-10 md:flex-row md:items-center md:py-[5vw] dark:bg-background">
           <div className="pr-5 md:w-[48%]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -133,7 +103,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Translation</h1>
-              <p className="mt-2 text-neutral-600 dark:text-neutral-50">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 Middo provides an ESL translation method to guarantee a
                 high-accuracy translate.
               </p>
@@ -180,7 +150,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Conversation</h1>
-              <p className="mt-2 text-neutral-600 dark:text-neutral-50">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 All-in-one conversation platform that integrated Middo
                 translation that could help you have unlimited connections with
                 everyone around the world.
@@ -227,7 +197,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Middo Call</h1>
-              <p className="mt-2 text-neutral-600 dark:text-neutral-50">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 Middo Call is one of the most fantastic feature of Middo
                 Conversation that could support your work more easily.
               </p>
@@ -268,7 +238,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Extension</h1>
-              <p className="mt-2 text-neutral-600 dark:text-neutral-50">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 Transform your website with Middo Extension in just a few
                 clicks. Capture leads, provide real-time support, and boost your
                 business – all within your website.
@@ -322,7 +292,7 @@ export default function Landing() {
           <h3>About us</h3>
         </div>
         <h1 className="w-full text-center text-[48px]">Dudaji Vietnam</h1>
-        <p className="mt-8 text-center text-neutral-600 dark:text-neutral-50">
+        <p className="mt-8 text-center text-neutral-600 dark:text-neutral-200">
           Dudaji supports you to quickly build a deep learning utilization
           service in a timely and timely place.
         </p>
@@ -336,7 +306,7 @@ export default function Landing() {
           service quickly.
         </p>
       </div>
-      <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.jpg')] px-5 py-12">
+      <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.png')] bg-[#FAFAFA] dark:bg-[#050505] dark:bg-[url('/landing-page/hero-dark.png')] bg-no-repeat bg-center bg-cover px-5 py-12">
         <h1 className="text-primary-500-main">Ready to get started?</h1>
         <div className="mt-8">
           <DownloadAppButton />
