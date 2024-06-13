@@ -3,17 +3,14 @@ import {
   forwardRef,
   memo,
   useEffect,
-  useId,
   useMemo,
   useRef,
 } from 'react';
 
-import { InfiniteScroll } from '@/components/infinity-scroll';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '@/features/chat/rooms/api';
 import {
   USE_GET_PINNED_ROOMS_KEY,
-  useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/stores';
 import { User } from '@/features/users/types';
@@ -29,12 +26,9 @@ import { cn } from '@/utils/cn';
 import { useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { Room } from '../../types';
-import { PinnedRoom } from '../pinned-room';
 import { RoomItem } from '../room-item';
 import { EmptyInbox } from './empty-inbox';
 import { InboxType } from './inbox';
-import ViewSpaceInboxFilter from './view-space-inbox-filter';
-import { isEmpty } from 'lodash';
 import {
   ALPHABET_LIST,
   ALPHABET_SELECTOR,
@@ -42,12 +36,14 @@ import {
 } from '../../configs/alphabet-list';
 import { useTranslation } from 'react-i18next';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
+import { Spinner } from '@/components/feedback';
 
-interface InboxListProps {
+
+interface InboxContactListProps {
   type: InboxType;
 }
-const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
-  ({ type }: InboxListProps, ref) => {
+const InboxContactList = forwardRef<HTMLDivElement, InboxContactListProps>(
+  ({ type }: InboxContactListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
     const {
@@ -64,12 +60,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
-    const helpDeskEmptyType = useMemo(() => {
-      if (!isBusiness) return undefined;
-      if (!isEmpty(Object.keys(appliedFilters || {})))
-        return 'help-desk-filtered';
-      return type;
-    }, [appliedFilters, isBusiness]);
     const key = useMemo(() => {
       if (spaceId) {
         return ['rooms', type, spaceId, status, appliedFilters];
@@ -80,28 +70,55 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const {
       items: rooms,
-      fetchNextPage,
-      hasNextPage,
       isLoading,
       removeItem,
       updateItem,
       addItem,
       refetch,
-      isRefetching,
     } = useCursorPaginationQuery<Room>({
       queryKey: key,
       queryFn: ({ pageParam }) =>
         roomApi.getRooms({
           cursor: pageParam,
           limit: 10,
-          type,
+          type: type,
           status,
           spaceId,
-          filterOptions: spaceId ? appliedFilters : undefined,
-          isGroup: filters.includes('group') ? true : undefined,
-          isUnread: filters.includes('unread') ? true : undefined,
+          isGroup: false,
         }),
     });
+
+    const sortedRooms = useMemo(() => {
+      let roomsClone = [...rooms];
+      // Sorted by a-z , if not in ALPHABET_LIST, move to last
+      roomsClone.sort((a: Room, b: Room) => {
+        const aParticipantName =
+          a.participants
+            .find((p) => p._id !== currentUser?._id)
+            ?.name?.toLowerCase() || '';
+        const bParticipantName =
+          b.participants
+            .find((p) => p._id !== currentUser?._id)
+            ?.name?.toLowerCase() || '';
+        if (ALPHABET_LIST.includes(aParticipantName.charAt(0))) {
+          if (ALPHABET_LIST.includes(bParticipantName.charAt(0))) {
+            return aParticipantName.localeCompare(bParticipantName);
+          }
+          return -1;
+        }
+        if (ALPHABET_LIST.includes(bParticipantName.charAt(0))) {
+          return 1;
+        }
+        return aParticipantName.localeCompare(bParticipantName);
+      });
+      return roomsClone.map((r) => {
+        if (r.name) return r;
+        const anotherUser = r.participants.find(
+          (p) => p._id !== currentUser?._id,
+        );
+        return { ...r, name: anotherUser?.name };
+      });
+    }, [currentUser?._id, rooms]);
 
     const scrollToCharacter = (id: string) => {
       const element = document.getElementById(ALPHABET_SELECTOR + id);
@@ -109,6 +126,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
         element.scrollIntoView();
       }
     };
+
     useEffect(() => {
       const ref = charactersScrollBarRef.current;
       if (!ref) return;
@@ -128,10 +146,8 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       return () => {
         document.removeEventListener('touchmove', handle);
       };
-    }, [type]);
+    }, []);
 
-    const { rooms: pinnedRooms, refetch: refetchPinned } =
-      useGetPinnedRooms(spaceId);
 
     const queryClient = useQueryClient();
 
@@ -141,11 +157,6 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     };
 
     const deleteRoom = (roomId: string) => {
-      queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
-      removeItem(roomId);
-    };
-
-    const leaveRoom = (roomId: string) => {
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
       removeItem(roomId);
     };
@@ -169,67 +180,92 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const showEmptyInbox = useMemo(() => {
       if (rooms.length || isLoading) return false;
-      if (type === 'all' || type === 'group') {
-        if (pinnedRooms?.length) return false;
-      }
       return true;
-    }, [rooms, isLoading, type, pinnedRooms]);
+    }, [rooms, isLoading]);
 
     if (!currentUser) return null;
 
     if (showEmptyInbox) {
-      return <EmptyInbox type={helpDeskEmptyType || type} />;
+      return <EmptyInbox type={type} />;
     }
-
-    const showFilter =
-      Object.values(appliedFilters || {}).flat().length > 0 && isBusiness;
 
     return (
       <div
         ref={ref}
         className={cn(
-          'relative h-full w-full flex-1 overflow-hidden ',
+          'relative h-full w-full flex-1 overflow-hidden pr-3 md:pr-0',
         )}
       >
         {isScrolled && (
           <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
         )}
 
+        {isLoading && 
+        <div className={cn('absolute left-1/2 z-50 -translate-x-1/2 rounded-full bg-neutral-50 dark:bg-neutral-800 p-2 text-primary top-1')}
+        >
+          <Spinner size="sm" />
+        </div>}
         <div
           id="scrollableDiv"
           ref={scrollRef}
           className={cn('no-scrollbar h-full gap-2 overflow-y-auto')}
         >
-          <InfiniteScroll
-            isRefreshing={isRefetching}
-            pullToRefresh
-            onRefresh={refetch}
-            onLoadMore={fetchNextPage}
-            hasMore={hasNextPage || false}
-            isFetching={isLoading}
-            className="flex flex-col"
-          >
-            <ViewSpaceInboxFilter
-              className={cn('z-[60] w-full', {
-                hidden: !showFilter,
-              })}
-            />
-            <PinnedRoom
-              type={filters.includes('group') ? 'group' : 'all'}
-              rooms={pinnedRooms}
-              currentRoomId={currentRoomId as string}
-            />
-            {rooms.map((room, index) => {
-              const isOnline = isRoomOnline({
-                currentUser,
-                room,
-                onlineList,
-                isBusiness,
-              });
-              return (
+          
+          {sortedRooms.map((room, index) => {
+            const isOnline = isRoomOnline({
+              currentUser,
+              room,
+              onlineList,
+              isBusiness,
+            });
+
+            let char: string | undefined;
+            const prevRoom: Room | null =
+              index > 0 ? sortedRooms[index - 1] : null;
+            let prevFirstChar = prevRoom?.name?.charAt(0).toLowerCase();
+            let currentFirstChar = room.name?.charAt(0).toLowerCase();
+            if (!currentFirstChar) char = undefined;
+            // CASE: First item
+            else if (!prevFirstChar)
+              char = ALPHABET_LIST.includes(currentFirstChar)
+                ? currentFirstChar
+                : OTHER_CHARACTER;
+            // CASE: Previous item is not in alphabet => Already add Other character
+            else if (
+              prevFirstChar &&
+              !ALPHABET_LIST.includes(prevFirstChar)
+            )
+              char = undefined;
+            // CASE: Previous item is in alphabet, and current item different with previous item
+            else if (
+              prevFirstChar &&
+              ALPHABET_LIST.includes(prevFirstChar) &&
+              currentFirstChar !== prevFirstChar
+            ) {
+              char = ALPHABET_LIST.includes(currentFirstChar)
+                ? currentFirstChar
+                : OTHER_CHARACTER;
+            }
+            // CASE: Previous item is in alphabet, and current item same with previous item
+            else if (
+              prevFirstChar &&
+              ALPHABET_LIST.includes(prevFirstChar) &&
+              currentFirstChar === prevFirstChar
+            )
+              char = undefined;
+
+            return (
+              <Fragment key={room._id}>
+                {char && (
+                  <span
+                    className="mx-3 my-2 block border-b border-neutral-50 px-3 py-1 text-xs text-neutral-500 dark:border-neutral-800"
+                    id={ALPHABET_SELECTOR + char}
+                  >
+                    {char.toUpperCase()}
+                  </span>
+                )}
                 <RoomItem
-                  key={room._id}
-                  showTime={true}
+                  showTime={false}
                   type={type}
                   isOnline={isOnline}
                   data={room}
@@ -237,18 +273,40 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                   currentRoomId={currentRoomId as string}
                   businessId={businessExtension?._id}
                 />
-              );
-            })}
-          </InfiniteScroll>
+              </Fragment>
+            );
+          })}
+          
+          <p className="mx-3 my-2 block border-t border-neutral-50 px-3 py-1 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-300">
+            {sortedRooms.length} {t('COMMON.CONTACTS')}
+          </p>
+        </div>
+        <div
+          className="absolute bottom-0 right-0 top-0 flex flex-col justify-center pr-1 md:hidden"
+          ref={charactersScrollBarRef}
+          id="characters"
+        >
+          {[...ALPHABET_LIST, OTHER_CHARACTER].map((char, _) => {
+            return (
+              <span
+                key={char}
+                className="pl-5 text-center text-xs text-neutral-500 transition-all"
+                onClick={() => scrollToCharacter(char)}
+              >
+                {char.toLocaleUpperCase()}
+              </span>
+            );
+          })}
         </div>
       </div>
     );
   },
 );
 
-InboxList.displayName = 'InboxList';
+InboxContactList.displayName = 'InboxContactList';
 
-export default memo(InboxList);
+export default memo(InboxContactList);
+
 
 export const isRoomOnline = ({
   room,
