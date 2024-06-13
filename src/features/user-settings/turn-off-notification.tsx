@@ -2,7 +2,7 @@
 import { Item } from '@/components/data-display';
 import { Switch } from '@/components/data-entry';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
-import { SettingsIcon } from 'lucide-react';
+import { BellIcon, SettingsIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../notification/hooks/use-notification';
 import { usePlatformStore } from '../platform/stores';
@@ -41,7 +41,7 @@ export const TurnOffNotification = (props: TurnOffNotificationProps) => {
   return (
     <Item
       
-      leftIcon={<SettingsIcon />}
+      leftIcon={<BellIcon />}
       className="gap-5 pl-5 font-medium dark:bg-neutral-900 dark:text-neutral-50 pr-5 border-b dark:border-b-neutral-800"
       right={<Switch checked={isSubscribed} onClick={handleToggle} />}
     >
