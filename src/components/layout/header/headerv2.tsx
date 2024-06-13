@@ -15,6 +15,7 @@ import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 import { HeaderNavMobile } from './header-nav.mobile';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useAppStore } from '@/stores/app.store';
+import { useMemo } from 'react';
 
 type Props = {};
 
@@ -25,14 +26,21 @@ export const Header = (props: Props) => {
 
   const { isBusiness } = useBusinessNavigationData();
   const hideNavigation = isBusiness;
+  const logoURL = useMemo(() => {
+    switch (theme) {
+      case 'light':
+        return isBusiness ? '/power-by-middo.svg' : '/logo.png'
+      case 'dark':
+        return isBusiness ? '/power-by-middo-dark.svg' : '/logo-dark.png'
+      default:
+        return '/logo.png'
+    }
+  }, [isBusiness, theme]);
+
   if (!isClient) return null;
   if (platform === 'mobile') return null;
-  const logoURL = isBusiness
-    ? '/power-by-middo.svg'
-    : theme == 'light'
-      ? '/logo.png'
-      : '/logo-dark.png';
-
+  
+  
   return (
     <div
       className={cn(

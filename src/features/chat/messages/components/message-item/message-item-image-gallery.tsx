@@ -44,7 +44,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                     width,
                     height: width,
                   }}
-                  className="relative cursor-pointer overflow-hidden rounded-xl border aspect-square border-neutral-50 max-w-full"
+                  className="relative cursor-pointer overflow-hidden rounded-xl border aspect-square border-neutral-50 dark:border-neutral-800 max-w-full"
                 >
                   <Image
                     priority
@@ -70,7 +70,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
               height={280}
               src={images[0].url}
               alt="img"
-              className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50 md:rounded-[16px]"
+              className="disable-ios-img-tap cursor-pointer overflow-hidden rounded-[20px] border border-neutral-50 dark:border-neutral-800 md:rounded-[16px]"
             />
           </div>
         )}
