@@ -2,7 +2,9 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { restoredState } from '@/utils/restore';
 
-export type Theme = 'light' | 'dark';
+export type ThemeSetting = 'system' | 'light' | 'dark';
+export type Theme = Exclude<ThemeSetting, 'system'>;
+
 export type AppState = {
   isMobile: boolean;
   isTablet: boolean;
@@ -12,6 +14,7 @@ export type AppState = {
   currentAudio?: HTMLAudioElement;
   language: string;
   theme?: Theme;
+  themeSetting?: ThemeSetting;
   pingEmptyInbox?: boolean;
   socketConnected: boolean;
 };
@@ -25,6 +28,7 @@ export type AppActions = {
   setCurrentAudio: (audio: HTMLAudioElement) => void;
   setLanguage: (language: string) => void;
   setTheme: (theme: Theme) => void;
+  setThemeSetting: (themeSetting: ThemeSetting) => void;
   setPingEmptyInbox: (pingEmptyInbox: boolean) => void;
   setSocketConnected: (socketConnected: boolean) => void;
 };
@@ -39,6 +43,7 @@ export const useAppStore = create<AppState & AppActions>()(
       platform: 'web',
       language: undefined,
       theme: undefined,
+      themeSetting: undefined,
       pingEmptyInbox: false,
       socketConnected: false,
       setPingEmptyInbox: (pingEmptyInbox) => set(() => ({ pingEmptyInbox })),
@@ -51,6 +56,7 @@ export const useAppStore = create<AppState & AppActions>()(
       setCurrentAudio: (currentAudio) => set(() => ({ currentAudio })),
       setLanguage: (language) => set(() => ({ language })),
       setTheme: (theme) => set(() => ({ theme })),
+      setThemeSetting: (themeSetting) => set(() => ({ themeSetting })),
       setSocketConnected: (socketConnected) => set(() => ({ socketConnected })),
       ...restoredState('app-store'),
     }),

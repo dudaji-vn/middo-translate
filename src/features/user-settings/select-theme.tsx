@@ -4,32 +4,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import {
-  LANGUAGE_CODES_MAP,
-  SUPPORTED_VOICE_MAP,
-} from '@/configs/default-language';
-import I18N_SUPPORTED_LANGUAGES from '@/lib/i18n/support_language';
 import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
-import { ChevronDownIcon, ChevronRight, Globe2, MoonIcon } from 'lucide-react';
-import moment from 'moment';
-import 'moment/locale/vi';
-import 'moment/locale/ko';
-import 'moment/locale/en-gb';
+import { ChevronRight, SunMoonIcon } from 'lucide-react';
 
-import React, { useCallback, useEffect, useState } from 'react';
-import { CircleFlag } from 'react-circle-flags';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@/components/actions';
 const themes = [
-    {
-        value: 'light',
-        title: 'COMMON.OFF'
-    },
-    {
-        value: 'dark',
-        title: 'COMMON.ON'
-    }
+  {
+    value: 'light',
+    title: 'COMMON.LIGHT'
+  },
+  {
+    value: 'dark',
+    title: 'COMMON.DARK'
+  },
+  {
+    value: 'system',
+    title: 'COMMON.SYSTEM'
+  }
 ]
 interface InputSelect {
   value: string;
@@ -37,7 +30,9 @@ interface InputSelect {
 }
 
 const SelectTheme = () => {
-  const { theme, setTheme } = useAppStore();
+  const themeSetting = useAppStore((state) => state.themeSetting);
+  const setThemeSetting = useAppStore((state) => state.setThemeSetting);
+  
   const [isOpenDropdown, setOpenDropdown] = useState(false);
   const [valueSelect, setValueSelect] = useState<InputSelect>({
     value: '',
@@ -45,26 +40,24 @@ const SelectTheme = () => {
   });
   const { t } = useTranslation('common');
   const handleSelectChange = useCallback((value: any) => {
-    
-    setTheme(value);    
     setOpenDropdown(false);
-  }, [setTheme]);
+    setThemeSetting(value);
+  }, [setThemeSetting]);
 
   useEffect(() => {
     let itemSelected = themes?.find(
-        (item: any) => item.value === theme,
+      (item: any) => item.value === themeSetting,
     );
     if(!itemSelected) {
-        itemSelected = themes[0];
+      itemSelected = themes[themes.length - 1];
     }
     setValueSelect(itemSelected);
-  }, [theme]);
-
+  }, [themeSetting]);
 
   return (
     <div className="flex w-full items-center border-b bg-white dark:bg-neutral-900 dark:border-b-neutral-800 px-5 py-4">
       <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-neutral-50 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-50">
-        <MoonIcon size={20} />
+        <SunMoonIcon size={20} />
       </div>
       <span className="ml-4 block flex-1 text-base font-medium">
         {t('ACCOUNT_SETTING.THEME')}

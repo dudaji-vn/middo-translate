@@ -94,14 +94,14 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             <button
               onClick={handleClear}
               className={
-                'flex aspect-square h-full items-center justify-center p-2  disabled:text-text dark:text-neutral-50'
+                'flex aspect-square h-full items-center justify-center p-2 text-neutral-700 disabled:text-text dark:text-neutral-50'
               }
             >
-              <XCircleIcon className="h-5 w-5 opacity-60 dark:text-neutral-50" />
+              <XCircleIcon className="h-5 w-5 dark:text-neutral-50" />
             </button>
           ) : (
             <div className="flex h-11 w-11 items-center bg-inherit dark:text-neutral-50">
-              <SearchButton disabled />
+              <SearchButton />
             </div>
           )}
         </div>
@@ -121,12 +121,12 @@ const SearchButton = forwardRef<HTMLButtonElement, SearchButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'flex aspect-square h-full items-center justify-center p-2 text-primary dark:text-neutral-50 disabled:text-text',
+          'flex aspect-square h-full items-center justify-center p-2 text-neutral-700 dark:text-neutral-50 disabled:text-text',
           className,
         )}
         {...props}
       >
-        <SearchIcon className="h-5 w-5 opacity-60" />
+        <SearchIcon className="h-5 w-5" />
       </button>
     );
   },

@@ -91,6 +91,9 @@
     "SPACE": "공간",
     "ON": "켜기",
     "OFF": "끄기",
+    "LIGHT": "빛",
+    "DARK": "어두운",
+    "SYSTEM": "체계",
     "TIME": {
       "CREATED_ON": "생성일",
       "UPDATED_ON": "업데이트일",
@@ -266,7 +269,7 @@
     "APP_PERMISSION": "앱 권한",
     "RESTRICT_MESSAGE": "알 수 없는 발신자 제한",
     "NOTIFICATION": "알림",
-    "THEME": "다크 모드"
+    "THEME": "주제"
   },
   "SIGN_IN": {
     "TITLE": "로그인",

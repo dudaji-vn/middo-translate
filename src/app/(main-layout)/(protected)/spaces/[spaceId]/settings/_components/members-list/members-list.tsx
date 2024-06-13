@@ -254,7 +254,7 @@ const ReorderList = ({
                                         )}
                                         key={item.email}
                                       >
-                                        <div className="!w-fit bg-white p-1 py-2 dark:bg-neutral-900">
+                                        <div className="!w-fit bg-white p-1 py-2 dark:bg-background">
                                           <Button.Icon
                                             size={'xs'}
                                             shape={'square'}

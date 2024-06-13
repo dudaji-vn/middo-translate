@@ -91,6 +91,9 @@
     "SPACE": "Space",
     "ON": "On",
     "OFF": "Off",
+    "LIGHT": "Light",
+    "DARK": "Dark",
+    "SYSTEM": "System",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
@@ -266,7 +269,7 @@
     "APP_PERMISSION": "App's permission",
     "RESTRICT_MESSAGE": "Restrict unknown senders",
     "NOTIFICATION": "Notification",
-    "THEME": "Dark mode"
+    "THEME": "Theme"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",
