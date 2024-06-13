@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     const result = await response.json();
     return Response.json({
       data: {
-        language: 'vi',
+        language: result.detectedSourceLanguage,
       },
     });
   } catch (error: any) {

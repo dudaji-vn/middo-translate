@@ -20,6 +20,6 @@ export async function GET(request: Request) {
 	}).then((res) => res.json());
 
 	return Response.json({
-		data: 'vi',
+		data: response,
 	});
 }
