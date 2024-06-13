@@ -193,16 +193,16 @@
                   </iframe>
                 <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="245,456.701 490,33.299 0,33.299 "></polygon> </g></svg>
                 <div
-                  id="iframe-trigger" style="position: fixed; bottom: 22px;  right:  22px; width: 200px; height: 200px;
+                  id="iframe-trigger" style="position: fixed; bottom: 0px;  right:  0px; width: 200px; height: 200px;
                   ">
                     <iframe
                     id="btn-trigger-chat-iframe"
                     src="${srcButton}"
-                     style="position: fixed; bottom: 22px;  right:  22px; width: 110px; height: 110px; border: none;  ">
+                     style="position: fixed; bottom: 0px;  right:  0px; width: 110px; height: 110px; border: none;  ">
                     </iframe>
                     <button id="btn-trigger-chat"
-                     style="position: absolute; bottom:  16px;  right:  16px; 
-                     width: 48px; height: 48px;
+                     style="position: absolute; bottom:  30px;  right:  30px; 
+                     width: 60px; height: 60px;
                      opacity: 1; 
                      font-size:32px; "
                     >
