@@ -19,8 +19,6 @@ import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth.store';
-import { useBusinessExtensionStore } from '@/stores/extension.store';
-import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import useStore from '@/stores/use-store';
 import { cn } from '@/utils/cn';
 import { useQueryClient } from '@tanstack/react-query';
@@ -53,19 +51,12 @@ const InboxContactList = forwardRef<HTMLDivElement, InboxContactListProps>(
     } = useBusinessNavigationData();
     const { t } = useTranslation('common');
     const charactersScrollBarRef = useRef<HTMLDivElement>(null);
-    const { businessExtension } = useBusinessExtensionStore();
-    const { appliedFilters } = useSpaceInboxFilterStore();
-    const filters = useSideChatStore((state) => state.filters);
-    const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
     const key = useMemo(() => {
-      if (spaceId) {
-        return ['rooms', type, spaceId, status, appliedFilters];
-      }
-      return ['rooms', type, status, filters];
-    }, [spaceId, type, status, filters, appliedFilters]);
+      return ['rooms', type, status];
+    }, [type, status]);
     const onlineList = useChatStore((state) => state.onlineList);
 
     const {
@@ -83,7 +74,6 @@ const InboxContactList = forwardRef<HTMLDivElement, InboxContactListProps>(
           limit: 10,
           type: type,
           status,
-          spaceId,
           isGroup: false,
         }),
     });
@@ -271,7 +261,7 @@ const InboxContactList = forwardRef<HTMLDivElement, InboxContactListProps>(
                   data={room}
                   isActive={currentRoomId === room._id}
                   currentRoomId={currentRoomId as string}
-                  businessId={businessExtension?._id}
+                  isForceShow={true}
                 />
               </Fragment>
             );

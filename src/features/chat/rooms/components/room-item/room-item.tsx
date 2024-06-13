@@ -44,6 +44,7 @@ export interface RoomItemProps {
   businessId?: string;
   isOnline?: boolean;
   type?: InboxType;
+  isForceShow?: boolean;
 }
 
 const RoomItemContext = createContext<
@@ -70,6 +71,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     className,
     isOnline,
     type,
+    isForceShow,
   } = props;
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
@@ -104,7 +106,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     params?.spaceId,
   ]);
   const isHideRead = useSideChatStore((state) =>
-    state.filters.includes('unread'),
+    state.filters.includes('unread') && !isForceShow,
   );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
   const isActive =
