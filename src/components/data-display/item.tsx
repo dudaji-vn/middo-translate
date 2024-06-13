@@ -25,7 +25,7 @@ export const Item = forwardRef<HTMLDivElement, ItemProps>(
           danger && 'text-error',
           onClick &&
             danger &&
-            'active:!bg-error-100/60 md:hover:bg-error-100/20 dark:md:hover:bg-error-900/60',
+            'active:!bg-error-100/60 md:hover:bg-error-100/20 dark:md:hover:bg-error-900/20 dark:active:!bg-error-900/60',
           neutral && 'text-neutral-800',
           onClick &&
             neutral &&

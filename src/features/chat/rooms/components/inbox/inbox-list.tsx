@@ -324,7 +324,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             })}
           </InfiniteScroll>
           {isSortByName && (
-            <p className="mx-3 my-2 block border-t border-neutral-50 px-3 py-1 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-800">
+            <p className="mx-3 my-2 block border-t border-neutral-50 px-3 py-1 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-300">
               {sortedRooms.length} {t('COMMON.CONTACTS')}
             </p>
           )}

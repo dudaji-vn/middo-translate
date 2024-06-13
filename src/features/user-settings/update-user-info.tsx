@@ -190,7 +190,7 @@ export default function UpdateUserInfo() {
                   onClick={() => {
                     reset();
                   }}
-                  className="mr-2 border-0"
+                  className="mr-5 border-0"
                 >
                   <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>

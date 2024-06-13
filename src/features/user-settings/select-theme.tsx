@@ -8,7 +8,7 @@ import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
 import { ChevronRight, SunMoonIcon } from 'lucide-react';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 const themes = [
   {

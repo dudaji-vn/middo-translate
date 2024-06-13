@@ -40,10 +40,10 @@ export default function AccountSettings() {
               alt={user?.name || 'Anonymous'}
               width={500}
               height={500}
-              className="h-full w-full overflow-hidden rounded-full border border-neutral-50 object-cover"
+              className="h-full w-full overflow-hidden rounded-full border border-neutral-50 object-cover dark:border-neutral-800"
             ></Image>
             {user?.language && (
-              <div className="absolute -bottom-1 -right-1 mt-2 flex items-center justify-center overflow-hidden rounded-full border-4 border-[#FCFCFC]">
+              <div className="absolute -bottom-1 -right-1 mt-2 flex items-center justify-center overflow-hidden rounded-full border-4 border-[#FCFCFC] dark:border-background">
                 <CircleFlag
                   countryCode={
                     LANGUAGE_CODES_MAP[

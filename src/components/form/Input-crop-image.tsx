@@ -233,12 +233,11 @@ export const InputCropImage = forwardRef<
           <p className="mt-2 text-center text-sm text-error">{errorMessage}</p>
         )}
       </div>
-      <div className="flex items-center justify-end gap-3">
+      <div className="flex items-center justify-end gap-5">
         <AlertDialogCancel
           onClick={() => {
             reset();
-          }} 
-          className="sm:mr-3">
+          }}>
             {t('COMMON.CANCEL')}
           </AlertDialogCancel>
         <Button size="md" shape="square" disabled={isLoading} type="submit" {...saveBtnProps}>
