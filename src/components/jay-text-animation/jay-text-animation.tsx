@@ -41,7 +41,7 @@ export const JayTextAnimation = forwardRef<
           animate={{ y: 0, opacity: 0.8 }}
           transition={{ duration: 0.7, type: 'spring' }}
           exit={{ y: -50, opacity: 0 }}
-          className="w-full text-center text-[32px] font-bold md:text-left md:text-[64px] dark:text-neutral-800"
+          className="w-full text-center text-[32px] font-bold md:text-left md:text-[64px]  dark:text-neutral-50"
         >
           {topTexts[currentIndex]}
         </motion.h1>

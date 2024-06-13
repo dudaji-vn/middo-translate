@@ -24,6 +24,7 @@ import { useOnClickOutside } from 'usehooks-ts';
 import { useMediaSettingStore } from '@/stores/media-setting.store';
 import downloadFile from '@/utils/download-file';
 import { createPortal } from 'react-dom';
+import Image from 'next/image';
 
 interface VideoProps {
   file: {
@@ -38,6 +39,7 @@ interface VideoProps {
   isFullScreenVideo?: boolean;
   onDisableLongPress?: (val: boolean) => void;
   onFullScreenChange?: (isFullScreen: boolean) => void;
+  poster?: string;
 }
 
 function VideoPlayer(props: VideoProps) {
@@ -50,6 +52,7 @@ function VideoPlayer(props: VideoProps) {
     isFullScreenVideo = false,
     onDisableLongPress,
     onFullScreenChange,
+    poster,
   } = props;
   const [isFullScreen, setIsFullScreen] = useState(isFullScreenVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -244,7 +247,7 @@ function VideoPlayer(props: VideoProps) {
   return (
     <div
       className={cn(
-        'group relative overflow-hidden bg-neutral-50',
+        'group relative overflow-hidden bg-transparent',
         className,
         isFullScreen
           ? 'fixed inset-0 z-[51] h-full w-full max-w-full rounded-none bg-black/90'
@@ -252,12 +255,17 @@ function VideoPlayer(props: VideoProps) {
       )}
       ref={wrapperRef}
     >
+      {poster && !isPlaying && (
+        <Image src={poster} alt="Video Intro Thumbnail" fill={true} objectFit='contain'/>
+      )}
       <video
         ref={videoRef}
         src={file.url}
         controls={false}
         disablePictureInPicture
-        className={cn('h-full w-full object-contain')}
+        className={cn('h-full w-full object-contain opacity-0', {
+          'opacity-100': isPlaying || !poster,
+        })}
       />
       {/* Button play */}
       <div
@@ -287,7 +295,7 @@ function VideoPlayer(props: VideoProps) {
       <div
         className={cn(
           'pointer-events-none absolute inset-0 bg-black/20 duration-500',
-          isPlaying || isFullScreen ? 'opacity-0' : '',
+          (isPlaying || isFullScreen || poster) ? 'opacity-0' : '',
         )}
       ></div>
 
