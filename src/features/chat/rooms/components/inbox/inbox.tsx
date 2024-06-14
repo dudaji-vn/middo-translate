@@ -15,13 +15,19 @@ import {
   ArchiveIcon,
   ContactRoundIcon,
   MessageSquareDashedIcon,
+  MessageSquareDot,
+  MessagesSquare,
   MessagesSquareIcon,
   UsersRoundIcon,
 } from 'lucide-react';
 import InboxContactList from './inbox-contact-list';
 import { useSearchParams } from 'next/navigation';
 import { SPK_FOCUS } from '@/configs/search-param-key';
-export interface InboxProps {}
+import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
+import { useAuthStore } from '@/stores/auth.store';
+export interface InboxProps {
+  unreadCount?: number;
+}
 export type InboxType =
   | 'all'
   | 'contact'
@@ -68,10 +74,12 @@ export const inboxTabMap: Record<
   'help-desk': {
     label: 'COMMON.ALL',
     value: 'help-desk',
+    icon: <MessagesSquare className="size-5 md:size-4" />,
   },
   'unread-help-desk': {
     label: 'COMMON.UNREAD',
     value: 'unread-help-desk',
+    icon: <MessageSquareDot className="size-5 md:size-4" />,
   },
 };
 
@@ -87,8 +95,9 @@ const businessInboxTabs = [
   inboxTabMap['unread-help-desk'],
 ];
 
-export const Inbox = (props: InboxProps) => {
+export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
+  const { space } = useAuthStore();
   const searchParams = useSearchParams();
   const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
   const [type, setType] = useState<InboxType>(tabs[0].value);
@@ -111,6 +120,8 @@ export const Inbox = (props: InboxProps) => {
     }
   }, [searchParams]);
 
+  console.log('unreadCount', unreadCount);
+
   return (
     <RoomActions>
       <div className="relative flex w-full flex-1 flex-col overflow-hidden bg-background">
@@ -127,7 +138,13 @@ export const Inbox = (props: InboxProps) => {
                   {type === tab.value ? (
                     <>{t(tab.label)}</>
                   ) : (
-                    <div className="h-5"> {tab?.icon || t(tab.label)}</div>
+                    <div className="relative h-5 ">
+                      {tab.value === 'unread-help-desk' &&
+                        Number(unreadCount) > 0 && (
+                          <Ping size={12} className="absolute -top-2 right-0" />
+                        )}
+                      {tab?.icon}
+                    </div>
                   )}
                 </TabsTrigger>
               ))}

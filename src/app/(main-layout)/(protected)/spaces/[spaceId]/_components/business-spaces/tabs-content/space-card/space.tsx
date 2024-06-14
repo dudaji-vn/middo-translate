@@ -45,7 +45,7 @@ const Space = ({
     <Card
       key={_id}
       className={cn(
-        'relative min-w-[280px] max-w-[84vw] cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 p-3 transition-all duration-300 ease-in-out hover:border-primary-500-main dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-primary',
+        'relative min-w-[280px] max-w-full cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 p-3 transition-all duration-300 ease-in-out hover:border-primary-500-main dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-primary',
       )}
       onClick={() => {
         router.push(`${ROUTE_NAMES.SPACES}/${_id}/conversations`);

@@ -143,10 +143,20 @@ const BusinessSpaces = () => {
               <TabsTrigger
                 key={item.value}
                 value={item.value}
-                className="flex max-w-fit flex-row items-center gap-2 px-7 dark:text-neutral-50 max-md:flex-1 sm:px-9 md:px-8"
+                className="flex max-w-fit flex-row items-center gap-2 px-7 dark:text-neutral-50 max-md:w-full max-md:flex-1 sm:px-9 md:px-8"
               >
-                {item.icon}
-                <p className="max-sm:!hidden">
+                <span
+                  className={cn({
+                    'max-sm:!hidden': item.value === tab,
+                  })}
+                >
+                  {item.icon}
+                </span>
+                <p
+                  className={cn({
+                    'max-md:hidden': item.value !== tab,
+                  })}
+                >
                   {t(`EXTENSION.SPACE.${item.label}`)}
                 </p>
               </TabsTrigger>

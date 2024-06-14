@@ -18,13 +18,6 @@ export default function ConversationLayout({
   const isMobile = useAppStore((state) => state.isMobile);
   const { businessConversationType } = useBusinessNavigationData();
   const pathname = usePathname();
-  console.log(
-    'businessConversationType',
-    businessConversationType,
-    isMobile &&
-      businessConversationType &&
-      !pathname?.endsWith(String(businessConversationType)),
-  );
   return (
     <div
       className={cn(
@@ -40,7 +33,7 @@ export default function ConversationLayout({
       {isMobile ? (
         <>
           <ChatSidebar spaceData={spaceData}>
-            <Inbox />
+            <Inbox unreadCount={spaceData?.totalNewMessages} />
           </ChatSidebar>
           {children}
         </>
@@ -48,7 +41,7 @@ export default function ConversationLayout({
         <Allotment defaultSizes={[300, 600]} vertical={false}>
           <Allotment.Pane minSize={300} maxSize={600} preferredSize={420}>
             <ChatSidebar spaceData={spaceData}>
-              <Inbox />
+              <Inbox unreadCount={spaceData?.totalNewMessages} />
             </ChatSidebar>
           </Allotment.Pane>
           <Allotment.Pane>{children}</Allotment.Pane>
