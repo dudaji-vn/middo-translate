@@ -337,7 +337,7 @@ const MembersList = () => {
     setData(filteredMembers || []);
   }, [space, search]);
 
-  if (!space || isEmpty(data))
+  if (isEmpty(space))
     return (
       <>
         <CategoryHeader role={ESPaceRoles.Admin} />
