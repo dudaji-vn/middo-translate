@@ -105,7 +105,7 @@ const InviteMemberModal = ({
             </Button>
             <Button
               onClick={onInviteUsers}
-              color={members.length ? 'primary' : 'disabled'}
+              color={'primary'}
               shape={'square'}
               disabled={!members.length}
               loading={loading}

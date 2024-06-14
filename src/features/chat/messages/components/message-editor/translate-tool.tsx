@@ -146,7 +146,7 @@ export const TranslateTool = ({
                     <textarea
                       ref={middleTextAreaRef}
                       className={cn(
-                        'max-h-[160px] flex-1 resize-none outline-none',
+                        'max-h-[160px] flex-1 resize-none outline-none dark:placeholder-neutral-600',
                       )}
                       value={middleText}
                       onChange={(e) => setMiddleText?.(e.target.value)}

@@ -333,6 +333,9 @@
   video.disable::-webkit-media-controls-overlay-enclosure {
     display: none !important;
   }
+  .tiptap p.is-editor-empty:first-child::before {
+    @apply dark:text-neutral-600;
+  }
 }
 .video-intro::-webkit-media-controls-overlay-enclosure {
   display: none !important;
@@ -490,6 +493,7 @@ body {
   color: #000;
   content: '\25CF';
 }
+
 .dark .prose
 :where(ul > li):not(
   :where([class~='not-prose'], [class~='not-prose'] *)

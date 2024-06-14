@@ -23,7 +23,7 @@ export interface EmojiToggleButtonProps {
 export const EmojiButton = ({ editor }: EmojiToggleButtonProps) => {
   const isMobile = useAppStore((state) => state.isMobile);
   const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
-
+  const theme = useAppStore((state) => state.theme);
   useKeyboardShortcut([SHORTCUTS.OPEN_EMOJI], (e) => {
     e?.preventDefault();
     setOpenEmojisPicker((prev) => !prev);
@@ -43,7 +43,7 @@ export const EmojiButton = ({ editor }: EmojiToggleButtonProps) => {
             className="custom-emoji-picker flex justify-center"
           >
             <EmojiPicker
-              theme="light"
+              theme={theme || 'light'}
               onEmojiSelect={(emoji: any) => {
                 setOpenEmojisPicker(false);
                 setTimeout(() => {
