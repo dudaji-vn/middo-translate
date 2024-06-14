@@ -23,7 +23,7 @@ export default function ConversationLayout({
       className={cn(
         'disable-text-selection  container-height overflow-y-hidden',
         {
-          'max-md:h-main-container-height':
+          'max-md:container-height':
             isMobile &&
             businessConversationType &&
             !pathname?.endsWith(String(businessConversationType)),

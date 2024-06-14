@@ -44,15 +44,13 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
       return [];
     }
     return (
-      spaces
-        ?.filter((s: TSpace) => s._id !== space._id)
-        .map((s: TSpace) => ({
-          name: s.name,
-          href: `/spaces/${s._id}/conversations`,
-          pathToInclude: `/spaces/${s._id}`,
-          isActive: pathname?.includes(`/spaces/${s._id}`),
-          space: s,
-        })) ?? []
+      spaces?.map((s: TSpace) => ({
+        name: s.name,
+        href: `/spaces/${s._id}/conversations`,
+        pathToInclude: `/spaces/${s._id}`,
+        isActive: pathname?.includes(`/spaces/${s._id}`),
+        space: s,
+      })) ?? []
     );
   }, [space, spaces, pathname]);
   const hasNotification = useMemo(() => {
@@ -60,18 +58,21 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   }, [spaces]);
 
   const onChangeSpace = (href: string) => {
+    if (pathname === href) {
+      return;
+    }
     router.push(href);
   };
   if (isLoading || !space || !pathname?.includes(space?._id)) {
     return (
       <div
         className={cn(
-          'flex h-fit  w-full flex-row items-center justify-start  bg-white dark:bg-neutral-900 p-2 text-neutral-500',
+          'flex h-fit  w-full flex-row items-center justify-start  bg-white p-2 text-neutral-500 dark:bg-neutral-900',
           props.className,
         )}
       >
         <Skeleton className="relative size-[50px] rounded-[8px] bg-primary-100 dark:bg-neutral-800">
-          <div className="absolute inset-2 rounded-full border border-neutral-50 bg-white dark:bg-neutral-900 dark:border-neutral-800" />
+          <div className="absolute inset-2 rounded-full border border-neutral-50 bg-white dark:border-neutral-800 dark:bg-neutral-900" />
         </Skeleton>
       </div>
     );
@@ -92,7 +93,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
               alt={space.name ?? ''}
               size="sm"
               src={String(space.avatar)}
-              className="border border-neutral-50 bg-white dark:bg-neutral-900 dark:border-neutral-900"
+              className="border border-neutral-50 bg-white dark:border-neutral-900 dark:bg-neutral-900"
             />
           )}
           <div
@@ -118,7 +119,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="start"
-        className="w-[360px] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A] dark:bg-neutral-900 dark:border-neutral-800"
+        className="w-[360px] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A] dark:border-neutral-800 dark:bg-neutral-900"
         sideOffset={-4}
         alignOffset={8}
       >
@@ -126,7 +127,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           <DropdownMenuItem
             className={cn(
               'relative flex w-full flex-row items-center justify-start gap-4 rounded-none bg-none dark:hover:bg-neutral-800',
-              option.isActive ? '!bg-primary !text-white' : '',
+              option.isActive ? 'cursor-default !bg-primary-200' : '',
             )}
             onClick={() => onChangeSpace(option.href)}
             key={option.href}
