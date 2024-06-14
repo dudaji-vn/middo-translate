@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 
 const ScriptsSelection = () => {
   const { setValue, watch } = useFormContext();
-  const [creating, setCreating] = useState(false);
+  const [createdNewOne, setCreatedNewOne] = useState(false);
   const [search, setSearch] = useState('');
   const params = useParams();
   const spaceId = params?.spaceId as string;
@@ -45,14 +45,16 @@ const ScriptsSelection = () => {
     }
   }, []);
   useEffect(() => {
-    console.log('data updated', dataUpdatedAt);
-    console.log('refetching', isRefetching);
-    console.log('data', data);
-    if (dataUpdatedAt && !isRefetching && data?.items?.[0]) {
-      setValue('currentScript', data.items[0]._id);
-      setValue('custom.firstMessage', data.items[0]._id);
+    if (isRefetching) {
+      setCreatedNewOne(true);
+      return;
     }
-  }, [dataUpdatedAt, isRefetching, data]);
+    if (dataUpdatedAt && !isRefetching && data?.items?.[0] && createdNewOne) {
+      const newScriptIdx = data?.items?.length - 1;
+      setValue('currentScript', data.items[newScriptIdx]?._id);
+      setValue('custom.firstMessage', data.items[newScriptIdx]?._id);
+    }
+  }, [dataUpdatedAt, isRefetching, data, setValue]);
 
   return (
     <ScriptsList
