@@ -11,6 +11,7 @@ import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useTranslation } from 'react-i18next';
+import { SPK_FOCUS } from '@/configs/search-param-key';
 
 const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
   variants: {
@@ -81,7 +82,7 @@ const Space = ({
           {` ${moment(createdAt).format('DD/MM/YYYY')}`}
         </span>
       </CardHeader>
-      <CardContent className="flex flex-row items-center gap-2 p-0">
+      <CardContent className="flex flex-row items-center gap-3 p-0">
         <Avatar
           src={avatar || '/logo.png'}
           alt={'avatar-owner'}
@@ -89,7 +90,7 @@ const Space = ({
           className="size-[88px] border border-neutral-50 p-1 dark:border-neutral-800"
         />
         <div className="flex flex-col space-y-1">
-          <CardTitle className="max-w-36 break-words  text-base font-normal  leading-[18px] dark:text-neutral-50  sm:max-w-44 xl:max-w-56">
+          <CardTitle className="max-w-36 break-words text-base  font-semibold  leading-[18px] text-neutral-800  dark:text-neutral-50 sm:max-w-44 xl:max-w-56">
             {name}
           </CardTitle>
           <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${members?.length} ${t('COMMON.MEMBER')}`}</span>
@@ -100,12 +101,14 @@ const Space = ({
             variant={'ghost'}
             onClick={(e) => {
               e.stopPropagation();
-              router.push(`${ROUTE_NAMES.SPACES}/${_id}/conversations`);
+              router.push(
+                `${ROUTE_NAMES.SPACES}/${_id}/conversations?${SPK_FOCUS}=unread-help-desk`,
+              );
             }}
             className={
               totalNewMessages > 0
-                ? 'text-sm font-semibold leading-[18px]  text-primary-500-main'
-                : 'invisible'
+                ? 'text-left text-sm font-semibold  leading-[18px] text-primary-500-main'
+                : 'hidden'
             }
             startIcon={<MessageSquare className="h-4 w-4" />}
           >{`${totalNewMessages} ${t('TOOL_TIP.NEW_CONVERSATION')}`}</Button>

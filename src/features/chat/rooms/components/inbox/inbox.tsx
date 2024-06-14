@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RoomActions } from '../room-actions';
 import InboxList from './inbox-list';
@@ -19,6 +19,8 @@ import {
   UsersRoundIcon,
 } from 'lucide-react';
 import InboxContactList from './inbox-contact-list';
+import { useSearchParams } from 'next/navigation';
+import { SPK_FOCUS } from '@/configs/search-param-key';
 export interface InboxProps {}
 export type InboxType =
   | 'all'
@@ -87,6 +89,7 @@ const businessInboxTabs = [
 
 export const Inbox = (props: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
+  const searchParams = useSearchParams();
   const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
   const [type, setType] = useState<InboxType>(tabs[0].value);
   const { t } = useTranslation('common');
@@ -100,6 +103,13 @@ export const Inbox = (props: InboxProps) => {
       );
     },
   );
+  useEffect(() => {
+    const focusType = searchParams?.get(SPK_FOCUS) as InboxType;
+    if (focusType && tabs.map((tab) => tab.value).includes(focusType)) {
+      console.log('focusType', focusType);
+      setType(focusType);
+    }
+  }, [searchParams]);
 
   return (
     <RoomActions>
@@ -123,9 +133,11 @@ export const Inbox = (props: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
-          {
-            type == 'contact' ? <InboxContactList type={type} /> : <InboxList type={type} />
-          }
+          {type == 'contact' ? (
+            <InboxContactList type={type} />
+          ) : (
+            <InboxList type={type} />
+          )}
         </div>
       </div>
     </RoomActions>

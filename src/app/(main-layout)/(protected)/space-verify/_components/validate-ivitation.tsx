@@ -34,7 +34,7 @@ const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
         color={'primary'}
         shape={'square'}
         className="min-w-[280px]"
-        size={'sm'}
+        size={'lg'}
         onClick={() => onValidateInvitation('accept')}
       >
         Accept
@@ -43,7 +43,7 @@ const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
         variant={'ghost'}
         color={'default'}
         shape={'square'}
-        // size={'sm'}
+        size={'lg'}
         className="min-w-[280px]"
         onClick={() => onValidateInvitation('decline')}
       >
