@@ -21,6 +21,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAuthStore } from '@/stores/auth.store';
 import { getUserSpaceRole } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/space-setting/role.util';
 import { ESPaceRoles } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/space-setting/setting-items';
+import customToast from '@/utils/custom-toast';
 
 const RoomAssignTag = ({
   room,
@@ -47,7 +48,7 @@ const RoomAssignTag = ({
     const tagId = id === room.tag?._id ? null : id;
     mutateAsync({ roomId: room._id, tagId: tagId })
       .catch(() => {
-        toast.error('Failed to update tag');
+        customToast.error('Failed to update tag');
       })
       .finally(() => {
         onClosed && onClosed();

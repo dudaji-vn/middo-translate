@@ -14,6 +14,7 @@ import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
 import { User } from "@/features/users/types";
+import customToast from "@/utils/custom-toast";
 
 export default function useHandleDoodle() {
     const {t} = useTranslation('common');
@@ -31,7 +32,7 @@ export default function useHandleDoodle() {
     const {isElectron, ipcRenderer} = useElectron();
     
     const doodleStart = useCallback((payload: IStartDoodlePayload) => {
-        toast.success(t('MESSAGE.SUCCESS.START_DOODLE', {name: payload.name}), {icon: <Brush size={20} />});
+        customToast.success(t('MESSAGE.SUCCESS.START_DOODLE', {name: payload.name}), {icon: <Brush size={20} />});
         setDoodle(true);
         setDoodleImage(payload.image_url);
         const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
@@ -44,7 +45,7 @@ export default function useHandleDoodle() {
     },[participants, setDoodle, setDoodleImage, setLayout, setPinDoodle])
 
     const doodleEnd = useCallback((name: string) => {
-        toast.success(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
+        customToast.success(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
         setDoodle(false);
         setMyOldDoodle([])
         setDrawing(false);

@@ -19,6 +19,7 @@ import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
 import { useVideoSettingStore } from '../../store/video-setting.store';
 import { useCallback } from 'react';
+import customToast from '@/utils/custom-toast';
 interface MediaStreamInterface {
   video?: boolean;
   audio?: boolean;
@@ -91,7 +92,7 @@ export default function VideoCallActions() {
         setTurnOnMic(audio);
       })
       .catch(() => {
-        toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
+        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         setTurnOnCamera(false);
         setTurnOnMic(false);
         setLoadingVideo(false);

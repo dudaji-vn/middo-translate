@@ -14,6 +14,7 @@ import { ESPaceRoles } from '../space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { GET_SPACE_DATA_KEY } from '@/features/business-spaces/hooks/use-get-space-data';
+import customToast from '@/utils/custom-toast';
 
 const InviteMemberModal = ({
   space,
@@ -35,7 +36,7 @@ const InviteMemberModal = ({
         members: members.map(({ email, role }) => ({ email, role })),
         spaceId: space._id,
       });
-      toast.success('Members invited successfully');
+      customToast.success('Members invited successfully');
       setMembers([]);
       setOpen(false);
       queryClient.invalidateQueries([
@@ -47,7 +48,7 @@ const InviteMemberModal = ({
       router.refresh();
     } catch (error) {
       console.log(error);
-      toast.error('Error inviting members. Please try again');
+      customToast.error('Error inviting members. Please try again');
     }
     setLoading(false);
   };

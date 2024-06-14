@@ -4,7 +4,7 @@ import { Button } from '@/components/actions';
 import { validateInvitation } from '@/services/business-space.service';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import customToast from '@/utils/custom-toast';
 
 type ValidateInvitationProps = {
   token: string;
@@ -22,7 +22,7 @@ const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
       console.log(error);
       // @ts-ignore
       const msg = error?.response?.data?.message || error?.message;
-      toast.error(msg || 'Failed to validate invitation');
+      customToast.error(msg || 'Failed to validate invitation');
       console.error(error);
     }
   };

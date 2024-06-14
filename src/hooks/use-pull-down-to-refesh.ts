@@ -1,3 +1,4 @@
+import customToast from '@/utils/custom-toast';
 import { useEffect } from 'react';
 import toast, { Toast } from 'react-hot-toast';
 export function usePullToRefresh({
@@ -71,7 +72,7 @@ export function usePullToRefresh({
         const y = endEvent.changedTouches[0].clientY;
         const dy = y - initialY;
         if (dy > TRIGGER_THRESHOLD) {
-          toast.success('Refreshing...');
+          customToast.success('Refreshing...');
           onRefresh?.();
         }
 

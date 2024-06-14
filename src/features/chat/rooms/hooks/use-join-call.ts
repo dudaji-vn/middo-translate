@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 import { StatusParticipant } from '@/features/call/interfaces/participant';
+import customToast from '@/utils/custom-toast';
 
 export const useJoinCall = () => {
   const { user } = useAuthStore();
@@ -58,7 +59,7 @@ export const useJoinCall = () => {
         return;
       }
       if (data.status !== STATUS.JOIN_SUCCESS) {
-        toast.error(t('MESSAGE.ERROR.JOIN_ROOM'));
+        customToast.error(t('MESSAGE.ERROR.JOIN_ROOM'));
         return;
       }
       setRequestCall();

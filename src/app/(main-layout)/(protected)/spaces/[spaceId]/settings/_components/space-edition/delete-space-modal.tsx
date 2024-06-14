@@ -10,6 +10,7 @@ import { TSpace } from '../../../_components/business-spaces';
 import { Typography } from '@/components/data-display';
 import { deleteSpace } from '@/services/business-space.service';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import customToast from '@/utils/custom-toast';
 
 export const DeleteSpaceModal = ({
   space,
@@ -31,18 +32,18 @@ export const DeleteSpaceModal = ({
       await deleteSpace(space._id)
         .then((res) => {
           if (res.data) {
-            toast.success('Space name deleted successfully');
+            customToast.success('Space name deleted successfully');
             router.push(ROUTE_NAMES.SPACES);
             setOpen(false);
             return;
           }
         })
         .catch((err) => {
-          toast.error('Error on delete space. Please try again');
+          customToast.error('Error on delete space. Please try again');
         });
     } catch (error) {
       console.error('Error on deleteSpace:', error);
-      toast.error('Error on delete space');
+      customToast.error('Error on delete space');
     }
   };
 

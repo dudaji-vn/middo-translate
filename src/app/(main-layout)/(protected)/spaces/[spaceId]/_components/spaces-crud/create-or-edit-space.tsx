@@ -24,6 +24,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces';
 import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 const createSpaceSchema = z.object({
   name: z
@@ -93,7 +94,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   const submitCreateSpace = async (value: any) => {
     formCreateSpace.trigger();
     if (!isEmpty(formCreateSpace.formState.errors)) {
-      toast.error('Please fill all required fields.');
+      customToast.error('Please fill all required fields.');
       setTabErrors([true, false]);
       return;
     }
@@ -104,11 +105,11 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
         backgroundImage: formCreateSpace.watch('backgroundImage'),
         members: formCreateSpace.watch('members'),
       });
-      toast.success('Space created successfully.');
+      customToast.success('Space created successfully.');
       queryClient.invalidateQueries([GET_SPACES_KEY, { type: 'all_spaces' }]);
       router.push('/spaces');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     }
   };
   const canNext = useMemo(() => {

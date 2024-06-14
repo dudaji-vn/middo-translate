@@ -26,6 +26,7 @@ import { Button } from '@/components/actions';
 import { UserRound } from 'lucide-react';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
+import customToast from '@/utils/custom-toast';
 
 interface DataResponseToken {
   token: string;
@@ -106,7 +107,7 @@ export default function SignIn() {
       }
       const { user } = data?.data;
       setDataAuth({ user, isAuthentication: true });
-      toast.success(t('MESSAGE.SUCCESS.LOGIN'));
+      customToast.success(t('MESSAGE.SUCCESS.LOGIN'));
       setErrorMessage('');
     } catch (err: any) {
       setErrorMessage(t('MESSAGE.ERROR.INVALID_ACCOUNT'));

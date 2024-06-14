@@ -17,6 +17,7 @@ import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import { getRoomsFilterOptionsFromSpace } from '@/utils/get-rooms-filter-options';
 import { useTranslation } from 'react-i18next';
 import SpaceNavigator from '@/features/business-spaces/space-navigator/space-navigator';
+import customToast from '@/utils/custom-toast';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
@@ -55,7 +56,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   }, [data, setFilterOptions, setSpace]);
 
   const handleRedirectToHome = useCallback(() => {
-    toast.loading('You has been removed from this space. Refreshing...');
+    customToast.loading('You has been removed from this space. Refreshing...');
     setTimeout(() => {
       router.push(ROUTE_NAMES.SPACES);
       toast.dismiss();

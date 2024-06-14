@@ -1,4 +1,4 @@
-import toast from 'react-hot-toast';
+import customToast from '@/utils/custom-toast';
 import { useTranslation } from 'react-i18next';
 
 export const useTextCopy = (_text?: string) => {
@@ -7,7 +7,7 @@ export const useTextCopy = (_text?: string) => {
     const textToCopy = text || _text || '';
     if(!textToCopy) return;
     navigator.clipboard.writeText(textToCopy).then(() => {
-      toast.success(t('MESSAGE.SUCCESS.COPIED'));
+      customToast.success(t('MESSAGE.SUCCESS.COPIED'));
     });
   };
   return { copy };

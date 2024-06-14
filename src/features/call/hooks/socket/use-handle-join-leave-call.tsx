@@ -12,6 +12,7 @@ import { useMyVideoCallStore } from "../../store/me.store";
 import { useTranslation } from "react-i18next";
 import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
 import { User } from "@/features/users/types";
+import customToast from "@/utils/custom-toast";
 
 export default function useHandleJoinLeaveCall() {
     const {t} = useTranslation('common');
@@ -35,7 +36,7 @@ export default function useHandleJoinLeaveCall() {
             removeParticipant(socketId);
         });
         if (items[0]?.user?.name) {
-            toast.success(t('MESSAGE.SUCCESS.LEFT_MEETING', {name: items[0].user.name}), { icon: <LogOutIcon size={20} /> });
+            customToast.success(t('MESSAGE.SUCCESS.LEFT_MEETING', {name: items[0].user.name}), { icon: <LogOutIcon size={20} /> });
         }
 
         // Check have pin this user

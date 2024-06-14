@@ -5,6 +5,7 @@ import { notificationApi } from '../api';
 import { useNotificationStore } from '../store';
 import toast from 'react-hot-toast';
 import { useElectron } from '@/hooks/use-electron';
+import customToast from '@/utils/custom-toast';
 
 export const useNotification = () => {
   const { isElectron } = useElectron();
@@ -75,7 +76,7 @@ export const useNotification = () => {
             setIsUnsubscribed(false);
             setFcmToken(currentToken);
           } else {
-            toast.error(
+            customToast.error(
               'No registration token available. Request permission to generate one.',
             );
             console.log(
@@ -84,11 +85,11 @@ export const useNotification = () => {
           }
         }
       } else {
-        toast.error('Service worker is not supported in this browser.');
+        customToast.error('Service worker is not supported in this browser.');
         console.log('Service worker is not supported in this browser.');
       }
     } catch (error) {
-      toast.error(
+      customToast.error(
         'An error occurred while retrieving token, please try later.',
       );
       console.log('An error occurred while retrieving token:', error);

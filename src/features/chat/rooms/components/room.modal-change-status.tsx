@@ -8,6 +8,7 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 import { ROUTE_NAMES } from '@/configs/route-name';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export interface RoomModalChangeStatusProps {
   id: Room['_id'];
@@ -49,7 +50,7 @@ export const RoomModalChangeStatus = ({
         );
       })
       .catch(() => {
-        toast.error(
+        customToast.error(
           t('MODAL.CHANGE_ROOM_STATUS.FAILED_TO', {
             action: t(`COMMON.${actionName?.toUpperCase()}`),
           }),

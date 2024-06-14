@@ -12,6 +12,7 @@ import { IJoinCallPayload } from "../../interfaces/socket/join.interface";
 import { MonitorUpIcon, LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { User } from "@/features/users/types";
+import customToast from "@/utils/custom-toast";
 
 export default function useHandleCreatePeerConnection() {
     const {t} = useTranslation('common')
@@ -96,9 +97,9 @@ export default function useHandleCreatePeerConnection() {
                 setPinShareScreen(true);
                 newUser.pin = true;
             }
-            toast.success(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name: payload.user.name}), {icon: <MonitorUpIcon size={20}/>});
+            customToast.success(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name: payload.user.name}), {icon: <MonitorUpIcon size={20}/>});
         } else {
-            toast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
+            customToast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
         }
         // Check is user is waiting for join
         let isInParticipantList = participants.some((p: ParticipantInVideoCall) => (p.user._id === payload.user._id && !!p.isShareScreen == !!payload.isShareScreen));

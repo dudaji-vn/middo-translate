@@ -14,6 +14,7 @@ import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
 import { User } from "@/features/users/types";
+import customToast from "@/utils/custom-toast";
 
 export default function useHandleShareScreen() {
     const {t} = useTranslation('common');
@@ -40,7 +41,7 @@ export default function useHandleShareScreen() {
         if (item) {
             item.peer?.destroy();
             removeParticipantShareScreen(socketId);
-            toast.success(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
+            customToast.success(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
         }
         if(item?.pin) {
             setShareScreen(false);
@@ -146,7 +147,7 @@ export default function useHandleShareScreen() {
             return;
         }
         if (!navigator.mediaDevices.getDisplayMedia) {
-            toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
+            customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             return;
         }
         try {
@@ -165,7 +166,7 @@ export default function useHandleShareScreen() {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
-              toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
+                customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             }
         }
 

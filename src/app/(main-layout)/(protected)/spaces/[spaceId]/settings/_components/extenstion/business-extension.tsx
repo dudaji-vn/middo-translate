@@ -17,6 +17,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from '../space-setting/setting-items';
+import customToast from '@/utils/custom-toast';
 
 
 export interface BusinessExtensionProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,10 +37,10 @@ const BusinessExtension = forwardRef<HTMLDivElement, BusinessExtensionProps & { 
     const [openConfirmDialog, setOpenConfirmDialog] = React.useState(false);
     const onDeleteExtension = async () => {
       deleteExtension(data?._id as string).then(() => {
-        toast.success('Extension deleted successfully');
+        customToast.success('Extension deleted successfully');
         router.refresh();
       }).catch(() => {
-        toast.error('Failed to delete extension');
+        customToast.error('Failed to delete extension');
       });
       setOpenConfirmDialog(false);
     };

@@ -18,6 +18,7 @@ import toast from 'react-hot-toast';
 import { User } from '@/features/users/types';
 import { useParams, useRouter } from 'next/navigation';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import customToast from '@/utils/custom-toast';
 
 type GuestInformation = Pick<User, '_id' | 'email' | 'phoneNumber'>;
 const infoNameFields: Array<keyof GuestInformation> = ['email', 'phoneNumber'];
@@ -54,10 +55,10 @@ const GuestInformation = (guestData: GuestInformation) => {
         spaceId: String(params?.spaceId),
         roomId: String(businessRoomId),
       });
-      toast.success(`Update phone number success!`);
+      customToast.success(`Update phone number success!`);
       setOpen(false);
     } catch (err: any) {
-      toast.error(err.response.data.message);
+      customToast.error(err.response.data.message);
     }
   };
   useEffect(() => {

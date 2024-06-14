@@ -64,7 +64,7 @@ export default function Landing() {
       >
         <HeaderLandingPage />
       </div>
-      <div className="w-full bg-[#FAFAFA] dark:bg-[#050505] bg-[url('/landing-page/hero.png')] dark:bg-[url('/landing-page/hero-dark.png')] bg-contain bg-center bg-no-repeat px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
+      <div className="w-full bg-[#FAFAFA] dark:bg-neutral-900 bg-[url('/landing-page/hero.png')] dark:bg-[url('/landing-page/hero-dark.png')] bg-contain bg-center bg-no-repeat px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
         <div className="relative h-fit md:w-[48%] md:min-w-[48%]">
           <VideoPlayer 
             file={{
@@ -306,7 +306,7 @@ export default function Landing() {
           service quickly.
         </p>
       </div>
-      <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.png')] bg-[#FAFAFA] dark:bg-[#050505] dark:bg-[url('/landing-page/hero-dark.png')] bg-no-repeat bg-center bg-cover px-5 py-12">
+      <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.png')] bg-[#FAFAFA] dark:bg-neutral-900 dark:bg-[url('/landing-page/hero-dark.png')] bg-no-repeat bg-center bg-cover px-5 py-12">
         <h1 className="text-primary-500-main">Ready to get started?</h1>
         <div className="mt-8">
           <DownloadAppButton />

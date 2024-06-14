@@ -26,6 +26,7 @@ import { useFormContext } from 'react-hook-form';
 import { Avatar } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { clear } from 'console';
+import customToast from '@/utils/custom-toast';
 
 export default function UploadSpaceImage({
   nameField,
@@ -57,7 +58,7 @@ export default function UploadSpaceImage({
     setIsLoading(true);
     const file = inputCropImage.current?.getCropData();
     if (!file) {
-      toast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
+      customToast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
       return;
     }
     try {
@@ -70,7 +71,7 @@ export default function UploadSpaceImage({
       }
       setOpen(false);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     }
     setIsLoading(false);
   };

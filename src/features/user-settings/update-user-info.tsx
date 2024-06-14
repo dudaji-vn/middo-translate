@@ -23,6 +23,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'react-i18next';
 import { User } from '../users/types';
+import customToast from '@/utils/custom-toast';
 
 export default function UpdateUserInfo() {
   const [loading, setLoading] = useState(false);
@@ -96,7 +97,7 @@ export default function UpdateUserInfo() {
           username: res.data.username,
         },
       });
-      toast.success(t('MESSAGE.SUCCESS.PROFILE_UPDATED'));
+      customToast.success(t('MESSAGE.SUCCESS.PROFILE_UPDATED'));
       setErrorMessage('');
       setOpen(false);
     } catch (err: any) {

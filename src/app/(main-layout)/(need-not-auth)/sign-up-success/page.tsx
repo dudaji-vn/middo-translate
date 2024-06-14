@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { resendEmailService } from '@/services/auth.service';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/actions';
+import customToast from '@/utils/custom-toast';
 
 export default function SignUpSuccess() {
   const router = useRouter();
@@ -45,9 +45,9 @@ export default function SignUpSuccess() {
       setLoading(true);
       setIsResend(true);
       const data = await resendEmailService(email);
-      toast.success(t('MESSAGE.SUCCESS.RESEND_EMAIL'));
+      customToast.success(t('MESSAGE.SUCCESS.RESEND_EMAIL'));
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     } finally {
       setLoading(false);
     }

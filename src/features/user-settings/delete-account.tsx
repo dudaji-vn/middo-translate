@@ -13,6 +13,7 @@ import {
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 import { deleteAccount } from '@/services/auth.service';
 import { useAuthStore } from '@/stores/auth.store';
+import customToast from '@/utils/custom-toast';
 import { useMutation } from '@tanstack/react-query';
 import { Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -45,7 +46,7 @@ export const DeleteAccount = (props: DeleteAccountProps) => {
           isDeleted: true,
         },
       });
-      toast.success('delete account success');
+      customToast.success('delete account success');
       router.push('/account-deleted');
       postMessage({ type: 'Trigger', data: { event: 'sign-out' } });
     },

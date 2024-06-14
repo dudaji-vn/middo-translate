@@ -12,6 +12,7 @@ import { copyBlobToClipboard } from 'copy-image-clipboard';
 import { toBlob } from 'html-to-image';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 type CaptureContext = {
   captureRef?: React.RefObject<HTMLDivElement>;
@@ -36,7 +37,7 @@ export const CaptureProvider = ({ children }: CaptureProviderProps) => {
     toBlob(refCapture.current, { cacheBust: true, backgroundColor: '#fff' })
       .then(async (blob) => {
         copyBlobToClipboard(blob as Blob);
-        toast.success(t('MESSAGE.SUCCESS.IMAGE_COPIED'));
+        customToast.success(t('MESSAGE.SUCCESS.IMAGE_COPIED'));
       })
       .catch((err) => {
         console.log(err);
