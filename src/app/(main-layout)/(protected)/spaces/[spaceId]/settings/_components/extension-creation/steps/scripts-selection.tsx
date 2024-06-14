@@ -16,10 +16,11 @@ const ScriptsSelection = () => {
     return currentScript ? { [currentScript]: true } : {};
   }, [currentScript]);
 
-  const { data, isLoading } = useGetConversationScripts({
-    search,
-    spaceId,
-  });
+  const { data, isLoading, dataUpdatedAt, isRefetching } =
+    useGetConversationScripts({
+      search,
+      spaceId,
+    });
   const onSearchChange = (search: string) => {
     setSearch(search);
   };
@@ -42,11 +43,17 @@ const ScriptsSelection = () => {
       setValue('currentScript', data.items[0]._id);
     }
   }, []);
+  useEffect(() => {
+    console.log('data updated', dataUpdatedAt);
+    console.log('refetching', isRefetching);
+    console.log('data', data);
+  }, [dataUpdatedAt, isRefetching, data]);
 
   return (
     <ScriptsList
       headerProps={{
-        className: 'justify-between px-10',
+        className: 'justify-between ',
+        menuProps: { className: 'hidden' },
       }}
       titleProps={{
         className: 'hidden',
