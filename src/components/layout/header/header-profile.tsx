@@ -49,7 +49,7 @@ const HeaderProfile = ({
         {isAuthentication && user ? (
           <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
             <DropdownMenuTrigger>
-              <div className="relative flex h-9 items-center gap-2 rounded-xl bg-neutral-50 px-3 py-[6px] active:!bg-neutral-200 active:!text-shading md:py-1 md:hover:bg-neutral-100 dark:bg-transparent dark:active:!bg-neutral-700 dark:md:hover:bg-neutral-800 dark:active:!text-neutral-50">
+              <div className="relative flex h-9 items-center gap-2 rounded-xl px-3 py-[6px] active:!bg-neutral-200 active:!text-shading md:py-1 md:hover:bg-neutral-100 dark:bg-transparent dark:active:!bg-neutral-700 dark:md:hover:bg-neutral-800 dark:active:!text-neutral-50">
                 <Avatar
                   src={user.avatar || '/person.svg'}
                   size="xs"
@@ -69,10 +69,10 @@ const HeaderProfile = ({
             <DropdownMenuContent
               align="end"
               onClick={() => setOpenDropdown(false)}
-              className='dark:bg-neutral-900 dark:border-neutral-800'
+              className='dark:bg-neutral-900 dark:border-neutral-800 rounded-2xl'
             >
               <Link href={ROUTE_NAMES.ACCOUNT_SETTINGS}>
-                <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800">
+                <DropdownMenuItem className="flex items-center">
                   <SettingsIcon className="mr-2 size-4" />
                   <span>{t('HEADER.ACCOUNT_SETTING')}</span>
                 </DropdownMenuItem>
@@ -86,7 +86,7 @@ const HeaderProfile = ({
                 </Link>
               )} */}
 
-              <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800" onClick={signOut}>
+              <DropdownMenuItem className="flex items-center" onClick={signOut}>
                 <LogOutIcon className="mr-2 size-4" />
                 <span> {t('HEADER.SIGN_OUT')}</span>
               </DropdownMenuItem>
@@ -105,16 +105,16 @@ const HeaderProfile = ({
             <DropdownMenuContent
               align="end"
               onClick={() => setOpenDropdown(false)}
-              className='dark:bg-neutral-900 dark:border-neutral-800'
+              className='dark:bg-neutral-900 dark:border-neutral-800 rounded-2xl'
             >
               <Link href={ROUTE_NAMES.SIGN_IN}>
-                <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800">
+                <DropdownMenuItem className="flex items-center">
                   <LogInIcon className="mr-2 size-4" />
                   <span>{t('HEADER.SIGN_IN')}</span>
                 </DropdownMenuItem>
               </Link>
               <Link href={ROUTE_NAMES.SETTINGS}>
-                <DropdownMenuItem className="flex items-center dark:hover:bg-neutral-800">
+                <DropdownMenuItem className="flex items-center">
                   <SettingsIcon className="mr-2 size-4" />
                   <span> {t('HEADER.SETTINGS')}</span>
                 </DropdownMenuItem>

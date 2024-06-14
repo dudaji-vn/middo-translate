@@ -64,8 +64,8 @@ export const buttonVariants = cva(
         variant: 'ghost',
         color: 'error',
         className:
-          'bg-transparent text-error md:hover:bg-error00 active:!bg-rose-300 disabled:!bg-transparent disabled:!opacity-30',
-      },
+          'bg-transparent text-error md:hover:bg-neutral-50 active:!bg-neutral-100 disabled:!bg-transparent disabled:!text-error-100 dark:!bg-transparent dark:text-error dark:hover:!bg-neutral-900 dark:active:!bg-neutral-800 dark:disabled:!text-error-900 disabled:!opacity-100',
+      }
     ],
     defaultVariants: {
       variant: 'default',

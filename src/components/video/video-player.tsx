@@ -251,7 +251,7 @@ function VideoPlayer(props: VideoProps) {
         className,
         isFullScreen
           ? 'fixed inset-0 z-[51] h-full w-full max-w-full rounded-none bg-black/90'
-          : '',
+          : 'z-[1]',
       )}
       ref={wrapperRef}
     >

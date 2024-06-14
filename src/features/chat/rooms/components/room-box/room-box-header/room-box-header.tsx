@@ -50,7 +50,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
     <div
       {...props}
       className={cn(
-        'flex w-full items-center border-b  px-1 py-1 md:px-3',
+        'flex w-full items-center border-b  px-1 py-1 md:px-3 dark:border-neutral-800',
         props.className,
       )}
     >

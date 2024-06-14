@@ -263,7 +263,7 @@ export default function UserGuide() {
                                 Translation tool
                                 </li>
                                 <li>
-                                E.S.L translated messages
+                                E.S.L message
                                 </li>
                             </ul>
                         },
@@ -374,7 +374,7 @@ export default function UserGuide() {
                         },
                         {
                             id: 'esl-translated-message',
-                            title: "E.S.L translated message",
+                            title: "E.S.L message",
                             content: "The English translated text from your message content"
                         },
                         {
