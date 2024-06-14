@@ -1,6 +1,7 @@
 'use-client';
 
 import { useNotificationStore } from '@/features/notification/store';
+import customToast from '@/utils/custom-toast';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
@@ -22,7 +23,7 @@ export const ReactNativeProvider = () => {
         const { type, data } = JSON.parse(event.data) as NativeEventData;
         switch (type) {
           case 'Trigger':
-            toast.success(data);
+            customToast.success(data);
             break;
           case 'Console':
             console.log(data);

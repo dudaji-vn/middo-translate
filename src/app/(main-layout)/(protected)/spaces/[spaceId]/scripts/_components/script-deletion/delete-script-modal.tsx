@@ -1,6 +1,7 @@
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { useDeleteScript } from '@/features/conversation-scripts/hooks/use-delete-script';
 import { TChatScript } from '@/types/scripts.type';
+import customToast from '@/utils/custom-toast';
 import { useParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -32,7 +33,7 @@ const DeleteScriptModal = ({
       console.log(error);
       // @ts-ignore
       const msg = error?.response?.data?.message || error?.message;
-      toast.error(msg || `Fail to delete script`);
+      customToast.error(msg || `Fail to delete script`);
       console.error(error);
     }
   };

@@ -13,6 +13,7 @@ import { TConversationTag } from '../../../_components/business-spaces';
 import { DEFAULT_THEME } from '../extension-creation/sections/options';
 import { createOrEditTag, deleteTag } from '@/services/business-space.service';
 import { isEqual } from 'lodash';
+import customToast from '@/utils/custom-toast';
 
 export const ConfirmDeleteTag = ({
     open,
@@ -35,10 +36,10 @@ export const ConfirmDeleteTag = ({
                 tagId: tag?._id
             });
             router.refresh();
-            toast.success(t('Tag deleted successfully'));
+            customToast.success(t('Tag deleted successfully'));
             onOpenChange(false);
         } catch (error) {
-            toast.error(t('Failed to delete tag'));
+            customToast.error(t('Failed to delete tag'));
         }
     }
     return (

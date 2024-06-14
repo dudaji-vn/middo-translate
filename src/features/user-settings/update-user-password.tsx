@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { PASSWORD_PATTERN } from '@/configs/regex-pattern';
 import { Button } from '@/components/actions';
 import { KeyRound } from 'lucide-react';
+import customToast from '@/utils/custom-toast';
 
 export default function UpdateUserPassword() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -85,7 +86,7 @@ export default function UpdateUserPassword() {
     const { confirmPassword, ...payload } = values;
     try {
       await changePasswordUserService(payload);
-      toast.success(t('MESSAGE.SUCCESS.PASSWORD_CHANGED'));
+      customToast.success(t('MESSAGE.SUCCESS.PASSWORD_CHANGED'));
       setOpen(false);
       setErrorMessage('');
     } catch (err: any) {

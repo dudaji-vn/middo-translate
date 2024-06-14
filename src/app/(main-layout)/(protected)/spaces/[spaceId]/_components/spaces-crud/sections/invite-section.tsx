@@ -21,6 +21,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { isEmpty } from 'lodash';
 import { ESPaceRoles } from '../../../settings/_components/space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export enum ESPaceMemberStatus {
   Invited = 'invited',
@@ -135,7 +136,7 @@ const InviteMembers = ({
         return;
       }
       if (invitedMembers.find((m) => m.email === newInvitedMember.email)) {
-        toast.error('This user has already been invited');
+        customToast.error('This user has already been invited');
         return;
       }
       setMembers([...invitedMembers, newInvitedMember as Member]);

@@ -17,6 +17,7 @@ import { isEqual } from 'lodash';
 import RHFColorSelector, {
   COLOR_REGEX,
 } from '@/components/form/RHF-color-selector/rhf-color-selector';
+import customToast from '@/utils/custom-toast';
 
 const createOrEditTagSchema = z.object({
   tagId: z.string().optional(),
@@ -102,7 +103,7 @@ export const CreateOrEditTag = ({
         tagId: initTag?._id,
       }).then((res) => {
         if (res.data) {
-          toast.success(
+          customToast.success(
             t(`COMMON.SUCCESS_TO`, { action: action.toLowerCase() }),
           );
           router.refresh();
@@ -115,7 +116,7 @@ export const CreateOrEditTag = ({
       console.log(error);
       // @ts-ignore
       const msg = error?.response?.data?.message || error?.message;
-      toast.error(
+      customToast.error(
         `${t(`COMMON.FAILED_TO`, { action: action.toLowerCase() })}: ${msg}`,
       );
       console.error(error);

@@ -34,6 +34,7 @@ import { Button } from '@/components/actions';
 import { TChatScript } from '@/types/scripts.type';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
+import customToast from '@/utils/custom-toast';
 
 type TFormValues = {
   addingDomain: string;
@@ -175,17 +176,17 @@ export default function CreateExtension({
 
       await createExtension(String(params?.spaceId), payload)
         .then((res) => {
-          toast.success(`${isEditing ? 'Edit' : 'Create'} extension success!`);
+          customToast.success(`${isEditing ? 'Edit' : 'Create'} extension success!`);
         })
         .catch((err) => {
-          toast.error(
+          customToast.error(
             err?.response?.data?.message ||
               `${isEditing ? 'Edit' : 'Create'}  extension failed!`,
           );
         });
       router.push(pathname + '?tab=extension');
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     }
   };
   const extensionRoles = SPACE_SETTING_TAB_ROLES.find(

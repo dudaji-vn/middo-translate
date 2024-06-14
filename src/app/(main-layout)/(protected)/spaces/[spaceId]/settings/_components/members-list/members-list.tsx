@@ -37,6 +37,7 @@ import {
   useGetSpaceData,
 } from '@/features/business-spaces/hooks/use-get-space-data';
 import { Spinner } from '@/components/feedback';
+import customToast from '@/utils/custom-toast';
 
 const ReorderList = ({
   data,
@@ -92,13 +93,13 @@ const ReorderList = ({
         }));
       });
       if (res.data) {
-        toast.success('Member removed successfully');
+        customToast.success('Member removed successfully');
         queryClient.invalidateQueries([GET_SPACE_DATA_KEY, { spaceId }]);
         return;
       }
     } catch (error) {
       console.error('Error on DeleteMember:', error);
-      toast.error('Error on Delete member');
+      customToast.error('Error on Delete member');
     }
   };
   const onResendInvitation = async (member: Member) => {
@@ -117,11 +118,11 @@ const ReorderList = ({
           [member.email]: false,
         }));
       });
-      toast.success('Invitation resent successfully');
+      customToast.success('Invitation resent successfully');
       queryClient.invalidateQueries([GET_SPACE_DATA_KEY, { spaceId }]);
     } catch (error) {
       console.error('Error on ResendInvitation:', error);
-      toast.error('Error on Resend invitation');
+      customToast.error('Error on Resend invitation');
     }
     setIsLoading((prev) => ({
       ...prev,
@@ -171,7 +172,7 @@ const ReorderList = ({
             const newArr = [...items];
             newArr[index].role = source.droppableId;
             setItems(items);
-            toast.error(t('EXTENSION.MEMBER.NO_EDIT_PERMISSION'));
+            customToast.error(t('EXTENSION.MEMBER.NO_EDIT_PERMISSION'));
             return;
           }
           setModal({

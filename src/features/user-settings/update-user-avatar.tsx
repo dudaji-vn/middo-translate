@@ -23,6 +23,7 @@ import {
   MediaUploadProvider,
 } from '@/components/media-upload';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export default function UpdateUserAvatar() {
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export default function UpdateUserAvatar() {
     e.preventDefault();
     const file = inputCropImage.current?.getCropData();
     if (!file) {
-      toast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
+      customToast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
       return;
     }
     try {
@@ -49,10 +50,10 @@ export default function UpdateUserAvatar() {
           avatar: res.data.avatar,
         },
       });
-      toast.success(t('MESSAGE.SUCCESS.UPDATED_AVATAR'));
+      customToast.success(t('MESSAGE.SUCCESS.UPDATED_AVATAR'));
       setOpen(false);
     } catch (_: unknown) {
-      toast.error(t('BACKEND.MESSAGE.SOMETHING_WRONG'));
+      customToast.error(t('BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
     }

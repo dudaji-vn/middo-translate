@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useChangeRoleMember } from '@/features/business-spaces/hooks/use-change-role-member';
 import { ESPaceRoles } from '../space-setting/setting-items';
+import customToast from '@/utils/custom-toast';
 
 export const ChangeMemberRoleModal = ({
   _id,
@@ -38,7 +39,7 @@ export const ChangeMemberRoleModal = ({
       })
       .catch((err) => {
         onFailed();
-        toast.error(
+        customToast.error(
           err?.response?.data?.message ||
             'Failed to change role member. Please try again later.',
         );

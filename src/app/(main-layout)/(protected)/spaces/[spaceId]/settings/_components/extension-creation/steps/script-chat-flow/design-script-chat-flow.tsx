@@ -28,6 +28,7 @@ import { initialChatFlowNodes } from '@/app/(main-layout)/(protected)/spaces/[sp
 import { type TScriptFormValues } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/script-creation/create-chat-script-modal';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export type FlowItemType =
   | 'button'
@@ -116,7 +117,7 @@ const DesignScriptChatFlow = ({
   };
   const redirectToPreview = () => {
     localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
-    toast.loading('Loading preview...');
+    customToast.loading('Loading preview...');
     let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
         width=700,height=700,left=-500,top=-500`;
     if (spaceId) {

@@ -5,7 +5,7 @@ export const ToastProvider = () => {
   const isMobile = useAppStore((state) => state.isMobile);
   return (
     <Toaster
-      position={isMobile ? 'top-center' : 'top-right'}
+      position={isMobile ? 'top-center' : 'bottom-center'}
       toastOptions={{
         error: {
           className:

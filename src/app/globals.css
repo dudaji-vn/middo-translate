@@ -490,6 +490,12 @@ body {
   color: #000;
   content: '\25CF';
 }
+.dark .prose
+:where(ul > li):not(
+  :where([class~='not-prose'], [class~='not-prose'] *)
+)::marker {
+  color: #F2F2F2;
+}
 .me
   .prose
   :where(ul > li):not(

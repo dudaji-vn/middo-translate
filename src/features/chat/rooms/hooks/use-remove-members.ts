@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useChatBox } from '../contexts';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export const useRemoveMember = () => {
   const { updateRoom } = useChatBox();
@@ -10,7 +11,7 @@ export const useRemoveMember = () => {
   return useMutation({
     mutationFn: roomApi.removeMember,
     onSuccess: (data) => {
-      toast.success(t('MESSAGE.SUCCESS.ROOM_INFO_UPDATED'));
+      customToast.success(t('MESSAGE.SUCCESS.ROOM_INFO_UPDATED'));
       updateRoom({
         participants: data.participants,
       });

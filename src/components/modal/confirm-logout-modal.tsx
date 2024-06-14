@@ -17,6 +17,7 @@ import { useNotificationStore } from '@/features/notification/store';
 import { useTranslation } from 'react-i18next';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 import { notificationApi } from '@/features/notification/api';
+import customToast from '@/utils/custom-toast';
 
 export const ConfirmLogoutModal = () => {
   const { setData: setDataAuth } = useAuthStore();
@@ -45,11 +46,11 @@ export const ConfirmLogoutModal = () => {
       await signOutService();
       setDataAuth({ user: null, isAuthentication: false });
       resetNotification();
-      toast.success(t('MESSAGE.SUCCESS.SIGN_OUT'));
+      customToast.success(t('MESSAGE.SUCCESS.SIGN_OUT'));
       const { deleteFCMToken } = await import('@/lib/firebase');
       await deleteFCMToken();
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     }
   };
   const closeModal = () => {
