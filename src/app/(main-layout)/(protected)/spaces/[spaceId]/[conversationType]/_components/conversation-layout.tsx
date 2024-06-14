@@ -21,7 +21,7 @@ export default function ConversationLayout({
   return (
     <div
       className={cn(
-        'disable-text-selection  extension-container-height overflow-y-hidden',
+        'disable-text-selection  container-height overflow-y-hidden',
         {
           'max-md:h-main-container-height':
             isMobile &&

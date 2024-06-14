@@ -25,22 +25,21 @@ export const Header = (props: Props) => {
   const theme = useAppStore((state) => state.theme);
 
   const { isBusiness } = useBusinessNavigationData();
-  const hideNavigation = isBusiness;
+  const hideNavigation = isBusiness || platform === 'mobile';
   const logoURL = useMemo(() => {
     switch (theme) {
       case 'light':
-        return isBusiness ? '/power-by-middo.svg' : '/logo.png'
+        return isBusiness ? '/power-by-middo.svg' : '/logo.png';
       case 'dark':
-        return isBusiness ? '/power-by-middo-dark.svg' : '/logo-dark.png'
+        return isBusiness ? '/power-by-middo-dark.svg' : '/logo-dark.png';
       default:
-        return '/logo.png'
+        return '/logo.png';
     }
   }, [isBusiness, theme]);
 
   if (!isClient) return null;
   if (platform === 'mobile') return null;
-  
-  
+
   return (
     <div
       className={cn(
