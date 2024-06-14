@@ -96,7 +96,7 @@ export const makeScriptsColumns = ({
             {props?.row?.original?.isUsing && (
               <Badge
                 variant="default"
-                className="bg-success-100 text-xs font-semibold text-success-700 "
+                className="bg-success-100 text-xs font-semibold text-success-700 dark:bg-success-900"
               >
                 {t('COMMON.IN_USE')}
               </Badge>
