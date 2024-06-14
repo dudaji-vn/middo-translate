@@ -95,8 +95,8 @@ const Page = ({
     'Last Connect Date': item.lastConnectDate,
   }));
   return (
-    <section className="relative w-full">
-      <div className="flex  flex-col justify-center gap-4  px-1 py-3 font-medium md:flex-row md:items-center md:px-10">
+    <section className="relative w-full ">
+      <div className="flex  flex-col justify-center gap-4  px-1 py-3 font-medium md:flex-row md:items-center  md:px-10">
         <div className="flex flex-row items-center justify-start">
           <Button.Icon
             onClick={() => setOpenSidebar(!openSidebar, true)}
@@ -135,13 +135,14 @@ const Page = ({
           </div>
         </div>
       </div>
-      <div className="w-full overflow-x-auto rounded-md px-2 py-3 max-md:h-[calc(100vh-270px)] md:px-10">
+      <div className="max-h-[calc(100vh-250px)]  w-full overflow-x-auto  overflow-y-scroll rounded-md px-2 py-3  md:px-10">
         <DataTable
           dividerRow
           columns={makeClientsColumns(t)}
           data={items}
           tableHeadProps={{
-            className: 'bg-white dark:bg-background dark:text-neutral-50 border-none',
+            className:
+              'bg-white dark:bg-background dark:text-neutral-50 border-none',
           }}
           cellProps={{
             className:

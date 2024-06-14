@@ -103,7 +103,7 @@ const ScriptsList = ({
         myRole={myRole}
         {...headerProps}
       />
-      <div className="w-full overflow-x-auto rounded-md px-2 py-3 max-md:max-h-[65vh] md:px-10">
+      <div className=" max-h-[calc(100vh-270px)]   w-full overflow-x-auto  overflow-y-scroll rounded-md px-2 py-3 md:px-10">
         <DataTable
           dividerRow
           tableInitialParams={{
@@ -132,7 +132,8 @@ const ScriptsList = ({
           })}
           data={scripts}
           tableHeadProps={{
-            className: 'bg-white  border-none dark:bg-background dark:text-neutral-50',
+            className:
+              'bg-white  border-none dark:bg-background dark:text-neutral-50',
           }}
           cellProps={{
             className:
