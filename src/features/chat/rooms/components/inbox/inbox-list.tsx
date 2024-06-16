@@ -42,6 +42,7 @@ import {
 } from '../../configs/alphabet-list';
 import { useTranslation } from 'react-i18next';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
+import { SelectedFilterRoom } from '../filter/selected-filter-room';
 
 interface InboxListProps {
   type: InboxType;
@@ -187,9 +188,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     return (
       <div
         ref={ref}
-        className={cn(
-          'relative h-full w-full flex-1 overflow-hidden ',
-        )}
+        className={cn('relative h-full w-full flex-1 overflow-hidden ')}
       >
         {isScrolled && (
           <div className="absolute left-0 right-0 top-0 z-10 h-0.5 w-full shadow-1"></div>
@@ -209,6 +208,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
             isFetching={isLoading}
             className="flex flex-col"
           >
+            <SelectedFilterRoom />
             <ViewSpaceInboxFilter
               className={cn('z-[60] w-full', {
                 hidden: !showFilter,
