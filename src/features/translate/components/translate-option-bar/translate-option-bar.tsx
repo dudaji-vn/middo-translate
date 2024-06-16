@@ -69,15 +69,15 @@ export const TranslateOptionBar = forwardRef<
     }
 
     // request permission
-    await navigator.mediaDevices.getUserMedia({ audio: true });
-    setValue('');
-    removeParam('query');
-    setIsListening(true);
-    startSpeechToText();
     postMessage({
       type: 'Trigger',
       data: { type: 'mic', value: !listening },
     });
+    await navigator?.mediaDevices?.getUserMedia({ audio: true });
+    setValue('');
+    removeParam('query');
+    setIsListening(true);
+    startSpeechToText();
   };
   const handleStopListening = useCallback(() => {
     setIsListening(false);
