@@ -163,7 +163,9 @@ export const makeScriptsColumns = ({
 
         return (
           <th className="flex flex-row items-center gap-2">
-            <p className="min-w-20 font-normal">{t('EXTENSION.SCRIPT.ACTIONS')}</p>
+            <p className="min-w-20 font-normal">
+              {t('EXTENSION.SCRIPT.ACTIONS')}
+            </p>
             <Button.Icon
               variant={'ghost'}
               size={'xs'}

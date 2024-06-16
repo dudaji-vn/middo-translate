@@ -28,7 +28,7 @@ const EmptyReport = () => {
           {t('EXTENSION.REPORT')}
         </Typography>
       </div>
-      <div className="m-auto flex flex-grow flex-col justify-center space-y-4 gap-5">
+      <div className="m-auto flex flex-grow flex-col justify-center gap-5 space-y-4">
         <Image
           src="/empty_report.svg"
           width={10}

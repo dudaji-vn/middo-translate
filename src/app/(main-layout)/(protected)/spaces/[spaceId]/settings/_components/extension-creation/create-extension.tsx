@@ -176,7 +176,9 @@ export default function CreateExtension({
 
       await createExtension(String(params?.spaceId), payload)
         .then((res) => {
-          customToast.success(`${isEditing ? 'Edit' : 'Create'} extension success!`);
+          customToast.success(
+            `${isEditing ? 'Edit' : 'Create'} extension success!`,
+          );
         })
         .catch((err) => {
           customToast.error(

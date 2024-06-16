@@ -239,7 +239,7 @@ const InviteMembers = ({
                   : 'Select a role'}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
+            <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
               {rolesOptions.map((option) => (
                 <DropdownMenuItem
                   key={option.name}
@@ -255,7 +255,9 @@ const InviteMembers = ({
             </DropdownMenuContent>
           </DropdownMenu>
           <div className="flex flex-col gap-3 py-2">
-            <FormLabel className="invisible text-neutral-600 dark:text-neutral-50">Invite</FormLabel>
+            <FormLabel className="invisible text-neutral-600 dark:text-neutral-50">
+              Invite
+            </FormLabel>
             <Button
               color="secondary"
               shape="square"
@@ -270,7 +272,7 @@ const InviteMembers = ({
           </div>
         </div>
         <div
-          className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 dark:bg-background p-3"
+          className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3 dark:bg-background"
           {...spacePreviewProps}
         >
           <Avatar
@@ -294,7 +296,8 @@ const InviteMembers = ({
             className: 'bg-transparent dark:bg-background dark:text-neutral-50',
           }}
           rowProps={{
-            className: 'rounded-full bg-primary-100 dark:bg-neutral-800 dark:text-neutral-50',
+            className:
+              'rounded-full bg-primary-100 dark:bg-neutral-800 dark:text-neutral-50',
           }}
           columns={makeMembersColumns({
             t,

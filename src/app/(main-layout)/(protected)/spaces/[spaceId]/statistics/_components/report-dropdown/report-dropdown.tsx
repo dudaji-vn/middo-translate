@@ -48,7 +48,7 @@ const ReportDropdown = ({
           onOpenChange(!open);
         }}
       >
-        <div className="relative flex-1 flex h-12 flex-row items-center justify-between gap-2 rounded-[12px] border border-neutral-50 dark:border-neutral-800 p-0 text-neutral-800 dark:text-neutral-50 active:!bg-neutral-200 dark:active:!bg-neutral-900 active:!text-shading md:hover:bg-neutral-100 dark:md:hover:bg-neutral-800 [&_div]:px-3 [&_div]:py-2">
+        <div className="relative flex h-12 flex-1 flex-row items-center justify-between gap-2 rounded-[12px] border border-neutral-50 p-0 text-neutral-800 active:!bg-neutral-200 active:!text-shading dark:border-neutral-800 dark:text-neutral-50 dark:active:!bg-neutral-900 md:hover:bg-neutral-100 dark:md:hover:bg-neutral-800 [&_div]:px-3 [&_div]:py-2">
           <div className="flex h-full items-center rounded-l-[12px] bg-primary-100 dark:bg-neutral-900 dark:text-primary">
             {cloneElement(startIcon, {
               size: 20,
@@ -82,8 +82,7 @@ const ReportDropdown = ({
                 key={name}
                 href={href}
                 className={cn(' w-full text-neutral-700 dark:text-neutral-50', {
-                  'bg-neutral-100':
-                    selectedOption?.value === value,
+                  'bg-neutral-100': selectedOption?.value === value,
                 })}
               >
                 <DropdownMenuItem className="text-md flex items-center rounded-none px-4 py-3 outline-none dark:hover:bg-neutral-800">
@@ -95,7 +94,7 @@ const ReportDropdown = ({
           return (
             <DropdownMenuItem
               key={name}
-              className=" text-md  rounded-none px-4 py-3 text-neutral-700 dark:text-neutral-50 outline-none hover:bg-neutral-100  hover:text-neutral-500 dark:hover:bg-neutral-800"
+              className=" text-md  rounded-none px-4 py-3 text-neutral-700 outline-none hover:bg-neutral-100 hover:text-neutral-500  dark:text-neutral-50 dark:hover:bg-neutral-800"
               onClick={() => onSelectChange(option)}
               {...props}
             >

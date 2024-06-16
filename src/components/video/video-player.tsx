@@ -256,7 +256,12 @@ function VideoPlayer(props: VideoProps) {
       ref={wrapperRef}
     >
       {poster && !isPlaying && (
-        <Image src={poster} alt="Video Intro Thumbnail" fill={true} objectFit='contain'/>
+        <Image
+          src={poster}
+          alt="Video Intro Thumbnail"
+          fill={true}
+          objectFit="contain"
+        />
       )}
       <video
         ref={videoRef}
@@ -295,7 +300,7 @@ function VideoPlayer(props: VideoProps) {
       <div
         className={cn(
           'pointer-events-none absolute inset-0 bg-black/20 duration-500',
-          (isPlaying || isFullScreen || poster) ? 'opacity-0' : '',
+          isPlaying || isFullScreen || poster ? 'opacity-0' : '',
         )}
       ></div>
 
