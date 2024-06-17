@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { DropdownMenuTriggerProps } from '@radix-ui/react-dropdown-menu';
 import { ChevronDown, Home, Plus } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetSpaces } from '../hooks/use-get-spaces';
@@ -35,7 +35,6 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const { expand, openNavigator, setOpenNavigator } = useSidebarStore();
 
-  const router = useRouter();
   const { t } = useTranslation('common');
   const { data: spaces, isLoading } = useGetSpaces({
     type: 'all_spaces',
@@ -62,12 +61,6 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
     return spaces?.some((s: TSpace) => Number(s.totalNewMessages) > 0);
   }, [spaces]);
 
-  const onChangeSpace = (href: string) => {
-    if (pathname === href) {
-      return;
-    }
-    router.push(href);
-  };
   if (isLoading || !space || !pathname?.includes(space?._id)) {
     return (
       <div
