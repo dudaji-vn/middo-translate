@@ -27,7 +27,7 @@ const CreateSpaceForm = () => {
           />
         </Typography>
       </div>
-      <div className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 dark:bg-neutral-900 p-3">
+      <div className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3 dark:bg-neutral-900">
         <UploadSpaceImage nameField="avatar" />
         <RHFInputField
           name="name"

@@ -9,6 +9,7 @@ import { Typography } from '@/components/data-display';
 import { useSidebarStore } from '@/stores/sidebar.store';
 export type ScriptsHeaderProps = {
   titleProps?: React.HTMLProps<HTMLSpanElement>;
+  menuProps?: React.HTMLProps<HTMLDivElement>;
   onSearchChange: (value: string) => void;
   onCreateClick: () => void;
   allowedRoles: Record<string, Array<ESPaceRoles>>;
@@ -19,6 +20,7 @@ const ScriptsHeader = ({
   titleProps,
   onSearchChange,
   onCreateClick,
+  menuProps,
   allowedRoles,
   myRole = ESPaceRoles.Viewer,
   ...props
@@ -30,7 +32,7 @@ const ScriptsHeader = ({
       className="flex  flex-col justify-center gap-4 px-1 py-3 font-medium md:flex-row md:items-center md:px-10"
       {...props}
     >
-      <div className="flex flex-row items-center justify-start">
+      <div className="flex flex-row items-center justify-start" {...menuProps}>
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}
           color="default"

@@ -748,6 +748,11 @@
       "MEMBERS_MANAGEMENT": "Members Management",
       "CONVERSATION_EXTENSION": "Conversation Extension"
     },
+    "SETTING": {
+      "TAGS_MANAGEMENT": "Tags Management",
+      "MEMBERS_MANAGEMENT": "Members Management",
+      "CONVERSATION_EXTENSION": "Conversation Extension"
+    },
     "SCRIPT": {
       "PAGE_TITLE": "Scripts Management",
       "SEARCH": "Search for scripts",

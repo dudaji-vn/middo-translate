@@ -91,7 +91,10 @@ const PluginChatPreview = ({
   return (
     <div
       {...props}
-      className={cn('flex flex-col divide-y divide-neutral-50 dark:divide-neutral-900', className)}
+      className={cn(
+        'flex flex-col divide-y divide-neutral-50 dark:divide-neutral-900',
+        className,
+      )}
     >
       <div className="flex  flex-row items-center justify-start gap-3 px-3 py-2">
         <Typography className="text-sm font-medium leading-[18px] text-neutral-800 dark:text-neutral-50">

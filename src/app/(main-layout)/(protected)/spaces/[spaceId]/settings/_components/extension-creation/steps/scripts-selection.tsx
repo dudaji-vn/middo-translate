@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 
 const ScriptsSelection = () => {
   const { setValue, watch } = useFormContext();
+  const [createdNewOne, setCreatedNewOne] = useState(false);
   const [search, setSearch] = useState('');
   const params = useParams();
   const spaceId = params?.spaceId as string;
@@ -16,10 +17,11 @@ const ScriptsSelection = () => {
     return currentScript ? { [currentScript]: true } : {};
   }, [currentScript]);
 
-  const { data, isLoading } = useGetConversationScripts({
-    search,
-    spaceId,
-  });
+  const { data, isLoading, dataUpdatedAt, isRefetching } =
+    useGetConversationScripts({
+      search,
+      spaceId,
+    });
   const onSearchChange = (search: string) => {
     setSearch(search);
   };
@@ -42,11 +44,23 @@ const ScriptsSelection = () => {
       setValue('currentScript', data.items[0]._id);
     }
   }, []);
+  useEffect(() => {
+    if (isRefetching) {
+      setCreatedNewOne(true);
+      return;
+    }
+    if (dataUpdatedAt && !isRefetching && data?.items?.[0] && createdNewOne) {
+      const newScriptIdx = data?.items?.length - 1;
+      setValue('currentScript', data.items[newScriptIdx]?._id);
+      setValue('custom.firstMessage', data.items[newScriptIdx]?._id);
+    }
+  }, [dataUpdatedAt, isRefetching, data, setValue]);
 
   return (
     <ScriptsList
       headerProps={{
-        className: 'justify-between px-10',
+        className: 'justify-between ',
+        menuProps: { className: 'hidden' },
       }}
       titleProps={{
         className: 'hidden',

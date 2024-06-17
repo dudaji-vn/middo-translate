@@ -163,7 +163,6 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             />
           </motion.div>
         </AnimatePresence>
-
         {!isSearch && (
           <>{isBusiness ? <RoomsModalFilter /> : <InboxFilter />}</>
         )}

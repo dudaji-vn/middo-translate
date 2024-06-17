@@ -59,21 +59,22 @@ export default function Landing() {
       <div
         className={cn(
           'fixed z-10 flex h-fit w-full items-center justify-between ',
-          isScrollDown && 'bg-white/80 dark:bg-neutral-900 shadow-2 backdrop-blur-xl',
+          isScrollDown &&
+            'bg-white/80 shadow-2 backdrop-blur-xl dark:bg-neutral-900',
         )}
       >
         <HeaderLandingPage />
       </div>
-      <div className="w-full bg-[#FAFAFA] dark:bg-neutral-900 bg-[url('/landing-page/hero.png')] dark:bg-[url('/landing-page/hero-dark.png')] bg-contain bg-center bg-no-repeat px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
+      <div className="w-full bg-[#FAFAFA] bg-[url('/landing-page/hero.png')] bg-contain bg-center bg-no-repeat px-5 pb-12 pt-[108px] dark:bg-neutral-900 dark:bg-[url('/landing-page/hero-dark.png')] md:flex md:flex-row-reverse md:px-[5vw]">
         <div className="relative h-fit md:w-[48%] md:min-w-[48%]">
-          <VideoPlayer 
+          <VideoPlayer
             file={{
               url: '/video/video-middo-intro.mp4',
               name: 'Middo Intro Video',
               type: 'video/mp4',
             }}
-            className='rounded-2xl'
-            poster='/landing-page/group.png'
+            className="rounded-2xl"
+            poster="/landing-page/group.png"
           />
         </div>
 
@@ -89,7 +90,7 @@ export default function Landing() {
         </div>
       </div>
       <div id="solution">
-        <div className="flex flex-col-reverse gap-10 py-10 md:flex-row md:items-center md:py-[5vw] dark:bg-background">
+        <div className="flex flex-col-reverse gap-10 py-10 dark:bg-background md:flex-row md:items-center md:py-[5vw]">
           <div className="pr-5 md:w-[48%]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -136,7 +137,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 md:flex-row-reverse md:justify-between md:pt-[5vw] dark:bg-neutral-900">
+        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 dark:bg-neutral-900 md:flex-row-reverse md:justify-between md:pt-[5vw]">
           <div className="flex h-full items-end md:w-[48%]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -183,7 +184,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse items-center gap-10 py-10 md:flex-row md:!gap-16 md:py-[5vw] dark:bg-background">
+        <div className="flex flex-col-reverse items-center gap-10 py-10 dark:bg-background md:flex-row md:!gap-16 md:py-[5vw]">
           <div className="flex h-full items-end px-5 md:w-[48%] md:!px-0 md:!pl-[5vw]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -224,7 +225,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 md:flex-row-reverse md:justify-between md:pt-[5vw] dark:bg-neutral-900">
+        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 dark:bg-neutral-900 md:flex-row-reverse md:justify-between md:pt-[5vw]">
           <div className="flex h-full items-end md:w-[48%]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -273,7 +274,10 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <div id="FAQ" className="bg-white px-5 py-12 md:px-[5vw] md:py-[72px] dark:bg-background">
+      <div
+        id="FAQ"
+        className="bg-white px-5 py-12 dark:bg-background md:px-[5vw] md:py-[72px]"
+      >
         <div className="flex w-full items-center justify-center gap-3 text-primary">
           <Sparkles className="size-7" />
           <h3>Help Center</h3>
@@ -285,7 +289,7 @@ export default function Landing() {
       </div>
       <div
         id="about-us"
-        className="bg-gradient-to-b dark:from-[#050505] dark:to-[#050505]/0 from-primary-100 to-transparent px-5 py-12 md:px-[5vw] md:py-[72px]"
+        className="bg-gradient-to-b from-primary-100 to-transparent px-5 py-12 dark:from-[#050505] dark:to-[#050505]/0 md:px-[5vw] md:py-[72px]"
       >
         <div className="flex w-full items-center justify-center gap-3 text-primary">
           <Sparkles className="size-7" />
@@ -306,7 +310,7 @@ export default function Landing() {
           service quickly.
         </p>
       </div>
-      <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.png')] bg-[#FAFAFA] dark:bg-neutral-900 dark:bg-[url('/landing-page/hero-dark.png')] bg-no-repeat bg-center bg-cover px-5 py-12">
+      <div className="flex h-fit w-full flex-col items-center justify-center bg-[#FAFAFA] bg-[url('/landing-page/hero.png')] bg-cover bg-center bg-no-repeat px-5 py-12 dark:bg-neutral-900 dark:bg-[url('/landing-page/hero-dark.png')]">
         <h1 className="text-primary-500-main">Ready to get started?</h1>
         <div className="mt-8">
           <DownloadAppButton />
