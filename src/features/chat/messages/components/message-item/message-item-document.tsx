@@ -3,6 +3,7 @@ import { FileIcon, defaultStyles } from 'react-file-icon';
 import { Media } from '@/types';
 import { cn } from '@/utils/cn';
 import { formatFileSize } from '../../utils';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 
 export interface DocumentProps {
   file: Media;
@@ -11,9 +12,23 @@ export interface DocumentProps {
 
 export const DocumentMessage = ({ file, isMe = false }: DocumentProps) => {
   const extension = file.name?.split('.').pop();
+  const { postMessage, isMobile } = useReactNativePostMessage();
   return (
     <a
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) => {
+        e.stopPropagation();
+        if (!isMobile) return;
+        e.preventDefault();
+        postMessage({
+          type: 'Trigger',
+          data: {
+            event: 'link',
+            payload: {
+              url: file.url,
+            },
+          },
+        });
+      }}
       download
       target="_blank"
       href={file.url}

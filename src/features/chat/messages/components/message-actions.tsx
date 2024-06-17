@@ -1,6 +1,7 @@
 import {
   CopyIcon,
   DownloadIcon,
+  EyeIcon,
   ForwardIcon,
   MessageSquareQuoteIcon,
   PenIcon,
@@ -28,6 +29,7 @@ type Action =
   | 'none'
   | 'unpin'
   | 'edit'
+  | 'browser'
   | 'download';
 type ActionItem = {
   action: Action;
@@ -53,16 +55,23 @@ export const actionItems: ActionItem[] = [
     icon: <DownloadIcon />,
   },
   {
+    action: 'browser',
+    label: 'CONVERSATION.OPEN_IN_BROWSER',
+    icon: <EyeIcon />,
+  },
+  {
     action: 'edit',
     label: 'COMMON.EDIT',
     icon: <PenIcon />,
   },
+
   {
     action: 'forward',
     label: 'CONVERSATION.FORWARD',
     icon: <ForwardIcon />,
     disabled: true,
   },
+
   {
     action: 'pin',
     label: 'CONVERSATION.PIN',
@@ -151,6 +160,18 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
 
         downloadFiles(files);
         break;
+      case 'browser':
+        postMessage({
+          type: 'Trigger',
+          data: {
+            event: 'link',
+            payload: {
+              url: message.media?.[0].url,
+            },
+          },
+        });
+        break;
+
       default:
         setAction(action);
         setMessage(message);
