@@ -29,6 +29,13 @@ export const DocumentMessage = ({ file, isMe = false }: DocumentProps) => {
           },
         });
       }}
+      download
+      target="_blank"
+      href={file.url}
+      className={cn(
+        'flex w-full items-center gap-2 overflow-hidden rounded-lg px-3 py-2',
+        isMe ? 'bg-primary' : 'bg-background-darker',
+      )}
     >
       <div className="flex h-8 w-8 items-center justify-center rounded-full bg-lighter p-2">
         <FileIcon
