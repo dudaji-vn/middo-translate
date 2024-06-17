@@ -4,7 +4,7 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { Form, FormLabel } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronDown, Plus, Shield, UserRound } from 'lucide-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -167,13 +167,16 @@ const InviteMembers = ({
   const rolesOptions = items.filter((item) =>
     allowedRoles.includes(item.name as ESPaceRoles),
   );
+  const defaultRole = useMemo(() => {
+    return rolesOptions.find((role) => role.name === formAdding.watch('role'));
+  }, [formAdding, rolesOptions]);
 
   return (
     <Form {...formAdding}>
       <section
         {...props}
         className={cn(
-          'flex h-[calc(100vh-200px)] min-h-80  max-w-6xl flex-col items-center justify-center gap-8',
+          'flex h-[calc(100vh-200px)]   min-h-80 w-full  max-w-6xl flex-col items-center justify-center gap-8 max-md:px-4',
           props.className,
         )}
       >
@@ -230,13 +233,20 @@ const InviteMembers = ({
                 disabled={formAdding.formState.isSubmitting}
                 color={'default'}
                 size={'xs'}
-                className="w-40 px-4 capitalize"
+                className="w-fit px-4 py-3 capitalize md:w-40"
               >
-                {formAdding.watch('role')
-                  ? t(
-                      `EXTENSION.ROLE.${formAdding.watch('role')?.toUpperCase()}`,
-                    )
-                  : 'Select a role'}
+                {formAdding.watch('role') ? (
+                  <>
+                    <span className="max-sm:hidden">
+                      {t(
+                        `EXTENSION.ROLE.${formAdding.watch('role')?.toUpperCase()}`,
+                      )}
+                    </span>
+                    <span className="sm:hidden">{defaultRole?.icon}</span>
+                  </>
+                ) : (
+                  'Select a role'
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
@@ -264,10 +274,10 @@ const InviteMembers = ({
               onClick={onAddUser}
               loading={formAdding.formState.isSubmitting}
               endIcon={<Plus className="mr-1 h-4 w-4" />}
-              className="h-10 min-w-28"
+              className="!max-sm:w-8 h-10 min-w-28"
               disabled={disabledInviteBtn as boolean}
             >
-              {t('COMMON.ADD')}
+              <span className="max-sm:hidden">{t('COMMON.ADD')}</span>
             </Button>
           </div>
         </div>
@@ -308,7 +318,10 @@ const InviteMembers = ({
             },
           })}
           data={tableRows as Member[]}
-          {...tableProps}
+          tableProps={{
+            ...tableProps,
+            className: 'max-md:h-[500px] overflow-y-auto',
+          }}
         />
       </section>
     </Form>

@@ -121,35 +121,37 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
         sideOffset={-4}
         alignOffset={8}
       >
-        {items?.map((option: Item) => (
-          <DropdownMenuItem
-            className={cn(
-              'relative  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
-              option.isActive ? 'cursor-default !bg-primary-200' : '',
-            )}
-            key={option.href}
-          >
-            <a
-              href={option.isActive ? '#' : option.href}
-              className="relative flex w-full flex-row items-center justify-start gap-4"
-            >
-              {option?.space?.avatar && (
-                <Avatar
-                  alt={option.space.name ?? ''}
-                  size="sm"
-                  src={String(option.space.avatar)}
-                />
+        <div className="h-fit max-h-96 w-full overflow-y-auto ">
+          {items?.map((option: Item) => (
+            <DropdownMenuItem
+              className={cn(
+                'relative  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
+                option.isActive ? 'cursor-default !bg-primary-200' : '',
               )}
-              <span className="pr-4">{option.name}</span>
-              <Ping
-                size={12}
-                className={cn('absolute right-4 top-[20px]', {
-                  hidden: Number(option?.space?.totalNewMessages) === 0,
-                })}
-              />
-            </a>
-          </DropdownMenuItem>
-        ))}
+              key={option.href}
+            >
+              <a
+                href={option.isActive ? '#' : option.href}
+                className="relative flex w-full flex-row items-center justify-start gap-4"
+              >
+                {option?.space?.avatar && (
+                  <Avatar
+                    alt={option.space.name ?? ''}
+                    size="sm"
+                    src={String(option.space.avatar)}
+                  />
+                )}
+                <span className="pr-4">{option.name}</span>
+                <Ping
+                  size={12}
+                  className={cn('absolute right-4 top-[20px]', {
+                    hidden: Number(option?.space?.totalNewMessages) === 0,
+                  })}
+                />
+              </a>
+            </DropdownMenuItem>
+          ))}
+        </div>
         <div className={cn('flex w-full flex-col gap-2 p-2')}>
           <Link href={'/spaces?modal=create-space'}>
             <Button

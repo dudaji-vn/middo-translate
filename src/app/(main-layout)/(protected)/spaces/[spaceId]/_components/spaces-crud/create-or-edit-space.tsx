@@ -25,6 +25,8 @@ import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces'
 import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
 import customToast from '@/utils/custom-toast';
+import { usePlatformStore } from '@/features/platform/stores';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 const createSpaceSchema = z.object({
   name: z
@@ -58,6 +60,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [tabErrors, setTabErrors] = React.useState<boolean[]>([false, false]);
   const router = useRouter();
+  const platform = usePlatformStore((state) => state.platform);
   const queryClient = useQueryClient();
   const { t } = useTranslation('common');
   const formCreateSpace = useForm<TCreateSpaceFormValues>({
@@ -107,7 +110,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
       });
       customToast.success('Space created successfully.');
       queryClient.invalidateQueries([GET_SPACES_KEY, { type: 'all_spaces' }]);
-      router.push('/spaces');
+      router.push(ROUTE_NAMES.SPACES + `?platform=${platform}`);
     } catch (err: any) {
       customToast.error(err?.response?.data?.message);
     }
@@ -144,7 +147,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           }}
         >
           <CreateSpaceForm />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 dark:bg-background py-4">
+          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4 dark:bg-background">
             <Button
               color={canNext ? 'primary' : 'disabled'}
               shape={'square'}
@@ -174,7 +177,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
             }
             allowedRoles={[ESPaceRoles.Admin, ESPaceRoles.Member]}
           />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 dark:bg-background py-4">
+          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4 dark:bg-background">
             <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>
               <Button
                 color={'primary'}
