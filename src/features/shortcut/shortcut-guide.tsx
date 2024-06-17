@@ -144,7 +144,7 @@ export default function ShortcutsGuide() {
               {t('SHORTCUT.TITLE')}
             {/* </Typography> */}
           </DialogTitle>
-          <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-scroll bg-white dark:bg-background [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
+          <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-auto bg-white dark:bg-background [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
             <Accordion
               type="single"
               collapsible

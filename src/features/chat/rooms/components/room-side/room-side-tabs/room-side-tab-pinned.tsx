@@ -52,7 +52,7 @@ export const RoomSideTabPinned = (props: RoomSideTabPinnedProps) => {
             </span>
           </div>
         )}
-        <div className="flex w-full flex-col divide-y divide-neutral-100 dark:divide-neutral-900 overflow-x-hidden  overflow-y-scroll pb-3">
+        <div className="flex w-full flex-col divide-y divide-neutral-100 dark:divide-neutral-900 overflow-x-hidden  overflow-y-auto pb-3">
           {data?.map((pin) => {
             const isMe = pin.pinnedBy._id === currentUserId;
             const message = {

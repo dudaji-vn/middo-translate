@@ -136,7 +136,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
                 : t('FILTERS.BUTTONS.SELECT_ALL')}
             </Button>
           </div>
-          <div className="darg:bg-background h-fit max-h-[400px] max-w-[500px] space-y-3 overflow-y-scroll bg-white">
+          <div className="h-fit max-h-[400px] max-w-[500px] space-y-3 overflow-y-auto bg-white dark:bg-background">
             <Accordion
               type="multiple"
               className="h-full w-full max-w-full p-0 transition-all duration-500  "
