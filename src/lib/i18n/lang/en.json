@@ -404,7 +404,8 @@
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
     "DOODLE": "Doodle",
     "FOCUS_VIEW": "Focus view",
-    "EDIT_MESSAGE": "Edit message"
+    "EDIT_MESSAGE": "Edit message",
+    "OPEN_IN_BROWSER": "Open in browser"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",

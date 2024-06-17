@@ -400,7 +400,8 @@
     "VIDEO_AUDIO_SETTINGS": "비디오 및 오디오 설정",
     "DOODLE": "그리기",
     "FOCUS_VIEW": "집중 보기",
-    "EDIT_MESSAGE": "메시지 편집"
+    "EDIT_MESSAGE": "메시지 편집",
+    "OPEN_IN_BROWSER": "브라우저에서 열기"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo가 권한이 필요합니다 ",
