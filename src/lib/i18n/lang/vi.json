@@ -404,7 +404,8 @@
     "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh",
     "DOODLE": "Vẽ",
     "FOCUS_VIEW": "Tập trung",
-    "EDIT_MESSAGE": "Chỉnh sửa tin nhắn"
+    "EDIT_MESSAGE": "Chỉnh sửa tin nhắn",
+    "OPEN_IN_BROWSER": "Mở trong trình duyệt"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",
