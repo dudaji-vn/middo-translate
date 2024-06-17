@@ -147,19 +147,15 @@
                   fill: white;
                   z-index: 999999999;
               }
-              @media (max-width: 500px) {
+              @media (max-width: 768px) {
                 .iframe_inset {
                   inset: auto 0px 108px 0px;
-    
                 }
-
                 #chat-frame-widget {
                   transform-origin: 85% 100%;
-                  width: 500px;
-                  height: 700px; 
-                  max-width: 100vw;
+                  width: 100vw;
+                  height: 70vh;
                 }
-
               }
            
           </style>
