@@ -57,8 +57,13 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
       })) ?? []
     );
   }, [space, spaces, pathname]);
+
   const hasNotification = useMemo(() => {
-    return spaces?.some((s: TSpace) => Number(s.totalNewMessages) > 0);
+    return spaces?.some(
+      (s: TSpace) =>
+        !pathname?.includes(`spaces/${s._id}`) &&
+        Number(s.totalNewMessages) > 0,
+    );
   }, [spaces]);
 
   if (isLoading || !space || !pathname?.includes(space?._id)) {
@@ -144,8 +149,10 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
                 <span className="pr-4">{option.name}</span>
                 <Ping
                   size={12}
-                  className={cn('absolute right-4 top-[20px]', {
-                    hidden: Number(option?.space?.totalNewMessages) === 0,
+                  className={cn('absolute right-2 top-[12px]', {
+                    hidden:
+                      Number(option?.space?.totalNewMessages) === 0 ||
+                      option?.isActive,
                   })}
                 />
               </a>

@@ -26,7 +26,7 @@ instance.interceptors.response.use(
     return response.data;
   },
   function (error) {
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       console.log('🚀 ~ file: axios-config.ts:29 ~ Unauthorized');
     } else {
       console.log(

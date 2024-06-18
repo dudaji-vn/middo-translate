@@ -128,18 +128,13 @@ const BusinessSidebarContent = ({
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
                     : 'min-w-[300px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
-                  isSelected ? 'text-white ' : 'text-neutral-600 dark:text-neutral-50',
+                  isSelected
+                    ? 'text-white '
+                    : 'text-neutral-600 dark:text-neutral-50',
                 )}
               >
                 {displayTitle}
               </Typography>
-              {notifications?.[title] && notifications[title] > 0 && (
-                <div className="flex h-3 w-3 items-center justify-center rounded-full bg-primary-500-main">
-                  <Typography className="text-white">
-                    {notifications[title]}
-                  </Typography>
-                </div>
-              )}
             </Button>
           </div>
         );
