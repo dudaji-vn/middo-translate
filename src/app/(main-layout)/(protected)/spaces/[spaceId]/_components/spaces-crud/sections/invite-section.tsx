@@ -233,7 +233,7 @@ const InviteMembers = ({
                 disabled={formAdding.formState.isSubmitting}
                 color={'default'}
                 size={'xs'}
-                className="w-fit px-4 py-3 capitalize md:w-40"
+                className="w-fit  px-4 capitalize max-md:py-3 md:w-40"
               >
                 {formAdding.watch('role') ? (
                   <>
