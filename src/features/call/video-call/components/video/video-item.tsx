@@ -27,6 +27,7 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
       participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''} ${
         participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}`;
   }, [participant?.isMe, participant?.isShareScreen, participant?.user?.name, t]);
+  
   return (
     <>
       {isFullScreen ? <VideoItemContent participant={participant} isGalleryView={isGalleryView} /> : 

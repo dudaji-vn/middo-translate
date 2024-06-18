@@ -15,7 +15,7 @@ import VideoItemText from './components/video-item-text';
 import ChangeToGalleryView from './components/change-to-gallery-view';
 import FullScreenButton from './components/full-screen-button';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 interface FocusVideoItemProps {
   participant: ParticipantInVideoCall;
@@ -76,7 +76,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   }
 
   if(!participant) {
-    setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+    setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
     return null;
   };
   return (

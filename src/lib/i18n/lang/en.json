@@ -473,6 +473,10 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "START_CALL": {
+      "TITLE": "Start Call",
+      "DESCRIPTION": "Are you sure you want to start the call?"
+    },
     "ROLE_CHANGE": {
       "TITLE": "Change Role",
       "DESCRIPTION": "Are you sure you want to change the role of <strong>{{name}}</strong> to <strong>{{role}}</strong>?"

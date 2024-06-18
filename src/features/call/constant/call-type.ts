@@ -3,7 +3,10 @@ export const JOIN_TYPE = {
     JOIN_ROOM: 'JOIN_ROOM',
 };
 
+export type CallType = 'GROUP' | 'DIRECT' | 'HELP_DESK';
+
 export const CALL_TYPE = {
     GROUP: 'GROUP',
     DIRECT: 'DIRECT',
+    HELP_DESK: 'HELP_DESK',
 }

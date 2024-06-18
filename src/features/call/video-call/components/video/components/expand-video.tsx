@@ -1,4 +1,4 @@
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
@@ -22,7 +22,7 @@ const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
   
   const expandVideoItem = () => {
     if (!isFullScreen) setFullScreen(true);
-    setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+    setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
     if (participant.isShareScreen) setPinShareScreen(true);
     setPinDoodle(false);
     pinParticipant(participant.socketId, participant.isShareScreen || false);

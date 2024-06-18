@@ -106,7 +106,7 @@ export default function UploadSpaceImage({
                 <Button.Icon
                   color={'default'}
                   size={'xs'}
-                  className="border-[2px] border-primary-100"
+                  className="border-[2px] border-primary-100 dark:border-neutral-800"
                   onClick={() => setOpen(true)}
                   {...uploadBtnProps}
                 >

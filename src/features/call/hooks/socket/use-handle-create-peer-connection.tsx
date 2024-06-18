@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 import { useVideoCallStore } from "../../store/video-call.store";
 import toast from "react-hot-toast";
 import ParticipantInVideoCall, { StatusParticipant } from "../../interfaces/participant";
-import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import { addPeer, createPeer } from "../../utils/peer-action.util";
@@ -90,10 +90,10 @@ export default function useHandleCreatePeerConnection() {
         }
 
         if (payload.isShareScreen) {
-            setLayout(VIDEOCALL_LAYOUTS.SHARE_SCREEN);
+            setLayout(VIDEO_CALL_LAYOUTS.SHARE_SCREEN);
             const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
             if (!isHavePin && !isPinDoodle) {
-                setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+                setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
                 setPinShareScreen(true);
                 newUser.pin = true;
             }

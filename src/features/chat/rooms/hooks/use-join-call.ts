@@ -1,6 +1,6 @@
-import { joinVideoCallRoom } from '@/services/video-call.service';
+import { joinHelpDeskVideoCallRoom, joinVideoCallRoom } from '@/services/video-call.service';
 import { useChatBox } from '../contexts';
-import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { IRoom, useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { STATUS } from '@/features/call/constant/status';
 import toast from 'react-hot-toast';
@@ -15,15 +15,28 @@ import { useParticipantVideoCallStore } from '@/features/call/store/participant.
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 import { StatusParticipant } from '@/features/call/interfaces/participant';
 import customToast from '@/utils/custom-toast';
+import { Room } from '../types';
+import openPopupWindow from '@/utils/open-popup-window';
+import { useBusinessExtensionStore } from '@/stores/extension.store';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
+interface CallResponse {
+  call: IRoom,
+  room: Room;
+  status: string,
+  type: string
+}
 export const useJoinCall = () => {
   const { user } = useAuthStore();
   const { postMessage } = useReactNativePostMessage();
   const { setRoom, room, setTempRoom, tmpRoom, setRequestCall } =
     useVideoCallStore();
+  const {isBusiness} = useBusinessNavigationData();
   const router = useRouter();
   const { t } = useTranslation('common');
   const { room: roomChatBox, updateRoom } = useChatBox();
+
   const addParticipant = useParticipantVideoCallStore(
     (state) => state.addParticipant,
   );
@@ -38,7 +51,10 @@ export const useJoinCall = () => {
   }, [roomChatBox?.participants, updateRoom]);
 
   const startVideoCall = useCallback(
-    async (roomId: string) => {
+    async ({
+      roomId,
+      userId
+    }: { roomId: string, userId?: string}) => {
       postMessage({
         type: 'Trigger',
         data: {
@@ -51,22 +67,38 @@ export const useJoinCall = () => {
         setTempRoom(roomId);
         return;
       }
-      let res = await joinVideoCallRoom({ roomId });
-      const data = res?.data;
+      // if have userId, it's help desk call
+      let res;
+      if(userId) {
+        res = await joinHelpDeskVideoCallRoom({ roomId, userId });
+      } else {
+        res = await joinVideoCallRoom({ roomId });
+      }
+      const data: CallResponse = res?.data;
       if (data.status === STATUS.ROOM_NOT_FOUND) {
         const newRoomId = await createRoomMeeting();
-        startVideoCall(newRoomId);
+        startVideoCall({
+          roomId: newRoomId,
+          userId: userId,
+        });
         return;
       }
       if (data.status !== STATUS.JOIN_SUCCESS) {
         customToast.error(t('MESSAGE.ERROR.JOIN_ROOM'));
         return;
       }
+      if(data.call.type == CALL_TYPE.HELP_DESK && !isBusiness) {
+        const url = `${NEXT_PUBLIC_URL}/help-desk/${roomId}/call/${userId}`;
+        const windowName = data.call._id;
+        openPopupWindow(url, windowName)
+        return;
+      }
       setRequestCall();
       setRoom(data?.call);
       if (
         data.type == JOIN_TYPE.NEW_CALL &&
-        data.call.type === CALL_TYPE.DIRECT
+        data.call.type === CALL_TYPE.DIRECT &&
+        !data.room.isHelpDesk
       ) {
         // Get participants id except me
         const inviteParticipant = data?.room?.participants.filter(
@@ -80,7 +112,7 @@ export const useJoinCall = () => {
         setTimeout(() => {
           addParticipant({
             user: inviteParticipant[0],
-            socketId: inviteParticipant._id,
+            socketId: inviteParticipant[0]._id,
             status: StatusParticipant.WAITING,
           });
         }, 500);

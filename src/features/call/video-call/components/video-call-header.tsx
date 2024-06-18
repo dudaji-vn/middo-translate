@@ -6,6 +6,9 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { useTranslation } from 'react-i18next';
+import useHelpDesk from '../../hooks/use-help-desk';
+import { cn } from '@/utils/cn';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export default function VideoCallHeader() {
   const { t } = useTranslation('common');
@@ -14,6 +17,8 @@ export default function VideoCallHeader() {
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const setFullScreen = useVideoCallStore((state) => state.setFullScreen);
   const setAllowDrag = useVideoCallStore((state) => state.setAllowDrag);
+  const {isHelpDeskCall} = useHelpDesk();
+  const {isBusiness} = useBusinessNavigationData();
   const toggleFullScreen = useCallback(() => {
     setFullScreen(!isFullScreen);
   }, [setFullScreen, isFullScreen]);
@@ -52,6 +57,7 @@ export default function VideoCallHeader() {
             color="default"
             size="xs"
             onClick={toggleFullScreen}
+            className={cn(isHelpDeskCall && !isBusiness && 'hidden')}
           >
             {isFullScreen ? <Minimize2 /> : <Maximize2 />}
           </Button.Icon>

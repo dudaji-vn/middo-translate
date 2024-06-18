@@ -9,7 +9,7 @@ import { useCallback, useEffect } from "react";
 import { createPeer } from "../../utils/peer-action.util";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { MonitorX } from "lucide-react";
-import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
@@ -45,7 +45,7 @@ export default function useHandleShareScreen() {
         }
         if(item?.pin) {
             setShareScreen(false);
-            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+            setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
         }
     }, [participants, removeParticipantShareScreen, setLayout, setShareScreen, t])
 
@@ -117,7 +117,7 @@ export default function useHandleShareScreen() {
         }
         const isPinMyStream = participants.some((p) => p.isShareScreen && p.pin && p.isMe);
         if(isPinMyStream) {
-            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+            setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
         }
         setShareScreen(false);
         removeParticipantShareScreen(socket.id);

@@ -13,7 +13,9 @@ export const ModalSwitchRoom = () => {
     const startVideoCall = useJoinCall();
     const handleSwitch = () => {
         if(!tmpRoom) return;
-        startVideoCall(tmpRoom)
+        startVideoCall({
+            roomId: tmpRoom
+        })
         setTempRoom(null);
     };
 

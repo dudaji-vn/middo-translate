@@ -13,6 +13,7 @@ import { useParticipantVideoCallStore } from '../../../store/participant.store';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useTranslation } from 'react-i18next';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export const ConfirmLeaveRoomModal = () => {
   const {t} = useTranslation('common');
@@ -22,7 +23,7 @@ export const ConfirmLeaveRoomModal = () => {
   const setRoom = useVideoCallStore(state => state.setRoom);
   const participants = useParticipantVideoCallStore(state => state.participants);
   const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
-
+  const { isHelpDesk } = useBusinessNavigationData();
   const { isElectron, ipcRenderer } = useElectron();
   
   const handleLeave = async () => {
@@ -36,6 +37,11 @@ export const ConfirmLeaveRoomModal = () => {
     setRoom();
     if(isElectron) {
       ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
+    }
+
+    // Check if is help desk call => close window
+    if(isHelpDesk) {
+      window.close();
     }
   };
 

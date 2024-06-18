@@ -470,6 +470,10 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "START_CALL": {
+      "TITLE": "Bắt đầu cuộc gọi",
+      "DESCRIPTION": "Bạn có chắc chắn muốn bắt đầu cuộc gọi không?"
+    },
     "ROLE_CHANGE": {
       "TITLE": "Thay đổi vai trò",
       "DESCRIPTION": "Bạn có chắc chắn muốn thay đổi vai trò của <strong>{{name}}</strong> thành <strong>{{role}}</strong> không?"

@@ -127,7 +127,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           <DropdownMenuItem
             className={cn(
               'relative flex w-full flex-row items-center justify-start gap-4 rounded-none bg-none dark:hover:bg-neutral-800',
-              option.isActive ? 'cursor-default !bg-primary-200' : '',
+              option.isActive ? 'cursor-default !bg-primary-200 dark:!bg-primary-900' : '',
             )}
             onClick={() => onChangeSpace(option.href)}
             key={option.href}

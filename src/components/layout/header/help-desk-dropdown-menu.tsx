@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,18 +9,18 @@ import {
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { LSK_FROM_DOMAIN } from '@/types/business.type';
-import { LogOut, Menu, Minus } from 'lucide-react';
+import {  LogOut, Menu } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 const HelpDeskDropdownMenu = () => {
   const { isOnHelpDeskChat } = useBusinessNavigationData();
   const searchParams = useSearchParams();
-
   const params = useParams();
   const userId = params?.slugs?.[1];
   const roomId = params?.slugs?.[0];
   const router = useRouter();
+
   const items = useMemo(() => {
     if (typeof window === 'undefined') return [];
     const fromDomain = localStorage.getItem(LSK_FROM_DOMAIN);
@@ -38,6 +37,7 @@ const HelpDeskDropdownMenu = () => {
       },
     ];
   }, [searchParams, params?.businessId, roomId, router, userId]);
+  
   if (!isOnHelpDeskChat) return null;
   return (
     <DropdownMenu>

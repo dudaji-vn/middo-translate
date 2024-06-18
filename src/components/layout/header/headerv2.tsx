@@ -11,7 +11,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderNav } from './header-nav';
 import HeaderProfile from './header-profile';
-import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 import { HeaderNavMobile } from './header-nav.mobile';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useAppStore } from '@/stores/app.store';

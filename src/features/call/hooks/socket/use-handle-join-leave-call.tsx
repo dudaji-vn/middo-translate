@@ -10,7 +10,7 @@ import { LogOutIcon } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import { useTranslation } from "react-i18next";
-import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { User } from "@/features/users/types";
 import customToast from "@/utils/custom-toast";
 
@@ -42,7 +42,7 @@ export default function useHandleJoinLeaveCall() {
         // Check have pin this user
         const isHavePin = items.some((p: ParticipantInVideoCall) => p.pin);
         if (isHavePin) {
-            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+            setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
         }
         // Remove peer share screen
         const itemShareScreen = peerShareScreen.find(

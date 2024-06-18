@@ -1,4 +1,4 @@
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import React from 'react'
 import GalleryLayout from './gallery-layout';
@@ -11,9 +11,9 @@ export default function VideoCallLayout() {
 
     if (!isFullScreen) return <GalleryLayout />;
     switch (layout) {
-      case VIDEOCALL_LAYOUTS.GALLERY_VIEW:
+      case VIDEO_CALL_LAYOUTS.GALLERY_VIEW:
         return <GalleryLayout />;
-      case VIDEOCALL_LAYOUTS.FOCUS_VIEW:
+      case VIDEO_CALL_LAYOUTS.FOCUS_VIEW:
         return <FocusScreenLayout />;
       default:
         return <GalleryLayout />;
