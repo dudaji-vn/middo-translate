@@ -68,12 +68,10 @@ const InviteMemberModal = ({
         onClick={() => setOpen(true)}
         shape={'square'}
         size={'sm'}
-        className="flex flex-row gap-2 md:py-2  [&_svg]:size-4"
+        startIcon={<UserRoundPlus />}
+        className="flex w-full flex-row gap-2 md:w-fit md:py-2  [&_svg]:size-4"
       >
-        <UserRoundPlus />
-        <span className="max-sm:hidden">
-          {t('EXTENSION.MEMBER.INVITE_MEMBER')}
-        </span>
+        {t('EXTENSION.MEMBER.INVITE_MEMBER')}
       </Button>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="flex h-fit  max-h-[80vh] min-h-fit max-w-screen-md flex-col justify-start overflow-y-auto">

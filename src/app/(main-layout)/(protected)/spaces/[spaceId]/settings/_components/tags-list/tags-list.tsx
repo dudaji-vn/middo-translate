@@ -137,8 +137,8 @@ const TagsList = ({
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
-      <div className="flex w-full flex-row items-center justify-between gap-5 px-10">
-        <div className="relative w-60 md:w-96">
+      <div className="flex w-full flex-col items-center justify-between gap-2 px-10 md:flex-row md:gap-5">
+        <div className="relative w-full md:max-w-96">
           <SearchInput
             className="flex-1"
             onChange={(e) => onSearchChange(e.target.value)}
@@ -154,15 +154,19 @@ const TagsList = ({
               modalType: TagModalType.CREATE_OR_EDIT,
             })
           }
+          startIcon={<Plus />}
           shape={'square'}
           size={'sm'}
-          className={cn('flex flex-row gap-2 [&_svg]:size-4 md:py-2', {
-            hidden: !roles.edit.find((role) => role === myRole),
-          })}
+          className={cn(
+            'flex flex-row gap-2 md:py-2 [&_svg]:size-4',
+            'max-md:w-full',
+            {
+              hidden: !roles.edit.find((role) => role === myRole),
+            },
+          )}
           disabled={!roles.edit.find((role) => role === myRole)}
         >
-          <Plus />
-          <span className="max-sm:hidden">{t('EXTENSION.TAG.CREATE')}</span>
+          {t('EXTENSION.TAG.CREATE')}
         </Button>
       </div>
       <div className="w-full overflow-x-auto p-0">
