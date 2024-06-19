@@ -159,7 +159,7 @@ const SpaceSetting = ({
       >
         <Tabs defaultValue={defaultTab} className="m-0 w-full p-0">
           <div className="w-full overflow-x-auto bg-white transition-all duration-300 dark:bg-background">
-            <TabsList className="flex w-full  flex-row justify-between sm:px-10 md:justify-start">
+            <TabsList className="flex w-full  flex-row justify-between px-3 md:justify-start md:px-10">
               {SPACE_SETTING_TAB_ROLES.map((item) => {
                 const isActive = item.name === selectedTab;
                 return (
@@ -170,8 +170,8 @@ const SpaceSetting = ({
                       setSelectedTab(String(item?.name) as ESettingTabs)
                     }
                     className={cn(
-                      'w-fit dark:text-neutral-200 max-md:flex-1 lg:px-10',
-                      'flex flex-row items-center gap-2 [&_svg]:size-4',
+                      'w-fit font-semibold text-neutral-800 dark:text-neutral-200 max-md:flex-1 lg:px-10',
+                      'flex flex-row items-center gap-2 transition-all duration-300 [&_svg]:size-4',
                       {
                         hidden:
                           !currentUserRole ||
@@ -181,10 +181,16 @@ const SpaceSetting = ({
                       },
                     )}
                   >
-                    {item.icon}
                     <span
                       className={cn({
-                        hidden: !isActive,
+                        'max-md:invisible max-md:w-0': isActive,
+                      })}
+                    >
+                      {item.icon}
+                    </span>
+                    <span
+                      className={cn({
+                        'max-md:invisible max-md:w-0': !isActive,
                       })}
                     >
                       {t(item.label)}
