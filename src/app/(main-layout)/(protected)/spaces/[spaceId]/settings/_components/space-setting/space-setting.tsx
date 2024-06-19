@@ -33,6 +33,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from './setting-items';
 import { getUserSpaceRole } from './role.util';
 import { useTranslation } from 'react-i18next';
+import SettingsHeader from '../header/settings-header';
 
 export enum ESettingTabs {
   'MEMBERS' = 'members',
@@ -231,7 +232,7 @@ const SpaceSetting = ({
           <TabsContent
             value={ESettingTabs.EXTENSION}
             className={cn(
-              'flex w-full flex-col items-center justify-center p-10',
+              'flex w-full flex-col items-center justify-center p-3 md:p-10',
               {
                 hidden:
                   !currentUserRole ||
