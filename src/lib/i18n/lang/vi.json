@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "Màu",
     "INVITE": "Mời",
     "APPLY": "Áp dụng",
     "PREVIEW": "Xem trước",
@@ -688,6 +689,7 @@
       "HOME": "Trang chủ"
     },
     "TAG": {
+      "NAME": "Tên",
       "SEARCH": "Tìm kiếm thẻ",
       "CREATE": "Tạo thẻ mới",
       "EDIT": "Chỉnh sửa thẻ",

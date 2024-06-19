@@ -1,16 +1,7 @@
 import React, { useMemo } from 'react';
 import { Typography } from '@/components/data-display';
-import {
-  Circle,
-  Grip,
-  GripVertical,
-  Pen,
-  Plus,
-  Search,
-  Trash2,
-} from 'lucide-react';
+import { Circle, GripVertical, Pen, Plus, Trash2 } from 'lucide-react';
 
-import TableSearch from '../../../clients/clients-table/table-search';
 import { Button } from '@/components/actions';
 import { TConversationTag } from '../../../_components/business-spaces';
 import { cn } from '@/utils/cn';
@@ -44,12 +35,13 @@ const TagItem = ({
   deleteAble,
   ...props
 }: TagItemProps) => {
+  const { t } = useTranslation('common');
   return (
     <div
-      className="flex w-full flex-row items-center justify-between gap-10 bg-primary-100 p-[8px_40px] dark:bg-neutral-900"
+      className="flex h-fit w-full flex-row items-center justify-between gap-2  pr-3 md:pr-10"
       {...props}
     >
-      <div className="flex w-full flex-row items-center justify-start  gap-10">
+      <div className="!w-fit bg-white p-1  dark:bg-background">
         <Button.Icon
           size={'xs'}
           shape={'square'}
@@ -58,40 +50,42 @@ const TagItem = ({
         >
           <GripVertical className="fill-neutral-500 stroke-neutral-500" />
         </Button.Icon>
+      </div>
+      <div className="flex  w-full flex-row items-center justify-start gap-6 rounded-[12px] bg-primary-100 px-6 py-2 dark:bg-neutral-900 md:gap-16">
         <Circle
           size={16}
           className="text-neutral-500"
           stroke={color}
           fill={color}
         />
-        <Typography className="text-base capitalize text-neutral-800 dark:text-neutral-50">
+        <Typography className="line-clamp-1 max-w-full text-ellipsis text-base capitalize text-neutral-800 dark:text-neutral-50">
           {name}
         </Typography>
-      </div>
-      <div
-        className={cn(
-          'flex min-w-10 flex-row items-center justify-end gap-2 px-4',
-          { invisible: isReadonly },
-        )}
-      >
-        <Button.Icon
-          size={'xs'}
-          className={editAble ? '' : 'invisible'}
-          disabled={!editAble}
-          color={'default'}
-          onClick={onEdit}
+        <div
+          className={cn(
+            'flex min-w-fit grow flex-row items-center justify-end gap-2 px-2',
+            { invisible: isReadonly },
+          )}
         >
-          <Pen />
-        </Button.Icon>
-        <Button.Icon
-          size={'xs'}
-          className={deleteAble ? '' : 'invisible'}
-          disabled={!deleteAble}
-          color={'default'}
-          onClick={onDelete}
-        >
-          <Trash2 className="text-error" />
-        </Button.Icon>
+          <Button.Icon
+            size={'xs'}
+            className={editAble ? '' : 'invisible'}
+            disabled={!editAble}
+            color={'default'}
+            onClick={onEdit}
+          >
+            <Pen />
+          </Button.Icon>
+          <Button.Icon
+            size={'xs'}
+            className={deleteAble ? '' : 'invisible'}
+            disabled={!deleteAble}
+            color={'default'}
+            onClick={onDelete}
+          >
+            <Trash2 className="text-error" />
+          </Button.Icon>
+        </div>
       </div>
     </div>
   );
@@ -137,7 +131,7 @@ const TagsList = ({
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
-      <div className="flex w-full flex-col items-center justify-between gap-2 px-3 md:px-10 md:flex-row md:gap-5">
+      <div className="flex w-full flex-col items-center justify-between gap-2 px-3 md:flex-row md:gap-5 md:px-10">
         <div className="relative w-full md:max-w-96">
           <SearchInput
             className="flex-1"
@@ -169,8 +163,25 @@ const TagsList = ({
           {t('EXTENSION.TAG.CREATE')}
         </Button>
       </div>
-      <div className="w-full overflow-x-auto p-0">
-        <div className="flex w-full flex-col gap-2">
+      <div className="w-full overflow-x-auto ">
+        <div className="flex w-full flex-col gap-1">
+          <div
+            className={cn(
+              'flex w-full flex-row items-center justify-start gap-2 py-2 pl-6 md:gap-8 md:pl-2',
+            )}
+          >
+            <GripVertical className="invisible" />
+            <div className="flex h-auto w-fit flex-row items-center justify-start break-words px-3 ">
+              <Typography className="text-sm  font-light text-neutral-800 dark:text-neutral-50">
+                {t('COMMON.COLOR')}
+              </Typography>
+            </div>
+            <div className="flex h-auto w-fit flex-row items-center justify-start break-words px-3 ">
+              <Typography className="text-sm  font-light text-neutral-800 dark:text-neutral-50">
+                {t('EXTENSION.TAG.NAME')}
+              </Typography>
+            </div>
+          </div>
           <p
             className={cn(
               'w-full py-1 text-center text-sm font-light italic text-neutral-500',

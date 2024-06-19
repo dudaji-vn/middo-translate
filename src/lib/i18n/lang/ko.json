@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "색상",
     "INVITE": "초대",
     "APPLY": "적용",
     "PREVIEW": "미리보기",
@@ -687,6 +688,7 @@
       "HOME": "홈"
     },
     "TAG": {
+      "NAME": "태그 이름",
       "SEARCH": "태그 검색",
       "CREATE": "새로운 태그 만들기",
       "EDIT": "태그 수정",

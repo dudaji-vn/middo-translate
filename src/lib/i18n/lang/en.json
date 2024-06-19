@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "Color",
     "INVITE": "Invite",
     "APPLY": "Apply",
     "PREVIEW": "Preview",
@@ -695,6 +696,7 @@
       "HOME": "Home"
     },
     "TAG": {
+      "NAME": "Name",
       "SEARCH": "Search for tags",
       "CREATE": "Create new tag",
       "EDIT": "Edit tag",
