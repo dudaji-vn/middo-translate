@@ -174,6 +174,7 @@ export const MessageItemWrapper = ({
               message?.media?.[0].type === 'document'
             )
               return true;
+            return false;
           case 'edit':
             const timeDiff = moment().diff(message.createdAt);
             return (

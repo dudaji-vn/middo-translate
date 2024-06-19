@@ -28,17 +28,17 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
       isRefreshing = false,
       ...props
     },
-    // ref,
+    ref,
   ) => {
-    const ref = useRef<HTMLDivElement>(null);
+    // const ref = useRef<HTMLDivElement>(null);
     const { isIntersecting, ref: triggerRef } = useIntersectionObserver({
       threshold: 1,
     });
-    usePullToRefresh({
-      ref: ref,
-      onRefresh,
-      disable: !pullToRefresh,
-    });
+    // usePullToRefresh({
+    //   ref: ref,
+    //   onRefresh,
+    //   disable: !pullToRefresh,
+    // });
 
     useEffect(() => {
       if (isIntersecting && hasMore) {
@@ -107,8 +107,7 @@ const IndicatorAnimation = ({
   const rotate = useTransform(x, [0, 300], [0, 360]);
   return (
     <div className="absolute left-0 right-0 z-50 flex w-full justify-center">
-      {isRefreshing ? //     'absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary', //   className={cn( // <div
-      //   )}
+      {isRefreshing ? //   )} //     'absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary', //   className={cn( // <div
       // >
       //   <Spinner size="sm" />
       // </div>
