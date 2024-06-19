@@ -17,7 +17,7 @@ import { cn } from '@/utils/cn';
 import { VariantProps } from 'class-variance-authority';
 import { useDisplayContent } from '../../hooks/use-display-content';
 import { Message } from '../../types';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, m, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
@@ -34,6 +34,7 @@ export const Content = ({
   showDetails,
   isEditing,
 }: ContentProps) => {
+  const { isOnHelpDeskChat } = useBusinessNavigationData();
   const { userLanguage, currentUserId } = useAuthStore((state) => ({
     userLanguage: state.user?.language,
     currentUserId: state.user?._id,
@@ -43,12 +44,20 @@ export const Content = ({
     (state) => state.showMiddleTranslation,
   );
   const isMe = message.sender._id === currentUserId;
+  const isMeTheAnonymous =
+    message.senderType === 'anonymous' && isOnHelpDeskChat;
+
   const enContent = message.translations?.en;
+
   const showEnContent = useMemo(() => {
     if (!enContent) return false;
     if (message.status === 'removed') return false;
     if (!showMiddleTranslation && !showDetails) return false;
-    if (message.language === DEFAULT_LANGUAGES_CODE.EN && isMe) return false;
+    if (
+      message.language === DEFAULT_LANGUAGES_CODE.EN &&
+      (isMe || isMeTheAnonymous)
+    )
+      return false;
     return true;
   }, [
     enContent,
@@ -57,6 +66,7 @@ export const Content = ({
     message.status,
     showDetails,
     showMiddleTranslation,
+    isMeTheAnonymous,
   ]);
   const { isHelpDesk } = useBusinessNavigationData();
   const { room } = useBusinessExtensionStore();
@@ -71,7 +81,9 @@ export const Content = ({
     message,
     userLanguage: receiverLanguage,
   });
-
+  if (showEnContent) {
+    console.log('ENG::>', enContent, message);
+  }
   return (
     <AnimatePresence mode="sync">
       <div
@@ -126,7 +138,9 @@ export const Content = ({
               )}
               pathProps={{
                 className:
-                  position === 'right' ? 'fill-primary-400' : 'fill-[#e6e6e6] dark:fill-neutral-800',
+                  position === 'right'
+                    ? 'fill-primary-400'
+                    : 'fill-[#e6e6e6] dark:fill-neutral-800',
               }}
             />
             <div
