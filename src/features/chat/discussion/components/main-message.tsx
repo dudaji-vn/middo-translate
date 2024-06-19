@@ -137,10 +137,9 @@ const CallMessage = ({ message }: { message: Message }) => {
         content: t('CONVERSATION.CALL_END_AT', {
           time: moment(call.endTime).format('HH:mm'),
         }),
-        subContent: convertToTimeReadable(
-          call.createdAt as string,
-          call.endTime,
-        ),
+        subContent:
+          convertToTimeReadable(call.startTime || call.endTime, call.endTime) ||
+          '0s',
         icon: (
           <PhoneIcon className="mr-2 inline-block h-4 w-4 rotate-[135deg]" />
         ),
@@ -150,7 +149,7 @@ const CallMessage = ({ message }: { message: Message }) => {
       content: t('CONVERSATION.STARTED_CALL'),
       icon: <PhoneCallIcon className="mr-2 inline-block h-4 w-4" />,
     };
-  }, [call?.createdAt, call?.endTime, t]);
+  }, [call?.endTime, call?.startTime, t]);
   return (
     <div className="pl-6">
       <div>
