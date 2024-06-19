@@ -20,6 +20,7 @@ import openPopupWindow from '@/utils/open-popup-window';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 
 interface CallResponse {
   call: IRoom,
@@ -33,6 +34,7 @@ export const useJoinCall = () => {
   const { setRoom, room, setTempRoom, tmpRoom, setRequestCall } =
     useVideoCallStore();
   const {isBusiness} = useBusinessNavigationData();
+  const setLayout = useVideoCallStore((state) => state.setLayout);
   const router = useRouter();
   const { t } = useTranslation('common');
   const { room: roomChatBox, updateRoom } = useChatBox();
@@ -92,6 +94,9 @@ export const useJoinCall = () => {
         const windowName = data.call._id;
         openPopupWindow(url, windowName)
         return;
+      }
+      if(isBusiness) {
+        setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW)
       }
       setRequestCall();
       setRoom(data?.call);

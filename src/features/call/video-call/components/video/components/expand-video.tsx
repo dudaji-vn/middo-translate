@@ -16,13 +16,14 @@ const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const setFullScreen = useVideoCallStore(state => state.setFullScreen);
   const setLayout = useVideoCallStore(state => state.setLayout);
+  const layout = useVideoCallStore(state => state.layout);
   const setPinShareScreen = useVideoCallStore(state => state.setPinShareScreen);
   const setPinDoodle = useVideoCallStore(state => state.setPinDoodle);
   const pinParticipant = useParticipantVideoCallStore(state => state.pinParticipant);
   
   const expandVideoItem = () => {
     if (!isFullScreen) setFullScreen(true);
-    setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
+    if(layout === VIDEO_CALL_LAYOUTS.GALLERY_VIEW) setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
     if (participant.isShareScreen) setPinShareScreen(true);
     setPinDoodle(false);
     pinParticipant(participant.socketId, participant.isShareScreen || false);

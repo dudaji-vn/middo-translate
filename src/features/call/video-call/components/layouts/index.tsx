@@ -3,6 +3,7 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import React from 'react'
 import GalleryLayout from './gallery-layout';
 import FocusScreenLayout from './focus-screen-layout';
+import P2PLayout from './p2p-layout';
 
 export default function VideoCallLayout() {
   
@@ -15,6 +16,8 @@ export default function VideoCallLayout() {
         return <GalleryLayout />;
       case VIDEO_CALL_LAYOUTS.FOCUS_VIEW:
         return <FocusScreenLayout />;
+      case VIDEO_CALL_LAYOUTS.P2P_VIEW:
+        return <P2PLayout />
       default:
         return <GalleryLayout />;
     }

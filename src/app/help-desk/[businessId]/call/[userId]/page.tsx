@@ -6,6 +6,7 @@ import { VIDEO_CALL_LAYOUTS } from "@/features/call/constant/layout";
 import { STATUS } from "@/features/call/constant/status";
 import { useVideoCallStore } from "@/features/call/store/video-call.store";
 import VideoCall from "@/features/call/video-call";
+import { useChatStore } from "@/features/chat/stores";
 import socket from "@/lib/socket-io";
 import { getHelpDeskCallInformation } from "@/services/video-call.service";
 import { useAppStore } from "@/stores/app.store";
@@ -25,19 +26,22 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
   const setLayout = useVideoCallStore(state => state.setLayout);
   const setData = useAuthStore(state => state.setData);
   const socketConnected = useAppStore((state) => state.socketConnected);
-  
   useEffect(()=>{
     const { userId, businessId } = params;
     const fetchCall = async () => {
-      let res = await getHelpDeskCallInformation(businessId, userId);
-      const {call, status, user} = res.data;
-      if(status === STATUS.MEETING_STARTED) {
-        setRoom(call)
-        setData({
-          user: user
-        });
-        setFullScreen(true);
-        setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW)
+      try {
+        let res = await getHelpDeskCallInformation(businessId, userId);
+        const {call, status, user} = res.data;
+        if(status === STATUS.MEETING_STARTED) {
+          setRoom(call)
+          setData({
+            user: user
+          });
+          setFullScreen(true);
+          setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW)
+        }
+      } catch (error) {
+        window.close();
       }
     }
     fetchCall();

@@ -33,22 +33,21 @@ export default function useHandleCreatePeerConnection() {
     const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
     
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
-    const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: { id: string; user: User }[], doodleImage: string}) => {
+    const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: { socketId: string; user: User }[], doodleImage: string}) => {
         if(!socket.id) return;
         if(users.length === 0) {
             setLoadingVideo(false);
             setLoadingStream(false);
         }
         // Loop and create peer connection for each user
-        users.forEach((user: { id: string; user: User }) => {
-            if (user.id === socket.id) return;
+        users.forEach((user: { socketId: string; user: User }) => {
+            if (user.socketId === socket.id) return;
             const peer = createPeer(myStream);
             addParticipant({
                 peer,
                 user: user.user,
-                socketId: user.id,
+                socketId: user.socketId,
                 isShareScreen: false,
-
             });
         });
         

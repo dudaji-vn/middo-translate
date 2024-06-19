@@ -3,6 +3,7 @@
 import { Button } from "@/components/actions";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/feedback";
 import { useJoinCall } from "@/features/chat/rooms/hooks/use-join-call";
+import { useChatStore } from "@/features/chat/stores";
 import { useBusinessNavigationData } from "@/hooks/use-business-navigation-data";
 import customToast from "@/utils/custom-toast";
 import { HeadsetIcon } from "lucide-react";
@@ -14,6 +15,7 @@ const HelpDeskCallButton = () => {
     const {t} = useTranslation('common');
     const { isOnHelpDeskChat } = useBusinessNavigationData();
     const { value, setTrue, setValue, setFalse } = useBoolean(false);
+    const meetingList = useChatStore(state => state.meetingList)
     const startVideoCall = useJoinCall();
     const params = useParams();
     const userId = params?.slugs?.[1];
@@ -27,8 +29,13 @@ const HelpDeskCallButton = () => {
             userId,
         })
     }
-
+    
     const checkToShowModalStartCall = () => {
+        let meeting = meetingList[roomId || ''];
+        if(meeting && meeting.participantsIdJoined.includes(userId || '')) {
+            customToast.error('You are already in the call');
+            return;
+        }
         setTrue();
     }
     if(!isOnHelpDeskChat) return;

@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
+export type Meeting = Record<string, {
+  participantsIdJoined: string[],
+}>
 export type ChatState = {
   showTranslateOnType: boolean;
   toggleShowTranslateOnType: () => void;
@@ -14,8 +16,9 @@ export type ChatState = {
   setDetLang: (lang: string) => void;
   onlineList: string[];
   setOnlineList: (list: string[]) => void;
-  meetingList: string[];
-  setMeetingList: (list: string[]) => void;
+  meetingList: Meeting;
+  updateMeetingList: (list: Meeting) => void;
+  deleteMeeting: (roomId: string) => void;
   sendOnSave: boolean;
   toggleSendOnSave: () => void;
 };
@@ -39,8 +42,16 @@ export const useChatStore = create<ChatState>()(
       setDetLang: (lang) => set(() => ({ detLang: lang })),
       onlineList: [],
       setOnlineList: (list) => set(() => ({ onlineList: list })),
-      meetingList: [],
-      setMeetingList: (list) => set(() => ({ meetingList: list })),
+      meetingList: {},
+      updateMeetingList: (list: Meeting) => set((state) => ({ meetingList: {
+        ...state.meetingList,
+        ...list,
+      } })),
+      deleteMeeting: (roomId: string) => set((state) => {
+        const newMeetingList = { ...state.meetingList };
+        delete newMeetingList[roomId];
+        return { meetingList: newMeetingList };
+      }),
       sendOnSave: false,
       toggleSendOnSave: () =>
         set((state) => ({ sendOnSave: !state.sendOnSave })),
