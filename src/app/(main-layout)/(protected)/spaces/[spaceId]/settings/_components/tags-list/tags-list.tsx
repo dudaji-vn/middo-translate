@@ -46,7 +46,7 @@ const TagItem = ({
 }: TagItemProps) => {
   return (
     <div
-      className="flex w-full flex-row items-center justify-between gap-10 bg-primary-100 dark:bg-neutral-900 p-[8px_40px]"
+      className="flex w-full flex-row items-center justify-between gap-10 bg-primary-100 p-[8px_40px] dark:bg-neutral-900"
       {...props}
     >
       <div className="flex w-full flex-row items-center justify-start  gap-10">
@@ -155,14 +155,14 @@ const TagsList = ({
             })
           }
           shape={'square'}
-          size={'xs'}
-          className={cn('', {
+          size={'sm'}
+          className={cn('flex flex-row gap-2 [&_svg]:size-4 md:py-2', {
             hidden: !roles.edit.find((role) => role === myRole),
           })}
           disabled={!roles.edit.find((role) => role === myRole)}
-          startIcon={<Plus />}
         >
-          {t('EXTENSION.TAG.CREATE')}
+          <Plus />
+          <span className="max-sm:hidden">{t('EXTENSION.TAG.CREATE')}</span>
         </Button>
       </div>
       <div className="w-full overflow-x-auto p-0">

@@ -85,6 +85,8 @@ const SpaceSetting = ({
   const searchParams = useSearchParams();
   const params = useParams();
   const { t } = useTranslation('common');
+  const [selectedTab, setSelectedTab] =
+    React.useState<ESettingTabs>(defaultTab);
   const currentUser = useAuthStore((state) => state.user);
   const currentUserRole = getUserSpaceRole(currentUser, space);
   const modalType: ExtensionModalType = searchParams?.get(
@@ -117,11 +119,13 @@ const SpaceSetting = ({
     <>
       <section
         className={
-          modalType ? 'hidden' : 'h-fit w-full bg-white dark:bg-background px-3 py-5 md:px-10'
+          modalType
+            ? 'hidden'
+            : 'h-fit w-full bg-white px-3 py-5 dark:bg-background md:px-10'
         }
       >
         <Form {...formEditSpace}>
-          <div className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 dark:bg-neutral-900 p-3">
+          <div className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 p-3 dark:bg-neutral-900">
             <div
               className={cn(
                 'flex w-full flex-row items-center gap-3',
@@ -147,26 +151,44 @@ const SpaceSetting = ({
         </Form>
       </section>
       <section
-        className={modalType ? 'hidden' : 'w-full items-center bg-white dark:bg-background'}
+        className={
+          modalType
+            ? 'hidden'
+            : 'w-full items-center bg-white dark:bg-background'
+        }
       >
         <Tabs defaultValue={defaultTab} className="m-0 w-full p-0">
-          <div className="w-full overflow-x-auto bg-white dark:bg-background transition-all duration-300">
-            <TabsList className="flex w-full  flex-row justify-start sm:px-10">
+          <div className="w-full overflow-x-auto bg-white transition-all duration-300 dark:bg-background">
+            <TabsList className="flex w-full  flex-row justify-between sm:px-10 md:justify-start">
               {SPACE_SETTING_TAB_ROLES.map((item) => {
+                const isActive = item.name === selectedTab;
                 return (
                   <TabsTrigger
                     key={item.label}
                     value={item.name}
-                    className={cn('w-fit lg:px-10 dark:text-neutral-200', {
-                      hidden:
-                        !currentUserRole ||
-                        !item.roles.view.find(
-                          (role) => role === currentUserRole,
-                        ),
-                    })}
-
+                    onClick={() =>
+                      setSelectedTab(String(item?.name) as ESettingTabs)
+                    }
+                    className={cn(
+                      'w-fit dark:text-neutral-200 max-md:flex-1 lg:px-10',
+                      'flex flex-row items-center gap-2 [&_svg]:size-4',
+                      {
+                        hidden:
+                          !currentUserRole ||
+                          !item.roles.view.find(
+                            (role) => role === currentUserRole,
+                          ),
+                      },
+                    )}
                   >
-                    {t(item.label)}
+                    {item.icon}
+                    <span
+                      className={cn({
+                        hidden: !isActive,
+                      })}
+                    >
+                      {t(item.label)}
+                    </span>
                   </TabsTrigger>
                 );
               })}
@@ -182,7 +204,7 @@ const SpaceSetting = ({
                 )?.roles.view.find((role) => role === currentUserRole),
             })}
           >
-            <MembersList  />
+            <MembersList />
           </TabsContent>
           <TabsContent
             value={ESettingTabs.TAGS}

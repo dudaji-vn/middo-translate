@@ -1,3 +1,5 @@
+import { Blocks, Tag, UsersRound } from 'lucide-react';
+
 export enum ESPaceRoles {
   Owner = 'owner',
   Admin = 'admin',
@@ -23,11 +25,13 @@ export const MANAGE_SPACE_ROLES: Record<
 export const SPACE_SETTING_TAB_ROLES: Array<{
   label: string;
   name: string;
+  icon: React.ReactNode;
   roles: Record<ERoleActions, Array<ESPaceRoles>>;
 }> = [
   {
     label: 'EXTENSION.SETTING.MEMBERS_MANAGEMENT',
     name: 'members',
+    icon: <UsersRound />,
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -37,6 +41,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
   {
     label: 'EXTENSION.SETTING.TAGS_MANAGEMENT',
     name: 'tags',
+    icon: <Tag />,
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -46,6 +51,7 @@ export const SPACE_SETTING_TAB_ROLES: Array<{
   {
     label: 'EXTENSION.SETTING.CONVERSATION_EXTENSION',
     name: 'extension',
+    icon: <Blocks />,
     roles: {
       view: [ESPaceRoles.Owner, ESPaceRoles.Admin],
       edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],

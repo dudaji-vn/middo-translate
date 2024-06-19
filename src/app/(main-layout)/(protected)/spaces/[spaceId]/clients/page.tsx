@@ -96,7 +96,7 @@ const Page = ({
   }));
   return (
     <section className="relative w-full ">
-      <div className="flex  flex-col justify-center gap-4  px-1 py-3 font-medium md:flex-row md:items-center  md:px-10">
+      <div className="flex  flex-col justify-between gap-4  px-1 py-3 font-medium md:flex-row md:items-center  md:px-10">
         <div className="flex flex-row items-center justify-start">
           <Button.Icon
             onClick={() => setOpenSidebar(!openSidebar, true)}
@@ -111,8 +111,8 @@ const Page = ({
             {t(`EXTENSION.CLIENT.PAGE_TITLE`)}
           </Typography>
         </div>
-        <em className="max-md:hidden md:w-1/6 xl:w-1/5" />
-        <div className="flex grow gap-4 px-2">
+
+        <div className="flex w-full flex-col gap-2  px-2 md:max-w-[60%] md:grow md:flex-row md:gap-4 xl:max-w-[50%]">
           <div className="h-12 grow">
             <SearchInput
               className="w-full"
@@ -121,7 +121,7 @@ const Page = ({
               placeholder={t('EXTENSION.CLIENT.SEARCH')}
             />
           </div>
-          <div className="h-fit w-fit flex-none ">
+          <div className="h-fit w-full md:w-fit md:flex-none ">
             <DownloadButton
               data={exportData}
               colInfo={[
@@ -135,7 +135,7 @@ const Page = ({
           </div>
         </div>
       </div>
-      <div className="max-h-[calc(100vh-250px)]  w-full overflow-x-auto  overflow-y-scroll rounded-md px-2 py-3  md:px-10">
+      <div className="max-h-[calc(100dvh-300px)]  w-full  overflow-x-auto  rounded-md  px-2 py-3 md:max-h-[calc(100dvh-200px)] md:px-10">
         <DataTable
           dividerRow
           columns={makeClientsColumns(t)}
@@ -155,7 +155,7 @@ const Page = ({
           loading={isLoading}
           skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}
           bodyProps={{
-            className: ' max-md:overflow-auto ',
+            className: ' ',
           }}
         />
       </div>
