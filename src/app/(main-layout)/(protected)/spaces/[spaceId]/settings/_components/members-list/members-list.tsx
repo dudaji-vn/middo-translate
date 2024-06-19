@@ -354,7 +354,7 @@ const MembersList = () => {
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
-      <div className="flex w-full flex-col items-center justify-between gap-2 px-10 md:flex-row md:gap-5">
+      <div className="flex w-full flex-col items-center justify-between gap-2 px-3 md:flex-row  md:gap-5 md:px-10">
         <div className="relative w-full md:max-w-96">
           <SearchInput
             className="flex-1"
