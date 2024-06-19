@@ -158,8 +158,8 @@ const SpaceSetting = ({
         }
       >
         <Tabs defaultValue={defaultTab} className="m-0 w-full p-0">
-          <div className="w-full overflow-x-auto bg-white transition-all duration-300 dark:bg-background">
-            <TabsList className="flex w-full  flex-row justify-between px-3 md:justify-start md:px-10">
+          <div className="w-full bg-white px-3 transition-all duration-300  dark:bg-background md:px-10">
+            <TabsList className="flex w-full  flex-row justify-between md:justify-start ">
               {SPACE_SETTING_TAB_ROLES.map((item) => {
                 const isActive = item.name === selectedTab;
                 return (
