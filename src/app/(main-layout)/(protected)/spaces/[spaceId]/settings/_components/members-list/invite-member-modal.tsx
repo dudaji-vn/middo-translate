@@ -67,8 +67,9 @@ const InviteMemberModal = ({
       <Button
         onClick={() => setOpen(true)}
         shape={'square'}
-        size={'xs'}
+        size={'sm'}
         startIcon={<UserRoundPlus />}
+        className="flex w-full flex-row gap-2 md:w-fit md:py-2  [&_svg]:size-4"
       >
         {t('EXTENSION.MEMBER.INVITE_MEMBER')}
       </Button>

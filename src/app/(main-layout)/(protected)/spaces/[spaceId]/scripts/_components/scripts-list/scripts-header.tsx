@@ -29,7 +29,7 @@ const ScriptsHeader = ({
   const { setOpenSidebar, openSidebar } = useSidebarStore();
   return (
     <div
-      className="flex  flex-col justify-center gap-4 px-1 py-3 font-medium md:flex-row md:items-center md:px-10"
+      className="flex  flex-col justify-between gap-4 px-1 py-3 font-medium md:flex-row md:items-center md:px-10"
       {...props}
     >
       <div className="flex flex-row items-center justify-start" {...menuProps}>
@@ -49,30 +49,27 @@ const ScriptsHeader = ({
           {t(`EXTENSION.SCRIPT.PAGE_TITLE`)}
         </Typography>
       </div>
-      <div className="flex grow justify-end gap-4 max-md:px-2">
-        <div className={cn('h-12 max-w-xl grow')}>
+      <div className="flex w-full flex-col gap-2 px-2 md:max-w-[60%] md:grow md:flex-row md:gap-4 xl:max-w-[50%]">
+        <div className="h-12 grow">
           <SearchInput
-            className="w-full"
             onChange={(e) => onSearchChange(e.target.value)}
             onClear={() => onSearchChange('')}
             placeholder={t('EXTENSION.SCRIPT.SEARCH')}
           />
         </div>
         <div
-          className={cn('h-fit w-fit flex-none ', {
+          className={cn('h-fit w-full md:w-fit md:flex-none ', {
             hidden: !allowedRoles.edit.includes(myRole as ESPaceRoles),
           })}
         >
           <Button
-            className=" min-w-fit max-md:h-12 max-md:w-16"
+            className=" w-full min-w-fit max-md:h-12 "
             shape={'square'}
             size="md"
             startIcon={<Plus />}
             onClick={() => onCreateClick()}
           >
-            <span className="max-md:hidden">
-              {t('EXTENSION.SCRIPT.ADD_SCRIPT')}
-            </span>
+            {t('EXTENSION.SCRIPT.ADD_SCRIPT')}
           </Button>
         </div>
       </div>

@@ -61,7 +61,10 @@ const SkeletonRow: React.FC<SkeletonRowProps> = ({
           </TableCell>
         ))}
       </TableRow>
-      <div key={Date.now()} className="h-2 w-full bg-white dark:bg-background" />
+      <div
+        key={Date.now()}
+        className="h-2 w-full bg-white dark:bg-background"
+      />
     </>
   );
 };

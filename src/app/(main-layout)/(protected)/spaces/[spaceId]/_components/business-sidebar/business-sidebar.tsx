@@ -100,7 +100,7 @@ const BusinessSidebarContent = ({
                   hidden: roles && !roles.includes(myRole),
                 },
                 {
-                  'max-md:hidden': title === 'settings',
+                  // 'max-md:hidden': title === 'settings',
                 },
                 isSelected
                   ? 'bg-primary-500-main hover:!bg-primary-500-main dark:bg-primary [&_svg]:stroke-white'

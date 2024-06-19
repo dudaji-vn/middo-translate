@@ -46,7 +46,7 @@ const TagItem = ({
 }: TagItemProps) => {
   return (
     <div
-      className="flex w-full flex-row items-center justify-between gap-10 bg-primary-100 dark:bg-neutral-900 p-[8px_40px]"
+      className="flex w-full flex-row items-center justify-between gap-10 bg-primary-100 p-[8px_40px] dark:bg-neutral-900"
       {...props}
     >
       <div className="flex w-full flex-row items-center justify-start  gap-10">
@@ -137,8 +137,8 @@ const TagsList = ({
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
-      <div className="flex w-full flex-row items-center justify-between gap-5 px-10">
-        <div className="relative w-60 md:w-96">
+      <div className="flex w-full flex-col items-center justify-between gap-2 px-3 md:px-10 md:flex-row md:gap-5">
+        <div className="relative w-full md:max-w-96">
           <SearchInput
             className="flex-1"
             onChange={(e) => onSearchChange(e.target.value)}
@@ -154,13 +154,17 @@ const TagsList = ({
               modalType: TagModalType.CREATE_OR_EDIT,
             })
           }
-          shape={'square'}
-          size={'xs'}
-          className={cn('', {
-            hidden: !roles.edit.find((role) => role === myRole),
-          })}
-          disabled={!roles.edit.find((role) => role === myRole)}
           startIcon={<Plus />}
+          shape={'square'}
+          size={'sm'}
+          className={cn(
+            'flex flex-row gap-2 md:py-2 [&_svg]:size-4',
+            'max-md:w-full',
+            {
+              hidden: !roles.edit.find((role) => role === myRole),
+            },
+          )}
+          disabled={!roles.edit.find((role) => role === myRole)}
         >
           {t('EXTENSION.TAG.CREATE')}
         </Button>
