@@ -849,5 +849,9 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "Mật khẩu mới phải khác với mật khẩu hiện tại!",
       "INVALID_TOKEN": "Liên kết xác minh đã hết hạn!"
     }
+  },
+
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "Trang này chỉ hỗ trợ phiên bản máy tính"
   }
 }

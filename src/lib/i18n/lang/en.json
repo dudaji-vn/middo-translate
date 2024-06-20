@@ -751,11 +751,6 @@
       "MEMBERS_MANAGEMENT": "Members Management",
       "CONVERSATION_EXTENSION": "Conversation Extension"
     },
-    "SETTING": {
-      "TAGS_MANAGEMENT": "Tags Management",
-      "MEMBERS_MANAGEMENT": "Members Management",
-      "CONVERSATION_EXTENSION": "Conversation Extension"
-    },
     "SCRIPT": {
       "PAGE_TITLE": "Scripts Management",
       "SEARCH": "Search for scripts",
@@ -860,5 +855,8 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "New password must be different from current password!",
       "INVALID_TOKEN": "Invalid token!"
     }
+  },
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "This tab is only available on desktop"
   }
 }

@@ -31,7 +31,7 @@ instance.interceptors.response.use(
     } else {
       console.log(
         '🚀 ~ file: axios-config.ts:31 ~ error',
-        error.response.message,
+        error?.response?.message,
       );
     }
     return Promise.reject(error);
