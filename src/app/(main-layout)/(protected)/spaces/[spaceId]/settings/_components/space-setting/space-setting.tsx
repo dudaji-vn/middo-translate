@@ -34,6 +34,7 @@ import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from './setting-items';
 import { getUserSpaceRole } from './role.util';
 import { useTranslation } from 'react-i18next';
 import SettingsHeader from '../header/settings-header';
+import MobileDefender from '@/components/non-responsive/mobile-defender';
 
 export enum ESettingTabs {
   'MEMBERS' = 'members',
@@ -242,55 +243,58 @@ const SpaceSetting = ({
               },
             )}
           >
-            <div
-              className={
-                isExtensionEmpty
-                  ? 'flex min-h-[calc(100vh-350px)] w-full  flex-col items-center justify-center gap-2'
-                  : 'hidden'
-              }
-            >
-              <Image
-                src="/empty_extension.svg"
-                width={200}
-                height={156}
-                alt="empty-extensions"
-                className="mx-auto"
-              />
-              <Typography className="text-lg font-semibold leading-5 text-neutral-800 dark:text-neutral-50">
-                Your extension is almost here!
-              </Typography>
-              <Typography className="text-neutral-600 dark:text-neutral-200">
-                Create a conversation extension with the help of ready-made
-                theme or define a unique one on your own
-              </Typography>
-              <div
-                className={cn({
-                  hidden: !isSpaceOwner,
-                })}
-              >
-                <Link
-                  href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`}
-                  className={isExtensionEmpty ? '' : 'hidden'}
+            <MobileDefender className="h-[60dvh]">
+              {isExtensionEmpty ? (
+                <div
+                  className={
+                    'flex min-h-[calc(100vh-350px)] w-full  flex-col items-center justify-center gap-2'
+                  }
                 >
-                  <Button
-                    variant={'default'}
-                    color={'primary'}
-                    shape={'square'}
-                    className={'mx-auto mt-4 w-fit'}
+                  <Image
+                    src="/empty_extension.svg"
+                    width={200}
+                    height={156}
+                    alt="empty-extensions"
+                    className="mx-auto"
+                  />
+                  <Typography className="text-lg font-semibold leading-5 text-neutral-800 dark:text-neutral-50">
+                    Your extension is almost here!
+                  </Typography>
+                  <Typography className="text-neutral-600 dark:text-neutral-200">
+                    Create a conversation extension with the help of ready-made
+                    theme or define a unique one on your own
+                  </Typography>
+                  <div
+                    className={cn({
+                      hidden: !isSpaceOwner,
+                    })}
                   >
-                    <Plus className="h-4 w-4" />
-                    <Typography className="ml-2 text-white">
-                      Create Extension
-                    </Typography>
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <BusinessExtension
-              data={space.extension}
-              name="Middo Conversation Extension"
-              myRole={currentUserRole}
-            />
+                    <Link
+                      href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`}
+                      className={isExtensionEmpty ? '' : 'hidden'}
+                    >
+                      <Button
+                        variant={'default'}
+                        color={'primary'}
+                        shape={'square'}
+                        className={'mx-auto mt-4 w-fit'}
+                      >
+                        <Plus className="h-4 w-4" />
+                        <Typography className="ml-2 text-white">
+                          Create Extension
+                        </Typography>
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <BusinessExtension
+                  data={space.extension}
+                  name="Middo Conversation Extension"
+                  myRole={currentUserRole}
+                />
+              )}
+            </MobileDefender>
           </TabsContent>
         </Tabs>
       </section>
