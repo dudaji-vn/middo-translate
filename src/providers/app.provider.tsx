@@ -27,6 +27,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ReactNativeProvider } from './react-native.provider';
 import { usePlatformStore } from '@/features/platform/stores';
+import { EventListener } from './event-listener';
 init({ data });
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
@@ -72,6 +73,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
         <I18nInitProvider />
       </I18nextProvider>
       <ReactNativeProvider />
+      <EventListener />
     </ReactQueryProvider>
   );
 };
