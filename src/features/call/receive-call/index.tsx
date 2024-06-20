@@ -76,7 +76,7 @@ const ReceiveVideoCall = () => {
   }, [playAudio, requestCall?.id, stopAudio]);
   useEffect(() => {
     if(!requestCall?.call?.roomId) return
-    if(!meetingList.includes(requestCall?.call?.roomId)) {
+    if(!meetingList[requestCall?.call?.roomId]) {
       setRequestCall();
     }
   }, [meetingList, requestCall?.call?.roomId, setRequestCall])
