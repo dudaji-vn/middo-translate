@@ -97,16 +97,20 @@ export async function GET(request: Request) {
       favicon,
     });
 
+    const isDev = process.env.NODE_ENV === 'development';
+    const imageHost = isDev ? 'http://localhost:3000' : NEXT_PUBLIC_URL;
+
     if (!image?.startsWith('https://opengraph.b-cdn.net')) {
-      image = NEXT_PUBLIC_URL + '/api/image?q=' + image;
+      image = imageHost + '/api/image?q=' + image;
     }
+
     return Response.json({
       data: {
         title,
         description,
         image: image,
         url,
-        favicon: favicon ? NEXT_PUBLIC_URL + '/api/image?q=' + favicon : null,
+        favicon: favicon ? imageHost + '/api/image?q=' + favicon : null,
       },
     });
   } catch (error) {

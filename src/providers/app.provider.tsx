@@ -28,6 +28,7 @@ import { ReactNativeProvider } from './react-native.provider';
 import { usePlatformStore } from '@/features/platform/stores';
 import { ToastProvider } from './toast.provider';
 import { ThemeProvider } from './Theme.provider';
+import { EventListener } from './event-listener';
 init({ data });
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
@@ -64,6 +65,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
         <ThemeProvider />
       </I18nextProvider>
       <ReactNativeProvider />
+      <EventListener />
     </ReactQueryProvider>
   );
 };
