@@ -34,7 +34,7 @@ const ParticipantsBar = ({ participants }: ParticipantsBarProps) => {
                             <div key={participant.socketId + participant.isShareScreen} className="h-12 w-12">
                                 <Avatar
                                     className="h-full w-full bg-neutral-900 object-cover"
-                                    src={participant?.user?.avatar || '/avatar_default.png'}
+                                    src={participant?.user?.avatar || '/avatar_default.svg'}
                                     alt={participant?.user?.name || 'Anonymous'}
                                 />
                             </div>

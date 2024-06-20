@@ -9,8 +9,6 @@ import { cn } from '@/utils/cn';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useParticipantVideoCallStore } from '../store/participant.store';
-import toast from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth.store';
 import { StatusParticipant } from '../interfaces/participant';
 import { useAppStore } from '@/stores/app.store';
