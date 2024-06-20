@@ -13,9 +13,9 @@ export interface RoomItemComingCallProps {
 export const RoomItemComingCall = ({
   roomChatBox,
 }: RoomItemComingCallProps) => {
-  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
   const startVideoCall = useJoinCall();
   const {isBusiness} = useBusinessNavigationData();
+  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id, isBusiness);
   const {t} = useTranslation('common');
   if (!isHaveMeeting) return null;
   if(isBusiness && !isHaveMeeting) return null;

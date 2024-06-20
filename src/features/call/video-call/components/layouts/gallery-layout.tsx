@@ -10,6 +10,7 @@ import { UserPlus2 } from 'lucide-react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import useGetMemberInRoom from '@/features/call/hooks/use-get-member-in-room';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 const GalleryLayout = () => {
   const isMobile = useAppStore(state => state.isMobile);
@@ -165,10 +166,13 @@ const ItemNumber = ({ numberItem }: { numberItem: number }) => {
 const AddUserItem = () => {
   const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
   const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
-    
+  const {isBusiness} = useBusinessNavigationData()
+  
   useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
     setModalAddUser(!isShowModalAddUser);
   });
+
+  if(isBusiness) return;
 
   return <div className='h-full w-full relative flex items-center justify-center'>
     <div className='rounded-xl text-neutral-700 dark:text-neutral-50 w-[60px] h-[60px] bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModalAddUser(true)}>

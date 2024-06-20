@@ -27,6 +27,7 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
   const setLayout = useVideoCallStore(state => state.setLayout);
   const setData = useAuthStore(state => state.setData);
   const socketConnected = useAppStore((state) => state.socketConnected);
+  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   useSocketVideoCall();
   const [status, setStatus] = useState<"WAITING" | "JOINED" | "BLOCK">("WAITING");
   useEffect(()=>{
@@ -43,6 +44,8 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
           setFullScreen(true);
           setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW)
           setStatus("JOINED");
+        } else {
+          setStatus("BLOCK");
         }
       } catch (error) {
         window.close();
@@ -60,6 +63,13 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
       socket.off(SOCKET_CONFIG.EVENTS.MEETING.BLOCK, blockJoinMeeting);
     }
   }, []);
+
+  useEffect(() => { 
+    if(!isFullScreen) {
+      setFullScreen(true)
+    }
+  }, [isFullScreen]);
+
   if(!socketConnected || status == 'WAITING') return <PageLoading />
   if(status == 'BLOCK') return <div>
     <p> You can not join this meeting </p>
