@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "색상",
     "INVITE": "초대",
     "APPLY": "적용",
     "PREVIEW": "미리보기",
@@ -435,7 +436,8 @@
     "VIDEO_AUDIO_SETTINGS": "비디오 및 오디오 설정",
     "DOODLE": "그리기",
     "FOCUS_VIEW": "집중 보기",
-    "EDIT_MESSAGE": "메시지 편집"
+    "EDIT_MESSAGE": "메시지 편집",
+    "OPEN_IN_BROWSER": "브라우저에서 열기"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo가 권한이 필요합니다 ",
@@ -690,6 +692,7 @@
       "HOME": "홈"
     },
     "TAG": {
+      "NAME": "태그 이름",
       "SEARCH": "태그 검색",
       "CREATE": "새로운 태그 만들기",
       "EDIT": "태그 수정",
@@ -849,5 +852,9 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "새 비밀번호는 이전 비밀번호와 동일할 수 없습니다!",
       "INVALID_TOKEN": "유효하지 않은 토큰!"
     }
+  },
+
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "이 기능은 데스크톱에서만 사용할 수 있습니다."
   }
 }

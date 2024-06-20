@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "Màu",
     "INVITE": "Mời",
     "APPLY": "Áp dụng",
     "PREVIEW": "Xem trước",
@@ -436,7 +437,8 @@
     "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh",
     "DOODLE": "Vẽ",
     "FOCUS_VIEW": "Tập trung",
-    "EDIT_MESSAGE": "Chỉnh sửa tin nhắn"
+    "EDIT_MESSAGE": "Chỉnh sửa tin nhắn",
+    "OPEN_IN_BROWSER": "Mở trong trình duyệt"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",
@@ -691,6 +693,7 @@
       "HOME": "Trang chủ"
     },
     "TAG": {
+      "NAME": "Tên",
       "SEARCH": "Tìm kiếm thẻ",
       "CREATE": "Tạo thẻ mới",
       "EDIT": "Chỉnh sửa thẻ",
@@ -850,5 +853,9 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "Mật khẩu mới phải khác với mật khẩu hiện tại!",
       "INVALID_TOKEN": "Liên kết xác minh đã hết hạn!"
     }
+  },
+
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "Trang này chỉ hỗ trợ phiên bản máy tính"
   }
 }

@@ -227,7 +227,7 @@ const ReorderList = ({
                             <ul
                               className={cn(
                                 'list-unstyled mb-3 ',
-                                'flex flex-col gap-1 overflow-x-auto  md:min-w-[400px]',
+                                'flex flex-col gap-1 overflow-x-auto w-full  md:min-w-[400px]',
                               )}
                             >
                               <CategoryHeader role={category._id} />
@@ -354,8 +354,8 @@ const MembersList = () => {
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
-      <div className="flex w-full flex-row items-center justify-between gap-5 px-10">
-        <div className="relative w-60 md:w-96">
+      <div className="flex w-full flex-col items-center justify-between gap-2 px-3 md:flex-row  md:gap-5 md:px-10">
+        <div className="relative w-full md:max-w-96">
           <SearchInput
             className="flex-1"
             onChange={(e) => onSearchChange(e.target.value)}

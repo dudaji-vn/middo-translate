@@ -27,18 +27,30 @@ export const mentionSuggestionOptions = (
   _items: MentionSuggestion[],
 ): MentionOptions['suggestion'] => {
   return {
-    items: async ({ query }): Promise<MentionSuggestion[]> => {
-      return Promise.resolve(
-        _items
-          .map((item) => ({
-            label: item.label,
-            id: item.id,
-            image: item.image,
-          }))
-          .filter((item) =>
-            item.label.toLowerCase().includes(query.toLowerCase()),
-          ),
-      );
+    // items: async ({ query }): Promise<MentionSuggestion[]> => {
+    //   return Promise.resolve(
+    //     _items
+    //       .map((item) => ({
+    //         label: item.label,
+    //         id: item.id,
+    //         image: item.image,
+    //       }))
+    //       .filter((item) =>
+    //         item.label.toLowerCase().includes(query.toLowerCase()),
+    //       ),
+    //   );
+    // },
+
+    items: ({ query }): MentionSuggestion[] => {
+      return _items
+        .map((item) => ({
+          label: item.label,
+          id: item.id,
+          image: item.image,
+        }))
+        .filter((item) =>
+          item.label.toLowerCase().includes(query.toLowerCase()),
+        );
     },
 
     render: () => {

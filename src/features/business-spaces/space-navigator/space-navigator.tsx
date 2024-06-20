@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { DropdownMenuTriggerProps } from '@radix-ui/react-dropdown-menu';
 import { ChevronDown, Home, Plus } from 'lucide-react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetSpaces } from '../hooks/use-get-spaces';
@@ -19,6 +19,7 @@ import { Button } from '@/components/actions';
 import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import Link from 'next/link';
+import { usePlatformStore } from '@/features/platform/stores';
 
 interface Item {
   name: string | React.ReactNode;
@@ -30,9 +31,10 @@ interface Item {
 
 const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   const pathname = usePathname();
+
+  const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const { expand, openNavigator, setOpenNavigator } = useSidebarStore();
 
-  const router = useRouter();
   const { t } = useTranslation('common');
   const { data: spaces, isLoading } = useGetSpaces({
     type: 'all_spaces',
@@ -46,23 +48,24 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
     return (
       spaces?.map((s: TSpace) => ({
         name: s.name,
-        href: `/spaces/${s._id}/conversations`,
+        href:
+          `/spaces/${s._id}/conversations` +
+          (isMobile ? '?platform=mobile' : ''),
         pathToInclude: `/spaces/${s._id}`,
         isActive: pathname?.includes(`/spaces/${s._id}`),
         space: s,
       })) ?? []
     );
   }, [space, spaces, pathname]);
+
   const hasNotification = useMemo(() => {
-    return spaces?.some((s: TSpace) => Number(s.totalNewMessages) > 0);
+    return spaces?.some(
+      (s: TSpace) =>
+        !pathname?.includes(`spaces/${s._id}`) &&
+        Number(s.totalNewMessages) > 0,
+    );
   }, [spaces]);
 
-  const onChangeSpace = (href: string) => {
-    if (pathname === href) {
-      return;
-    }
-    router.push(href);
-  };
   if (isLoading || !space || !pathname?.includes(space?._id)) {
     return (
       <div
@@ -123,31 +126,39 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
         sideOffset={-4}
         alignOffset={8}
       >
-        {items?.map((option: Item) => (
-          <DropdownMenuItem
-            className={cn(
-              'relative flex w-full flex-row items-center justify-start gap-4 rounded-none bg-none dark:hover:bg-neutral-800',
-              option.isActive ? 'cursor-default !bg-primary-200 dark:!bg-primary-900' : '',
-            )}
-            onClick={() => onChangeSpace(option.href)}
-            key={option.href}
-          >
-            {option?.space?.avatar && (
-              <Avatar
-                alt={option.space.name ?? ''}
-                size="sm"
-                src={String(option.space.avatar)}
-              />
-            )}
-            <span className="pr-4">{option.name}</span>
-            <Ping
-              size={12}
-              className={cn('absolute right-4 top-[20px]', {
-                hidden: Number(option?.space?.totalNewMessages) === 0,
-              })}
-            />
-          </DropdownMenuItem>
-        ))}
+        <div className="h-fit max-h-96 w-full overflow-y-auto ">
+          {items?.map((option: Item) => (
+            <DropdownMenuItem
+              className={cn(
+                'relative  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
+                option.isActive ? 'cursor-default !bg-primary-200 dark:!bg-primary-900' : '',
+              )}
+              key={option.href}
+            >
+              <a
+                href={option.isActive ? '#' : option.href}
+                className="relative flex w-full flex-row items-center justify-start gap-4"
+              >
+                {option?.space?.avatar && (
+                  <Avatar
+                    alt={option.space.name ?? ''}
+                    size="sm"
+                    src={String(option.space.avatar)}
+                  />
+                )}
+                <span className="pr-4">{option.name}</span>
+                <Ping
+                  size={12}
+                  className={cn('absolute right-2 top-[12px]', {
+                    hidden:
+                      Number(option?.space?.totalNewMessages) === 0 ||
+                      option?.isActive,
+                  })}
+                />
+              </a>
+            </DropdownMenuItem>
+          ))}
+        </div>
         <div className={cn('flex w-full flex-col gap-2 p-2')}>
           <Link href={'/spaces?modal=create-space'}>
             <Button

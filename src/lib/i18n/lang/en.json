@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "Color",
     "INVITE": "Invite",
     "APPLY": "Apply",
     "PREVIEW": "Preview",
@@ -439,7 +440,8 @@
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
     "DOODLE": "Doodle",
     "FOCUS_VIEW": "Focus view",
-    "EDIT_MESSAGE": "Edit message"
+    "EDIT_MESSAGE": "Edit message",
+    "OPEN_IN_BROWSER": "Open in browser"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",
@@ -698,6 +700,7 @@
       "HOME": "Home"
     },
     "TAG": {
+      "NAME": "Name",
       "SEARCH": "Search for tags",
       "CREATE": "Create new tag",
       "EDIT": "Edit tag",
@@ -746,11 +749,6 @@
       "MINUTE": "minute",
       "SECOND": "second",
       "MILLISECOND": "millisecond"
-    },
-    "SETTING": {
-      "TAGS_MANAGEMENT": "Tags Management",
-      "MEMBERS_MANAGEMENT": "Members Management",
-      "CONVERSATION_EXTENSION": "Conversation Extension"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Tags Management",
@@ -861,5 +859,8 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "New password must be different from current password!",
       "INVALID_TOKEN": "Invalid token!"
     }
+  },
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "This tab is only available on desktop"
   }
 }

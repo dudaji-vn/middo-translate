@@ -60,7 +60,7 @@ export const SelectedFilterRoom = () => {
       {expanded && (
         <div
           className={cn(
-            'flex h-fit  w-full gap-3 overflow-hidden transition-all duration-300',
+            'flex h-fit  w-full gap-2 overflow-hidden transition-all duration-300',
           )}
         >
           {filters.map((filter) => {
@@ -73,12 +73,12 @@ export const SelectedFilterRoom = () => {
                 onClick={() => {
                   removeFilter(filter);
                 }}
-                className="relative flex w-fit flex-row justify-between gap-2  pr-6"
+                className="relative flex w-fit flex-row justify-between gap-4"
               >
-                <span className=" max-w-full flex-1  !truncate text-ellipsis text-sm font-semibold ">
+                <span className="max-w-full flex-1 !truncate text-ellipsis text-sm font-semibold capitalize ">
                   {filter}
                 </span>
-                <XIcon className="inset-y absolute right-2 !size-4" />
+                <XIcon className="!size-4" />
               </Button>
             );
           })}

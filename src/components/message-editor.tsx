@@ -72,6 +72,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     const setDraft = useDraftStore((s) => s.setDraft);
 
     const mentionSuggestions = useMemo(() => {
+      console.log('render mentionSuggestions');
       const suggestions = userMentions.map(
         (participant): MentionSuggestion => ({
           id: participant._id,
