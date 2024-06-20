@@ -12,7 +12,6 @@ export const LinkEventListener = () => {
         if (!isMobile) return;
         event.preventDefault();
         const href = event.target.getAttribute('href');
-        console.log('href', href);
         if (href) {
           postMessage({
             type: 'Trigger',
@@ -30,6 +29,6 @@ export const LinkEventListener = () => {
       document.removeEventListener('click', () => {});
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isMobile]);
   return null;
 };
