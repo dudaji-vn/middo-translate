@@ -13,13 +13,13 @@ import GetCaptionUser from './components/get-caption-user';
 import UserStatus from './components/user-status';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
   size?: 'sm' | 'md' | 'lg';
-  isGalleryView?: boolean;
 }
-const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
+const VideoItem = ({ participant }: VideoItemProps) => {
   const { t } = useTranslation('common');
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const userName = useMemo(() => {
@@ -30,17 +30,18 @@ const VideoItem = ({ participant, isGalleryView }: VideoItemProps) => {
   
   return (
     <>
-      {isFullScreen ? <VideoItemContent participant={participant} isGalleryView={isGalleryView} /> : 
+      {isFullScreen ? <VideoItemContent participant={participant}/> : 
       <Tooltip 
         title={userName} 
-        triggerItem={<VideoItemContent participant={participant} isGalleryView={isGalleryView} />}
+        triggerItem={<VideoItemContent participant={participant}/>}
       />}
     </>
   );
 };
 
-const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) => {
+const VideoItemContent = memo(({ participant }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const layout = useVideoCallStore(state => state.layout);
   const itemRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera } = useLoadStream(participant, videoRef);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
@@ -53,11 +54,10 @@ const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) =
       <div
         className={cn(
           'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-50 dark:bg-neutral-900 transition-all',
-          // !isTurnOnCamera && !isFullScreen && 'aspect-square h-[60px] w-[60px]',
-          isTurnOnCamera && !isGalleryView && 'w-[100px]',
+          isTurnOnCamera && layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && 'w-[100px]',
           !isFullScreen && 'aspect-square h-[60px] w-[60px]',
-          !isFullScreen && isGalleryView && isTurnOnCamera && 'w-[60px]',
-          isGalleryView && isFullScreen && 'min-h-[200px] md:min-h-max',
+          !isFullScreen && layout == VIDEO_CALL_LAYOUTS.GALLERY_VIEW && isTurnOnCamera && 'w-[60px]',
+          isFullScreen && layout == VIDEO_CALL_LAYOUTS.GALLERY_VIEW && 'min-h-[200px] md:min-h-max',
         )}
       >
         {/* Talk border */}
@@ -75,7 +75,7 @@ const VideoItemContent = memo(({ participant, isGalleryView }: VideoItemProps) =
         ></video>
 
         {/* Expand video */}
-        <ExpandVideo isGalleryView={isGalleryView} participant={participant}/>
+        <ExpandVideo participant={participant}/>
         {/* Avatar */}
         <VideoItemAvatar participant={participant} isTurnOnCamera={isTurnOnCamera}/>
         {/* Name */}

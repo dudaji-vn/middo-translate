@@ -1,17 +1,18 @@
 "use client";
 
 import { PageLoading } from "@/components/feedback";
+import { SOCKET_CONFIG } from "@/configs/socket";
 import { CommonComponent } from "@/features/call/components/common/common";
 import { VIDEO_CALL_LAYOUTS } from "@/features/call/constant/layout";
 import { STATUS } from "@/features/call/constant/status";
+import useSocketVideoCall from "@/features/call/hooks/socket/use-socket-video-call";
 import { useVideoCallStore } from "@/features/call/store/video-call.store";
 import VideoCall from "@/features/call/video-call";
-import { useChatStore } from "@/features/chat/stores";
 import socket from "@/lib/socket-io";
 import { getHelpDeskCallInformation } from "@/services/video-call.service";
 import { useAppStore } from "@/stores/app.store";
 import { useAuthStore } from "@/stores/auth.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface HelpDeskCallProps {
   params: {
@@ -26,6 +27,8 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
   const setLayout = useVideoCallStore(state => state.setLayout);
   const setData = useAuthStore(state => state.setData);
   const socketConnected = useAppStore((state) => state.socketConnected);
+  useSocketVideoCall();
+  const [status, setStatus] = useState<"WAITING" | "JOINED" | "BLOCK">("WAITING");
   useEffect(()=>{
     const { userId, businessId } = params;
     const fetchCall = async () => {
@@ -39,6 +42,7 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
           });
           setFullScreen(true);
           setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW)
+          setStatus("JOINED");
         }
       } catch (error) {
         window.close();
@@ -46,8 +50,21 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
     }
     fetchCall();
   },[params, setData, setFullScreen, setLayout, setRoom])
-  
-  if(!socketConnected) return <PageLoading />
+
+  useEffect(() => {
+    const blockJoinMeeting = () => {
+      setStatus("BLOCK");
+    }
+    socket.on(SOCKET_CONFIG.EVENTS.MEETING.BLOCK, blockJoinMeeting);
+    return () => {
+      socket.off(SOCKET_CONFIG.EVENTS.MEETING.BLOCK, blockJoinMeeting);
+    }
+  }, []);
+  if(!socketConnected || status == 'WAITING') return <PageLoading />
+  if(status == 'BLOCK') return <div>
+    <p> You can not join this meeting </p>
+  </div>
+
 
   return (
    <>

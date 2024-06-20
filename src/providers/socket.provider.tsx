@@ -18,9 +18,6 @@ const SocketProvider = () => {
   const user = useAuthStore((state) => state.user);
   const { anonymousId } = useBusinessNavigationData();
   const setOnlineList = useChatStore((state) => state.setOnlineList);
-  const updateMeetingList = useChatStore((state) => state.updateMeetingList);
-  const deleteMeeting = useChatStore((state) => state.deleteMeeting);
-  const meetingList = useChatStore(state => state.meetingList)
   const setSocketConnected = useAppStore((state) => state.setSocketConnected);
   const queryClient = useQueryClient();
   useEffect(() => {
@@ -34,15 +31,6 @@ const SocketProvider = () => {
         socket.on(SOCKET_CONFIG.EVENTS.CLIENT.LIST, (data) => {
           setOnlineList(data);
         });
-        socket.on(SOCKET_CONFIG.EVENTS.MEETING.LIST, (meetings: Meeting) => {
-          updateMeetingList(meetings);
-        })
-        socket.on(SOCKET_CONFIG.EVENTS.MEETING.UPDATE, (meetings: Meeting) => {
-          updateMeetingList(meetings);
-        })
-        socket.on(SOCKET_CONFIG.EVENTS.MEETING.END, (roomId: string) => {
-          deleteMeeting(roomId)
-        })
       }
     }
 
@@ -67,9 +55,6 @@ const SocketProvider = () => {
       socket.off('disconnect', onDisconnect);
       socket.disconnect();
       socket.off(SOCKET_CONFIG.EVENTS.CLIENT.LIST);
-      socket.off(SOCKET_CONFIG.EVENTS.MEETING.LIST);
-      socket.off(SOCKET_CONFIG.EVENTS.MEETING.UPDATE);
-      socket.off(SOCKET_CONFIG.EVENTS.MEETING.END);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anonymousId, user?._id]);

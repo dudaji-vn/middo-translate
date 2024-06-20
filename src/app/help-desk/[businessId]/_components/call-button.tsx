@@ -8,6 +8,7 @@ import { useBusinessNavigationData } from "@/hooks/use-business-navigation-data"
 import customToast from "@/utils/custom-toast";
 import { HeadsetIcon } from "lucide-react";
 import { useParams, useSearchParams } from "next/navigation";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useBoolean } from "usehooks-ts";
 
@@ -30,9 +31,17 @@ const HelpDeskCallButton = () => {
         })
     }
     
-    const checkToShowModalStartCall = () => {
+    
+    const isInCall = useMemo(()=>{
         let meeting = meetingList[roomId || ''];
         if(meeting && meeting.participantsIdJoined.includes(userId || '')) {
+            return true;
+        }
+        return false;
+    },[meetingList])
+    
+    const checkToShowModalStartCall = () => {
+        if(isInCall) {
             customToast.error('You are already in the call');
             return;
         }
@@ -45,6 +54,7 @@ const HelpDeskCallButton = () => {
             <Button.Icon 
                 size="xs" 
                 variant="ghost"
+                color={isInCall ? 'primary' : 'default'}
                 onClick={checkToShowModalStartCall}
             >
                 <HeadsetIcon />

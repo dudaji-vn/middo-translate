@@ -7,12 +7,10 @@ import { Fullscreen } from 'lucide-react';
 import React, { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 interface ExpandVideoProps {
-  isGalleryView?: boolean;
   participant: ParticipantInVideoCall;
 }
-const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
+const ExpandVideo = ({ participant }: ExpandVideoProps) => {
   const {t} = useTranslation('common')
-
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const setFullScreen = useVideoCallStore(state => state.setFullScreen);
   const setLayout = useVideoCallStore(state => state.setLayout);
@@ -20,7 +18,7 @@ const ExpandVideo = ({ isGalleryView, participant }: ExpandVideoProps) => {
   const setPinShareScreen = useVideoCallStore(state => state.setPinShareScreen);
   const setPinDoodle = useVideoCallStore(state => state.setPinDoodle);
   const pinParticipant = useParticipantVideoCallStore(state => state.pinParticipant);
-  
+  const isGalleryView = layout === VIDEO_CALL_LAYOUTS.GALLERY_VIEW;
   const expandVideoItem = () => {
     if (!isFullScreen) setFullScreen(true);
     if(layout === VIDEO_CALL_LAYOUTS.GALLERY_VIEW) setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);

@@ -19,11 +19,10 @@ const P2PLayout = () => {
             pPin = participants.find((p: ParticipantInVideoCall) => !p.isMe);
         }
         if(!pPin) return [participants[0], []]
-        const anotherP = participants.filter((p:ParticipantInVideoCall) => p.socketId != pPin?.socketId)
+        const anotherP = participants.filter((p:ParticipantInVideoCall) => !(p.socketId == pPin?.socketId && !!p?.isShareScreen == !!pPin?.isShareScreen))
         return [pPin, anotherP]
     }, [participants])
 
-    console.log({participantPin, anotherParticipants})
     if(!participantPin) return null;
 
     return (

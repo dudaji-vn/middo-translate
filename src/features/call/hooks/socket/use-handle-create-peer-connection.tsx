@@ -28,6 +28,7 @@ export default function useHandleCreatePeerConnection() {
     const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
     const updateParticipant = useParticipantVideoCallStore(state => state.updateParticipant);
     const myStream = useMyVideoCallStore(state => state.myStream);
+    const layout = useVideoCallStore(state => state.layout);
 
     const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
     const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
@@ -89,13 +90,15 @@ export default function useHandleCreatePeerConnection() {
         }
 
         if (payload.isShareScreen) {
-            setLayout(VIDEO_CALL_LAYOUTS.SHARE_SCREEN);
             const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
-            if (!isHavePin && !isPinDoodle) {
-                setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
-                setPinShareScreen(true);
+            if(!isHavePin) {
                 newUser.pin = true;
+                if (!isPinDoodle && layout == VIDEO_CALL_LAYOUTS.GALLERY_VIEW ) {
+                    setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
+                    setPinShareScreen(true);
+                }
             }
+            
             customToast.success(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name: payload.user.name}), {icon: <MonitorUpIcon size={20}/>});
         } else {
             customToast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
