@@ -22,13 +22,12 @@ export default function VideoItemText({
   const layout = useVideoCallStore((state) => state.layout);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const isTurnOnMic = useMyVideoCallStore((state) => state.isTurnOnMic);
-  
-  if(participant?.isShareScreen && !isFullScreen) return;
-
   const userName = useMemo(() => {
     return `${participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''} ${participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}`;
   }, [participant?.isMe, participant?.isShareScreen, participant?.user?.name, t]);
 
+  if(participant?.isShareScreen && !isFullScreen) return;
+  
   if (!participant) return null;
   
   const getMicStatus = () => {
