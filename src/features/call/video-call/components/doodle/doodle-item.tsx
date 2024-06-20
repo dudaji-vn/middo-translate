@@ -2,7 +2,7 @@ import { Fullscreen } from 'lucide-react';
 import Image from 'next/image';
 import { cn } from '@/utils/cn';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useTranslation } from 'react-i18next';
 interface DoodleItemProps {}
 const DoodleItem = ({}: DoodleItemProps) => {
@@ -18,7 +18,7 @@ const DoodleItem = ({}: DoodleItemProps) => {
 
   const expandDoodle = () => {
     if (!isFullScreen) setFullScreen(true);
-    setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+    setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
     setPinDoodle(true);
   };
 
@@ -35,14 +35,14 @@ const DoodleItem = ({}: DoodleItemProps) => {
         <div
           className={cn(
             'absolute inset-0 flex cursor-pointer flex-col items-center justify-center gap-1 bg-black/80 text-white opacity-0 transition-all',
-            layout !== VIDEOCALL_LAYOUTS.FOCUS_VIEW &&
+            layout !== VIDEO_CALL_LAYOUTS.FOCUS_VIEW &&
               isFullScreen &&
               'hover:opacity-100',
           )}
           onClick={expandDoodle}
         >
           <Fullscreen className="h-6 w-6" />
-          {isFullScreen && layout !== VIDEOCALL_LAYOUTS.FOCUS_VIEW && (
+          {isFullScreen && layout !== VIDEO_CALL_LAYOUTS.FOCUS_VIEW && (
             <p className="text-center"> {t('CONVERSATION.EXPAND')}</p>
           )}
         </div>
@@ -58,7 +58,7 @@ const DoodleItem = ({}: DoodleItemProps) => {
             'pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90 opacity-0',
             isPinDoodle &&
               isFullScreen &&
-              layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW &&
+              layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW &&
               'opacity-100',
           )}
         >

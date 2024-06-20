@@ -91,7 +91,7 @@ const GalleryLayout = () => {
             if(index == (isDoodle ? 5 : 6) && numberItem > 7) {
               const remain = numberItem - 7;
               return <div key={key} className='h-full w-full relative'>
-                <VideoItem isGalleryView participant={participant} />
+                <VideoItem participant={participant} />
                 <ItemNumber numberItem={remain} />
               </div>
             }
@@ -99,7 +99,7 @@ const GalleryLayout = () => {
             return ( <div
               key={key}
               className={cn('h-full w-full', isHidden ? 'hidden' : '')}>
-              <VideoItem isGalleryView participant={participant} />
+              <VideoItem participant={participant} />
             </div>
           )},
         )}
@@ -125,7 +125,7 @@ const GalleryLayout = () => {
           key={participants[index].socketId  + participants[index].isShareScreen}
           className={cn('w-full h-full', numColumn > 1 && `w-1/${numColumn}`)}
         >
-          <VideoItem isGalleryView participant={participants[index]} />
+          <VideoItem participant={participants[index]} />
         </div>)
       }
       result.push(<div 

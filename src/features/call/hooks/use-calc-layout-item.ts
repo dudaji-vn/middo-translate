@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useVideoCallStore } from "../store/video-call.store";
-import { VIDEOCALL_LAYOUTS } from "../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../constant/layout";
 
 export default function useCalcLayoutItem(elementRef: React.RefObject<HTMLElement>, length: number) {
     const layout = useVideoCallStore(state => state.layout)
     const isFullScreen = useVideoCallStore(state => state.isFullScreen)
     useEffect(() => {
         let className: string[] = [];
-        if(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen) {
+        if(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && isFullScreen) {
             className.push('h-full')
         } else {
             switch (true) {
@@ -31,7 +31,7 @@ export default function useCalcLayoutItem(elementRef: React.RefObject<HTMLElemen
         }
 
         // calc width
-        if(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && isFullScreen) {
+        if(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && isFullScreen) {
             className.push('w-full')
         } else {
             className.push('md:w-1/4')

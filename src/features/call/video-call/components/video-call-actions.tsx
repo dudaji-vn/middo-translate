@@ -20,6 +20,11 @@ import { useTranslation } from 'react-i18next';
 import { useVideoSettingStore } from '../../store/video-setting.store';
 import { useCallback } from 'react';
 import customToast from '@/utils/custom-toast';
+import useHelpDesk from '../../hooks/use-help-desk';
+import ActionVideoAudioSetting from './actions/action-video-audio-setting';
+import ActionToggleCaption from './actions/action-toggle-caption';
+import { cn } from '@/utils/cn';
+import { useAuthStore } from '@/stores/auth.store';
 interface MediaStreamInterface {
   video?: boolean;
   audio?: boolean;
@@ -27,7 +32,8 @@ interface MediaStreamInterface {
 export default function VideoCallActions() {
 
   const {t} = useTranslation('common')
-
+  const { isHelpDeskCall } = useHelpDesk();
+  const { user } = useAuthStore();
   const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
   const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
   const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
@@ -114,10 +120,12 @@ export default function VideoCallActions() {
 
   return (
     <section className="relative z-20 flex items-center justify-between bg-primary-100 dark:bg-neutral-900 p-2">
-      <div className="flex w-full md:justify-center justify-around md:gap-6">
-        <DropdownActions />
-        <ActionChat />
-        <ActionDraw />
+      <div className={cn('flex w-full md:justify-center justify-around md:gap-6', isHelpDeskCall && 'md:gap-3')}>
+        {!isHelpDeskCall && <DropdownActions />}
+        {!isHelpDeskCall && <ActionChat />}
+        {!isHelpDeskCall && <ActionDraw />}
+        {isHelpDeskCall && <ActionVideoAudioSetting />}
+        {isHelpDeskCall && <ActionToggleCaption />}
         {/* <ActionAddMembers /> */}
         <ActionShareScreen />
         <ActionToggleCamera handleChangeCameraOrMic={handleChangeCameraOrMic} />

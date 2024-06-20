@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 import { useVideoCallStore } from "../../store/video-call.store";
 import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
-import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { IStartDoodlePayload } from "../../interfaces/socket/doodle.interface";
 import { useAuthStore } from "@/stores/auth.store";
@@ -38,7 +38,7 @@ export default function useHandleDoodle() {
         const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
         if (!isHavePin) {
             setPinDoodle(true);
-            setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+            setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
         }
     // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,7 +51,7 @@ export default function useHandleDoodle() {
         setDrawing(false);
         setDoodleImage('');
         setPinDoodle(false);
-        setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+        setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
     // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[setDoodle, setDoodleImage, setDrawing, setLayout, setMyOldDoodle, setPinDoodle])

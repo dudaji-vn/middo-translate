@@ -54,7 +54,6 @@ export default function VideoCall() {
       setFullScreen(true)
     }
   }, [isMobile, setFullScreen])
-  
   if (!room) return null;
   return (
     <CallDragable

@@ -9,7 +9,7 @@ import { useCallback, useEffect } from "react";
 import { createPeer } from "../../utils/peer-action.util";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { MonitorX } from "lucide-react";
-import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
@@ -33,6 +33,7 @@ export default function useHandleShareScreen() {
     const isShareScreen = useMyVideoCallStore(state => state.isShareScreen);
     const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
     const user = useAuthStore(state => state.user);
+    const layout = useVideoCallStore(state => state.layout);
 
     const {isElectron, ipcRenderer} = useElectron();
     
@@ -45,20 +46,22 @@ export default function useHandleShareScreen() {
         }
         if(item?.pin) {
             setShareScreen(false);
-            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+            if(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW) {
+                setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
+            }
         }
     }, [participants, removeParticipantShareScreen, setLayout, setShareScreen, t])
 
-    const createPeerShareScreenConnection = useCallback((users: { id: string; user: User }[]) => {
+    const createPeerShareScreenConnection = useCallback((users: { socketId: string; user: User }[]) => {
         if (!shareScreenStream) return;
-        users.forEach((u: { id: string; user: User }) => {
+        users.forEach((u: { socketId: string; user: User }) => {
             if (!socket.id) return;
             const peer = createPeer(shareScreenStream);
             peer.on("signal", (signal) => {
-                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
+                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.socketId, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
             });
             addPeerShareScreen({
-                id: u.id,
+                id: u.socketId,
                 peer,
             });
         });
@@ -116,8 +119,8 @@ export default function useHandleShareScreen() {
             });
         }
         const isPinMyStream = participants.some((p) => p.isShareScreen && p.pin && p.isMe);
-        if(isPinMyStream) {
-            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+        if(isPinMyStream && layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW) {
+            setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
         }
         setShareScreen(false);
         removeParticipantShareScreen(socket.id);

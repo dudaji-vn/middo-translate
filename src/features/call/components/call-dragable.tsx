@@ -2,8 +2,10 @@
 
 import { cn } from '@/utils/cn';
 import { motion, useAnimationControls, useDragControls } from 'framer-motion';
-import { PropsWithChildren, useEffect, useRef } from 'react';
+import { PropsWithChildren, useEffect, useMemo, useRef } from 'react';
 import { useVideoCallStore } from '../store/video-call.store';
+import useHelpDesk from '../hooks/use-help-desk';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 interface CallDragableProps {
   className?: string;
@@ -13,7 +15,8 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
   const dragContainerRef = useRef<HTMLDivElement>(null);
   const controls = useDragControls();
   const animationControls = useAnimationControls();
-
+  const { isHelpDeskCall } = useHelpDesk();
+  const {isBusiness} = useBusinessNavigationData();
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const isAllowDrag = useVideoCallStore(state => state.isAllowDrag);
   useEffect(() => {
@@ -22,11 +25,16 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
       y:0
     })
   }, [animationControls, isFullScreen]);
+  
+  const isAllowDragCall = useMemo(()=>{
+    if(isHelpDeskCall && !isBusiness) return false
+    return isAllowDrag;
+  }, [isAllowDrag, isBusiness, isHelpDeskCall]) 
 
   return (
     <motion.div
       ref={constraintsRef}
-      className="pointer-events-none fixed inset-0 z-50 block max-h-vh cursor-auto bg-transparent h-full"
+      className={cn("pointer-events-none fixed inset-0 z-50 block max-h-vh cursor-auto bg-transparent h-full", isBusiness && "left-[80px]")}
     >
       <motion.div
         drag
@@ -35,7 +43,7 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
         dragMomentum={false}
         animate={animationControls}
         ref={dragContainerRef}
-        dragListener={isAllowDrag}
+        dragListener={isAllowDragCall}
         className={cn("pointer-events-auto absolute h-full cursor-auto shadow-glow md:bottom-4 md:left-4 w-[304px] rounded-xl", className)}
         onDoubleClick={() => {
           dragContainerRef.current?.removeAttribute('style');

@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useTranslation } from 'react-i18next';
 
@@ -33,7 +33,7 @@ export default function ActionDraw({}: {}) {
       !haveShareScreen ||
       !isFullScreen ||
       !isPinShareScreen ||
-      layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW ||
+      layout != VIDEO_CALL_LAYOUTS.FOCUS_VIEW ||
       !participantShareScreen?.isElectron ||
       !participantPin?.isShareScreen
     );
