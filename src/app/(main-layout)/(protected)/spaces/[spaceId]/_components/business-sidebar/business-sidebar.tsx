@@ -202,9 +202,9 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
         onMouseEnter={expandSheet}
       >
         <SheetContent
-          overlayProps={{ className: 'top-[52px]' }}
+          overlayProps={{ className: 'top-[52px] z-[48]' }}
           side={'left'}
-          className="bottom-0 z-[49] top-[52px] w-fit  p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          className="bottom-0 top-[52px] z-[49] w-fit  p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
           onMouseLeave={shrinkSheet}
         >
           <SpaceNavigator />
