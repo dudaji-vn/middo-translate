@@ -7,7 +7,7 @@ import React from 'react';
 
 const ClientInviteTime = ({ invitedAt }: { invitedAt: string }) => {
   return (
-    <Typography className="p dark:text-neutral-100  flex items-center text-sm font-light text-neutral-500 max-md:pt-2 md:pl-3">
+    <Typography className="p flex  items-center text-sm font-light text-neutral-500 dark:text-neutral-100 max-md:pt-2 md:pl-3">
       At&nbsp;
       <Clock className="ml-1 inline-block size-4" />
       <span className="text-base font-normal leading-[18px] ">

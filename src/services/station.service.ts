@@ -18,3 +18,10 @@ export const getStations = (type: 'joined-stations' | undefined | null) => {
   const queryParams = type ? `?type=${type}` : '';
   return get(`/stations` + queryParams);
 };
+
+export const validateStationInvitation = (data: {
+  token: string;
+  status: 'accept' | 'decline';
+}) => {
+  return post('/stations/members/validate-invite', data);
+};
