@@ -26,10 +26,10 @@ export type TStation = BaseEntity & {
   avatar?: string;
   backgroundImage?: string;
   description?: string;
-  members: Member[];
   totalNewMessages: number;
   totalMembers: number;
   owner: User;
+  isOwner: boolean;
   tag?: TStationTag;
   tags: TConversationTag[];
 };
