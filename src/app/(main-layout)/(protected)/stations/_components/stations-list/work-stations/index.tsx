@@ -4,15 +4,16 @@ import { Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link, { LinkProps } from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import React from 'react';
+import React, { act, useCallback } from 'react';
 import { useAuthStore } from '@/stores/auth.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
 import StationsListSkeletons from '../../skeletons/station-list-skeletons';
-import Station from '../station-card/station';
+import Station, { EStationActions } from '../station-card/station';
 import { TStation } from '../../type';
 import { useRouter } from 'next/navigation';
+import { DeleteStationModal } from '../../../station-crud/station-deletion/delete-station-modal';
 
 function StationCreateButton({}: {} & React.HTMLAttributes<HTMLDivElement>) {
   const { t } = useTranslation('common');
@@ -42,14 +43,35 @@ const WorkStations = ({
   loading?: boolean;
 }) => {
   const currentUser = useAuthStore((s) => s.user);
-
+  const [modalAction, setModalAction] = React.useState<{
+    action: EStationActions | null;
+    station: TStation | null;
+  }>({
+    action: null,
+    station: null,
+  });
+  const onAction = useCallback((action: EStationActions, station: TStation) => {
+    setModalAction({ action, station });
+  }, []);
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       <StationCreateButton />
       {loading && <StationsListSkeletons count={3} />}
       {stations?.map((stn, index) => {
-        return <Station key={stn._id} data={stn} />;
+        return (
+          <Station
+            key={stn._id}
+            data={stn}
+            onAction={(action) => {
+              onAction(action, stn);
+            }}
+          />
+        );
       })}
+
+      {modalAction.station && modalAction.action === EStationActions.DELETE && (
+        <DeleteStationModal station={modalAction.station} />
+      )}
     </div>
   );
 };

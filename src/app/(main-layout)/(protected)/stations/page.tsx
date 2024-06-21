@@ -1,5 +1,5 @@
 import StationsList from './_components/stations-list';
-import CreateStation from './station-crud/create-station';
+import CreateStation from './station-crud/station-creation/create-station';
 
 enum WorkStationModalType {
   CreateStation = 'create-station',

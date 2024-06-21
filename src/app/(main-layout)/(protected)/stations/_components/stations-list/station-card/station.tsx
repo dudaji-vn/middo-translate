@@ -1,8 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
-import React, { cloneElement, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import moment from 'moment';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { Avatar } from '@/components/data-display';
-import { Circle, Key, MessageSquare, MoreVertical, User } from 'lucide-react';
+import { Circle, MessageSquare, MoreVertical, User } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
@@ -27,26 +26,29 @@ const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
     },
   },
 });
+export enum EStationActions {
+  SETTINGS = 'settings',
+  SET_AS_DEFAULT = 'set-as-default',
+  DELETE = 'delete',
+}
 
 type StationMenuItem = {
   label: string;
-  action: string;
+  action: EStationActions;
   labelProps?: React.HTMLAttributes<HTMLSpanElement>;
 }[];
-
 const items: StationMenuItem = [
   {
     label: 'STATION.ACTIONS.SETTINGS',
-    action: 'settings',
+    action: EStationActions.SETTINGS,
   },
   {
-    // set as default
     label: 'STATION.ACTIONS.SET_AS_DEFAULT',
-    action: 'set-as-default',
+    action: EStationActions.SET_AS_DEFAULT,
   },
   {
     label: 'COMMON.DELETE',
-    action: 'delete',
+    action: EStationActions.DELETE,
     labelProps: {
       className: '!text-error ',
     },
@@ -55,15 +57,14 @@ const items: StationMenuItem = [
 
 const StationMenu = ({
   station,
+  onAction,
   ...props
 }: {
   station?: TStation;
+  onAction: (action: EStationActions) => void;
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
-  const onOpenChange = useCallback((open: boolean) => {
-    setOpen(open);
-  }, []);
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setOpen}>
@@ -93,7 +94,7 @@ const StationMenu = ({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log('STATION ?? ', item.action);
+                onAction(item.action);
               }}
             >
               <span
@@ -119,18 +120,13 @@ const MAPPED_TAGS = {
 
 const Station = ({
   data,
+  onAction = () => {},
   ...props
 }: {
   data: TStation;
+  onAction?: (action: EStationActions) => void;
 } & React.HTMLAttributes<HTMLDivElement>) => {
-  const {
-    name,
-    totalMembers,
-    totalNewMessages = 0,
-    createdAt,
-    avatar,
-    _id,
-  } = data || {};
+  const { name, totalMembers, totalNewMessages = 0, avatar, _id } = data || {};
   const hasNotification = totalNewMessages > 0;
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -148,7 +144,7 @@ const Station = ({
       {...props}
     >
       <div className="absolute right-2 top-1 z-10">
-        <StationMenu station={data} />
+        <StationMenu station={data} onAction={onAction} />
       </div>
       <div className="absolute -top-1 right-[10px]">
         <Circle

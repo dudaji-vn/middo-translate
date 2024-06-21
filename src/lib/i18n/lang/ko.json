@@ -517,6 +517,11 @@
       "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
       "CONFIRM": "공간 삭제"
     },
+    "DELETE_STATION": {
+      "TITLE": "정류장 삭제",
+      "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
+      "CONFIRM": "정류장 삭제"
+    },
     "SIGN_OUT": {
       "TITLE": "로그아웃 하시겠습니까?",
       "DESCRIPTION": "앱에서 로그아웃되며 다시 로그인해야 합니다."

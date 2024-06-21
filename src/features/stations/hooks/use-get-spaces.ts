@@ -16,7 +16,6 @@ export const useGetStations = ({ type }: { type?: StationTabType }) => {
             type,
           },
         });
-        console.log('STATION:: ', response.data);
         return response.data;
       } catch (error) {
         console.error(`Error fetching stations: ${error as Error}`);

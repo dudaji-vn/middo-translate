@@ -518,6 +518,11 @@
       "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu của mình và không thể hoàn tác. Bạn có chắc chắn muốn xoá <strong>{{name}}</strong> không?",
       "CONFIRM": "Xoá không gian"
     },
+    "DELETE_STATION": {
+      "TITLE": "Xoá trạm",
+      "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu của mình và không thể hoàn tác. Bạn có chắc chắn muốn xoá <strong>{{name}}</strong> không?",
+      "CONFIRM": "Xoá trạm"
+    },
     "SIGN_OUT": {
       "TITLE": "Bạn có muốn đăng xuất không?",
       "DESCRIPTION": "Bạn sẽ đăng xuất khỏi ứng dụng và cần đăng nhập lại."

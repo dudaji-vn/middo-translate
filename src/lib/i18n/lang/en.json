@@ -521,6 +521,11 @@
       "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
       "CONFIRM": "Delete Space"
     },
+    "DELETE_STATION": {
+      "TITLE": "Delete Station",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
+      "CONFIRM": "Delete Station"
+    },
     "SIGN_OUT": {
       "TITLE": "Do you want to sign out?",
       "DESCRIPTION": "You will be signed out of the app and need to log in again."
