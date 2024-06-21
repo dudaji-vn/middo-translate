@@ -16,7 +16,6 @@ import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useTranslation } from 'react-i18next';
-import { SPK_FOCUS } from '@/configs/search-param-key';
 import { TStation } from '../../type';
 
 const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
@@ -32,30 +31,24 @@ const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
 type StationMenuItem = {
   label: string;
   action: string;
-  labelProps: React.HTMLAttributes<HTMLSpanElement>;
+  labelProps?: React.HTMLAttributes<HTMLSpanElement>;
 }[];
 
 const items: StationMenuItem = [
   {
     label: 'STATION.ACTIONS.SETTINGS',
     action: 'settings',
-    labelProps: {
-      className: 'font-semibold text-neutral-800 dark:text-neutral-100',
-    },
   },
   {
     // set as default
     label: 'STATION.ACTIONS.SET_AS_DEFAULT',
     action: 'set-as-default',
-    labelProps: {
-      className: 'font-semibold text-neutral-800 dark:text-neutral-100',
-    },
   },
   {
     label: 'COMMON.DELETE',
     action: 'delete',
     labelProps: {
-      className: 'font-semibold text-error-400 dark:text-neutral-100',
+      className: '!text-error ',
     },
   },
 ];
@@ -100,11 +93,17 @@ const StationMenu = ({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-
                 console.log('STATION ?? ', item.action);
               }}
             >
-              <span {...item.labelProps}>{t(item.label)}</span>
+              <span
+                className={cn(
+                  'font-semibold text-neutral-800 dark:text-neutral-100',
+                  item.labelProps?.className,
+                )}
+              >
+                {t(item.label)}
+              </span>
             </DropdownMenuItem>
           );
         })}
@@ -113,10 +112,6 @@ const StationMenu = ({
   );
 };
 
-const MAPPED_ICONS = {
-  my: <Key className="mr-2 h-4 w-4" />,
-  joined: <User className="mr-2 h-4 w-4" />,
-};
 const MAPPED_TAGS = {
   my: 'STATION.MY_STATION',
   joined: 'STATION.JOINED_STATION',
@@ -124,11 +119,9 @@ const MAPPED_TAGS = {
 
 const Station = ({
   data,
-  tag,
   ...props
 }: {
   data: TStation;
-  tag: 'my' | 'joined';
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const {
     name,
@@ -141,6 +134,8 @@ const Station = ({
   const hasNotification = totalNewMessages > 0;
   const { t } = useTranslation('common');
   const router = useRouter();
+
+  const tag = data?.isOwner ? 'my' : 'joined';
   return (
     <Card
       key={_id}
@@ -182,7 +177,6 @@ const Station = ({
         />
         <div className="flex flex-col items-start space-y-1">
           <Badge className={cn('px-2 py-1', tagsVariants({ tag }))}>
-            {MAPPED_ICONS[tag]}
             {t(MAPPED_TAGS[tag])}
           </Badge>
           <CardTitle className="max-w-36 break-words text-base  font-semibold  leading-[18px] text-neutral-800  dark:text-neutral-50 sm:max-w-44 xl:max-w-56">
