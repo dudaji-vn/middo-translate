@@ -472,6 +472,27 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "CREATE_STATION": {
+      "HEADING": "Tạo Trạm",
+      "TITLE": "Cung cấp <span class='text-primary-500-main'> thông tin cho trạm của bạn </span>",
+      "DESCRIPTION": "Giúp đội ngũ của bạn dễ dàng nhận diện doanh nghiệp của bạn bằng cách đặt tên cho trạm này, thêm hình đại diện của trạm hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Nhập tên trạm"
+      },
+      "ERRORS": {
+        "NAME_REQUIRED": "Tên trạm là bắt buộc",
+        "NAME_MAX_LENGTH": "Tên trạm không được vượt quá 30 ký tự",
+        "AVATAR_REQUIRED": "Hình đại diện của trạm là bắt buộc"
+      },
+      "INVITE_MEMBERS": {
+        "TITLE": "<span class='mr-2 text-primary-500-main'>Mời</span> người khác tham gia trạm làm việc của bạn&nbsp;<span class='text-[24px] font-normal'>(tùy chọn)</span>",
+        "DESCRIPTION": "Giúp đội ngũ của bạn dễ dàng nhận diện Trạm Làm Việc của bạn bằng cách đặt tên, thêm hình đại diện hoặc logo của công ty. <span class='font-normal text-primary-500-main'>Nâng cấp gói.</span>",
+        "ERRORS": {
+          "EMAIL_REQUIRED": "Email là bắt buộc",
+          "EMAIL_INVALID": "Email không hợp lệ"
+        }
+      }
+    },
     "START_CALL": {
       "TITLE": "Bắt đầu cuộc gọi",
       "DESCRIPTION": "Bạn có chắc chắn muốn bắt đầu cuộc gọi không?"
@@ -667,6 +688,34 @@
       "TITLE": "Không thể tải cuôc trò chuyện",
       "DESCRIPTION": "Vui lòng kiểm tra lại mã nhúng hoặc xem tên miền của bạn đã được thêm vào danh sách hay chưa."
     }
+  },
+  "STATION": {
+    "WELCOME": "Xin chào, chào mừng trở lại",
+    "ALL_STATION": "Tất cả các trạm",
+    "JOINED_STATION": "Trạm đã tham gia",
+    "MY_STATION": "Trạm của tôi",
+    "CREATE_STATION": "Tạo trạm mới",
+    "DASHBOARD": "Bảng điều khiển",
+    "STATION_INFOR": "Thông tin trạm",
+    "UPLOAD_IMAGE": "Tải lên ảnh đại diện trạm",
+    "CREATE_BUTTON": "Tạo trạm và mời thành viên",
+    "ERRORS": {
+      "NAME_REQUIRED": "Tên trạm là bắt buộc",
+      "NAME_MAX_LENGTH": "Tên trạm phải ít hơn 30 ký tự",
+      "AVATAR_REQUIRED": "Ảnh đại diện trạm là bắt buộc",
+      "INVALID_EMAIL_MEMBER": "Email thành viên không hợp lệ"
+    },
+    "ACTIONS": {
+      "SET_AS_DEFAULT": "Đặt làm mặc định",
+      "DELETE": "Xoá trạm",
+      "SETTINGS": "Cài đặt"
+    },
+    "MEMBER": {
+      "YOU": "bạn",
+      "EMAIL": "Email",
+      "ROLE": "Vai trò"
+    },
+    "NO_MEMBER": "Không có thành viên"
   },
   "EXTENSION": {
     "ALL_DOMAINS": "Tất cả miền",
