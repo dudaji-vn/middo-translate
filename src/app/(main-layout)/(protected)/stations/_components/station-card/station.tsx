@@ -31,7 +31,7 @@ const MAPPED_TAGS = {
   joined: 'EXTENSION.SPACE.JOINED_SPACE',
 };
 const Station = ({
-  data: { name, members = [], totalNewMessages = 0, createdAt, avatar, _id },
+  data: { name, totalNewMessages = 0, totalMembers, createdAt, avatar, _id },
   tag,
   ...props
 }: {
@@ -93,7 +93,7 @@ const Station = ({
           <CardTitle className="max-w-36 break-words text-base  font-semibold  leading-[18px] text-neutral-800  dark:text-neutral-50 sm:max-w-44 xl:max-w-56">
             {name}
           </CardTitle>
-          <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${members?.length} ${t('COMMON.MEMBER')}`}</span>
+          <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${totalMembers} ${t('COMMON.MEMBER')}`}</span>
           <Button
             size={'xs'}
             shape={'square'}

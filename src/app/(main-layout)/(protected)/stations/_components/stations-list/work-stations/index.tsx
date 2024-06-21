@@ -14,7 +14,7 @@ import Station from '../station-card/station';
 import { TStation } from '../../type';
 import { useRouter } from 'next/navigation';
 
-function StationCreateButton({ }: {} & React.HTMLAttributes<HTMLDivElement>) {
+function StationCreateButton({}: {} & React.HTMLAttributes<HTMLDivElement>) {
   const { t } = useTranslation('common');
   const router = useRouter();
   return (
@@ -47,15 +47,8 @@ const WorkStations = ({
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       <StationCreateButton />
       {loading && <StationsListSkeletons count={3} />}
-      {stations?.map((st, index) => {
-        console.log('station', st);
-        return (
-          <Station
-            key={st._id}
-            data={st}
-            tag={currentUser?._id === st.owner?._id ? 'my' : 'joined'}
-          />
-        );
+      {stations?.map((stn, index) => {
+        return <Station key={stn._id} data={stn} />;
       })}
     </div>
   );
