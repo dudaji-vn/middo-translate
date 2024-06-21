@@ -47,7 +47,7 @@ export const getStationInvitationByToken = async (token: string) => {
   const access_token = await getAccessToken();
   try {
     const response = await fetch(
-      process.env.NEXT_PUBLIC_API_URL + '/api/station-verify/' + token,
+      process.env.NEXT_PUBLIC_API_URL + '/api/stations/station-verify/' + token,
       {
         method: 'GET',
         headers: {
