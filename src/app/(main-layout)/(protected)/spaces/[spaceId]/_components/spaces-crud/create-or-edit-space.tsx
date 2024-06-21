@@ -163,7 +163,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           value="1"
           cardProps={{
             className:
-              'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none dark:bg-background',
+              'w-full flex flex-col min-h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
           }}
         >
           <InviteMembers
