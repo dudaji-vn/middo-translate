@@ -132,8 +132,8 @@ const ActionBar = () => {
 };
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
-  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
   const {isBusiness} = useBusinessNavigationData();
+  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id, isBusiness);
   const { user } = useAuthStore();
   const currentUserId = user?._id || '';
   const { t } = useTranslation('common');

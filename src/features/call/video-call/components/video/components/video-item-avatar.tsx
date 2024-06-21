@@ -45,7 +45,7 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
       >
         <Avatar
           className="h-full w-full bg-neutral-900 object-cover"
-          src={participant?.user?.avatar || '/avatar_default.png'}
+          src={participant?.user?.avatar || '/avatar_default.svg'}
           alt={participant?.user?.name || 'Anonymous'}
         />
       </div>

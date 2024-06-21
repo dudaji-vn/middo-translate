@@ -10,6 +10,7 @@ export default function useSocketVideoCall() {
   const room = useVideoCallStore((state) => state.room);
   const setRoom = useVideoCallStore((state) => state.setRoom);
   const clearStateVideoCall = useVideoCallStore(state => state.clearStateVideoCall);
+  const setMeetingList = useChatStore(state => state.setMeetingList);
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.MEETING.END, (roomId: string) => {
         deleteMeeting(roomId);
@@ -19,15 +20,15 @@ export default function useSocketVideoCall() {
         }
     });
     socket.on(SOCKET_CONFIG.EVENTS.MEETING.LIST, (meetings: Meeting) => {
-      updateMeetingList(meetings);
+      setMeetingList(meetings);
     });
     socket.on(SOCKET_CONFIG.EVENTS.MEETING.UPDATE, (meetings: Meeting) => {
       updateMeetingList(meetings);
     });
     return () => {
-        socket.off(SOCKET_CONFIG.EVENTS.MEETING.END);
-        socket.off(SOCKET_CONFIG.EVENTS.MEETING.LIST);
-        socket.off(SOCKET_CONFIG.EVENTS.MEETING.UPDATE);
+      socket.off(SOCKET_CONFIG.EVENTS.MEETING.END);
+      socket.off(SOCKET_CONFIG.EVENTS.MEETING.LIST);
+      socket.off(SOCKET_CONFIG.EVENTS.MEETING.UPDATE);
     }
   }, [room, setRoom, clearStateVideoCall, deleteMeeting, updateMeetingList]);
 }

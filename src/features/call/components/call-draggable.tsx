@@ -10,7 +10,7 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 interface CallDragableProps {
   className?: string;
 }
-const CallDragable = ({ children, className }: PropsWithChildren & CallDragableProps) => {
+const CallDraggable = ({ children, className }: PropsWithChildren & CallDragableProps) => {
   const constraintsRef = useRef<HTMLDivElement>(null);
   const dragContainerRef = useRef<HTMLDivElement>(null);
   const controls = useDragControls();
@@ -28,13 +28,14 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
   
   const isAllowDragCall = useMemo(()=>{
     if(isHelpDeskCall && !isBusiness) return false
+    if(isFullScreen) return false;
     return isAllowDrag;
   }, [isAllowDrag, isBusiness, isHelpDeskCall]) 
 
   return (
     <motion.div
       ref={constraintsRef}
-      className={cn("pointer-events-none fixed inset-0 z-50 block max-h-vh cursor-auto bg-transparent h-full", isBusiness && "left-[80px]")}
+      className={cn("pointer-events-none fixed inset-0 z-50 block max-h-vh cursor-auto bg-transparent h-full")}
     >
       <motion.div
         drag
@@ -57,4 +58,4 @@ const CallDragable = ({ children, className }: PropsWithChildren & CallDragableP
   );
 };
 
-export default CallDragable;
+export default CallDraggable;

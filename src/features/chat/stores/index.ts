@@ -17,6 +17,7 @@ export type ChatState = {
   onlineList: string[];
   setOnlineList: (list: string[]) => void;
   meetingList: Meeting;
+  setMeetingList: (list: Meeting) => void;
   updateMeetingList: (list: Meeting) => void;
   deleteMeeting: (roomId: string) => void;
   sendOnSave: boolean;
@@ -43,6 +44,7 @@ export const useChatStore = create<ChatState>()(
       onlineList: [],
       setOnlineList: (list) => set(() => ({ onlineList: list })),
       meetingList: {},
+      setMeetingList: (list: Meeting) => set(() => ({ meetingList: list })),
       updateMeetingList: (list: Meeting) => set((state) => ({ meetingList: {
         ...state.meetingList,
         ...list,
