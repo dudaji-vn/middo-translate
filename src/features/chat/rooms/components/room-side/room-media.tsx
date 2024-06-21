@@ -59,7 +59,10 @@ export const RoomMedia = () => {
               >
                 {media.type === 'video' && (
                   <div className="relative h-full w-full">
-                    <video src={media.url} className="h-full w-full" />
+
+                    <video className="h-full w-full object-cover" >
+                      <source src={media.url + '#t=0.001'} type="video/mp4" />
+                    </video>
                     <Button.Icon
                       size={'ss'}
                       variant={'default'}

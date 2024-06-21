@@ -9,6 +9,7 @@ import { Editor } from '@tiptap/react';
 
 import MediaLightBox from './media-light-box/media-light-box';
 import { cn } from '@/utils/cn';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,8 +22,9 @@ export const AttachmentSelection = forwardRef<
   AttachmentSelectionProps
 >(({ editor, readonly }, ref) => {
   const { files, removeFile, open } = useMediaUpload();
-  const [index, setIndex] = useState<number | undefined>(undefined);
-
+  const setIndex = useMediaLightBoxStore(state => state.setIndex);
+  const setFiles = useMediaLightBoxStore(state => state.setFiles);
+  
   useEffect(() => {
     if (files.length > 0) editor?.commands.focus();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,6 +46,11 @@ export const AttachmentSelection = forwardRef<
       });
   }, [files]);
 
+  const onOpenMediaLightBox = (index: number) => {
+    setIndex(index);
+    setFiles(sliders);
+  }
+
   return (
     <AnimatePresence>
       {files.length > 0 && (
@@ -61,12 +68,6 @@ export const AttachmentSelection = forwardRef<
             <PlusCircleIcon />
           </Button.Icon>
           <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
-            <MediaLightBox
-              files={sliders}
-              index={index}
-              close={() => setIndex(undefined)}
-              key={index}
-            />
             <AnimatePresence>
               {files.map((file, i) => {
                 return (
@@ -79,7 +80,7 @@ export const AttachmentSelection = forwardRef<
                   >
                     <div
                       className="aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow"
-                      onClick={() => setIndex(i)}
+                      onClick={() => onOpenMediaLightBox(i)}
                     >
                       <MediaItem file={file} />
                     </div>
@@ -122,7 +123,9 @@ export const MediaItem = ({ file }: { file: SelectedFile }) => {
       case 'video':
         return (
           <div className="relative h-full">
-            <video src={file.url} className="h-full w-full" />
+            <video className="h-full w-full object-cover">
+              <source src={file.url + '#t=0.001'} type="video/mp4" />
+            </video>
             <PlayCircleIcon className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white" />
           </div>
         );

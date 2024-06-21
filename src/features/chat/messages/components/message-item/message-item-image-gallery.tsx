@@ -8,6 +8,7 @@ import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import { forwardRef, useState } from 'react';
 import useRotate from '@/components/data-display/rotate';
 import MediaLightBox from '@/components/media-light-box/media-light-box';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 export interface ImageGalleryProps
   extends React.HTMLAttributes<HTMLDivElement> {
   images: Media[];
@@ -19,8 +20,16 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
     const isMultiple = length > 1;
     const num = length > 3 ? 3 : length;
     const width = 360 / num;
-    const [index, setIndex] = useState<number | undefined>();
-
+    const setIndex = useMediaLightBoxStore(state => state.setIndex);
+    const setFiles = useMediaLightBoxStore(state => state.setFiles);
+    const onOpenMediaLightBox = (index: number) => {
+      setIndex(index);
+      setFiles(images.map((img) => ({
+        url: img.url,
+        type: 'image',
+        name: img.name || '',
+      })));
+    }
     return (
       <>
         {isMultiple ? (
@@ -37,7 +46,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIndex(index);
+                    onOpenMediaLightBox(index);
                   }}
                   key={index}
                   style={{
@@ -64,7 +73,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
               priority
               onClick={(e) => {
                 e.stopPropagation();
-                setIndex(0);
+                onOpenMediaLightBox(0);
               }}
               width={280}
               height={280}
@@ -74,16 +83,6 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             />
           </div>
         )}
-        <MediaLightBox
-          files={images.map((img) => ({
-            url: img.url,
-            type: 'image',
-            name: img.name || '',
-          }))}
-          key={index}
-          index={index}
-          close={() => setIndex(undefined)}
-          />
       </>
     );
   },

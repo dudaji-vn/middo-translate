@@ -244,195 +244,198 @@ function VideoPlayer(props: VideoProps) {
     return new Date(currentTime * 1000).toISOString().substr(14, 5);
   }, [currentTime]);
 
-  return (
+  const Component = <div
+  className={cn(
+    'group relative overflow-hidden bg-transparent',
+    className,
+    isFullScreen
+      ? 'fixed inset-0 z-[51] h-full w-full max-w-full rounded-none bg-black/90'
+      : 'z-[1]',
+  )}
+  ref={wrapperRef}
+>
+  {poster && !isPlaying && (
+    <Image
+      src={poster}
+      alt="Video Intro Thumbnail"
+      fill={true}
+      objectFit="contain"
+    />
+  )}
+  <video
+    ref={videoRef}
+    src={file.url}
+    controls={false}
+    disablePictureInPicture
+    className={cn('h-full w-full object-contain opacity-0', {
+      'opacity-100': isPlaying || !poster,
+    })}
+  />
+  {/* Button play */}
+  <div
+    className="group absolute inset-3 z-10 flex items-center justify-center"
+    onClick={(e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      toggleVideoPlay();
+    }}
+    onDoubleClick={() => setIsFullScreen((prev) => !prev)}
+  >
+    <Button.Icon
+      variant={'default'}
+      color={'default'}
+      shape={'default'}
+      size={isFullScreen ? 'md' : 'sm'}
+      className={cn(
+        'shadow-2',
+        isPlaying ? 'opacity-0' : '',
+        isPlaying && isFullScreen && '!opacity-0',
+      )}
+    >
+      {isPlaying ? <Pause /> : <PlayIcon />}
+    </Button.Icon>
+  </div>
+
+  <div
+    className={cn(
+      'pointer-events-none absolute inset-0 bg-black/20 duration-500',
+      isPlaying || isFullScreen || poster ? 'opacity-0' : '',
+    )}
+  ></div>
+
+  {/* Actions */}
+  <div
+    className={cn(
+      'absolute bottom-1 left-1 right-1 z-10 flex items-center justify-end gap-2 rounded-2xl  bg-black/40 p-1 px-2 duration-500 md:rounded-xl',
+      isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40',
+      isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]',
+    )}
+    ref={actionMenuRef}
+    onClick={(e) => {
+      e.stopPropagation();
+    }}
+  >
+    <span
+      className={cn(
+        'hidden text-sm text-white md:block',
+        isFullScreen && 'block',
+      )}
+    >
+      {formatVideoTimer}
+    </span>
     <div
       className={cn(
-        'group relative overflow-hidden bg-transparent',
-        className,
-        isFullScreen
-          ? 'fixed inset-0 z-[51] h-full w-full max-w-full rounded-none bg-black/90'
-          : 'z-[1]',
+        'relative mx-2 hidden flex-1 py-2 md:block',
+        isFullScreen && 'block',
       )}
-      ref={wrapperRef}
+      ref={durationBarRef}
     >
-      {poster && !isPlaying && (
-        <Image
-          src={poster}
-          alt="Video Intro Thumbnail"
-          fill={true}
-          objectFit="contain"
-        />
-      )}
-      <video
-        ref={videoRef}
-        src={file.url}
-        controls={false}
-        disablePictureInPicture
-        className={cn('h-full w-full object-contain opacity-0', {
-          'opacity-100': isPlaying || !poster,
-        })}
-      />
-      {/* Button play */}
-      <div
-        className="group absolute inset-3 z-10 flex items-center justify-center"
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          toggleVideoPlay();
+      <Range
+        step={0.01}
+        min={0}
+        max={1}
+        values={[currentTime / videoDuration]}
+        onChange={(values) => {
+          videoRef.current!.currentTime = values[0] * videoDuration;
+          setCurrentTime(videoRef.current!.currentTime);
         }}
-        onDoubleClick={() => setIsFullScreen((prev) => !prev)}
-      >
-        <Button.Icon
-          variant={'default'}
-          color={'default'}
-          shape={'default'}
-          size={isFullScreen ? 'md' : 'sm'}
-          className={cn(
-            'shadow-2',
-            isPlaying ? 'opacity-0' : '',
-            isPlaying && isFullScreen && '!opacity-0',
-          )}
-        >
-          {isPlaying ? <Pause /> : <PlayIcon />}
-        </Button.Icon>
-      </div>
-
-      <div
-        className={cn(
-          'pointer-events-none absolute inset-0 bg-black/20 duration-500',
-          isPlaying || isFullScreen || poster ? 'opacity-0' : '',
-        )}
-      ></div>
-
-      {/* Actions */}
-      <div
-        className={cn(
-          'absolute bottom-1 left-1 right-1 z-10 flex items-center justify-end gap-2 rounded-2xl  bg-black/40 p-1 px-2 duration-500 md:rounded-xl',
-          isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40',
-          isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]',
-        )}
-        ref={actionMenuRef}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <span
-          className={cn(
-            'hidden text-sm text-white md:block',
-            isFullScreen && 'block',
-          )}
-        >
-          {formatVideoTimer}
-        </span>
-        <div
-          className={cn(
-            'relative mx-2 hidden flex-1 py-2 md:block',
-            isFullScreen && 'block',
-          )}
-          ref={durationBarRef}
-        >
-          <Range
-            step={0.01}
-            min={0}
-            max={1}
-            values={[currentTime / videoDuration]}
-            onChange={(values) => {
-              videoRef.current!.currentTime = values[0] * videoDuration;
-              setCurrentTime(videoRef.current!.currentTime);
-            }}
-            renderTrack={({ props, children }) => (
-              <div {...props} className={cn('relative h-4 w-full rounded')}>
-                <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 rounded bg-neutral-500" />
-                <div
-                  className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded bg-primary "
-                  style={{ width: `${(currentTime / videoDuration) * 100}%` }}
-                />
-                {children}
-              </div>
-            )}
-            renderThumb={({ props }) => (
-              <div
-                {...props}
-                className="h-4 w-4 rounded-full bg-white"
-                key="1"
-              ></div>
-            )}
-          />
-
-          {/* Thumbnail Video */}
-          <div
-            className={cn(
-              'pointer-events-none absolute bottom-[calc(100%+16px)] aspect-video w-[100px] -translate-x-1/2 overflow-hidden rounded-sm bg-transparent transition-all',
-              isHoverDurationBar ? 'visible' : 'hidden',
-            )}
-            style={{
-              left: `${thumbnailLeft}%`,
-            }}
-          >
-            <video
-              ref={videoThumbnailRef}
-              src={file.url}
-              muted
-              controls={false}
-              disablePictureInPicture
-              className={cn('h-full w-full')}
+        renderTrack={({ props, children }) => (
+          <div {...props} className={cn('relative h-4 w-full rounded')}>
+            <div className="absolute left-0 top-1/2 h-1 w-full -translate-y-1/2 rounded bg-neutral-500" />
+            <div
+              className="absolute left-0 top-1/2 h-1 -translate-y-1/2 rounded bg-primary "
+              style={{ width: `${(currentTime / videoDuration) * 100}%` }}
             />
+            {children}
           </div>
-        </div>
-        {isShowVolume && (
-          <DropdownMenu open={isOpenVolume}>
-            <DropdownMenuTrigger asChild={true}>
-              <div
-                ref={buttonVolumeRef}
-                className={cn('hidden md:block', isFullScreen && 'block')}
-              >
-                <ButtonVolume
-                  isFullScreen={isFullScreen}
-                  isOpenVolume={isOpenVolume}
-                  setIsOpenVolume={setIsOpenVolume}
-                />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              align="center"
-              side="top"
-              className="item-center z-[52] flex !min-w-1 max-w-6 justify-center border-none bg-black/20 px-[10px] py-4"
-              onClick={() => setIsOpenVolume(false)}
-            >
-              <div ref={rangeVolumeRef}>
-                <RangeVolume />
-              </div>
-            </DropdownMenuContent>
-          </DropdownMenu>
         )}
-        {/* Download */}
-        {isShowDownload && (
-          <Button.Icon
-            variant={'default'}
-            color={'default'}
-            size={isFullScreen ? 'xs' : 'ss'}
-            shape={'default'}
-            className={cn(isFullScreen ? '' : 'hidden')}
-            onClick={download}
-          >
-            <DownloadIcon />
-          </Button.Icon>
+        renderThumb={({ props }) => (
+          <div
+            {...props}
+            className="h-4 w-4 rounded-full bg-white"
+            key="1"
+          ></div>
         )}
-        {/* Full Screen */}
-        {isShowFullScreen && (
-          <Button.Icon
-            variant={'default'}
-            color={'default'}
-            size={isFullScreen ? 'xs' : 'ss'}
-            shape={'default'}
-            onClick={() => setIsFullScreen(!isFullScreen)}
-          >
-            {isFullScreen ? <X /> : <Maximize2Icon />}
-          </Button.Icon>
+      />
+
+      {/* Thumbnail Video */}
+      <div
+        className={cn(
+          'pointer-events-none absolute bottom-[calc(100%+16px)] aspect-video w-[100px] -translate-x-1/2 overflow-hidden rounded-sm bg-transparent transition-all',
+          isHoverDurationBar ? 'visible' : 'hidden',
         )}
+        style={{
+          left: `${thumbnailLeft}%`,
+        }}
+      >
+        <video
+          ref={videoThumbnailRef}
+          src={file.url}
+          muted
+          controls={false}
+          disablePictureInPicture
+          className={cn('h-full w-full')}
+        />
       </div>
     </div>
-  );
+    {isShowVolume && (
+      <DropdownMenu open={isOpenVolume}>
+        <DropdownMenuTrigger asChild={true}>
+          <div
+            ref={buttonVolumeRef}
+            className={cn('hidden md:block', isFullScreen && 'block')}
+          >
+            <ButtonVolume
+              isFullScreen={isFullScreen}
+              isOpenVolume={isOpenVolume}
+              setIsOpenVolume={setIsOpenVolume}
+            />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="center"
+          side="top"
+          className="item-center z-[52] flex !min-w-1 max-w-6 justify-center border-none bg-black/20 px-[10px] py-4"
+          onClick={() => setIsOpenVolume(false)}
+        >
+          <div ref={rangeVolumeRef}>
+            <RangeVolume />
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )}
+    {/* Download */}
+    {isShowDownload && (
+      <Button.Icon
+        variant={'default'}
+        color={'default'}
+        size={isFullScreen ? 'xs' : 'ss'}
+        shape={'default'}
+        className={cn(isFullScreen ? '' : 'hidden')}
+        onClick={download}
+      >
+        <DownloadIcon />
+      </Button.Icon>
+    )}
+    {/* Full Screen */}
+    {isShowFullScreen && (
+      <Button.Icon
+        variant={'default'}
+        color={'default'}
+        size={isFullScreen ? 'xs' : 'ss'}
+        shape={'default'}
+        onClick={() => setIsFullScreen(!isFullScreen)}
+      >
+        {isFullScreen ? <X /> : <Maximize2Icon />}
+      </Button.Icon>
+    )}
+  </div>
+</div>
+
+  if(isFullScreen) {
+    return createPortal(Component, document.body);
+  }
+  return Component;
 }
 
 interface ButtonVolumeProps {
