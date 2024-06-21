@@ -213,7 +213,7 @@ function VideoPlayer(props: VideoProps) {
 
       if (timeout) clearTimeout(timeout);
     };
-  }, [isOpenVolume]);
+  }, [isOpenVolume, isFullScreen]);
 
   useEffect(() => {
     const ref = actionMenuRef.current;
@@ -267,8 +267,8 @@ function VideoPlayer(props: VideoProps) {
     src={file.url}
     controls={false}
     disablePictureInPicture
-    className={cn('h-full w-full object-contain opacity-0', {
-      'opacity-100': isPlaying || !poster,
+    className={cn('h-full w-full object-contain opacity-100', {
+      'opacity-0': !isPlaying && poster,
     })}
   />
   {/* Button play */}
