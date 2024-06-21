@@ -42,3 +42,30 @@ export const getStationById = async (stationId: string) => {
     return {};
   }
 };
+
+export const getStationInvitationByToken = async (token: string) => {
+  const access_token = await getAccessToken();
+  try {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_API_URL + '/api/station-verify/' + token,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${access_token}`,
+        },
+      },
+    );
+    const data = await response.json();
+    if (!response.ok) {
+      return {
+        statusCode: response.status,
+        error: data.message,
+      };
+    }
+    return data?.data;
+  } catch (error) {
+    console.error('Error in get invitation by token', error);
+    return undefined;
+  }
+};
