@@ -56,6 +56,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const { postMessage } = useReactNativePostMessage();
   const isMobile = useAppStore((state) => state.isMobile);
   const [apiCarousel, setApiCarousel] = useState<CarouselApi>();
+  const [isAllowClose, setAllowClose] = useState(true);
 
   const onDownload = () => {
     const file = files[current || 0];
@@ -165,20 +166,43 @@ function MediaLightBox(props: MediaLightBoxProps) {
     const handleSliderChange = (emblaApi: any ) => {
       setCurrent(emblaApi.selectedScrollSnap())
     }
+    const handleSliderUp = () => {
+      setAllowClose(true)
+    }
+    const handleSliderDown = () => {
+      setAllowClose(false)
+    }
     apiCarousel?.on('select', handleSliderChange);
+    apiCarousel?.on('pointerUp', handleSliderUp);
+    apiCarousel?.on('pointerDown', handleSliderDown);
     return () => {
       apiCarousel?.off('select', handleSliderChange);
+      apiCarousel?.off('pointerUp', handleSliderUp);
+      apiCarousel?.off('pointerDown', handleSliderDown);
     }
   }, [current, apiCarousel])
 
   if (files.length === 0 || index == undefined) return null;
-
+  
   return createPortal(
-    <Drawer.Root open={index != undefined} direction='bottom' shouldScaleBackground onOpenChange={(open)=> {
-      if(!open) {
-        close && close();
-      }
-    }}>
+    <Drawer.Root 
+      open={index != undefined} 
+      direction='bottom' 
+      shouldScaleBackground 
+      dismissible={true}
+      modal={true}
+      onDrag={(event, percentageDragged) => {
+        console.log({event, percentageDragged, isAllowClose})
+        if(!isAllowClose) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }}
+      onOpenChange={(open)=> {
+        if(!open) {
+          close && close();
+        }
+      }}>
       <Drawer.Portal>
         <Drawer.Content className='-m-[1px] bg-black/90 border-none fixed inset-0 z-50 outline-none'>
           <div className="flex h-vh h-dvh w-full flex-col overflow-hidden p-3">
@@ -215,7 +239,6 @@ function MediaLightBox(props: MediaLightBoxProps) {
                     // dragFree: true,
                     containScroll: 'trimSnaps',
                     // dragThreshold: (zoom != 1) ? 100 : 10,
-                    
                   }}>
                   <CarouselContent className='w-full h-full !ml-0'>
                     {
@@ -236,7 +259,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
                                   // key={current}
                                 >
                                   {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                                    <div 
+                                    <div data-vaul-no-drag
                                       style={{ width: '100%', height: '100%', position: 'relative' }}
                                     >
                                       <Controls zoom={zoom} />
