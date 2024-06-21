@@ -471,6 +471,27 @@
     "RESTRICT_MESSAGE": "이 기능을 활성화하면 알 수 없는 발신자는 문자 메시지만 보낼 수 있으며 해당 메시지는 '대기 중' 탭으로 이동됩니다."
   },
   "MODAL": {
+    "CREATE_STATION": {
+      "HEADING": "정류장 만들기",
+      "TITLE": "정류장에 <span class='text-primary-500-main'> 정보를 입력하세요 </span>",
+      "DESCRIPTION": "정류장 이름을 지정하고 정류장 아바타 또는 회사 로고 <span class='font-light'>(선택사항)</span>를 추가하여 승무원들이 귀사의 비즈니스를 쉽게 인식할 수 있도록 도와주세요.",
+      "PLACEHOLDERS": {
+        "NAME": "정류장 이름 입력"
+      },
+      "ERRORS": {
+        "NAME_REQUIRED": "정류장 이름은 필수 항목입니다",
+        "NAME_MAX_LENGTH": "정류장 이름은 30자를 초과할 수 없습니다",
+        "AVATAR_REQUIRED": "정류장 아바타는 필수 항목입니다"
+      },
+      "INVITE_MEMBERS": {
+        "TITLE": "<span class='mr-2 text-primary-500-main'>초대</span> 다른 사람을 작업 공간에 초대하세요&nbsp;<span class='text-[24px] font-normal'>(선택사항)</span>",
+        "DESCRIPTION": "작업 공간의 이름을 지정하고 아바타 또는 회사 로고를 추가하여 승무원들이 작업 공간을 쉽게 인식할 수 있도록 도와주세요. <span class='font-normal text-primary-500-main'>업그레이드 계획.</span>",
+        "ERRORS": {
+          "EMAIL_REQUIRED": "이메일은 필수 항목입니다",
+          "EMAIL_INVALID": "유효하지 않은 이메일입니다"
+        }
+      }
+    },
     "START_CALL": {
       "TITLE": "통화 시작",
       "DESCRIPTION": "통화를 시작하시겠습니까?"
@@ -666,6 +687,34 @@
       "TITLE": "확장 프로그램을 로드할 수 없음",
       "DESCRIPTION": "임베드 코드를 다시 확인하거나 도메인이 목록에 추가되었는지 확인하세요."
     }
+  },
+  "STATION": {
+    "WELCOME": "안녕하세요, 다시 오신 것을 환영합니다",
+    "ALL_STATION": "모든 스테이션",
+    "JOINED_STATION": "가입한 스테이션",
+    "MY_STATION": "내 스테이션",
+    "CREATE_STATION": "새 스테이션 생성",
+    "DASHBOARD": "대시보드",
+    "STATION_INFOR": "스테이션 정보",
+    "UPLOAD_IMAGE": "스테이션 아바타 업로드",
+    "CREATE_BUTTON": "스테이션 생성 및 멤버 초대",
+    "ERRORS": {
+      "NAME_REQUIRED": "스테이션 이름은 필수 항목입니다",
+      "NAME_MAX_LENGTH": "스테이션 이름은 30자 이하여야 합니다",
+      "AVATAR_REQUIRED": "스테이션 아바타는 필수 항목입니다",
+      "INVALID_EMAIL_MEMBER": "유효하지 않은 이메일 멤버"
+    },
+    "ACTIONS": {
+      "SET_AS_DEFAULT": "기본값으로 설정",
+      "DELETE": "삭제",
+      "SETTINGS": "설정"
+    },
+    "MEMBER": {
+      "YOU": "나",
+      "EMAIL": "이메일",
+      "ROLE": "역할"
+    },
+    "NO_MEMBER": "멤버 없음"
   },
   "EXTENSION": {
     "ALL_DOMAINS": "모든 도메인",

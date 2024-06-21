@@ -22,4 +22,5 @@ export const ROUTE_NAMES = {
   LANDING_PAGE: '/landing',
   SETTINGS: '/settings',
   WIDGET_NOTIFICATION: '/widget-notification',
+  STATIONS: '/stations',
 };

@@ -475,6 +475,27 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "CREATE_STATION": {
+      "HEADING": "Create Work Station",
+      "TITLE": "Give <span class='text-primary-500-main'> your station </span> some information",
+      "DESCRIPTION": "Help your crews to recognize your business easier by naming this station, adding station avatar or company's logo <span class='font-light'>(optional)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Enter station name"
+      },
+      "ERRORS": {
+        "NAME_REQUIRED": "Station name is required",
+        "NAME_MAX_LENGTH": "Station name cannot exceed 30 characters",
+        "AVATAR_REQUIRED": "Station avatar is required"
+      },
+      "INVITE_MEMBERS": {
+        "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span> others to join your work station&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
+        "DESCRIPTION": "Help your crews to recognize your Work Station easier by naming, adding avatar or company's logo. <span class='font-normal text-primary-500-main'>Upgrade plan.</span>",
+        "ERRORS": {
+          "EMAIL_REQUIRED": "Email is required",
+          "EMAIL_INVALID": "Email is invalid"
+        }
+      }
+    },
     "START_CALL": {
       "TITLE": "Start Call",
       "DESCRIPTION": "Are you sure you want to start the call?"
@@ -674,6 +695,34 @@
       "TITLE": "Can not load extension",
       "DESCRIPTION": "Please check if your extension script is correct, or your domain is in the list of allowed domains."
     }
+  },
+  "STATION": {
+    "WELCOME": "Hi, welcome back",
+    "ALL_STATION": "All station",
+    "JOINED_STATION": "Joined station",
+    "MY_STATION": "My station",
+    "CREATE_STATION": "Create new station",
+    "DASHBOARD": "Dashboard",
+    "STATION_INFOR": "Station information",
+    "UPLOAD_IMAGE": "Upload Station Avatar",
+    "CREATE_BUTTON": "Create Station and invite members",
+    "ERRORS": {
+      "NAME_REQUIRED": "Station name is required",
+      "NAME_MAX_LENGTH": "Station name must be less than 30 characters",
+      "AVATAR_REQUIRED": "Station avatar is required",
+      "INVALID_EMAIL_MEMBER": "Invalid email member"
+    },
+    "ACTIONS": {
+      "SET_AS_DEFAULT": "Set as default",
+      "DELETE": "Delete",
+      "SETTINGS": "Settings"
+    },
+    "MEMBER": {
+      "YOU": "You",
+      "EMAIL": "Email",
+      "ROLE": "Role"
+    },
+    "NO_MEMBER": "No members"
   },
   "EXTENSION": {
     "ALL_DOMAINS": "All Domains",

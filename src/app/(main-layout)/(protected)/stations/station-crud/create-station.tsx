@@ -8,44 +8,42 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import toast from 'react-hot-toast';
 import useClient from '@/hooks/use-client';
 import { Tabs } from '@/components/navigation';
-import CreateOrEditSpaceHeader from './create-or-edit-space-header';
 import { z } from 'zod';
-import StepWrapper from '../../settings/_components/extension-creation/steps/step-wrapper';
 import { Button } from '@/components/actions';
 import { isEmpty } from 'lodash';
-import { createOrEditSpace } from '@/services/business-space.service';
-import CreateSpaceForm from './sections/create-section';
+import CreateStationForm from './sections/create-section';
 import InviteMembers from './sections/invite-section';
-import { Member } from './sections/members-columns';
+import { EStationRoles, Member } from './sections/members-columns';
 import { useQueryClient } from '@tanstack/react-query';
-import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces';
-import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
 import customToast from '@/utils/custom-toast';
 import { usePlatformStore } from '@/features/platform/stores';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-spaces';
+import StepWrapper from '../../spaces/[spaceId]/settings/_components/extension-creation/steps/step-wrapper';
+import CreateStationHeader from './create-station-header';
+import { createStation } from '@/services/station.service';
 
-const createSpaceSchema = z.object({
+const createStationSchema = z.object({
   name: z
     .string()
     .min(1, {
-      message: 'EXTENSION.SPACE.ERRORS.NAME_REQUIRED',
+      message: 'STATION.ERRORS.NAME_REQUIRED',
     })
     .max(30, {
-      message: 'EXTENSION.SPACE.ERRORS.NAME_MAX_LENGTH',
+      message: 'STATION.ERRORS.NAME_MAX_LENGTH',
     }),
   avatar: z.string().min(1, {
-    message: 'EXTENSION.SPACE.ERRORS.AVATAR_REQUIRED',
+    message: 'STATION.ERRORS.AVATAR_REQUIRED',
   }),
   backgroundImage: z.string().optional(),
   members: z
     .array(
       z.object({
         email: z.string().email({
-          message: 'EXTENSION.SPACE.ERRORS.INVALID_EMAIL',
+          message: 'STATION.ERRORS.INVALID_EMAIL',
         }),
         role: z.string(),
       }),
@@ -53,9 +51,9 @@ const createSpaceSchema = z.object({
     .optional(),
 });
 
-type TCreateSpaceFormValues = z.infer<typeof createSpaceSchema>;
+type TCreateStationFormValues = z.infer<typeof createStationSchema>;
 
-export default function CreateOrEditSpace({ open }: { open: boolean }) {
+export default function CreateStation({ open }: { open: boolean }) {
   const isClient = useClient();
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [tabErrors, setTabErrors] = React.useState<boolean[]>([false, false]);
@@ -63,7 +61,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   const platform = usePlatformStore((state) => state.platform);
   const queryClient = useQueryClient();
   const { t } = useTranslation('common');
-  const formCreateSpace = useForm<TCreateSpaceFormValues>({
+  const formCreateStation = useForm<TCreateStationFormValues>({
     mode: 'onChange',
     defaultValues: {
       name: '',
@@ -71,7 +69,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
       backgroundImage: '',
       members: [],
     },
-    resolver: zodResolver(createSpaceSchema),
+    resolver: zodResolver(createStationSchema),
   });
 
   useEffect(() => {
@@ -79,48 +77,51 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
       setTabValue(0);
     }
     if (!open) {
-      formCreateSpace.reset();
+      formCreateStation.reset();
       return;
     }
   }, [open]);
 
   const handleStepChange = async (value: number) => {
-    await formCreateSpace.trigger().then((res) => {
+    await formCreateStation.trigger().then((res) => {
       if (!res) {
         return;
       }
       setTabValue(value);
     });
-    setTabErrors([!isEmpty(formCreateSpace.formState.errors), false]);
+    setTabErrors([!isEmpty(formCreateStation.formState.errors), false]);
   };
 
-  const submitCreateSpace = async (value: any) => {
-    formCreateSpace.trigger();
-    if (!isEmpty(formCreateSpace.formState.errors)) {
+  const submitCreateStation = async (value: any) => {
+    formCreateStation.trigger();
+    if (!isEmpty(formCreateStation.formState.errors)) {
       customToast.error('Please fill all required fields.');
       setTabErrors([true, false]);
       return;
     }
     try {
-      await createOrEditSpace({
-        name: formCreateSpace.watch('name'),
-        avatar: formCreateSpace.watch('avatar'),
-        backgroundImage: formCreateSpace.watch('backgroundImage'),
-        members: formCreateSpace.watch('members'),
+      await createStation({
+        name: formCreateStation.watch('name'),
+        avatar: formCreateStation.watch('avatar'),
+        backgroundImage: formCreateStation.watch('backgroundImage'),
+        members: formCreateStation.watch('members'),
       });
-      customToast.success('Space created successfully.');
-      queryClient.invalidateQueries([GET_SPACES_KEY, { type: 'all_spaces' }]);
-      router.push(ROUTE_NAMES.SPACES + `?platform=${platform}`);
+      customToast.success('Station created successfully.');
+      queryClient.invalidateQueries([
+        GET_STATIONS_KEY,
+        { type: 'all_stations' },
+      ]);
+      router.push(ROUTE_NAMES.STATIONS + `?platform=${platform}`);
     } catch (err: any) {
       customToast.error(err?.response?.data?.message);
     }
   };
   const canNext = useMemo(() => {
-    if (formCreateSpace.watch('avatar') && formCreateSpace.watch('name')) {
-      return formCreateSpace.trigger();
+    if (formCreateStation.watch('avatar') && formCreateStation.watch('name')) {
+      return formCreateStation.trigger();
     }
     return false;
-  }, [formCreateSpace.watch('name'), formCreateSpace.watch('avatar')]);
+  }, [formCreateStation.watch('name'), formCreateStation.watch('avatar')]);
 
   if (!isClient || !open) return null;
   return (
@@ -132,8 +133,8 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
         setTabValue(parseInt(value));
       }}
     >
-      <Form {...formCreateSpace}>
-        <CreateOrEditSpaceHeader
+      <Form {...formCreateStation}>
+        <CreateStationHeader
           errors={tabErrors}
           step={tabValue}
           onStepChange={handleStepChange}
@@ -143,10 +144,10 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           className="px-0"
           cardProps={{
             className:
-              'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none',
+              'w-full shadow-none dark:bg-background flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none',
           }}
         >
-          <CreateSpaceForm />
+          <CreateStationForm />
           <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4 dark:bg-background">
             <Button
               color={canNext ? 'primary' : 'disabled'}
@@ -163,31 +164,33 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           value="1"
           cardProps={{
             className:
-              'w-full flex flex-col min-h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
+              'w-full md:pt-10 pt-3  flex flex-col min-h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
           }}
         >
           <InviteMembers
-            space={{
-              name: formCreateSpace.watch('name'),
-              avatar: formCreateSpace.watch('avatar'),
-              members: formCreateSpace.watch('members') || [],
+            station={{
+              name: formCreateStation.watch('name'),
+              avatar: formCreateStation.watch('avatar'),
+              members: formCreateStation.watch('members') || [],
             }}
             setMembers={(members: Member[]) =>
-              formCreateSpace.setValue('members', members)
+              formCreateStation.setValue('members', members)
             }
-            allowedRoles={[ESPaceRoles.Admin, ESPaceRoles.Member]}
+            allowedRoles={[EStationRoles.Admin, EStationRoles.Member]}
           />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4 dark:bg-background">
-            <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>
+          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-6 dark:bg-background">
+            <form
+              onSubmit={formCreateStation.handleSubmit(submitCreateStation)}
+            >
               <Button
                 color={'primary'}
                 shape={'square'}
                 type="submit"
                 size={'sm'}
-                loading={formCreateSpace.formState.isSubmitting}
-                disabled={!formCreateSpace.formState.isValid}
+                loading={formCreateStation.formState.isSubmitting}
+                disabled={!formCreateStation.formState.isValid}
               >
-                {t('EXTENSION.SPACE.CREATE_BUTTON')}
+                {t('STATION.CREATE_BUTTON')}
               </Button>
             </form>
           </div>

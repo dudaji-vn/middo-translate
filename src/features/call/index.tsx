@@ -8,14 +8,16 @@ import { useNetworkStatus } from '@/utils/use-network-status';
 import useSocketVideoCall from './hooks/socket/use-socket-video-call';
 
 const CallVideoModalContainer = () => {
-  const clearStateVideoCall = useVideoCallStore(state => state.clearStateVideoCall);
-  const room = useVideoCallStore(state => state.room);
-  const setRoom = useVideoCallStore(state => state.setRoom);
-  useSocketVideoCall()
+  const clearStateVideoCall = useVideoCallStore(
+    (state) => state.clearStateVideoCall,
+  );
+  const room = useVideoCallStore((state) => state.room);
+  const setRoom = useVideoCallStore((state) => state.setRoom);
+  useSocketVideoCall();
   const { isOnline } = useNetworkStatus();
-  if(!isOnline) {
-    if(room) {
-      setRoom()
+  if (!isOnline) {
+    if (room) {
+      setRoom();
       clearStateVideoCall();
     }
     return;
