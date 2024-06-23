@@ -1,68 +1,57 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button, ButtonProps } from '@/components/actions';
-import { Trash2 } from 'lucide-react';
-import { useFormContext } from 'react-hook-form';
-import toast from 'react-hot-toast';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
-import { Typography } from '@/components/data-display';
-import { ROUTE_NAMES } from '@/configs/route-name';
 import customToast from '@/utils/custom-toast';
 import { deleteStation } from '@/services/station.service';
 import { TStation } from '../../_components/type';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-spaces';
 
 export const DeleteStationModal = ({
   station,
+  open = false,
+  onclose = () => {},
 }: {
   station: Omit<TStation, 'owner'>;
   deleteBtnProps?: ButtonProps;
+  open: boolean;
+  onclose: () => void;
 }) => {
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
   const { t } = useTranslation('common');
-  const form = useFormContext();
-  const {
-    formState: { errors },
-  } = form;
 
-  const onSubmitDeleteStationName = async () => {
+  const onDeleteStation = async () => {
     if (!station._id) return;
+    setLoading(true);
     try {
       await deleteStation(station._id)
         .then((res) => {
           if (res.data) {
             customToast.success('Station name deleted successfully');
-            router.push(ROUTE_NAMES.STATIONS);
-            setOpen(false);
+            queryClient.invalidateQueries([
+              GET_STATIONS_KEY,
+              { type: 'all_stations' },
+            ]);
             return;
           }
         })
         .catch((err) => {
-          customToast.error('Error on delete station. Please try again');
+          customToast.error('Failed to delete station: ' + err);
         });
     } catch (error) {
       console.error('Error on deleteStation:', error);
-      customToast.error('Error on delete station');
+      customToast.error('Error on delete station. Please try again');
     }
+    setLoading(false);
   };
 
   return (
     <>
-      <Button
-        startIcon={<Trash2 size={15} />}
-        onClick={() => setOpen(true)}
-        color={'default'}
-        shape={'square'}
-        className="min-w-fit  text-error max-sm:hidden"
-        size={'xs'}
-      >
-        {t('MODAL.DELETE_STATION.TITLE')}
-      </Button>
       <ConfirmAlertModal
         title={`Delete station`}
         open={open}
-        onOpenChange={setOpen}
         footerProps={{
           className: 'hidden',
         }}
@@ -72,14 +61,14 @@ export const DeleteStationModal = ({
             <p
               className="text-left"
               dangerouslySetInnerHTML={{
-                __html: t('MODAL.DELETE_STATION.DESCRIPTION', {
+                __html: t('MODAL.SET_AS_DEFAULT_STATION.DESCRIPTION', {
                   name: station.name,
                 }),
               }}
             ></p>
             <div className="flex w-full flex-row items-center justify-end gap-3">
               <Button
-                onClick={() => setOpen(false)}
+                onClick={onclose}
                 color={'default'}
                 shape={'square'}
                 size={'sm'}
@@ -92,13 +81,12 @@ export const DeleteStationModal = ({
                 shape={'square'}
                 size={'sm'}
                 onClick={() => {
-                  form.handleSubmit(onSubmitDeleteStationName)();
-                  setOpen(false);
+                  onDeleteStation();
+                  onclose();
                 }}
-                loading={form.formState.isSubmitting}
-                disabled={!!errors['name']}
+                loading={loading}
               >
-                {t('COMMON.DELETE')}
+                {t('COMMON.SET_AS_DEFAULT')}
               </Button>
             </div>
           </div>

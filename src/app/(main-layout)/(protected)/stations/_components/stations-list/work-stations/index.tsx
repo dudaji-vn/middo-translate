@@ -2,7 +2,6 @@ import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { Plus } from 'lucide-react';
 import Image from 'next/image';
-import Link, { LinkProps } from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import React, { act, useCallback } from 'react';
 import { useAuthStore } from '@/stores/auth.store';
@@ -14,6 +13,7 @@ import Station, { EStationActions } from '../station-card/station';
 import { TStation } from '../../type';
 import { useRouter } from 'next/navigation';
 import { DeleteStationModal } from '../../../station-crud/station-deletion/delete-station-modal';
+import { SetStationToDefaultModal } from '../../../station-crud/station-designation';
 
 function StationCreateButton({}: {} & React.HTMLAttributes<HTMLDivElement>) {
   const { t } = useTranslation('common');
@@ -51,7 +51,12 @@ const WorkStations = ({
     station: null,
   });
   const onAction = useCallback((action: EStationActions, station: TStation) => {
+    console.log('on the action ::>', action);
     setModalAction({ action, station });
+  }, []);
+
+  const onCloseModal = useCallback(() => {
+    setModalAction({ action: null, station: null });
   }, []);
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
@@ -62,15 +67,25 @@ const WorkStations = ({
           <Station
             key={stn._id}
             data={stn}
-            onAction={(action) => {
-              onAction(action, stn);
+            menuProps={{
+              onAction: (action) => onAction(action, stn),
             }}
           />
         );
       })}
-
-      {modalAction.station && modalAction.action === EStationActions.DELETE && (
-        <DeleteStationModal station={modalAction.station} />
+      {modalAction.station && (
+        <>
+          <DeleteStationModal
+            station={modalAction.station}
+            open={modalAction.action === EStationActions.DELETE}
+            onclose={onCloseModal}
+          />
+          <SetStationToDefaultModal
+            onclose={onCloseModal}
+            open={modalAction.action === EStationActions.SET_AS_DEFAULT}
+            station={modalAction.station}
+          />
+        </>
       )}
     </div>
   );

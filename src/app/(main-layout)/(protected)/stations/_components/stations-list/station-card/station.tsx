@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { Avatar } from '@/components/data-display';
-import { Circle, MessageSquare, MoreVertical, User } from 'lucide-react';
+import { Circle, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
@@ -37,7 +37,7 @@ type StationMenuItem = {
   action: EStationActions;
   labelProps?: React.HTMLAttributes<HTMLSpanElement>;
 }[];
-const items: StationMenuItem = [
+const menuItems: StationMenuItem = [
   {
     label: 'STATION.ACTIONS.SETTINGS',
     action: EStationActions.SETTINGS,
@@ -54,15 +54,12 @@ const items: StationMenuItem = [
     },
   },
 ];
-
-const StationMenu = ({
-  station,
-  onAction,
-  ...props
-}: {
-  station?: TStation;
+export type StationMenuProps = {
+  station: TStation;
   onAction: (action: EStationActions) => void;
-} & React.HTMLAttributes<HTMLDivElement>) => {
+} & React.HTMLAttributes<HTMLDivElement>;
+
+const StationMenu = ({ station, onAction, ...props }: StationMenuProps) => {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
 
@@ -86,7 +83,7 @@ const StationMenu = ({
           e.preventDefault();
         }}
       >
-        {items.map(({ ...item }) => {
+        {menuItems.map(({ ...item }) => {
           return (
             <DropdownMenuItem
               className="flex items-center active:bg-primary-200 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
@@ -120,11 +117,11 @@ const MAPPED_TAGS = {
 
 const Station = ({
   data,
-  onAction = () => {},
+  menuProps,
   ...props
 }: {
   data: TStation;
-  onAction?: (action: EStationActions) => void;
+  menuProps: Omit<StationMenuProps, 'station'>;
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const { name, totalMembers, totalNewMessages = 0, avatar, _id } = data || {};
   const hasNotification = totalNewMessages > 0;
@@ -144,7 +141,7 @@ const Station = ({
       {...props}
     >
       <div className="absolute right-2 top-1 z-10">
-        <StationMenu station={data} onAction={onAction} />
+        <StationMenu {...menuProps} station={data} />
       </div>
       <div className="absolute -top-1 right-[10px]">
         <Circle
@@ -179,22 +176,6 @@ const Station = ({
             {name}
           </CardTitle>
           <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${totalMembers} ${t('COMMON.MEMBER')}`}</span>
-          <Button
-            size={'xs'}
-            shape={'square'}
-            color={'primary'}
-            variant={'ghost'}
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`${ROUTE_NAMES.STATIONS}/${_id}`);
-            }}
-            className={
-              totalNewMessages > 0
-                ? 'text-left text-sm font-semibold  leading-[18px] text-primary-500-main'
-                : 'hidden'
-            }
-            startIcon={<MessageSquare className="h-4 w-4" />}
-          >{`${totalNewMessages} ${t('TOOL_TIP.NEW_CONVERSATION')}`}</Button>
         </div>
       </CardContent>
     </Card>
