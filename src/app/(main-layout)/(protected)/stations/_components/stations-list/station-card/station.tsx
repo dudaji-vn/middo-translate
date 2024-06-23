@@ -1,8 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { cn } from '@/utils/cn';
-import React, { cloneElement, useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import moment from 'moment';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { Avatar } from '@/components/data-display';
-import { Circle, Key, MessageSquare, MoreVertical, User } from 'lucide-react';
+import { Circle, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
@@ -27,43 +26,42 @@ const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
     },
   },
 });
+export enum EStationActions {
+  SETTINGS = 'settings',
+  SET_AS_DEFAULT = 'set-as-default',
+  DELETE = 'delete',
+}
 
 type StationMenuItem = {
   label: string;
-  action: string;
+  action: EStationActions;
   labelProps?: React.HTMLAttributes<HTMLSpanElement>;
 }[];
-
-const items: StationMenuItem = [
+const menuItems: StationMenuItem = [
   {
     label: 'STATION.ACTIONS.SETTINGS',
-    action: 'settings',
+    action: EStationActions.SETTINGS,
   },
   {
-    // set as default
     label: 'STATION.ACTIONS.SET_AS_DEFAULT',
-    action: 'set-as-default',
+    action: EStationActions.SET_AS_DEFAULT,
   },
   {
     label: 'COMMON.DELETE',
-    action: 'delete',
+    action: EStationActions.DELETE,
     labelProps: {
       className: '!text-error ',
     },
   },
 ];
+export type StationMenuProps = {
+  station: TStation;
+  onAction: (action: EStationActions) => void;
+} & React.HTMLAttributes<HTMLDivElement>;
 
-const StationMenu = ({
-  station,
-  ...props
-}: {
-  station?: TStation;
-} & React.HTMLAttributes<HTMLDivElement>) => {
+const StationMenu = ({ station, onAction, ...props }: StationMenuProps) => {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
-  const onOpenChange = useCallback((open: boolean) => {
-    setOpen(open);
-  }, []);
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setOpen}>
@@ -85,7 +83,7 @@ const StationMenu = ({
           e.preventDefault();
         }}
       >
-        {items.map(({ ...item }) => {
+        {menuItems.map(({ ...item }) => {
           return (
             <DropdownMenuItem
               className="flex items-center active:bg-primary-200 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
@@ -93,7 +91,7 @@ const StationMenu = ({
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log('STATION ?? ', item.action);
+                onAction(item.action);
               }}
             >
               <span
@@ -119,18 +117,13 @@ const MAPPED_TAGS = {
 
 const Station = ({
   data,
+  menuProps,
   ...props
 }: {
   data: TStation;
+  menuProps: Omit<StationMenuProps, 'station'>;
 } & React.HTMLAttributes<HTMLDivElement>) => {
-  const {
-    name,
-    totalMembers,
-    totalNewMessages = 0,
-    createdAt,
-    avatar,
-    _id,
-  } = data || {};
+  const { name, totalMembers, totalNewMessages = 0, avatar, _id } = data || {};
   const hasNotification = totalNewMessages > 0;
   const { t } = useTranslation('common');
   const router = useRouter();
@@ -148,7 +141,7 @@ const Station = ({
       {...props}
     >
       <div className="absolute right-2 top-1 z-10">
-        <StationMenu station={data} />
+        <StationMenu {...menuProps} station={data} />
       </div>
       <div className="absolute -top-1 right-[10px]">
         <Circle
@@ -183,22 +176,6 @@ const Station = ({
             {name}
           </CardTitle>
           <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${totalMembers} ${t('COMMON.MEMBER')}`}</span>
-          <Button
-            size={'xs'}
-            shape={'square'}
-            color={'primary'}
-            variant={'ghost'}
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`${ROUTE_NAMES.STATIONS}/${_id}`);
-            }}
-            className={
-              totalNewMessages > 0
-                ? 'text-left text-sm font-semibold  leading-[18px] text-primary-500-main'
-                : 'hidden'
-            }
-            startIcon={<MessageSquare className="h-4 w-4" />}
-          >{`${totalNewMessages} ${t('TOOL_TIP.NEW_CONVERSATION')}`}</Button>
         </div>
       </CardContent>
     </Card>

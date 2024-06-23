@@ -492,6 +492,10 @@
         }
       }
     },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "기본 정류장 설정",
+      "DESCRIPTION": "<strong>{{name}}</strong>을(를) 기본 정류장으로 설정하시겠습니까?"
+    },
     "START_CALL": {
       "TITLE": "통화 시작",
       "DESCRIPTION": "통화를 시작하시겠습니까?"
@@ -516,6 +520,11 @@
       "TITLE": "공간 삭제",
       "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
       "CONFIRM": "공간 삭제"
+    },
+    "DELETE_STATION": {
+      "TITLE": "정류장 삭제",
+      "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
+      "CONFIRM": "정류장 삭제"
     },
     "SIGN_OUT": {
       "TITLE": "로그아웃 하시겠습니까?",

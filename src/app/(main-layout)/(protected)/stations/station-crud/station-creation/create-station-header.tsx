@@ -109,9 +109,9 @@ const CreateStationHeader = ({
                   'flex flex-row gap-3',
                   isActive && '!bg-neutral-50 dark:!bg-neutral-800',
                   isAfterCurrent &&
-                  '!bg-neutral-50 hover:bg-primary-100  dark:!bg-neutral-800',
+                    '!bg-neutral-50 hover:bg-primary-100  dark:!bg-neutral-800',
                   isDone &&
-                  '!active:bg-success-200 !bg-success-100 hover:bg-success-200',
+                    '!active:bg-success-200 !bg-success-100 hover:bg-success-200',
                   isError && '!bg-error-100',
                 )}
               >
@@ -121,7 +121,7 @@ const CreateStationHeader = ({
                     isActive && 'bg-primary-500-main text-white',
                     isAfterCurrent && 'bg-neutral-200 text-white',
                     isDone &&
-                    '!active:bg-success-200 bg-success-700 text-white',
+                      '!active:bg-success-200 bg-success-700 text-white',
                     isError && 'bg-error text-white',
                   )}
                 >

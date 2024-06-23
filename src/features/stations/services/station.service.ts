@@ -1,5 +1,4 @@
 // server side getting functions
-
 import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
 import { cookies } from 'next/headers';
 

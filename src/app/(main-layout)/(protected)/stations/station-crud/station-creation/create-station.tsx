@@ -13,18 +13,18 @@ import { Tabs } from '@/components/navigation';
 import { z } from 'zod';
 import { Button } from '@/components/actions';
 import { isEmpty } from 'lodash';
-import CreateStationForm from './sections/create-section';
-import InviteMembers from './sections/invite-section';
-import { EStationRoles, Member } from './sections/members-columns';
+import CreateStationForm from '../sections/create-section';
+import InviteMembers from '../sections/invite-section';
+import { EStationRoles, Member } from '../sections/members-columns';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import customToast from '@/utils/custom-toast';
 import { usePlatformStore } from '@/features/platform/stores';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-spaces';
-import StepWrapper from '../../spaces/[spaceId]/settings/_components/extension-creation/steps/step-wrapper';
 import CreateStationHeader from './create-station-header';
 import { createStation } from '@/services/station.service';
+import StepWrapper from '../../../spaces/[spaceId]/settings/_components/extension-creation/steps/step-wrapper';
 
 const createStationSchema = z.object({
   name: z

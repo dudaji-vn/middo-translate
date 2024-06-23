@@ -496,6 +496,10 @@
         }
       }
     },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "Set as Default Station",
+      "DESCRIPTION": "Are you sure you want to set <strong>{{name}}</strong> as your default station?"
+    },
     "START_CALL": {
       "TITLE": "Start Call",
       "DESCRIPTION": "Are you sure you want to start the call?"
@@ -520,6 +524,11 @@
       "TITLE": "Delete Space",
       "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
       "CONFIRM": "Delete Space"
+    },
+    "DELETE_STATION": {
+      "TITLE": "Delete Station",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
+      "CONFIRM": "Delete Station"
     },
     "SIGN_OUT": {
       "TITLE": "Do you want to sign out?",
