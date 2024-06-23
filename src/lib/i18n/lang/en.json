@@ -496,6 +496,10 @@
         }
       }
     },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "Set as Default Station",
+      "DESCRIPTION": "Are you sure you want to set <strong>{{name}}</strong> as your default station?"
+    },
     "START_CALL": {
       "TITLE": "Start Call",
       "DESCRIPTION": "Are you sure you want to start the call?"

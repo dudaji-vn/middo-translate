@@ -493,6 +493,10 @@
         }
       }
     },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "Thiết lập trạm mặc định",
+      "DESCRIPTION": "Bạn có chắc chắn muốn thiết lập <strong>{{name}}</strong> làm trạm mặc định không?"
+    },
     "START_CALL": {
       "TITLE": "Bắt đầu cuộc gọi",
       "DESCRIPTION": "Bạn có chắc chắn muốn bắt đầu cuộc gọi không?"
