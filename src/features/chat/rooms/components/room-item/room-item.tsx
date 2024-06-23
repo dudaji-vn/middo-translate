@@ -29,6 +29,7 @@ import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { InboxType } from '../inbox/inbox';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 
 export interface RoomItemProps {
   data: Room;
@@ -78,23 +79,31 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const currentUserId = currentUser?._id;
   const params = useParams();
   const { businessConversationType } = useBusinessNavigationData();
+  const { isOnStation, stationId } = useStationNavigationData();
   const { t } = useTranslation('common');
   const { room, visitorCountry } = useMemo(() => {
     const businessRedirectPath = businessConversationType
       ? `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}/${_data._id}`
       : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/conversation/${_data._id}`;
+    const stationRedirectPath = `${ROUTE_NAMES.STATIONS}/${stationId}/conversation/${_data._id}`;
+    let overridePath;
+    if (isOnStation) {
+      overridePath = stationRedirectPath;
+    }
+    if (businessConversationType) {
+      overridePath = businessRedirectPath;
+    }
     const visitor = _data.participants.find(
       (user) => user.status === 'anonymous',
     );
     const countryCode = getCountryCode(visitor?.language || 'en');
+
     return {
       room: generateRoomDisplay({
         room: _data,
         currentUserId,
         inCludeLink: !disabledRedirect,
-        overridePath: Boolean(businessConversationType)
-          ? businessRedirectPath
-          : null,
+        overridePath,
       }),
       visitorCountry: {
         ...SUPPORTED_LANGUAGES.find((sl) => sl.code === visitor?.language),
