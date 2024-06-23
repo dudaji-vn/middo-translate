@@ -2,12 +2,17 @@ import { Room, RoomStatus } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
 import moment from 'moment';
 
-export function generateRoomDisplay(
-  room: Room,
-  currentUserId: User['_id'],
-  inCludeLink?: boolean,
-  overridePath?: string | null,
-): Room {
+export function generateRoomDisplay({
+  room,
+  currentUserId,
+  inCludeLink,
+  overridePath = null,
+}: {
+  room: Room;
+  currentUserId: User['_id'];
+  inCludeLink?: boolean;
+  overridePath?: string | null;
+}): Room {
   const { participants, isGroup, name, waitingUsers = [] } = room;
   const combinedParticipants = participants.concat(waitingUsers || []);
 

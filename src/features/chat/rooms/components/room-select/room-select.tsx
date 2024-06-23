@@ -131,7 +131,8 @@ export const SelectedItem = forwardRef<HTMLDivElement, SelectedItemProps>(
     const currentUserId = currentUser?._id;
 
     const room = useMemo(
-      () => generateRoomDisplay(item, currentUserId, true),
+      () =>
+        generateRoomDisplay({ room: item, currentUserId, inCludeLink: true }),
       [currentUserId, item],
     );
 

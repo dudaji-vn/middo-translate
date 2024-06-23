@@ -8,6 +8,7 @@ import { TBusinessExtensionData } from '../../help-desk/api/business.service';
 import ChatSidebarHeader from './chat-sidebar-header';
 import { ChatSidebarTabs } from './chat-sidebar-tabs';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { TStation } from '@/app/(main-layout)/(protected)/stations/_components/type';
 
 interface ChatSidebarProps {
   children: ReactNode;
@@ -27,7 +28,7 @@ export const ChatSidebar = ({
     if (spaceData) {
       setBusinessExtension(spaceData.extension);
     }
-  }, [spaceData]);
+  }, [setBusinessExtension, spaceData]);
 
   return (
     <>

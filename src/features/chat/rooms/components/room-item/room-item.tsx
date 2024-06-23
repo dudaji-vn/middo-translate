@@ -28,6 +28,7 @@ import { CircleFlag } from 'react-circle-flags';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { InboxType } from '../inbox/inbox';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export interface RoomItemProps {
   data: Room;
@@ -76,23 +77,25 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
   const params = useParams();
-  const conversationType = params?.conversationType;
+  const { businessConversationType } = useBusinessNavigationData();
   const { t } = useTranslation('common');
   const { room, visitorCountry } = useMemo(() => {
-    const businessRedirectPath = conversationType
-      ? `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/${_data._id}`
-      : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/`;
+    const businessRedirectPath = businessConversationType
+      ? `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}/${_data._id}`
+      : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/conversation/${_data._id}`;
     const visitor = _data.participants.find(
       (user) => user.status === 'anonymous',
     );
     const countryCode = getCountryCode(visitor?.language || 'en');
     return {
-      room: generateRoomDisplay(
-        _data,
+      room: generateRoomDisplay({
+        room: _data,
         currentUserId,
-        !disabledRedirect,
-        Boolean(conversationType) ? businessRedirectPath : null,
-      ),
+        inCludeLink: !disabledRedirect,
+        overridePath: Boolean(businessConversationType)
+          ? businessRedirectPath
+          : null,
+      }),
       visitorCountry: {
         ...SUPPORTED_LANGUAGES.find((sl) => sl.code === visitor?.language),
         code: countryCode,
@@ -102,17 +105,17 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     _data,
     currentUserId,
     disabledRedirect,
-    conversationType,
+    businessConversationType,
     params?.spaceId,
   ]);
-  const isHideRead = useSideChatStore((state) =>
-    state.filters.includes('unread') && !isForceShow,
+  const isHideRead = useSideChatStore(
+    (state) => state.filters.includes('unread') && !isForceShow,
   );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
-      `/${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/${currentRoomId}` ||
+      `/${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
@@ -149,7 +152,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           }}
         >
           <RoomItemWrapper>
-            {!conversationType ? (
+            {!businessConversationType ? (
               <ItemAvatar isOnline={isOnline} room={room} isMuted={isMuted} />
             ) : (
               <RoomItemVisitorAvatar isOnline={isOnline} isMuted={isMuted} />
