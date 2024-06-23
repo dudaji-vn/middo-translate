@@ -84,8 +84,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const { room, visitorCountry } = useMemo(() => {
     const businessRedirectPath = businessConversationType
       ? `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}/${_data._id}`
-      : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/conversation/${_data._id}`;
-    const stationRedirectPath = `${ROUTE_NAMES.STATIONS}/${stationId}/conversation/${_data._id}`;
+      : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/conversations/${_data._id}`;
+    const stationRedirectPath = `${ROUTE_NAMES.STATIONS}/${stationId}/conversations/${_data._id}`;
     let overridePath;
     if (isOnStation) {
       overridePath = stationRedirectPath;

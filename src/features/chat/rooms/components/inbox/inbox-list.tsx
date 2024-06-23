@@ -43,6 +43,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { SelectedFilterRoom } from '../filter/selected-filter-room';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 
 interface InboxListProps {
   type: InboxType;
@@ -62,6 +63,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const { appliedFilters } = useSpaceInboxFilterStore();
     const filters = useSideChatStore((state) => state.filters);
     const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
+    const stationId = params?.stationId ? String(params?.stationId) : undefined;
     const currentRoomId = params?.id || businessRoomId;
     const { isScrolled, ref: scrollRef } = useScrollDistanceFromTop(1);
 
@@ -98,6 +100,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
           type,
           status,
           spaceId,
+          stationId,
           filterOptions: spaceId ? appliedFilters : undefined,
           isGroup: filters.includes('group') ? true : undefined,
           isUnread: filters.includes('unread') ? true : undefined,

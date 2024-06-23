@@ -13,6 +13,6 @@ export const useStationNavigationData = () => {
 
   return {
     isOnStation,
-    stationId,
+    stationId: stationId ? String(stationId) : undefined,
   };
 };
