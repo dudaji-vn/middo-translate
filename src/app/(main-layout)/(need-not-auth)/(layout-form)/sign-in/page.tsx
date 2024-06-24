@@ -163,7 +163,7 @@ export default function SignIn() {
 
   return (
     <>
-      {(loading || (isAuthentication && userData)) && <PageLoading />}
+      {(loading || (isAuthentication && userData)) && ing />}
       <form
         className="flex w-full flex-col items-center"
         onSubmit={handleSubmitForm}

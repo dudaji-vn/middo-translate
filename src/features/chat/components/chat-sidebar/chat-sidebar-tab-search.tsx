@@ -16,18 +16,22 @@ import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'next/navigation';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchValue = useSearchStore((state) => state.searchValue);
     const { isBusiness, spaceId } = useBusinessNavigationData();
+    const { isOnStation, stationId } = useStationNavigationData();
     const params = useParams();
-    const helpdeskParams = spaceId
+    const businessSpaceParams = spaceId
       ? { type: 'help-desk', spaceId: params?.spaceId as string }
       : undefined;
 
-    const { data: recData } = useGetRoomsRecChat(helpdeskParams);
+    const stationParams = isOnStation ? { stationId } : undefined;
+
+    const { data: recData } = useGetRoomsRecChat(businessSpaceParams);
     const { businessExtension } = useBusinessExtensionStore();
     const { t } = useTranslation('common');
     const { data } = useQuerySearch<{
@@ -37,11 +41,12 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
       searchApi: searchApi.inboxes,
       queryKey: 'chat-search',
       searchTerm: searchValue || '',
-      helpdeskParams,
+      businessSpaceParams,
+      stationParams,
     });
 
     return (
-      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px] dark:bg-background">
+      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 dark:bg-background md:top-[106px]">
         <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

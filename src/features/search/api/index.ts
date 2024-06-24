@@ -8,10 +8,13 @@ import queryString from 'query-string';
 type HelpdeskSearchParam = {
   type?: string;
   spaceId?: string;
-}
+};
+type StationParams = {
+  stationId?: string;
+};
 const basePath = '/search';
 export const searchApi = {
-  async inboxes(params: SearchParams & HelpdeskSearchParam) {
+  async inboxes(params: SearchParams & HelpdeskSearchParam & StationParams) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/inboxes`,
       query: params,
@@ -21,7 +24,7 @@ export const searchApi = {
       users: User[];
     }> = await axios.get(path);
     return res.data;
-  },  
+  },
   async users(params: SearchParams) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/users`,

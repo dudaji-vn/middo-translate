@@ -8,12 +8,12 @@ export const useGetUsersRecChat = () => {
   });
 };
 
-export const useGetRoomsRecChat = (helpdeskParams?: {
+export const useGetRoomsRecChat = (extensionSpaceParams?: {
   type?: string;
   spaceId?: string;
 }) => {
   return useQuery({
     queryKey: ['rooms-rec-chat'],
-    queryFn: () => recommendationApi.rooms(helpdeskParams),
+    queryFn: () => recommendationApi.rooms(extensionSpaceParams),
   });
 };

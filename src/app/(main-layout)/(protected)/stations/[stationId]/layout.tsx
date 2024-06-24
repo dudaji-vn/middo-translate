@@ -1,8 +1,12 @@
-import { getStationById } from '@/features/stations/services/station.service';
-import { notFound } from 'next/navigation';
-import React from 'react';
+'use client';
 
-const layout = async ({
+import { PageLoading } from '@/components/feedback';
+import { useGetStation } from '@/features/stations/hooks/use-get-space-data';
+import { useAuthStore } from '@/stores/auth.store';
+import { notFound } from 'next/navigation';
+import React, { useEffect } from 'react';
+
+const StationLayout = ({
   children,
   params: { stationId },
 }: {
@@ -11,12 +15,21 @@ const layout = async ({
     stationId: string;
   };
 }) => {
-  const stationData = await getStationById(stationId);
-  console.log(stationData);
-  if (!stationData) {
+  const { setWorkStation, workStation } = useAuthStore();
+  const { data, isLoading, isFetched } = useGetStation({ stationId });
+  console.log('stationId ::>', stationId);
+
+  useEffect(() => {
+    if (data) {
+      console.log('station Data ::>', data);
+      setWorkStation(data);
+    }
+  }, [data, setWorkStation]);
+  if (!data && isFetched && !isLoading) {
     notFound();
   }
-  return children;
+  if (isLoading) return <PageLoading />;
+  return <>{children}</>;
 };
 
-export default layout;
+export default StationLayout;

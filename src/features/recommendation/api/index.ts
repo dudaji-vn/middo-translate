@@ -13,12 +13,12 @@ export const recommendationApi = {
     const res: Response<User[]> = await axios.get(path);
     return res.data;
   },
-  async rooms(helpdeskParams?: { type?: string; spaceId?: string }) {
-    const helpdeskQueryParams = helpdeskParams?.type
-      ? `?type=${helpdeskParams.type}&spaceId=${helpdeskParams.spaceId}`
+  async rooms(extensionSpaceParams?: { type?: string; spaceId?: string }) {
+    const spaceQueryParams = extensionSpaceParams?.type
+      ? `?type=${extensionSpaceParams.type}&spaceId=${extensionSpaceParams.spaceId}`
       : '';
     const path = queryString.stringifyUrl({
-      url: `${basePath}/chat` + helpdeskQueryParams,
+      url: `${basePath}/chat` + spaceQueryParams,
     });
     const res: Response<Room[]> = await axios.get(path);
     return res.data;

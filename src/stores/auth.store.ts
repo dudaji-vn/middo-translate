@@ -1,4 +1,5 @@
 import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
+import { TStation } from '@/app/(main-layout)/(protected)/stations/_components/type';
 import { User } from '@/features/users/types';
 import { create } from 'zustand';
 
@@ -12,6 +13,8 @@ export type AuthState = {
   setIsMobile: (data: boolean) => void;
   space: TSpace | null;
   setSpace: (data: TSpace) => void;
+  workStation: TStation | null;
+  setWorkStation: (data: TStation) => void;
 };
 
 export const useAuthStore = create<AuthState>()((set) => ({
@@ -25,4 +28,6 @@ export const useAuthStore = create<AuthState>()((set) => ({
   setIsMobile: (data: boolean) => set(() => ({ isMobile: data })),
   space: null,
   setSpace: (data: TSpace) => set(() => ({ space: data })),
+  workStation: null,
+  setWorkStation: (data: TStation) => set(() => ({ workStation: data })),
 }));

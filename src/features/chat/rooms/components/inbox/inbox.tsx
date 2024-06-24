@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RoomActions } from '../room-actions';
 import InboxList from './inbox-list';
@@ -25,6 +25,7 @@ import { useSearchParams } from 'next/navigation';
 import { SPK_FOCUS } from '@/configs/search-param-key';
 import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
 import { useAuthStore } from '@/stores/auth.store';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 export interface InboxProps {
   unreadCount?: number;
 }
@@ -94,12 +95,22 @@ const businessInboxTabs = [
   inboxTabMap['help-desk'],
   inboxTabMap['unread-help-desk'],
 ];
+const stationInboxTabs = [inboxTabMap.all, inboxTabMap.group];
 
 export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
+  const { isOnStation } = useStationNavigationData();
   const { space } = useAuthStore();
   const searchParams = useSearchParams();
-  const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
+  const tabs = useMemo(() => {
+    if (isBusiness) {
+      return businessInboxTabs;
+    }
+    if (isOnStation) {
+      return stationInboxTabs;
+    }
+    return normalInboxTabs;
+  }, [isBusiness, isOnStation]);
   const [type, setType] = useState<InboxType>(tabs[0].value);
   const { t } = useTranslation('common');
   useKeyboardShortcut(

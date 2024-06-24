@@ -27,6 +27,7 @@ export const roomApi = {
       type: InboxType;
       status?: string | null;
       spaceId?: string;
+      stationId?: string;
       filterOptions?: {
         domains?: string[];
         countries?: string[];
@@ -51,16 +52,19 @@ export const roomApi = {
     return res.data;
   },
   async createRoom(
-    data: Pick<Room, 'name' | 'avatar'> & {
+    data: Pick<Room, 'name' | 'avatar' | 'stationId'> & {
       participants: string[];
       avatarFile?: File;
+      stationId?: string;
     },
   ) {
     if (data.avatarFile) {
       const res = await uploadImage(data.avatarFile);
       data.avatar = res.secure_url;
     }
-    const res: Response<Room> = await axios.post(basePath, data);
+    const { stationId, ...payload } = data;
+    const url = stationId ? `${basePath}?stationId=${stationId}` : basePath;
+    const res: Response<Room> = await axios.post(url, payload);
     return res.data;
   },
 

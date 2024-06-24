@@ -24,7 +24,11 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
   const user = useAuthStore((state) => state.user);
 
   const { room, language, anonymousUser } = useMemo(() => {
-    const room = generateRoomDisplay(_room, user?._id || '', true);
+    const room = generateRoomDisplay({
+      room: _room,
+      currentUserId: user?._id || '',
+      inCludeLink: true,
+    });
     const others = room.participants.filter(
       (member) => member._id !== user?._id,
     );

@@ -6,17 +6,23 @@ export function useQuerySearch<T>({
   searchApi,
   queryKey,
   searchTerm,
-  helpdeskParams,
+  businessSpaceParams,
+  stationParams,
 }: {
   searchApi: Function;
   queryKey: string;
   searchTerm: string;
-  helpdeskParams?: { type?: string; spaceId?: string };
+  businessSpaceParams?: { type?: string; spaceId?: string };
+  stationParams?: { stationId?: string };
 }) {
-  const { type, spaceId } = helpdeskParams || {};
+  const { type, spaceId } = businessSpaceParams || {};
+  const { stationId } = stationParams || {};
   const { data, ...rest } = useQuery({
-    queryKey: ['search' + queryKey, { q: searchTerm, type, spaceId }],
-    queryFn: (): T => searchApi({ q: searchTerm, type, spaceId }),
+    queryKey: [
+      'search' + queryKey,
+      { q: searchTerm, type, spaceId, stationId },
+    ],
+    queryFn: (): T => searchApi({ q: searchTerm, type, spaceId, stationId }),
     enabled: !!searchTerm,
     staleTime: DEFAULT_STALE_TIME, // 5 minutes
     keepPreviousData: true,
