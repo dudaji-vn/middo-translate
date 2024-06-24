@@ -26,6 +26,8 @@ import { SPK_FOCUS } from '@/configs/search-param-key';
 import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
 import { useAuthStore } from '@/stores/auth.store';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
+import { useQueryClient } from '@tanstack/react-query';
+import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces';
 export interface InboxProps {
   unreadCount?: number;
 }
@@ -112,6 +114,7 @@ export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
     return normalInboxTabs;
   }, [isBusiness, isOnStation]);
   const [type, setType] = useState<InboxType>(tabs[0].value);
+  const queryClient = useQueryClient();
   const { t } = useTranslation('common');
   useKeyboardShortcut(
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
@@ -131,7 +134,11 @@ export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
     }
   }, [searchParams]);
 
-  console.log('unreadCount', unreadCount);
+  useEffect(() => {
+    if (type === 'help-desk') {
+      queryClient.invalidateQueries([GET_SPACES_KEY, { type }]);
+    }
+  }, [type]);
 
   return (
     <RoomActions>

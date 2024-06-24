@@ -17,6 +17,21 @@ export function makeClientsColumns(t: TFunction): ColumnDef<Client>[] {
     {
       accessorKey: 'phoneNumber',
       header: t('EXTENSION.CLIENT.PHONE'),
+      cell: ({ row }) => {
+        const value = row.original.phoneNumber;
+        if (!value) {
+          return '-';
+        }
+        return (
+          <a
+            href={`
+            tel:${value}
+          `}
+          >
+            {value}
+          </a>
+        );
+      },
     },
     {
       accessorKey: 'firstConnectDate',

@@ -771,7 +771,7 @@
     "STATISTICS": "Thống kê",
     "SCRIPTS": "Kịch bản trò chuyện",
     "SETTINGS": "Cài đặt",
-    "REPORT": "Báo cáo",
+    "REPORT": "Thống kê",
     "CLIENT_LIST": "Danh sách khách hàng",
     "CHART": {
       "CLIENT": "Khách hàng mới",
@@ -815,7 +815,7 @@
       "CONVERSATION_EXTENSION": "Tiện ích trò chuyện"
     },
     "SCRIPT": {
-      "PAGE_TITLE": "Quản lý Kịch bản",
+      "PAGE_TITLE": "Kịch bản trò chuyện",
       "SEARCH": "Tìm kiếm kịch bản",
       "ADD_SCRIPT": "Thêm kịch bản mới",
       "EDIT_SCRIPT": "Chỉnh sửa kịch bản",

@@ -770,14 +770,14 @@
       "DELETE": "Delete tag"
     },
     "RECEIVED_FROM": "Received from",
-    "CONVERSATIONS": "General",
+    "CONVERSATIONS": "Conversations",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
     "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
     "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
-    "REPORT": "Report",
+    "REPORT": "Statistics",
     "CHART": {
       "CLIENT": "New Clients",
       "LANGUAGERANK": "Conversation's Language",
@@ -820,7 +820,7 @@
       "CONVERSATION_EXTENSION": "Conversation Extension"
     },
     "SCRIPT": {
-      "PAGE_TITLE": "Scripts Management",
+      "PAGE_TITLE": "Conversation Scripts",
       "SEARCH": "Search for scripts",
       "ADD_SCRIPT": "Add new script",
       "EDIT_SCRIPT": "Edit script",
