@@ -101,6 +101,7 @@
       "DELETED_ON": "삭제일",
       "LAST_WEEK": "지난 주",
       "LAST_MONTH": "지난 달",
+      "LAST_EDITED": "마지막 편집",
       "LAST_YEAR": "작년",
       "CUSTOM": "사용자 정의"
     },
@@ -756,6 +757,7 @@
       "EDIT": "태그 수정",
       "DELETE": "태그 삭제"
     },
+    "RECEIVED_FROM": "받는 사람",
     "CONVERSATIONS": "일반",
     "COMPLETED": "완료됨",
     "ARCHIVED": "보관됨",

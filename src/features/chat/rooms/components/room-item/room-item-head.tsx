@@ -1,8 +1,7 @@
 import { RoomItemTime } from './room-item-time';
 import { cn } from '@/utils/cn';
 import { useRoomItem } from './room-item';
-import { Badge } from '@/components/ui/badge';
-import { getContrastingTextColor } from '@/utils/color-generator';
+import RoomItemTag from './room-item-tag';
 
 export interface RoomItemHeadProps {
   name?: string;
@@ -17,20 +16,7 @@ export const RoomItemHead = ({ isRead, showTime, time }: RoomItemHeadProps) => {
   return (
     <div className="mb-1 flex items-center justify-between">
       <div className="flex w-full max-w-full flex-row items-center gap-2">
-        {data?.tag && (
-          <Badge
-            variant="default"
-            className={cn('line-clamp-1 max-w-40 capitalize', {
-              hidden: !data?.tag?.name,
-            })}
-            style={{
-              backgroundColor: data?.tag?.color,
-              color: getContrastingTextColor(data?.tag?.color),
-            }}
-          >
-            {data?.tag?.name}
-          </Badge>
-        )}
+        <RoomItemTag tag={data.tag} />
         <span
           className={cn(
             'line-clamp-1 break-all ',
