@@ -163,7 +163,7 @@ export default function SignIn() {
 
   return (
     <>
-      {(loading || (isAuthentication && userData)) && ing />}
+      {(loading || (isAuthentication && userData)) && <PageLoading />}
       <form
         className="flex w-full flex-col items-center"
         onSubmit={handleSubmitForm}
@@ -190,7 +190,7 @@ export default function SignIn() {
           type="password"
         />
         <Link
-          className="ml-auto mt-3 inline-block rounded-xl px-3 py-2 font-semibold text-neutral-700 active:bg-neutral-100 md:hover:bg-neutral-50 dark:text-neutral-50 dark:md:hover:bg-neutral-900 dark:md:active:bg-neutral-800"
+          className="ml-auto mt-3 inline-block rounded-xl px-3 py-2 font-semibold text-neutral-700 active:bg-neutral-100 dark:text-neutral-50 md:hover:bg-neutral-50 dark:md:hover:bg-neutral-900 dark:md:active:bg-neutral-800"
           href={ROUTE_NAMES.FORGOT_PASSWORD}
         >
           {t('SIGN_IN.FORGOT_PASSWORD')}
