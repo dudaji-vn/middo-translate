@@ -34,7 +34,7 @@ export const ForwardModal = ({ message, onClosed }: ForwardModalProps) => {
     rooms: Room[];
     users: User[];
   }>(searchApi.inboxes, 'forward');
-  const { data: recData } = useGetRoomsRecChat();
+  const { data: recData } = useGetRoomsRecChat({});
   const { t } = useTranslation('common');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 

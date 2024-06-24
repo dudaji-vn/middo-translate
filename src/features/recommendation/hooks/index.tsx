@@ -8,12 +8,20 @@ export const useGetUsersRecChat = () => {
   });
 };
 
-export const useGetRoomsRecChat = (extensionSpaceParams?: {
-  type?: string;
-  spaceId?: string;
+export const useGetRoomsRecChat = ({
+  businessSpaceParams,
+  stationParams,
+}: {
+  businessSpaceParams?: {
+    type?: string;
+    spaceId?: string;
+  };
+  stationParams?: {
+    stationId?: string;
+  };
 }) => {
   return useQuery({
     queryKey: ['rooms-rec-chat'],
-    queryFn: () => recommendationApi.rooms(extensionSpaceParams),
+    queryFn: () => recommendationApi.rooms(businessSpaceParams),
   });
 };

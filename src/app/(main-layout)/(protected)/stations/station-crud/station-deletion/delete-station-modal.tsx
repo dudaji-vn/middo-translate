@@ -86,7 +86,7 @@ export const DeleteStationModal = ({
                 }}
                 loading={loading}
               >
-                {t('COMMON.SET_AS_DEFAULT')}
+                {t('COMMON.DELETE')}
               </Button>
             </div>
           </div>
