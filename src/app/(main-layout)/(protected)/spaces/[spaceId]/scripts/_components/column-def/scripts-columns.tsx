@@ -172,6 +172,7 @@ export const makeScriptsColumns = ({
               color={'error'}
               disabled={!isManySelected || !enableDeletion}
               onClick={onDeleteRowSelections}
+              className={enableDeletion ? '' : 'hidden'}
             >
               <Trash2 />
             </Button.Icon>

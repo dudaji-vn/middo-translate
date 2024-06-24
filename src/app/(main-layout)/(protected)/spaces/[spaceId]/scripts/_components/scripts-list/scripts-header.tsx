@@ -49,7 +49,13 @@ const ScriptsHeader = ({
           {t(`EXTENSION.SCRIPT.PAGE_TITLE`)}
         </Typography>
       </div>
-      <div className="flex w-full flex-col gap-2 px-2 md:max-w-[60%] md:grow md:flex-row md:gap-4 xl:max-w-[50%]">
+      <div
+        {...props}
+        className={cn(
+          'flex w-full flex-col gap-2 px-2 md:max-w-[60%] md:grow md:flex-row md:justify-between md:gap-4 xl:max-w-[50%]',
+          props.className,
+        )}
+      >
         <div className="h-12 grow">
           <SearchInput
             onChange={(e) => onSearchChange(e.target.value)}

@@ -68,6 +68,9 @@ const Page = ({
         onSearchChange={onSearchChange}
         search={search}
         isLoading={isLoading}
+        tableWrapperProps={{
+          className: 'md:px-10',
+        }}
       />
       <ScriptsPagination
         pagination={pagination}

@@ -67,8 +67,9 @@ const ScriptsSelection = () => {
   return (
     <ScriptsList
       headerProps={{
-        className: 'justify-between ',
+        className: 'justify-between w-full md:max-w-full xl:max-w-full',
         menuProps: { className: 'hidden' },
+        
       }}
       titleProps={{
         className: 'hidden',
