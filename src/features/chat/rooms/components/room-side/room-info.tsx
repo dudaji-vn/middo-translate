@@ -84,8 +84,10 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
             />
           </div>
         )}
+        {!isEmpty(anonymousUser) && (
+          <GuestInformation guestData={anonymousUser} room={room} />
+        )}
       </div>
-      {!isEmpty(anonymousUser) && <GuestInformation {...anonymousUser} />}
     </>
   );
 };

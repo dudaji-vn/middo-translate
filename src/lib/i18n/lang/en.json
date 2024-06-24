@@ -102,6 +102,7 @@
       "LAST_WEEK": "Last week",
       "LAST_MONTH": "Last month",
       "LAST_YEAR": "Last year",
+      "LAST_EDITED": "Last edited",
       "CUSTOM": "Custom"
     },
     "WEEKDAY": {
@@ -764,6 +765,7 @@
       "EDIT": "Edit tag",
       "DELETE": "Delete tag"
     },
+    "RECEIVED_FROM": "Received from",
     "CONVERSATIONS": "General",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",

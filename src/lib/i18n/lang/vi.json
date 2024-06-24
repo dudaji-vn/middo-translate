@@ -101,6 +101,7 @@
       "DELETED_ON": "Xoá vào",
       "LAST_WEEK": "Tuần trước",
       "LAST_MONTH": "Tháng trước",
+      "LAST_EDITED": "Chỉnh sửa cuối",
       "LAST_YEAR": "Năm trước",
       "CUSTOM": "Tùy chỉnh"
     },
@@ -757,6 +758,7 @@
       "EDIT": "Chỉnh sửa thẻ",
       "DELETE": "Xoá thẻ"
     },
+    "RECEIVED_FROM": "Nhận từ",
     "CONVERSATIONS": "Chung",
     "COMPLETED": "Hoàn thành",
     "ARCHIVED": "Lưu trữ",
