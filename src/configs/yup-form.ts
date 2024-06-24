@@ -171,8 +171,8 @@ export const createExtensionSchema = z.object({
 });
 
 export const createGuestInfoSchema = z.object({
-  name: z.string().min(1, {}).max(50, {
-    message: 'Name must be less than 50 characters!',
+  name: z.string().min(1, {}).max(20, {
+    message: 'Name must be less than 20 characters!',
   }),
   email: z.string().email({
     message: 'Please enter a valid email address!',
