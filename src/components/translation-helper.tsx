@@ -189,7 +189,7 @@ export const TranslationHelper = forwardRef<
               <div className="rounded-xl bg-primary-100 dark:bg-neutral-900">
                 <div className="flex items-center gap-3 p-3">
                   <CircleFlag countryCode="gb" height="20" width="20" />
-                  <span className="text-sm font-medium text-neutral-600">
+                  <span className="text-sm font-medium text-neutral-600 dark:text-neutral-200">
                     {t('CONVERSATION.TRANSLATED_TOOL')}
                   </span>
                   {isFetching && <Spinner className="h-4 w-4 text-primary" />}

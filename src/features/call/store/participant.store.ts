@@ -1,6 +1,6 @@
 import Peer from 'simple-peer';
 import { create } from 'zustand';
-import ParticipantInVideoCall, { StatusParticipantType } from '../interfaces/participant';
+import ParticipantInVideoCall, { StatusParticipant, StatusParticipantType } from '../interfaces/participant';
 import { User } from '@/features/users/types';
 export interface IUserRequestJoinRoom {
     socketId: string;
@@ -27,6 +27,7 @@ export type VideoCallState = {
     updatePeerParticipant: (peer: Peer.Instance, socketId: string) => void;
     addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: User}) => void;
     removeUsersRequestJoinRoom: (socketId: string) => void;
+    removeWaitingHelpDeskParticipant: () => void;
     updateStatusParticipant: (userId: string, status: StatusParticipantType) => void;
     pinParticipant: (socketId: string, isShareScreen: boolean) => void;
     clearPinParticipant: () => void;
@@ -114,6 +115,11 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
     },
     removeUsersRequestJoinRoom: (socketId: string) => {
         set((state) => ({ usersRequestJoinRoom: state.usersRequestJoinRoom.filter((u) => u.socketId != socketId) }));
+    },
+    removeWaitingHelpDeskParticipant: () => {
+        set((state) => ({
+            participants: state.participants.filter((p) => p.status != StatusParticipant.WAITING_HELP_DESK),
+        }));
     },
     updateStatusParticipant: (userId: string, status: StatusParticipantType) => {
         set((state) => ({

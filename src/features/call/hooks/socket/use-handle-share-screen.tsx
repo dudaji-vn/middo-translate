@@ -42,7 +42,7 @@ export default function useHandleShareScreen() {
         if (item) {
             item.peer?.destroy();
             removeParticipantShareScreen(socketId);
-            customToast.success(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
+            customToast.default(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
         }
         if(item?.pin) {
             setShareScreen(false);

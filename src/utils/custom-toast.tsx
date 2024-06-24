@@ -24,8 +24,8 @@ const customToast = {
     error: (message: string | React.ReactNode, options ?: {}) => {
         toast.error((t)=>customToastContent(t, message), options);
     },
-    loading: (message: string | React.ReactNode, options ?: {}) => {
-        toast.loading((t)=>customToastContent(t, message), options);
+    default: (message: string | React.ReactNode, options ?: {}) => {
+        toast((t)=>customToastContent(t, message), options);
     },
 };
 

@@ -23,6 +23,7 @@ export const ToastProvider = () => {
           className:
             '!bg-neutral-50 !text-neutral-800 !border !border-neutral-300 dark:!bg-neutral-900 dark:!border-neutral-600 dark:!text-neutral-50',
         },
+        duration: 3000,
       }}
     />
   );

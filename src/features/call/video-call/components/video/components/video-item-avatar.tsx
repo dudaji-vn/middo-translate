@@ -23,6 +23,8 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
       case StatusParticipant.WAITING:
       case StatusParticipant.DECLINE:
         return 'opacity-10'
+      case StatusParticipant.WAITING_HELP_DESK:
+        return 'opacity-[0.05]'
       default:
     }
   }, [participant?.status])

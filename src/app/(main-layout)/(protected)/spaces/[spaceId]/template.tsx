@@ -32,7 +32,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   }, [data, setFilterOptions, setSpace]);
 
   const handleRedirectToHome = useCallback(() => {
-    customToast.loading('You has been removed from this space. Refreshing...');
+    customToast.default('You has been removed from this space. Refreshing...');
     setTimeout(() => {
       router.push(ROUTE_NAMES.SPACES);
       toast.dismiss();
