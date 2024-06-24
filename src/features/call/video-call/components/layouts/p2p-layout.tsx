@@ -12,7 +12,6 @@ import ParticipantsBar from "../participants-bar/participants-bar";
 const P2PLayout = () => {
     const participants = useParticipantVideoCallStore(state => state.participants)
     const [participantPin, anotherParticipants] = useMemo(()=> {
-        console.log({participants})
         if(participants.length == 1) return [participants[0], []];
         let pPin = participants.find((p: ParticipantInVideoCall) => p.pin);
         if(!pPin) {

@@ -2,7 +2,6 @@ import { SOCKET_CONFIG } from "@/configs/socket";
 import socket from "@/lib/socket-io";
 import { useCallback, useEffect } from "react";
 import { useVideoCallStore } from "../../store/video-call.store";
-import toast from "react-hot-toast";
 import ParticipantInVideoCall, { StatusParticipant } from "../../interfaces/participant";
 import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
@@ -13,6 +12,8 @@ import { MonitorUpIcon, LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { User } from "@/features/users/types";
 import customToast from "@/utils/custom-toast";
+import { useBusinessNavigationData } from "@/hooks/use-business-navigation-data";
+import { useHelpDeskCallContext } from "@/app/help-desk/[businessId]/call/[userId]/page";
 
 export default function useHandleCreatePeerConnection() {
     const {t} = useTranslation('common')
@@ -29,10 +30,13 @@ export default function useHandleCreatePeerConnection() {
     const updateParticipant = useParticipantVideoCallStore(state => state.updateParticipant);
     const myStream = useMyVideoCallStore(state => state.myStream);
     const layout = useVideoCallStore(state => state.layout);
-
+    
     const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
     const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
-    
+
+    const { isHelpDesk } = useBusinessNavigationData();
+    const {businessData} = useHelpDeskCallContext();
+
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
     const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: { socketId: string; user: User }[], doodleImage: string}) => {
         if(!socket.id) return;
@@ -80,7 +84,11 @@ export default function useHandleCreatePeerConnection() {
         const newUser: ParticipantInVideoCall = {
             socketId: payload.callerId,
             peer,
-            user: payload.user,
+            user: {
+                ...payload.user,
+                name: isHelpDesk ? (businessData?.space?.name || '') : payload.user.name,
+                avatar: isHelpDesk ? (businessData?.space?.avatar || '') : payload.user.avatar,
+            },
             isShareScreen: payload.isShareScreen,
             isElectron: payload?.isElectron || false,
             status: StatusParticipant.JOINED,
@@ -99,9 +107,9 @@ export default function useHandleCreatePeerConnection() {
                 }
             }
             
-            customToast.success(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name: payload.user.name}), {icon: <MonitorUpIcon size={20}/>});
+            customToast.default(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name: payload.user.name}), {icon: <MonitorUpIcon size={20}/>});
         } else {
-            customToast.success(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
+            customToast.default(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
         }
         // Check is user is waiting for join
         let isInParticipantList = participants.some((p: ParticipantInVideoCall) => (p.user._id === payload.user._id && !!p.isShareScreen == !!payload.isShareScreen));

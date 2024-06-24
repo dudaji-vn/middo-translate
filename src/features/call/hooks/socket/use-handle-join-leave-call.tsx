@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { IPeerShareScreen, useParticipantVideoCallStore } from "../../store/participant.store";
 import { IReturnSignal } from "../../interfaces/socket/signal.interface";
-import ParticipantInVideoCall from "../../interfaces/participant";
+import ParticipantInVideoCall, { StatusParticipant } from "../../interfaces/participant";
 import { useVideoCallStore } from "../../store/video-call.store";
 import { LogOutIcon } from "lucide-react";
 import { useAuthStore } from "@/stores/auth.store";
@@ -26,7 +26,7 @@ export default function useHandleJoinLeaveCall() {
     const setLayout = useVideoCallStore(state => state.setLayout);
     const myStream = useMyVideoCallStore(state => state.myStream);
     const user = useAuthStore(state => state.user);
-    
+
     const removeUserLeavedRoom = useCallback((socketId: string) => {
         if(socketId === socket.id) return;
         // use filter because when user share screen leave, need remove both user and share screen
@@ -36,7 +36,7 @@ export default function useHandleJoinLeaveCall() {
             removeParticipant(socketId);
         });
         if (items[0]?.user?.name) {
-            customToast.success(t('MESSAGE.SUCCESS.LEFT_MEETING', {name: items[0].user.name}), { icon: <LogOutIcon size={20} /> });
+            customToast.default(t('MESSAGE.SUCCESS.LEFT_MEETING', {name: items[0].user.name}), { icon: <LogOutIcon size={20} /> });
         }
 
         // Check have pin this user
@@ -127,6 +127,20 @@ export default function useHandleJoinLeaveCall() {
             addParticipant(me);
         };
     }, [addParticipant, myStream, participants, user]);
+
+    // // // Add Me To list participant
+    // useEffect(() => {
+    //     const isHaveMe = participants.some((p: ParticipantInVideoCall) => p.isMe);
+    //     if(!user) return;
+    //     if (!isHaveMe) {
+    //         console.log('🟣 Add MEE')
+    //         const me: ParticipantInVideoCall = { user, isMe: true, socketId: socket.id || '' }
+    //         if (myStream) {
+    //             me.stream = myStream
+    //         }
+    //         addParticipant(me);
+    //     };
+    // }, [addParticipant, myStream, participants, user]);
 
     // For testing layout
     // useEffect(() => {

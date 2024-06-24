@@ -74,12 +74,6 @@ const ReceiveVideoCall = () => {
       stopAudio();
     }
   }, [playAudio, requestCall?.id, stopAudio]);
-  useEffect(() => {
-    if(!requestCall?.call?.roomId) return
-    if(!meetingList[requestCall?.call?.roomId]) {
-      setRequestCall();
-    }
-  }, [meetingList, requestCall?.call?.roomId, setRequestCall])
 
   // Auto decline call after 30s
   useEffect(() => {
@@ -145,7 +139,7 @@ const ReceiveVideoCall = () => {
         dragMomentum={false}
         className="pointer-events-auto absolute h-full w-full cursor-auto rounded-xl shadow-glow md:bottom-4 md:left-4 md:h-[252px] md:w-[336px]"
       >
-        <div className="max-h-vh flex h-full bg-white w-full flex-col overflow-hidden rounded-none md:rounded-xl">
+        <div className="max-h-vh flex h-full bg-white dark:bg-background w-full flex-col overflow-hidden rounded-none md:rounded-xl border border-primary-400">
           <ReceiveVideoCallHeader />
           <div className="relative flex flex-1 flex-col overflow-hidden">
             <ReceiveVideoCallContent />
