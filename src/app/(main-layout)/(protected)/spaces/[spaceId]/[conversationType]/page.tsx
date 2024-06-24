@@ -9,9 +9,8 @@ export default async function BusinessConversationPage({
   params: { spaceId: string };
 }) {
   const space = await businessAPI.getSpaceBySpaceID(spaceId);
-  console.log('spaceData', space);
 
-  if (!space?.extension) return <CreateExtensionShortcut />;
+  if (space?.extension) return <CreateExtensionShortcut />;
 
   return <LetsPickAConversation />;
 }

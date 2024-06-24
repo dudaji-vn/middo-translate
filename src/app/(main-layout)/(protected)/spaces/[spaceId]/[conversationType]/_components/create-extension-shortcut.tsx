@@ -11,14 +11,16 @@ import { cn } from '@/utils/cn';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useParams } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth.store';
+import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
 
 export default function CreateExtensionShortcut() {
   const { t } = useTranslation('common');
   const { space, user: currentUser } = useAuthStore();
   const params = useParams();
 
-  const isOwnerOfThisSpace =
-    currentUser && space?.owner?._id === currentUser?._id;
+  const youOnSpace = space?.members?.find(
+    (member) => member._id === currentUser?._id,
+  );
 
   return (
     <div
@@ -34,15 +36,14 @@ export default function CreateExtensionShortcut() {
         className="mx-auto"
       />
       <Typography className="text-lg font-semibold leading-5 text-neutral-800 dark:text-neutral-50">
-        Your extension is almost here!
+        {t('EXTENSION.EMPTY.TITLE')}
       </Typography>
       <Typography className="text-neutral-600 dark:text-neutral-200">
-        Create a conversation extension with the help of ready-made theme or
-        define a unique one on your own
+        {t('EXTENSION.EMPTY.OWNER_DES')}
       </Typography>
       <div
         className={cn({
-          hidden: !isOwnerOfThisSpace,
+          hidden: youOnSpace?.role !== ESPaceRoles.Member,
         })}
       >
         <Link
