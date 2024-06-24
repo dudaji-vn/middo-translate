@@ -227,7 +227,7 @@ const ReorderList = ({
                             <ul
                               className={cn(
                                 'list-unstyled mb-3 ',
-                                'flex flex-col gap-1 overflow-x-auto w-full  md:min-w-[400px]',
+                                'flex w-full flex-col gap-1 overflow-x-auto  md:min-w-[400px]',
                               )}
                             >
                               <CategoryHeader role={category._id} />
@@ -237,7 +237,10 @@ const ReorderList = ({
                                   <Draggable
                                     draggableId={item.email}
                                     key={item.email.toString()}
-                                    isDragDisabled={item.email === owner.email}
+                                    isDragDisabled={
+                                      item.email === owner.email ||
+                                      disableChangeRole
+                                    }
                                     index={index}
                                   >
                                     {(provided) => (

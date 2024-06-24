@@ -1,19 +1,16 @@
-'use client';
+import { businessAPI } from '@/features/chat/help-desk/api/business.service';
+import CreateExtensionShortcut from './_components/create-extension-shortcut';
 
-import { MessageBubbleIcon } from '@/components/icons';
-import { Typography } from '@/components/data-display';
-import { useTranslation } from 'react-i18next';
+import LetsPickAConversation from './_components/lets-pick-a-conversation';
 
-export default function BusinessConversation() {
-  const { t } = useTranslation('common');
-  return (
-    <main className="bw-full flex h-full flex-col items-center justify-center rounded-md bg-card max-md:hidden">
-      <div className="flex flex-col items-center justify-center">
-        <MessageBubbleIcon />
-        <Typography variant="muted" className="text-center text-lg">
-          {t('CONVERSATION.PICK_MESSAGE')}
-        </Typography>
-      </div>
-    </main>
-  );
+export default async function BusinessConversationPage({
+  params: { spaceId },
+}: {
+  params: { spaceId: string };
+}) {
+  const space = await businessAPI.getSpaceBySpaceID(spaceId);
+
+  if (space?.extension) return <CreateExtensionShortcut />;
+
+  return <LetsPickAConversation />;
 }

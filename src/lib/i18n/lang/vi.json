@@ -729,6 +729,11 @@
     "NO_MEMBER": "Không có thành viên"
   },
   "EXTENSION": {
+    "EMPTY": {
+      "TITLE": "확장이 거의 도착했습니다!",
+      "OWNER_DES": "기성 테마를 사용하여 대화 확장을 만들거나 고유한 테마를 직접 정의하십시오."
+    },
+
     "ALL_DOMAINS": "Tất cả miền",
     "ALL_MEMBERS": "Tất cả thành viên",
     "SPACE": {
@@ -767,7 +772,7 @@
     "STATISTICS": "Thống kê",
     "SCRIPTS": "Kịch bản trò chuyện",
     "SETTINGS": "Cài đặt",
-    "REPORT": "Báo cáo",
+    "REPORT": "Thống kê",
     "CLIENT_LIST": "Danh sách khách hàng",
     "CHART": {
       "CLIENT": "Khách hàng mới",
@@ -811,7 +816,7 @@
       "CONVERSATION_EXTENSION": "Tiện ích trò chuyện"
     },
     "SCRIPT": {
-      "PAGE_TITLE": "Quản lý Kịch bản",
+      "PAGE_TITLE": "Kịch bản trò chuyện",
       "SEARCH": "Tìm kiếm kịch bản",
       "ADD_SCRIPT": "Thêm kịch bản mới",
       "EDIT_SCRIPT": "Chỉnh sửa kịch bản",

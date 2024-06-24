@@ -49,18 +49,27 @@ const ScriptsSelection = () => {
       setCreatedNewOne(true);
       return;
     }
+
     if (dataUpdatedAt && !isRefetching && data?.items?.[0] && createdNewOne) {
+      if (
+        watch('currentScript') &&
+        data?.items?.find((item: any) => item._id === watch('currentScript'))
+      ) {
+        setCreatedNewOne(false);
+        return;
+      }
       const newScriptIdx = data?.items?.length - 1;
       setValue('currentScript', data.items[newScriptIdx]?._id);
       setValue('custom.firstMessage', data.items[newScriptIdx]?._id);
     }
-  }, [dataUpdatedAt, isRefetching, data, setValue]);
+  }, [dataUpdatedAt, isRefetching, data, setValue, createdNewOne]);
 
   return (
     <ScriptsList
       headerProps={{
-        className: 'justify-between ',
+        className: 'justify-between w-full md:max-w-full xl:max-w-full',
         menuProps: { className: 'hidden' },
+        
       }}
       titleProps={{
         className: 'hidden',

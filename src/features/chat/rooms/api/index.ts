@@ -63,7 +63,7 @@ export const roomApi = {
       data.avatar = res.secure_url;
     }
     const { stationId, ...payload } = data;
-    const url = stationId ? `${basePath}?stationId=${stationId}` : basePath;
+    const url = stationId ? `${basePath}/stations/${stationId}` : basePath;
     const res: Response<Room> = await axios.post(url, payload);
     return res.data;
   },

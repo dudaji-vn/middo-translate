@@ -46,10 +46,16 @@ const ScriptsHeader = ({
           className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800 dark:text-neutral-50"
           {...titleProps}
         >
-          {t(`EXTENSION.SCRIPT.PAGE_TITLE`)}
+          {t(`EXTENSION.SCRIPTS`)}
         </Typography>
       </div>
-      <div className="flex w-full flex-col gap-2 px-2 md:max-w-[60%] md:grow md:flex-row md:gap-4 xl:max-w-[50%]">
+      <div
+        {...props}
+        className={cn(
+          'flex w-full flex-col gap-2 px-2 md:max-w-[60%] md:grow md:flex-row md:justify-between md:gap-4 xl:max-w-[50%]',
+          props.className,
+        )}
+      >
         <div className="h-12 grow">
           <SearchInput
             onChange={(e) => onSearchChange(e.target.value)}
