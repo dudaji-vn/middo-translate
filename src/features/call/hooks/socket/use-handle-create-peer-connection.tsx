@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { User } from "@/features/users/types";
 import customToast from "@/utils/custom-toast";
 import { useBusinessNavigationData } from "@/hooks/use-business-navigation-data";
-import { useHelpDeskCallContext } from "@/app/help-desk/[businessId]/call/[userId]/page";
+import { useHelpDeskCallContext } from "@/features/help-desk/context/help-desk-call.context";
 
 export default function useHandleCreatePeerConnection() {
     const {t} = useTranslation('common')

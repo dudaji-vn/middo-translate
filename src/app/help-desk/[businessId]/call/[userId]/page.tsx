@@ -13,26 +13,13 @@ import useSocketVideoCall from '@/features/call/hooks/socket/use-socket-video-ca
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import VideoCall from '@/features/call/video-call';
 import { Room } from '@/features/chat/rooms/types';
+import { VideoCallHelpDeskContext, VideoCallHelpDeskContextType } from '@/features/help-desk/context/help-desk-call.context';
 import socket from '@/lib/socket-io';
 import { getHelpDeskCallInformation } from '@/services/video-call.service';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-export type VideoCallHelpDeskContextType =
-  | 'WAITING'
-  | 'JOINED'
-  | 'BLOCK'
-  | 'BUSY';
-interface VideoCallHelpDeskContextProps {
-  status: 'WAITING' | 'JOINED' | 'BLOCK' | 'BUSY';
-  setStatus: (status: VideoCallHelpDeskContextType) => void;
-  businessData: Room;
-}
-
-const VideoCallHelpDeskContext = createContext<VideoCallHelpDeskContextProps>(
-  {} as VideoCallHelpDeskContextProps,
-);
 
 interface HelpDeskCallProps {
   params: {
@@ -115,15 +102,6 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
 
 export default HelpDeskCall;
 
-export const useHelpDeskCallContext = () => {
-  const context = useContext(VideoCallHelpDeskContext);
-  if (!context) {
-    throw new Error(
-      'useHelpDeskCallContext must be used within VideoCallHelpDeskContext',
-    );
-  }
-  return context;
-};
 
 const HelpDeskCallContent = () => {
   useHelpDeskCall();

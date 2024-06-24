@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import ParticipantInVideoCall, { StatusParticipant } from "../../interfaces/participant";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { useVideoCallStore } from "../../store/video-call.store";
-import { useHelpDeskCallContext } from "@/app/help-desk/[businessId]/call/[userId]/page";
+import { useHelpDeskCallContext } from "@/features/help-desk/context/help-desk-call.context";
+
 
 export default function useHelpDeskCall()  {
     const { isHelpDesk } = useBusinessNavigationData();

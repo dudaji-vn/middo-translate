@@ -115,7 +115,7 @@ const BusinessSidebarContent = ({
                 {icon}
                 <Circle
                   className={cn(
-                    'absolute -right-2 -top-2 !size-4 fill-primary-500-main stroke-white stroke-[2px]',
+                    'absolute -right-2 -top-2 !size-4 fill-primary-500-main stroke-white dark:stroke-neutral-800 stroke-[2px]',
                     {
                       hidden: isSelected || !notifications?.[title],
                     },

@@ -1,10 +1,10 @@
-import { useHelpDeskCallContext } from '@/app/help-desk/[businessId]/call/[userId]/page';
 import { CALL_TYPE } from '@/features/call/constant/call-type';
 import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import usePlayAudio from '@/features/call/hooks/use-play-audio';
 import ParticipantInVideoCall, { StatusParticipant } from '@/features/call/interfaces/participant';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { useHelpDeskCallContext } from '@/features/help-desk/context/help-desk-call.context';
 import { cn } from '@/utils/cn';
 import { PhoneMissed } from 'lucide-react';
 import React, { useEffect } from 'react';

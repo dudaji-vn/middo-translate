@@ -25,7 +25,7 @@ const HelpDeskCallButton = () => {
     const roomId = params?.slugs?.[0];
     const handleStartCall = () => {
         setFalse();
-        customToast.success('Call started');
+        customToast.default('Call started');
         if(!userId || !roomId) return;
         startVideoCall({
             roomId,
@@ -54,7 +54,7 @@ const HelpDeskCallButton = () => {
     return (
         <>
             <Button.Icon 
-                size="xs" 
+                size="xs"
                 variant="ghost"
                 color={isInCall ? 'primary' : 'default'}
                 onClick={checkToShowModalStartCall}
