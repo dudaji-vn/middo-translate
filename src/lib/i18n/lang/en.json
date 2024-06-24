@@ -78,6 +78,7 @@
     "TYPE_A_MESSAGE": "Type a message",
     "CLICK": "Click",
     "WAITING": "Waiting",
+    "CONNECTING": "Connecting",
     "DRAFT": "Draft",
     "TRANSLATED_FROM": "Translated from",
     "EDITED": "Edited",

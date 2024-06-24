@@ -32,7 +32,7 @@ export default function useHandleDoodle() {
     const {isElectron, ipcRenderer} = useElectron();
     
     const doodleStart = useCallback((payload: IStartDoodlePayload) => {
-        customToast.success(t('MESSAGE.SUCCESS.START_DOODLE', {name: payload.name}), {icon: <Brush size={20} />});
+        customToast.default(t('MESSAGE.SUCCESS.START_DOODLE', {name: payload.name}), {icon: <Brush size={20} />});
         setDoodle(true);
         setDoodleImage(payload.image_url);
         const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
@@ -45,7 +45,7 @@ export default function useHandleDoodle() {
     },[participants, setDoodle, setDoodleImage, setLayout, setPinDoodle])
 
     const doodleEnd = useCallback((name: string) => {
-        customToast.success(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
+        customToast.default(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
         setDoodle(false);
         setMyOldDoodle([])
         setDrawing(false);

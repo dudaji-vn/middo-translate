@@ -1,9 +1,11 @@
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { Theme, useAppStore } from '@/stores/app.store';
 import { useEffect } from 'react';
 
 export const ThemeProvider = () => {
   const setTheme = useAppStore(state => state.setTheme);
   const themeSetting = useAppStore(state => state.themeSetting);
+  const { isHelpDesk } = useBusinessNavigationData();
   useEffect(() => {
     let currentTheme: Theme = 'light';
     if (themeSetting === 'system' || !themeSetting) {
@@ -24,5 +26,14 @@ export const ThemeProvider = () => {
     }
   }, [setTheme, themeSetting]);
   
+
+  useEffect(() => {
+    // Help desk should always be light theme
+    if(isHelpDesk && themeSetting != 'light') {
+      setTheme('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [themeSetting, setTheme, isHelpDesk]);
+
   return <></>;
 };

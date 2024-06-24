@@ -117,7 +117,7 @@ const DesignScriptChatFlow = ({
   };
   const redirectToPreview = () => {
     localStorage.setItem(CHAT_FLOW_KEY, JSON.stringify({ nodes, edges }));
-    customToast.loading('Loading preview...');
+    customToast.default('Loading preview...');
     let params = `scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no,
         width=700,height=700,left=-500,top=-500`;
     if (spaceId) {
