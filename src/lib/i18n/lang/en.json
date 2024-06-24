@@ -735,6 +735,10 @@
     "NO_MEMBER": "No members"
   },
   "EXTENSION": {
+    "EMPTY": {
+      "TITLE": "Your extension is almost here!",
+      "OWNER_DES": "Create a conversation extension with the help of ready-made theme or define a unique one on your own."
+    },
     "ALL_DOMAINS": "All Domains",
     "ALL_MEMBERS": "All Members",
     "SPACE": {

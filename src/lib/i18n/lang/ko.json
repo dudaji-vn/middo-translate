@@ -727,6 +727,10 @@
     "NO_MEMBER": "멤버 없음"
   },
   "EXTENSION": {
+    "EMPTY": {
+      "TITLE": "Tiện ích mở rộng của bạn sắp đến!",
+      "OWNER_DES": "Tạo một tiện ích mở rộng cuộc trò chuyện với sự trợ giúp của chủ đề sẵn có hoặc tự định nghĩa một chủ đề độc đáo của riêng bạn."
+    },
     "ALL_DOMAINS": "모든 도메인",
     "ALL_MEMBERS": "모든 구성원",
     "SPACE": {
