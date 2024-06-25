@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
 
 const A_MINUTE = 1000 * 60;
 const DEFAULT_STALE_TIME = A_MINUTE * 5; // 5 minutes
@@ -7,16 +8,15 @@ export function useQuerySearch<T>({
   queryKey,
   searchTerm,
   businessSpaceParams,
-  stationParams,
 }: {
   searchApi: Function;
   queryKey: string;
   searchTerm: string;
   businessSpaceParams?: { type?: string; spaceId?: string };
-  stationParams?: { stationId?: string };
 }) {
   const { type, spaceId } = businessSpaceParams || {};
-  const { stationId } = stationParams || {};
+  const params = useParams();
+  const stationId = params?.stationId ? String(params.stationId) : undefined;
   const { data, ...rest } = useQuery({
     queryKey: [
       'search' + queryKey,
