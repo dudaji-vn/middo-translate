@@ -257,21 +257,6 @@ function MediaLightBox(props: MediaLightBoxProps) {
         </Button.Icon>
       </div>
       <div className="relative flex-1 overflow-hidden">
-        {/* Button Prev */}
-        {current > 0 && files?.length > 1 && (
-          <Button.Icon
-            variant={'default'}
-            color={'default'}
-            size={'xs'}
-            shape={'default'}
-            className="absolute left-0 top-1/2 z-50 -translate-y-1/2 transform opacity-40"
-            onClick={onPrev}
-          >
-            <ChevronLeft />
-          </Button.Icon>
-        )}
-        {/* Image main */}
-
         <div className="no-scrollbar flex h-full w-full select-none items-center justify-center overflow-auto focus:scroll-auto">
           <TransformWrapper
             initialScale={1}
@@ -320,27 +305,39 @@ function MediaLightBox(props: MediaLightBoxProps) {
             )}
           </TransformWrapper>
         </div>
-        {/* Button next */}
-        {current < files.length - 1 && files?.length > 1 && (
+      </div>
+      <div className="relative h-24 ">
+        <div className='flex gap-2 py-2 items-center justify-center w-fit mx-auto'>
           <Button.Icon
             variant={'default'}
             color={'default'}
             size={'xs'}
             shape={'default'}
-            className="absolute right-0 top-1/2 z-50 -translate-y-1/2 transform opacity-40"
+            className={cn({'!opacity-0': (current == 0 || files.length == 1)})}
+            onClick={onPrev}
+            disabled={current == 0 || files.length == 1}
+          >
+            <ChevronLeft />
+          </Button.Icon>
+       
+          <ThumbnailList
+            files={files}
+            current={current}
+            setCurrent={setCurrent}
+          />
+
+          <Button.Icon
+            variant={'default'}
+            color={'default'}
+            size={'xs'}
+            shape={'default'}
+            className={cn({'!opacity-0': (current == files.length - 1 || files.length == 1)})}
             onClick={onNext}
+            disabled={current == files.length - 1 || files.length == 1}
           >
             <ChevronRight />
           </Button.Icon>
-        )}
-      </div>
-      <div className="relative flex h-24 py-2">
-        {/* Thumbnail */}
-        <ThumbnailList
-          files={files}
-          current={current}
-          setCurrent={setCurrent}
-        />
+        </div>
 
         {/* Controls */}
         {files[current].type === 'image' && (
