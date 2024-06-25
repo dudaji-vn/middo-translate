@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/data-display/accordion';
-import MediaLightBox from '@/components/media-light-box/media-light-box';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 import { cn } from '@/utils/cn';
 import Image from 'next/image';
 
@@ -22,8 +22,8 @@ export default function UserGuide() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [index, setIndex] = useState<number | undefined>();
-  const [imagePreview, setImagePreview] = useState<string | undefined>();
+  const setIndex = useMediaLightBoxStore((state) => state.setIndex);
+  const setFiles = useMediaLightBoxStore((state) => state.setFiles);
 
   const [guide, setGuide] = useState<{
     guide: string;
@@ -65,8 +65,11 @@ export default function UserGuide() {
   };
 
   const onPreviewImage = (url: string) => {
-    setImagePreview(url);
     setIndex(0);
+    setFiles([{
+      url,
+      type: 'image',
+    }])
   };
 
   const guides = [
@@ -1071,18 +1074,6 @@ export default function UserGuide() {
           </AccordionItem>
         ))}
       </Accordion>
-      <MediaLightBox
-        index={index}
-        close={() => {
-          setIndex(undefined);
-        }}
-        files={[
-          {
-            url: imagePreview || '',
-            type: 'image',
-          },
-        ]}
-      />
     </>
   );
 }

@@ -1,15 +1,15 @@
 import { Button } from '@/components/actions';
 import { InfiniteScrollWithLoading } from '@/components/infinity-scroll/infinity-scroll-with-loading';
-import MediaLightBox from '@/components/media-light-box/media-light-box';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Message } from '@/features/chat/messages/types';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
 import { Media } from '@/types';
 import { PlayIcon } from 'lucide-react';
 import Image from 'next/image';
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useMemo } from 'react';
 import { roomApi } from '../../api';
 import { useChatBox } from '../../contexts';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 
 export interface RoomMediaProps {}
 
@@ -17,6 +17,10 @@ export const RoomMedia = () => {
   const { room } = useChatBox();
   const roomId = room._id;
   const roomStatus = room.status;
+
+  const setIndex = useMediaLightBoxStore((state) => state.setIndex);
+  const setFiles = useMediaLightBoxStore((state) => state.setFiles);
+  const setFetchNextPage = useMediaLightBoxStore((state) => state.setFetchNextPage);
 
   const { items, hasNextPage, fetchNextPage, status } =
     useCursorPaginationQuery<Message>({
@@ -39,9 +43,15 @@ export const RoomMedia = () => {
     });
     return media;
   }, [items]);
+  
+  const openMediaLightBox = (index: number) => {
+    setIndex(index);
+    setFiles(media);
+    setFetchNextPage(fetchNextPage)
+  }
 
-  const [index, setIndex] = useState<number | undefined>(undefined);
   if (media.length === 0) return null;
+
   return (
     <>
       <div className="h-full w-full">
@@ -54,7 +64,7 @@ export const RoomMedia = () => {
             {media.map((media, index) => (
               <div
                 key={media.url}
-                onClick={() => setIndex(index)}
+                onClick={() => openMediaLightBox(index)}
                 className="relative block aspect-square cursor-pointer overflow-hidden rounded-[4px] border border-neutral-50 dark:border-neutral-900"
               >
                 {media.type === 'video' && (
@@ -95,13 +105,6 @@ export const RoomMedia = () => {
           </div>
         </InfiniteScrollWithLoading>
       </div>
-      <MediaLightBox
-        files={media}
-        index={index}
-        key={index}
-        close={() => setIndex(undefined)}
-        fetchNextPage={hasNextPage ? fetchNextPage : undefined}
-      />
       {/* {hasNextPage && (
         <Button
           onClick={() => fetchNextPage()}

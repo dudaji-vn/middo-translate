@@ -28,8 +28,9 @@ import {
 import { Button } from '../actions';
 import { Spinner } from '../feedback';
 import VideoPlayer from '../video/video-player';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 
-interface Media {
+export interface Media {
   url: string;
   file?: File;
   type: string;
@@ -40,13 +41,12 @@ interface MediaLightBoxProps {
   files: Media[];
   index?: number;
   close?: () => void;
-  fetchNextPage?: () => void;
 }
 
 function MediaLightBox(props: MediaLightBoxProps) {
   const { t } = useTranslation('common');
   const imageRef = useRef<HTMLImageElement>(null);
-  const { files, index, fetchNextPage, close } = props;
+  const { files, index, close } = props;
   const [current, setCurrent] = useState(index || 0);
   const [zoom, setZoom] = useState(1);
   const [rotate, setRotate] = useState(0);
@@ -54,7 +54,10 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const [paintingStart, setPaintingStart] = useState<number>(0);
   const [isVideoFullScreen, setIsVideoFullScreen] = useState(false);
   const { postMessage } = useReactNativePostMessage();
-
+  const setIndex = useMediaLightBoxStore((state) => state.setIndex);
+  const setFiles = useMediaLightBoxStore((state) => state.setFiles);
+  const fetchNextPage = useMediaLightBoxStore((state) => state.fetchNextPage);
+  const setFetchNextPage = useMediaLightBoxStore((state) => state.setFetchNextPage);
   const onDownload = () => {
     const file = files[current || 0];
     if (!file) return;
@@ -82,6 +85,9 @@ function MediaLightBox(props: MediaLightBoxProps) {
     });
   };
   const onClose = useCallback(() => {
+    setIndex();
+    setFiles([]);
+    setFetchNextPage();
     close && close();
   }, [close]);
 
