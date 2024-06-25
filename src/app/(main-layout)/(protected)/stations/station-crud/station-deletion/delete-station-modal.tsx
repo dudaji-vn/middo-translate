@@ -29,7 +29,7 @@ export const DeleteStationModal = ({
       await deleteStation(station._id)
         .then((res) => {
           if (res.data) {
-            customToast.success('Station name deleted successfully');
+            customToast.success(`Station ${station.name} deleted successfully`);
             queryClient.invalidateQueries([
               GET_STATIONS_KEY,
               { type: 'all_stations' },

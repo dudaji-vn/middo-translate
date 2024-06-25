@@ -45,7 +45,7 @@ const createStationSchema = z.object({
         email: z.string().email({
           message: 'STATION.ERRORS.INVALID_EMAIL',
         }),
-        role: z.string(),
+        role: z.string().default(EStationRoles.Member),
       }),
     )
     .optional(),
@@ -176,7 +176,6 @@ export default function CreateStation({ open }: { open: boolean }) {
             setMembers={(members: Member[]) =>
               formCreateStation.setValue('members', members)
             }
-            allowedRoles={[EStationRoles.Admin, EStationRoles.Member]}
           />
           <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-6 dark:bg-background">
             <form

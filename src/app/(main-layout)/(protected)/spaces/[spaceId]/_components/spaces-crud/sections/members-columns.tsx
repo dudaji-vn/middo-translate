@@ -32,7 +32,7 @@ export const makeMembersColumns = ({
             {props.getValue() as string}
             <span className="font-light">
               {(props.row.original.role === ESPaceRoles.Owner &&
-                ` ${t('EXTENSION.MEMBER.YOU')}`) ||
+                ` (${t('EXTENSION.MEMBER.YOU')})`) ||
                 ''}
             </span>
           </Typography>
@@ -47,7 +47,8 @@ export const makeMembersColumns = ({
           <Typography
             className={cn(
               'capitalize text-gray-500 dark:text-neutral-50',
-              props.getValue() === ESPaceRoles.Admin && 'text-primary-500-main dark:text-primary',
+              props.getValue() === ESPaceRoles.Admin &&
+                'text-primary-500-main dark:text-primary',
             )}
           >
             {props.getValue() as string}
