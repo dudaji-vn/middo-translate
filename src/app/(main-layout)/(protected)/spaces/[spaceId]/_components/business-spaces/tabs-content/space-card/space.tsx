@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useTranslation } from 'react-i18next';
 import { SPK_FOCUS } from '@/configs/search-param-key';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
   variants: {
@@ -40,7 +41,15 @@ const Space = ({
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const hasNotification = totalNewMessages > 0;
   const { t } = useTranslation('common');
-  const router = useRouter();
+  const { navigateTo } = usePlatformNavigation();
+  const onNotificationClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    navigateTo(
+      `${ROUTE_NAMES.SPACES}/${_id}/conversations`,
+      new URLSearchParams([[SPK_FOCUS, 'unread-help-desk']]),
+    );
+  };
+
   return (
     <Card
       key={_id}
@@ -48,7 +57,7 @@ const Space = ({
         'relative min-w-[280px] max-w-full cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 p-3 transition-all duration-300 ease-in-out hover:border-primary-500-main dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-primary',
       )}
       onClick={() => {
-        router.push(`${ROUTE_NAMES.SPACES}/${_id}/conversations`);
+        navigateTo(`${ROUTE_NAMES.SPACES}/${_id}/conversations`);
       }}
       {...props}
     >
@@ -99,12 +108,7 @@ const Space = ({
             shape={'square'}
             color={'primary'}
             variant={'ghost'}
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(
-                `${ROUTE_NAMES.SPACES}/${_id}/conversations?${SPK_FOCUS}=unread-help-desk`,
-              );
-            }}
+            onClick={onNotificationClick}
             className={
               totalNewMessages > 0
                 ? 'text-left text-sm font-semibold  leading-[18px] text-primary-500-main'

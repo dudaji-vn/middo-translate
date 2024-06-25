@@ -5,12 +5,11 @@ import { createExtensionSchema } from '@/configs/yup-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { createExtension } from '@/services/extension.service';
-import toast from 'react-hot-toast';
 import isEmpty from 'lodash/isEmpty';
 import useClient from '@/hooks/use-client';
 import { useAuthStore } from '@/stores/auth.store';
@@ -35,6 +34,7 @@ import { TChatScript } from '@/types/scripts.type';
 import { useTranslation } from 'react-i18next';
 import { isEqual } from 'lodash';
 import customToast from '@/utils/custom-toast';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 type TFormValues = {
   addingDomain: string;
@@ -71,7 +71,7 @@ export default function CreateExtension({
   const [compareData, setCompareData] = React.useState<any>();
   const myRole = getUserSpaceRole(currentUser, space);
 
-  const router = useRouter();
+  const { navigateTo } = usePlatformNavigation();
 
   const form = useForm<TFormValues>({
     mode: 'onChange',
@@ -186,7 +186,8 @@ export default function CreateExtension({
               `${isEditing ? 'Edit' : 'Create'}  extension failed!`,
           );
         });
-      router.push(pathname + '?tab=extension');
+      // router.push(pathname + '?tab=extension');
+      navigateTo(pathname, new URLSearchParams({ tab: 'extension' }));
     } catch (err: any) {
       customToast.error(err?.response?.data?.message);
     }
