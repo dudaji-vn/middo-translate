@@ -81,9 +81,7 @@ export const Content = ({
     message,
     userLanguage: receiverLanguage,
   });
-  if (showEnContent) {
-    console.log('ENG::>', enContent, message);
-  }
+
   return (
     <AnimatePresence mode="sync">
       <div

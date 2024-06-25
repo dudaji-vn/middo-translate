@@ -24,10 +24,7 @@ import InboxContactList from './inbox-contact-list';
 import { useSearchParams } from 'next/navigation';
 import { SPK_FOCUS } from '@/configs/search-param-key';
 import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
-import { useAuthStore } from '@/stores/auth.store';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
-import { useQueryClient } from '@tanstack/react-query';
-import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces';
 export interface InboxProps {
   unreadCount?: number;
 }
@@ -99,10 +96,9 @@ const businessInboxTabs = [
 ];
 const stationInboxTabs = [inboxTabMap.all, inboxTabMap.group];
 
-export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
+export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
   const { isOnStation } = useStationNavigationData();
-  const { space } = useAuthStore();
   const searchParams = useSearchParams();
   const tabs = useMemo(() => {
     if (isBusiness) {
@@ -114,11 +110,16 @@ export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
     return normalInboxTabs;
   }, [isBusiness, isOnStation]);
   const [type, setType] = useState<InboxType>(tabs[0].value);
-  const queryClient = useQueryClient();
+  const [notifications, setNotifications] = useState<
+    Partial<Record<InboxType, boolean>>
+  >({
+    'unread-help-desk': unreadCount ? true : false,
+  });
   const { t } = useTranslation('common');
   useKeyboardShortcut(
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
     (_, matchedKeys) => {
+      if (isBusiness) return;
       setType(
         isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB)
           ? tabs[0].value
@@ -132,13 +133,14 @@ export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
       console.log('focusType', focusType);
       setType(focusType);
     }
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (type === 'help-desk') {
-      queryClient.invalidateQueries([GET_SPACES_KEY, { type }]);
-    }
-  }, [type]);
+  }, [searchParams, tabs]);
+  const updateNotification = (type: InboxType, ping?: boolean) => {
+    if (notifications[type] === ping) return;
+    setNotifications((prev) => ({
+      ...prev,
+      [type]: ping,
+    }));
+  };
 
   return (
     <RoomActions>
@@ -150,17 +152,18 @@ export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
-                  onClick={() => setType(tab.value)}
+                  onClick={() => {
+                    setType(tab.value);
+                  }}
                   className="!rounded-none dark:!text-neutral-50"
                 >
                   {type === tab.value ? (
                     <>{t(tab.label)}</>
                   ) : (
                     <div className="relative h-5 ">
-                      {tab.value === 'unread-help-desk' &&
-                        Number(unreadCount) > 0 && (
-                          <Ping size={12} className="absolute -top-2 right-0" />
-                        )}
+                      {notifications[tab.value] && (
+                        <Ping size={12} className="absolute -top-2 right-0" />
+                      )}
                       {tab?.icon}
                     </div>
                   )}
@@ -171,7 +174,7 @@ export const Inbox = ({ unreadCount = 0, ...props }: InboxProps) => {
           {type == 'contact' ? (
             <InboxContactList type={type} />
           ) : (
-            <InboxList type={type} />
+            <InboxList type={type} notifyToTab={updateNotification} />
           )}
         </div>
       </div>

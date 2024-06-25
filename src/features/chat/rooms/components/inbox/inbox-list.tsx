@@ -46,10 +46,11 @@ import { SelectedFilterRoom } from '../filter/selected-filter-room';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 
 interface InboxListProps {
+  notifyToTab?: (tab: InboxType, ping?: boolean) => void;
   type: InboxType;
 }
 const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
-  ({ type }: InboxListProps, ref) => {
+  ({ type, notifyToTab = () => {} }: InboxListProps, ref) => {
     const currentUser = useStore(useAuthStore, (s) => s.user);
     const params = useParams();
     const {
@@ -152,6 +153,11 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
       removeItem(roomId);
     };
+    useEffect(() => {
+      if (type === 'unread-help-desk') {
+        notifyToTab('unread-help-desk', rooms.length > 0);
+      }
+    }, [type, rooms.length, notifyToTab]);
 
     useEffect(() => {
       socket.on(SOCKET_CONFIG.EVENTS.INBOX.NEW, addItem);
@@ -172,6 +178,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const showEmptyInbox = useMemo(() => {
       if (rooms.length || isLoading) return false;
+
       if (type === 'all' || type === 'group') {
         if (pinnedRooms?.length) return false;
       }
