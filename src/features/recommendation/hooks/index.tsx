@@ -4,13 +4,20 @@ import { useQuery } from '@tanstack/react-query';
 import { PK_STATION_KEY } from '@/app/(main-layout)/(protected)/stations/_components/type';
 
 export const useGetUsersRecChat = () => {
+  const params = useParams();
+  const stationId = params?.[PK_STATION_KEY]
+    ? String(params[PK_STATION_KEY])
+    : undefined;
   return useQuery({
-    queryKey: ['users-rec-chat'],
-    queryFn: recommendationApi.globalUsers,
+    queryKey: ['users-rec-chat', stationId],
+    queryFn: () => {
+      if (stationId) {
+        return recommendationApi.stationUsers(stationId);
+      }
+      return recommendationApi.globalUsers();
+    },
   });
 };
-
-
 
 export const useGetRoomsRecChat = (businessSpaceParams?: {
   type?: string;
@@ -25,6 +32,7 @@ export const useGetRoomsRecChat = (businessSpaceParams?: {
       'rooms-rec-chat',
       businessSpaceParams?.spaceId,
       businessSpaceParams?.type,
+      stationId,
     ],
     queryFn: () => {
       if (stationId) {
