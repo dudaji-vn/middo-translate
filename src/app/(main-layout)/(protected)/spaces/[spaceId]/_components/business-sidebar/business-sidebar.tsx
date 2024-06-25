@@ -23,8 +23,8 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth.store';
 import { getUserSpaceRole } from '../../settings/_components/space-setting/role.util';
 import { TSpace } from '../business-spaces';
-import SpaceNavigator from '@/features/business-spaces/space-navigator/space-navigator';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import SpaceNavigator from '../space-navigator/space-navigator';
 
 interface SidebarContent {
   title: string;

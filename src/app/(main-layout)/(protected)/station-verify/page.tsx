@@ -39,7 +39,7 @@ const StationVerify = async ({
   return (
     <main className="flex h-[calc(100vh-52px)] items-center justify-center  px-8 md:px-2  ">
       <div className="max-w-screen flex flex-col items-center gap-8  leading-8 md:max-w-screen-sm xl:max-w-screen-md">
-        <Typography className="station-y-3 max-w-full break-words text-center text-[1.35rem] font-semibold text-primary-500-main sm:text-[2rem]">
+        <Typography className="space-y-3 max-w-full break-words text-center text-[1.35rem] font-semibold text-primary-500-main sm:text-[2rem]">
           {email}
           <span className="leading-[48px] text-neutral-800">, </span>
           <br />
@@ -47,7 +47,7 @@ const StationVerify = async ({
             You&apos;ve been invited to join
           </span>
         </Typography>
-        <div className="station-y-3 h-auto w-fit min-w-[320px]">
+        <div className="space-y-3 h-auto w-fit min-w-[320px]">
           <div className="flex w-full flex-col  items-center justify-center gap-4  rounded-[12px] bg-primary-100 p-3 dark:bg-neutral-800 dark:text-neutral-50 sm:min-w-[290px]">
             <Avatar
               variant={'outline'}

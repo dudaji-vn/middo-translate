@@ -10,63 +10,62 @@ import { cn } from '@/utils/cn';
 import { DropdownMenuTriggerProps } from '@radix-ui/react-dropdown-menu';
 import { ChevronDown, Home, Plus } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetSpaces } from '../hooks/use-get-spaces';
-import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/actions';
-import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
-import { useSidebarStore } from '@/stores/sidebar.store';
 import Link from 'next/link';
 import { usePlatformStore } from '@/features/platform/stores';
+import { useGetStations } from '@/features/stations/hooks/use-get-spaces';
+import { TStation } from '../../../_components/type';
+import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 interface Item {
   name: string | React.ReactNode;
   href: string;
   isActive?: boolean;
   pathToInclude: string;
-  space?: TSpace;
+  station?: TStation;
 }
 
-const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
+const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   const pathname = usePathname();
-
+  const [open, setOpen] = useState(false);
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
-  const { expand, openNavigator, setOpenNavigator } = useSidebarStore();
 
   const { t } = useTranslation('common');
-  const { data: spaces, isLoading } = useGetSpaces({
-    type: 'all_spaces',
+  const { data: stations, isLoading } = useGetStations({
+    type: 'all_stations',
   });
-  const { space } = useAuthStore();
+  const { workStation: station } = useAuthStore();
 
   const items: Item[] = useMemo(() => {
-    if (isLoading || !spaces || !space) {
+    if (isLoading || !stations || !station) {
       return [];
     }
     return (
-      spaces?.map((s: TSpace) => ({
+      stations?.map((s: TStation) => ({
         name: s.name,
         href:
-          `/spaces/${s._id}/conversations` +
+          `${ROUTE_NAMES.STATIONS}/${s._id}/conversations` +
           (isMobile ? '?platform=mobile' : ''),
-        pathToInclude: `/spaces/${s._id}`,
-        isActive: pathname?.includes(`/spaces/${s._id}`),
-        space: s,
+        pathToInclude: `${ROUTE_NAMES.STATIONS}/${s._id}`,
+        isActive: pathname?.includes(`${ROUTE_NAMES.STATIONS}/${s._id}`),
+        station: s,
       })) ?? []
     );
-  }, [space, spaces, pathname]);
+  }, [station, stations, pathname]);
 
   const hasNotification = useMemo(() => {
-    return spaces?.some(
-      (s: TSpace) =>
-        !pathname?.includes(`spaces/${s._id}`) &&
+    return stations?.some(
+      (s: TStation) =>
+        !pathname?.includes(`stations/${s._id}`) &&
         Number(s.totalNewMessages) > 0,
     );
-  }, [spaces]);
+  }, [stations]);
 
-  if (isLoading || !space || !pathname?.includes(space?._id)) {
+  if (isLoading || !station || !pathname?.includes(station?._id)) {
     return (
       <div
         className={cn(
@@ -81,42 +80,37 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
     );
   }
   return (
-    <DropdownMenu open={openNavigator} onOpenChange={setOpenNavigator}>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         {...props}
         className={cn(
           'flex h-fit w-full !bg-transparent p-2 text-neutral-800  active:!bg-transparent',
           props.className,
-          expand && 'min-w-[376px]  max-w-full',
+          'min-w-[200px]  max-w-full',
         )}
       >
         <div className="relative flex w-full flex-row items-center justify-start gap-3  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
-          {space?.avatar && (
+          {station?.avatar && (
             <Avatar
-              alt={space.name ?? ''}
+              alt={station.name ?? ''}
               size="sm"
-              src={String(space.avatar)}
+              src={String(station.avatar)}
               className="border border-neutral-50 bg-white dark:border-neutral-900 dark:bg-neutral-900"
             />
           )}
           <div
-            className={cn('hidden ', {
-              ' flex flex-grow flex-row items-center justify-start gap-1 ':
-                expand,
-            })}
+            className={
+              ' flex flex-grow flex-row items-center justify-start gap-1 '
+            }
           >
-            <p className="font-semibold">{space?.name}</p>
+            <p className="font-semibold">{station?.name}</p>
             <ChevronDown className="h-4 w-4" />
           </div>
           <Ping
             size={12}
-            className={cn(
-              'absolute right-[6px] top-[20px]',
-              expand && 'right-4',
-              {
-                hidden: !hasNotification,
-              },
-            )}
+            className={cn('absolute right-[6px] top-[20px]', 'right-4', {
+              hidden: !hasNotification,
+            })}
           />
         </div>
       </DropdownMenuTrigger>
@@ -131,7 +125,9 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
             <DropdownMenuItem
               className={cn(
                 'relative  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
-                option.isActive ? 'cursor-default !bg-primary-200 dark:!bg-primary-900' : '',
+                option.isActive
+                  ? 'cursor-default !bg-primary-200 dark:!bg-primary-900'
+                  : '',
               )}
               key={option.href}
             >
@@ -139,11 +135,11 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
                 href={option.isActive ? '#' : option.href}
                 className="relative flex w-full flex-row items-center justify-start gap-4"
               >
-                {option?.space?.avatar && (
+                {option?.station?.avatar && (
                   <Avatar
-                    alt={option.space.name ?? ''}
+                    alt={option.station.name ?? ''}
                     size="sm"
-                    src={String(option.space.avatar)}
+                    src={String(option.station.avatar)}
                   />
                 )}
                 <span className="pr-4">{option.name}</span>
@@ -151,7 +147,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
                   size={12}
                   className={cn('absolute right-2 top-[12px]', {
                     hidden:
-                      Number(option?.space?.totalNewMessages) === 0 ||
+                      Number(option?.station?.totalNewMessages) === 0 ||
                       option?.isActive,
                   })}
                 />
@@ -160,17 +156,17 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           ))}
         </div>
         <div className={cn('flex w-full flex-col gap-2 p-2')}>
-          <Link href={'/spaces?modal=create-space'}>
+          <Link href={`${ROUTE_NAMES.STATIONS}?modal=create-station`}>
             <Button
               className="w-full"
               shape={'square'}
               size={'md'}
               startIcon={<Plus size={16} />}
             >
-              {t('EXTENSION.SPACE.CREATE_SPACE')}
+              {t('STATION.CREATE_STATION')}
             </Button>
           </Link>
-          <Link href="/spaces">
+          <Link href="/stations">
             <Button
               className="w-full"
               shape={'square'}
@@ -178,7 +174,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
               size={'md'}
               startIcon={<Home size={16} />}
             >
-              {t('EXTENSION.SPACE.DASHBOARD')}
+              {t('STATION.DASHBOARD')}
             </Button>
           </Link>
         </div>
@@ -187,4 +183,4 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   );
 };
 
-export default SpaceNavigator;
+export default StationNavigator;
