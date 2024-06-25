@@ -124,7 +124,7 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           {items?.map((option: Item) => (
             <DropdownMenuItem
               className={cn(
-                'relative  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
+                'relative my-0  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
                 option.isActive
                   ? 'cursor-default !bg-primary-200 dark:!bg-primary-900'
                   : '',
