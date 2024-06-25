@@ -134,8 +134,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
       };
     }, [type]);
 
-    const { rooms: pinnedRooms, refetch: refetchPinned } =
-      useGetPinnedRooms(spaceId);
+    const { rooms: pinnedRooms, refetch: refetchPinned } = useGetPinnedRooms();
 
     const queryClient = useQueryClient();
 

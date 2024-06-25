@@ -189,9 +189,21 @@ export const roomApi = {
     return res.data;
   },
 
-  async getPinned(spaceId?: string) {
+  async getPinned({
+    spaceId,
+    stationId,
+  }: {
+    spaceId?: string;
+    stationId?: string;
+  }) {
+    let queryParams = '';
+    if (spaceId) {
+      queryParams = `?spaceId=${spaceId}`;
+    } else if (stationId) {
+      queryParams = `?stationId=${stationId}`;
+    }
     const res: Response<Room[]> = await axios.get(
-      `${basePath}/pin` + (spaceId ? `?spaceId=${spaceId}` : ''),
+      `${basePath}/pin${queryParams}`,
     );
     return res.data;
   },

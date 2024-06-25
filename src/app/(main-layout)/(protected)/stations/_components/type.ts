@@ -4,7 +4,6 @@ import React from 'react';
 import { TabsContentProps } from '@radix-ui/react-tabs';
 import { BaseEntity } from '@/types';
 import { type User } from '@/features/users/types';
-import { Member } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/spaces-crud/sections/members-columns';
 
 export type StationTabType = 'all_stations' | 'my_stations' | 'joined_stations';
 export type StationTabItem = {
@@ -33,3 +32,5 @@ export type TStation = BaseEntity & {
   tag?: TStationTag;
   tags: TConversationTag[];
 };
+
+export const PK_STATION_KEY = 'stationId';
