@@ -30,6 +30,7 @@ import { InboxType } from '../inbox/inbox';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 export interface RoomItemProps {
   data: Room;
@@ -79,6 +80,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const currentUserId = currentUser?._id;
   const params = useParams();
   const { businessConversationType } = useBusinessNavigationData();
+  const { toPlatformLink } = usePlatformNavigation();
   const { isOnStation, stationId } = useStationNavigationData();
   const { t } = useTranslation('common');
   const { room, visitorCountry } = useMemo(() => {
@@ -91,7 +93,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
       overridePath = stationRedirectPath;
     }
     if (businessConversationType) {
-      overridePath = businessRedirectPath;
+      overridePath = toPlatformLink(businessRedirectPath);
     }
     const visitor = _data.participants.find(
       (user) => user.status === 'anonymous',

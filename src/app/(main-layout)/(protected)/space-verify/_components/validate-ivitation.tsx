@@ -5,19 +5,21 @@ import { validateInvitation } from '@/services/business-space.service';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import customToast from '@/utils/custom-toast';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 type ValidateInvitationProps = {
   token: string;
 };
 const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
-  const router = useRouter();
+  const { navigateTo } = usePlatformNavigation();
   const onValidateInvitation = async (status: 'accept' | 'decline') => {
     try {
       const res = await validateInvitation({
         token,
         status,
       });
-      router.push('/spaces');
+      navigateTo(ROUTE_NAMES.SPACES);
     } catch (error: unknown) {
       console.log(error);
       // @ts-ignore

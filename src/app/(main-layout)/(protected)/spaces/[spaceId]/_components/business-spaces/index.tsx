@@ -24,6 +24,7 @@ import SpacesNotifications from './business-notifications/spaces-notifications';
 import { TBusinessExtensionData } from '@/features/chat/help-desk/api/business.service';
 import { useTranslation } from 'react-i18next';
 import { type User } from '@/features/users/types';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 export type BusinessTabType = 'all_spaces' | 'my_spaces' | 'joined_spaces';
 export type BusinessTabItem = {
@@ -55,7 +56,6 @@ export type TSpace = BaseEntity & {
   bot?: string;
 };
 
-
 const tabItems: BusinessTabItem[] = [
   {
     value: 'all_spaces',
@@ -85,13 +85,20 @@ const BusinessSpaces = () => {
   const { data: spaces_list, isLoading } = useGetSpaces({
     type: tab,
   });
+  const { navigateTo } = usePlatformNavigation();
   const modal = useMemo(() => {
     const modal = searchParams?.get('modal');
     if (modal === 'create-space') return modal;
     return null;
   }, [searchParams]);
 
-  const router = useRouter();
+  const onCreateSpaceClick = () => {
+    navigateTo(
+      ROUTE_NAMES.SPACES,
+      new URLSearchParams({ modal: 'create-space' }),
+    );
+  };
+
   return (
     <>
       <section className={modal ? 'hidden' : ''}>
@@ -123,9 +130,7 @@ const BusinessSpaces = () => {
               color={'primary'}
               shape={'square'}
               className={'w-full sm:w-fit'}
-              onClick={() => {
-                router.push(ROUTE_NAMES.SPACES + '?modal=create-space');
-              }}
+              onClick={onCreateSpaceClick}
               size={'xs'}
             >
               {t('EXTENSION.SPACE.CREATE_SPACE')}

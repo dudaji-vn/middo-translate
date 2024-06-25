@@ -1,7 +1,7 @@
 'use client';
 
 import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import React, { useCallback, useEffect } from 'react';
 import BusinessSidebar from './_components/business-sidebar/business-sidebar';
 import { cn } from '@/utils/cn';
@@ -14,6 +14,7 @@ import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import { getRoomsFilterOptionsFromSpace } from '@/utils/get-rooms-filter-options';
 import { useTranslation } from 'react-i18next';
 import customToast from '@/utils/custom-toast';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
@@ -22,7 +23,8 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
 
   const { setSpace } = useAuthStore();
   const { t } = useTranslation('common');
-  const router = useRouter();
+
+  const { navigateTo, router } = usePlatformNavigation();
 
   useEffect(() => {
     if (data) {
@@ -34,7 +36,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const handleRedirectToHome = useCallback(() => {
     customToast.default('You has been removed from this space. Refreshing...');
     setTimeout(() => {
-      router.push(ROUTE_NAMES.SPACES);
+      navigateTo(ROUTE_NAMES.SPACES);
       toast.dismiss();
     }, 2000);
   }, [router]);
