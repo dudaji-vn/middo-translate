@@ -10,7 +10,7 @@ export function useSearch<T>(searchApi: Function, queryKey: string) {
     : undefined;
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { data } = useQuery({
-    queryKey: ['search' + queryKey, { q: searchTerm }, stationId],
+    queryKey: ['search' + queryKey, { q: searchTerm, stationId }],
     queryFn: (): T =>
       searchApi({
         q: searchTerm,
@@ -24,6 +24,7 @@ export function useSearch<T>(searchApi: Function, queryKey: string) {
   return {
     searchTerm,
     setSearchTerm,
+    stationId,
     data: data,
   };
 }

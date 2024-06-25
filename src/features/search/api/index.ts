@@ -15,6 +15,7 @@ type StationParams = {
 const basePath = '/search';
 export const searchApi = {
   async inboxes(params: SearchParams & HelpdeskSearchParam & StationParams) {
+    console.log('searchApi.inboxes', params);
     const path = queryString.stringifyUrl({
       url: `${basePath}/inboxes`,
       query: params,
