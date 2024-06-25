@@ -14,6 +14,7 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import VideoCall from '@/features/call/video-call';
 import { Room } from '@/features/chat/rooms/types';
 import { VideoCallHelpDeskContext, VideoCallHelpDeskContextType } from '@/features/help-desk/context/help-desk-call.context';
+import { User } from '@/features/users/types';
 import socket from '@/lib/socket-io';
 import { getHelpDeskCallInformation } from '@/services/video-call.service';
 import { useAppStore } from '@/stores/app.store';
@@ -33,8 +34,10 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
   const setFullScreen = useVideoCallStore((state) => state.setFullScreen);
   const setLayout = useVideoCallStore((state) => state.setLayout);
   const setData = useAuthStore((state) => state.setData);
+  const user = useAuthStore((state) => state.user);
   const socketConnected = useAppStore((state) => state.socketConnected);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
+  const [userHelpDesk, setUserHelpDesk] = useState<User>();
   useSocketVideoCall();
   const [status, setStatus] = useState<VideoCallHelpDeskContextType>('WAITING');
   const { userId, businessId } = params;
@@ -49,9 +52,7 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
         const { call, status, user } = res.data;
         if (status === STATUS.MEETING_STARTED) {
           setRoom(call);
-          setData({
-            user: user,
-          });
+          setUserHelpDesk(user);
           setFullScreen(true);
           setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW);
           setStatus('JOINED');
@@ -64,6 +65,14 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
     };
     fetchCall();
   }, [params, setData, setFullScreen, setLayout, setRoom]);
+
+  useEffect(() => {
+    if(userHelpDesk && user?._id != userHelpDesk?._id) {
+      setData({
+        user: userHelpDesk,
+      });
+    }
+  }, [userHelpDesk]);
 
   useEffect(() => {
     const blockJoinMeeting = () => {
@@ -81,7 +90,7 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
     }
   }, [isFullScreen]);
   
-  if (!socketConnected || !data || status == 'WAITING') return <PageLoading />;
+  if (!socketConnected || !data || status == 'WAITING' || !userHelpDesk || !user) return <PageLoading />;
 
   if (status == 'BLOCK') return <BlockCall />;
 

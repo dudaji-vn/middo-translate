@@ -5,22 +5,27 @@ import { motion, useAnimationControls, useDragControls } from 'framer-motion';
 
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/actions";
-import { Maximize2Icon, Minimize2Icon } from "lucide-react";
+import { Maximize2Icon, Minimize2Icon, ScreenShare, ScreenShareIcon } from "lucide-react";
 import { useBoolean } from "usehooks-ts";
 import { Avatar } from "@/components/data-display";
+import { useParticipantVideoCallStore } from "@/features/call/store/participant.store";
 
 interface ParticipantsBarProps {
     participants: ParticipantInVideoCall[];
 }
 const ParticipantsBar = ({ participants }: ParticipantsBarProps) => {
     const {value: isExpanded, toggle: toggleExpanded} = useBoolean(true);
+    const pinParticipant = useParticipantVideoCallStore(state => state.pinParticipant);
+    const pin = (socketId: string, isShareScreen: boolean) => {
+        pinParticipant(socketId, isShareScreen || false);
+    }
     return (
         <DragBar isExpanded={isExpanded} toggleExpanded={toggleExpanded}>
             <div className={cn("flex flex-col gap-1", !isExpanded && 'hidden' )}>
                 {
                     participants.map((participant: ParticipantInVideoCall) => {
                         return (
-                            <div key={participant.socketId + participant.isShareScreen} className="w-full aspect-video bg-neutral-50 rounded-xl overflow-hidden">
+                            <div key={participant.socketId + participant.isShareScreen} className="w-full aspect-video bg-neutral-50 dark:bg-neutral-800 rounded-xl overflow-hidden">
                                 <VideoItem participant={participant} />
                             </div>
                         )
@@ -31,12 +36,18 @@ const ParticipantsBar = ({ participants }: ParticipantsBarProps) => {
                 {
                     participants.map((participant: ParticipantInVideoCall) => {
                         return (
-                            <div key={participant.socketId + participant.isShareScreen} className="h-12 w-12">
+                            <div key={participant.socketId + participant.isShareScreen} className="relative file:h-12 w-12 cursor-pointer hover:opacity-90 transition-all active:opacity-80" onClick={()=>{
+                                pin(participant.socketId, participant.isShareScreen || false);
+                            }}>
                                 <Avatar
                                     className="h-full w-full bg-neutral-900 object-cover"
                                     src={participant?.user?.avatar || '/avatar_default.svg'}
                                     alt={participant?.user?.name || 'Anonymous'}
                                 />
+                                {participant.isShareScreen && 
+                                <div className="absolute bottom-0 right-0 bg-neutral-100 dark:bg-neutral-900 dark:border-background border-2 dark:text-neutral-50 border-white rounded-full p-1">
+                                    <ScreenShareIcon size={12}/>
+                                </div>}
                             </div>
                         )
                     })

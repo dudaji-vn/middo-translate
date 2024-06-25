@@ -81,12 +81,13 @@ export default function useHandleCreatePeerConnection() {
             updatePeerParticipant(peer, payload.callerId);
             return;
         }
+        const name = isHelpDesk ? (businessData?.space?.name || '') : payload.user.name
         const newUser: ParticipantInVideoCall = {
             socketId: payload.callerId,
             peer,
             user: {
                 ...payload.user,
-                name: isHelpDesk ? (businessData?.space?.name || '') : payload.user.name,
+                name,
                 avatar: isHelpDesk ? (businessData?.space?.avatar || '') : payload.user.avatar,
             },
             isShareScreen: payload.isShareScreen,
@@ -107,9 +108,9 @@ export default function useHandleCreatePeerConnection() {
                 }
             }
             
-            customToast.default(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name: payload.user.name}), {icon: <MonitorUpIcon size={20}/>});
+            customToast.default(t('MESSAGE.SUCCESS.SHARE_SCREEN', {name}), {icon: <MonitorUpIcon size={20}/>});
         } else {
-            customToast.default(t('MESSAGE.SUCCESS.JOIN_MEETING', {name: payload.user.name}), {icon: <LogIn size={20}/>});
+            customToast.default(t('MESSAGE.SUCCESS.JOIN_MEETING', {name}), {icon: <LogIn size={20}/>});
         }
         // Check is user is waiting for join
         let isInParticipantList = participants.some((p: ParticipantInVideoCall) => (p.user._id === payload.user._id && !!p.isShareScreen == !!payload.isShareScreen));
