@@ -29,12 +29,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
       ? { type: 'help-desk', spaceId: params?.spaceId as string }
       : undefined;
 
-    const stationParams = isOnStation ? { stationId } : undefined;
-
-    const { data: recData } = useGetRoomsRecChat({
-      businessSpaceParams,
-      stationParams,
-    });
+    const { data: recData } = useGetRoomsRecChat(businessSpaceParams);
     const { businessExtension } = useBusinessExtensionStore();
     const { t } = useTranslation('common');
     const { data } = useQuerySearch<{
@@ -45,7 +40,6 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
       queryKey: 'chat-search',
       searchTerm: searchValue || '',
       businessSpaceParams,
-      stationParams,
     });
 
     return (
