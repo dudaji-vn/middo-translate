@@ -23,7 +23,6 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchValue = useSearchStore((state) => state.searchValue);
     const { isBusiness, spaceId } = useBusinessNavigationData();
-    const { isOnStation, stationId } = useStationNavigationData();
     const params = useParams();
     const businessSpaceParams = spaceId
       ? { type: 'help-desk', spaceId: params?.spaceId as string }

@@ -29,7 +29,7 @@ export const recommendationApi = {
     return res.data;
   },
 
-  async spaceRooms(extensionSpaceParams?: { type?: string; spaceId?: string }) {
+  async spaceRooms(extensionSpaceParams: { type?: string; spaceId?: string }) {
     const spaceQueryParams = extensionSpaceParams?.type
       ? `?type=${extensionSpaceParams.type}&spaceId=${extensionSpaceParams.spaceId}`
       : '';

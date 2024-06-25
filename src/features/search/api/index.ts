@@ -25,7 +25,7 @@ export const searchApi = {
     }> = await axios.get(path);
     return res.data;
   },
-  async users(params: SearchParams) {
+  async users(params: SearchParams & StationParams) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/users`,
       query: params,
