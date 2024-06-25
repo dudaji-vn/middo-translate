@@ -27,20 +27,6 @@ export enum EStationMemberStatus {
   Joined = 'joined',
 }
 
-const items: Array<{
-  name: 'admin' | 'member';
-  icon: React.ReactNode;
-}> = [
-  {
-    name: EStationRoles.Admin,
-    icon: <Shield size={16} />,
-  },
-  {
-    name: EStationRoles.Member,
-    icon: <UserRound size={16} />,
-  },
-];
-
 export type InviteMembersProps = {
   station: {
     name?: string;
@@ -57,7 +43,6 @@ export type InviteMembersProps = {
   headerDescriptionProps?: React.HTMLAttributes<HTMLDivElement>;
   blackList?: string[];
   hideOwner?: boolean;
-  allowedRoles?: EStationRoles[];
 } & React.HTMLAttributes<HTMLDivElement>;
 
 const InviteMembers = ({
@@ -72,7 +57,6 @@ const InviteMembers = ({
   hideOwner = false,
   headerDescriptionProps,
   onAddMember,
-  allowedRoles = [EStationRoles.Member],
   ...props
 }: InviteMembersProps) => {
   const currentUser = useAuthStore((state) => state.user);
@@ -105,11 +89,7 @@ const InviteMembers = ({
           message: 'This user has already been invited!',
         },
       ),
-    role: z.union([
-      z.literal('admin'),
-      z.literal('member'),
-      z.literal('owner'),
-    ]),
+    role: z.union([z.literal('member'), z.literal('owner')]),
     status: z.union([z.literal('invited'), z.literal('joined')]),
   });
   type TAddingMember = z.infer<typeof addingSchema>;
@@ -163,12 +143,7 @@ const InviteMembers = ({
         },
       ];
 
-  const rolesOptions = items.filter((item) =>
-    allowedRoles.includes(item.name as EStationRoles),
-  );
-  const defaultRole = useMemo(() => {
-    return rolesOptions.find((role) => role.name === formAdding.watch('role'));
-  }, [formAdding, rolesOptions]);
+  const defaultRole = 'member';
 
   return (
     <Form {...formAdding}>
@@ -220,49 +195,6 @@ const InviteMembers = ({
               className: 'w-full',
             }}
           />
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex flex-col gap-3 py-2">
-              <FormLabel className="text-neutral-600 dark:text-neutral-50">
-                {t('EXTENSION.MEMBER.ROLE')}
-              </FormLabel>
-              <Button
-                endIcon={<ChevronDown className="h-4 w-4" />}
-                shape={'square'}
-                type="button"
-                disabled={formAdding.formState.isSubmitting}
-                color={'default'}
-                size={'xs'}
-                className="w-fit  px-4 capitalize max-md:py-3 md:w-40"
-              >
-                {formAdding.watch('role') ? (
-                  <>
-                    <span className="max-sm:hidden">
-                      {t(
-                        `EXTENSION.ROLE.${formAdding.watch('role')?.toUpperCase()}`,
-                      )}
-                    </span>
-                    <span className="sm:hidden">{defaultRole?.icon}</span>
-                  </>
-                ) : (
-                  'Select a role'
-                )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
-              {rolesOptions.map((option) => (
-                <DropdownMenuItem
-                  key={option.name}
-                  onSelect={() => {
-                    formAdding.setValue('role', option.name);
-                  }}
-                  className="flex flex-row gap-2 capitalize text-neutral-600 dark:text-neutral-50 dark:hover:bg-neutral-800"
-                >
-                  {option.icon}
-                  {t(`EXTENSION.ROLE.${option.name?.toUpperCase()}`)}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
           <div className="flex flex-col gap-3 py-2">
             <FormLabel className="invisible text-neutral-600 dark:text-neutral-50">
               Invite

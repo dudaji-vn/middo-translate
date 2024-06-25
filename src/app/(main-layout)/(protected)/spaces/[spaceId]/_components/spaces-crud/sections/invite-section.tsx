@@ -176,7 +176,7 @@ const InviteMembers = ({
       <section
         {...props}
         className={cn(
-          'flex h-[calc(100vh-200px)]   min-h-80 w-full  max-w-6xl flex-col items-center justify-center gap-8 max-md:px-4',
+          'flex h-[calc(100vh-200px)] min-h-80   w-full max-w-6xl  flex-col items-center justify-center gap-8 max-md:h-fit max-md:px-4',
           props.className,
         )}
       >
@@ -282,7 +282,7 @@ const InviteMembers = ({
           </div>
         </div>
         <div
-          className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3 dark:bg-background"
+          className="flex w-full  flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3 dark:bg-background"
           {...spacePreviewProps}
         >
           <Avatar
@@ -320,7 +320,7 @@ const InviteMembers = ({
           data={tableRows as Member[]}
           tableProps={{
             ...tableProps,
-            className: 'max-md:h-[500px] overflow-y-auto',
+            className: 'max-md:h-[700px] overflow-y-auto',
           }}
         />
       </section>

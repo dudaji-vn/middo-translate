@@ -8,7 +8,6 @@ import { Trash2 } from 'lucide-react';
 import { TFunction } from 'i18next';
 export enum EStationRoles {
   Owner = 'owner',
-  Admin = 'admin',
   Member = 'member',
 }
 export type Member = {
@@ -35,26 +34,9 @@ export const makeMembersColumns = ({
             {props.getValue() as string}
             <span className="font-light">
               {(props.row.original.role === EStationRoles.Owner &&
-                ` ${t('STATION.MEMBER.YOU')}`) ||
+                ` (${t('STATION.MEMBER.YOU')})`) ||
                 ''}
             </span>
-          </Typography>
-        );
-      },
-    },
-    {
-      accessorKey: 'role',
-      header: t('STATION.MEMBER.ROLE'),
-      cell(props) {
-        return (
-          <Typography
-            className={cn(
-              'capitalize text-gray-500 dark:text-neutral-50',
-              props.getValue() === EStationRoles.Admin &&
-                'text-primary-500-main dark:text-primary',
-            )}
-          >
-            {props.getValue() as string}
           </Typography>
         );
       },
