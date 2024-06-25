@@ -27,7 +27,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const { navigateTo, router } = usePlatformNavigation();
 
   useEffect(() => {
-    if (data) {
+    if (data?._id) {
       setFilterOptions(getRoomsFilterOptionsFromSpace(data));
       setSpace(data);
     }

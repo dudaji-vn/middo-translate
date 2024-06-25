@@ -37,11 +37,13 @@ export type SpaceInboxFilterState = {
 export const useSpaceInboxFilterStore = create<SpaceInboxFilterState>()(
   (set) => ({
     filterOptions: DEFAULT_FILTERS,
-    setFilterOptions: (filterOptions) =>
+    setFilterOptions: (filterOptions) => {
       set(() => ({
         filterOptions,
         selectedFilters: DEFAULT_FILTERS,
-      })),
+        appliedFilters: undefined,
+      }));
+    },
     selectedFilters: DEFAULT_FILTERS,
     setSelectedFilters: (selectedFilters) =>
       set(() => ({

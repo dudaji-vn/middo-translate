@@ -1,6 +1,5 @@
 'use client';
 
-import { MessageBubbleIcon } from '@/components/icons';
 import { Typography } from '@/components/data-display';
 import { useTranslation } from 'react-i18next';
 import Image from 'next/image';
@@ -18,14 +17,13 @@ export default function CreateExtensionShortcut() {
   const { space, user: currentUser } = useAuthStore();
   const params = useParams();
 
-  const youOnSpace = space?.members?.find(
-    (member) => member._id === currentUser?._id,
-  );
+  const me = space?.members?.find((member) => member._id === currentUser?._id);
+  console.log('me', me);
 
   return (
     <div
       className={
-        'container-height flex w-full  flex-col items-center justify-center gap-2'
+        'container-height flex w-full  flex-col items-center justify-center gap-2 px-3'
       }
     >
       <Image
@@ -43,7 +41,8 @@ export default function CreateExtensionShortcut() {
       </Typography>
       <div
         className={cn({
-          hidden: youOnSpace?.role !== ESPaceRoles.Member,
+          hidden:
+            me?.role !== ESPaceRoles.Admin && me?.role !== ESPaceRoles.Owner,
         })}
       >
         <Link

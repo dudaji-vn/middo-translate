@@ -88,7 +88,7 @@ const GuestInformation = ({
         return (
           <Item
             key={field}
-            className="truncate"
+            className="truncate lowercase"
             onClick={() => {
               if (editable) setOpen(true);
             }}
