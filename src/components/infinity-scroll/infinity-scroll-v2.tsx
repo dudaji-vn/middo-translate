@@ -1,5 +1,6 @@
+import { usePullToRefresh } from '@/hooks/use-pull-down-to-refesh';
 import { cn } from '@/utils/cn';
-import { forwardRef, useEffect } from 'react';
+import { forwardRef, useEffect, useRef } from 'react';
 import { useIntersectionObserver } from 'usehooks-ts';
 import { Spinner } from '../feedback';
 
@@ -11,6 +12,10 @@ interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {
   scrollDirection?: 'to-top' | 'to-bottom';
   pullToRefresh?: boolean;
   isRefreshing?: boolean;
+  onReverseLoadMore?: () => void;
+  onReverseRefresh?: () => void;
+  isReverseFetching?: boolean;
+  reverseHasMore: boolean;
 }
 
 export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
@@ -23,6 +28,10 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
       scrollDirection = 'to-bottom',
       pullToRefresh = false,
       isRefreshing = false,
+      onReverseLoadMore,
+      onReverseRefresh,
+      isReverseFetching,
+      reverseHasMore,
       ...props
     },
     ref,
@@ -30,15 +39,40 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
     const { isIntersecting, ref: triggerRef } = useIntersectionObserver({
       threshold: 1,
     });
+    const { isIntersecting: isReverseIntersecting, ref: reverseTriggerRef } =
+      useIntersectionObserver({
+        threshold: 1,
+      });
 
     useEffect(() => {
-      if (isIntersecting && hasMore) {
+      if (isIntersecting && hasMore && !isFetching) {
         onLoadMore();
       }
-    }, [isIntersecting, hasMore, onLoadMore]);
+    }, [isIntersecting, hasMore, onLoadMore, isFetching]);
+
+    useEffect(() => {
+      if (isReverseIntersecting && reverseHasMore && !isReverseFetching) {
+        onReverseLoadMore?.();
+      }
+    }, [
+      isReverseIntersecting,
+      reverseHasMore,
+      onReverseLoadMore,
+      isReverseFetching,
+    ]);
+
     return (
       <>
         <div ref={ref} {...props} className={cn('relative', props.className)}>
+          <div className="relative h-[1px] w-[1px]">
+            <div
+              ref={reverseTriggerRef}
+              className={cn('absolute h-1 w-1', {
+                'bottom-20': scrollDirection === 'to-top',
+                'top-20': scrollDirection === 'to-bottom',
+              })}
+            />
+          </div>
           {isFetching && (
             <div
               className={cn(

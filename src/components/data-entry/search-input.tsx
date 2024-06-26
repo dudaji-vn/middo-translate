@@ -18,10 +18,12 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 
-export interface SearchInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface SearchInputProps
+  extends InputHTMLAttributes<HTMLInputElement> {
   loading?: boolean;
   btnDisabled?: boolean;
   onClear?: () => void;
+  onEnter?: () => void;
 }
 
 export interface SearchInputRef extends HTMLInputElement {
@@ -29,7 +31,7 @@ export interface SearchInputRef extends HTMLInputElement {
   focus: () => void;
 }
 export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
-  ({ btnDisabled, defaultValue, onClear, ...props }, ref) => {
+  ({ btnDisabled, defaultValue, onClear, onEnter, ...props }, ref) => {
     const [value, setValue] = useState(defaultValue || '');
     const { setCurrentSide } = useSideChatStore();
     const inputRef = useRef<HTMLInputElement>(null);
@@ -74,6 +76,12 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       <div className="relative w-full overflow-hidden rounded-xl border bg-background transition-all dark:border-neutral-800">
         <div className="flex h-11 pl-1 transition-all ">
           <input
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && onEnter) {
+                e.preventDefault();
+                onEnter();
+              }
+            }}
             value={value}
             ref={inputRef}
             type="text"
@@ -121,7 +129,7 @@ const SearchButton = forwardRef<HTMLButtonElement, SearchButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'flex aspect-square h-full items-center justify-center p-2 text-primary dark:text-neutral-50 disabled:text-text',
+          'flex aspect-square h-full items-center justify-center p-2 text-primary disabled:text-text dark:text-neutral-50',
           className,
         )}
         {...props}

@@ -146,7 +146,8 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           <motion.div key="search-input-main" className="w-full">
             <SearchInput
               ref={searchInputRef}
-              defaultValue={searchValue || ''}
+              // defaultValue={searchValue || ''}
+              value={searchValue}
               autoFocus={isSearch}
               onFocus={() => {
                 setCurrentSide('search');

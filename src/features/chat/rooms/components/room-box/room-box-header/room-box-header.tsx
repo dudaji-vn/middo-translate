@@ -2,7 +2,12 @@
 
 import { Button } from '@/components/actions';
 import { useAuthStore } from '@/stores/auth.store';
-import { AlertCircleIcon, Phone, PhoneCallIcon } from 'lucide-react';
+import {
+  AlertCircleIcon,
+  Phone,
+  PhoneCallIcon,
+  SearchIcon,
+} from 'lucide-react';
 import { useCallback, useMemo } from 'react';
 import { useChatBox } from '../../../contexts';
 import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
@@ -19,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { RoomAddMember } from '../../room-side/room-add-member';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
 
 export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room } = useChatBox();
@@ -107,6 +113,8 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
 };
 const ActionBar = () => {
   const { toggleTab, currentSide } = useRoomSidebarTabs();
+  const { isShowSearch, toggleIsShowSearch } = useRoomSearchStore();
+
   const isShowInfo = currentSide === 'info';
 
   const handleToggleInfo = useCallback(() => {
@@ -118,8 +126,18 @@ const ActionBar = () => {
     handleToggleInfo,
   );
 
+  useKeyboardShortcut([SHORTCUTS.SEARCH_IN_ROOM], toggleIsShowSearch);
+
   return (
-    <div className="flex">
+    <div className="flex gap-1">
+      <Button.Icon
+        onClick={toggleIsShowSearch}
+        size="xs"
+        color={isShowSearch ? 'secondary' : 'primary'}
+        variant={isShowSearch ? 'default' : 'ghost'}
+      >
+        <SearchIcon />
+      </Button.Icon>
       <Button.Icon
         onClick={handleToggleInfo}
         size="xs"

@@ -71,7 +71,6 @@ export const Content = ({
     message,
     userLanguage: receiverLanguage,
   });
-
   return (
     <AnimatePresence mode="sync">
       <div
@@ -92,7 +91,7 @@ export const Content = ({
             <EditedStatus position={position} />
           )}
           <RichTextView
-            editorStyle={cn('text-base md:text-sm', {
+            editorStyle={cn('text-base md:text-sm highlight-content', {
               translated: !isUseOriginal,
             })}
             mentions={
@@ -175,3 +174,18 @@ const EditedStatus = ({ position }: { position?: 'left' | 'right' | null }) => {
     </span>
   );
 };
+
+function highlightKeyword(htmlContent: string, keyword: string): string {
+  // Escape special characters in the keyword for use in a regular expression
+  const escapedKeyword = keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
+  // Create a regular expression to find the keyword, case-insensitive
+  const regex = new RegExp(`(${escapedKeyword})`, 'gi');
+
+  // Replace the keyword with a highlighted version
+  const highlightedContent = htmlContent.replace(
+    regex,
+    '<span class="highlight">$1</span>',
+  );
+  return highlightedContent;
+}

@@ -15,6 +15,7 @@ import { PaintbrushIcon, SearchIcon, XIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { SearchTabs } from '@/features/search/components/search-tabs';
+import { useMutation, useQuery } from '@tanstack/react-query';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
@@ -45,9 +46,13 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           ref={ref}
-          className="w-full bg-neutral-white"
+          className="flex h-full w-full flex-col bg-neutral-white"
         >
-          {searchValue ? <SearchTabs /> : <SearchHistory />}
+          {searchValue ? (
+            <SearchTabs searchValue={searchValue} />
+          ) : (
+            <SearchHistory />
+          )}
         </motion.div>
       </div>
     );
@@ -56,19 +61,35 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
 SearchTab.displayName = 'SearchTab';
 
 const SearchHistory = () => {
+  const setSearchValue = useSearchStore((state) => state.setSearchValue);
   const { t } = useTranslation('common');
-  const handleClearAll = () => {
-    // clear all search history
-  };
-  const handleClearSearch = () => {
-    // clear search history
-  };
+  const { data, refetch } = useQuery({
+    queryKey: ['searchHistory'],
+    queryFn: searchApi.getKeywords,
+  });
+  const { mutate: clearAll } = useMutation({
+    mutationFn: searchApi.clearKeywords,
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const { mutate: deleteOne } = useMutation({
+    mutationFn: searchApi.deleteKeyword,
+    onSuccess: () => {
+      refetch();
+    },
+  });
 
   return (
     <Section
       label={t('COMMON.SEARCH_HISTORY')}
       labelRight={
         <Button
+          disabled={!data?.length}
+          onClick={() => {
+            clearAll();
+          }}
           startIcon={<PaintbrushIcon />}
           variant={'ghost'}
           shape="square"
@@ -79,15 +100,23 @@ const SearchHistory = () => {
         </Button>
       }
     >
-      {/* <div className="space-y-1">
-        <div className="text-sm text-neutral-600">
-          {t('SEARCH.NO_SEARCH_HISTORY')}
-        </div>
-      </div> */}
-      <SearchKeyword>Nhật đẹp trai</SearchKeyword>
-      <SearchKeyword>Nhật </SearchKeyword>
-      <SearchKeyword>Nhật đẹp </SearchKeyword>
-      <SearchKeyword>Nhật đẹ</SearchKeyword>
+      <div>
+        {data?.map((item) => (
+          <SearchKeyword
+            onClick={setSearchValue.bind(null, item.keyword)}
+            onClear={
+              item.keyword
+                ? () => {
+                    deleteOne(item.keyword);
+                  }
+                : undefined
+            }
+            key={item.keyword}
+          >
+            {item.keyword}
+          </SearchKeyword>
+        ))}
+      </div>
     </Section>
   );
 };
@@ -98,14 +127,25 @@ type SearchKeywordProps = {
   onClear?: () => void;
 };
 
-const SearchKeyword = ({ children }: SearchKeywordProps) => {
+const SearchKeyword = ({ children, onClear, onClick }: SearchKeywordProps) => {
   return (
-    <div className="flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-neutral-50 active:bg-neutral-100">
+    <div
+      onClick={onClick}
+      className="flex cursor-pointer items-center justify-between px-3 py-2 hover:bg-neutral-50 active:bg-neutral-100"
+    >
       <div className="flex items-center gap-2">
         <SearchIcon className="size-4 text-primary" />
         <div className="text-base text-neutral-700"> {children}</div>
       </div>
-      <Button.Icon variant="ghost" size="xs" color="default">
+      <Button.Icon
+        onClick={(e) => {
+          e.stopPropagation();
+          onClear?.();
+        }}
+        variant="ghost"
+        size="xs"
+        color="default"
+      >
         <XIcon />
       </Button.Icon>
     </div>

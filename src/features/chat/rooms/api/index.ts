@@ -92,6 +92,31 @@ export const roomApi = {
     return res.data;
   },
 
+  async getMessagesAroundMessage({
+    roomId,
+    messageId,
+    params,
+  }: {
+    roomId: string;
+    messageId: string;
+    params: CursorParams;
+  }) {
+    const path = queryString.stringifyUrl({
+      url: `${basePath}/${roomId}/messages/${messageId}`,
+      query: params,
+    });
+    const res: Response<
+      ListResponse<
+        Message,
+        CursorPagination & {
+          startCursor: string;
+          hasPrevPage: boolean;
+        }
+      >
+    > = await axios.get(path);
+    return res.data;
+  },
+
   async getMedia({ roomId, params }: { roomId: string; params: CursorParams }) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/${roomId}/media`,
@@ -234,5 +259,5 @@ export const roomApi = {
       `${basePath}/${roomId}/delete-contact`,
     );
     return res.data;
-  }
+  },
 };

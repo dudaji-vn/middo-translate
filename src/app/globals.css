@@ -567,3 +567,6 @@ input::-ms-clear {
     overflow: auto;
   }
 }
+.highlight {
+  @apply font-semibold text-primary;
+}

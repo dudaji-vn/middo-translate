@@ -16,9 +16,9 @@ export function useQuerySearch<T>({
   const { type, spaceId } = helpdeskParams || {};
   const { data, ...rest } = useQuery({
     queryKey: ['search' + queryKey, { q: searchTerm, type, spaceId }],
-    queryFn: (): T => searchApi({ q: searchTerm, type, spaceId }),
+    queryFn: (): T => searchApi({ q: searchTerm, type, spaceId, limit: 3 }),
     enabled: !!searchTerm,
-    staleTime: DEFAULT_STALE_TIME, // 5 minutes
+    // staleTime: DEFAULT_STALE_TIME, // 5 minutes
     keepPreviousData: true,
   });
 
