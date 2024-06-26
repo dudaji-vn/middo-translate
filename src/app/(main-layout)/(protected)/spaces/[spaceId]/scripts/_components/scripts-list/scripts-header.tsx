@@ -58,7 +58,11 @@ const ScriptsHeader = ({
       >
         <div className="h-12 grow">
           <SearchInput
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(
+              e:
+                | React.ChangeEvent<HTMLInputElement>
+                | React.ChangeEvent<HTMLTextAreaElement>,
+            ) => onSearchChange(e.target.value)}
             onClear={() => onSearchChange('')}
             placeholder={t('EXTENSION.SCRIPT.SEARCH')}
           />

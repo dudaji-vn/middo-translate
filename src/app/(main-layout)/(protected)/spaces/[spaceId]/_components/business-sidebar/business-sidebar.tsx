@@ -205,13 +205,13 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
           overlayProps={{
             className: cn(
               ' z-[48]',
-              isMobilePlatform ? 'top-[72px]' : 'top-[52px]',
+              isMobilePlatform ? 'top-[64px]' : 'top-[52px]',
             ),
           }}
           side={'left'}
           className={cn(
             ' bottom-0  z-[49] w-fit  p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-            isMobilePlatform ? 'top-[72px]' : 'top-[52px]',
+            isMobilePlatform ? 'top-[64px] w-full pr-2' : 'top-[52px]',
           )}
           onMouseLeave={shrinkSheet}
         >
