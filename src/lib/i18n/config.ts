@@ -4,6 +4,7 @@ import common_en from './lang/en.json';
 import common_ko from './lang/ko.json';
 
 i18next.init({
+  fallbackLng: 'en',
   interpolation: { escapeValue: false }, // React already does escaping
   lng: 'en', // language to use
   resources: {

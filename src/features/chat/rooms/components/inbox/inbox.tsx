@@ -18,6 +18,7 @@ import {
   MessageSquareDot,
   MessagesSquare,
   MessagesSquareIcon,
+  SettingsIcon,
   UsersRoundIcon,
 } from 'lucide-react';
 import InboxContactList from './inbox-contact-list';
@@ -25,6 +26,7 @@ import { useSearchParams } from 'next/navigation';
 import { SPK_FOCUS } from '@/configs/search-param-key';
 import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
+import { SettingTab } from '@/features/stations/components/setting-tab';
 export interface InboxProps {
   unreadCount?: number;
 }
@@ -35,7 +37,8 @@ export type InboxType =
   | 'help-desk'
   | 'unread-help-desk'
   | 'archived'
-  | 'waiting';
+  | 'waiting'
+  | 'settings';
 
 export const inboxTabMap: Record<
   InboxType,
@@ -81,6 +84,11 @@ export const inboxTabMap: Record<
     value: 'unread-help-desk',
     icon: <MessageSquareDot className="size-5 md:size-4" />,
   },
+  settings: {
+    label: 'COMMON.SETTINGS',
+    value: 'settings',
+    icon: <SettingsIcon className="size-5 md:size-4" />,
+  },
 };
 
 const normalInboxTabs = [
@@ -94,7 +102,11 @@ const businessInboxTabs = [
   inboxTabMap['help-desk'],
   inboxTabMap['unread-help-desk'],
 ];
-const stationInboxTabs = [inboxTabMap.all, inboxTabMap.group];
+const stationInboxTabs = [
+  inboxTabMap.all,
+  inboxTabMap.group,
+  inboxTabMap.settings,
+];
 
 export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
@@ -171,11 +183,12 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
-          {type == 'contact' ? (
+          {/* {type == 'contact' ? (
             <InboxContactList type={type} />
           ) : (
             <InboxList type={type} notifyToTab={updateNotification} />
-          )}
+          )} */}
+          <SettingTab />
         </div>
       </div>
     </RoomActions>

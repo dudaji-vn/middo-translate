@@ -12,11 +12,13 @@ export const DeleteStationModal = ({
   station,
   open = false,
   onclose = () => {},
+  onDeleted = () => {},
 }: {
   station: Omit<TStation, 'owner'>;
   deleteBtnProps?: ButtonProps;
   open: boolean;
   onclose: () => void;
+  onDeleted?: () => void;
 }) => {
   const [loading, setLoading] = useState(false);
   const queryClient = useQueryClient();
@@ -44,6 +46,8 @@ export const DeleteStationModal = ({
       console.error('Error on deleteStation:', error);
       customToast.error('Error on delete station. Please try again');
     }
+    onDeleted();
+    onclose();
     setLoading(false);
   };
 
@@ -61,7 +65,7 @@ export const DeleteStationModal = ({
             <p
               className="text-left"
               dangerouslySetInnerHTML={{
-                __html: t('MODAL.SET_AS_DEFAULT_STATION.DESCRIPTION', {
+                __html: t('MODAL.DELETE_STATION.DESCRIPTION', {
                   name: station.name,
                 }),
               }}
@@ -80,10 +84,7 @@ export const DeleteStationModal = ({
                 color={'error'}
                 shape={'square'}
                 size={'sm'}
-                onClick={() => {
-                  onDeleteStation();
-                  onclose();
-                }}
+                onClick={onDeleteStation}
                 loading={loading}
               >
                 {t('COMMON.DELETE')}

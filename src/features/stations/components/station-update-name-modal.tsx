@@ -6,29 +6,37 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from '@/components/feedback';
 import { useId, useRef, useState } from 'react';
 
+import { Button } from '@/components/actions';
 import { Input } from '@/components/data-entry';
+import { Pen } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useChatBox } from '../../contexts';
-import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
+import { Station } from '../types/station.types';
+import { useUpdateStation } from '../hooks/use-update-station';
 
-export interface RoomUpdateNameProps {}
+export interface StationUpdateNameProps {
+  station: Station;
+  onClosed?: () => void;
+}
 
-export const RoomUpdateName = (props: RoomUpdateNameProps) => {
-  const { room } = useChatBox();
-  const [newName, setNewName] = useState(room.name || '');
+export const StationUpdateName = ({
+  station,
+  onClosed,
+}: StationUpdateNameProps) => {
+  const [newName, setNewName] = useState(station.name || '');
   const id = useId();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { mutate } = useUpdateRoomInfo();
+  const { mutate } = useUpdateStation();
   const { t } = useTranslation('common');
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData(e.currentTarget);
     const name = data.get('name') as string;
     mutate({
-      roomId: room._id,
+      stationId: station._id,
       data: {
         name: name.trim(),
       },
@@ -36,11 +44,33 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog
+      defaultOpen={true}
+      onOpenChange={(open) => {
+        if (!open) {
+          onClosed?.();
+        }
+      }}
+    >
+      <AlertDialogTrigger asChild>
+        <Button.Icon
+          size="xs"
+          onClick={() => {
+            setTimeout(() => {
+              inputRef.current?.focus();
+            }, 100);
+          }}
+          color="secondary"
+          type="button"
+          className="shrink-0"
+        >
+          <Pen />
+        </Button.Icon>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('CONVERSATION.CHANGE_STATION_NAME')}
+            {t('CONVERSATION.CHANGE_GROUP_NAME')}
           </AlertDialogTitle>
         </AlertDialogHeader>
         <form id={id} onSubmit={handleSubmit}>
@@ -54,17 +84,14 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
         <AlertDialogFooter>
           <AlertDialogCancel
             onClick={() => {
-              setNewName(room.name || '');
+              setNewName(station.name || '');
             }}
             className="mr-4"
           >
             {t('COMMON.CANCEL')}
           </AlertDialogCancel>
           <AlertDialogAction
-            disabled={
-              newName.trim() === room.name ||
-              (!room.isSetName && newName.trim() === '')
-            }
+            disabled={newName.trim() === station.name}
             form={id}
             type="submit"
           >
