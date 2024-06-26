@@ -31,6 +31,7 @@ import { Spinner } from '../feedback';
 import VideoPlayer from '../video/video-player';
 import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '../data-display/carousel';
+import { Drawer, DrawerClose, DrawerContent, DrawerOverlay } from '../data-display/drawer';
 
 export interface Media {
   url: string;
@@ -58,11 +59,11 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const [zoom, setZoom] = useState(1);
   const [rotate, setRotate] = useState(0);
   const [downloading, setDownloading] = useState(false);
+  const isMobile = useAppStore((state) => state.isMobile);
   const [isVideoFullScreen, setIsVideoFullScreen] = useState(false);
   const { postMessage } = useReactNativePostMessage();
-  const isMobile = useAppStore((state) => state.isMobile);
   const [apiCarousel, setApiCarousel] = useState<CarouselApi>()
-
+  const [allowClose, setAllowClose] = useState(true);
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
   const setFiles = useMediaLightBoxStore((state) => state.setFiles);
   const fetchNextPage = useMediaLightBoxStore((state) => state.fetchNextPage);
@@ -216,14 +217,26 @@ function MediaLightBox(props: MediaLightBoxProps) {
 
   // On Slide change
   useEffect(() => {
+    let timer : NodeJS.Timeout;
     const handleSelect = (data: any) => {
       setCurrent(data.selectedScrollSnap());
     }
+    const handleScroll = (data: any) => {
+      setAllowClose(false);
+      if(timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        setAllowClose(true);
+      }, 100);
+    }
     apiCarousel?.on("select", handleSelect);
+    apiCarousel?.on("scroll", handleScroll);
+
     return () => {
       if (apiCarousel) {
         apiCarousel.off("select", handleSelect)
+        apiCarousel.off("scroll", handleScroll)
       }
+      if(timer) clearTimeout(timer);
     }
   }, [apiCarousel]);
 
@@ -260,168 +273,175 @@ function MediaLightBox(props: MediaLightBoxProps) {
 
   // on component unmount reset all state
 
-  return createPortal(
-    <div className="fixed bottom-0 left-0 right-0 top-0 z-[51] flex h-full w-full flex-col overflow-hidden bg-black/90 p-3">
-      <div className="z-20 ml-auto flex w-fit gap-2 rounded-xl bg-black/40 p-2">
-        <Button.Icon
-          variant={'default'}
-          color={'default'}
-          size={'xs'}
-          shape={'default'}
-          onClick={onDownload}
-          disabled={downloading}
+  return <Drawer 
+          open={typeof index == 'number'} 
+          onClose={onClose}
+          shouldScaleBackground={true}
+          dismissible={isMobile ? allowClose : false}
         >
-          {downloading ? <Spinner /> : <DownloadIcon />}
-        </Button.Icon>
-        <Button.Icon
-          variant={'default'}
-          color={'default'}
-          size={'xs'}
-          shape={'default'}
-          onClick={onClose}
-        >
-          <XIcon />
-        </Button.Icon>
-      </div>
-      <div className="relative flex-1 overflow-hidden">
-        <div className="no-scrollbar h-full w-full">
-          <Carousel
-            opts={{
-              align: "center",
-              loop: false,
-              startIndex: index,
-            }}
-            setApi={setApiCarousel}
-            className='h-full [&>div]:h-full'
-          >
-            <CarouselContent className='h-full'>
-              {
-                files.map((file, index) => {
-                  return (
-                    <CarouselItem key={index} className='h-full'>
-                      {renderMedia(file, index)}
-                    </CarouselItem>
-                  )
-                })
-              }
-            </CarouselContent>
-          </Carousel>
-        </div>
-      </div>
-      <div className="relative h-24 ">
-        <div className='flex gap-2 py-2 items-center justify-center w-fit mx-auto'>
-          <Button.Icon
-            variant={'default'}
-            color={'default'}
-            size={'xs'}
-            shape={'default'}
-            className={cn({'!opacity-0': (current == 0 || files.length == 1)})}
-            onClick={onPrev}
-            disabled={current == 0 || files.length == 1}
-          >
-            <ChevronLeft />
-          </Button.Icon>
-       
-          <ThumbnailList
-            files={files}
-            current={current}
-            setCurrent={setCurrent}
-          />
-
-          <Button.Icon
-            variant={'default'}
-            color={'default'}
-            size={'xs'}
-            shape={'default'}
-            className={cn({'!opacity-0': (current == files.length - 1 || files.length == 1)})}
-            onClick={onNext}
-            disabled={current == files.length - 1 || files.length == 1}
-          >
-            <ChevronRight />
-          </Button.Icon>
-        </div>
-
-        {/* Controls */}
-        {files[current].type === 'image' && (
-          <div className="absolute bottom-0 right-0 z-20 ml-auto hidden w-fit items-center gap-2 rounded-xl bg-black/40 p-2 md:flex">
-            {/* Button Zoom  */}
+      <DrawerContent className='w-full h-full border-none'>
+        <div className="flex h-full w-full flex-col overflow-hidden bg-black/90 p-3 -mt-6">
+          <div className="z-20 ml-auto flex w-fit gap-2 rounded-xl bg-black/40 p-2">
             <Button.Icon
               variant={'default'}
               color={'default'}
               size={'xs'}
               shape={'default'}
-              onClick={() => {
-                if (zoom > MIN_ZOOM) setZoom((prev) => prev - STEP_ZOOM);
-              }}
+              onClick={onDownload}
+              disabled={downloading}
             >
-              <MinusIcon />
-            </Button.Icon>
-            {/* Range */}
-            <div className="mx-1">
-              <Range
-                step={STEP_ZOOM}
-                min={MIN_ZOOM}
-                max={MAX_ZOOM}
-                values={[zoom]}
-                onChange={(values) => {
-                  setZoom(values[0]);
-                }}
-                renderTrack={({ props, children }) => (
-                  <div
-                    {...props}
-                    className={cn(
-                      'relative h-1 w-[72px] rounded bg-neutral-500',
-                    )}
-                  >
-                    {children}
-                  </div>
-                )}
-                renderThumb={({ props }) => (
-                  <div
-                    {...props}
-                    className="h-4 w-4 rounded-full bg-white"
-                    key="1"
-                  ></div>
-                )}
-              />
-            </div>
-            <Button.Icon
-              variant={'default'}
-              color={'default'}
-              size={'xs'}
-              shape={'default'}
-              onClick={() => {
-                if (zoom < MAX_ZOOM) setZoom((prev) => prev + STEP_ZOOM);
-              }}
-            >
-              <PlusIcon />
-            </Button.Icon>
-            {/* Rotate */}
-            <Button.Icon
-              variant={'default'}
-              color={'default'}
-              size={'xs'}
-              shape={'default'}
-              onClick={onRotateLeft}
-            >
-              <RotateCcwIcon />
+              {downloading ? <Spinner /> : <DownloadIcon />}
             </Button.Icon>
             <Button.Icon
               variant={'default'}
               color={'default'}
               size={'xs'}
               shape={'default'}
-              onClick={onRotateRight}
-              className="rotate-45"
+              onClick={onClose}
             >
-              <RotateCwIcon />
+              <XIcon />
             </Button.Icon>
           </div>
-        )}
-      </div>
-    </div>,
-    document.body,
-  );
+          <div className="relative flex-1 overflow-hidden">
+            <div className="no-scrollbar h-full w-full">
+              <Carousel
+                opts={{
+                  align: "center",
+                  loop: false,
+                  startIndex: index,
+                  axis: 'x',
+                }}
+                setApi={setApiCarousel}
+                className='h-full [&>div]:h-full'
+              >
+                <CarouselContent className='h-full'>
+                  {
+                    files.map((file, index) => {
+                      return (
+                        <CarouselItem key={index} className='h-full'>
+                          {renderMedia(file, index)}
+                        </CarouselItem>
+                      )
+                    })
+                  }
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </div>
+          <div className="relative h-24 ">
+            <div className='flex gap-2 py-2 items-center justify-center w-fit mx-auto'>
+              <Button.Icon
+                variant={'default'}
+                color={'default'}
+                size={'xs'}
+                shape={'default'}
+                className={cn({'!opacity-0': (current == 0 || files.length == 1)})}
+                onClick={onPrev}
+                disabled={current == 0 || files.length == 1}
+              >
+                <ChevronLeft />
+              </Button.Icon>
+          
+              <ThumbnailList
+                files={files}
+                current={current}
+                setCurrent={setCurrent}
+              />
+
+              <Button.Icon
+                variant={'default'}
+                color={'default'}
+                size={'xs'}
+                shape={'default'}
+                className={cn({'!opacity-0': (current == files.length - 1 || files.length == 1)})}
+                onClick={onNext}
+                disabled={current == files.length - 1 || files.length == 1}
+              >
+                <ChevronRight />
+              </Button.Icon>
+            </div>
+
+            {/* Controls */}
+            {files[current].type === 'image' && (
+              <div className="absolute bottom-0 right-0 z-20 ml-auto hidden w-fit items-center gap-2 rounded-xl bg-black/40 p-2 md:flex">
+                {/* Button Zoom  */}
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={() => {
+                    if (zoom > MIN_ZOOM) setZoom((prev) => prev - STEP_ZOOM);
+                  }}
+                >
+                  <MinusIcon />
+                </Button.Icon>
+                {/* Range */}
+                <div className="mx-1">
+                  <Range
+                    step={STEP_ZOOM}
+                    min={MIN_ZOOM}
+                    max={MAX_ZOOM}
+                    values={[zoom]}
+                    onChange={(values) => {
+                      setZoom(values[0]);
+                    }}
+                    renderTrack={({ props, children }) => (
+                      <div
+                        {...props}
+                        className={cn(
+                          'relative h-1 w-[72px] rounded bg-neutral-500',
+                        )}
+                      >
+                        {children}
+                      </div>
+                    )}
+                    renderThumb={({ props }) => (
+                      <div
+                        {...props}
+                        className="h-4 w-4 rounded-full bg-white"
+                        key="1"
+                      ></div>
+                    )}
+                  />
+                </div>
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={() => {
+                    if (zoom < MAX_ZOOM) setZoom((prev) => prev + STEP_ZOOM);
+                  }}
+                >
+                  <PlusIcon />
+                </Button.Icon>
+                {/* Rotate */}
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={onRotateLeft}
+                >
+                  <RotateCcwIcon />
+                </Button.Icon>
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={onRotateRight}
+                  className="rotate-45"
+                >
+                  <RotateCwIcon />
+                </Button.Icon>
+              </div>
+            )}
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
 }
 
 interface ThumbnailListProps {

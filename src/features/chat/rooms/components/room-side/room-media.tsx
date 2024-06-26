@@ -47,7 +47,9 @@ export const RoomMedia = () => {
   const openMediaLightBox = (index: number) => {
     setIndex(index);
     setFiles(media);
-    setFetchNextPage(fetchNextPage)
+    setFetchNextPage(()=>{
+      fetchNextPage()
+    })
   }
 
   if (media.length === 0) return null;
