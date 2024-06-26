@@ -154,6 +154,17 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
     }));
   };
 
+  const renderList = () => {
+    switch (type) {
+      case 'contact':
+        return <InboxContactList type={type} />;
+      case 'settings':
+        return <SettingTab />;
+      default:
+        return <InboxList type={type} notifyToTab={updateNotification} />;
+    }
+  };
+
   return (
     <RoomActions>
       <div className="relative flex w-full flex-1 flex-col overflow-hidden bg-background">
@@ -183,12 +194,7 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
               ))}
             </TabsList>
           </Tabs>
-          {/* {type == 'contact' ? (
-            <InboxContactList type={type} />
-          ) : (
-            <InboxList type={type} notifyToTab={updateNotification} />
-          )} */}
-          <SettingTab />
+          {renderList()}
         </div>
       </div>
     </RoomActions>
