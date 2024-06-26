@@ -24,11 +24,13 @@ import {
   TransformComponent,
   TransformWrapper,
   useControls,
+  useTransformEffect,
 } from 'react-zoom-pan-pinch';
 import { Button } from '../actions';
 import { Spinner } from '../feedback';
 import VideoPlayer from '../video/video-player';
 import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
+import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '../data-display/carousel';
 
 export interface Media {
   url: string;
@@ -43,6 +45,11 @@ interface MediaLightBoxProps {
   close?: () => void;
 }
 
+
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 5;
+const STEP_ZOOM = 0.1;
+
 function MediaLightBox(props: MediaLightBoxProps) {
   const { t } = useTranslation('common');
   const imageRef = useRef<HTMLImageElement>(null);
@@ -51,13 +58,16 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const [zoom, setZoom] = useState(1);
   const [rotate, setRotate] = useState(0);
   const [downloading, setDownloading] = useState(false);
-  const [paintingStart, setPaintingStart] = useState<number>(0);
   const [isVideoFullScreen, setIsVideoFullScreen] = useState(false);
   const { postMessage } = useReactNativePostMessage();
+  const isMobile = useAppStore((state) => state.isMobile);
+  const [apiCarousel, setApiCarousel] = useState<CarouselApi>()
+
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
   const setFiles = useMediaLightBoxStore((state) => state.setFiles);
   const fetchNextPage = useMediaLightBoxStore((state) => state.fetchNextPage);
   const setFetchNextPage = useMediaLightBoxStore((state) => state.setFetchNextPage);
+  
   const onDownload = () => {
     const file = files[current || 0];
     if (!file) return;
@@ -118,43 +128,43 @@ function MediaLightBox(props: MediaLightBoxProps) {
     }
   };
 
-  const renderMediaMain = () => {
-    switch (files[current].type) {
+  const renderMedia = (file: Media, index: number) => {
+    switch (file.type) {
       case 'image':
-        return (
-          <TransformWrapper
-            doubleClick={{ disabled: true }}
-            smooth={true}
-            centerOnInit={true}
-            panning={{ disabled: zoom === 1 }}
+        return <TransformWrapper
+          doubleClick={{ disabled: true }}
+          smooth={true}
+          centerOnInit={true}
+          maxScale={MAX_ZOOM}
+          minScale={MIN_ZOOM}
+          panning={{ 
+            disabled: zoom === 1,
+            allowLeftClickPan: false,
+            allowMiddleClickPan: false,
+            allowRightClickPan: false,
+          }}
+          limitToBounds={true}
+        >
+          <Controls setZoom={setZoom}/>
+          <TransformComponent
+            contentClass="!w-full !h-full"
+            wrapperClass="!w-full !h-full"
           >
-            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-              <div
-                style={{ width: '100%', height: '100%', position: 'relative' }}
-              >
-                <Controls zoom={zoom} />
-                <TransformComponent
-                  contentClass="!w-full !h-full"
-                  wrapperClass="!w-full !h-full"
-                >
-                  <Image
-                    ref={imageRef}
-                    className="h-full w-full object-contain"
-                    src={files[current].url}
-                    alt={files[current]?.file?.name || ''}
-                    layout="fill"
-                  />
-                </TransformComponent>
-              </div>
-            )}
-          </TransformWrapper>
-        );
+            <Image
+              {...index == current && { ref: imageRef }}
+              className="h-full w-full object-contain"
+              src={file.url}
+              alt={file?.file?.name || ''}
+              layout="fill"
+            />
+          </TransformComponent>
+        </TransformWrapper>
       case 'video':
         const props = {
           file: {
-            url: files[current].url,
+            url: file.url,
             type: 'video',
-            name: files[current].file?.name || '',
+            name: file.file?.name || '',
           },
           onFullScreenChange: (value: boolean) => {
             if (value != isVideoFullScreen) setIsVideoFullScreen(value);
@@ -162,7 +172,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
           className: 'w-full h-full bg-transparent',
           isFullScreenVideo: isVideoFullScreen,
         };
-        if (isVideoFullScreen) {
+        if (isVideoFullScreen && index == current) {
           return createPortal(<VideoPlayer {...props} />, document.body);
         }
         return <VideoPlayer {...props} />;
@@ -204,9 +214,26 @@ function MediaLightBox(props: MediaLightBoxProps) {
     };
   }, [current, isVideoFullScreen, onClose, onNext, onPrev]);
 
-  // On Change current image =>
+  // On Slide change
+  useEffect(() => {
+    const handleSelect = (data: any) => {
+      setCurrent(data.selectedScrollSnap());
+    }
+    apiCarousel?.on("select", handleSelect);
+    return () => {
+      if (apiCarousel) {
+        apiCarousel.off("select", handleSelect)
+      }
+    }
+  }, [apiCarousel]);
+
+
   useEffect(() => {
     setIsVideoFullScreen(false);
+    const currentSlide = apiCarousel?.selectedScrollSnap();
+    if(currentSlide != current && typeof current == 'number') {
+      apiCarousel?.scrollTo(current);
+    }
   }, [current]);
 
   useEffect(() => {
@@ -257,53 +284,28 @@ function MediaLightBox(props: MediaLightBoxProps) {
         </Button.Icon>
       </div>
       <div className="relative flex-1 overflow-hidden">
-        <div className="no-scrollbar flex h-full w-full select-none items-center justify-center overflow-auto focus:scroll-auto">
-          <TransformWrapper
-            initialScale={1}
-            minScale={1}
-            maxScale={1}
-            smooth={true}
-            centerOnInit={true}
-            panning={{
-              disabled: true,
+        <div className="no-scrollbar h-full w-full">
+          <Carousel
+            opts={{
+              align: "center",
+              loop: false,
+              startIndex: index,
             }}
-            onPanningStart={(_, e: MouseEvent | TouchEvent) => {
-              let offsetX = 0;
-              if (e instanceof MouseEvent) {
-                offsetX = e.offsetX;
-              } else {
-                offsetX = e.touches[0].clientX;
-              }
-              setPaintingStart(offsetX || 0);
-            }}
-            onPanningStop={(ref, e: MouseEvent | TouchEvent) => {
-              if (zoom != 1) return;
-              const THRESHOLD = 50;
-              let offsetX = 0;
-              if (e instanceof MouseEvent) {
-                offsetX = e.offsetX;
-              } else {
-                offsetX = e.touches[0].clientX;
-              }
-              let threshold = paintingStart - offsetX;
-              if (threshold > THRESHOLD) {
-                onNext();
-              } else if (threshold < -THRESHOLD) {
-                onPrev();
-              }
-            }}
+            setApi={setApiCarousel}
+            className='h-full [&>div]:h-full'
           >
-            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-              <>
-                <TransformComponent
-                  contentClass="!w-full !h-full"
-                  wrapperClass="!w-full !h-full"
-                >
-                  {renderMediaMain()}
-                </TransformComponent>
-              </>
-            )}
-          </TransformWrapper>
+            <CarouselContent className='h-full'>
+              {
+                files.map((file, index) => {
+                  return (
+                    <CarouselItem key={index} className='h-full'>
+                      {renderMedia(file, index)}
+                    </CarouselItem>
+                  )
+                })
+              }
+            </CarouselContent>
+          </Carousel>
         </div>
       </div>
       <div className="relative h-24 ">
@@ -349,7 +351,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
               size={'xs'}
               shape={'default'}
               onClick={() => {
-                if (zoom > 0.6) setZoom((prev) => prev - 0.1);
+                if (zoom > MIN_ZOOM) setZoom((prev) => prev - STEP_ZOOM);
               }}
             >
               <MinusIcon />
@@ -357,9 +359,9 @@ function MediaLightBox(props: MediaLightBoxProps) {
             {/* Range */}
             <div className="mx-1">
               <Range
-                step={0.1}
-                min={0.5}
-                max={1.5}
+                step={STEP_ZOOM}
+                min={MIN_ZOOM}
+                max={MAX_ZOOM}
                 values={[zoom]}
                 onChange={(values) => {
                   setZoom(values[0]);
@@ -389,7 +391,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
               size={'xs'}
               shape={'default'}
               onClick={() => {
-                if (zoom < 1.5) setZoom((prev) => prev + 0.1);
+                if (zoom < MAX_ZOOM) setZoom((prev) => prev + STEP_ZOOM);
               }}
             >
               <PlusIcon />
@@ -522,9 +524,15 @@ const ThumbnailList = memo(
 );
 ThumbnailList.displayName = 'ThumbnailList';
 
-const Controls = ({ zoom }: { zoom: number }) => {
-  const { setTransform } = useControls();
-  // setTransform(0, 0, zoom);
+interface ControlsProps {
+  setZoom: (val: number) => void;
+}
+const Controls = ({setZoom}: ControlsProps) => {
+  useTransformEffect(({ state, instance }) => {
+    setZoom(state.scale);
+    return () => {
+    };
+  });
   return <></>;
 };
 

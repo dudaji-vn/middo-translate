@@ -8,7 +8,7 @@ const MediaLightBoxProvider = () => {
 
     if(typeof index !== 'number' || files.length == 0) return null;
 
-    return <MediaLightBox index={index} files={files}/>;
+    return <MediaLightBox index={index} files={files} key={index}/>;
   
 };
 

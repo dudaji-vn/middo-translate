@@ -43,7 +43,7 @@ export const RoomMedia = () => {
     });
     return media;
   }, [items]);
-  
+
   const openMediaLightBox = (index: number) => {
     setIndex(index);
     setFiles(media);
@@ -69,7 +69,7 @@ export const RoomMedia = () => {
               >
                 {media.type === 'video' && (
                   <div className="relative h-full w-full">
-                    <video src={media.url} className="h-full w-full" />
+                    <video src={media.url} className="h-full w-full object-cover" />
                     <Button.Icon
                       size={'ss'}
                       variant={'default'}
