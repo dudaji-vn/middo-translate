@@ -1,3 +1,5 @@
+import { headers } from 'next/headers';
+
 export async function GET(
   request: Request,
   {
@@ -34,12 +36,12 @@ export async function GET(
   const allowedDomain = domains.find((domain: string) =>
     domain?.includes(host),
   );
-  console.log('domains', domains);
-  console.log('allowedDomain', allowedDomain);
-  console.log('host', host);
+  console.log('data?.color', data.data?.color);
   if (allowedDomain) {
     return Response.json({
-      data: 'OK',
+      data: {
+        color: data.data?.color,
+      },
     });
   }
   return Response.json(
