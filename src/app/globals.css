@@ -78,7 +78,7 @@
     --foreground: 210 40% 98%;
     --card: 0 0% 6%;
     --card-foreground: 0 0% 10.2%;
-    
+
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
@@ -494,11 +494,12 @@ body {
   content: '\25CF';
 }
 
-.dark .prose
-:where(ul > li):not(
-  :where([class~='not-prose'], [class~='not-prose'] *)
-)::marker {
-  color: #F2F2F2;
+.dark
+  .prose
+  :where(ul > li):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::marker {
+  color: #f2f2f2;
 }
 .me
   .prose
@@ -537,7 +538,6 @@ body {
 .container-height {
   height: calc(100dvh - 52px);
 }
-
 .extension-container-height {
   height: calc(100dvh - 52px);
 }
@@ -580,7 +580,6 @@ input::-ms-clear {
     overflow: auto;
   }
 }
-
 
 /* React flow hidden label panel */
 .react-flow__panel.react-flow__attribution.bottom.right {
