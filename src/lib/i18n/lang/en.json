@@ -96,6 +96,12 @@
     "LIGHT": "Light",
     "DARK": "Dark",
     "SYSTEM": "System",
+    "SETTINGS": "Settings",
+    "CHANGE_AVATAR": "Change avatar",
+    "CHANGE_NAME": "Change name",
+    "INFORMATION": "Information",
+    "DELETE_STATION": "Delete station",
+    "STATION_INFORMATION": "Station's information",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
@@ -377,6 +383,7 @@
     "FILE": "File",
     "LINK": "Link",
     "LEAVE_GROUP": "Leave group",
+    "LEAVE_STATION": "Leave station",
     "DELETE": "Delete conversation",
     "START": "Start conversation",
     "JOIN": "Join",
@@ -604,6 +611,10 @@
     "LEAVE_ROOM": {
       "TITLE": "Leave Room",
       "DESCRIPTION": "You will no longer be able to view messages from this room. Are you sure you want to leave?"
+    },
+    "LEAVE_STATION": {
+      "TITLE": "Leave Station",
+      "DESCRIPTION": "You will no longer be able to view messages from this Station. Are you sure you want to leave?"
     },
     "CHANGE_ROOM_STATUS": {
       "TITLE": "{{action}} conversation",

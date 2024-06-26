@@ -96,6 +96,11 @@
     "LIGHT": "빛",
     "DARK": "어두운",
     "SYSTEM": "체계",
+    "SETTINGS": "설정",
+    "CHANGE_AVATAR": "아바타 변경",
+    "CHANGE_NAME": "이름 변경",
+    "INFORMATION": "정보",
+    "DELETE_STATION": "Station 삭제",
     "TIME": {
       "CREATED_ON": "생성일",
       "UPDATED_ON": "업데이트일",
