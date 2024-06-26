@@ -23,6 +23,7 @@ const createOrEditTagSchema = z.object({
   tagId: z.string().optional(),
   name: z
     .string()
+    .trim()
     .min(1, {
       message: 'Tag name is required.',
     })

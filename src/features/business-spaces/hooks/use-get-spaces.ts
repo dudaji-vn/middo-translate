@@ -16,10 +16,10 @@ export const useGetSpaces = ({ type }: { type?: BusinessTabType }) => {
             type,
           },
         });
-        return response.data;
+        return response.data || [];
       } catch (error) {
         console.error(`Error fetching spaces: ${error as Error}`);
-        return {};
+        return [];
       }
     },
     enabled: true,

@@ -28,7 +28,7 @@ const MobileDefender = ({
   return (
     <>
       {titleKey && (
-        <div className="flex flex-row items-center justify-start">
+        <div className="flex flex-row items-center justify-start p-3">
           <Button.Icon
             onClick={() => setOpenSidebar(!openSidebar, true)}
             color="default"

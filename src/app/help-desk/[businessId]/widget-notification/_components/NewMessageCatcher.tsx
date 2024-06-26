@@ -89,8 +89,8 @@ const NewMessageCatcher = ({
   console.log('showPing', showPing);
   return (
     <Ping
-      size={16}
-      className={cn('absolute right-4 top-0', {
+      size={14}
+      className={cn('absolute right-[14px] top-0', {
         hidden: !showPing,
       })}
     />

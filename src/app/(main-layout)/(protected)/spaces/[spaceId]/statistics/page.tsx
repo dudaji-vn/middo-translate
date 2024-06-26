@@ -83,7 +83,7 @@ const ReportPage = ({
   return (
     <>
       <ReportHeader />
-      <section className="relative h-fit w-full bg-[#FCFCFC] md:space-y-4 dark:bg-background-darker">
+      <section className="relative h-fit w-full bg-[#FCFCFC] dark:bg-background-darker md:space-y-4">
         <ReportCards
           data={data?.analysis}
           loading={isFetching}
@@ -98,7 +98,7 @@ const ReportPage = ({
             data?.analysis[chart]?.value || 0;
           const filterBy =
             searchParams[
-            CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
+              CHART_AFFECTED_PARAMS[chart] as keyof typeof searchParams
             ];
           switch (chart) {
             case ESpaceChart.OPENED_CONVERSATION: {
@@ -156,7 +156,7 @@ const ReportPage = ({
               formattedDisplayValue = `${formattedDisplayValue} ${chartUnit}`;
               break;
             case ESpaceChart.DROP_RATE:
-              formattedDisplayValue = `${(Number(data?.analysis.dropRate.value) * 100) / (data?.analysis.dropRate.total || 1) || 0} %`;
+              formattedDisplayValue = `${((Number(data?.analysis.dropRate.value) * 100) / (data?.analysis.dropRate.total || 1))?.toFixed(2) || 0} %`;
               break;
           }
 

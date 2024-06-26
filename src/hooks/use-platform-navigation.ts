@@ -38,5 +38,6 @@ export default function usePlatformNavigation() {
     navigateTo,
     toPlatformLink,
     router,
+    isMobile,
   };
 }

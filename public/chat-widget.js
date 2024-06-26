@@ -197,8 +197,8 @@
                      style="position: fixed; bottom: 0px;  right:  0px; width: 110px; height: 110px; border: none;  ">
                     </iframe>
                     <button id="btn-trigger-chat"
-                     style="position: absolute; bottom:  30px;  right:  30px; 
-                     width: 60px; height: 60px;
+                     style="position: absolute; bottom:  35px;  right:  35px; 
+                     width: 50px; height: 50px;
                      opacity: 1; 
                      font-size:32px; "
                     >
@@ -232,11 +232,15 @@
     });
 
     divTrigger.disabled = true;
-
     fetch(`${chatSRC}/check-host?host=${domain}`, {
       mode: 'no-cors',
+      method: 'GET',
+      headers: {
+        Accept: 'Content-Type',
+      },
     })
       .then((response) => {
+        console.log('response', response);
         setTimeout(() => {
           // btn.style.opacity = 0;
           btn.innerHTML = components.icon_message;

@@ -96,7 +96,7 @@ const Page = ({
   }));
   return (
     <section className="relative w-full ">
-      <div className="flex  flex-col justify-between gap-4  px-1 py-3 font-medium md:flex-row md:items-center  md:px-10">
+      <div className="flex  flex-col justify-between gap-4  p-3 font-medium md:flex-row md:items-center  md:px-10">
         <div className="flex flex-row items-center justify-start">
           <Button.Icon
             onClick={() => setOpenSidebar(!openSidebar, true)}
