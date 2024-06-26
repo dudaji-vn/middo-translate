@@ -235,11 +235,6 @@ export const MessageBoxSearch = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScrolled]);
 
-  useEffect(() => {
-    setIsShowScrollToBottom?.(false);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
       <InfiniteScroll

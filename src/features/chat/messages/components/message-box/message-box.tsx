@@ -164,10 +164,21 @@ export const MessageBox = ({
   }, [currentUserId, messagesGroup, participants]);
 
   useEffect(() => {
-    setCanCount(isScrolled);
     setIsShowScrollToBottom(isScrolled);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isScrolled, messageId]);
+  }, [isScrolled]);
+
+  useEffect(() => {
+    if (newCount > 0 && messageId) {
+      setIsShowScrollToBottom(true);
+      return;
+    }
+  }, [newCount, messageId]);
+
+  useEffect(() => {
+    setCanCount(isShowScrollToBottom);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isShowScrollToBottom]);
 
   const handleScrollToBottom = () => {
     scrollIntoView();
