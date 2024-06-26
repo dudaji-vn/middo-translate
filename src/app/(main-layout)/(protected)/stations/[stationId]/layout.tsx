@@ -1,7 +1,7 @@
 'use client';
 
 import { PageLoading } from '@/components/feedback';
-import { useGetStation } from '@/features/stations/hooks/use-get-space-data';
+import { useGetStation } from '@/features/stations/hooks/use-get-station';
 import { useAuthStore } from '@/stores/auth.store';
 import { notFound } from 'next/navigation';
 import React, { useEffect } from 'react';
