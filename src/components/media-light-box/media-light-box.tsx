@@ -24,12 +24,16 @@ import {
   TransformComponent,
   TransformWrapper,
   useControls,
+  useTransformEffect,
 } from 'react-zoom-pan-pinch';
 import { Button } from '../actions';
 import { Spinner } from '../feedback';
 import VideoPlayer from '../video/video-player';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
+import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '../data-display/carousel';
+import { Drawer, DrawerClose, DrawerContent, DrawerOverlay } from '../data-display/drawer';
 
-interface Media {
+export interface Media {
   url: string;
   file?: File;
   type: string;
@@ -40,21 +44,31 @@ interface MediaLightBoxProps {
   files: Media[];
   index?: number;
   close?: () => void;
-  fetchNextPage?: () => void;
 }
+
+
+const MIN_ZOOM = 1;
+const MAX_ZOOM = 5;
+const STEP_ZOOM = 0.1;
 
 function MediaLightBox(props: MediaLightBoxProps) {
   const { t } = useTranslation('common');
   const imageRef = useRef<HTMLImageElement>(null);
-  const { files, index, fetchNextPage, close } = props;
+  const { files, index, close } = props;
   const [current, setCurrent] = useState(index || 0);
   const [zoom, setZoom] = useState(1);
   const [rotate, setRotate] = useState(0);
   const [downloading, setDownloading] = useState(false);
-  const [paintingStart, setPaintingStart] = useState<number>(0);
+  const isMobile = useAppStore((state) => state.isMobile);
   const [isVideoFullScreen, setIsVideoFullScreen] = useState(false);
   const { postMessage } = useReactNativePostMessage();
-
+  const [apiCarousel, setApiCarousel] = useState<CarouselApi>()
+  const [allowClose, setAllowClose] = useState(true);
+  const setIndex = useMediaLightBoxStore((state) => state.setIndex);
+  const setFiles = useMediaLightBoxStore((state) => state.setFiles);
+  const fetchNextPage = useMediaLightBoxStore((state) => state.fetchNextPage);
+  const setFetchNextPage = useMediaLightBoxStore((state) => state.setFetchNextPage);
+  
   const onDownload = () => {
     const file = files[current || 0];
     if (!file) return;
@@ -82,6 +96,9 @@ function MediaLightBox(props: MediaLightBoxProps) {
     });
   };
   const onClose = useCallback(() => {
+    setIndex();
+    setFiles([]);
+    setFetchNextPage();
     close && close();
   }, [close]);
 
@@ -112,43 +129,43 @@ function MediaLightBox(props: MediaLightBoxProps) {
     }
   };
 
-  const renderMediaMain = () => {
-    switch (files[current].type) {
+  const renderMedia = (file: Media, index: number) => {
+    switch (file.type) {
       case 'image':
-        return (
-          <TransformWrapper
-            doubleClick={{ disabled: true }}
-            smooth={true}
-            centerOnInit={true}
-            panning={{ disabled: zoom === 1 }}
+        return <TransformWrapper
+          doubleClick={{ disabled: true }}
+          smooth={true}
+          centerOnInit={true}
+          maxScale={MAX_ZOOM}
+          minScale={MIN_ZOOM}
+          panning={{ 
+            disabled: zoom === 1,
+            allowLeftClickPan: false,
+            allowMiddleClickPan: false,
+            allowRightClickPan: false,
+          }}
+          limitToBounds={true}
+        >
+          <Controls setZoom={setZoom}/>
+          <TransformComponent
+            contentClass="!w-full !h-full"
+            wrapperClass="!w-full !h-full"
           >
-            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-              <div
-                style={{ width: '100%', height: '100%', position: 'relative' }}
-              >
-                <Controls zoom={zoom} />
-                <TransformComponent
-                  contentClass="!w-full !h-full"
-                  wrapperClass="!w-full !h-full"
-                >
-                  <Image
-                    ref={imageRef}
-                    className="h-full w-full object-contain"
-                    src={files[current].url}
-                    alt={files[current]?.file?.name || ''}
-                    layout="fill"
-                  />
-                </TransformComponent>
-              </div>
-            )}
-          </TransformWrapper>
-        );
+            <Image
+              {...index == current && { ref: imageRef }}
+              className="h-full w-full object-contain"
+              src={file.url}
+              alt={file?.file?.name || ''}
+              layout="fill"
+            />
+          </TransformComponent>
+        </TransformWrapper>
       case 'video':
         const props = {
           file: {
-            url: files[current].url,
+            url: file.url,
             type: 'video',
-            name: files[current].file?.name || '',
+            name: file.file?.name || '',
           },
           onFullScreenChange: (value: boolean) => {
             if (value != isVideoFullScreen) setIsVideoFullScreen(value);
@@ -156,7 +173,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
           className: 'w-full h-full bg-transparent',
           isFullScreenVideo: isVideoFullScreen,
         };
-        if (isVideoFullScreen) {
+        if (isVideoFullScreen && index == current) {
           return createPortal(<VideoPlayer {...props} />, document.body);
         }
         return <VideoPlayer {...props} />;
@@ -198,9 +215,38 @@ function MediaLightBox(props: MediaLightBoxProps) {
     };
   }, [current, isVideoFullScreen, onClose, onNext, onPrev]);
 
-  // On Change current image =>
+  // On Slide change
+  useEffect(() => {
+    let timer : NodeJS.Timeout;
+    const handleSelect = (data: any) => {
+      setCurrent(data.selectedScrollSnap());
+    }
+    const handleScroll = (data: any) => {
+      setAllowClose(false);
+      if(timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        setAllowClose(true);
+      }, 100);
+    }
+    apiCarousel?.on("select", handleSelect);
+    apiCarousel?.on("scroll", handleScroll);
+
+    return () => {
+      if (apiCarousel) {
+        apiCarousel.off("select", handleSelect)
+        apiCarousel.off("scroll", handleScroll)
+      }
+      if(timer) clearTimeout(timer);
+    }
+  }, [apiCarousel]);
+
+
   useEffect(() => {
     setIsVideoFullScreen(false);
+    const currentSlide = apiCarousel?.selectedScrollSnap();
+    if(currentSlide != current && typeof current == 'number') {
+      apiCarousel?.scrollTo(current);
+    }
   }, [current]);
 
   useEffect(() => {
@@ -227,196 +273,175 @@ function MediaLightBox(props: MediaLightBoxProps) {
 
   // on component unmount reset all state
 
-  return createPortal(
-    <div className="fixed bottom-0 left-0 right-0 top-0 z-[51] flex h-full w-full flex-col overflow-hidden bg-black/90 p-3">
-      <div className="z-20 ml-auto flex w-fit gap-2 rounded-xl bg-black/40 p-2">
-        <Button.Icon
-          variant={'default'}
-          color={'default'}
-          size={'xs'}
-          shape={'default'}
-          onClick={onDownload}
-          disabled={downloading}
+  return <Drawer 
+          open={typeof index == 'number'} 
+          onClose={onClose}
+          shouldScaleBackground={true}
+          dismissible={isMobile ? allowClose : false}
         >
-          {downloading ? <Spinner /> : <DownloadIcon />}
-        </Button.Icon>
-        <Button.Icon
-          variant={'default'}
-          color={'default'}
-          size={'xs'}
-          shape={'default'}
-          onClick={onClose}
-        >
-          <XIcon />
-        </Button.Icon>
-      </div>
-      <div className="relative flex-1 overflow-hidden">
-        {/* Button Prev */}
-        {current > 0 && files?.length > 1 && (
-          <Button.Icon
-            variant={'default'}
-            color={'default'}
-            size={'xs'}
-            shape={'default'}
-            className="absolute left-0 top-1/2 z-50 -translate-y-1/2 transform opacity-40"
-            onClick={onPrev}
-          >
-            <ChevronLeft />
-          </Button.Icon>
-        )}
-        {/* Image main */}
-
-        <div className="no-scrollbar flex h-full w-full select-none items-center justify-center overflow-auto focus:scroll-auto">
-          <TransformWrapper
-            initialScale={1}
-            minScale={1}
-            maxScale={1}
-            smooth={true}
-            centerOnInit={true}
-            panning={{
-              disabled: true,
-            }}
-            onPanningStart={(_, e: MouseEvent | TouchEvent) => {
-              let offsetX = 0;
-              if (e instanceof MouseEvent) {
-                offsetX = e.offsetX;
-              } else {
-                offsetX = e.touches[0].clientX;
-              }
-              setPaintingStart(offsetX || 0);
-            }}
-            onPanningStop={(ref, e: MouseEvent | TouchEvent) => {
-              if (zoom != 1) return;
-              const THRESHOLD = 50;
-              let offsetX = 0;
-              if (e instanceof MouseEvent) {
-                offsetX = e.offsetX;
-              } else {
-                offsetX = e.touches[0].clientX;
-              }
-              let threshold = paintingStart - offsetX;
-              if (threshold > THRESHOLD) {
-                onNext();
-              } else if (threshold < -THRESHOLD) {
-                onPrev();
-              }
-            }}
-          >
-            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-              <>
-                <TransformComponent
-                  contentClass="!w-full !h-full"
-                  wrapperClass="!w-full !h-full"
-                >
-                  {renderMediaMain()}
-                </TransformComponent>
-              </>
-            )}
-          </TransformWrapper>
-        </div>
-        {/* Button next */}
-        {current < files.length - 1 && files?.length > 1 && (
-          <Button.Icon
-            variant={'default'}
-            color={'default'}
-            size={'xs'}
-            shape={'default'}
-            className="absolute right-0 top-1/2 z-50 -translate-y-1/2 transform opacity-40"
-            onClick={onNext}
-          >
-            <ChevronRight />
-          </Button.Icon>
-        )}
-      </div>
-      <div className="relative flex h-24 py-2">
-        {/* Thumbnail */}
-        <ThumbnailList
-          files={files}
-          current={current}
-          setCurrent={setCurrent}
-        />
-
-        {/* Controls */}
-        {files[current].type === 'image' && (
-          <div className="absolute bottom-0 right-0 z-20 ml-auto hidden w-fit items-center gap-2 rounded-xl bg-black/40 p-2 md:flex">
-            {/* Button Zoom  */}
+      <DrawerContent className='w-full h-full border-none'>
+        <div className="flex h-full w-full flex-col overflow-hidden bg-black/90 p-3 -mt-6">
+          <div className="z-20 ml-auto flex w-fit gap-2 rounded-xl bg-black/40 p-2">
             <Button.Icon
               variant={'default'}
               color={'default'}
               size={'xs'}
               shape={'default'}
-              onClick={() => {
-                if (zoom > 0.6) setZoom((prev) => prev - 0.1);
-              }}
+              onClick={onDownload}
+              disabled={downloading}
             >
-              <MinusIcon />
-            </Button.Icon>
-            {/* Range */}
-            <div className="mx-1">
-              <Range
-                step={0.1}
-                min={0.5}
-                max={1.5}
-                values={[zoom]}
-                onChange={(values) => {
-                  setZoom(values[0]);
-                }}
-                renderTrack={({ props, children }) => (
-                  <div
-                    {...props}
-                    className={cn(
-                      'relative h-1 w-[72px] rounded bg-neutral-500',
-                    )}
-                  >
-                    {children}
-                  </div>
-                )}
-                renderThumb={({ props }) => (
-                  <div
-                    {...props}
-                    className="h-4 w-4 rounded-full bg-white"
-                    key="1"
-                  ></div>
-                )}
-              />
-            </div>
-            <Button.Icon
-              variant={'default'}
-              color={'default'}
-              size={'xs'}
-              shape={'default'}
-              onClick={() => {
-                if (zoom < 1.5) setZoom((prev) => prev + 0.1);
-              }}
-            >
-              <PlusIcon />
-            </Button.Icon>
-            {/* Rotate */}
-            <Button.Icon
-              variant={'default'}
-              color={'default'}
-              size={'xs'}
-              shape={'default'}
-              onClick={onRotateLeft}
-            >
-              <RotateCcwIcon />
+              {downloading ? <Spinner /> : <DownloadIcon />}
             </Button.Icon>
             <Button.Icon
               variant={'default'}
               color={'default'}
               size={'xs'}
               shape={'default'}
-              onClick={onRotateRight}
-              className="rotate-45"
+              onClick={onClose}
             >
-              <RotateCwIcon />
+              <XIcon />
             </Button.Icon>
           </div>
-        )}
-      </div>
-    </div>,
-    document.body,
-  );
+          <div className="relative flex-1 overflow-hidden">
+            <div className="no-scrollbar h-full w-full">
+              <Carousel
+                opts={{
+                  align: "center",
+                  loop: false,
+                  startIndex: index,
+                  axis: 'x',
+                }}
+                setApi={setApiCarousel}
+                className='h-full [&>div]:h-full'
+              >
+                <CarouselContent className='h-full'>
+                  {
+                    files.map((file, index) => {
+                      return (
+                        <CarouselItem key={index} className='h-full'>
+                          {renderMedia(file, index)}
+                        </CarouselItem>
+                      )
+                    })
+                  }
+                </CarouselContent>
+              </Carousel>
+            </div>
+          </div>
+          <div className="relative h-24 ">
+            <div className='flex gap-2 py-2 items-center justify-center w-fit mx-auto'>
+              <Button.Icon
+                variant={'default'}
+                color={'default'}
+                size={'xs'}
+                shape={'default'}
+                className={cn({'!opacity-0': (current == 0 || files.length == 1)})}
+                onClick={onPrev}
+                disabled={current == 0 || files.length == 1}
+              >
+                <ChevronLeft />
+              </Button.Icon>
+          
+              <ThumbnailList
+                files={files}
+                current={current}
+                setCurrent={setCurrent}
+              />
+
+              <Button.Icon
+                variant={'default'}
+                color={'default'}
+                size={'xs'}
+                shape={'default'}
+                className={cn({'!opacity-0': (current == files.length - 1 || files.length == 1)})}
+                onClick={onNext}
+                disabled={current == files.length - 1 || files.length == 1}
+              >
+                <ChevronRight />
+              </Button.Icon>
+            </div>
+
+            {/* Controls */}
+            {files[current].type === 'image' && (
+              <div className="absolute bottom-0 right-0 z-20 ml-auto hidden w-fit items-center gap-2 rounded-xl bg-black/40 p-2 md:flex">
+                {/* Button Zoom  */}
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={() => {
+                    if (zoom > MIN_ZOOM) setZoom((prev) => prev - STEP_ZOOM);
+                  }}
+                >
+                  <MinusIcon />
+                </Button.Icon>
+                {/* Range */}
+                <div className="mx-1">
+                  <Range
+                    step={STEP_ZOOM}
+                    min={MIN_ZOOM}
+                    max={MAX_ZOOM}
+                    values={[zoom]}
+                    onChange={(values) => {
+                      setZoom(values[0]);
+                    }}
+                    renderTrack={({ props, children }) => (
+                      <div
+                        {...props}
+                        className={cn(
+                          'relative h-1 w-[72px] rounded bg-neutral-500',
+                        )}
+                      >
+                        {children}
+                      </div>
+                    )}
+                    renderThumb={({ props }) => (
+                      <div
+                        {...props}
+                        className="h-4 w-4 rounded-full bg-white"
+                        key="1"
+                      ></div>
+                    )}
+                  />
+                </div>
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={() => {
+                    if (zoom < MAX_ZOOM) setZoom((prev) => prev + STEP_ZOOM);
+                  }}
+                >
+                  <PlusIcon />
+                </Button.Icon>
+                {/* Rotate */}
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={onRotateLeft}
+                >
+                  <RotateCcwIcon />
+                </Button.Icon>
+                <Button.Icon
+                  variant={'default'}
+                  color={'default'}
+                  size={'xs'}
+                  shape={'default'}
+                  onClick={onRotateRight}
+                  className="rotate-45"
+                >
+                  <RotateCwIcon />
+                </Button.Icon>
+              </div>
+            )}
+          </div>
+        </div>
+      </DrawerContent>
+    </Drawer>
 }
 
 interface ThumbnailListProps {
@@ -519,9 +544,15 @@ const ThumbnailList = memo(
 );
 ThumbnailList.displayName = 'ThumbnailList';
 
-const Controls = ({ zoom }: { zoom: number }) => {
-  const { setTransform } = useControls();
-  // setTransform(0, 0, zoom);
+interface ControlsProps {
+  setZoom: (val: number) => void;
+}
+const Controls = ({setZoom}: ControlsProps) => {
+  useTransformEffect(({ state, instance }) => {
+    setZoom(state.scale);
+    return () => {
+    };
+  });
   return <></>;
 };
 

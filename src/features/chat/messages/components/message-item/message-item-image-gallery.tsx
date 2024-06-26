@@ -1,13 +1,7 @@
-import Download from 'yet-another-react-lightbox/plugins/download';
 import Image from 'next/image';
-import LightImage from '@/components/data-display/lingtbox-image';
-import Lightbox from 'yet-another-react-lightbox';
 import { Media } from '@/types';
-import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
-import Zoom from 'yet-another-react-lightbox/plugins/zoom';
-import { forwardRef, useState } from 'react';
-import useRotate from '@/components/data-display/rotate';
-import MediaLightBox from '@/components/media-light-box/media-light-box';
+import { forwardRef } from 'react';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 export interface ImageGalleryProps
   extends React.HTMLAttributes<HTMLDivElement> {
   images: Media[];
@@ -19,8 +13,17 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
     const isMultiple = length > 1;
     const num = length > 3 ? 3 : length;
     const width = 360 / num;
-    const [index, setIndex] = useState<number | undefined>();
 
+    const setIndex = useMediaLightBoxStore((state) => state.setIndex);
+    const setFiles = useMediaLightBoxStore((state) => state.setFiles);    
+    const openMediaLightBox = (index: number) => {
+      setIndex(index)
+      setFiles(images.map((img) => ({
+        url: img.url,
+        type: 'image',
+        name: img.name || '',
+      })))
+    }
     return (
       <>
         {isMultiple ? (
@@ -37,7 +40,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
                 <div
                   onClick={(e) => {
                     e.stopPropagation();
-                    setIndex(index);
+                    openMediaLightBox(index);
                   }}
                   key={index}
                   style={{
@@ -64,7 +67,7 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
               priority
               onClick={(e) => {
                 e.stopPropagation();
-                setIndex(0);
+                openMediaLightBox(0);
               }}
               width={280}
               height={280}
@@ -74,16 +77,6 @@ export const ImageGallery = forwardRef<HTMLDivElement, ImageGalleryProps>(
             />
           </div>
         )}
-        <MediaLightBox
-          files={images.map((img) => ({
-            url: img.url,
-            type: 'image',
-            name: img.name || '',
-          }))}
-          key={index}
-          index={index}
-          close={() => setIndex(undefined)}
-          />
       </>
     );
   },

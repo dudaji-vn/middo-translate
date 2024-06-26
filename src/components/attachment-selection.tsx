@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { forwardRef, useEffect, useMemo, useState } from 'react';
+import { forwardRef, useEffect, useMemo } from 'react';
 import { SelectedFile, useMediaUpload } from './media-upload';
 import { Button } from './actions';
 import { PlayCircleIcon, PlusCircleIcon, XIcon } from 'lucide-react';
@@ -7,8 +7,8 @@ import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
 import { Editor } from '@tiptap/react';
 
-import MediaLightBox from './media-light-box/media-light-box';
 import { cn } from '@/utils/cn';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +21,9 @@ export const AttachmentSelection = forwardRef<
   AttachmentSelectionProps
 >(({ editor, readonly }, ref) => {
   const { files, removeFile, open } = useMediaUpload();
-  const [index, setIndex] = useState<number | undefined>(undefined);
+
+  const setIndex = useMediaLightBoxStore((state) => state.setIndex);
+  const setFiles = useMediaLightBoxStore((state) => state.setFiles);
 
   useEffect(() => {
     if (files.length > 0) editor?.commands.focus();
@@ -44,6 +46,11 @@ export const AttachmentSelection = forwardRef<
       });
   }, [files]);
 
+  const openMediaLightBox = (index: number) => {
+    setIndex(index);
+    setFiles(sliders);
+  }
+
   return (
     <AnimatePresence>
       {files.length > 0 && (
@@ -61,12 +68,6 @@ export const AttachmentSelection = forwardRef<
             <PlusCircleIcon />
           </Button.Icon>
           <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
-            <MediaLightBox
-              files={sliders}
-              index={index}
-              close={() => setIndex(undefined)}
-              key={index}
-            />
             <AnimatePresence>
               {files.map((file, i) => {
                 return (
@@ -79,7 +80,7 @@ export const AttachmentSelection = forwardRef<
                   >
                     <div
                       className="aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow"
-                      onClick={() => setIndex(i)}
+                      onClick={() => openMediaLightBox(i)}
                     >
                       <MediaItem file={file} />
                     </div>
