@@ -17,19 +17,19 @@ import { useTranslation } from 'react-i18next';
 const COLORS = [...CHART_COLORS].reverse();
 const LoadingLanguageRank = () => {
   return (
-    <section className="relative w-full space-y-4  bg-white dark:bg-background px-4 py-5 md:px-10">
+    <section className="relative w-full space-y-4  bg-white px-4 py-5 dark:bg-background md:px-10">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800 dark:text-neutral-50">
           Conversation&apos;s Language
         </Typography>
       </div>
-      <div className="flex w-full flex-col gap-4 md:flex-row">
+      <div className="flex w-full flex-col gap-4 max-md:items-center md:flex-row">
         <div>
           <Skeleton className="relative h-60 w-60 rounded-full bg-primary-200">
             <div className="absolute inset-6 rounded-full bg-white dark:bg-neutral-800" />
           </Skeleton>
         </div>
-        <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
+        <div className="flex h-fit min-h-40 flex-grow flex-col  items-end gap-4 transition-all duration-1000 w-full">
           {Array.from({ length: 3 }).map((_, index) => {
             return (
               <div
@@ -91,7 +91,7 @@ const LanguageRank = ({
   const isEmpty = dataSlice.length === 0;
   if (isEmpty) return null;
   return (
-    <section className="relative w-full space-y-4  bg-white dark:bg-background px-3 py-4 md:px-10">
+    <section className="relative w-full space-y-4  bg-white px-3 py-4 dark:bg-background md:px-10">
       <div className="flex flex-row items-center justify-between">
         <Typography className="text-base font-semibold text-neutral-800 dark:text-neutral-50">
           {t('EXTENSION.CHART.LANGUAGERANK')}

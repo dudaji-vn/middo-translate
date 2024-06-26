@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import toast from 'react-hot-toast';
 import useClient from '@/hooks/use-client';
 import { Tabs } from '@/components/navigation';
 import CreateOrEditSpaceHeader from './create-or-edit-space-header';
@@ -31,6 +30,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 const createSpaceSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(1, {
       message: 'EXTENSION.SPACE.ERRORS.NAME_REQUIRED',
     })
@@ -116,7 +116,10 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
     }
   };
   const canNext = useMemo(() => {
-    if (formCreateSpace.watch('avatar') && formCreateSpace.watch('name')) {
+    if (
+      formCreateSpace.watch('avatar') &&
+      formCreateSpace.watch('name')?.trim()
+    ) {
       return formCreateSpace.trigger();
     }
     return false;

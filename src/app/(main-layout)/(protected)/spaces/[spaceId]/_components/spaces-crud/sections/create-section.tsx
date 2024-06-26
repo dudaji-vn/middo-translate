@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 const CreateSpaceForm = () => {
   const { t } = useTranslation('common');
   return (
-    <section className="flex h-[calc(100vh-220px)] max-md:px-4 min-h-80  max-w-[800px] flex-col items-center justify-center gap-8">
+    <section className="flex h-[calc(100vh-220px)] min-h-80 max-w-[800px]  flex-col items-center justify-center gap-8 max-md:px-4">
       <div className="flex w-full flex-col  gap-3">
         <Typography className="text-[32px] font-semibold leading-9 text-neutral-800 dark:text-neutral-50">
           <span
