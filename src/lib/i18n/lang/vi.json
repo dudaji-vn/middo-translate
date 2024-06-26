@@ -96,6 +96,11 @@
     "LIGHT": "Sáng",
     "DARK": "Tối",
     "SYSTEM": "Hệ thống",
+    "SETTINGS": "Cài đặt",
+    "CHANGE_AVATAR": "Thay đổi hình đại diện",
+    "CHANGE_NAME": "Thay đổi tên",
+    "INFORMATION": "Thông tin",
+    "DELETE_STATION": "Xoá Station",
     "TIME": {
       "CREATED_ON": "Tạo vào",
       "UPDATED_ON": "Cập nhật vào",
