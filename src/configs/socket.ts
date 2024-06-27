@@ -104,6 +104,9 @@ export const SOCKET_CONFIG = {
     },
     MEETING: {
       LIST: 'meeting.list',
+      UPDATE: 'meeting.update',
+      END: 'meeting.end',
+      BLOCK: 'meeting.block'
     }
   },
 };

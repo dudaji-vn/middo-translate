@@ -1,5 +1,12 @@
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { BlocksIcon, Download, DownloadIcon, LanguagesIcon, MessageSquare, MessagesSquareIcon } from 'lucide-react';
+import {
+  BlocksIcon,
+  Download,
+  DownloadIcon,
+  LanguagesIcon,
+  MessageSquare,
+  MessagesSquareIcon,
+} from 'lucide-react';
 
 export type NavItem = {
   name: string;
@@ -15,21 +22,21 @@ const items: NavItem[] = [
     href: ROUTE_NAMES.TRANSLATION,
     isShowOnDesktop: true,
     target: '_self',
-    icon: <LanguagesIcon size={16}/>
+    icon: <LanguagesIcon size={16} />,
   },
   {
     name: 'HEADER.CONVERSATION',
-    href: ROUTE_NAMES.ONLINE_CONVERSATION,
+    href: ROUTE_NAMES.STATIONS,
     isShowOnDesktop: true,
     target: '_self',
-    icon: <MessagesSquareIcon size={16}/>
+    icon: <MessagesSquareIcon size={16} />,
   },
   {
     name: 'HEADER.EXTENSION',
     href: ROUTE_NAMES.EXTENSION,
     isShowOnDesktop: true,
     target: '_blank',
-    icon: <BlocksIcon size={16}/>
+    icon: <BlocksIcon size={16} />,
   },
   // {
   //   name: 'HEADER.DOWNLOAD',

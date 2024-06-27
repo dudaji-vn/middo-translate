@@ -10,7 +10,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/feedback';
 
-import { Button } from '@/components/actions';
 import { LogOut } from 'lucide-react';
 import { useLeaveRoom } from '../../hooks/use-leave-room';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +30,7 @@ export const RoomLeave = ({ roomId }: RoomLeaveProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('MODAL.LEAVE_ROOM.TITLE')}?</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.LEAVE_ROOM.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

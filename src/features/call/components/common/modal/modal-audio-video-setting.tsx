@@ -20,6 +20,7 @@ import { useParticipantVideoCallStore } from '@/features/call/store/participant.
 import toast from 'react-hot-toast';
 import socket from '@/lib/socket-io';
 import { useVideoSettingStore } from '@/features/call/store/video-setting.store';
+import customToast from '@/utils/custom-toast';
 
 export const ModalAudioVideoSetting = () => {
   const { t } = useTranslation('common');
@@ -59,7 +60,7 @@ export const ModalAudioVideoSetting = () => {
         setTurnOnMic(isTurnOnMic);
       })
       .catch(() => {
-        toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
+        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         setTurnOnCamera(false);
         setTurnOnMic(false);
       })

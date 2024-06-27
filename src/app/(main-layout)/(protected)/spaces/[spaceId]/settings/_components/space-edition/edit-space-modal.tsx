@@ -18,6 +18,7 @@ import { TEditSpaceFormValues } from '../space-setting/space-setting';
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { TSpace } from '../../../_components/business-spaces';
 import { createOrEditSpace } from '@/services/business-space.service';
+import customToast from '@/utils/custom-toast';
 
 export const EditSpaceModal = ({ space }: { space: Omit<TSpace, 'owner'> }) => {
   const [open, setOpen] = useState(false);
@@ -39,18 +40,18 @@ export const EditSpaceModal = ({ space }: { space: Omit<TSpace, 'owner'> }) => {
       })
         .then((res) => {
           if (res.data) {
-            toast.success('Space name updated successfully');
+            customToast.success('Space name updated successfully');
             router.refresh();
             setOpen(false);
             return;
           }
         })
         .catch((err) => {
-          toast.error('Error on update space. Please try again');
+          customToast.error('Error on update space. Please try again');
         });
     } catch (error) {
       console.error('Error on UpdateSpace:', error);
-      toast.error('Error on Update space');
+      customToast.error('Error on Update space');
     }
   };
 
@@ -67,7 +68,7 @@ export const EditSpaceModal = ({ space }: { space: Omit<TSpace, 'owner'> }) => {
           className: 'hidden',
         }}
       >
-        <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
+        <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem] dark:bg-background">
           <div className="flex w-full flex-col gap-3">
             <div className="flex w-full flex-row items-center gap-3 rounded-[12px]">
               <RHFInputField

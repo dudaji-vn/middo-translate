@@ -13,7 +13,7 @@ const ReceiveVideoCallActions = ({acceptCall, declineCall}: ReceiveVideoCallActi
   const {t} = useTranslation('common')
   const isMobile = useAppStore((state) => state.isMobile);
   return (
-    <div className="flex justify-around gap-2 p-3 pb-20 md:pb-3">
+    <div className="flex justify-around gap-2 p-3 pb-20 md:pb-3 dark:bg-neutral-900">
       <Button
         onClick={declineCall}
         size={isMobile ? 'md' : 'xs'}

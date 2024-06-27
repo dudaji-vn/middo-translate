@@ -17,19 +17,19 @@ import { useTranslation } from 'react-i18next';
 const COLORS = [...CHART_COLORS].reverse();
 const LoadingLanguageRank = () => {
   return (
-    <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
+    <section className="relative w-full space-y-4  bg-white px-4 py-5 dark:bg-background md:px-10">
       <div className="flex flex-row items-center justify-between">
-        <Typography className="text-base font-semibold text-neutral-800">
+        <Typography className="text-base font-semibold text-neutral-800 dark:text-neutral-50">
           Conversation&apos;s Language
         </Typography>
       </div>
-      <div className="flex w-full flex-col gap-4 md:flex-row">
+      <div className="flex w-full flex-col gap-4 max-md:items-center md:flex-row">
         <div>
           <Skeleton className="relative h-60 w-60 rounded-full bg-primary-200">
-            <div className="absolute inset-6 rounded-full bg-white" />
+            <div className="absolute inset-6 rounded-full bg-white dark:bg-neutral-800" />
           </Skeleton>
         </div>
-        <div className="flex h-fit min-h-40 flex-grow flex-col items-end gap-4 transition-all duration-1000">
+        <div className="flex h-fit min-h-40 flex-grow flex-col  items-end gap-4 transition-all duration-1000 w-full">
           {Array.from({ length: 3 }).map((_, index) => {
             return (
               <div
@@ -37,10 +37,10 @@ const LoadingLanguageRank = () => {
                 key={index}
               >
                 <div className="flex h-fit w-36 flex-row items-center gap-2">
-                  <Skeleton className="h-5 w-5 rounded-full bg-neutral-100" />
-                  <Skeleton className="h-5 w-32 rounded-md bg-neutral-100" />
+                  <Skeleton className="h-5 w-5 rounded-full bg-neutral-100 dark:bg-neutral-800" />
+                  <Skeleton className="h-5 w-32 rounded-md bg-neutral-100 dark:bg-neutral-800" />
                 </div>
-                <Skeleton className=" h-2 w-full flex-grow rounded-full bg-primary-200 " />
+                <Skeleton className=" h-2 w-full flex-grow rounded-full bg-primary-200 dark:bg-neutral-800" />
                 <Skeleton className="h-5 w-5 rounded-md " />
               </div>
             );
@@ -91,9 +91,9 @@ const LanguageRank = ({
   const isEmpty = dataSlice.length === 0;
   if (isEmpty) return null;
   return (
-    <section className="relative w-full space-y-4  bg-white px-3 py-4 md:px-10">
+    <section className="relative w-full space-y-4  bg-white px-3 py-4 dark:bg-background md:px-10">
       <div className="flex flex-row items-center justify-between">
-        <Typography className="text-base font-semibold text-neutral-800">
+        <Typography className="text-base font-semibold text-neutral-800 dark:text-neutral-50">
           {t('EXTENSION.CHART.LANGUAGERANK')}
         </Typography>
       </div>
@@ -122,13 +122,13 @@ const LanguageRank = ({
                   <Tooltip
                     title={getCountryNameByCode(item.language)}
                     triggerItem={
-                      <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800">
+                      <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800 dark:text-neutral-50">
                         {getCountryNameByCode(item.language)}
                       </Typography>
                     }
                   />
                 </div>
-                <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
+                <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100 dark:bg-neutral-900">
                   <div
                     className={cn(
                       'relative h-2 rounded-l-full transition-all duration-1000',
@@ -140,7 +140,7 @@ const LanguageRank = ({
                     }}
                   />
                 </div>
-                <span className=" w-10 text-end text-neutral-800">
+                <span className=" w-10 text-end text-neutral-800 dark:text-neutral-50">
                   {item?.count}
                 </span>
               </div>
@@ -160,7 +160,7 @@ const LanguageRank = ({
                   {t('COMMON.OTHERS')}...
                 </Button>
               </div>
-              <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100">
+              <div className="flex h-full flex-grow justify-items-start rounded-full bg-primary-100 dark:bg-neutral-900">
                 <div
                   className={cn(
                     'h-2 rounded-l-full transition-all  duration-1000',
@@ -174,7 +174,7 @@ const LanguageRank = ({
                   }}
                 />
               </div>
-              <span className=" w-10 text-end text-neutral-800">
+              <span className=" w-10 text-end text-neutral-800 dark:text-neutral-50">
                 {others.reduce((acc, item) => acc + item.count, 0)}
               </span>
             </div>

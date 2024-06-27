@@ -28,7 +28,7 @@ export const initialEdges: Edge[] = [
     source: '1',
     target: '2',
     animated: true,
-    label: 'Start conversation',
+    className: 'dark:[&_*]:fill-neutral-900 dark:[&_text]:fill-neutral-50',
   },
 ];
 
@@ -50,7 +50,10 @@ const checkIncludingOption = (nodes: FlowNode[]) => {
   return hasOption;
 };
 export const createChatScriptSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .max(30, 'Name is too long, max 30 characters'),
   chatFlow: z
     .object({
       nodes: z

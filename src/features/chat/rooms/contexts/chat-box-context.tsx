@@ -42,7 +42,11 @@ export const ChatBoxProvider = ({
   const queryClient = useQueryClient();
   const [room, setRoom] = useState<Room>(_room);
   const roomDisplay = useMemo(
-    () => generateRoomDisplay(room, currentUserId || ''),
+    () =>
+      generateRoomDisplay({
+        room,
+        currentUserId: currentUserId || '',
+      }),
     [currentUserId, room],
   );
   const updateRoom = useCallback((room: Partial<Room>) => {
@@ -57,13 +61,16 @@ export const ChatBoxProvider = ({
     },
     [room._id, router],
   );
-  const handleDeleteContact = useCallback((_room: Partial<Room>)=> {
-    Object.keys(inboxTabMap).forEach((tab) => {
-      queryClient.invalidateQueries(['rooms', tab]);
-    });
-    if(room._id !== _room._id) return;
-    setRoom((old) => ({ ...old, ..._room }));
-  }, [queryClient, room._id]);
+  const handleDeleteContact = useCallback(
+    (_room: Partial<Room>) => {
+      Object.keys(inboxTabMap).forEach((tab) => {
+        queryClient.invalidateQueries(['rooms', tab]);
+      });
+      if (room._id !== _room._id) return;
+      setRoom((old) => ({ ...old, ..._room }));
+    },
+    [queryClient, room._id],
+  );
 
   useEffect(() => {
     if (socketConnected) {
@@ -80,7 +87,7 @@ export const ChatBoxProvider = ({
       });
     };
   }, [notifyToken, room._id, isOnline, socketConnected]);
-  
+
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.UPDATE, updateRoom);
     socket.on(SOCKET_CONFIG.EVENTS.ROOM.DELETE, handleForceLeaveRoom);

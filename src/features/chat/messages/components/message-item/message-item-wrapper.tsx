@@ -32,11 +32,15 @@ import { MessageItem } from '.';
 import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
 import { actionItems, useMessageActions } from '../message-actions';
-import { EMOJI_LANG_SUPPORT, MessageEmojiPicker } from '../message-emoji-picker';
+import {
+  EMOJI_LANG_SUPPORT,
+  MessageEmojiPicker,
+} from '../message-emoji-picker';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 import { listenEvent } from '@/features/call/utils/custom-event.util';
 import { CUSTOM_EVENTS } from '@/configs/custom-event';
+import { usePlatformStore } from '@/features/platform/stores';
 
 const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
 
@@ -112,6 +116,9 @@ export const MessageItemWrapper = ({
   ...props
 }: MessageItemWrapperProps & PropsWithChildren) => {
   const isMobile = useAppStore((state) => state.isMobile);
+  const isMobilePlatform = usePlatformStore(
+    (state) => state.platform === 'mobile',
+  );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMe, message, setActive, discussionDisabled, showTime } = props;
   const ref = useRef<HTMLDivElement | null>(null);
@@ -153,7 +160,21 @@ export const MessageItemWrapper = ({
           case 'reply':
             return !discussionDisabled;
           case 'download':
+            if (
+              isMobilePlatform &&
+              message.type === 'media' &&
+              message?.media?.[0].type === 'document'
+            )
+              return false;
             return message.type === 'media';
+          case 'browser':
+            if (
+              isMobilePlatform &&
+              message.type === 'media' &&
+              message?.media?.[0].type === 'document'
+            )
+              return true;
+            return false;
           case 'edit':
             const timeDiff = moment().diff(message.createdAt);
             return (
@@ -172,7 +193,7 @@ export const MessageItemWrapper = ({
             isMe,
           }),
       }));
-  }, [discussionDisabled, isMe, message, onAction]);
+  }, [discussionDisabled, isMe, isMobilePlatform, message, onAction]);
 
   const Wrapper = useMemo(() => {
     if (message.status === 'removed') return RemovedWrapper;
@@ -262,17 +283,16 @@ const MobileWrapper = ({
   const { value, setValue, setFalse } = useBoolean(false);
 
   const { t } = useTranslation('common');
+  const theme = useAppStore((state) => state.theme);
   const {
     setFalse: hideEmoji,
     value: showEmoji,
     setValue: changeShowEmoji,
     setTrue: openEmoji,
   } = useBoolean(false);
-  const language = useAppStore(state => state.language);
-  const {
-    value: isDisableLongPress,
-    setValue: changeDisableLongPress,
-  } = useBoolean(false);
+  const language = useAppStore((state) => state.language);
+  const { value: isDisableLongPress, setValue: changeDisableLongPress } =
+    useBoolean(false);
 
   const { mutateAsync } = useReactMessage();
   const handleEmojiClick = async (emoji: string) => {
@@ -286,10 +306,14 @@ const MobileWrapper = ({
 
   useEffect(() => {
     let cleanup: (() => void) | undefined;
-    if(message.type === 'media' && (message?.media?.[0].type === 'video' )) {
-      cleanup = listenEvent(CUSTOM_EVENTS.MESSAGE.CHANGE_ALLOW_LONG_PRESS + message?.media?.[0]?.url, (event: {detail: boolean}) => {
-        changeDisableLongPress(event.detail);
-      });
+    if (message.type === 'media' && message?.media?.[0].type === 'video') {
+      cleanup = listenEvent(
+        CUSTOM_EVENTS.MESSAGE.CHANGE_ALLOW_LONG_PRESS +
+          message?.media?.[0]?.url,
+        (event: { detail: boolean }) => {
+          changeDisableLongPress(event.detail);
+        },
+      );
     }
     return () => {
       cleanup && cleanup();
@@ -362,15 +386,20 @@ const MobileWrapper = ({
               startIcon={item.icon}
               color={item.color === 'error' ? 'error' : 'default'}
               onClick={item.onAction}
+              className="hover:bg-neutral-900"
             >
               {t(item.label)}
             </LongPressMenu.Item>
           ))}
         </LongPressMenu.Menu>
       </LongPressMenu>
-      {showEmoji && <div className='fixed top-0 left-0 right-0 bottom-0 z-50 bg-neutral-200/80 backdrop-blur-md flex flex-col'>
-          <div className='flex-1 w-full' onClick={()=>changeShowEmoji(false)}></div>
-          <motion.div 
+      {showEmoji && (
+        <div className="fixed bottom-0 left-0 right-0 top-0 z-50 flex flex-col bg-neutral-200/80 backdrop-blur-md">
+          <div
+            className="w-full flex-1"
+            onClick={() => changeShowEmoji(false)}
+          ></div>
+          <motion.div
             initial={{ opacity: 0, top: 200 }}
             animate={{
               opacity: 1,
@@ -380,10 +409,11 @@ const MobileWrapper = ({
               },
             }}
             exit={{ opacity: 0, top: 200 }}
-          className='bg-white flex items-center justify-center rounded-tl-3xl rounded-tr-3xl border-t border-neutral-100 relative'>
+            className="relative flex items-center justify-center overflow-hidden rounded-tl-3xl rounded-tr-3xl border-t border-neutral-100 bg-white dark:border-neutral-800 dark:bg-neutral-900"
+          >
             <EmojiPicker
-              locale={EMOJI_LANG_SUPPORT.includes(language) ?  language : 'en'}
-              theme="light"
+              locale={EMOJI_LANG_SUPPORT.includes(language) ? language : 'en'}
+              theme={theme || 'light'}
               onEmojiSelect={(emoji: any) => {
                 handleEmojiClick(emoji.native);
               }}
@@ -391,23 +421,8 @@ const MobileWrapper = ({
               previewPosition="none"
             />
           </motion.div>
-        </div>}
-      {/* <Drawer open={showEmoji} onOpenChange={changeShowEmoji} >
-        <DrawerContent>
-          <div
-            className="custom-emoji-picker flex justify-center overflow-auto"
-          >
-            <EmojiPicker
-              theme="light"
-              onEmojiSelect={(emoji: any) => {
-                handleEmojiClick(emoji.native);
-              }}
-              skinTonePosition="none"
-              previewPosition="none"
-            />
-          </div>
-        </DrawerContent>
-      </Drawer> */}
+        </div>
+      )}
     </>
   );
 };
@@ -418,7 +433,7 @@ const DesktopWrapper = ({
   isMe,
   message,
   setIsMenuOpen,
-  isMenuOpen
+  isMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
   const { t } = useTranslation('common');
@@ -440,7 +455,7 @@ const DesktopWrapper = ({
               <MoreVerticalIcon />
             </Button.Icon>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
             {items.map((item) => (
               <DropdownMenuItem
                 disabled={item.disabled}
@@ -449,6 +464,7 @@ const DesktopWrapper = ({
                   e.stopPropagation();
                   item.onAction();
                 }}
+                className="dark:hover:bg-neutral-800"
               >
                 {cloneElement(item.icon, {
                   size: 16,

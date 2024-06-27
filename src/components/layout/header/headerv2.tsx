@@ -11,10 +11,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderNav } from './header-nav';
 import HeaderProfile from './header-profile';
-import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 import { HeaderNavMobile } from './header-nav.mobile';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useAppStore } from '@/stores/app.store';
+import { useMemo } from 'react';
 
 type Props = {};
 
@@ -24,42 +24,43 @@ export const Header = (props: Props) => {
   const theme = useAppStore((state) => state.theme);
 
   const { isBusiness } = useBusinessNavigationData();
-  const hideNavigation = isBusiness;
+  const hideNavigation = isBusiness || platform === 'mobile';
+  const logoURL = useMemo(() => {
+    switch (theme) {
+      case 'light':
+        return isBusiness ? '/power-by-middo.svg' : '/logo.png';
+      case 'dark':
+        return isBusiness ? '/power-by-middo-dark.svg' : '/logo-dark.png';
+      default:
+        return '/logo.png';
+    }
+  }, [isBusiness, theme]);
+
   if (!isClient) return null;
   if (platform === 'mobile') return null;
 
   return (
     <div
       className={cn(
-        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] md:gap-5 md:pl-[5vw] dark:bg-neutral-900 dark:border-neutral-800',
+        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] dark:border-neutral-800 dark:bg-neutral-900 md:gap-5 md:pl-[5vw]',
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
       <Link
         href={ROUTE_NAMES.ROOT}
         className={cn(
-          'flex w-[60px] flex-row justify-start gap-2 divide-x-[2px] divide-neutral-900',
+          'flex w-[60px] flex-row justify-start gap-2',
+          isBusiness && 'w-[120px]',
         )}
       >
-        <Image 
-          src={theme == 'light' ? '/logo.png' : '/logo-dark.png'} 
-          priority 
-          alt="Middo logo" 
-          width={500} 
-          height={500} 
+        <Image
+          src={logoURL}
+          priority
+          alt="Middo logo"
+          width={500}
+          height={500}
         />
-        {isBusiness && (
-          <Typography
-            className={
-              'flex flex-row items-center pl-2 font-semibold text-primary-500-main'
-            }
-          >
-            {' '}
-            <Blocks /> Extension
-          </Typography>
-        )}
       </Link>
-
       {!hideNavigation && <HeaderNav />}
       <HeaderProfile />
     </div>

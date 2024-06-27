@@ -9,6 +9,7 @@ import { Typography } from '@/components/data-display';
 import { useSidebarStore } from '@/stores/sidebar.store';
 export type ScriptsHeaderProps = {
   titleProps?: React.HTMLProps<HTMLSpanElement>;
+  menuProps?: React.HTMLProps<HTMLDivElement>;
   onSearchChange: (value: string) => void;
   onCreateClick: () => void;
   allowedRoles: Record<string, Array<ESPaceRoles>>;
@@ -19,6 +20,7 @@ const ScriptsHeader = ({
   titleProps,
   onSearchChange,
   onCreateClick,
+  menuProps,
   allowedRoles,
   myRole = ESPaceRoles.Viewer,
   ...props
@@ -27,10 +29,10 @@ const ScriptsHeader = ({
   const { setOpenSidebar, openSidebar } = useSidebarStore();
   return (
     <div
-      className="flex  flex-col justify-center gap-4 px-10 py-3 font-medium md:flex-row md:items-center  md:px-10"
+      className="flex  flex-col justify-between gap-4 px-1 py-3 font-medium md:flex-row md:items-center md:px-10"
       {...props}
     >
-      <div className="flex flex-row items-center justify-start">
+      <div className="flex flex-row items-center justify-start" {...menuProps}>
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}
           color="default"
@@ -41,28 +43,37 @@ const ScriptsHeader = ({
           <Menu />
         </Button.Icon>
         <Typography
-          className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800"
+          className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800 dark:text-neutral-50"
           {...titleProps}
         >
-          {t(`EXTENSION.SCRIPT.PAGE_TITLE`)}
+          {t(`EXTENSION.SCRIPTS`)}
         </Typography>
       </div>
-      <div className="flex grow justify-end gap-4">
-        <div className={cn('h-12 max-w-xl grow')}>
+      <div
+        {...props}
+        className={cn(
+          'flex w-full flex-col gap-2 px-2 md:max-w-[60%] md:grow md:flex-row md:justify-between md:gap-4 xl:max-w-[50%]',
+          props.className,
+        )}
+      >
+        <div className="h-12 grow">
           <SearchInput
-            className="w-full"
-            onChange={(e) => onSearchChange(e.target.value)}
+            onChange={(
+              e:
+                | React.ChangeEvent<HTMLInputElement>
+                | React.ChangeEvent<HTMLTextAreaElement>,
+            ) => onSearchChange(e.target.value)}
             onClear={() => onSearchChange('')}
             placeholder={t('EXTENSION.SCRIPT.SEARCH')}
           />
         </div>
         <div
-          className={cn('h-fit w-fit flex-none ', {
+          className={cn('h-fit w-full md:w-fit md:flex-none ', {
             hidden: !allowedRoles.edit.includes(myRole as ESPaceRoles),
           })}
         >
           <Button
-            className="min-w-fit"
+            className=" w-full min-w-fit max-md:h-12 "
             shape={'square'}
             size="md"
             startIcon={<Plus />}

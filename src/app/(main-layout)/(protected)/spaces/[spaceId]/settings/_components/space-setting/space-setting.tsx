@@ -33,6 +33,8 @@ import { useAuthStore } from '@/stores/auth.store';
 import { ESPaceRoles, SPACE_SETTING_TAB_ROLES } from './setting-items';
 import { getUserSpaceRole } from './role.util';
 import { useTranslation } from 'react-i18next';
+import SettingsHeader from '../header/settings-header';
+import MobileDefender from '@/components/non-responsive/mobile-defender';
 
 export enum ESettingTabs {
   'MEMBERS' = 'members',
@@ -85,6 +87,8 @@ const SpaceSetting = ({
   const searchParams = useSearchParams();
   const params = useParams();
   const { t } = useTranslation('common');
+  const [selectedTab, setSelectedTab] =
+    React.useState<ESettingTabs>(defaultTab);
   const currentUser = useAuthStore((state) => state.user);
   const currentUserRole = getUserSpaceRole(currentUser, space);
   const modalType: ExtensionModalType = searchParams?.get(
@@ -117,11 +121,13 @@ const SpaceSetting = ({
     <>
       <section
         className={
-          modalType ? 'hidden' : 'h-fit w-full bg-white px-3 py-5 md:px-10'
+          modalType
+            ? 'hidden'
+            : 'h-fit w-full bg-white px-3 py-5 dark:bg-background md:px-10'
         }
       >
         <Form {...formEditSpace}>
-          <div className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 p-3">
+          <div className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 p-3 dark:bg-neutral-900">
             <div
               className={cn(
                 'flex w-full flex-row items-center gap-3',
@@ -131,7 +137,7 @@ const SpaceSetting = ({
               <EditSpaceImage uploadAble={isSpaceOwner} />
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row items-center gap-2">
-                  <Typography className="text-[18px]  font-semibold  leading-5 text-neutral-800">
+                  <Typography className="text-[18px]  font-semibold  leading-5 text-neutral-800 dark:text-neutral-50">
                     {space?.name}
                   </Typography>
                   {isSpaceOwner && <EditSpaceModal space={space} />}
@@ -147,25 +153,50 @@ const SpaceSetting = ({
         </Form>
       </section>
       <section
-        className={modalType ? 'hidden' : 'w-full items-center bg-white'}
+        className={
+          modalType
+            ? 'hidden'
+            : 'w-full items-center bg-white dark:bg-background'
+        }
       >
         <Tabs defaultValue={defaultTab} className="m-0 w-full p-0">
-          <div className="w-full overflow-x-auto bg-white transition-all duration-300">
-            <TabsList className="flex w-full  flex-row justify-start sm:px-10">
+          <div className="w-full max-w-full bg-white px-3 transition-all duration-300  dark:bg-background md:px-10">
+            <TabsList className="flex w-full max-w-full  flex-row justify-between md:justify-start ">
               {SPACE_SETTING_TAB_ROLES.map((item) => {
+                const isActive = item.name === selectedTab;
                 return (
                   <TabsTrigger
                     key={item.label}
                     value={item.name}
-                    className={cn('w-fit lg:px-10', {
-                      hidden:
-                        !currentUserRole ||
-                        !item.roles.view.find(
-                          (role) => role === currentUserRole,
-                        ),
-                    })}
+                    onClick={() =>
+                      setSelectedTab(String(item?.name) as ESettingTabs)
+                    }
+                    className={cn(
+                      'w-fit font-semibold text-neutral-800 dark:text-neutral-200 max-md:flex-1 lg:px-10',
+                      'flex flex-row items-center gap-2 transition-all duration-300 [&_svg]:size-4',
+                      {
+                        hidden:
+                          !currentUserRole ||
+                          !item.roles.view.find(
+                            (role) => role === currentUserRole,
+                          ),
+                      },
+                    )}
                   >
-                    {t(item.label)}
+                    <span
+                      className={cn({
+                        'max-md:invisible max-md:w-0': isActive,
+                      })}
+                    >
+                      {item.icon}
+                    </span>
+                    <span
+                      className={cn({
+                        'max-md:invisible max-md:w-0': !isActive,
+                      })}
+                    >
+                      {t(item.label)}
+                    </span>
                   </TabsTrigger>
                 );
               })}
@@ -181,7 +212,7 @@ const SpaceSetting = ({
                 )?.roles.view.find((role) => role === currentUserRole),
             })}
           >
-            <MembersList  />
+            <MembersList />
           </TabsContent>
           <TabsContent
             value={ESettingTabs.TAGS}
@@ -202,7 +233,7 @@ const SpaceSetting = ({
           <TabsContent
             value={ESettingTabs.EXTENSION}
             className={cn(
-              'flex w-full flex-col items-center justify-center p-10',
+              'flex w-full flex-col items-center justify-center p-3 md:p-10',
               {
                 hidden:
                   !currentUserRole ||
@@ -212,55 +243,58 @@ const SpaceSetting = ({
               },
             )}
           >
-            <div
-              className={
-                isExtensionEmpty
-                  ? 'flex min-h-[calc(100vh-350px)] w-full  flex-col items-center justify-center gap-2'
-                  : 'hidden'
-              }
-            >
-              <Image
-                src="/empty_extension.svg"
-                width={200}
-                height={156}
-                alt="empty-extensions"
-                className="mx-auto"
-              />
-              <Typography className="text-lg font-semibold leading-5 text-neutral-800">
-                Your extension is almost here!
-              </Typography>
-              <Typography className="text-neutral-600">
-                Create a conversation extension with the help of ready-made
-                theme or define a unique one on your own
-              </Typography>
-              <div
-                className={cn({
-                  hidden: !isSpaceOwner,
-                })}
-              >
-                <Link
-                  href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`}
-                  className={isExtensionEmpty ? '' : 'hidden'}
+            <MobileDefender className="h-[60dvh]">
+              {isExtensionEmpty ? (
+                <div
+                  className={
+                    'flex min-h-[calc(100vh-350px)] w-full  flex-col items-center justify-center gap-2'
+                  }
                 >
-                  <Button
-                    variant={'default'}
-                    color={'primary'}
-                    shape={'square'}
-                    className={'mx-auto mt-4 w-fit'}
+                  <Image
+                    src="/empty_extension.svg"
+                    width={200}
+                    height={156}
+                    alt="empty-extensions"
+                    className="mx-auto"
+                  />
+                  <Typography className="text-lg font-semibold leading-5 text-neutral-800 dark:text-neutral-50">
+                    Your extension is almost here!
+                  </Typography>
+                  <Typography className="text-neutral-600 dark:text-neutral-200">
+                    Create a conversation extension with the help of ready-made
+                    theme or define a unique one on your own
+                  </Typography>
+                  <div
+                    className={cn({
+                      hidden: !isSpaceOwner,
+                    })}
                   >
-                    <Plus className="h-4 w-4" />
-                    <Typography className="ml-2 text-white">
-                      Create Extension
-                    </Typography>
-                  </Button>
-                </Link>
-              </div>
-            </div>
-            <BusinessExtension
-              data={space.extension}
-              name="Middo Conversation Extension"
-              myRole={currentUserRole}
-            />
+                    <Link
+                      href={`${ROUTE_NAMES.SPACES}/${params?.spaceId}/settings?modal=create-extension`}
+                      className={isExtensionEmpty ? '' : 'hidden'}
+                    >
+                      <Button
+                        variant={'default'}
+                        color={'primary'}
+                        shape={'square'}
+                        className={'mx-auto mt-4 w-fit'}
+                      >
+                        <Plus className="h-4 w-4" />
+                        <Typography className="ml-2 text-white">
+                          Create Extension
+                        </Typography>
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <BusinessExtension
+                  data={space.extension}
+                  name="Middo Conversation Extension"
+                  myRole={currentUserRole}
+                />
+              )}
+            </MobileDefender>
           </TabsContent>
         </Tabs>
       </section>

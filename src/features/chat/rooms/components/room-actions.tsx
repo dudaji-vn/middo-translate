@@ -48,8 +48,7 @@ export type Action =
   | 'accept'
   | 'reject'
   | 'copy_username'
-  | 'delete-contact'
-;
+  | 'delete-contact';
 
 export type ActionItem = {
   action: Action;
@@ -170,6 +169,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
           <RoomModalChangeStatus onClosed={reset} id={id} actionName={action} />
         );
       case 'block':
+        if (room.isHelpDesk) return null;
         const otherUser = room.participants.find(
           (participant) => participant._id !== currentUserId,
         );
@@ -182,7 +182,7 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
       case 'tag':
         return null;
       case 'delete-contact':
-        return <RoomModalDeleteContact onClosed={reset} id={id} />;;
+        return <RoomModalDeleteContact onClosed={reset} id={id} />;
       default:
         return null;
     }
@@ -275,13 +275,13 @@ export const RoomActions = ({ children }: { children: React.ReactNode }) => {
         icon: <TrashIcon />,
         color: 'error',
       },
-      
+
       {
         action: 'delete-contact',
         label: 'CONVERSATION.DELETE_CONTACT',
         icon: <Trash2Icon />,
         color: 'error',
-      }
+      },
     ] as ActionItem[];
   }, []);
 

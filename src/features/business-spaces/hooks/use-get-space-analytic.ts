@@ -74,7 +74,7 @@ export const useGetSpaceAnalytic = ({
         return response.data as TData;
       } catch (error) {
         console.error(
-          `Error fetching space ${spaceId}: ${(error as Error).message}`,
+          `Error fetching space ${spaceId} from useGetSpaceAnalytic: ${error as Error}`,
         );
         return {
           analysis: {},

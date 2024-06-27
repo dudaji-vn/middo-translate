@@ -19,7 +19,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
     useSidebarStore();
 
   return (
-    <section className="relative w-full space-y-4 px-4 md:px-10">
+    <section className="relative w-full space-y-4 px-3 md:px-10">
       <div className="flex flex-row items-center justify-start">
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}
@@ -30,7 +30,7 @@ const ReportHeader = ({ ...props }: ReportHeaderProps) => {
         >
           <Menu />
         </Button.Icon>
-        <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800">
+        <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800 dark:text-neutral-50">
           {t('EXTENSION.REPORT')}
         </Typography>
       </div>

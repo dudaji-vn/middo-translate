@@ -179,16 +179,16 @@ const ReportCards = ({
   if (loading) return <CardsLoading />;
   if (!data) return null;
   return (
-    <section className="relative w-full space-y-4  bg-white px-4 py-5 md:px-10">
+    <section className="relative w-full space-y-4  bg-white dark:bg-background px-4 py-5 md:px-10">
       <p
         className={cn(
-          'flex flex-row items-center gap-2 font-normal text-neutral-800',
+          'flex flex-row items-center gap-2 font-normal text-neutral-800 dark:text-neutral-50',
           {
             hidden: !domain,
           },
         )}
       >
-        <Globe className="text-primary-500-main" size={15} />
+        <Globe className="text-primary-500-main dark:text-primary" size={15} />
         {domain}
       </p>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2  lg:grid-cols-3 ">
@@ -200,10 +200,10 @@ const ReportCards = ({
               <Card
                 key={index}
                 className={cn(
-                  'cursor-pointer gap-2 rounded-[12px] border border-solid p-5 transition-all duration-300 ease-in-out hover:border-primary-300',
+                  'cursor-pointer gap-2 rounded-[12px] border border-solid p-5 transition-all duration-300 ease-in-out dark:border-neutral-800 hover:border-primary-300 dark:hover:border-primary',
                 )}
               >
-                <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600">
+                <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600 dark:text-neutral-200">
                   <CardTitle className="text-base font-normal leading-[18px]">
                     {displayTitle}
                   </CardTitle>
@@ -213,7 +213,7 @@ const ReportCards = ({
                       className: 'text-white',
                     }}
                     triggerItem={
-                      <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
+                      <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800">
                         <Info size={20} className="" />
                       </div>
                     }
@@ -240,9 +240,9 @@ const ReportCards = ({
             },
           )}
         >
-          <User className="font-normal text-neutral-800" size={15} />
+          <User className="font-normal text-neutral-800 dark:text-neutral-50" size={15} />
           {displayMember}
-          <span className="font-light capitalize text-neutral-500">
+          <span className="font-light capitalize text-neutral-500 dark:text-neutral-50">
             ({t('COMMON.MEMBER')})
           </span>
         </p>
@@ -256,10 +256,10 @@ const ReportCards = ({
               <Card
                 key={index}
                 className={cn(
-                  'cursor-pointer gap-2 rounded-[12px] border border-solid p-5 transition-all duration-300 ease-in-out hover:border-primary-300',
+                  'cursor-pointer gap-2 rounded-[12px] border border-solid p-5 transition-all duration-300 ease-in-out dark:border-neutral-800 hover:border-primary-300 dark:hover:border-primary',
                 )}
               >
-                <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600">
+                <CardHeader className="flex flex-row items-center justify-between p-0 text-neutral-600 dark:text-neutral-200">
                   <CardTitle className="text-base font-normal leading-[18px]">
                     {displayTitle}
                   </CardTitle>
@@ -269,7 +269,7 @@ const ReportCards = ({
                       className: 'text-white',
                     }}
                     triggerItem={
-                      <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50">
+                      <div className="h-fit w-fit rounded-full p-2 text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800">
                         <Info size={20} className="" />
                       </div>
                     }

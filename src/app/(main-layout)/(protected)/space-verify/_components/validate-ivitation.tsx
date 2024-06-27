@@ -4,25 +4,27 @@ import { Button } from '@/components/actions';
 import { validateInvitation } from '@/services/business-space.service';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import customToast from '@/utils/custom-toast';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 type ValidateInvitationProps = {
   token: string;
 };
 const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
-  const router = useRouter();
+  const { navigateTo } = usePlatformNavigation();
   const onValidateInvitation = async (status: 'accept' | 'decline') => {
     try {
       const res = await validateInvitation({
         token,
         status,
       });
-      router.push('/spaces');
+      navigateTo(ROUTE_NAMES.SPACES);
     } catch (error: unknown) {
       console.log(error);
       // @ts-ignore
       const msg = error?.response?.data?.message || error?.message;
-      toast.error(msg || 'Failed to validate invitation');
+      customToast.error(msg || 'Failed to validate invitation');
       console.error(error);
     }
   };
@@ -34,7 +36,7 @@ const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
         color={'primary'}
         shape={'square'}
         className="min-w-[280px]"
-        size={'sm'}
+        size={'lg'}
         onClick={() => onValidateInvitation('accept')}
       >
         Accept
@@ -43,7 +45,7 @@ const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
         variant={'ghost'}
         color={'default'}
         shape={'square'}
-        // size={'sm'}
+        size={'lg'}
         className="min-w-[280px]"
         onClick={() => onValidateInvitation('decline')}
       >

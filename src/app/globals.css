@@ -73,9 +73,11 @@
 
   .dark {
     --background: 0 0% 5%;
+    --background-darker: 0, 0%, 2%;
+    --background-lightest: 0, 0%, 10%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 10.2%;
 
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
@@ -87,8 +89,7 @@
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
+    --muted-foreground: 0 0% 20%;
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
@@ -98,6 +99,8 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
+    --text-color: 0, 0%, 95%;
 
     --shadow-3: 2px 10px 24px 2px #000000;
   }
@@ -330,6 +333,9 @@
   video.disable::-webkit-media-controls-overlay-enclosure {
     display: none !important;
   }
+  .tiptap p.is-editor-empty:first-child::before {
+    @apply dark:text-neutral-600;
+  }
 }
 .video-intro::-webkit-media-controls-overlay-enclosure {
   display: none !important;
@@ -487,6 +493,14 @@ body {
   color: #000;
   content: '\25CF';
 }
+
+.dark
+  .prose
+  :where(ul > li):not(
+    :where([class~='not-prose'], [class~='not-prose'] *)
+  )::marker {
+  color: #f2f2f2;
+}
 .me
   .prose
   :where(ul > li):not(
@@ -524,7 +538,6 @@ body {
 .container-height {
   height: calc(100dvh - 52px);
 }
-
 .extension-container-height {
   height: calc(100dvh - 52px);
 }
@@ -569,4 +582,9 @@ input::-ms-clear {
 }
 .highlight {
   @apply font-semibold text-primary;
+}
+
+/* React flow hidden label panel */
+.react-flow__panel.react-flow__attribution.bottom.right {
+  display: none;
 }

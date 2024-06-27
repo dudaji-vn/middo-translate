@@ -91,13 +91,16 @@ const PluginChatPreview = ({
   return (
     <div
       {...props}
-      className={cn('flex flex-col divide-y divide-neutral-50', className)}
+      className={cn(
+        'flex flex-col divide-y divide-neutral-50 dark:divide-neutral-900',
+        className,
+      )}
     >
       <div className="flex  flex-row items-center justify-start gap-3 px-3 py-2">
-        <Typography className="text-sm font-medium leading-[18px] text-neutral-800">
+        <Typography className="text-sm font-medium leading-[18px] text-neutral-800 dark:text-neutral-50">
           {t('COMMON.PREVIEW')}
         </Typography>
-        <div className="flex flex-row items-center gap-1 rounded-[8px] bg-neutral-50 p-1">
+        <div className="flex flex-row items-center gap-1 rounded-[8px] bg-neutral-50 p-1 dark:bg-neutral-900">
           {devices.map((device, index) => {
             const isSelect = selectedDevice === device.name;
             return (
@@ -110,8 +113,8 @@ const PluginChatPreview = ({
                 className={cn(
                   'rounded-[4px]',
                   isSelect
-                    ? 'bg-white hover:!bg-white'
-                    : 'bg-neutral-50 hover:!bg-gray-50',
+                    ? 'bg-white hover:!bg-white dark:bg-neutral-800 dark:hover:!bg-neutral-800'
+                    : 'bg-neutral-50 hover:!bg-gray-50 dark:bg-neutral-900 dark:hover:!bg-neutral-800',
                 )}
                 onClick={() => setSelectedDevice(device.name)}
               >

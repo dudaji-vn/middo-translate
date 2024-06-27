@@ -26,7 +26,7 @@ export const ModalProvider = (props: ModalProviderProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription className="justify-start text-start">
+          <AlertDialogDescription className="justify-start text-start dark:text-neutral-50">
             {description}
           </AlertDialogDescription>
         </AlertDialogHeader>

@@ -6,14 +6,10 @@ import { DataTable, DataTableProps } from '@/components/ui/data-table';
 import { DEFAULT_CLIENTS_PAGINATION } from '@/types/business-statistic.type';
 import { useTranslation } from 'react-i18next';
 
-import { useGetConversationScripts } from '@/features/conversation-scripts/hooks/use-get-conversation-scripts';
-import { SearchInput } from '@/components/data-entry';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
-import { Button } from '@/components/actions';
-import { Plus } from 'lucide-react';
 import { TChatScript } from '@/types/scripts.type';
 import {
   ERoleActions,
@@ -41,6 +37,7 @@ const ScriptsList = ({
   search,
   onSearchChange,
   isLoading,
+  tableWrapperProps,
 }: {
   titleProps?: React.HTMLProps<HTMLSpanElement>;
   headerProps?: Partial<ScriptsHeaderProps>;
@@ -50,6 +47,7 @@ const ScriptsList = ({
   onSearchChange: (value: string) => void;
   isLoading: boolean;
   enableDeletion?: boolean;
+  tableWrapperProps?: React.HTMLProps<HTMLDivElement>;
 }) => {
   const [modalState, setModalState] = useState<{
     modalType: 'create' | 'edit' | 'delete' | 'view';
@@ -103,7 +101,13 @@ const ScriptsList = ({
         myRole={myRole}
         {...headerProps}
       />
-      <div className="w-full overflow-x-auto rounded-md px-10 py-3">
+      <div
+        {...tableWrapperProps}
+        className={cn(
+          'max-h-[calc(100dvh-300px)] w-full  overflow-x-auto overflow-y-scroll  rounded-md px-2 py-3 md:max-h-[calc(100dvh-200px)] ',
+          tableWrapperProps?.className,
+        )}
+      >
         <DataTable
           dividerRow
           tableInitialParams={{
@@ -132,7 +136,8 @@ const ScriptsList = ({
           })}
           data={scripts}
           tableHeadProps={{
-            className: 'bg-white  border-none',
+            className:
+              'bg-white  border-none dark:bg-background dark:text-neutral-50',
           }}
           cellProps={{
             className:
@@ -140,7 +145,7 @@ const ScriptsList = ({
           }}
           rowProps={{
             className:
-              'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50',
+              'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50  dark:bg-neutral-900  dark:hover:bg-neutral-800 dark:text-neutral-50',
           }}
           loading={isLoading}
           skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}

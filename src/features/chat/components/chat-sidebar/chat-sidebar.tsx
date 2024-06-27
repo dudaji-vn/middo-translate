@@ -8,6 +8,9 @@ import { TBusinessExtensionData } from '../../help-desk/api/business.service';
 import ChatSidebarHeader from './chat-sidebar-header';
 import { ChatSidebarTabs } from './chat-sidebar-tabs';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { TStation } from '@/app/(main-layout)/(protected)/stations/_components/type';
+import { useStationNavigationData } from '@/hooks';
+import StationNavigator from '@/app/(main-layout)/(protected)/stations/[stationId]/_components/station-navigator/station-navigator';
 
 interface ChatSidebarProps {
   children: ReactNode;
@@ -22,22 +25,24 @@ export const ChatSidebar = ({
 }: ChatSidebarProps & PropsWithChildren) => {
   const { setBusinessExtension } = useBusinessExtensionStore();
   const { isOnBusinessChat, isBusiness } = useBusinessNavigationData();
+  const { isOnStation } = useStationNavigationData();
 
   useEffect(() => {
     if (spaceData) {
       setBusinessExtension(spaceData.extension);
     }
-  }, [spaceData]);
+  }, [setBusinessExtension, spaceData]);
 
   return (
     <>
       <div
         className={cn(
-          'container-height relative flex w-full flex-col overflow-hidden border-r',
-          { 'extension-container-height': isBusiness },
+          'container-height relative flex w-full flex-col overflow-hidden border-r dark:border-neutral-800',
+          { 'container-height': isBusiness },
           { 'max-md:hidden ': isOnBusinessChat },
         )}
       >
+        {isOnStation && <StationNavigator className="w-full" />}
         <ChatSidebarHeader />
         <ChatSidebarTabs>{children}</ChatSidebarTabs>
       </div>

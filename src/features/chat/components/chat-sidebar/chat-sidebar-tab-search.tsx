@@ -16,6 +16,7 @@ import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'next/navigation';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
@@ -23,11 +24,11 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     const searchValue = useSearchStore((state) => state.searchValue);
     const { isBusiness, spaceId } = useBusinessNavigationData();
     const params = useParams();
-    const helpdeskParams = spaceId
+    const businessSpaceParams = spaceId
       ? { type: 'help-desk', spaceId: params?.spaceId as string }
       : undefined;
 
-    const { data: recData } = useGetRoomsRecChat(helpdeskParams);
+    const { data: recData } = useGetRoomsRecChat(businessSpaceParams);
     const { businessExtension } = useBusinessExtensionStore();
     const { t } = useTranslation('common');
     const { data } = useQuerySearch<{
@@ -37,16 +38,16 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
       searchApi: searchApi.inboxes,
       queryKey: 'chat-search',
       searchTerm: searchValue || '',
-      helpdeskParams,
+      businessSpaceParams,
     });
 
     return (
-      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
+      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 dark:bg-background md:top-[106px]">
         <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           ref={ref}
-          className="w-full bg-neutral-white"
+          className="w-full bg-neutral-white dark:bg-background"
         >
           {data?.users && data.users.length > 0 && (
             <Section label={t('CONVERSATION.PEOPLE')}>

@@ -62,19 +62,21 @@ export const MessageEmojiPicker = forwardRef<
     ref,
   ) => {
     const { mutate } = useReactMessage();
+    
     const handleEmojiClick = (emoji: string) => {
       mutate({ id: messageId, emoji });
       onEmojiClick && onEmojiClick(emoji);
     };
     const isMobile = useAppStore((state) => state.isMobile);
     const language = useAppStore(state => state.language);
+    const theme = useAppStore((state) => state.theme);
     
     return (
       <div
         onClick={(e) => e.stopPropagation()}
         ref={ref}
         {...props}
-        className="flex w-full items-center justify-between gap-1 rounded-full border-neutral-50 bg-white p-1 px-1 pl-3 shadow-1 md:w-fit"
+        className="flex w-full items-center justify-between gap-1 rounded-full border-neutral-50 bg-white p-1 px-1 pl-3 shadow-1 md:w-fit dark:bg-neutral-900"
       >
         <AnimatePresence>
           {defaultEmoji.map((emoji, index) => (
@@ -93,8 +95,8 @@ export const MessageEmojiPicker = forwardRef<
               key={emoji.name}
             >
               <Tooltip>
-                <TooltipContent className="rounded-full">
-                  <span className="mx-[2px] text-sm">{emoji.name}</span>
+                <TooltipContent className="rounded-full dark:bg-neutral-900 dark:text-neutral-50">
+                  <span className="mx-[2px] text-sm ">{emoji.name}</span>
                 </TooltipContent>
                 <TooltipTrigger asChild>
                   <div
@@ -128,7 +130,7 @@ export const MessageEmojiPicker = forwardRef<
             >
               <Picker
                 locale={EMOJI_LANG_SUPPORT.includes(language) ?  language : 'en'}
-                theme="light"
+                theme={theme || 'light'}
                 onEmojiSelect={(emoji: any) => {
                   handleEmojiClick(emoji.native);
                 }}

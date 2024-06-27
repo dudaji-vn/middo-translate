@@ -125,7 +125,7 @@ const CreateOrEditChatScriptModal = ({
           <AlertDialogContent className="max-w-screen z-[100] flex h-[calc(100vh-2rem)] !w-[calc(100vw-2rem)] flex-col justify-stretch gap-1">
             <AlertDialogHeader className="flex h-fit w-full flex-row items-start justify-between gap-3 text-base">
               {viewOnly ? (
-                <Typography className="text-lg font-semibold text-neutral-900">
+                <Typography className="text-lg font-semibold text-neutral-900 dark:text-neutral-50">
                   {currentScript?.name}
                 </Typography>
               ) : (

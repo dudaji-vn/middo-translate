@@ -11,9 +11,7 @@ import { axios } from '@/lib/axios';
 import queryString from 'query-string';
 import { uploadImage } from '@/utils/upload-img';
 import { InboxType } from '../components/inbox/inbox';
-import { t } from 'i18next';
 import { convertRoomsFilterOptionsToString } from '@/utils/get-rooms-filter-options';
-import { SpaceInboxFilterState } from '@/stores/space-inbox-filter.store';
 
 const basePath = '/rooms';
 
@@ -27,14 +25,18 @@ export const roomApi = {
       type: InboxType;
       status?: string | null;
       spaceId?: string;
+      stationId?: string;
       filterOptions?: {
         domains?: string[];
         countries?: string[];
         tags?: string[];
       };
+      isGroup?: boolean;
+      isUnread?: boolean;
     },
   ) {
     const { filterOptions, ...restParams } = params;
+    console.log(restParams);
     const queryParams = {
       ...restParams,
       ...convertRoomsFilterOptionsToString(filterOptions),
@@ -48,16 +50,19 @@ export const roomApi = {
     return res.data;
   },
   async createRoom(
-    data: Pick<Room, 'name' | 'avatar'> & {
+    data: Pick<Room, 'name' | 'avatar' | 'stationId'> & {
       participants: string[];
       avatarFile?: File;
+      stationId?: string;
     },
   ) {
     if (data.avatarFile) {
       const res = await uploadImage(data.avatarFile);
       data.avatar = res.secure_url;
     }
-    const res: Response<Room> = await axios.post(basePath, data);
+    const { stationId, ...payload } = data;
+    const url = stationId ? `${basePath}/stations/${stationId}` : basePath;
+    const res: Response<Room> = await axios.post(url, payload);
     return res.data;
   },
 
@@ -207,9 +212,21 @@ export const roomApi = {
     return res.data;
   },
 
-  async getPinned(spaceId?: string) {
+  async getPinned({
+    spaceId,
+    stationId,
+  }: {
+    spaceId?: string;
+    stationId?: string;
+  }) {
+    let queryParams = '';
+    if (spaceId) {
+      queryParams = `?spaceId=${spaceId}`;
+    } else if (stationId) {
+      queryParams = `?stationId=${stationId}`;
+    }
     const res: Response<Room[]> = await axios.get(
-      `${basePath}/pin` + (spaceId ? `?spaceId=${spaceId}` : ''),
+      `${basePath}/pin${queryParams}`,
     );
     return res.data;
   },

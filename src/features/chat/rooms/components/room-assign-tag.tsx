@@ -21,6 +21,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import { useAuthStore } from '@/stores/auth.store';
 import { getUserSpaceRole } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/space-setting/role.util';
 import { ESPaceRoles } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/space-setting/setting-items';
+import customToast from '@/utils/custom-toast';
 
 const RoomAssignTag = ({
   room,
@@ -47,7 +48,7 @@ const RoomAssignTag = ({
     const tagId = id === room.tag?._id ? null : id;
     mutateAsync({ roomId: room._id, tagId: tagId })
       .catch(() => {
-        toast.error('Failed to update tag');
+        customToast.error('Failed to update tag');
       })
       .finally(() => {
         onClosed && onClosed();
@@ -72,7 +73,7 @@ const RoomAssignTag = ({
             onMouseEnter={() => {
               setOpen(true);
             }}
-            className="relative flex cursor-pointer select-none items-center gap-2 rounded-md px-3 py-1.5 text-sm  outline-none transition-colors hover:bg-primary-100 focus:bg-accent focus:text-accent-foreground max-md:gap-4 max-md:px-5 max-md:text-[16px]"
+            className="relative flex cursor-pointer select-none items-center gap-2 rounded-md px-3 py-1.5 text-sm  outline-none transition-colors hover:bg-primary-100 dark:hover:bg-neutral-800 focus:bg-accent focus:text-accent-foreground max-md:gap-4 max-md:px-5 max-md:text-[16px]"
           >
             <Tag size={16} className="max-md:size-5" />
             <span>{t(`CONVERSATION.TAG`)}</span>
@@ -85,7 +86,7 @@ const RoomAssignTag = ({
           onMouseLeave={() => setOpen(false)}
           className=" flex h-auto flex-col border-none bg-transparent px-0  py-2 pl-8 shadow-none"
         >
-          <div className="divide-y divide-neutral-100  rounded-[16px] border bg-white py-2 shadow-md">
+          <div className="divide-y divide-neutral-100  rounded-[16px] border bg-white dark:bg-neutral-900 dark:divide-neutral-800 py-2 shadow-md">
             <div className="flex max-h-60 w-full flex-col overflow-y-auto">
               {tags.map(({ _id, color, name }) => {
                 const isCurrent = room.tag?._id === _id;
@@ -93,10 +94,10 @@ const RoomAssignTag = ({
                   <div
                     key={name}
                     className={cn(
-                      'relative flex w-full min-w-full cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
-                      { 'bg-primary-100': isCurrent || isLoading },
+                      'relative flex w-full min-w-full cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800',
+                      { 'bg-primary-100 dark:bg-neutral-800': isCurrent || isLoading },
                       {
-                        'cursor-default bg-neutral-100':
+                        'cursor-default bg-neutral-100 dark:bg-neutral-800':
                           isLoading && clicked === _id,
                       },
                     )}
@@ -107,7 +108,7 @@ const RoomAssignTag = ({
                         'relative size-4 rounded-full ',
                         isCurrent
                           ? 'bg-primary-500-main'
-                          : 'border border-primary-300 bg-neutral-100',
+                          : 'border border-primary-300 bg-neutral-100 dark:bg-neutral-800',
                         {
                           'border-none': isLoading && clicked === _id,
                         },
@@ -122,7 +123,7 @@ const RoomAssignTag = ({
                       <Check
                         size={16}
                         className={cn(
-                          'invisible absolute inset-0 stroke-neutral-50',
+                          'invisible absolute inset-0 stroke-neutral-50 dark:stroke-neutral-800',
                           {
                             visible: isCurrent && !isLoading && !clicked,
                           },
@@ -130,7 +131,7 @@ const RoomAssignTag = ({
                       />
                     </div>
                     <Circle size={12} fill={color} stroke={color} />
-                    <span className="text-base text-neutral-700">{name}</span>
+                    <span className="text-base text-neutral-700 dark:text-neutral-50">{name}</span>
                   </div>
                 );
               })}
@@ -142,7 +143,7 @@ const RoomAssignTag = ({
             >
               <div
                 className={cn(
-                  'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
+                  'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800',
                 )}
                 onClick={() => setOpenAddTag(true)}
               >
@@ -150,7 +151,7 @@ const RoomAssignTag = ({
               </div>
               <div
                 className={cn(
-                  'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100',
+                  'flex w-full min-w-fit  cursor-pointer flex-row items-center justify-stretch gap-3 px-4 py-2 hover:bg-neutral-100 dark:hover:bg-neutral-800',
                 )}
                 onClick={onRedirectToTagsManagement}
               >

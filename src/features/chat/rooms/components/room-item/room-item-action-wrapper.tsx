@@ -205,6 +205,7 @@ const MobileWrapper = ({
               startIcon={item.icon}
               color={item.color === 'error' ? 'error' : 'default'}
               onClick={item.onAction}
+              className='hover:bg-neutral-900'
             >
               {t(item.label)}
             </LongPressMenu.Item>
@@ -249,14 +250,14 @@ const DesktopWrapper = ({
               <MoreVertical />
             </Button.Icon>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
                 return renderItem({ item, room, setOpen: onOpenChange });
               }
               return (
                 <DropdownMenuItem
-                  className="flex items-center active:bg-primary-200"
+                  className="flex items-center active:bg-primary-200 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
                   key={item.action}
                   disabled={item.disabled}
                   onClick={item.onAction}

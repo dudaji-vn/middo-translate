@@ -26,6 +26,8 @@ import { useFormContext } from 'react-hook-form';
 import { Avatar } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { clear } from 'console';
+import customToast from '@/utils/custom-toast';
+import { useAppStore } from '@/stores/app.store';
 
 export default function UploadSpaceImage({
   nameField,
@@ -42,6 +44,7 @@ export default function UploadSpaceImage({
   uploadAble?: boolean;
   onUploadDone?: () => void;
 }) {
+  const theme = useAppStore((state) => state.theme);
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const inputCropImage = useRef<InputCropImageRef>(null);
@@ -57,7 +60,7 @@ export default function UploadSpaceImage({
     setIsLoading(true);
     const file = inputCropImage.current?.getCropData();
     if (!file) {
-      toast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
+      customToast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
       return;
     }
     try {
@@ -70,7 +73,7 @@ export default function UploadSpaceImage({
       }
       setOpen(false);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     }
     setIsLoading(false);
   };
@@ -105,7 +108,7 @@ export default function UploadSpaceImage({
                 <Button.Icon
                   color={'default'}
                   size={'xs'}
-                  className="border-[2px] border-primary-100"
+                  className="border-[2px] border-primary-100 dark:border-neutral-800"
                   onClick={() => setOpen(true)}
                   {...uploadBtnProps}
                 >
@@ -118,11 +121,11 @@ export default function UploadSpaceImage({
           <AlertDialogTrigger className="relative">
             <Avatar
               variant={'outline'}
-              src={'/empty-cam.svg'}
+              src={theme == 'dark' ? '/empty-cam-dark.svg' : '/empty-cam.svg'}
               alt="avatar"
               className={cn(
                 'z-0 h-24 w-24 cursor-pointer p-0',
-                errors[nameField] && 'border border-red-500',
+                errors[nameField] && 'border border-red-500 dark:bg-neutral-800',
               )}
             />
           </AlertDialogTrigger>

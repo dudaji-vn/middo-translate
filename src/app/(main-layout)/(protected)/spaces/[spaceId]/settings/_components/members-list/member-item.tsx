@@ -48,12 +48,14 @@ const MemberItem = ({
 
   return (
     <div
-      className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 py-1"
+      className="flex w-full flex-row items-center justify-between rounded-[12px] bg-primary-100 py-1 dark:bg-neutral-900"
       {...props}
     >
       <div className="flex w-full flex-row items-center justify-start">
-        <div className="flex h-auto w-[400px] flex-row items-center justify-start gap-3 break-words rounded-l-[12px] px-3 md:w-[500px] xl:w-[800px]">
-          <Typography className="text-neutral-800">{email}</Typography>
+        <div className="w-[260px] flex h-auto flex-row items-center justify-start gap-3 break-words rounded-l-[12px] px-3 sm:w-[400px] md:w-[500px] xl:w-[800px]">
+          <Typography className="line-clamp-2 text-ellipsis break-words text-neutral-800 dark:text-neutral-50 max-w-full ">
+            {email}
+          </Typography>
           {isOwnerRow && <Badge className="bg-primary text-white">Owner</Badge>}
           {isMe && (
             <span className="font-light text-neutral-500">{`(${t('EXTENSION.MEMBER.YOU')})`}</span>

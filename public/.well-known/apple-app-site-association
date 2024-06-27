@@ -1,0 +1,23 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "Z52QH9UXD8.com.dudajivn.middo",
+        "paths": [
+          "/records/*"
+        ]
+      }
+    ]
+  },
+  "activitycontinuation": {
+    "apps": [
+      "Z52QH9UXD8.com.dudajivn.middo"
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "Z52QH9UXD8.com.dudajivn.middo"
+    ]
+  }
+}

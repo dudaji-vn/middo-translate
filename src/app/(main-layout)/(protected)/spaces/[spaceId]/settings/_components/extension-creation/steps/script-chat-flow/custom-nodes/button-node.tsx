@@ -17,6 +17,7 @@ import { FormLabel } from '@/components/ui/form';
 import { Switch } from '@/components/data-entry';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import toast from 'react-hot-toast';
+import customToast from '@/utils/custom-toast';
 
 function ButtonNode(node: CustomNodeProps) {
   const { data, isConnectable } = node;
@@ -123,7 +124,7 @@ function ButtonNode(node: CustomNodeProps) {
         setValue(FLOW_KEYS.EDGES, beforeChanges.edges);
       }
     } catch (error) {
-      toast.error("Can't revert changes, please try again");
+      customToast.error("Can't revert changes, please try again");
     }
     localStorage.removeItem('before-changes');
   };

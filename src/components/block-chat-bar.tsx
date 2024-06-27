@@ -20,7 +20,7 @@ const BlockChatBar = ({
     <div
       {...wrapperProps}
       className={cn(
-        'flex items-center justify-center bg-primary-100 py-1 text-neutral-800 max-md:flex-col max-md:text-center md:gap-2',
+        'flex items-center justify-center bg-primary-100 py-1 text-neutral-800 dark:text-neutral-50 dark:bg-background max-md:flex-col max-md:text-center md:gap-2',
         wrapperProps?.className,
       )}
     >

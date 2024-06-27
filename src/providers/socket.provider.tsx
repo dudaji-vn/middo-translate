@@ -6,7 +6,7 @@ import socket from '@/lib/socket-io';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useChatStore } from '@/features/chat/stores';
+import { Meeting, useChatStore } from '@/features/chat/stores';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
@@ -18,10 +18,8 @@ const SocketProvider = () => {
   const user = useAuthStore((state) => state.user);
   const { anonymousId } = useBusinessNavigationData();
   const setOnlineList = useChatStore((state) => state.setOnlineList);
-  const setMeetingList = useChatStore((state) => state.setMeetingList);
   const setSocketConnected = useAppStore((state) => state.setSocketConnected);
   const queryClient = useQueryClient();
-
   useEffect(() => {
     function onConnect() {
       const clientId = anonymousId || user?._id;
@@ -33,9 +31,6 @@ const SocketProvider = () => {
         socket.on(SOCKET_CONFIG.EVENTS.CLIENT.LIST, (data) => {
           setOnlineList(data);
         });
-        socket.on(SOCKET_CONFIG.EVENTS.MEETING.LIST, (meetingIds) => {
-          setMeetingList(meetingIds);
-        })
       }
     }
 
@@ -60,7 +55,6 @@ const SocketProvider = () => {
       socket.off('disconnect', onDisconnect);
       socket.disconnect();
       socket.off(SOCKET_CONFIG.EVENTS.CLIENT.LIST);
-      socket.off(SOCKET_CONFIG.EVENTS.MEETING.LIST);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anonymousId, user?._id]);

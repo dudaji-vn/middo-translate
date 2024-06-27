@@ -1,4 +1,4 @@
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import ParticipantInVideoCall, {
   StatusParticipant,
 } from '@/features/call/interfaces/participant';
@@ -22,12 +22,12 @@ export default function VideoItemText({
   const layout = useVideoCallStore((state) => state.layout);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const isTurnOnMic = useMyVideoCallStore((state) => state.isTurnOnMic);
-  // console.log('🟣VideoItemText', isTurnOnMic, participant)
-  
   const userName = useMemo(() => {
     return `${participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''} ${participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}`;
   }, [participant?.isMe, participant?.isShareScreen, participant?.user?.name, t]);
 
+  if(participant?.isShareScreen && !isFullScreen) return;
+  
   if (!participant) return null;
   
   const getMicStatus = () => {
@@ -39,12 +39,12 @@ export default function VideoItemText({
     if (participant.isMe) {
       return (
         <>
-          {isFullScreen && !(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) &&(
+          {isFullScreen && !(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) &&(
             <span className="mx-2 h-[15px] w-[1px] bg-neutral-400"></span>
           )}
           <span>
             {isTurnOnMic ? (
-              <Mic size={16} className="text-neutral-500"></Mic>
+              <Mic size={16} className="text-neutral-500 dark:text-neutral-50"></Mic>
             ) : (
               <MicOff size={16} className="text-error"></MicOff>
             )}
@@ -54,7 +54,7 @@ export default function VideoItemText({
     }
     return (
       <>
-        {isFullScreen && !(layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) && (
+        {isFullScreen && !(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) && (
           <span className="mx-2 h-[15px] w-[1px] bg-neutral-400"></span>
         )}
         <span>
@@ -73,7 +73,7 @@ export default function VideoItemText({
     !isFocusItem &&
     !isPinDoodle &&
     isFullScreen &&
-    layout == VIDEOCALL_LAYOUTS.FOCUS_VIEW
+    layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW
   ) {
     return (
       <div className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 flex items-center justify-center bg-black/90">

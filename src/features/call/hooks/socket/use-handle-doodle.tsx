@@ -4,7 +4,7 @@ import { useCallback, useEffect } from "react";
 import { useVideoCallStore } from "../../store/video-call.store";
 import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
-import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 import { IStartDoodlePayload } from "../../interfaces/socket/doodle.interface";
 import { useAuthStore } from "@/stores/auth.store";
@@ -14,6 +14,7 @@ import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
 import { User } from "@/features/users/types";
+import customToast from "@/utils/custom-toast";
 
 export default function useHandleDoodle() {
     const {t} = useTranslation('common');
@@ -31,26 +32,26 @@ export default function useHandleDoodle() {
     const {isElectron, ipcRenderer} = useElectron();
     
     const doodleStart = useCallback((payload: IStartDoodlePayload) => {
-        toast.success(t('MESSAGE.SUCCESS.START_DOODLE', {name: payload.name}), {icon: <Brush size={20} />});
+        customToast.default(t('MESSAGE.SUCCESS.START_DOODLE', {name: payload.name}), {icon: <Brush size={20} />});
         setDoodle(true);
         setDoodleImage(payload.image_url);
         const isHavePin = participants.some((p: ParticipantInVideoCall) => p.pin);
         if (!isHavePin) {
             setPinDoodle(true);
-            setLayout(VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+            setLayout(VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
         }
     // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[participants, setDoodle, setDoodleImage, setLayout, setPinDoodle])
 
     const doodleEnd = useCallback((name: string) => {
-        toast.success(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
+        customToast.default(t('MESSAGE.SUCCESS.STOP_DOODLE', {name: name}), {icon: <Ban size={20} />});
         setDoodle(false);
         setMyOldDoodle([])
         setDrawing(false);
         setDoodleImage('');
         setPinDoodle(false);
-        setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+        setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
     // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[setDoodle, setDoodleImage, setDrawing, setLayout, setMyOldDoodle, setPinDoodle])

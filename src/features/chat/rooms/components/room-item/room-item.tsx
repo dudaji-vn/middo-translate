@@ -27,6 +27,10 @@ import RoomItemVisitorAvatar from './room-item-visitor-avatar';
 import { CircleFlag } from 'react-circle-flags';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { InboxType } from '../inbox/inbox';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 export interface RoomItemProps {
   data: Room;
@@ -43,6 +47,7 @@ export interface RoomItemProps {
   businessId?: string;
   isOnline?: boolean;
   type?: InboxType;
+  isForceShow?: boolean;
 }
 
 const RoomItemContext = createContext<
@@ -69,27 +74,39 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     className,
     isOnline,
     type,
+    isForceShow,
   } = props;
   const currentUser = useAuthStore((s) => s.user)!;
   const currentUserId = currentUser?._id;
   const params = useParams();
-  const conversationType = params?.conversationType;
+  const { businessConversationType } = useBusinessNavigationData();
+  const { toPlatformLink } = usePlatformNavigation();
+  const { isOnStation, stationId } = useStationNavigationData();
   const { t } = useTranslation('common');
   const { room, visitorCountry } = useMemo(() => {
-    const businessRedirectPath = conversationType
-      ? `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/${_data._id}`
-      : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/`;
+    const businessRedirectPath = businessConversationType
+      ? `${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}/${_data._id}`
+      : `${ROUTE_NAMES.SPACES}/${params?.spaceId}/conversations/${_data._id}`;
+    const stationRedirectPath = `${ROUTE_NAMES.STATIONS}/${stationId}/conversations/${_data._id}`;
+    let overridePath;
+    if (isOnStation) {
+      overridePath = stationRedirectPath;
+    }
+    if (businessConversationType) {
+      overridePath = toPlatformLink(businessRedirectPath);
+    }
     const visitor = _data.participants.find(
       (user) => user.status === 'anonymous',
     );
     const countryCode = getCountryCode(visitor?.language || 'en');
+
     return {
-      room: generateRoomDisplay(
-        _data,
+      room: generateRoomDisplay({
+        room: _data,
         currentUserId,
-        !disabledRedirect,
-        Boolean(conversationType) ? businessRedirectPath : null,
-      ),
+        inCludeLink: !disabledRedirect,
+        overridePath,
+      }),
       visitorCountry: {
         ...SUPPORTED_LANGUAGES.find((sl) => sl.code === visitor?.language),
         code: countryCode,
@@ -99,14 +116,17 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     _data,
     currentUserId,
     disabledRedirect,
-    conversationType,
+    businessConversationType,
     params?.spaceId,
   ]);
+  const isHideRead = useSideChatStore(
+    (state) => state.filters.includes('unread') && !isForceShow,
+  );
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
-      `/${ROUTE_NAMES.SPACES}/${params?.spaceId}/${conversationType}/${currentRoomId}` ||
+      `/${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}/${currentRoomId}` ||
     _isActive;
 
   const { isMuted } = useIsMutedRoom(room._id);
@@ -115,11 +135,15 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     ? RoomItemActionWrapperDisabled
     : RoomItemActionWrapper;
 
+  if (isHideRead && isRead) return null;
+
   return (
     <div
       className={cn(
         'group flex',
-        isActive ? 'bg-primary-200' : 'bg-white hover:bg-primary-100',
+        isActive
+          ? 'bg-primary-200 dark:bg-primary-800'
+          : 'bg-white hover:bg-primary-100 dark:bg-neutral-950 dark:hover:bg-primary-900',
         className,
       )}
     >
@@ -139,7 +163,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           }}
         >
           <RoomItemWrapper>
-            {!conversationType ? (
+            {!businessConversationType ? (
               <ItemAvatar isOnline={isOnline} room={room} isMuted={isMuted} />
             ) : (
               <RoomItemVisitorAvatar isOnline={isOnline} isMuted={isMuted} />
@@ -169,9 +193,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
                   </span>
                 </div>
               )}
-              {
-                type == 'contact' ?  <RenderItemUserName /> : <RenderItemSub />
-              }
+              {type == 'contact' ? <RenderItemUserName /> : <RenderItemSub />}
               {room.isHelpDesk && (
                 <div className="flex flex-row items-center gap-1 text-sm font-light">
                   <CircleFlag
@@ -197,12 +219,12 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             </div>
 
             {rightElement}
-            {isMuted && (
+            {isMuted && type != 'contact' && (
               <div className="flex items-center">
                 <BellOffIcon className="size-4 fill-error stroke-error text-neutral-600" />
               </div>
             )}
-            {room?.isPinned && (
+            {room?.isPinned && type != 'contact' && (
               <div className="flex items-center">
                 <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
               </div>
@@ -252,13 +274,17 @@ const RenderItemSub = () => {
 
 const RenderItemUserName = () => {
   const { data, currentUser } = useRoomItem();
-  
-  const user = data.participants.filter(p => p._id !== currentUser._id)[0];
+
+  const user = data.participants.filter((p) => p._id !== currentUser._id)[0];
 
   if (!user) return null;
 
-  return <p className="text-neutral-800 text-sm font-light line-clamp-1">{'@' + user?.username}</p>;
-}
+  return (
+    <p className="line-clamp-1 text-sm font-light text-neutral-800 dark:text-neutral-50">
+      {'@' + user?.username}
+    </p>
+  );
+};
 
 const ItemSubDraft = ({ htmlContent }: { htmlContent: string }) => {
   const { t } = useTranslation('common');

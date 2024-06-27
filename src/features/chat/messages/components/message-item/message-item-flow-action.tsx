@@ -128,7 +128,7 @@ const MessageNode = ({
             ...createLocalMessage({
               sender: bot!,
               content: '',
-              language: ""
+              language: '',
             }),
             status: 'sent',
             roomId: room?._id,
@@ -143,7 +143,7 @@ const MessageNode = ({
             ...createLocalMessage({
               sender: bot!,
               content: '',
-              language: ''
+              language: '',
             }),
             status: 'sent',
             roomId: room?._id,
@@ -158,7 +158,7 @@ const MessageNode = ({
             ...createLocalMessage({
               sender: bot!,
               content: '',
-              language: ''
+              language: '',
             }),
             status: 'sent',
             roomId: room?._id,
@@ -177,9 +177,10 @@ const MessageNode = ({
       <a target="_blank" href={link}>
         <Button
           disabled={disabled}
-          className={'h-9 w-fit rounded-full'}
+          className={'h-auto  w-fit  rounded-[20px] py-1 text-right'}
           variant={'outline'}
           color={'primary'}
+          size="xs"
           shape={'square'}
           type={'button'}
         >
@@ -191,9 +192,10 @@ const MessageNode = ({
   return (
     <Button
       disabled={disabled || !!roomSendingState}
-      className={'h-9 w-fit rounded-full'}
+      className={'h-auto w-fit rounded-[20px] py-1  text-right'}
       variant={'outline'}
       color={'primary'}
+      size="xs"
       shape={'default'}
       type={'button'}
       onClick={onFlowActionClick}

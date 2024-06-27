@@ -29,6 +29,7 @@ export type Room = {
   status: RoomStatus;
   admin: User;
   isHelpDesk?: boolean;
+  stationId?: string;
   isSetName: boolean;
   isPinned?: boolean;
   tag?: {
@@ -39,4 +40,5 @@ export type Room = {
   expiredAt?: string;
   space?: TSpace;
   fromDomain?: string;
+  station: string;
 } & BaseEntity;

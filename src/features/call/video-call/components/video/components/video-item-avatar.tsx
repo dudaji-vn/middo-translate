@@ -1,5 +1,5 @@
 import { Avatar } from '@/components/data-display';
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import ParticipantInVideoCall, { StatusParticipant } from '@/features/call/interfaces/participant';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
@@ -17,12 +17,14 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const layout = useVideoCallStore(state => state.layout);
 
-  const isGalleryView = layout == VIDEOCALL_LAYOUTS.GALLERY_VIEW
+  const isGalleryView = layout == VIDEO_CALL_LAYOUTS.GALLERY_VIEW
   const statusClass = useMemo(()=> {
     switch (participant?.status) {
       case StatusParticipant.WAITING:
       case StatusParticipant.DECLINE:
         return 'opacity-10'
+      case StatusParticipant.WAITING_HELP_DESK:
+        return 'opacity-[0.05]'
       default:
     }
   }, [participant?.status])
@@ -45,11 +47,11 @@ export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamer
       >
         <Avatar
           className="h-full w-full bg-neutral-900 object-cover"
-          src={participant?.user?.avatar || '/person.svg'}
+          src={participant?.user?.avatar || '/avatar_default.svg'}
           alt={participant?.user?.name || 'Anonymous'}
         />
       </div>
-      {/* {layout === VIDEOCALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
+      {/* {layout === VIDEO_CALL_LAYOUTS.GALLERY_VIEW && isFullScreen && (
         <span className="relative mt-2 block w-full truncate px-1 text-center leading-snug">
           {participant?.isMe ? t('CONVERSATION.YOU') : participant?.user?.name || ''}
           {participant?.isShareScreen ? `  (${t('CONVERSATION.SCREEN')})` : ''}

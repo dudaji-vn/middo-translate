@@ -85,12 +85,12 @@ export default function BusinessScatter({
     };
   }, [data]);
   return (
-    <section className="relative  w-full space-y-4  bg-white  px-3  py-4 md:px-10">
-      <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800">
+    <section className="relative  w-full space-y-4  bg-white dark:bg-background px-3  py-4 md:px-10">
+      <Typography className="flex flex-row items-center justify-start gap-2 text-base font-semibold text-neutral-800 dark:text-neutral-50">
         {t('EXTENSION.CHART.TRAFFICTRACK')}
         <span
           className={cn(
-            'flex flex-row items-center gap-2 font-normal text-neutral-800',
+            'flex flex-row items-center gap-2 font-normal text-neutral-800 dark:text-neutral-50',
             {
               hidden: !displayFilterBy,
             },
@@ -121,12 +121,12 @@ export default function BusinessScatter({
                       <div
                         key={`tooltip-${x}-${y}`}
                         id="tooltip"
-                        className="border-primary-200/80 h-fit rounded-[12px] border border-neutral-50 bg-white/95 p-4 text-neutral-300  shadow-md"
+                        className="border-primary-200/80 h-fit rounded-[12px] border border-neutral-50 bg-white/95 dark:bg-neutral-900 dark:border-neutral-800 p-4 text-neutral-300  shadow-md dark:text-neutral-50"
                       >
                         <p className="font-medium">
                           {t('EXTENSION.CHART.OPENEDCONVERSATION')}
                         </p>
-                        <p className="font-semibold text-neutral-800">
+                        <p className="font-semibold text-neutral-800 dark:text-neutral-50">
                           {density}
                         </p>
                         <p>
@@ -147,10 +147,10 @@ export default function BusinessScatter({
                                     height={20}
                                     width={20}
                                   />
-                                  <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800">
+                                  <Typography className="line-clamp-1 max-w-32 font-normal text-neutral-800 dark:text-neutral-50">
                                     {getCountryNameByCode(language)}
                                   </Typography>
-                                  <Typography className="text-base font-normal text-neutral-800">
+                                  <Typography className="text-base font-normal text-neutral-800 dark:text-neutral-50">
                                     {count}
                                   </Typography>
                                 </div>
@@ -167,6 +167,7 @@ export default function BusinessScatter({
                 label: {
                   value: t('COMMON.WEEKDAY.TITLE'),
                   position: 'top',
+                  
                 },
                 domain: [0, 7],
                 tickFormatter: (value: number) => formatWeekday(value),

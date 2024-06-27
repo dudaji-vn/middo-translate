@@ -1,4 +1,4 @@
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { cn } from '@/utils/cn';
 import { LayoutGrid } from 'lucide-react';
@@ -16,9 +16,9 @@ const ChangeToGalleryView = ({ children, isExpandFull }: PropsWithChildren & Cha
   const expandVideoItem = () => {
     if(isExpandFull) return;
     setLayout(
-      layout === VIDEOCALL_LAYOUTS.FOCUS_VIEW
-        ? VIDEOCALL_LAYOUTS.GALLERY_VIEW
-        : VIDEOCALL_LAYOUTS.FOCUS_VIEW,
+      layout === VIDEO_CALL_LAYOUTS.FOCUS_VIEW
+        ? VIDEO_CALL_LAYOUTS.GALLERY_VIEW
+        : VIDEO_CALL_LAYOUTS.FOCUS_VIEW,
     );
   };
   if (isDrawing) return null;

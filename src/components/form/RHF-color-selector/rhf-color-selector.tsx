@@ -79,7 +79,7 @@ const RHFColorSelector = ({
                             onClickManualAddColor();
                         }
                     }}
-                    className={cn('size-8 bg-transparent border-[2px] border-white relative', itemProps?.className)}
+                    className={cn('size-8 bg-transparent border-[2px] border-white dark:border-neutral-800 relative', itemProps?.className)}
                 >
                     {manualColor && <CircleIcon className='absolute inset-0 size-full m-auto' stroke={selectedColor || '#FAFAFA'} fill={selectedColor || '#FAFAFA'} />}
                     <input

@@ -56,7 +56,7 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
     };
   }, [data]);
   return (
-    <div className="bg-white pt-0 p-3 h-full flex flex-col">
+    <div className="bg-white dark:bg-background pt-0 p-3 h-full flex flex-col">
       <Tabs defaultValue="all" value={currentTab} className="w-full h-fit">
         <TabsList className="overflow-x-auto">
           {tabs.map((tab) => (
@@ -64,12 +64,12 @@ export const RoomCloud = ({ room }: RoomCloudProps) => {
               key={tab.value}
               value={tab.value}
               onClick={() => setCurrentTab(tab.value)}
-              className="!rounded-none"
+              className="!rounded-none dark:text-neutral-50"
             >
               <div className="mr-2">{tab.icon}</div>
               {t(tab.label)}
               &nbsp;
-              <span className="text-sm text-neutral-600">
+              <span className="text-sm text-neutral-600 ">
                 ({counts[tab.value]})
               </span>
             </TabsTrigger>

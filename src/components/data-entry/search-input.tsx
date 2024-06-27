@@ -24,6 +24,8 @@ export interface SearchInputProps
   btnDisabled?: boolean;
   onClear?: () => void;
   onEnter?: () => void;
+  leftElement?: React.ReactNode;
+  showSearchButton?: boolean;
 }
 
 export interface SearchInputRef extends HTMLInputElement {
@@ -31,7 +33,18 @@ export interface SearchInputRef extends HTMLInputElement {
   focus: () => void;
 }
 export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
-  ({ btnDisabled, defaultValue, onClear, onEnter, ...props }, ref) => {
+  (
+    {
+      btnDisabled,
+      defaultValue,
+      onClear,
+      onEnter,
+      leftElement,
+      showSearchButton = true,
+      ...props
+    },
+    ref,
+  ) => {
     const [value, setValue] = useState(defaultValue || '');
     const { setCurrentSide } = useSideChatStore();
     const inputRef = useRef<HTMLInputElement>(null);
@@ -75,6 +88,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
     return (
       <div className="relative w-full overflow-hidden rounded-xl border bg-background transition-all dark:border-neutral-800">
         <div className="flex h-11 pl-1 transition-all ">
+          {leftElement}
           <input
             onKeyDown={(e) => {
               if (e.key === 'Enter' && onEnter) {
@@ -108,9 +122,13 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
               <XCircleIcon className="h-5 w-5 opacity-60" />
             </button>
           ) : (
-            <div className="flex h-11 w-11 items-center bg-inherit dark:text-neutral-50">
-              <SearchButton disabled />
-            </div>
+            <>
+              {showSearchButton && (
+                <div className="flex h-11 w-11 items-center bg-inherit dark:text-neutral-50">
+                  <SearchButton disabled />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

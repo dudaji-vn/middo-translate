@@ -4,7 +4,7 @@ import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { Form, FormLabel } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ChevronDown, Plus, Shield, UserRound } from 'lucide-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { isEmpty } from 'lodash';
 import { ESPaceRoles } from '../../../settings/_components/space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export enum ESPaceMemberStatus {
   Invited = 'invited',
@@ -88,7 +89,7 @@ const InviteMembers = ({
       })
       .refine(
         (value) => {
-          return value !== currentUser?.email;
+          return value?.toLowerCase() !== currentUser?.email?.toLowerCase();
         },
         {
           message: 'You are already a member of this space',
@@ -99,7 +100,9 @@ const InviteMembers = ({
           if (isEmpty(blackList)) {
             return true;
           }
-          return !blackList?.includes(value);
+          return !blackList?.find(
+            (email) => email?.toLowerCase() === value?.toLowerCase(),
+          );
         },
         {
           message: 'This user has already been invited!',
@@ -135,7 +138,7 @@ const InviteMembers = ({
         return;
       }
       if (invitedMembers.find((m) => m.email === newInvitedMember.email)) {
-        toast.error('This user has already been invited');
+        customToast.error('This user has already been invited');
         return;
       }
       setMembers([...invitedMembers, newInvitedMember as Member]);
@@ -166,13 +169,16 @@ const InviteMembers = ({
   const rolesOptions = items.filter((item) =>
     allowedRoles.includes(item.name as ESPaceRoles),
   );
+  const defaultRole = useMemo(() => {
+    return rolesOptions.find((role) => role.name === formAdding.watch('role'));
+  }, [formAdding, rolesOptions]);
 
   return (
     <Form {...formAdding}>
       <section
         {...props}
         className={cn(
-          'flex h-[calc(100vh-200px)] min-h-80  max-w-6xl flex-col items-center justify-center gap-8',
+          'flex h-[calc(100vh-200px)] min-h-80   w-full max-w-6xl  flex-col items-center justify-center gap-8 max-md:h-fit max-md:px-4',
           props.className,
         )}
       >
@@ -181,7 +187,7 @@ const InviteMembers = ({
         ) : (
           <div className="flex w-full flex-col  gap-3" {...headerProps}>
             <Typography
-              className="text-[32px] font-semibold leading-9 text-neutral-800"
+              className="text-[32px] font-semibold leading-9 text-neutral-800 dark:text-neutral-50"
               {...headerTitleProps}
             >
               <span
@@ -191,7 +197,7 @@ const InviteMembers = ({
               ></span>
             </Typography>
             <Typography
-              className="flex gap-2 font-light text-neutral-600"
+              className="flex gap-2 font-light text-neutral-600 dark:text-neutral-100"
               {...headerDescriptionProps}
             >
               <span
@@ -207,7 +213,7 @@ const InviteMembers = ({
             name="email"
             formLabel={t('EXTENSION.MEMBER.EMAIL')}
             formLabelProps={{
-              className: 'text-neutral-600',
+              className: 'text-neutral-600 dark:text-neutral-50',
             }}
             inputProps={{
               placeholder: 'Enter email address',
@@ -219,7 +225,7 @@ const InviteMembers = ({
           />
           <DropdownMenu>
             <DropdownMenuTrigger className="flex flex-col gap-3 py-2">
-              <FormLabel className="text-neutral-600">
+              <FormLabel className="text-neutral-600 dark:text-neutral-50">
                 {t('EXTENSION.MEMBER.ROLE')}
               </FormLabel>
               <Button
@@ -229,23 +235,30 @@ const InviteMembers = ({
                 disabled={formAdding.formState.isSubmitting}
                 color={'default'}
                 size={'xs'}
-                className="w-40 px-4 capitalize"
+                className="w-fit  px-4 capitalize max-md:py-3 md:w-40"
               >
-                {formAdding.watch('role')
-                  ? t(
-                      `EXTENSION.ROLE.${formAdding.watch('role')?.toUpperCase()}`,
-                    )
-                  : 'Select a role'}
+                {formAdding.watch('role') ? (
+                  <>
+                    <span className="max-sm:hidden">
+                      {t(
+                        `EXTENSION.ROLE.${formAdding.watch('role')?.toUpperCase()}`,
+                      )}
+                    </span>
+                    <span className="sm:hidden">{defaultRole?.icon}</span>
+                  </>
+                ) : (
+                  'Select a role'
+                )}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
               {rolesOptions.map((option) => (
                 <DropdownMenuItem
                   key={option.name}
                   onSelect={() => {
                     formAdding.setValue('role', option.name);
                   }}
-                  className="flex flex-row gap-2 capitalize text-neutral-600"
+                  className="flex flex-row gap-2 capitalize text-neutral-600 dark:text-neutral-50 dark:hover:bg-neutral-800"
                 >
                   {option.icon}
                   {t(`EXTENSION.ROLE.${option.name?.toUpperCase()}`)}
@@ -254,22 +267,24 @@ const InviteMembers = ({
             </DropdownMenuContent>
           </DropdownMenu>
           <div className="flex flex-col gap-3 py-2">
-            <FormLabel className="invisible text-neutral-600">Invite</FormLabel>
+            <FormLabel className="invisible text-neutral-600 dark:text-neutral-50">
+              Invite
+            </FormLabel>
             <Button
               color="secondary"
               shape="square"
               onClick={onAddUser}
               loading={formAdding.formState.isSubmitting}
               endIcon={<Plus className="mr-1 h-4 w-4" />}
-              className="h-10 min-w-28"
+              className="!max-sm:w-8 h-10 min-w-28"
               disabled={disabledInviteBtn as boolean}
             >
-              {t('COMMON.ADD')}
+              <span className="max-sm:hidden">{t('COMMON.ADD')}</span>
             </Button>
           </div>
         </div>
         <div
-          className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3"
+          className="flex w-full  flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3 dark:bg-background"
           {...spacePreviewProps}
         >
           <Avatar
@@ -279,10 +294,10 @@ const InviteMembers = ({
             className="size-[88px] cursor-pointer p-0"
           />
           <div className="flex w-full flex-col gap-1">
-            <Typography className="text-[18px] font-semibold text-neutral-800">
+            <Typography className="text-[18px] font-semibold text-neutral-800 dark:text-neutral-50">
               {space?.name}
             </Typography>
-            <Typography className="font-normal text-neutral-600">
+            <Typography className="font-normal text-neutral-600 dark:text-neutral-50">
               {space?.members?.length} members
             </Typography>
           </div>
@@ -290,10 +305,11 @@ const InviteMembers = ({
         <DataTable
           customEmpty={t('EXTENSION.SPACE.NO_MEMBER')}
           tableHeadProps={{
-            className: 'bg-transparent',
+            className: 'bg-transparent dark:bg-background dark:text-neutral-50',
           }}
           rowProps={{
-            className: 'rounded-full bg-primary-100',
+            className:
+              'rounded-full bg-primary-100 dark:bg-neutral-800 dark:text-neutral-50',
           }}
           columns={makeMembersColumns({
             t,
@@ -304,7 +320,10 @@ const InviteMembers = ({
             },
           })}
           data={tableRows as Member[]}
-          {...tableProps}
+          tableProps={{
+            ...tableProps,
+            className: 'max-md:h-[700px] overflow-y-auto',
+          }}
         />
       </section>
     </Form>

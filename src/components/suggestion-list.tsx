@@ -74,7 +74,7 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
     props.items.map;
 
     return props.items.length > 0 ? (
-      <div className=" w-72 overflow-hidden rounded-xl border bg-white  py-1 shadow-1">
+      <div className=" w-72 overflow-hidden rounded-xl border bg-white dark:bg-neutral-900  py-1 shadow-1">
         <ul className="max-h-60 w-full space-y-1 overflow-y-auto px-1">
           {props.items.map((item, index) => (
             <Item
@@ -119,7 +119,7 @@ const Item = ({
       onMouseDown={() => selectItem(index)}
       className={cn(
         'flex cursor-pointer items-center gap-1 rounded-lg px-3 py-2 ',
-        isSelected ? 'bg-primary text-white' : 'hover:bg-primary-200',
+        isSelected ? 'bg-primary text-white' : 'hover:bg-primary-200 dark:hover:bg-neutral-800',
       )}
     >
       {item?.image ? (

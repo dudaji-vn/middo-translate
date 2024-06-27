@@ -71,7 +71,7 @@ export const ConfirmAlertModal = ({
           {header || (
             <>
               <AlertDialogTitle {...titleProps}>{title}</AlertDialogTitle>
-              <AlertDialogDescription {...descriptionProps}>
+              <AlertDialogDescription className="dark:text-neutral-50" {...descriptionProps}>
                 {description}
               </AlertDialogDescription>
             </>

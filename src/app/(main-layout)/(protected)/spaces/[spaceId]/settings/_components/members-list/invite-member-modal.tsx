@@ -14,6 +14,7 @@ import { ESPaceRoles } from '../space-setting/setting-items';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { GET_SPACE_DATA_KEY } from '@/features/business-spaces/hooks/use-get-space-data';
+import customToast from '@/utils/custom-toast';
 
 const InviteMemberModal = ({
   space,
@@ -35,7 +36,7 @@ const InviteMemberModal = ({
         members: members.map(({ email, role }) => ({ email, role })),
         spaceId: space._id,
       });
-      toast.success('Members invited successfully');
+      customToast.success('Members invited successfully');
       setMembers([]);
       setOpen(false);
       queryClient.invalidateQueries([
@@ -47,7 +48,7 @@ const InviteMemberModal = ({
       router.refresh();
     } catch (error) {
       console.log(error);
-      toast.error('Error inviting members. Please try again');
+      customToast.error('Error inviting members. Please try again');
     }
     setLoading(false);
   };
@@ -66,8 +67,9 @@ const InviteMemberModal = ({
       <Button
         onClick={() => setOpen(true)}
         shape={'square'}
-        size={'xs'}
+        size={'sm'}
         startIcon={<UserRoundPlus />}
+        className="flex w-full flex-row gap-2 md:w-fit md:py-2  [&_svg]:size-4"
       >
         {t('EXTENSION.MEMBER.INVITE_MEMBER')}
       </Button>
@@ -104,7 +106,7 @@ const InviteMemberModal = ({
             </Button>
             <Button
               onClick={onInviteUsers}
-              color={members.length ? 'primary' : 'disabled'}
+              color={'primary'}
               shape={'square'}
               disabled={!members.length}
               loading={loading}

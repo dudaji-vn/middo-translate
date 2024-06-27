@@ -12,6 +12,7 @@ import getUserStream from "../../utils/get-user-stream";
 import { useTranslation } from "react-i18next";
 import { SOCKET_CONFIG } from "@/configs/socket";
 import { useVideoSettingStore } from "../../store/video-setting.store";
+import customToast from "@/utils/custom-toast";
 
 export default function useHandleStreamMyVideo() {
     const {t} = useTranslation('common');
@@ -45,7 +46,7 @@ export default function useHandleStreamMyVideo() {
         }).catch(_ =>  {
             setTurnOnCamera(false);
             setTurnOnMic(false);
-            toast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
+            customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         }).finally(() => {
             setMyStream(myVideoStream);
             setStreamForParticipant(myVideoStream, socket.id || '', false)

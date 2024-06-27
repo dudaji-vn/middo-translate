@@ -1,18 +1,20 @@
 import { create } from 'zustand';
-import { VIDEOCALL_LAYOUTS } from '../constant/layout';
+import { VIDEO_CALL_LAYOUTS, VideoCallLayout } from '../constant/layout';
 import getRandomColor from '../utils/get-random-color.util';
 import CaptionInterface from '../interfaces/caption.interface';
 import { User } from '@/features/users/types';
+import { CallType } from '../constant/call-type';
 export interface IRoom {
   _id: string;
   name: string;
   roomId: string;
-  type: 'GROUP' | 'DIRECT';
+  type: CallType;
   startTime: string;
   endTime: string;
   createdBy: string;
   createdAt: string;
   updatedAt: string;
+  isHelpDesk: boolean;
 }
 
 export interface IRequestCall {
@@ -52,7 +54,7 @@ export type VideoCallState = {
   setRoom: (room?: IRoom) => void;
   isAllowDrag: boolean;
   setAllowDrag: (allowDrag: boolean) => void;
-  setLayout: (layout?: string) => void;
+  setLayout: (layout?: VideoCallLayout) => void;
   setConfirmLeave: (confirmLeave: boolean) => void;
   setDoodle: (isDoodle: boolean) => void;
   setDoodleImage: (doodleImage: string) => void;
@@ -77,7 +79,7 @@ export type VideoCallState = {
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
   room: null,
-  layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
+  layout: VIDEO_CALL_LAYOUTS.GALLERY_VIEW,
   confirmLeave: false,
   usersRequestJoinRoom: [],
   isDoodle: false,
@@ -106,8 +108,8 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   setAllowDrag: (allowDrag: boolean) => {
     set(() => ({ isAllowDrag: allowDrag }));
   },
-  setLayout: (layout?: string) => {
-    set(() => ({ layout: layout || VIDEOCALL_LAYOUTS.GALLERY_VIEW }));
+  setLayout: (layout?: VideoCallLayout) => {
+    set(() => ({ layout: layout || VIDEO_CALL_LAYOUTS.GALLERY_VIEW }));
   },
   setConfirmLeave: (confirmLeave: boolean) => {
     set(() => ({ confirmLeave }));
@@ -170,7 +172,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   clearStateVideoCall: () => {
     set(() => ({
-      layout: VIDEOCALL_LAYOUTS.GALLERY_VIEW,
+      layout: VIDEO_CALL_LAYOUTS.GALLERY_VIEW,
       confirmLeave: false,
       isDoodle: false,
       doodleImage: null,

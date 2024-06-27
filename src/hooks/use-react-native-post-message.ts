@@ -19,5 +19,5 @@ export const useReactNativePostMessage = () => {
       );
     }
   };
-  return { postMessage };
+  return { postMessage, isMobile: platform === 'mobile' };
 };

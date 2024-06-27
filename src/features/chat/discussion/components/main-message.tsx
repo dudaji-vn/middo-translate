@@ -17,6 +17,7 @@ import { useChatStore } from '../../stores';
 import { useAuthStore } from '@/stores/auth.store';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { useBoolean } from 'usehooks-ts';
+import { useAppStore } from '@/stores/app.store';
 
 export interface MainMessageProps {
   message: Message;
@@ -83,6 +84,7 @@ const TextMessage = ({
   message: Message;
   isActive: boolean;
 }) => {
+  const theme = useAppStore(state => state.theme);
   const enContent = message.translations?.en;
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
@@ -107,11 +109,11 @@ const TextMessage = ({
         (showMiddleTranslation || isActive) && (
           <div className="relative mt-2">
             <TriangleSmall
-              fill="#f2f2f2"
+              fill={theme == 'light' ? "#f2f2f2" : "#191919" }
               position="top"
               className="absolute left-4 top-0 -translate-y-full"
             />
-            <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
+            <div className="rounded-xl bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-50 p-3 py-2 text-neutral-600">
               <RichTextView
                 editorStyle="text-base md:text-sm translated"
                 mentionClassName="left"
@@ -137,10 +139,9 @@ const CallMessage = ({ message }: { message: Message }) => {
         content: t('CONVERSATION.CALL_END_AT', {
           time: moment(call.endTime).format('HH:mm'),
         }),
-        subContent: convertToTimeReadable(
-          call.createdAt as string,
-          call.endTime,
-        ),
+        subContent:
+          convertToTimeReadable(call.startTime || call.endTime, call.endTime) ||
+          '0s',
         icon: (
           <PhoneIcon className="mr-2 inline-block h-4 w-4 rotate-[135deg]" />
         ),
@@ -150,7 +151,7 @@ const CallMessage = ({ message }: { message: Message }) => {
       content: t('CONVERSATION.STARTED_CALL'),
       icon: <PhoneCallIcon className="mr-2 inline-block h-4 w-4" />,
     };
-  }, [call?.createdAt, call?.endTime, t]);
+  }, [call?.endTime, call?.startTime, t]);
   return (
     <div className="pl-6">
       <div>

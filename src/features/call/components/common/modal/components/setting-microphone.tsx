@@ -80,7 +80,7 @@ const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProp
       </Typography>
       {audioInputDevices.length > 0 && (<>
       <Select value={audio?.deviceId || audioInputDevices[0]?.deviceId || ""} onValueChange={onVideoInputChange}>
-        <SelectTrigger className="w-full rounded-xl bg-neutral-50 !py-2 shadow-none">
+        <SelectTrigger className="w-full rounded-xl bg-neutral-50 !py-2 shadow-none dark:bg-neutral-900 dark:dark:bg-neutral-800 dark:active:text-neutral-50">
           <SelectValue>
             {audio
               ? audio.label
@@ -89,16 +89,16 @@ const SettingMicrophone = ({ className, onSettingChange }: SettingMicrophoneProp
                 : ''}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className='dark:bg-neutral-900 dark:border-neutral-800'>
           {audioInputDevices.map((device) => (
-            <SelectItem key={device.deviceId} value={device.deviceId}>
+            <SelectItem key={device.deviceId} value={device.deviceId} className="dark:hover:bg-neutral-800">
               <span>{device.label}</span>
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
       <div className="mt-2  w-full overflow-hidden first-letter:rounded-lg">
-        <div className='h-3 w-full bg-neutral-100 rounded-xl overflow-hidden relative'>
+        <div className='h-3 w-full bg-neutral-100 dark:bg-neutral-900 rounded-xl overflow-hidden relative'>
           <div className='absolute bg-primary left-0 top-0 bottom-0 transition-all' style={{width: level + '%'}}></div>
         </div>
       </div>

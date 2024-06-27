@@ -2,7 +2,7 @@ import { translate } from '@/lib/cloud-translate';
 import { NEXT_PUBLIC_API_URL } from '@/configs/env.public';
 
 export async function GET(request: Request) {
-  console.log('run translate');
+  // console.log('run translate');
   const { searchParams } = new URL(request.url);
   const text = searchParams.get('query') || '';
   const from = searchParams.get('from') || 'vi';

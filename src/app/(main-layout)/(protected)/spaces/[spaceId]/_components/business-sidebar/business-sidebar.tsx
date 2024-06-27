@@ -23,7 +23,8 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth.store';
 import { getUserSpaceRole } from '../../settings/_components/space-setting/role.util';
 import { TSpace } from '../business-spaces';
-import SpaceNavigator from '@/features/business-spaces/space-navigator/space-navigator';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import SpaceNavigator from '../space-navigator/space-navigator';
 
 interface SidebarContent {
   title: string;
@@ -100,10 +101,10 @@ const BusinessSidebarContent = ({
                   hidden: roles && !roles.includes(myRole),
                 },
                 {
-                  'max-md:hidden': title === 'settings',
+                  // 'max-md:hidden': title === 'settings',
                 },
                 isSelected
-                  ? 'bg-primary-500-main hover:!bg-primary-500-main [&_svg]:stroke-white'
+                  ? 'bg-primary-500-main hover:!bg-primary-500-main dark:bg-primary [&_svg]:stroke-white'
                   : 'hover:bg-primary-300',
                 {
                   'gap-0': shrink,
@@ -115,7 +116,7 @@ const BusinessSidebarContent = ({
                 {icon}
                 <Circle
                   className={cn(
-                    'absolute -right-2 -top-2 !size-4 fill-primary-500-main stroke-white stroke-[2px]',
+                    'absolute -right-2 -top-2 !size-4 fill-primary-500-main stroke-white stroke-[2px] dark:stroke-neutral-800',
                     {
                       hidden: isSelected || !notifications?.[title],
                     },
@@ -128,18 +129,13 @@ const BusinessSidebarContent = ({
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
                     : 'min-w-[300px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
-                  isSelected ? 'text-white ' : 'text-neutral-600',
+                  isSelected
+                    ? 'text-white '
+                    : 'text-neutral-600 dark:text-neutral-50',
                 )}
               >
                 {displayTitle}
               </Typography>
-              {notifications?.[title] && notifications[title] > 0 && (
-                <div className="flex h-3 w-3 items-center justify-center rounded-full bg-primary-500-main">
-                  <Typography className="text-white">
-                    {notifications[title]}
-                  </Typography>
-                </div>
-              )}
             </Button>
           </div>
         );
@@ -161,24 +157,23 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
   const params = useParams();
   const pathname = usePathname();
   const currentUser = useAuthStore((s) => s.user);
-
+  const { navigateTo, isMobile: isMobilePlatform } = usePlatformNavigation();
   const [selected, setSelected] = useState<SidebarContent | undefined>(
     sidebarContents.find((item) => pathname?.includes(`/${item.title}`)) ||
       undefined,
   );
-  const router = useRouter();
   const expandSheet = () => {
     setExpandSidebar(true);
   };
   const shrinkSheet = () => {
-    if (openNavigator || isMobile) return;
+    if (openNavigator) return;
     setExpandSidebar(false);
   };
   const onSelectedChange = (item: { title: string; icon: React.ReactNode }) => {
     const spaceId = params?.spaceId;
     if (!spaceId) return;
     const nextPath = `${ROUTE_NAMES.SPACES}/${spaceId}/${item.title}`;
-    router.push(nextPath);
+    navigateTo(nextPath);
   };
   const myRole = useMemo(() => {
     return getUserSpaceRole(currentUser, space);
@@ -207,9 +202,17 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
         onMouseEnter={expandSheet}
       >
         <SheetContent
-          overlayProps={{ className: 'top-[52px]' }}
+          overlayProps={{
+            className: cn(
+              ' z-[48]',
+              isMobilePlatform ? 'top-[64px]' : 'top-[52px]',
+            ),
+          }}
           side={'left'}
-          className="bottom-0  top-[52px] w-fit  p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          className={cn(
+            ' bottom-0  z-[49] w-fit  p-0 backdrop-blur-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+            isMobilePlatform ? 'top-[64px] w-full pr-2' : 'top-[52px]',
+          )}
           onMouseLeave={shrinkSheet}
         >
           <SpaceNavigator />

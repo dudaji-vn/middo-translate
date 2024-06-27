@@ -4,8 +4,8 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
-import { isEqual } from 'lodash';
-import { useState } from 'react';
+import { isEmpty, isEqual } from 'lodash';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RoomActions } from '../room-actions';
 import InboxList from './inbox-list';
@@ -15,10 +15,22 @@ import {
   ArchiveIcon,
   ContactRoundIcon,
   MessageSquareDashedIcon,
+  MessageSquareDot,
+  MessagesSquare,
   MessagesSquareIcon,
+  SettingsIcon,
   UsersRoundIcon,
 } from 'lucide-react';
-export interface InboxProps {}
+import InboxContactList from './inbox-contact-list';
+import { useSearchParams } from 'next/navigation';
+import { SPK_FOCUS } from '@/configs/search-param-key';
+import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
+import { SettingTab } from '@/features/stations/components/setting-tab';
+import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
+export interface InboxProps {
+  unreadCount?: number;
+}
 export type InboxType =
   | 'all'
   | 'contact'
@@ -26,7 +38,8 @@ export type InboxType =
   | 'help-desk'
   | 'unread-help-desk'
   | 'archived'
-  | 'waiting';
+  | 'waiting'
+  | 'settings';
 
 export const inboxTabMap: Record<
   InboxType,
@@ -65,10 +78,17 @@ export const inboxTabMap: Record<
   'help-desk': {
     label: 'COMMON.ALL',
     value: 'help-desk',
+    icon: <MessagesSquare className="size-5 md:size-4" />,
   },
   'unread-help-desk': {
     label: 'COMMON.UNREAD',
     value: 'unread-help-desk',
+    icon: <MessageSquareDot className="size-5 md:size-4" />,
+  },
+  settings: {
+    label: 'COMMON.SETTINGS',
+    value: 'settings',
+    icon: <SettingsIcon className="size-5 md:size-4" />,
   },
 };
 
@@ -83,15 +103,37 @@ const businessInboxTabs = [
   inboxTabMap['help-desk'],
   inboxTabMap['unread-help-desk'],
 ];
+const stationInboxTabs = [
+  inboxTabMap.all,
+  inboxTabMap.group,
+  inboxTabMap.settings,
+];
 
-export const Inbox = (props: InboxProps) => {
+export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
-  const tabs = isBusiness ? businessInboxTabs : normalInboxTabs;
+  const { isOnStation } = useStationNavigationData();
+  const searchParams = useSearchParams();
+  const tabs = useMemo(() => {
+    if (isBusiness) {
+      return businessInboxTabs;
+    }
+    if (isOnStation) {
+      return stationInboxTabs;
+    }
+    return normalInboxTabs;
+  }, [isBusiness, isOnStation]);
   const [type, setType] = useState<InboxType>(tabs[0].value);
+  const { appliedFilters } = useSpaceInboxFilterStore();
+  const [notifications, setNotifications] = useState<
+    Partial<Record<InboxType, boolean>>
+  >({
+    'unread-help-desk': unreadCount ? true : false,
+  });
   const { t } = useTranslation('common');
   useKeyboardShortcut(
     [SHORTCUTS.SWITCH_TO_ALL_TAB, SHORTCUTS.SWITCH_TO_GROUP_TAB],
     (_, matchedKeys) => {
+      if (isBusiness) return;
       setType(
         isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_ALL_TAB)
           ? tabs[0].value
@@ -99,6 +141,31 @@ export const Inbox = (props: InboxProps) => {
       );
     },
   );
+  useEffect(() => {
+    const focusType = searchParams?.get(SPK_FOCUS) as InboxType;
+    if (focusType && tabs.map((tab) => tab.value).includes(focusType)) {
+      console.log('focusType', focusType);
+      setType(focusType);
+    }
+  }, [searchParams, tabs]);
+  const updateNotification = (type: InboxType, ping?: boolean) => {
+    if (notifications[type] === ping) return;
+    setNotifications((prev) => ({
+      ...prev,
+      [type]: ping,
+    }));
+  };
+
+  const renderList = () => {
+    switch (type) {
+      case 'contact':
+        return <InboxContactList type={type} />;
+      case 'settings':
+        return <SettingTab />;
+      default:
+        return <InboxList type={type} notifyToTab={updateNotification} />;
+    }
+  };
 
   return (
     <RoomActions>
@@ -110,19 +177,29 @@ export const Inbox = (props: InboxProps) => {
                 <TabsTrigger
                   key={tab.value}
                   value={tab.value}
-                  onClick={() => setType(tab.value)}
-                  className="!rounded-none"
+                  onClick={() => {
+                    setType(tab.value);
+                  }}
+                  className="!rounded-none dark:!text-neutral-50"
                 >
                   {type === tab.value ? (
                     <>{t(tab.label)}</>
                   ) : (
-                    <div className="h-5"> {tab?.icon || t(tab.label)}</div>
+                    <div className="relative h-5 ">
+                      {notifications[tab.value] &&
+                        isEmpty(
+                          Object.values(appliedFilters || {})?.flat(),
+                        ) && (
+                          <Ping size={12} className="absolute -top-2 right-0" />
+                        )}
+                      {tab?.icon}
+                    </div>
                   )}
                 </TabsTrigger>
               ))}
             </TabsList>
           </Tabs>
-          <InboxList type={type} />
+          {renderList()}
         </div>
       </div>
     </RoomActions>

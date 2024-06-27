@@ -37,6 +37,7 @@ import {
   useGetSpaceData,
 } from '@/features/business-spaces/hooks/use-get-space-data';
 import { Spinner } from '@/components/feedback';
+import customToast from '@/utils/custom-toast';
 
 const ReorderList = ({
   data,
@@ -92,13 +93,13 @@ const ReorderList = ({
         }));
       });
       if (res.data) {
-        toast.success('Member removed successfully');
+        customToast.success('Member removed successfully');
         queryClient.invalidateQueries([GET_SPACE_DATA_KEY, { spaceId }]);
         return;
       }
     } catch (error) {
       console.error('Error on DeleteMember:', error);
-      toast.error('Error on Delete member');
+      customToast.error('Error on Delete member');
     }
   };
   const onResendInvitation = async (member: Member) => {
@@ -117,11 +118,11 @@ const ReorderList = ({
           [member.email]: false,
         }));
       });
-      toast.success('Invitation resent successfully');
+      customToast.success('Invitation resent successfully');
       queryClient.invalidateQueries([GET_SPACE_DATA_KEY, { spaceId }]);
     } catch (error) {
       console.error('Error on ResendInvitation:', error);
-      toast.error('Error on Resend invitation');
+      customToast.error('Error on Resend invitation');
     }
     setIsLoading((prev) => ({
       ...prev,
@@ -171,7 +172,7 @@ const ReorderList = ({
             const newArr = [...items];
             newArr[index].role = source.droppableId;
             setItems(items);
-            toast.error(t('EXTENSION.MEMBER.NO_EDIT_PERMISSION'));
+            customToast.error(t('EXTENSION.MEMBER.NO_EDIT_PERMISSION'));
             return;
           }
           setModal({
@@ -223,20 +224,24 @@ const ReorderList = ({
                       <Droppable droppableId={category._id.toString()}>
                         {(provided) => (
                           <div ref={provided.innerRef}>
+                            <CategoryHeader role={category._id} />
+
                             <ul
                               className={cn(
                                 'list-unstyled mb-3 ',
-                                'flex flex-col gap-1 overflow-x-auto  md:min-w-[400px]',
+                                'flex w-full flex-col gap-1 overflow-x-auto  md:min-w-[400px]',
                               )}
                             >
-                              <CategoryHeader role={category._id} />
                               {items
                                 .filter((item) => item.role === category._id)
                                 .map((item, index) => (
                                   <Draggable
                                     draggableId={item.email}
                                     key={item.email.toString()}
-                                    isDragDisabled={item.email === owner.email}
+                                    isDragDisabled={
+                                      item.email === owner.email ||
+                                      disableChangeRole
+                                    }
                                     index={index}
                                   >
                                     {(provided) => (
@@ -254,7 +259,7 @@ const ReorderList = ({
                                         )}
                                         key={item.email}
                                       >
-                                        <div className="!w-fit bg-white p-1 py-2 ">
+                                        <div className="!w-fit bg-white p-1 py-2 dark:bg-background">
                                           <Button.Icon
                                             size={'xs'}
                                             shape={'square'}
@@ -337,7 +342,7 @@ const MembersList = () => {
     setData(filteredMembers || []);
   }, [space, search]);
 
-  if (!space || isEmpty(data))
+  if (isEmpty(space))
     return (
       <>
         <CategoryHeader role={ESPaceRoles.Admin} />
@@ -353,8 +358,8 @@ const MembersList = () => {
 
   return (
     <section className="flex w-full flex-col items-end gap-5 py-4">
-      <div className="flex w-full flex-row items-center justify-between gap-5 px-10">
-        <div className="relative w-60 md:w-96">
+      <div className="flex w-full flex-col items-center justify-between gap-2 px-3 md:flex-row  md:gap-5 md:px-10">
+        <div className="relative w-full md:max-w-96">
           <SearchInput
             className="flex-1"
             onChange={(e) => onSearchChange(e.target.value)}

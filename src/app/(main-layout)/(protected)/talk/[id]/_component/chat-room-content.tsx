@@ -51,7 +51,7 @@ const ChatRoomMain = ({ room }: { room: Room }) => {
   const { isShowSearch } = useRoomSearchStore();
 
   return (
-    <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
+    <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg md:rounded-none bg-card">
       <ChatBoxHeader />
       <PinnedBar />
       {isShowSearch && <SearchMessageBar />}

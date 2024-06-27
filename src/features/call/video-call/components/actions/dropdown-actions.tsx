@@ -13,7 +13,7 @@ import ActionDoodle from './action-doodle';
 import ActionToggleLayout from './action-toggle-layout';
 import { useMemo } from 'react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 import { useVideoCallContext } from '@/features/call/context/video-call-context';
 import useHaveShareScreen from '../../hooks/use-have-share-screen';
 import { SHORTCUTS } from '@/types/shortcuts';
@@ -47,7 +47,7 @@ export default function DropdownActions() {
       !haveShareScreen ||
       !isFullScreen ||
       !isPinShareScreen ||
-      layout != VIDEOCALL_LAYOUTS.FOCUS_VIEW
+      layout != VIDEO_CALL_LAYOUTS.FOCUS_VIEW
     );
   }, [haveShareScreen, isFullScreen, isPinShareScreen, layout]);
   const { t } = useTranslation('common')
@@ -73,7 +73,7 @@ export default function DropdownActions() {
   useKeyboardShortcut(actionShortcutKeysSet, (e, matchedKeys) => {
     if (!e || !isFullScreen) return;
     if (isEqual(matchedKeys, SHORTCUTS.SWITCH_TO_GALLERY_VIEW)) {
-      setLayout(layout === VIDEOCALL_LAYOUTS.FOCUS_VIEW ? VIDEOCALL_LAYOUTS.GALLERY_VIEW : VIDEOCALL_LAYOUTS.FOCUS_VIEW);
+      setLayout(layout === VIDEO_CALL_LAYOUTS.FOCUS_VIEW ? VIDEO_CALL_LAYOUTS.GALLERY_VIEW : VIDEO_CALL_LAYOUTS.FOCUS_VIEW);
       return;
     }
     if (isEqual(matchedKeys, SHORTCUTS.START_STOP_SCREEN_DOODLE)) {
@@ -102,17 +102,17 @@ export default function DropdownActions() {
           <MoreVertical />
         </Button.Icon>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
         <ActionToggleLayout />
         <ActionDoodle disabled={isDoodleDisabled} onDoodle={onDoodle} />
         {room?.type === CALL_TYPE.GROUP && (
-          <DropdownMenuItem onClick={() => setModalAddUser(true)}>
+          <DropdownMenuItem onClick={() => setModalAddUser(true)} className='dark:hover:bg-neutral-800'>
             <UserPlus2 />
             <span className="ml-2">{t('CONVERSATION.ADD_MEMBER')}</span>
           </DropdownMenuItem>
         )}
-        <ActionToggleCaption />
-        <ActionVideoAudioSetting />
+        <ActionToggleCaption isInDropdown={true}/>
+        <ActionVideoAudioSetting isInDropdown={true}/>
       </DropdownMenuContent>
     </DropdownMenu>
   );

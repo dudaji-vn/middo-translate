@@ -79,7 +79,7 @@ const CardItem = ({
     </Typography>
     <Typography
       variant="muted"
-      className="mt-2 overflow-hidden text-center text-neutral-600"
+      className="mt-2 overflow-hidden text-center text-neutral-600 dark:text-neutral-50"
     >
       {description}
     </Typography>

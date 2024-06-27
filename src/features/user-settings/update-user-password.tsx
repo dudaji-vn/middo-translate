@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { PASSWORD_PATTERN } from '@/configs/regex-pattern';
 import { Button } from '@/components/actions';
 import { KeyRound } from 'lucide-react';
+import customToast from '@/utils/custom-toast';
 
 export default function UpdateUserPassword() {
   const [errorMessage, setErrorMessage] = useState('');
@@ -85,7 +86,7 @@ export default function UpdateUserPassword() {
     const { confirmPassword, ...payload } = values;
     try {
       await changePasswordUserService(payload);
-      toast.success(t('MESSAGE.SUCCESS.PASSWORD_CHANGED'));
+      customToast.success(t('MESSAGE.SUCCESS.PASSWORD_CHANGED'));
       setOpen(false);
       setErrorMessage('');
     } catch (err: any) {
@@ -99,8 +100,8 @@ export default function UpdateUserPassword() {
     <>
       {isSubmitting && <PageLoading />}
       <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4 md:hover:bg-primary-100">
-          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
+        <AlertDialogTrigger className="flex w-full items-center border-b bg-white dark:bg-neutral-900 dark:border-b-neutral-800 px-5 py-4 md:hover:bg-primary-100  dark:md:hover:bg-primary-800">
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900 text-primary">
             <KeyRound size={20} />
           </div>
           <span className="ml-4 block text-center text-base font-medium">
@@ -143,7 +144,7 @@ export default function UpdateUserPassword() {
                   onClick={() => {
                     reset();
                   }}
-                  className="mr-2 border-0 bg-transparent hover:!border-0 hover:!bg-transparent"
+                  className="mr-5 border-0"
                 >
                   <p>{t('COMMON.CANCEL')}</p>
                 </AlertDialogCancel>

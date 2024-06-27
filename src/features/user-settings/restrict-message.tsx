@@ -24,8 +24,8 @@ export default function RestrictMessage() {
 
   return (
     <>
-      <div className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4 md:hover:bg-primary-100">
-        <div className="relative flex !h-10 !w-10 min-w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
+      <div className="flex w-full items-center border-b bg-white dark:bg-neutral-900 dark:border-b-neutral-800 px-5 py-4">
+        <div className="relative flex !h-10 !w-10 min-w-10 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900 text-primary">
           <ShieldIcon size={20} />
         </div>
         <span className="ml-4 block text-left text-base font-medium ">

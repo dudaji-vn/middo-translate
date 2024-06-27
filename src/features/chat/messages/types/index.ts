@@ -40,6 +40,7 @@ type Call = {
   endTime: string | null;
   startTime: string | null;
   type: 'DIRECT' | 'GROUP';
+  participants: Pick<User, '_id' | 'name' | 'avatar'| 'status'>[];
 } & BaseEntity;
 export type Message = {
   content: string;

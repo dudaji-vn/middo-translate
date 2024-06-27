@@ -42,7 +42,7 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
           {isFetching && (
             <div
               className={cn(
-                'absolute left-1/2 z-50 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary',
+                'absolute left-1/2 z-50 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary dark:bg-neutral-800',
                 {
                   'top-1': scrollDirection === 'to-bottom',
                   'bottom-1': scrollDirection === 'to-top',

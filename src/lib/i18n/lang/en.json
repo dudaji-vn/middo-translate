@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "Color",
     "INVITE": "Invite",
     "APPLY": "Apply",
     "PREVIEW": "Preview",
@@ -41,6 +42,9 @@
     "VIEW": "View",
     "REMOVE": "Remove",
     "CLEAR": "Clear",
+    "AND": "and",
+    "JOINED": "joined",
+    "SEND_BY": "Send by",
     "SAVE_CHANGE": "Save Changes",
     "UPLOAD_IMAGE": "Upload Image",
     "SUGGESTION": "Suggestion",
@@ -77,6 +81,7 @@
     "TYPE_A_MESSAGE": "Type a message",
     "CLICK": "Click",
     "WAITING": "Waiting",
+    "CONNECTING": "Connecting",
     "DRAFT": "Draft",
     "TRANSLATED_FROM": "Translated from",
     "EDITED": "Edited",
@@ -94,6 +99,16 @@
     "USER": "User",
     "MESSAGE": "Message",
     "SEARCH_HISTORY": "Search history",
+    "LIGHT": "Light",
+    "DARK": "Dark",
+    "SYSTEM": "System",
+    "SETTINGS": "Settings",
+    "CHANGE_AVATAR": "Change avatar",
+    "CHANGE_NAME": "Change name",
+    "INFORMATION": "Information",
+    "DELETE_STATION": "Delete station",
+    "STATION_INFORMATION": "Station's information",
+    "LINK": "Link",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
@@ -101,6 +116,7 @@
       "LAST_WEEK": "Last week",
       "LAST_MONTH": "Last month",
       "LAST_YEAR": "Last year",
+      "LAST_EDITED": "Last edited",
       "CUSTOM": "Custom"
     },
     "WEEKDAY": {
@@ -154,7 +170,8 @@
       "USERNAME_MIN": "Username must be at least 3 characters!",
       "USERNAME_MAX": "Username must be at most 15 characters!",
       "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
-      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view."
+      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view.",
+      "USER_NOT_FOUND": "User not found!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -268,8 +285,8 @@
     "CHANGE_AVATAR": "Change avatar",
     "APP_PERMISSION": "App's permission",
     "RESTRICT_MESSAGE": "Restrict unknown senders",
-    "NOTIFICATION": "Notification",
-    "THEME": "Dark mode"
+    "NOTIFICATION": "Turn off all notifications",
+    "THEME": "Theme"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",
@@ -374,6 +391,7 @@
     "FILE": "File",
     "LINK": "Link",
     "LEAVE_GROUP": "Leave group",
+    "LEAVE_STATION": "Leave station",
     "DELETE": "Delete conversation",
     "START": "Start conversation",
     "JOIN": "Join",
@@ -390,8 +408,8 @@
     "NOTICE_CONTENT": "Members in the group will not receive notifications about this call until you invite them to join.",
     "INVITE": "Invite",
     "YOU": "You",
-    "TRANSLATED_TOOL": "Translation",
-    "MESSAGE_TRANSLATE": "Translate message",
+    "TRANSLATED_TOOL": "E.S.L Translation Tool",
+    "MESSAGE_TRANSLATE": "E.S.L Message",
     "EMOJI": "Emoji",
     "MESSAGE_REACTION": "Message reaction",
     "CALL_END_AT": "Call ended at {{time}}",
@@ -439,7 +457,8 @@
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
     "DOODLE": "Doodle",
     "FOCUS_VIEW": "Focus view",
-    "EDIT_MESSAGE": "Edit message"
+    "EDIT_MESSAGE": "Edit message",
+    "OPEN_IN_BROWSER": "Open in browser"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",
@@ -473,6 +492,35 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "CREATE_STATION": {
+      "HEADING": "Create Work Station",
+      "TITLE": "Give <span class='text-primary-500-main'> your station </span> some information",
+      "DESCRIPTION": "Help your crews to recognize your business easier by naming this station, adding station avatar or company's logo <span class='font-light'>(optional)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Enter station name"
+      },
+      "ERRORS": {
+        "NAME_REQUIRED": "Station name is required",
+        "NAME_MAX_LENGTH": "Station name cannot exceed 30 characters",
+        "AVATAR_REQUIRED": "Station avatar is required"
+      },
+      "INVITE_MEMBERS": {
+        "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span> others to join your work station&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
+        "DESCRIPTION": "Help your crews to recognize your Work Station easier by naming, adding avatar or company's logo. <span class='font-normal text-primary-500-main'>Upgrade plan.</span>",
+        "ERRORS": {
+          "EMAIL_REQUIRED": "Email is required",
+          "EMAIL_INVALID": "Email is invalid"
+        }
+      }
+    },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "Set as Default Station",
+      "DESCRIPTION": "Are you sure you want to set <strong>{{name}}</strong> as your default station?"
+    },
+    "START_CALL": {
+      "TITLE": "Start Call",
+      "DESCRIPTION": "Are you sure you want to start the call?"
+    },
     "ROLE_CHANGE": {
       "TITLE": "Change Role",
       "DESCRIPTION": "Are you sure you want to change the role of <strong>{{name}}</strong> to <strong>{{role}}</strong>?"
@@ -493,6 +541,11 @@
       "TITLE": "Delete Space",
       "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
       "CONFIRM": "Delete Space"
+    },
+    "DELETE_STATION": {
+      "TITLE": "Delete Station",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
+      "CONFIRM": "Delete Station"
     },
     "SIGN_OUT": {
       "TITLE": "Do you want to sign out?",
@@ -566,6 +619,10 @@
     "LEAVE_ROOM": {
       "TITLE": "Leave Room",
       "DESCRIPTION": "You will no longer be able to view messages from this room. Are you sure you want to leave?"
+    },
+    "LEAVE_STATION": {
+      "TITLE": "Leave Station",
+      "DESCRIPTION": "You will no longer be able to view messages from this Station. Are you sure you want to leave?"
     },
     "CHANGE_ROOM_STATUS": {
       "TITLE": "{{action}} conversation",
@@ -669,7 +726,40 @@
       "DESCRIPTION": "Please check if your extension script is correct, or your domain is in the list of allowed domains."
     }
   },
+  "STATION": {
+    "WELCOME": "Hi, welcome back",
+    "ALL_STATION": "All station",
+    "JOINED_STATION": "Joined station",
+    "MY_STATION": "My station",
+    "CREATE_STATION": "Create new station",
+    "DASHBOARD": "Dashboard",
+    "STATION_INFOR": "Station information",
+    "UPLOAD_IMAGE": "Upload Station Avatar",
+    "CREATE_BUTTON": "Create Station and invite members",
+    "ERRORS": {
+      "NAME_REQUIRED": "Station name is required",
+      "NAME_MAX_LENGTH": "Station name must be less than 30 characters",
+      "AVATAR_REQUIRED": "Station avatar is required",
+      "INVALID_EMAIL_MEMBER": "Invalid email member"
+    },
+    "ACTIONS": {
+      "SET_AS_DEFAULT": "Set as default",
+      "DELETE": "Delete",
+      "SETTINGS": "Settings"
+    },
+    "MEMBER": {
+      "YOU": "You",
+      "EMAIL": "Email",
+      "ROLE": "Role"
+    },
+    "NO_MEMBER": "No members",
+    "INVITE_MEMBERS": "Invite members"
+  },
   "EXTENSION": {
+    "EMPTY": {
+      "TITLE": "Your extension is almost here!",
+      "OWNER_DES": "Create a conversation extension with the help of ready-made theme or define a unique one on your own."
+    },
     "ALL_DOMAINS": "All Domains",
     "ALL_MEMBERS": "All Members",
     "SPACE": {
@@ -694,19 +784,21 @@
       "HOME": "Home"
     },
     "TAG": {
+      "NAME": "Name",
       "SEARCH": "Search for tags",
       "CREATE": "Create new tag",
       "EDIT": "Edit tag",
       "DELETE": "Delete tag"
     },
-    "CONVERSATIONS": "General",
+    "RECEIVED_FROM": "Received from",
+    "CONVERSATIONS": "Conversations",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
     "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
     "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
-    "REPORT": "Report",
+    "REPORT": "Statistics",
     "CHART": {
       "CLIENT": "New Clients",
       "LANGUAGERANK": "Conversation's Language",
@@ -749,7 +841,7 @@
       "CONVERSATION_EXTENSION": "Conversation Extension"
     },
     "SCRIPT": {
-      "PAGE_TITLE": "Scripts Management",
+      "PAGE_TITLE": "Conversation Scripts",
       "SEARCH": "Search for scripts",
       "ADD_SCRIPT": "Add new script",
       "EDIT_SCRIPT": "Edit script",
@@ -852,5 +944,8 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "New password must be different from current password!",
       "INVALID_TOKEN": "Invalid token!"
     }
+  },
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "This tab is only available on desktop"
   }
 }

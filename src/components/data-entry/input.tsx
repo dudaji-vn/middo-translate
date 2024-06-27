@@ -35,10 +35,11 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {...wrapperProps}
         className={cn('relative', wrapperProps?.className)}
       >
+        {leftElement}
         <input
           type={type === 'password' && isShowPassword ? 'text' : type}
           className={cn(
-            'z-10 flex h-12 w-full rounded-xl border border-input bg-background px-5 py-[14px] pr-[3.75rem] text-base font-normal leading-none ring-offset-background file:bg-transparent placeholder:!text-neutral-200 placeholder:text-muted-foreground focus-within:border-primary focus-within:caret-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 ',
+            'z-10 flex h-12 w-full rounded-xl border border-input bg-background px-5 py-[14px] pr-[3.75rem] text-base font-normal leading-none ring-offset-background file:bg-transparent placeholder:!text-neutral-200 placeholder:text-muted-foreground focus-within:border-primary focus-within:caret-primary focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:text-neutral-50',
             className,
             isError && 'border-error focus-within:border-error',
             prefixEl && 'pl-7',
@@ -73,9 +74,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             color={'default'}
             shape={'default'}
             onClick={() => setIsShowPassword(!isShowPassword)}
-            className='absolute right-1 top-1/2 -translate-y-1/2'
-            >
-            {isShowPassword ? <EyeIcon /> : <EyeOffIcon /> }
+            className="absolute right-1 top-1/2 -translate-y-1/2"
+          >
+            {isShowPassword ? <EyeIcon /> : <EyeOffIcon />}
           </Button.Icon>
         )}
         {prefixEl && (
@@ -86,11 +87,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {suffix && (
           <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
             {suffix}
-          </div>
-        )}
-        {leftElement && (
-          <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
-            {leftElement}
           </div>
         )}
       </div>

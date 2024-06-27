@@ -147,19 +147,15 @@
                   fill: white;
                   z-index: 999999999;
               }
-              @media (max-width: 500px) {
+              @media (max-width: 768px) {
                 .iframe_inset {
                   inset: auto 0px 108px 0px;
-    
                 }
-
                 #chat-frame-widget {
                   transform-origin: 85% 100%;
-                  width: 500px;
-                  height: 700px; 
-                  max-width: 100vw;
+                  width: 100vw;
+                  height: 70vh;
                 }
-
               }
            
           </style>
@@ -177,9 +173,6 @@
     const domain = window.location.host;
     chatWidget.id = 'chat-widget';
     const srcWithDomain = `${chatSRC}?domain=${domain}`;
-    const paths = chatSRC.split('://');
-    const rest = paths[1]?.split('/');
-    const middoDomain = rest?.[0];
     const srcButton = `${chatSRC}/widget-notification`;
     chatWidget.innerHTML = `
               <iframe 
@@ -196,16 +189,16 @@
                   </iframe>
                 <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <polygon points="245,456.701 490,33.299 0,33.299 "></polygon> </g></svg>
                 <div
-                  id="iframe-trigger" style="position: fixed; bottom: 22px;  right:  22px; width: 200px; height: 200px;
+                  id="iframe-trigger" style="position: fixed; bottom: 0px;  right:  0px; width: 200px; height: 200px;
                   ">
                     <iframe
                     id="btn-trigger-chat-iframe"
                     src="${srcButton}"
-                     style="position: fixed; bottom: 22px;  right:  22px; width: 110px; height: 110px; border: none;  ">
+                     style="position: fixed; bottom: 0px;  right:  0px; width: 110px; height: 110px; border: none;  ">
                     </iframe>
                     <button id="btn-trigger-chat"
-                     style="position: absolute; bottom:  16px;  right:  16px; 
-                     width: 48px; height: 48px;
+                     style="position: absolute; bottom:  35px;  right:  35px; 
+                     width: 50px; height: 50px;
                      opacity: 1; 
                      font-size:32px; "
                     >
@@ -239,11 +232,15 @@
     });
 
     divTrigger.disabled = true;
-
     fetch(`${chatSRC}/check-host?host=${domain}`, {
       mode: 'no-cors',
+      method: 'GET',
+      headers: {
+        Accept: 'Content-Type',
+      },
     })
       .then((response) => {
+        console.log('response', response);
         setTimeout(() => {
           // btn.style.opacity = 0;
           btn.innerHTML = components.icon_message;

@@ -1,6 +1,7 @@
 import {
   CopyIcon,
   DownloadIcon,
+  EyeIcon,
   ForwardIcon,
   MessageSquareQuoteIcon,
   PenIcon,
@@ -10,14 +11,14 @@ import {
 } from 'lucide-react';
 import { createContext, useContext, useMemo, useState } from 'react';
 
-import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
+import { IDownloadFile, downloadFiles } from '@/utils/download-file';
 import { useClickReplyMessage } from '../hooks/use-click-reply-message';
 import { useCopyMessage } from '../hooks/use-copy-message';
 import { usePinMessage } from '../hooks/use-pin-message';
 import { Message } from '../types';
 import { ForwardModal } from './forward-modal';
 import { MessageModalRemove } from './message-modal-remove';
-import { IDownloadFile, downloadFiles } from '@/utils/download-file';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 
 type Action =
   | 'remove'
@@ -28,6 +29,7 @@ type Action =
   | 'none'
   | 'unpin'
   | 'edit'
+  | 'browser'
   | 'download';
 type ActionItem = {
   action: Action;
@@ -53,16 +55,23 @@ export const actionItems: ActionItem[] = [
     icon: <DownloadIcon />,
   },
   {
+    action: 'browser',
+    label: 'CONVERSATION.OPEN_IN_BROWSER',
+    icon: <EyeIcon />,
+  },
+  {
     action: 'edit',
     label: 'COMMON.EDIT',
     icon: <PenIcon />,
   },
+
   {
     action: 'forward',
     label: 'CONVERSATION.FORWARD',
     icon: <ForwardIcon />,
     disabled: true,
   },
+
   {
     action: 'pin',
     label: 'CONVERSATION.PIN',
@@ -110,6 +119,7 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
   const { copyMessage } = useCopyMessage();
   const { onClickReplyMessage } = useClickReplyMessage();
   const { pin } = usePinMessage();
+  const { postMessage } = useReactNativePostMessage();
   const onAction = ({ action, isMe, message }: OnActionParams) => {
     switch (action) {
       case 'copy':
@@ -126,14 +136,42 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
         break;
       case 'download':
         if (!message?.media) return;
-        let files: IDownloadFile[] = []
+        let files: IDownloadFile[] = [];
 
         message.media.forEach((media) => {
-          files.push({ url: media.url, fileName: media.name, mimeType: media.type });
+          files.push({
+            url: media.url,
+            fileName: media.name,
+            mimeType: media.type,
+          });
+        });
+
+        postMessage({
+          type: 'Trigger',
+          data: {
+            event: 'download',
+            payload: files.map((file) => ({
+              url: file.url,
+              name: file.fileName,
+              type: file.mimeType,
+            })),
+          },
         });
 
         downloadFiles(files);
         break;
+      case 'browser':
+        postMessage({
+          type: 'Trigger',
+          data: {
+            event: 'link',
+            payload: {
+              url: message.media?.[0].url,
+            },
+          },
+        });
+        break;
+
       default:
         setAction(action);
         setMessage(message);
