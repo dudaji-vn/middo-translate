@@ -40,5 +40,5 @@ export type Room = {
   expiredAt?: string;
   space?: TSpace;
   fromDomain?: string;
-  station: string;
+  station?: string;
 } & BaseEntity;

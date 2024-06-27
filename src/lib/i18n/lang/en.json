@@ -108,6 +108,7 @@
     "INFORMATION": "Information",
     "DELETE_STATION": "Delete station",
     "STATION_INFORMATION": "Station's information",
+    "STATION_SETTINGS": "Station settings",
     "LINK": "Link",
     "TIME": {
       "CREATED_ON": "Created on",

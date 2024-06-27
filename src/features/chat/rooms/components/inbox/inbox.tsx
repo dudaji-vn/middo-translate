@@ -103,11 +103,7 @@ const businessInboxTabs = [
   inboxTabMap['help-desk'],
   inboxTabMap['unread-help-desk'],
 ];
-const stationInboxTabs = [
-  inboxTabMap.all,
-  inboxTabMap.group,
-  inboxTabMap.settings,
-];
+const stationInboxTabs = [inboxTabMap.all, inboxTabMap.archived];
 
 export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
@@ -160,8 +156,6 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
     switch (type) {
       case 'contact':
         return <InboxContactList type={type} />;
-      case 'settings':
-        return <SettingTab />;
       default:
         return <InboxList type={type} notifyToTab={updateNotification} />;
     }

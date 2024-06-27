@@ -7,8 +7,10 @@ import { useActiveLinkInvitation } from '../hooks/use-active-link-invitation';
 import { useCancelLinkInvitation } from '../hooks/use-cancel-link-invitation';
 import { useGetInvitationLink } from '../hooks/use-get-invitation-link';
 import { Station } from '../types/station.types';
+import { useAuthStore } from '@/stores/auth.store';
 
 export const AddByLink = ({ station }: { station: Station }) => {
+  const userId = useAuthStore((state) => state.user?._id);
   const { cancel } = useCancelLinkInvitation({ stationId: station._id });
   const { active } = useActiveLinkInvitation({ stationId: station._id });
   const { data, refetch } = useGetInvitationLink({ stationId: station._id });
@@ -22,24 +24,27 @@ export const AddByLink = ({ station }: { station: Station }) => {
     }
   };
   const link = data?.link;
-  console.log(data);
+
+  const isOwner = station.owner._id === userId;
 
   return (
     <div className="w-full">
       <div className="flex justify-between">
         <span className="font-semibold">Invitation link</span>
-        <Switch
-          checked={isActive}
-          onCheckedChange={handleSwitch}
-          className="ml-3"
-        />
+        {isOwner && (
+          <Switch
+            checked={isActive}
+            onCheckedChange={handleSwitch}
+            className="ml-3"
+          />
+        )}
       </div>
       {isActive && (
         <div className="mt-2 w-full space-y-2">
           <span className="text-sm font-light">
             Copy & send the link below for others to join this Station
           </span>
-          <div className="flex items-center gap-1 rounded-xl border border-neutral-100 bg-neutral-50 p-1 pl-3">
+          <div className="flex items-center gap-1 rounded-xl border border-neutral-100 bg-neutral-50 p-1 pl-3 dark:border-neutral-700 dark:bg-neutral-800">
             <span className="line-clamp-1 flex-1 overflow-hidden font-semibold text-primary">
               {link}
             </span>
@@ -58,6 +63,13 @@ export const AddByLink = ({ station }: { station: Station }) => {
               onExpire={refetch}
             />
           </div>
+        </div>
+      )}
+      {!isOwner && !isActive && (
+        <div className="mt-2 w-full space-y-2">
+          <span className="text-sm font-light">
+            This invitation link is not active, ask the owner to activate it!
+          </span>
         </div>
       )}
     </div>
@@ -91,7 +103,7 @@ const LinkExpireIn = ({
   }, [expireAt]);
 
   return (
-    <div className="text-sm font-light text-neutral-600">
+    <div className="text-sm font-light text-neutral-600 dark:text-neutral-200">
       Link expire in{' '}
       <span className="font-semibold ">
         {new Date(timeLeft).toISOString().substr(11, 8).replace(/00:/, '')}

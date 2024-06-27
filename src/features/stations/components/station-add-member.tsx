@@ -11,8 +11,16 @@ import {
 } from '@/components/feedback';
 import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { User } from '@/features/users/types';
-import { Link, SearchIcon, UserPlus2Icon } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { AtSignIcon, Link, SearchIcon, UserPlus2Icon } from 'lucide-react';
+import {
+  forwardRef,
+  use,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useInviteMembers } from '../hooks/use-invite-members';
 import { Station } from '../types/station.types';
@@ -36,7 +44,7 @@ export const tabs: Record<
   search: {
     label: 'COMMON.USERNAME',
     value: 'search',
-    icon: <SearchIcon className="size-5 md:size-4" />,
+    icon: <AtSignIcon className="size-5 md:size-4" />,
   },
   // email: {
   //   label: 'COMMON.EMAIL',
@@ -52,40 +60,13 @@ export const tabs: Record<
 
 export const StationAddMember = ({ station }: StationAddMemberProps) => {
   const { t } = useTranslation('common');
-  const [type, setType] = useState<AddType>('search');
-
+  const ref = useRef<StationAddMemberRef>(null);
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
-  const { mutate } = useInviteMembers();
 
   const handleSubmit = () => {
-    mutate({
-      stationId: station._id,
-      users: selectedUsers,
-    });
-    setSelectedUsers([]);
+    ref.current?.submit();
   };
-  const TabContent = useMemo(() => {
-    switch (type) {
-      // case 'email':
-      //   return (
-      //     <AddByEmail
-      //       station={station}
-      //       addedEmails={addedEmails}
-      //       setAddedEmails={setAddedEmails}
-      //     />
-      //   );
-      case 'link':
-        return <AddByLink station={station} />;
-      default:
-        return (
-          <AddByUsername
-            station={station}
-            selectedUsers={selectedUsers}
-            setSelectedUsers={setSelectedUsers}
-          />
-        );
-    }
-  }, [type, station, selectedUsers]);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -96,27 +77,11 @@ export const StationAddMember = ({ station }: StationAddMemberProps) => {
       <AlertDialogContent>
         <AlertDialogHeader className="w-full overflow-hidden">
           <AlertDialogTitle>{t('STATION.INVITE_MEMBERS')}</AlertDialogTitle>
-          <Tabs defaultValue="all" value={type} className="w-full">
-            <TabsList>
-              {Object.values(tabs).map((tab) => (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  onClick={() => {
-                    setType(tab.value);
-                  }}
-                  className="!rounded-none dark:!text-neutral-50"
-                >
-                  {type === tab.value ? (
-                    <>{t(tab.label)}</>
-                  ) : (
-                    <div className="relative h-5 ">{tab?.icon}</div>
-                  )}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-          <div className="py-3">{TabContent}</div>
+          <StationAddMemberContent
+            onAdd={setSelectedUsers}
+            ref={ref}
+            station={station}
+          />
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="mr-4">
@@ -133,3 +98,82 @@ export const StationAddMember = ({ station }: StationAddMemberProps) => {
     </AlertDialog>
   );
 };
+
+interface StationAddMemberContentProps {
+  station: Station;
+  onAdd: (users: User[]) => void;
+}
+
+export interface StationAddMemberRef {
+  submit: () => void;
+}
+
+export const StationAddMemberContent = forwardRef<
+  StationAddMemberRef,
+  StationAddMemberContentProps
+>(({ station, onAdd }, ref) => {
+  const { t } = useTranslation('common');
+  const [type, setType] = useState<'search' | 'link'>('search');
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const { mutate } = useInviteMembers();
+
+  const handleSubmit = () => {
+    mutate({
+      stationId: station._id,
+      users: selectedUsers,
+    });
+    setSelectedUsers([]);
+  };
+
+  useImperativeHandle(ref, () => ({
+    submit: handleSubmit,
+  }));
+
+  const TabContent = useMemo(() => {
+    switch (type) {
+      case 'link':
+        return <AddByLink station={station} />;
+      default:
+        return (
+          <AddByUsername
+            station={station}
+            selectedUsers={selectedUsers}
+            setSelectedUsers={setSelectedUsers}
+          />
+        );
+    }
+  }, [type, station, selectedUsers]);
+
+  useEffect(() => {
+    onAdd(selectedUsers);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUsers]);
+
+  return (
+    <>
+      <Tabs defaultValue="all" value={type} className="w-full">
+        <TabsList>
+          {Object.values(tabs).map((tab) => (
+            <TabsTrigger
+              key={tab.value}
+              value={tab.value}
+              onClick={() => {
+                setType(tab.value);
+              }}
+              className="!rounded-none dark:!text-neutral-50"
+            >
+              {type === tab.value ? (
+                <>{t(tab.label)}</>
+              ) : (
+                <div className="relative h-5 ">{tab?.icon}</div>
+              )}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+      </Tabs>
+      <div className="py-3">{TabContent}</div>
+    </>
+  );
+});
+
+StationAddMemberContent.displayName = 'StationAddMemberContent';

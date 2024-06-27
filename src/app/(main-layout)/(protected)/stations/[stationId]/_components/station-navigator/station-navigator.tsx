@@ -9,17 +9,17 @@ import {
 } from '@/components/data-display';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useGetStations } from '@/features/stations/hooks/use-get-spaces';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { DropdownMenuTriggerProps } from '@radix-ui/react-dropdown-menu';
-import { ChevronDown, Home, Plus } from 'lucide-react';
+import { ChevronDown, Home, Plus, SettingsIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useResizeObserver } from 'usehooks-ts';
 import { TStation } from '../../../_components/type';
 
 interface Item {
@@ -36,6 +36,7 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const triggerRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState<number>(0);
+  const { setCurrentSide } = useSideChatStore();
 
   const { t } = useTranslation('common');
   const { data: stations, isLoading } = useGetStations({
@@ -89,7 +90,7 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
     );
   }
   return (
-    <>
+    <div className="flex items-center">
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger
           {...props}
@@ -196,7 +197,15 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           </div>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+      <Button.Icon
+        onClick={() => setCurrentSide('station_settings')}
+        color="default"
+        size="xs"
+        className="mr-2"
+      >
+        <SettingsIcon />
+      </Button.Icon>
+    </div>
   );
 };
 
