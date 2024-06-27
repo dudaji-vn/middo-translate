@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
-import { isEqual } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RoomActions } from '../room-actions';
@@ -27,6 +27,7 @@ import { SPK_FOCUS } from '@/configs/search-param-key';
 import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 import { SettingTab } from '@/features/stations/components/setting-tab';
+import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 export interface InboxProps {
   unreadCount?: number;
 }
@@ -122,6 +123,7 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
     return normalInboxTabs;
   }, [isBusiness, isOnStation]);
   const [type, setType] = useState<InboxType>(tabs[0].value);
+  const { appliedFilters } = useSpaceInboxFilterStore();
   const [notifications, setNotifications] = useState<
     Partial<Record<InboxType, boolean>>
   >({
@@ -184,9 +186,12 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
                     <>{t(tab.label)}</>
                   ) : (
                     <div className="relative h-5 ">
-                      {notifications[tab.value] && (
-                        <Ping size={12} className="absolute -top-2 right-0" />
-                      )}
+                      {notifications[tab.value] &&
+                        isEmpty(
+                          Object.values(appliedFilters || {})?.flat(),
+                        ) && (
+                          <Ping size={12} className="absolute -top-2 right-0" />
+                        )}
                       {tab?.icon}
                     </div>
                   )}

@@ -70,7 +70,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const helpDeskEmptyType = useMemo(() => {
       if (!isBusiness) return undefined;
-      if (!isEmpty(Object.keys(appliedFilters || {})))
+      if (!isEmpty(Object.values(appliedFilters || {})?.flat()))
         return 'help-desk-filtered';
       return type;
     }, [appliedFilters, isBusiness]);
