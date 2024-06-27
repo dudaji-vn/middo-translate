@@ -34,4 +34,12 @@ export const searchApi = {
     const res: Response<User[]> = await axios.get(path);
     return res.data;
   },
+  async username(params: SearchParams & StationParams) {
+    const path = queryString.stringifyUrl({
+      url: `${basePath}/users/username`,
+      query: params,
+    });
+    const res: Response<User[]> = await axios.get(path);
+    return res.data;
+  },
 };

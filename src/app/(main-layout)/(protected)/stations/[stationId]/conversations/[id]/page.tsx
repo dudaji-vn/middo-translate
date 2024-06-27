@@ -7,8 +7,10 @@ import { redirect } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import ChatRoomContent from '@/app/(main-layout)/(protected)/talk/[id]/_component/chat-room-content';
 
-async function getChatRoom(id: string) {
-  const data = await fetchApi<Response<Room>>(`/rooms/${id}`);
+async function getChatRoom(id: string, stationId: string) {
+  const data = await fetchApi<Response<Room>>(
+    `/rooms/${id}?stationId=${stationId}`,
+  );
   if (!data) {
     throw new Error('Not Found');
   }
@@ -18,9 +20,11 @@ async function getChatRoom(id: string) {
 const ChatBoxPage = async (props: {
   params: {
     id: string;
+    stationId: string;
   };
 }) => {
-  const room = await getChatRoom(props.params.id);
+  const room = await getChatRoom(props.params.id, props.params.stationId);
+  console.log(room);
 
   if (!room || room.isHelpDesk) {
     return redirect(ROUTE_NAMES.ONLINE_CONVERSATION);

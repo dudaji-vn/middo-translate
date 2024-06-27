@@ -11,9 +11,7 @@ import { axios } from '@/lib/axios';
 import queryString from 'query-string';
 import { uploadImage } from '@/utils/upload-img';
 import { InboxType } from '../components/inbox/inbox';
-import { t } from 'i18next';
 import { convertRoomsFilterOptionsToString } from '@/utils/get-rooms-filter-options';
-import { SpaceInboxFilterState } from '@/stores/space-inbox-filter.store';
 
 const basePath = '/rooms';
 

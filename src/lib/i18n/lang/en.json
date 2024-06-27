@@ -105,6 +105,7 @@
     "INFORMATION": "Information",
     "DELETE_STATION": "Delete station",
     "STATION_INFORMATION": "Station's information",
+    "LINK": "Link",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
@@ -166,7 +167,8 @@
       "USERNAME_MIN": "Username must be at least 3 characters!",
       "USERNAME_MAX": "Username must be at most 15 characters!",
       "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
-      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view."
+      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view.",
+      "USER_NOT_FOUND": "User not found!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -747,7 +749,8 @@
       "EMAIL": "Email",
       "ROLE": "Role"
     },
-    "NO_MEMBER": "No members"
+    "NO_MEMBER": "No members",
+    "INVITE_MEMBERS": "Invite members"
   },
   "EXTENSION": {
     "EMPTY": {
