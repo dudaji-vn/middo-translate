@@ -8,11 +8,13 @@ export function useQuerySearch<T>({
   queryKey,
   searchTerm,
   businessSpaceParams,
+  limit = 10,
 }: {
   searchApi: Function;
   queryKey: string;
   searchTerm: string;
   businessSpaceParams?: { type?: string; spaceId?: string };
+  limit?: number;
 }) {
   const { type, spaceId } = businessSpaceParams || {};
   const params = useParams();
@@ -22,7 +24,8 @@ export function useQuerySearch<T>({
       'search' + queryKey,
       { q: searchTerm, type, spaceId, stationId },
     ],
-    queryFn: (): T => searchApi({ q: searchTerm, type, spaceId, stationId }),
+    queryFn: (): T =>
+      searchApi({ q: searchTerm, type, spaceId, stationId, limit }),
     enabled: !!searchTerm,
     // staleTime: DEFAULT_STALE_TIME, // 5 minutes
     keepPreviousData: true,

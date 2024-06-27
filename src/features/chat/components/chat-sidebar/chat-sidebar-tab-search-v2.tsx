@@ -1,47 +1,50 @@
 import { Section } from '@/components/data-display/section';
 import { searchApi } from '@/features/search/api';
-import { User } from '@/features/users/types';
 import { motion } from 'framer-motion';
 import { forwardRef } from 'react';
-import { Room } from '../../rooms/types';
 
 import { Button } from '@/components/actions';
-import { useGetRoomsRecChat } from '@/features/recommendation/hooks';
-import { useSearchStore } from '@/features/search/store/search.store';
-import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { useQuerySearch } from '@/hooks/use-query-search';
-import { useBusinessExtensionStore } from '@/stores/extension.store';
-import { PaintbrushIcon, SearchIcon, XIcon } from 'lucide-react';
-import { useParams } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
 import { SearchTabs } from '@/features/search/components/search-tabs';
+import { useSearchStore } from '@/features/search/store/search.store';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { PaintbrushIcon, SearchIcon, XIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useStationNavigationData } from '@/hooks';
+import { cn } from '@/utils/cn';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
     const searchValue = useSearchStore((state) => state.searchValue);
-    const { isBusiness, spaceId } = useBusinessNavigationData();
-    const params = useParams();
-    const helpdeskParams = spaceId
-      ? { type: 'help-desk', spaceId: params?.spaceId as string }
-      : undefined;
+    const { isOnStation } = useStationNavigationData();
+    // const { isBusiness, spaceId } = useBusinessNavigationData();
+    // const params = useParams();
+    // const helpdeskParams = spaceId
+    //   ? { type: 'help-desk', spaceId: params?.spaceId as string }
+    //   : undefined;
 
-    const { data: recData } = useGetRoomsRecChat(helpdeskParams);
-    const { businessExtension } = useBusinessExtensionStore();
-    const { t } = useTranslation('common');
-    const { data } = useQuerySearch<{
-      rooms: Room[];
-      users: User[];
-    }>({
-      searchApi: searchApi.inboxes,
-      queryKey: 'chat-search',
-      searchTerm: searchValue || '',
-      helpdeskParams,
-    });
+    // const { data: recData } = useGetRoomsRecChat(helpdeskParams);
+    // const { businessExtension } = useBusinessExtensionStore();
+    // const { t } = useTranslation('common');
+    // const { data } = useQuerySearch<{
+    //   rooms: Room[];
+    //   users: User[];
+    // }>({
+    //   searchApi: searchApi.inboxes,
+    //   queryKey: 'chat-search',
+    //   searchTerm: searchValue || '',
+    //   helpdeskParams,
+    // });
 
     return (
-      <div className="absolute left-0 top-[114px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[106px]">
+      <div
+        className={cn(
+          'absolute left-0  h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 ',
+          isOnStation
+            ? 'top-[182px] md:top-[174px]'
+            : 'top-[114px] md:top-[106px]',
+        )}
+      >
         <motion.div
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

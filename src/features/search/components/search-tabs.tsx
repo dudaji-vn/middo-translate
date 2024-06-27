@@ -23,6 +23,8 @@ import { SearchType } from '../types';
 import moment from 'moment';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useAuthStore } from '@/stores/auth.store';
+import { useSearchDynamic } from '../hooks/use-search-dynamic';
+import { useStationNavigationData } from '@/hooks';
 
 export interface SearchTabsProps {
   searchValue: string;
@@ -57,13 +59,14 @@ const tabs: Record<
 
 export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
   const [type, setType] = useState<SearchType>('all');
+  const { stationId } = useStationNavigationData();
   const { mutate } = useMutation({
     mutationFn: searchApi.createKeyword,
   });
   const { t } = useTranslation('common');
   // call api to count the number of results for each tab
   const { data } = useQuery({
-    queryFn: () => searchApi.count({ q: searchValue || '' }),
+    queryFn: () => searchApi.count({ q: searchValue || '', stationId }),
     queryKey: ['search', 'count', searchValue],
   });
 
@@ -166,11 +169,9 @@ const UsersResult = ({ searchValue, onItemClick }: ResultProps) => {
   );
 };
 const MessagesResult = ({ searchValue, onItemClick }: ResultProps) => {
-  const { data } = useQuery({
-    queryFn: () =>
-      searchApi.conversations({ q: searchValue || '', type: 'message' }),
-    queryKey: ['search', 'messages', searchValue],
-    enabled: !!searchValue,
+  const { data } = useSearchDynamic({
+    searchValue,
+    type: 'message',
   });
   const messages = data?.items as Message[];
 
@@ -221,6 +222,7 @@ const AllResult = ({ searchValue, onItemClick }: ResultProps) => {
     searchApi: searchApi.inboxes,
     queryKey: 'chat-search',
     searchTerm: searchValue || '',
+    limit: 3,
   });
   if (!data) return null;
   return (
@@ -316,7 +318,10 @@ const MessageItem = ({
   onClick?: () => void;
 }) => {
   const userId = useAuthStore((state) => state.user?._id);
-  const room = generateRoomDisplay(message.room!, userId!);
+  const room = generateRoomDisplay({
+    room: message.room!,
+    currentUserId: userId!,
+  });
   return (
     <Link
       key={message?._id}

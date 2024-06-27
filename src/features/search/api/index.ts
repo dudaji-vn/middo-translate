@@ -76,9 +76,11 @@ export const searchApi = {
     return res.data;
   },
   async conversations(
-    params: SearchParams & {
-      type: 'user' | 'group' | 'message';
-    },
+    params: SearchParams &
+      HelpdeskSearchParam &
+      StationParams & {
+        type: 'user' | 'group' | 'message';
+      },
   ) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/conversations`,
@@ -113,7 +115,7 @@ export const searchApi = {
     const res: Response<Message[]> = await axios.get(path);
     return res.data;
   },
-  async count(params: SearchParams) {
+  async count(params: SearchParams & StationParams) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/inboxes/count`,
       query: params,
