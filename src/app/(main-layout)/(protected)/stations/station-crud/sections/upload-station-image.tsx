@@ -43,6 +43,7 @@ export default function UploadStationImage({
   uploadAble?: boolean;
   onUploadDone?: () => void;
 }) {
+  const theme = useAppStore((state) => state.theme);
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const inputCropImage = useRef<InputCropImageRef>(null);
@@ -119,7 +120,7 @@ export default function UploadStationImage({
           <AlertDialogTrigger className="relative">
             <Avatar
               variant={'outline'}
-              src={'/empty-cam.svg'}
+              src={theme == 'dark' ? '/empty-cam-dark.svg' : '/empty-cam.svg'}
               alt="avatar"
               className={cn(
                 'z-0 h-24 w-24 cursor-pointer p-0',
