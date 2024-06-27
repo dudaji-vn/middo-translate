@@ -580,6 +580,9 @@ input::-ms-clear {
     overflow: auto;
   }
 }
+.highlight {
+  @apply font-semibold text-primary;
+}
 
 /* React flow hidden label panel */
 .react-flow__panel.react-flow__attribution.bottom.right {

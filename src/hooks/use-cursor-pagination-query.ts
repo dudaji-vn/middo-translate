@@ -19,6 +19,7 @@ type CursorPaginationQuery<TData> = {
   queryFn: QueryFunction<TDataResponse<TData>>;
   queryKey: QueryKey;
   config?: UseInfiniteQueryOptions<TDataResponse<TData>>;
+  initialCursor?: string;
 };
 
 export const useCursorPaginationQuery = <TData>({

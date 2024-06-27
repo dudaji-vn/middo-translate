@@ -12,6 +12,7 @@ export interface UserItemProps extends React.HTMLAttributes<HTMLDivElement> {
   rightElement?: React.ReactNode;
   subContent?: React.ReactNode;
   wrapperClassName?: string;
+  topContent?: string;
   status?: MemberStatus;
 }
 
@@ -19,6 +20,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
   (
     {
       user,
+      topContent,
       rightElement,
       isActive,
       subContent,
@@ -52,13 +54,18 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
         ref={ref}
         {...props}
         className={cn(
-          'flex cursor-pointer items-center justify-between px-3 py-2 transition-all',
+          'flex cursor-pointer flex-col items-center justify-between px-3 py-2 transition-all',
           isActive
             ? 'bg-background-lightest'
             : 'bg-transparent hover:bg-background-lighter dark:hover:bg-primary-900',
           wrapperClassName,
         )}
       >
+        {topContent && (
+          <span className="mb-1 self-start text-xs font-light text-neutral-400">
+            from <span className="font-normal">{topContent}</span>
+          </span>
+        )}
         <div className="flex w-full items-center gap-2">
           <div className="relative">
             <Avatar src={user?.avatar} alt={user?.name} />
@@ -76,7 +83,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
                 </span>
               </div>
             </div>
-            <Typography className="line-clamp-1 break-all text-sm text-text/50">
+            <Typography className="highlight-able line-clamp-1 break-all text-sm text-text/50">
               {subContent ? subContent : '@' + user?.username}
             </Typography>
           </div>
