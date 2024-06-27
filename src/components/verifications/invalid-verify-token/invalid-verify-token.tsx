@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { ArrowLeftRight } from 'lucide-react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import React from 'react';
 const statusMessages: Record<string, string> = {
   '400': 'The invitation is invalid',
@@ -22,7 +22,7 @@ const InvalidVerifyToken = ({
   status: number;
 }) => {
   const { user: currentUser, setData } = useAuthStore();
-  const router = useRouter();
+
   const pathname = usePathname();
   const onSwitchAccount = async () => {
     setCookieService([

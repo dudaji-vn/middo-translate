@@ -91,7 +91,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           expand && 'min-w-[376px]  max-w-full',
         )}
       >
-        <div className="relative flex w-full flex-row items-center justify-start gap-3  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
+        <div className=" flex w-full flex-row items-center justify-start gap-3 overflow-x-hidden  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
           {space?.avatar && (
             <Avatar
               alt={space.name ?? ''}
@@ -102,22 +102,20 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           )}
           <div
             className={cn('hidden ', {
-              ' flex flex-grow flex-row items-center justify-start gap-1 ':
+              ' flex max-w-full flex-grow flex-row items-center justify-start gap-1 ':
                 expand,
             })}
           >
-            <p className="font-semibold">{space?.name}</p>
+            <p className="max-w-56 truncate text-ellipsis break-words text-left font-semibold">
+              {space?.name}
+            </p>
             <ChevronDown className="h-4 w-4" />
           </div>
           <Ping
             size={12}
-            className={cn(
-              'absolute right-[6px] top-[20px]',
-              expand && 'right-4',
-              {
-                hidden: !hasNotification,
-              },
-            )}
+            className={cn('absolute right-3 top-[26px] ', expand && 'right-6', {
+              hidden: !hasNotification,
+            })}
           />
         </div>
       </DropdownMenuTrigger>

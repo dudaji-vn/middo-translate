@@ -13,11 +13,14 @@ export default function usePlatformNavigation() {
     query?: URLSearchParams,
     option: 'push' | 'replace' = 'push',
   ) => {
+    let href = path;
     const current = new URLSearchParams(Array.from(query?.entries() || []));
     if (isMobile) {
       current.set('platform', 'mobile');
     }
-    const href = `${path}?${current.toString()}`;
+    if (current.toString()) {
+      href += `?${current.toString()}`;
+    }
     if (option === 'replace') {
       router.replace(href);
       return;
@@ -25,11 +28,14 @@ export default function usePlatformNavigation() {
     router.push(href);
   };
 
-  const toPlatformLink = (path: string, query?: URLSearchParams) => {
-    let href = `${path}?platform=mobile`;
-    if (isMobile && query) {
+  const toPlatformLink = (path: string, q?: URLSearchParams) => {
+    let href = `${path}`;
+    const query = new URLSearchParams(Array.from(q?.entries() || []));
+    if (isMobile) {
       query.set('platform', 'mobile');
-      href = `${path}?${query.toString()}`;
+    }
+    if (query.toString()) {
+      href += `?${query.toString()}`;
     }
     return href as string;
   };

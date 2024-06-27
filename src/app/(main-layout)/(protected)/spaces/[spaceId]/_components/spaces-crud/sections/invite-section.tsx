@@ -89,7 +89,7 @@ const InviteMembers = ({
       })
       .refine(
         (value) => {
-          return value !== currentUser?.email;
+          return value?.toLowerCase() !== currentUser?.email?.toLowerCase();
         },
         {
           message: 'You are already a member of this space',
@@ -100,7 +100,9 @@ const InviteMembers = ({
           if (isEmpty(blackList)) {
             return true;
           }
-          return !blackList?.includes(value);
+          return !blackList?.find(
+            (email) => email?.toLowerCase() === value?.toLowerCase(),
+          );
         },
         {
           message: 'This user has already been invited!',

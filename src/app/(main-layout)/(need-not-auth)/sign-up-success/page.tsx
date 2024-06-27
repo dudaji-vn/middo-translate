@@ -44,10 +44,10 @@ export default function SignUpSuccess() {
     try {
       setLoading(true);
       setIsResend(true);
-      const data = await resendEmailService(email);
+      await resendEmailService(email);
       customToast.success(t('MESSAGE.SUCCESS.RESEND_EMAIL'));
     } catch (err: any) {
-      customToast.error(err?.response?.data?.message);
+      customToast.error(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
     }

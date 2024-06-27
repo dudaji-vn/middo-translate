@@ -28,6 +28,9 @@ const P2PLayout = () => {
         <div className="relative flex w-full h-full p-1">
             <div className="flex h-full w-full relative">
                 {participantPin && <FocusVideoItem participant={participantPin} isAllowChangeView={false}/>}
+                {participantPin && <div className="hidden"> 
+                    <VideoItem participant={participantPin} />
+                </div>}
             </div>
             {anotherParticipants.length > 0 && <ParticipantsBar participants={anotherParticipants}/>}
         </div>

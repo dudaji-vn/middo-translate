@@ -2,6 +2,8 @@ import { useId, useState } from 'react';
 
 import { AlertCircleIcon } from 'lucide-react';
 import Image from 'next/image';
+import customToast from '@/utils/custom-toast';
+import { useTranslation } from 'react-i18next';
 
 interface InputImageProps {
   className?: string;
@@ -12,6 +14,7 @@ interface InputImageProps {
 }
 
 export const InputImage = (props: InputImageProps) => {
+  const {t} = useTranslation('common');
   const id = useId();
   const [imageSource, setImageSource] = useState<string | ArrayBuffer | null>(
     '/person.svg',
@@ -22,6 +25,10 @@ export const InputImage = (props: InputImageProps) => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    if (!file.type.includes('image')) {
+      return customToast.error(t('MESSAGE.ERROR.FILE_NOT_SUPPORTED'));
+    }
+    
     const urlImage = URL.createObjectURL(file);
     setImageSource(urlImage);
     setValue('avatar', file);
@@ -47,7 +54,7 @@ export const InputImage = (props: InputImageProps) => {
           type="file"
           id={id}
           hidden
-          accept="image/png, image/gif, image/jpeg"
+          // accept="image/png, image/gif, image/jpeg"
         />
         <div className="absolute bottom-0 right-0 h-8 w-8 cursor-pointer rounded-full transition-all hover:opacity-70">
           <Image

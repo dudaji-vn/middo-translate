@@ -52,8 +52,8 @@ const MemberItem = ({
       {...props}
     >
       <div className="flex w-full flex-row items-center justify-start">
-        <div className="flex h-auto w-[260px] flex-row items-center justify-start gap-3 break-words rounded-l-[12px] px-3 sm:w-[400px] md:w-[500px] xl:w-[800px]">
-          <Typography className="text-neutral-800 dark:text-neutral-50">
+        <div className="w-[260px] flex h-auto flex-row items-center justify-start gap-3 break-words rounded-l-[12px] px-3 sm:w-[400px] md:w-[500px] xl:w-[800px]">
+          <Typography className="line-clamp-2 text-ellipsis break-words text-neutral-800 dark:text-neutral-50 max-w-full ">
             {email}
           </Typography>
           {isOwnerRow && <Badge className="bg-primary text-white">Owner</Badge>}

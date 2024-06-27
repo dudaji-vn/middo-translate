@@ -4,7 +4,9 @@ import toast, { Toast, ToastOptions } from "react-hot-toast";
 
 const customToastContent = (t: Toast, message: string | React.ReactNode) => {
     return <div className="flex items-center -mr-2">
-        {message}
+        <span className="break-all line-clamp-2">
+            {message}
+        </span>
         <Button.Icon 
             variant={'ghost'}
             color={'default'}

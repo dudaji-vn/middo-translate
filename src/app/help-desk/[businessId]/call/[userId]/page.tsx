@@ -31,8 +31,10 @@ interface HelpDeskCallProps {
 
 const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
   const setRoom = useVideoCallStore((state) => state.setRoom);
+  const room = useVideoCallStore((state) => state.room);
   const setFullScreen = useVideoCallStore((state) => state.setFullScreen);
   const setLayout = useVideoCallStore((state) => state.setLayout);
+  const layout = useVideoCallStore((state) => state.layout);
   const setData = useAuthStore((state) => state.setData);
   const user = useAuthStore((state) => state.user);
   const socketConnected = useAppStore((state) => state.socketConnected);
@@ -55,7 +57,6 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
           setUserHelpDesk(user);
           setFullScreen(true);
           setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW);
-          setStatus('JOINED');
         } else {
           setStatus('BLOCK');
         }
@@ -75,6 +76,13 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
   }, [userHelpDesk]);
 
   useEffect(() => {
+    if(userHelpDesk && room) {
+      setStatus('JOINED');
+    }
+  }, [userHelpDesk, room, setStatus]);
+
+  
+  useEffect(() => {
     const blockJoinMeeting = () => {
       setStatus('BLOCK');
     };
@@ -88,7 +96,10 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
     if (!isFullScreen) {
       setFullScreen(true);
     }
-  }, [isFullScreen]);
+    if(layout != VIDEO_CALL_LAYOUTS.P2P_VIEW) {
+      setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW);
+    }
+  }, [isFullScreen, layout, setLayout]);
   
   if (!socketConnected || !data || status == 'WAITING' || !userHelpDesk || !user) return <PageLoading />;
 

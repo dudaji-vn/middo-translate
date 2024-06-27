@@ -70,7 +70,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
 
     const helpDeskEmptyType = useMemo(() => {
       if (!isBusiness) return undefined;
-      if (!isEmpty(Object.keys(appliedFilters || {})))
+      if (!isEmpty(Object.values(appliedFilters || {})?.flat()))
         return 'help-desk-filtered';
       return type;
     }, [appliedFilters, isBusiness]);
@@ -224,7 +224,13 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               })}
             />
             <PinnedRoom
-              type={filters.includes('group') ? 'group' : 'all'}
+              type={
+                filters.includes('group')
+                  ? 'group'
+                  : type === 'help-desk'
+                    ? 'help-desk'
+                    : 'all'
+              }
               rooms={pinnedRooms}
               currentRoomId={currentRoomId as string}
             />

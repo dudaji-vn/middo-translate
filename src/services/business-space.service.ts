@@ -37,6 +37,10 @@ export const validateInvitation = (data: {
   return post('/help-desk/validate-invite', data);
 };
 
+export const getInvitationByToken = (token: string) => {
+  return get(`/help-desk/space-verify/${token}`);
+};
+
 export const removeMemberFromSpace = (data: {
   email: string;
   spaceId: string;
