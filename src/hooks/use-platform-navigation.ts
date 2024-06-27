@@ -25,11 +25,14 @@ export default function usePlatformNavigation() {
     router.push(href);
   };
 
-  const toPlatformLink = (path: string, query?: URLSearchParams) => {
-    let href = `${path}?platform=mobile`;
-    if (isMobile && query) {
+  const toPlatformLink = (path: string, q?: URLSearchParams) => {
+    let href = `${path}`;
+    const query = new URLSearchParams(Array.from(q?.entries() || []));
+    if (isMobile) {
       query.set('platform', 'mobile');
-      href = `${path}?${query.toString()}`;
+    }
+    if (query.toString()) {
+      href += `?${query.toString()}`;
     }
     return href as string;
   };
