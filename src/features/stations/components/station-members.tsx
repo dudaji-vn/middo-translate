@@ -35,9 +35,6 @@ export const StationMembers = ({ station }: StationMembersProps) => {
               <Users2Icon />
             </IconWrapper>
             <span>{t('CONVERSATION.MEMBERS')}</span>
-            <span className="text-sm text-neutral-600">
-              ({members?.length})
-            </span>
           </div>
           <StationAddMember station={station} />
         </div>
