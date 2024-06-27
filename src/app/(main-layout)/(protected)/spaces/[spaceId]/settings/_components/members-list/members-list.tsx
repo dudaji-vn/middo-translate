@@ -224,13 +224,14 @@ const ReorderList = ({
                       <Droppable droppableId={category._id.toString()}>
                         {(provided) => (
                           <div ref={provided.innerRef}>
+                            <CategoryHeader role={category._id} />
+
                             <ul
                               className={cn(
                                 'list-unstyled mb-3 ',
                                 'flex w-full flex-col gap-1 overflow-x-auto  md:min-w-[400px]',
                               )}
                             >
-                              <CategoryHeader role={category._id} />
                               {items
                                 .filter((item) => item.role === category._id)
                                 .map((item, index) => (
