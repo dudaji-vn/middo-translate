@@ -8,6 +8,7 @@ import ExpiredVerifyToken from '../../../../components/verifications/expired-ver
 import { ClientInviteTime } from '@/components/verifications/client-invite-time';
 import { InvalidVerifyToken } from '@/components/verifications/invalid-verify-token';
 import { useGetSpaceVerification } from '@/features/business-spaces/hooks/use-get-space-verification';
+import { PageLoading } from '@/components/feedback';
 
 const SpaceVerify = ({
   searchParams: { token },
@@ -19,11 +20,18 @@ const SpaceVerify = ({
   if (!token) {
     notFound();
   }
-  const { data: invitation } = useGetSpaceVerification(token);
-  console.log('invitation==>', invitation);
+  const {
+    data: invitation,
+    isLoading,
+    isFetched,
+  } = useGetSpaceVerification(token);
+
+  if (isLoading) {
+    return <PageLoading />;
+  }
 
   if (!invitation) {
-    return null;
+    notFound();
   }
   if (invitation.statusCode) {
     return <InvalidVerifyToken token={token} status={invitation.statusCode} />;
