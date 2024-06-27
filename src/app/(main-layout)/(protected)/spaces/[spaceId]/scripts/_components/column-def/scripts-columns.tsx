@@ -91,12 +91,14 @@ export const makeScriptsColumns = ({
       header: t('EXTENSION.SCRIPT.NAME'),
       cell(props) {
         return (
-          <td className="flex gap-2" {...props}>
-            <span>{props?.row?.original?.name}</span>
+          <td {...props} className=" flex gap-2">
+            <span className="line-clamp-2 max-w-80 text-ellipsis break-words">
+              {props?.row?.original?.name}
+            </span>
             {props?.row?.original?.isUsing && (
               <Badge
                 variant="default"
-                className="bg-success-100 text-xs font-semibold text-success-700 dark:bg-success-900"
+                className=" bg-success-100 text-xs font-semibold text-success-700 dark:bg-success-900"
               >
                 {t('COMMON.IN_USE')}
               </Badge>
