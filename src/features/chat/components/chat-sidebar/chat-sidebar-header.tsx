@@ -6,6 +6,7 @@ import {
   ArrowLeftIcon,
   Filter,
   Menu,
+  MoreVerticalIcon,
   PenSquareIcon,
   Settings,
 } from 'lucide-react';
@@ -111,7 +112,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             triggerItem={
               <ChatSettingMenu open={openSetting} onOpenChange={setOpenSetting}>
                 <Button.Icon color="default" size="xs">
-                  <Settings />
+                  <MoreVerticalIcon />
                 </Button.Icon>
               </ChatSettingMenu>
             }

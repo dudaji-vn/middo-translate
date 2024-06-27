@@ -1,20 +1,17 @@
 'use client';
 
-import { Blocks, Minus } from 'lucide-react';
-import { Typography } from '@/components/data-display';
-
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { usePlatformStore } from '@/features/platform/stores';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import useClient from '@/hooks/use-client';
+import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
 import Image from 'next/image';
 import Link from 'next/link';
-import { HeaderNav } from './header-nav';
-import HeaderProfile from './header-profile';
-import { HeaderNavMobile } from './header-nav.mobile';
-import { usePlatformStore } from '@/features/platform/stores';
-import { useAppStore } from '@/stores/app.store';
 import { useMemo } from 'react';
+import { HeaderNav } from './header-nav';
+import { HeaderNavMobile } from './header-nav.mobile';
+import HeaderProfile from './header-profile';
 
 type Props = {};
 

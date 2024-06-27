@@ -6,6 +6,7 @@ import { IndividualTab } from './chat-sidebar-tab-individual';
 import { SearchTab } from './chat-sidebar-tab-search-v2';
 import { SidebarTabs } from '../../types';
 import { useSideChatStore } from '../../stores/side-chat.store';
+import { StationSettingTab } from './chat-sidebar-station-settings';
 export interface ChatSidebarTabsProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -23,6 +24,9 @@ const tabMap: Record<
   },
   individual: {
     component: <IndividualTab />,
+  },
+  station_settings: {
+    component: <StationSettingTab />,
   },
 };
 

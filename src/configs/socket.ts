@@ -97,6 +97,17 @@ export const SOCKET_CONFIG = {
       REMOVE_MEMBER: 'space.member.remove',
       UPDATE: 'space.update',
     },
+    STATION: {
+      NOTIFICATION: {
+        NEW: 'space.notification.new',
+      },
+      MEMBER: {
+        REMOVE: 'station.member.remove',
+        LEAVE: 'station.member.leave',
+        UPDATE: 'station.member.update',
+      },
+      UPDATE: 'station.update',
+    },
     USER: {
       RELATIONSHIP: {
         UPDATE: 'user.relationship.update',
@@ -106,7 +117,7 @@ export const SOCKET_CONFIG = {
       LIST: 'meeting.list',
       UPDATE: 'meeting.update',
       END: 'meeting.end',
-      BLOCK: 'meeting.block'
-    }
+      BLOCK: 'meeting.block',
+    },
   },
 };

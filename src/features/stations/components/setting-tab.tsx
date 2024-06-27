@@ -41,7 +41,7 @@ export const SettingTab = (props: SettingTabProps) => {
 const StationCard = ({ station }: { station: Station }) => {
   return (
     <div className="p-3 pb-0">
-      <div className="relative flex items-center gap-3 rounded-xl bg-primary-100 px-3 py-5">
+      <div className="relative flex items-center gap-3 rounded-xl bg-primary-100 px-3 py-5 dark:bg-primary-900">
         <Avatar size="3xl" alt={station.name} src={station.avatar!} />
         <Typography variant="h4">{station.name}</Typography>
         <MoreMenu station={station} />

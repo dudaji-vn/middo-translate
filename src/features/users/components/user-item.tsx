@@ -69,7 +69,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
         <div className="flex w-full items-center gap-2">
           <div className="relative">
             <Avatar src={user?.avatar} alt={user?.name} />
-            {status && (
+            {status && status !== 'joined' && (
               <div className="absolute -bottom-1 -right-0 rounded-full  border-2 border-white ">
                 {renderStatus()}
               </div>

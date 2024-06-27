@@ -1,6 +1,7 @@
 import { FCMBackground } from '@/features/notification/components';
 import { Fragment } from 'react';
 import { Metadata } from 'next';
+import { StationSocket } from '@/features/stations/components/station-socket';
 
 export const metadata: Metadata = {
   title: 'Middo Work Station',
@@ -16,6 +17,7 @@ const WorkStationLayoutLayout = ({
     <Fragment>
       {children}
       <FCMBackground />
+      <StationSocket />
     </Fragment>
   );
 };

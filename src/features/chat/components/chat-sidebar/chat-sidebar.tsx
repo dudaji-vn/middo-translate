@@ -8,9 +8,10 @@ import { TBusinessExtensionData } from '../../help-desk/api/business.service';
 import ChatSidebarHeader from './chat-sidebar-header';
 import { ChatSidebarTabs } from './chat-sidebar-tabs';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { TStation } from '@/app/(main-layout)/(protected)/stations/_components/type';
 import { useStationNavigationData } from '@/hooks';
 import StationNavigator from '@/app/(main-layout)/(protected)/stations/[stationId]/_components/station-navigator/station-navigator';
+import { Button } from '@/components/actions';
+import { Settings } from 'lucide-react';
 
 interface ChatSidebarProps {
   children: ReactNode;
