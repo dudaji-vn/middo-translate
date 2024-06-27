@@ -224,7 +224,13 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
               })}
             />
             <PinnedRoom
-              type={filters.includes('group') ? 'group' : 'all'}
+              type={
+                filters.includes('group')
+                  ? 'group'
+                  : type === 'help-desk'
+                    ? 'help-desk'
+                    : 'all'
+              }
               rooms={pinnedRooms}
               currentRoomId={currentRoomId as string}
             />
