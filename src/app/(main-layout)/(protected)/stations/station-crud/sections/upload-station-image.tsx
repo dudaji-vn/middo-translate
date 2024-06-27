@@ -27,6 +27,7 @@ import { Avatar } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { clear } from 'console';
 import customToast from '@/utils/custom-toast';
+import { useAppStore } from '@/stores/app.store';
 
 export default function UploadStationImage({
   nameField,
