@@ -16,7 +16,6 @@ import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message
 import { StatusParticipant } from '@/features/call/interfaces/participant';
 import customToast from '@/utils/custom-toast';
 import { Room } from '../types';
-import openPopupWindow from '@/utils/open-popup-window';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
@@ -91,8 +90,10 @@ export const useJoinCall = () => {
       }
       if(data.call.type == CALL_TYPE.HELP_DESK && !isBusiness) {
         const url = `${NEXT_PUBLIC_URL}/help-desk/${roomId}/call/${userId}`;
-        const windowName = data.call._id;
-        openPopupWindow(url, windowName)
+        let a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.click();
         return;
       }
       if(isBusiness) {
