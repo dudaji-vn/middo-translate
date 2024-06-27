@@ -58,8 +58,6 @@ export const StationActions = ({ children }: { children: React.ReactNode }) => {
     setStation(null);
   };
 
-  console.log('station action:', action, station);
-
   const Modal = useMemo(() => {
     if (!station) return null;
     switch (action) {

@@ -12,7 +12,6 @@ import { UserRound } from 'lucide-react';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
 import { PageLoading } from '@/components/feedback';
 import { updateInforSchema as schema } from '@/configs/yup-form';
-import toast from 'react-hot-toast';
 import { updateInfoUserService } from '@/services/user.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useForm } from 'react-hook-form';
@@ -42,12 +41,14 @@ export default function UpdateUserInfo() {
     resolver: zodResolver(
       z
         .object({
-          name: z.string().min(1, {
-            message: t('MESSAGE.ERROR.REQUIRED'),
-          })
-          .refine((data) => data.trim().length > 0, {
-            message: t('MESSAGE.ERROR.REQUIRED'),
-          }),
+          name: z
+            .string()
+            .min(1, {
+              message: t('MESSAGE.ERROR.REQUIRED'),
+            })
+            .refine((data) => data.trim().length > 0, {
+              message: t('MESSAGE.ERROR.REQUIRED'),
+            }),
           language: z.string().min(1, {
             message: t('MESSAGE.ERROR.REQUIRED'),
           }),
@@ -101,7 +102,9 @@ export default function UpdateUserInfo() {
       setErrorMessage('');
       setOpen(false);
     } catch (err: any) {
-      setErrorMessage(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
+      setErrorMessage(
+        t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'),
+      );
     } finally {
       setLoading(false);
       setValue('name', user.name);
@@ -124,8 +127,8 @@ export default function UpdateUserInfo() {
     <>
       {loading && <PageLoading />}
       <AlertDialog open={open} onOpenChange={onModalChange}>
-        <AlertDialogTrigger className="flex w-full items-center border-b bg-white dark:bg-neutral-900 dark:border-b-neutral-800 px-5 py-4 md:hover:bg-primary-100  dark:md:hover:bg-primary-800">
-          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900 text-primary">
+        <AlertDialogTrigger className="flex w-full items-center border-b bg-white px-5 py-4 dark:border-b-neutral-800 dark:bg-neutral-900 md:hover:bg-primary-100  dark:md:hover:bg-primary-800">
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-100 text-primary dark:bg-primary-900">
             <UserRound size={20} />
           </div>
           <span className="ml-4 block text-left text-base font-medium">

@@ -4,10 +4,11 @@ import React from 'react';
 import { TabsContentProps } from '@radix-ui/react-tabs';
 import { BaseEntity } from '@/types';
 import { type User } from '@/features/users/types';
-type Members = {
+export type MemberStatus = 'invited' | 'joined' | 'deleted' | 'rejected';
+export type Member = {
   user: User;
   role: 'admin' | 'member';
-  status: 'invited' | 'joined' | 'deleted';
+  status: MemberStatus;
 };
 
 export type StationTabType = 'all_stations' | 'my_stations' | 'joined_stations';
@@ -33,7 +34,7 @@ export type TStation = BaseEntity & {
   totalNewMessages: number;
   totalMembers: number;
   owner: User;
-  members: Members[];
+  members: Member[];
   isOwner: boolean;
   tag?: TStationTag;
   tags: TConversationTag[];

@@ -35,6 +35,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {...wrapperProps}
         className={cn('relative', wrapperProps?.className)}
       >
+        {leftElement}
         <input
           type={type === 'password' && isShowPassword ? 'text' : type}
           className={cn(
@@ -73,9 +74,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             color={'default'}
             shape={'default'}
             onClick={() => setIsShowPassword(!isShowPassword)}
-            className='absolute right-1 top-1/2 -translate-y-1/2'
-            >
-            {isShowPassword ? <EyeIcon /> : <EyeOffIcon /> }
+            className="absolute right-1 top-1/2 -translate-y-1/2"
+          >
+            {isShowPassword ? <EyeIcon /> : <EyeOffIcon />}
           </Button.Icon>
         )}
         {prefixEl && (
@@ -86,11 +87,6 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {suffix && (
           <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
             {suffix}
-          </div>
-        )}
-        {leftElement && (
-          <div className="absolute right-3 top-1/2 flex -translate-y-1/2 items-center text-muted-foreground">
-            {leftElement}
           </div>
         )}
       </div>

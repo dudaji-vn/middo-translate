@@ -3,6 +3,8 @@ import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
+import { SendIcon, XIcon } from 'lucide-react';
+import { MemberStatus } from '@/app/(main-layout)/(protected)/stations/_components/type';
 
 export interface UserItemProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User;
@@ -10,13 +12,41 @@ export interface UserItemProps extends React.HTMLAttributes<HTMLDivElement> {
   rightElement?: React.ReactNode;
   subContent?: React.ReactNode;
   wrapperClassName?: string;
+  status?: MemberStatus;
 }
 
 export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
   (
-    { user, rightElement, isActive, subContent, wrapperClassName, ...props },
+    {
+      user,
+      rightElement,
+      isActive,
+      subContent,
+      wrapperClassName,
+      status,
+      ...props
+    },
     ref,
   ) => {
+    const renderStatus = () => {
+      switch (status) {
+        case 'invited':
+          return (
+            <div className="flex size-5 items-center justify-center rounded-full bg-success-100 text-success">
+              <SendIcon className="size-3" />
+            </div>
+          );
+        case 'rejected':
+          return (
+            <div className="flex size-5 items-center justify-center rounded-full bg-error-100 text-error">
+              <XIcon className="size-3" />
+            </div>
+          );
+        default:
+          return null;
+      }
+    };
+
     return (
       <div
         ref={ref}
@@ -30,7 +60,14 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
         )}
       >
         <div className="flex w-full items-center gap-2">
-          <Avatar src={user?.avatar} alt={user?.name} />
+          <div className="relative">
+            <Avatar src={user?.avatar} alt={user?.name} />
+            {status && (
+              <div className="absolute -bottom-1 -right-0 rounded-full  border-2 border-white ">
+                {renderStatus()}
+              </div>
+            )}
+          </div>
           <div className="w-full">
             <div className="flex items-center justify-between">
               <div className="max-w-full">
