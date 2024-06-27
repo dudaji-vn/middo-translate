@@ -91,7 +91,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           expand && 'min-w-[376px]  max-w-full',
         )}
       >
-        <div className="relative flex w-full flex-row items-center justify-start gap-3  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
+        <div className="relative flex w-full flex-row items-center justify-start gap-3 overflow-x-hidden  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
           {space?.avatar && (
             <Avatar
               alt={space.name ?? ''}
