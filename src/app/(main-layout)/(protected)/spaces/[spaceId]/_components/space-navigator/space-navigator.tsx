@@ -102,11 +102,13 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           )}
           <div
             className={cn('hidden ', {
-              ' flex flex-grow flex-row items-center justify-start gap-1 ':
+              ' flex max-w-full flex-grow flex-row items-center justify-start gap-1 ':
                 expand,
             })}
           >
-            <p className="font-semibold">{space?.name}</p>
+            <p className="max-w-56 truncate text-ellipsis break-words text-left font-semibold">
+              {space?.name}
+            </p>
             <ChevronDown className="h-4 w-4" />
           </div>
           <Ping
