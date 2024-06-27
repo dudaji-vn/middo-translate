@@ -1,13 +1,16 @@
+'use client';
+
 import { Avatar, Typography } from '@/components/data-display';
-import { businessAPI } from '@/features/chat/help-desk/api/business.service';
 import { notFound } from 'next/navigation';
 import React from 'react';
 import ValidateInvitation from './_components/validate-ivitation';
 import ExpiredVerifyToken from '../../../../components/verifications/expired-verify-token/expired-verify-token';
 import { ClientInviteTime } from '@/components/verifications/client-invite-time';
 import { InvalidVerifyToken } from '@/components/verifications/invalid-verify-token';
+import { useGetSpaceVerification } from '@/features/business-spaces/hooks/use-get-space-verification';
+import { PageLoading } from '@/components/feedback';
 
-const SpaceVerify = async ({
+const SpaceVerify = ({
   searchParams: { token },
 }: {
   searchParams: {
@@ -17,15 +20,25 @@ const SpaceVerify = async ({
   if (!token) {
     notFound();
   }
-  const invitation = await businessAPI.getInvitationByToken(token);
+  const {
+    data: invitation,
+    isLoading,
+    isFetched,
+  } = useGetSpaceVerification(token);
 
-  console.log('invitation==>', invitation);
-  if (invitation.statusCode === 410 || invitation.isExpired) {
-    return <ExpiredVerifyToken token={token} />;
+  if (isLoading) {
+    return <PageLoading />;
   }
 
+  if (!invitation) {
+    notFound();
+  }
   if (invitation.statusCode) {
     return <InvalidVerifyToken token={token} status={invitation.statusCode} />;
+  }
+
+  if (invitation.isExpired) {
+    return <ExpiredVerifyToken token={token} />;
   }
 
   const { space, email, invitedAt } = invitation;

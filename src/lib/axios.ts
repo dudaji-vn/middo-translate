@@ -23,7 +23,11 @@ const instance = axios.create({
 // Add a response interceptor
 instance.interceptors.response.use(
   function (response) {
-    return response.data;
+    return {
+      ...response.data,
+      ok: response.status < 400,
+      statusCode: response.status,
+    };
   },
   function (error) {
     if (error?.response?.status === 401) {

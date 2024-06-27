@@ -13,11 +13,14 @@ export default function usePlatformNavigation() {
     query?: URLSearchParams,
     option: 'push' | 'replace' = 'push',
   ) => {
+    let href = path;
     const current = new URLSearchParams(Array.from(query?.entries() || []));
     if (isMobile) {
       current.set('platform', 'mobile');
     }
-    const href = `${path}?${current.toString()}`;
+    if (current.toString()) {
+      href += `?${current.toString()}`;
+    }
     if (option === 'replace') {
       router.replace(href);
       return;
