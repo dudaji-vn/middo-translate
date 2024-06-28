@@ -73,7 +73,7 @@ const SpaceVerify = () => {
           Accept this invitation to join to&nbsp;
           {space?.name}. Or you could decline it.
         </p>
-        <ValidateInvitation token={token || ''} />
+        <ValidateInvitation />
       </div>
     </main>
   );
