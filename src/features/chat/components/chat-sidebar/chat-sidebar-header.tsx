@@ -53,7 +53,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
       return t('EXTENSION.ARCHIVED_CONVERSATIONS');
     }
     return t('CONVERSATION.TITLE');
-  }, []);
+  }, [businessConversationType, isBusiness, t]);
 
   const handleNewConversation = useCallback(() => {
     setCurrentSide('individual');
@@ -92,7 +92,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           <Menu />
         </Button.Icon>
         <Typography variant="h6" className="dark:text-neutral-50">
-          {t('CONVERSATION.TITLE')}
+          {title}
         </Typography>
         <div className="flex gap-3">
           <Tooltip
