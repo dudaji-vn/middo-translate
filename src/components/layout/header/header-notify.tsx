@@ -8,8 +8,6 @@ import {
   PopoverTrigger,
 } from '@/components/data-display/popover';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useDeleteNotifications } from '@/features/business-spaces/hooks/use-delete-notifications';
-import { useReadNotifications } from '@/features/business-spaces/hooks/use-read-notifications';
 import { useDeleteAppNotify } from '@/features/notification/hooks/use-delete-app-notify';
 import { useGetAppNotify } from '@/features/notification/hooks/use-get-app-notify';
 import { useReadAppNotify } from '@/features/notification/hooks/use-read-app-notify';
@@ -57,7 +55,7 @@ export const HeaderNotify = ({}: {}) => {
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4 dark:bg-neutral-900"
+        className="mr-3 flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4 dark:bg-neutral-900"
       >
         {notifications?.map((item: TSpacesNotification) => (
           <Notification

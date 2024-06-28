@@ -588,3 +588,7 @@ input::-ms-clear {
 .react-flow__panel.react-flow__attribution.bottom.right {
   display: none;
 }
+
+.active-message {
+  filter: drop-shadow(0px 0px 12px var(--primary));
+}

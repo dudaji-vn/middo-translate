@@ -97,12 +97,15 @@ export const stationApi = {
   },
   async removeMember({
     stationId,
-    userId,
+    email,
   }: {
     stationId: string;
-    userId: string;
+    email: string;
   }): Promise<Response<Station>> {
-    const response = await axios.delete(`${basePath}/${stationId}/members`);
+    console.log('stationId', email);
+    const response = await axios.delete(`${basePath}/${stationId}/members`, {
+      data: { email },
+    });
     return response.data;
   },
 };

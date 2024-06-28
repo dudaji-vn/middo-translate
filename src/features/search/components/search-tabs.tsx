@@ -146,15 +146,15 @@ type ResultProps = {
 };
 
 const UsersResult = ({ searchValue, onItemClick }: ResultProps) => {
-  const { data } = useQuery({
-    queryFn: () => searchApi.users({ q: searchValue || '' }),
-    queryKey: ['search', 'users', searchValue],
-    enabled: !!searchValue,
+  const { data } = useSearchDynamic({
+    searchValue,
+    type: 'user',
   });
   if (!data) return null;
+  const users = data.items as User[];
   return (
     <div>
-      {data?.map((user) => {
+      {users?.map((user) => {
         return (
           <Link
             onClick={() => onItemClick({ type: 'user', id: user._id })}
@@ -185,11 +185,9 @@ const MessagesResult = ({ searchValue, onItemClick }: ResultProps) => {
 };
 
 const RoomsResult = ({ searchValue, onItemClick }: ResultProps) => {
-  const { data } = useQuery({
-    queryFn: () =>
-      searchApi.conversations({ q: searchValue || '', type: 'group' }),
-    queryKey: ['search', 'rooms', searchValue],
-    enabled: !!searchValue,
+  const { data } = useSearchDynamic({
+    searchValue,
+    type: 'group',
   });
   const rooms = data?.items as Room[];
   return (

@@ -39,10 +39,10 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
     return (
       <div
         className={cn(
-          'absolute left-0  h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 ',
-          isOnStation
-            ? 'top-[182px] md:top-[174px]'
-            : 'top-[114px] md:top-[106px]',
+          'absolute left-0  top-[182px] h-[calc(100%_-_106px)] w-full overflow-y-auto bg-white pt-3 md:top-[174px] ',
+          // isOnStation
+          //   ? 'top-[182px] md:top-[174px]'
+          //   : 'top-[114px] md:top-[106px]',
         )}
       >
         <motion.div

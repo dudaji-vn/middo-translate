@@ -50,7 +50,7 @@ export const SetStationToDefaultModal = ({
   return (
     <>
       <ConfirmAlertModal
-        title={`Delete station`}
+        title={t('MODAL.SET_AS_DEFAULT_STATION.TITLE')}
         open={open}
         footerProps={{
           className: 'hidden',
@@ -61,7 +61,7 @@ export const SetStationToDefaultModal = ({
             <p
               className="text-left"
               dangerouslySetInnerHTML={{
-                __html: t('MODAL.DELETE_STATION.DESCRIPTION', {
+                __html: t('MODAL.SET_AS_DEFAULT_STATION.DESCRIPTION', {
                   name: station.name,
                 }),
               }}

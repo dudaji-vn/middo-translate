@@ -43,7 +43,7 @@ export const ChatSidebar = ({
           { 'max-md:hidden ': isOnBusinessChat },
         )}
       >
-        {isOnStation && <StationNavigator className="w-full" />}
+        {!isOnBusinessChat && <StationNavigator className="w-full" />}
         <ChatSidebarHeader />
         <ChatSidebarTabs>{children}</ChatSidebarTabs>
       </div>
