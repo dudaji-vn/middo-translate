@@ -779,6 +779,7 @@
     "CONVERSATIONS": "일반",
     "COMPLETED": "완료됨",
     "ARCHIVED": "보관됨",
+    "ARCHIVED_CONVERSATIONS": "보관된 대화",
     "CLIENTS": "고객",
     "STATISTICS": "통계",
     "SCRIPTS": "채팅 스크립트",

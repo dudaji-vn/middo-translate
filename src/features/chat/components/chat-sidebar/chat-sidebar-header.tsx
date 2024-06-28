@@ -10,7 +10,7 @@ import {
   PenSquareIcon,
   Settings,
 } from 'lucide-react';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
@@ -46,8 +46,14 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
     handleToggleSetting,
   );
   const isSearch = currentSide === 'search';
-  const { isBusiness } = useBusinessNavigationData();
+  const { isBusiness, businessConversationType } = useBusinessNavigationData();
   const searchInputRef = useRef<SearchInputRef>(null);
+  const title = useMemo(() => {
+    if (isBusiness && businessConversationType === 'archived') {
+      return t('EXTENSION.ARCHIVED_CONVERSATIONS');
+    }
+    return t('CONVERSATION.TITLE');
+  }, [businessConversationType, isBusiness, t]);
 
   const handleNewConversation = useCallback(() => {
     setCurrentSide('individual');
@@ -86,7 +92,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           <Menu />
         </Button.Icon>
         <Typography variant="h6" className="dark:text-neutral-50">
-          {t('CONVERSATION.TITLE')}
+          {title}
         </Typography>
         <div className="flex gap-3">
           <Tooltip
