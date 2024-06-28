@@ -25,6 +25,7 @@ import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSearchDynamic } from '../hooks/use-search-dynamic';
 import { useStationNavigationData } from '@/hooks';
+import { Button } from '@/components/actions';
 
 export interface SearchTabsProps {
   searchValue: string;
@@ -133,7 +134,15 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
       </Tabs>
       {searchValue && (
         <div className="flex-1 overflow-y-scroll">
-          <ResultComp onItemClick={handleItemClick} searchValue={searchValue} />
+          <ResultComp
+            countData={countData}
+            onItemClick={handleItemClick}
+            searchValue={searchValue}
+            onSeeAll={(type) => {
+              setType(type);
+              onTabChange?.(type);
+            }}
+          />
         </div>
       )}
     </>
@@ -143,6 +152,8 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
 type ResultProps = {
   searchValue: string;
   onItemClick: (data: { type: SearchType; id: string }) => void;
+  countData: { user: number; group: number; message: number };
+  onSeeAll?: (type: SearchType) => void;
 };
 
 const UsersResult = ({ searchValue, onItemClick }: ResultProps) => {
@@ -210,7 +221,16 @@ const RoomsResult = ({ searchValue, onItemClick }: ResultProps) => {
   );
 };
 
-const AllResult = ({ searchValue, onItemClick }: ResultProps) => {
+const LIMIT = 3;
+
+const AllResult = ({
+  searchValue,
+  onItemClick,
+  countData,
+  onSeeAll,
+}: ResultProps & {
+  countData: { user: number; group: number; message: number };
+}) => {
   const { t } = useTranslation('common');
   const { data } = useQuerySearch<{
     rooms: Room[];
@@ -220,7 +240,7 @@ const AllResult = ({ searchValue, onItemClick }: ResultProps) => {
     searchApi: searchApi.inboxes,
     queryKey: 'chat-search',
     searchTerm: searchValue || '',
-    limit: 3,
+    limit: LIMIT,
   });
   if (!data) return null;
   return (
@@ -238,6 +258,19 @@ const AllResult = ({ searchValue, onItemClick }: ResultProps) => {
               </Link>
             );
           })}
+          {countData.user > LIMIT && (
+            <div className="mt-1 px-3">
+              <Button
+                onClick={() => onSeeAll?.('user')}
+                size="md"
+                className="w-full"
+                color="secondary"
+                shape="square"
+              >
+                See all result
+              </Button>
+            </div>
+          )}
         </Section>
       )}
       {data?.rooms && data.rooms.length > 0 && (
@@ -255,6 +288,19 @@ const AllResult = ({ searchValue, onItemClick }: ResultProps) => {
                 showTime={false}
               />
             ))}
+            {countData.group > LIMIT && (
+              <div className="mt-1 px-3">
+                <Button
+                  onClick={() => onSeeAll?.('group')}
+                  size="md"
+                  className="w-full"
+                  color="secondary"
+                  shape="square"
+                >
+                  See all result
+                </Button>
+              </div>
+            )}
           </Section>
         </div>
       )}
@@ -263,6 +309,19 @@ const AllResult = ({ searchValue, onItemClick }: ResultProps) => {
           <Section label={'Message'}>
             <MessagesList messages={data.messages} searchValue={searchValue} />
           </Section>
+          {countData.message > LIMIT && (
+            <div className="mt-1 px-3">
+              <Button
+                onClick={() => onSeeAll?.('message')}
+                size="md"
+                className="w-full"
+                color="secondary"
+                shape="square"
+              >
+                See all result
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </>
@@ -320,6 +379,13 @@ const MessageItem = ({
     room: message.room!,
     currentUserId: userId!,
   });
+  const lang = useAuthStore((state) => state.user?.language);
+  const contentDisplay = useMemo(() => {
+    const content = message.translations?.[lang || 'en'] || message.content;
+    return convert(content, {
+      selectors: [{ selector: 'a', options: { ignoreHref: true } }],
+    });
+  }, [lang, message.content, message.translations]);
   return (
     <Link
       key={message?._id}
@@ -334,9 +400,7 @@ const MessageItem = ({
     >
       <UserItem
         topContent={room.name}
-        subContent={convert(message.content, {
-          selectors: [{ selector: 'a', options: { ignoreHref: true } }],
-        })}
+        subContent={contentDisplay}
         user={message.sender}
         rightElement={
           <span className="ml-auto shrink-0 pl-2 text-xs font-light text-neutral-300">
