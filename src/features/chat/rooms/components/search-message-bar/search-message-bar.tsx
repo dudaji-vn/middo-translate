@@ -134,7 +134,7 @@ export const SearchMessageBar = forwardRef<
                 Search results
               </AlertDialogTitle>
             </AlertDialogHeader>
-            <div className="max-h-96 overflow-y-auto">
+            <div className="-mx-5 max-h-96 overflow-y-auto">
               <MessagesList
                 onItemClick={() => setOpen(false)}
                 messages={messages}

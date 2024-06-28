@@ -300,7 +300,7 @@ export const MessageBoxSearch = ({
                       <MessageItem
                         className={cn(
                           message._id === messageId &&
-                            'active-message border-2 border-yellow-400',
+                            'active-message rounded-3xl border-2 border-primary p-1 md:rounded-[20px]',
                         )}
                         isEditing={
                           message._id === messageEditing?._id &&
