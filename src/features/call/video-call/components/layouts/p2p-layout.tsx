@@ -7,10 +7,12 @@ import { DoodleArea } from "../doodle/doodle-area";
 import FocusVideoItem from "../video/focus-video-item";
 import { useMemo } from "react";
 import ParticipantsBar from "../participants-bar/participants-bar";
+import { useAuthStore } from "@/stores/auth.store";
 
 
 const P2PLayout = () => {
     const participants = useParticipantVideoCallStore(state => state.participants)
+    const user = useAuthStore(state => state.user)
     const [participantPin, anotherParticipants] = useMemo(()=> {
         if(participants.length == 1) return [participants[0], []];
         let pPin = participants.find((p: ParticipantInVideoCall) => p.pin);
@@ -21,9 +23,9 @@ const P2PLayout = () => {
         const anotherP = participants.filter((p:ParticipantInVideoCall) => !(p.socketId == pPin?.socketId && !!p?.isShareScreen == !!pPin?.isShareScreen))
         return [pPin, anotherP]
     }, [participants])
-
+    console.error({user, participants, participantPin, anotherParticipants})
     if(!participantPin) return null;
-
+    
     return (
         <div className="relative flex w-full h-full p-1">
             <div className="flex h-full w-full relative">

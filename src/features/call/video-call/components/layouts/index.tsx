@@ -9,7 +9,7 @@ export default function VideoCallLayout() {
   
     const layout = useVideoCallStore(state => state.layout);
     const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-
+    console.error('LAYOUT::', layout)
     if (!isFullScreen) return <GalleryLayout />;
     switch (layout) {
       case VIDEO_CALL_LAYOUTS.GALLERY_VIEW:
