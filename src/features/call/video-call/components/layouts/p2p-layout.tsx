@@ -7,23 +7,26 @@ import { DoodleArea } from "../doodle/doodle-area";
 import FocusVideoItem from "../video/focus-video-item";
 import { useMemo } from "react";
 import ParticipantsBar from "../participants-bar/participants-bar";
+import { useAuthStore } from "@/stores/auth.store";
 
 
 const P2PLayout = () => {
     const participants = useParticipantVideoCallStore(state => state.participants)
     const [participantPin, anotherParticipants] = useMemo(()=> {
-        if(participants.length == 1) return [participants[0], []];
-        let pPin = participants.find((p: ParticipantInVideoCall) => p.pin);
-        if(!pPin) {
-            pPin = participants.find((p: ParticipantInVideoCall) => !p.isMe);
+        const tmpParticipants = [...participants]
+        if(tmpParticipants.length == 1) return [tmpParticipants[0], []];
+        let pPinIndex: number;
+        pPinIndex = tmpParticipants.findIndex((p: ParticipantInVideoCall) => p.pin);
+        if(pPinIndex == -1) {
+            pPinIndex = tmpParticipants.findIndex((p: ParticipantInVideoCall) => !p.isMe);
         }
-        if(!pPin) return [participants[0], []]
-        const anotherP = participants.filter((p:ParticipantInVideoCall) => !(p.socketId == pPin?.socketId && !!p?.isShareScreen == !!pPin?.isShareScreen))
-        return [pPin, anotherP]
+        if(pPinIndex == -1) return [tmpParticipants[0], tmpParticipants.slice(1)]
+        const pPin = tmpParticipants[pPinIndex]
+        tmpParticipants.splice(pPinIndex, 1)
+        return [pPin, tmpParticipants]
     }, [participants])
-
     if(!participantPin) return null;
-
+    
     return (
         <div className="relative flex w-full h-full p-1">
             <div className="flex h-full w-full relative">
