@@ -26,7 +26,6 @@ export const ChatSidebar = ({
 }: ChatSidebarProps & PropsWithChildren) => {
   const { setBusinessExtension } = useBusinessExtensionStore();
   const { isOnBusinessChat, isBusiness } = useBusinessNavigationData();
-  const { isOnStation } = useStationNavigationData();
 
   useEffect(() => {
     if (spaceData) {
@@ -43,7 +42,7 @@ export const ChatSidebar = ({
           { 'max-md:hidden ': isOnBusinessChat },
         )}
       >
-        {!isOnBusinessChat && <StationNavigator className="w-full" />}
+        {!isBusiness && <StationNavigator className="w-full" />}
         <ChatSidebarHeader />
         <ChatSidebarTabs>{children}</ChatSidebarTabs>
       </div>
