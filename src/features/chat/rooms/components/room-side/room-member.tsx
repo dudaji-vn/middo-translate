@@ -121,7 +121,7 @@ export const RoomMember = ({
                 rightElement={
                   <div className="ml-auto">
                     {member.inviteStatus === 'pending' ? (
-                      <span className="rounded bg-neutral-50 p-0.5 px-1 text-xs text-neutral-600 whitespace-nowrap">
+                      <span className="whitespace-nowrap rounded bg-neutral-50 p-0.5 px-1 text-xs text-neutral-600">
                         {t('COMMON.PENDING')}
                       </span>
                     ) : member.inviteStatus === 'rejected' ? (

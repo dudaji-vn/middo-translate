@@ -6,15 +6,23 @@ import {
   DropdownMenuTrigger,
   IconWrapper,
 } from '@/components/data-display';
+import { SearchInput } from '@/components/data-entry';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { UserItem } from '@/features/users/components';
 import { useAuthStore } from '@/stores/auth.store';
-import { MoreVerticalIcon, SendIcon, Users2Icon, XIcon } from 'lucide-react';
+import {
+  MessagesSquareIcon,
+  MoreVerticalIcon,
+  SendIcon,
+  Trash2Icon,
+  Users2Icon,
+  XIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
+import { useRemoveStationMember } from '../hooks/use-remove-station-mebers';
 import { Station } from '../types/station.types';
 import { StationAddMember } from './station-add-member';
-import { SearchInput } from '@/components/data-entry';
 
 export interface StationMembersProps {
   station: Station;
@@ -26,6 +34,8 @@ export const StationMembers = ({ station }: StationMembersProps) => {
   const members = station.members;
   const owner = station.owner;
   const stationId = station._id;
+  const isAdmin = station.owner?._id === userId;
+  const { mutate } = useRemoveStationMember();
   return (
     <div className="flex-1">
       <div className=" bg-white pb-3 dark:bg-background">
@@ -80,28 +90,37 @@ export const StationMembers = ({ station }: StationMembersProps) => {
                   <>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button.Icon size="xs" variant="ghost" color="default">
+                        <Button.Icon
+                          className="mr-3"
+                          size="xs"
+                          variant="ghost"
+                          color="default"
+                        >
                           <MoreVerticalIcon />
                         </Button.Icon>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        {/* {isAdmin && (
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  mutate({
-                                    roomId: room._id,
-                                    userId: member._id,
-                                  });
-                                }}
-                              >
-                                <span>{t('COMMON.REMOVE')}</span>
-                              </DropdownMenuItem>
-                            )} */}
+                        {isAdmin && (
+                          <DropdownMenuItem
+                            onClick={() => {
+                              mutate({
+                                stationId: stationId,
+                                email: member.email,
+                              });
+                            }}
+                          >
+                            <Trash2Icon className="mr-2 size-4 text-error" />
+                            <span className="text-error">
+                              {t('COMMON.REMOVE')}
+                            </span>
+                          </DropdownMenuItem>
+                        )}
                         {member.status === 'joined' && (
                           <DropdownMenuItem asChild>
                             <Link
                               href={`${ROUTE_NAMES.STATIONS}/${stationId}/conversations/${user._id}`}
                             >
+                              <MessagesSquareIcon className="mr-2 size-4" />
                               <span>{t('CONVERSATION.START')}</span>
                             </Link>
                           </DropdownMenuItem>

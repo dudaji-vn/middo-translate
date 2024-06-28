@@ -89,7 +89,7 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
     if (triggerRef.current) {
       setWidth(triggerRef.current.clientWidth);
     }
-  }, [stations]);
+  }, [stations, triggerRef]);
 
   if (isLoading || !station || !pathname?.includes(station?._id)) {
     return (

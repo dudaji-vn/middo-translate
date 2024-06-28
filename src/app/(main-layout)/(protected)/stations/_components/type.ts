@@ -9,6 +9,7 @@ export type Member = {
   user: User;
   role: 'admin' | 'member';
   status: MemberStatus;
+  email: string;
 };
 
 export type StationTabType = 'all_stations' | 'my_stations' | 'joined_stations';
