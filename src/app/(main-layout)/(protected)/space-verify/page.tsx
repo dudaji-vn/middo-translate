@@ -1,7 +1,7 @@
 'use client';
 
 import { Avatar, Typography } from '@/components/data-display';
-import { notFound } from 'next/navigation';
+import { notFound, useSearchParams } from 'next/navigation';
 import React from 'react';
 import ValidateInvitation from './_components/validate-ivitation';
 import ExpiredVerifyToken from '../../../../components/verifications/expired-verify-token/expired-verify-token';
@@ -10,22 +10,15 @@ import { InvalidVerifyToken } from '@/components/verifications/invalid-verify-to
 import { useGetSpaceVerification } from '@/features/business-spaces/hooks/use-get-space-verification';
 import { PageLoading } from '@/components/feedback';
 
-const SpaceVerify = ({
-  searchParams: { token },
-}: {
-  searchParams: {
-    token: string;
-  };
-}) => {
-  if (!token) {
-    notFound();
-  }
+const SpaceVerify = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams?.get('token');
   const {
     data: invitation,
     isLoading,
     isFetched,
-  } = useGetSpaceVerification(token);
-
+  } = useGetSpaceVerification(token || '');
+  
   if (isLoading) {
     return <PageLoading />;
   }
@@ -34,11 +27,11 @@ const SpaceVerify = ({
     notFound();
   }
   if (invitation.statusCode) {
-    return <InvalidVerifyToken token={token} status={invitation.statusCode} />;
+    return <InvalidVerifyToken token={token || ''} status={invitation.statusCode} />;
   }
 
   if (invitation.isExpired) {
-    return <ExpiredVerifyToken token={token} />;
+    return <ExpiredVerifyToken token={token || ''} />;
   }
 
   const { space, email, invitedAt } = invitation;
@@ -80,7 +73,7 @@ const SpaceVerify = ({
           Accept this invitation to join to&nbsp;
           {space?.name}. Or you could decline it.
         </p>
-        <ValidateInvitation token={token} />
+        <ValidateInvitation token={token || ''} />
       </div>
     </main>
   );
