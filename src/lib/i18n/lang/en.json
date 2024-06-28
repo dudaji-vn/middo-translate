@@ -795,6 +795,7 @@
     "CONVERSATIONS": "Conversations",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
+    "ARCHIVED_CONVERSATIONS": "Archived conversations",
     "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
     "SCRIPTS": "Conversation Scripts",
