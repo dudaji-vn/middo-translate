@@ -88,7 +88,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
         className={cn(
           'flex h-fit w-full !bg-transparent p-2 text-neutral-800  active:!bg-transparent',
           props.className,
-          expand && 'min-w-[376px]  max-w-full',
+          expand && !isMobile && 'min-w-[376px]  max-w-full',
         )}
       >
         <div className=" flex w-full flex-row items-center justify-start gap-3 overflow-x-hidden  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
@@ -103,7 +103,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           <div
             className={cn('hidden ', {
               ' flex max-w-full flex-grow flex-row items-center justify-start gap-1 ':
-                expand,
+                expand && !isMobile,
             })}
           >
             <p className="max-w-56 truncate text-ellipsis break-words text-left font-semibold">
@@ -113,9 +113,13 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
           </div>
           <Ping
             size={12}
-            className={cn('absolute right-3 top-[26px] ', expand && 'right-6', {
-              hidden: !hasNotification,
-            })}
+            className={cn(
+              'absolute right-3 top-[26px] ',
+              !isMobile && expand && 'right-6',
+              {
+                hidden: !hasNotification,
+              },
+            )}
           />
         </div>
       </DropdownMenuTrigger>
