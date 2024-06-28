@@ -12,18 +12,21 @@ export const useGetSpaceVerification = (token: string) => {
     queryFn: async () => {
       try {
         const data = await getInvitationByToken(token);
-        return data.data;
+        if (data.data) {
+          return data.data;
+        }
+        return data;
       } catch (error: any) {
         console.error(
           'Error in get space invitation by token',
           error?.response?.data,
         );
-        return (
-          error?.response?.data || {
+        return {
+          data: error?.response?.data || {
             statusCode: 500,
             message: 'Failed to get space invitation',
-          }
-        );
+          },
+        };
       }
     },
     enabled: true,

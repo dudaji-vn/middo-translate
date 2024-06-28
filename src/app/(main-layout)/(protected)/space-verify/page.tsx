@@ -18,19 +18,19 @@ const SpaceVerify = ({
   };
 }) => {
   if (!token) {
-    notFound();
+    console.error('Token is required');
+    // notFound();
   }
   const {
     data: invitation,
     isLoading,
     isFetched,
   } = useGetSpaceVerification(token);
-
   if (isLoading) {
     return <PageLoading />;
   }
 
-  if (!invitation) {
+  if (!invitation && !isLoading && !isFetched) {
     notFound();
   }
   if (invitation.statusCode) {
