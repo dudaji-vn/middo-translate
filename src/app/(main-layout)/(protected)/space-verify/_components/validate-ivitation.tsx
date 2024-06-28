@@ -7,12 +7,14 @@ import { useRouter } from 'next/navigation';
 import customToast from '@/utils/custom-toast';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useSearchParams } from 'next/navigation';
 
-type ValidateInvitationProps = {
-  token: string;
-};
-const ValidateInvitation = ({ token }: ValidateInvitationProps) => {
+type ValidateInvitationProps = {};
+const ValidateInvitation = () => {
+  const searchParams = useSearchParams();
+  const token = searchParams?.get('token') || '';
   const { navigateTo } = usePlatformNavigation();
+
   const onValidateInvitation = async (status: 'accept' | 'decline') => {
     try {
       const res = await validateInvitation({
