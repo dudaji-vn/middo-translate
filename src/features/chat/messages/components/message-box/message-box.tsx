@@ -243,7 +243,8 @@ export const MessageBox = ({
 
                 <div className="flex w-full gap-1">
                   <MessageItemGroup>
-                    {group.messages.map((message) => {
+                    {group.messages.map((message, index) => {
+                      const isLast = index === 0;
                       const pinnedBy = pinnedMessages?.find(
                         (pinnedMessage) =>
                           pinnedMessage.message._id === message._id,
@@ -258,6 +259,7 @@ export const MessageBox = ({
                             message._id === messageEditing?._id &&
                             action === 'edit'
                           }
+                          isLast={isLast}
                           actionsDisabled={isAnonymous || room.isHelpDesk}
                           guestId={guestId}
                           pinnedBy={pinnedBy}
