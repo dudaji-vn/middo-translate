@@ -16,6 +16,7 @@ import { useDeleteNotifications } from '@/features/business-spaces/hooks/use-del
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import { useRouter } from 'next/navigation';
 
 export type TSpacesNotification = {
   _id: string;
@@ -44,7 +45,8 @@ const Notification = ({
   const { mutateAsync: readNotifications } = useReadNotifications();
 
   const timeDiff = moment().diff(createdAt, 'days');
-  const { navigateTo } = usePlatformNavigation();
+  const { isMobile } = usePlatformNavigation();
+  const router = useRouter();
   const {
     mutateAsync: deleteNotifications,
     isLoading,
@@ -65,7 +67,15 @@ const Notification = ({
   const onClickNotification = () => {
     onReadNotification({ _id, description, createdAt, from: { avatar, name } });
     if (isLoading) return;
-    if (link) navigateTo(link);
+    if (link) {
+      if (isMobile) {
+        if (link.includes('?')) {
+          router.push(link + '&platform=mobile');
+        } else router.push(link + '?platform=mobile');
+      } else {
+        router.push(link);
+      }
+    }
   };
   if (isSuccess) return null;
 
