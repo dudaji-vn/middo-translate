@@ -22,6 +22,5 @@ export const useGetSpaces = ({ type }: { type?: BusinessTabType }) => {
         return [];
       }
     },
-    enabled: true,
   });
 };

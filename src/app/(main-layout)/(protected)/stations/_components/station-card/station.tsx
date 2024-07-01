@@ -52,7 +52,7 @@ const Station = ({
       }}
       {...props}
     >
-      <div className="absolute -top-1 right-[10px]">
+      <div className="absolute -top-[16px] right-[10px]">
         <Circle
           size={16}
           className={

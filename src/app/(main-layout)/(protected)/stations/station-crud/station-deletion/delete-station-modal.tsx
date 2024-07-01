@@ -6,7 +6,7 @@ import customToast from '@/utils/custom-toast';
 import { deleteStation } from '@/services/station.service';
 import { TStation } from '../../_components/type';
 import { useQueryClient } from '@tanstack/react-query';
-import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-spaces';
+import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-stations';
 
 export const DeleteStationModal = ({
   station,

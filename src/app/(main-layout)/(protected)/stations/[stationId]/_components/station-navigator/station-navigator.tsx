@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { usePlatformStore } from '@/features/platform/stores';
-import { useGetStations } from '@/features/stations/hooks/use-get-spaces';
+import { useGetStations } from '@/features/stations/hooks/use-get-stations';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { DropdownMenuTriggerProps } from '@radix-ui/react-dropdown-menu';
@@ -134,11 +134,12 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
               }
             >
               <p className="font-semibold">{station?.name}</p>
-              <ChevronDown className="h-4 w-4" />
             </div>
+            <ChevronDown className="h-4 w-4" />
+
             <Ping
               size={12}
-              className={cn('absolute right-[6px] top-[20px]', 'right-4', {
+              className={cn('absolute right-2 top-0', {
                 hidden: !hasNotification,
               })}
             />

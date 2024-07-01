@@ -731,7 +731,8 @@
     "ACTIONS": {
       "SET_AS_DEFAULT": "기본값으로 설정",
       "DELETE": "삭제",
-      "SETTINGS": "설정"
+      "SETTINGS": "설정",
+      "REMOVE_DEFAULT": "기본값 제거"
     },
     "MEMBER": {
       "YOU": "나",

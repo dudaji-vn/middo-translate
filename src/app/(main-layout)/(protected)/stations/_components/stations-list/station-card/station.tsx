@@ -9,13 +9,24 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { Avatar } from '@/components/data-display';
-import { Circle, MoreVertical } from 'lucide-react';
+import {
+  Circle,
+  KeyIcon,
+  MoreVertical,
+  Settings,
+  SettingsIcon,
+  StarIcon,
+  StarOffIcon,
+  Trash2Icon,
+  User2Icon,
+} from 'lucide-react';
 import { Button } from '@/components/actions';
 import { cva } from 'class-variance-authority';
 import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useTranslation } from 'react-i18next';
 import { TStation } from '../../type';
+import { Item } from '@radix-ui/react-dropdown-menu';
 
 const tagsVariants = cva('text-[12px] font-medium rounded-full ', {
   variants: {
@@ -30,25 +41,35 @@ export enum EStationActions {
   SETTINGS = 'settings',
   SET_AS_DEFAULT = 'set-as-default',
   DELETE = 'delete',
+  REMOVE_DEFAULT = 'remove-default',
 }
 
 type StationMenuItem = {
   label: string;
   action: EStationActions;
+  icon?: React.ReactNode;
   labelProps?: React.HTMLAttributes<HTMLSpanElement>;
 }[];
 const menuItems: StationMenuItem = [
   {
     label: 'STATION.ACTIONS.SETTINGS',
     action: EStationActions.SETTINGS,
+    icon: <SettingsIcon className="size-4" />,
   },
   {
     label: 'STATION.ACTIONS.SET_AS_DEFAULT',
     action: EStationActions.SET_AS_DEFAULT,
+    icon: <StarIcon className="size-4" />,
+  },
+  {
+    label: 'STATION.ACTIONS.REMOVE_DEFAULT',
+    action: EStationActions.REMOVE_DEFAULT,
+    icon: <StarOffIcon className="size-4" />,
   },
   {
     label: 'COMMON.DELETE',
     action: EStationActions.DELETE,
+    icon: <Trash2Icon className="size-4" />,
     labelProps: {
       className: '!text-error ',
     },
@@ -57,9 +78,15 @@ const menuItems: StationMenuItem = [
 export type StationMenuProps = {
   station: TStation;
   onAction: (action: EStationActions) => void;
+  isDefault?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
 
-const StationMenu = ({ station, onAction, ...props }: StationMenuProps) => {
+const StationMenu = ({
+  station,
+  onAction,
+  isDefault,
+  ...props
+}: StationMenuProps) => {
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
 
@@ -84,16 +111,24 @@ const StationMenu = ({ station, onAction, ...props }: StationMenuProps) => {
         }}
       >
         {menuItems.map(({ ...item }) => {
+          if (item.action === EStationActions.REMOVE_DEFAULT && !isDefault) {
+            return null;
+          }
+          if (item.action === EStationActions.SET_AS_DEFAULT && isDefault) {
+            return null;
+          }
           return (
             <DropdownMenuItem
               className="flex items-center active:bg-primary-200 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
               key={item.action}
               onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
                 onAction(item.action);
               }}
             >
+              <div className={cn('mr-2', item.labelProps?.className)}>
+                {' '}
+                {item.icon}
+              </div>
               <span
                 className={cn(
                   'font-semibold text-neutral-800 dark:text-neutral-100',
@@ -110,18 +145,26 @@ const StationMenu = ({ station, onAction, ...props }: StationMenuProps) => {
   );
 };
 
-const MAPPED_TAGS = {
-  my: 'STATION.MY_STATION',
-  joined: 'STATION.JOINED_STATION',
+const MAPPED_TAGS_ICONS = {
+  my: {
+    icon: <KeyIcon size={16} />,
+    style: 'bg-primary text-white',
+  },
+  joined: {
+    icon: <User2Icon size={16} />,
+    style: 'bg-secondary text-primary',
+  },
 };
 
 const Station = ({
   data,
   menuProps,
+  isDefault,
   ...props
 }: {
   data: TStation;
   menuProps: Omit<StationMenuProps, 'station'>;
+  isDefault?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>) => {
   const { name, totalMembers, totalNewMessages = 0, avatar, _id } = data || {};
   const hasNotification = totalNewMessages > 0;
@@ -133,7 +176,7 @@ const Station = ({
     <Card
       key={_id}
       className={cn(
-        'relative min-h-[112px] min-w-[280px] max-w-full cursor-pointer gap-2 space-y-3 rounded-[12px] border border-solid border-primary-200 bg-primary-100 px-3 transition-all duration-300 ease-in-out hover:border-primary-500-main dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-primary',
+        'relative min-h-[112px] min-w-[280px] max-w-full cursor-pointer gap-2 space-y-3 rounded-xl border border-solid border-transparent bg-primary-100 px-3 shadow-none transition-all duration-300 ease-in-out active:border-primary-500-main dark:bg-neutral-900 md:hover:shadow-2',
       )}
       onClick={() => {
         router.push(`${ROUTE_NAMES.STATIONS}/${_id}/conversations`);
@@ -141,9 +184,9 @@ const Station = ({
       {...props}
     >
       <div className="absolute right-2 top-1 z-10">
-        <StationMenu {...menuProps} station={data} />
+        <StationMenu {...menuProps} isDefault={isDefault} station={data} />
       </div>
-      <div className="absolute -top-1 right-[10px]">
+      <div className="absolute -top-[16px] right-[10px]">
         <Circle
           size={16}
           className={
@@ -162,22 +205,36 @@ const Station = ({
         />
       </div>
       <CardContent className=" m-0 flex flex-row items-center gap-3 p-0">
-        <Avatar
-          src={avatar || '/logo.png'}
-          alt={'avatar-owner'}
-          variant={'outline'}
-          className="size-[88px] border border-neutral-50 p-1 dark:border-neutral-800"
-        />
+        <div className="relative">
+          <Avatar
+            src={avatar || '/logo.png'}
+            alt={'avatar-owner'}
+            variant={'outline'}
+            className="size-[88px] border border-neutral-50 p-1 dark:border-neutral-800"
+          />
+          <div className="absolute bottom-0  right-0 rounded-full border-2 border-primary-100 dark:border-neutral-900">
+            <div
+              className={cn(
+                ' flex size-6 items-center justify-center rounded-full ',
+                MAPPED_TAGS_ICONS[tag].style,
+              )}
+            >
+              {MAPPED_TAGS_ICONS[tag].icon}
+            </div>
+          </div>
+        </div>
         <div className="flex flex-col items-start space-y-1">
-          <Badge className={cn('px-2 py-1', tagsVariants({ tag }))}>
-            {t(MAPPED_TAGS[tag])}
-          </Badge>
           <CardTitle className="max-w-36 break-words text-base  font-semibold  leading-[18px] text-neutral-800  dark:text-neutral-50 sm:max-w-44 xl:max-w-56">
             {name}
           </CardTitle>
           <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${totalMembers} ${t('COMMON.MEMBER')}`}</span>
         </div>
       </CardContent>
+      {isDefault && (
+        <div className="absolute bottom-0 right-0 flex h-11 w-11 items-center justify-center rounded-br-xl rounded-tl-xl bg-primary">
+          <StarIcon className="h-5 w-5 fill-white text-white " />
+        </div>
+      )}
     </Card>
   );
 };

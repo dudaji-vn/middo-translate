@@ -732,7 +732,8 @@
     "ACTIONS": {
       "SET_AS_DEFAULT": "Đặt làm mặc định",
       "DELETE": "Xoá trạm",
-      "SETTINGS": "Cài đặt"
+      "SETTINGS": "Cài đặt",
+      "REMOVE_DEFAULT": "Xoá mặc định"
     },
     "MEMBER": {
       "YOU": "bạn",

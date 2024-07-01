@@ -30,6 +30,7 @@ import { ToastProvider } from './toast.provider';
 import { ThemeProvider } from './Theme.provider';
 import { EventListener } from './event-listener';
 import MediaLightBoxProvider from './media-light-box.provider';
+
 init({ data });
 
 export const AppProvider = (props: Props & React.PropsWithChildren) => {
@@ -37,16 +38,22 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const pathname = usePathname();
   const router = useRouter();
+  const stationId = user?.defaultStation?._id;
+
   useEffect(() => {
     if (user && isLoaded && pathname == ROUTE_NAMES.ROOT) {
       if (isMobile) {
         router.push(ROUTE_NAMES.TRANSLATION);
         return;
       }
+      if (stationId) {
+        router.push(`${ROUTE_NAMES.STATIONS}/${stationId}/conversations`);
+        return;
+      }
       router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isLoaded, isMobile]);
+  }, [user, isLoaded, isMobile, stationId]);
 
   return (
     <ReactQueryProvider>

@@ -746,7 +746,8 @@
     "ACTIONS": {
       "SET_AS_DEFAULT": "Set as default",
       "DELETE": "Delete",
-      "SETTINGS": "Settings"
+      "SETTINGS": "Settings",
+      "REMOVE_DEFAULT": "Remove default"
     },
     "MEMBER": {
       "YOU": "You",

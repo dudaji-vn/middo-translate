@@ -1,19 +1,20 @@
 'use client';
 
-import { Button } from '@/components/actions';
-import { Avatar, Typography } from '@/components/data-display';
-import { cn } from '@/utils/cn';
-import { Blocks, Key, Plus, User as UserIcon } from 'lucide-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { Typography } from '@/components/data-display';
+import {
+  Blocks,
+  Key,
+  KeyIcon,
+  User2Icon,
+  User as UserIcon,
+} from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
 
+import { useGetStations } from '@/features/stations/hooks/use-get-stations';
 import React, { useMemo } from 'react';
-import { useAuthStore } from '@/stores/auth.store';
-import { ROUTE_NAMES } from '@/configs/route-name';
-import { useTranslation } from 'react-i18next';
-import { useGetStations } from '@/features/stations/hooks/use-get-spaces';
+import { StationTabItem, StationTabType } from '../type';
 import PublicStation from './public-station';
 import WorkStations from './work-stations';
-import { StationTabItem, StationTabType } from '../type';
 
 const tabItems: StationTabItem[] = [
   {
@@ -36,9 +37,7 @@ const tabItems: StationTabItem[] = [
   },
 ];
 const StationsList = () => {
-  const [tab, setTab] = React.useState<StationTabType>('all_stations');
-  const currentUser = useAuthStore((s) => s.user);
-  const { t } = useTranslation('common');
+  const [tab] = React.useState<StationTabType>('all_stations');
   const searchParams = useSearchParams();
 
   const { data: stations_list, isLoading } = useGetStations({
@@ -50,7 +49,6 @@ const StationsList = () => {
     return null;
   }, [searchParams]);
 
-  const router = useRouter();
   return (
     <div className="flex w-full flex-col gap-4 px-[5vw] py-4">
       <section
@@ -74,6 +72,24 @@ const StationsList = () => {
           <Typography className=" text-center text-base font-normal leading-[18px] text-neutral-500">
             WORK STATIONS
           </Typography>
+          <div className="flex items-center gap-5">
+            <div className="flex items-center gap-1">
+              <div className="flex size-5 items-center justify-center rounded-full bg-primary text-white">
+                <KeyIcon size={12} />
+              </div>
+              <span className="text-sm text-neutral-600 dark:text-neutral-200">
+                My Station
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="flex size-5 items-center justify-center rounded-full bg-secondary text-primary">
+                <User2Icon size={12} />
+              </div>
+              <span className="ext-neutral-600 text-sm dark:text-neutral-200">
+                Joined Station
+              </span>
+            </div>
+          </div>
         </div>
         <WorkStations stations={stations_list} loading={isLoading} />
       </section>
