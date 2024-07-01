@@ -19,5 +19,5 @@ export type User = {
   phoneNumber?: string;
   username: string;
   allowUnknown: boolean;
-  defaultStation: Station;
+  defaultStation?: Station;
 } & BaseEntity;
