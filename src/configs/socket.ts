@@ -119,5 +119,10 @@ export const SOCKET_CONFIG = {
       END: 'meeting.end',
       BLOCK: 'meeting.block',
     },
+    APP: {
+      NOTIFICATION: {
+        NEW: 'app.notification.new',
+      },
+    },
   },
 };
