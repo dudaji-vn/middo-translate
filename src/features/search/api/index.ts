@@ -103,14 +103,14 @@ export const searchApi = {
   },
   async messageInRoom({
     roomId,
-    query,
+    params,
   }: {
     roomId: string;
-    query: SearchParams;
+    params: SearchParams;
   }) {
     const path = queryString.stringifyUrl({
       url: `${basePath}/rooms/${roomId}/messages`,
-      query: query,
+      query: params,
     });
     const res: Response<Message[]> = await axios.get(path);
     return res.data;

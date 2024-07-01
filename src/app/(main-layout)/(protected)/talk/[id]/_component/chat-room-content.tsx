@@ -47,14 +47,14 @@ const ChatRoomContent = () => {
   );
 };
 
-const ChatRoomMain = ({ room }: { room: Room }) => {
+export const ChatRoomMain = ({ room }: { room: Room }) => {
   const { isShowSearch } = useRoomSearchStore();
 
   return (
-    <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg md:rounded-none bg-card">
+    <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card md:rounded-none">
       <ChatBoxHeader />
       <PinnedBar />
-      {isShowSearch && <SearchMessageBar />}
+      {isShowSearch && <SearchMessageBar roomId={room._id} />}
       <MediaUploadProvider>
         <MediaUploadDropzone>
           <MessagesBoxProvider room={room}>

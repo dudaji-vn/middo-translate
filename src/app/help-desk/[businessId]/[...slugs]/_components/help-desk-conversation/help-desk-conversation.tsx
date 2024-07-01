@@ -29,6 +29,8 @@ import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/r
 import { Allotment } from 'allotment';
 import { MessageActions } from '@/features/chat/messages/components/message-actions';
 import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
+import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
+import { SearchMessageBar } from '@/features/chat/rooms/components/search-message-bar';
 
 const HelpDeskConversation = ({
   room,
@@ -112,9 +114,16 @@ const HelpDeskConversationContent = memo(
     isAnonymousPage?: boolean;
     roomSendingState: string;
   }) => {
+    const { isShowSearch } = useRoomSearchStore();
     return (
       <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
-        {!isAnonymousPage && <ChatBoxHeader />}
+        {!isAnonymousPage && (
+          <>
+            <ChatBoxHeader />
+            {isShowSearch && <SearchMessageBar roomId={room._id} />}
+          </>
+        )}
+
         <MediaUploadProvider>
           <MediaUploadDropzone>
             <MessageActions>
