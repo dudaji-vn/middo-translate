@@ -25,11 +25,11 @@ export const HeaderNotify = ({}: {}) => {
   const { data: notifications, refetch, isLoading } = useGetAppNotify();
 
   useEffect(() => {
-    socket.on(SOCKET_CONFIG.EVENTS.SPACE.NOTIFICATION.NEW, (data) => {
+    socket.on(SOCKET_CONFIG.EVENTS.APP.NOTIFICATION.NEW, (data) => {
       refetch();
     });
     return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.SPACE.NOTIFICATION.NEW);
+      socket.off(SOCKET_CONFIG.EVENTS.APP.NOTIFICATION.NEW);
     };
   }, []);
 
