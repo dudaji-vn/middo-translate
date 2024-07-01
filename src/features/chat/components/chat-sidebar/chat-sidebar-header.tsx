@@ -61,6 +61,8 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const handleBack = useCallback(() => {
     setCurrentSide('');
     searchInputRef.current?.reset();
+    setSearchValue('');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setCurrentSide]);
 
   if (pathname?.includes('statistics')) {
@@ -160,7 +162,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
                 setCurrentSide('search');
               }}
               btnDisabled
-              placeholder={t('CONVERSATION.SEARCH')}
+              placeholder={t('COMMON.SEARCH')}
               onChange={(e) => {
                 setSearchValue(e.target.value);
               }}
