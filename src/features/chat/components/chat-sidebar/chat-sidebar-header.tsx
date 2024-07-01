@@ -4,11 +4,9 @@ import { SearchInput, SearchInputRef } from '@/components/data-entry';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeftIcon,
-  Filter,
   Menu,
   MoreVerticalIcon,
   PenSquareIcon,
-  Settings,
 } from 'lucide-react';
 import { useCallback, useMemo, useRef, useState } from 'react';
 
@@ -18,16 +16,16 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useSearchStore } from '@/features/search/store/search.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { useAppStore } from '@/stores/app.store';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { cn } from '@/utils/cn';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { ChatSettingMenu } from '../chat-setting';
-import { useAppStore } from '@/stores/app.store';
-import { useSideChatStore } from '../../stores/side-chat.store';
-import { RoomsModalFilter } from '../../rooms/components/rooms.modal-filter';
 import { InboxFilter } from '../../rooms/components/inbox/inbox-filter';
+import { RoomsModalFilter } from '../../rooms/components/rooms.modal-filter';
+import { useSideChatStore } from '../../stores/side-chat.store';
+import { ChatSettingMenu } from '../chat-setting';
 
 export interface ChatSidebarHeaderProps {}
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
@@ -99,7 +97,7 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
             title={t('TOOL_TIP.NEW_CONVERSATION')}
             triggerItem={
               <div className="relative">
-                {pingEmptyInbox && (
+                {pingEmptyInbox && !isBusiness && (
                   <div className="absolute left-0 top-0 h-full w-full animate-ping rounded-full ring-2" />
                 )}
                 <Button.Icon

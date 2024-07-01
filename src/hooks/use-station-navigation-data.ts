@@ -12,7 +12,7 @@ export const useStationNavigationData = () => {
   const stationId = params?.[PK_WORK_STATION];
 
   return {
-    isOnStation,
+    isOnStation: isOnStation || false,
     stationId: stationId ? String(stationId) : undefined,
   };
 };

@@ -73,7 +73,7 @@ export const SelectedFilterRoom = () => {
                 onClick={() => {
                   removeFilter(filter);
                 }}
-                className="relative flex w-fit flex-row justify-between gap-4"
+                className="relative flex w-fit flex-row justify-between gap-3"
               >
                 <span className="max-w-full flex-1 !truncate text-ellipsis text-sm font-semibold capitalize ">
                   {filter}

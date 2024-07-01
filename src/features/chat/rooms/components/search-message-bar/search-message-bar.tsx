@@ -22,14 +22,15 @@ import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRoomId } from '../../hooks/use-roomId';
 export interface SearchMessageBarProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+  extends React.HTMLAttributes<HTMLDivElement> {
+  roomId?: string;
+}
 
 export const SearchMessageBar = forwardRef<
   HTMLDivElement,
   SearchMessageBarProps
->((props, ref) => {
-  const roomId = useRoomId();
-  const { isShowSearch, toggleIsShowSearch } = useRoomSearchStore();
+>(({ roomId, ...props }, ref) => {
+  const { toggleIsShowSearch } = useRoomSearchStore();
   const { t } = useTranslation('common');
   const [searchInput, setSearchInput] = useState('');
   const [open, setOpen] = useState(false);
@@ -43,7 +44,7 @@ export const SearchMessageBar = forwardRef<
 
   const handleSearch = () => {
     if (disabled) return;
-    mutate({ roomId, query: { q: searchInput } });
+    mutate({ roomId, params: { q: searchInput } });
   };
   const messages = useMemo(() => {
     const result = data || [];
@@ -80,32 +81,86 @@ export const SearchMessageBar = forwardRef<
   };
 
   return (
-    <div
-      ref={ref}
-      {...props}
-      className={'flex items-center gap-3 border-b p-3'}
-    >
-      <SearchInput
-        onClear={() => {
-          setSearchInput('');
-          removeParam('search_id');
-          mutate({ roomId: '', query: { q: '' } });
-        }}
-        onEnter={handleSearch}
-        onChange={(e) => setSearchInput(e.target.value)}
-        value={searchInput}
-        placeholder="Search messages"
-        className="flex-1"
-      />
-      <Button.Icon
-        disabled={disabled}
-        loading={isLoading}
-        onClick={handleSearch}
-        size="xs"
-      >
-        <SearchIcon />
-      </Button.Icon>
-      <div className="flex shrink-0 items-center gap-2">
+    <div ref={ref} {...props} className={'flex flex-col gap-3 border-b p-3'}>
+      <div className="flex items-center gap-3">
+        <SearchInput
+          onClear={() => {
+            setSearchInput('');
+            removeParam('search_id');
+            mutate({ roomId: '', params: { q: '' } });
+          }}
+          onEnter={handleSearch}
+          onChange={(e) => setSearchInput(e.target.value)}
+          value={searchInput}
+          placeholder="Search messages"
+          className="flex-1"
+        />
+        <Button.Icon
+          disabled={disabled}
+          loading={isLoading}
+          onClick={handleSearch}
+          size="xs"
+        >
+          <SearchIcon />
+        </Button.Icon>
+        <div className="hidden shrink-0 items-center gap-2 md:flex">
+          <Button.Icon
+            onClick={handleMoveUp}
+            disabled={!canMoveUp}
+            color="default"
+            size="xs"
+          >
+            <ChevronUpIcon />
+          </Button.Icon>
+          <AlertDialog open={open} onOpenChange={setOpen}>
+            <AlertDialogTrigger disabled={!messages.length}>
+              <div className="hover:opacity-80">
+                <Typography variant="default">
+                  {messages.length} {messages.length > 1 ? 'results' : 'result'}
+                </Typography>
+              </div>
+            </AlertDialogTrigger>
+
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Search results</AlertDialogTitle>
+              </AlertDialogHeader>
+              <div className="-mx-5 max-h-96 overflow-y-auto">
+                <MessagesList
+                  onItemClick={() => setOpen(false)}
+                  messages={messages}
+                  searchValue={searchInput}
+                />
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogAction>{t('COMMON.CLOSE')}</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <Button.Icon
+            onClick={handleMoveDown}
+            disabled={!canMoveDown}
+            color="default"
+            size="xs"
+          >
+            <ChevronDown />
+          </Button.Icon>
+        </div>
+        <Button
+          color="default"
+          onClick={() => {
+            toggleIsShowSearch();
+            removeParam('search_id');
+          }}
+          shape="square"
+          variant="default"
+          size="xs"
+        >
+          {t('COMMON.CLOSE')}
+        </Button>
+      </div>
+      <div className="flex shrink-0 items-center justify-between gap-2 md:hidden">
         <Button.Icon
           onClick={handleMoveUp}
           disabled={!canMoveUp}
@@ -118,21 +173,14 @@ export const SearchMessageBar = forwardRef<
           <AlertDialogTrigger disabled={!messages.length}>
             <div className="hover:opacity-80">
               <Typography variant="default">
-                {messages.length}{' '}
-                {/* {messages.length > 1
-              ? t('CONVERSATION.MESSAGES')
-              : t('CONVERSATION.MESSAGE')} */}
-                {messages.length > 1 ? 'results' : 'result'}
+                {messages.length} {messages.length > 1 ? 'results' : 'result'}
               </Typography>
             </div>
           </AlertDialogTrigger>
 
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>
-                {/* {t('CONVERSATION.MESSAGE_REACTION')} */}
-                Search results
-              </AlertDialogTitle>
+              <AlertDialogTitle>Search results</AlertDialogTitle>
             </AlertDialogHeader>
             <div className="-mx-5 max-h-96 overflow-y-auto">
               <MessagesList
@@ -156,17 +204,6 @@ export const SearchMessageBar = forwardRef<
           <ChevronDown />
         </Button.Icon>
       </div>
-      <Button.Icon
-        color="default"
-        onClick={() => {
-          toggleIsShowSearch();
-          removeParam('search_id');
-        }}
-        variant="ghost"
-        size="xs"
-      >
-        <XIcon />
-      </Button.Icon>
     </div>
   );
 });

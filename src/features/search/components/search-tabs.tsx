@@ -24,7 +24,7 @@ import moment from 'moment';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSearchDynamic } from '../hooks/use-search-dynamic';
-import { useStationNavigationData } from '@/hooks';
+import { useBusinessNavigationData, useStationNavigationData } from '@/hooks';
 import { Button } from '@/components/actions';
 
 export interface SearchTabsProps {
@@ -133,7 +133,7 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
         </TabsList>
       </Tabs>
       {searchValue && (
-        <div className="flex-1 overflow-y-scroll">
+        <div className="flex-1 overflow-y-auto py-3">
           <ResultComp
             countData={countData}
             onItemClick={handleItemClick}
@@ -161,21 +161,14 @@ const UsersResult = ({ searchValue, onItemClick }: ResultProps) => {
     searchValue,
     type: 'user',
   });
+
   if (!data) return null;
   const users = data.items as User[];
   return (
     <div>
-      {users?.map((user) => {
-        return (
-          <Link
-            onClick={() => onItemClick({ type: 'user', id: user._id })}
-            key={user?._id}
-            href={ROUTE_NAMES.ONLINE_CONVERSATION + '/' + user?._id}
-          >
-            <UserItem user={user} />
-          </Link>
-        );
-      })}
+      {users?.map((user) => (
+        <SearchUserItem key={user._id} user={user} onItemClick={onItemClick} />
+      ))}
     </div>
   );
 };
@@ -232,6 +225,7 @@ const AllResult = ({
   countData: { user: number; group: number; message: number };
 }) => {
   const { t } = useTranslation('common');
+  const { spaceId } = useBusinessNavigationData();
   const { data } = useQuerySearch<{
     rooms: Room[];
     users: User[];
@@ -240,6 +234,9 @@ const AllResult = ({
     searchApi: searchApi.inboxes,
     queryKey: 'chat-search',
     searchTerm: searchValue || '',
+    businessSpaceParams: {
+      spaceId: spaceId as string,
+    },
     limit: LIMIT,
   });
   if (!data) return null;
@@ -247,17 +244,13 @@ const AllResult = ({
     <>
       {data?.users && data.users.length > 0 && (
         <Section label={t('CONVERSATION.PEOPLE')}>
-          {data?.users?.map((user) => {
-            return (
-              <Link
-                key={user?._id}
-                href={ROUTE_NAMES.ONLINE_CONVERSATION + '/' + user?._id}
-                onClick={() => onItemClick({ type: 'user', id: user._id })}
-              >
-                <UserItem user={user} />
-              </Link>
-            );
-          })}
+          {data?.users?.map((user) => (
+            <SearchUserItem
+              key={user._id}
+              user={user}
+              onItemClick={onItemClick}
+            />
+          ))}
           {countData.user > LIMIT && (
             <div className="mt-1 px-3">
               <Button
@@ -337,7 +330,6 @@ export const MessagesList = ({
   searchValue: string;
   onItemClick?: (data: { type: SearchType; id: string }) => void;
 }) => {
-  const userId = useAuthStore((state) => state.user?._id);
   useEffect(() => {
     const container = document.querySelector('.highlight-container');
     if (!container) return;
@@ -364,8 +356,6 @@ export const MessagesList = ({
     </div>
   );
 };
-
-const Highlight = ({ key, value }: { key: string; value: string }) => {};
 
 const MessageItem = ({
   message,
@@ -408,6 +398,28 @@ const MessageItem = ({
           </span>
         }
       />
+    </Link>
+  );
+};
+const SearchUserItem = ({
+  user,
+  onItemClick,
+}: {
+  user: User;
+  onItemClick: (data: { type: SearchType; id: string }) => void;
+}) => {
+  let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${user._id}`;
+  const { isOnStation, stationId } = useStationNavigationData();
+  if (isOnStation) {
+    link = `${ROUTE_NAMES.STATIONS}/${stationId}/conversations/${user._id}`;
+  }
+  return (
+    <Link
+      key={user?._id}
+      href={link}
+      onClick={() => onItemClick({ type: 'user', id: user._id })}
+    >
+      <UserItem user={user} />
     </Link>
   );
 };
