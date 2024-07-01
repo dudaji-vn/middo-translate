@@ -3,7 +3,7 @@ import React, { forwardRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { GroupTab } from './chat-sidebar-tab-group';
 import { IndividualTab } from './chat-sidebar-tab-individual';
-import { SearchTab } from './chat-sidebar-tab-search-v2';
+import { SearchTab } from './chat-sidebar-tab-search';
 import { SidebarTabs } from '../../types';
 import { useSideChatStore } from '../../stores/side-chat.store';
 import { StationSettingTab } from './chat-sidebar-station-settings';
