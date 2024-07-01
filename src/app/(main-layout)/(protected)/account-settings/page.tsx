@@ -12,11 +12,12 @@ import { useAuthStore } from '@/stores/auth.store';
 import Image from 'next/image';
 import { CircleFlag } from 'react-circle-flags';
 import { useTranslation } from 'react-i18next';
-import SelectPageLanguage from './_components/select-page-language';
 import { DeleteAccount } from '@/features/user-settings/delete-account';
 import { AppPermission } from '@/features/user-settings/app-permission';
 import RestrictMessage from '@/features/user-settings/restrict-message';
 import { TurnOffNotification } from '@/features/user-settings/turn-off-notification';
+import SelectPageLanguage from '@/features/user-settings/select-page-language';
+import SelectTheme from '@/features/user-settings/select-theme';
 
 export default function AccountSettings() {
   const { user } = useAuthStore();
@@ -29,8 +30,8 @@ export default function AccountSettings() {
   };
 
   return (
-    <div className="container-height overflow-auto">
-      <div className="mx-auto w-full bg-[#FCFCFC] md:my-8 md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2">
+    <div className="container-height overflow-auto dark:bg-background">
+      <div className="mx-auto w-full bg-[#FCFCFC] dark:bg-background md:my-8 md:max-w-[500px] md:overflow-hidden md:rounded-xl md:shadow-2 dark:border-neutral-800 dark:md:shadow-3">
         <div className="flex flex-col items-center p-10">
           <div className="relative mx-auto h-24 w-24 ">
             <Image
@@ -39,10 +40,10 @@ export default function AccountSettings() {
               alt={user?.name || 'Anonymous'}
               width={500}
               height={500}
-              className="h-full w-full overflow-hidden rounded-full border border-neutral-50 object-cover"
+              className="h-full w-full overflow-hidden rounded-full border border-neutral-50 object-cover dark:border-neutral-800"
             ></Image>
             {user?.language && (
-              <div className="absolute -bottom-1 -right-1 mt-2 flex items-center justify-center overflow-hidden rounded-full border-4 border-[#FCFCFC]">
+              <div className="absolute -bottom-1 -right-1 mt-2 flex items-center justify-center overflow-hidden rounded-full border-4 border-[#FCFCFC] dark:border-background">
                 <CircleFlag
                   countryCode={
                     LANGUAGE_CODES_MAP[
@@ -54,10 +55,10 @@ export default function AccountSettings() {
               </div>
             )}
           </div>
-          <h2 className="mt-5 w-full break-words px-4  text-center text-lg text-neutral-800">
+          <h2 className="mt-5 w-full break-words px-4  text-center text-lg text-neutral-800 dark:text-neutral-50">
             {user?.name || 'Anonymous'}
           </h2>
-          <p className="mb-3 text-center text-sm font-light text-neutral-800">
+          <p className="mb-3 text-center text-sm font-light text-neutral-800 dark:text-neutral-50">
             {user?.email || ''}
           </p>
           <CopyZoneClick text={user?.username || ''}>
@@ -75,24 +76,21 @@ export default function AccountSettings() {
           <UpdateUserInfo />
           <UpdateUserAvatar />
           <UpdateUserPassword />
-          <RestrictMessage />
+          {/* <RestrictMessage /> */}
+          <TurnOffNotification />
         </div>
         <div className="my-4">
           <SelectPageLanguage />
-          <TurnOffNotification />
+          <SelectTheme />
           <AppPermission />
         </div>
         <div
-          className="flex w-full cursor-pointer items-center bg-white px-5 py-4 md:hover:bg-neutral-100/20"
+          className="flex w-full cursor-pointer items-center bg-white px-5 py-4 md:hover:bg-neutral-100/20 dark:bg-neutral-900"
           onClick={signOut}
         >
-          <Button.Icon
-            color={'default'}
-            size={'sm'}
-            className="relative !h-10 !w-10 rounded-xl"
-          >
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-neutral-50 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-50">
             <LogOut size={20} />
-          </Button.Icon>
+          </div>
           <span className="ml-4 block text-center text-base font-medium ">
             {t('ACCOUNT_SETTING.SIGN_OUT')}
           </span>

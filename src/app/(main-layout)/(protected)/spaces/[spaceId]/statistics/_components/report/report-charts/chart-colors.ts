@@ -8,3 +8,13 @@ export const CHART_COLORS = [
   '#3D88ED',
   '#096AEC',
 ];
+
+export const CHART_DARK_COLORS = [
+  '#191919',
+  '#191919',
+  '#00275C',
+  '#003D8F',
+  '#0053C2',
+  '#096AEC',
+  '#3D88ED',
+];

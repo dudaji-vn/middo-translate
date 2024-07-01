@@ -95,8 +95,8 @@ const Page = ({
     'Last Connect Date': item.lastConnectDate,
   }));
   return (
-    <section className="relative w-full">
-      <div className="flex  flex-col justify-center gap-4  px-4 py-3 font-medium md:flex-row md:items-center md:px-10">
+    <section className="relative w-full ">
+      <div className="flex  flex-col justify-between gap-4  p-3 font-medium md:flex-row md:items-center  md:px-10">
         <div className="flex flex-row items-center justify-start">
           <Button.Icon
             onClick={() => setOpenSidebar(!openSidebar, true)}
@@ -107,12 +107,12 @@ const Page = ({
           >
             <Menu />
           </Button.Icon>
-          <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800">
-            {t(`EXTENSION.CLIENT.PAGE_TITLE`)}
+          <Typography className=" flex flex-row items-center justify-between  space-y-0 text-base font-semibold text-neutral-800 dark:text-neutral-50">
+            {t(`EXTENSION.CLIENTS`)}
           </Typography>
         </div>
-        <em className="max-md:hidden md:w-1/6 xl:w-1/5" />
-        <div className="flex grow gap-4">
+
+        <div className="flex w-full flex-col gap-2  px-2 md:max-w-[60%] md:grow md:flex-row md:gap-4 xl:max-w-[50%]">
           <div className="h-12 grow">
             <SearchInput
               className="w-full"
@@ -121,7 +121,7 @@ const Page = ({
               placeholder={t('EXTENSION.CLIENT.SEARCH')}
             />
           </div>
-          <div className="h-fit w-fit flex-none ">
+          <div className="h-fit w-full md:w-fit md:flex-none ">
             <DownloadButton
               data={exportData}
               colInfo={[
@@ -135,13 +135,14 @@ const Page = ({
           </div>
         </div>
       </div>
-      <div className="w-full overflow-x-auto rounded-md px-10 py-3">
+      <div className="max-h-[calc(100dvh-300px)]  w-full  overflow-x-auto  rounded-md  px-2 py-3 md:max-h-[calc(100dvh-200px)] md:px-10">
         <DataTable
           dividerRow
           columns={makeClientsColumns(t)}
           data={items}
           tableHeadProps={{
-            className: 'bg-white  border-none',
+            className:
+              'bg-white dark:bg-background dark:text-neutral-50 border-none',
           }}
           cellProps={{
             className:
@@ -149,18 +150,21 @@ const Page = ({
           }}
           rowProps={{
             className:
-              'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50',
+              'bg-white even:bg-primary-100 dark:even:bg-neutral-900 dark:bg-neutral-900 bg-primary-100 h-12 hover:bg-neutral-50 dark:hover:bg-neutral-800',
           }}
           loading={isLoading}
           skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}
-        />
-        <ClientsPagination
-          pagination={pagination}
-          limitOptions={ROWS_PER_PAGE_OPTIONS}
-          onPageChange={onPageChange}
-          onLimitChange={onLimitChange}
+          bodyProps={{
+            className: ' ',
+          }}
         />
       </div>
+      <ClientsPagination
+        pagination={pagination}
+        limitOptions={ROWS_PER_PAGE_OPTIONS}
+        onPageChange={onPageChange}
+        onLimitChange={onLimitChange}
+      />
     </section>
   );
 };

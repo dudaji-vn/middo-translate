@@ -1,4 +1,9 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { restoredState } from '@/utils/restore';
+
+export type ThemeSetting = 'system' | 'light' | 'dark';
+export type Theme = Exclude<ThemeSetting, 'system'>;
 
 export type AppState = {
   isMobile: boolean;
@@ -8,6 +13,8 @@ export type AppState = {
   platform: 'web' | 'mobile';
   currentAudio?: HTMLAudioElement;
   language: string;
+  theme?: Theme;
+  themeSetting?: ThemeSetting;
   pingEmptyInbox?: boolean;
   socketConnected: boolean;
 };
@@ -20,27 +27,39 @@ export type AppActions = {
   setPlatform: (platform: 'web' | 'mobile') => void;
   setCurrentAudio: (audio: HTMLAudioElement) => void;
   setLanguage: (language: string) => void;
+  setTheme: (theme: Theme) => void;
+  setThemeSetting: (themeSetting: ThemeSetting) => void;
   setPingEmptyInbox: (pingEmptyInbox: boolean) => void;
   setSocketConnected: (socketConnected: boolean) => void;
 };
 
-export const useAppStore = create<AppState & AppActions>()((set) => ({
-  isMobile: false,
-  isTablet: false,
-  loading: false,
-  isShowConfirmLogout: false,
-  platform: 'web',
-  language: 'en',
-  pingEmptyInbox: false,
-  socketConnected: false,
-  setPingEmptyInbox: (pingEmptyInbox) => set(() => ({ pingEmptyInbox })),
-  setMobile: (isMobile) => set(() => ({ isMobile })),
-  setLoading: (loading) => set(() => ({ loading })),
-  setTablet: (isTablet) => set(() => ({ isTablet })),
-  setPlatform: (platform) => set(() => ({ platform })),
-  setShowConfirmLogout: (isShowConfirmLogout) =>
-    set(() => ({ isShowConfirmLogout })),
-  setCurrentAudio: (currentAudio) => set(() => ({ currentAudio })),
-  setLanguage: (language) => set(() => ({ language })),
-  setSocketConnected: (socketConnected) => set(() => ({ socketConnected })),
-}));
+export const useAppStore = create<AppState & AppActions>()(
+  persist(
+    (set) => ({
+      isMobile: false,
+      isTablet: false,
+      loading: false,
+      isShowConfirmLogout: false,
+      platform: 'web',
+      language: undefined,
+      theme: undefined,
+      themeSetting: undefined,
+      pingEmptyInbox: false,
+      socketConnected: false,
+      setPingEmptyInbox: (pingEmptyInbox) => set(() => ({ pingEmptyInbox })),
+      setMobile: (isMobile) => set(() => ({ isMobile })),
+      setLoading: (loading) => set(() => ({ loading })),
+      setTablet: (isTablet) => set(() => ({ isTablet })),
+      setPlatform: (platform) => set(() => ({ platform })),
+      setShowConfirmLogout: (isShowConfirmLogout) =>
+        set(() => ({ isShowConfirmLogout })),
+      setCurrentAudio: (currentAudio) => set(() => ({ currentAudio })),
+      setLanguage: (language) => set(() => ({ language })),
+      setTheme: (theme) => set(() => ({ theme })),
+      setThemeSetting: (themeSetting) => set(() => ({ themeSetting })),
+      setSocketConnected: (socketConnected) => set(() => ({ socketConnected })),
+      ...restoredState('app-store'),
+    }),
+    { name: 'app-store', },
+  )
+);

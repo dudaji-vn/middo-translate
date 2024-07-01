@@ -23,6 +23,7 @@ import {
   MediaUploadProvider,
 } from '@/components/media-upload';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export default function UpdateUserAvatar() {
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export default function UpdateUserAvatar() {
     e.preventDefault();
     const file = inputCropImage.current?.getCropData();
     if (!file) {
-      toast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
+      customToast.error(t('MESSAGE.ERROR.NOT_CHOOSE_IMAGE'));
       return;
     }
     try {
@@ -49,10 +50,10 @@ export default function UpdateUserAvatar() {
           avatar: res.data.avatar,
         },
       });
-      toast.success(t('MESSAGE.SUCCESS.UPDATED_AVATAR'));
+      customToast.success(t('MESSAGE.SUCCESS.UPDATED_AVATAR'));
       setOpen(false);
     } catch (_: unknown) {
-      toast.error(t('BACKEND.MESSAGE.SOMETHING_WRONG'));
+      customToast.error(t('BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
     }
@@ -62,8 +63,8 @@ export default function UpdateUserAvatar() {
     <>
       {loading && <PageLoading />}
       <AlertDialog open={open} onOpenChange={setOpen}>
-        <AlertDialogTrigger className="flex w-full items-center border-b border-b-[#F2F2F2] bg-white px-5 py-4 md:hover:bg-primary-100">
-          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-200 text-primary">
+        <AlertDialogTrigger className="flex w-full items-center border-b bg-white dark:bg-neutral-900 dark:border-b-neutral-800 px-5 py-4 md:hover:bg-primary-100  dark:md:hover:bg-primary-800">
+          <div className="relative flex !h-10 !w-10 items-center justify-center rounded-xl bg-primary-100 dark:bg-primary-900 text-primary">
             <Camera size={20} />
           </div>
           <span className="ml-4 block text-center text-base font-medium">

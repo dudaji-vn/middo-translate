@@ -13,6 +13,7 @@ import { useChatBox } from '../../contexts';
 import { useDropzone } from 'react-dropzone';
 import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 
 export interface RoomUpdateAvatarProps {
   initialAvatar?: string;
@@ -50,7 +51,7 @@ export const RoomUpdateAvatar = ({
       // call api to update avatar, tomorrow
     },
     onDropRejected: () => {
-      toast.error(t('MESSAGE.ERROR.FILE_TOO_LARGE_OR_NOT_SUPPORT'));
+      customToast.error(t('MESSAGE.ERROR.FILE_TOO_LARGE_OR_NOT_SUPPORT'));
     },
   });
 

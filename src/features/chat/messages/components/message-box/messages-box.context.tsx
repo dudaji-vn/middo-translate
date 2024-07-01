@@ -1,28 +1,17 @@
 'use client';
 
-import {
-  PropsWithChildren,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
-import { NEXT_PUBLIC_NAME } from '@/configs/env.public';
-import { SOCKET_CONFIG } from '@/configs/socket';
+import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 import { Message, PinMessage } from '@/features/chat/messages/types';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { Room } from '@/features/chat/rooms/types';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
-import socket from '@/lib/socket-io';
 import { useAuthStore } from '@/stores/auth.store';
-import { useQueryClient } from '@tanstack/react-query';
-import { convert } from 'html-to-text';
 import { useParams } from 'next/navigation';
 import { roomApi } from '../../../rooms/api';
-import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
-import { MessageActions } from '../message-actions';
-import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
+import { useChangeTitle } from './use-change-title';
+import { useMessageSocket } from './use-message-socket';
 
 interface MessagesBoxContextProps {
   room: Room;
@@ -36,6 +25,8 @@ interface MessagesBoxContextProps {
   updateMessage: (message: Message) => void;
   removeMessage: (messageId: string) => void;
   isFetching: boolean;
+  newCount: number;
+  setCanCount: (canCount: boolean) => void;
 }
 
 export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
@@ -52,8 +43,9 @@ export const MessagesBoxProvider = ({
   isAnonymous?: boolean;
   guestId?: string;
 }>) => {
+  const userId = useAuthStore((s) => s.user?._id);
+  const [notification, setNotification] = useState<string>('');
   const key = ['messages', room._id];
-  const queryClient = useQueryClient();
   const {
     isFetching,
     items,
@@ -85,74 +77,19 @@ export const MessagesBoxProvider = ({
     isAnonymous,
   });
 
-  const userId = useAuthStore((s) => s.user?._id);
+  const { newCount, setCanCount } = useMessageSocket({
+    room,
+    userId: userId as string,
+    guestId: guestId as string,
+    replaceItem,
+    updateItem,
+    setNotification,
+  });
 
-  const [notification, setNotification] = useState<string>('');
-
-  const isFocused = useHasFocus();
-  // socket event
-
-  useEffect(() => {
-    socket.on(
-      SOCKET_CONFIG.EVENTS.MESSAGE.NEW,
-      ({
-        clientTempId,
-        message,
-      }: {
-        message: Message;
-        clientTempId: string;
-      }) => {
-        console.log(`socket.on(${SOCKET_CONFIG.EVENTS.MESSAGE.NEW})`, message);
-        replaceItem(message, clientTempId);
-        if (message.sender._id === userId) return;
-        const targetText = message.room?.isGroup
-          ? message.room?.name
-            ? message.room?.name
-            : 'your group'
-          : 'you';
-        const content = convert(message.content);
-        const messageNotify = `${message.sender.name} to ${targetText}: ${content} `;
-        setNotification(messageNotify);
-      },
-    );
-    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
-      queryClient.invalidateQueries(['message', message._id]);
-      if (message.hasChild) {
-        queryClient.invalidateQueries(['message-item-replies', message._id]);
-      }
-    });
-    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
-      console.log('update message', message);
-      updateItem(message);
-      queryClient.invalidateQueries(['message', message._id]);
-    });
-
-    return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replaceItem, room._id, updateItem, userId, guestId]);
-
-  useEffect(() => {
-    let intervalId: NodeJS.Timeout;
-    if (notification && !isFocused) {
-      intervalId = setInterval(() => {
-        const defaultTitle = `Talk | ${NEXT_PUBLIC_NAME}`;
-        document.title =
-          document.title === `Talk | ${NEXT_PUBLIC_NAME}`
-            ? notification
-            : defaultTitle;
-      }, 1000);
-    }
-    if (isFocused) {
-      document.title = `Talk | ${NEXT_PUBLIC_NAME}`;
-      setNotification('');
-    }
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [isFocused, notification]);
+  useChangeTitle({
+    notification,
+    setNotification,
+  });
 
   return (
     <MessagesBoxContext.Provider
@@ -168,6 +105,8 @@ export const MessagesBoxProvider = ({
         updateMessage: updateItem,
         removeMessage: removeItem,
         isFetching,
+        newCount,
+        setCanCount,
       }}
     >
       {children}

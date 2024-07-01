@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import DEFAULT_USER_CALL_STATE from '../constant/default-user-call-state';
+import { CanvasPath } from 'react-sketch-canvas';
 
 export type MyVideoCallState = {
     myStream: MediaStream | undefined;
@@ -7,7 +8,7 @@ export type MyVideoCallState = {
     isTurnOnCamera: boolean;
     isTurnOnMic: boolean;
     shareScreenStream: MediaStream | undefined;
-    myOldDoodle: any;
+    myOldDoodle: CanvasPath[];
     isLoadingVideo: boolean;
     isLoadingStream: boolean;
     setMyStream: (stream?: MediaStream) => void;
@@ -15,7 +16,7 @@ export type MyVideoCallState = {
     setTurnOnCamera: (isTurnOnCamera: boolean) => void;
     setTurnOnMic: (isTurnOnMic: boolean) => void;
     setShareScreenStream: (stream?: MediaStream) => void;
-    setMyOldDoodle: (doodle: any) => void;
+    setMyOldDoodle: (doodle: CanvasPath[]) => void;
     setLoadingVideo: (isLoadingVideo: boolean) => void;
     setLoadingStream: (isLoadingStream: boolean) => void;
 };
@@ -26,7 +27,7 @@ export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
     isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera,
     isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic,
     shareScreenStream: undefined,
-    myOldDoodle: undefined,
+    myOldDoodle: [],
     isLoadingVideo: false,
     isLoadingStream: false,
     setMyStream: (stream?: MediaStream) => {
@@ -44,7 +45,7 @@ export const useMyVideoCallStore = create<MyVideoCallState>()((set) => ({
     setShareScreenStream: (stream?: MediaStream) => {
         set(() => ({ shareScreenStream: stream }));
     },
-    setMyOldDoodle: (doodle: any) => {
+    setMyOldDoodle: (doodle: CanvasPath[]) => {
         set(() => ({ myOldDoodle: doodle }));
     },
     setLoadingVideo: (isLoadingVideo: boolean) => {

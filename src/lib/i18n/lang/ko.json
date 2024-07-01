@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "색상",
     "INVITE": "초대",
     "APPLY": "적용",
     "PREVIEW": "미리보기",
@@ -32,6 +33,8 @@
     "REPLACE": "교체",
     "UPDATE": "업데이트",
     "ALL": "모두",
+    "CONTACT": "콘택트 렌즈",
+    "CONTACTS": "콘택트 렌즈",
     "GROUP": "그룹",
     "UNREAD": "읽지 않음",
     "SWITCH": "전환",
@@ -39,10 +42,15 @@
     "VIEW": "보기",
     "REMOVE": "제거",
     "CLEAR": "지우기",
+    "AND": "및",
+    "JOINED": "가입됨",
+    "SEND_BY": "보낸 사람",
     "SAVE_CHANGE": "변경 사항 저장",
     "UPLOAD_IMAGE": "이미지 업로드",
     "SUGGESTION": "제안",
     "SHOW_MORE": "더 보기",
+    "OTHERS": "기타",
+    "SHOW_LESS": "간략히",
     "CLOSE": "닫기",
     "FORWARD": "전달",
     "EDIT": "편집",
@@ -73,6 +81,7 @@
     "TYPE_A_MESSAGE": "메시지 입력",
     "CLICK": "클릭",
     "WAITING": "대기 중",
+    "CONNECTING": "연결 중",
     "DRAFT": "임시",
     "TRANSLATED_FROM": "번역됨",
     "EDITING": "편집 중",
@@ -85,15 +94,51 @@
     "PENDING": "대기 중",
     "MEMBER": "구성원",
     "SPACE": "공간",
+    "ON": "켜기",
+    "OFF": "끄기",
+    "USER": "사용자",
+    "MESSAGE": "메시지",
+    "SEARCH_HISTORY": "검색 기록",
+    "LIGHT": "빛",
+    "DARK": "어두운",
+    "SYSTEM": "체계",
+    "SETTINGS": "설정",
+    "CHANGE_AVATAR": "아바타 변경",
+    "CHANGE_NAME": "이름 변경",
+    "INFORMATION": "정보",
+    "DELETE_STATION": "Station 삭제",
+    "LINK": "링크",
     "TIME": {
       "CREATED_ON": "생성일",
       "UPDATED_ON": "업데이트일",
       "DELETED_ON": "삭제일",
       "LAST_WEEK": "지난 주",
       "LAST_MONTH": "지난 달",
+      "LAST_EDITED": "마지막 편집",
       "LAST_YEAR": "작년",
       "CUSTOM": "사용자 정의"
+    },
+    "WEEKDAY": {
+      "SUN": "일요일",
+      "MON": "월요일",
+      "TUE": "화요일",
+      "WED": "수요일",
+      "THU": "목요일",
+      "FRI": "금요일",
+      "SAT": "토요일",
+      "TITLE": "대화"
+    },
+    "HOURLY": {
+      "TITLE": "시간"
     }
+  },
+  "PAGINATION": {
+    "PREV": "이전",
+    "NEXT": "다음",
+    "PAGE": "페이지",
+    "PER_PAGE": "페이지당",
+    "ITEMS": "항목",
+    "ITEMS_PER_PAGE": "페이지당 항목 수"
   },
   "MESSAGE": {
     "ERROR": {
@@ -124,7 +169,8 @@
       "USERNAME_MIN": "사용자 이름은 최소 3자 이상이어야 합니다!",
       "USERNAME_MAX": "사용자 이름은 최대 15자까지만 허용됩니다!",
       "USERNAME_PATTERN": "사용자 이름은 문자, 숫자, 밑줄 및 하이픈만 포함할 수 있습니다!",
-      "NOT_SUPPORT_PREVIEW": "파일이 너무 크거나 미리보기를 지원하지 않습니다! <br />보려면 다운로드하세요."
+      "NOT_SUPPORT_PREVIEW": "파일이 너무 크거나 미리보기를 지원하지 않습니다! <br />보려면 다운로드하세요.",
+      "USER_NOT_FOUND": "사용자를 찾을 수 없습니다!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "프로필이 성공적으로 업데이트되었습니다!",
@@ -156,7 +202,8 @@
     "SIGN_IN": "로그인",
     "ACCOUNT_SETTING": "계정 설정",
     "MIDDO_EXTENSION": "Middo 확장",
-    "SIGN_OUT": "로그아웃"
+    "SIGN_OUT": "로그아웃",
+    "SETTINGS": "설정"
   },
   "TRANSLATION": {
     "HISTORY": "역사",
@@ -237,7 +284,8 @@
     "CHANGE_AVATAR": "아바타 변경",
     "APP_PERMISSION": "앱 권한",
     "RESTRICT_MESSAGE": "알 수 없는 발신자 제한",
-    "NOTIFICATION": "알림"
+    "NOTIFICATION": "모든 알림 끄기",
+    "THEME": "주제"
   },
   "SIGN_IN": {
     "TITLE": "로그인",
@@ -318,6 +366,9 @@
     "FORWARD": "전달",
     "PIN": "고정",
     "LEAVE": "나가기",
+    "COPY_USERNAME": "사용자 이름 복사",
+    "TALK": "대화 시작",
+    "DELETE_CONTACT": "연락처 삭제",
     "ON": "켜기",
     "OFF": "끄기",
     "UNPIN": "고정 해제",
@@ -351,8 +402,8 @@
     "NOTICE_CONTENT": "그룹의 구성원들은 초대되기 전까지 이 통화에 대한 알림을 받지 않습니다.",
     "INVITE": "초대",
     "YOU": "나",
-    "TRANSLATED_TOOL": "번역",
-    "MESSAGE_TRANSLATE": "메시지 번역",
+    "TRANSLATED_TOOL": "E.S.L 번역 도구",
+    "MESSAGE_TRANSLATE": "E.S.L 메시지",
     "EMOJI": "이모지",
     "MESSAGE_REACTION": "메시지 반응",
     "CALL_END_AT": "{{time}}에 통화 종료",
@@ -435,14 +486,60 @@
     "RESTRICT_MESSAGE": "이 기능을 활성화하면 알 수 없는 발신자는 문자 메시지만 보낼 수 있으며 해당 메시지는 '대기 중' 탭으로 이동됩니다."
   },
   "MODAL": {
+    "CREATE_STATION": {
+      "HEADING": "정류장 만들기",
+      "TITLE": "정류장에 <span class='text-primary-500-main'> 정보를 입력하세요 </span>",
+      "DESCRIPTION": "정류장 이름을 지정하고 정류장 아바타 또는 회사 로고 <span class='font-light'>(선택사항)</span>를 추가하여 승무원들이 귀사의 비즈니스를 쉽게 인식할 수 있도록 도와주세요.",
+      "PLACEHOLDERS": {
+        "NAME": "정류장 이름 입력"
+      },
+      "ERRORS": {
+        "NAME_REQUIRED": "정류장 이름은 필수 항목입니다",
+        "NAME_MAX_LENGTH": "정류장 이름은 30자를 초과할 수 없습니다",
+        "AVATAR_REQUIRED": "정류장 아바타는 필수 항목입니다"
+      },
+      "INVITE_MEMBERS": {
+        "TITLE": "<span class='mr-2 text-primary-500-main'>초대</span> 다른 사람을 작업 공간에 초대하세요&nbsp;<span class='text-[24px] font-normal'>(선택사항)</span>",
+        "DESCRIPTION": "작업 공간의 이름을 지정하고 아바타 또는 회사 로고를 추가하여 승무원들이 작업 공간을 쉽게 인식할 수 있도록 도와주세요. <span class='font-normal text-primary-500-main'>업그레이드 계획.</span>",
+        "ERRORS": {
+          "EMAIL_REQUIRED": "이메일은 필수 항목입니다",
+          "EMAIL_INVALID": "유효하지 않은 이메일입니다"
+        }
+      }
+    },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "기본 정류장 설정",
+      "DESCRIPTION": "<strong>{{name}}</strong>을(를) 기본 정류장으로 설정하시겠습니까?"
+    },
+    "START_CALL": {
+      "TITLE": "통화 시작",
+      "DESCRIPTION": "통화를 시작하시겠습니까?"
+    },
+    "ROLE_CHANGE": {
+      "TITLE": "역할 변경",
+      "DESCRIPTION": "<strong>{{name}}</strong>의 역할을 <strong>{{role}}</strong>(으)로 변경하시겠습니까?"
+    },
+    "INVITE_MEMBERS": {
+      "TITLE": "<span class='mr-2 text-primary-500-main'>초대</span>하여 공간에 참여시키세요&nbsp;<span class='text-[24px] font-normal'>(선택 사항)</span>",
+      "DESCRIPTION": "무료 플랜 계정에서는 최대 2명의 멤버만 초대할 수 있습니다. <span class='font-normal text-primary-500-main'>플랜 업그레이드.</span>"
+    },
     "CREATE_SPACE": {
-      "TITLE": "<span class='text-primary-500-main'>당신의 공간</span>에 정보를 제공하세요",
-      "DESCRIPTION": "이 공간에 이름을 지정하고 공간 아바타 또는 회사 로고를 추가하여 당신의 업무를 쉽게 인식할 수 있도록 도와주세요 <span class='font-light'>(선택 사항)</span>."
+      "HEADING": "공간 생성",
+      "TITLE": "<span class='text-primary-500-main'>당신의 공간</span>&nbsp;에 정보를 제공하세요",
+      "DESCRIPTION": "이 공간에 이름을 지정하고 공간 아바타 또는 회사 로고를 추가하여 당신의 업무를 쉽게 인식할 수 있도록 도와주세요 <span class='font-light'>(선택 사항)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "공간 이름"
+      }
     },
     "DELETE_SPACE": {
       "TITLE": "공간 삭제",
       "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
       "CONFIRM": "공간 삭제"
+    },
+    "DELETE_STATION": {
+      "TITLE": "정류장 삭제",
+      "DESCRIPTION": "모든 데이터가 삭제되며 되돌릴 수 없습니다. <strong>{{name}}</strong>을(를) 삭제하시겠습니까?",
+      "CONFIRM": "정류장 삭제"
     },
     "SIGN_OUT": {
       "TITLE": "로그아웃 하시겠습니까?",
@@ -489,7 +586,6 @@
       "TITLE": "그룹 나가기",
       "DESCRIPTION": "이 그룹의 메시지를 더 이상 볼 수 없게 됩니다. 정말 그룹에서 나가시겠습니까?"
     },
-
     "BLOCK_USER": {
       "TITLE": "{{name}} 차단",
       "DESCRIPTION": "차단 해제할 때까지 그들로부터 메시지나 전화를 받지 않습니다. 정말로 차단하시겠습니까?",
@@ -549,6 +645,10 @@
       "VIDEO": "카메라",
       "SPEAKER": "스피커",
       "NO_DEVICE": "장치 없음"
+    },
+    "DELETE_CONTACT": {
+      "TITLE": "연락처 삭제",
+      "DESCRIPTION": "이 연락처를 삭제하시겠습니까?"
     }
   },
   "FILTERS": {
@@ -606,29 +706,81 @@
     "START_STOP_SCREEN_DOODLE": "화면 드로잉 시작/정지",
     "TOGGLE_LIVE_CAPTION": "라이브 자막 보기/숨기기"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "확장 프로그램을 로드할 수 없음",
+      "DESCRIPTION": "임베드 코드를 다시 확인하거나 도메인이 목록에 추가되었는지 확인하세요."
+    }
+  },
+  "STATION": {
+    "WELCOME": "안녕하세요, 다시 오신 것을 환영합니다",
+    "ALL_STATION": "모든 스테이션",
+    "JOINED_STATION": "가입한 스테이션",
+    "MY_STATION": "내 스테이션",
+    "CREATE_STATION": "새 스테이션 생성",
+    "DASHBOARD": "대시보드",
+    "STATION_INFOR": "스테이션 정보",
+    "UPLOAD_IMAGE": "스테이션 아바타 업로드",
+    "CREATE_BUTTON": "스테이션 생성 및 멤버 초대",
+    "ERRORS": {
+      "NAME_REQUIRED": "스테이션 이름은 필수 항목입니다",
+      "NAME_MAX_LENGTH": "스테이션 이름은 30자 이하여야 합니다",
+      "AVATAR_REQUIRED": "스테이션 아바타는 필수 항목입니다",
+      "INVALID_EMAIL_MEMBER": "유효하지 않은 이메일 멤버"
+    },
+    "ACTIONS": {
+      "SET_AS_DEFAULT": "기본값으로 설정",
+      "DELETE": "삭제",
+      "SETTINGS": "설정",
+      "REMOVE_DEFAULT": "기본값 제거"
+    },
+    "MEMBER": {
+      "YOU": "나",
+      "EMAIL": "이메일",
+      "ROLE": "역할"
+    },
+    "NO_MEMBER": "멤버 없음"
+  },
   "EXTENSION": {
+    "EMPTY": {
+      "TITLE": "Tiện ích mở rộng của bạn sắp đến!",
+      "OWNER_DES": "Tạo một tiện ích mở rộng cuộc trò chuyện với sự trợ giúp của chủ đề sẵn có hoặc tự định nghĩa một chủ đề độc đáo của riêng bạn."
+    },
     "ALL_DOMAINS": "모든 도메인",
     "ALL_MEMBERS": "모든 구성원",
     "SPACE": {
-      "WELCOME": "안녕하세요, 환영합니다",
+      "WELCOME": "안녕하세요, 다시 오신 것을 환영합니다",
       "ALL_SPACE": "모든 공간",
       "JOINED_SPACE": "가입한 공간",
       "MY_SPACE": "내 공간",
-      "CREATE_SPACE": "새로운 공간 만들기",
-      "SPACE_INFOR": "공간 정보"
+      "CREATE_SPACE": "새 공간 만들기",
+      "DASHBOARD": "대시보드",
+      "SPACE_INFOR": "공간 정보",
+      "UPLOAD_IMAGE": "공간 아바타 업로드",
+      "CREATE_BUTTON": "공간 만들기 및 멤버 초대",
+      "ERRORS": {
+        "NAME_REQUIRED": "공간 이름은 필수입니다",
+        "NAME_MAX_LENGTH": "공간 이름은 30자 이내여야 합니다",
+        "AVATAR_REQUIRED": "공간 아바타는 필수입니다",
+        "INVALID_EMAIL_MEMBER": "잘못된 이메일 멤버"
+      },
+      "NO_MEMBER": "멤버 없음"
     },
     "BREADCRUMB": {
       "HOME": "홈"
     },
     "TAG": {
+      "NAME": "태그 이름",
       "SEARCH": "태그 검색",
       "CREATE": "새로운 태그 만들기",
       "EDIT": "태그 수정",
       "DELETE": "태그 삭제"
     },
+    "RECEIVED_FROM": "받는 사람",
     "CONVERSATIONS": "일반",
     "COMPLETED": "완료됨",
     "ARCHIVED": "보관됨",
+    "ARCHIVED_CONVERSATIONS": "보관된 대화",
     "CLIENTS": "고객",
     "STATISTICS": "통계",
     "SCRIPTS": "채팅 스크립트",
@@ -638,12 +790,38 @@
     "CHART": {
       "CLIENT": "신규 고객",
       "LANGUAGERANK": "대화 언어",
-      "NEWVISITOR": "신규 방문자",
+      "NEWVISITOR": "방문자",
       "RESPONSETIME": "응답 시간",
       "OPENEDCONVERSATION": "열린 대화",
       "DROPRATE": "드랍 비율",
       "RESPONSEDMESSAGE": "응답 메시지",
-      "CUSTOMERRATING": "고객 평가"
+      "CUSTOMERRATING": "고객 평가",
+      "TRAFFICTRACK": "트래픽 추적"
+    },
+    "CHART_TOOLTIP": {
+      "CLIENT": "새로운 고객 수",
+      "LANGUAGERANK": "가장 많이 사용되는 언어 순위",
+      "NEWVISITOR": "귀하의 웹사이트를 방문한 새로운 방문자 수",
+      "RESPONSETIME": "팀의 평균 응답 시간",
+      "OPENEDCONVERSATION": "웹사이트를 통해 열린 대화 수",
+      "DROPRATE": "중단된 대화 비율",
+      "RESPONSEDMESSAGE": "팀이 응답한 메시지 수",
+      "CUSTOMERRATING": "고객의 평균 평가",
+      "TRAFFICTRACK": "열린 대화의 트래픽 추적"
+    },
+    "CHART_UNIT": {
+      "NEWVISITOR": "회",
+      "OPENEDCONVERSATION": "대화",
+      "DROPRATE": "대화",
+      "CUSTOMERRATING": "별",
+      "RESPONSEDMESSAGE": "메시지",
+      "LANGUAGERANK": "언어",
+      "TRAFFICTRACK": "열린 대화",
+      "DAY": "일",
+      "HOUR": "시간",
+      "MINUTE": "분",
+      "SECOND": "초",
+      "MILLISECOND": "밀리초"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "태그 관리",
@@ -664,7 +842,8 @@
       "CREATE_BY": "작성자",
       "CREATE_ON": "작성 날짜",
       "LAST_EDITED": "최근 편집",
-      "ACTIONS": "조치"
+      "ACTIONS": "조치",
+      "ENTER_SCRIPT_NAME": "스크립트 이름 입력"
     },
     "CLIENT": {
       "PAGE_TITLE": "고객 관리",
@@ -688,7 +867,10 @@
       "ACTIONS": "조치",
       "NO_MEMBER": "회원을 찾을 수 없습니다",
       "NO_ADMIN": "관리자를 찾을 수 없습니다",
-      "INVITE_MEMBER": "회원 초대"
+      "INVITE_MEMBER": "회원 초대",
+      "NO_EDIT_PERMISSION": "이 회원을 편집할 권한이 없습니다",
+      "NO_DELETE_PERMISSION": "이 회원을 삭제할 권한이 없습니다",
+      "NO_INVITE_PERMISSION": "회원을 초대할 권한이 없습니다"
     },
     "ROLE": {
       "ADMIN": "관리자",
@@ -707,6 +889,14 @@
     "BACK_TO_HOME": "홈으로 돌아가기"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "현재 대화가 없습니다",
+      "DESCRIPTION": "아직 고객 대화가 없습니다."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 결과",
+      "DESCRIPTION": "키워드를 다시 확인하거나 필터를 변경하세요"
+    },
     "TIP_DESCRIPTION": "사람 또는 그룹을 찾으려면 해당 사람의 메일, 이름 또는 그룹 이름을 입력하세요.",
     "TIP_TITLE": "검색 바",
     "TITLE": "현재 대화가 없습니다",
@@ -717,7 +907,8 @@
     "TIP_TITLE_GROUP": "\"그룹\" 사용 방법",
     "TITLE_GROUP": "현재 그룹 대화가 없습니다",
     "DESCRIPTION_GROUP": "아래 버튼을 클릭하여 새로운 대화를 만들거나 그룹 대화의 관리자에게 추가해달라고 요청하세요.",
-    "MESSAGE": "아직 메시지 없음."
+    "MESSAGE": "아직 메시지 없음.",
+    "MESSAGE_CONTACT": "아직 연락이 없습니다"
   },
   "OFFLINE": {
     "TITLE": "인터넷 연결이 끊어졌습니다",
@@ -741,5 +932,9 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "새 비밀번호는 이전 비밀번호와 동일할 수 없습니다!",
       "INVALID_TOKEN": "유효하지 않은 토큰!"
     }
+  },
+
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "이 기능은 데스크톱에서만 사용할 수 있습니다."
   }
 }

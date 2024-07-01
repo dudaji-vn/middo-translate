@@ -26,9 +26,9 @@ const Tip = ({
         props.className,
       )}
     >
-      <div className="flex h-auto w-full flex-col items-center justify-between rounded-xl bg-neutral-50 p-2 text-neutral-700 ">
+      <div className="flex h-auto w-full flex-col items-center justify-between rounded-xl bg-neutral-50 dark:bg-neutral-900 p-2 text-neutral-700 dark:text-neutral-400 ">
         <div className="flex w-full flex-row justify-between">
-          <Typography className="font-open-sans flex items-center gap-1 text-left text-base font-medium leading-5 tracking-normal text-neutral-600">
+          <Typography className="font-open-sans flex items-center gap-1 text-left text-base font-medium leading-5 tracking-normal text-neutral-600 dark:text-neutral-200">
             <Lightbulb />
             {tipTitle}
           </Typography>
@@ -42,7 +42,7 @@ const Tip = ({
             <XIcon />
           </Button.Icon>
         </div>
-        <Typography className="flex flex-row items-center gap-2 text-start text-[14px] text-sm font-light leading-[18px] text-neutral-400">
+        <Typography className="flex flex-row items-center gap-2 text-start text-[14px] text-sm font-light leading-[18px] text-neutral-400 dark:text-neutral-400">
           {tipContent}
         </Typography>
       </div>

@@ -5,12 +5,11 @@ import { createExtensionSchema } from '@/configs/yup-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { createExtension } from '@/services/extension.service';
-import toast from 'react-hot-toast';
 import isEmpty from 'lodash/isEmpty';
 import useClient from '@/hooks/use-client';
 import { useAuthStore } from '@/stores/auth.store';
@@ -32,6 +31,10 @@ import { TSpace } from '../../../_components/business-spaces';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { TChatScript } from '@/types/scripts.type';
+import { useTranslation } from 'react-i18next';
+import { isEqual } from 'lodash';
+import customToast from '@/utils/custom-toast';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 type TFormValues = {
   addingDomain: string;
@@ -61,12 +64,14 @@ export default function CreateExtension({
 }) {
   const isClient = useClient();
   const [tabValue, setTabValue] = React.useState<number>(0);
+  const { t } = useTranslation('common');
   const pathname = usePathname() || '';
   const params = useParams();
   const currentUser = useAuthStore((s) => s.user);
+  const [compareData, setCompareData] = React.useState<any>();
   const myRole = getUserSpaceRole(currentUser, space);
 
-  const router = useRouter();
+  const { navigateTo } = usePlatformNavigation();
 
   const form = useForm<TFormValues>({
     mode: 'onChange',
@@ -109,10 +114,15 @@ export default function CreateExtension({
       if (initialData.currentScript) {
         setValue('currentScript', initialData.currentScript);
         setValue('startingMessageType', 'script');
-        setValue('custom.firstMessage', '');
+        setValue('custom.firstMessage', initialData.currentScript);
+        setCompareData({
+          step1: initialData.domains,
+          step2: initialData.currentScript,
+          step3: initialData.color || DEFAULT_THEME,
+        });
         return;
       }
-      if (initialData.firstMessage) {
+      if (initialData.firstMessage?.length) {
         setValue('custom.firstMessage', initialData.firstMessage);
         setValue(
           'startingMessageType',
@@ -120,6 +130,11 @@ export default function CreateExtension({
             ? 'default'
             : 'custom',
         );
+        setCompareData({
+          step1: initialData.domains,
+          step2: initialData.firstMessage,
+          step3: initialData.color || DEFAULT_THEME,
+        });
         return;
       }
     }
@@ -161,17 +176,20 @@ export default function CreateExtension({
 
       await createExtension(String(params?.spaceId), payload)
         .then((res) => {
-          toast.success(`${isEditing ? 'Edit' : 'Create'} extension success!`);
+          customToast.success(
+            `${isEditing ? 'Edit' : 'Create'} extension success!`,
+          );
         })
         .catch((err) => {
-          toast.error(
+          customToast.error(
             err?.response?.data?.message ||
               `${isEditing ? 'Edit' : 'Create'}  extension failed!`,
           );
         });
-      router.push(pathname + '?tab=extension');
+      // router.push(pathname + '?tab=extension');
+      navigateTo(pathname, new URLSearchParams({ tab: 'extension' }));
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     }
   };
   const extensionRoles = SPACE_SETTING_TAB_ROLES.find(
@@ -186,12 +204,24 @@ export default function CreateExtension({
   const noScript =
     watch('startingMessageType') === 'script' &&
     isEmpty(watch('currentScript'));
+  const nothingChanged = isEqual(
+    {
+      step1: watch('domains'),
+      step2:
+        watch('startingMessageType') === 'script'
+          ? watch('currentScript')
+          : watch('custom.firstMessage'),
+      step3: watch('custom.color'),
+    },
+    compareData,
+  );
+
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(submit)}>
         <Tabs
           value={tabValue?.toString()}
-          className="w-full bg-primary-100"
+          className="w-full bg-primary-100 dark:bg-[#030303]"
           defaultValue={tabValue.toString()}
           onValueChange={(value) => {
             setTabValue(parseInt(value));
@@ -213,7 +243,7 @@ export default function CreateExtension({
               endIcon: <ArrowRight />,
             }}
             cardProps={{
-              className: 'divide-y divide-neutral-50',
+              className: 'divide-y divide-neutral-50 dark:divide-neutral-900',
             }}
           >
             <AddingDomainsStep />
@@ -262,10 +292,10 @@ export default function CreateExtension({
               size={'sm'}
               loading={isSubmitting}
               type="submit"
-              disabled={!isValid || isSubmitting || noScript}
+              disabled={!isValid || isSubmitting || noScript || nothingChanged}
               className={isEditing ? 'min-w-[240px]' : 'hidden'}
             >
-              Save Change
+              {t('COMMON.SAVE_CHANGE')}
             </Button>
           </div>
         </Tabs>

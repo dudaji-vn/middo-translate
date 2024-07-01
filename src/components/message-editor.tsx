@@ -239,7 +239,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
                 )}
               </div>
               <EditorContent
-                className="max-h-[200px] min-h-[46] w-full overflow-y-auto"
+                className="max-h-[200px] min-h-[46] w-full overflow-y-auto dark:text-neutral-50"
                 editor={editor}
               />
               {!isEditing && <AttachmentSelection editor={editor} />}
@@ -264,7 +264,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             {editor && !isMobile && <Autofocus editor={editor} />}
           </div>
           {disabled && (
-            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80 max-md:text-sm" />
+            <div className="absolute left-0 top-0 h-full w-full bg-white dark:bg-neutral-900 opacity-80 max-md:text-sm" />
           )}
         </div>
       </>

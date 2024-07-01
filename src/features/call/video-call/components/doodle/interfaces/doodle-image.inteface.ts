@@ -1,7 +1,9 @@
+import { User } from "@/features/users/types";
+
 type IDoodleImage = Record<
 string,
 {
-  user: any;
+  user: User;
   image: string;
   color: string;
 }

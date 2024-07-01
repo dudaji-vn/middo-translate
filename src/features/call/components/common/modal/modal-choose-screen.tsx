@@ -22,6 +22,7 @@ import toast from 'react-hot-toast';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
 interface MediaSource {
     id: string;
     thumbnail: string;
@@ -93,7 +94,7 @@ export const ModalChooseScreen = () => {
             });      
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
-                toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
+                customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             }
         }
         setChooseScreen(false)
@@ -106,11 +107,11 @@ export const ModalChooseScreen = () => {
                     <AlertDialogTitle>
                         {t('MODAL.SHARE_SCREEN.TITLE')}
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogDescription className="dark:text-neutral-50">
                         {t('MODAL.SHARE_SCREEN.DESCRIPTION')}
                     </AlertDialogDescription>
                     <div className='grid grid-cols-4 gap-3 mt-3 max-h-[60vh] overflow-auto'>
-                        {sources.map((source: any) => {
+                        {sources.map((source: MediaSource) => {
                             return (
                                 <div key={source.id} 
                                     className={cn('p-2 border rounded-2xl cursor-pointer',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50')}

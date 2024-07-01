@@ -23,11 +23,11 @@ export const RoomBlockContent = ({ room }: RoomBlockContentProps) => {
     mutate(user._id);
   };
   return (
-    <div className="relative flex flex-col items-center gap-2 py-1">
+    <div className="relative flex flex-col items-center gap-2 py-1 dark:bg-background">
       <span className="font-semibold text-error md:text-sm">
         {t('CONVERSATION.BLOCK_CONTENT.TITLE')} {user?.name}
       </span>
-      <span className="text-neutral-600 md:text-sm">
+      <span className="text-neutral-600 md:text-sm dark:text-neutral-50">
         {t('CONVERSATION.BLOCK_CONTENT.DESCRIPTION')}
       </span>
       <Button

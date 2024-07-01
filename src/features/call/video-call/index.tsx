@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import CallDragable from '../components/call-dragable';
+import CallDraggable from '../components/call-draggable';
 import VideoCallHeader from './components/video-call-header';
 import { useVideoCallStore } from '../store/video-call.store';
 import { VideoCallProvider } from '../context/video-call-context';
@@ -9,8 +9,6 @@ import { cn } from '@/utils/cn';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { useParticipantVideoCallStore } from '../store/participant.store';
-import toast from 'react-hot-toast';
-import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth.store';
 import { StatusParticipant } from '../interfaces/participant';
 import { useAppStore } from '@/stores/app.store';
@@ -21,7 +19,7 @@ export default function VideoCall() {
   const setFullScreen = useVideoCallStore(state => state.setFullScreen);
   const participants = useParticipantVideoCallStore(state => state.participants)
   const user = useAuthStore(state => state.user)
-  const removeRequestCall = useVideoCallStore(state => state.removeRequestCall)
+  const setRequestCall = useVideoCallStore(state => state.setRequestCall)
   const updateStatusParticipant = useParticipantVideoCallStore(state => state.updateStatusParticipant)
   const isMobile = useAppStore(state => state.isMobile)
   useEffect(() => {
@@ -39,7 +37,7 @@ export default function VideoCall() {
           }
         }
         if(userId === user?._id) {
-          removeRequestCall(roomId)
+          setRequestCall()
         }
       })
     }
@@ -47,17 +45,16 @@ export default function VideoCall() {
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, declineCall)
     }
-  }, [participants, removeRequestCall, room, updateStatusParticipant, user?._id]);
+  }, [participants, room?._id, room?.roomId, setRequestCall, updateStatusParticipant, user?._id]);
 
   useEffect(() => {
     if(isMobile) {
       setFullScreen(true)
     }
   }, [isMobile, setFullScreen])
-  
   if (!room) return null;
   return (
-    <CallDragable
+    <CallDraggable
       className={cn(
         'h-fit',
         isFullScreen && 'inset-0 !h-full !w-full !left-0 !bottom-0 !rounded-none md:rounded-none translate-x-0 translate-y-0'
@@ -72,6 +69,6 @@ export default function VideoCall() {
           </div>
         </div>
       </VideoCallProvider>
-    </CallDragable>
+    </CallDraggable>
   );
 }

@@ -15,9 +15,6 @@ import VideoPlayer from '@/components/video/video-player';
 export default function Landing() {
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const [isScrollDown, setScrollDown] = useState(false);
-
-  const videoRef = useRef<any>();
-  const [isPlayVideo, setIsPlayVideo] = useState<boolean>(false);
   const router = useRouter();
   useEffect(() => {
     const changeClass = () => {
@@ -62,57 +59,28 @@ export default function Landing() {
       <div
         className={cn(
           'fixed z-10 flex h-fit w-full items-center justify-between ',
-          isScrollDown && 'bg-white/80 shadow-2 backdrop-blur-xl',
+          isScrollDown &&
+            'bg-white/80 shadow-2 backdrop-blur-xl dark:bg-neutral-900',
         )}
       >
-        {/* {isMobile ? (
-          <HeaderNavLandingMobile navItems={navLandingPageItems} />
-        ) : (
-          <Header></Header>
-        )} */}
         <HeaderLandingPage />
       </div>
-      <div className="w-full bg-[url('/landing-page/hero.jpg')] px-5 pb-12 pt-[108px] md:flex md:flex-row-reverse md:px-[5vw]">
-        <div className="relative h-fit md:w-[44%] md:min-w-[44%]">
-          {/* {!isPlayVideo && (
-            <div
-              onClick={() => {
-                if (videoRef.current) videoRef.current.play();
-              }}
-              className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 transform cursor-pointer"
-            >
-              <div className="hover:bg-primary-500-main/60 z-10 cursor-pointer rounded-full bg-white/60 p-3">
-                <Play className="size-7" color="white" />
-              </div>
-            </div>
-          )} */}
-
-          {/* <video
-            ref={videoRef}
-            className="video-intro w-full object-contain before:!bg-none"
-            width="100%"
-            height="auto"
-            controls
-            // autoPlay
-            loop
-            poster="/landing-page/group.png"
-          >
-            <source src="/video/video-middo-intro.mp4" type="video/mp4" />
-            Your browser does not support the video tag.
-          </video> */}
-          <VideoPlayer 
+      <div className="w-full bg-[#FAFAFA] bg-[url('/landing-page/hero.png')] bg-contain bg-center bg-no-repeat px-5 pb-12 pt-[108px] dark:bg-neutral-900 dark:bg-[url('/landing-page/hero-dark.png')] md:flex md:flex-row-reverse md:px-[5vw]">
+        <div className="relative h-fit md:w-[48%] md:min-w-[48%]">
+          <VideoPlayer
             file={{
               url: '/video/video-middo-intro.mp4',
               name: 'Middo Intro Video',
               type: 'video/mp4',
             }}
-            className='rounded-2xl'
+            className="rounded-2xl"
+            poster="/landing-page/group.png"
           />
         </div>
 
         <div className="mt-8 flex flex-col items-center justify-center md:mr-8 md:items-start">
           <JayTextAnimation />
-          <p className="mt-8 text-center text-neutral-600 md:text-left">
+          <p className="mt-8 text-center text-neutral-600 dark:text-neutral-200 md:text-left">
             Middo can be your trusted tool to do all translation work. Beisde
             that we also provide a barrier-free language conversation platform.{' '}
           </p>
@@ -122,7 +90,7 @@ export default function Landing() {
         </div>
       </div>
       <div id="solution">
-        <div className="flex flex-col-reverse gap-10 py-10 md:flex-row md:items-center md:py-[5vw]">
+        <div className="flex flex-col-reverse gap-10 py-10 dark:bg-background md:flex-row md:items-center md:py-[5vw]">
           <div className="pr-5 md:w-[48%]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -136,7 +104,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Translation</h1>
-              <p className="mt-2 text-neutral-600">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 Middo provides an ESL translation method to guarantee a
                 high-accuracy translate.
               </p>
@@ -169,7 +137,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 md:flex-row-reverse md:justify-between md:pt-[5vw]">
+        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 dark:bg-neutral-900 md:flex-row-reverse md:justify-between md:pt-[5vw]">
           <div className="flex h-full items-end md:w-[48%]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -183,7 +151,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Conversation</h1>
-              <p className="mt-2 text-neutral-600">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 All-in-one conversation platform that integrated Middo
                 translation that could help you have unlimited connections with
                 everyone around the world.
@@ -216,7 +184,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse items-center gap-10 py-10 md:flex-row md:!gap-16 md:py-[5vw]">
+        <div className="flex flex-col-reverse items-center gap-10 py-10 dark:bg-background md:flex-row md:!gap-16 md:py-[5vw]">
           <div className="flex h-full items-end px-5 md:w-[48%] md:!px-0 md:!pl-[5vw]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -230,7 +198,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Middo Call</h1>
-              <p className="mt-2 text-neutral-600">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 Middo Call is one of the most fantastic feature of Middo
                 Conversation that could support your work more easily.
               </p>
@@ -257,7 +225,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 md:flex-row-reverse md:justify-between md:pt-[5vw]">
+        <div className="flex flex-col-reverse items-center gap-10 bg-primary-100 pt-10 dark:bg-neutral-900 md:flex-row-reverse md:justify-between md:pt-[5vw]">
           <div className="flex h-full items-end md:w-[48%]">
             {
               // eslint-disable-next-line @next/next/no-img-element
@@ -271,7 +239,7 @@ export default function Landing() {
                 <h3>Solution</h3>
               </div>
               <h1 className="text-[48px]">Extension</h1>
-              <p className="mt-2 text-neutral-600">
+              <p className="mt-2 text-neutral-600 dark:text-neutral-200">
                 Transform your website with Middo Extension in just a few
                 clicks. Capture leads, provide real-time support, and boost your
                 business – all within your website.
@@ -306,7 +274,10 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      <div id="FAQ" className="bg-white px-5 py-12 md:px-[5vw] md:py-[72px]">
+      <div
+        id="FAQ"
+        className="bg-white px-5 py-12 dark:bg-background md:px-[5vw] md:py-[72px]"
+      >
         <div className="flex w-full items-center justify-center gap-3 text-primary">
           <Sparkles className="size-7" />
           <h3>Help Center</h3>
@@ -318,18 +289,18 @@ export default function Landing() {
       </div>
       <div
         id="about-us"
-        className="bg-gradient-to-b from-primary-100 to-transparent px-5 py-12 md:px-[5vw] md:py-[72px]"
+        className="bg-gradient-to-b from-primary-100 to-transparent px-5 py-12 dark:from-[#050505] dark:to-[#050505]/0 md:px-[5vw] md:py-[72px]"
       >
         <div className="flex w-full items-center justify-center gap-3 text-primary">
           <Sparkles className="size-7" />
           <h3>About us</h3>
         </div>
         <h1 className="w-full text-center text-[48px]">Dudaji Vietnam</h1>
-        <p className="mt-8 text-center text-neutral-600">
+        <p className="mt-8 text-center text-neutral-600 dark:text-neutral-200">
           Dudaji supports you to quickly build a deep learning utilization
           service in a timely and timely place.
         </p>
-        <p className="mt-8 text-center">
+        <p className="mt-8 text-center dark:text-neutral-50">
           To put machine learning and deep learning techniques into practice,
           you can not only design algorithms, but also there is a great need for
           infrastructure know-how, such as data preprocessing, building a
@@ -339,7 +310,7 @@ export default function Landing() {
           service quickly.
         </p>
       </div>
-      <div className="flex h-fit w-full flex-col items-center justify-center bg-[url('/landing-page/hero.jpg')] px-5 py-12">
+      <div className="flex h-fit w-full flex-col items-center justify-center bg-[#FAFAFA] bg-[url('/landing-page/hero.png')] bg-cover bg-center bg-no-repeat px-5 py-12 dark:bg-neutral-900 dark:bg-[url('/landing-page/hero-dark.png')]">
         <h1 className="text-primary-500-main">Ready to get started?</h1>
         <div className="mt-8">
           <DownloadAppButton />

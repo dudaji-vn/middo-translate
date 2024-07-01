@@ -1,10 +1,7 @@
-import { forwardRef, useEffect, useRef, useState } from 'react';
+import { cn } from '@/utils/cn';
+import { forwardRef, useEffect } from 'react';
 import { useIntersectionObserver } from 'usehooks-ts';
 import { Spinner } from '../feedback';
-import { cn } from '@/utils/cn';
-import { usePullToRefresh } from '@/hooks/use-pull-down-to-refesh';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { RotateCwIcon } from 'lucide-react';
 
 interface InfiniteScrollProps extends React.HTMLAttributes<HTMLDivElement> {
   onLoadMore: () => void;
@@ -30,15 +27,9 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
     },
     ref,
   ) => {
-    // const ref = useRef<HTMLDivElement>(null);
     const { isIntersecting, ref: triggerRef } = useIntersectionObserver({
       threshold: 1,
     });
-    // usePullToRefresh({
-    //   ref: ref,
-    //   onRefresh,
-    //   disable: !pullToRefresh,
-    // });
 
     useEffect(() => {
       if (isIntersecting && hasMore) {
@@ -47,12 +38,11 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
     }, [isIntersecting, hasMore, onLoadMore]);
     return (
       <>
-        {/* <IndicatorAnimation isRefreshing={isRefreshing} input={currentY} /> */}
         <div ref={ref} {...props} className={cn('relative', props.className)}>
           {isFetching && (
             <div
               className={cn(
-                'absolute left-1/2 z-50 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary',
+                'absolute left-1/2 z-50 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary dark:bg-neutral-800',
                 {
                   'top-1': scrollDirection === 'to-bottom',
                   'bottom-1': scrollDirection === 'to-top',
@@ -92,42 +82,3 @@ export const InfiniteScroll = forwardRef<HTMLDivElement, InfiniteScrollProps>(
   },
 );
 InfiniteScroll.displayName = 'InfiniteScroll';
-const IndicatorAnimation = ({
-  input,
-  isRefreshing,
-}: {
-  input: number;
-  isRefreshing?: boolean;
-}) => {
-  const x = useMotionValue(0);
-  x.set(input);
-
-  // const scale = useTransform(x, [0, 300], [0, 1]);
-  const top = useTransform(x, [0, 150], [0, 52]);
-  const rotate = useTransform(x, [0, 300], [0, 360]);
-  return (
-    <div className="absolute left-0 right-0 z-50 flex w-full justify-center">
-      {isRefreshing ? //   )} //     'absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-neutral-50 p-2 text-primary', //   className={cn( // <div
-      // >
-      //   <Spinner size="sm" />
-      // </div>
-      null : (
-        <motion.div
-          style={{
-            translateY: -36,
-            top,
-          }}
-          className="absolute top-10 flex h-9 w-9 items-center justify-center rounded-full bg-neutral-50 text-primary"
-        >
-          <motion.div
-            style={{
-              rotate,
-            }}
-          >
-            <RotateCwIcon />
-          </motion.div>
-        </motion.div>
-      )}
-    </div>
-  );
-};

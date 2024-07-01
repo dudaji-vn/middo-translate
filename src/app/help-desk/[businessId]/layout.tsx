@@ -23,6 +23,6 @@ const HelpDeskConversationLayout = async ({
         item.name === extensionData.color || item.hex === extensionData.color,
     ) || extensionsCustomThemeOptions[0];
 
-  return <div className={cn(theme.name, 'container-height')}>{children}</div>;
+  return <div className={cn(theme.name, 'container-height bg-transparent')}>{children}</div>;
 };
 export default HelpDeskConversationLayout;

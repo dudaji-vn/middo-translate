@@ -10,8 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/data-display';
 import { Pagination, PaginationContent } from '@/components/ui/pagination';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type ClientPagination = {
   totalPage: number;
@@ -33,6 +34,7 @@ const ClientsPagination = ({
   onLimitChange: (limit: number) => void;
   pagination: ClientPagination;
 }) => {
+  const { t } = useTranslation('common');
   const { limit, nextPage, previousPage, canNextPage, canPreviousPage } =
     pagination;
 
@@ -42,15 +44,28 @@ const ClientsPagination = ({
         <PaginationContent className="gap-3">
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <DropdownMenuLabel className="font-normal">
-                Items per page: <span className="font-medium">{limit}</span>
-              </DropdownMenuLabel>
+              <Button
+                size={'xs'}
+                variant={'ghost'}
+                color={'default'}
+                shape={'square'}
+                className="flex flex-row items-center gap-1 font-normal "
+                endIcon={<ChevronDown className="h-4 w-4" />}
+              >
+                <span className="max-md:hidden">
+                  {t('PAGINATION.ITEMS_PER_PAGE')}&nbsp;
+                </span>
+                <span className="flex flex-row items-center gap-1 font-medium ">
+                  {limit}
+                </span>
+              </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
               {limitOptions.map((option) => (
                 <DropdownMenuItem
                   key={option}
                   onSelect={() => onLimitChange(option)}
+                  className='dark:hover:bg-neutral-800'
                 >
                   {option}
                 </DropdownMenuItem>
@@ -65,7 +80,7 @@ const ClientsPagination = ({
             disabled={!canPreviousPage}
           >
             <ChevronLeft className="h-4 w-4" />
-            <span className="max-md:hidden">Previous</span>
+            <span className="max-md:hidden">{t('PAGINATION.PREV')}</span>
           </Button>
           <MiddlePaginationButtons
             className="flex items-center gap-1 max-md:hidden"
@@ -79,7 +94,7 @@ const ClientsPagination = ({
             onClick={() => nextPage && onPageChange(nextPage)}
             disabled={!canNextPage}
           >
-            <span className="max-md:hidden">Next</span>
+            <span className="max-md:hidden">{t('PAGINATION.NEXT')}</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
         </PaginationContent>

@@ -119,7 +119,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="!max-h-[80vh] min-h-fit max-w-[calc(100vw-32px)] flex-row gap-0 rounded-[12px] p-0 md:max-w-[500px] ">
           <div className="flex flex-row items-center justify-between p-3">
-            <Typography className="font-semibold text-neutral-800">
+            <Typography className="font-semibold text-neutral-800 dark:text-neutral-50">
               {t('FILTERS.FILTER_BY')}
             </Typography>
             <Button
@@ -136,7 +136,7 @@ export const RoomsModalFilter = (props: RoomsFilterProps) => {
                 : t('FILTERS.BUTTONS.SELECT_ALL')}
             </Button>
           </div>
-          <div className="h-fit max-h-[400px] max-w-[500px] space-y-3 overflow-y-scroll bg-white">
+          <div className="h-fit max-h-[400px] max-w-[500px] space-y-3 overflow-y-auto bg-white dark:bg-background">
             <Accordion
               type="multiple"
               className="h-full w-full max-w-full p-0 transition-all duration-500  "

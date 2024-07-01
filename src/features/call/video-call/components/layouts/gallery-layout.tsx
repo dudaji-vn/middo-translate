@@ -10,6 +10,7 @@ import { UserPlus2 } from 'lucide-react';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import useGetMemberInRoom from '@/features/call/hooks/use-get-member-in-room';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 const GalleryLayout = () => {
   const isMobile = useAppStore(state => state.isMobile);
@@ -61,7 +62,7 @@ const GalleryLayout = () => {
   }, [participants]);
 
   const [containerHeight, setContainerHeight] = useState(0);
-  const { members } = useGetMemberInRoom({roomId: room.roomId});
+  const { members } = useGetMemberInRoom({roomId: room?.roomId});
 
 
   useEffect(() => {
@@ -91,7 +92,7 @@ const GalleryLayout = () => {
             if(index == (isDoodle ? 5 : 6) && numberItem > 7) {
               const remain = numberItem - 7;
               return <div key={key} className='h-full w-full relative'>
-                <VideoItem isGalleryView participant={participant} />
+                <VideoItem participant={participant} />
                 <ItemNumber numberItem={remain} />
               </div>
             }
@@ -99,7 +100,7 @@ const GalleryLayout = () => {
             return ( <div
               key={key}
               className={cn('h-full w-full', isHidden ? 'hidden' : '')}>
-              <VideoItem isGalleryView participant={participant} />
+              <VideoItem participant={participant} />
             </div>
           )},
         )}
@@ -125,7 +126,7 @@ const GalleryLayout = () => {
           key={participants[index].socketId  + participants[index].isShareScreen}
           className={cn('w-full h-full', numColumn > 1 && `w-1/${numColumn}`)}
         >
-          <VideoItem isGalleryView participant={participants[index]} />
+          <VideoItem participant={participants[index]} />
         </div>)
       }
       result.push(<div 
@@ -165,14 +166,17 @@ const ItemNumber = ({ numberItem }: { numberItem: number }) => {
 const AddUserItem = () => {
   const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
   const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
-    
+  const {isBusiness} = useBusinessNavigationData()
+  
   useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
     setModalAddUser(!isShowModalAddUser);
   });
 
+  if(isBusiness) return;
+
   return <div className='h-full w-full relative flex items-center justify-center'>
-    <div className='rounded-xl text-neutral-700 w-[60px] h-[60px] bg-neutral-50 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModalAddUser(true)}>
-      <UserPlus2></UserPlus2>
+    <div className='rounded-xl text-neutral-700 dark:text-neutral-50 w-[60px] h-[60px] bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModalAddUser(true)}>
+      <UserPlus2 size={20}></UserPlus2>
     </div>
   </div>
 }

@@ -19,7 +19,7 @@ export const useGetSpaceData = ({ spaceId }: { spaceId: string }) => {
         return response.data;
       } catch (error) {
         console.error(
-          `Error fetching space ${spaceId}: ${(error as Error).message}`,
+          `Error fetching space ${spaceId} from useGetSpaceData: ${error as Error}`,
         );
         return {};
       }

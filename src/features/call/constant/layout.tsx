@@ -23,10 +23,17 @@ export const VIDEOCALL_LAYOUTS_OPTION: Record<string, LayoutInterface> = {
         icon: <Square className="w-4 h-4" />,
     },
 }
-
-export const VIDEOCALL_LAYOUTS = {
+export type VideoCallLayout = keyof typeof VIDEO_CALL_LAYOUTS;
+export const VIDEO_CALL_LAYOUTS: {
+    GALLERY_VIEW: VideoCallLayout,
+    SPEAKER_VIEW: VideoCallLayout,
+    FOCUS_VIEW: VideoCallLayout,
+    SHARE_SCREEN: VideoCallLayout,
+    P2P_VIEW: VideoCallLayout,
+} = {
     GALLERY_VIEW: 'GALLERY_VIEW',
     SPEAKER_VIEW: 'SPEAKER_VIEW',
     FOCUS_VIEW: 'FOCUS_VIEW',
     SHARE_SCREEN: 'SHARE_SCREEN',
+    P2P_VIEW: 'P2P_VIEW',
 }

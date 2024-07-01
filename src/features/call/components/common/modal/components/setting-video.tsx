@@ -96,7 +96,7 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
         }
         onValueChange={onVideoInputChange}
       >
-        <SelectTrigger className="w-full rounded-xl bg-neutral-50 !py-2 shadow-none">
+        <SelectTrigger className="w-full rounded-xl bg-neutral-50 dark:bg-neutral-900 dark:dark:bg-neutral-800 dark:active:text-neutral-50 !py-2 shadow-none">
           <SelectValue>
             {video
               ? video.label
@@ -105,9 +105,9 @@ const SettingVideo = ({ className, onSettingChange}: SettingVideoProps) => {
                 : ''}
           </SelectValue>
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className='dark:bg-neutral-900 dark:border-neutral-800'>
           {videoInputDevices.map((device) => (
-            <SelectItem key={device.deviceId} value={device.deviceId}>
+            <SelectItem key={device.deviceId} value={device.deviceId} className="dark:hover:bg-neutral-800">
               <span>{device.label}</span>
             </SelectItem>
           ))}

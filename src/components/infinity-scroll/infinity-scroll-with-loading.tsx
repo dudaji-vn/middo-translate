@@ -14,19 +14,20 @@ export const InfiniteScrollWithLoading = forwardRef<HTMLDivElement, InfiniteScro
     const pageEndRef = useRef(null);
     useEffect(() => {
       if (hasMore) {
+        let ref = pageEndRef.current;
         const observer = new IntersectionObserver((entries) => {
           if (entries[0].isIntersecting) {
             onLoadMore();
           }
         });
   
-        if (pageEndRef.current) {
-          observer.observe(pageEndRef.current);
+        if (ref) {
+          observer.observe(ref);
         }
   
         return () => {
-          if (pageEndRef.current) {
-            observer.unobserve(pageEndRef.current);
+          if (ref) {
+            observer.unobserve(ref);
           }
         };
       }

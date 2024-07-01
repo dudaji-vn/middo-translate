@@ -2,7 +2,7 @@
 
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { CHART_COLORS } from '../chart-colors';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { getCountryNameByCode, getCountryCode } from '@/utils/language-fn';
 import { cn } from '@/utils/cn';
 import { CircleFlag } from 'react-circle-flags';
@@ -27,6 +27,8 @@ export default function LanguagePieChart({
     value: number;
     index?: number;
   } | null>(null);
+
+
   const pies = useMemo(
     () => (data.length ? data : [{ label: 'None', value: 1 }]),
     [data],
@@ -75,9 +77,10 @@ export default function LanguagePieChart({
               return (
                 <>
                   <Cell
+                    style={{ outline: 'none' }}
                     onClick={() => onTogglePie(entry, index)}
                     key={`cell-${index}`}
-                    className="cursor-pointer"
+                    className="cursor-pointer dark:stroke-neutral-800"
                     fill={COLORS[index % COLORS.length]}
                   />
                 </>
@@ -86,13 +89,14 @@ export default function LanguagePieChart({
           </Pie>
           {selectedPie && outlinePie && (
             <Pie
-              animationDuration={500}
+              animationDuration={800}
               animationBegin={outlinePie.startAngle}
               data={[{ value: selectedPie.value }]}
               outerRadius={124}
               innerRadius={116}
               fill={COLORS[(selectedPie.index || 0) % COLORS.length]}
               dataKey="value"
+              className='dark:stroke-neutral-800'
               {...outlinePie}
             />
           )}
@@ -112,14 +116,14 @@ export default function LanguagePieChart({
                 width={20}
               />
             )}
-            <p className="text-base text-neutral-800">
+            <p className="text-base text-neutral-800 dark:text-neutral-50">
               {outlinePie?.countryName}
             </p>
           </div>
-          <p className="text-2xl font-bold text-neutral-800">
+          <p className="text-2xl font-bold text-neutral-800 dark:text-neutral-50">
             {outlinePie?.count}
           </p>
-          <p className="text-base  text-neutral-600">
+          <p className="text-base  text-neutral-600 dark:text-neutral-50">
             {`${((selectedPie?.value || 0) * 100)?.toFixed(0) || 0}%`}
           </p>
         </div>

@@ -10,7 +10,8 @@ import {
   XAxisProps,
 } from 'recharts';
 import { useWindowSize } from 'usehooks-ts';
-import { CHART_COLORS } from '../chart-colors';
+import { CHART_COLORS, CHART_DARK_COLORS } from '../chart-colors';
+import { Theme, useAppStore } from '@/stores/app.store';
 const breakpoints = [
   { point: -10 },
   { point: 0 },
@@ -29,12 +30,13 @@ const breakpoints = [
     point: 34,
   },
 ];
-const getHeatGroups = (dataset: any) => {
+const getHeatGroups = (dataset: any, theme?: Theme) => {
   let remaining = [...dataset];
   const heatGroups = [];
 
   breakpoints.forEach(({ point }, index) => {
-    const cellColor = CHART_COLORS[index % CHART_COLORS.length];
+    const colors = theme == 'dark' ? CHART_DARK_COLORS : CHART_COLORS;
+    const cellColor = colors[index % colors.length];
     heatGroups.push({
       label: `>= ${point}`,
       color: cellColor,
@@ -65,6 +67,7 @@ const CustomShape = ({ width = 50, height = 44, ...props }: RectangleProps) => {
       {...props}
       height={height}
       width={width}
+      className='dark:stroke-neutral-950 [&_*]:!fill-neutral-950'
       x={x}
       y={y}
     />
@@ -91,6 +94,7 @@ const HeatMap = ({
   tooltip: React.ReactNode;
 }) => {
   const { width } = useWindowSize();
+  const theme = useAppStore(state => state.theme)
   const { shapeWidth, shapeHeight } = useMemo(() => {
     const isMobile = width < 756;
     if (isMobile) {
@@ -121,7 +125,7 @@ const HeatMap = ({
       margin={{
         top: 25,
         right: 60,
-        left: 20,
+        left: 32,
         bottom: 0,
       }}
       {...props}
@@ -134,6 +138,7 @@ const HeatMap = ({
         tickCount={25}
         tickLine={false}
         padding={{ left: Math.max(shapeWidth - 20, 10), right: 30 }}
+        className='dark:stroke-neutral-200 [&_*]:!fill-neutral-200'
         {...xAxisProps}
       />
       <YAxis
@@ -145,10 +150,11 @@ const HeatMap = ({
         padding={{ top: 30 }}
         tickLine={false}
         tick={{ fontSize: 16 }}
+        className='dark:stroke-neutral-200 [&_*]:!fill-neutral-200'
         {...yAxisProps}
-      />
+        />
 
-      {getHeatGroups(dataset).map((group, index) => (
+      {getHeatGroups(dataset, theme).map((group, index) => (
         <Scatter
           id="heatmap-scatter"
           name={group.label}

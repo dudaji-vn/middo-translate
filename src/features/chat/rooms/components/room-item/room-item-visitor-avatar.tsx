@@ -15,7 +15,7 @@ const RoomItemVisitorAvatar = ({
     <div className="relative">
       <Avatar src={'/anonymous_avt.png'} alt="anonymous-avt" />
       {isOnline && (
-        <div className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-white p-[2.4px]">
+        <div className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-white p-[2.4px] dark:bg-neutral-950">
           <div className="h-full w-full rounded-full bg-success" />
         </div>
       )}

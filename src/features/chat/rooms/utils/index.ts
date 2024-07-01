@@ -1,17 +1,26 @@
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room, RoomStatus } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 import moment from 'moment';
 
-export function generateRoomDisplay(
-  room: Room,
-  currentUserId: User['_id'],
-  inCludeLink?: boolean,
-  overridePath?: string | null,
-): Room {
+export function generateRoomDisplay({
+  room,
+  currentUserId,
+  inCludeLink,
+  overridePath = null,
+}: {
+  room: Room;
+  currentUserId: User['_id'];
+  inCludeLink?: boolean;
+  overridePath?: string | null;
+}): Room {
   const { participants, isGroup, name, waitingUsers = [] } = room;
   const combinedParticipants = participants.concat(waitingUsers || []);
 
-  const link = inCludeLink ? overridePath || `/talk/${room._id}` : '';
+  const link = inCludeLink
+    ? overridePath || `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}`
+    : '';
   let status: RoomStatus = room.status;
 
   if (status !== 'temporary' && !room.isHelpDesk) {
@@ -20,7 +29,7 @@ export function generateRoomDisplay(
         (user) => user._id.toString() === currentUserId,
       );
       if (isInWaitingList) {
-        status = 'waiting';
+        status = 'waiting_group';
       }
     } else if (waitingUsers.length > 0) {
       status = 'waiting';

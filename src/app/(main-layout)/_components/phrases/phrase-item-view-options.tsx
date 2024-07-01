@@ -12,6 +12,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { SearchParams } from '../../translation/page';
 import { FAVORITE_OPTION_NAME, phraseOptions } from './options';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 export type PhraseItemViewOptionsProps = {
   phraseItemName: string;
@@ -93,7 +94,7 @@ const PhraseItemViewOptions = ({
       return;
     }
     router.replace(
-      `/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${
+      `${ROUTE_NAMES.TRANSLATION}/?query=${translated}&source=${currentInputLanguage}&target=${currentOutputLanguage}${
         isMobile || !searchParams?.tab ? '' : `&tab=${searchParams?.tab}`
       }`,
     );
@@ -122,13 +123,13 @@ const PhraseItemViewOptions = ({
           variant={'ghost'}
           size={'xs'}
           color={'default'}
-          className="m-0 [&_svg]:text-neutral-800 "
+          className="m-0"
           onClick={onClose}
         >
           <ArrowLeft className="max-md:hidden" />
           <XIcon className="md:hidden" />
         </Button.Icon>
-        <Typography className="flex flex-row items-center  gap-2 break-words font-semibold text-neutral-700">
+        <Typography className="flex flex-row items-center  gap-2 break-words font-semibold text-neutral-700 dark:text-neutral-50">
           {icon}
           {phraseItemName}
         </Typography>
@@ -143,15 +144,17 @@ const PhraseItemViewOptions = ({
           return (
             <div
               className={cn(
-                ' flex cursor-pointer flex-row items-center justify-between rounded-xl   bg-primary-100 p-3 hover:bg-primary-200 max-md:ml-3',
-                selectedIndex === index ? '!bg-primary-300' : '',
+                ' flex cursor-pointer flex-row items-center justify-between rounded-xl   bg-primary-100 p-3 hover:bg-primary-200 dark:bg-neutral-900 dark:hover:bg-neutral-800 max-md:ml-3',
+                selectedIndex === index
+                  ? '!bg-primary-300 dark:!bg-neutral-800'
+                  : '',
               )}
               key={`${phraseItemName}-${index}`}
               onClick={(e) => handlePhraseOptionClick(index, option)}
             >
               <Typography
                 className={cn(
-                  'w-10/12 break-words text-left font-semibold text-neutral-700',
+                  'w-10/12 break-words text-left font-semibold text-neutral-700 dark:text-neutral-50',
                   selectedIndex === index ? '' : '',
                 )}
               >

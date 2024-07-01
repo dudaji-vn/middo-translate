@@ -33,7 +33,7 @@ const DisplayedSelectedFilter = ({
   }
 
   return (
-    <section className="relative space-y-3 bg-[#FCFCFC] p-3">
+    <section className="relative space-y-3 bg-[#FCFCFC] p-3 w-full dark:bg-[#030303]">
       <div
         {...props}
         className={cn(
@@ -84,7 +84,7 @@ const DisplayedSelectedFilter = ({
               <div
                 key={section}
                 className={cn(
-                  'flex flex-row justify-between gap-2 rounded-[16px] bg-[#FAFAFA] p-1',
+                  'flex flex-row justify-between gap-2 rounded-[16px] bg-[#FAFAFA] p-1 dark:bg-background',
                   {
                     hidden: values.length === 0,
                   },

@@ -33,6 +33,7 @@ import { messageVariants } from './variants';
 import { AnimatePresence } from 'framer-motion';
 import { PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { MessageItemParticipantJoinCall } from './message-item-participant-join-call';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -53,6 +54,7 @@ export interface MessageProps
   isSendBySpaceMember?: boolean;
   isEditing?: boolean;
   isDiscussion?: boolean;
+  isLast?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -79,6 +81,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     {
       message,
       sender,
+      isLast,
       order,
       guestId,
       className,
@@ -268,15 +271,17 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     <MessageItemReactionBar isMe={isMe} message={message} />
                   )}
               </div>
-
-              {isSendBySpaceMember && (
+              <MessageItemParticipantJoinCall message={message} isMe={isMe}/>
+              
+              
+              {isSendBySpaceMember && isLast && (
                 <span
                   className={cn(
-                    'mt-1  block text-xs font-light text-neutral-500',
+                    'mt-1  block text-xs font-light text-neutral-500 dark:text-neutral-200',
                     isMe ? 'text-end' : 'pl-7 text-start',
                   )}
                 >
-                  Send by&nbsp;
+                  {t('COMMON.SEND_BY')}&nbsp;
                   <span className="font-medium">
                     {message.sender?.name}
                     {message.senderType === 'bot' && <>&apos;s script</>}

@@ -6,16 +6,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/feedback';
 import { useId, useRef, useState } from 'react';
 
-import { Button } from '@/components/actions';
 import { Input } from '@/components/data-entry';
-import { Pen } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useChatBox } from '../../contexts';
 import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
-import { useTranslation } from 'react-i18next';
 
 export interface RoomUpdateNameProps {}
 
@@ -40,25 +37,10 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button.Icon
-          size="xs"
-          onClick={() => {
-            setTimeout(() => {
-              inputRef.current?.focus();
-            }, 100);
-          }}
-          color="secondary"
-          type="button"
-          className="shrink-0"
-        >
-          <Pen />
-        </Button.Icon>
-      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('CONVERSATION.CHANGE_GROUP_NAME')}
+            {t('CONVERSATION.CHANGE_STATION_NAME')}
           </AlertDialogTitle>
         </AlertDialogHeader>
         <form id={id} onSubmit={handleSubmit}>

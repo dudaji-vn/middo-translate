@@ -14,7 +14,9 @@ export type TRHFFormItemProps = {
   description?: React.ReactNode;
   formItemProps?: React.HTMLAttributes<HTMLDivElement>;
   formLabelProps?: React.HTMLAttributes<HTMLLabelElement>;
-  formMessageProps?: React.HTMLAttributes<HTMLParagraphElement>;
+  formMessageProps?: React.HTMLAttributes<HTMLParagraphElement> & {
+    render?: (props: any) => React.ReactNode;
+  };
   descriptionProps?: React.HTMLAttributes<HTMLParagraphElement>;
 };
 
@@ -31,7 +33,7 @@ function RHFFormItem({
     <FormItem className="space-y-2" {...formItemProps}>
       {formLabel && (
         <FormLabel
-          className="inline-block text-[1rem] font-normal text-neutral-900"
+          className="inline-block text-[1rem] font-normal text-neutral-900 dark:text-neutral-50"
           {...formLabelProps}
         >
           {formLabel}

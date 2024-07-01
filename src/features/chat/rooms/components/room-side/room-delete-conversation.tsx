@@ -31,8 +31,8 @@ export const RoomDeleteConversation = ({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <div>
-          <Item danger leftIcon={<Trash2 />}>
+        <div className='cursor-pointer'>
+          <Item danger leftIcon={<Trash2 />} onClick={()=>{}}>
             {t('MODAL.DELETE_CONVERSATION.TITLE')}
           </Item>
         </div>
@@ -42,7 +42,7 @@ export const RoomDeleteConversation = ({
           <AlertDialogTitle>
             {t('MODAL.DELETE_CONVERSATION.TITLE')} ?
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.DELETE_CONVERSATION.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

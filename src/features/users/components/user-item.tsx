@@ -3,6 +3,8 @@ import { Typography } from '@/components/data-display';
 import { User } from '@/features/users/types';
 import { cn } from '@/utils/cn';
 import { forwardRef } from 'react';
+import { SendIcon, XIcon } from 'lucide-react';
+import { MemberStatus } from '@/app/(main-layout)/(protected)/stations/_components/type';
 
 export interface UserItemProps extends React.HTMLAttributes<HTMLDivElement> {
   user: User;
@@ -10,27 +12,69 @@ export interface UserItemProps extends React.HTMLAttributes<HTMLDivElement> {
   rightElement?: React.ReactNode;
   subContent?: React.ReactNode;
   wrapperClassName?: string;
+  topContent?: string;
+  status?: MemberStatus;
 }
 
 export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
   (
-    { user, rightElement, isActive, subContent, wrapperClassName, ...props },
+    {
+      user,
+      topContent,
+      rightElement,
+      isActive,
+      subContent,
+      wrapperClassName,
+      status,
+      ...props
+    },
     ref,
   ) => {
+    const renderStatus = () => {
+      switch (status) {
+        case 'invited':
+          return (
+            <div className="flex size-5 items-center justify-center rounded-full bg-success-100 text-success">
+              <SendIcon className="size-3" />
+            </div>
+          );
+        case 'rejected':
+          return (
+            <div className="flex size-5 items-center justify-center rounded-full bg-error-100 text-error">
+              <XIcon className="size-3" />
+            </div>
+          );
+        default:
+          return null;
+      }
+    };
+
     return (
       <div
         ref={ref}
         {...props}
         className={cn(
-          'flex cursor-pointer items-center justify-between px-3 py-2 transition-all',
+          'flex cursor-pointer flex-col items-center justify-between px-3 py-2 transition-all',
           isActive
             ? 'bg-background-lightest'
-            : 'bg-transparent hover:bg-background-lighter',
+            : 'bg-transparent hover:bg-background-lighter dark:hover:bg-primary-900',
           wrapperClassName,
         )}
       >
+        {topContent && (
+          <span className="mb-1 self-start text-xs font-light text-neutral-400">
+            from <span className="font-normal">{topContent}</span>
+          </span>
+        )}
         <div className="flex w-full items-center gap-2">
-          <Avatar src={user?.avatar} alt={user?.name} />
+          <div className="relative">
+            <Avatar src={user?.avatar} alt={user?.name} />
+            {status && status !== 'joined' && (
+              <div className="absolute -bottom-1 -right-0 rounded-full  border-2 border-white ">
+                {renderStatus()}
+              </div>
+            )}
+          </div>
           <div className="w-full">
             <div className="flex items-center justify-between">
               <div className="max-w-full">
@@ -39,7 +83,7 @@ export const UserItem = forwardRef<HTMLDivElement, UserItemProps>(
                 </span>
               </div>
             </div>
-            <Typography className="line-clamp-1 break-all text-sm text-text/50">
+            <Typography className="highlight-able line-clamp-1 break-all text-sm text-text/50">
               {subContent ? subContent : '@' + user?.username}
             </Typography>
           </div>

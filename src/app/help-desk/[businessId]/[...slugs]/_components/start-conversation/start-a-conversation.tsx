@@ -21,6 +21,7 @@ import {
 } from '@/types/business.type';
 import { cn } from '@/utils/cn';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -132,7 +133,9 @@ const StartAConversation = ({
   }, []);
 
   if (!isClient) return null;
-  const submit = async (values: z.infer<typeof createGuestInfoSchema>) => {
+  const submitStartAChat = async (
+    values: z.infer<typeof createGuestInfoSchema>,
+  ) => {
     try {
       setLoading(true);
       await startAGuestConversation({
@@ -156,12 +159,12 @@ const StartAConversation = ({
   return (
     <div
       className={cn(
-        'flex h-full w-full flex-col justify-between px-4 py-3',
+        'flex h-full w-full flex-col justify-between',
         isAfterDoneAConversation ? 'my-auto max-h-60' : 'container-height pb-5',
       )}
     >
       {isAfterDoneAConversation ? (
-        <div className="m-auto flex max-w-screen-md flex-col items-center gap-4 px-4">
+        <div className="m-auto flex max-w-screen-md flex-col items-center gap-4  px-4 py-3 ">
           <Typography variant={'h4'} className="text-lg">
             Thank you!
           </Typography>
@@ -170,20 +173,31 @@ const StartAConversation = ({
           </Typography>
         </div>
       ) : (
-        <div className="relative  flex aspect-square h-fit  max-h-[100px] w-full flex-row gap-2 overflow-hidden">
-          <Avatar
-            variant={'outline'}
-            src={space?.avatar ?? '/avatar.svg'}
-            alt={'avatar-sender'}
-            className="size-16  border border-neutral-50 p-1"
-          />
-          <div className="flex h-fit w-full flex-col gap-1">
-            <p className="max-h-fit text-xs text-neutral-800">
-              Conversation with
-            </p>
-            <p className="max-h-fit text-[24px] font-semibold text-neutral-600">
-              {space?.name}
-            </p>
+        <div className="flex size-full flex-col justify-stretch gap-2">
+          <div className="flex-grow  pt-4">
+            <Image
+              src="/start-chat.png"
+              alt="start-a-chat"
+              className="m-auto"
+              width={240}
+              height={236}
+            />
+          </div>
+          <div className="relative  flex aspect-square h-fit max-h-[100px] w-full  flex-none flex-row items-center  gap-2 overflow-hidden px-3">
+            <Avatar
+              variant={'outline'}
+              src={space?.avatar ?? '/avatar.svg'}
+              alt={'avatar-sender'}
+              className="size-24  border border-neutral-50 p-1"
+            />
+            <div className="flex h-fit w-full flex-col gap-1">
+              <p className="max-h-fit text-base font-normal text-neutral-600">
+                Conversation with
+              </p>
+              <p className="max-h-fit text-[24px] font-semibold text-neutral-800">
+                {space?.name}
+              </p>
+            </div>
           </div>
         </div>
       )}
@@ -196,7 +210,7 @@ const StartAConversation = ({
         >
           <Form {...methods}>
             <form
-              onSubmit={handleSubmit(submit)}
+              onSubmit={handleSubmit(submitStartAChat)}
               className="mx-auto flex max-w-md flex-col justify-center space-y-4"
             >
               <Typography className="w-full text-center text-2xl font-semibold leading-7 tracking-normal text-neutral-600">
@@ -242,9 +256,9 @@ const StartAConversation = ({
             </form>
           </Form>
         </SheetContent>
-        <SheetTrigger>
+        <SheetTrigger className="w-full p-5 pt-3">
           <Button
-            className="mx-auto  h-11 w-2/3 min-w-fit md:max-w-48"
+            className="mx-auto  w-full px-7 py-4"
             variant={'default'}
             color={'primary'}
             shape={'square'}

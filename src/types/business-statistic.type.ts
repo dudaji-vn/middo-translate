@@ -18,16 +18,6 @@ export enum ESpaceChart {
   RESPONSE_MESSAGE = 'responsedMessage',
 }
 
-export const CHART_TOOLTIP_CONTENT: Record<ESpaceChart, string> = {
-  newVisitor: 'The number of new visitors to your website',
-  openedConversation: 'The number of opened conversations',
-  dropRate: 'The rate of dropped conversations',
-  responseTime: 'The average response time',
-  customerRating: 'The average customer rating',
-  responsedMessage: 'The average response message',
-  languageRank: 'The rank of languages',
-  trafficTrack: 'The traffic track of conversations',
-};
 export type AnalysisData = Record<
   ESpaceChart,
   {
@@ -52,20 +42,11 @@ export type TTraficTrack = Array<{
   }>;
 }>;
 
-export const MAPPED_CHARTS_INFO: Record<ESpaceChart, string> = {
-  newVisitor: 'New Visitors',
-  openedConversation: 'Opened conversations',
-  dropRate: 'Response time',
-  languageRank: "Conversation's language",
-  responseTime: 'Customer rating',
-  customerRating: 'Customer rating',
-  responsedMessage: 'Response time',
-  trafficTrack: 'Traffic track',
-};
-
 export const ROWS_PER_PAGE_OPTIONS = [5, 25, 75, 100];
 export const DEFAULT_CLIENTS_PAGINATION = {
   limit: ROWS_PER_PAGE_OPTIONS[1],
   currentPage: 1,
   search: '',
 };
+
+export const DEFAULT_SCRIPTS_PAGINATION = DEFAULT_CLIENTS_PAGINATION;

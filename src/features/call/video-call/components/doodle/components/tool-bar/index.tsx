@@ -44,7 +44,7 @@ const Toolbar = (props: ToolbarProps) => {
         dragMomentum={false}
         whileTap={{ boxShadow: '0px 0px 15px rgba(0,0,0,0.2)' }}
         dragControls={controls}
-        className="pointer-events-auto absolute left-2 top-2 z-20 flex flex-col items-center gap-3 rounded-md bg-white p-2"
+        className="pointer-events-auto absolute left-2 top-2 z-20 flex flex-col items-center gap-3 rounded-md bg-white dark:bg-neutral-800 border border-neutral-800 p-2"
       >
         <div onPointerDown={(e) => controls.start(e)} className="cursor-move">
           <GripHorizontal></GripHorizontal>
@@ -93,7 +93,7 @@ const Toolbar = (props: ToolbarProps) => {
         )}
         <div className="flex flex-col items-center">
           {isShowColor && <ParticipantDoodleList />}
-          <div className="border-t border-neutral-50 ">
+          <div className="border-t border-neutral-50 dark:border-neutral-700">
             <Button.Icon
               variant="ghost"
               size="xs"

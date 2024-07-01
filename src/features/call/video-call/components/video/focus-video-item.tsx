@@ -15,11 +15,13 @@ import VideoItemText from './components/video-item-text';
 import ChangeToGalleryView from './components/change-to-gallery-view';
 import FullScreenButton from './components/full-screen-button';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
-import { VIDEOCALL_LAYOUTS } from '@/features/call/constant/layout';
+import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
+import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 interface FocusVideoItemProps {
-  participant?: any;
+  participant: ParticipantInVideoCall;
+  isAllowChangeView?: boolean;
 }
-const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
+const FocusVideoItem = ({ participant, isAllowChangeView = true }: FocusVideoItemProps) => {
   const {t} = useTranslation('common')
   
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -49,7 +51,6 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
 
   useEffect(() => {
     const handleFullScreenEsc = () => {
-      console.log('handleFullScreenEsc')
       const isFullScreen = document.fullscreenElement;
       if(!isFullScreen && isExpandFull){
         setIsExpandFull(false)
@@ -76,7 +77,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
   }
 
   if(!participant) {
-    setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+    setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
     return null;
   };
   return (
@@ -84,7 +85,7 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
       ref={parentRef}
       className={cn(
         'relative flex h-full w-full items-center justify-center overflow-hidden rounded-xl bg-neutral-900 transition-all',
-        isTurnOnCamera ? 'bg-neutral-900' : 'bg-neutral-50',
+        isTurnOnCamera ? 'bg-neutral-900' : 'bg-neutral-50 dark:bg-neutral-900',
         isExpandFull && 'fixed top-0 left-0 right-0 bottom-0 z-50',
         // isShowChat && 'h-[200px] md:h-full',
       )}
@@ -123,10 +124,12 @@ const FocusVideoItem = ({ participant }: FocusVideoItemProps) => {
         <DoodleShareScreen width={width} height={height} />
       )}
 
-      <ChangeToGalleryView isExpandFull={isExpandFull}>
-        <FullScreenButton setFullScreenWeb={setFullScreenWeb} isExpandFull={isExpandFull} />
-      </ChangeToGalleryView>
-
+      {isAllowChangeView ? 
+        <ChangeToGalleryView isExpandFull={isExpandFull}>
+          <FullScreenButton setFullScreenWeb={setFullScreenWeb} isExpandFull={isExpandFull} />
+        </ChangeToGalleryView> : 
+      <FullScreenButton setFullScreenWeb={setFullScreenWeb} isExpandFull={isExpandFull} />}
+      
       <UserStatus isForgeShow={true} participant={participant}/>
     </section>
   );

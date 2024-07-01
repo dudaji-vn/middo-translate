@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { messageApi } from '../api';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
+import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
 export const useDisplayContent = ({
   message,
@@ -12,7 +13,10 @@ export const useDisplayContent = ({
   message: Message;
   userLanguage?: string;
 }) => {
+  const { isOnHelpDeskChat } = useBusinessNavigationData();
   const isMe = message.sender._id === useAuthStore.getState().user?._id;
+  const isMeTheAnonymous =
+    message.senderType === 'anonymous' && isOnHelpDeskChat;
   const translatedFrom = useTranslatedFromText({
     languageCode: message.language,
   });
@@ -25,7 +29,7 @@ export const useDisplayContent = ({
       setContentDisplay(t('CONVERSATION.REMOVED_A_MESSAGE'));
       return;
     }
-    if (userLanguage === message.language || isMe) {
+    if (userLanguage === message.language || isMe || isMeTheAnonymous) {
       setContentDisplay(message.content);
       setIsUseOriginal(true);
       return;

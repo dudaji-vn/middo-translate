@@ -20,9 +20,7 @@ const headerVariants = cva('w-full flex flex-row', {
     },
   },
 });
-const mappedTitle = {
-  'create-space': 'Create Space',
-};
+
 export const createSpaceSteps = [
   {
     title: 'EXTENSION.SPACE.SPACE_INFOR',
@@ -59,7 +57,7 @@ const CreateOrEditSpaceHeader = ({
   return (
     <section
       className={cn(
-        'createSpaceSteps-center flex w-full flex-row items-center justify-between gap-3 bg-primary-100 px-4',
+        'createSpaceSteps-center flex w-full min-w-fit flex-row items-center justify-between  gap-3 bg-primary-100 px-4 dark:bg-background',
         headerVariants({ navigation: modalType || 'default' }),
       )}
     >
@@ -75,8 +73,8 @@ const CreateOrEditSpaceHeader = ({
         >
           <ArrowLeft className="" />
         </Button.Icon>
-        <Typography className="min-w-max capitalize text-neutral-600">
-          {mappedTitle[modalType || 'create-space']}
+        <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50 max-sm:min-w-32">
+          {t('MODAL.CREATE_SPACE.HEADING')}
         </Typography>
       </div>
       <TabsList className="relative max-w-[600px] justify-between gap-5 border-none md:mx-10 xl:mx-14">
@@ -108,8 +106,9 @@ const CreateOrEditSpaceHeader = ({
                 variant={'ghost'}
                 className={cn(
                   'flex flex-row gap-3',
-                  isActive && '!bg-neutral-50',
-                  isAfterCurrent && '!bg-neutral-50  hover:bg-primary-100',
+                  isActive && '!bg-neutral-50 dark:!bg-neutral-800',
+                  isAfterCurrent &&
+                    '!bg-neutral-50 hover:bg-primary-100  dark:!bg-neutral-800',
                   isDone &&
                     '!active:bg-success-200 !bg-success-100 hover:bg-success-200',
                   isError && '!bg-error-100',

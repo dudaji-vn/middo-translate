@@ -18,6 +18,7 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
 import { useTranslation } from 'react-i18next';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
+import customToast from '@/utils/custom-toast';
 
 export interface TranslateOptionBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -64,7 +65,7 @@ export const TranslateOptionBar = forwardRef<
 
   const handleStartListening = async () => {
     if (!ableListen) {
-      toast.error(t('MESSAGE.ERROR.NOT_SELECTED_LANGUAGE'));
+      customToast.error(t('MESSAGE.ERROR.NOT_SELECTED_LANGUAGE'));
       return;
     }
 
@@ -126,7 +127,7 @@ export const TranslateOptionBar = forwardRef<
         ref={ref}
         {...props}
         className={cn(
-          'toolWrapper relative',
+          'toolWrapper relative dark:bg-neutral-950 dark:border-neutral-900 dark:border dark:shadow-3',
           listening ? 'animate' : '',
           isFocused && '!hidden md:!block',
         )}

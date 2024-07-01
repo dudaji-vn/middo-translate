@@ -24,8 +24,8 @@ const CustomExtension = ({
 
   return (
     <section className="flex flex-col gap-1">
-      <div className="rounded-[12px]  bg-primary-100 p-3  0">
-        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500">
+      <div className="rounded-[12px]  bg-primary-100 p-3  0  dark:bg-neutral-900">
+        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500  dark:text-neutral-50">
           Theme
         </FormLabel>
         <div className="grid grid-flow-row grid-cols-4 md:grid-cols-6  lg:grid-cols-8 xl:grid-cols-10 ">
@@ -36,7 +36,7 @@ const CustomExtension = ({
                 title={color.name}
                 key={color.hex}
                 contentProps={{
-                  className: 'text-neutral-800 capitalize',
+                  className: 'text-neutral-800 capitalize  dark:text-neutral-50',
                 }}
                 triggerItem={
                   <Button.Icon
@@ -72,17 +72,17 @@ const CustomExtension = ({
           <Tooltip
             title={'Custom (This feature is not available yet)'}
             contentProps={{
-              className: 'text-neutral-800',
+              className: 'text-neutral-800 dark:text-neutral-50',
             }}
             triggerItem={
               <Button.Icon
                 variant="ghost"
                 type="button"
-                className="relative !h-6  !w-6 bg-neutral-100 hover:bg-neutral-200"
+                className="relative !h-6  !w-6 bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700"
               >
                 <Plus
                   stroke="grey"
-                  className={`absolute left-1 top-1 h-4 w-4 stroke-neutral-700 `}
+                  className={`absolute left-1 top-1 h-4 w-4 stroke-neutral-700 dark:stroke-neutral-900 `}
                 />
               </Button.Icon>
             }
@@ -91,11 +91,11 @@ const CustomExtension = ({
       </div>
       <div
         className={cn(
-          'flex  flex-row items-center justify-between rounded-[12px] bg-primary-100 p-3  0',
+          'flex  flex-row items-center justify-between rounded-[12px] bg-primary-100 dark:bg-neutral-900 p-3  0',
           isPro ? '' : 'opacity-70',
         )}
       >
-        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500">
+        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500 dark:text-neutral-50">
           Conversation icon
         </FormLabel>
         <div className="flex items-center gap-1 text-primary-500-main">
@@ -107,11 +107,11 @@ const CustomExtension = ({
       </div>
       <div
         className={cn(
-          'flex  flex-row items-center justify-between rounded-[12px] bg-primary-100 p-3  0',
+          'flex  flex-row items-center justify-between rounded-[12px] bg-primary-100 dark:bg-neutral-900 p-3  0',
           isPro ? '' : 'opacity-70',
         )}
       >
-        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500">
+        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500 dark:text-neutral-50">
           Middo icon
         </FormLabel>
         <div className="flex items-center gap-1 text-primary-500-main">
@@ -123,11 +123,11 @@ const CustomExtension = ({
       </div>
       <div
         className={cn(
-          'flex  flex-row items-center justify-between rounded-[12px] bg-primary-100 p-3  0',
+          'flex  flex-row items-center justify-between rounded-[12px] bg-primary-100 dark:bg-neutral-900 p-3  0',
           isPro ? '' : 'opacity-70',
         )}
       >
-        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500">
+        <FormLabel className="mb-3 inline-block text-[1rem] font-normal text-neutral-500 dark:text-neutral-50">
           Video call
         </FormLabel>
         <div className="flex items-center gap-1 text-primary-500-main">

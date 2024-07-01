@@ -1,15 +1,22 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import Tip from '@/components/data-display/tip/tip';
-import { Frown, FrownIcon, PenSquareIcon, Users2Icon } from 'lucide-react';
+import {
+  Frown,
+  FrownIcon,
+  PenSquareIcon,
+  Search,
+  Users2Icon,
+} from 'lucide-react';
 
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { InboxType } from './inbox';
 import { useAppStore } from '@/stores/app.store';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
+import ViewSpaceInboxFilter from './view-space-inbox-filter';
 export interface EmptyInboxProps extends React.HTMLAttributes<HTMLDivElement> {
-  type?: InboxType;
+  type?: InboxType | 'help-desk-filtered';
 }
 
 export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
@@ -21,6 +28,8 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
           return '';
         case 'group':
           return '_GROUP';
+        case 'contact':
+          return '_CONTACT';
         default:
           return '';
       }
@@ -42,11 +51,45 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [type]);
 
-    if (type === 'archived' || type === 'waiting') {
+    if (type === 'help-desk-filtered') {
+      return (
+        <div className="relative  flex h-full w-full flex-1  flex-col items-center gap-4 overflow-hidden bg-card p-0 text-base">
+          <ViewSpaceInboxFilter className={'z-[60]'} />
+          <Typography
+            variant="default"
+            className="flex-rows mt-10 flex items-center gap-3 text-neutral-500"
+          >
+            <Search className="size-4 font-semibold text-neutral-800" />
+            {t(`INBOX_EMPTY.NO_RESULT.TITLE`)}
+          </Typography>
+          <p className="my-3 text-neutral-600">
+            {t(`INBOX_EMPTY.NO_RESULT.DESCRIPTION`)}
+          </p>
+        </div>
+      );
+    }
+    if (type === 'help-desk') {
+      return (
+        <div className="mt-3 h-full bg-card px-4 text-base">
+          <div className="py-6">
+            <Typography
+              variant="default"
+              className="font-semibold text-neutral-800 dark:text-neutral-50"
+            >
+              {t(`INBOX_EMPTY.NO_CLIENT.TITLE${translateExtension}`)}
+            </Typography>
+            <p className="my-3 text-neutral-600  dark:text-neutral-50">
+              {t(`INBOX_EMPTY.NO_CLIENT.DESCRIPTION${translateExtension}`)}
+            </p>
+          </div>
+        </div>
+      );
+    }
+    if (type === 'archived' || type === 'waiting' || type === 'contact') {
       return (
         <div className="mt-3 flex h-full flex-col items-center justify-center bg-card px-4 text-base">
-          <FrownIcon className="-mt-10 h-12 w-12 text-neutral-400" />
-          <p className="my-3 text-center font-medium text-neutral-600">
+          <FrownIcon className="-mt-10 h-12 w-12 text-neutral-400 dark:text-neutral-50" />
+          <p className="my-3 text-center font-medium text-neutral-600 dark:text-neutral-50">
             {t(`INBOX_EMPTY.MESSAGE${translateExtension}`)}
           </p>
         </div>
@@ -64,15 +107,15 @@ export const EmptyInbox = forwardRef<HTMLDivElement, EmptyInboxProps>(
         <div className="py-6">
           <Typography
             variant="default"
-            className="font-semibold text-neutral-800"
+            className="font-semibold text-neutral-800 dark:text-neutral-50"
           >
             {t(`INBOX_EMPTY.TITLE${translateExtension}`)}
           </Typography>
-          <p className="my-3 text-neutral-600">
+          <p className="my-3 text-neutral-600 dark:text-neutral-50">
             {t(`INBOX_EMPTY.DESCRIPTION${translateExtension}`)}
           </p>
           {type === 'all' && (
-            <ul className="ml-5 list-decimal space-y-4 text-neutral-400">
+            <ul className="ml-5 list-decimal space-y-4 text-neutral-400 dark:text-neutral-50">
               <li className="items-center">
                 <div className="flex items-center">
                   <span className="capitalize">

@@ -91,6 +91,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         if (room.status === 'temporary') {
           const res = await roomApi.createRoom({
             participants: room.participants.map((p) => p._id),
+            stationId: room.station as string,
           });
           setRoomId(roomId);
           roomId = res._id;
@@ -194,34 +195,37 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
 
     if (isBlockedConversation || relationshipStatus === 'blocked') {
       return (
-        <div className="relative w-full border-t bg-primary-100 p-2">
+        <div className="relative w-full border-t bg-primary-100 p-2 dark:bg-background">
           <BlockChatBar
             blockContent={t('CONVERSATION.BLOCKED.MESSAGE')}
-            learnMoreLink={'#'}
+            learnMoreLink={'/?guide=why-i-can-not-reply-to-a-conversation'}
             learnMoreText={t('CONVERSATION.BLOCKED.LEARN_MORE')}
           />
         </div>
       );
     }
-
     return (
       <div className={'relative w-full border-t p-2'}>
         {relationshipStatus === 'blocking' && <RoomBlockContent room={room} />}
-        {room.status === 'waiting' && relationshipStatus !== 'blocking' && (
-          <>
-            {isAdmin ? (
-              <RoomWaitingContent room={room} />
-            ) : (
-              <RoomActions>
-                <RoomResponseContent room={room} />
-              </RoomActions>
-            )}
-          </>
-        )}
+        {room.status === 'waiting_group' &&
+          relationshipStatus !== 'blocking' && (
+            <>
+              {isAdmin ? (
+                <RoomWaitingContent room={room} />
+              ) : (
+                <RoomActions>
+                  <RoomResponseContent room={room} />
+                </RoomActions>
+              )}
+            </>
+          )}
+        {room.status === 'waiting' && <RoomWaitingContent room={room} />}
 
         {isShowEditor && (
           <MessageEditor
-            isMediaDisabled={room.status === 'waiting'}
+            isMediaDisabled={
+              room.status === 'waiting' || room.status === 'waiting_group'
+            }
             isEditing={isEdit}
             onEditSubmit={updateMessage}
             roomId={room._id}

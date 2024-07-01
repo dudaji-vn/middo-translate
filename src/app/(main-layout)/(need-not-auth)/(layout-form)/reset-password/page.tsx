@@ -8,7 +8,6 @@ import { InputField } from '@/components/form/Input-field';
 import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { checkTokenResetPassword, resetPasswordService, setCookieService } from '@/services/auth.service';
-import toast from 'react-hot-toast';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
@@ -18,6 +17,7 @@ import { CAPS_PATTERN, PASSWORD_PATTERN, patternMinLength } from '@/configs/rege
 import { Typography } from '@/components/data-display';
 import { Button } from '@/components/actions';
 import { InputPasswordPattern } from '@/components/form/input-password-pattern';
+import customToast from '@/utils/custom-toast';
 
 export default function ResetPassword() {
   const [loading, setLoading] = useState(false);
@@ -100,7 +100,7 @@ export default function ResetPassword() {
       await setCookieService([{key: ACCESS_TOKEN_NAME, value: token || '', time: 15 }]);
       await resetPasswordService(watch().password);
       router.push(ROUTE_NAMES.SIGN_IN);
-      toast.success(t('MESSAGE.SUCCESS.CHANGE_PASSWORD'));
+      customToast.success(t('MESSAGE.SUCCESS.CHANGE_PASSWORD'));
       setErrorMessage('');
     } catch (err: any) {
       setErrorMessage(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));

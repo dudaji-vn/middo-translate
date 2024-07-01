@@ -1,12 +1,21 @@
+import Peer from 'simple-peer';
 import { create } from 'zustand';
-import ParticipantInVideoCall, { StatusParticipantType } from '../interfaces/participant';
-
+import ParticipantInVideoCall, { StatusParticipant, StatusParticipantType } from '../interfaces/participant';
+import { User } from '@/features/users/types';
+export interface IUserRequestJoinRoom {
+    socketId: string;
+    user: User
+}
+export interface IPeerShareScreen {
+    id: string; // socket Id
+    peer: Peer.Instance
+}
 export type VideoCallState = {
-    changeMicStatusParticipant: any;
+    changeMicStatusParticipant: (userId: string, status: boolean) => void;
     participants: ParticipantInVideoCall[];
-    usersRequestJoinRoom: any[];
-    peerShareScreen: any[];
-    addPeerShareScreen: (peer: any) => void;
+    usersRequestJoinRoom: IUserRequestJoinRoom[];
+    peerShareScreen: IPeerShareScreen[];
+    addPeerShareScreen: (peer: IPeerShareScreen) => void;
     removePeerShareScreen: (id: string) => void;
     clearPeerShareScreen: () => void;
     updateParticipant: (participant: ParticipantInVideoCall, userId: string) => void;
@@ -15,9 +24,10 @@ export type VideoCallState = {
     removeParticipant: (socketId: string) => void;
     removeParticipantByUserId: (userId: string) => void;
     removeParticipantShareScreen: (socketId: string) => void;
-    updatePeerParticipant: (peer: any, socketId: string) => void;
-    addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => void;
+    updatePeerParticipant: (peer: Peer.Instance, socketId: string) => void;
+    addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: User}) => void;
     removeUsersRequestJoinRoom: (socketId: string) => void;
+    removeWaitingHelpDeskParticipant: () => void;
     updateStatusParticipant: (userId: string, status: StatusParticipantType) => void;
     pinParticipant: (socketId: string, isShareScreen: boolean) => void;
     clearPinParticipant: () => void;
@@ -45,10 +55,18 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
     setStreamForParticipant(stream: MediaStream, socketId: string, isShareScreen: boolean) {
         set((state) => ({
             participants: state.participants.map((p) => {
-                if (p.socketId == socketId && (p.isShareScreen || false) == isShareScreen) {
+                if (p.socketId == socketId && !!p.isShareScreen == isShareScreen) {
                     return {
                         ...p,
                         stream
+                    };
+                }
+                // CASE Helpdesk call
+                if(!p.socketId && p.isMe && !!p.isShareScreen == isShareScreen) {
+                    return {
+                        ...p,
+                        stream,
+                        socketId
                     };
                 }
                 return p;
@@ -70,16 +88,16 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
             participants: state.participants.filter((p) => p.socketId != socketId || !p.isShareScreen),
         }));
     },
-    addPeerShareScreen: (peer: any) => {
+    addPeerShareScreen: (peer: IPeerShareScreen) => {
         set((state) => ({ peerShareScreen: state.peerShareScreen.concat(peer) }));
     },
     removePeerShareScreen: (id: string) => {
         set((state) => ({ peerShareScreen: state.peerShareScreen.filter((p) => p.id != id) }));
     },
     clearPeerShareScreen: () => {
-        set((state) => ({ peerShareScreen: []}));
+        set((_) => ({ peerShareScreen: []}));
     },
-    updatePeerParticipant: (peer: any, socketId: string) => {
+    updatePeerParticipant: (peer: Peer.Instance, socketId: string) => {
         set((state) => ({
             participants: state.participants.map((p) => {
                 if (p.socketId == socketId && !p.isShareScreen) {
@@ -92,11 +110,16 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
             }),
         }));
     },
-    addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: any}) => {
+    addUsersRequestJoinRoom: ({socketId, user}: {socketId: string; user: User}) => {
         set((state) => ({ usersRequestJoinRoom: state.usersRequestJoinRoom.concat({socketId, user}) }));
     },
     removeUsersRequestJoinRoom: (socketId: string) => {
         set((state) => ({ usersRequestJoinRoom: state.usersRequestJoinRoom.filter((u) => u.socketId != socketId) }));
+    },
+    removeWaitingHelpDeskParticipant: () => {
+        set((state) => ({
+            participants: state.participants.filter((p) => p.status != StatusParticipant.WAITING_HELP_DESK),
+        }));
     },
     updateStatusParticipant: (userId: string, status: StatusParticipantType) => {
         set((state) => ({

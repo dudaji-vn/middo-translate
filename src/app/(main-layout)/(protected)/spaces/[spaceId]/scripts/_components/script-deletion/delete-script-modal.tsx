@@ -1,6 +1,7 @@
 import { ConfirmAlertModal } from '@/components/modal/confirm-alert-modal';
 import { useDeleteScript } from '@/features/conversation-scripts/hooks/use-delete-script';
 import { TChatScript } from '@/types/scripts.type';
+import customToast from '@/utils/custom-toast';
 import { useParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 import toast from 'react-hot-toast';
@@ -28,8 +29,12 @@ const DeleteScriptModal = ({
     try {
       await mutateAsync({ spaceId, scriptIds: idsToDelete });
       onclose();
-    } catch (error) {
-      toast.error(`Failed to ${title.toLowerCase()}`);
+    } catch (error: unknown) {
+      console.log(error);
+      // @ts-ignore
+      const msg = error?.response?.data?.message || error?.message;
+      customToast.error(msg || `Fail to delete script`);
+      console.error(error);
     }
   };
   return (

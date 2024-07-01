@@ -12,7 +12,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { HeaderNav } from './header-nav';
 import HeaderProfile from './header-profile';
-import HelpDeskDropdownMenu from './help-desk-dropdown-menu';
 
 type Props = {};
 

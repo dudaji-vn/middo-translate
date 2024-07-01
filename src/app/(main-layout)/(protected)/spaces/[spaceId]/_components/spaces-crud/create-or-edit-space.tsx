@@ -5,10 +5,9 @@ import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useRouter } from 'next/navigation';
-import React, { use, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
-import toast from 'react-hot-toast';
 import useClient from '@/hooks/use-client';
 import { Tabs } from '@/components/navigation';
 import CreateOrEditSpaceHeader from './create-or-edit-space-header';
@@ -22,27 +21,31 @@ import InviteMembers from './sections/invite-section';
 import { Member } from './sections/members-columns';
 import { useQueryClient } from '@tanstack/react-query';
 import { GET_SPACES_KEY } from '@/features/business-spaces/hooks/use-get-spaces';
-import { useAuthStore } from '@/stores/auth.store';
 import { ESPaceRoles } from '../../settings/_components/space-setting/setting-items';
+import { useTranslation } from 'react-i18next';
+import customToast from '@/utils/custom-toast';
+import { usePlatformStore } from '@/features/platform/stores';
+import { ROUTE_NAMES } from '@/configs/route-name';
 
 const createSpaceSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(1, {
-      message: 'Space name is required.',
+      message: 'EXTENSION.SPACE.ERRORS.NAME_REQUIRED',
     })
-    .max(50, {
-      message: 'Space name is too long, maximum 500 characters.',
+    .max(30, {
+      message: 'EXTENSION.SPACE.ERRORS.NAME_MAX_LENGTH',
     }),
   avatar: z.string().min(1, {
-    message: 'Space avatar is required.',
+    message: 'EXTENSION.SPACE.ERRORS.AVATAR_REQUIRED',
   }),
   backgroundImage: z.string().optional(),
   members: z
     .array(
       z.object({
         email: z.string().email({
-          message: 'Invalid email address',
+          message: 'EXTENSION.SPACE.ERRORS.INVALID_EMAIL',
         }),
         role: z.string(),
       }),
@@ -57,8 +60,9 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   const [tabValue, setTabValue] = React.useState<number>(0);
   const [tabErrors, setTabErrors] = React.useState<boolean[]>([false, false]);
   const router = useRouter();
+  const platform = usePlatformStore((state) => state.platform);
   const queryClient = useQueryClient();
-
+  const { t } = useTranslation('common');
   const formCreateSpace = useForm<TCreateSpaceFormValues>({
     mode: 'onChange',
     defaultValues: {
@@ -93,7 +97,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   const submitCreateSpace = async (value: any) => {
     formCreateSpace.trigger();
     if (!isEmpty(formCreateSpace.formState.errors)) {
-      toast.error('Please fill all required fields.');
+      customToast.error('Please fill all required fields.');
       setTabErrors([true, false]);
       return;
     }
@@ -104,15 +108,18 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
         backgroundImage: formCreateSpace.watch('backgroundImage'),
         members: formCreateSpace.watch('members'),
       });
-      toast.success('Space created successfully.');
+      customToast.success('Space created successfully.');
       queryClient.invalidateQueries([GET_SPACES_KEY, { type: 'all_spaces' }]);
-      router.push('/spaces');
+      router.push(ROUTE_NAMES.SPACES + `?platform=${platform}`);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(err?.response?.data?.message);
     }
   };
   const canNext = useMemo(() => {
-    if (formCreateSpace.watch('avatar') && formCreateSpace.watch('name')) {
+    if (
+      formCreateSpace.watch('avatar') &&
+      formCreateSpace.watch('name')?.trim()
+    ) {
       return formCreateSpace.trigger();
     }
     return false;
@@ -122,7 +129,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
   return (
     <Tabs
       value={tabValue?.toString()}
-      className="w-full bg-primary-100"
+      className="w-full bg-primary-100 dark:bg-background"
       defaultValue={tabValue.toString()}
       onValueChange={(value) => {
         setTabValue(parseInt(value));
@@ -143,14 +150,14 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           }}
         >
           <CreateSpaceForm />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4">
+          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4 dark:bg-background">
             <Button
               color={canNext ? 'primary' : 'disabled'}
               shape={'square'}
               size={'sm'}
               onClick={() => handleStepChange(1)}
             >
-              Next
+              {t('PAGINATION.NEXT')}
             </Button>
           </div>
         </StepWrapper>
@@ -159,7 +166,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
           value="1"
           cardProps={{
             className:
-              'w-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none',
+              'w-full flex flex-col min-h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
           }}
         >
           <InviteMembers
@@ -173,7 +180,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
             }
             allowedRoles={[ESPaceRoles.Admin, ESPaceRoles.Member]}
           />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4">
+          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4 dark:bg-background">
             <form onSubmit={formCreateSpace.handleSubmit(submitCreateSpace)}>
               <Button
                 color={'primary'}
@@ -183,7 +190,7 @@ export default function CreateOrEditSpace({ open }: { open: boolean }) {
                 loading={formCreateSpace.formState.isSubmitting}
                 disabled={!formCreateSpace.formState.isValid}
               >
-                Create space and Invite members
+                {t('EXTENSION.SPACE.CREATE_BUTTON')}
               </Button>
             </form>
           </div>

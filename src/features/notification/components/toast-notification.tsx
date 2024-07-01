@@ -1,3 +1,4 @@
+import { Button } from '@/components/actions';
 import { XIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,35 +22,50 @@ export const ToastNotification = ({
 
   if (isDismissed)
     return (
-      <div className="flex w-full">
-        <span>
+      <div className="flex w-full items-center">
+        <span className="text-center">
           {t('NOTIFICATION.WITHOUT_NOTIFICATIONS')}&nbsp;
+          <br />
           <TextUnderlineClickAble onClick={onEnable}>
             {t('NOTIFICATION.ENABLE')}
           </TextUnderlineClickAble>
-          <span className="mx-2">/</span>
-          <TextUnderlineClickAble onClick={onDismiss}>
+          {/* <span className="mx-2">/</span> */}
+          {/* <TextUnderlineClickAble onClick={onDismiss}>
             {t('NOTIFICATION.LATER')}
-          </TextUnderlineClickAble>
+          </TextUnderlineClickAble> */}
           <span className="mx-2">/</span>
           <TextUnderlineClickAble onClick={onDeny}>
             {t('NOTIFICATION.DENY')}
           </TextUnderlineClickAble>
         </span>
-        <span></span>
+        <Button.Icon 
+            variant={'ghost'}
+            color={'default'}
+            size={'ss'}
+            onClick={onDismiss} 
+            className="ml-2"
+        >
+            <XIcon size={16} />
+        </Button.Icon>
       </div>
     );
   return (
-    <div className="flex w-full">
+    <div className="flex w-full items-center">
       <span>
         {t('NOTIFICATION.MESSAGE')}&nbsp;
         <TextUnderlineClickAble onClick={onEnable}>
         {t('NOTIFICATION.ENABLE')}
         </TextUnderlineClickAble>
       </span>
-      <button onClick={handleDismiss} className="ml-3">
-        <XIcon width={20} height={20} />
-      </button>
+      <Button.Icon 
+        variant={'ghost'}
+        color={'default'}
+        size={'ss'}
+        onClick={handleDismiss} 
+        className="ml-2"
+      >
+        <XIcon size={16} />
+      </Button.Icon>
     </div>
   );
 };

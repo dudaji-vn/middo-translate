@@ -37,6 +37,10 @@ export const validateInvitation = (data: {
   return post('/help-desk/validate-invite', data);
 };
 
+export const getInvitationByToken = (token: string) => {
+  return get(`/help-desk/space-verify/${token}`);
+};
+
 export const removeMemberFromSpace = (data: {
   email: string;
   spaceId: string;
@@ -71,4 +75,12 @@ export const deleteTag = ({
   return axios.delete(`/help-desk/spaces/${spaceId}/tags/${tagId}`, {
     data: { spaceId },
   });
+};
+
+export const changeRoleMember = (data: {
+  email: string;
+  role: string;
+  spaceId: string;
+}) => {
+  return axios.patch(`/help-desk/spaces/${data.spaceId}/change-role`, data);
 };

@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,21 +8,22 @@ import {
 } from '@/components/data-display';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { LogOut, Menu } from 'lucide-react';
+import { LSK_FROM_DOMAIN } from '@/types/business.type';
+import {  LogOut, Menu } from 'lucide-react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import React, { useMemo } from 'react';
 
 const HelpDeskDropdownMenu = () => {
   const { isOnHelpDeskChat } = useBusinessNavigationData();
   const searchParams = useSearchParams();
-
   const params = useParams();
   const userId = params?.slugs?.[1];
   const roomId = params?.slugs?.[0];
   const router = useRouter();
+
   const items = useMemo(() => {
-    const originReferer = searchParams?.get('originReferer');
-    const queryParams = originReferer ? `?originReferer=${originReferer}` : ``;
+    if (typeof window === 'undefined') return [];
+    const fromDomain = localStorage.getItem(LSK_FROM_DOMAIN);
     return [
       {
         name: 'End conversation',
@@ -31,17 +31,17 @@ const HelpDeskDropdownMenu = () => {
         onClick: () => {
           if (!userId) return;
           router.replace(
-            `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${roomId}/${userId}` +
-              queryParams,
+            `${ROUTE_NAMES.HELPDESK_CONVERSATION}/${params?.businessId}/rate/${roomId}/${userId}?originReferer=${fromDomain}`,
           );
         },
       },
     ];
   }, [searchParams, params?.businessId, roomId, router, userId]);
+  
   if (!isOnHelpDeskChat) return null;
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="p-3 text-neutral-300">
+      <DropdownMenuTrigger className="p-3 text-neutral-700">
         <Menu size={20} />
       </DropdownMenuTrigger>
       <DropdownMenuContent>

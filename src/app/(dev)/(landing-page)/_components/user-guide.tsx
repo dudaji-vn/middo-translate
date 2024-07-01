@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/data-display/accordion';
-import MediaLightBox from '@/components/media-light-box/media-light-box';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
 import { cn } from '@/utils/cn';
 import Image from 'next/image';
 
@@ -22,8 +22,8 @@ export default function UserGuide() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [index, setIndex] = useState<number | undefined>();
-  const [imagePreview, setImagePreview] = useState<string | undefined>();
+  const setIndex = useMediaLightBoxStore((state) => state.setIndex);
+  const setFiles = useMediaLightBoxStore((state) => state.setFiles);
 
   const [guide, setGuide] = useState<{
     guide: string;
@@ -65,8 +65,13 @@ export default function UserGuide() {
   };
 
   const onPreviewImage = (url: string) => {
-    setImagePreview(url);
     setIndex(0);
+    setFiles([
+      {
+        url,
+        type: 'image',
+      },
+    ]);
   };
 
   const guides = [
@@ -312,7 +317,7 @@ export default function UserGuide() {
                   subContent: (
                     <ul className="ml-5 mt-5 flex list-disc flex-col gap-3">
                       <li>Translation tool</li>
-                      <li>E.S.L translated messages</li>
+                      <li>E.S.L message</li>
                     </ul>
                   ),
                 },
@@ -441,7 +446,7 @@ export default function UserGuide() {
                 },
                 {
                   id: 'esl-translated-message',
-                  title: 'E.S.L translated message',
+                  title: 'E.S.L message',
                   content:
                     'The English translated text from your message content',
                 },
@@ -1059,7 +1064,7 @@ export default function UserGuide() {
           >
             <AccordionTrigger
               className={cn(
-                'rounded-xl bg-[#fafafa] px-5 text-left text-base hover:no-underline md:text-xl ',
+                'rounded-xl bg-[#fafafa] px-5 text-left text-base hover:no-underline dark:bg-neutral-900 md:text-xl ',
                 'guide' + guide.id,
               )}
             >
@@ -1071,18 +1076,6 @@ export default function UserGuide() {
           </AccordionItem>
         ))}
       </Accordion>
-      <MediaLightBox
-        index={index}
-        close={() => {
-          setIndex(undefined);
-        }}
-        files={[
-          {
-            url: imagePreview || '',
-            type: 'image',
-          },
-        ]}
-      />
     </>
   );
 }
@@ -1220,7 +1213,7 @@ const MultiAccordion = ({
           <AccordionItem value={item.id} key={item.id} id={'guide_1' + item.id}>
             <AccordionTrigger
               className={cn(
-                'rounded-xl bg-primary-100 px-5 text-left text-base hover:no-underline md:text-lg',
+                'rounded-xl bg-primary-100 px-5 text-left text-base hover:no-underline dark:bg-neutral-800 md:text-lg',
                 'guide_1' + item.id,
               )}
             >
@@ -1253,7 +1246,7 @@ const MultiAccordion = ({
                         <AccordionItem value={subItem.id} key={subItem.id}>
                           <AccordionTrigger
                             className={cn(
-                              'rounded-xl border border-neutral-50 bg-white px-5 text-left hover:no-underline',
+                              'rounded-xl border border-neutral-50 bg-white px-5 text-left hover:no-underline dark:border-neutral-700 dark:bg-neutral-700',
                               'guide_2' + subItem.id,
                             )}
                           >
@@ -1320,7 +1313,7 @@ const MultiStepAccordion = ({
             <AccordionItem value={step.id} key={step.id}>
               <AccordionTrigger
                 className={cn(
-                  'rounded-xl bg-primary-100 px-5 text-left text-base hover:no-underline md:text-lg',
+                  'rounded-xl bg-primary-100 px-5 text-left text-base hover:no-underline dark:bg-neutral-800 md:text-lg',
                   'guide_1' + step.id,
                 )}
               >

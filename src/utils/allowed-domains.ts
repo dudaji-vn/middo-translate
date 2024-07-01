@@ -6,6 +6,8 @@ export const getAllowedDomain = ({
   allowedDomains?: string[];
 }) => {
   return allowedDomains?.find((domain) => {
-    return refer?.startsWith(domain);
+    return refer?.includes('http')
+      ? refer?.startsWith(domain)
+      : domain.includes(refer || '');
   });
 };

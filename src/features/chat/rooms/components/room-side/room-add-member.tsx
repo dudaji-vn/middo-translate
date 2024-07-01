@@ -35,7 +35,7 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
   const { mutate } = useAddMembers();
   const user = useAuthStore((state) => state.user);
-  const {t} = useTranslation('common');
+  const { t } = useTranslation('common');
   const filteredUsers = useMemo(() => {
     return data?.filter((u) => {
       if (u._id === user?._id) return false;
@@ -100,7 +100,9 @@ export const RoomAddMember = (props: RoomAddMemberProps) => {
             </div>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="mr-4">{t('COMMON.CANCEL')}</AlertDialogCancel>
+            <AlertDialogCancel className="mr-4">
+              {t('COMMON.CANCEL')}
+            </AlertDialogCancel>
             <AlertDialogAction
               disabled={selectedUsers.length === 0}
               onClick={handleSubmit}

@@ -10,9 +10,11 @@ export default function useGetMemberInRoom({ roomId }: UseGetMemberInRoomProps) 
     useEffect(() => {
         if (!roomId) return;
         const fetchMembersInGroup = async () => {
-            const res = await getRoomService(roomId)
-            const { data } = res;
-            setMembers(data?.participants || [])
+            try {
+                const res = await getRoomService(roomId)
+                const { data } = res;
+                setMembers(data?.participants || []);
+            } catch {}
         }
         fetchMembersInGroup();
     }, [roomId])

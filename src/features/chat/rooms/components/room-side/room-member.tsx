@@ -90,7 +90,7 @@ export const RoomMember = ({
   }, [isShowAll, members, pendingMembers, rejectedMembers, showMembers]);
 
   return (
-    <div className="mt-5 bg-white pb-3">
+    <div className="mt-5 bg-white pb-3 dark:bg-background">
       <div className="flex items-center justify-between gap-2.5  p-3 pl-3">
         <div className="flex items-center gap-2">
           <IconWrapper>
@@ -121,7 +121,7 @@ export const RoomMember = ({
                 rightElement={
                   <div className="ml-auto">
                     {member.inviteStatus === 'pending' ? (
-                      <span className="rounded bg-neutral-50 p-0.5 px-1 text-xs text-neutral-600">
+                      <span className="whitespace-nowrap rounded bg-neutral-50 p-0.5 px-1 text-xs text-neutral-600">
                         {t('COMMON.PENDING')}
                       </span>
                     ) : member.inviteStatus === 'rejected' ? (

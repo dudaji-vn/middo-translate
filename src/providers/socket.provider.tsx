@@ -6,7 +6,7 @@ import socket from '@/lib/socket-io';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { SOCKET_CONFIG } from '@/configs/socket';
-import { useChatStore } from '@/features/chat/stores';
+import { Meeting, useChatStore } from '@/features/chat/stores';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
@@ -20,7 +20,6 @@ const SocketProvider = () => {
   const setOnlineList = useChatStore((state) => state.setOnlineList);
   const setSocketConnected = useAppStore((state) => state.setSocketConnected);
   const queryClient = useQueryClient();
-
   useEffect(() => {
     function onConnect() {
       const clientId = anonymousId || user?._id;

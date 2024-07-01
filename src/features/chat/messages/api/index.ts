@@ -60,14 +60,18 @@ export const messageApi = {
     );
     return res.data;
   },
-  async seenAnonymous(id: string) {
-    // TODO: ask BE open this endpoint
-
-    // const res: Response<Message> = await axiosWithInterceptor.patch(
-    //   anonymousBasePath+ `/messages/help-desk/${id}/seen`,
-    // );
-    // return res.data;
-    return new Promise((resolve) => resolve({}));
+  async seenAnonymous(id: String, anonymousId: string) {
+    const res = await fetch(
+      anonymousBasePath + `/messages/help-desk/${id}/seen`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId: anonymousId }),
+      },
+    );
+    return res.json();
   },
 
   async seen(id: string) {
@@ -78,10 +82,26 @@ export const messageApi = {
   },
 
   async checkSeen(id: string) {
-    const res: Response<{
-      seen: boolean;
-    }> = await axiosWithInterceptor.get(`${basePath}/${id}/seen`);
-    return res.data;
+    try {
+      const res: Response<{
+        seen: boolean;
+      }> = await axiosWithInterceptor.get(`${basePath}/${id}/seen`);
+
+      return res.data;
+    } catch (error) {
+      return { seen: false };
+    }
+  },
+
+  async checkSeenAnonymous(id: string, guestId: string) {
+    try {
+      const res = await fetch(
+        `${anonymousBasePath}/messages/help-desk/${id}/seen/${guestId}`,
+      );
+      return res.json();
+    } catch (error) {
+      return { seen: false };
+    }
   },
   async edit({
     id,

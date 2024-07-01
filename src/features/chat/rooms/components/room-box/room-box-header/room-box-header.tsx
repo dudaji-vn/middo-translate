@@ -2,7 +2,12 @@
 
 import { Button } from '@/components/actions';
 import { useAuthStore } from '@/stores/auth.store';
-import { AlertCircleIcon, Phone, PhoneCallIcon } from 'lucide-react';
+import {
+  AlertCircleIcon,
+  Phone,
+  PhoneCallIcon,
+  SearchIcon,
+} from 'lucide-react';
 import { useCallback, useMemo } from 'react';
 import { useChatBox } from '../../../contexts';
 import { useCheckHaveMeeting } from '../../../hooks/use-check-have-meeting';
@@ -19,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { RoomAddMember } from '../../room-side/room-add-member';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
 
 export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room } = useChatBox();
@@ -28,7 +34,6 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { isBusiness, spaceId, businessConversationType } =
     useBusinessNavigationData();
   const { toggleTab } = useRoomSidebarTabs();
-  const allowCall = !isBusiness;
 
   const participants = room.participants.filter(
     (user) => user._id !== currentUser._id,
@@ -50,7 +55,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
     <div
       {...props}
       className={cn(
-        'flex w-full items-center border-b  px-1 py-1 md:px-3',
+        'flex w-full items-center border-b  px-1 py-1 md:px-3 dark:border-neutral-800',
         props.className,
       )}
     >
@@ -90,7 +95,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
       </div>
 
       <div className="ml-auto mr-1 flex items-center gap-1">
-        {allowCall && room.status === 'active' && <VideoCall />}
+        {room.status === 'active' && <VideoCall />}
         {room.isGroup && room.status === 'active' && (
           <Tooltip
             title={t('TOOL_TIP.ADD_MEMBER')}
@@ -107,6 +112,8 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
 };
 const ActionBar = () => {
   const { toggleTab, currentSide } = useRoomSidebarTabs();
+  const { isShowSearch, toggleIsShowSearch } = useRoomSearchStore();
+
   const isShowInfo = currentSide === 'info';
 
   const handleToggleInfo = useCallback(() => {
@@ -118,8 +125,18 @@ const ActionBar = () => {
     handleToggleInfo,
   );
 
+  useKeyboardShortcut([SHORTCUTS.SEARCH_IN_ROOM], toggleIsShowSearch);
+
   return (
-    <div className="flex">
+    <div className="flex gap-1">
+      <Button.Icon
+        onClick={toggleIsShowSearch}
+        size="xs"
+        color={isShowSearch ? 'secondary' : 'primary'}
+        variant={isShowSearch ? 'default' : 'ghost'}
+      >
+        <SearchIcon />
+      </Button.Icon>
       <Button.Icon
         onClick={handleToggleInfo}
         size="xs"
@@ -133,7 +150,8 @@ const ActionBar = () => {
 };
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
-  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id);
+  const {isBusiness} = useBusinessNavigationData();
+  const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id, isBusiness);
   const { user } = useAuthStore();
   const currentUserId = user?._id || '';
   const { t } = useTranslation('common');
@@ -142,13 +160,16 @@ const VideoCall = () => {
     roomChatBox?.participants?.every((p) => p._id === currentUserId);
   const startVideoCall = useJoinCall();
   if (isSelfChat) return null;
+  
+  if(isBusiness && !isHaveMeeting) return null;
+
   return (
     <div>
       <Tooltip
         title={t('TOOL_TIP.START_CALL')}
         triggerItem={
           <Button.Icon
-            onClick={() => startVideoCall(roomChatBox?._id)}
+            onClick={() => startVideoCall({roomId: roomChatBox?._id})}
             size="xs"
             color={isHaveMeeting ? 'secondary' : 'primary'}
             variant={isHaveMeeting ? 'default' : 'ghost'}
@@ -160,7 +181,7 @@ const VideoCall = () => {
         }
       />
       <Button
-        onClick={() => startVideoCall(roomChatBox?._id)}
+        onClick={() => startVideoCall({roomId: roomChatBox?._id})}
         size="xs"
         shape={'square'}
         color={isHaveMeeting ? 'primary' : 'secondary'}

@@ -1,3 +1,4 @@
+import { Station } from '@/features/stations/types/station.types';
 import { BaseEntity } from '@/types';
 export type UserRelationshipStatus = 'none' | 'blocking' | 'blocked';
 type UserStatus =
@@ -18,4 +19,5 @@ export type User = {
   phoneNumber?: string;
   username: string;
   allowUnknown: boolean;
+  defaultStation?: Station;
 } & BaseEntity;

@@ -18,7 +18,7 @@ export const ConfirmStopDoodle = () => {
     
     const handleStop = () => {
         setMeDoodle(false);
-        setMyOldDoodle(null)
+        setMyOldDoodle([])
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.END_DOODLE, user?.name);
     };
 
@@ -29,7 +29,7 @@ export const ConfirmStopDoodle = () => {
                     <AlertDialogTitle>
                         {t('MODAL.STOP_DOODLE.TITLE')}
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogDescription className="dark:text-neutral-50">
                         <span>{t('MODAL.STOP_DOODLE.DESCRIPTION')}</span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>

@@ -2,17 +2,19 @@ import { SOCKET_CONFIG } from "@/configs/socket";
 import socket from "@/lib/socket-io";
 import { useVideoCallStore } from "../../store/video-call.store";
 import toast from "react-hot-toast";
-import { useParticipantVideoCallStore } from "../../store/participant.store";
+import { IPeerShareScreen, useParticipantVideoCallStore } from "../../store/participant.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { useMyVideoCallStore } from "../../store/me.store";
 import { useCallback, useEffect } from "react";
 import { createPeer } from "../../utils/peer-action.util";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { MonitorX } from "lucide-react";
-import { VIDEOCALL_LAYOUTS } from "../../constant/layout";
+import { VIDEO_CALL_LAYOUTS } from "../../constant/layout";
 import { useElectron } from "@/hooks/use-electron";
 import { ELECTRON_EVENTS } from "@/configs/electron-events";
 import { useTranslation } from "react-i18next";
+import { User } from "@/features/users/types";
+import customToast from "@/utils/custom-toast";
 
 export default function useHandleShareScreen() {
     const {t} = useTranslation('common');
@@ -31,32 +33,35 @@ export default function useHandleShareScreen() {
     const isShareScreen = useMyVideoCallStore(state => state.isShareScreen);
     const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
     const user = useAuthStore(state => state.user);
+    const layout = useVideoCallStore(state => state.layout);
 
     const {isElectron, ipcRenderer} = useElectron();
     
     const removeShareScreen = useCallback((socketId: string) => {
         const item = participants.find((p: ParticipantInVideoCall) => p.socketId === socketId && p.isShareScreen);
         if (item) {
-            item.peer.destroy();
+            item.peer?.destroy();
             removeParticipantShareScreen(socketId);
-            toast.success(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
+            customToast.default(t('MESSAGE.SUCCESS.STOP_SHARE_SCREEN', {name: item?.user?.name}), { icon: <MonitorX size={20} /> })
         }
         if(item?.pin) {
             setShareScreen(false);
-            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+            if(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW) {
+                setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
+            }
         }
     }, [participants, removeParticipantShareScreen, setLayout, setShareScreen, t])
 
-    const createPeerShareScreenConnection = useCallback((users: any[]) => {
+    const createPeerShareScreenConnection = useCallback((users: { socketId: string; user: User }[]) => {
         if (!shareScreenStream) return;
-        users.forEach((u: { id: string; user: any }) => {
+        users.forEach((u: { socketId: string; user: User }) => {
             if (!socket.id) return;
             const peer = createPeer(shareScreenStream);
             peer.on("signal", (signal) => {
-                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.id, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
+                socket.emit(SOCKET_CONFIG.EVENTS.CALL.SEND_SIGNAL, { id: u.socketId, user, callerId: socket.id, signal, isShareScreen: true, isElectron: isElectron })
             });
             addPeerShareScreen({
-                id: u.id,
+                id: u.socketId,
                 peer,
             });
         });
@@ -87,7 +92,7 @@ export default function useHandleShareScreen() {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN);
             socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN);
             if (!shareScreenStream) return;
-            shareScreenStream.getTracks().forEach((track: any) => {
+            shareScreenStream.getTracks().forEach((track: MediaStreamTrack) => {
                 track.stop();
             });
         };
@@ -109,20 +114,20 @@ export default function useHandleShareScreen() {
     const stopShareScreen = useCallback(() => {
         if (!socket.id) return;
         if (shareScreenStream) {
-            shareScreenStream.getTracks().forEach((track: any) => {
+            shareScreenStream.getTracks().forEach((track: MediaStreamTrack) => {
                 track.stop();
             });
         }
         const isPinMyStream = participants.some((p) => p.isShareScreen && p.pin && p.isMe);
-        if(isPinMyStream) {
-            setLayout(VIDEOCALL_LAYOUTS.GALLERY_VIEW);
+        if(isPinMyStream && layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW) {
+            setLayout(VIDEO_CALL_LAYOUTS.GALLERY_VIEW);
         }
         setShareScreen(false);
         removeParticipantShareScreen(socket.id);
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.STOP_SHARE_SCREEN);
         socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT_NEED_ADD_SCREEN);
         socket.off(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN);
-        peerShareScreen.forEach((peer: any) => {
+        peerShareScreen.forEach((peer: IPeerShareScreen) => {
             if (!peer.peer) return;
             peer.peer.destroy();
         });
@@ -138,14 +143,14 @@ export default function useHandleShareScreen() {
             stopShareScreen();
             return;
         }
-        const navigator = window.navigator as any;
+        const navigator: Navigator = window.navigator as Navigator
         if(isElectron) {
             setChooseScreen(true);
             ipcRenderer.send(ELECTRON_EVENTS.GET_SCREEN_SOURCE);
             return;
         }
         if (!navigator.mediaDevices.getDisplayMedia) {
-            toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
+            customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             return;
         }
         try {
@@ -164,7 +169,7 @@ export default function useHandleShareScreen() {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
-              toast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
+                customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             }
         }
 

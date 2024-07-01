@@ -60,16 +60,16 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
   const { t } = useTranslation('common');
   return (
     <AccordionItem value={title}>
-      <AccordionTrigger className="flex h-11 w-full flex-row items-center justify-between  rounded-none !bg-neutral-50 p-2 py-1 ">
+      <AccordionTrigger className="flex h-11 w-full flex-row items-center justify-between  rounded-none !bg-neutral-50 dark:!bg-neutral-900 p-2 py-1 ">
         <Typography
           variant="h4"
-          className="text-base leading-[18px] text-neutral-600 "
+          className="text-base leading-[18px] text-neutral-600 dark:text-neutral-50 "
         >
           {title}
         </Typography>
       </AccordionTrigger>
       <AccordionContent className="accordion-up 0.2s py-0 ease-out">
-        <div className="flex flex-col gap-0 divide-y divide-neutral-50">
+        <div className="flex flex-col gap-0 divide-y divide-neutral-50 dark:divide-neutral-900">
           {shortcuts.map((item, index) => (
             <div
               key={index}
@@ -93,7 +93,7 @@ const ShortcutSection: React.FC<ShortcutSectionProps> = ({
                       <span
                         key={key}
                         className={cn(
-                          'mx-1 my-1 inline-block h-[34px] min-h-10 w-[82px] cursor-default rounded-xl bg-neutral-50 p-[8px_12px] text-center text-base font-semibold capitalize text-neutral-800 shadow-1 ',
+                          'mx-1 my-1 inline-block h-[34px] min-h-10 w-[82px] cursor-default rounded-xl bg-neutral-50 dark:bg-neutral-900 p-[8px_12px] text-center text-base font-semibold capitalize text-neutral-800 dark:text-neutral-200 shadow-1 ',
                           isLast ? 'w-auto min-w-[40px]' : '',
                         )}
                       >
@@ -144,7 +144,7 @@ export default function ShortcutsGuide() {
               {t('SHORTCUT.TITLE')}
             {/* </Typography> */}
           </DialogTitle>
-          <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-scroll bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
+          <div className=" max-h-[calc(85vh-48px)] max-w-screen-md overflow-y-auto bg-white dark:bg-background [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
             <Accordion
               type="single"
               collapsible

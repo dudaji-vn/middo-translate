@@ -25,11 +25,11 @@ export const RoomResponseContent = ({ room }: RoomResponseContentProps) => {
   const { onAction } = useRoomActions();
   if (room.isGroup) {
     return (
-      <div className="relative mt-60 flex w-full flex-col items-center gap-2">
+      <div className="relative mt-60 flex w-full flex-col items-center gap-2 dark:bg-background">
         <span className="font-semibold text-primary md:text-sm">
           You are invited to join the group.
         </span>
-        <div className="prose my-0 text-center text-sm text-neutral-600">
+        <div className="prose my-0 text-center text-sm text-neutral-600 dark:text-neutral-50">
           <li>
             <strong>Reject</strong> to ignore the invitation.
           </li>
@@ -70,12 +70,12 @@ export const RoomResponseContent = ({ room }: RoomResponseContentProps) => {
     );
   }
   return (
-    <div className=" relative flex w-full flex-col items-center gap-2">
+    <div className=" relative flex w-full flex-col items-center gap-2 dark:bg-background">
       <span className="font-semibold text-primary md:text-sm">
-        {user?.name}
+        {user?.name}&nbsp;
         isn’t in your contacts yet.
       </span>
-      <div className="prose my-0 text-center text-sm text-neutral-600">
+      <div className="prose my-0 text-center text-sm text-neutral-600  dark:text-neutral-50">
         <li>
           <strong>Reply</strong> to add them in your contacts.
         </li>

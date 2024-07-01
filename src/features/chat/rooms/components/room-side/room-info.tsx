@@ -24,7 +24,11 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
   const user = useAuthStore((state) => state.user);
 
   const { room, language, anonymousUser } = useMemo(() => {
-    const room = generateRoomDisplay(_room, user?._id || '', true);
+    const room = generateRoomDisplay({
+      room: _room,
+      currentUserId: user?._id || '',
+      inCludeLink: true,
+    });
     const others = room.participants.filter(
       (member) => member._id !== user?._id,
     );
@@ -63,7 +67,7 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
           {room.name}
         </p>
         {!room.isGroup ? (
-          <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2">
+          <div className="mt-2 flex items-center gap-2 rounded-xl bg-background-darker p-2 dark:bg-neutral-800">
             <CircleFlag
               countryCode={language.countryCode?.toLowerCase() || 'gb'}
               height={20}
@@ -80,8 +84,10 @@ export const RoomInfo = ({ room: _room, isGuest }: RoomInfoProps) => {
             />
           </div>
         )}
+        {!isEmpty(anonymousUser) && (
+          <GuestInformation guestData={anonymousUser} room={room} />
+        )}
       </div>
-      {!isEmpty(anonymousUser) && <GuestInformation {...anonymousUser} />}
     </>
   );
 };

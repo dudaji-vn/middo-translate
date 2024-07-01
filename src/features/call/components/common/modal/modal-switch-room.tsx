@@ -13,7 +13,9 @@ export const ModalSwitchRoom = () => {
     const startVideoCall = useJoinCall();
     const handleSwitch = () => {
         if(!tmpRoom) return;
-        startVideoCall(tmpRoom)
+        startVideoCall({
+            roomId: tmpRoom
+        })
         setTempRoom(null);
     };
 
@@ -24,7 +26,7 @@ export const ModalSwitchRoom = () => {
                     <AlertDialogTitle>
                         {t('MODAL.SWITCH_ROOM.TITLE')}
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogDescription className="dark:text-neutral-50">
                         <span>{t('MODAL.SWITCH_ROOM.DESCRIPTION')}</span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>

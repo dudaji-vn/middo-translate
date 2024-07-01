@@ -35,7 +35,7 @@ export const RoomModalLeave = (props: RoomModalLeaveProps) => {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('MODAL.LEAVE_GROUP.TITLE')}</AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className="dark:text-neutral-50">
             {t('MODAL.LEAVE_GROUP.DESCRIPTION')}
           </AlertDialogDescription>
         </AlertDialogHeader>

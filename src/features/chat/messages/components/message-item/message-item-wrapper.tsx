@@ -283,6 +283,7 @@ const MobileWrapper = ({
   const { value, setValue, setFalse } = useBoolean(false);
 
   const { t } = useTranslation('common');
+  const theme = useAppStore((state) => state.theme);
   const {
     setFalse: hideEmoji,
     value: showEmoji,
@@ -385,6 +386,7 @@ const MobileWrapper = ({
               startIcon={item.icon}
               color={item.color === 'error' ? 'error' : 'default'}
               onClick={item.onAction}
+              className="hover:bg-neutral-900"
             >
               {t(item.label)}
             </LongPressMenu.Item>
@@ -407,11 +409,11 @@ const MobileWrapper = ({
               },
             }}
             exit={{ opacity: 0, top: 200 }}
-            className="relative flex items-center justify-center rounded-tl-3xl rounded-tr-3xl border-t border-neutral-100 bg-white"
+            className="relative flex items-center justify-center overflow-hidden rounded-tl-3xl rounded-tr-3xl border-t border-neutral-100 bg-white dark:border-neutral-800 dark:bg-neutral-900"
           >
             <EmojiPicker
               locale={EMOJI_LANG_SUPPORT.includes(language) ? language : 'en'}
-              theme="light"
+              theme={theme || 'light'}
               onEmojiSelect={(emoji: any) => {
                 handleEmojiClick(emoji.native);
               }}
@@ -421,22 +423,6 @@ const MobileWrapper = ({
           </motion.div>
         </div>
       )}
-      {/* <Drawer open={showEmoji} onOpenChange={changeShowEmoji} >
-        <DrawerContent>
-          <div
-            className="custom-emoji-picker flex justify-center overflow-auto"
-          >
-            <EmojiPicker
-              theme="light"
-              onEmojiSelect={(emoji: any) => {
-                handleEmojiClick(emoji.native);
-              }}
-              skinTonePosition="none"
-              previewPosition="none"
-            />
-          </div>
-        </DrawerContent>
-      </Drawer> */}
     </>
   );
 };
@@ -469,7 +455,7 @@ const DesktopWrapper = ({
               <MoreVerticalIcon />
             </Button.Icon>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
+          <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
             {items.map((item) => (
               <DropdownMenuItem
                 disabled={item.disabled}
@@ -478,6 +464,7 @@ const DesktopWrapper = ({
                   e.stopPropagation();
                   item.onAction();
                 }}
+                className="dark:hover:bg-neutral-800"
               >
                 {cloneElement(item.icon, {
                   size: 16,

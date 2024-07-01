@@ -17,6 +17,7 @@ import { useChatStore } from '../../stores';
 import { useAuthStore } from '@/stores/auth.store';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { useBoolean } from 'usehooks-ts';
+import { useAppStore } from '@/stores/app.store';
 
 export interface MainMessageProps {
   message: Message;
@@ -39,7 +40,7 @@ export const MainMessage = ({ message, className }: MainMessageProps) => {
     >
       <div className="flex items-center gap-2">
         <Avatar size="xs" src={sender.avatar} alt={sender.name} />
-        <span className="max-w-80 break-words text-sm font-semibold">
+        <span className="max-w-80 flex-1 overflow-hidden break-words text-sm font-semibold">
           {sender.name}
         </span>
       </div>
@@ -83,6 +84,7 @@ const TextMessage = ({
   message: Message;
   isActive: boolean;
 }) => {
+  const theme = useAppStore(state => state.theme);
   const enContent = message.translations?.en;
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
@@ -107,11 +109,11 @@ const TextMessage = ({
         (showMiddleTranslation || isActive) && (
           <div className="relative mt-2">
             <TriangleSmall
-              fill="#f2f2f2"
+              fill={theme == 'light' ? "#f2f2f2" : "#191919" }
               position="top"
               className="absolute left-4 top-0 -translate-y-full"
             />
-            <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600">
+            <div className="rounded-xl bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-50 p-3 py-2 text-neutral-600">
               <RichTextView
                 editorStyle="text-base md:text-sm translated"
                 mentionClassName="left"

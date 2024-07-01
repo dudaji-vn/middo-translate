@@ -34,7 +34,7 @@ export const RequestJoinRoomModal = () => {
                     <AlertDialogTitle>
                         {t('MODAL.REQUEST_JOIN_ROOM.TITLE', {name: usersRequestJoinRoom[0].user.name})}
                     </AlertDialogTitle>
-                    <AlertDialogDescription>
+                    <AlertDialogDescription className="dark:text-neutral-50">
                         <span className="block mt-5">{t('MODAL.REQUEST_JOIN_ROOM.DESCRIPTION')}</span>
                     </AlertDialogDescription>
                 </AlertDialogHeader>

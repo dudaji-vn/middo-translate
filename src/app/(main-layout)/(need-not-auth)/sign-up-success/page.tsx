@@ -7,10 +7,10 @@ import Link from 'next/link';
 import { PageLoading } from '@/components/feedback';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { resendEmailService } from '@/services/auth.service';
-import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/actions';
+import customToast from '@/utils/custom-toast';
 
 export default function SignUpSuccess() {
   const router = useRouter();
@@ -44,17 +44,17 @@ export default function SignUpSuccess() {
     try {
       setLoading(true);
       setIsResend(true);
-      const data = await resendEmailService(email);
-      toast.success(t('MESSAGE.SUCCESS.RESEND_EMAIL'));
+      await resendEmailService(email);
+      customToast.success(t('MESSAGE.SUCCESS.RESEND_EMAIL'));
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      customToast.error(t(err?.response?.data?.message || 'BACKEND.MESSAGE.SOMETHING_WRONG'));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center bg-background">
       {loading && <PageLoading />}
       <div className="w-full bg-background px-[5vw] py-8 md:my-10 md:w-[500px] md:rounded-3xl md:px-6">
         <div className="mx-auto w-[223px]">

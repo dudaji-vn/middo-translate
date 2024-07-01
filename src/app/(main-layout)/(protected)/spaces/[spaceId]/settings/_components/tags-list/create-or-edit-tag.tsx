@@ -17,11 +17,13 @@ import { isEqual } from 'lodash';
 import RHFColorSelector, {
   COLOR_REGEX,
 } from '@/components/form/RHF-color-selector/rhf-color-selector';
+import customToast from '@/utils/custom-toast';
 
 const createOrEditTagSchema = z.object({
   tagId: z.string().optional(),
   name: z
     .string()
+    .trim()
     .min(1, {
       message: 'Tag name is required.',
     })
@@ -102,7 +104,7 @@ export const CreateOrEditTag = ({
         tagId: initTag?._id,
       }).then((res) => {
         if (res.data) {
-          toast.success(
+          customToast.success(
             t(`COMMON.SUCCESS_TO`, { action: action.toLowerCase() }),
           );
           router.refresh();
@@ -111,8 +113,13 @@ export const CreateOrEditTag = ({
           return;
         }
       });
-    } catch (error) {
-      toast.error(t(`COMMON.FAILED_TO`, { action: action.toLowerCase() }));
+    } catch (error: unknown) {
+      console.log(error);
+      // @ts-ignore
+      const msg = error?.response?.data?.message || error?.message;
+      customToast.error(
+        `${t(`COMMON.FAILED_TO`, { action: action.toLowerCase() })}: ${msg}`,
+      );
       console.error(error);
     }
   };
@@ -148,7 +155,7 @@ export const CreateOrEditTag = ({
         }}
       >
         <Form {...methods}>
-          <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem]">
+          <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white dark:bg-background  [&_h3]:mt-4 [&_h3]:text-[1.25rem]">
             <div className="flex w-full flex-col gap-3">
               <div className="flex w-full flex-row items-center gap-3 rounded-[12px]">
                 <RHFInputField

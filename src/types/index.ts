@@ -7,6 +7,7 @@ export type BaseEntity = {
 export type CursorParams = {
   limit?: number;
   cursor?: string;
+  direction?: 'forward' | 'backward';
 };
 
 export type CursorPagination = {

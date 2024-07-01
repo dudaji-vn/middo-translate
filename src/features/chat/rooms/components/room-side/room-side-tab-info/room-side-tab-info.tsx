@@ -32,7 +32,7 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
           <ArrowLeftIcon />
         </Button.Icon>
       </div>
-      <div className="-mx-3 -mt-3 bg-[#fcfcfc] pb-2 pt-3">
+      <div className="-mx-3 -mt-3 bg-[#fcfcfc] pb-2 pt-3 dark:bg-background">
         <RoomInfo room={room} isGuest={isBusiness} />
         <div className={isBusiness ? 'mb-8' : 'my-5'}>
           {!isBusiness && <RoomSetting room={room} />}
@@ -45,10 +45,12 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
             />
           )}
         </div>
-        <div className="mt-5 divide-y-[1px] divide-neutral-50 bg-white">
+        <div className="mt-5 divide-y-[1px] divide-neutral-50 bg-white dark:divide-neutral-800 dark:bg-background">
           {room.isGroup && <RoomLeave roomId={room._id} />}
-          {!room.isGroup && <RoomBlock room={room} />}
-          <RoomDeleteConversation isGroup={room.isGroup} roomId={room._id} />
+          {!room.isGroup && !isBusiness && <RoomBlock room={room} />}
+          {!isBusiness && (
+            <RoomDeleteConversation isGroup={room.isGroup} roomId={room._id} />
+          )}
         </div>
       </div>
     </>

@@ -30,10 +30,12 @@ const ReportPickerMember = ({}: ReportPickerMemberProps) => {
     value: null,
   };
   const options = useMemo(() => {
-    return (space?.members.map((member) => ({
-      name: member.email,
-      value: member._id,
-    })) || []) as DropdownOption[];
+    return (space?.members
+      ?.filter(({ status }) => status === 'joined')
+      ?.map((member) => ({
+        name: member.email,
+        value: member._id,
+      })) || []) as DropdownOption[];
   }, [space]);
   const searchParams = useSearchParams();
   const current = new URLSearchParams(

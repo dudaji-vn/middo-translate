@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "Color",
     "INVITE": "Invite",
     "APPLY": "Apply",
     "PREVIEW": "Preview",
@@ -32,6 +33,8 @@
     "REPLACE": "Replace",
     "UPDATE": "Update",
     "ALL": "All",
+    "CONTACT": "Contacts",
+    "CONTACTS": "Contacts",
     "GROUP": "Group",
     "UNREAD": "Unread",
     "SWITCH": "Switch",
@@ -39,10 +42,15 @@
     "VIEW": "View",
     "REMOVE": "Remove",
     "CLEAR": "Clear",
+    "AND": "and",
+    "JOINED": "joined",
+    "SEND_BY": "Send by",
     "SAVE_CHANGE": "Save Changes",
     "UPLOAD_IMAGE": "Upload Image",
     "SUGGESTION": "Suggestion",
     "SHOW_MORE": "Show More",
+    "OTHERS": "Others",
+    "SHOW_LESS": "Show Less",
     "CLOSE": "Close",
     "FORWARD": "Forward",
     "EDIT": "Edit",
@@ -73,6 +81,7 @@
     "TYPE_A_MESSAGE": "Type a message",
     "CLICK": "Click",
     "WAITING": "Waiting",
+    "CONNECTING": "Connecting",
     "DRAFT": "Draft",
     "TRANSLATED_FROM": "Translated from",
     "EDITED": "Edited",
@@ -85,6 +94,22 @@
     "PENDING": "Pending",
     "MEMBER": "Member",
     "SPACE": "Space",
+    "ON": "On",
+    "OFF": "Off",
+    "USER": "User",
+    "MESSAGE": "Message",
+    "SEARCH_HISTORY": "Search history",
+    "LIGHT": "Light",
+    "DARK": "Dark",
+    "SYSTEM": "System",
+    "SETTINGS": "Settings",
+    "CHANGE_AVATAR": "Change avatar",
+    "CHANGE_NAME": "Change name",
+    "INFORMATION": "Information",
+    "DELETE_STATION": "Delete station",
+    "STATION_INFORMATION": "Station's information",
+    "STATION_SETTINGS": "Station settings",
+    "LINK": "Link",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
@@ -92,8 +117,30 @@
       "LAST_WEEK": "Last week",
       "LAST_MONTH": "Last month",
       "LAST_YEAR": "Last year",
+      "LAST_EDITED": "Last edited",
       "CUSTOM": "Custom"
+    },
+    "WEEKDAY": {
+      "SUN": "Sunday",
+      "MON": "Monday",
+      "TUE": "Tuesday",
+      "WED": "Wednesday",
+      "THU": "Thursday",
+      "FRI": "Friday",
+      "SAT": "Saturday",
+      "TITLE": "Day of week"
+    },
+    "HOURLY": {
+      "TITLE": "Hourly"
     }
+  },
+  "PAGINATION": {
+    "PREV": "Previous",
+    "NEXT": "Next",
+    "PAGE": "Page",
+    "PER_PAGE": "Per page",
+    "ITEMS": "items",
+    "ITEMS_PER_PAGE": "Items per page"
   },
   "MESSAGE": {
     "ERROR": {
@@ -124,7 +171,8 @@
       "USERNAME_MIN": "Username must be at least 3 characters!",
       "USERNAME_MAX": "Username must be at most 15 characters!",
       "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
-      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view."
+      "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view.",
+      "USER_NOT_FOUND": "User not found!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -156,7 +204,8 @@
     "SIGN_IN": "Sign In",
     "ACCOUNT_SETTING": "Account Settings",
     "MIDDO_EXTENSION": "Middo Extension",
-    "SIGN_OUT": "Sign Out"
+    "SIGN_OUT": "Sign Out",
+    "SETTINGS": "Settings"
   },
   "TRANSLATION": {
     "HISTORY": "History",
@@ -237,7 +286,8 @@
     "CHANGE_AVATAR": "Change avatar",
     "APP_PERMISSION": "App's permission",
     "RESTRICT_MESSAGE": "Restrict unknown senders",
-    "NOTIFICATION": "Notification"
+    "NOTIFICATION": "Turn off all notifications",
+    "THEME": "Theme"
   },
   "SIGN_IN": {
     "TITLE": "Sign In",
@@ -322,6 +372,9 @@
     "FORWARD": "Forward",
     "PIN": "Pin",
     "LEAVE": "Leave",
+    "COPY_USERNAME": "Copy username",
+    "TALK": "Start conversation",
+    "DELETE_CONTACT": "Delete contact",
     "ON": "On",
     "OFF": "Off",
     "UNPIN": "Unpin",
@@ -339,6 +392,7 @@
     "FILE": "File",
     "LINK": "Link",
     "LEAVE_GROUP": "Leave group",
+    "LEAVE_STATION": "Leave station",
     "DELETE": "Delete conversation",
     "START": "Start conversation",
     "JOIN": "Join",
@@ -355,8 +409,8 @@
     "NOTICE_CONTENT": "Members in the group will not receive notifications about this call until you invite them to join.",
     "INVITE": "Invite",
     "YOU": "You",
-    "TRANSLATED_TOOL": "Translation",
-    "MESSAGE_TRANSLATE": "Translate message",
+    "TRANSLATED_TOOL": "E.S.L Translation Tool",
+    "MESSAGE_TRANSLATE": "E.S.L Message",
     "EMOJI": "Emoji",
     "MESSAGE_REACTION": "Message reaction",
     "CALL_END_AT": "Call ended at {{time}}",
@@ -439,14 +493,60 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "CREATE_STATION": {
+      "HEADING": "Create Work Station",
+      "TITLE": "Give <span class='text-primary-500-main'> your station </span> some information",
+      "DESCRIPTION": "Help your crews to recognize your business easier by naming this station, adding station avatar or company's logo <span class='font-light'>(optional)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Enter station name"
+      },
+      "ERRORS": {
+        "NAME_REQUIRED": "Station name is required",
+        "NAME_MAX_LENGTH": "Station name cannot exceed 30 characters",
+        "AVATAR_REQUIRED": "Station avatar is required"
+      },
+      "INVITE_MEMBERS": {
+        "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span> others to join your work station&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
+        "DESCRIPTION": "Help your crews to recognize your Work Station easier by naming, adding avatar or company's logo. <span class='font-normal text-primary-500-main'>Upgrade plan.</span>",
+        "ERRORS": {
+          "EMAIL_REQUIRED": "Email is required",
+          "EMAIL_INVALID": "Email is invalid"
+        }
+      }
+    },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "Set as Default Station",
+      "DESCRIPTION": "Are you sure you want to set <strong>{{name}}</strong> as your default station?"
+    },
+    "START_CALL": {
+      "TITLE": "Start Call",
+      "DESCRIPTION": "Are you sure you want to start the call?"
+    },
+    "ROLE_CHANGE": {
+      "TITLE": "Change Role",
+      "DESCRIPTION": "Are you sure you want to change the role of <strong>{{name}}</strong> to <strong>{{role}}</strong>?"
+    },
+    "INVITE_MEMBERS": {
+      "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span>other to join your space&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
+      "DESCRIPTION": "You can only invite 2 members in a Free plan account.<span class='font-normal text-primary-500-main'>upgrade plan.</span>"
+    },
     "CREATE_SPACE": {
+      "HEADING": "Create Space",
       "TITLE": "Give <span class='text-primary-500-main'> your space </span> some information",
-      "DESCRIPTION": "Help your crews to recognize your business easier by naming this space, adding space avatar or company's logo <span class='font-light'>(optional)</span>."
+      "DESCRIPTION": "Help your crews to recognize your business easier by naming this space, adding space avatar or company's logo <span class='font-light'>(optional)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Enter space name"
+      }
     },
     "DELETE_SPACE": {
       "TITLE": "Delete Space",
       "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
       "CONFIRM": "Delete Space"
+    },
+    "DELETE_STATION": {
+      "TITLE": "Delete Station",
+      "DESCRIPTION": "You will lose all your data and cannot be undone. Are you sure you want to delete <strong>{{name}}</strong>?",
+      "CONFIRM": "Delete Station"
     },
     "SIGN_OUT": {
       "TITLE": "Do you want to sign out?",
@@ -521,6 +621,10 @@
       "TITLE": "Leave Room",
       "DESCRIPTION": "You will no longer be able to view messages from this room. Are you sure you want to leave?"
     },
+    "LEAVE_STATION": {
+      "TITLE": "Leave Station",
+      "DESCRIPTION": "You will no longer be able to view messages from this Station. Are you sure you want to leave?"
+    },
     "CHANGE_ROOM_STATUS": {
       "TITLE": "{{action}} conversation",
       "DESCRIPTION": " Are you sure you want to {{action}} this conversation?",
@@ -556,6 +660,10 @@
       "VIDEO": "Camera",
       "SPEAKER": "Speaker",
       "NO_DEVICE": "No device"
+    },
+    "DELETE_CONTACT": {
+      "TITLE": "Delete contact",
+      "DESCRIPTION": "Are you sure you want to delete this contact?"
     }
   },
   "FILTERS": {
@@ -613,43 +721,122 @@
     "START_STOP_SCREEN_DOODLE": "Start/Stop Screen Doodle",
     "TOGGLE_LIVE_CAPTION": "Show/Hide Live Caption"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "Can not load extension",
+      "DESCRIPTION": "Please check if your extension script is correct, or your domain is in the list of allowed domains."
+    }
+  },
+  "STATION": {
+    "WELCOME": "Hi, welcome back",
+    "ALL_STATION": "All station",
+    "JOINED_STATION": "Joined station",
+    "MY_STATION": "My station",
+    "CREATE_STATION": "Create new station",
+    "DASHBOARD": "Dashboard",
+    "STATION_INFOR": "Station information",
+    "UPLOAD_IMAGE": "Upload Station Avatar",
+    "CREATE_BUTTON": "Create Station and invite members",
+    "ERRORS": {
+      "NAME_REQUIRED": "Station name is required",
+      "NAME_MAX_LENGTH": "Station name must be less than 30 characters",
+      "AVATAR_REQUIRED": "Station avatar is required",
+      "INVALID_EMAIL_MEMBER": "Invalid email member"
+    },
+    "ACTIONS": {
+      "SET_AS_DEFAULT": "Set as default",
+      "DELETE": "Delete",
+      "SETTINGS": "Settings",
+      "REMOVE_DEFAULT": "Remove default"
+    },
+    "MEMBER": {
+      "YOU": "You",
+      "EMAIL": "Email",
+      "ROLE": "Role"
+    },
+    "NO_MEMBER": "No members",
+    "INVITE_MEMBERS": "Invite members"
+  },
   "EXTENSION": {
+    "EMPTY": {
+      "TITLE": "Your extension is almost here!",
+      "OWNER_DES": "Create a conversation extension with the help of ready-made theme or define a unique one on your own."
+    },
     "ALL_DOMAINS": "All Domains",
     "ALL_MEMBERS": "All Members",
     "SPACE": {
       "WELCOME": "Hi, welcome back",
       "ALL_SPACE": "All space",
-      "JOINED_SPACE": "joined space",
+      "JOINED_SPACE": "Joined space",
       "MY_SPACE": "My space",
       "CREATE_SPACE": "Create new space",
-      "SPACE_INFOR": "Space information"
+      "DASHBOARD": "Dashboard",
+      "SPACE_INFOR": "Space information",
+      "UPLOAD_IMAGE": "Upload Space Avatar",
+      "CREATE_BUTTON": "Create Space and invite members",
+      "ERRORS": {
+        "NAME_REQUIRED": "Space name is required",
+        "NAME_MAX_LENGTH": "Space name must be less than 30 characters",
+        "AVATAR_REQUIRED": "Space avatar is required",
+        "INVALID_EMAIL_MEMBER": "Invalid email member"
+      },
+      "NO_MEMBER": "No members"
     },
     "BREADCRUMB": {
       "HOME": "Home"
     },
     "TAG": {
+      "NAME": "Name",
       "SEARCH": "Search for tags",
       "CREATE": "Create new tag",
       "EDIT": "Edit tag",
       "DELETE": "Delete tag"
     },
-    "CONVERSATIONS": "General",
+    "RECEIVED_FROM": "Received from",
+    "CONVERSATIONS": "Conversations",
     "COMPLETED": "Completed",
     "ARCHIVED": "Archived",
+    "ARCHIVED_CONVERSATIONS": "Archived conversations",
     "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
     "SCRIPTS": "Conversation Scripts",
     "SETTINGS": "Settings",
-    "REPORT": "Report",
+    "REPORT": "Statistics",
     "CHART": {
       "CLIENT": "New Clients",
       "LANGUAGERANK": "Conversation's Language",
-      "NEWVISITOR": "New Visitors",
+      "NEWVISITOR": "Visitors",
       "RESPONSETIME": "Response Time",
       "OPENEDCONVERSATION": "Opened Conversations",
       "DROPRATE": "Drop Rate",
       "RESPONSEDMESSAGE": "Responsed Message",
-      "CUSTOMERRATING": "Customer Rating"
+      "CUSTOMERRATING": "Customer Rating",
+      "TRAFFICTRACK": "Traffic Track"
+    },
+    "CHART_TOOLTIP": {
+      "CLIENT": "The number of new clients",
+      "LANGUAGERANK": "The rank of most used languages",
+      "NEWVISITOR": "The number of new visitors that visit your website",
+      "RESPONSETIME": "The average response time of your team",
+      "OPENEDCONVERSATION": "The number of conversations that have been opened through your website",
+      "DROPRATE": "The rate of dropped conversations",
+      "RESPONSEDMESSAGE": "The  number of messages that have been response by your team",
+      "CUSTOMERRATING": "The average rating of your customers",
+      "TRAFFICTRACK": "The traffic track of opened conversations"
+    },
+    "CHART_UNIT": {
+      "NEWVISITOR": "times",
+      "OPENEDCONVERSATION": "conversation",
+      "DROPRATE": "conversation",
+      "CUSTOMERRATING": "star",
+      "RESPONSEDMESSAGE": "message",
+      "LANGUAGERANK": "language",
+      "TRAFFICTRACK": "opened conversation",
+      "DAY": "day",
+      "HOUR": "hour",
+      "MINUTE": "minute",
+      "SECOND": "second",
+      "MILLISECOND": "millisecond"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Tags Management",
@@ -657,7 +844,7 @@
       "CONVERSATION_EXTENSION": "Conversation Extension"
     },
     "SCRIPT": {
-      "PAGE_TITLE": "Scripts Management",
+      "PAGE_TITLE": "Conversation Scripts",
       "SEARCH": "Search for scripts",
       "ADD_SCRIPT": "Add new script",
       "EDIT_SCRIPT": "Edit script",
@@ -670,7 +857,8 @@
       "CREATE_BY": "Create by",
       "CREATE_ON": "Create on",
       "LAST_EDITED": "Last edited",
-      "ACTIONS": "Actions"
+      "ACTIONS": "Actions",
+      "ENTER_SCRIPT_NAME": "Enter script name"
     },
     "CLIENT": {
       "PAGE_TITLE": "Clients Management",
@@ -694,7 +882,10 @@
       "ACTIONS": "Actions",
       "NO_MEMBER": "No members found",
       "NO_ADMIN": "No admin found",
-      "INVITE_MEMBER": "Invite member"
+      "INVITE_MEMBER": "Invite member",
+      "NO_EDIT_PERMISSION": "You do not have permission to edit this member",
+      "NO_DELETE_PERMISSION": "You do not have permission to delete this member",
+      "NO_INVITE_PERMISSION": "You do not have permission to invite member"
     },
     "ROLE": {
       "ADMIN": "Admin",
@@ -713,6 +904,14 @@
     "BACK_TO_HOME": "Back to home"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "Currently you don't have any conversation",
+      "DESCRIPTION": "You have no client conversation yet."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 results",
+      "DESCRIPTION": "Check your keyword or filter again"
+    },
     "TIP_DESCRIPTION": "You can search for a person or a group by typing person's mail, person's name or groups' name",
     "TIP_TITLE": "Search bar",
     "TITLE": "Currently you don't have any conversation",
@@ -723,7 +922,8 @@
     "TIP_TITLE_GROUP": "How to use \"Group\"",
     "TITLE_GROUP": "Currently, you have no Group Conversation",
     "DESCRIPTION_GROUP": "Click button below to create a new one or ask Administrator of a Group Conversation add you in",
-    "MESSAGE": "No messages yet"
+    "MESSAGE": "No messages yet",
+    "MESSAGE_CONTACT": "No contact yet"
   },
   "OFFLINE": {
     "TITLE": "You're offline",
@@ -747,5 +947,8 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "New password must be different from current password!",
       "INVALID_TOKEN": "Invalid token!"
     }
+  },
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "This tab is only available on desktop"
   }
 }

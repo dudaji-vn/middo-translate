@@ -38,10 +38,10 @@ export const JayTextAnimation = forwardRef<
         <motion.h1
           key={currentIndex + 'top'}
           initial={{ y: 50, opacity: 0 }}
-          animate={{ y: 0, opacity: 0.8 }}
+          animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, type: 'spring' }}
           exit={{ y: -50, opacity: 0 }}
-          className="w-full text-center text-[32px] font-bold md:text-left md:text-[64px]"
+          className="w-full text-center text-[32px] font-bold md:text-left md:text-[64px]  dark:text-neutral-50"
         >
           {topTexts[currentIndex]}
         </motion.h1>
@@ -52,7 +52,7 @@ export const JayTextAnimation = forwardRef<
           key={currentIndex + 'bottom'}
           exit={{ y: 50, opacity: 0 }}
           initial={{ y: -50, opacity: 0 }}
-          animate={{ y: 0, opacity: 0.8 }}
+          animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, type: 'spring' }}
           className="w-full text-center text-[32px] font-bold text-primary md:text-left md:text-[64px]"
         >

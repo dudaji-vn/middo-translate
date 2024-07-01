@@ -30,6 +30,7 @@ export const SOCKET_CONFIG = {
       },
       UPDATE: 'room.update',
       DELETE: 'room.delete',
+      DELETE_CONTACT: 'room.delete_contact',
     },
     INBOX: {
       NEW: 'inbox.new',
@@ -94,10 +95,33 @@ export const SOCKET_CONFIG = {
         NEW: 'space.notification.new',
       },
       REMOVE_MEMBER: 'space.member.remove',
+      UPDATE: 'space.update',
+    },
+    STATION: {
+      NOTIFICATION: {
+        NEW: 'space.notification.new',
+      },
+      MEMBER: {
+        REMOVE: 'station.member.remove',
+        LEAVE: 'station.member.leave',
+        UPDATE: 'station.member.update',
+      },
+      UPDATE: 'station.update',
     },
     USER: {
       RELATIONSHIP: {
         UPDATE: 'user.relationship.update',
+      },
+    },
+    MEETING: {
+      LIST: 'meeting.list',
+      UPDATE: 'meeting.update',
+      END: 'meeting.end',
+      BLOCK: 'meeting.block',
+    },
+    APP: {
+      NOTIFICATION: {
+        NEW: 'app.notification.new',
       },
     },
   },

@@ -10,16 +10,16 @@ import { useTranslation } from 'react-i18next';
 const CreateSpaceForm = () => {
   const { t } = useTranslation('common');
   return (
-    <section className="flex h-[calc(100vh-220px)] min-h-80  max-w-[800px] flex-col items-center justify-center gap-8">
+    <section className="flex h-[calc(100vh-220px)] min-h-80 max-w-[800px]  flex-col items-center justify-center gap-8 max-md:px-4">
       <div className="flex w-full flex-col  gap-3">
-        <Typography className="text-[32px] font-semibold leading-9 text-neutral-800">
+        <Typography className="text-[32px] font-semibold leading-9 text-neutral-800 dark:text-neutral-50">
           <span
             dangerouslySetInnerHTML={{
               __html: t('MODAL.CREATE_SPACE.TITLE'),
             }}
           />
         </Typography>
-        <Typography className="font-normal text-neutral-600">
+        <Typography className="font-normal text-neutral-600 dark:text-neutral-100">
           <span
             dangerouslySetInnerHTML={{
               __html: t('MODAL.CREATE_SPACE.DESCRIPTION'),
@@ -27,15 +27,25 @@ const CreateSpaceForm = () => {
           />
         </Typography>
       </div>
-      <div className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3">
+      <div className="flex w-full flex-row items-center gap-3 rounded-[12px] bg-primary-100 p-3 dark:bg-neutral-900">
         <UploadSpaceImage nameField="avatar" />
         <RHFInputField
           name="name"
           formItemProps={{
             className: 'w-full',
           }}
+          formMessageProps={{
+            render: ({ message }) => {
+              console.log('message', message);
+              return (
+                <Typography className="text-sm text-red-500">
+                  {t(message)}
+                </Typography>
+              );
+            },
+          }}
           inputProps={{
-            placeholder: 'Enter space name',
+            placeholder: t('MODAL.CREATE_SPACE.PLACEHOLDERS.NAME'),
             required: true,
           }}
         />

@@ -1,38 +1,42 @@
-import { Typography } from '@/components/data-display'
-import HelpDeskDropdownMenu from '@/components/layout/header/help-desk-dropdown-menu'
-import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
-import { cn } from '@/utils/cn'
-import Image from 'next/image'
-import React from 'react'
+'use client';
 
-const layout = ({
-    children
-}: {
-    children: React.ReactNode
-}) => {
+import { Typography } from '@/components/data-display';
+import HelpDeskDropdownMenu from '@/components/layout/header/help-desk-dropdown-menu';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { cn } from '@/utils/cn';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import React, { use } from 'react';
+import HelpDeskCallButton from './[businessId]/_components/call-button';
 
-    return (
-        <div className="full mx-auto flex h-full flex-col">
-            <div
-                className={cn(
-                    'z-50 flex h-header  items-center gap-5 border-b border-neutral-50 bg-background py-4  pl-[1vw] pr-[5vw] md:pl-[5vw] w-full flex-row justify-between',
-                )}
-            >
-                <div
-                    className={cn(
-                        'flex flex-row justify-start gap-2  items-center'
-                    )}
-                >
-                    <Typography className={' ml-5 min-w-14 text-xs text-neutral-600'}>
-                        Power by
-                    </Typography>
-                    <Image src="/logo.png" priority alt="logo" width={50} height={50} />
-                </div>
-                <HelpDeskDropdownMenu />
-            </div>
-            {children}
+const LayoutBusiness = ({ children }: { children: React.ReactNode }) => {
+  const pathname = usePathname();
+  return (
+    <div className="full mx-auto flex h-full flex-col">
+      <div
+        className={cn(
+          'z-50 flex h-header  w-full flex-row items-center justify-between rounded-t-[20px] border-b  border-neutral-50 bg-background ',
+          {
+            hidden: pathname?.endsWith(ROUTE_NAMES.WIDGET_NOTIFICATION),
+          },
+        )}
+      >
+        <div
+          className={cn('flex flex-row items-center justify-start gap-2   p-1')}
+        >
+          <Typography className={' ml-5 min-w-14 text-xs text-neutral-600'}>
+            Power by
+          </Typography>
+          <Image src="/logo.png" priority alt="logo" width={50} height={50} />
         </div>
-    )
-}
+        <div className="flex flex-1 justify-end">
+          <HelpDeskCallButton />
+        </div>
+        <HelpDeskDropdownMenu />
+      </div>
+      {children}
+    </div>
+  );
+};
 
-export default layout
+export default LayoutBusiness;

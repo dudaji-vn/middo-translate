@@ -14,11 +14,13 @@ import { User } from '@/features/users/types';
 import { useDropzone } from 'react-dropzone';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 
 export interface GroupCreateHeaderProps {
   handleCreateGroup: (data: {
     name: string;
     participants: string[];
+    stationId?: string;
     avatarFile?: File;
   }) => void;
   setSearchTerm: (term: string) => void;
@@ -34,6 +36,7 @@ export const GroupCreateHeader = ({
 }: GroupCreateHeaderProps) => {
   const [preview, setPreview] = useState<string | undefined>();
   const { t } = useTranslation('common');
+  const { stationId, isOnStation } = useStationNavigationData();
   const { getInputProps, open, acceptedFiles, inputRef } = useDropzone({
     noClick: true,
     multiple: false,
@@ -59,6 +62,7 @@ export const GroupCreateHeader = ({
     handleCreateGroup({
       name: name.trim(),
       participants,
+      stationId: isOnStation ? stationId : undefined,
       avatarFile,
     });
   };
@@ -123,7 +127,7 @@ export const GroupCreateHeader = ({
         <input
           placeholder={t('CONVERSATION.GROUP_NAME_PLACEHOLDER')}
           name="name"
-          className="flex-1 border-none px-0 outline-none ring-0 focus:border-none focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
+          className="flex-1 border-none bg-transparent px-0 outline-none ring-0 focus:border-none focus:outline-none focus:ring-offset-0 focus-visible:ring-0"
         />
       </div>
       <div className="z-10 items-center gap-2 space-y-1 px-3 py-2 pb-3">

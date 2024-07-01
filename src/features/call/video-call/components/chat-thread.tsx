@@ -45,7 +45,7 @@ export default function ChatThread({ className }: { className?: string }) {
         (!isFullScreen || !isShowChat) && 'hidden md:hidden',
       )}
     >
-      <div className="flex h-full w-full flex-col border-l border-neutral-50">
+      <div className="flex h-full w-full flex-col border-l border-neutral-50 dark:border-neutral-900">
         <div className="flex h-[53px] w-full items-center gap-2 border-b p-3 font-semibold text-primary">
           <MessageSquareQuote className="size-4" />
           <span>{t('CONVERSATION.DISCUSSION')}</span>

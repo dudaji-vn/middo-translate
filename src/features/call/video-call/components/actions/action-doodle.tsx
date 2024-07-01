@@ -13,7 +13,7 @@ export default function ActionDoodle({
 
   const {t} = useTranslation('common')
   return (
-    <DropdownMenuItem disabled={disabled} onClick={onDoodle}>
+    <DropdownMenuItem disabled={disabled} onClick={onDoodle} className='dark:hover:bg-neutral-800'>
       <IconScreenCapture />
       <span className="ml-2">{t('CONVERSATION.SCREEN_CAPTURE')}</span>
     </DropdownMenuItem>

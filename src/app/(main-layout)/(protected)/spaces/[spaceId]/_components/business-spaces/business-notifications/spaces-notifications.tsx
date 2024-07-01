@@ -1,6 +1,6 @@
 import { Button } from '@/components/actions';
 import React, { useEffect } from 'react';
-import { Bell, Circle, Clock, Clock3, Trash2 } from 'lucide-react';
+import { Bell, Circle, Clock3, Trash2 } from 'lucide-react';
 import Ping from '../ping/ping';
 import {
   Popover,
@@ -12,10 +12,11 @@ import moment from 'moment';
 import { cn } from '@/utils/cn';
 import { useGetMyBusinessNotifications } from '@/features/business-spaces/hooks/use-get-notification';
 import { useReadNotifications } from '@/features/business-spaces/hooks/use-read-notifications';
-import { useRouter } from 'next/navigation';
 import { useDeleteNotifications } from '@/features/business-spaces/hooks/use-delete-notifications';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import { useRouter } from 'next/navigation';
 
 export type TSpacesNotification = {
   _id: string;
@@ -41,7 +42,10 @@ const Notification = ({
   link,
   onDeleteSuccess,
 }: TSpacesNotification) => {
+  const { mutateAsync: readNotifications } = useReadNotifications();
+
   const timeDiff = moment().diff(createdAt, 'days');
+  const { isMobile } = usePlatformNavigation();
   const router = useRouter();
   const {
     mutateAsync: deleteNotifications,
@@ -57,9 +61,21 @@ const Notification = ({
       ? moment(createdAt).format('DD/MM/YYYY HH:mm')
       : moment(createdAt).fromNow();
 
+  const onReadNotification = (item: TSpacesNotification) => {
+    readNotifications([item]);
+  };
   const onClickNotification = () => {
+    onReadNotification({ _id, description, createdAt, from: { avatar, name } });
     if (isLoading) return;
-    router.push(link || '/');
+    if (link) {
+      if (isMobile) {
+        if (link.includes('?')) {
+          router.push(link + '&platform=mobile');
+        } else router.push(link + '?platform=mobile');
+      } else {
+        router.push(link);
+      }
+    }
   };
   if (isSuccess) return null;
 
@@ -68,8 +84,9 @@ const Notification = ({
       className={cn(
         'flex w-full flex-row items-center justify-stretch gap-3 p-4',
         {
-          'bg-white': unRead,
-          'cursor-pointer hover:bg-primary-100': !!link,
+          'bg-white dark:bg-neutral-950': unRead,
+          'cursor-pointer hover:bg-primary-100 dark:hover:bg-neutral-800':
+            !!link,
         },
         { 'opacity-50': isLoading },
       )}
@@ -120,19 +137,6 @@ const SpacesNotifications = ({}: {}) => {
     isLoading,
   } = useGetMyBusinessNotifications();
 
-  const { mutateAsync: readNotifications } = useReadNotifications();
-
-  useEffect(() => {
-    if (open) {
-      const unreadList = notifications?.filter(
-        (item: TSpacesNotification) => item.unRead,
-      );
-      if (unreadList?.length) {
-        readNotifications(unreadList);
-      }
-    }
-  }, [open, notifications]);
-
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.SPACE.NOTIFICATION.NEW, (data) => {
       refetch();
@@ -164,7 +168,7 @@ const SpacesNotifications = ({}: {}) => {
       </PopoverTrigger>
       <PopoverContent
         align="start"
-        className="flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4"
+        className="flex h-fit max-h-[400px] min-h-[300px] w-[462px] max-w-[100vw] flex-col overflow-y-auto bg-white px-0 py-4 dark:bg-neutral-900"
       >
         {notifications?.map((item: TSpacesNotification) => (
           <Notification

@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "COLOR": "Màu",
     "INVITE": "Mời",
     "APPLY": "Áp dụng",
     "PREVIEW": "Xem trước",
@@ -32,6 +33,8 @@
     "REPLACE": "Thay thế",
     "UPDATE": "Cập nhật",
     "ALL": "Tất cả",
+    "CONTACT": "Danh bạ",
+    "CONTACTS": "Liên hệ",
     "GROUP": "Nhóm",
     "UNREAD": "Chưa đọc",
     "SWITCH": "Chuyển",
@@ -39,10 +42,15 @@
     "VIEW": "Xem",
     "REMOVE": "Xoá",
     "CLEAR": "Xóa",
+    "AND": "và",
+    "JOINED": "đã tham gia",
+    "SEND_BY": "Được gửi bởi",
     "SAVE_CHANGE": "Lưu thay đổi",
     "UPLOAD_IMAGE": "Tải ảnh lên",
     "SUGGESTION": "Gợi ý",
     "SHOW_MORE": "Xem thêm",
+    "OTHERS": "Khác",
+    "SHOW_LESS": "Ẩn bớt",
     "CLOSE": "Đóng",
     "FORWARD": "Chuyển tiếp",
     "SIGN_OUT": "Đăng xuất",
@@ -71,6 +79,7 @@
     "TYPE_A_MESSAGE": "Nhập tin nhắn",
     "CLICK": "Ấn",
     "WAITING": "Đang chờ",
+    "CONNECTING": "Đang kết nối",
     "DRAFT": "Nháp",
     "TRANSLATED_FROM": "Dịch từ tiếng",
     "EDIT": "Chỉnh sửa",
@@ -85,15 +94,51 @@
     "PENDING": "Đang chờ",
     "MEMBER": "Thành viên",
     "SPACE": "Không gian",
+    "ON": "Bật",
+    "OFF": "Tắt",
+    "USER": "Người",
+    "MESSAGE": "Tin nhắn",
+    "SEARCH_HISTORY": "Lịch sử tìm kiếm",
+    "LIGHT": "Sáng",
+    "DARK": "Tối",
+    "SYSTEM": "Hệ thống",
+    "SETTINGS": "Cài đặt",
+    "CHANGE_AVATAR": "Thay đổi hình đại diện",
+    "CHANGE_NAME": "Thay đổi tên",
+    "INFORMATION": "Thông tin",
+    "DELETE_STATION": "Xoá Station",
+    "Link": "Liên kết",
     "TIME": {
       "CREATED_ON": "Tạo vào",
       "UPDATED_ON": "Cập nhật vào",
       "DELETED_ON": "Xoá vào",
       "LAST_WEEK": "Tuần trước",
       "LAST_MONTH": "Tháng trước",
+      "LAST_EDITED": "Chỉnh sửa cuối",
       "LAST_YEAR": "Năm trước",
       "CUSTOM": "Tùy chỉnh"
+    },
+    "WEEKDAY": {
+      "SUN": "Chủ nhật",
+      "MON": "Thứ hai",
+      "TUE": "Thứ ba",
+      "WED": "Thứ tư",
+      "THU": "Thứ năm",
+      "FRI": "Thứ sáu",
+      "SAT": "Thứ bảy",
+      "TITLE": "Ngày trong tuần"
+    },
+    "HOURLY": {
+      "TITLE": "Theo giờ"
     }
+  },
+  "PAGINATION": {
+    "PREV": "Trước",
+    "NEXT": "Tiếp",
+    "PAGE": "Trang",
+    "PER_PAGE": "Mỗi trang",
+    "ITEMS": "mục",
+    "ITEMS_PER_PAGE": "Mục mỗi trang"
   },
   "MESSAGE": {
     "ERROR": {
@@ -124,7 +169,8 @@
       "USERNAME_MIN": "Tên người dùng phải có ít nhất 3 ký tự!",
       "USERNAME_MAX": "Tên người dùng phải có tối đa 15 ký tự!",
       "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!",
-      "NOT_SUPPORT_PREVIEW": "Nội dung file quá lớn hoặc không được hỗ trợ để xem trước! <br /> Vui lòng tải xuống để xem."
+      "NOT_SUPPORT_PREVIEW": "Nội dung file quá lớn hoặc không được hỗ trợ để xem trước! <br /> Vui lòng tải xuống để xem.",
+      "USER_NOT_FOUND": "Người dùng không tồn tại!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",
@@ -156,7 +202,8 @@
     "SIGN_IN": "Đăng nhập",
     "ACCOUNT_SETTING": "Cài đặt tài khoản",
     "MIDDO_EXTENSION": "Tiện ích Middo",
-    "SIGN_OUT": "Đăng xuất"
+    "SIGN_OUT": "Đăng xuất",
+    "SETTINGS": "Cài đặt"
   },
   "TRANSLATION": {
     "HISTORY": "Lịch sử",
@@ -237,7 +284,8 @@
     "CHANGE_AVATAR": "Thay đổi hình đại diện",
     "APP_PERMISSION": "Quyền ứng dụng",
     "RESTRICT_MESSAGE": "Hạn chế người gửi không xác định",
-    "NOTIFICATION": "Thông báo"
+    "NOTIFICATION": "Tắt toàn bộ thông báo",
+    "THEME": "Giao diện"
   },
   "SIGN_IN": {
     "TITLE": "Đăng nhập",
@@ -287,12 +335,10 @@
       "MESSAGE": "Hiện tại bạn không thể trả lời cuộc trò chuyện này.",
       "LEARN_MORE": "Tìm hiểu thêm"
     },
-
     "BLOCK_CONTENT": {
       "TITLE": "Bạn đã chặn",
       "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ."
     },
-
     "WELCOME_TITLE": "Chào mừng bạn đến với trò chuyện Middo!",
     "WELCOME_CONTENT": "Bắt đầu một cuộc trò chuyện với đồng đội của bạn hoặc nhóm. Bạn cũng có thể tạo một nhóm trò chuyện để thảo luận và chia sẻ tệp.",
     "TITLE": "Hội thoại",
@@ -322,6 +368,8 @@
     "DOWNLOAD": "Tải xuống",
     "PIN": "Ghim",
     "LEAVE": "Rời khỏi",
+    "COPY_USERNAME": "Sao chép tên người dùng",
+    "DELETE_CONTACT": "Xóa liên hệ",
     "ON": "Bật",
     "OFF": "Tắt",
     "UNPIN": "Bỏ ghim",
@@ -355,8 +403,8 @@
     "NOTICE_CONTENT": "Thành viên trong nhóm sẽ không nhận được thông báo về cuộc gọi này cho đến khi bạn mời họ tham gia",
     "INVITE": "Mời",
     "YOU": "Bạn",
-    "TRANSLATED_TOOL": "Dịch thuật",
-    "MESSAGE_TRANSLATE": "Dịch tin nhắn",
+    "TRANSLATED_TOOL": "Công cụ dịch E.S.L",
+    "MESSAGE_TRANSLATE": "Tin nhắn E.S.L",
     "EMOJI": "Biểu tượng cảm xúc",
     "MESSAGE_REACTION": "Cảm xúc về tin nhắn",
     "CALL_END_AT": "Cuộc gọi kết thúc lúc {{time}}",
@@ -439,14 +487,60 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "CREATE_STATION": {
+      "HEADING": "Tạo Trạm",
+      "TITLE": "Cung cấp <span class='text-primary-500-main'> thông tin cho trạm của bạn </span>",
+      "DESCRIPTION": "Giúp đội ngũ của bạn dễ dàng nhận diện doanh nghiệp của bạn bằng cách đặt tên cho trạm này, thêm hình đại diện của trạm hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Nhập tên trạm"
+      },
+      "ERRORS": {
+        "NAME_REQUIRED": "Tên trạm là bắt buộc",
+        "NAME_MAX_LENGTH": "Tên trạm không được vượt quá 30 ký tự",
+        "AVATAR_REQUIRED": "Hình đại diện của trạm là bắt buộc"
+      },
+      "INVITE_MEMBERS": {
+        "TITLE": "<span class='mr-2 text-primary-500-main'>Mời</span> người khác tham gia trạm làm việc của bạn&nbsp;<span class='text-[24px] font-normal'>(tùy chọn)</span>",
+        "DESCRIPTION": "Giúp đội ngũ của bạn dễ dàng nhận diện Trạm Làm Việc của bạn bằng cách đặt tên, thêm hình đại diện hoặc logo của công ty. <span class='font-normal text-primary-500-main'>Nâng cấp gói.</span>",
+        "ERRORS": {
+          "EMAIL_REQUIRED": "Email là bắt buộc",
+          "EMAIL_INVALID": "Email không hợp lệ"
+        }
+      }
+    },
+    "SET_AS_DEFAULT_STATION": {
+      "TITLE": "Thiết lập trạm mặc định",
+      "DESCRIPTION": "Bạn có chắc chắn muốn thiết lập <strong>{{name}}</strong> làm trạm mặc định không?"
+    },
+    "START_CALL": {
+      "TITLE": "Bắt đầu cuộc gọi",
+      "DESCRIPTION": "Bạn có chắc chắn muốn bắt đầu cuộc gọi không?"
+    },
+    "ROLE_CHANGE": {
+      "TITLE": "Thay đổi vai trò",
+      "DESCRIPTION": "Bạn có chắc chắn muốn thay đổi vai trò của <strong>{{name}}</strong> thành <strong>{{role}}</strong> không?"
+    },
+    "INVITE_MEMBERS": {
+      "TITLE": "<span class='mr-2 text-primary-500-main'>Mời</span> người khác tham gia không gian của bạn&nbsp;<span class='text-[24px] font-normal'>(tuỳ chọn)</span>",
+      "DESCRIPTION": "Bạn chỉ có thể mời 2 thành viên trong tài khoản gói Miễn phí. <span class='font-normal text-primary-500-main'>Nâng cấp gói.</span>"
+    },
     "CREATE_SPACE": {
+      "HEADING": "Tạo không gian",
       "TITLE": "Cung cấp thông tin cho <span class='text-primary-500-main'> không gian của bạn </span>",
-      "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>."
+      "DESCRIPTION": "Giúp nhóm của bạn nhận diện doanh nghiệp của bạn dễ dàng hơn bằng cách đặt tên cho không gian này, thêm ảnh đại diện cho không gian hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
+      "PLACEHOLDERS": {
+        "NAME": "Tên không gian"
+      }
     },
     "DELETE_SPACE": {
       "TITLE": "Xoá không gian",
       "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu của mình và không thể hoàn tác. Bạn có chắc chắn muốn xoá <strong>{{name}}</strong> không?",
       "CONFIRM": "Xoá không gian"
+    },
+    "DELETE_STATION": {
+      "TITLE": "Xoá trạm",
+      "DESCRIPTION": "Bạn sẽ mất tất cả dữ liệu của mình và không thể hoàn tác. Bạn có chắc chắn muốn xoá <strong>{{name}}</strong> không?",
+      "CONFIRM": "Xoá trạm"
     },
     "SIGN_OUT": {
       "TITLE": "Bạn có muốn đăng xuất không?",
@@ -493,13 +587,11 @@
       "TITLE": "Rời nhóm",
       "DESCRIPTION": "Bạn sẽ không thể xem tin nhắn của nhóm này nữa. Bạn có chắc chắn muốn rời nhóm không?"
     },
-
     "BLOCK_USER": {
       "TITLE": "Chặn {{name}}",
       "DESCRIPTION": "Bạn sẽ không nhận được tin nhắn hoặc cuộc gọi từ họ cho đến khi bạn bỏ chặn. Bạn có chắc chắn không?",
       "ADDITIONAL_OPTION_1": "Cũng xóa lịch sử cuộc trò chuyện (không thể hoàn tác)"
     },
-
     "VERIFY": {
       "SUCCESS": {
         "TITLE": "Xác minh thành công",
@@ -554,6 +646,10 @@
       "VIDEO": "Hình ảnh",
       "SPEAKER": "Loa",
       "NO_DEVICE": "Không có thiết bị"
+    },
+    "DELETE_CONTACT": {
+      "TITLE": "Xoá liên hệ",
+      "DESCRIPTION": "Bạn có chắc muốn xoá liên hệ này?"
     }
   },
   "FILTERS": {
@@ -611,52 +707,131 @@
     "START_STOP_SCREEN_DOODLE": "Bắt đầu/Dừng vẽ trên màn hình",
     "TOGGLE_LIVE_CAPTION": "Hiển thị/Ẩn chú thích trực tiếp"
   },
+  "EMBED_SCRIPT": {
+    "INVALID_DOMAIN": {
+      "TITLE": "Không thể tải cuôc trò chuyện",
+      "DESCRIPTION": "Vui lòng kiểm tra lại mã nhúng hoặc xem tên miền của bạn đã được thêm vào danh sách hay chưa."
+    }
+  },
+  "STATION": {
+    "WELCOME": "Xin chào, chào mừng trở lại",
+    "ALL_STATION": "Tất cả các trạm",
+    "JOINED_STATION": "Trạm đã tham gia",
+    "MY_STATION": "Trạm của tôi",
+    "CREATE_STATION": "Tạo trạm mới",
+    "DASHBOARD": "Bảng điều khiển",
+    "STATION_INFOR": "Thông tin trạm",
+    "UPLOAD_IMAGE": "Tải lên ảnh đại diện trạm",
+    "CREATE_BUTTON": "Tạo trạm và mời thành viên",
+    "ERRORS": {
+      "NAME_REQUIRED": "Tên trạm là bắt buộc",
+      "NAME_MAX_LENGTH": "Tên trạm phải ít hơn 30 ký tự",
+      "AVATAR_REQUIRED": "Ảnh đại diện trạm là bắt buộc",
+      "INVALID_EMAIL_MEMBER": "Email thành viên không hợp lệ"
+    },
+    "ACTIONS": {
+      "SET_AS_DEFAULT": "Đặt làm mặc định",
+      "DELETE": "Xoá trạm",
+      "SETTINGS": "Cài đặt",
+      "REMOVE_DEFAULT": "Xoá mặc định"
+    },
+    "MEMBER": {
+      "YOU": "bạn",
+      "EMAIL": "Email",
+      "ROLE": "Vai trò"
+    },
+    "NO_MEMBER": "Không có thành viên"
+  },
   "EXTENSION": {
+    "EMPTY": {
+      "TITLE": "확장이 거의 도착했습니다!",
+      "OWNER_DES": "기성 테마를 사용하여 대화 확장을 만들거나 고유한 테마를 직접 정의하십시오."
+    },
+
     "ALL_DOMAINS": "Tất cả miền",
     "ALL_MEMBERS": "Tất cả thành viên",
     "SPACE": {
-      "WELCOME": "Chào, mừng bạn trở lại",
+      "WELCOME": "Xin chào, mừng bạn trở lại",
       "ALL_SPACE": "Tất cả không gian",
       "JOINED_SPACE": "Không gian đã tham gia",
       "MY_SPACE": "Không gian của tôi",
       "CREATE_SPACE": "Tạo không gian mới",
-      "SPACE_INFOR": "Thông tin không gian"
+      "DASHBOARD": "Trang tổng quan",
+      "SPACE_INFOR": "Thông tin không gian",
+      "UPLOAD_IMAGE": "Tải lên ảnh đại diện không gian",
+      "CREATE_BUTTON": "Tạo không gian và mời thành viên",
+      "ERRORS": {
+        "NAME_REQUIRED": "Tên không gian là bắt buộc",
+        "NAME_MAX_LENGTH": "Tên không gian phải ít hơn 30 ký tự",
+        "AVATAR_REQUIRED": "Ảnh đại diện không gian là bắt buộc",
+        "INVALID_EMAIL_MEMBER": "Thành viên email không hợp lệ"
+      },
+      "NO_MEMBER": "Không có thành viên nào"
     },
     "BREADCRUMB": {
       "HOME": "Trang chủ"
     },
     "TAG": {
+      "NAME": "Tên",
       "SEARCH": "Tìm kiếm thẻ",
       "CREATE": "Tạo thẻ mới",
       "EDIT": "Chỉnh sửa thẻ",
       "DELETE": "Xoá thẻ"
     },
+    "RECEIVED_FROM": "Nhận từ",
     "CONVERSATIONS": "Chung",
     "COMPLETED": "Hoàn thành",
     "ARCHIVED": "Lưu trữ",
+    "ARCHIVED_CONVERSATIONS": "Cuộc trò chuyện đã lưu trữ",
     "CLIENTS": "Khách hàng",
     "STATISTICS": "Thống kê",
     "SCRIPTS": "Kịch bản trò chuyện",
     "SETTINGS": "Cài đặt",
-    "REPORT": "Báo cáo",
+    "REPORT": "Thống kê",
     "CLIENT_LIST": "Danh sách khách hàng",
     "CHART": {
       "CLIENT": "Khách hàng mới",
       "LANGUAGERANK": "Xếp hạng ngôn ngữ",
-      "NEWVISITOR": "Khách hàng mới",
+      "NEWVISITOR": "Khách hàng ghé thăm",
       "RESPONSETIME": "Thời gian phản hồi",
       "OPENEDCONVERSATION": "Cuộc trò chuyện mở",
       "DROPRATE": "Tỷ lệ bỏ cuộc",
       "RESPONSEDMESSAGE": "Tin nhắn phản hồi",
-      "CUSTOMERRATING": "Đánh giá khách hàng"
+      "CUSTOMERRATING": "Đánh giá khách hàng",
+      "TRAFFICTRACK": "Lưu lượng truy cập"
+    },
+    "CHART_TOOLTIP": {
+      "CLIENT": "Số lượng khách hàng mới",
+      "LANGUAGERANK": "Xếp hạng ngôn ngữ được sử dụng nhiều nhất",
+      "NEWVISITOR": "Số lượng khách truy cập mới vào trang web của bạn",
+      "RESPONSETIME": "Thời gian phản hồi trung bình của nhóm của bạn",
+      "OPENEDCONVERSATION": "Số lượng cuộc trò chuyện đã được mở qua trang web của bạn",
+      "DROPRATE": "Tỷ lệ cuộc trò chuyện bị bỏ rơi",
+      "RESPONSEDMESSAGE": "Số lượng tin nhắn đã được nhóm của bạn phản hồi",
+      "CUSTOMERRATING": "Đánh giá trung bình của khách hàng",
+      "TRAFFICTRACK": "Theo dõi lưu lượng của các cuộc trò chuyện đã được mở"
+    },
+    "CHART_UNIT": {
+      "NEWVISITOR": "lần",
+      "OPENEDCONVERSATION": "cuộc trò chuyện",
+      "DROPRATE": "cuộc trò chuyện",
+      "CUSTOMERRATING": "sao",
+      "RESPONSEDMESSAGE": "tin nhắn",
+      "LANGUAGERANK": "ngôn ngữ",
+      "TRAFFICTRACK": "cuộc trò chuyện đã mở",
+      "DAY": "ngày",
+      "HOUR": "giờ",
+      "MINUTE": "phút",
+      "SECOND": "giây",
+      "MILLISECOND": "mili giây"
     },
     "SETTING": {
       "TAGS_MANAGEMENT": "Quản lý thẻ",
       "MEMBERS_MANAGEMENT": "Quản lý thành viên",
-      "CONVERSATION_EXTENSION": "Mở rộng trò chuyện"
+      "CONVERSATION_EXTENSION": "Tiện ích trò chuyện"
     },
     "SCRIPT": {
-      "PAGE_TITLE": "Quản lý Kịch bản",
+      "PAGE_TITLE": "Kịch bản trò chuyện",
       "SEARCH": "Tìm kiếm kịch bản",
       "ADD_SCRIPT": "Thêm kịch bản mới",
       "EDIT_SCRIPT": "Chỉnh sửa kịch bản",
@@ -669,7 +844,8 @@
       "CREATE_BY": "Tạo bởi",
       "CREATE_ON": "Tạo vào ngày",
       "LAST_EDITED": "Chỉnh sửa lần cuối",
-      "ACTIONS": "Hành động"
+      "ACTIONS": "Hành động",
+      "ENTER_SCRIPT_NAME": "Nhập tên kịch bản"
     },
     "CLIENT": {
       "PAGE_TITLE": "Quản lý khách hàng",
@@ -693,7 +869,10 @@
       "ACTIONS": "Hành động",
       "NO_MEMBER": "Không tìm thấy thành viên",
       "NO_ADMIN": "Không tìm thấy quản trị viên",
-      "INVITE_MEMBER": "Mời thành viên"
+      "INVITE_MEMBER": "Mời thành viên",
+      "NO_EDIT_PERMISSION": "Bạn không có quyền chỉnh sửa thành viên này",
+      "NO_DELETE_PERMISSION": "Bạn không có quyền xoá thành viên này",
+      "NO_INVITE_PERMISSION": "Bạn không có quyền mời thành viên"
     },
     "ROLE": {
       "ADMIN": "Quản trị viên",
@@ -712,6 +891,14 @@
     "BACK_TO_HOME": "Đi đến trang chủ"
   },
   "INBOX_EMPTY": {
+    "NO_CLIENT": {
+      "TITLE": "Hiện tại bạn không có cuộc trò chuyện nào",
+      "DESCRIPTION": "Bạn chưa có cuộc trò chuyện với khách hàng nào."
+    },
+    "NO_RESULT": {
+      "TITLE": "0 kết quả phù hợp",
+      "DESCRIPTION": "Vui lòng kiểm tra lại từ khoá hoặc thay đổi bộ lọc"
+    },
     "TIP_DESCRIPTION": "Bạn có thể tìm kiếm một người hoặc một nhóm bằng cách nhập email của người đó, tên của người đó hoặc tên của nhóm",
     "TIP_TITLE": "Thanh tìm kiếm",
     "TITLE": "Hiện tại bạn không có cuộc trò chuyện nào",
@@ -722,7 +909,8 @@
     "TIP_TITLE_GROUP": "Cách sử dụng \"Nhóm\"",
     "TITLE_GROUP": "Hiện tại, bạn không có Cuộc trò chuyện Nhóm nào",
     "DESCRIPTION_GROUP": "Nhấp vào nút dưới đây để tạo một cuộc trò chuyện mới hoặc yêu cầu Quản trị viên của một Cuộc trò chuyện Nhóm thêm bạn vào",
-    "MESSAGE": "Chưa có tin nhắn nào"
+    "MESSAGE": "Chưa có tin nhắn nào",
+    "MESSAGE_CONTACT": "Chưa có liên hệ nào"
   },
   "OFFLINE": {
     "TITLE": "Bạn đang ngoại tuyến",
@@ -746,5 +934,9 @@
       "NEW_PASSWORD_SAME_OLD_PASSWORD": "Mật khẩu mới phải khác với mật khẩu hiện tại!",
       "INVALID_TOKEN": "Liên kết xác minh đã hết hạn!"
     }
+  },
+
+  "RESPONSIVE": {
+    "DESKTOP_ONLY": "Trang này chỉ hỗ trợ phiên bản máy tính"
   }
 }

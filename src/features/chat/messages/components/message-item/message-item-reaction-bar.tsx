@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { MessageEmojiPicker } from '../message-emoji-picker';
 import { Drawer, DrawerContent } from '@/components/data-display/drawer';
 import EmojiPicker from '@emoji-mart/react';
+import { useAppStore } from '@/stores/app.store';
 
 export interface MessageItemReactionBarProps {
   message: Message;
@@ -51,7 +52,7 @@ export const MessageItemReactionBar = ({
   );
 
   const user = useAuthStore((state) => state.user);
-
+  const theme = useAppStore((state) => state.theme);
   const [tabValue, setTabValue] = useState<string>('all');
   const {
     value: showEmoji,
@@ -203,7 +204,7 @@ export const MessageItemReactionBar = ({
             <DrawerContent>
               <div className="custom-emoji-picker flex justify-center">
                 <EmojiPicker
-                  theme="light"
+                  theme={theme || 'light'}
                   onEmojiSelect={(emoji: any) => {
                     handleEmojiClick(emoji.native);
                   }}
@@ -229,7 +230,7 @@ const ReactionItem = (props: {
   return (
     <div
       onClick={props.onClick}
-      className="flex h-5 cursor-pointer items-center justify-center rounded-full border border-neutral-50 bg-white"
+      className="flex h-5 cursor-pointer items-center justify-center rounded-full border border-neutral-50 bg-white dark:border-neutral-800 dark:dark:bg-neutral-900"
     >
       <Tooltip>
         <TooltipContent className="rounded-2xl">
