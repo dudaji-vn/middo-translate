@@ -25,8 +25,8 @@ import customToast from '@/utils/custom-toast';
 export const ModalAudioVideoSetting = () => {
   const { t } = useTranslation('common');
 
-  const isShowModalAudioVideoSetting = useVideoCallStore(state => state.isShowModalAudioVideoSetting);
-  const setModalAudioVideoSetting = useVideoCallStore(state => state.setModalAudioVideoSetting);
+  const setModal = useVideoCallStore(state => state.setModal);
+  const modal = useVideoCallStore(state => state.modal);
   const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
   const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
   const myStream = useMyVideoCallStore(state => state.myStream);
@@ -82,8 +82,8 @@ export const ModalAudioVideoSetting = () => {
   return (
     <div>
       <AlertDialog
-        open={isShowModalAudioVideoSetting}
-        onOpenChange={() => setModalAudioVideoSetting(false)}
+        open={modal == 'video-setting'}
+        onOpenChange={() => setModal()}
       >
         <AlertDialogContent className="md:max-w-[500px]">
           <AlertDialogHeader>

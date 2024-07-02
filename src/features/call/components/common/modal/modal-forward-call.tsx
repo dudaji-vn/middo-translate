@@ -14,7 +14,7 @@ import { SearchInput } from '@/components/data-entry';
 import { useTranslation } from 'react-i18next';
 import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 
-export const ModalAddUser = () => {
+export const ModalForwardCall = () => {
     const {t} = useTranslation("common");
     const setModal = useVideoCallStore((state) => state.setModal);
     const modal = useVideoCallStore((state) => state.modal);
@@ -80,7 +80,7 @@ export const ModalAddUser = () => {
     }
     return (
         <div>
-            <AlertDialog open={modal == 'add-user'} onOpenChange={() => setModal()}>
+            <AlertDialog open={modal == 'forward-call'} onOpenChange={() => setModal()}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t('MODAL.ADD_USER.TITLE')}</AlertDialogTitle>

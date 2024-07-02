@@ -5,10 +5,12 @@ import { motion, useAnimationControls, useDragControls } from 'framer-motion';
 
 import { cn } from "@/utils/cn";
 import { Button } from "@/components/actions";
-import { Maximize2Icon, Minimize2Icon, ScreenShare, ScreenShareIcon } from "lucide-react";
+import { Maximize2Icon, Minimize2Icon, PhoneForwardedIcon, ScreenShare, ScreenShareIcon } from "lucide-react";
 import { useBoolean } from "usehooks-ts";
 import { Avatar } from "@/components/data-display";
 import { useParticipantVideoCallStore } from "@/features/call/store/participant.store";
+import { useBusinessNavigationData } from "@/hooks";
+import { useVideoCallStore } from "@/features/call/store/video-call.store";
 
 interface ParticipantsBarProps {
     participants: ParticipantInVideoCall[];
@@ -16,9 +18,11 @@ interface ParticipantsBarProps {
 const ParticipantsBar = ({ participants }: ParticipantsBarProps) => {
     const {value: isExpanded, toggle: toggleExpanded} = useBoolean(true);
     const pinParticipant = useParticipantVideoCallStore(state => state.pinParticipant);
+    const {isBusiness} = useBusinessNavigationData()
     const pin = (socketId: string, isShareScreen: boolean) => {
         pinParticipant(socketId, isShareScreen || false);
     }
+    const setModal = useVideoCallStore(state => state.setModal)
     return (
         <DragBar isExpanded={isExpanded} toggleExpanded={toggleExpanded}>
             <div className={cn("flex flex-col gap-1", !isExpanded && 'hidden' )}>
@@ -32,11 +36,12 @@ const ParticipantsBar = ({ participants }: ParticipantsBarProps) => {
                     })
                 }
             </div>
-            <div className={cn("flex justify-center gap-1", isExpanded && 'hidden' )}>
+
+            <div className={cn("flex justify-center w-full gap-1", isExpanded && 'hidden' )}>
                 {
                     participants.map((participant: ParticipantInVideoCall) => {
                         return (
-                            <div key={participant.socketId + participant.isShareScreen} className="relative file:h-12 w-12 cursor-pointer hover:opacity-90 transition-all active:opacity-80" onClick={()=>{
+                            <div key={participant.socketId + participant.isShareScreen} className="relative h-12 w-12 cursor-pointer hover:opacity-90 transition-all active:opacity-80" onClick={()=>{
                                 pin(participant.socketId, participant.isShareScreen || false);
                             }}>
                                 <Avatar
@@ -53,6 +58,19 @@ const ParticipantsBar = ({ participants }: ParticipantsBarProps) => {
                     })
                 }
             </div>
+
+            {isBusiness && 
+            <Button
+                size="sm"
+                shape={'square'}
+                variant={'default'}
+                color={"secondary"}
+                className="w-full"
+                startIcon={<PhoneForwardedIcon />}
+                onClick={()=>setModal('forward-call')}
+            >
+                Forward Call
+            </Button>}
         </DragBar>
     );
 };
@@ -107,7 +125,7 @@ const DragBar = ({isExpanded, toggleExpanded, children}: DragBarProps & PropsWit
                         { isExpanded ? <Minimize2Icon /> : <Maximize2Icon /> }
                     </Button.Icon>
                 </div>
-                <div className="p-1">
+                <div className="p-1 flex flex-col gap-1">
                     {children}
                 </div>
             </motion.div>

@@ -7,11 +7,11 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
 import { useTranslation } from 'react-i18next';
 
-export const ConfirmStopDoodle = () => {
+export const ModalStopDoodle = () => {
     const {t} = useTranslation('common');
 
-    const confirmStopDoodle = useVideoCallStore(state => state.confirmStopDoodle);
-    const setConfirmStopDoodle = useVideoCallStore(state => state.setConfirmStopDoodle);
+    const setModal = useVideoCallStore(state => state.setModal);
+    const modal = useVideoCallStore(state => state.modal);
     const setMeDoodle = useVideoCallStore(state => state.setMeDoodle);
     const user = useAuthStore(state => state.user);
     const setMyOldDoodle = useMyVideoCallStore(state => state.setMyOldDoodle);
@@ -23,7 +23,7 @@ export const ConfirmStopDoodle = () => {
     };
 
     return (
-        <AlertDialog open={confirmStopDoodle} onOpenChange={()=>setConfirmStopDoodle(false)}>
+        <AlertDialog open={modal == 'stop-doodle'} onOpenChange={()=>setModal()}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>
