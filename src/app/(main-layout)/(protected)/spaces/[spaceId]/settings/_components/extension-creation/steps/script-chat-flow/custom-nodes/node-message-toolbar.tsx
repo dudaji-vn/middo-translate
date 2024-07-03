@@ -45,25 +45,25 @@ const NodeMessageToolbar = ({
 
   useEffect(() => {
     if (uploadedFiles) {
-      const savedUrls = uploadedFiles.map((file) => file.url).sort();
+      const cloudUrls = uploadedFiles.map((file) => file.url).sort();
       const currentUrls = files.map((file) => file.url).sort();
 
-      const nothingChanged = isEqual(savedUrls, currentUrls);
-      // console.log('================> \n uploadedFiles', savedUrls);
-      // console.log('================> \n files', currentUrls);
+      const nothingChanged = isEqual(cloudUrls, currentUrls);
 
-      if (nothingChanged) return;
-      if (currentUrls.length < savedUrls.length) {
-        const fileRemoved = uploadedFiles.find(
-          (file) => !savedUrls.includes(file.url),
-        );
-        if (fileRemoved) removeUploadedFile(fileRemoved);
-      }
       const media = uploadedFiles.map((file) => ({
         ...file,
         type: file.metadata.resource_type || 'document',
       }));
       setValue(mediasNameField, media);
+      if (nothingChanged) return;
+      if (files.length < uploadedFiles.length) {
+        const fileRemoved = uploadedFiles.find(
+          (file) => !currentUrls.includes(file.url),
+        );
+        if (fileRemoved) {
+          removeUploadedFile(fileRemoved);
+        }
+      }
     }
   }, [uploadedFiles, files, setValue, mediasNameField]);
 
