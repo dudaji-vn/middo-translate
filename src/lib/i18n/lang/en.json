@@ -425,7 +425,7 @@
     "EXPAND": "Click to expand",
     "SCREEN": "Screen",
     "CALLING": "<strong>{{name}}</strong> is calling...",
-    "CALLING_GROUP": "<strong>{{name}}</strong> invites you to join the <strong>{{group}</strong> group call",
+    "CALLING_GROUP": "<strong>{{name}}</strong> invites you to join the <strong>{{group}}</strong> group call",
     "CALLING_HELP_DESK": "Call from the <strong>{{space}}</strong> space is forwarded from <strong>{{name}}</strong>",
     "UNSEND_A_MESSAGE": "Message unsent",
     "REMOVED_A_MESSAGE": "removed a message",
