@@ -152,16 +152,18 @@ const ScriptsList = ({
           {...tableProps}
         />
       </div>
-      <CreateOrEditChatScriptModal
-        open={
-          modalState?.modalType === 'create' ||
-          modalState?.modalType === 'edit' ||
-          modalState?.modalType === 'view'
-        }
-        viewOnly={modalState?.modalType === 'view'}
-        currentScript={modalState?.initialData!}
-        onClose={() => setModalState(null)}
-      />
+      {modalState && (
+        <CreateOrEditChatScriptModal
+          open={
+            modalState.modalType === 'create' ||
+            modalState.modalType === 'edit' ||
+            modalState.modalType === 'view'
+          }
+          viewOnly={modalState?.modalType === 'view'}
+          currentScript={modalState?.initialData!}
+          onClose={() => setModalState(null)}
+        />
+      )}
       <DeleteScriptModal
         open={modalState?.modalType === 'delete' && !!rowSelection}
         scriptIds={Object.keys(rowSelection)}

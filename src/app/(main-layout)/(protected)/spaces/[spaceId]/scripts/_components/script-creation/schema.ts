@@ -33,6 +33,7 @@ export const initialEdges: Edge[] = [
 ];
 
 const checkNodeDataEmptyLink = (data: { link?: string }) => {
+  console.log('checkNodeDataEmptyLink  ', data.link);
   if (data.link && !data.link.trim().length) {
     return false;
   }

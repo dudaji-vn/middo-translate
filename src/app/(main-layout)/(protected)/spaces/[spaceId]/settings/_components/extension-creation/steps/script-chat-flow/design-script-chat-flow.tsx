@@ -59,6 +59,7 @@ const DesignScriptChatFlow = ({
   };
   viewOnly?: boolean;
 }) => {
+  console.log('rerenderr  initialChatFlow', initialChatFlow);
   const control = useFormContext();
   const { t } = useTranslation('common');
   const { setValue, watch, trigger, formState } = control;
@@ -77,7 +78,7 @@ const DesignScriptChatFlow = ({
         setValue(FLOW_KEYS.NODES, applyNodeChanges(changes, watchedNodes));
       }
     },
-    [setValue, watch],
+    [setValue, viewOnly, watch],
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
@@ -88,7 +89,7 @@ const DesignScriptChatFlow = ({
         setValue(FLOW_KEYS.EDGES, applyEdgeChanges(changes, edges));
       }
     },
-    [setValue, edges],
+    [viewOnly, setValue, edges],
   );
 
   const onNodesDelete = useCallback(
@@ -106,7 +107,7 @@ const DesignScriptChatFlow = ({
       const newNodes = deepDeleteNodes(nodes, nodesToDelete, edges);
       setValue(FLOW_KEYS.NODES, newNodes as FlowNode[]);
     },
-    [setValue, nodes, edges],
+    [viewOnly, nodes, edges, setValue],
   );
 
   const onConnect = (connection: Edge | Connection) => {
@@ -169,7 +170,7 @@ const DesignScriptChatFlow = ({
       setValue(FLOW_KEYS.NODES, initialChatFlow.nodes);
       setValue(FLOW_KEYS.NODES, initialChatFlow.edges);
     }
-  }, []);
+  }, [setValue, initialChatFlow]);
 
   const onPreviewClick = async () => {
     checkingErrors();
@@ -223,7 +224,7 @@ const DesignScriptChatFlow = ({
       <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200 dark:bg-neutral-800">
         <Form {...control}>
           <ReactFlow
-            nodes={viewOnly ? viewOnlyNodes : nodes}
+            nodes={nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}

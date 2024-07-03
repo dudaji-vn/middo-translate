@@ -28,6 +28,8 @@ import { useTranslation } from 'react-i18next';
 
 export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
+const initEdges = initialEdges;
+const initNodes = initialChatFlowNodes;
 const CreateOrEditChatScriptModal = ({
   open,
   onClose,
@@ -42,55 +44,37 @@ const CreateOrEditChatScriptModal = ({
   const spaceId = useParams()?.spaceId as string;
   const { t } = useTranslation('common');
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditScript();
-  const [isEditing, scriptId] = useMemo(() => {
-    return [Boolean(currentScript), currentScript?._id];
+  const { isEditing, scriptId, currentEdges, currentNodes } = useMemo(() => {
+    return {
+      isEditing: Boolean(currentScript),
+      scriptId: currentScript?._id,
+      currentNodes: currentScript?.chatFlow
+        .nodes as TScriptFormValues['chatFlow']['nodes'],
+      currentEdges: currentScript?.chatFlow
+        .edges as TScriptFormValues['chatFlow']['edges'],
+    };
   }, [currentScript]);
 
   const form = useForm<TScriptFormValues>({
     mode: 'onChange',
     defaultValues: {
-      name: '',
+      name: currentScript?.name || '',
       chatFlow: {
-        nodes: initialChatFlowNodes as TScriptFormValues['chatFlow']['nodes'],
-        edges: initialEdges as TScriptFormValues['chatFlow']['edges'],
+        nodes:
+          currentNodes || (initNodes as TScriptFormValues['chatFlow']['nodes']),
+        edges:
+          currentEdges || (initEdges as TScriptFormValues['chatFlow']['edges']),
         mappedFlowErrors: [],
       },
     },
     resolver: zodResolver(createChatScriptSchema),
   });
-
   const {
     setValue,
     handleSubmit,
     trigger,
     formState: { isValid, isSubmitting, errors },
   } = form;
-
-  useEffect(() => {
-    if (open && currentScript) {
-      setValue('name', currentScript.name);
-      setValue(
-        'chatFlow.edges',
-        currentScript.chatFlow.edges as TScriptFormValues['chatFlow']['edges'],
-      );
-      setValue(
-        'chatFlow.nodes',
-        currentScript.chatFlow.nodes as TScriptFormValues['chatFlow']['nodes'],
-      );
-      return;
-    }
-    if (open && !currentScript) {
-      setValue('name', '');
-      setValue(
-        'chatFlow.nodes',
-        initialChatFlowNodes as TScriptFormValues['chatFlow']['nodes'],
-      );
-      setValue(
-        'chatFlow.edges',
-        initialEdges as TScriptFormValues['chatFlow']['edges'],
-      );
-    }
-  }, [open, currentScript]);
 
   const submit = async ({
     name,
@@ -117,7 +101,7 @@ const CreateOrEditChatScriptModal = ({
       console.error('Error while creating script', error);
     }
   };
-
+  console.log('rerender open', open);
   return (
     <>
       <AlertDialog open={open} onOpenChange={(o) => !o && onClose()}>

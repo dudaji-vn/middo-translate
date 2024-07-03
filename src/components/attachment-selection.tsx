@@ -47,9 +47,10 @@ export const AttachmentSelection = forwardRef<
   }, [files]);
 
   const openMediaLightBox = (index: number) => {
+    if (readonly) return;
     setIndex(index);
     setFiles(sliders);
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -79,7 +80,12 @@ export const AttachmentSelection = forwardRef<
                     className="group relative aspect-square h-[60px] w-[60px]"
                   >
                     <div
-                      className="aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow"
+                      className={cn(
+                        'aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow',
+                        {
+                          'cursor-default': readonly,
+                        },
+                      )}
                       onClick={() => openMediaLightBox(i)}
                     >
                       <MediaItem file={file} />
@@ -88,7 +94,7 @@ export const AttachmentSelection = forwardRef<
                       tabIndex={-1}
                       type="button"
                       onClick={() => removeFile(file)}
-                      disabled={readonly}
+                      className={cn({ hidden: readonly })}
                     >
                       <div className="absolute -right-1 -top-1 rounded-full border bg-background opacity-0 shadow-1 transition-all group-hover:opacity-100">
                         <XIcon width={16} height={16} />

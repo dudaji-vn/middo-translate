@@ -106,7 +106,7 @@ function ButtonNode(node: CustomNodeProps) {
           ...currentNode,
           data: {
             ...currentNode.data,
-            link: 'https://',
+            link: '',
           },
         },
       ]);
