@@ -31,9 +31,8 @@ interface MediaSource {
 export const ModalChooseScreen = () => {
     const {t} = useTranslation('common');
     
-    const user = useAuthStore(state => state.user);
-    const showChooseScreen = useVideoCallStore(state => state.showChooseScreen);
-    const setChooseScreen = useVideoCallStore(state => state.setChooseScreen);
+    const setModal = useVideoCallStore(state => state.setModal);
+    const modal = useVideoCallStore(state => state.modal);
     const room = useVideoCallStore(state =>state.room);
     
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
@@ -97,11 +96,11 @@ export const ModalChooseScreen = () => {
                 customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             }
         }
-        setChooseScreen(false)
-    }, [addParticipant, ipcRenderer, isTurnOnCamera, isTurnOnMic, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, t, user])
+        setModal()
+    }, [addParticipant, ipcRenderer, isTurnOnCamera, isTurnOnMic, room?._id, selectedSource, setModal, setShareScreen, setShareScreenStream, t, user])
 
     return (
-        <AlertDialog open={showChooseScreen} onOpenChange={() => setChooseScreen(false)}>
+        <AlertDialog open={modal == 'choose-screen'} onOpenChange={() => setModal()}>
             <AlertDialogContent className="min-w-[80%]" >
                 <AlertDialogHeader>
                     <AlertDialogTitle>

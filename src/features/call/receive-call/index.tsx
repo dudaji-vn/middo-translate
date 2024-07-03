@@ -24,14 +24,19 @@ const ReceiveVideoCall = () => {
   
   const setRoom = useVideoCallStore((state) => state.setRoom);
   const room = useVideoCallStore((state) => state.room);
-  const meetingList = useChatStore(state => state.meetingList)
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
   const { isElectron, ipcRenderer } = useElectron();
-  const listenToCall = useCallback(({ call, user }: IRequestCall) => {
+  const listenToCall = useCallback(({ call, user, type, message }: IRequestCall) => {
       if (user._id == me?._id) return;
       if (requestCall) return;
       if(room && room.roomId === call.roomId) return;
-      const data = { id: call.roomId, call, user }
+      const data = { 
+        id: call?.roomId, 
+        call, 
+        user,
+        type,
+        message
+      }
       setRequestCall(data);
       if(isElectron && ipcRenderer) {
         ipcRenderer.send(ELECTRON_EVENTS.RECEIVE_CALL_INVITE, data);
@@ -39,10 +44,9 @@ const ReceiveVideoCall = () => {
     },
     [ipcRenderer, isElectron, me?._id, requestCall, room, setRequestCall],
   );
-
   const declineCall = useCallback(() => {
     socket.emit(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, {
-      roomId: requestCall?.call.roomId,
+      roomId: requestCall?.call?.roomId,
       userId: me?._id,
     });
     setRequestCall();

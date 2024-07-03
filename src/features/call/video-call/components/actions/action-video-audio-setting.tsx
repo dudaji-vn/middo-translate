@@ -10,13 +10,12 @@ interface ActionVideoAudioSettingProps {
 }
 const ActionVideoAudioSetting = ({isInDropdown}: ActionVideoAudioSettingProps) => {
   const { t } = useTranslation('common');
-
-  const setModalAudioVideoSetting = useVideoCallStore((state) => state.setModalAudioVideoSetting);
+  const setModal = useVideoCallStore((state) => state.setModal);
   
   if (isInDropdown) {
     return (
       <>
-        <DropdownMenuItem onClick={() => setModalAudioVideoSetting(true)} className="dark:hover:bg-neutral-800">
+        <DropdownMenuItem onClick={() => setModal('video-setting')} className="dark:hover:bg-neutral-800">
           <SlidersHorizontal />
           <span className="ml-2">{t('CONVERSATION.VIDEO_AUDIO_SETTINGS')}</span>
         </DropdownMenuItem>
@@ -28,7 +27,7 @@ const ActionVideoAudioSetting = ({isInDropdown}: ActionVideoAudioSettingProps) =
       variant="default"
       size="xs"
       color={'default'}
-      onClick={() => setModalAudioVideoSetting(true)}
+      onClick={() => setModal('video-setting')}
     >
       <Tooltip
         title={t('CONVERSATION.VIDEO_AUDIO_SETTINGS')}

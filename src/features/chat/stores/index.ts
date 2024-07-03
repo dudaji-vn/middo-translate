@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 export type Meeting = Record<string, {
   participantsIdJoined: string[],
+  whiteList?: string[],
 }>
 export type ChatState = {
   showTranslateOnType: boolean;

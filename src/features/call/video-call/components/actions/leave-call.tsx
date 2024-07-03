@@ -9,10 +9,9 @@ import { useTranslation } from 'react-i18next';
 const ActionLeaveCall = () => {
   const {t} = useTranslation('common')
 
-  const setConfirmLeave = useVideoCallStore(state => state.setConfirmLeave);
-  
+  const setModal = useVideoCallStore(state => state.setModal);
   const handleLeave = () => {
-    setConfirmLeave(true);
+    setModal('leave-call')
   };
   return (
     <Tooltip

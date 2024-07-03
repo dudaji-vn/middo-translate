@@ -29,6 +29,7 @@
     "ARCHIVE": "보관됨",
     "UNARCHIVE": "보관 취소",
     "COMPLETE": "완료됨",
+    "FORWARD_CALL": "전화 전달",
     "STOP": "중지",
     "REPLACE": "교체",
     "UPDATE": "업데이트",
@@ -417,6 +418,8 @@
     "EXPAND": "확장하려면 클릭",
     "SCREEN": "화면",
     "CALLING": "<strong>{{name}}</strong>님이 호출 중...",
+    "CALLING_GROUP": "<strong>{{name}}</strong>님이 <strong>{{group}}</strong> 그룹 통화에 참여하라고 초대했습니다",
+    "CALLING_HELP_DESK": "<strong>{{name}}</strong>님이 <strong>{{space}}</strong> 공간에서 전달된 통화",
     "UNSEND_A_MESSAGE": "메시지 취소됨",
     "REMOVED_A_MESSAGE": "메시지 제거됨",
     "SEND_PHOTO": "사진 전송",
@@ -553,6 +556,10 @@
     },
     "ADD_USER": {
       "TITLE": "멤버 추가"
+    },
+    "FORWARD_CALL": {
+      "TITLE": "전화 전달",
+      "DESCRIPTION": "이 통화를 전달하려면 <strong>@{{username}}</strong>에게 전달됩니다. 정말 전달하시겠습니까?"
     },
     "SHARE_SCREEN": {
       "TITLE": "화면 공유",

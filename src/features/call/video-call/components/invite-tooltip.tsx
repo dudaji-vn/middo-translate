@@ -12,8 +12,7 @@ export default function InviteTooltip() {
   const participants = useParticipantVideoCallStore(state => state.participants);
   const room = useVideoCallStore(state => state.room);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  const setModalAddUser = useVideoCallStore(state => state.setModalAddUser);
-  
+  const setModal =  useVideoCallStore(state => state.setModal);
   const [isShowInvite, setShowInvite] = useState(true);
   
   useEffect(() => {
@@ -42,7 +41,7 @@ export default function InviteTooltip() {
               </p>
             </div>
             <Button
-              onClick={() => setModalAddUser(true)}
+              onClick={() => setModal('add-user')}
               size="sm"
               color="primary"
               variant="default"

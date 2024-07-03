@@ -15,11 +15,11 @@ import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 
-export const ConfirmLeaveRoomModal = () => {
+export const ModalLeaveCall = () => {
   const {t} = useTranslation('common');
 
-  const confirmLeave = useVideoCallStore(state => state.confirmLeave);
-  const setConfirmLeave = useVideoCallStore(state => state.setConfirmLeave);
+  const setModal = useVideoCallStore(state => state.setModal);
+  const modal = useVideoCallStore(state => state.modal);
   const setRoom = useVideoCallStore(state => state.setRoom);
   const participants = useParticipantVideoCallStore(state => state.participants);
   const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
@@ -27,7 +27,7 @@ export const ConfirmLeaveRoomModal = () => {
   const { isElectron, ipcRenderer } = useElectron();
   
   const handleLeave = async () => {
-    setConfirmLeave(false);
+    setModal();
     participants.forEach((participant) => {
       if (!participant.isMe) {
         participant.peer?.destroy();
@@ -45,12 +45,9 @@ export const ConfirmLeaveRoomModal = () => {
     }
   };
 
-  const closeModal = () => {
-    setConfirmLeave(false);
-  };
 
   return (
-    <AlertDialog open={confirmLeave} onOpenChange={closeModal}>
+    <AlertDialog open={modal == 'leave-call'} onOpenChange={() => setModal()}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

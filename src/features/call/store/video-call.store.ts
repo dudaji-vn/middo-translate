@@ -1,9 +1,11 @@
+import { SpaceInboxFilterState } from '@/stores/space-inbox-filter.store';
 import { create } from 'zustand';
 import { VIDEO_CALL_LAYOUTS, VideoCallLayout } from '../constant/layout';
 import getRandomColor from '../utils/get-random-color.util';
 import CaptionInterface from '../interfaces/caption.interface';
 import { User } from '@/features/users/types';
 import { CallType } from '../constant/call-type';
+type ModalType = 'forward-call' | 'add-user' | 'video-setting' | 'leave-call' | 'stop-doodle' | 'choose-screen'
 export interface IRoom {
   _id: string;
   name: string;
@@ -28,39 +30,36 @@ export interface IRequestCall {
     avatar?: string;
     participants?: User[];
   };
+  message?: string;
+  // space?: 
+  type: 'direct' | 'group' | 'help_desk';
 }
 export type VideoCallState = {
   room: IRoom | null | undefined;
   layout: string;
-  confirmLeave: boolean;
   isDoodle: boolean;
   isDrawing: boolean;
   doodleImage: string | null;
   isMeDoodle: boolean;
-  confirmStopDoodle: boolean;
   colorDoodle: string;
   isFullScreen: boolean;
   isPinDoodle: boolean;
   isPinShareScreen: boolean;
+  modal?: ModalType;
   tmpRoom: string | null;
   isShowChat: boolean;
   isShowCaption: boolean;
   requestCall?: IRequestCall;
-  isShowModalAddUser: boolean;
-  isShowModalAudioVideoSetting: boolean;
   captions: CaptionInterface[];
   messageId: string;
-  showChooseScreen: boolean;
   setRoom: (room?: IRoom) => void;
   isAllowDrag: boolean;
   setAllowDrag: (allowDrag: boolean) => void;
   setLayout: (layout?: VideoCallLayout) => void;
-  setConfirmLeave: (confirmLeave: boolean) => void;
   setDoodle: (isDoodle: boolean) => void;
   setDoodleImage: (doodleImage: string) => void;
   setMeDoodle: (isMeDoodle: boolean) => void;
   setDrawing: (isDrawing: boolean) => void;
-  setConfirmStopDoodle: (confirmStopDoodle: boolean) => void;
   setFullScreen: (isFullScreen: boolean) => void;
   setPinDoodle: (isPinDoodle: boolean) => void;
   setPinShareScreen: (isPinShareScreen: boolean) => void;
@@ -68,25 +67,21 @@ export type VideoCallState = {
   setShowChat: (isShowChat: boolean) => void;
   setShowCaption: (isShowCaption: boolean) => void;
   setRequestCall: (requestCall?: IRequestCall) => void;
-  setModalAddUser: (isShowModalAddUser: boolean) => void;
-  setModalAudioVideoSetting: (isShowModalAudioVideoSetting: boolean) => void;
   addCaption: (caption: CaptionInterface) => void;
   clearCaption: () => void;
   setMessageId: (messageId: string) => void;
   clearStateVideoCall: () => void;
-  setChooseScreen: (showChooseScreen: boolean) => void;
+  setModal: (modal?: ModalType) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
   room: null,
   layout: VIDEO_CALL_LAYOUTS.GALLERY_VIEW,
-  confirmLeave: false,
   usersRequestJoinRoom: [],
   isDoodle: false,
   doodleImage: null,
   isMeDoodle: false,
   isDrawing: false,
-  confirmStopDoodle: false,
   colorDoodle: getRandomColor(),
   peerShareScreen: [],
   isFullScreen: false,
@@ -96,11 +91,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   isShowChat: true,
   isShowCaption: false,
   requestCall: undefined,
-  isShowModalAddUser: false,
-  isShowModalAudioVideoSetting: false,
+  modal: undefined,
   captions: [],
   messageId: '',
-  showChooseScreen: false,
   setRoom: (room?: IRoom) => {
     set(() => ({ room }));
   },
@@ -110,9 +103,6 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   setLayout: (layout?: VideoCallLayout) => {
     set(() => ({ layout: layout || VIDEO_CALL_LAYOUTS.GALLERY_VIEW }));
-  },
-  setConfirmLeave: (confirmLeave: boolean) => {
-    set(() => ({ confirmLeave }));
   },
   setDoodle: (isDoodle: boolean) => {
     set(() => ({ isDoodle }));
@@ -125,9 +115,6 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   setDrawing: (isDrawing: boolean) => {
     set(() => ({ isDrawing }));
-  },
-  setConfirmStopDoodle: (confirmStopDoodle: boolean) => {
-    set(() => ({ confirmStopDoodle }));
   },
   setFullScreen: (isFullScreen: boolean) => {
     set(() => ({ isFullScreen }));
@@ -152,12 +139,6 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   setRequestCall: (requestCall?: IRequestCall) => {
     set(() => ({ requestCall }));
   },
-  setModalAddUser: (isShowModalAddUser: boolean) => {
-    set(() => ({ isShowModalAddUser }));
-  },
-  setModalAudioVideoSetting: (isShowModalAudioVideoSetting: boolean) => {
-    set(() => ({ isShowModalAudioVideoSetting }));
-  },
   addCaption: (caption: CaptionInterface) => {
     set((state) => ({ captions: [...state.captions, caption] }));
   },
@@ -167,18 +148,16 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   setMessageId: (messageId: string) => {
     set(() => ({ messageId }));
   },
-  setChooseScreen: (showChooseScreen: boolean) => {
-    set(() => ({ showChooseScreen }));
+  setModal: (modal?: ModalType) => {
+    set(() => ({ modal }));
   },
   clearStateVideoCall: () => {
     set(() => ({
       layout: VIDEO_CALL_LAYOUTS.GALLERY_VIEW,
-      confirmLeave: false,
       isDoodle: false,
       doodleImage: null,
       isMeDoodle: false,
       isDrawing: false,
-      confirmStopDoodle: false,
       peerShareScreen: [],
       isFullScreen: false,
       isPinDoodle: false,
@@ -187,9 +166,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
       isShowChat: true,
       isShowCaption: false,
       requestCall: undefined,
-      isShowModalAddUser: false,
       captions: [],
       messageId: '',
+      modal: undefined
     }));
   },
 }));

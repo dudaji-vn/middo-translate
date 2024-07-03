@@ -27,13 +27,13 @@ export default function DropdownActions() {
   const room = useVideoCallStore((state) => state.room);
   const isDoodle = useVideoCallStore((state) => state.isDoodle);
   const isMeDoodle = useVideoCallStore((state) => state.isMeDoodle);
-  const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
   const layout = useVideoCallStore((state) => state.layout);
   const isPinShareScreen = useVideoCallStore((state) => state.isPinShareScreen);
   const setDrawing = useVideoCallStore((state) => state.setDrawing);
   const isDrawing = useVideoCallStore((state) => state.isDrawing);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
-  const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
+  const setModal = useVideoCallStore((state) => state.setModal);
+  const modal = useVideoCallStore((state) => state.modal);
   const isShowCaption = useVideoCallStore((state) => state.isShowCaption);
   const setShowCaption = useVideoCallStore((state) => state.setShowCaption);
   const setLayout = useVideoCallStore((state) => state.setLayout);
@@ -85,7 +85,7 @@ export default function DropdownActions() {
       return;
     }
     if (isEqual(matchedKeys, SHORTCUTS.ADD_MEMBERS)) {
-      setModalAddUser(!isShowModalAddUser);
+      setModal(modal == 'add-user' ? undefined : 'add-user')
       return;
     }
   });
@@ -106,7 +106,7 @@ export default function DropdownActions() {
         <ActionToggleLayout />
         <ActionDoodle disabled={isDoodleDisabled} onDoodle={onDoodle} />
         {room?.type === CALL_TYPE.GROUP && (
-          <DropdownMenuItem onClick={() => setModalAddUser(true)} className='dark:hover:bg-neutral-800'>
+          <DropdownMenuItem onClick={() => setModal('add-user')} className='dark:hover:bg-neutral-800'>
             <UserPlus2 />
             <span className="ml-2">{t('CONVERSATION.ADD_MEMBER')}</span>
           </DropdownMenuItem>
