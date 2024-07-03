@@ -9,17 +9,19 @@ import { Editor } from '@tiptap/react';
 
 import { cn } from '@/utils/cn';
 import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
+import { Spinner } from './feedback';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor?: Editor | null;
   readonly?: boolean;
+  isLoading?: boolean;
 }
 
 export const AttachmentSelection = forwardRef<
   HTMLDivElement,
   AttachmentSelectionProps
->(({ editor, readonly }, ref) => {
+>(({ editor, readonly, isLoading }, ref) => {
   const { files, removeFile, open } = useMediaUpload();
 
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
@@ -47,9 +49,10 @@ export const AttachmentSelection = forwardRef<
   }, [files]);
 
   const openMediaLightBox = (index: number) => {
+    if (readonly) return;
     setIndex(index);
     setFiles(sliders);
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -79,16 +82,29 @@ export const AttachmentSelection = forwardRef<
                     className="group relative aspect-square h-[60px] w-[60px]"
                   >
                     <div
-                      className="aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow"
+                      className={cn(
+                        'aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow',
+                        {
+                          'cursor-default': readonly,
+                        },
+                        isLoading
+                          ? 'relative flex flex-col items-center justify-center'
+                          : '',
+                      )}
                       onClick={() => openMediaLightBox(i)}
                     >
                       <MediaItem file={file} />
+                      <Spinner
+                        size="sm"
+                        className={isLoading ? 'absolute  inset-0 bg-blend-overlay ' : 'hidden'}
+                        color="white"
+                      />
                     </div>
                     <button
                       tabIndex={-1}
                       type="button"
                       onClick={() => removeFile(file)}
-                      disabled={readonly}
+                      className={cn({ hidden: readonly })}
                     >
                       <div className="absolute -right-1 -top-1 rounded-full border bg-background opacity-0 shadow-1 transition-all group-hover:opacity-100">
                         <XIcon width={16} height={16} />
