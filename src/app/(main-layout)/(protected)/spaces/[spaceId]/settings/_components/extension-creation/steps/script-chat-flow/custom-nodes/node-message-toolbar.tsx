@@ -49,8 +49,6 @@ const NodeMessageToolbar = ({
       const currentUrls = files.map((file) => file.url).sort();
 
       const nothingChanged = isEqual(cloudUrls, currentUrls);
-      // console.log('================> \n showing files', currentUrls);
-      // console.log('================> \n  uploaded to cloud files', cloudUrls);
 
       const media = uploadedFiles.map((file) => ({
         ...file,
@@ -63,8 +61,7 @@ const NodeMessageToolbar = ({
           (file) => !currentUrls.includes(file.url),
         );
         if (fileRemoved) {
-          const succes = removeUploadedFile(fileRemoved);
-          console.log('file being removed:>>', succes);
+          removeUploadedFile(fileRemoved);
         }
       }
     }
