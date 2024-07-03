@@ -59,7 +59,6 @@ const DesignScriptChatFlow = ({
   };
   viewOnly?: boolean;
 }) => {
-  console.log('rerenderr  initialChatFlow', initialChatFlow);
   const control = useFormContext();
   const { t } = useTranslation('common');
   const { setValue, watch, trigger, formState } = control;

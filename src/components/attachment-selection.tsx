@@ -9,17 +9,19 @@ import { Editor } from '@tiptap/react';
 
 import { cn } from '@/utils/cn';
 import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
+import { Spinner } from './feedback';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor?: Editor | null;
   readonly?: boolean;
+  isLoading?: boolean;
 }
 
 export const AttachmentSelection = forwardRef<
   HTMLDivElement,
   AttachmentSelectionProps
->(({ editor, readonly }, ref) => {
+>(({ editor, readonly, isLoading }, ref) => {
   const { files, removeFile, open } = useMediaUpload();
 
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
@@ -85,10 +87,18 @@ export const AttachmentSelection = forwardRef<
                         {
                           'cursor-default': readonly,
                         },
+                        isLoading
+                          ? 'relative flex flex-col items-center justify-center'
+                          : '',
                       )}
                       onClick={() => openMediaLightBox(i)}
                     >
                       <MediaItem file={file} />
+                      <Spinner
+                        size="sm"
+                        className={isLoading ? 'absolute  inset-0 bg-blend-overlay ' : 'hidden'}
+                        color="white"
+                      />
                     </div>
                     <button
                       tabIndex={-1}

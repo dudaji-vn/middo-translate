@@ -101,7 +101,7 @@ const CreateOrEditChatScriptModal = ({
       console.error('Error while creating script', error);
     }
   };
-  console.log('rerender open', open);
+  // console.log('rerender open', open);
   return (
     <>
       <AlertDialog open={open} onOpenChange={(o) => !o && onClose()}>
