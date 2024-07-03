@@ -49,14 +49,13 @@ const NodeMessageToolbar = ({
       const currentUrls = files.map((file) => file.url).sort();
 
       const nothingChanged = isEqual(savedUrls, currentUrls);
-      console.log('================> \n uploadedFiles', savedUrls);
-      console.log('================> \n files', currentUrls);
+      // console.log('================> \n uploadedFiles', savedUrls);
+      // console.log('================> \n files', currentUrls);
 
       if (nothingChanged) return;
-
-      if (currentUrls.length > savedUrls.length) {
+      if (currentUrls.length < savedUrls.length) {
         const fileRemoved = uploadedFiles.find(
-          (file) => !currentUrls.includes(file.url),
+          (file) => !savedUrls.includes(file.url),
         );
         if (fileRemoved) removeUploadedFile(fileRemoved);
       }

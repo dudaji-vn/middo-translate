@@ -156,7 +156,7 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
   const removeUploadedFile = (file: UploadedFile) => {
     setUploadedFiles((old) =>
       old.filter((f) => {
-        if (f.localUrl === file.localUrl) {
+        if (f.localUrl === file.localUrl || f.url === file.url) {
           URL.revokeObjectURL(f.url);
           return false;
         }
