@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { GET_CONVERSATION_SCRIPTS_KEY } from './use-get-conversation-scripts';
 import { createOrEditChatScript } from '@/services/scripts.service';
-import toast from 'react-hot-toast';
 import customToast from '@/utils/custom-toast';
 
 export const useCreateOrEditScript = () => {
