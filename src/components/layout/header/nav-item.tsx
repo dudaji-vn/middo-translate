@@ -28,7 +28,7 @@ export const NavItem = ({
   return (
     <Link
       href={item.href}
-      target={isElectron ? '_self' : item.target || '_self'}
+      target={item.target || '_self'}
       {...(item.type === 'scroll'
         ? {
             onClick: (e) => {

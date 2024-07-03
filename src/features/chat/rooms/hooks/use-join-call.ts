@@ -111,8 +111,9 @@ export const useJoinCall = () => {
         );
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
           users: [...inviteParticipant],
-          room: data?.call,
+          call: data?.call,
           user: user,
+          type: 'direct'
         });
         setTimeout(() => {
           addParticipant({

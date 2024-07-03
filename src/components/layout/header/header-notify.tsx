@@ -40,7 +40,7 @@ export const HeaderNotify = ({}: {}) => {
           variant={'default'}
           color={'default'}
           size={'xs'}
-          className="relative"
+          className="relative ml-2"
         >
           <Ping
             className={cn('absolute -right-[8px] -top-[2px]', {

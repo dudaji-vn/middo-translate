@@ -1,3 +1,4 @@
+import { SpaceInboxFilterState } from '@/stores/space-inbox-filter.store';
 import { create } from 'zustand';
 import { VIDEO_CALL_LAYOUTS, VideoCallLayout } from '../constant/layout';
 import getRandomColor from '../utils/get-random-color.util';
@@ -29,6 +30,9 @@ export interface IRequestCall {
     avatar?: string;
     participants?: User[];
   };
+  message?: string;
+  // space?: 
+  type: 'direct' | 'group' | 'help_desk';
 }
 export type VideoCallState = {
   room: IRoom | null | undefined;

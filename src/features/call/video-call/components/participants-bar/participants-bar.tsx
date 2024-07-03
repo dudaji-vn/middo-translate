@@ -65,7 +65,7 @@ const ParticipantsBar = ({ participants }: ParticipantsBarProps) => {
                 shape={'square'}
                 variant={'default'}
                 color={"secondary"}
-                className="w-full"
+                className="w-full whitespace-nowrap"
                 startIcon={<PhoneForwardedIcon />}
                 onClick={()=>setModal('forward-call')}
             >

@@ -64,8 +64,9 @@ export const ModalAddUser = () => {
     const handleSubmit = () => { 
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
             users: selectedUsers,
-            room,
-            user
+            call: room,
+            user,
+            type: 'group'
         })
         setSelectedUsers([]);
     };
