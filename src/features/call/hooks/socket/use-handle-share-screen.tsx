@@ -21,7 +21,7 @@ export default function useHandleShareScreen() {
 
     const room = useVideoCallStore(state => state.room);
     const setLayout = useVideoCallStore(state => state.setLayout);
-    const setChooseScreen = useVideoCallStore(state => state.setChooseScreen);
+    const setModal = useVideoCallStore(state => state.setModal);
     const participants = useParticipantVideoCallStore(state => state.participants);
     const removeParticipantShareScreen = useParticipantVideoCallStore(state => state.removeParticipantShareScreen);
     const peerShareScreen = useParticipantVideoCallStore(state => state.peerShareScreen);
@@ -145,7 +145,7 @@ export default function useHandleShareScreen() {
         }
         const navigator: Navigator = window.navigator as Navigator
         if(isElectron) {
-            setChooseScreen(true);
+            setModal("choose-screen")
             ipcRenderer.send(ELECTRON_EVENTS.GET_SCREEN_SOURCE);
             return;
         }
@@ -174,7 +174,7 @@ export default function useHandleShareScreen() {
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [addParticipant, isShareScreen, room?._id, setChooseScreen, setShareScreen, setShareScreenStream, stopShareScreen, user?._id, isElectron])
+    }, [addParticipant, isShareScreen, room?._id, setModal, setShareScreen, setShareScreenStream, stopShareScreen, user?._id, isElectron])
 
     useEffect(() => {
         if(!shareScreenStream) return;

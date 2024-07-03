@@ -18,7 +18,7 @@ export const DoodleArea = () => {
     
     const doodleImage = useVideoCallStore(state => state.doodleImage);
     const colorDoodle = useVideoCallStore(state => state.colorDoodle);
-    const setConfirmStopDoodle = useVideoCallStore(state => state.setConfirmStopDoodle);
+    const setModal = useVideoCallStore(state => state.setModal);
     const isDrawing = useVideoCallStore(state => state.isDrawing);
     const setDrawing = useVideoCallStore(state => state.setDrawing);
 
@@ -50,7 +50,7 @@ export const DoodleArea = () => {
         canvasRef.current?.resetCanvas();
     }
     const handleStopDoodle = () => {
-        setConfirmStopDoodle(true)
+        setModal('stop-doodle')
     }
     
     useEffect(() => {
