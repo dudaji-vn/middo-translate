@@ -22,7 +22,7 @@ export const AttachmentSelection = forwardRef<
   HTMLDivElement,
   AttachmentSelectionProps
 >(({ editor, readonly, isLoading }, ref) => {
-  const { files, removeFile, open } = useMediaUpload();
+  const { files, removeFile, open, uploadedFiles } = useMediaUpload();
 
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
   const setFiles = useMediaLightBoxStore((state) => state.setFiles);
@@ -73,6 +73,14 @@ export const AttachmentSelection = forwardRef<
           <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
             <AnimatePresence>
               {files.map((file, i) => {
+                const fileIsUploaded = uploadedFiles.find((f) => {
+                  return f.localUrl === file.url;
+                });
+                if (fileIsUploaded) {
+                  console.log('file Is Uploaded here', fileIsUploaded);
+                } else {
+                  console.log('file Is Not Uploaded here', file);
+                }
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -87,18 +95,24 @@ export const AttachmentSelection = forwardRef<
                         {
                           'cursor-default': readonly,
                         },
-                        isLoading
-                          ? 'relative flex flex-col items-center justify-center'
-                          : '',
+                        isLoading ? 'relative' : '',
                       )}
                       onClick={() => openMediaLightBox(i)}
                     >
                       <MediaItem file={file} />
-                      <Spinner
-                        size="sm"
-                        className={isLoading ? 'absolute  inset-0 bg-blend-overlay ' : 'hidden'}
-                        color="white"
-                      />
+                      <div
+                        className={
+                          isLoading && !fileIsUploaded
+                            ? 'absolute  inset-0 flex flex-col  items-center justify-center bg-primary-100 opacity-70'
+                            : 'hidden'
+                        }
+                      >
+                        <Spinner
+                          size="sm"
+                          color="white"
+                          className=" text-primary-500-main"
+                        />
+                      </div>
                     </div>
                     <button
                       tabIndex={-1}
