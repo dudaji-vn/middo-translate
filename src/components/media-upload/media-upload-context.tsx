@@ -12,7 +12,10 @@ import { DropzoneRootProps, useDropzone, DropzoneState } from 'react-dropzone';
 
 interface MediaUploadContextProps extends DropzoneState {
   files: SelectedFile[];
-  loadSavedFilesContext: (uploadedFiles: UploadedFile[]) => void;
+  loadSavedFilesContext: (
+    uploadedFiles: UploadedFile[],
+    allowedFileTypes: Record<string, string>,
+  ) => void;
   uploadedFiles: UploadedFile[];
   getInputProps: <T extends DropzoneRootProps>(props?: T | undefined) => T;
   getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T;
@@ -39,6 +42,7 @@ export type UploadedFile = {
   url: string;
   file: File;
   metadata: CloudinaryUploadResponse;
+  type?: string;
 };
 export interface MediaUploadProps {}
 const MAX_FILE_SIZE = 25;
@@ -68,18 +72,28 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
       type: 'error',
     });
   };
-  const loadSavedFilesContext = (uploadedFiles: UploadedFile[]) => {
+  const loadSavedFilesContext = (
+    uploadedFiles: UploadedFile[],
+    allowedFileTypes: Record<string, string>,
+  ) => {
     setUploadedFiles(uploadedFiles);
     setFiles(
-      uploadedFiles.map((file) => ({
-        url: file.url,
-        file: {
-          ...file.file,
-          type: file.metadata.resource_type,
-          size: file.metadata.bytes,
-          name: file.metadata.original_filename,
-        },
-      })),
+      uploadedFiles
+        .filter((file) => {
+          const type = file.type || file.metadata.resource_type;
+          return !!allowedFileTypes[type];
+        })
+        .map((file) => {
+          return {
+            url: file.url,
+            file: {
+              ...file.file,
+              type: file.type || file.metadata.resource_type,
+              size: file.metadata.bytes,
+              name: file.metadata.original_filename,
+            },
+          };
+        }),
     );
   };
   const handlePasteFile = (
@@ -154,7 +168,7 @@ export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
     );
   };
   const removeUploadedFile = (file: UploadedFile) => {
-    console.log('file being removed:>>', file)
+    console.log('file being removed:>>', file);
     setUploadedFiles((old) =>
       old.filter((f) => {
         if (f.localUrl === file.localUrl || f.url === file.url) {
@@ -196,7 +210,6 @@ export const useMediaUpload = () => {
 };
 
 const crateFile = (file: File): SelectedFile => {
-  console.log('file', file);
   return {
     url: URL.createObjectURL(file),
     file,
