@@ -34,7 +34,7 @@ export const ModalChooseScreen = () => {
     const setModal = useVideoCallStore(state => state.setModal);
     const modal = useVideoCallStore(state => state.modal);
     const room = useVideoCallStore(state =>state.room);
-    
+    const user = useAuthStore(state => state.user);
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
     const setShareScreen = useMyVideoCallStore(state => state.setShareScreen);
     const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
@@ -113,7 +113,7 @@ export const ModalChooseScreen = () => {
                         {sources.map((source: MediaSource) => {
                             return (
                                 <div key={source.id} 
-                                    className={cn('p-2 border rounded-2xl cursor-pointer',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50')}
+                                    className={cn('p-2 border rounded-2xl cursor-pointer',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50 dark:border-neutral-800')}
                                     onClick={()=>setSelectedSource(source)}>
                                     <div className='w-full rounded-xl overflow-hidden aspect-video'>
                                         <Image 
