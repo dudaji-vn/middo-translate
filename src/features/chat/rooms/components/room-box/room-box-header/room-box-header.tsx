@@ -87,7 +87,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
             <p className="break-word-mt line-clamp-1 font-medium">
               {room.name}
             </p>
-            <p className="text-sm font-light">
+            <p className="line-clamp-1 text-sm font-light">
               {room.isHelpDesk
                 ? isOnline
                   ? t('COMMON.ONLINE')

@@ -10,7 +10,7 @@ export const TimeDisplay = ({ className, time }: LimeDisplayProps) => {
   if (!time) return null;
   return (
     <div
-      className={cn('my-2 flex items-center justify-center gap-3', className)}
+      className={cn('my-3 flex items-center justify-center gap-3', className)}
     >
       <div className="flex items-center justify-center">
         <div className="bg-primary/30 h-[1px]" />
