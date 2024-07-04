@@ -38,7 +38,6 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const pathname = usePathname();
   const router = useRouter();
-  const stationId = user?.defaultStation?._id;
 
   useEffect(() => {
     if (user && isLoaded && pathname == ROUTE_NAMES.ROOT) {
@@ -46,14 +45,24 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
         router.push(ROUTE_NAMES.TRANSLATION);
         return;
       }
-      if (stationId) {
-        router.push(`${ROUTE_NAMES.STATIONS}/${stationId}/conversations`);
-        return;
-      }
       router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isLoaded, isMobile, stationId]);
+  }, [user, isLoaded, isMobile]);
+
+  useEffect(() => {
+    const stationId = user?.defaultStation?._id;
+    if (
+      isLoaded &&
+      (pathname == ROUTE_NAMES.ONLINE_CONVERSATION ||
+        pathname == ROUTE_NAMES.ROOT) &&
+      stationId
+    ) {
+      router.push(`${ROUTE_NAMES.STATIONS}/${stationId}/conversations`);
+      return;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, user]);
 
   return (
     <ReactQueryProvider>

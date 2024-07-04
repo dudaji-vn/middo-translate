@@ -164,14 +164,14 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
                     : '',
                 )}
               >
-                <a
+                <Link
                   href={!isOnStation ? '#' : ROUTE_NAMES.ONLINE_CONVERSATION}
                   className="relative flex w-full flex-row items-center justify-start gap-4"
                 >
                   <Avatar alt="hello" size="sm" src="/icon.png" />
 
                   <span className="pr-4">Middo Station</span>
-                </a>
+                </Link>
               </DropdownMenuItem>
             </Section>
             <Section label="WORK STATION">
@@ -185,7 +185,7 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
                   )}
                   key={option.href}
                 >
-                  <a
+                  <Link
                     href={option.isActive ? '#' : option.href}
                     className="relative flex w-full flex-row items-center justify-start gap-4"
                   >
@@ -205,7 +205,7 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
                           option?.isActive,
                       })}
                     />
-                  </a>
+                  </Link>
                 </DropdownMenuItem>
               ))}
             </Section>

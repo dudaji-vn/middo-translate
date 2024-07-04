@@ -198,7 +198,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           order,
                           status: message.status,
                         }),
-                        'pointer-events-auto',
+                        'text-content-wrapper pointer-events-auto',
                         mediaLength > 1 && 'rounded-none',
                       )}
                     >
@@ -271,9 +271,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     <MessageItemReactionBar isMe={isMe} message={message} />
                   )}
               </div>
-              <MessageItemParticipantJoinCall message={message} isMe={isMe}/>
-              
-              
+              <MessageItemParticipantJoinCall message={message} isMe={isMe} />
+
               {isSendBySpaceMember && isLast && (
                 <span
                   className={cn(

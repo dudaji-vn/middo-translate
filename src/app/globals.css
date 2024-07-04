@@ -593,4 +593,14 @@ input::-ms-clear {
 
 .active-message {
   filter: drop-shadow(0px 0px 12px var(--primary));
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+.active-message .text-content-wrapper {
+  @apply outline outline-2 outline-offset-2 outline-primary;
+}
+
+.active-message .highlight-content,
+.active-message .highlight-content a {
+  @apply bg-white font-semibold text-primary;
 }

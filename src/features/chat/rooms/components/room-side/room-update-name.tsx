@@ -6,6 +6,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger,
 } from '@/components/feedback';
 import { useId, useRef, useState } from 'react';
 
@@ -13,6 +14,9 @@ import { Input } from '@/components/data-entry';
 import { useTranslation } from 'react-i18next';
 import { useChatBox } from '../../contexts';
 import { useUpdateRoomInfo } from '../../hooks/use-update-room-info';
+import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
+import { Button } from '@/components/actions';
+import { Camera, PenIcon } from 'lucide-react';
 
 export interface RoomUpdateNameProps {}
 
@@ -37,10 +41,20 @@ export const RoomUpdateName = (props: RoomUpdateNameProps) => {
 
   return (
     <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button.Icon
+          size="xs"
+          color="secondary"
+          type="button"
+          className="shrink-0"
+        >
+          <PenIcon />
+        </Button.Icon>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {t('CONVERSATION.CHANGE_STATION_NAME')}
+            {t('CONVERSATION.CHANGE_GROUP_NAME')}
           </AlertDialogTitle>
         </AlertDialogHeader>
         <form id={id} onSubmit={handleSubmit}>
