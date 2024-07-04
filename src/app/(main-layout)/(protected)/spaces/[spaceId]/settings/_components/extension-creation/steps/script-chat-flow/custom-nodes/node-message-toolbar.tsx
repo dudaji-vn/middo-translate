@@ -19,8 +19,10 @@ import { FLOW_KEYS } from './node-types';
 import { isEmpty, isEqual } from 'lodash';
 import { Spinner } from '@/components/feedback';
 import { Skeleton } from '@/components/ui/skeleton';
+import { MediaType } from '@/types';
+import { useModalStore } from '@/stores/modal.store';
 
-const allowedMediaTypes: Record<string, string> = {
+const allowedMediaTypes: Partial<Record<MediaType, string>> = {
   image: 'image',
   video: 'video',
   document: 'document',
@@ -50,10 +52,16 @@ const NodeMessageToolbar = ({
 
       const nothingChanged = isEqual(cloudUrls, currentUrls);
 
-      const media = uploadedFiles.map((file) => ({
-        ...file,
-        type: file.metadata.resource_type || 'document',
-      }));
+      const media = uploadedFiles
+        .map((file) => {
+          let type = file.metadata.resource_type || file.type;
+          return {
+            ...file,
+            type: !allowedMediaTypes[type as MediaType] ? 'document' : type,
+          };
+        })
+        .filter(Boolean);
+      console.log('medi a ?????', media);
       setValue(mediasNameField, media);
       if (nothingChanged) return;
       if (files.length < uploadedFiles.length) {
@@ -69,7 +77,7 @@ const NodeMessageToolbar = ({
 
   useEffect(() => {
     if (!isEmpty(currentNodeMedias)) {
-      loadSavedFilesContext(currentNodeMedias);
+      loadSavedFilesContext(currentNodeMedias, allowedMediaTypes);
     }
   }, []);
   const isLoading = useMemo(() => {
@@ -87,7 +95,12 @@ const NodeMessageToolbar = ({
           <Skeleton className="h-1 w-full rounded-md bg-primary-200" />
         )}
         {currentNodeMedias && (
-          <AttachmentSelection readonly={readonly} isLoading={isLoading} />
+          <AttachmentSelection
+            readonly={readonly}
+            isLoading={isLoading}
+            limit={6}
+            disabledReview
+          />
         )}
         <div className={cn('flex flex-row')}>
           <MessageEditorToolbarFile disabled={readonly} />
