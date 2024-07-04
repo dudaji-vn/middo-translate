@@ -30,6 +30,7 @@ import { ChatSettingMenu } from '../chat-setting';
 export interface ChatSidebarHeaderProps {}
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
   const { currentSide, setCurrentSide } = useSideChatStore();
+  const isMobile = useAppStore((state) => state.isMobile);
   const pingEmptyInbox = useAppStore((state) => state.pingEmptyInbox);
   const [openSetting, setOpenSetting] = useState(false);
   const { searchValue, setSearchValue } = useSearchStore();
@@ -125,55 +126,58 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
           />
         </div>
       </div>
-      <div
-        className={cn(
-          'flex items-center gap-1 ',
-          { 'gap-3': isBusiness && !isSearch },
-          pathname?.includes('statistics') && 'hidden',
-        )}
-      >
-        <AnimatePresence mode="popLayout">
-          {isSearch && (
-            <motion.div
-              layout="size"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{
-                scale: 1,
-                opacity: 1,
-              }}
-              exit={{ scale: 0, opacity: 0 }}
-            >
-              <Button.Icon
-                size="xs"
-                variant="ghost"
-                color="default"
-                onClick={handleBack}
-              >
-                <ArrowLeftIcon />
-              </Button.Icon>
-            </motion.div>
+
+      {!(isMobile && isSearch) && (
+        <div
+          className={cn(
+            'flex items-center gap-1 ',
+            { 'gap-3': isBusiness && !isSearch },
+            pathname?.includes('statistics') && 'hidden',
           )}
-          <motion.div key="search-input-main" className="w-full">
-            <SearchInput
-              ref={searchInputRef}
-              value={searchValue}
-              autoFocus={isSearch}
-              onFocus={() => {
-                setCurrentSide('search');
-              }}
-              btnDisabled
-              placeholder={t('COMMON.SEARCH')}
-              onChange={(e) => {
-                setSearchValue(e.target.value);
-              }}
-              onClear={handleBack}
-            />
-          </motion.div>
-        </AnimatePresence>
-        {!isSearch && (
-          <>{isBusiness ? <RoomsModalFilter /> : <InboxFilter />}</>
-        )}
-      </div>
+        >
+          <AnimatePresence mode="popLayout">
+            {isSearch && (
+              <motion.div
+                layout="size"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{
+                  scale: 1,
+                  opacity: 1,
+                }}
+                exit={{ scale: 0, opacity: 0 }}
+              >
+                <Button.Icon
+                  size="xs"
+                  variant="ghost"
+                  color="default"
+                  onClick={handleBack}
+                >
+                  <ArrowLeftIcon />
+                </Button.Icon>
+              </motion.div>
+            )}
+            <motion.div key="search-input-main" className="w-full">
+              <SearchInput
+                ref={searchInputRef}
+                value={searchValue}
+                autoFocus={isSearch}
+                onFocus={() => {
+                  setCurrentSide('search');
+                }}
+                btnDisabled
+                placeholder={t('COMMON.SEARCH')}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+                onClear={handleBack}
+              />
+            </motion.div>
+          </AnimatePresence>
+          {!isSearch && (
+            <>{isBusiness ? <RoomsModalFilter /> : <InboxFilter />}</>
+          )}
+        </div>
+      )}
     </div>
   );
 };
