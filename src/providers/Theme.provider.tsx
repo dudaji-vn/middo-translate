@@ -1,3 +1,5 @@
+import { ELECTRON_EVENTS } from '@/configs/electron-events';
+import { useElectron } from '@/hooks';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { Theme, useAppStore } from '@/stores/app.store';
 import { useEffect } from 'react';
@@ -6,6 +8,7 @@ export const ThemeProvider = () => {
   const setTheme = useAppStore(state => state.setTheme);
   const themeSetting = useAppStore(state => state.themeSetting);
   const { isHelpDesk } = useBusinessNavigationData();
+  const {isElectron, ipcRenderer} = useElectron();
   useEffect(() => {
     let currentTheme: Theme = 'light';
     if (themeSetting === 'system' || !themeSetting) {
@@ -24,7 +27,10 @@ export const ThemeProvider = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [setTheme, themeSetting]);
+    if(isElectron && ipcRenderer) {
+      ipcRenderer.send(ELECTRON_EVENTS.TOGGLE_THEME, currentTheme);
+    }
+  }, [setTheme, themeSetting, ipcRenderer, isElectron]);
   
 
   useEffect(() => {

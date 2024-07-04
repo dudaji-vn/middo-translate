@@ -5,6 +5,7 @@ import getRandomColor from '../utils/get-random-color.util';
 import CaptionInterface from '../interfaces/caption.interface';
 import { User } from '@/features/users/types';
 import { CallType } from '../constant/call-type';
+import { Station } from '@/features/stations/types/station.types';
 type ModalType = 'forward-call' | 'add-user' | 'video-setting' | 'leave-call' | 'stop-doodle' | 'choose-screen'
 export interface IRoom {
   _id: string;
@@ -17,6 +18,7 @@ export interface IRoom {
   createdAt: string;
   updatedAt: string;
   isHelpDesk: boolean;
+  station?: Station
 }
 
 export interface IRequestCall {
@@ -26,12 +28,21 @@ export interface IRequestCall {
     participants?: User[];
   };
   user: User;
-  room?: IRoom & {
+  room: IRoom & {
     avatar?: string;
     participants?: User[];
+    space?: {
+      _id: string;
+      name: string;
+      avatar: string;
+    }
   };
   message?: string;
-  // space?: 
+  space?: {
+    _id: string;
+    name: string;
+    avatar: string;
+  }
   type: 'direct' | 'group' | 'help_desk';
 }
 export type VideoCallState = {
