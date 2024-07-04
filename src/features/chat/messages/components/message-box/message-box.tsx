@@ -9,7 +9,7 @@ import { ArrowDownIcon } from 'lucide-react';
 import { Room } from '../../../rooms/types';
 import { Message } from '../../types';
 import { MessageItemGroup } from '../message-group';
-import { MessageItem } from '../message-item';
+import { MessageItem } from '../message-item-v2';
 
 import { useAuthStore } from '@/stores/auth.store';
 import moment from 'moment';
@@ -69,98 +69,15 @@ export const MessageBox = ({
   }, [room.participants.length]);
 
   const messagesGroup = useMemo(() => {
-    const data = messages?.reduce((acc, message) => {
-      if (acc.length === 0) {
-        acc.push({
-          messages: [message],
-          lastMessage: message,
-        });
-        return acc;
-      }
-      if (message.type === 'action' || message.type === 'notification') {
-        acc.push({
-          messages: [message],
-          lastMessage: message,
-        });
-        return acc;
-      }
-      const lastGroup = acc[acc.length - 1];
-      const lastMessage = lastGroup.lastMessage;
-      // if last message is notification
-      if (
-        lastMessage.type === 'notification' ||
-        lastMessage.type === 'action'
-      ) {
-        acc.push({
-          messages: [message],
-          lastMessage: message,
-        });
-        return acc;
-      }
-      // if last message is not from the same sender
-      if (lastMessage.sender._id !== message.sender._id) {
-        acc.push({
-          messages: [message],
-          lastMessage: message,
-        });
-        return acc;
-      }
-      // if last message is from the same sender but time diff is too big
-      const timeDiff = moment(lastMessage.createdAt).diff(
-        moment(message.createdAt),
-        'minute',
-      );
-      if (timeDiff > MAX_TIME_DIFF) {
-        acc.push({
-          messages: [message],
-          lastMessage: message,
-        });
-      } else {
-        lastGroup.messages.push(message);
-        lastGroup.lastMessage = message;
-      }
-      return acc;
-    }, [] as MessageGroup[]);
-
-    return data;
+    return groupMessages(messages);
   }, [messages]);
 
   const usersReadMessageMap = useMemo(() => {
-    let alreadyShow: string[] = [];
-    const usersReadMessageMap: { [key: string]: User[] } = {};
-    messagesGroup.forEach((group, index) => {
-      group.messages.forEach((message, messageIndex) => {
-        if (index === 0 && messageIndex === 0) {
-          alreadyShow = message.readBy ?? [];
-          usersReadMessageMap[message._id] = [];
-          message.readBy?.forEach((userId) => {
-            const user = participants.find(
-              (u) => u._id === userId && u._id !== currentUserId,
-            );
-            if (user) {
-              usersReadMessageMap[message._id].push(user);
-            }
-          });
-        } else {
-          message.readBy?.forEach((userId) => {
-            if (!alreadyShow.includes(userId)) {
-              const user = participants.find(
-                (u) => u._id === userId && u._id !== currentUserId,
-              );
-              if (user) {
-                alreadyShow.push(userId);
-                usersReadMessageMap[message._id] = [
-                  ...(usersReadMessageMap[message._id] ?? []),
-                  user,
-                ];
-              }
-            }
-          });
-        }
-      });
-    });
-
-    return usersReadMessageMap;
+    return generateUsersReadMessageMap(
+      messagesGroup,
+      participants,
+      currentUserId as string,
+    );
   }, [currentUserId, messagesGroup, participants]);
 
   useEffect(() => {
@@ -334,4 +251,103 @@ export const MessageBox = ({
       )}
     </div>
   );
+};
+
+const groupMessages = (messages: Message[]): MessageGroup[] => {
+  return messages?.reduce((acc, message) => {
+    if (acc.length === 0) {
+      acc.push({ messages: [message], lastMessage: message });
+      return acc;
+    }
+
+    const lastGroup = acc[acc.length - 1];
+    const lastMessage = lastGroup.lastMessage;
+
+    if (shouldCreateNewGroup(message, lastMessage)) {
+      acc.push({ messages: [message], lastMessage: message });
+    } else {
+      lastGroup.messages.push(message);
+      lastGroup.lastMessage = message;
+    }
+
+    return acc;
+  }, [] as MessageGroup[]);
+};
+
+const shouldCreateNewGroup = (
+  message: Message,
+  lastMessage: Message,
+): boolean => {
+  const isDifferentSender = lastMessage.sender._id !== message.sender._id;
+  const isNotificationOrAction =
+    message.type === 'action' || message.type === 'notification';
+  const timeDiff = moment(lastMessage.createdAt).diff(
+    moment(message.createdAt),
+    'minute',
+  );
+
+  const isHaveExtension = !!message?.reactions?.length || !!message?.hasChild;
+
+  return (
+    isNotificationOrAction ||
+    lastMessage.type === 'notification' ||
+    lastMessage.type === 'action' ||
+    isDifferentSender ||
+    timeDiff > MAX_TIME_DIFF ||
+    isHaveExtension
+  );
+};
+
+const generateUsersReadMessageMap = (
+  messagesGroup: MessageGroup[],
+  participants: User[],
+  currentUserId: string,
+) => {
+  let alreadyShow: string[] = [];
+  const usersReadMessageMap: { [key: string]: User[] } = {};
+
+  messagesGroup.forEach((group, index) => {
+    group.messages.forEach((message, messageIndex) => {
+      if (index === 0 && messageIndex === 0) {
+        alreadyShow = message.readBy ?? [];
+        usersReadMessageMap[message._id] = getReadByUsers(
+          message,
+          participants,
+          currentUserId,
+        );
+      } else {
+        message.readBy?.forEach((userId) => {
+          if (!alreadyShow.includes(userId)) {
+            const user = participants.find(
+              (u) => u._id === userId && u._id !== currentUserId,
+            );
+            if (user) {
+              alreadyShow.push(userId);
+              usersReadMessageMap[message._id] = [
+                ...(usersReadMessageMap[message._id] ?? []),
+                user,
+              ];
+            }
+          }
+        });
+      }
+    });
+  });
+
+  return usersReadMessageMap;
+};
+
+const getReadByUsers = (
+  message: Message,
+  participants: User[],
+  currentUserId: string,
+): User[] => {
+  return (message.readBy ?? [])
+    .map((userId) => {
+      const user = participants.find(
+        (u) => u._id === userId && u._id !== currentUserId,
+      );
+      return user ? user : null;
+    })
+    .filter((user): user is User => !!user);
 };
