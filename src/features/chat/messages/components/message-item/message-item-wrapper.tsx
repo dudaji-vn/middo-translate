@@ -52,6 +52,7 @@ export interface MessageItemWrapperProps {
   actionsDisabled?: boolean;
   showTime?: boolean;
   showDetail?: boolean;
+  reactionDisabled?: boolean;
   hideDetail?: () => void;
   toggleDetail?: () => void;
   setIsMenuOpen?: (isOpen: boolean) => void;
@@ -110,6 +111,7 @@ const MessageDetail = ({
 
 export const MessageItemWrapper = ({
   actionsDisabled,
+  reactionDisabled,
   showDetail,
   hideDetail,
   toggleDetail,

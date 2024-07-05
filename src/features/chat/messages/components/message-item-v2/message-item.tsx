@@ -47,6 +47,7 @@ export interface MessageProps
   pinnedBy?: User;
   discussionDisabled?: boolean;
   guestId?: string;
+  reactionDisabled?: boolean;
   actionsDisabled?: boolean;
   showTime?: boolean;
   showReactionBar?: boolean;
@@ -91,6 +92,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       direction,
       showReply = true,
       pinnedBy,
+      reactionDisabled = false,
       actionsDisabled = false,
       discussionDisabled = false,
       showTime,
@@ -185,6 +187,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   toggleDetail={toggleShowDetail}
                   showTime={showTime}
                   actionsDisabled={actionsDisabled || isEditing}
+                  reactionDisabled
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
@@ -251,7 +254,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   <MessageItemLinks isMe={isMe} message={message} />
                 )}
 
-                {message.forwardOf && (
+                {message.forwardOf && !actionsDisabled && (
                   <MessageItemForward
                     hasParent={!!message.content}
                     message={message.forwardOf}
@@ -259,13 +262,14 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   />
                 )}
 
-                {pinnedBy && (
+                {pinnedBy && !actionsDisabled && (
                   <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
                 )}
                 {!discussionDisabled && message.hasChild && showReply && (
                   <MessageItemReply isMe={isMe} messageId={message._id} />
                 )}
                 {showReactionBar &&
+                  !reactionDisabled &&
                   message?.reactions &&
                   message.reactions.length > 0 && (
                     <MessageItemReactionBar isMe={isMe} message={message} />

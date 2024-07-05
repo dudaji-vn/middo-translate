@@ -50,6 +50,7 @@ export interface MessageItemWrapperProps {
   message: Message;
   setActive: (active: boolean) => void;
   discussionDisabled?: boolean;
+  reactionDisabled?: boolean;
   actionsDisabled?: boolean;
   showTime?: boolean;
   showDetail?: boolean;
@@ -111,6 +112,7 @@ const MessageDetail = ({
 
 export const MessageItemWrapper = ({
   actionsDisabled,
+  reactionDisabled,
   showDetail,
   hideDetail,
   toggleDetail,
@@ -251,6 +253,7 @@ export const MessageItemWrapper = ({
         isMe={isMe}
         message={message}
         items={items}
+        reactionDisabled={reactionDisabled}
         hideDetail={hideDetail}
         setIsMenuOpen={setIsMenuOpen}
         isMenuOpen={isMenuOpen}
@@ -280,6 +283,7 @@ const MobileWrapper = ({
   items,
   isMe,
   message,
+  reactionDisabled,
   setActive,
   setIsMenuOpen,
 }: MessageItemMobileWrapperProps) => {
@@ -367,19 +371,21 @@ const MobileWrapper = ({
               >
                 <DisplayMessage isMe={isMe} message={message} />
               </div>
-              <div className="pointer-events-auto">
-                <MessageEmojiPicker
-                  onClickMore={() => {
-                    openEmoji();
-                    setFalse();
-                  }}
-                  onEmojiClick={() => {
-                    setFalse();
-                    setActive(false);
-                  }}
-                  messageId={message._id}
-                />
-              </div>
+              {!reactionDisabled && (
+                <div className="pointer-events-auto">
+                  <MessageEmojiPicker
+                    onClickMore={() => {
+                      openEmoji();
+                      setFalse();
+                    }}
+                    onEmojiClick={() => {
+                      setFalse();
+                      setActive(false);
+                    }}
+                    messageId={message._id}
+                  />
+                </div>
+              )}
             </div>
           }
         >
@@ -434,6 +440,7 @@ const DesktopWrapper = ({
   items,
   children,
   isMe,
+  reactionDisabled,
   message,
   setIsMenuOpen,
   isMenuOpen,
@@ -481,32 +488,36 @@ const DesktopWrapper = ({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Popover
-          open={value}
-          onOpenChange={(open) => {
-            setValue(open);
-            setIsMenuOpen?.(open);
-          }}
-        >
-          <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
-            <Button.Icon size="ss" variant="ghost" color="default">
-              <SmilePlusIcon />
-            </Button.Icon>
-          </PopoverTrigger>
-          <PopoverContent
-            align={isMe ? 'end' : 'start'}
-            className={cn('w-fit border-none !bg-transparent p-0 shadow-none')}
+        {!reactionDisabled && (
+          <Popover
+            open={value}
+            onOpenChange={(open) => {
+              setValue(open);
+              setIsMenuOpen?.(open);
+            }}
           >
-            <MessageEmojiPicker
+            <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
+              <Button.Icon size="ss" variant="ghost" color="default">
+                <SmilePlusIcon />
+              </Button.Icon>
+            </PopoverTrigger>
+            <PopoverContent
               align={isMe ? 'end' : 'start'}
-              onEmojiClick={() => {
-                setIsMenuOpen?.(false);
-                setFalse();
-              }}
-              messageId={message._id}
-            />
-          </PopoverContent>
-        </Popover>
+              className={cn(
+                'w-fit border-none !bg-transparent p-0 shadow-none',
+              )}
+            >
+              <MessageEmojiPicker
+                align={isMe ? 'end' : 'start'}
+                onEmojiClick={() => {
+                  setIsMenuOpen?.(false);
+                  setFalse();
+                }}
+                messageId={message._id}
+              />
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
     </>
   );
