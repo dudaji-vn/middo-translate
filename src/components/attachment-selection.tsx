@@ -16,12 +16,14 @@ export interface AttachmentSelectionProps
   editor?: Editor | null;
   readonly?: boolean;
   isLoading?: boolean;
+  disabledReview?: boolean;
+  limit?: number;
 }
 
 export const AttachmentSelection = forwardRef<
   HTMLDivElement,
   AttachmentSelectionProps
->(({ editor, readonly, isLoading }, ref) => {
+>(({ editor, readonly, limit, isLoading, disabledReview }, ref) => {
   const { files, removeFile, open, uploadedFiles } = useMediaUpload();
 
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
@@ -49,6 +51,7 @@ export const AttachmentSelection = forwardRef<
   }, [files]);
 
   const openMediaLightBox = (index: number) => {
+    if (disabledReview) return;
     if (readonly) return;
     setIndex(index);
     setFiles(sliders);
@@ -63,7 +66,7 @@ export const AttachmentSelection = forwardRef<
             type="button"
             color="secondary"
             size="lg"
-            disabled={readonly}
+            disabled={readonly || Boolean(limit && limit <= files.length)}
             className={cn('rounded-2xl', {
               hidden: readonly,
             })}
@@ -74,13 +77,10 @@ export const AttachmentSelection = forwardRef<
             <AnimatePresence>
               {files.map((file, i) => {
                 const fileIsUploaded = uploadedFiles.find((f) => {
-                  return f.localUrl === file.url;
+                  return (
+                    (f.localUrl === file.url || f.url === file.url) && f.url
+                  );
                 });
-                if (fileIsUploaded) {
-                  console.log('file Is Uploaded here', fileIsUploaded);
-                } else {
-                  console.log('file Is Not Uploaded here', file);
-                }
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -93,7 +93,7 @@ export const AttachmentSelection = forwardRef<
                       className={cn(
                         'aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow',
                         {
-                          'cursor-default': readonly,
+                          'cursor-default': readonly || disabledReview,
                         },
                         isLoading ? 'relative' : '',
                       )}

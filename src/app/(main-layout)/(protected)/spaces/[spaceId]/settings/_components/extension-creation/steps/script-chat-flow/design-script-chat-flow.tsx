@@ -223,7 +223,7 @@ const DesignScriptChatFlow = ({
       <div className="h-[calc(100vh-200px)]  max-h-[calc(100vh-200px)]  w-full bg-gray-200 dark:bg-neutral-800">
         <Form {...control}>
           <ReactFlow
-            nodes={nodes}
+            nodes={viewOnly ? viewOnlyNodes : nodes}
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}

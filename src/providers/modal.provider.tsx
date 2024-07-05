@@ -23,7 +23,12 @@ export const ModalProvider = (props: ModalProviderProps) => {
         }
       }}
     >
-      <AlertDialogContent>
+      <AlertDialogContent
+        overlayProps={{
+          className: 'z-[1000000]',
+        }}
+        className="z-[1000000]"
+      >
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription className="justify-start text-start dark:text-neutral-50">
