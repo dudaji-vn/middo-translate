@@ -2,6 +2,10 @@
   @apply text-white;
 }
 
+.rich-text-view {
+  @apply text-neutral-800 dark:text-neutral-50;
+}
+
 .rich-text-view .mention {
   @apply bg-primary-200 text-primary;
 }
