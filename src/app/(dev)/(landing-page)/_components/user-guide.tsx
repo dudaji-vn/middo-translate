@@ -66,10 +66,12 @@ export default function UserGuide() {
 
   const onPreviewImage = (url: string) => {
     setIndex(0);
-    setFiles([{
-      url,
-      type: 'image',
-    }])
+    setFiles([
+      {
+        url,
+        type: 'image',
+      },
+    ]);
   };
 
   const guides = [

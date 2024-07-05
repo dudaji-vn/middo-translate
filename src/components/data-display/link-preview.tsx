@@ -56,7 +56,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
       }}
       href={previewData?.url}
       target="_blank"
-      className="block w-full max-w-96 rounded-2xl border bg-white p-2 hover:opacity-90"
+      className="block w-full max-w-96 rounded-2xl border bg-white p-2 hover:opacity-90 dark:bg-neutral-900"
     >
       <div className="flex items-center gap-1">
         <div className="size-4 shrink-0">
@@ -72,7 +72,7 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
           {previewData?.title}
         </h6>
       </div>
-      <p className="line-clamp-1 text-base text-neutral-600 md:text-sm">
+      <p className="line-clamp-1 text-base text-neutral-600 dark:text-neutral-200 md:text-sm">
         {previewData?.description}
       </p>
       {!isImageError && previewData.image && (

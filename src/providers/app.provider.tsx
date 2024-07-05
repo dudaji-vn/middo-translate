@@ -26,9 +26,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { ReactNativeProvider } from './react-native.provider';
 import { usePlatformStore } from '@/features/platform/stores';
+import { EventListener } from './event-listener';
 import { ToastProvider } from './toast.provider';
 import { ThemeProvider } from './Theme.provider';
-import { EventListener } from './event-listener';
 import MediaLightBoxProvider from './media-light-box.provider';
 
 init({ data });

@@ -600,3 +600,7 @@ input::-ms-clear {
 .active-message .highlight-content a {
   @apply bg-white font-semibold text-primary;
 }
+
+.message-editor .link {
+  color: var(--primary);
+}
