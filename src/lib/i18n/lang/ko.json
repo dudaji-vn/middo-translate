@@ -750,8 +750,8 @@
   },
   "EXTENSION": {
     "EMPTY": {
-      "TITLE": "Tiện ích mở rộng của bạn sắp đến!",
-      "OWNER_DES": "Tạo một tiện ích mở rộng cuộc trò chuyện với sự trợ giúp của chủ đề sẵn có hoặc tự định nghĩa một chủ đề độc đáo của riêng bạn."
+      "TITLE": "확장 프로그램을 로드할 수 없음",
+      "OWNER_DES": "기존 테마를 사용하여 채팅 확장 프로그램을 만들거나 고유한 테마를 정의하세요."
     },
     "ALL_DOMAINS": "모든 도메인",
     "ALL_MEMBERS": "모든 구성원",
