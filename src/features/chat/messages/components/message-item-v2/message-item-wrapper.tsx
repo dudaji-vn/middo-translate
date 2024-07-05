@@ -41,6 +41,7 @@ import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 import { listenEvent } from '@/features/call/utils/custom-event.util';
 import { CUSTOM_EVENTS } from '@/configs/custom-event';
 import { usePlatformStore } from '@/features/platform/stores';
+import { useBusinessNavigationData } from '@/hooks';
 
 const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
 
@@ -119,6 +120,7 @@ export const MessageItemWrapper = ({
   const isMobilePlatform = usePlatformStore(
     (state) => state.platform === 'mobile',
   );
+  const { spaceId, isOnBusinessChat } = useBusinessNavigationData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMe, message, setActive, discussionDisabled, showTime } = props;
   const ref = useRef<HTMLDivElement | null>(null);
@@ -144,8 +146,9 @@ export const MessageItemWrapper = ({
           case 'copy':
             return message.type === 'text';
           case 'forward':
-            return message.type !== 'call';
+            return message.type !== 'call' && !isOnBusinessChat;
           case 'pin':
+            if (isOnBusinessChat) return false;
             if (discussionDisabled) return false;
             if (message.isPinned) return false;
             if (message.type === 'call') return false;
@@ -156,9 +159,9 @@ export const MessageItemWrapper = ({
               return false;
             return true;
           case 'unpin':
-            return message.isPinned;
+            return message.isPinned && !isOnBusinessChat;
           case 'reply':
-            return !discussionDisabled;
+            return !discussionDisabled && !isOnBusinessChat;
           case 'download':
             if (
               isMobilePlatform &&
