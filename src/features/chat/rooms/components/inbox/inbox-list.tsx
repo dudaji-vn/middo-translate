@@ -223,17 +223,19 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
                 hidden: !showFilter,
               })}
             />
-            <PinnedRoom
-              type={
-                filters.includes('group')
-                  ? 'group'
-                  : type === 'help-desk'
-                    ? 'help-desk'
-                    : 'all'
-              }
-              rooms={pinnedRooms}
-              currentRoomId={currentRoomId as string}
-            />
+            {(type === 'all' || type == 'help-desk') && (
+              <PinnedRoom
+                type={
+                  filters.includes('group')
+                    ? 'group'
+                    : type === 'help-desk'
+                      ? 'help-desk'
+                      : 'all'
+                }
+                rooms={pinnedRooms}
+                currentRoomId={currentRoomId as string}
+              />
+            )}
             {rooms.map((room, index) => {
               const isOnline = isRoomOnline({
                 currentUser,

@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { IRequestCall, useVideoCallStore } from '../store/video-call.store';
 import socket from '@/lib/socket-io';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -12,7 +12,7 @@ import usePlayAudio from '../hooks/use-play-audio';
 import { motion, useDragControls } from 'framer-motion';
 import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
-import { useChatStore } from '@/features/chat/stores';
+import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 
 const ReceiveVideoCall = () => {
   const constraintsRef = useRef<HTMLDivElement>(null);
@@ -24,14 +24,31 @@ const ReceiveVideoCall = () => {
   
   const setRoom = useVideoCallStore((state) => state.setRoom);
   const room = useVideoCallStore((state) => state.room);
-  const meetingList = useChatStore(state => state.meetingList)
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
   const { isElectron, ipcRenderer } = useElectron();
-  const listenToCall = useCallback(({ call, user }: IRequestCall) => {
+  const listenToCall = useCallback(({ call, user, type, message, room }: IRequestCall) => {
       if (user._id == me?._id) return;
       if (requestCall) return;
       if(room && room.roomId === call.roomId) return;
-      const data = { id: call.roomId, call, user }
+      const data = { 
+        id: call?.roomId, 
+        call, 
+        user,
+        type,
+        message,
+        room
+      }
+      // Set avatar for room 
+      if(!data.room?.avatar) {
+        data.room.avatar = NEXT_PUBLIC_URL + '/icon.png';
+      }
+      if(!data.room?.station) {
+        //@ts-ignore
+        data.room.station = {
+          name: 'Middo',
+          avatar: NEXT_PUBLIC_URL + '/icon.png'
+        }
+      }
       setRequestCall(data);
       if(isElectron && ipcRenderer) {
         ipcRenderer.send(ELECTRON_EVENTS.RECEIVE_CALL_INVITE, data);
@@ -39,10 +56,9 @@ const ReceiveVideoCall = () => {
     },
     [ipcRenderer, isElectron, me?._id, requestCall, room, setRequestCall],
   );
-
   const declineCall = useCallback(() => {
     socket.emit(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, {
-      roomId: requestCall?.call.roomId,
+      roomId: requestCall?.call?.roomId,
       userId: me?._id,
     });
     setRequestCall();
@@ -137,11 +153,11 @@ const ReceiveVideoCall = () => {
         dragConstraints={constraintsRef}
         dragControls={controls}
         dragMomentum={false}
-        className="pointer-events-auto absolute h-full w-full cursor-auto rounded-xl shadow-glow md:bottom-4 md:left-4 md:h-[252px] md:w-[336px]"
+        className="pointer-events-auto absolute h-full w-full cursor-auto rounded-xl shadow-glow md:bottom-4 md:left-4 md:h-[300px] md:w-[320px]"
       >
         <div className="max-h-vh flex h-full bg-white dark:bg-background w-full flex-col overflow-hidden rounded-none md:rounded-xl border border-primary-400">
           <ReceiveVideoCallHeader />
-          <div className="relative flex flex-1 flex-col overflow-hidden">
+          <div className="relative flex flex-1 flex-col p-5 gap-5 overflow-hidden">
             <ReceiveVideoCallContent />
             <ReceiveVideoCallActions
               acceptCall={acceptCall}

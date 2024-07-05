@@ -30,8 +30,18 @@ import { Button } from '../actions';
 import { Spinner } from '../feedback';
 import VideoPlayer from '../video/video-player';
 import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
-import { Carousel, CarouselApi, CarouselContent, CarouselItem } from '../data-display/carousel';
-import { Drawer, DrawerClose, DrawerContent, DrawerOverlay } from '../data-display/drawer';
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from '../data-display/carousel';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerOverlay,
+} from '../data-display/drawer';
 
 export interface Media {
   url: string;
@@ -45,7 +55,6 @@ interface MediaLightBoxProps {
   index?: number;
   close?: () => void;
 }
-
 
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 5;
@@ -62,13 +71,15 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const isMobile = useAppStore((state) => state.isMobile);
   const [isVideoFullScreen, setIsVideoFullScreen] = useState(false);
   const { postMessage } = useReactNativePostMessage();
-  const [apiCarousel, setApiCarousel] = useState<CarouselApi>()
+  const [apiCarousel, setApiCarousel] = useState<CarouselApi>();
   const [allowClose, setAllowClose] = useState(true);
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
   const setFiles = useMediaLightBoxStore((state) => state.setFiles);
   const fetchNextPage = useMediaLightBoxStore((state) => state.fetchNextPage);
-  const setFetchNextPage = useMediaLightBoxStore((state) => state.setFetchNextPage);
-  
+  const setFetchNextPage = useMediaLightBoxStore(
+    (state) => state.setFetchNextPage,
+  );
+
   const onDownload = () => {
     const file = files[current || 0];
     if (!file) return;
@@ -132,34 +143,36 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const renderMedia = (file: Media, index: number) => {
     switch (file.type) {
       case 'image':
-        return <TransformWrapper
-          doubleClick={{ disabled: true }}
-          smooth={true}
-          centerOnInit={true}
-          maxScale={MAX_ZOOM}
-          minScale={MIN_ZOOM}
-          panning={{ 
-            disabled: zoom === 1,
-            allowLeftClickPan: false,
-            allowMiddleClickPan: false,
-            allowRightClickPan: false,
-          }}
-          limitToBounds={true}
-        >
-          <Controls setZoom={setZoom}/>
-          <TransformComponent
-            contentClass="!w-full !h-full"
-            wrapperClass="!w-full !h-full"
+        return (
+          <TransformWrapper
+            doubleClick={{ disabled: true }}
+            smooth={true}
+            centerOnInit={true}
+            maxScale={MAX_ZOOM}
+            minScale={MIN_ZOOM}
+            panning={{
+              disabled: zoom === 1,
+              allowLeftClickPan: false,
+              allowMiddleClickPan: false,
+              allowRightClickPan: false,
+            }}
+            limitToBounds={true}
           >
-            <Image
-              {...index == current && { ref: imageRef }}
-              className="h-full w-full object-contain"
-              src={file.url}
-              alt={file?.file?.name || ''}
-              layout="fill"
-            />
-          </TransformComponent>
-        </TransformWrapper>
+            <Controls setZoom={setZoom} />
+            <TransformComponent
+              contentClass="!w-full !h-full"
+              wrapperClass="!w-full !h-full"
+            >
+              <Image
+                {...(index == current && { ref: imageRef })}
+                className="h-full w-full object-contain"
+                src={file.url}
+                alt={file?.file?.name || ''}
+                layout="fill"
+              />
+            </TransformComponent>
+          </TransformWrapper>
+        );
       case 'video':
         const props = {
           file: {
@@ -217,34 +230,33 @@ function MediaLightBox(props: MediaLightBoxProps) {
 
   // On Slide change
   useEffect(() => {
-    let timer : NodeJS.Timeout;
+    let timer: NodeJS.Timeout;
     const handleSelect = (data: any) => {
       setCurrent(data.selectedScrollSnap());
-    }
+    };
     const handleScroll = (data: any) => {
       setAllowClose(false);
-      if(timer) clearTimeout(timer);
+      if (timer) clearTimeout(timer);
       timer = setTimeout(() => {
         setAllowClose(true);
       }, 100);
-    }
-    apiCarousel?.on("select", handleSelect);
-    apiCarousel?.on("scroll", handleScroll);
+    };
+    apiCarousel?.on('select', handleSelect);
+    apiCarousel?.on('scroll', handleScroll);
 
     return () => {
       if (apiCarousel) {
-        apiCarousel.off("select", handleSelect)
-        apiCarousel.off("scroll", handleScroll)
+        apiCarousel.off('select', handleSelect);
+        apiCarousel.off('scroll', handleScroll);
       }
-      if(timer) clearTimeout(timer);
-    }
+      if (timer) clearTimeout(timer);
+    };
   }, [apiCarousel]);
-
 
   useEffect(() => {
     setIsVideoFullScreen(false);
     const currentSlide = apiCarousel?.selectedScrollSnap();
-    if(currentSlide != current && typeof current == 'number') {
+    if (currentSlide != current && typeof current == 'number') {
       apiCarousel?.scrollTo(current);
     }
   }, [current]);
@@ -273,14 +285,15 @@ function MediaLightBox(props: MediaLightBoxProps) {
 
   // on component unmount reset all state
 
-  return <Drawer 
-          open={typeof index == 'number'} 
-          onClose={onClose}
-          shouldScaleBackground={true}
-          dismissible={isMobile ? allowClose : false}
-        >
-      <DrawerContent className='w-full h-full border-none'>
-        <div className="flex h-full w-full flex-col overflow-hidden bg-black/90 p-3 -mt-6">
+  return (
+    <Drawer
+      open={typeof index == 'number'}
+      onClose={onClose}
+      shouldScaleBackground={true}
+      dismissible={isMobile ? allowClose : false}
+    >
+      <DrawerContent className="z-50 h-full w-full border-none">
+        <div className="-mt-6 flex h-full w-full flex-col overflow-hidden bg-black/90 p-3">
           <div className="z-20 ml-auto flex w-fit gap-2 rounded-xl bg-black/40 p-2">
             <Button.Icon
               variant={'default'}
@@ -306,42 +319,42 @@ function MediaLightBox(props: MediaLightBoxProps) {
             <div className="no-scrollbar h-full w-full">
               <Carousel
                 opts={{
-                  align: "center",
+                  align: 'center',
                   loop: false,
                   startIndex: index,
                   axis: 'x',
                 }}
                 setApi={setApiCarousel}
-                className='h-full [&>div]:h-full'
+                className="h-full [&>div]:h-full"
               >
-                <CarouselContent className='h-full'>
-                  {
-                    files.map((file, index) => {
-                      return (
-                        <CarouselItem key={index} className='h-full'>
-                          {renderMedia(file, index)}
-                        </CarouselItem>
-                      )
-                    })
-                  }
+                <CarouselContent className="h-full">
+                  {files.map((file, index) => {
+                    return (
+                      <CarouselItem key={index} className="h-full">
+                        {renderMedia(file, index)}
+                      </CarouselItem>
+                    );
+                  })}
                 </CarouselContent>
               </Carousel>
             </div>
           </div>
           <div className="relative h-24 ">
-            <div className='flex gap-2 py-2 items-center justify-center w-fit mx-auto'>
+            <div className="mx-auto flex w-fit items-center justify-center gap-2 py-2">
               <Button.Icon
                 variant={'default'}
                 color={'default'}
                 size={'xs'}
                 shape={'default'}
-                className={cn({'!opacity-0': (current == 0 || files.length == 1)})}
+                className={cn({
+                  '!opacity-0': current == 0 || files.length == 1,
+                })}
                 onClick={onPrev}
                 disabled={current == 0 || files.length == 1}
               >
                 <ChevronLeft />
               </Button.Icon>
-          
+
               <ThumbnailList
                 files={files}
                 current={current}
@@ -353,7 +366,10 @@ function MediaLightBox(props: MediaLightBoxProps) {
                 color={'default'}
                 size={'xs'}
                 shape={'default'}
-                className={cn({'!opacity-0': (current == files.length - 1 || files.length == 1)})}
+                className={cn({
+                  '!opacity-0':
+                    current == files.length - 1 || files.length == 1,
+                })}
                 onClick={onNext}
                 disabled={current == files.length - 1 || files.length == 1}
               >
@@ -442,6 +458,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
         </div>
       </DrawerContent>
     </Drawer>
+  );
 }
 
 interface ThumbnailListProps {
@@ -547,11 +564,10 @@ ThumbnailList.displayName = 'ThumbnailList';
 interface ControlsProps {
   setZoom: (val: number) => void;
 }
-const Controls = ({setZoom}: ControlsProps) => {
+const Controls = ({ setZoom }: ControlsProps) => {
   useTransformEffect(({ state, instance }) => {
     setZoom(state.scale);
-    return () => {
-    };
+    return () => {};
   });
   return <></>;
 };

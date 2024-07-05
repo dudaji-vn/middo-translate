@@ -16,12 +16,10 @@ import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 
 export const ModalAddUser = () => {
     const {t} = useTranslation("common");
-
-    const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
-    const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
+    const setModal = useVideoCallStore((state) => state.setModal);
+    const modal = useVideoCallStore((state) => state.modal);
     const room = useVideoCallStore((state) => state.room);
     const participants = useParticipantVideoCallStore(state => state.participants)
-    const addParticipant = useParticipantVideoCallStore(state => state.addParticipant)
     const [members, setMembers] = useState<User[]>([]);
     const [membersApi, setMembersApi] = useState<User[]>([]);
     
@@ -66,27 +64,10 @@ export const ModalAddUser = () => {
     const handleSubmit = () => { 
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
             users: selectedUsers,
-            room,
-            user
+            call: room,
+            user,
+            type: 'group'
         })
-        // selectedUsers.forEach((user: User) => {
-        //     // Check to make sure the user is not in the list
-        //     if(!participants.some((p) => p.user._id === user._id)) {
-        //         let participant: ParticipantInVideoCall = {
-        //             socketId: user._id,
-        //             user: {
-        //                 _id: user._id,
-        //                 name: user.name,
-        //                 avatar: user.avatar,
-        //                 language: user.language,
-        //                 status: user.status,
-        //                 email: user.email,
-        //             },
-        //             status: 'WAITING'
-        //         }
-        //         addParticipant(participant)
-        //     }
-        // });
         setSelectedUsers([]);
     };
     const handleChangeSearch = (e: React.FormEvent<HTMLInputElement>) => {
@@ -100,7 +81,7 @@ export const ModalAddUser = () => {
     }
     return (
         <div>
-            <AlertDialog open={isShowModalAddUser} onOpenChange={() => setModalAddUser(false)}>
+            <AlertDialog open={modal == 'add-user'} onOpenChange={() => setModal()}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>{t('MODAL.ADD_USER.TITLE')}</AlertDialogTitle>

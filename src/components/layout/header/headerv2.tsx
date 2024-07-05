@@ -12,6 +12,7 @@ import { useMemo } from 'react';
 import { HeaderNav } from './header-nav';
 import { HeaderNavMobile } from './header-nav.mobile';
 import HeaderProfile from './header-profile';
+import { useElectron } from '@/hooks';
 
 type Props = {};
 
@@ -22,6 +23,8 @@ export const Header = (props: Props) => {
 
   const { isBusiness } = useBusinessNavigationData();
   const hideNavigation = isBusiness || platform === 'mobile';
+  const { isElectron } = useElectron();
+
   const logoURL = useMemo(() => {
     switch (theme) {
       case 'light':
@@ -39,12 +42,12 @@ export const Header = (props: Props) => {
   return (
     <div
       className={cn(
-        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] dark:border-neutral-800 dark:bg-neutral-900 md:gap-5 md:pl-[5vw]',
+        'flex h-header w-full items-center justify-between gap-1 border-b border-neutral-50 bg-primary-100 py-4  pl-[1vw] pr-[5vw] dark:border-neutral-800 dark:bg-neutral-900 md:gap-5 md:pl-[5vw] app-header',
       )}
     >
       {!hideNavigation && <HeaderNavMobile />}
       <Link
-        href={ROUTE_NAMES.ROOT}
+        href={isElectron ? ROUTE_NAMES.ONLINE_CONVERSATION : ROUTE_NAMES.ROOT}
         className={cn(
           'flex w-[60px] flex-row justify-start gap-2',
           isBusiness && 'w-[120px]',

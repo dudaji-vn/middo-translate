@@ -19,8 +19,10 @@ import { FLOW_KEYS } from './node-types';
 import { isEmpty, isEqual } from 'lodash';
 import { Spinner } from '@/components/feedback';
 import { Skeleton } from '@/components/ui/skeleton';
+import { MediaType } from '@/types';
+import { useModalStore } from '@/stores/modal.store';
 
-const allowedMediaTypes: Record<string, string> = {
+const allowedMediaTypes: Partial<Record<MediaType, string>> = {
   image: 'image',
   video: 'video',
   document: 'document',
@@ -35,7 +37,8 @@ const NodeMessageToolbar = ({
   readonly?: boolean;
 }) => {
   const { t } = useTranslation('common');
-  const { files, uploadedFiles, loadSavedFilesContext } = useMediaUpload();
+  const { files, uploadedFiles, loadSavedFilesContext, removeUploadedFile } =
+    useMediaUpload();
   const { setValue, watch } = useFormContext();
   const isMobile = useAppStore((state) => state.isMobile);
   const [openEmojisPicker, setOpenEmojisPicker] = useState(false);
@@ -44,21 +47,45 @@ const NodeMessageToolbar = ({
 
   useEffect(() => {
     if (uploadedFiles) {
-      const media = uploadedFiles.map((file) => ({
-        ...file,
-        type: file.metadata.resource_type || 'document',
-      }));
+      const cloudUrls = uploadedFiles.map((file) => file.url).sort();
+      const currentUrls = files.map((file) => file.url).sort();
+
+      const nothingChanged = isEqual(cloudUrls, currentUrls);
+
+      const media = uploadedFiles
+        .map((file) => {
+          let type = file.metadata.resource_type || file.type;
+          return {
+            ...file,
+            type: !allowedMediaTypes[type as MediaType] ? 'document' : type,
+          };
+        })
+        .filter(Boolean);
+      console.log('medi a ?????', media);
       setValue(mediasNameField, media);
+      if (nothingChanged) return;
+      if (files.length < uploadedFiles.length) {
+        const fileRemoved = uploadedFiles.find(
+          (file) => !currentUrls.includes(file.url),
+        );
+        if (fileRemoved) {
+          removeUploadedFile(fileRemoved);
+        }
+      }
     }
-  }, [uploadedFiles, files, setValue, currentNodeMedias, mediasNameField]);
+  }, [uploadedFiles, files, setValue, mediasNameField]);
 
   useEffect(() => {
     if (!isEmpty(currentNodeMedias)) {
-      loadSavedFilesContext(currentNodeMedias);
+      loadSavedFilesContext(currentNodeMedias, allowedMediaTypes);
     }
   }, []);
   const isLoading = useMemo(() => {
-    return currentNodeMedias?.length !== files?.length;
+    return (
+      currentNodeMedias?.length !== files?.length &&
+      !isEmpty(files) &&
+      !isEmpty(currentNodeMedias)
+    );
   }, [currentNodeMedias, files]);
 
   return (
@@ -67,7 +94,14 @@ const NodeMessageToolbar = ({
         {isLoading && (
           <Skeleton className="h-1 w-full rounded-md bg-primary-200" />
         )}
-        {currentNodeMedias && <AttachmentSelection readonly={readonly} />}
+        {currentNodeMedias && (
+          <AttachmentSelection
+            readonly={readonly}
+            isLoading={isLoading}
+            limit={6}
+            disabledReview
+          />
+        )}
         <div className={cn('flex flex-row')}>
           <MessageEditorToolbarFile disabled={readonly} />
           <Popover open={openEmojisPicker} onOpenChange={setOpenEmojisPicker}>

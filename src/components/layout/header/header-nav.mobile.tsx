@@ -61,7 +61,6 @@ const MobileNav = ({
         )}
       >
         {navItems.map((item, index) => {
-          if(!item.isShowOnDesktop && isElectron ) return;
           return (
             <motion.div
               onClick={toggleMenu}

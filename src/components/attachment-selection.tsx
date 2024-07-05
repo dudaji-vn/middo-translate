@@ -9,18 +9,22 @@ import { Editor } from '@tiptap/react';
 
 import { cn } from '@/utils/cn';
 import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
+import { Spinner } from './feedback';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {
   editor?: Editor | null;
   readonly?: boolean;
+  isLoading?: boolean;
+  disabledReview?: boolean;
+  limit?: number;
 }
 
 export const AttachmentSelection = forwardRef<
   HTMLDivElement,
   AttachmentSelectionProps
->(({ editor, readonly }, ref) => {
-  const { files, removeFile, open } = useMediaUpload();
+>(({ editor, readonly, limit, isLoading, disabledReview }, ref) => {
+  const { files, removeFile, open, uploadedFiles } = useMediaUpload();
 
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
   const setFiles = useMediaLightBoxStore((state) => state.setFiles);
@@ -47,9 +51,11 @@ export const AttachmentSelection = forwardRef<
   }, [files]);
 
   const openMediaLightBox = (index: number) => {
+    if (disabledReview) return;
+    if (readonly) return;
     setIndex(index);
     setFiles(sliders);
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -60,7 +66,7 @@ export const AttachmentSelection = forwardRef<
             type="button"
             color="secondary"
             size="lg"
-            disabled={readonly}
+            disabled={readonly || Boolean(limit && limit <= files.length)}
             className={cn('rounded-2xl', {
               hidden: readonly,
             })}
@@ -70,6 +76,11 @@ export const AttachmentSelection = forwardRef<
           <div className="flex w-[10px] flex-1 flex-row-reverse justify-end gap-2">
             <AnimatePresence>
               {files.map((file, i) => {
+                const fileIsUploaded = uploadedFiles.find((f) => {
+                  return (
+                    (f.localUrl === file.url || f.url === file.url) && f.url
+                  );
+                });
                 return (
                   <motion.div
                     initial={{ opacity: 0, scale: 0 }}
@@ -79,16 +90,35 @@ export const AttachmentSelection = forwardRef<
                     className="group relative aspect-square h-[60px] w-[60px]"
                   >
                     <div
-                      className="aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow"
+                      className={cn(
+                        'aspect-square h-[60px] w-[60px] shrink-0 cursor-pointer overflow-hidden rounded-xl shadow',
+                        {
+                          'cursor-default': readonly || disabledReview,
+                        },
+                        isLoading ? 'relative' : '',
+                      )}
                       onClick={() => openMediaLightBox(i)}
                     >
                       <MediaItem file={file} />
+                      <div
+                        className={
+                          isLoading && !fileIsUploaded
+                            ? 'absolute  inset-0 flex flex-col  items-center justify-center bg-primary-100 opacity-70'
+                            : 'hidden'
+                        }
+                      >
+                        <Spinner
+                          size="sm"
+                          color="white"
+                          className=" text-primary-500-main"
+                        />
+                      </div>
                     </div>
                     <button
                       tabIndex={-1}
                       type="button"
                       onClick={() => removeFile(file)}
-                      disabled={readonly}
+                      className={cn({ hidden: readonly })}
                     >
                       <div className="absolute -right-1 -top-1 rounded-full border bg-background opacity-0 shadow-1 transition-all group-hover:opacity-100">
                         <XIcon width={16} height={16} />

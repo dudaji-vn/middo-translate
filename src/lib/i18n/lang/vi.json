@@ -29,6 +29,7 @@
     "ARCHIVE": "Lưu trữ",
     "UNARCHIVE": "Bỏ lưu trữ",
     "COMPLETED": "Hoàn thành",
+    "FORWARD_CALL": "Chuyển tiếp cuộc gọi",
     "STOP": "Dừng",
     "REPLACE": "Thay thế",
     "UPDATE": "Cập nhật",
@@ -417,7 +418,9 @@
     "CHAT_SETTING": "Cài đặt trò chuyện",
     "EXPAND": "Bấm để mở rộng",
     "SCREEN": "Màn hình",
-    "CALLING": "<strong>{{name}}</strong> đang gọi...",
+    "CALLING": "đang gọi",
+    "CALLING_GROUP": "Cuộc gọi từ <strong>{{group}}</strong> <br><strong>{{name}}</strong> mời bạn tham gia",
+    "CALLING_HELPDESK": "Cuộc gọi từ không gian <strong>{{space}}</strong> được chuyển tiếp từ <strong>{{name}}</strong>",
     "UNSEND_A_MESSAGE": "Tin nhắn đã bị gỡ",
     "REMOVED_A_MESSAGE": "đã gỡ một tin nhắn",
     "SEND_PHOTO": "đã gửi 1 ảnh",
@@ -554,6 +557,10 @@
     },
     "ADD_USER": {
       "TITLE": "Thêm thành viên"
+    },
+    "FORWARD_CALL": {
+      "TITLE": "Chuyển tiếp cuộc gọi",
+      "DESCRIPTION": "Bạn sẽ bị xóa khỏi cuộc gọi này để chuyển tiếp cho <strong>@{{username}}</strong>. Bạn có chắc chắn muốn làm điều này không?"
     },
     "SHARE_SCREEN": {
       "TITLE": "Chia sẻ màn hình",

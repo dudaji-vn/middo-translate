@@ -5,7 +5,7 @@ import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { UserPlus2 } from 'lucide-react';
-import React, { memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const ActionAddMembers = () => {
@@ -13,11 +13,13 @@ const ActionAddMembers = () => {
 
   const room = useVideoCallStore((state) => state.room);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
-  const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
-  const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
-    
+  const setModal = useVideoCallStore((state) => state.setModal);
+  const modal = useVideoCallStore((state) => state.modal);
+  const toggleModalAddUser = useCallback(()=> {
+    setModal(modal == 'add-user' ? undefined : 'add-user')
+  },[modal, setModal])
   useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
-    setModalAddUser(!isShowModalAddUser);
+    toggleModalAddUser()
   });
 
   if(isFullScreen || room?.type !== CALL_TYPE.GROUP) return null
@@ -30,7 +32,7 @@ const ActionAddMembers = () => {
           variant="default"
           size="xs"
           color={'default'}
-          onClick={() => setModalAddUser(true)}
+          onClick={() => toggleModalAddUser()}
         >
           <UserPlus2 />
         </Button.Icon>

@@ -42,7 +42,11 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   }, [router]);
 
   const handleRefresh = useCallback(() => {
-    router.refresh();
+    customToast.default('The space has been updated. Refreshing...');
+    setTimeout(() => {
+      router.refresh();
+      toast.dismiss();
+    }, 2000);
   }, [router]);
 
   useEffect(() => {

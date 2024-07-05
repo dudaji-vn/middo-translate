@@ -55,6 +55,9 @@ export const getSpaces = (type: 'joined-spaces' | undefined | null) => {
   const queryParams = type ? `?type=${type}` : '';
   return get(`/help-desk/spaces` + queryParams);
 };
+export const getMembers = (spaceId: string) => {
+  return get(`/help-desk/spaces/` + spaceId + `/members`);
+};
 
 export const createOrEditTag = (data: {
   name: string;

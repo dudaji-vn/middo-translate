@@ -7,6 +7,7 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 import { useChatStore } from '@/features/chat/stores';
 import { isRoomOnline } from '../inbox/inbox-list';
 import { useAuthStore } from '@/stores/auth.store';
+import { EBusinessSidebarKeys } from '@/types/business.type';
 
 export interface PinnedRoomProps {
   currentRoomId?: string;
@@ -19,7 +20,7 @@ export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
   const user = useAuthStore((state) => state.user);
 
   const { businessExtension } = useBusinessExtensionStore();
-  const { isBusiness } = useBusinessNavigationData();
+  const { isBusiness, businessConversationType } = useBusinessNavigationData();
   const filteredRooms = useMemo(() => {
     if (!rooms) return [];
     const showHelpDeskRooms =
@@ -31,6 +32,7 @@ export const PinnedRoom = ({ currentRoomId, type, rooms }: PinnedRoomProps) => {
     });
   }, [rooms, type, businessExtension, isBusiness]);
 
+  if (businessConversationType === EBusinessSidebarKeys.Archived) return null;
   if (!filteredRooms || !filteredRooms.length) return null;
   return (
     <div>

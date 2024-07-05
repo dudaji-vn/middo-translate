@@ -24,7 +24,11 @@ import moment from 'moment';
 import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSearchDynamic } from '../hooks/use-search-dynamic';
-import { useBusinessNavigationData, useStationNavigationData } from '@/hooks';
+import {
+  useBusinessNavigationData,
+  useCursorPaginationQuery,
+  useStationNavigationData,
+} from '@/hooks';
 import { Button } from '@/components/actions';
 
 export interface SearchTabsProps {
@@ -178,7 +182,6 @@ const MessagesResult = ({ searchValue, onItemClick }: ResultProps) => {
     type: 'message',
   });
   const messages = data?.items as Message[];
-
   return (
     <MessagesList
       onItemClick={onItemClick}

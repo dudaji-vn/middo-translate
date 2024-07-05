@@ -77,7 +77,7 @@ const DesignScriptChatFlow = ({
         setValue(FLOW_KEYS.NODES, applyNodeChanges(changes, watchedNodes));
       }
     },
-    [setValue, watch],
+    [setValue, viewOnly, watch],
   );
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
@@ -88,7 +88,7 @@ const DesignScriptChatFlow = ({
         setValue(FLOW_KEYS.EDGES, applyEdgeChanges(changes, edges));
       }
     },
-    [setValue, edges],
+    [viewOnly, setValue, edges],
   );
 
   const onNodesDelete = useCallback(
@@ -106,7 +106,7 @@ const DesignScriptChatFlow = ({
       const newNodes = deepDeleteNodes(nodes, nodesToDelete, edges);
       setValue(FLOW_KEYS.NODES, newNodes as FlowNode[]);
     },
-    [setValue, nodes, edges],
+    [viewOnly, nodes, edges, setValue],
   );
 
   const onConnect = (connection: Edge | Connection) => {
@@ -169,7 +169,7 @@ const DesignScriptChatFlow = ({
       setValue(FLOW_KEYS.NODES, initialChatFlow.nodes);
       setValue(FLOW_KEYS.NODES, initialChatFlow.edges);
     }
-  }, []);
+  }, [setValue, initialChatFlow]);
 
   const onPreviewClick = async () => {
     checkingErrors();

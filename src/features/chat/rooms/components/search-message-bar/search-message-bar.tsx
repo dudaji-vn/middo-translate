@@ -17,7 +17,7 @@ import { searchApi } from '@/features/search/api';
 import { MessagesList } from '@/features/search/components/search-tabs';
 import { useSetParams } from '@/hooks/use-set-params';
 import { useMutation } from '@tanstack/react-query';
-import { ChevronDown, ChevronUpIcon, SearchIcon, XIcon } from 'lucide-react';
+import { ChevronDown, ChevronUpIcon, SearchIcon } from 'lucide-react';
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRoomId } from '../../hooks/use-roomId';
@@ -31,6 +31,7 @@ export const SearchMessageBar = forwardRef<
   SearchMessageBarProps
 >(({ roomId, ...props }, ref) => {
   const { toggleIsShowSearch } = useRoomSearchStore();
+  const [currentValue, setCurrentValue] = useState('');
   const { t } = useTranslation('common');
   const [searchInput, setSearchInput] = useState('');
   const [open, setOpen] = useState(false);
@@ -45,6 +46,7 @@ export const SearchMessageBar = forwardRef<
   const handleSearch = () => {
     if (disabled) return;
     mutate({ roomId, params: { q: searchInput } });
+    setCurrentValue(searchInput);
   };
   const messages = useMemo(() => {
     const result = data || [];
@@ -68,6 +70,10 @@ export const SearchMessageBar = forwardRef<
     const canMoveDown = messages[0]?._id !== searchId;
     return { canMoveUp, canMoveDown };
   }, [messages, searchId]);
+  const currentIndex = useMemo(() => {
+    if (!searchId || !messages.length) return 0;
+    return messages.findIndex((message) => message._id === searchId) + 1;
+  }, [searchId, messages]);
 
   const handleMoveUp = () => {
     if (!canMoveUp) return;
@@ -89,7 +95,14 @@ export const SearchMessageBar = forwardRef<
             removeParam('search_id');
             mutate({ roomId: '', params: { q: '' } });
           }}
-          onEnter={handleSearch}
+          onEnter={() => {
+            if (canMoveUp && currentValue === searchInput) {
+              handleMoveUp();
+              return;
+            }
+            if (currentValue === searchInput) return;
+            handleSearch();
+          }}
           onChange={(e) => setSearchInput(e.target.value)}
           value={searchInput}
           placeholder="Search messages"
@@ -116,6 +129,7 @@ export const SearchMessageBar = forwardRef<
             <AlertDialogTrigger disabled={!messages.length}>
               <div className="hover:opacity-80">
                 <Typography variant="default">
+                  {currentIndex ? currentIndex + '/' : ''}
                   {messages.length} {messages.length > 1 ? 'results' : 'result'}
                 </Typography>
               </div>
@@ -173,7 +187,8 @@ export const SearchMessageBar = forwardRef<
           <AlertDialogTrigger disabled={!messages.length}>
             <div className="hover:opacity-80">
               <Typography variant="default">
-                {messages.length} {messages.length > 1 ? 'results' : 'result'}
+                {currentIndex + 1} {messages.length}
+                {messages.length > 1 ? 'results' : 'result'}
               </Typography>
             </div>
           </AlertDialogTrigger>

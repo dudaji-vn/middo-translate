@@ -51,7 +51,7 @@ const HeaderProfile = ({
           <>
             <DropdownMenu open={isOpenDropdown} onOpenChange={setOpenDropdown}>
               <DropdownMenuTrigger>
-                <div className="relative flex h-9 items-center gap-2 rounded-xl px-3 py-[6px] active:!bg-neutral-200 active:!text-shading dark:bg-transparent dark:active:!bg-neutral-700 dark:active:!text-neutral-50 md:py-1 md:hover:bg-neutral-100 dark:md:hover:bg-neutral-800">
+                <div className="relative flex h-9 items-center gap-2 rounded-xl px-3 py-[6px] bg-neutral-50 active:!bg-neutral-200 active:!text-shading dark:bg-transparent dark:active:!bg-neutral-700 dark:active:!text-neutral-50 md:py-1 md:hover:bg-neutral-100 dark:md:hover:bg-neutral-800">
                   <Avatar
                     src={user.avatar || '/person.svg'}
                     size="xs"

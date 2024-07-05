@@ -15,15 +15,15 @@ export const useChangeTitle = ({
     let intervalId: NodeJS.Timeout;
     if (notification && !isFocused) {
       intervalId = setInterval(() => {
-        const defaultTitle = `Talk | ${NEXT_PUBLIC_NAME}`;
+        const defaultTitle = `${NEXT_PUBLIC_NAME}`;
         document.title =
-          document.title === `Talk | ${NEXT_PUBLIC_NAME}`
+          document.title === `${NEXT_PUBLIC_NAME}`
             ? notification
             : defaultTitle;
       }, 1000);
     }
     if (isFocused) {
-      document.title = `Talk | ${NEXT_PUBLIC_NAME}`;
+      document.title = `${NEXT_PUBLIC_NAME}`;
       setNotification('');
     }
     return () => {

@@ -164,18 +164,17 @@ const ItemNumber = ({ numberItem }: { numberItem: number }) => {
 };
 
 const AddUserItem = () => {
-  const setModalAddUser = useVideoCallStore((state) => state.setModalAddUser);
-  const isShowModalAddUser = useVideoCallStore((state) => state.isShowModalAddUser);
   const {isBusiness} = useBusinessNavigationData()
-  
+  const modal = useVideoCallStore((state) => state.modal);
+  const setModal = useVideoCallStore((state) => state.setModal);
   useKeyboardShortcut([SHORTCUTS.ADD_MEMBERS], () => {
-    setModalAddUser(!isShowModalAddUser);
+    setModal(modal == 'add-user' ? undefined : 'add-user')
   });
 
   if(isBusiness) return;
 
   return <div className='h-full w-full relative flex items-center justify-center'>
-    <div className='rounded-xl text-neutral-700 dark:text-neutral-50 w-[60px] h-[60px] bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModalAddUser(true)}>
+    <div className='rounded-xl text-neutral-700 dark:text-neutral-50 w-[60px] h-[60px] bg-neutral-50 dark:bg-neutral-900 flex items-center justify-center p-[2px]  md:hover:opacity-80 cursor-pointer' onClick={() => setModal('add-user')}>
       <UserPlus2 size={20}></UserPlus2>
     </div>
   </div>

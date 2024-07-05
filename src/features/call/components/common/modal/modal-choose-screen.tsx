@@ -31,11 +31,10 @@ interface MediaSource {
 export const ModalChooseScreen = () => {
     const {t} = useTranslation('common');
     
-    const user = useAuthStore(state => state.user);
-    const showChooseScreen = useVideoCallStore(state => state.showChooseScreen);
-    const setChooseScreen = useVideoCallStore(state => state.setChooseScreen);
+    const setModal = useVideoCallStore(state => state.setModal);
+    const modal = useVideoCallStore(state => state.modal);
     const room = useVideoCallStore(state =>state.room);
-    
+    const user = useAuthStore(state => state.user);
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
     const setShareScreen = useMyVideoCallStore(state => state.setShareScreen);
     const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
@@ -97,11 +96,11 @@ export const ModalChooseScreen = () => {
                 customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
             }
         }
-        setChooseScreen(false)
-    }, [addParticipant, ipcRenderer, isTurnOnCamera, isTurnOnMic, room?._id, selectedSource, setChooseScreen, setShareScreen, setShareScreenStream, t, user])
+        setModal()
+    }, [addParticipant, ipcRenderer, isTurnOnCamera, isTurnOnMic, room?._id, selectedSource, setModal, setShareScreen, setShareScreenStream, t, user])
 
     return (
-        <AlertDialog open={showChooseScreen} onOpenChange={() => setChooseScreen(false)}>
+        <AlertDialog open={modal == 'choose-screen'} onOpenChange={() => setModal()}>
             <AlertDialogContent className="min-w-[80%]" >
                 <AlertDialogHeader>
                     <AlertDialogTitle>
@@ -114,7 +113,7 @@ export const ModalChooseScreen = () => {
                         {sources.map((source: MediaSource) => {
                             return (
                                 <div key={source.id} 
-                                    className={cn('p-2 border rounded-2xl cursor-pointer',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50')}
+                                    className={cn('p-2 border rounded-2xl cursor-pointer',selectedSource?.id === source.id ? 'border-2 border-primary' : 'border-neutral-50 dark:border-neutral-800')}
                                     onClick={()=>setSelectedSource(source)}>
                                     <div className='w-full rounded-xl overflow-hidden aspect-video'>
                                         <Image 

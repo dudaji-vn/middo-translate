@@ -35,7 +35,7 @@ const P2PLayout = () => {
                     <VideoItem participant={participantPin} />
                 </div>}
             </div>
-            {anotherParticipants.length > 0 && <ParticipantsBar participants={anotherParticipants}/>}
+            <ParticipantsBar participants={anotherParticipants}/>
         </div>
     );
 };

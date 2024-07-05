@@ -1,30 +1,43 @@
 import { Section } from '@/components/data-display/section';
 import { searchApi } from '@/features/search/api';
-import { motion } from 'framer-motion';
-import { forwardRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { forwardRef, useCallback, useRef } from 'react';
 
 import { Button } from '@/components/actions';
 import { SearchTabs } from '@/features/search/components/search-tabs';
 import { useSearchStore } from '@/features/search/store/search.store';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { PaintbrushIcon, SearchIcon, XIcon } from 'lucide-react';
+import { ArrowLeftIcon, PaintbrushIcon, SearchIcon, XIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/utils/cn';
 import { useBusinessNavigationData } from '@/hooks';
+import { useAppStore } from '@/stores/app.store';
+import { SearchInput, SearchInputRef } from '@/components/data-entry';
+import { useSideChatStore } from '../../stores/side-chat.store';
 export interface SearchTabProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
   (props, ref) => {
-    const searchValue = useSearchStore((state) => state.searchValue);
+    const { searchValue, setSearchValue } = useSearchStore((state) => state);
+    const { currentSide, setCurrentSide } = useSideChatStore();
+    const { t } = useTranslation('common');
+    const searchInputRef = useRef<SearchInputRef>(null);
     const { isBusiness } = useBusinessNavigationData();
-    console.log('isBusiness', isBusiness);
+    const isMobile = useAppStore((state) => state.isMobile);
+    const handleBack = useCallback(() => {
+      setCurrentSide('');
+      searchInputRef.current?.reset();
+      setSearchValue('');
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [setCurrentSide]);
     return (
       <div
         className={cn(
           'absolute left-0  w-full overflow-y-auto',
-          isBusiness
+          isBusiness && !isMobile
             ? 'top-[112px] h-[calc(100%_-_112px)]'
             : 'top-[184px] h-[calc(100%_-_184px)] md:top-[174px] md:h-[calc(100%_-_174px)]',
+          isMobile && 'left-0 top-0 h-full',
         )}
       >
         <motion.div
@@ -33,6 +46,47 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
           ref={ref}
           className="flex h-full w-full flex-col bg-neutral-white dark:bg-neutral-950"
         >
+          {isMobile && (
+            <div className="flex gap-2 p-3 pl-0">
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  layout="size"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{
+                    scale: 1,
+                    opacity: 1,
+                  }}
+                  exit={{ scale: 0, opacity: 0 }}
+                >
+                  <Button.Icon
+                    size="xs"
+                    variant="ghost"
+                    color="default"
+                    onClick={handleBack}
+                  >
+                    <ArrowLeftIcon />
+                  </Button.Icon>
+                </motion.div>
+
+                <motion.div key="search-input-main" className="w-full">
+                  <SearchInput
+                    ref={searchInputRef}
+                    value={searchValue}
+                    autoFocus
+                    onFocus={() => {
+                      setCurrentSide('search');
+                    }}
+                    btnDisabled
+                    placeholder={t('COMMON.SEARCH')}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value);
+                    }}
+                    onClear={handleBack}
+                  />
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          )}
           {searchValue ? (
             <SearchTabs searchValue={searchValue} />
           ) : (
