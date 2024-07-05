@@ -43,6 +43,7 @@ import { CUSTOM_EVENTS } from '@/configs/custom-event';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useBusinessNavigationData } from '@/hooks';
 import { isMobile as isMobileDevice } from 'react-device-detect';
+import { useAuthStore } from '@/stores/auth.store';
 
 const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
 
@@ -123,8 +124,8 @@ export const MessageItemWrapper = ({
   const isMobilePlatform = usePlatformStore(
     (state) => state.platform === 'mobile',
   );
-  const { spaceId, isOnBusinessChat, isOnHelpDeskChat } =
-    useBusinessNavigationData();
+  const { isOnBusinessChat, isOnHelpDeskChat } = useBusinessNavigationData();
+  const { user } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMe, message, setActive, discussionDisabled, showTime } = props;
   const ref = useRef<HTMLDivElement | null>(null);
@@ -191,6 +192,14 @@ export const MessageItemWrapper = ({
             return (
               message.type === 'text' && timeDiff < MAX_TIME_CAN_EDIT && isMe
             );
+
+          case 'remove': {
+            if (isOnBusinessChat && message.sender._id !== user?._id)
+              return false;
+            if (isOnHelpDeskChat && message.senderType !== 'anonymous')
+              return false;
+            return true;
+          }
           default:
             return true;
         }
