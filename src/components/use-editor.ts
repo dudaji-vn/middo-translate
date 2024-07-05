@@ -86,8 +86,7 @@ export const useEditor = ({
           ],
           HTMLAttributes: {
             rel: 'noopener noreferrer',
-            className: 'link',
-            style: 'color: #007bff',
+            class: 'link',
           },
         }),
         enterToSubmit

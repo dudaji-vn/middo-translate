@@ -362,10 +362,6 @@
   @apply bg-primary-600;
 }
 
-/* .editor-view .mention.me {
-  @apply bg-yellow-500/50;
-} */
-
 .editor-view .mention.left.me {
   @apply text-neutral-900;
 }

@@ -8,16 +8,18 @@ import { useAppStore } from '@/stores/app.store';
 import { cn } from '@/utils/cn';
 import { AnimatePresence } from 'framer-motion';
 import { PropsWithChildren } from 'react';
-
 export interface ChatMainProps {}
 
 export const ChatMain = ({ children }: ChatMainProps & PropsWithChildren) => {
   const isMobile = useAppStore((state) => state.isMobile);
   const pathName = usePathname();
+
   const params = useParams();
 
   const isInRoom =
-    pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) && !!params?.id;
+    (pathName?.includes(ROUTE_NAMES.ONLINE_CONVERSATION) ||
+      pathName?.includes(ROUTE_NAMES.STATIONS)) &&
+    !!params?.id;
 
   const show = !isMobile || isInRoom;
 

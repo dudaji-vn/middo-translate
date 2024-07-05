@@ -25,6 +25,7 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 import { RoomAddMember } from '../../room-side/room-add-member';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
+import { useStationNavigationData } from '@/hooks';
 
 export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { room } = useChatBox();
@@ -33,6 +34,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation('common');
   const { isBusiness, spaceId, businessConversationType } =
     useBusinessNavigationData();
+  const { isOnStation, stationId } = useStationNavigationData();
   const { toggleTab } = useRoomSidebarTabs();
 
   const participants = room.participants.filter(
@@ -51,21 +53,25 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
     return participants.some((user) => onlineList.includes(user._id));
   }, [isBusiness, onlineList, participants]);
 
+  const backHref = useMemo(() => {
+    if (isBusiness) {
+      return `${ROUTE_NAMES.SPACES}/${spaceId}/${businessConversationType}`;
+    }
+    if (isOnStation) {
+      return `${ROUTE_NAMES.STATIONS}/${stationId}/conversations`;
+    }
+    return ROUTE_NAMES.ONLINE_CONVERSATION;
+  }, [isBusiness, spaceId, businessConversationType, isOnStation, stationId]);
+
   return (
     <div
       {...props}
       className={cn(
-        'flex w-full items-center border-b  px-1 py-1 md:px-3 dark:border-neutral-800',
+        'flex w-full items-center border-b  px-1 py-1 dark:border-neutral-800 md:px-3',
         props.className,
       )}
     >
-      <RoomBoxHeaderNavigation
-        href={
-          isBusiness
-            ? `${ROUTE_NAMES.SPACES}/${spaceId}/${businessConversationType}`
-            : ROUTE_NAMES.ONLINE_CONVERSATION
-        }
-      />
+      <RoomBoxHeaderNavigation href={backHref} />
       <div className="flex flex-1 items-center gap-2">
         <div
           className="flex items-center gap-2 active:opacity-30 md:cursor-pointer"
@@ -81,7 +87,7 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
             <p className="break-word-mt line-clamp-1 font-medium">
               {room.name}
             </p>
-            <p className="text-sm font-light">
+            <p className="line-clamp-1 text-sm font-light">
               {room.isHelpDesk
                 ? isOnline
                   ? t('COMMON.ONLINE')
@@ -150,7 +156,7 @@ const ActionBar = () => {
 };
 const VideoCall = () => {
   const { room: roomChatBox } = useChatBox();
-  const {isBusiness} = useBusinessNavigationData();
+  const { isBusiness } = useBusinessNavigationData();
   const isHaveMeeting = useCheckHaveMeeting(roomChatBox?._id, isBusiness);
   const { user } = useAuthStore();
   const currentUserId = user?._id || '';
@@ -160,8 +166,8 @@ const VideoCall = () => {
     roomChatBox?.participants?.every((p) => p._id === currentUserId);
   const startVideoCall = useJoinCall();
   if (isSelfChat) return null;
-  
-  if(isBusiness && !isHaveMeeting) return null;
+
+  if (isBusiness && !isHaveMeeting) return null;
 
   return (
     <div>
@@ -169,7 +175,7 @@ const VideoCall = () => {
         title={t('TOOL_TIP.START_CALL')}
         triggerItem={
           <Button.Icon
-            onClick={() => startVideoCall({roomId: roomChatBox?._id})}
+            onClick={() => startVideoCall({ roomId: roomChatBox?._id })}
             size="xs"
             color={isHaveMeeting ? 'secondary' : 'primary'}
             variant={isHaveMeeting ? 'default' : 'ghost'}
@@ -181,7 +187,7 @@ const VideoCall = () => {
         }
       />
       <Button
-        onClick={() => startVideoCall({roomId: roomChatBox?._id})}
+        onClick={() => startVideoCall({ roomId: roomChatBox?._id })}
         size="xs"
         shape={'square'}
         color={isHaveMeeting ? 'primary' : 'secondary'}

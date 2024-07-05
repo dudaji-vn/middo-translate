@@ -62,7 +62,7 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
       return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, user]);
+  }, [isLoaded, user?._id, user?.defaultStation?._id]);
 
   return (
     <ReactQueryProvider>
