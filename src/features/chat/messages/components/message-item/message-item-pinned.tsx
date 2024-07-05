@@ -19,7 +19,7 @@ export const MessageItemPinned = ({
   return (
     <div
       className={cn(
-        'text-xs font-light text-neutral-600 ',
+        'text-xs font-light text-neutral-600 dark:text-neutral-200',
         isMe ? 'text-right' : 'text-left',
       )}
     >
