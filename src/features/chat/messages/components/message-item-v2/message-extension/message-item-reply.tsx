@@ -49,10 +49,10 @@ export const MessageItemReply = ({
     >
       {!isMe && (
         <div>
-          <div className="h-1/2 w-2 rounded-bl-sm border-b border-l border-neutral-50 dark:border-neutral-700" />
+          <div className="h-1/2 w-2 rounded-bl-sm border-b border-l border-neutral-200 dark:border-neutral-600" />
         </div>
       )}
-      <div className="flex h-fit w-fit items-center gap-1 rounded-lg border border-neutral-100 px-2 py-1 dark:border-neutral-700 dark:border-primary-100">
+      <div className="flex h-fit w-fit items-center gap-1 rounded-lg border border-neutral-200 px-2 py-1 dark:border-neutral-600">
         {uniqueUsers.map((user) => (
           <Avatar
             alt={user.name}

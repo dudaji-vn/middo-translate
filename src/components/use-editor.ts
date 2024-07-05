@@ -45,7 +45,7 @@ export const useEditor = ({
 
         attributes: {
           class:
-            'prose max-w-none w-full focus:outline-none dark:text-neutral-50',
+            'prose max-w-none w-full focus:outline-none dark:text-neutral-50 message-editor',
         },
         handlePaste: (_, e) => {
           onClipboardEvent?.(e);
