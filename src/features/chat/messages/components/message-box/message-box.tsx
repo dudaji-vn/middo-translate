@@ -177,7 +177,8 @@ export const MessageBox = ({
                             action === 'edit'
                           }
                           isLast={isLast}
-                          actionsDisabled={isAnonymous || room.isHelpDesk}
+                          // actionsDisabled={isAnonymous }
+                          reactionDisabled={room.isHelpDesk || isAnonymous}
                           guestId={guestId}
                           pinnedBy={pinnedBy}
                           showAvatar={

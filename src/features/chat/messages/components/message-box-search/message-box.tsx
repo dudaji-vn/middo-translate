@@ -305,7 +305,8 @@ export const MessageBoxSearch = ({
                           message._id === messageEditing?._id &&
                           action === 'edit'
                         }
-                        actionsDisabled={isAnonymous || room.isHelpDesk}
+                        // actionsDisabled={room.isHelpDesk}
+                        reactionDisabled={room.isHelpDesk}
                         guestId={guestId}
                         pinnedBy={pinnedBy}
                         showAvatar={
