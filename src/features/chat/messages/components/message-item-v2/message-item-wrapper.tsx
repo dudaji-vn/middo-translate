@@ -42,6 +42,7 @@ import { listenEvent } from '@/features/call/utils/custom-event.util';
 import { CUSTOM_EVENTS } from '@/configs/custom-event';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useBusinessNavigationData } from '@/hooks';
+import { isMobile as isMobileDevice } from 'react-device-detect';
 
 const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
 
@@ -122,7 +123,8 @@ export const MessageItemWrapper = ({
   const isMobilePlatform = usePlatformStore(
     (state) => state.platform === 'mobile',
   );
-  const { spaceId, isOnBusinessChat } = useBusinessNavigationData();
+  const { spaceId, isOnBusinessChat, isOnHelpDeskChat } =
+    useBusinessNavigationData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMe, message, setActive, discussionDisabled, showTime } = props;
   const ref = useRef<HTMLDivElement | null>(null);
@@ -148,9 +150,11 @@ export const MessageItemWrapper = ({
           case 'copy':
             return message.type === 'text';
           case 'forward':
-            return message.type !== 'call' && !isOnBusinessChat;
+            return (
+              message.type !== 'call' && !isOnBusinessChat && !isOnHelpDeskChat
+            );
           case 'pin':
-            if (isOnBusinessChat) return false;
+            if (isOnBusinessChat || isOnHelpDeskChat) return false;
             if (discussionDisabled) return false;
             if (message.isPinned) return false;
             if (message.type === 'call') return false;
@@ -161,9 +165,11 @@ export const MessageItemWrapper = ({
               return false;
             return true;
           case 'unpin':
-            return message.isPinned && !isOnBusinessChat;
+            return message.isPinned && !isOnBusinessChat && !isOnHelpDeskChat;
           case 'reply':
-            return !discussionDisabled && !isOnBusinessChat;
+            return (
+              !discussionDisabled && !isOnBusinessChat && !isOnHelpDeskChat
+            );
           case 'download':
             if (
               isMobilePlatform &&
@@ -201,10 +207,15 @@ export const MessageItemWrapper = ({
   }, [discussionDisabled, isMe, isMobilePlatform, message, onAction]);
 
   const Wrapper = useMemo(() => {
+    // console.log('isMobileDevice', );
     if (message.status === 'removed') return RemovedWrapper;
+
+    if (isOnHelpDeskChat) {
+      return isMobileDevice ? MobileWrapper : DesktopWrapper;
+    }
     if (isMobile) return MobileWrapper;
     return DesktopWrapper;
-  }, [isMobile, message.status]);
+  }, [isMobile, message.status, isOnHelpDeskChat]);
 
   useEffect(() => {
     if (showDetail) {
@@ -446,6 +457,7 @@ const DesktopWrapper = ({
   isMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
+  const isOnHelpDeskChat = useBusinessNavigationData().isOnHelpDeskChat;
   const { t } = useTranslation('common');
   return (
     <>
@@ -457,6 +469,7 @@ const DesktopWrapper = ({
             ? '-left-4 -translate-x-full'
             : '-right-4 translate-x-full flex-row-reverse',
           isMenuOpen && 'opacity-100',
+          isOnHelpDeskChat && 'visible !flex',
         )}
       >
         <DropdownMenu onOpenChange={setIsMenuOpen}>
