@@ -255,6 +255,13 @@
       btnIframe.style.display = 'block';
     });
   }
+  window.addEventListener('message', (event) => {
+    // if (event.origin !== 'http://localhost:3000') return;
+    console.log('event.data', event.data);
+    if (event.data === 'toggle-chat-widget') {
+      document.getElementById('btn-trigger-chat').click();
+    }
+  });
   window.ChatWidget = {
     init: intChatInterface,
   };

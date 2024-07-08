@@ -54,7 +54,7 @@ const EmbedButtonPage = () => {
     <div className="fixed inset-0 flex h-screen w-screen flex-row items-end justify-end bg-transparent">
       <button
         onClick={() => {
-          console.log('checkTheLocalStorage');
+          window.parent.postMessage('toggle-chat-widget', '*');
           checkTheLocalStorage();
         }}
         className="relative mb-7 mr-7 w-fit rounded-full bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]"
