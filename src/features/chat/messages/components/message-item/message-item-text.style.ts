@@ -7,7 +7,7 @@ export const wrapperVariants = cva('px-3 py-2 md:py-1', {
       right: 'bg-primary',
     },
     status: {
-      removed: 'bg-transparent',
+      removed: '!bg-transparent',
       pending: '',
       sent: '',
       received: '',
@@ -45,8 +45,9 @@ export const wrapperMiddleVariants = cva(
   {
     variants: {
       position: {
-        left: 'bg-neutral-100/80 dark:bg-neutral-800',
-        right: 'bg-primary-400s bg-white/20 dark:bg-primary-400 dark:text-neutral-50',
+        left: 'bg-black/5 dark:bg-white/15',
+        right:
+          'bg-primary-400s bg-white/20 dark:bg-primary-400 dark:text-neutral-50',
       },
       status: {
         removed: 'bg-transparent',
@@ -92,7 +93,7 @@ export const textVariants = cva(
         right: 'text-neutral-white',
       },
       status: {
-        removed: 'text-neutral-300',
+        removed: 'text-neutral-300 dark:text-neutral-600',
         pending: '',
         sent: '',
         received: '',

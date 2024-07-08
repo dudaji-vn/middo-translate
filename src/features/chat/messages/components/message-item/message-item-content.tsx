@@ -7,7 +7,7 @@ import {
 } from './message-item-text.style';
 
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import { RichTextView } from '@/components/rich-text-view';
+
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
 import { useChatStore } from '@/features/chat/stores';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
@@ -19,6 +19,7 @@ import { useDisplayContent } from '../../hooks/use-display-content';
 import { Message } from '../../types';
 import { AnimatePresence, m, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { RichTextView } from './rich-text-view';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -81,6 +82,20 @@ export const Content = ({
     message,
     userLanguage: receiverLanguage,
   });
+  if (message.status === 'removed') {
+    return (
+      <div
+        className={cn(
+          wrapperVariants({ active, position, status: message.status }),
+          position === 'right' ? 'me' : '',
+        )}
+      >
+        <div className={cn(textVariants({ position, status: message.status }))}>
+          {contentDisplay}
+        </div>
+      </div>
+    );
+  }
   return (
     <AnimatePresence mode="sync">
       <div
@@ -103,6 +118,7 @@ export const Content = ({
           <RichTextView
             editorStyle={cn('text-base md:text-sm highlight-content', {
               translated: !isUseOriginal,
+              right: position === 'right',
             })}
             mentions={
               message?.mentions?.map((mention) => ({
@@ -110,7 +126,6 @@ export const Content = ({
                 label: mention.name,
               })) || []
             }
-            mentionClassName={position === 'right' ? 'right' : 'left'}
             content={contentDisplay}
           />
         </div>
@@ -155,11 +170,19 @@ export const Content = ({
                 )}
               >
                 <RichTextView
-                  mentionClassName={position === 'right' ? 'right' : 'left'}
                   editorStyle={cn(
                     'font-light translated text-base md:text-sm dark:text-neutral-50',
                     isEditing ? 'isEditing' : '',
+                    {
+                      right: position === 'right',
+                    },
                   )}
+                  mentions={
+                    message?.mentions?.map((mention) => ({
+                      id: mention._id,
+                      label: mention.name,
+                    })) || []
+                  }
                   content={enContent || ''}
                 />
               </div>
