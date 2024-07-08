@@ -132,7 +132,7 @@ function ButtonNode(node: CustomNodeProps) {
       onCancelAllChanges();
     } else if (isUpdating) {
       localStorage.setItem('before-changes', JSON.stringify({ nodes, edges }));
-    }
+    } else localStorage.removeItem('before-changes');
   }, [isUpdating]);
 
   if (!node) return null;
@@ -151,7 +151,7 @@ function ButtonNode(node: CustomNodeProps) {
       </Button>
       <Handle
         type="source"
-        className={currentNode?.data?.link ? 'hidden' : ''}
+        className={isLink ? 'invisible' : ''}
         position={Position.Right}
         isConnectable={isConnectable && !isLink && !data?.readonly}
       />
