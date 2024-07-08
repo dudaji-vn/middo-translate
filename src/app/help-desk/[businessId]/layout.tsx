@@ -15,10 +15,8 @@ const HelpDeskConversationLayout = async ({
 }) => {
   const extensionData = await businessAPI.getExtensionByBusinessId(businessId);
   if (!extensionData) {
-    console.log('Extension isssss not found');
     notFound();
   }
-  console.log('Extension is found', extensionData);
   const theme =
     extensionsCustomThemeOptions.find(
       (item) =>
