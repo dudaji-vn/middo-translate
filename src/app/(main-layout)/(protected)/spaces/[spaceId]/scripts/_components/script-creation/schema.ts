@@ -34,7 +34,11 @@ export const initialEdges: Edge[] = [
 
 const checkNodeDataEmptyLink = (data: { link?: string }) => {
   console.log('checkNodeDataEmptyLink  ', data.link);
-  if (data.link && !data.link.trim().length) {
+  if (
+    typeof data.link !== 'undefined' &&
+    data.link !== null &&
+    data.link.trim().length
+  ) {
     return false;
   }
   return true;
@@ -72,28 +76,43 @@ export const createChatScriptSchema = z.object({
             draggable: z.boolean().optional(),
             sourcePosition: z.string().optional(),
             targetPosition: z.string().optional(),
-            data: z
-              .object({
-                label: z.string().optional(),
-                content: z.string().min(1, {
+            data: z.object({
+              label: z.string().trim().optional(),
+              content: z
+                .string()
+                .trim()
+                .min(1, {
                   message: 'Please enter content!',
+                })
+                .max(200, {
+                  message: 'Content is too long, max 200 characters',
                 }),
-                link: z.string().optional(),
-                media: z
-                  .array(
-                    z.object({
-                      file: z.any(),
-                      localUrl: z.string().optional(),
-                      metadata: z.any(),
-                      type: z.string(),
-                      url: z.string(),
-                    }),
-                  )
-                  .optional(),
-              })
-              .refine(checkNodeDataEmptyLink, {
-                message: 'Link should not be empty',
-              }),
+              link: z
+                .string()
+                .trim()
+                .optional(),
+                // .refine(
+                //   (value: any) =>
+                //     !value ||
+                //     value?.trim() === '' ||
+                //     /^(http|https):\/\/.*/.test(value),
+                //   {
+                //     message: 'Please enter a valid link!',
+                //   },
+                // ),
+              media: z
+                .array(
+                  z.object({
+                    file: z.any(),
+                    localUrl: z.string().optional(),
+                    metadata: z.any(),
+                    type: z.string(),
+                    url: z.string(),
+                  }),
+                )
+                .optional(),
+            }),
+
             position: z.object({
               x: z.number(),
               y: z.number(),
