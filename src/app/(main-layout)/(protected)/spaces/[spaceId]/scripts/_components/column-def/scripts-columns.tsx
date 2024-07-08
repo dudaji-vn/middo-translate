@@ -1,7 +1,7 @@
 'use client';
 
 import { User } from '@/features/users/types';
-import { ColumnDef } from '@tanstack/react-table';
+import { ColumnDef, SortingFn } from '@tanstack/react-table';
 import { Edge } from 'reactflow';
 import { FlowNode } from '../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { Button } from '@/components/actions';
@@ -126,6 +126,16 @@ export const makeScriptsColumns = ({
     {
       accessorKey: 'createdAt',
       header: t('EXTENSION.SCRIPT.CREATE_ON'),
+      sortDescFirst: true,
+      sortingFn: (rowA, rowB) => {
+        const statusA = rowA.original.createdAt;
+        const statusB = rowB.original.createdAt;
+
+        return (
+          new Date(statusA as string).getTime() -
+          new Date(statusB as string).getTime()
+        );
+      },
       cell(props) {
         const displayTime = moment(props?.row?.original?.createdAt).format(
           'DD/MM/YYYY HH:mm A',

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { DataTable } from '@/components/ui/data-table';
 import { makeClientsColumns } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/clients/clients-table/clients-columns';
 import moment from 'moment';
@@ -25,6 +25,11 @@ import { Menu } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import { Button } from '@/components/actions';
+import {
+  SortingState,
+  getCoreRowModel,
+  getSortedRowModel,
+} from '@tanstack/react-table';
 
 export type Client = Pick<User, '_id' | 'email' | 'name' | 'phoneNumber'> & {
   firstConnectDate: string;
@@ -62,6 +67,15 @@ const Page = ({
     limit,
     spaceId,
   });
+  const columns = useMemo(() => makeClientsColumns(t), [t]);
+
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: 'firstConnectDate', desc: true },
+    { id: 'lastConnectDate', desc: true },
+  ]);
+
+  console.log('data sort', sorting);
+
   const items = formatClientData(data?.items || []);
   const totalPage = data?.totalPage || 0;
 
@@ -138,7 +152,7 @@ const Page = ({
       <div className="max-h-[calc(100dvh-300px)]  w-full  overflow-x-auto  rounded-md  px-2 py-3 md:max-h-[calc(100dvh-200px)] md:px-10">
         <DataTable
           dividerRow
-          columns={makeClientsColumns(t)}
+          columns={columns}
           data={items}
           tableHeadProps={{
             className:
@@ -156,6 +170,14 @@ const Page = ({
           skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}
           bodyProps={{
             className: ' ',
+          }}
+          tableInitialParams={{
+            state: {
+              sorting,
+            },
+            onSortingChange: setSorting,
+            getCoreRowModel: getCoreRowModel(),
+            getSortedRowModel: getSortedRowModel(),
           }}
         />
       </div>

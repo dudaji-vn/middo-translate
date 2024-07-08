@@ -21,6 +21,11 @@ import CreateOrEditChatScriptModal from '../script-creation/create-chat-script-m
 import DeleteScriptModal from '../script-deletion/delete-script-modal';
 import { useParams } from 'next/dist/client/components/navigation';
 import ScriptsHeader, { ScriptsHeaderProps } from './scripts-header';
+import {
+  SortingState,
+  getCoreRowModel,
+  getSortedRowModel,
+} from '@tanstack/react-table';
 
 const MANAGE_SCRIPTS_ROLES: Record<ERoleActions, Array<ESPaceRoles>> = {
   edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -54,6 +59,11 @@ const ScriptsList = ({
     initialData?: TChatScript;
   } | null>(null);
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: 'createdAt', desc: true },
+    { id: 'createdAt', desc: true },
+  ]);
   const router = useRouter();
   const spaceId = useParams()?.spaceId as string;
 
@@ -116,7 +126,11 @@ const ScriptsList = ({
             },
             state: {
               rowSelection,
+              sorting,
             },
+            onSortingChange: setSorting,
+            getCoreRowModel: getCoreRowModel(),
+            getSortedRowModel: getSortedRowModel(),
             enableRowSelection(row) {
               return !row.original?.isUsing;
             },
