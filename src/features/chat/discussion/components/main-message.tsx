@@ -7,10 +7,6 @@ import { Clock9Icon, PhoneCallIcon, PhoneIcon } from 'lucide-react';
 import moment from 'moment';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
-import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
-import { textVariants } from '../../messages/components/message-item/message-item-text.style';
-import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';
 import { useDisplayContent } from '../../messages/hooks/use-display-content';
 import { Message } from '../../messages/types';
 import { useChatStore } from '../../stores';
@@ -18,6 +14,10 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { useBoolean } from 'usehooks-ts';
 import { useAppStore } from '@/stores/app.store';
+import { ImageGallery } from '../../messages/components/message-item/message-item-image-gallery';
+import { DocumentMessage } from '../../messages/components/message-item/message-item-document';
+import { MessageItemVideo } from '../../messages/components/message-item/message-item-video';
+import { textVariants } from '../../messages/components/message-item/message-item-text.style';
 
 export interface MainMessageProps {
   message: Message;
@@ -84,7 +84,7 @@ const TextMessage = ({
   message: Message;
   isActive: boolean;
 }) => {
-  const theme = useAppStore(state => state.theme);
+  const theme = useAppStore((state) => state.theme);
   const enContent = message.translations?.en;
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
@@ -109,11 +109,11 @@ const TextMessage = ({
         (showMiddleTranslation || isActive) && (
           <div className="relative mt-2">
             <TriangleSmall
-              fill={theme == 'light' ? "#f2f2f2" : "#191919" }
+              fill={theme == 'light' ? '#f2f2f2' : '#191919'}
               position="top"
               className="absolute left-4 top-0 -translate-y-full"
             />
-            <div className="rounded-xl bg-neutral-50 dark:bg-neutral-900 dark:text-neutral-50 p-3 py-2 text-neutral-600">
+            <div className="rounded-xl bg-neutral-50 p-3 py-2 text-neutral-600 dark:bg-neutral-900 dark:text-neutral-50">
               <RichTextView
                 editorStyle="text-base md:text-sm translated"
                 mentionClassName="left"
