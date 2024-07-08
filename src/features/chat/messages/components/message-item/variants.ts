@@ -15,7 +15,7 @@ export const messageVariants = cva(
         last: '',
       },
       status: {
-        removed: 'border border-neutral-50',
+        removed: 'border border-neutral-50 dark:border-neutral-800',
         pending: '',
         sent: '',
         received: '',

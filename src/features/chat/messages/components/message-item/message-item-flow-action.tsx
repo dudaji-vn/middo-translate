@@ -114,7 +114,6 @@ const MessageNode = ({
         actions: nextNode.type === 'message' ? undefined : childrenActions,
       });
       if (nextNode?.data?.media) {
-        console.log('nextNode?.data?.media :: >>', nextNode?.data?.media);
         const images = nextNode?.data?.media?.filter(
           (media) => media.type === 'image',
         );

@@ -9,7 +9,7 @@ import { ArrowDownIcon } from 'lucide-react';
 import { Room } from '../../../rooms/types';
 import { Message } from '../../types';
 import { MessageItemGroup } from '../message-group';
-import { MessageItem } from '../message-item-v2';
+import { MessageItem } from '../message-item';
 
 import { useAuthStore } from '@/stores/auth.store';
 import moment from 'moment';
@@ -177,7 +177,6 @@ export const MessageBox = ({
                             action === 'edit'
                           }
                           isLast={isLast}
-                          // actionsDisabled={isAnonymous }
                           reactionDisabled={room.isHelpDesk || isAnonymous}
                           guestId={guestId}
                           pinnedBy={pinnedBy}
