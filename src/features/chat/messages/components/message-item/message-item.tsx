@@ -250,7 +250,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 {isPending && <PendingStatus />}
               </AnimatePresence>
               <div className={cn(!isMe ? 'pl-7' : '')}>
-                {message?.content && (
+                {message?.content && !isDraw && (
                   <MessageItemLinks isMe={isMe} message={message} />
                 )}
 
