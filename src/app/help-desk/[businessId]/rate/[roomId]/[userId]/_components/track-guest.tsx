@@ -37,7 +37,7 @@ const TrackGuest = ({
 
   if (invalidDomain) {
     return (
-      <section className="flex h-screen items-center justify-center">
+      <section className="flex h-[80vh] flex-col items-center justify-center px-3">
         <h4 className="text-2xl font-semibold text-primary-500-main">
           {t('EMBED_SCRIPT.INVALID_DOMAIN.TITLE')}
         </h4>

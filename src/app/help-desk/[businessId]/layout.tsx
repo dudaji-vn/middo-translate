@@ -15,14 +15,20 @@ const HelpDeskConversationLayout = async ({
 }) => {
   const extensionData = await businessAPI.getExtensionByBusinessId(businessId);
   if (!extensionData) {
+    console.log('Extension isssss not found');
     notFound();
   }
+  console.log('Extension is found', extensionData);
   const theme =
     extensionsCustomThemeOptions.find(
       (item) =>
         item.name === extensionData.color || item.hex === extensionData.color,
     ) || extensionsCustomThemeOptions[0];
 
-  return <div className={cn(theme.name, 'container-height bg-transparent')}>{children}</div>;
+  return (
+    <div className={cn(theme.name, 'container-height bg-transparent')}>
+      {children}
+    </div>
+  );
 };
 export default HelpDeskConversationLayout;
