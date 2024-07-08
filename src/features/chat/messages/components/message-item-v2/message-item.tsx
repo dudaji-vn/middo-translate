@@ -187,7 +187,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   toggleDetail={toggleShowDetail}
                   showTime={showTime}
                   actionsDisabled={actionsDisabled || isEditing}
-                  reactionDisabled
+                  reactionDisabled={reactionDisabled}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
