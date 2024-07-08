@@ -287,7 +287,7 @@ export const MessageItemWrapper = ({
   }
 
   return (
-    <div>
+    <div className={cn('flex flex-col', isMe ? 'items-end' : 'items-start')}>
       <div
         ref={ref}
         className="relative cursor-pointer"
