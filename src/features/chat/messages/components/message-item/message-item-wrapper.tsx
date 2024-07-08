@@ -196,7 +196,7 @@ export const MessageItemWrapper = ({
           case 'remove': {
             if (isOnBusinessChat && message.sender._id !== user?._id)
               return false;
-            if (isOnHelpDeskChat && message.senderType !== 'anonymous')
+            if (isOnHelpDeskChat)
               return false;
             return true;
           }
