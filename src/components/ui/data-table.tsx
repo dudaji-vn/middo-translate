@@ -5,7 +5,6 @@ import {
   TableOptions,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -20,7 +19,7 @@ import {
 import { cn } from '@/utils/cn';
 import { Skeleton } from './skeleton';
 import { useTranslation } from 'react-i18next';
-import { ArrowDown, ArrowUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
