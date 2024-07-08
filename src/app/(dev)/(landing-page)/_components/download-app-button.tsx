@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button } from '@/components/actions';
 import Image from 'next/image';
+import { useAppStore } from "@/stores/app.store";
 const DOWNLOAD_LINK = {
     'mac': 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.dmg',
     'window': 'https://github.com/dudaji-vn/middo-desktop-native-app/releases/latest/download/Middo.exe',
-    'ios': 'https://apps.apple.com/kr/app/middo/id6479731975',
-    'android': '',
+    'ios': 'https://apps.apple.com/app/middo/id6479731975',
+    'android': 'https://play.google.com/store/apps/details?id=com.dudajivn.middo',
 }
 export default function DownloadAppButton() {
     const [system, setSystem] = useState<'mac' | 'window' | 'ios' | 'android'>();
@@ -87,11 +88,13 @@ const WindowDownloadButton = ({...props}) => {
 }
 
 const AppStoreDownloadButton = ({...props}) => {
+  const theme = useAppStore(state=>state.theme)
     return <button
+      className="active:opacity-80 transition-all"
     {...props}
   >
     <Image
-        src="/landing-page/app-store-dark.png"
+        src={theme == 'dark' ? "/landing-page/app-store-dark.svg" : "/landing-page/app-store.svg"}
         width="200"
         height="50"
         alt="Download on the App Store"
@@ -100,11 +103,13 @@ const AppStoreDownloadButton = ({...props}) => {
 }
 
 const PlayStoreDownloadButton = ({...props}) => {
+  const theme = useAppStore(state=>state.theme)
     return <button
+    className="active:opacity-80 transition-all"
     {...props}
   >
     <Image
-        src="/landing-page/google-play-dark.png"
+        src={theme == 'dark' ? "/landing-page/chplay-dark.svg" : "/landing-page/chplay.svg"}
         width="200"
         height="50"
         alt="Download on the Play Store"

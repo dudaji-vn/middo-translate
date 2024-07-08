@@ -64,6 +64,7 @@ const tabs: Record<
 
 export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
   const [type, setType] = useState<SearchType>('all');
+  const { isBusiness, spaceId } = useBusinessNavigationData();
   const { stationId } = useStationNavigationData();
   const { mutate } = useMutation({
     mutationFn: searchApi.createKeyword,
@@ -103,12 +104,21 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
   }) => {
     mutate({ keyword: searchValue });
   };
+  const filterTabs = useMemo(() => {
+    if (isBusiness && spaceId) {
+      return {
+        message: tabs.message,
+        user: tabs.user,
+      };
+    }
+    return tabs;
+  }, [isBusiness, spaceId, stationId]);
 
   return (
     <>
       <Tabs defaultValue="all" value={type} className="w-full">
         <TabsList>
-          {Object.values(tabs).map((tab) => (
+          {Object.values(filterTabs).map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
@@ -269,7 +279,7 @@ const AllResult = ({
           )}
         </Section>
       )}
-      {data?.rooms && data.rooms.length > 0 && (
+      {data?.rooms && data.rooms.length > 0 && !spaceId && (
         <div className="mt-5">
           <Section label={'Groups'}>
             {data?.rooms.map((room) => (
@@ -368,6 +378,7 @@ const MessageItem = ({
   onClick?: () => void;
 }) => {
   const userId = useAuthStore((state) => state.user?._id);
+  const { spaceId } = useBusinessNavigationData();
   const room = generateRoomDisplay({
     room: message.room!,
     currentUserId: userId!,
@@ -379,18 +390,12 @@ const MessageItem = ({
       selectors: [{ selector: 'a', options: { ignoreHref: true } }],
     });
   }, [lang, message.content, message.translations]);
+  let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}?search_id=${message._id}`;
+  if (spaceId) {
+    link = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}?search_id=${message._id}`;
+  }
   return (
-    <Link
-      key={message?._id}
-      href={
-        ROUTE_NAMES.ONLINE_CONVERSATION +
-        '/' +
-        room._id +
-        '?search_id=' +
-        message._id
-      }
-      onClick={onClick}
-    >
+    <Link key={message?._id} href={link} onClick={onClick}>
       <UserItem
         topContent={room.name}
         subContent={contentDisplay}
@@ -413,8 +418,12 @@ const SearchUserItem = ({
 }) => {
   let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${user._id}`;
   const { isOnStation, stationId } = useStationNavigationData();
+  const { isBusiness, spaceId } = useBusinessNavigationData();
   if (isOnStation) {
     link = `${ROUTE_NAMES.STATIONS}/${stationId}/conversations/${user._id}`;
+  }
+  if (isBusiness && spaceId) {
+    link = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${user._id}`;
   }
   return (
     <Link

@@ -51,6 +51,7 @@ export interface MessageProps
   showTime?: boolean;
   showReactionBar?: boolean;
   isDraw?: boolean;
+  reactionDisabled?: boolean;
   isSendBySpaceMember?: boolean;
   isEditing?: boolean;
   isDiscussion?: boolean;
@@ -82,6 +83,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       message,
       sender,
       isLast,
+      reactionDisabled = false,
       order,
       guestId,
       className,
@@ -184,6 +186,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   showDetail={showDetail}
                   toggleDetail={toggleShowDetail}
                   showTime={showTime}
+                  reactionDisabled={reactionDisabled}
                   actionsDisabled={actionsDisabled || isEditing}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}

@@ -41,6 +41,9 @@ import { formatTimeDisplay } from '@/features/chat/rooms/utils';
 import { listenEvent } from '@/features/call/utils/custom-event.util';
 import { CUSTOM_EVENTS } from '@/configs/custom-event';
 import { usePlatformStore } from '@/features/platform/stores';
+import { useBusinessNavigationData } from '@/hooks';
+import { isMobile as isMobileDevice } from 'react-device-detect';
+import { useAuthStore } from '@/stores/auth.store';
 
 const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
 
@@ -49,6 +52,7 @@ export interface MessageItemWrapperProps {
   message: Message;
   setActive: (active: boolean) => void;
   discussionDisabled?: boolean;
+  reactionDisabled?: boolean;
   actionsDisabled?: boolean;
   showTime?: boolean;
   showDetail?: boolean;
@@ -110,6 +114,7 @@ const MessageDetail = ({
 
 export const MessageItemWrapper = ({
   actionsDisabled,
+  reactionDisabled,
   showDetail,
   hideDetail,
   toggleDetail,
@@ -119,6 +124,8 @@ export const MessageItemWrapper = ({
   const isMobilePlatform = usePlatformStore(
     (state) => state.platform === 'mobile',
   );
+  const { isOnBusinessChat, isOnHelpDeskChat } = useBusinessNavigationData();
+  const { user } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMe, message, setActive, discussionDisabled, showTime } = props;
   const ref = useRef<HTMLDivElement | null>(null);
@@ -144,8 +151,11 @@ export const MessageItemWrapper = ({
           case 'copy':
             return message.type === 'text';
           case 'forward':
-            return message.type !== 'call';
+            return (
+              message.type !== 'call' && !isOnBusinessChat && !isOnHelpDeskChat
+            );
           case 'pin':
+            if (isOnBusinessChat || isOnHelpDeskChat) return false;
             if (discussionDisabled) return false;
             if (message.isPinned) return false;
             if (message.type === 'call') return false;
@@ -156,9 +166,11 @@ export const MessageItemWrapper = ({
               return false;
             return true;
           case 'unpin':
-            return message.isPinned;
+            return message.isPinned && !isOnBusinessChat && !isOnHelpDeskChat;
           case 'reply':
-            return !discussionDisabled;
+            return (
+              !discussionDisabled && !isOnBusinessChat && !isOnHelpDeskChat
+            );
           case 'download':
             if (
               isMobilePlatform &&
@@ -180,6 +192,14 @@ export const MessageItemWrapper = ({
             return (
               message.type === 'text' && timeDiff < MAX_TIME_CAN_EDIT && isMe
             );
+
+          case 'remove': {
+            if (isOnBusinessChat && message.sender._id !== user?._id)
+              return false;
+            if (isOnHelpDeskChat && message.senderType !== 'anonymous')
+              return false;
+            return true;
+          }
           default:
             return true;
         }
@@ -196,10 +216,15 @@ export const MessageItemWrapper = ({
   }, [discussionDisabled, isMe, isMobilePlatform, message, onAction]);
 
   const Wrapper = useMemo(() => {
+    // console.log('isMobileDevice', );
     if (message.status === 'removed') return RemovedWrapper;
+
+    if (isOnHelpDeskChat) {
+      return isMobileDevice ? MobileWrapper : DesktopWrapper;
+    }
     if (isMobile) return MobileWrapper;
     return DesktopWrapper;
-  }, [isMobile, message.status]);
+  }, [isMobile, message.status, isOnHelpDeskChat]);
 
   useEffect(() => {
     if (showDetail) {
@@ -248,6 +273,7 @@ export const MessageItemWrapper = ({
         isMe={isMe}
         message={message}
         items={items}
+        reactionDisabled={reactionDisabled}
         hideDetail={hideDetail}
         setIsMenuOpen={setIsMenuOpen}
         isMenuOpen={isMenuOpen}
@@ -277,6 +303,7 @@ const MobileWrapper = ({
   items,
   isMe,
   message,
+  reactionDisabled,
   setActive,
   setIsMenuOpen,
 }: MessageItemMobileWrapperProps) => {
@@ -364,19 +391,21 @@ const MobileWrapper = ({
               >
                 <DisplayMessage isMe={isMe} message={message} />
               </div>
-              <div className="pointer-events-auto">
-                <MessageEmojiPicker
-                  onClickMore={() => {
-                    openEmoji();
-                    setFalse();
-                  }}
-                  onEmojiClick={() => {
-                    setFalse();
-                    setActive(false);
-                  }}
-                  messageId={message._id}
-                />
-              </div>
+              {!reactionDisabled && (
+                <div className="pointer-events-auto">
+                  <MessageEmojiPicker
+                    onClickMore={() => {
+                      openEmoji();
+                      setFalse();
+                    }}
+                    onEmojiClick={() => {
+                      setFalse();
+                      setActive(false);
+                    }}
+                    messageId={message._id}
+                  />
+                </div>
+              )}
             </div>
           }
         >
@@ -431,11 +460,13 @@ const DesktopWrapper = ({
   items,
   children,
   isMe,
+  reactionDisabled,
   message,
   setIsMenuOpen,
   isMenuOpen,
 }: MessageItemMobileWrapperProps) => {
   const { setFalse, value, setValue } = useBoolean(false);
+  const isOnHelpDeskChat = useBusinessNavigationData().isOnHelpDeskChat;
   const { t } = useTranslation('common');
   return (
     <>
@@ -447,6 +478,7 @@ const DesktopWrapper = ({
             ? '-left-4 -translate-x-full'
             : '-right-4 translate-x-full flex-row-reverse',
           isMenuOpen && 'opacity-100',
+          isOnHelpDeskChat && 'visible !flex',
         )}
       >
         <DropdownMenu onOpenChange={setIsMenuOpen}>
@@ -478,32 +510,36 @@ const DesktopWrapper = ({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Popover
-          open={value}
-          onOpenChange={(open) => {
-            setValue(open);
-            setIsMenuOpen?.(open);
-          }}
-        >
-          <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
-            <Button.Icon size="ss" variant="ghost" color="default">
-              <SmilePlusIcon />
-            </Button.Icon>
-          </PopoverTrigger>
-          <PopoverContent
-            align={isMe ? 'end' : 'start'}
-            className={cn('w-fit border-none !bg-transparent p-0 shadow-none')}
+        {!reactionDisabled && (
+          <Popover
+            open={value}
+            onOpenChange={(open) => {
+              setValue(open);
+              setIsMenuOpen?.(open);
+            }}
           >
-            <MessageEmojiPicker
+            <PopoverTrigger onClick={(e) => e.stopPropagation()} asChild>
+              <Button.Icon size="ss" variant="ghost" color="default">
+                <SmilePlusIcon />
+              </Button.Icon>
+            </PopoverTrigger>
+            <PopoverContent
               align={isMe ? 'end' : 'start'}
-              onEmojiClick={() => {
-                setIsMenuOpen?.(false);
-                setFalse();
-              }}
-              messageId={message._id}
-            />
-          </PopoverContent>
-        </Popover>
+              className={cn(
+                'w-fit border-none !bg-transparent p-0 shadow-none',
+              )}
+            >
+              <MessageEmojiPicker
+                align={isMe ? 'end' : 'start'}
+                onEmojiClick={() => {
+                  setIsMenuOpen?.(false);
+                  setFalse();
+                }}
+                messageId={message._id}
+              />
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
     </>
   );

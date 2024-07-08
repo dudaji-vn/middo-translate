@@ -60,6 +60,12 @@ const processContent = (
     }
   });
 
+  // process links
+  const links = Array.from(doc.querySelectorAll('a'));
+  links.forEach((link) => {
+    link.setAttribute('target', '_blank');
+    link.setAttribute('rel', 'noopener noreferrer');
+  });
   return doc.body.innerHTML;
 };
 
@@ -75,7 +81,9 @@ const RichTextView = ({
 
   useEffect(() => {
     const updatedContent = processContent(content, mentions, userId);
-    const sanitizedContent = DOMPurify.sanitize(updatedContent);
+    const sanitizedContent = DOMPurify.sanitize(updatedContent, {
+      ALLOWED_ATTR: ['data-id', 'data-label', 'class', 'href', 'target', 'rel'],
+    });
     setSanitizedHtml(sanitizedContent);
   }, [content, mentions, userId]);
 

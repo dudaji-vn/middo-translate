@@ -751,8 +751,8 @@
   },
   "EXTENSION": {
     "EMPTY": {
-      "TITLE": "확장이 거의 도착했습니다!",
-      "OWNER_DES": "기성 테마를 사용하여 대화 확장을 만들거나 고유한 테마를 직접 정의하십시오."
+      "TITLE": "Tiện ích trò chuyện",
+      "OWNER_DES": "Tạo tiện ích trò chuyện bằng các chủ đề có sẵn hoặc xác định chủ đề của riêng bạn"
     },
 
     "ALL_DOMAINS": "Tất cả miền",
