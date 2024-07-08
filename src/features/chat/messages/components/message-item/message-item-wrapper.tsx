@@ -196,8 +196,7 @@ export const MessageItemWrapper = ({
           case 'remove': {
             if (isOnBusinessChat && message.sender._id !== user?._id)
               return false;
-            if (isOnHelpDeskChat && message.senderType !== 'anonymous')
-              return false;
+            if (isOnHelpDeskChat) return false;
             return true;
           }
           default:
@@ -238,7 +237,7 @@ export const MessageItemWrapper = ({
     }
   }, [showDetail]);
 
-  if (actionsDisabled) {
+  if (actionsDisabled || !items.length) {
     return (
       <div
         className="relative h-fit cursor-pointer transition-all duration-300"
