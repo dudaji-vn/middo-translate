@@ -17,13 +17,9 @@ import { CallMessage } from './message-item-call';
 import { Content } from './message-item-content';
 import { DocumentMessage } from './message-item-document';
 import MessageItemFlowActions from './message-item-flow-action';
-import { MessageItemForward } from './message-item-forward';
 import { ImageGallery } from './message-item-image-gallery';
-import { MessageItemLinks } from './message-item-links';
-import { MessageItemPinned } from './message-item-pinned';
-import { MessageItemReactionBar } from './message-item-reaction-bar';
-import { MessageItemReply } from './message-item-reply';
-import { SeenTracker } from './message-item-seen-tracker';
+import { MessageItemPinned } from './message-extension/message-item-pinned';
+import { MessageItemReply } from './message-extension/message-item-reply';
 import { MessageItemSystem } from './message-item-system';
 import { MessageItemVideo } from './message-item-video';
 import { MessageItemWrapper } from './message-item-wrapper';
@@ -33,7 +29,11 @@ import { messageVariants } from './variants';
 import { AnimatePresence } from 'framer-motion';
 import { PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { MessageItemParticipantJoinCall } from './message-item-participant-join-call';
+import { MessageItemLinks } from './message-extension/message-item-links';
+import { MessageItemForward } from './message-item-forward';
+import { SeenTracker } from './message-extension/message-item-seen-tracker';
+import { MessageItemReactionBar } from './message-extension/message-item-reaction-bar';
+import { MessageItemParticipantJoinCall } from './message-extension/message-item-participant-join-call';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -47,11 +47,11 @@ export interface MessageProps
   pinnedBy?: User;
   discussionDisabled?: boolean;
   guestId?: string;
+  reactionDisabled?: boolean;
   actionsDisabled?: boolean;
   showTime?: boolean;
   showReactionBar?: boolean;
   isDraw?: boolean;
-  reactionDisabled?: boolean;
   isSendBySpaceMember?: boolean;
   isEditing?: boolean;
   isDiscussion?: boolean;
@@ -83,7 +83,6 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       message,
       sender,
       isLast,
-      reactionDisabled = false,
       order,
       guestId,
       className,
@@ -93,6 +92,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       direction,
       showReply = true,
       pinnedBy,
+      reactionDisabled = false,
       actionsDisabled = false,
       discussionDisabled = false,
       showTime,
@@ -186,8 +186,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   showDetail={showDetail}
                   toggleDetail={toggleShowDetail}
                   showTime={showTime}
-                  reactionDisabled={reactionDisabled}
                   actionsDisabled={actionsDisabled || isEditing}
+                  reactionDisabled={reactionDisabled}
                   discussionDisabled={discussionDisabled}
                   setActive={setActive}
                   isMe={isMe}
@@ -250,11 +250,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                 {isPending && <PendingStatus />}
               </AnimatePresence>
               <div className={cn(!isMe ? 'pl-7' : '')}>
-                {message?.content && (
+                {message?.content && !isDraw && (
                   <MessageItemLinks isMe={isMe} message={message} />
                 )}
 
-                {message.forwardOf && (
+                {message.forwardOf && !actionsDisabled && (
                   <MessageItemForward
                     hasParent={!!message.content}
                     message={message.forwardOf}
@@ -262,13 +262,14 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   />
                 )}
 
-                {pinnedBy && (
+                {pinnedBy && !actionsDisabled && (
                   <MessageItemPinned pinnedBy={pinnedBy} isMe={isMe} />
                 )}
                 {!discussionDisabled && message.hasChild && showReply && (
                   <MessageItemReply isMe={isMe} messageId={message._id} />
                 )}
                 {showReactionBar &&
+                  !reactionDisabled &&
                   message?.reactions &&
                   message.reactions.length > 0 && (
                     <MessageItemReactionBar isMe={isMe} message={message} />
