@@ -302,10 +302,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     isMe ? 'text-end' : 'pl-7 text-start',
                   )}
                 >
-                  {t('COMMON.SEND_BY')}&nbsp;
+                  {t(
+                    message.senderType === 'bot'
+                      ? 'COMMON.SEND_BY_SCRIPT'
+                      : 'COMMON.SEND_BY',
+                  )}
                   <span className="font-medium">
-                    {message.sender?.name}
-                    {message.senderType === 'bot' && <>&apos;s script</>}
+                    &nbsp;{message.script?.name || message.sender?.name}
                   </span>
                 </span>
               )}

@@ -5,7 +5,6 @@ import {
   TableOptions,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -20,6 +19,7 @@ import {
 import { cn } from '@/utils/cn';
 import { Skeleton } from './skeleton';
 import { useTranslation } from 'react-i18next';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -110,9 +110,57 @@ export function DataTable<TData, TValue>({
           <TableRow
             key={headerGroup.id}
             {...rowProps}
-            className={cn('border-none', rowProps?.className)}
+            className={cn('border-none ', rowProps?.className)}
           >
             {headerGroup.headers.map((header) => {
+              return (
+                <TableHead
+                  key={header.id}
+                  colSpan={header.colSpan}
+                  {...tableHeadProps}
+                >
+                  {header.isPlaceholder ? null : (
+                    <div
+                      className={
+                        header.column.getCanSort()
+                          ? 'flex cursor-pointer select-none flex-row items-center gap-2 text-neutral-400 dark:text-neutral-50'
+                          : ''
+                      }
+                      onClick={header.column.getToggleSortingHandler()}
+                      title={
+                        header.column.getCanSort()
+                          ? header.column.getNextSortingOrder() === 'asc'
+                            ? 'Sort ascending'
+                            : header.column.getNextSortingOrder() === 'desc'
+                              ? 'Sort descending'
+                              : 'Clear sort'
+                          : undefined
+                      }
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                      {{
+                        asc: (
+                          <ChevronUp
+                            size={20}
+                            className="text-neutral-700 dark:text-neutral-50"
+                          />
+                        ),
+                        desc: (
+                          <ChevronDown
+                            size={20}
+                            className="text-neutral-700 dark:text-neutral-50"
+                          />
+                        ),
+                      }[header.column.getIsSorted() as string] ?? null}
+                    </div>
+                  )}
+                </TableHead>
+              );
+            })}
+            {/* {headerGroup.headers.map((header) => {
               return (
                 <TableHead key={header.id} {...tableHeadProps}>
                   {header.isPlaceholder
@@ -123,7 +171,7 @@ export function DataTable<TData, TValue>({
                       )}
                 </TableHead>
               );
-            })}
+            })} */}
           </TableRow>
         ))}
       </TableHeader>
@@ -168,7 +216,7 @@ export function DataTable<TData, TValue>({
               {...cellProps}
               className={cn(
                 cellProps?.className,
-                'mx-auto  border-none  text-center',
+                'mx-auto  border-none  text-center text-neutral-800',
               )}
             >
               {customEmpty || t('COMMON.NO_DATA')}

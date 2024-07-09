@@ -8,9 +8,11 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import React, { use } from 'react';
 import HelpDeskCallButton from './[businessId]/_components/call-button';
+import { useBusinessNavigationData } from '@/hooks';
 
 const LayoutBusiness = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
+  const { isOnHelpDeskChat } = useBusinessNavigationData();
   return (
     <div className="full mx-auto flex h-full flex-col">
       <div
@@ -32,7 +34,7 @@ const LayoutBusiness = ({ children }: { children: React.ReactNode }) => {
         <div className="flex flex-1 justify-end">
           <HelpDeskCallButton />
         </div>
-        <HelpDeskDropdownMenu />
+        {isOnHelpDeskChat && <HelpDeskDropdownMenu />}
       </div>
       {children}
     </div>
