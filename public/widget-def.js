@@ -268,17 +268,17 @@
     })
       .then((response) => {
         console.log('response', response);
-        setTimeout(() => {
-          floatingIcon.innerHTML = components.icon_message;
-          divTrigger.disabled = false;
-          console.log('widgetChatFrame loaded');
-        }, 200);
       })
       .catch((error) => {
         chatWidget.remove();
       });
     widgetChatFrame.addEventListener('load', () => {
       console.log('widgetChatFrame loaded');
+      setTimeout(() => {
+        floatingIcon.innerHTML = components.icon_message;
+        divTrigger.disabled = false;
+        console.log('widgetChatFrame loaded');
+      }, 200);
       // floatingButtonFrame.style.display = 'block';
     });
   }

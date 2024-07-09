@@ -41,6 +41,7 @@ window.ChatWidget = {
           case 'room-found':
             console.log('room-found or on-start'), c.classList.remove('shrink');
             break;
+          case 'hide-form':
           case 'room-end':
             console.log('room-end'), c.classList.add('shrink');
         }

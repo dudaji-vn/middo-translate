@@ -72,6 +72,10 @@ const StartAConversation = ({
     announceToParent('show-form');
     setOpen(true);
   };
+  const hideForm = () => {
+    announceToParent('hide-form');
+    setOpen(false);
+  };
   const methods = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -199,7 +203,12 @@ const StartAConversation = ({
           </div>
         </div>
       )}
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet
+        open={open}
+        onOpenChange={(open) => {
+          open ? showForm() : hideForm();
+        }}
+      >
         <SheetContent
           side="bottom"
           className={
