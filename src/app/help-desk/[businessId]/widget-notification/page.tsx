@@ -1,14 +1,18 @@
 'use client';
 
-import { MessagesSquare } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import NewMessageCatcher from './_components/NewMessageCatcher';
 import { LSK_VISITOR_ID, LSK_VISITOR_ROOM_ID } from '@/types/business.type';
 import { useGetRoomData } from '@/features/business-spaces/hooks/use-get-chat-room';
 import { isEmpty } from 'lodash';
+const announceToParent = (message: string) => {
+  if (typeof window === 'undefined') return;
+  window.parent.postMessage(message, '*');
+};
 
 const EmbedButtonPage = () => {
   const [anonymous, setAnonymous] = useState();
+  const [isWidgetOpen, setIsWidgetOpen] = useState(false);
   const [roomId, setRoomId] = useState<string>('');
   const [visitorId, setVisitorId] = useState<string>('');
   const [idsFound, setIdsFound] = useState<boolean>(false);
@@ -22,6 +26,7 @@ const EmbedButtonPage = () => {
       setRoomId(rId);
       setVisitorId(vId);
       setIdsFound(true); // Stop checking once IDs are found
+      announceToParent('idsFound');
     }
   };
   const onRoomEnd = () => {
@@ -50,14 +55,16 @@ const EmbedButtonPage = () => {
     }
   }, [idsFound]);
 
+  const handleClick = () => {
+    checkTheLocalStorage();
+    setIsWidgetOpen(!isWidgetOpen);
+  };
+
   return (
     <div className="fixed inset-0 flex h-screen w-screen flex-row items-end justify-end bg-transparent">
       <button
-        onClick={() => {
-          console.log('checkTheLocalStorage');
-          checkTheLocalStorage();
-        }}
-        className="relative mb-7 mr-7 w-fit rounded-full bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]"
+        onClick={handleClick}
+        className="invisible relative mb-7 mr-7 w-fit rounded-full p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)]"
       >
         {anonymous && room && (
           <NewMessageCatcher
@@ -66,7 +73,6 @@ const EmbedButtonPage = () => {
             onRoomEnd={onRoomEnd}
           />
         )}
-        <MessagesSquare className="h-8 w-8 stroke-primary-500-main" />
       </button>
     </div>
   );
