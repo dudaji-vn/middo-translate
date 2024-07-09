@@ -26,11 +26,11 @@ const EmbedButtonPage = () => {
       setRoomId(rId);
       setVisitorId(vId);
       setIdsFound(true); // Stop checking once IDs are found
-      announceToParent('idsFound');
     }
   };
   const onRoomEnd = () => {
     console.log('onRoomEnd');
+    announceToParent('room-end');
     setAnonymous(undefined);
     setRoomId('');
     setVisitorId('');

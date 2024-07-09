@@ -46,7 +46,7 @@
         opacity: 0.75;
         animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
       }
-
+     
       @keyframes ping {
         75%,
         100% {
@@ -62,6 +62,10 @@
         0% { opacity: 0; transform: translateY(500px) scaleY(0.5); }
         100% { opacity: 1; transform: translateY(0) scaleY(1); }
       }
+      @keyframes shrink-chat {
+            0% { height: 500px}
+            100% { height: 300px !important; }
+      }
       @keyframes scale-to-0 {
         0% { transform: translateY(0) scaleY(1); opacity: 1; }
         100% { transform: translateY(100%) scaleY(0); opacity: 0; }
@@ -73,6 +77,7 @@
       #chat-widget {
         position: fixed; bottom: 10px; right: 20px; display: grid; z-index: 999999999 !important;
       }
+    
       #chat-messages {
         height: auto; padding: 10px; overflow-y: auto;
       }
@@ -81,6 +86,7 @@
         height: 64px; width: 64px; align-items: center; justify-content: center; border-radius: 9999px;
         cursor: pointer; background-color: white; color: var(--grey-color); border-style: none;
       }
+    
       #loading-icon {
         animation: rotate-load 1s linear infinite;
       }
@@ -99,13 +105,18 @@
       }
       #widget-chat-frame.active {
         display: block; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
-      }
+      }      
       #widget-chat-frame.deactive {
         display: block; animation: scale-to-0 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
       }
       #widget-chat-frame.hidden {
         display: none;
       }
+      #widget-chat-frame.shrink {
+        height: 300px !important;
+        animation: shrink-chat 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+      }
+     
       .iframe_inset {
         inset: auto 15px 106px auto;
       }
@@ -170,7 +181,8 @@
       bottom: 0; right: 0; width: 120px; height: 120px;">
         <iframe id="floating-button-iframe" src="${srcButton}" style="position: fixed; bottom: 0; right: 0; width: 120px; height: 120px;
         border-radius: 50%;
-        border: none;"></iframe>
+        border: none;"
+        ></iframe>
 
         <button id="floating-icon-btn" style="position: absolute; bottom: 28px; right: 28px; width: 64px; height: 64px; opacity: 1; font-size: 32px;">
           ${components.loading}
@@ -196,7 +208,7 @@
     );
     floatingButtonFrame.style.display = 'none';
     const divTrigger = document.getElementById('iframe-trigger-container');
-    const ping = document.getElementById('chat-messages-ping');
+    widgetChatFrame.classList.add('shrink');
 
     window.addEventListener('message', (event) => {
       const trigger = document.getElementById('iframe-trigger-container');
@@ -205,14 +217,21 @@
       switch (event.data) {
         case 'open-chat-widget':
         case 'close-chat-widget':
-          trigger.click();
+          // trigger.click();
           break;
         case 'ping':
           p.classList.add('active');
           break;
         case 'no-ping':
           p.classList.remove('active');
-
+          break;
+        case 'room-found':
+          console.log('room-found');
+          widgetChatFrame.classList.remove('shrink');
+          break;
+        case 'room-end':
+          console.log('room-end');
+          widgetChatFrame.classList.add('shrink');
           break;
         default:
           break;
@@ -253,7 +272,6 @@
       .catch((error) => {
         chatWidget.remove();
       });
-
     widgetChatFrame.addEventListener('load', () => {
       console.log('widgetChatFrame loaded');
       // floatingButtonFrame.style.display = 'block';

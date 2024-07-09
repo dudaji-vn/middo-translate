@@ -42,6 +42,10 @@ export type TStartAConversation = {
   language: string;
   email: string;
 };
+const announceToParent = (message: string) => {
+  if (typeof window === 'undefined') return;
+  window.parent.postMessage(message, '*');
+};
 
 const StartAConversation = ({
   extensionData,
@@ -126,6 +130,7 @@ const StartAConversation = ({
     localStorage.setItem(LSK_VISITOR_DATA, JSON.stringify(visitorData));
     addDetectVisitorLanguage();
     if (visitorId && visitorRoomId) {
+      announceToParent('room-found');
       router.push(
         `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}&originReferer=${fromDomain}`,
       );
@@ -145,6 +150,7 @@ const StartAConversation = ({
       }).then(async (res) => {
         const roomId = res.data.roomId;
         const user = res.data.user;
+        announceToParent('room-found');
         localStorage.setItem(LSK_VISITOR_ROOM_ID, roomId);
         localStorage.setItem(LSK_VISITOR_ID, user._id);
         await appendFirstMessageFromChatFlow(roomId);
