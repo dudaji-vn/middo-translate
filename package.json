@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "minify": "terser public/widget-def.js -o public/chat-widget.js --compress --mangle",
+    "minify:widget": "terser public/widget-def.js -o public/chat-widget.js --compress --mangle",
     "lint:fix": "eslint --ext js,jsx,mdx,ts,tsx src --fix",
     "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
     "type:check": "tsc --noEmit --pretty"
