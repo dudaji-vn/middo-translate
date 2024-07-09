@@ -79,7 +79,6 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const setFetchNextPage = useMediaLightBoxStore(
     (state) => state.setFetchNextPage,
   );
-
   const onDownload = () => {
     const file = files[current || 0];
     if (!file) return;

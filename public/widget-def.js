@@ -54,6 +54,15 @@
           opacity: 0;
         }
       }
+      @keyframes grow-to-full-screen {
+        0% { opacity: 0; transform: scale(0.5); }
+        70% { opacity: 0.6}
+        100% { opacity: 1; transform: scale(1); }
+      }
+      @keyframes shrink-to-normal {
+        0% {}
+        100% { transform: width = 400px; height: 500px; }
+      }
       @keyframes rotate-load {
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
@@ -134,12 +143,32 @@
       }
       #chat-messages-ping {
         display: none;
-  }
+        }
       #chat-messages-ping.active {
         display: flex;
       }
+        #widget-chat-frame.fullscreen {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 999999999 !important; background-color: rgba(0, 0, 0, 0.15);
+                transform-origin: 95% 100%;
+                animation: grow-to-full-screen 0.7s ease forwards;
+        }
         
       @media (max-width: 768px) {
+        @keyframes shrink-to-normal {
+            0% { height: 100vh; }
+            100% { height: 70vh; }
+        }
+        @keyframes grow-to-full-screen {
+            0% { height: 70vh; }
+            100% { height: 100vh; }
+        }
+      
         .iframe_inset {
           inset: auto 0px 108px 0px;
         }
@@ -187,7 +216,6 @@
         border-radius: 50%;
         border: none;"
         ></iframe>
-
         <button id="floating-icon-btn" style="position: absolute; bottom: 28px; right: 28px; width: 64px; height: 64px; opacity: 1; font-size: 32px;">
           ${components.loading}
          </button>
@@ -238,6 +266,16 @@
         case 'room-end':
           console.log('room-end');
           widgetChatFrame.classList.add('shrink');
+          break;
+        case 'media-show':
+          console.log('view-media');
+          theTriangle.classList.remove('active');
+          widgetChatFrame.classList.add('fullscreen');
+          break;
+        case 'media-close':
+          console.log('hide-media');
+          widgetChatFrame.classList.remove('fullscreen');
+          theTriangle.classList.add('active');
           break;
         default:
           break;

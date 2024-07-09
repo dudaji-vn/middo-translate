@@ -20,6 +20,7 @@ import {
   LSK_VISITOR_ROOM_ID,
 } from '@/types/business.type';
 import { cn } from '@/utils/cn';
+import { announceToParent } from '@/utils/iframe-util';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -42,10 +43,7 @@ export type TStartAConversation = {
   language: string;
   email: string;
 };
-const announceToParent = (message: string) => {
-  if (typeof window === 'undefined') return;
-  window.parent.postMessage(message, '*');
-};
+
 
 const StartAConversation = ({
   extensionData,
