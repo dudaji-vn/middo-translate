@@ -42,6 +42,10 @@ export type TStartAConversation = {
   language: string;
   email: string;
 };
+const announceToParent = (message: string) => {
+  if (typeof window === 'undefined') return;
+  window.parent.postMessage(message, '*');
+};
 
 const StartAConversation = ({
   extensionData,
@@ -65,6 +69,7 @@ const StartAConversation = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const showForm = () => {
+    announceToParent('show-form');
     setOpen(true);
   };
   const methods = useForm({
@@ -126,6 +131,7 @@ const StartAConversation = ({
     localStorage.setItem(LSK_VISITOR_DATA, JSON.stringify(visitorData));
     addDetectVisitorLanguage();
     if (visitorId && visitorRoomId) {
+      announceToParent('room-found');
       router.push(
         `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}&originReferer=${fromDomain}`,
       );
@@ -145,6 +151,7 @@ const StartAConversation = ({
       }).then(async (res) => {
         const roomId = res.data.roomId;
         const user = res.data.user;
+        announceToParent('room-found');
         localStorage.setItem(LSK_VISITOR_ROOM_ID, roomId);
         localStorage.setItem(LSK_VISITOR_ID, user._id);
         await appendFirstMessageFromChatFlow(roomId);
@@ -173,16 +180,7 @@ const StartAConversation = ({
           </Typography>
         </div>
       ) : (
-        <div className="flex size-full flex-col justify-stretch gap-2">
-          <div className="flex-grow  pt-4">
-            <Image
-              src="/start-chat.png"
-              alt="start-a-chat"
-              className="m-auto"
-              width={240}
-              height={236}
-            />
-          </div>
+        <div className="flex size-full flex-col justify-stretch gap-2 pt-4">
           <div className="relative  flex aspect-square h-fit max-h-[100px] w-full  flex-none flex-row items-center  gap-2 overflow-hidden px-3">
             <Avatar
               variant={'outline'}
