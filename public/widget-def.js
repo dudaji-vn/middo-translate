@@ -234,6 +234,7 @@
           console.log('room-found or on-start');
           widgetChatFrame.classList.remove('shrink');
           break;
+        case 'hide-form':
         case 'room-end':
           console.log('room-end');
           widgetChatFrame.classList.add('shrink');
