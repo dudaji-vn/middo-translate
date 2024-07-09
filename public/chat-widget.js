@@ -63,8 +63,8 @@
         100% { opacity: 1; transform: translateY(0) scaleY(1); }
       }
       @keyframes shrink-chat {
-            0% { height: 500px}
-            100% { height: 300px !important; }
+            0% { height: 500px,transform: translateY(100%) scaleY(0.5); }
+            100% { height: 280px !important; transform: translateY(0) scaleY(1); }
       }
       @keyframes scale-to-0 {
         0% { transform: translateY(0) scaleY(1); opacity: 1; }
@@ -112,10 +112,14 @@
       #widget-chat-frame.hidden {
         display: none;
       }
-      #widget-chat-frame.shrink {
-        height: 300px !important;
-        animation: shrink-chat 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+      #widget-chat-frame.active.shrink {
+        height: 280px !important; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+    
       }
+      #widget-chat-frame.deactive.shrink {
+        height: 280px !important;
+      }
+     
      
       .iframe_inset {
         inset: auto 15px 106px auto;
@@ -225,8 +229,9 @@
         case 'no-ping':
           p.classList.remove('active');
           break;
+        case 'show-form':
         case 'room-found':
-          console.log('room-found');
+          console.log('room-found or on-start');
           widgetChatFrame.classList.remove('shrink');
           break;
         case 'room-end':
