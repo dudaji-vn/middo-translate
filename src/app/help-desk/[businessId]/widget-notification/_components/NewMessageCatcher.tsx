@@ -8,7 +8,6 @@ import { Room } from '@/features/chat/rooms/types';
 import { usePlatformStore } from '@/features/platform/stores';
 import socket from '@/lib/socket-io';
 import { useAppStore } from '@/stores/app.store';
-import { cn } from '@/utils/cn';
 import { useNetworkStatus } from '@/utils/use-network-status';
 import { User } from '@sentry/nextjs';
 import React, { useEffect } from 'react';
@@ -83,18 +82,12 @@ const NewMessageCatcher = ({
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
     };
   }, [room._id]);
-  if (!isClient) {
-    return null;
-  }
-  console.log('showPing', showPing);
-  return (
-    <Ping
-      size={14}
-      className={cn('absolute right-[14px] top-0', {
-        hidden: !showPing,
-      })}
-    />
-  );
+
+  useEffect(() => {
+    if (showPing) window.parent.postMessage('ping', '*');
+    else window.parent.postMessage('no-ping', '*');
+  }, [showPing]);
+  return null;
 };
 
 export default NewMessageCatcher;

@@ -20,6 +20,9 @@ import { Message } from '../../types';
 import { AnimatePresence, m, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { RichTextView } from './rich-text-view';
+import { useMessageActions } from '../message-actions';
+import { Button } from '@/components/actions';
+import { EyeOffIcon } from 'lucide-react';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
@@ -40,6 +43,13 @@ export const Content = ({
     userLanguage: state.user?.language,
     currentUserId: state.user?._id,
   }));
+  const { t } = useTranslation('common');
+  const { action, message: activeMessage } = useMessageActions();
+
+  const isActionActive = useMemo(() => {
+    return activeMessage?._id === message._id;
+  }, [activeMessage, message._id]);
+  const isOriginal = action === 'view-original' && isActionActive;
 
   const showMiddleTranslation = useChatStore(
     (state) => state.showMiddleTranslation,
@@ -81,6 +91,7 @@ export const Content = ({
   const { contentDisplay, isUseOriginal } = useDisplayContent({
     message,
     userLanguage: receiverLanguage,
+    useOriginal: isOriginal,
   });
   if (message.status === 'removed') {
     return (
@@ -112,9 +123,24 @@ export const Content = ({
             isEditing ? 'text-opacity-20' : '',
           )}
         >
-          {message.status === 'edited' && !isEditing && (
-            <EditedStatus position={position} />
-          )}
+          <div className="flex">
+            {message.status === 'edited' && !isEditing && (
+              <EditedStatus position={position} />
+            )}
+            {isOriginal && (
+              <span
+                className={
+                  'flex text-xs font-light' +
+                  (position === 'right'
+                    ? ' justify-end text-primary-300'
+                    : ' text-neutral-300')
+                }
+              >
+                {message.status === 'edited' && '|'}
+                {t('CONVERSATION.ORIGINAL')}
+              </span>
+            )}
+          </div>
           <RichTextView
             editorStyle={cn('text-base md:text-sm highlight-content', {
               translated: !isUseOriginal,

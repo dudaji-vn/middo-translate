@@ -16,7 +16,6 @@ import UpdatingNodeWrapper from './updating-node-wrapper';
 import { FormLabel } from '@/components/ui/form';
 import { Switch } from '@/components/data-entry';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
-import toast from 'react-hot-toast';
 import customToast from '@/utils/custom-toast';
 
 function ButtonNode(node: CustomNodeProps) {
@@ -106,7 +105,7 @@ function ButtonNode(node: CustomNodeProps) {
           ...currentNode,
           data: {
             ...currentNode.data,
-            link: '',
+            link: 'https://',
           },
         },
       ]);
@@ -133,10 +132,11 @@ function ButtonNode(node: CustomNodeProps) {
       onCancelAllChanges();
     } else if (isUpdating) {
       localStorage.setItem('before-changes', JSON.stringify({ nodes, edges }));
-    }
+    } else localStorage.removeItem('before-changes');
   }, [isUpdating]);
 
   if (!node) return null;
+
   return (
     <div className="flex h-auto w-[400px]  flex-row gap-1 pl-2">
       <Button
@@ -151,7 +151,7 @@ function ButtonNode(node: CustomNodeProps) {
       </Button>
       <Handle
         type="source"
-        className={currentNode?.data?.link ? 'hidden' : ''}
+        className={isLink ? 'invisible' : ''}
         position={Position.Right}
         isConnectable={isConnectable && !isLink && !data?.readonly}
       />
@@ -180,19 +180,24 @@ function ButtonNode(node: CustomNodeProps) {
             inputProps={{
               placeholder: 'Button name',
               className: 'w-full h-full',
+              onFocus: (e) => {
+                e.target.select();
+              },
             }}
           />
-          <RHFInputField
-            formItemProps={{
-              className: isLink ? 'block' : 'hidden',
-            }}
-            name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.link`}
-            inputProps={{
-              disabled: !isLink,
-              placeholder: 'https://',
-              className: 'w-full h-full',
-            }}
-          />
+          {isLink && (
+            <RHFInputField
+              name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.link`}
+              inputProps={{
+                disabled: !isLink,
+                placeholder: 'https://',
+                className: 'w-full h-full',
+                onFocus: (e) => {
+                  e.target.select();
+                },
+              }}
+            />
+          )}
         </div>
         <div className="flex-flow flex w-full justify-end gap-3 px-3">
           <Button
@@ -211,7 +216,7 @@ function ButtonNode(node: CustomNodeProps) {
             size={'xs'}
             className="flex-flow flex h-10 gap-3 px-2"
             shape={'square'}
-            disabled={data?.readonly}
+            disabled={data?.readonly || (isLink && !data?.link)}
             onClick={() => {
               localStorage.removeItem('before-changes');
               setIsUpdating(false);

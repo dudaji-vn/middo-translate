@@ -5,6 +5,7 @@ import { User } from '@/features/users/types';
 import { VariantProps } from 'class-variance-authority';
 import { messageVariants } from '../components/message-item/variants';
 import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
+import { ChatScript } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/scripts/_components/column-def/scripts-columns';
 
 export type MessageType =
   | 'text'
@@ -40,7 +41,7 @@ type Call = {
   endTime: string | null;
   startTime: string | null;
   type: 'DIRECT' | 'GROUP';
-  participants: Pick<User, '_id' | 'name' | 'avatar'| 'status'>[];
+  participants: Pick<User, '_id' | 'name' | 'avatar' | 'status'>[];
 } & BaseEntity;
 export type Message = {
   content: string;
@@ -63,6 +64,7 @@ export type Message = {
   action?: ActionTypes;
   clientTempId?: string;
   senderType?: 'bot' | 'user' | 'anonymous';
+  script?: ChatScript;
   translations?: {
     [key: string]: string;
   };

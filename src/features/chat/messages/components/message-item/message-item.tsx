@@ -27,13 +27,15 @@ import { PendingStatus } from './pending-status';
 import { ReadByUsers } from './read-by-users';
 import { messageVariants } from './variants';
 import { AnimatePresence } from 'framer-motion';
-import { PenLineIcon } from 'lucide-react';
+import { EyeOffIcon, PenLineIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { MessageItemLinks } from './message-extension/message-item-links';
 import { MessageItemForward } from './message-item-forward';
 import { SeenTracker } from './message-extension/message-item-seen-tracker';
 import { MessageItemReactionBar } from './message-extension/message-item-reaction-bar';
 import { MessageItemParticipantJoinCall } from './message-extension/message-item-participant-join-call';
+import { Button } from '@/components/actions';
+import { useMessageActions } from '../message-actions';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -111,6 +113,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const mediaLength = message.media?.length || 0;
     const { isOnHelpDeskChat } = useBusinessNavigationData();
     const isSystemMessage = message.type === 'action';
+    const { message: activeMessage, action, reset } = useMessageActions();
+    const isActionActive = activeMessage?._id === message._id;
     const { value: isActive, setValue: setActive } = useBoolean(false);
     const {
       value: showDetail,
@@ -193,53 +197,67 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   isMe={isMe}
                   message={message}
                 >
-                  <div {...props} ref={ref} className={className}>
-                    <div
-                      className={cn(
-                        messageVariants({
-                          sender,
-                          order,
-                          status: message.status,
-                        }),
-                        'text-content-wrapper pointer-events-auto',
-                        mediaLength > 1 && 'rounded-none',
-                      )}
-                    >
-                      {message.content && (
-                        <Content
-                          showDetails={showDetail}
-                          position={isMe ? 'right' : 'left'}
-                          message={message}
-                          active={isActive}
-                          isEditing={isEditing}
-                        />
-                      )}
-                      {message.type === 'call' && (
-                        <CallMessage
-                          position={isMe ? 'right' : 'left'}
-                          message={message}
-                          active={isActive}
-                        />
-                      )}
-                      {message?.media && message.media.length > 0 && (
-                        <Fragment>
-                          {message.media[0].type === 'image' && (
-                            <ImageGallery images={message.media} />
-                          )}
-                          {message.media[0].type === 'document' && (
-                            <DocumentMessage
-                              isMe={isMe}
-                              file={message.media[0]}
-                            />
-                          )}
-                          {message.media[0].type === 'video' && (
-                            <MessageItemVideo file={message.media[0]} />
-                          )}
-                        </Fragment>
-                      )}
+                  <div className="flex items-center gap-2">
+                    <div {...props} ref={ref} className={className}>
+                      <div
+                        className={cn(
+                          messageVariants({
+                            sender,
+                            order,
+                            status: message.status,
+                          }),
+                          'text-content-wrapper pointer-events-auto',
+                          mediaLength > 1 && 'rounded-none',
+                        )}
+                      >
+                        {message.content && (
+                          <Content
+                            showDetails={showDetail}
+                            position={isMe ? 'right' : 'left'}
+                            message={message}
+                            active={isActive}
+                            isEditing={isEditing}
+                          />
+                        )}
+                        {message.type === 'call' && (
+                          <CallMessage
+                            position={isMe ? 'right' : 'left'}
+                            message={message}
+                            active={isActive}
+                          />
+                        )}
+                        {message?.media && message.media.length > 0 && (
+                          <Fragment>
+                            {message.media[0].type === 'image' && (
+                              <ImageGallery images={message.media} />
+                            )}
+                            {message.media[0].type === 'document' && (
+                              <DocumentMessage
+                                isMe={isMe}
+                                file={message.media[0]}
+                              />
+                            )}
+                            {message.media[0].type === 'video' && (
+                              <MessageItemVideo file={message.media[0]} />
+                            )}
+                          </Fragment>
+                        )}
+                      </div>
+                      <div className="block-blur absolute bottom-0 left-0  hidden h-9 w-full bg-gradient-to-t from-gray2 to-gray2/0" />
                     </div>
-
-                    <div className="block-blur absolute bottom-0 left-0  hidden h-9 w-full bg-gradient-to-t from-gray2 to-gray2/0" />
+                    {isActionActive && action === 'view-original' && (
+                      <Button.Icon
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          reset();
+                        }}
+                        size="ss"
+                        variant="ghost"
+                        color="default"
+                      >
+                        <EyeOffIcon />
+                      </Button.Icon>
+                    )}
                   </div>
                 </MessageItemWrapper>
                 {!isMe && (
@@ -284,10 +302,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                     isMe ? 'text-end' : 'pl-7 text-start',
                   )}
                 >
-                  {t('COMMON.SEND_BY')}&nbsp;
+                  {t(
+                    message.senderType === 'bot'
+                      ? 'COMMON.SEND_BY_SCRIPT'
+                      : 'COMMON.SEND_BY',
+                  )}
                   <span className="font-medium">
-                    {message.sender?.name}
-                    {message.senderType === 'bot' && <>&apos;s script</>}
+                    &nbsp;{message.script?.name || message.sender?.name}
                   </span>
                 </span>
               )}
