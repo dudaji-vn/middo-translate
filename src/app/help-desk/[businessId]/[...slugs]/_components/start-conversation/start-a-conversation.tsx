@@ -20,6 +20,7 @@ import {
   LSK_VISITOR_ROOM_ID,
 } from '@/types/business.type';
 import { cn } from '@/utils/cn';
+import { announceToParent } from '@/utils/iframe-util';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -42,10 +43,7 @@ export type TStartAConversation = {
   language: string;
   email: string;
 };
-const announceToParent = (message: string) => {
-  if (typeof window === 'undefined') return;
-  window.parent.postMessage(message, '*');
-};
+
 
 const StartAConversation = ({
   extensionData,
@@ -71,6 +69,10 @@ const StartAConversation = ({
   const showForm = () => {
     announceToParent('show-form');
     setOpen(true);
+  };
+  const hideForm = () => {
+    announceToParent('hide-form');
+    setOpen(false);
   };
   const methods = useForm({
     mode: 'onChange',
@@ -199,7 +201,12 @@ const StartAConversation = ({
           </div>
         </div>
       )}
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet
+        open={open}
+        onOpenChange={(open) => {
+          open ? showForm() : hideForm();
+        }}
+      >
         <SheetContent
           side="bottom"
           className={

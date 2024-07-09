@@ -5,10 +5,7 @@ import NewMessageCatcher from './_components/NewMessageCatcher';
 import { LSK_VISITOR_ID, LSK_VISITOR_ROOM_ID } from '@/types/business.type';
 import { useGetRoomData } from '@/features/business-spaces/hooks/use-get-chat-room';
 import { isEmpty } from 'lodash';
-const announceToParent = (message: string) => {
-  if (typeof window === 'undefined') return;
-  window.parent.postMessage(message, '*');
-};
+import { announceToParent } from '@/utils/iframe-util';
 
 const EmbedButtonPage = () => {
   const [anonymous, setAnonymous] = useState();
