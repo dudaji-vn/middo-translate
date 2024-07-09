@@ -1,49 +1,53 @@
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
-import { AnimatePresence, motion } from 'framer-motion';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/data-display';
-import { Drawer, DrawerContent } from '@/components/data-display/drawer';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
+import { CUSTOM_EVENTS } from '@/configs/custom-event';
+import { listenEvent } from '@/features/call/utils/custom-event.util';
+import { formatTimeDisplay } from '@/features/chat/rooms/utils';
+import { usePlatformStore } from '@/features/platform/stores';
+import { useBusinessNavigationData } from '@/hooks';
+import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
 import { useAppStore } from '@/stores/app.store';
+import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import EmojiPicker from '@emoji-mart/react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Clock9Icon, MoreVerticalIcon, SmilePlusIcon } from 'lucide-react';
 import moment from 'moment';
 import {
-  PropsWithChildren,
   cloneElement,
+  PropsWithChildren,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
+import { isMobile as isMobileDevice } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
 import { useBoolean, useOnClickOutside } from 'usehooks-ts';
 import { MessageItem } from '.';
 import { useReactMessage } from '../../hooks';
 import { Message } from '../../types';
-import { actionItems, useMessageActions } from '../message-actions';
+import {
+  actionItems,
+  MessageActionItem,
+  useMessageActions,
+} from '../message-actions';
 import {
   EMOJI_LANG_SUPPORT,
   MessageEmojiPicker,
 } from '../message-emoji-picker';
-import { useTranslatedFromText } from '@/hooks/use-translated-from-text';
-import { formatTimeDisplay } from '@/features/chat/rooms/utils';
-import { listenEvent } from '@/features/call/utils/custom-event.util';
-import { CUSTOM_EVENTS } from '@/configs/custom-event';
-import { usePlatformStore } from '@/features/platform/stores';
-import { useBusinessNavigationData } from '@/hooks';
-import { isMobile as isMobileDevice } from 'react-device-detect';
-import { useAuthStore } from '@/stores/auth.store';
 
 const MAX_TIME_CAN_EDIT = 15 * 60 * 1000; // 5 minutes
 
@@ -142,14 +146,22 @@ export const MessageItemWrapper = ({
     }) || (() => {}),
   );
 
-  const { onAction } = useMessageActions();
+  const { onAction, message: activeMessage, action } = useMessageActions();
+  const isActive = activeMessage?._id === message._id;
 
   const items = useMemo(() => {
+    const isViewOriginal = action === 'view-original';
     return actionItems
       .filter((item) => {
         switch (item.action) {
           case 'copy':
             return message.type === 'text';
+          case 'view-original':
+          case 'copy-original':
+            return message.type === 'text' && !isViewOriginal && !isMe;
+          case 'view-translated':
+          case 'copy-translated':
+            return message.type === 'text' && isViewOriginal && isActive;
           case 'forward':
             return (
               message.type !== 'call' && !isOnBusinessChat && !isOnHelpDeskChat
@@ -207,12 +219,26 @@ export const MessageItemWrapper = ({
         ...item,
         onAction: () =>
           onAction({
-            action: item.action,
+            action:
+              item.action === 'copy' && isViewOriginal
+                ? 'copy-original'
+                : item.action,
             message,
             isMe,
           }),
       }));
-  }, [discussionDisabled, isMe, isMobilePlatform, message, onAction]);
+  }, [
+    action,
+    discussionDisabled,
+    isMe,
+    isMobilePlatform,
+    isOnBusinessChat,
+    isOnHelpDeskChat,
+    message,
+    onAction,
+    user?._id,
+    isActive,
+  ]);
 
   const Wrapper = useMemo(() => {
     // console.log('isMobileDevice', );
@@ -260,25 +286,27 @@ export const MessageItemWrapper = ({
   }
 
   return (
-    <div
-      ref={ref}
-      className="relative cursor-pointer"
-      onClick={() => {
-        !isMenuOpen && toggleDetail?.();
-      }}
-    >
-      <Wrapper
-        setActive={setActive}
-        isMe={isMe}
-        message={message}
-        items={items}
-        reactionDisabled={reactionDisabled}
-        hideDetail={hideDetail}
-        setIsMenuOpen={setIsMenuOpen}
-        isMenuOpen={isMenuOpen}
+    <div className={cn('flex flex-col', isMe ? 'items-end' : 'items-start')}>
+      <div
+        ref={ref}
+        className="relative cursor-pointer"
+        onClick={() => {
+          !isMenuOpen && toggleDetail?.();
+        }}
       >
-        {props.children}
-      </Wrapper>
+        <Wrapper
+          setActive={setActive}
+          isMe={isMe}
+          message={message}
+          items={items}
+          reactionDisabled={reactionDisabled}
+          hideDetail={hideDetail}
+          setIsMenuOpen={setIsMenuOpen}
+          isMenuOpen={isMenuOpen}
+        >
+          {props.children}
+        </Wrapper>
+      </div>
       {message.status !== 'removed' && (
         <MessageDetail
           isMe={isMe}
@@ -291,9 +319,11 @@ export const MessageItemWrapper = ({
     </div>
   );
 };
-
+type Item = MessageActionItem & {
+  onAction: () => void;
+};
 export type MessageItemMobileWrapperProps = {
-  items: any[];
+  items: Item[];
 } & MessageItemWrapperProps &
   PropsWithChildren;
 
@@ -472,10 +502,10 @@ const DesktopWrapper = ({
       {children}
       <div
         className={cn(
-          'absolute top-1/2 hidden -translate-y-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:flex',
+          'absolute top-1/2 hidden -translate-y-1/2 gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100 sm:flex',
           isMe
-            ? '-left-4 -translate-x-full'
-            : '-right-4 translate-x-full flex-row-reverse',
+            ? '-left-2 -translate-x-full'
+            : '-right-2 translate-x-full flex-row-reverse',
           isMenuOpen && 'opacity-100',
           isOnHelpDeskChat && 'visible !flex',
         )}
@@ -488,24 +518,27 @@ const DesktopWrapper = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
             {items.map((item) => (
-              <DropdownMenuItem
-                disabled={item.disabled}
-                key={item.action}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  item.onAction();
-                }}
-                className="dark:hover:bg-neutral-800"
-              >
-                {cloneElement(item.icon, {
-                  size: 16,
-                  className: cn('mr-2', item.color && `text-${item.color}`),
-                })}
+              <>
+                <DropdownMenuItem
+                  disabled={item.disabled}
+                  key={item.action}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    item.onAction();
+                  }}
+                  className="dark:hover:bg-neutral-800"
+                >
+                  {cloneElement(item.icon, {
+                    size: 16,
+                    className: cn('mr-2', item.color && `text-${item.color}`),
+                  })}
 
-                <span className={cn(item.color && `text-${item.color}`)}>
-                  {t(item.label)}
-                </span>
-              </DropdownMenuItem>
+                  <span className={cn(item.color && `text-${item.color}`)}>
+                    {t(item.label)}
+                  </span>
+                </DropdownMenuItem>
+                {item.separator && <DropdownMenuSeparator />}
+              </>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>

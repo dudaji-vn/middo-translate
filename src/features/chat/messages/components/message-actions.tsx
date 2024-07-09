@@ -3,6 +3,7 @@ import {
   DownloadIcon,
   EyeIcon,
   ForwardIcon,
+  Globe,
   MessageSquareQuoteIcon,
   PenIcon,
   PinIcon,
@@ -30,20 +31,50 @@ type Action =
   | 'unpin'
   | 'edit'
   | 'browser'
-  | 'download';
-type ActionItem = {
+  | 'download'
+  | 'view-original'
+  | 'copy-original'
+  | 'view-translated'
+  | 'copy-translated'
+  | 'copy-english';
+export type MessageActionItem = {
   action: Action;
   label: string;
   icon: JSX.Element;
   color?: string;
   disabled?: boolean;
+  separator?: boolean;
 };
-export const actionItems: ActionItem[] = [
+export const actionItems: MessageActionItem[] = [
+  {
+    action: 'view-original',
+    label: 'CONVERSATION.VIEW_ORIGINAL',
+    icon: <EyeIcon />,
+    separator: true,
+  },
   {
     action: 'copy',
     label: 'CONVERSATION.COPY',
     icon: <CopyIcon />,
   },
+  {
+    action: 'copy-english',
+    label: 'CONVERSATION.COPY_ESL',
+    icon: <CopyIcon />,
+  },
+  {
+    action: 'copy-original',
+    label: 'CONVERSATION.COPY_ORIGINAL',
+    icon: <CopyIcon />,
+    separator: true,
+  },
+  {
+    action: 'copy-translated',
+    label: 'CONVERSATION.COPY_TRANSLATED',
+    icon: <CopyIcon />,
+    separator: true,
+  },
+
   {
     action: 'reply',
     label: 'CONVERSATION.REPLY_IN_DISCUSSION',
@@ -57,7 +88,7 @@ export const actionItems: ActionItem[] = [
   {
     action: 'browser',
     label: 'CONVERSATION.OPEN_IN_BROWSER',
-    icon: <EyeIcon />,
+    icon: <Globe />,
   },
   {
     action: 'edit',
@@ -76,11 +107,13 @@ export const actionItems: ActionItem[] = [
     action: 'pin',
     label: 'CONVERSATION.PIN',
     icon: <PinIcon />,
+    separator: true,
   },
   {
     action: 'unpin',
     label: 'CONVERSATION.UNPIN',
     icon: <PinOffIcon />,
+    separator: true,
   },
 
   {
@@ -116,14 +149,21 @@ export const MessageActions = ({ children }: { children: React.ReactNode }) => {
   const [message, setMessage] = useState<Message | null>(null);
   const [isMe, setIsMe] = useState<boolean>(false);
   const [action, setAction] = useState<Action>('none');
-  const { copyMessage } = useCopyMessage();
+  const { copyMessage, copyHtml } = useCopyMessage();
   const { onClickReplyMessage } = useClickReplyMessage();
   const { pin } = usePinMessage();
   const { postMessage } = useReactNativePostMessage();
   const onAction = ({ action, isMe, message }: OnActionParams) => {
     switch (action) {
       case 'copy':
+      case 'copy-translated':
         copyMessage(message);
+        break;
+      case 'copy-original':
+        copyMessage(message, true);
+        break;
+      case 'copy-english':
+        copyHtml(message.translations?.en || message.content);
         break;
       case 'reply':
         onClickReplyMessage(message._id);

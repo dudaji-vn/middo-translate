@@ -57,7 +57,7 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
+    --border: 0 0% 95%;
     --input: var(--stroke);
     --ring: 222.2 84% 4.9%;
 
@@ -96,7 +96,7 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
+    --border: 0 0% 20%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
 
@@ -603,4 +603,11 @@ input::-ms-clear {
 
 .message-editor .link {
   color: var(--primary);
+}
+
+pre {
+  white-space: pre;
+  white-space: pre-wrap;
+  word-break: break-all;
+  word-wrap: break-word;
 }

@@ -9,9 +9,11 @@ import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data'
 export const useDisplayContent = ({
   message,
   userLanguage,
+  useOriginal,
 }: {
   message: Message;
   userLanguage?: string;
+  useOriginal?: boolean;
 }) => {
   const { isOnHelpDeskChat } = useBusinessNavigationData();
   const isMe = message.sender._id === useAuthStore.getState().user?._id;
@@ -29,7 +31,13 @@ export const useDisplayContent = ({
       setContentDisplay(t('CONVERSATION.REMOVED_A_MESSAGE'));
       return;
     }
-    if (userLanguage === message.language || isMe || isMeTheAnonymous) {
+
+    if (
+      userLanguage === message.language ||
+      isMe ||
+      isMeTheAnonymous ||
+      useOriginal
+    ) {
       setContentDisplay(message.content);
       setIsUseOriginal(true);
       return;
@@ -57,12 +65,14 @@ export const useDisplayContent = ({
     translate();
   }, [
     isMe,
+    isMeTheAnonymous,
     message._id,
     message.content,
     message.language,
     message.status,
     message.translations,
     t,
+    useOriginal,
     userLanguage,
   ]);
   return { contentDisplay, isUseOriginal, translatedFrom };
