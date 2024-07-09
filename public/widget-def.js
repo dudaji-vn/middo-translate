@@ -1,5 +1,6 @@
 (function () {
   function initChatInterface(chatSRC, primaryColor = 'default') {
+    const INF = 999999999;
     const colorMap = {
       default: '#3D88ED',
       halloween: '#ff5e00',
@@ -55,13 +56,8 @@
         }
       }
       @keyframes grow-to-full-screen {
-        0% { opacity: 0; transform: scale(0.5); }
-        70% { opacity: 0.6}
-        100% { opacity: 1; transform: scale(1); }
-      }
-      @keyframes shrink-to-normal {
-        0% {}
-        100% { transform: width = 400px; height: 500px; }
+        0% { opacity: 0; transform: translateY(50%)}
+        100% { opacity: 1; transform: translateY(0)}
       }
       @keyframes rotate-load {
         0% { transform: rotate(0deg); }
@@ -73,7 +69,7 @@
       }
       @keyframes shrink-chat {
             0% { height: 500px,transform: translateY(100%) scaleY(0.5); }
-            100% { height: 280px !important; transform: translateY(0) scaleY(1); }
+            100% { height: 256px !important; transform: translateY(0) scaleY(1); }
       }
       @keyframes scale-to-0 {
         0% { transform: translateY(0) scaleY(1); opacity: 1; }
@@ -122,11 +118,11 @@
         display: none;
       }
       #widget-chat-frame.active.shrink {
-        height: 280px !important; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+        height: 256px !important; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
     
       }
       #widget-chat-frame.deactive.shrink {
-        height: 280px !important;
+        height: 256px !important;
       }
      
      
@@ -156,14 +152,11 @@
                 height: 100vh;
                 z-index: 999999999 !important; background-color: rgba(0, 0, 0, 0.15);
                 transform-origin: 95% 100%;
-                animation: grow-to-full-screen 0.7s ease forwards;
+                animation: grow-to-full-screen 0.3s ease forwards;
         }
         
       @media (max-width: 768px) {
-        @keyframes shrink-to-normal {
-            0% { height: 100vh; }
-            100% { height: 70vh; }
-        }
+
         @keyframes grow-to-full-screen {
             0% { height: 70vh; }
             100% { height: 100vh; }
@@ -264,18 +257,17 @@
           break;
         case 'hide-form':
         case 'room-end':
-          console.log('room-end');
           widgetChatFrame.classList.add('shrink');
           break;
         case 'media-show':
-          console.log('view-media');
-          theTriangle.classList.remove('active');
           widgetChatFrame.classList.add('fullscreen');
+          theTriangle.style.zIndex = 0;
           break;
         case 'media-close':
-          console.log('hide-media');
-          widgetChatFrame.classList.remove('fullscreen');
-          theTriangle.classList.add('active');
+          if (widgetChatFrame.classList.contains('fullscreen')) {
+            widgetChatFrame.classList.remove('fullscreen');
+            theTriangle.style.zIndex = INF;
+          }
           break;
         default:
           break;
@@ -286,6 +278,7 @@
     });
 
     divTrigger.addEventListener('click', () => {
+      if (divTrigger.disabled === true) return;
       if (floatingIcon.innerHTML !== components.icon_close) {
         floatingIcon.innerHTML = components.icon_close;
         widgetChatFrame.classList.remove('deactive');
@@ -307,17 +300,18 @@
     })
       .then((response) => {
         console.log('response', response);
+        setTimeout(() => {
+          floatingIcon.innerHTML = components.icon_message;
+          divTrigger.disabled = false;
+          console.log('widgetChatFrame loaded');
+        }, 1800);
       })
       .catch((error) => {
         chatWidget.remove();
       });
     widgetChatFrame.addEventListener('load', () => {
       console.log('widgetChatFrame loaded');
-      setTimeout(() => {
-        floatingIcon.innerHTML = components.icon_message;
-        divTrigger.disabled = false;
-        console.log('widgetChatFrame loaded');
-      }, 200);
+
       // floatingButtonFrame.style.display = 'block';
     });
   }
