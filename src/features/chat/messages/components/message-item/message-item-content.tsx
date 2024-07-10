@@ -123,11 +123,11 @@ export const Content = ({
             isEditing ? 'text-opacity-20' : '',
           )}
         >
-          <div className="flex">
+          <div className="flex items-center gap-1">
             {message.status === 'edited' && !isEditing && (
               <EditedStatus position={position} />
             )}
-            {isOriginal && (
+            {!isOriginal && (
               <span
                 className={
                   'flex text-xs font-light' +
@@ -136,7 +136,7 @@ export const Content = ({
                     : ' text-neutral-300')
                 }
               >
-                {message.status === 'edited' && '|'}
+                {message.status === 'edited' && !isOriginal && ' | '}
                 {t('CONVERSATION.ORIGINAL')}
               </span>
             )}
