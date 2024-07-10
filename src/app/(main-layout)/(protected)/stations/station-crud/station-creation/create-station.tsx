@@ -101,7 +101,7 @@ export default function CreateStation({ open }: { open: boolean }) {
     }
     try {
       await createStation({
-        name: formCreateStation.watch('name'),
+        name: formCreateStation.watch('name').trim(),
         avatar: formCreateStation.watch('avatar'),
         backgroundImage: formCreateStation.watch('backgroundImage'),
         members: formCreateStation.watch('members'),
@@ -117,7 +117,10 @@ export default function CreateStation({ open }: { open: boolean }) {
     }
   };
   const canNext = useMemo(() => {
-    if (formCreateStation.watch('avatar') && formCreateStation.watch('name')) {
+    if (
+      formCreateStation.watch('avatar') &&
+      formCreateStation.watch('name').trim()
+    ) {
       return formCreateStation.trigger();
     }
     return false;
