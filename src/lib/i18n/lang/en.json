@@ -112,6 +112,7 @@
     "STATION_INFORMATION": "Station's information",
     "STATION_SETTINGS": "Station settings",
     "LINK": "Link",
+    "DETECT_LANGUAGE": "Detect language",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",

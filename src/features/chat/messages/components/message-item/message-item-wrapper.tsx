@@ -161,7 +161,7 @@ export const MessageItemWrapper = ({
           case 'copy-original':
             return (
               message.type === 'text' &&
-              !isViewOriginal &&
+              !(isViewOriginal && isActive) &&
               !isMe &&
               !isSameLanguage
             );
@@ -531,7 +531,7 @@ const DesktopWrapper = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
             {items.map((item) => (
-              <>
+              <div key={item.action}>
                 <DropdownMenuItem
                   disabled={item.disabled}
                   key={item.action}
@@ -551,7 +551,7 @@ const DesktopWrapper = ({
                   </span>
                 </DropdownMenuItem>
                 {item.separator && <DropdownMenuSeparator />}
-              </>
+              </div>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>

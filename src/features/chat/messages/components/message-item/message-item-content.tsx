@@ -21,14 +21,13 @@ import { AnimatePresence, m, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { RichTextView } from './rich-text-view';
 import { useMessageActions } from '../message-actions';
-import { Button } from '@/components/actions';
-import { EyeOffIcon } from 'lucide-react';
 
 export interface ContentProps extends VariantProps<typeof wrapperVariants> {
   message: Message;
   setLinks?: (links: string[]) => void;
   showDetails?: boolean;
   isEditing?: boolean;
+  keyword?: string;
 }
 
 export const Content = ({
@@ -37,6 +36,7 @@ export const Content = ({
   message,
   showDetails,
   isEditing,
+  keyword,
 }: ContentProps) => {
   const { isOnHelpDeskChat } = useBusinessNavigationData();
   const { userLanguage, currentUserId } = useAuthStore((state) => ({
@@ -127,7 +127,7 @@ export const Content = ({
             {message.status === 'edited' && !isEditing && (
               <EditedStatus position={position} />
             )}
-            {!isOriginal && (
+            {isOriginal && (
               <span
                 className={
                   'flex text-xs font-light' +
@@ -136,13 +136,14 @@ export const Content = ({
                     : ' text-neutral-300')
                 }
               >
-                {message.status === 'edited' && !isOriginal && ' | '}
+                {message.status === 'edited' && ' | '}
                 {t('CONVERSATION.ORIGINAL')}
               </span>
             )}
           </div>
           <RichTextView
-            editorStyle={cn('text-base md:text-sm highlight-content', {
+            keyword={keyword}
+            editorStyle={cn('text-base md:text-sm', {
               translated: !isUseOriginal,
               right: position === 'right',
             })}
