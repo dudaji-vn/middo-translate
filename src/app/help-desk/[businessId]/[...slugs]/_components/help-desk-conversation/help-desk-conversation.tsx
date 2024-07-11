@@ -73,7 +73,9 @@ const HelpDeskConversation = ({
   }, []);
   useEffect(() => {
     if (isOnHelpDeskChat) {
-      announceToParent(isViewingMedia ? 'media-show' : 'media-close');
+      announceToParent({
+        type: isViewingMedia ? 'media-show' : 'media-close',
+      });
     }
   }, [isViewingMedia]);
 
