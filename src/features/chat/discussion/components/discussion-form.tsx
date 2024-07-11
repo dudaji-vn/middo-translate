@@ -1,7 +1,7 @@
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '@/components/message-editor';
+} from '@/features/chat/messages/components/message-editor/message-editor';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSendImageMessage } from '../../messages/hooks/use-send-image-message';
 import { useSendMediaMessages } from '../../messages/hooks/use-send-media-messages';

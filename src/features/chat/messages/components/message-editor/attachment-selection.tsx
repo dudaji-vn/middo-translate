@@ -1,7 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { forwardRef, useEffect, useMemo } from 'react';
-import { SelectedFile, useMediaUpload } from './media-upload';
-import { Button } from './actions';
+import {
+  SelectedFile,
+  useMediaUpload,
+} from '../../../../../components/media-upload';
+import { Button } from '../../../../../components/actions';
 import { PlayCircleIcon, PlusCircleIcon, XIcon } from 'lucide-react';
 import { FileIcon, defaultStyles } from 'react-file-icon';
 import Image from 'next/image';
@@ -9,7 +12,7 @@ import { Editor } from '@tiptap/react';
 
 import { cn } from '@/utils/cn';
 import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
-import { Spinner } from './feedback';
+import { Spinner } from '../../../../../components/feedback';
 
 export interface AttachmentSelectionProps
   extends React.HTMLAttributes<HTMLDivElement> {

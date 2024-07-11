@@ -599,9 +599,9 @@ input::-ms-clear {
   @apply outline outline-2 outline-offset-2 outline-primary;
 }
 
-.active-message .highlight-content,
-.active-message .highlight-content a {
-  @apply bg-white font-semibold text-primary;
+.active-message .content-highlight,
+.active-message .content-highlight a {
+  @apply rounded bg-white font-semibold text-primary;
 }
 
 .message-editor .link {

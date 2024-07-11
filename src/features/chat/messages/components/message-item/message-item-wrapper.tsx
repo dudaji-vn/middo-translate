@@ -129,7 +129,8 @@ export const MessageItemWrapper = ({
     (state) => state.platform === 'mobile',
   );
   const { isOnBusinessChat, isOnHelpDeskChat } = useBusinessNavigationData();
-  const { user } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const isSameLanguage = user?.language === props.message.language;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMe, message, setActive, discussionDisabled, showTime } = props;
   const ref = useRef<HTMLDivElement | null>(null);
@@ -158,10 +159,21 @@ export const MessageItemWrapper = ({
             return message.type === 'text';
           case 'view-original':
           case 'copy-original':
-            return message.type === 'text' && !isViewOriginal && !isMe;
+            return (
+              message.type === 'text' &&
+              !(isViewOriginal && isActive) &&
+              !isMe &&
+              !isSameLanguage
+            );
           case 'view-translated':
           case 'copy-translated':
             return message.type === 'text' && isViewOriginal && isActive;
+          case 'copy-english':
+            if (message.language === 'en') {
+              if (isViewOriginal || isSameLanguage) return false;
+            }
+            return message.type === 'text';
+
           case 'forward':
             return (
               message.type !== 'call' && !isOnBusinessChat && !isOnHelpDeskChat
@@ -238,6 +250,7 @@ export const MessageItemWrapper = ({
     onAction,
     user?._id,
     isActive,
+    isSameLanguage,
   ]);
 
   const Wrapper = useMemo(() => {
@@ -518,7 +531,7 @@ const DesktopWrapper = ({
           </DropdownMenuTrigger>
           <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
             {items.map((item) => (
-              <>
+              <div key={item.action}>
                 <DropdownMenuItem
                   disabled={item.disabled}
                   key={item.action}
@@ -538,7 +551,7 @@ const DesktopWrapper = ({
                   </span>
                 </DropdownMenuItem>
                 {item.separator && <DropdownMenuSeparator />}
-              </>
+              </div>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>

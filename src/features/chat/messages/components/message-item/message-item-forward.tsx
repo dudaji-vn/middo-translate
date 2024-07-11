@@ -1,5 +1,5 @@
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import { RichTextView } from '@/components/rich-text-view';
+import { RichTextView } from '@/features/chat/messages/components/message-editor/rich-text-view';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room } from '@/features/chat/rooms/types';
 import { useChatStore } from '@/features/chat/stores';

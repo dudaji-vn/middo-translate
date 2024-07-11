@@ -13,7 +13,11 @@ import Picker from '@emoji-mart/react';
 import { Smile } from 'lucide-react';
 import { useState } from 'react';
 import { Editor } from '@tiptap/react';
-import { Drawer, DrawerContent, DrawerTrigger } from './data-display/drawer';
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTrigger,
+} from '../../../../../components/data-display/drawer';
 import EmojiPicker from '@emoji-mart/react';
 
 export interface EmojiToggleButtonProps {

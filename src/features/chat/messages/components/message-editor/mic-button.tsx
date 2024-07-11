@@ -1,5 +1,5 @@
 import { Button } from '@/components/actions';
-import { Mic } from 'lucide-react';
+import { Mic, Pause, Square } from 'lucide-react';
 
 import {
   forwardRef,
@@ -34,6 +34,7 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
     const enableTranscribing = () => setTranscribing(true);
     const disableTranscribing = () => setTranscribing(false);
     const { postMessage } = useReactNativePostMessage();
+    const isContentEmpty = editor?.getText().trim().length === 0;
 
     const {
       listening,
@@ -90,15 +91,19 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
       e?.preventDefault();
     });
 
+    if (!isContentEmpty && !listening) {
+      return null;
+    }
+
     return (
       <Button.Icon
         onClick={handleToggleListening}
-        variant="ghost"
+        variant={listening ? 'default' : 'ghost'}
         size="xs"
-        color={listening && transcribing ? 'primary' : 'default'}
+        color={listening && transcribing ? 'secondary' : 'default'}
         {...props}
       >
-        <Mic />
+        {listening ? <Square fill="currentColor" /> : <Mic />}
       </Button.Icon>
     );
   },

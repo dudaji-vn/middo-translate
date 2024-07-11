@@ -10,7 +10,7 @@ import { useFormContext } from 'react-hook-form';
 import { useMediaUpload } from '@/components/media-upload';
 import { MessageEditorToolbarFile } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-file';
 import { useTranslation } from 'react-i18next';
-import { AttachmentSelection } from '@/components/attachment-selection';
+import { AttachmentSelection } from '@/features/chat/messages/components/message-editor/attachment-selection';
 import { useAppStore } from '@/stores/app.store';
 import { Popover, PopoverTrigger } from '@/components/data-display/popover';
 import { PopoverContent } from '@radix-ui/react-popover';

@@ -364,6 +364,7 @@ export const MessagesList = ({
           onClick={() => onItemClick?.({ type: 'message', id: message._id })}
           key={message?._id}
           message={message}
+          keyword={searchValue}
         />
       ))}
     </div>
@@ -373,8 +374,10 @@ export const MessagesList = ({
 const MessageItem = ({
   message,
   onClick,
+  keyword,
 }: {
   message: Message;
+  keyword: string;
   onClick?: () => void;
 }) => {
   const userId = useAuthStore((state) => state.user?._id);
@@ -390,9 +393,9 @@ const MessageItem = ({
       selectors: [{ selector: 'a', options: { ignoreHref: true } }],
     });
   }, [lang, message.content, message.translations]);
-  let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}?search_id=${message._id}`;
+  let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}?search_id=${message._id}&keyword=${keyword}`;
   if (spaceId) {
-    link = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}?search_id=${message._id}`;
+    link = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}?search_id=${message._id}${keyword ? `&keyword=${keyword}` : ''}`;
   }
   return (
     <Link key={message?._id} href={link} onClick={onClick}>

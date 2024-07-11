@@ -6,7 +6,7 @@ import BlockChatBar from '@/components/block-chat-bar';
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '@/components/message-editor';
+} from '@/features/chat/messages/components/message-editor/message-editor';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { CreateMessage } from '@/features/chat/messages/api';
 import { useMessageActions } from '@/features/chat/messages/components/message-actions';

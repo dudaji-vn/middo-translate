@@ -1,5 +1,5 @@
 import { messageApi } from '@/features/chat/messages/api';
-import { useMessageActions } from '@/features/chat/messages/components/message-actions';
+
 import { Message } from '@/features/chat/messages/types';
 import { useChatStore } from '@/features/chat/stores';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
@@ -14,11 +14,11 @@ import { Editor, EditorContent } from '@tiptap/react';
 import { isEqual } from 'lodash';
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, ButtonProps } from './actions';
+import { Button, ButtonProps } from '../../../../../components/actions';
 import { AttachmentButton } from './attachment-button';
 import { AttachmentSelection } from './attachment-selection';
 import { EmojiButton } from './emoji-button';
-import { useMediaUpload } from './media-upload';
+import { useMediaUpload } from '../../../../../components/media-upload';
 import { MentionButton } from './mention-button';
 import { MentionSuggestion } from './mention-suggestion-options';
 import { MicButton, MicButtonRef } from './mic-button';
@@ -26,7 +26,10 @@ import { SendButton } from './send-button';
 import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
 import { isMobile as isMobileDevice } from 'react-device-detect';
-import BlockChatBar from './block-chat-bar';
+import { MessageEditorLanguageSelect } from './message-editor-language-select';
+import { useMessageActions } from '../message-actions';
+import { useMSEditorStore } from '@/features/chat/stores/editor-language.store';
+
 export type MessageEditorSubmitData = {
   content: string;
   images: Media[];
@@ -67,12 +70,16 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
   ) => {
     const { files, reset: filesReset, handleClipboardEvent } = useMediaUpload();
     const { t } = useTranslation('common');
+    const { languageCode, detectedLanguage } = useMSEditorStore(
+      (state) => state,
+    );
+
+    const [isTyping, setIsTyping] = useState(false);
 
     const [disabled, setDisabled] = useState(false);
     const setDraft = useDraftStore((s) => s.setDraft);
 
     const mentionSuggestions = useMemo(() => {
-      console.log('render mentionSuggestions');
       const suggestions = userMentions.map(
         (participant): MentionSuggestion => ({
           id: participant._id,
@@ -103,7 +110,10 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       mentionSuggestions,
       onEnterTrigger: handleEnterTrigger,
       enterToSubmit: !isMobileDevice,
-      onTypingChange,
+      onTypingChange: (isTyping) => {
+        setIsTyping(isTyping);
+        onTypingChange?.(isTyping);
+      },
       isEditing,
       id: roomId,
     });
@@ -123,11 +133,12 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     };
 
     const handleSubmit = async () => {
+      if (isTyping && showTranslateOnType) return;
       const images: Media[] = [];
       const documents: Media[] = [];
       const videos: Media[] = [];
       let content = editor?.getHTML() || '';
-      let lang = translationHelperRef.current?.getSourceLang() || '';
+      let lang = languageCode === 'auto' ? detectedLanguage : languageCode;
       let english = translationHelperRef.current?.getEnContent();
       let mentions: string[] = [];
       reset();
@@ -171,15 +182,18 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         content,
         images,
         documents,
-        language: lang,
+        language: lang || '',
         mentions: mentions,
         videos,
         enContent: english,
       });
     };
 
-    const { toggleShowTranslateOnType, toggleShowMiddleTranslation } =
-      useChatStore();
+    const {
+      toggleShowTranslateOnType,
+      showTranslateOnType,
+      toggleShowMiddleTranslation,
+    } = useChatStore();
     useKeyboardShortcut(
       [
         SHORTCUTS.TURN_ON_OFF_TRANSLATION,
@@ -203,17 +217,19 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     };
     return (
       <>
-        <TranslationHelper
-          ref={translationHelperRef}
-          mentionSuggestionOptions={mentionSuggestions}
-          editor={editor}
-          onStartedEdit={() => setDisabled(true)}
-          onFinishedEdit={() => {
-            setDisabled(false);
-            editor?.commands.focus('end');
-          }}
-          onSend={handleSubmit}
-        />
+        {showTranslateOnType && (
+          <TranslationHelper
+            ref={translationHelperRef}
+            mentionSuggestionOptions={mentionSuggestions}
+            editor={editor}
+            onStartedEdit={() => setDisabled(true)}
+            onFinishedEdit={() => {
+              setDisabled(false);
+              editor?.commands.focus('end');
+            }}
+            onSend={handleSubmit}
+          />
+        )}
         <div className="relative">
           {isEditing && editor && (
             <EditControl
@@ -228,20 +244,28 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             <div
               ref={ref}
               {...props}
-              className="flex min-h-[82px] w-full flex-col rounded-xl border border-primary p-1 px-3 pb-3 shadow-sm"
+              className="flex min-h-[82px] w-full flex-col rounded-xl border border-primary p-1 shadow-sm"
             >
-              <div className="-ml-2">
+              <div className="flex items-center">
+                <div className="mr-3 flex-1 md:flex-none">
+                  <MessageEditorLanguageSelect editor={editor} />
+                </div>
                 {!isEditing && !isMediaDisabled && <AttachmentButton />}
                 <EmojiButton editor={editor} />
-                <MicButton ref={micRef} editor={editor} />
                 {mentionSuggestions.length > 0 && (
                   <MentionButton onMention={focus} editor={editor} />
                 )}
               </div>
-              <EditorContent
-                className="max-h-[200px] min-h-[46] w-full overflow-y-auto dark:text-neutral-50"
-                editor={editor}
-              />
+
+              <div className="flex ">
+                <EditorContent
+                  className="max-h-[200px] min-h-[46] w-full overflow-y-auto p-2 dark:text-neutral-50"
+                  editor={editor}
+                />
+                <div className="mt-auto">
+                  <MicButton ref={micRef} editor={editor} />
+                </div>
+              </div>
               {!isEditing && <AttachmentSelection editor={editor} />}
             </div>
 
@@ -250,7 +274,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
               id={`input-${editorId}`}
               type="text"
             />
-            {!isEditing && (
+            {!isEditing && !(isTyping && showTranslateOnType) && (
               <SendButton
                 id={sendButtonId}
                 onClick={(e) => {
@@ -264,7 +288,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             {editor && !isMobile && <Autofocus editor={editor} />}
           </div>
           {disabled && (
-            <div className="absolute left-0 top-0 h-full w-full bg-white dark:bg-neutral-900 opacity-80 max-md:text-sm" />
+            <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80 dark:bg-neutral-900 max-md:text-sm" />
           )}
         </div>
       </>

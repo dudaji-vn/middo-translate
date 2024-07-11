@@ -110,6 +110,7 @@
     "INFORMATION": "정보",
     "DELETE_STATION": "Station 삭제",
     "LINK": "링크",
+    "DETECT_LANGUAGE": "언어 감지",
     "TIME": {
       "CREATED_ON": "생성일",
       "UPDATED_ON": "업데이트일",

@@ -16,7 +16,7 @@ import { Edge } from 'reactflow';
 import FakeTyping from './_components/fake-typing';
 import { CHAT_FLOW_KEY } from '@/configs/store-key';
 import { isEmpty } from 'lodash';
-import { MessageEditor } from '@/components/message-editor';
+import { MessageEditor } from '@/features/chat/messages/components/message-editor/message-editor';
 import { MediaUploadProvider } from '@/components/media-upload';
 import { Media } from '@/types';
 import { FlowNode } from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';

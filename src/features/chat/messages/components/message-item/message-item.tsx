@@ -58,6 +58,7 @@ export interface MessageProps
   isEditing?: boolean;
   isDiscussion?: boolean;
   isLast?: boolean;
+  keyword?: string;
 }
 
 type MessageItemContextProps = {
@@ -103,6 +104,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       isDraw = false,
       isEditing = false,
       isDiscussion = false,
+      keyword,
       ...props
     },
     ref,
@@ -212,6 +214,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                       >
                         {message.content && (
                           <Content
+                            keyword={keyword}
                             showDetails={showDetail}
                             position={isMe ? 'right' : 'left'}
                             message={message}

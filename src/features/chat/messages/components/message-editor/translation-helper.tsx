@@ -1,25 +1,33 @@
 import { Button } from '@/components/actions';
 import { Switch } from '@/components/data-entry';
 import { Spinner } from '@/components/feedback';
-import { MentionSuggestion } from '@/components/mention-suggestion-options';
-import { RichTextView } from '@/components/rich-text-view';
 import { DEFAULT_LANGUAGES_CODE } from '@/configs/default-language';
+import { MentionSuggestion } from '@/features/chat/messages/components/message-editor/mention-suggestion-options';
+import { RichTextView } from '@/features/chat/messages/components/message-editor/rich-text-view';
 import { useChatStore } from '@/features/chat/stores';
-import { detectLanguage, translateText } from '@/services/languages.service';
+import { useMSEditorStore } from '@/features/chat/stores/editor-language.store';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { translateText } from '@/services/languages.service';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { useQuery } from '@tanstack/react-query';
 import { Editor, EditorContent } from '@tiptap/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { PenIcon } from 'lucide-react';
-import { forwardRef, useId, useImperativeHandle, useState } from 'react';
-import { CircleFlag } from 'react-circle-flags';
-import { useTranslation } from 'react-i18next';
-import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { SHORTCUTS } from '@/types/shortcuts';
 import { isEqual } from 'lodash';
-import { useQuery } from '@tanstack/react-query';
-import { useEditor } from './use-editor';
-import { Checkbox } from './form/checkbox';
-import { useDebounce } from 'usehooks-ts';
+import { PenIcon } from 'lucide-react';
+import {
+  forwardRef,
+  useId,
+  useImperativeHandle,
+  useMemo,
+  useState,
+} from 'react';
+import { CircleFlag } from 'react-circle-flags';
 import { isMobile } from 'react-device-detect';
+import { useTranslation } from 'react-i18next';
+import { useDebounceValue } from 'usehooks-ts';
+import { Checkbox } from '../../../../../components/form/checkbox';
+import { useEditor } from './use-editor';
+import { convert } from 'html-to-text';
 const DEBOUNCE_TIME = 500;
 export interface TranslationHelperProps {
   mentionSuggestionOptions: MentionSuggestion[];
@@ -61,7 +69,13 @@ export const TranslationHelper = forwardRef<
       string | null
     >(null);
     const { t } = useTranslation('common');
-    const [srcLang, setSrcLang] = useState<string | null>(null);
+    const { detectedLanguage, languageCode } = useMSEditorStore(
+      (state) => state,
+    );
+
+    const srcLang = useMemo(() => {
+      return languageCode === 'auto' ? detectedLanguage : languageCode;
+    }, [detectedLanguage, languageCode]);
 
     const handleEnter = () => {
       const confirmButton = document.getElementById(confirmButtonId);
@@ -73,33 +87,33 @@ export const TranslationHelper = forwardRef<
       onEnterTrigger: handleEnter,
     });
 
-    const isRootEditorEmpty = rootEditor
-      ? rootEditor.getText().trim().length === 0
-      : true;
+    const [htmlDebounce] = useDebounceValue(
+      rootEditor?.getHTML(),
+      DEBOUNCE_TIME,
+    );
 
-    const htmlDebounce = useDebounce(rootEditor?.getHTML(), DEBOUNCE_TIME);
-    const textDebounce = useDebounce(rootEditor?.getText(), DEBOUNCE_TIME);
-    const translatedEnContentDebounce = useDebounce(
+    const isRootEditorEmpty = convert(htmlDebounce || '').trim() === '';
+
+    const [translatedEnContentDebounce] = useDebounceValue(
       translatedEnContent,
       DEBOUNCE_TIME,
     );
     const { isLoading, isFetching, data } = useQuery({
-      queryKey: ['translation-helper', htmlDebounce],
+      queryKey: ['translation-helper', htmlDebounce, srcLang],
       queryFn: async () => {
-        const plainText = (textDebounce || '').trim();
-        const srcLang = await detectLanguage(plainText);
         const translated = await translateText(
           htmlDebounce || '',
-          srcLang,
+          srcLang!,
           DEFAULT_LANGUAGES_CODE.EN,
         );
-        setSrcLang(srcLang);
         return translated;
       },
       enabled:
-        !isRootEditorEmpty && htmlDebounce !== translatedEnContentDebounce,
+        !isRootEditorEmpty &&
+        htmlDebounce !== translatedEnContentDebounce &&
+        !!srcLang,
       staleTime: Infinity,
-      keepPreviousData: true,
+      keepPreviousData: !isRootEditorEmpty,
     });
     const handleStartEdit = () => {
       editor?.commands.setContent(enContent || data);
@@ -120,14 +134,13 @@ export const TranslationHelper = forwardRef<
         DEFAULT_LANGUAGES_CODE.EN,
         srcLang!,
       );
-      setTranslatedEnContent(translated);
       onFinishedEdit?.();
       rootEditor?.commands.setContent(translated);
       if (sendOnSave) {
         onSend?.();
       }
     };
-    const showHelper = showTranslateOnType && !isRootEditorEmpty;
+    const showHelper = !isRootEditorEmpty;
 
     const confirmButtonId = useId();
 
@@ -159,13 +172,14 @@ export const TranslationHelper = forwardRef<
     const clearContent = () => {
       setEnContent(null);
       setTranslatedEnContent(null);
-      setSrcLang(null);
     };
 
     useImperativeHandle(
       ref,
       () => ({
         getEnContent: () => {
+          console.log(enContent, 'hello');
+          console.log(data, 'data');
           return enContent || (!isLoading && !isFetching) ? data : null;
         },
         clearContent,
@@ -205,7 +219,7 @@ export const TranslationHelper = forwardRef<
                       <div>
                         <div
                           className={
-                            'mb-2 flex flex-1 rounded-xl border border-primary-500-main bg-white dark:bg-neutral-900 px-3 py-2'
+                            'mb-2 flex flex-1 rounded-xl border border-primary-500-main bg-white px-3 py-2 dark:bg-neutral-900'
                           }
                         >
                           <EditorContent

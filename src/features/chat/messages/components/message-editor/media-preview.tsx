@@ -6,7 +6,7 @@ import Thumbnails from 'yet-another-react-lightbox/plugins/thumbnails';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import Video from 'yet-another-react-lightbox/plugins/video';
 import { Media } from '@/types';
-import { SelectedFile } from './media-upload';
+import { SelectedFile } from '../../../../../components/media-upload';
 
 export interface MediaPreviewProps {
   files: (SelectedFile | Media)[];
