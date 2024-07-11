@@ -90,6 +90,7 @@
         box-sizing: border-box; margin-left: auto; margin-top: auto; display: inline-flex;
         height: 64px; width: 64px; align-items: center; justify-content: center; border-radius: 9999px;
         cursor: pointer; background-color: white; color: var(--grey-color); border-style: none;
+        box-shadow: 2px 2px 16px 2px rgba(22, 22, 22, 0.1);
       }
     
       #loading-icon {
@@ -148,6 +149,7 @@
                 position: fixed;
                 top: 0;
                 left: 0;
+                border-radius: 0px;
                 width: 100vw;
                 height: 100vh;
                 z-index: 999999999 !important; background-color: rgba(0, 0, 0, 0.15);
@@ -238,7 +240,6 @@
     window.addEventListener('message', (event) => {
       const trigger = document.getElementById('iframe-trigger-container');
       const p = document.getElementById('chat-messages-ping');
-      console.log('event', event);
       switch (event.data) {
         case 'open-chat-widget':
         case 'close-chat-widget':
