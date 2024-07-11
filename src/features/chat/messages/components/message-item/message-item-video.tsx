@@ -23,9 +23,13 @@ export const MessageItemVideo = ({ file }: MessageItemVideoProps) => {
 
   useEffect(() => {
     if(isOnHelpDeskChat && isFullScreenStore) {
-      announceToParent('media-show');
+      announceToParent({
+        type: 'media-show',
+      });
     } else if (isOnHelpDeskChat && !isFullScreenStore && typeof index !== 'number') {
-      announceToParent('media-close');
+      announceToParent({
+        type: 'media-close',
+      });
     }
   }, [isFullScreenStore]);
 

@@ -11,9 +11,13 @@ const MediaLightBoxProvider = () => {
     const { isOnHelpDeskChat } = useBusinessNavigationData();
     useEffect(() => {
         if (isOnHelpDeskChat && typeof index === 'number') {
-          announceToParent('media-show');
+          announceToParent({
+            type: 'media-show',
+          });
         } else if(isOnHelpDeskChat && typeof index !== 'number') {
-          announceToParent('media-close');
+          announceToParent({
+            type: 'media-close',
+          });
         }
     }, [isOnHelpDeskChat, index]);
 

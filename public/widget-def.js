@@ -15,7 +15,7 @@
     const styleTag = `
       <style>
         :root {
-          --grey-color: ${colorMap[primaryColor]};
+          --primary-color: ${colorMap[primaryColor]};
         }
       .ping-container {
         color: #3c3c3c;
@@ -31,7 +31,7 @@
         .dot {
         position: relative;
         width: fit-content;
-        background: var(--grey-color);
+        background: var(--primary-color);
         border-radius: 40px;
         width: 1rem;
         height: 1rem;
@@ -40,7 +40,7 @@
       .heartbeat {
         position: absolute;
         width: fit-content;
-        background-color: var(--grey-color);
+        background-color: var(--primary-color);
         border-radius: 40px;
         width: 1rem;
         height: 1rem;
@@ -89,11 +89,12 @@
       #floating-icon-btn {
         box-sizing: border-box; margin-left: auto; margin-top: auto; display: inline-flex;
         height: 64px; width: 64px; align-items: center; justify-content: center; border-radius: 9999px;
-        cursor: pointer; background-color: white; color: var(--grey-color); border-style: none;
+        cursor: pointer; background-color: white; color: var(--primary-color); border-style: none;
         box-shadow: 2px 2px 16px 2px rgba(22, 22, 22, 0.1);
       }
     
       #loading-icon {
+        color: #f1f1f1;
         animation: rotate-load 1s linear infinite;
       }
       .h-7 { height: 1.75rem; }
@@ -228,6 +229,7 @@
 
     const floatingIcon = document.getElementById('floating-icon-btn');
     const widgetChatFrame = document.getElementById('widget-chat-frame');
+    floatingIcon.style.color = colorMap['rose'];
 
     const theTriangle = document.getElementById('widget_triangle');
     const floatingButtonFrame = document.getElementById(
@@ -236,11 +238,13 @@
     floatingButtonFrame.style.display = 'none';
     const divTrigger = document.getElementById('iframe-trigger-container');
     widgetChatFrame.classList.add('shrink');
-
     window.addEventListener('message', (event) => {
       const trigger = document.getElementById('iframe-trigger-container');
       const p = document.getElementById('chat-messages-ping');
-      switch (event.data) {
+      const { type, payload } = event.data;
+
+      console.log('event.data -- ', type, event.data);
+      switch (type) {
         case 'open-chat-widget':
         case 'close-chat-widget':
           // trigger.click();
@@ -268,6 +272,12 @@
           if (widgetChatFrame.classList.contains('fullscreen')) {
             widgetChatFrame.classList.remove('fullscreen');
             theTriangle.style.zIndex = INF;
+          }
+          break;
+        case 'update-primary-color':
+          const { themeColor } = payload;
+          if (colorMap[themeColor]) {
+            floatingIcon.style.color = colorMap[themeColor];
           }
           break;
         default:
