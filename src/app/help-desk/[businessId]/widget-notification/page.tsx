@@ -27,7 +27,7 @@ const EmbedButtonPage = () => {
   };
   const onRoomEnd = () => {
     console.log('onRoomEnd');
-    announceToParent('room-end');
+    announceToParent({ type: 'room-end' });
     setAnonymous(undefined);
     setRoomId('');
     setVisitorId('');
