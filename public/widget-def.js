@@ -274,7 +274,6 @@
           break;
         case 'update-primary-color':
           const { themeColor } = payload;
-          alert(themeColor);
           if (colorMap[themeColor]) {
             floatingIcon.style.color = colorMap[themeColor];
           }
