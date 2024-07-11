@@ -44,7 +44,6 @@ export type TStartAConversation = {
   email: string;
 };
 
-
 const StartAConversation = ({
   extensionData,
   isAfterDoneAConversation,
@@ -67,11 +66,15 @@ const StartAConversation = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const showForm = () => {
-    announceToParent('show-form');
+    announceToParent({
+      type: 'show-form',
+    });
     setOpen(true);
   };
   const hideForm = () => {
-    announceToParent('hide-form');
+    announceToParent({
+      type: 'hide-form',
+    });
     setOpen(false);
   };
   const methods = useForm({
@@ -128,12 +131,16 @@ const StartAConversation = ({
     if (language?.code) setValue('language', language.code);
   };
   useEffect(() => {
+    announceToParent({
+      type: 'update-primary-color',
+      payload: { themeColor: theme.name },
+    });
     const visitorId = localStorage.getItem(LSK_VISITOR_ID);
     const visitorRoomId = localStorage.getItem(LSK_VISITOR_ROOM_ID);
     localStorage.setItem(LSK_VISITOR_DATA, JSON.stringify(visitorData));
     addDetectVisitorLanguage();
     if (visitorId && visitorRoomId) {
-      announceToParent('room-found');
+      announceToParent({ type: 'room-found' });
       router.push(
         `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}&originReferer=${fromDomain}`,
       );
@@ -153,7 +160,7 @@ const StartAConversation = ({
       }).then(async (res) => {
         const roomId = res.data.roomId;
         const user = res.data.user;
-        announceToParent('room-found');
+        announceToParent({ type: 'room-found' });
         localStorage.setItem(LSK_VISITOR_ROOM_ID, roomId);
         localStorage.setItem(LSK_VISITOR_ID, user._id);
         await appendFirstMessageFromChatFlow(roomId);
