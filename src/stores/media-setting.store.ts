@@ -5,6 +5,8 @@ import { restoredState } from '@/utils/restore';
 export type MediaSettingState = {
   volume: number; // 0 - 1
   setVolume: (volume: number) => void;
+  isFullScreenStore: boolean;
+  setFullScreenStore: (isFullScreen: boolean) => void;
   clear: () => void;
 };
 
@@ -21,10 +23,18 @@ export const useMediaSettingStore = create<MediaSettingState>()(
         }
         set({ volume });
       },
+      isFullScreenStore: false,
+      setFullScreenStore: (isFullScreenStore: boolean) => set({ isFullScreenStore }),
       ...restoredState('media-setting'),
     }),
     {
       name: 'media-setting',
-    },
+      partialize: (state) =>
+        Object.fromEntries(
+          Object.entries(state).filter(
+            ([key]) => !['isFullScreenStore'].includes(key)
+          )
+      ),
+    }
   ),
 );

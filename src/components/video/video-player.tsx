@@ -25,6 +25,8 @@ import { useMediaSettingStore } from '@/stores/media-setting.store';
 import downloadFile from '@/utils/download-file';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
+import { announceToParent } from '@/utils/iframe-util';
 
 interface VideoProps {
   file: {
@@ -54,7 +56,7 @@ function VideoPlayer(props: VideoProps) {
     onFullScreenChange,
     poster,
   } = props;
-  const [isFullScreen, setIsFullScreen] = useState(isFullScreenVideo);
+  // const [isFullScreen, setIsFullScreen] = useState(isFullScreenVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoThumbnailRef = useRef<HTMLVideoElement>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -62,7 +64,8 @@ function VideoPlayer(props: VideoProps) {
   const rangeVolumeRef = useRef<HTMLDivElement>(null);
   const buttonVolumeRef = useRef<HTMLDivElement>(null);
   const actionMenuRef = useRef<HTMLDivElement>(null);
-
+  const setFullScreenStore = useMediaSettingStore((state) => state.setFullScreenStore);
+  const isFullScreenStore = useMediaSettingStore((state) => state.isFullScreenStore);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoDuration, setVideoDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -129,10 +132,10 @@ function VideoPlayer(props: VideoProps) {
   }, []);
 
   useEffect(() => {
-    if (!isFullScreen) return;
+    if (!isFullScreenStore) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
-        setIsFullScreen(false);
+        setFullScreenStore(false)
       }
       if (e.code === 'Space') {
         e.preventDefault();
@@ -143,7 +146,7 @@ function VideoPlayer(props: VideoProps) {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isFullScreen, toggleVideoPlay]);
+  }, [isFullScreenStore, toggleVideoPlay, setFullScreenStore]);
 
   // Add event listener for duration bar to get time and get thumbnail
   useEffect(() => {
@@ -232,8 +235,8 @@ function VideoPlayer(props: VideoProps) {
   }, [onDisableLongPress]);
 
   useEffect(() => {
-    onFullScreenChange && onFullScreenChange(isFullScreen);
-  }, [isFullScreen, onFullScreenChange]);
+    onFullScreenChange && onFullScreenChange(isFullScreenStore);
+  }, [isFullScreenStore, onFullScreenChange]);
 
   // Use click out side to close volume
   useOnClickOutside([rangeVolumeRef, buttonVolumeRef], () => {
@@ -249,7 +252,7 @@ function VideoPlayer(props: VideoProps) {
       className={cn(
         'group relative overflow-hidden bg-transparent',
         className,
-        isFullScreen
+        isFullScreenStore
           ? 'fixed inset-0 z-[51] h-full w-full max-w-full rounded-none bg-black/90'
           : 'z-[1]',
       )}
@@ -280,17 +283,17 @@ function VideoPlayer(props: VideoProps) {
           e.preventDefault();
           toggleVideoPlay();
         }}
-        onDoubleClick={() => setIsFullScreen((prev) => !prev)}
+        onDoubleClick={() => setFullScreenStore(!isFullScreenStore)}
       >
         <Button.Icon
           variant={'default'}
           color={'default'}
           shape={'default'}
-          size={isFullScreen ? 'md' : 'sm'}
+          size={isFullScreenStore ? 'md' : 'sm'}
           className={cn(
             'shadow-2',
             isPlaying ? 'opacity-0' : '',
-            isPlaying && isFullScreen && '!opacity-0',
+            isPlaying && isFullScreenStore && '!opacity-0',
           )}
         >
           {isPlaying ? <Pause /> : <PlayIcon />}
@@ -300,7 +303,7 @@ function VideoPlayer(props: VideoProps) {
       <div
         className={cn(
           'pointer-events-none absolute inset-0 bg-black/20 duration-500',
-          isPlaying || isFullScreen || poster ? 'opacity-0' : '',
+          isPlaying || isFullScreenStore || poster ? 'opacity-0' : '',
         )}
       ></div>
 
@@ -308,7 +311,7 @@ function VideoPlayer(props: VideoProps) {
       <div
         className={cn(
           'absolute bottom-1 left-1 right-1 z-10 flex items-center justify-end gap-2 rounded-2xl  bg-black/40 p-1 px-2 duration-500 md:rounded-xl',
-          isFullScreen ? 'p-2' : 'bg-transparent md:bg-black/40',
+          isFullScreenStore ? 'p-2' : 'bg-transparent md:bg-black/40',
           isShowActionBar ? 'translate-y-0' : 'translate-y-[calc(100%+20px)]',
         )}
         ref={actionMenuRef}
@@ -319,7 +322,7 @@ function VideoPlayer(props: VideoProps) {
         <span
           className={cn(
             'hidden text-sm text-white md:block',
-            isFullScreen && 'block',
+            isFullScreenStore && 'block',
           )}
         >
           {formatVideoTimer}
@@ -327,7 +330,7 @@ function VideoPlayer(props: VideoProps) {
         <div
           className={cn(
             'relative mx-2 hidden flex-1 py-2 md:block',
-            isFullScreen && 'block',
+            isFullScreenStore && 'block',
           )}
           ref={durationBarRef}
         >
@@ -384,10 +387,10 @@ function VideoPlayer(props: VideoProps) {
             <DropdownMenuTrigger asChild={true}>
               <div
                 ref={buttonVolumeRef}
-                className={cn('hidden md:block', isFullScreen && 'block')}
+                className={cn('hidden md:block', isFullScreenStore && 'block')}
               >
                 <ButtonVolume
-                  isFullScreen={isFullScreen}
+                  isFullScreen={isFullScreenStore}
                   isOpenVolume={isOpenVolume}
                   setIsOpenVolume={setIsOpenVolume}
                 />
@@ -410,9 +413,9 @@ function VideoPlayer(props: VideoProps) {
           <Button.Icon
             variant={'default'}
             color={'default'}
-            size={isFullScreen ? 'xs' : 'ss'}
+            size={isFullScreenStore ? 'xs' : 'ss'}
             shape={'default'}
-            className={cn(isFullScreen ? '' : 'hidden')}
+            className={cn(isFullScreenStore ? '' : 'hidden')}
             onClick={download}
           >
             <DownloadIcon />
@@ -423,11 +426,11 @@ function VideoPlayer(props: VideoProps) {
           <Button.Icon
             variant={'default'}
             color={'default'}
-            size={isFullScreen ? 'xs' : 'ss'}
+            size={isFullScreenStore ? 'xs' : 'ss'}
             shape={'default'}
-            onClick={() => setIsFullScreen(!isFullScreen)}
+            onClick={() => setFullScreenStore(!isFullScreenStore)}
           >
-            {isFullScreen ? <X /> : <Maximize2Icon />}
+            {isFullScreenStore ? <X /> : <Maximize2Icon />}
           </Button.Icon>
         )}
       </div>

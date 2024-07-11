@@ -90,6 +90,7 @@
         box-sizing: border-box; margin-left: auto; margin-top: auto; display: inline-flex;
         height: 64px; width: 64px; align-items: center; justify-content: center; border-radius: 9999px;
         cursor: pointer; background-color: white; color: var(--primary-color); border-style: none;
+        box-shadow: 2px 2px 16px 2px rgba(22, 22, 22, 0.1);
       }
     
       #loading-icon {
@@ -144,17 +145,18 @@
       #chat-messages-ping.active {
         display: flex;
       }
-      #widget-chat-frame.fullscreen {
-          display: block;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100vw;
-          height: 100vh;
-          z-index: 999999999 !important; background-color: rgba(0, 0, 0, 0.15);
-          transform-origin: 95% 100%;
-          animation: grow-to-full-screen 0.3s ease forwards;
-      }
+        #widget-chat-frame.fullscreen {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                border-radius: 0px;
+                width: 100vw;
+                height: 100vh;
+                z-index: 999999999 !important; background-color: rgba(0, 0, 0, 0.15);
+                transform-origin: 95% 100%;
+                animation: grow-to-full-screen 0.3s ease forwards;
+        }
         
       @media (max-width: 768px) {
 

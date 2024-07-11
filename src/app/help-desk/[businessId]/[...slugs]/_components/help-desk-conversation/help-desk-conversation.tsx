@@ -57,10 +57,6 @@ const HelpDeskConversation = ({
     useBusinessExtensionStore();
   const isClient = useClient();
   const isMobile = useAppStore((state) => state.isMobile);
-  const { isOnHelpDeskChat } = useBusinessNavigationData();
-  const isViewingMedia = useMediaLightBoxStore(
-    (state) => typeof state.index === 'number',
-  );
 
   const { currentSide } = useRoomSidebarTabs();
   useEffect(() => {
@@ -71,13 +67,6 @@ const HelpDeskConversation = ({
       setChatFlow(chatFlow);
     }
   }, []);
-  useEffect(() => {
-    if (isOnHelpDeskChat) {
-      announceToParent({
-        type: isViewingMedia ? 'media-show' : 'media-close',
-      });
-    }
-  }, [isViewingMedia]);
 
   if (!isClient) return null;
 

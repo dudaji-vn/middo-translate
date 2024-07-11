@@ -338,6 +338,9 @@
   .tiptap p.is-editor-empty:first-child::before {
     @apply dark:text-neutral-600;
   }
+  .hidden-drawer-bar > .bg-muted {
+    @apply opacity-0;
+  }
 }
 .video-intro::-webkit-media-controls-overlay-enclosure {
   display: none !important;
