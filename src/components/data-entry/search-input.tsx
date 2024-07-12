@@ -26,6 +26,7 @@ export interface SearchInputProps
   onEnter?: () => void;
   leftElement?: React.ReactNode;
   showSearchButton?: boolean;
+  wrapperClassName?: string;
 }
 
 export interface SearchInputRef extends HTMLInputElement {
@@ -41,6 +42,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       onEnter,
       leftElement,
       showSearchButton = true,
+      wrapperClassName,
       ...props
     },
     ref,
@@ -86,7 +88,12 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
     }, [props.autoFocus]);
 
     return (
-      <div className="relative w-full overflow-hidden rounded-xl border bg-background transition-all dark:border-neutral-800">
+      <div
+        className={cn(
+          'relative w-full overflow-hidden rounded-xl border bg-background transition-all dark:border-neutral-800',
+          wrapperClassName,
+        )}
+      >
         <div className="flex h-11 pl-1 transition-all ">
           {leftElement}
           <input

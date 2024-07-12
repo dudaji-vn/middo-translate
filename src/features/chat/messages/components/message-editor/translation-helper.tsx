@@ -140,7 +140,9 @@ export const TranslationHelper = forwardRef<
         onSend?.();
       }
     };
-    const showHelper = !isRootEditorEmpty;
+    const showHelper =
+      (!isRootEditorEmpty || rootEditor?.getText().trim().length !== 0) &&
+      showTranslateOnType;
 
     const confirmButtonId = useId();
 

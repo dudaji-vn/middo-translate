@@ -1,12 +1,16 @@
+import { Button } from '@/components/actions';
 import { Section } from '@/components/data-display';
 import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Message } from '@/features/chat/messages/types';
 import { RoomItem } from '@/features/chat/rooms/components/room-item';
 import { Room } from '@/features/chat/rooms/types';
+import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { UserItem } from '@/features/users/components';
 import { User } from '@/features/users/types';
+import { useBusinessNavigationData, useStationNavigationData } from '@/hooks';
 import { useQuerySearch } from '@/hooks/use-query-search';
+import { useAuthStore } from '@/stores/auth.store';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { convert } from 'html-to-text';
 import {
@@ -15,24 +19,18 @@ import {
   UserRound,
   UsersRound,
 } from 'lucide-react';
+import moment from 'moment';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { searchApi } from '../api';
-import { SearchType } from '../types';
-import moment from 'moment';
-import { generateRoomDisplay } from '@/features/chat/rooms/utils';
-import { useAuthStore } from '@/stores/auth.store';
 import { useSearchDynamic } from '../hooks/use-search-dynamic';
-import {
-  useBusinessNavigationData,
-  useCursorPaginationQuery,
-  useStationNavigationData,
-} from '@/hooks';
-import { Button } from '@/components/actions';
+import { SearchType } from '../types';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 
 export interface SearchTabsProps {
   searchValue: string;
+  onItemClicked?: () => void;
   onTabChange?: (type: SearchType) => void;
 }
 
@@ -62,7 +60,12 @@ const tabs: Record<
   },
 };
 
-export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
+export const SearchTabs = ({
+  searchValue,
+  onTabChange,
+  onItemClicked,
+}: SearchTabsProps) => {
+  const setCurrentSide = useSideChatStore((state) => state.setCurrentSide);
   const [type, setType] = useState<SearchType>('all');
   const { isBusiness, spaceId } = useBusinessNavigationData();
   const { stationId } = useStationNavigationData();
@@ -103,6 +106,7 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
     id?: string;
   }) => {
     mutate({ keyword: searchValue });
+    onItemClicked?.();
   };
   const filterTabs = useMemo(() => {
     if (isBusiness && spaceId) {
@@ -112,7 +116,7 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
       };
     }
     return tabs;
-  }, [isBusiness, spaceId, stationId]);
+  }, [isBusiness, spaceId]);
 
   return (
     <>
@@ -313,7 +317,11 @@ const AllResult = ({
       {data?.messages && data.messages.length > 0 && (
         <div className="mt-5">
           <Section label={'Message'}>
-            <MessagesList messages={data.messages} searchValue={searchValue} />
+            <MessagesList
+              messages={data.messages}
+              onItemClick={onItemClick}
+              searchValue={searchValue}
+            />
           </Section>
           {countData.message > LIMIT && (
             <div className="mt-1 px-3">

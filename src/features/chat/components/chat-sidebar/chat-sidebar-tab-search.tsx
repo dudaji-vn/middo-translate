@@ -88,7 +88,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
             </div>
           )}
           {searchValue ? (
-            <SearchTabs searchValue={searchValue} />
+            <SearchTabs onItemClicked={handleBack} searchValue={searchValue} />
           ) : (
             <SearchHistory />
           )}

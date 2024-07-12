@@ -217,19 +217,18 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     };
     return (
       <>
-        {showTranslateOnType && (
-          <TranslationHelper
-            ref={translationHelperRef}
-            mentionSuggestionOptions={mentionSuggestions}
-            editor={editor}
-            onStartedEdit={() => setDisabled(true)}
-            onFinishedEdit={() => {
-              setDisabled(false);
-              editor?.commands.focus('end');
-            }}
-            onSend={handleSubmit}
-          />
-        )}
+        <TranslationHelper
+          ref={translationHelperRef}
+          mentionSuggestionOptions={mentionSuggestions}
+          editor={editor}
+          onStartedEdit={() => setDisabled(true)}
+          onFinishedEdit={() => {
+            setDisabled(false);
+            editor?.commands.focus('end');
+          }}
+          onSend={handleSubmit}
+        />
+
         <div className="relative">
           {isEditing && editor && (
             <EditControl
@@ -244,7 +243,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             <div
               ref={ref}
               {...props}
-              className="flex min-h-[82px] w-full flex-col rounded-xl border border-primary p-1 shadow-sm"
+              className="flex min-h-[82px] w-full flex-col rounded-2xl border border-primary p-1 shadow-sm"
             >
               <div className="flex items-center">
                 <div className="mr-3 flex-1 md:flex-none">
