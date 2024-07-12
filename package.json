@@ -56,7 +56,7 @@
     "class-variance-authority": "^0.7.0",
     "cloudinary": "^1.41.0",
     "clsx": "^2.0.0",
-    "cmdk": "^0.2.1",
+    "cmdk": "^1.0.0",
     "cookies": "^0.8.0",
     "copy-image-clipboard": "^2.1.2",
     "date-fns": "^3.6.0",
