@@ -117,7 +117,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onTypingChange: (isTyping) => {
         setIsTyping(isTyping);
         onTypingChange?.(isTyping);
-        if (isTyping) micRef.current?.stop();
       },
       isEditing,
       id: roomId,
