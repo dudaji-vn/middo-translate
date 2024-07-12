@@ -1,6 +1,16 @@
 import { Button } from '@/components/actions';
-import { Mic, Pause, Square } from 'lucide-react';
+import { Mic, Square } from 'lucide-react';
 
+import {
+  DEFAULT_LANGUAGES_CODE,
+  SUPPORTED_VOICE_MAP,
+} from '@/configs/default-language';
+import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
+import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
+import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
+import { useAuthStore } from '@/stores/auth.store';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { Editor } from '@tiptap/react';
 import {
   forwardRef,
   useCallback,
@@ -8,26 +18,18 @@ import {
   useImperativeHandle,
   useState,
 } from 'react';
-import { useAuthStore } from '@/stores/auth.store';
-import {
-  DEFAULT_LANGUAGES_CODE,
-  SUPPORTED_VOICE_MAP,
-} from '@/configs/default-language';
-import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
-import { SHORTCUTS } from '@/types/shortcuts';
-import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
-import { Editor } from '@tiptap/react';
-import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 export interface MicButtonProps {
   className?: string;
   editor: Editor | null;
+  onListeningChange?: (listening: boolean) => void;
 }
 export interface MicButtonRef {
   stop: () => void;
+  isListening: boolean;
 }
 
 export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
-  ({ editor, ...props }, ref) => {
+  ({ editor, onListeningChange, ...props }, ref) => {
     const lang =
       useAuthStore((s) => s.user?.language) ?? DEFAULT_LANGUAGES_CODE.EN;
     const [transcribing, setTranscribing] = useState(false);
@@ -82,8 +84,13 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
       }
     }, [interimTranscript, listening, setTextContent]);
 
+    useEffect(() => {
+      onListeningChange?.(listening);
+    }, [listening]);
+
     useImperativeHandle(ref, () => ({
       stop: handleStopListening,
+      isListening: listening,
     }));
 
     useKeyboardShortcut([SHORTCUTS.START_STOP_SPEECH_TO_TEXT], (e) => {

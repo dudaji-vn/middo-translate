@@ -123,7 +123,6 @@ export const useEditor = ({
   useEffect(() => {
     if (!editor) return;
     if (isEditing) {
-      console.log('isEditing', message?.content);
       editor.commands.setContent(message?.content ?? '');
       setTimeout(() => {
         editor.commands.focus('end');
@@ -132,6 +131,13 @@ export const useEditor = ({
     }
     editor.commands.setContent(useDraftStore.getState().draft[id ?? ''] ?? '');
   }, [id, editor, isEditing, message?.content]);
-
+  useEffect(() => {
+    if (editor !== null && placeholder !== '') {
+      editor.extensionManager.extensions.filter(
+        (extension) => extension.name === 'placeholder',
+      )[0].options['placeholder'] = placeholder;
+      editor.view.dispatch(editor.state.tr);
+    }
+  }, [editor, placeholder]);
   return editor;
 };

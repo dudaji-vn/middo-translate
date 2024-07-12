@@ -54,7 +54,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       setValue('');
       onClear?.();
     }, [onClear]);
-    const canClear = value !== '';
+    const [canClear, setCanClear] = useState(false);
     useKeyboardShortcut(
       [SHORTCUTS.SEARCH, SHORTCUTS.NEW_CONVERSATION],
       (_, matchedKeys) => {
@@ -87,6 +87,10 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
       }
     }, [props.autoFocus]);
 
+    useEffect(() => {
+      setValue(props.value || '');
+    }, [props.value]);
+
     return (
       <div
         className={cn(
@@ -103,10 +107,10 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
                 onEnter();
               }
             }}
+            {...props}
             value={value}
             ref={inputRef}
             type="text"
-            {...props}
             onFocus={(e) => {
               props.onFocus?.(e);
               setTimeout(() => {
@@ -115,6 +119,7 @@ export const SearchInput = forwardRef<SearchInputRef, SearchInputProps>(
             }}
             onChange={(e) => {
               props.onChange?.(e);
+              setCanClear(e.target.value.length > 0);
               setValue(e.target.value);
             }}
             className={`w-full border-0 bg-inherit p-2  ring-0 focus:outline-none focus:ring-0 focus:ring-offset-0 focus:ring-offset-transparent dark:text-neutral-50 ${props.className}`}

@@ -82,113 +82,110 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
     );
   }
   return (
-    <DropdownMenu open={openNavigator} onOpenChange={setOpenNavigator}>
-      <DropdownMenuTrigger
-        {...props}
-        className={cn(
-          'flex h-fit w-full !bg-transparent p-2 text-neutral-800  active:!bg-transparent',
-          props.className,
-          expand && !isMobile && 'min-w-[376px]  max-w-full',
-        )}
-      >
-        <div className=" flex w-full flex-row items-center justify-start gap-3 overflow-x-hidden  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
-          {space?.avatar && (
-            <Avatar
-              alt={space.name ?? ''}
-              size="sm"
-              src={String(space.avatar)}
-              className="border border-neutral-50 bg-white dark:border-neutral-900 dark:bg-neutral-900"
-            />
+    <div className="flex p-2">
+      <DropdownMenu open={openNavigator} onOpenChange={setOpenNavigator}>
+        <DropdownMenuTrigger
+          {...props}
+          className={cn(
+            'flex h-fit flex-1 !bg-transparent text-neutral-800  active:!bg-transparent',
+            props.className,
+            expand && !isMobile && ' max-w-full',
           )}
-          <div
-            className={cn('hidden ', {
-              ' flex max-w-full flex-grow flex-row items-center justify-start gap-1 ':
-                expand && !isMobile,
-            })}
-          >
-            <p className="max-w-56 truncate text-ellipsis break-words text-left font-semibold">
-              {space?.name}
-            </p>
-            <ChevronDown className="h-4 w-4" />
-          </div>
-          <Ping
-            size={12}
-            className={cn(
-              'absolute right-3 top-[26px] ',
-              !isMobile && expand && 'right-6',
-              {
-                hidden: !hasNotification,
-              },
+        >
+          <div className=" flex w-full flex-row items-center justify-start gap-3 overflow-x-hidden  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50">
+            {space?.avatar && (
+              <Avatar
+                alt={space.name ?? ''}
+                size="sm"
+                src={String(space.avatar)}
+                className="border border-neutral-50 bg-white dark:border-neutral-900 dark:bg-neutral-900"
+              />
             )}
-          />
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="start"
-        className="w-[360px] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A] dark:border-neutral-800 dark:bg-neutral-900"
-        sideOffset={-4}
-        alignOffset={8}
-      >
-        <div className="h-fit max-h-96 w-full overflow-y-auto ">
-          {items?.map((option: Item) => (
-            <DropdownMenuItem
-              className={cn(
-                'relative  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
-                option.isActive
-                  ? 'cursor-default !bg-primary-200 dark:!bg-primary-900'
-                  : '',
-              )}
-              key={option.href}
+            <div
+              className={cn('hidden ', {
+                ' flex max-w-full flex-grow flex-row items-center justify-start gap-1 ':
+                  expand && !isMobile,
+              })}
             >
-              <a
-                href={option.isActive ? '#' : option.href}
-                className="relative flex w-full flex-row items-center justify-start gap-4"
-              >
-                {option?.space?.avatar && (
-                  <Avatar
-                    alt={option.space.name ?? ''}
-                    size="sm"
-                    src={String(option.space.avatar)}
-                  />
+              <p className="max-w-56 truncate text-ellipsis break-words text-left font-semibold">
+                {space?.name}
+              </p>
+              <ChevronDown className="ml-auto h-4 w-4" />
+            </div>
+            <Ping
+              size={12}
+              className={cn('absolute right-4 top-1 ', {
+                hidden: !hasNotification,
+              })}
+            />
+          </div>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent
+          align="start"
+          className="w-[--radix-dropdown-menu-trigger-width] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A] dark:border-neutral-800 dark:bg-neutral-900"
+        >
+          <div className="no-scrollbar h-fit max-h-96 w-full overflow-y-auto">
+            {items?.map((option: Item) => (
+              <DropdownMenuItem
+                className={cn(
+                  'relative  w-full rounded-none  bg-none dark:hover:bg-neutral-800',
+                  option.isActive
+                    ? 'cursor-default !bg-primary-200 dark:!bg-primary-900'
+                    : '',
                 )}
-                <span className="pr-4">{option.name}</span>
-                <Ping
-                  size={12}
-                  className={cn('absolute right-2 top-[12px]', {
-                    hidden:
-                      Number(option?.space?.totalNewMessages) === 0 ||
-                      option?.isActive,
-                  })}
-                />
-              </a>
-            </DropdownMenuItem>
-          ))}
-        </div>
-        <div className={cn('flex w-full flex-col gap-2 p-2')}>
-          <Link href={'/spaces?modal=create-space'}>
-            <Button
-              className="w-full"
-              shape={'square'}
-              size={'md'}
-              startIcon={<Plus size={16} />}
-            >
-              {t('EXTENSION.SPACE.CREATE_SPACE')}
-            </Button>
-          </Link>
-          <Link href="/spaces">
-            <Button
-              className="w-full"
-              shape={'square'}
-              variant={'ghost'}
-              size={'md'}
-              startIcon={<Home size={16} />}
-            >
-              {t('EXTENSION.SPACE.DASHBOARD')}
-            </Button>
-          </Link>
-        </div>
-      </DropdownMenuContent>
-    </DropdownMenu>
+                key={option.href}
+              >
+                <a
+                  href={option.isActive ? '#' : option.href}
+                  className="relative flex w-full flex-row items-center justify-start gap-4"
+                >
+                  {option?.space?.avatar && (
+                    <Avatar
+                      alt={option.space.name ?? ''}
+                      size="sm"
+                      src={String(option.space.avatar)}
+                    />
+                  )}
+                  <span className="pr-4">{option.name}</span>
+                  <Ping
+                    size={12}
+                    className={cn('absolute right-2 top-[12px]', {
+                      hidden:
+                        Number(option?.space?.totalNewMessages) === 0 ||
+                        option?.isActive,
+                    })}
+                  />
+                </a>
+              </DropdownMenuItem>
+            ))}
+          </div>
+          <div className={cn('flex w-full flex-col gap-2 p-2')}>
+            <Link href={'/spaces?modal=create-space'}>
+              <Button
+                className="w-full"
+                shape={'square'}
+                size={'md'}
+                startIcon={<Plus size={16} />}
+              >
+                {t('EXTENSION.SPACE.CREATE_SPACE')}
+              </Button>
+            </Link>
+            <Link href="/spaces">
+              <Button
+                className="w-full"
+                shape={'square'}
+                variant={'ghost'}
+                size={'md'}
+                startIcon={<Home size={16} />}
+              >
+                {t('EXTENSION.SPACE.DASHBOARD')}
+              </Button>
+            </Link>
+          </div>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   );
 };
 

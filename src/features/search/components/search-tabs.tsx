@@ -27,6 +27,7 @@ import { searchApi } from '../api';
 import { useSearchDynamic } from '../hooks/use-search-dynamic';
 import { SearchType } from '../types';
 import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
+import { languages } from 'react-circle-flags';
 
 export interface SearchTabsProps {
   searchValue: string;
@@ -388,7 +389,13 @@ const MessageItem = ({
   keyword: string;
   onClick?: () => void;
 }) => {
-  const userId = useAuthStore((state) => state.user?._id);
+  const { userId, language } = useAuthStore((state) => {
+    return {
+      language: state.user?.language,
+      userId: state.user?._id,
+    };
+  });
+
   const { spaceId } = useBusinessNavigationData();
   const room = generateRoomDisplay({
     room: message.room!,
@@ -396,11 +403,12 @@ const MessageItem = ({
   });
   const lang = useAuthStore((state) => state.user?.language);
   const contentDisplay = useMemo(() => {
+    if (message.language === language) return message.content;
     const content = message.translations?.[lang || 'en'] || message.content;
     return convert(content, {
       selectors: [{ selector: 'a', options: { ignoreHref: true } }],
     });
-  }, [lang, message.content, message.translations]);
+  }, [lang, language, message.content, message.language, message.translations]);
   let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}?search_id=${message._id}&keyword=${keyword}`;
   if (spaceId) {
     link = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}?search_id=${message._id}${keyword ? `&keyword=${keyword}` : ''}`;

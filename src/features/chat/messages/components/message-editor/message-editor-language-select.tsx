@@ -124,7 +124,7 @@ export const MessageEditorLanguageSelect = ({
           )}
           <ChevronUpIcon />
         </PopoverTrigger>
-        <PopoverContent className="no-scrollbar relative max-h-[300px] w-full overflow-hidden overflow-y-auto p-0 md:w-[240px]">
+        <PopoverContent className="no-scrollbar relative max-h-[300px] w-[--radix-popover-trigger-width]  overflow-hidden overflow-y-auto p-0 md:w-[240px]">
           <div className="fixed left-0 top-0 z-10 w-full rounded-t-xl border border-b-0 bg-white p-2 dark:bg-neutral-900">
             <SearchInput
               value={searchValue}

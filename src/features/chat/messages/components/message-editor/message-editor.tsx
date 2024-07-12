@@ -75,6 +75,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     );
 
     const [isTyping, setIsTyping] = useState(false);
+    const [isListening, setIsListening] = useState(false);
 
     const [disabled, setDisabled] = useState(false);
     const setDraft = useDraftStore((s) => s.setDraft);
@@ -102,10 +103,13 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     const handleEnterTrigger = () => {
       document.getElementById(sendButtonId)?.click();
     };
+    const micRef = useRef<MicButtonRef>(null);
     const editorId = useId();
     const sendButtonId = useId();
     const editor = useEditor({
-      placeholder: t('CONVERSATION.TYPE_A_MESSAGE'),
+      placeholder: isListening
+        ? t('COMMON.LISTENING')
+        : t('CONVERSATION.TYPE_A_MESSAGE'),
       onClipboardEvent: isMediaDisabled ? undefined : handleClipboardEvent,
       mentionSuggestions,
       onEnterTrigger: handleEnterTrigger,
@@ -113,14 +117,13 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       onTypingChange: (isTyping) => {
         setIsTyping(isTyping);
         onTypingChange?.(isTyping);
+        if (isTyping) micRef.current?.stop();
       },
       isEditing,
       id: roomId,
     });
 
     const translationHelperRef = useRef<TranslationHelperRef>(null);
-
-    const micRef = useRef<MicButtonRef>(null);
 
     const isContentEmpty = editor?.getText().trim().length === 0;
 
@@ -262,7 +265,11 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
                   editor={editor}
                 />
                 <div className="mt-auto">
-                  <MicButton ref={micRef} editor={editor} />
+                  <MicButton
+                    onListeningChange={setIsListening}
+                    ref={micRef}
+                    editor={editor}
+                  />
                 </div>
               </div>
               {!isEditing && <AttachmentSelection editor={editor} />}
@@ -273,17 +280,18 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
               id={`input-${editorId}`}
               type="text"
             />
-            {!isEditing && !(isTyping && showTranslateOnType) && (
-              <SendButton
-                id={sendButtonId}
-                onClick={(e) => {
-                  handleSubmit();
-                }}
-                editor={editor}
-                editorId={editorId}
-                {...sendBtnProps}
-              />
-            )}
+            {!isEditing &&
+              (!(isTyping && showTranslateOnType) || isListening) && (
+                <SendButton
+                  id={sendButtonId}
+                  onClick={(e) => {
+                    handleSubmit();
+                  }}
+                  editor={editor}
+                  editorId={editorId}
+                  {...sendBtnProps}
+                />
+              )}
             {editor && !isMobile && <Autofocus editor={editor} />}
           </div>
           {disabled && (

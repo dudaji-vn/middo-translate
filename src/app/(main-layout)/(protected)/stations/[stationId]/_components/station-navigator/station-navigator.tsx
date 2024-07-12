@@ -108,53 +108,50 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   return (
     <div className="flex items-center">
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger
-          {...props}
-          className={cn(
-            'flex h-fit w-full !bg-transparent p-2 text-neutral-800  active:!bg-transparent',
-            props.className,
-            'min-w-[200px]  max-w-full',
-          )}
-        >
-          <div
-            ref={triggerRef}
-            className="relative flex w-full flex-row items-center justify-start gap-3  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50"
-          >
-            {station?.avatar && (
-              <Avatar
-                alt={station.name ?? ''}
-                size="sm"
-                src={String(station.avatar)}
-                className="border border-neutral-50 bg-white dark:border-neutral-900 dark:bg-neutral-900"
-              />
+        <div className="flex-1 p-2">
+          <DropdownMenuTrigger
+            {...props}
+            className={cn(
+              'flex h-fit w-full !bg-transparent text-neutral-800  active:!bg-transparent',
+              props.className,
+              'min-w-[200px]  max-w-full',
             )}
+          >
             <div
-              className={
-                ' flex flex-grow flex-row items-center justify-start gap-1 '
-              }
+              ref={triggerRef}
+              className="relative flex w-full flex-row items-center justify-start gap-3  rounded-[12px] bg-primary-100 p-2 dark:bg-neutral-900 dark:text-neutral-50"
             >
-              <p className="font-semibold">{station?.name}</p>
-            </div>
-            <ChevronDown className="h-4 w-4" />
+              {station?.avatar && (
+                <Avatar
+                  alt={station.name ?? ''}
+                  size="sm"
+                  src={String(station.avatar)}
+                  className="border border-neutral-50 bg-white dark:border-neutral-900 dark:bg-neutral-900"
+                />
+              )}
+              <div
+                className={
+                  ' flex flex-grow flex-row items-center justify-start gap-1 '
+                }
+              >
+                <p className="font-semibold">{station?.name}</p>
+              </div>
+              <ChevronDown className="h-4 w-4" />
 
-            <Ping
-              size={12}
-              className={cn('absolute right-2 top-0', {
-                hidden: !hasNotification,
-              })}
-            />
-          </div>
-        </DropdownMenuTrigger>
+              <Ping
+                size={12}
+                className={cn('absolute right-2 top-0', {
+                  hidden: !hasNotification,
+                })}
+              />
+            </div>
+          </DropdownMenuTrigger>
+        </div>
         <DropdownMenuContent
           align="start"
-          className="w-[360px] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A] dark:border-neutral-800 dark:bg-neutral-900"
-          sideOffset={-4}
-          alignOffset={8}
-          style={{
-            width: width,
-          }}
+          className="w-[--radix-dropdown-menu-trigger-width] max-w-full border-none p-0 shadow-[2px_10px_24px_2px_#1616161A] dark:border-neutral-800 dark:bg-neutral-900"
         >
-          <div className="h-fit max-h-96 w-full overflow-y-auto ">
+          <div className="no-scrollbar h-fit max-h-96 w-full overflow-y-auto">
             <Section label="GLOBAL STATION">
               <DropdownMenuItem
                 className={cn(
