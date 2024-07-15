@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Avatar,
   DropdownMenu,
@@ -21,6 +23,7 @@ import Link from 'next/link';
 import { usePlatformStore } from '@/features/platform/stores';
 import { useGetSpaces } from '@/features/business-spaces/hooks/use-get-spaces';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { useAppStore } from '@/stores/app.store';
 
 interface Item {
   name: string | React.ReactNode;
@@ -33,7 +36,9 @@ interface Item {
 const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
   const pathname = usePathname();
 
-  const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
+  const isMobilePlatform =
+    usePlatformStore((state) => state.platform) === 'mobile';
+  const isMobile = useAppStore((state) => state.isMobile);
   const { expand, openNavigator, setOpenNavigator } = useSidebarStore();
 
   const { t } = useTranslation('common');
@@ -51,7 +56,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
         name: s.name,
         href:
           `${ROUTE_NAMES.SPACES}/${s._id}/conversations` +
-          (isMobile ? '?platform=mobile' : ''),
+          (isMobilePlatform ? '?platform=mobile' : ''),
         pathToInclude: `${ROUTE_NAMES.SPACES}/${s._id}`,
         isActive: pathname?.includes(`${ROUTE_NAMES.SPACES}/${s._id}`),
         space: s,
@@ -104,7 +109,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
             <div
               className={cn('hidden ', {
                 ' flex max-w-full flex-grow flex-row items-center justify-start gap-1 ':
-                  expand && !isMobile,
+                  expand || isMobile,
               })}
             >
               <p className="max-w-56 truncate text-ellipsis break-words text-left font-semibold">

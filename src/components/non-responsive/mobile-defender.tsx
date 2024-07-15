@@ -9,6 +9,7 @@ import { Menu } from 'lucide-react';
 import { useSidebarStore } from '@/stores/sidebar.store';
 import { Button } from '../actions';
 import { useTranslation } from 'react-i18next';
+import SpaceNavigator from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/space-navigator/space-navigator';
 
 const MobileDefender = ({
   descriptionKey = 'RESPONSIVE.DESKTOP_ONLY',
@@ -27,6 +28,7 @@ const MobileDefender = ({
   if (!isMobile) return children;
   return (
     <>
+      <SpaceNavigator />
       {titleKey && (
         <div className="flex flex-row items-center justify-start p-3">
           <Button.Icon

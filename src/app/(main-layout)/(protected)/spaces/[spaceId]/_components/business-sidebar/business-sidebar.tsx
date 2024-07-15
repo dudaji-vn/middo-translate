@@ -128,7 +128,7 @@ const BusinessSidebarContent = ({
                   'relative scale-y-0 p-0',
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
-                    : 'min-w-[300px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
+                    : 'min-w-[268px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
                   isSelected
                     ? 'text-white '
                     : 'text-neutral-600 dark:text-neutral-50',
@@ -215,7 +215,7 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
           )}
           onMouseLeave={shrinkSheet}
         >
-          <SpaceNavigator />
+          {!isMobile && <SpaceNavigator />}
           <div className="h-full  w-full">
             <BusinessSidebarContent
               shrink={!expand && !isMobile}
