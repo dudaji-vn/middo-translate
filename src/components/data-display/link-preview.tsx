@@ -51,9 +51,6 @@ export const LinkPreview = ({ url: _url, onFailLoad }: LinkPreviewProps) => {
 
   return (
     <Link
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
       href={previewData?.url}
       target="_blank"
       className="block w-full max-w-96 rounded-2xl border bg-white p-2 hover:opacity-90 dark:bg-neutral-900"
