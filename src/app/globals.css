@@ -608,6 +608,11 @@ input::-ms-clear {
   color: var(--primary);
 }
 
+.message-editor strong,
+.editor-view strong {
+  color: currentColor;
+}
+
 pre {
   white-space: pre;
   white-space: pre-wrap;
