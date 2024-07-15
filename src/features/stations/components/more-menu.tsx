@@ -11,6 +11,7 @@ import {
 } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { useTranslation } from 'react-i18next';
+import { useAuthStore } from '@/stores/auth.store';
 
 export interface MoreMenuProps {
   station: Station;
@@ -18,6 +19,7 @@ export interface MoreMenuProps {
 
 export const MoreMenu = ({ station }: MoreMenuProps) => {
   const { actionItems, onAction } = useStationActions();
+  const userId = useAuthStore((state) => state.user?._id);
   const { t } = useTranslation('common');
   const [isOpen, setOpen] = useState(false);
   const onOpenChange = useCallback((open: boolean) => {
@@ -27,6 +29,10 @@ export const MoreMenu = ({ station }: MoreMenuProps) => {
     return actionItems
       .filter((item) => {
         switch (item.action) {
+          case 'leave':
+            return station.owner._id !== userId;
+          case 'delete':
+            return station.owner._id === userId;
           default:
             return true;
         }
@@ -39,7 +45,7 @@ export const MoreMenu = ({ station }: MoreMenuProps) => {
             station: station,
           }),
       }));
-  }, [actionItems, onAction, station]);
+  }, [actionItems, onAction, station, userId]);
   return (
     <>
       <DropdownMenu open={isOpen} onOpenChange={setOpen}>

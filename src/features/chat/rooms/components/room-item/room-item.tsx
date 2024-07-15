@@ -112,12 +112,15 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         code: countryCode,
       },
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    _data,
-    currentUserId,
-    disabledRedirect,
     businessConversationType,
     params?.spaceId,
+    _data,
+    stationId,
+    isOnStation,
+    currentUserId,
+    disabledRedirect,
   ]);
   const isHideRead = useSideChatStore(
     (state) => state.filters.includes('unread') && !isForceShow,
@@ -136,7 +139,6 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     : RoomItemActionWrapper;
 
   if (isHideRead && isRead) return null;
-
   return (
     <div
       className={cn(
@@ -168,7 +170,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             ) : (
               <RoomItemVisitorAvatar isOnline={isOnline} isMuted={isMuted} />
             )}
-            <div className="w-full">
+            <div className="w-full flex-1 overflow-hidden">
               <RoomItemHead
                 isRead={isRead}
                 showTime={showTime}

@@ -1,5 +1,11 @@
 import { DeleteStationModal } from '@/app/(main-layout)/(protected)/stations/station-crud/station-deletion';
-import { CameraIcon, InfoIcon, PenIcon, Trash2Icon } from 'lucide-react';
+import {
+  CameraIcon,
+  InfoIcon,
+  LogOutIcon,
+  PenIcon,
+  Trash2Icon,
+} from 'lucide-react';
 import { ReactNode, createContext, useContext, useMemo, useState } from 'react';
 import { Station } from '../types/station.types';
 import StationInformationModal from './station-information-modal';
@@ -7,8 +13,9 @@ import StationUpdateAvatar from './station-update-avatar-modal';
 import { StationUpdateName } from './station-update-name-modal';
 import { useRouter } from 'next/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
+import { StationLeaveModal } from './station-leave-modal';
 
-export type Action = 'name' | 'avatar' | 'info' | 'delete' | 'none';
+export type Action = 'name' | 'avatar' | 'info' | 'delete' | 'none' | 'leave';
 
 export type ActionItem = {
   action: Action;
@@ -67,6 +74,8 @@ export const StationActions = ({ children }: { children: React.ReactNode }) => {
         return <StationUpdateAvatar station={station} onClosed={reset} />;
       case 'info':
         return <StationInformationModal station={station} onClosed={reset} />;
+      case 'leave':
+        return <StationLeaveModal onClosed={reset} stationId={station._id} />;
       case 'delete':
         return (
           <DeleteStationModal
@@ -100,6 +109,12 @@ export const StationActions = ({ children }: { children: React.ReactNode }) => {
         action: 'info',
         label: 'COMMON.INFORMATION',
         icon: <InfoIcon />,
+      },
+      {
+        action: 'leave',
+        label: 'CONVERSATION.LEAVE_STATION',
+        icon: <LogOutIcon />,
+        color: 'error',
       },
       {
         action: 'delete',

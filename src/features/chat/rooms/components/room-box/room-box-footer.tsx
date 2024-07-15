@@ -143,6 +143,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         guest,
         room._id,
         room.participants,
+        room.station,
         room.status,
         sendImageMessage,
         sendMediaMessages,
