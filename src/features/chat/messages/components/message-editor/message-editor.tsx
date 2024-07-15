@@ -135,7 +135,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
     };
 
     const handleSubmit = async () => {
-      if (isTyping && showTranslateOnType) return;
+      if (isTyping && showTranslateOnType && !isListening) return;
       const images: Media[] = [];
       const documents: Media[] = [];
       const videos: Media[] = [];
