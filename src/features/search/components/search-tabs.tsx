@@ -26,8 +26,6 @@ import { useTranslation } from 'react-i18next';
 import { searchApi } from '../api';
 import { useSearchDynamic } from '../hooks/use-search-dynamic';
 import { SearchType } from '../types';
-import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
-import { languages } from 'react-circle-flags';
 
 export interface SearchTabsProps {
   searchValue: string;
@@ -66,7 +64,6 @@ export const SearchTabs = ({
   onTabChange,
   onItemClicked,
 }: SearchTabsProps) => {
-  const setCurrentSide = useSideChatStore((state) => state.setCurrentSide);
   const [type, setType] = useState<SearchType>('all');
   const { isBusiness, spaceId } = useBusinessNavigationData();
   const { stationId } = useStationNavigationData();
@@ -106,7 +103,11 @@ export const SearchTabs = ({
     type?: SearchType;
     id?: string;
   }) => {
-    mutate({ keyword: searchValue });
+    mutate({
+      keyword: searchValue,
+      stationId: stationId,
+      spaceId: spaceId as string,
+    });
     onItemClicked?.();
   };
   const filterTabs = useMemo(() => {
@@ -397,6 +398,7 @@ const MessageItem = ({
   });
 
   const { spaceId } = useBusinessNavigationData();
+  const { stationId } = useStationNavigationData();
   const room = generateRoomDisplay({
     room: message.room!,
     currentUserId: userId!,
@@ -409,10 +411,19 @@ const MessageItem = ({
       selectors: [{ selector: 'a', options: { ignoreHref: true } }],
     });
   }, [lang, language, message.content, message.language, message.translations]);
-  let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}?search_id=${message._id}&keyword=${keyword}`;
-  if (spaceId) {
-    link = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}?search_id=${message._id}${keyword ? `&keyword=${keyword}` : ''}`;
-  }
+  const link = useMemo(() => {
+    let baseLink = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}`;
+
+    if (spaceId) {
+      baseLink = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}`;
+    }
+
+    if (stationId) {
+      baseLink = `${ROUTE_NAMES.STATIONS}/${stationId}/conversations/${room._id}`;
+    }
+
+    return `${baseLink}?search_id=${message._id}${keyword ? `&keyword=${keyword}` : ''}`;
+  }, [keyword, message._id, room._id, spaceId, stationId]);
   return (
     <Link key={message?._id} href={link} onClick={onClick}>
       <UserItem

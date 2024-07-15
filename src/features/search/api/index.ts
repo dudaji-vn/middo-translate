@@ -17,7 +17,6 @@ type StationParams = {
 const basePath = '/search';
 export const searchApi = {
   async inboxes(params: SearchParams & HelpdeskSearchParam & StationParams) {
-    console.log('searchApi.inboxes', params);
     const path = queryString.stringifyUrl({
       url: `${basePath}/inboxes`,
       query: params,
@@ -39,24 +38,39 @@ export const searchApi = {
     );
     return res.data;
   },
-  async deleteKeyword(keyword: string) {
-    const res: Response<string> = await axios.delete(
-      `${basePath}/keywords/${keyword}`,
-    );
+  async deleteKeyword(params: {
+    keyword: string;
+    spaceId?: string;
+    stationId?: string;
+  }) {
+    const { keyword, ...rest } = params;
+    const path = queryString.stringifyUrl({
+      url: `${basePath}/keywords/${params.keyword}`,
+      query: rest,
+    });
+    const res: Response<string> = await axios.delete(path);
     return res.data;
   },
-  async clearKeywords() {
-    const res: Response<string> = await axios.delete(`${basePath}/keywords`);
+  async clearKeywords(params: { spaceId?: string; stationId?: string } = {}) {
+    const path = queryString.stringifyUrl({
+      url: `${basePath}/keywords`,
+      query: params,
+    });
+    const res: Response<string> = await axios.delete(path);
     return res.data;
   },
-  async getKeywords() {
+  async getKeywords(params: { spaceId?: string; stationId?: string }) {
+    const path = queryString.stringifyUrl({
+      url: `${basePath}/keywords`,
+      query: params,
+    });
     const res: Response<
       [
         {
           keyword: string;
         },
       ]
-    > = await axios.get(`${basePath}/keywords`);
+    > = await axios.get(path);
     return res.data;
   },
   async users(params: SearchParams & StationParams) {
