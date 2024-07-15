@@ -15,6 +15,7 @@ import { getRoomsFilterOptionsFromSpace } from '@/utils/get-rooms-filter-options
 import { useTranslation } from 'react-i18next';
 import customToast from '@/utils/custom-toast';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import SpaceNavigator from './_components/space-navigator/space-navigator';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
