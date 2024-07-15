@@ -104,7 +104,7 @@ const SpaceNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
             <div
               className={cn('hidden ', {
                 ' flex max-w-full flex-grow flex-row items-center justify-start gap-1 ':
-                  expand && !isMobile,
+                  expand || isMobile,
               })}
             >
               <p className="max-w-56 truncate text-ellipsis break-words text-left font-semibold">
