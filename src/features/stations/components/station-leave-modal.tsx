@@ -7,29 +7,28 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/feedback';
 
-import { useLeaveRoom } from '@/features/chat/rooms/hooks/use-leave-room';
-import { LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Item } from '@/components/data-display';
 import { useLeaveStation } from '../hooks/use-leave-station';
 
 export interface RoomLeaveProps {
-  roomId: string;
+  stationId: string;
+  onClosed?: () => void;
 }
 
-export const StationLeave = ({ roomId }: RoomLeaveProps) => {
+export const StationLeaveModal = ({ stationId, onClosed }: RoomLeaveProps) => {
   const { mutate } = useLeaveStation();
   const { t } = useTranslation('common');
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Item danger leftIcon={<LogOut />} onClick={() => {}}>
-          {t('CONVERSATION.LEAVE_STATION')}
-        </Item>
-      </AlertDialogTrigger>
+    <AlertDialog
+      defaultOpen
+      onOpenChange={(open) => {
+        if (!open && onClosed) {
+          onClosed();
+        }
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{t('MODAL.LEAVE_STATION.TITLE')}?</AlertDialogTitle>
@@ -45,7 +44,7 @@ export const StationLeave = ({ roomId }: RoomLeaveProps) => {
             type="submit"
             className="bg-error text-background active:!bg-error-darker md:hover:bg-error-lighter"
             onClick={() => {
-              mutate(roomId);
+              mutate(stationId);
             }}
           >
             {t('COMMON.LEAVE')}
