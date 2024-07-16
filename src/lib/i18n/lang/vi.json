@@ -801,6 +801,7 @@
     "CLIENTS": "Khách hàng",
     "STATISTICS": "Thống kê",
     "SCRIPTS": "Kịch bản trò chuyện",
+    "FORMS": "Biểu mẫu",
     "SETTINGS": "Cài đặt",
     "REPORT": "Thống kê",
     "CLIENT_LIST": "Danh sách khách hàng",
@@ -861,6 +862,23 @@
       "LAST_EDITED": "Chỉnh sửa lần cuối",
       "ACTIONS": "Hành động",
       "ENTER_SCRIPT_NAME": "Nhập tên kịch bản"
+    },
+    "FORM": {
+      "PAGE_TITLE": "Mẫu Hội thoại",
+      "SEARCH": "Tìm kiếm mẫu",
+      "ADD_FORM": "Thêm mẫu mới",
+      "EDIT_FORM": "Chỉnh sửa mẫu",
+      "DELETE_FORM": "Xóa mẫu",
+      "VIEW_FORM": "Xem mẫu",
+      "PREVIEW_FLOW": "Xem trước luồng",
+      "NO_FORM": "Không tìm thấy mẫu",
+      "NAME": "Tên",
+      "DESCRIPTION": "Mô tả",
+      "CREATE_BY": "Tạo bởi",
+      "CREATE_ON": "Tạo vào ngày",
+      "LAST_EDITED": "Chỉnh sửa lần cuối",
+      "ACTIONS": "Hành động",
+      "ENTER_FORM_NAME": "Nhập tên mẫu"
     },
     "CLIENT": {
       "PAGE_TITLE": "Quản lý khách hàng",

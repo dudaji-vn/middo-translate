@@ -30,6 +30,9 @@ export enum EBusinessSidebarKeys {
   Archived = 'archived',
   Settings = 'settings',
   Statistic = 'statistics',
+  Scripts = 'scripts',
+  Clients = 'clients',
+  Forms = 'forms',
 }
 
 export const LSK_VISITOR_ID = 'visitor_id';

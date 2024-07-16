@@ -816,6 +816,7 @@
     "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
     "SCRIPTS": "Conversation Scripts",
+    "FORMS": "Forms",
     "SETTINGS": "Settings",
     "REPORT": "Statistics",
     "CHART": {
@@ -875,6 +876,23 @@
       "LAST_EDITED": "Last edited",
       "ACTIONS": "Actions",
       "ENTER_SCRIPT_NAME": "Enter script name"
+    },
+    "FORM": {
+      "PAGE_TITLE": "Conversation Forms",
+      "SEARCH": "Search for forms",
+      "ADD_FORM": "Add new form",
+      "EDIT_FORM": "Edit form",
+      "DELETE_FORM": "Delete form",
+      "VIEW_FORM": "View form",
+      "PREVIEW_FLOW": "Preview flow",
+      "NO_FORM": "No forms found",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "CREATE_BY": "Create by",
+      "CREATE_ON": "Create on",
+      "LAST_EDITED": "Last edited",
+      "ACTIONS": "Actions",
+      "ENTER_FORM_NAME": "Enter form name"
     },
     "CLIENT": {
       "PAGE_TITLE": "Clients Management",
