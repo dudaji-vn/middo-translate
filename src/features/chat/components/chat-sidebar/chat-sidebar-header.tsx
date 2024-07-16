@@ -26,6 +26,7 @@ import { InboxFilter } from '../../rooms/components/inbox/inbox-filter';
 import { RoomsModalFilter } from '../../rooms/components/rooms.modal-filter';
 import { useSideChatStore } from '../../stores/side-chat.store';
 import { ChatSettingMenu } from '../chat-setting';
+import { NewCallIcon } from '@/components/icons/new-call';
 
 export interface ChatSidebarHeaderProps {}
 const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
@@ -110,6 +111,21 @@ const ChatSidebarHeader = (props: ChatSidebarHeaderProps) => {
                   size="xs"
                 >
                   <PenSquareIcon />
+                </Button.Icon>
+              </div>
+            }
+          />
+          <Tooltip
+            title={t('TOOL_TIP.NEW_CALL')}
+            triggerItem={
+              <div className="relative">
+                <Button.Icon
+                  onClick={()=>setCurrentSide('new_call')}
+                  color="default"
+                  className={isBusiness ? 'relative hidden' : 'relative'}
+                  size="xs"
+                >
+                  <NewCallIcon />
                 </Button.Icon>
               </div>
             }

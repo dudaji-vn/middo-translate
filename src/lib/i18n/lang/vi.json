@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "JOIN_CALL": "Tham gia cuộc gọi",
     "COLOR": "Màu",
     "INVITE": "Mời",
     "APPLY": "Áp dụng",
@@ -208,6 +209,9 @@
     "SIGN_OUT": "Đăng xuất",
     "SETTINGS": "Cài đặt"
   },
+  "NEW_CALL": {
+    "TEXT_1": "Nhập thông tin dưới đây để tham gia cuộc gọi"
+  },
   "TRANSLATION": {
     "HISTORY": "Lịch sử",
     "PHRASES": "Câu mẫu",
@@ -347,6 +351,8 @@
     "TITLE": "Hội thoại",
     "PEOPLE": "Người",
     "NEW": "Hội thoại mới",
+    "NEW_CALL": "Cuộc gọi mới",
+    "CREATE_INSTANT_CALL": "Tạo cuộc gọi ngay",
     "SEARCH": "Tìm kiếm người hoặc nhóm",
     "PICK_MESSAGE": "Chọn một hội thoại để bắt đầu trò chuyện",
     "PINNED_MESSAGES": "Tin nhắn đã ghim",
@@ -475,6 +481,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "Hội thoại mới",
+    "NEW_CALL": "Cuộc gọi mới",
     "FILTER": "Bộ lọc",
     "SETTINGS": "Cài đặt",
     "START_CALL": "Bắt đầu cuộc gọi",

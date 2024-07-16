@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "JOIN_CALL": "Join Call",
     "COLOR": "Color",
     "INVITE": "Invite",
     "APPLY": "Apply",
@@ -210,6 +211,9 @@
     "SIGN_OUT": "Sign Out",
     "SETTINGS": "Settings"
   },
+  "NEW_CALL": {
+    "TEXT_1": "Enter the information below to join Call"
+  },
   "TRANSLATION": {
     "HISTORY": "History",
     "PHRASES": "Phrases",
@@ -353,6 +357,8 @@
     "TITLE": "Conversation",
     "PEOPLE": "People",
     "NEW": "New conversation",
+    "NEW_CALL":"New Call",
+    "CREATE_INSTANT_CALL": "Create an instant Call",
     "SEARCH": "Search for people or groups",
     "PICK_MESSAGE": "Pick a conversation to start chatting",
     "PINNED_MESSAGES": "Pinned messages",
@@ -482,6 +488,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "New Conversation",
+    "NEW_CALL": "New Call",
     "FILTER": "Filter",
     "SETTINGS": "Settings",
     "START_CALL": "Start Call",

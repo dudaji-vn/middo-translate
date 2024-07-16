@@ -29,11 +29,29 @@ interface MediaStreamInterface {
   video?: boolean;
   audio?: boolean;
 }
-export default function VideoCallActions() {
+
+interface VideoCallActionsProps {
+  isShowEndCall?: boolean;
+  isShowShareScreen?: boolean;
+  isShowVideoSetting?: boolean;
+  isShowDropdown?: boolean;
+  isShowChat?: boolean;
+  isShowDrawer?: boolean;
+  isShowToggleCaption?: boolean;
+  className?: string;
+}
+export default function VideoCallActions({
+  isShowEndCall = true,
+  isShowShareScreen = true,
+  isShowVideoSetting = true,
+  isShowDropdown = true,
+  isShowChat = true,
+  isShowDrawer= true,
+  isShowToggleCaption = true,
+  className,
+}:VideoCallActionsProps) {
 
   const {t} = useTranslation('common')
-  const { isHelpDeskCall } = useHelpDesk();
-  const { user } = useAuthStore();
   const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
   const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
   const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
@@ -120,17 +138,17 @@ export default function VideoCallActions() {
 
   return (
     <section className="relative z-20 flex items-center justify-between bg-primary-100 dark:bg-neutral-900 p-2">
-      <div className={cn('flex w-full md:justify-center justify-around md:gap-6', isHelpDeskCall && 'md:gap-3')}>
-        {!isHelpDeskCall && <DropdownActions />}
-        {!isHelpDeskCall && <ActionChat />}
-        {!isHelpDeskCall && <ActionDraw />}
-        {isHelpDeskCall && <ActionVideoAudioSetting />}
-        {isHelpDeskCall && <ActionToggleCaption />}
+      <div className={cn('flex w-full md:justify-center justify-around md:gap-6', className)}>
+        {isShowDropdown && <DropdownActions />}
+        {isShowChat && <ActionChat />}
+        {isShowDrawer && <ActionDraw />}
+        {isShowVideoSetting && <ActionVideoAudioSetting />}
+        {isShowToggleCaption && <ActionToggleCaption />}
         {/* <ActionAddMembers /> */}
-        <ActionShareScreen />
+        {isShowShareScreen && <ActionShareScreen />}
         <ActionToggleCamera handleChangeCameraOrMic={handleChangeCameraOrMic} />
         <ActionToggleMic handleChangeCameraOrMic={handleChangeCameraOrMic} />
-        <ActionLeaveCall />
+        {isShowEndCall && <ActionLeaveCall />}
       </div>
       <InviteTooltip />
     </section>

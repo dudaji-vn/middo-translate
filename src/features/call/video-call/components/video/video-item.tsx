@@ -18,8 +18,9 @@ import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 interface VideoItemProps {
   participant: ParticipantInVideoCall;
   size?: 'sm' | 'md' | 'lg';
+  isShowExpand?: boolean;
 }
-const VideoItem = ({ participant }: VideoItemProps) => {
+const VideoItem = ({ participant, ...props }: VideoItemProps) => {
   const { t } = useTranslation('common');
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const userName = useMemo(() => {
@@ -30,16 +31,16 @@ const VideoItem = ({ participant }: VideoItemProps) => {
   
   return (
     <>
-      {isFullScreen ? <VideoItemContent participant={participant}/> : 
+      {isFullScreen ? <VideoItemContent participant={participant} {...props}/> : 
       <Tooltip 
         title={userName} 
-        triggerItem={<VideoItemContent participant={participant}/>}
+        triggerItem={<VideoItemContent participant={participant} {...props}/>}
       />}
     </>
   );
 };
 
-const VideoItemContent = memo(({ participant }: VideoItemProps) => {
+const VideoItemContent = memo(({ participant, isShowExpand = true }: VideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const layout = useVideoCallStore(state => state.layout);
   const itemRef = useRef<HTMLElement>(null);
@@ -75,7 +76,7 @@ const VideoItemContent = memo(({ participant }: VideoItemProps) => {
         ></video>
 
         {/* Expand video */}
-        <ExpandVideo participant={participant}/>
+        {isShowExpand && <ExpandVideo participant={participant}/>}
         {/* Avatar */}
         <VideoItemAvatar participant={participant} isTurnOnCamera={isTurnOnCamera}/>
         {/* Name */}

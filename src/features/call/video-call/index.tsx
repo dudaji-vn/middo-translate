@@ -12,6 +12,7 @@ import { useParticipantVideoCallStore } from '../store/participant.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { StatusParticipant } from '../interfaces/participant';
 import { useAppStore } from '@/stores/app.store';
+import useHelpDesk from '../hooks/use-help-desk';
 
 export default function VideoCall() {
   const room = useVideoCallStore(state => state.room);
@@ -22,6 +23,8 @@ export default function VideoCall() {
   const setRequestCall = useVideoCallStore(state => state.setRequestCall)
   const updateStatusParticipant = useParticipantVideoCallStore(state => state.updateStatusParticipant)
   const isMobile = useAppStore(state => state.isMobile)
+  const { isHelpDeskCall } = useHelpDesk();
+
   useEffect(() => {
     const declineCall = (payload: {
       roomId: string,
@@ -65,7 +68,14 @@ export default function VideoCall() {
         <div className="relative flex-1 overflow-hidden">
           <div className="flex h-full w-full flex-col">
             <VideoCallContent />
-            <VideoCallActions />
+            <VideoCallActions 
+              isShowChat={!isHelpDeskCall}
+              isShowDrawer={!isHelpDeskCall}
+              isShowDropdown={!isHelpDeskCall}
+              isShowVideoSetting={isHelpDeskCall}
+              isShowToggleCaption={isHelpDeskCall}
+              className={isHelpDeskCall ? 'md:gap-3' : ''}
+            />
           </div>
         </div>
       </VideoCallProvider>

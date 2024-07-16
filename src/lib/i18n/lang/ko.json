@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "JOIN_CALL": "통화 참여",
     "COLOR": "색상",
     "INVITE": "초대",
     "APPLY": "적용",
@@ -208,6 +209,9 @@
     "SIGN_OUT": "로그아웃",
     "SETTINGS": "설정"
   },
+  "NEW_CALL": {
+    "TEXT_1": "통화에 참여하려면 아래 정보를 입력하세요"
+  },
   "TRANSLATION": {
     "HISTORY": "역사",
     "PHRASES": "구문",
@@ -347,6 +351,8 @@
     "TITLE": "대화",
     "PEOPLE": "사람",
     "NEW": "새 대화",
+    "NEW_CALL": "통화 시작",
+    "CREATE_INSTANT_CALL": "즉시 통화 시작",
     "SEARCH": "사람 또는 그룹 찾기",
     "PICK_MESSAGE": "채팅을 시작할 대화 선택",
     "PINNED_MESSAGES": "고정된 메시지",
@@ -474,6 +480,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "새 대화",
+    "NEW_CALL": "통화 시작",
     "FILTER": "필터",
     "SETTINGS": "설정",
     "START_CALL": "통화 시작",
