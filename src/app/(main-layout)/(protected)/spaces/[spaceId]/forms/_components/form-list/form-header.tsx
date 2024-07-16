@@ -32,7 +32,7 @@ const FormsHeader = ({
   const isMobile = useAppStore((state) => state.isMobile);
   return (
     <div
-      className="flex  flex-col justify-between gap-4 px-1 py-3 font-medium md:flex-row md:items-center md:px-10"
+      className="flex  flex-col justify-between gap-4 px-1 font-medium md:flex-row md:items-center md:px-10 md:py-3"
       {...props}
     >
       {isMobile && <SpaceNavigator />}

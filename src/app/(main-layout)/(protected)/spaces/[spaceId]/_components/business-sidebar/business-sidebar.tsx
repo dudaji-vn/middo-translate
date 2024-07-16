@@ -51,6 +51,11 @@ const sidebarContents: Array<{
     icon: <Contact />,
   },
   {
+    title: EBusinessSidebarKeys.Forms,
+    icon: <FileText />,
+    roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
+  },
+  {
     title: EBusinessSidebarKeys.Statistic,
     icon: <LineChartIcon />,
   },
@@ -62,11 +67,6 @@ const sidebarContents: Array<{
   {
     title: EBusinessSidebarKeys.Settings,
     icon: <Settings />,
-    roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
-  },
-  {
-    title: EBusinessSidebarKeys.Forms,
-    icon: <FileText />,
     roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
   },
 ];

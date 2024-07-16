@@ -102,7 +102,7 @@ const FormsList = ({
   }, [forms]);
 
   return (
-    <section className="relative w-full">
+    <>
       <FormsHeader
         titleProps={titleProps}
         onSearchChange={onSearchChange}
@@ -111,79 +111,82 @@ const FormsList = ({
         myRole={myRole}
         {...headerProps}
       />
-      <div
-        {...tableWrapperProps}
-        className={cn(
-          'max-h-[calc(100dvh-300px)] w-full  overflow-x-auto overflow-y-scroll  rounded-md px-2 py-3 md:max-h-[calc(100dvh-200px)] ',
-          tableWrapperProps?.className,
+      <section className="relative w-full">
+        <div
+          {...tableWrapperProps}
+          className={cn(
+            'max-h-[calc(100dvh-300px)] w-full  overflow-x-auto overflow-y-scroll  rounded-md px-2 py-3 md:max-h-[calc(100dvh-200px)] ',
+            tableWrapperProps?.className,
+          )}
+        >
+          <DataTable
+            dividerRow
+            tableInitialParams={{
+              onRowSelectionChange: (selectedRows: any) => {
+                setRowSelection(selectedRows);
+              },
+              state: {
+                rowSelection,
+                sorting,
+              },
+              onSortingChange: setSorting,
+              getCoreRowModel: getCoreRowModel(),
+              getSortedRowModel: getSortedRowModel(),
+              enableRowSelection(row) {
+                return !row.original?.isUsing;
+              },
+              getRowId: (row) => row._id,
+            }}
+            columns={makeFormsColumns({
+              t,
+              isSomeRowCanDelete,
+              onEdit,
+              onView,
+              enableDeletion,
+              singleRowSelection:
+                tableProps?.tableInitialParams?.enableMultiRowSelection ===
+                false,
+              onDeleteRowSelections: () => {
+                setModalState({ modalType: 'delete' });
+              },
+            })}
+            data={forms}
+            tableHeadProps={{
+              className:
+                'bg-white  border-none dark:bg-background dark:text-neutral-50',
+            }}
+            cellProps={{
+              className:
+                'max-w-[200px] break-words bg-transparent first:rounded-s-xl last:rounded-e-xl py-1',
+            }}
+            rowProps={{
+              className:
+                'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50  dark:bg-neutral-900  dark:hover:bg-neutral-800 dark:text-neutral-50',
+            }}
+            loading={isLoading}
+            skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}
+            {...tableProps}
+          />
+        </div>
+        {modalState && (
+          <CreateOrEditBusinessFormModal
+            open={
+              modalState.modalType === 'create' ||
+              modalState.modalType === 'edit' ||
+              modalState.modalType === 'view'
+            }
+            viewOnly={modalState?.modalType === 'view'}
+            currentForm={modalState?.initialData!}
+            onClose={() => setModalState(null)}
+          />
         )}
-      >
-        <DataTable
-          dividerRow
-          tableInitialParams={{
-            onRowSelectionChange: (selectedRows: any) => {
-              setRowSelection(selectedRows);
-            },
-            state: {
-              rowSelection,
-              sorting,
-            },
-            onSortingChange: setSorting,
-            getCoreRowModel: getCoreRowModel(),
-            getSortedRowModel: getSortedRowModel(),
-            enableRowSelection(row) {
-              return !row.original?.isUsing;
-            },
-            getRowId: (row) => row._id,
-          }}
-          columns={makeFormsColumns({
-            t,
-            isSomeRowCanDelete,
-            onEdit,
-            onView,
-            enableDeletion,
-            singleRowSelection:
-              tableProps?.tableInitialParams?.enableMultiRowSelection === false,
-            onDeleteRowSelections: () => {
-              setModalState({ modalType: 'delete' });
-            },
-          })}
-          data={forms}
-          tableHeadProps={{
-            className:
-              'bg-white  border-none dark:bg-background dark:text-neutral-50',
-          }}
-          cellProps={{
-            className:
-              'max-w-[200px] break-words bg-transparent first:rounded-s-xl last:rounded-e-xl py-1',
-          }}
-          rowProps={{
-            className:
-              'bg-white even:bg-primary-100 bg-primary-100 h-12 hover:bg-neutral-50  dark:bg-neutral-900  dark:hover:bg-neutral-800 dark:text-neutral-50',
-          }}
-          loading={isLoading}
-          skeletonsRows={DEFAULT_CLIENTS_PAGINATION.limit}
-          {...tableProps}
+        <DeleteFormModal
+          open={modalState?.modalType === 'delete' && !!rowSelection}
+          formIds={Object.keys(rowSelection)}
+          onclose={() => setModalState(null)}
         />
-      </div>
-      {modalState && (
-        <CreateOrEditBusinessFormModal
-          open={
-            modalState.modalType === 'create' ||
-            modalState.modalType === 'edit' ||
-            modalState.modalType === 'view'
-          }
-          viewOnly={modalState?.modalType === 'view'}
-          currentForm={modalState?.initialData!}
-          onClose={() => setModalState(null)}
-        />
-      )}
-      <DeleteFormModal
-        open={modalState?.modalType === 'delete' && !!rowSelection}
-        formIds={Object.keys(rowSelection)}
-        onclose={() => setModalState(null)}
-      />
-    </section>
+      </section>
+    </>
   );
 };
 
