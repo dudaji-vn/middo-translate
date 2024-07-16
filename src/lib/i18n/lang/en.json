@@ -163,6 +163,8 @@
       "NO_ACCESS_MEDIA": "Unable to access your camera or microphone!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File too large or not supported!",
       "UPDATE_ROOM": "Can not update room information!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "Please stop your call before creating a new instant call!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "Can not create instant call!",
       "JOIN_ROOM": "Unable to join call!",
       "NOT_SELECTED_LANGUAGE": "Please select a language!",
       "NOT_CHOOSE_IMAGE": "Please choose an image!",
@@ -402,6 +404,7 @@
     "MEMBERS": "Members",
     "SHOW_ALL": "Show all",
     "HIDE": "Hide",
+    "SHOW": "Show",
     "CLOUD_SHARED": "Media & Files",
     "MEDIA": "Media",
     "FILE": "File",
@@ -477,7 +480,9 @@
     "DOODLE": "Doodle",
     "FOCUS_VIEW": "Focus view",
     "EDIT_MESSAGE": "Edit message",
-    "OPEN_IN_BROWSER": "Open in browser"
+    "OPEN_IN_BROWSER": "Open in browser",
+    "INVITATION_LINK": "Invitation link",
+    "COPY_INVITATION_LINK": "Copy & send the link below for others to join this Call"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",

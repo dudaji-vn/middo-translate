@@ -15,6 +15,13 @@ import { useParams } from 'next/navigation';
 import { useSearch } from '@/hooks/use-search';
 import { useTranslation } from 'react-i18next';
 import { useSideChatStore } from '../../stores/side-chat.store';
+import { useCursorPaginationQuery } from '@/hooks';
+import { Room } from '../types';
+import { useMemo } from 'react';
+import { roomApi } from '../api';
+import { RoomItem } from './room-item';
+import { InfiniteScroll } from '@/components/infinity-scroll';
+import CreateInstantCall from './call/create-instant-call';
 
 export interface IndividualSideCreateProps {
   onBack?: () => void;
@@ -26,13 +33,40 @@ export const NewCallSide = (props: IndividualSideCreateProps) => {
   const { setCurrentSide } = useSideChatStore();
   const params = useParams();
   const { t } = useTranslation('common');
-  const handleCreateGroup = () => {
-    setCurrentSide('group');
-  };
+  const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
+  const currentRoomId = params?.id;
+  const key = useMemo(() => {
+    if (spaceId) {
+      return ['rooms', "all", spaceId];
+    }
+    return ['rooms', "all",];
+  }, [spaceId]);
+
+  const {
+    items: rooms,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    removeItem,
+    updateItem,
+    addItem,
+    refetch,
+    isRefetching,
+  } = useCursorPaginationQuery<Room>({
+    queryKey: key,
+    queryFn: ({ pageParam }) =>
+      roomApi.getRooms({
+        cursor: pageParam,
+        limit: 10,
+        type: 'all',
+        spaceId,
+      }),
+  });
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.currentTarget.value.toLocaleLowerCase());
   };
+
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-md bg-card shadow-sm">
@@ -45,43 +79,40 @@ export const NewCallSide = (props: IndividualSideCreateProps) => {
           />
         </div>
         {recData && recData.length > 0 && !data && (
-          <div className="flex w-full flex-1 flex-col overflow-y-auto px-2">
+          <div className="flex w-full flex-1 flex-col overflow-y-auto px-2 pt-2">
             <Section label={t('COMMON.SUGGESTION')}>
-              {recData?.map((user) => {
-                return (
-                  <Link key={user?._id} href={`/talk/${user?._id}`}>
-                    <UserItem user={user} />
-                  </Link>
-                );
-              })}
-              {recData?.map((user) => {
-                return (
-                  <Link key={user?._id} href={`/talk/${user?._id}`}>
-                    <UserItem user={user} />
-                  </Link>
-                );
-              })}
-              {recData?.map((user) => {
-                return (
-                  <Link key={user?._id} href={`/talk/${user?._id}`}>
-                    <UserItem user={user} />
-                  </Link>
-                );
-              })}
+              <InfiniteScroll
+                isRefreshing={isRefetching}
+                pullToRefresh
+                onRefresh={refetch}
+                onLoadMore={fetchNextPage}
+                hasMore={hasNextPage || false}
+                isFetching={isLoading}
+                className="flex flex-col"
+              >
+                {rooms.map((room, index) => {
+                  return (
+                    <RoomItem
+                      key={room._id}
+                      showTime={false}
+                      isShowStatus={false}
+                      type={'all'}
+                      isForgeShowCallButton={true}
+                      isOnline={false}
+                      showMembersName={true}
+                      data={room}
+                      isActive={currentRoomId === room._id}
+                      currentRoomId={currentRoomId as string}
+                      disabledAction={true}
+                    />
+                  );
+                })}
+              </InfiniteScroll>
             </Section>
           </div>
         )}
         <div className='p-3 mt-auto border-t border-neutral-50'>
-          <Button
-            shape={'square'}
-            color={'primary'}
-            variant={'default'}
-            className='w-full'
-            startIcon={<LinkIcon size={20} />}
-            
-          >
-            {t('CONVERSATION.CREATE_INSTANT_CALL')}
-          </Button>
+          <CreateInstantCall />
         </div>
 
       </div>

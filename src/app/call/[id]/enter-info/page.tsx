@@ -14,7 +14,7 @@ import getUserStream from '@/features/call/utils/get-user-stream';
 import customToast from '@/utils/custom-toast';
 import JoinCallForm from './_component/join-call-form';
 
-export default function Call() {
+export default function CallEnterInfo() {
     const { t } = useTranslation('common');
     const myStream = useMyVideoCallStore((state) => state.myStream);
     const setFullScreen = useVideoCallStore((state) => state.setFullScreen);

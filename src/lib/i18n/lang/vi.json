@@ -161,6 +161,8 @@
       "NO_ACCESS_MEDIA": "Không thể truy cập vào máy ảnh hoặc microphone của bạn!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File quá lớn hoặc không được hỗ trợ!",
       "UPDATE_ROOM": "Không thể cập nhật thông tin phòng!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "Vui lòng dừng cuộc gọi trước khi tạo cuộc gọi mới!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "Không thể tạo cuộc gọi ngay!",
       "JOIN_ROOM": "Không thể tham gia cuộc gọi!",
       "NOT_SELECTED_LANGUAGE": "Vui lòng chọn ngôn ngữ!",
       "NOT_CHOOSE_IMAGE": "Vui lòng chọn ảnh!",
@@ -397,6 +399,7 @@
     "MEMBERS": "Thành viên",
     "SHOW_ALL": "Xem tất cả",
     "HIDE": "Ẩn",
+    "SHOW": "Hiện",
     "CLOUD_SHARED": "Phương tiện & Tệp",
     "MEDIA": "Media",
     "FILE": "Tệp tin",
@@ -470,7 +473,9 @@
     "DOODLE": "Vẽ",
     "FOCUS_VIEW": "Tập trung",
     "EDIT_MESSAGE": "Chỉnh sửa tin nhắn",
-    "OPEN_IN_BROWSER": "Mở trong trình duyệt"
+    "OPEN_IN_BROWSER": "Mở trong trình duyệt",
+    "INVITATION_LINK": "Liên kết mời",
+    "COPY_INVITATION_LINK": "Sao chép và gửi liên kết dưới đây cho người khác tham gia cuộc gọi này"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",

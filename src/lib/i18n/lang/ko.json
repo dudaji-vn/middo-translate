@@ -161,6 +161,8 @@
       "NO_ACCESS_MEDIA": "카메라 또는 마이크에 접근할 수 없습니다!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "파일이 너무 크거나 지원되지 않습니다!",
       "UPDATE_ROOM": "방 정보를 업데이트할 수 없습니다!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "새로운 즉시 통화를 만들기 전에 통화를 중지하세요!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "즉시 통화를 만들 수 없습니다!",
       "JOIN_ROOM": "통화에 참여할 수 없습니다!",
       "NOT_SELECTED_LANGUAGE": "언어를 선택해주세요!",
       "NOT_CHOOSE_IMAGE": "이미지를 선택해주세요!",
@@ -396,6 +398,7 @@
     "MEMBERS": "구성원",
     "SHOW_ALL": "모두 보기",
     "HIDE": "숨기기",
+    "SHOW": "보이기",
     "CLOUD_SHARED": "미디어 및 파일",
     "MEDIA": "미디어",
     "FILE": "파일",
@@ -469,7 +472,9 @@
     "DOODLE": "그리기",
     "FOCUS_VIEW": "집중 보기",
     "EDIT_MESSAGE": "메시지 편집",
-    "OPEN_IN_BROWSER": "브라우저에서 열기"
+    "OPEN_IN_BROWSER": "브라우저에서 열기",
+    "INVITATION_LINK": "초대 링크",
+    "COPY_INVITATION_LINK": "아래 링크를 복사하여 다른 사람이 이 통화에 참여하도록 보내세요"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo가 권한이 필요합니다 ",

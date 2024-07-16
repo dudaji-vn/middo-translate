@@ -11,13 +11,22 @@ import { useEffect, useState } from 'react';
 import { PhoneIcon } from 'lucide-react';
 import { SUPPORTED_LANGUAGES } from '@/configs/default-language';
 import { PageLoading } from '@/components/feedback';
+import { useParams, useRouter } from 'next/navigation';
+import { userJoinAnonymousCall } from '@/services/video-call.service';
+import { useAuthStore } from '@/stores/auth.store';
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
 
 export default function JoinCallForm() {
   const { t } = useTranslation('common');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [defaultLanguage, setDefaultLanguage] = useState<string>('');
   const [loading, setLoading] = useState(false);
-
+  const setData = useAuthStore(state => state.setData)
+  const setRoom = useVideoCallStore(state =>state.setRoom)
+  const setFullScreen = useVideoCallStore(state => state.setFullScreen)
+  const params = useParams();
+  const callId = params?.id;
+  const router = useRouter();
   const form = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -63,21 +72,18 @@ export default function JoinCallForm() {
     if (!isValid) return;
     try {
         setLoading(true);
-        console.log('JoinCallForm - Line 116 :: submit -> values', values);
-      //   setLoading(true);
-      //   let img = {secure_url: ''};
-      //   if(avatar) {
-      //     img = await uploadImage(avatar as File);
-      //   }
-      //   let res = await addInfoUserService({
-      //     avatar: img.secure_url,
-      //     name,
-      //     language,
-      //     username,
-      //   });
-      //   setDataAuthStore({ user: res.data });
-      //   router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
-      //   setErrorMessage('');
+        const {name, language} = values
+        const res = await userJoinAnonymousCall({
+          callId: callId as string,
+          name,
+          language
+        })
+        const data = res.data;
+        const {user, call} = data
+        setData({user})
+        setRoom(call)
+        setFullScreen(true)
+        router.push(`/call/${callId}`)
     } catch (err: any) {
         setErrorMessage(t(err?.response?.data?.message));
     } finally {
