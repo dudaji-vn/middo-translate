@@ -25,7 +25,6 @@ import {
 } from '@tanstack/react-table';
 import { BusinessForm } from '@/types/forms.type';
 import DeleteFormModal from '../form-deletion/delete-form-modal';
-import CreateOrEditBusinessFormModal from '../form-creation/create-form-modal';
 
 const MANAGE_FORMS_ROLES: Record<ERoleActions, Array<ESPaceRoles>> = {
   edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -54,11 +53,11 @@ const FormsList = ({
   enableDeletion?: boolean;
   tableWrapperProps?: React.HTMLProps<HTMLDivElement>;
 }) => {
+  const [rowSelection, setRowSelection] = React.useState({});
   const [modalState, setModalState] = useState<{
-    modalType: 'create' | 'edit' | 'delete' | 'view';
+    modalType: 'edit' | 'delete' | 'view';
     initialData?: BusinessForm;
   } | null>(null);
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'createdAt', desc: true },
@@ -82,21 +81,16 @@ const FormsList = ({
   }
 
   const onEdit = (id: string) => {
-    const currentForm = forms.find((s) => s._id === id);
-    if (currentForm)
-      setModalState({
-        modalType: 'edit',
-        initialData: currentForm as BusinessForm,
-      });
+    // TODO: implement edit form
   };
   const onView = (id: string) => {
-    const currentForm = forms.find((s) => s._id === id);
-    if (currentForm)
-      setModalState({
-        modalType: 'view',
-        initialData: currentForm as BusinessForm,
-      });
+    // TODO: implement view form
   };
+
+  const onCreateFormClick = () => {
+    router.push(`${ROUTE_NAMES.SPACES}/${spaceId}/forms?modal=create`);
+  };
+
   const isSomeRowCanDelete = useMemo(() => {
     return forms?.some((s) => !s.isUsing);
   }, [forms]);
@@ -106,7 +100,7 @@ const FormsList = ({
       <FormsHeader
         titleProps={titleProps}
         onSearchChange={onSearchChange}
-        onCreateClick={() => setModalState({ modalType: 'create' })}
+        onCreateClick={onCreateFormClick}
         allowedRoles={MANAGE_FORMS_ROLES}
         myRole={myRole}
         {...headerProps}
@@ -168,18 +162,6 @@ const FormsList = ({
             {...tableProps}
           />
         </div>
-        {modalState && (
-          <CreateOrEditBusinessFormModal
-            open={
-              modalState.modalType === 'create' ||
-              modalState.modalType === 'edit' ||
-              modalState.modalType === 'view'
-            }
-            viewOnly={modalState?.modalType === 'view'}
-            currentForm={modalState?.initialData!}
-            onClose={() => setModalState(null)}
-          />
-        )}
         <DeleteFormModal
           open={modalState?.modalType === 'delete' && !!rowSelection}
           formIds={Object.keys(rowSelection)}

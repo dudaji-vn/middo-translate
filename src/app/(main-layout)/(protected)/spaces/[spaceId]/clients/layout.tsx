@@ -7,7 +7,7 @@ import SpaceNavigator from '../_components/space-navigator/space-navigator';
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { isMobile } = useAppStore();
   return (
-    <div className="container-height  relative w-full overflow-hidden bg-white dark:bg-background">
+    <div className="relative  h-full w-full !overflow-hidden bg-white dark:bg-background">
       {isMobile && <SpaceNavigator />}
       {children}
     </div>

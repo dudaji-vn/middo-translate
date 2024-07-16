@@ -17,14 +17,20 @@ import {
   getFormsTablePerpage,
   setFormsTablePerpage,
 } from '@/utils/local-storage';
+import CreateOrEditBusinessForm from './_components/form-creation/create-form';
 
 const Page = ({
   params: { spaceId },
+  searchParams,
 }: {
   params: {
     spaceId: string;
   };
+  searchParams: {
+    modal: 'create';
+  };
 }) => {
+  const { modal } = searchParams;
   const router = useRouter();
   const [search, setSearch] = useState('');
   const onSearchChange = (search: string) => {
@@ -61,6 +67,13 @@ const Page = ({
     setCurrentPage(page);
   };
   const forms: BusinessForm[] = data?.items || [];
+  if (modal === 'create') {
+    return (
+      <div className="background-business-forms container-height">
+        <CreateOrEditBusinessForm open={true} />
+      </div>
+    );
+  }
   return (
     <>
       <FormsList
