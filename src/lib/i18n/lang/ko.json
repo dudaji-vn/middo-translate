@@ -799,6 +799,7 @@
     "CLIENTS": "고객",
     "STATISTICS": "통계",
     "SCRIPTS": "채팅 스크립트",
+    "FORMS": "양식",
     "SETTINGS": "설정",
     "REPORT": "보고서",
     "CLIENT_LIST": "고객 목록",
@@ -859,6 +860,23 @@
       "LAST_EDITED": "최근 편집",
       "ACTIONS": "조치",
       "ENTER_SCRIPT_NAME": "스크립트 이름 입력"
+    },
+    "FORM": {
+      "PAGE_TITLE": "대화 양식",
+      "SEARCH": "양식 검색",
+      "ADD_FORM": "새 양식 추가",
+      "EDIT_FORM": "양식 편집",
+      "DELETE_FORM": "양식 삭제",
+      "VIEW_FORM": "양식 보기",
+      "PREVIEW_FLOW": "흐름 미리보기",
+      "NO_FORM": "양식을 찾을 수 없습니다",
+      "NAME": "이름",
+      "DESCRIPTION": "설명",
+      "CREATE_BY": "작성자",
+      "CREATE_ON": "작성일",
+      "LAST_EDITED": "마지막 편집",
+      "ACTIONS": "작업",
+      "ENTER_FORM_NAME": "양식 이름 입력"
     },
     "CLIENT": {
       "PAGE_TITLE": "고객 관리",

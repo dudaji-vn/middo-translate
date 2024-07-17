@@ -619,3 +619,13 @@ pre {
   word-break: break-all;
   word-wrap: break-word;
 }
+.background-business-forms {
+  background: linear-gradient(
+    to bottom right,
+    #d0def1 30%,
+    #a4c2ea,
+    #72a5e999,
+    #3d88ed92
+  );
+}
+

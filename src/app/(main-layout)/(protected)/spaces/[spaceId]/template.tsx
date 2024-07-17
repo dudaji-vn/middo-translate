@@ -63,7 +63,7 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   }, [handleRedirectToHome, handleRefresh]);
 
   return (
-    <div className="container-height w-full overflow-y-hidden ">
+    <div className="h-full w-full overflow-y-hidden ">
       <div className="flex flex-row overflow-y-auto">
         <div
           className={cn('flex w-[74px] flex-col max-md:hidden', {
