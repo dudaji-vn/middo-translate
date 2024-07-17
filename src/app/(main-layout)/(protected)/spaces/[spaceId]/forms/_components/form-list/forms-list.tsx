@@ -25,6 +25,7 @@ import {
 } from '@tanstack/react-table';
 import { BusinessForm } from '@/types/forms.type';
 import DeleteFormModal from '../form-deletion/delete-form-modal';
+import { isEmpty } from 'lodash';
 
 const MANAGE_FORMS_ROLES: Record<ERoleActions, Array<ESPaceRoles>> = {
   edit: [ESPaceRoles.Owner, ESPaceRoles.Admin],
@@ -105,7 +106,12 @@ const FormsList = ({
         myRole={myRole}
         {...headerProps}
       />
-      <section className="relative w-full">
+      <section
+        className={cn(
+          'relative w-full',
+          isEmpty(forms) && !isLoading && 'hidden',
+        )}
+      >
         <div
           {...tableWrapperProps}
           className={cn(

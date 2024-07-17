@@ -18,6 +18,8 @@ import {
   setFormsTablePerpage,
 } from '@/utils/local-storage';
 import CreateOrEditBusinessForm from './_components/form-creation/create-form';
+import { isEmpty } from 'lodash';
+import EmptyForms from './_components/form-list/empty-forms/empty-forms';
 
 const Page = ({
   params: { spaceId },
@@ -41,7 +43,7 @@ const Page = ({
   );
 
   const [limit, setLimit] = useState(getFormsTablePerpage());
-  const { data, isLoading } = useGetBusinessForms({
+  const { data, isLoading, isFetched } = useGetBusinessForms({
     search,
     spaceId,
     limit,
@@ -85,12 +87,16 @@ const Page = ({
           className: 'md:px-10',
         }}
       />
-      <FormsPagination
-        pagination={pagination}
-        limitOptions={ROWS_PER_PAGE_OPTIONS}
-        onPageChange={onPageChange}
-        onLimitChange={onLimitChange}
-      />
+      {isEmpty(forms) && isFetched ? (
+        <EmptyForms />
+      ) : (
+        <FormsPagination
+          pagination={pagination}
+          limitOptions={ROWS_PER_PAGE_OPTIONS}
+          onPageChange={onPageChange}
+          onLimitChange={onLimitChange}
+        />
+      )}
     </>
   );
 };
