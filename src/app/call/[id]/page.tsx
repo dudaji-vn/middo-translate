@@ -10,6 +10,8 @@ export default function Call() {
     const user = useAuthStore(state => state.user);
     const room = useVideoCallStore(state => state.room);
     const router = useRouter();
+    const isFullScreen = useVideoCallStore(state=>state.isFullScreen)
+    const setFullScreen = useVideoCallStore(state=>state.setFullScreen)
     const pathName = usePathname();
     useEffect(() => {
         if (!room || !user) {
@@ -17,9 +19,12 @@ export default function Call() {
         }
     }, [room, user, router]);
 
+    useEffect(()=>{
+        if(!isFullScreen) setFullScreen(true)
+    }, [isFullScreen])
     if(!room || !user ) return null;
-    
+
     return ( 
-        <VideoCall />
+        <VideoCall isShowFullScreenButton={false}/>
     );
 }

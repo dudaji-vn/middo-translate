@@ -114,14 +114,6 @@ export default function VideoCallActions({
         setLoadingVideo(false);
         setTurnOnCamera(video);
         setTurnOnMic(audio);
-      })
-      .catch(() => {
-        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
-        setTurnOnCamera(false);
-        setTurnOnMic(false);
-        setLoadingVideo(false);
-      })
-      .finally(() => {
         if (!audio && myVideoStream.getAudioTracks().length > 0) {
           myVideoStream.getAudioTracks().forEach((track) => {
             track.enabled = false;
@@ -132,6 +124,12 @@ export default function VideoCallActions({
         setTimeout(() => {
           setLoadingStream(false);
         }, 1000);
+      })
+      .catch(() => {
+        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
+        setLoadingVideo(false);
+      })
+      .finally(() => {
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioSetting?.deviceId, isLoadingStream, isTurnOnCamera, isTurnOnMic, myStream, participants, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, videoSetting?.deviceId]);

@@ -63,7 +63,7 @@ export const ChatRoomMain = ({ room }: { room: Room }) => {
                   <RoomTyping />
                 </>
               )}
-              <ChatBoxFooter />
+              <ChatBoxFooter isAnonymous={true}/>
             </MessageActions>
           </MessagesBoxProvider>
         </MediaUploadDropzone>

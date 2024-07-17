@@ -18,10 +18,17 @@ export default function InvitationLink() {
             <p className="text-sm text-neutral-600 dark:text-neutral-200">{t('CONVERSATION.COPY_INVITATION_LINK')}</p>
             <CopyZoneClick
                 text={`${NEXT_PUBLIC_URL}/call/${room?._id}`}
-                className="bg-white rounded-xl border border-neutral-100 px-3 py-4 dark:border-neutral-700 dark:bg-background flex justify-center items-center cursor-pointer md:hover:bg-neutral-50 active:bg-neutral-100 dark:md:hover:bg-neutral-900 dark:active:bg-neutral-800"
+                className="bg-white rounded-xl border border-neutral-100 p-3 dark:border-neutral-700 dark:bg-background flex justify-center items-center cursor-pointer"
             >
                 <span className="flex-1 text-primary font-semibold truncate">{`${NEXT_PUBLIC_URL}/call/${room?._id}`}</span>
-                <CopyIcon size={20} />
+                <Button.Icon
+                    size={"xs"}
+                    shape={'default'}
+                    color={'default'}
+                    variant={'ghost'}
+                    >
+                        <CopyIcon />
+                    </Button.Icon>
             </CopyZoneClick>
         </>}
 

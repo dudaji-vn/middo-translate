@@ -11,9 +11,11 @@ import { DiscussionForm } from './discussion-form';
 import { DiscussionSocket } from './discussion-socket';
 import { MainMessage } from './main-message';
 import { RepliesBox } from './replies-box';
+import { useAuthStore } from '@/stores/auth.store';
 
 type Props = {
   messageId: string;
+  isAnonymous?: boolean;
 };
 interface DiscussionContextProps {
   message: Message;
@@ -27,23 +29,25 @@ export const DiscussionContext = createContext<DiscussionContextProps>(
   {} as DiscussionContextProps,
 );
 
-const Discussion = ({ messageId }: Props) => {
+const Discussion = ({ messageId, isAnonymous }: Props) => {
   const messageBoxRef = useRef<HTMLDivElement>(null);
   const messageBoxId = useId();
-
+  const user = useAuthStore((state) => state.user);
   const { data } = useQuery({
     queryKey: ['message', messageId],
-    queryFn: () => messageApi.getOne(messageId),
+    queryFn: () => isAnonymous ? messageApi.getOneAnonymous(messageId, user?._id || '' ) : messageApi.getOne(messageId),
     enabled: !!messageId,
   });
+
   const repliesKey = ['message-replies', messageId];
   const queryClient = useQueryClient();
   const { data: messages } = useQuery({
     queryKey: repliesKey,
-    queryFn: () => messageApi.getReplies(messageId),
+    queryFn: () => isAnonymous ? messageApi.getRepliesAnonymous(messageId, user?._id || '' ) : messageApi.getReplies(messageId),
     keepPreviousData: true,
     enabled: !!messageId,
   });
+  
 
   const addReply = (reply: Message) => {
     queryClient.setQueryData<typeof messages | undefined>(repliesKey, (old) =>
@@ -105,7 +109,7 @@ const Discussion = ({ messageId }: Props) => {
               <MainMessage message={data} className="p-3" />
               <RepliesBox />
             </div>
-            <DiscussionForm scrollId={messageBoxId} />
+            <DiscussionForm scrollId={messageBoxId}/>
           </MediaUploadDropzone>
           <DiscussionSocket />
         </DiscussionContext.Provider>

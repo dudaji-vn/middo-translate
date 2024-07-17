@@ -14,7 +14,10 @@ import { StatusParticipant } from '../interfaces/participant';
 import { useAppStore } from '@/stores/app.store';
 import useHelpDesk from '../hooks/use-help-desk';
 
-export default function VideoCall() {
+interface VideoCallProps {
+  isShowFullScreenButton?: boolean
+}
+export default function VideoCall({isShowFullScreenButton = true}: VideoCallProps) {
   const room = useVideoCallStore(state => state.room);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const setFullScreen = useVideoCallStore(state => state.setFullScreen);
@@ -64,7 +67,9 @@ export default function VideoCall() {
       )}
     >
       <VideoCallProvider>
-        <VideoCallHeader />
+        <VideoCallHeader 
+          isShowFullScreenButton={isShowFullScreenButton}
+        />
         <div className="relative flex-1 overflow-hidden">
           <div className="flex h-full w-full flex-col">
             <VideoCallContent />

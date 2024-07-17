@@ -11,6 +11,7 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import Tip from '@/components/data-display/tip/tip';
 import InvitationLink from './invitation-link';
+import { useAuthStore } from '@/stores/auth.store';
 
 export default function ChatThread({ className }: { className?: string }) {
 
@@ -24,6 +25,8 @@ export default function ChatThread({ className }: { className?: string }) {
   const setMessageId = useVideoCallStore((state) => state.setMessageId);
   const isMobile = useAppStore((state) => state.isMobile);
   const [isShowAlert, setShowAlert] = useState(true);
+  const user = useAuthStore((state) => state.user);
+
   useEffect(() => {
     if (messageId) return;
     const callId = room?._id;
@@ -71,7 +74,7 @@ export default function ChatThread({ className }: { className?: string }) {
           </div>}
           <div className="flex-1 overflow-hidden">
             <div className="h-full">
-              <Discussion messageId={messageId} />
+              <Discussion messageId={messageId} isAnonymous={user?.status === 'anonymous'}/>
             </div>
           </div>
         </div>
