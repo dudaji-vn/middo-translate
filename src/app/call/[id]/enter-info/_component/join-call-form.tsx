@@ -15,6 +15,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { userJoinAnonymousCall } from '@/services/video-call.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useVideoCallStore } from '@/features/call/store/video-call.store';
+import { setCookieService } from '@/services/auth.service';
+import { ACCESS_TOKEN_NAME } from '@/configs/store-key';
 
 export default function JoinCallForm() {
   const { t } = useTranslation('common');
@@ -79,6 +81,16 @@ export default function JoinCallForm() {
           language
         })
         const data = res.data;
+        await setCookieService([
+          { 
+            key: ACCESS_TOKEN_NAME, 
+            value: data.token, 
+            time: 60 * 60 * 24,
+            config: {
+              path: '/api',
+            }
+          },
+        ]);
         const {user, call} = data
         setData({user})
         setRoom(call)

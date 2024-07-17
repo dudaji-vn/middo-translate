@@ -34,5 +34,9 @@ export default function ProtectedLayout({
     router.push('/account-deleted');
     return;
   }
+  if(user.status == 'anonymous') {
+    router.push('/');
+    return;
+  }
   return <>{children}</>;
 }

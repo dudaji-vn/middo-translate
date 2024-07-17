@@ -74,7 +74,7 @@ export default function ChatThread({ className }: { className?: string }) {
           </div>}
           <div className="flex-1 overflow-hidden">
             <div className="h-full">
-              <Discussion messageId={messageId} isAnonymous={user?.status === 'anonymous'}/>
+              <Discussion messageId={messageId}/>
             </div>
           </div>
         </div>

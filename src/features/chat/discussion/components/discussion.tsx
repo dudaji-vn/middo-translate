@@ -15,7 +15,6 @@ import { useAuthStore } from '@/stores/auth.store';
 
 type Props = {
   messageId: string;
-  isAnonymous?: boolean;
 };
 interface DiscussionContextProps {
   message: Message;
@@ -29,13 +28,13 @@ export const DiscussionContext = createContext<DiscussionContextProps>(
   {} as DiscussionContextProps,
 );
 
-const Discussion = ({ messageId, isAnonymous }: Props) => {
+const Discussion = ({ messageId }: Props) => {
   const messageBoxRef = useRef<HTMLDivElement>(null);
   const messageBoxId = useId();
   const user = useAuthStore((state) => state.user);
   const { data } = useQuery({
     queryKey: ['message', messageId],
-    queryFn: () => isAnonymous ? messageApi.getOneAnonymous(messageId, user?._id || '' ) : messageApi.getOne(messageId),
+    queryFn: () => messageApi.getOne(messageId),
     enabled: !!messageId,
   });
 
@@ -43,7 +42,7 @@ const Discussion = ({ messageId, isAnonymous }: Props) => {
   const queryClient = useQueryClient();
   const { data: messages } = useQuery({
     queryKey: repliesKey,
-    queryFn: () => isAnonymous ? messageApi.getRepliesAnonymous(messageId, user?._id || '' ) : messageApi.getReplies(messageId),
+    queryFn: () => messageApi.getReplies(messageId),
     keepPreviousData: true,
     enabled: !!messageId,
   });

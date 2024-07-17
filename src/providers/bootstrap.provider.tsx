@@ -2,9 +2,10 @@
 
 import { useEffect } from 'react';
 
-import { getProfileService } from '@/services/auth.service';
+import { getProfileService, signOutService } from '@/services/auth.service';
 import { useAuthStore } from '@/stores/auth.store';
 import { useQuery } from '@tanstack/react-query';
+import { User } from '@/features/users/types';
 
 const BootstrapProvider = () => {
   const { setData } = useAuthStore();
@@ -13,18 +14,19 @@ const BootstrapProvider = () => {
     queryFn: getProfileService,
   });
 
-  const user = data?.data;
+  const user: User = data?.data;
 
   useEffect(() => {
     if (isLoading) {
       return;
     }
-    if (user) {
+    if (user && user.status == 'anonymous') {
+      signOutService();
+    } else if (user) {
       setData({ isAuthentication: true, user: user, isLoaded: true });
       return;
-    } else {
-      setData({ isAuthentication: false, user: null, isLoaded: true });
     }
+    setData({ isAuthentication: false, user: null, isLoaded: true });
   }, [user, isLoading, setData]);
 
   return null;
