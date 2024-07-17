@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import React from 'react';
+import { useFieldArray, useForm, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
@@ -12,67 +12,15 @@ import { createBusinessFormSchema } from './schema';
 import { useCreateOrEditForm } from '@/features/conversation-forms/hooks/use-create-or-edit-form';
 import { BusinessForm } from '@/types/forms.type';
 import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
-import { Button } from '@/components/actions';
 import StepWrapper from './step-wrapper';
 import { cn } from '@/utils/cn';
-import { ArrowLeft, Eye } from 'lucide-react';
-import { Typography } from '@/components/data-display';
+import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
+import { CreateFormHeader } from './create-form-header';
+import { Button } from '@/components/actions';
+import { Plus, SquareCheck } from 'lucide-react';
+import ArrayFields from './array-fields';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
-
-const Header = () => {
-  const router = useRouter();
-  const { t } = useTranslation('common');
-  const onPreviewClick = () => {
-    // TODO: Implement preview
-  };
-  return (
-    <section
-      className={cn(
-        ' flex w-full flex-row items-center justify-between gap-3   px-4 py-2 ',
-      )}
-    >
-      <div className="flex flex-row items-center gap-2">
-        <Button.Icon
-          onClick={() => {
-            router.back();
-          }}
-          variant={'ghost'}
-          size={'xs'}
-          color={'default'}
-          className="text-neutral-600"
-        >
-          <ArrowLeft className="" />
-        </Button.Icon>
-        <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50 max-sm:min-w-32">
-          {t('EXTENSION.FORM.ADD_FORM')}
-        </Typography>
-      </div>
-      <div className="flex flex-row items-center gap-2">
-        <Button
-          onClick={onPreviewClick}
-          shape={'square'}
-          size={'xs'}
-          type="button"
-          color={'secondary'}
-          startIcon={<Eye />}
-        >
-          {t('COMMON.PREVIEW')}
-          &nbsp;
-        </Button>
-        <Button
-          variant={'default'}
-          size={'xs'}
-          shape={'square'}
-          color={'primary'}
-          type="submit"
-        >
-          {t('EXTENSION.FORM.ADD_FORM')}
-        </Button>
-      </div>
-    </section>
-  );
-};
 
 const tabLabels = ['Form', 'Thank You', 'Customize'];
 const CreateOrEditBusinessForm = ({
@@ -93,14 +41,13 @@ const CreateOrEditBusinessForm = ({
   const form = useForm<TFormFormValues>({
     mode: 'onChange',
     defaultValues: {
-      name: currentForm?.name || '',
+      name: currentForm?.name || 'Untitled Form',
+      formFields: [],
     },
     resolver: zodResolver(createBusinessFormSchema),
   });
   const {
-    setValue,
-    handleSubmit,
-    trigger,
+    watch,
     formState: { isValid, isSubmitting, errors },
   } = form;
 
@@ -117,6 +64,7 @@ const CreateOrEditBusinessForm = ({
       console.error('Error while creating form', error);
     }
   };
+  const fields = watch('formFields');
   return (
     <Tabs
       value={tabValue?.toString()}
@@ -127,31 +75,59 @@ const CreateOrEditBusinessForm = ({
       }}
     >
       <Form {...form}>
-        <Header />
+        <CreateFormHeader />
         <TabsList className="mx-auto flex h-fit w-[400px] max-w-full flex-row  items-center justify-between gap-3 border-none max-md:gap-0 md:justify-start">
           {[1, 2, 3].map((_, i) => (
             <TabsTrigger
               key={i}
               value={i.toString()}
               variant="button"
-              className="rounded-t-lg bg-primary-100"
+              className="rounded-t-lg bg-white"
             >
               {tabLabels[i]}
             </TabsTrigger>
           ))}
         </TabsList>
-        <StepWrapper value="0" className="px-0" title="Untitled Form">
-          updating ...
-          {/* TODO: implement this form */}
-        </StepWrapper>
-        <StepWrapper title="Thank You Page" className="px-0" value="1">
-          updating ...
-          {/* TODO: implement  this form */}
-        </StepWrapper>
-        <StepWrapper title="Customize" className="px-0" value="2">
-          updating ...
-          {/* TODO : implement this form */}
-        </StepWrapper>
+        <section
+          className={cn(
+            'flex flex-col  p-10',
+            'mx-auto h-fit  min-h-[400px] w-[90%] rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
+          )}
+        >
+          <RHFInputField
+            name="name"
+            formItemProps={{
+              className: 'w-full',
+            }}
+            inputProps={{
+              placeholder: 'please enter a form name',
+              required: true,
+              className:
+                'text-left p-0 text-2xl outline-none border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
+            }}
+          />
+          <RHFInputField
+            name="description"
+            formItemProps={{
+              className: 'w-full',
+            }}
+            inputProps={{
+              placeholder: 'Form description (optional)',
+              className: 'outline-none p-0 border-none !bg-transparent',
+            }}
+          />
+          <StepWrapper value="0">
+            <ArrayFields />
+          </StepWrapper>
+          <StepWrapper value="1">
+            updating ...
+            {/* TODO: implement  this form */}
+          </StepWrapper>
+          <StepWrapper value="2">
+            updating ...
+            {/* TODO : implement this form */}
+          </StepWrapper>
+        </section>
       </Form>
     </Tabs>
   );

@@ -34,20 +34,8 @@ const StepWrapper = ({
   footerProps?: React.ComponentPropsWithoutRef<'div'>;
 }) => {
   return (
-    <TabsContent
-      {...props}
-      className={cn(
-        'mx-auto mt-0 h-full max-h-[calc(100dvh-300px)] min-h-[400px] w-[80%] rounded-2xl border-none bg-primary-100 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
-        className,
-      )}
-    >
-      <div className="flex size-full min-h-[calc(100vh-200px)] flex-col gap-8 p-10">
-        <Typography
-          variant="h4"
-          className="text-left text-2xl font-semibold leading-7 text-neutral-800 dark:text-neutral-50"
-        >
-          {props.title}
-        </Typography>
+    <TabsContent {...props} className={cn('mt-0', className)}>
+      <div className="flex size-full min-h-[calc(100vh-200px)] flex-col gap-8 ">
         {children}
       </div>
       <div
