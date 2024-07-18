@@ -1,5 +1,7 @@
 {
   "COMMON": {
+    "DESCRIBE_MIDDO_STATION": "Không gian công cộng để kết nối tất cả người dùng",
+    "ADD_WORK_STATION": "Thêm Trạm ",
     "JOIN_CALL": "Tham gia cuộc gọi",
     "COLOR": "Màu",
     "INVITE": "Mời",

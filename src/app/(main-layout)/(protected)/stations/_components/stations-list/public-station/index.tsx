@@ -60,7 +60,7 @@ const PublicStation = () => {
               Middo Station
             </CardTitle>
             <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">
-              Public space to connect all users
+              {t('COMMON.DESCRIBE_MIDDO_STATION')}
             </span>
           </div>
         </CardContent>

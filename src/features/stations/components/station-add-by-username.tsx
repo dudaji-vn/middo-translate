@@ -116,7 +116,7 @@ export const SearchList = ({
   const currentUserId = useAuthStore((state) => state.user?._id);
   if (!items?.length) return null;
   return (
-    <div className="rounded-xl bg-primary-100">
+    <div className="rounded-xl bg-primary-100 dark:bg-transparent">
       <div className="p-3">
         <span className="text-sm font-semibold text-neutral-600">
           Added list
