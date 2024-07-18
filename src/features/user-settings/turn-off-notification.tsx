@@ -6,15 +6,17 @@ import { BellIcon, SettingsIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../notification/hooks/use-notification';
 import { usePlatformStore } from '../platform/stores';
+import { useElectron } from '@/hooks';
+import { notificationApi } from '../notification/api';
 
 export interface TurnOffNotificationProps {}
 
 export const TurnOffNotification = (props: TurnOffNotificationProps) => {
   const { t } = useTranslation('common');
-  const { isSubscribed, fcmToken, retrieveToken, turnOff } = useNotification();
+  const { isSubscribed, fcmToken, retrieveToken, turnOff, setFcmToken, retrieveTokenElectron } = useNotification();
   const platform = usePlatformStore((state) => state.platform);
   const { postMessage } = useReactNativePostMessage();
-
+  const { isElectron, ipcRenderer, electron } = useElectron();
   const handleToggle = async () => {
     if (isSubscribed) {
       if (!fcmToken) return;
@@ -34,13 +36,16 @@ export const TurnOffNotification = (props: TurnOffNotificationProps) => {
         });
         return;
       }
-      retrieveToken();
+      if(isElectron) {
+        retrieveTokenElectron()
+      } else {
+        retrieveToken();
+      }
     }
   };
 
   return (
     <Item
-      
       leftIcon={<BellIcon />}
       className="gap-5 pl-5 font-medium dark:bg-neutral-900 dark:text-neutral-50 pr-5 border-b dark:border-b-neutral-800"
       right={<Switch checked={isSubscribed} onClick={handleToggle} />}
