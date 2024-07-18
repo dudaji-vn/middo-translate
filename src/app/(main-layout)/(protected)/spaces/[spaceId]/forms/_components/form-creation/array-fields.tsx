@@ -88,7 +88,7 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 pt-3">
+    <div className="flex flex-col gap-3 px-5 pt-3">
       <DropdownMenu>
         <DropdownMenuTrigger className="w-full">
           <Button
@@ -125,7 +125,17 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
   );
 };
 
-const FieldOptions = ({ field, index }: { field: any; index: number }) => {
+const FieldOptions = ({
+  field,
+  index,
+  disableParentDrag,
+  enableParentDrag,
+}: {
+  field: any;
+  index: number;
+  disableParentDrag: () => void;
+  enableParentDrag: () => void;
+}) => {
   const { control } = useFormContext();
   const { type, required, options, name } = field || {};
   const [open, setOpen] = React.useState(false);
@@ -150,13 +160,15 @@ const FieldOptions = ({ field, index }: { field: any; index: number }) => {
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
-      <div className="flex w-full flex-col gap-3 pt-3">
+      <div className="flex w-full flex-col">
         <Droppable droppableId={`droppable-${field.id}`}>
           {(droppableProvider) => (
             <ul
               ref={droppableProvider.innerRef}
-              className="flex w-full flex-col gap-3"
+              className="flex w-full flex-col py-2"
               {...droppableProvider.droppableProps}
+              onMouseEnter={disableParentDrag}
+              onMouseLeave={enableParentDrag}
             >
               {fields.map((option: any, optionIndex) => {
                 const disabled =
@@ -173,7 +185,7 @@ const FieldOptions = ({ field, index }: { field: any; index: number }) => {
                         {...draggableProvider.draggableProps}
                         {...draggableProvider.dragHandleProps}
                         className={cn(
-                          'flex w-full flex-row items-start justify-between gap-2',
+                          'flex w-full flex-row items-start  justify-between gap-2  px-5  py-2 ',
                           'field' + field.id,
                         )}
                       >
@@ -270,6 +282,7 @@ const RenderField = ({
 }) => {
   const { control, watch } = useFormContext();
   const { type, required, options, name } = field || {};
+  const [dragable, setDragable] = React.useState(true);
   const [open, setOpen] = React.useState(false);
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
@@ -288,14 +301,14 @@ const RenderField = ({
       key={field.id}
       draggableId={field.id}
       index={index}
-      // isDragDisabled={expand}
+      isDragDisabled={!dragable}
     >
       {(draggableProvider) => (
         <li
           ref={draggableProvider.innerRef}
           {...draggableProvider.draggableProps}
           {...draggableProvider.dragHandleProps}
-          className="h-fit w-full rounded-xl border"
+          className="h-fit w-full rounded-xl border "
         >
           <AccordionItem
             key={field.id}
@@ -347,8 +360,8 @@ const RenderField = ({
                 />
               </div>
             </div>
-            <AccordionContent className="px-5 py-5 text-base">
-              <div className="flex flex-col gap-2">
+            <AccordionContent className="space-y-3 py-5 text-base">
+              <div className="flex flex-col gap-2 px-5">
                 <RHFInputField
                   name={`formFields[${index}].name`}
                   formLabel="Data-name"
@@ -385,13 +398,19 @@ const RenderField = ({
                 />
               </div>
               {type === 'checkbox' || type === 'radio' ? (
-                <FieldOptions field={field} index={index} />
+                <FieldOptions
+                  field={field}
+                  index={index}
+                  disableParentDrag={() => setDragable(false)}
+                  enableParentDrag={() => setDragable(true)}
+                />
               ) : null}
               {type === 'input' && (
                 <TypeSelection field={field} index={index} />
               )}
             </AccordionContent>
           </AccordionItem>
+
           {!expand && (
             <div className="p-2 transition-all delay-200">
               <pre>{previewContent}</pre>
