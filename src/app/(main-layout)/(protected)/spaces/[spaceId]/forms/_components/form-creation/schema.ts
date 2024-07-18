@@ -8,14 +8,20 @@ const formFieldSchema = z.object({
   dataType: dataTypes,
   type: formFieldTypeSchema,
   label: z.string().min(1, { message: 'Label is required' }),
-  required: z.boolean(),
+  required: z.boolean().default(false),
   options: z
     .array(
       z.object({
-        value: z.string().min(1, { message: 'Option content is required' }),
+        value: z.string(),
       }),
     )
     .optional(),
+});
+
+const customizeFormSchema = z.object({
+  theme: z.string().optional(),
+  background: z.string().optional(),
+  layout: z.enum(['single', 'multiple']),
 });
 
 export const createBusinessFormSchema = z.object({
@@ -30,11 +36,12 @@ export const createBusinessFormSchema = z.object({
   formFields: z.array(formFieldSchema),
   thankyou: z
     .object({
-      title: z.string().optional(),
-      subtitle: z.string().optional(),
+      title: z.string(),
+      subtitle: z.string(),
       image: z.string().optional(),
     })
     .optional(),
+  customize: customizeFormSchema.optional(),
 });
 export type CreateBusinessForm = z.infer<typeof createBusinessFormSchema>;
 export type FormField = z.infer<typeof formFieldSchema>;

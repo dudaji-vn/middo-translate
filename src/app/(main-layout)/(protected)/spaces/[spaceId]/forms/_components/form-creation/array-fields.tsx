@@ -66,7 +66,7 @@ const typeIcons: Record<FormFieldType, React.ReactElement> = {
 };
 
 const TypeSelection = ({ field, index }: { field: any; index: number }) => {
-  const { control, setValue, watch } = useFormContext();
+  const { setValue, watch } = useFormContext();
 
   const inputTypes: Array<{ type: FormFieldDataTypes; label: string }> = [
     {
@@ -143,14 +143,10 @@ const FieldOptions = ({
   enableParentDrag: () => void;
 }) => {
   const { control } = useFormContext();
-  const { type, required, options, name } = field || {};
-  const [open, setOpen] = React.useState(false);
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: `formFields[${index}].options`,
-    },
-  );
+  const { fields, append, remove, swap } = useFieldArray({
+    control,
+    name: `formFields[${index}].options`,
+  });
 
   const hasOtherOption = useMemo(
     () => fields.some((option: any) => option?.value === 'Other'),
@@ -260,7 +256,7 @@ const FieldOptions = ({
           </Button>
           <Button
             onClick={() => append({ value: 'Other' })}
-            color={'secondary'}
+            color={'default'}
             shape={'square'}
             size={'xs'}
             startIcon={<Plus size={18} />}
@@ -288,20 +284,10 @@ const RenderField = ({
   expand?: boolean;
   onRemoveField?: () => void;
 }) => {
-  const { control, watch } = useFormContext();
-  const { type, required, options, name } = field || {};
+  const { control, watch, setValue } = useFormContext();
+  const { type, name } = field || {};
   const [dragable, setDragable] = React.useState(true);
-  const [open, setOpen] = React.useState(false);
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: `formFields[${index}].options`,
-    },
-  );
-  const hasOtherOption = useMemo(
-    () => fields.some((option: any) => option?.value === 'Other'),
-    [fields],
-  );
+
   const previewContent =
     watch(`formFields[${index}].label`) || 'Your question here';
   return (
@@ -316,7 +302,7 @@ const RenderField = ({
           ref={draggableProvider.innerRef}
           {...draggableProvider.draggableProps}
           {...draggableProvider.dragHandleProps}
-          className="h-fit w-full rounded-xl border "
+          className="h-fit w-full rounded-xl border"
         >
           <AccordionItem
             key={field.id}
@@ -342,7 +328,12 @@ const RenderField = ({
               <div className="flex flex-row items-center gap-2">
                 <div className="flex flex-row items-center gap-2 text-neutral-600">
                   <Typography>Required</Typography>
-                  <Switch />
+                  <Switch
+                    checked={watch(`formFields[${index}].required`)}
+                    onCheckedChange={(value) => {
+                      setValue(`formFields[${index}].required`, value);
+                    }}
+                  />
                 </div>
                 <CopyZoneClick text={name}>
                   <Button.Icon
@@ -479,7 +470,7 @@ function ArrayFields() {
               <Accordion
                 type="single"
                 collapsible
-                className="flex flex-col gap-5"
+                className="flex flex-col gap-5 "
                 onValueChange={(props) => {
                   setAccordionStatus(props);
                 }}
@@ -541,7 +532,7 @@ function ArrayFields() {
                     onAddField({
                       name: `${option.label}`,
                       type: option.value,
-                      required: false,
+                      required: true,
                       options: [],
                     });
                     setOpen(false);

@@ -19,6 +19,7 @@ import { CreateFormHeader } from './create-form-header';
 import ArrayFields from './array-fields';
 import ThankYouForm from './thank-you-form';
 import { title } from 'process';
+import CustomizeForm from './customize-form';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -53,14 +54,14 @@ const CreateOrEditBusinessForm = ({
   });
   const {
     watch,
+    handleSubmit,
     formState: { isValid, isSubmitting, errors },
   } = form;
 
-  const submit = async ({ name }: { name: string }) => {
+  const submit = async (data: any) => {
+    console.log('data', data);
     const payload = {
-      spaceId,
-      formId: currentForm?._id,
-      name,
+      ...data,
     };
     try {
       await mutateAsync(payload);
@@ -71,16 +72,19 @@ const CreateOrEditBusinessForm = ({
   };
   const fields = watch('formFields');
   return (
-    <Tabs
-      value={tabValue?.toString()}
-      className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
-      defaultValue={tabValue.toString()}
-      onValueChange={(value) => {
-        setTabValue(parseInt(value));
-      }}
-    >
-      <Form {...form}>
-        <CreateFormHeader />
+    <Form {...form}>
+      <Tabs
+        value={tabValue?.toString()}
+        className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
+        defaultValue={tabValue.toString()}
+        onValueChange={(value) => {
+          setTabValue(parseInt(value));
+        }}
+      >
+        <form id="form-create-form" onSubmit={handleSubmit(submit)}>
+          <CreateFormHeader />
+        </form>
+
         <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-between gap-3 border-none max-md:gap-0 md:justify-start">
           {[1, 2, 3].map((_, i) => (
             <TabsTrigger
@@ -130,17 +134,15 @@ const CreateOrEditBusinessForm = ({
               <ArrayFields />
             </StepWrapper>
             <StepWrapper value="1">
-              updating ...
               <ThankYouForm />
             </StepWrapper>
             <StepWrapper value="2">
-              updating ...
-              {/* TODO : implement this form */}
+              <CustomizeForm />
             </StepWrapper>
           </div>
         </section>
-      </Form>
-    </Tabs>
+      </Tabs>
+    </Form>
   );
 };
 

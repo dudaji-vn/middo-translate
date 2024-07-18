@@ -59,6 +59,7 @@ export const CreateFormHeader = () => {
           shape={'square'}
           color={'primary'}
           type="submit"
+          form='form-create-form'
         >
           {t('EXTENSION.FORM.ADD_FORM')}
         </Button>
