@@ -17,6 +17,8 @@ import { cn } from '@/utils/cn';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { CreateFormHeader } from './create-form-header';
 import ArrayFields from './array-fields';
+import ThankYouForm from './thank-you-form';
+import { title } from 'process';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -40,6 +42,11 @@ const CreateOrEditBusinessForm = ({
     mode: 'onChange',
     defaultValues: {
       name: currentForm?.name || 'Untitled Form',
+      thankyou: {
+        title: 'Thank you',
+        subtitle: 'for submitting our form',
+        image: '',
+      },
       formFields: [],
     },
     resolver: zodResolver(createBusinessFormSchema),
@@ -88,39 +95,43 @@ const CreateOrEditBusinessForm = ({
         </TabsList>
         <section
           className={cn(
-            'flex flex-1 flex-col overflow-hidden p-10',
+            'flex flex-1 flex-col overflow-hidden p-5 md:p-10',
             'mx-auto w-full  rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
           )}
         >
-          <RHFInputField
-            name="name"
-            formItemProps={{
-              className: 'w-full',
-            }}
-            inputProps={{
-              placeholder: 'please enter a form name',
-              required: true,
-              className:
-                'text-left p-0 text-2xl outline-none border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
-            }}
-          />
-          <RHFInputField
-            name="description"
-            formItemProps={{
-              className: 'w-full',
-            }}
-            inputProps={{
-              placeholder: 'Form description (optional)',
-              className: 'outline-none p-0 border-none !bg-transparent',
-            }}
-          />
+          {tabValue === 0 && (
+            <>
+              <RHFInputField
+                name="name"
+                formItemProps={{
+                  className: 'w-full',
+                }}
+                inputProps={{
+                  placeholder: 'please enter a form name',
+                  required: true,
+                  className:
+                    'text-left p-0 text-2xl outline-none border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
+                }}
+              />
+              <RHFInputField
+                name="description"
+                formItemProps={{
+                  className: 'w-full',
+                }}
+                inputProps={{
+                  placeholder: 'Form description (optional)',
+                  className: 'outline-none p-0 border-none !bg-transparent',
+                }}
+              />
+            </>
+          )}
           <div className="flex w-full flex-1 flex-col overflow-y-auto">
             <StepWrapper value="0">
               <ArrayFields />
             </StepWrapper>
             <StepWrapper value="1">
               updating ...
-              {/* TODO: implement  this form */}
+              <ThankYouForm />
             </StepWrapper>
             <StepWrapper value="2">
               updating ...

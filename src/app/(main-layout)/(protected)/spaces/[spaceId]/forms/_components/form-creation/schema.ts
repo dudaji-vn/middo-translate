@@ -28,6 +28,13 @@ export const createBusinessFormSchema = z.object({
     .max(100, 'Description is too long, max 100 characters')
     .optional(),
   formFields: z.array(formFieldSchema),
+  thankyou: z
+    .object({
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
+      image: z.string().optional(),
+    })
+    .optional(),
 });
 export type CreateBusinessForm = z.infer<typeof createBusinessFormSchema>;
 export type FormField = z.infer<typeof formFieldSchema>;
