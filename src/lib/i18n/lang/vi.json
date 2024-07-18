@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "JOIN_CALL": "Tham gia cuộc gọi",
     "COLOR": "Màu",
     "INVITE": "Mời",
     "APPLY": "Áp dụng",
@@ -26,6 +27,7 @@
     "DECLINE": "Từ chối",
     "ACCEPT_CALL": "Nghe máy",
     "DELETE": "Xoá",
+    "COPY_AND_CLOSE": "Sao chép & Đóng",
     "ARCHIVE": "Lưu trữ",
     "UNARCHIVE": "Bỏ lưu trữ",
     "COMPLETED": "Hoàn thành",
@@ -160,6 +162,8 @@
       "NO_ACCESS_MEDIA": "Không thể truy cập vào máy ảnh hoặc microphone của bạn!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File quá lớn hoặc không được hỗ trợ!",
       "UPDATE_ROOM": "Không thể cập nhật thông tin phòng!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "Vui lòng dừng cuộc gọi trước khi tạo cuộc gọi mới!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "Không thể tạo cuộc gọi ngay!",
       "JOIN_ROOM": "Không thể tham gia cuộc gọi!",
       "NOT_SELECTED_LANGUAGE": "Vui lòng chọn ngôn ngữ!",
       "NOT_CHOOSE_IMAGE": "Vui lòng chọn ảnh!",
@@ -207,6 +211,9 @@
     "MIDDO_EXTENSION": "Tiện ích Middo",
     "SIGN_OUT": "Đăng xuất",
     "SETTINGS": "Cài đặt"
+  },
+  "NEW_CALL": {
+    "TEXT_1": "Nhập thông tin dưới đây để tham gia cuộc gọi"
   },
   "TRANSLATION": {
     "HISTORY": "Lịch sử",
@@ -347,6 +354,8 @@
     "TITLE": "Hội thoại",
     "PEOPLE": "Người",
     "NEW": "Hội thoại mới",
+    "NEW_CALL": "Cuộc gọi mới",
+    "CREATE_INSTANT_CALL": "Tạo cuộc gọi ngay",
     "SEARCH": "Tìm kiếm người hoặc nhóm",
     "PICK_MESSAGE": "Chọn một hội thoại để bắt đầu trò chuyện",
     "PINNED_MESSAGES": "Tin nhắn đã ghim",
@@ -391,6 +400,7 @@
     "MEMBERS": "Thành viên",
     "SHOW_ALL": "Xem tất cả",
     "HIDE": "Ẩn",
+    "SHOW": "Hiện",
     "CLOUD_SHARED": "Phương tiện & Tệp",
     "MEDIA": "Media",
     "FILE": "Tệp tin",
@@ -461,10 +471,13 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Công cụ dịch",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện.",
     "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh",
+    "SHOW_INVITATION_LINK": "Hiển thị liên kết mời",
     "DOODLE": "Vẽ",
     "FOCUS_VIEW": "Tập trung",
     "EDIT_MESSAGE": "Chỉnh sửa tin nhắn",
-    "OPEN_IN_BROWSER": "Mở trong trình duyệt"
+    "OPEN_IN_BROWSER": "Mở trong trình duyệt",
+    "INVITATION_LINK": "Liên kết mời",
+    "COPY_INVITATION_LINK": "Sao chép và gửi liên kết dưới đây cho người khác tham gia cuộc gọi này"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",
@@ -475,6 +488,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "Hội thoại mới",
+    "NEW_CALL": "Cuộc gọi mới",
     "FILTER": "Bộ lọc",
     "SETTINGS": "Cài đặt",
     "START_CALL": "Bắt đầu cuộc gọi",
@@ -498,6 +512,10 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "INVITATION_LINK": {
+      "TITLE": "Liên kết mời",
+      "DESCRIPTION": "Sao chép và gửi liên kết dưới đây cho người khác tham gia cuộc gọi này"
+    },
     "CREATE_STATION": {
       "HEADING": "Tạo Trạm",
       "TITLE": "Cung cấp <span class='text-primary-500-main'> thông tin cho trạm của bạn </span>",

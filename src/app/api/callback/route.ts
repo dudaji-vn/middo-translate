@@ -17,7 +17,6 @@ export async function GET(request: Request, response: Response) {
     // redirect(`middo://?token=${accessToken}&refresh_token=${refreshToken}`);
     redirect(ROUTE_NAMES.DESKTOP_LOGIN + '?access_token=' + accessToken + '&refresh_token=' + refreshToken);
   }
-  console.log('SET token')
   
   setTokens({ accessToken, refreshToken });
   if (redirectPath) {

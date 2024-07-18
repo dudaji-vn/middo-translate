@@ -65,7 +65,7 @@ export const ChatRoomMain = ({ room }: { room: Room }) => {
                   <RoomTyping />
                 </>
               )}
-              <ChatBoxFooter />
+              <ChatBoxFooter/>
             </MessageActions>
           </MessagesBoxProvider>
         </MediaUploadDropzone>

@@ -20,6 +20,7 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
 import ActionVideoAudioSetting from './action-video-audio-setting';
+import ActionShowInvitation from './action-show-invitation';
 
 
 export default function DropdownActions() {
@@ -111,6 +112,7 @@ export default function DropdownActions() {
             <span className="ml-2">{t('CONVERSATION.ADD_MEMBER')}</span>
           </DropdownMenuItem>
         )}
+        {room?.type == CALL_TYPE.ANONYMOUS && <ActionShowInvitation />}
         <ActionToggleCaption isInDropdown={true}/>
         <ActionVideoAudioSetting isInDropdown={true}/>
       </DropdownMenuContent>

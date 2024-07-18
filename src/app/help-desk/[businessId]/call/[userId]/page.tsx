@@ -127,7 +127,7 @@ const HelpDeskCallContent = () => {
   useHelpDeskCall();
   return (
     <>
-      <VideoCall />
+      <VideoCall isShowFullScreenButton={false}/>
       <CommonComponent />
     </>
   );

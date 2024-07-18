@@ -18,7 +18,7 @@ const CallDraggable = ({ children, className }: PropsWithChildren & CallDragable
   const { isHelpDeskCall } = useHelpDesk();
   const {isBusiness} = useBusinessNavigationData();
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  const isAllowDrag = useVideoCallStore(state => state.isAllowDrag);
+  // const isAllowDrag = useVideoCallStore(state => state.isAllowDrag);
   useEffect(() => {
     animationControls.set({
       x:0,
@@ -28,10 +28,8 @@ const CallDraggable = ({ children, className }: PropsWithChildren & CallDragable
   
   const isAllowDragCall = useMemo(()=>{
     if(isHelpDeskCall && !isBusiness) return false
-    if(isFullScreen) return false;
-    return isAllowDrag;
-  }, [isAllowDrag, isBusiness, isHelpDeskCall]) 
-
+    return !isFullScreen;
+  }, [isBusiness, isHelpDeskCall, isFullScreen]) 
   return (
     <motion.div
       ref={constraintsRef}

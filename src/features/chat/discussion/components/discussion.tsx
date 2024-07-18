@@ -11,6 +11,7 @@ import { DiscussionForm } from './discussion-form';
 import { DiscussionSocket } from './discussion-socket';
 import { MainMessage } from './main-message';
 import { RepliesBox } from './replies-box';
+import { useAuthStore } from '@/stores/auth.store';
 
 type Props = {
   messageId: string;
@@ -30,12 +31,13 @@ export const DiscussionContext = createContext<DiscussionContextProps>(
 const Discussion = ({ messageId }: Props) => {
   const messageBoxRef = useRef<HTMLDivElement>(null);
   const messageBoxId = useId();
-
+  const user = useAuthStore((state) => state.user);
   const { data } = useQuery({
     queryKey: ['message', messageId],
     queryFn: () => messageApi.getOne(messageId),
     enabled: !!messageId,
   });
+
   const repliesKey = ['message-replies', messageId];
   const queryClient = useQueryClient();
   const { data: messages } = useQuery({
@@ -44,6 +46,7 @@ const Discussion = ({ messageId }: Props) => {
     keepPreviousData: true,
     enabled: !!messageId,
   });
+  
 
   const addReply = (reply: Message) => {
     queryClient.setQueryData<typeof messages | undefined>(repliesKey, (old) =>
@@ -105,7 +108,7 @@ const Discussion = ({ messageId }: Props) => {
               <MainMessage message={data} className="p-3" />
               <RepliesBox />
             </div>
-            <DiscussionForm scrollId={messageBoxId} />
+            <DiscussionForm scrollId={messageBoxId}/>
           </MediaUploadDropzone>
           <DiscussionSocket />
         </DiscussionContext.Provider>

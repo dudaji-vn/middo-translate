@@ -1,5 +1,6 @@
 {
   "COMMON": {
+    "JOIN_CALL": "Join Call",
     "COLOR": "Color",
     "INVITE": "Invite",
     "APPLY": "Apply",
@@ -26,6 +27,7 @@
     "DECLINE": "Decline",
     "ACCEPT_CALL": "Accept Call",
     "DELETE": "Delete",
+    "COPY_AND_CLOSE": "Copy & Close",
     "ARCHIVE": "Archive",
     "UNARCHIVE": "Unarchive",
     "COMPLETE": "Complete",
@@ -162,6 +164,8 @@
       "NO_ACCESS_MEDIA": "Unable to access your camera or microphone!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File too large or not supported!",
       "UPDATE_ROOM": "Can not update room information!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "Please stop your call before creating a new instant call!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "Can not create instant call!",
       "JOIN_ROOM": "Unable to join call!",
       "NOT_SELECTED_LANGUAGE": "Please select a language!",
       "NOT_CHOOSE_IMAGE": "Please choose an image!",
@@ -209,6 +213,9 @@
     "MIDDO_EXTENSION": "Middo Extension",
     "SIGN_OUT": "Sign Out",
     "SETTINGS": "Settings"
+  },
+  "NEW_CALL": {
+    "TEXT_1": "Enter the information below to join Call"
   },
   "TRANSLATION": {
     "HISTORY": "History",
@@ -353,6 +360,8 @@
     "TITLE": "Conversation",
     "PEOPLE": "People",
     "NEW": "New conversation",
+    "NEW_CALL":"New Call",
+    "CREATE_INSTANT_CALL": "Create an instant Call",
     "SEARCH": "Search for people or groups",
     "PICK_MESSAGE": "Pick a conversation to start chatting",
     "PINNED_MESSAGES": "Pinned messages",
@@ -396,6 +405,7 @@
     "MEMBERS": "Members",
     "SHOW_ALL": "Show all",
     "HIDE": "Hide",
+    "SHOW": "Show",
     "CLOUD_SHARED": "Media & Files",
     "MEDIA": "Media",
     "FILE": "File",
@@ -468,10 +478,13 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Translate tool",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation.",
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
+    "SHOW_INVITATION_LINK": "Show invitation link",
     "DOODLE": "Doodle",
     "FOCUS_VIEW": "Focus view",
     "EDIT_MESSAGE": "Edit message",
-    "OPEN_IN_BROWSER": "Open in browser"
+    "OPEN_IN_BROWSER": "Open in browser",
+    "INVITATION_LINK": "Invitation link",
+    "COPY_INVITATION_LINK": "Copy & send the link below for others to join this Call"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",
@@ -482,6 +495,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "New Conversation",
+    "NEW_CALL": "New Call",
     "FILTER": "Filter",
     "SETTINGS": "Settings",
     "START_CALL": "Start Call",
@@ -505,6 +519,10 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "INVITATION_LINK": {
+      "TITLE": "Invitation Link",
+      "DESCRIPTION": "Copy and send the link below for others to join this Call"
+    },
     "CREATE_STATION": {
       "HEADING": "Create Work Station",
       "TITLE": "Give <span class='text-primary-500-main'> your station </span> some information",

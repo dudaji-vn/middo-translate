@@ -22,7 +22,9 @@ export default function useHandleStreamMyVideo() {
     const setShareScreenStream = useMyVideoCallStore(state => state.setShareScreenStream);
     const setShareScreen = useMyVideoCallStore(state => state.setShareScreen);
     const setTurnOnCamera = useMyVideoCallStore(state => state.setTurnOnCamera);
+    const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
     const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
+    const isTurnOnMic =  useMyVideoCallStore(state => state.isTurnOnMic);
     const setLoadingVideo = useMyVideoCallStore(state => state.setLoadingVideo);
     const participants = useParticipantVideoCallStore(state => state.participants);
     const clearPeerShareScreen = useParticipantVideoCallStore(state => state.clearPeerShareScreen);
@@ -40,7 +42,7 @@ export default function useHandleStreamMyVideo() {
         setLoadingVideo(true);
         setLoadingStream(true);
         // Start get streaming
-        getUserStream({isTurnOnCamera: DEFAULT_USER_CALL_STATE.isTurnOnCamera, isTurnOnMic: DEFAULT_USER_CALL_STATE.isTurnOnMic, cameraDeviceId: video?.deviceId || undefined, micDeviceId: audio?.deviceId || undefined})
+        getUserStream({isTurnOnCamera: isTurnOnCamera, isTurnOnMic: isTurnOnMic, cameraDeviceId: video?.deviceId || undefined, micDeviceId: audio?.deviceId || undefined})
         .then((stream: MediaStream) => {
             myVideoStream = stream;
         }).catch(_ =>  {

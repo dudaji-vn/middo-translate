@@ -14,18 +14,20 @@ import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useParams, useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth.store';
 
 export const ModalLeaveCall = () => {
   const {t} = useTranslation('common');
-
+  const user = useAuthStore(state=>state.user)
   const setModal = useVideoCallStore(state => state.setModal);
-  const modal = useVideoCallStore(state => state.modal);
+  const modal = useVideoCallStore(state => state.modal)
   const setRoom = useVideoCallStore(state => state.setRoom);
   const participants = useParticipantVideoCallStore(state => state.participants);
   const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
   const { isHelpDesk } = useBusinessNavigationData();
   const { isElectron, ipcRenderer } = useElectron();
-  
+  const router = useRouter();
   const handleLeave = async () => {
     setModal();
     participants.forEach((participant) => {
@@ -38,8 +40,10 @@ export const ModalLeaveCall = () => {
     if(isElectron) {
       ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
     }
-
-    // Check if is help desk call => close window
+    if(user?.status == 'anonymous') {
+      router.push('/');
+      return;
+    }
     if(isHelpDesk) {
       window.close();
     }

@@ -31,6 +31,7 @@ import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import { RoomItemCall } from './room-item-call';
 
 export interface RoomItemProps {
   data: Room;
@@ -38,6 +39,8 @@ export interface RoomItemProps {
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
   showTime?: boolean;
+  isShowStatus?: boolean;
+  isForgeShowCallButton?: boolean;
   onClick?: () => void;
   isMuted?: boolean;
   disabledAction?: boolean;
@@ -67,6 +70,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     showMembersName,
     currentRoomId,
     showTime = true,
+    isShowStatus = true,
+    isForgeShowCallButton,
     onClick,
     disabledAction,
     rightElement,
@@ -221,12 +226,12 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             </div>
 
             {rightElement}
-            {isMuted && type != 'contact' && (
+            {isShowStatus && isMuted && type != 'contact' && (
               <div className="flex items-center">
                 <BellOffIcon className="size-4 fill-error stroke-error text-neutral-600" />
               </div>
             )}
-            {room?.isPinned && type != 'contact' && (
+            {isShowStatus && room?.isPinned && type != 'contact' && (
               <div className="flex items-center">
                 <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
               </div>
@@ -234,10 +239,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           </RoomItemWrapper>
         </RoomItemContext.Provider>
       </Wrapper>
-      <Tooltip
-        title={t('CONVERSATION.JOIN')}
-        triggerItem={<RoomItemComingCall roomChatBox={room} />}
-      />
+      <RoomItemCall roomChatBox={room} isForgeShow={isForgeShowCallButton}/>
     </div>
   );
 });

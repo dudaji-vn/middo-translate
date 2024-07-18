@@ -51,6 +51,13 @@ export const messageApi = {
     return res.data;
   },
 
+  async getOneAnonymous(id: string, userId: string) {
+    const res: Response<Message> = await axiosWithInterceptor.get(
+      `${basePath}/${id}/anonymous/${userId}`,
+    );
+    return res.data;
+  },
+
   async remove({ id, type }: { id: string; type: 'me' | 'all' }) {
     const res: Response<Message> = await axiosWithInterceptor.delete(
       `${basePath}/${id}`,
@@ -160,6 +167,13 @@ export const messageApi = {
   async getReplies(id: string) {
     const res: Response<Message[]> = await axiosWithInterceptor.get(
       `${basePath}/${id}/replies`,
+    );
+    return res.data;
+  },
+
+  async getRepliesAnonymous(id: string, userId: string) {
+    const res: Response<Message[]> = await axiosWithInterceptor.get(
+      `${basePath}/${id}/replies/anonymous/${userId}`,
     );
     return res.data;
   },
