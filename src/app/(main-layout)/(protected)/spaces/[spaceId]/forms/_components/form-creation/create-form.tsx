@@ -66,7 +66,7 @@ const CreateOrEditBusinessForm = ({
   return (
     <Tabs
       value={tabValue?.toString()}
-      className="h-full w-full p-4"
+      className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
       defaultValue={tabValue.toString()}
       onValueChange={(value) => {
         setTabValue(parseInt(value));
@@ -74,7 +74,7 @@ const CreateOrEditBusinessForm = ({
     >
       <Form {...form}>
         <CreateFormHeader />
-        <TabsList className="mx-auto flex h-fit w-[400px] max-w-full flex-row  items-center justify-between gap-3 border-none max-md:gap-0 md:justify-start">
+        <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-between gap-3 border-none max-md:gap-0 md:justify-start">
           {[1, 2, 3].map((_, i) => (
             <TabsTrigger
               key={i}
@@ -88,8 +88,8 @@ const CreateOrEditBusinessForm = ({
         </TabsList>
         <section
           className={cn(
-            'flex flex-col  p-10',
-            'mx-auto h-fit  min-h-[400px] w-[90%] rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
+            'flex flex-1 flex-col overflow-hidden p-10',
+            'mx-auto w-full  rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
           )}
         >
           <RHFInputField
@@ -114,17 +114,19 @@ const CreateOrEditBusinessForm = ({
               className: 'outline-none p-0 border-none !bg-transparent',
             }}
           />
-          <StepWrapper value="0">
-            <ArrayFields />
-          </StepWrapper>
-          <StepWrapper value="1">
-            updating ...
-            {/* TODO: implement  this form */}
-          </StepWrapper>
-          <StepWrapper value="2">
-            updating ...
-            {/* TODO : implement this form */}
-          </StepWrapper>
+          <div className="flex w-full flex-1 flex-col overflow-y-auto">
+            <StepWrapper value="0">
+              <ArrayFields />
+            </StepWrapper>
+            <StepWrapper value="1">
+              updating ...
+              {/* TODO: implement  this form */}
+            </StepWrapper>
+            <StepWrapper value="2">
+              updating ...
+              {/* TODO : implement this form */}
+            </StepWrapper>
+          </div>
         </section>
       </Form>
     </Tabs>

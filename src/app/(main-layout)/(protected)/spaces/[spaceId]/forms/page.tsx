@@ -71,7 +71,7 @@ const Page = ({
   const forms: BusinessForm[] = data?.items || [];
   if (modal === 'create') {
     return (
-      <div className="background-business-forms  container-height overflow-y-auto">
+      <div className="flex h-screen flex-col  overflow-hidden bg-red-400">
         <CreateOrEditBusinessForm open={true} />
       </div>
     );
