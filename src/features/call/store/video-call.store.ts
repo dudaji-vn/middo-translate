@@ -6,7 +6,7 @@ import CaptionInterface from '../interfaces/caption.interface';
 import { User } from '@/features/users/types';
 import { CallType } from '../constant/call-type';
 import { Station } from '@/features/stations/types/station.types';
-type ModalType = 'forward-call' | 'add-user' | 'video-setting' | 'leave-call' | 'stop-doodle' | 'choose-screen'
+type ModalType = 'forward-call' | 'add-user' | 'video-setting' | 'leave-call' | 'stop-doodle' | 'choose-screen' | 'show-invitation'
 export interface IRoom {
   _id: string;
   name: string;
@@ -63,6 +63,7 @@ export type VideoCallState = {
   requestCall?: IRequestCall;
   captions: CaptionInterface[];
   messageId: string;
+  isShowInviteSection: boolean;
   setRoom: (room?: IRoom) => void;
   isAllowDrag: boolean;
   setAllowDrag: (allowDrag: boolean) => void;
@@ -83,6 +84,7 @@ export type VideoCallState = {
   setMessageId: (messageId: string) => void;
   clearStateVideoCall: () => void;
   setModal: (modal?: ModalType) => void;
+  setShowInviteSection: (isShowInviteSection: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
@@ -105,6 +107,7 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   modal: undefined,
   captions: [],
   messageId: '',
+  isShowInviteSection: true,
   setRoom: (room?: IRoom) => {
     set(() => ({ room }));
   },
@@ -161,6 +164,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   setModal: (modal?: ModalType) => {
     set(() => ({ modal }));
+  },
+  setShowInviteSection: (isShowInviteSection: boolean) => {
+    set(() => ({ isShowInviteSection }));
   },
   clearStateVideoCall: () => {
     set(() => ({

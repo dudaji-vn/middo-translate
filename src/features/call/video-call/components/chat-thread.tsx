@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import Tip from '@/components/data-display/tip/tip';
 import InvitationLink from './invitation-link';
 import { useAuthStore } from '@/stores/auth.store';
+import { CALL_TYPE } from '../../constant/call-type';
 
 export default function ChatThread({ className }: { className?: string }) {
 
@@ -25,7 +26,7 @@ export default function ChatThread({ className }: { className?: string }) {
   const setMessageId = useVideoCallStore((state) => state.setMessageId);
   const isMobile = useAppStore((state) => state.isMobile);
   const [isShowAlert, setShowAlert] = useState(true);
-  const user = useAuthStore((state) => state.user);
+  const isShowInviteSection = useVideoCallStore(state => state.isShowInviteSection)
 
   useEffect(() => {
     if (messageId) return;
@@ -69,7 +70,7 @@ export default function ChatThread({ className }: { className?: string }) {
         </div>
         <div className="flex flex-1 flex-col overflow-hidden">
         <Tip hideTip={!isShowAlert} closeTip={()=>setShowAlert(false)} tipTitle={t('CONVERSATION.TITLE_DISCUSSION_CALL')} tipContent={t('CONVERSATION.CONTENT_DISCUSSION_CALL')} className='p-3' />
-          {room?.type == 'ANONYMOUS' && <div className='p-3'>
+          {room?.type == CALL_TYPE.ANONYMOUS && isShowInviteSection && <div className='p-3'>
             <InvitationLink />
           </div>}
           <div className="flex-1 overflow-hidden">

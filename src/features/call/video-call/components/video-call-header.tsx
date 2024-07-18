@@ -18,29 +18,29 @@ export default function VideoCallHeader({isShowFullScreenButton}:VideoCallHeader
   const room = useVideoCallStore((state) => state.room);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const setFullScreen = useVideoCallStore((state) => state.setFullScreen);
-  const setAllowDrag = useVideoCallStore((state) => state.setAllowDrag);
+  // const setAllowDrag = useVideoCallStore((state) => state.setAllowDrag);
   const toggleFullScreen = useCallback(() => {
     setFullScreen(!isFullScreen);
   }, [setFullScreen, isFullScreen]);
 
   useKeyboardShortcut([SHORTCUTS.MAXIMIZE_MINIMIZE_CALL], toggleFullScreen);
 
-  useEffect(() => {
-    if (!ref) return;
-    const enableDrag = () => {
-      setAllowDrag(true);
-    };
-    const disableDrag = () => {
-      setAllowDrag(false);
-    };
-    ref.current?.addEventListener('mouseenter', enableDrag);
-    ref.current?.addEventListener('mouseleave', disableDrag);
+  // useEffect(() => {
+  //   if (!ref) return;
+  //   const enableDrag = () => {
+  //     setAllowDrag(true);
+  //   };
+  //   const disableDrag = () => {
+  //     setAllowDrag(false);
+  //   };
+  //   ref.current?.addEventListener('mouseenter', enableDrag);
+  //   ref.current?.addEventListener('mouseleave', disableDrag);
 
-    return () => {
-      ref.current?.removeEventListener('mouseenter', enableDrag);
-      ref.current?.removeEventListener('mouseleave', disableDrag);
-    };
-  }, [setAllowDrag]);
+  //   return () => {
+  //     ref.current?.removeEventListener('mouseenter', enableDrag);
+  //     ref.current?.removeEventListener('mouseleave', disableDrag);
+  //   };
+  // }, [setAllowDrag]);
 
   return (
     <div

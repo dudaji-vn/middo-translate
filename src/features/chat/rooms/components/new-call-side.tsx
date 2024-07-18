@@ -28,9 +28,7 @@ export interface IndividualSideCreateProps {
 }
 
 export const NewCallSide = (props: IndividualSideCreateProps) => {
-  const { data, setSearchTerm } = useSearch<User[]>(searchApi.users, 'users');
   const { data: recData } = useGetUsersRecChat();
-  const { setCurrentSide } = useSideChatStore();
   const params = useParams();
   const { t } = useTranslation('common');
   const spaceId = params?.spaceId ? String(params?.spaceId) : undefined;
@@ -63,21 +61,10 @@ export const NewCallSide = (props: IndividualSideCreateProps) => {
       }),
   });
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.currentTarget.value.toLocaleLowerCase());
-  };
-
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-md bg-card shadow-sm">
       <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="mt-2 flex items-center gap-2 space-y-1 border-b px-5 pb-5">
-          <SearchInput
-            className="flex-1"
-            onChange={handleSearch}
-            placeholder={t('CONVERSATION.SEARCH')}
-          />
-        </div>
         {recData && recData.length > 0 && !data && (
           <div className="flex w-full flex-1 flex-col overflow-y-auto px-2 pt-2">
             <Section label={t('COMMON.SUGGESTION')}>

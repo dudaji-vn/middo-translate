@@ -27,6 +27,7 @@
     "DECLINE": "Decline",
     "ACCEPT_CALL": "Accept Call",
     "DELETE": "Delete",
+    "COPY_AND_CLOSE": "Copy & Close",
     "ARCHIVE": "Archive",
     "UNARCHIVE": "Unarchive",
     "COMPLETE": "Complete",
@@ -477,6 +478,7 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Translate tool",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation.",
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
+    "SHOW_INVITATION_LINK": "Show invitation link",
     "DOODLE": "Doodle",
     "FOCUS_VIEW": "Focus view",
     "EDIT_MESSAGE": "Edit message",
@@ -517,6 +519,10 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "INVITATION_LINK": {
+      "TITLE": "Invitation Link",
+      "DESCRIPTION": "Copy and send the link below for others to join this Call"
+    },
     "CREATE_STATION": {
       "HEADING": "Create Work Station",
       "TITLE": "Give <span class='text-primary-500-main'> your station </span> some information",

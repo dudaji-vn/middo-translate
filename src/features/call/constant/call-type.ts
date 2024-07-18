@@ -9,4 +9,5 @@ export const CALL_TYPE = {
     GROUP: 'GROUP',
     DIRECT: 'DIRECT',
     HELP_DESK: 'HELP_DESK',
+    ANONYMOUS: 'ANONYMOUS',
 }

@@ -27,6 +27,7 @@
     "DECLINE": "Từ chối",
     "ACCEPT_CALL": "Nghe máy",
     "DELETE": "Xoá",
+    "COPY_AND_CLOSE": "Sao chép & Đóng",
     "ARCHIVE": "Lưu trữ",
     "UNARCHIVE": "Bỏ lưu trữ",
     "COMPLETED": "Hoàn thành",
@@ -470,6 +471,7 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Công cụ dịch",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện.",
     "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh",
+    "SHOW_INVITATION_LINK": "Hiển thị liên kết mời",
     "DOODLE": "Vẽ",
     "FOCUS_VIEW": "Tập trung",
     "EDIT_MESSAGE": "Chỉnh sửa tin nhắn",
@@ -510,6 +512,10 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "INVITATION_LINK": {
+      "TITLE": "Liên kết mời",
+      "DESCRIPTION": "Sao chép và gửi liên kết dưới đây cho người khác tham gia cuộc gọi này"
+    },
     "CREATE_STATION": {
       "HEADING": "Tạo Trạm",
       "TITLE": "Cung cấp <span class='text-primary-500-main'> thông tin cho trạm của bạn </span>",
