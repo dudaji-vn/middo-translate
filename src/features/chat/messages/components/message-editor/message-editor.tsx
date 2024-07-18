@@ -120,6 +120,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       },
       isEditing,
       id: roomId,
+      editorId,
     });
 
     const translationHelperRef = useRef<TranslationHelperRef>(null);
@@ -232,6 +233,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         />
 
         <div className="relative">
+          <div className="mention-bar" />
           {isEditing && editor && (
             <EditControl
               onEditSubmit={onEditSubmit}
@@ -260,7 +262,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
 
               <div className="flex ">
                 <EditorContent
-                  className="max-h-[200px] min-h-[46] w-full overflow-y-auto p-2 dark:text-neutral-50"
+                  className="no-scrollbar max-h-[200px] min-h-[46] w-full overflow-y-auto p-2 dark:text-neutral-50"
                   editor={editor}
                 />
                 <div className="mt-auto">

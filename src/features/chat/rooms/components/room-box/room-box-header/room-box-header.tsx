@@ -108,17 +108,15 @@ export const ChatBoxHeader = (props: React.HTMLAttributes<HTMLDivElement>) => {
             triggerItem={<RoomAddMember />}
           />
         )}
-        {(room.status === 'active' ||
-          (room.status === 'waiting' && !room.isGroup)) && (
-          <Tooltip title={t('TOOL_TIP.INFO')} triggerItem={<ActionBar />} />
-        )}
+        {room.status !== 'waiting' && <SearchButton />}
+        {!(room.status === 'waiting' && room.isGroup) && <InfoButton />}
       </div>
     </div>
   );
 };
-const ActionBar = () => {
+const InfoButton = () => {
+  const { t } = useTranslation('common');
   const { toggleTab, currentSide } = useRoomSidebarTabs();
-  const { isShowSearch, toggleIsShowSearch } = useRoomSearchStore();
 
   const isShowInfo = currentSide === 'info';
 
@@ -131,27 +129,35 @@ const ActionBar = () => {
     handleToggleInfo,
   );
 
-  useKeyboardShortcut([SHORTCUTS.SEARCH_IN_ROOM], toggleIsShowSearch);
-
   return (
-    <div className="flex gap-1">
-      <Button.Icon
-        onClick={toggleIsShowSearch}
-        size="xs"
-        color={isShowSearch ? 'secondary' : 'primary'}
-        variant={isShowSearch ? 'default' : 'ghost'}
-      >
-        <SearchIcon />
-      </Button.Icon>
-      <Button.Icon
-        onClick={handleToggleInfo}
-        size="xs"
-        color={isShowInfo ? 'secondary' : 'primary'}
-        variant={isShowInfo ? 'default' : 'ghost'}
-      >
-        <AlertCircleIcon />
-      </Button.Icon>
-    </div>
+    <Tooltip
+      title={t('TOOL_TIP.INFO')}
+      triggerItem={
+        <Button.Icon
+          onClick={handleToggleInfo}
+          size="xs"
+          color={isShowInfo ? 'secondary' : 'primary'}
+          variant={isShowInfo ? 'default' : 'ghost'}
+        >
+          <AlertCircleIcon />
+        </Button.Icon>
+      }
+    />
+  );
+};
+
+const SearchButton = () => {
+  const { toggleIsShowSearch, isShowSearch } = useRoomSearchStore();
+  useKeyboardShortcut([SHORTCUTS.SEARCH_IN_ROOM], toggleIsShowSearch);
+  return (
+    <Button.Icon
+      onClick={toggleIsShowSearch}
+      size="xs"
+      color={isShowSearch ? 'secondary' : 'primary'}
+      variant={isShowSearch ? 'default' : 'ghost'}
+    >
+      <SearchIcon />
+    </Button.Icon>
   );
 };
 const VideoCall = () => {

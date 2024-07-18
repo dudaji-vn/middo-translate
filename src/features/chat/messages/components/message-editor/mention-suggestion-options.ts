@@ -1,4 +1,3 @@
-import type { MentionOptions } from '@tiptap/extension-mention';
 import { ReactRenderer } from '@tiptap/react';
 import tippy, { type Instance as TippyInstance } from 'tippy.js';
 import SuggestionList, { type SuggestionListRef } from './suggestion-list';
@@ -22,6 +21,13 @@ const DOM_RECT_FALLBACK: DOMRect = {
     return {};
   },
 };
+import { isMobile as isMobileDevice } from 'react-device-detect';
+import { SuggestionOptions } from '@tiptap/suggestion';
+
+export type MentionOptions = {
+  HTMLAttributes: Record<string, any>;
+  suggestion: Omit<SuggestionOptions, 'editor'>;
+};
 
 export const mentionSuggestionOptions = (
   _items: MentionSuggestion[],
@@ -40,7 +46,6 @@ export const mentionSuggestionOptions = (
     //       ),
     //   );
     // },
-
     items: ({ query }): MentionSuggestion[] => {
       return _items
         .map((item) => ({
@@ -64,25 +69,36 @@ export const mentionSuggestionOptions = (
             editor: props.editor,
           });
 
-          popup = tippy('body', {
-            getReferenceClientRect: () =>
-              props.clientRect?.() ?? DOM_RECT_FALLBACK,
-            appendTo: () => document.body,
-            content: component.element,
-            showOnCreate: true,
-            interactive: true,
-            trigger: 'manual',
-            placement: 'auto-start',
-          })[0];
+          if (isMobileDevice) {
+            popup = tippy(document.querySelectorAll('.mention-bar'), {
+              appendTo: () => document.body,
+              content: component.element,
+              showOnCreate: true,
+              interactive: true,
+              sticky: 'reference',
+              placement: 'bottom-start',
+            })[0];
+          } else {
+            popup = tippy('body', {
+              getReferenceClientRect: () =>
+                props.clientRect?.() ?? DOM_RECT_FALLBACK,
+              appendTo: () => document.body,
+              content: component.element,
+              showOnCreate: true,
+              interactive: true,
+              trigger: 'manual',
+              placement: 'top-start',
+            })[0];
+          }
         },
 
         onUpdate(props) {
           component?.updateProps(props);
-
-          popup?.setProps({
-            getReferenceClientRect: () =>
-              props.clientRect?.() ?? DOM_RECT_FALLBACK,
-          });
+          !isMobileDevice &&
+            popup?.setProps({
+              getReferenceClientRect: () =>
+                props.clientRect?.() ?? DOM_RECT_FALLBACK,
+            });
         },
 
         onKeyDown(props) {
@@ -101,7 +117,6 @@ export const mentionSuggestionOptions = (
         onExit() {
           popup?.destroy();
           component?.destroy();
-
           // Remove references to the old popup and component upon destruction/exit.
           // (This should prevent redundant calls to `popup.destroy()`, which Tippy
           // warns in the console is a sign of a memory leak, as the `suggestion`

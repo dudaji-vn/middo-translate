@@ -19,6 +19,7 @@ export type SuggestionListRef = {
     >['onKeyDown']
   >;
 };
+import { isMobile as isMobileDevice } from 'react-device-detect';
 
 export type SuggestionListProps = SuggestionProps<MentionSuggestion>;
 
@@ -30,7 +31,6 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
       if (index >= props.items.length) {
         return;
       }
-
       const suggestion = props.items[index];
       props.command(suggestion);
     };
@@ -74,18 +74,20 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
     props.items.map;
 
     return props.items.length > 0 ? (
-      <div className=" w-72 overflow-hidden rounded-xl border bg-white py-1  shadow-1 dark:bg-neutral-900">
-        <ul className="max-h-60 w-full space-y-1 overflow-y-auto px-1">
-          {props.items.map((item, index) => (
-            <Item
-              key={item.id}
-              item={item}
-              index={index}
-              isSelected={index === selectedIndex}
-              selectItem={selectItem}
-            />
-          ))}
-        </ul>
+      <div className={cn(isMobileDevice ? 'w-[96vw]' : 'w-72')}>
+        <div className="w-full overflow-hidden rounded-xl border bg-white py-1 shadow-1  dark:bg-neutral-900 ">
+          <div className="flex max-h-60 w-full flex-col space-y-1 overflow-y-auto px-1">
+            {props.items.map((item, index) => (
+              <Item
+                key={item.id}
+                item={item}
+                index={index}
+                isSelected={selectedIndex === index}
+                selectItem={selectItem}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     ) : null;
   },
@@ -102,7 +104,7 @@ const Item = ({
   isSelected: boolean;
   selectItem: (index: number) => void;
 }) => {
-  const ref = useRef<HTMLLIElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (isSelected && ref.current) {
       ref.current.scrollIntoView({
@@ -113,15 +115,15 @@ const Item = ({
     }
   }, [isSelected]);
   return (
-    <li
+    <button
       ref={ref}
       key={item.id}
-      onMouseDown={() => selectItem(index)}
+      onClick={() => selectItem(index)}
       className={cn(
-        'flex cursor-pointer items-center gap-1 rounded-lg px-3 py-2 ',
+        'flex cursor-pointer items-center gap-1 rounded-lg px-3 py-3 md:py-2',
         isSelected
-          ? 'bg-primary text-white'
-          : 'hover:bg-primary-200 dark:hover:bg-neutral-800',
+          ? 'md:bg-primary md:text-white'
+          : 'active:!bg-primary md:hover:bg-primary-200 md:dark:hover:bg-neutral-800 dark:md:active:!bg-neutral-700',
       )}
     >
       {item?.image ? (
@@ -136,7 +138,7 @@ const Item = ({
         </div>
       )}
       <span className="truncate"> {item.label}</span>
-    </li>
+    </button>
   );
 };
 

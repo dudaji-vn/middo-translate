@@ -21,6 +21,7 @@ type UseEditorOptions = {
   onTypingChange?: (isTyping: boolean) => void;
   id?: string;
   isEditing?: boolean;
+  editorId?: string;
 };
 export const useEditor = ({
   enterToSubmit = true,
@@ -97,6 +98,9 @@ export const useEditor = ({
         Emoji.configure({
           enableEmoticons: true,
           emojis: gitHubEmojis,
+          HTMLAttributes: {
+            contenteditable: true,
+          },
         }),
         Mention.configure({
           renderHTML(props) {
@@ -108,6 +112,7 @@ export const useEditor = ({
                 'data-type': 'mention',
                 'data-id': node.attrs.id,
                 'data-label': node.attrs.label,
+                contenteditable: true,
               },
 
               `@${node.attrs.label}`,
