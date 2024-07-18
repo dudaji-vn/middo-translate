@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 
-import { InputField } from '@/components/form/Input-field';
 import { InputImage } from '@/components/form/input-image';
 import { InputSelectLanguage } from '@/components/form/input-select-language';
 import { PageLoading } from '@/components/feedback';
