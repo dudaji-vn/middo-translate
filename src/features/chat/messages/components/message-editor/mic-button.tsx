@@ -1,14 +1,11 @@
 import { Button } from '@/components/actions';
 import { Mic, Square } from 'lucide-react';
 
-import {
-  DEFAULT_LANGUAGES_CODE,
-  SUPPORTED_VOICE_MAP,
-} from '@/configs/default-language';
+import { SUPPORTED_VOICE_MAP } from '@/configs/default-language';
+import { useMSEditorStore } from '@/features/chat/stores/editor-language.store';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { useReactNativePostMessage } from '@/hooks/use-react-native-post-message';
 import useSpeechRecognizer from '@/hooks/use-speech-recognizer';
-import { useAuthStore } from '@/stores/auth.store';
 import { SHORTCUTS } from '@/types/shortcuts';
 import { Editor } from '@tiptap/react';
 import {
@@ -30,8 +27,10 @@ export interface MicButtonRef {
 
 export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
   ({ editor, onListeningChange, ...props }, ref) => {
-    const lang =
-      useAuthStore((s) => s.user?.language) ?? DEFAULT_LANGUAGES_CODE.EN;
+    const { languageCode, detectedLanguage } = useMSEditorStore(
+      (state) => state,
+    );
+    const lang = languageCode === 'auto' ? detectedLanguage : languageCode;
     const [transcribing, setTranscribing] = useState(false);
     const enableTranscribing = () => setTranscribing(true);
     const disableTranscribing = () => setTranscribing(false);
