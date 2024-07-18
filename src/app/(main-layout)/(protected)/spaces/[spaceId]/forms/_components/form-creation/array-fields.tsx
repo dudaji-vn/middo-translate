@@ -506,8 +506,8 @@ function ArrayFields() {
         onMouseLeave={onClose}
       >
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild onClick={onOpen} onMouseEnter={onOpen}>
-            <Button.Icon color={'secondary'} size={'xs'}>
+          <PopoverTrigger asChild>
+            <Button.Icon color={'secondary'} size={'xs'} onMouseEnter={onOpen}>
               <Plus
                 size={18}
                 className={cn(
@@ -522,14 +522,14 @@ function ArrayFields() {
             side="bottom"
             sideOffset={-30}
             className={cn(
-              'size-fit border-none bg-transparent py-0 pl-12 shadow-none !duration-1000 ',
+              'size-fit border-none bg-transparent py-0 pl-12 shadow-none  !delay-0',
+              open ? '!duration-100' : '!duration-500',
             )}
           >
             <div
-              onMouseLeave={onClose}
               className={cn(
-                'size-fit !origin-top-left space-y-2 rounded-[12px]   border border-dashed border-primary-500-main bg-white  p-2 shadow-[2px_4px_16px_2px_#1616161A]  duration-500',
-                open ? '!scale-100' : '!scale-0',
+                'size-fit !origin-top-left space-y-2 rounded-[12px]   border border-dashed border-primary-500-main bg-white  p-2 shadow-[2px_4px_16px_2px_#1616161A]   duration-500',
+                open ? '!scale-100 duration-500' : '!scale-0',
               )}
             >
               {fieldOptions.map((option) => (
