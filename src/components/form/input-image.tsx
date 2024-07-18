@@ -54,7 +54,7 @@ export const InputImage = (props: InputImageProps) => {
           type="file"
           id={id}
           hidden
-          // accept="image/png, image/gif, image/jpeg"
+          accept="image/png, image/gif, image/jpeg"
         />
         <div className="absolute bottom-0 right-0 h-8 w-8 cursor-pointer rounded-full transition-all hover:opacity-70">
           <Image

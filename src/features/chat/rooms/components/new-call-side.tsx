@@ -1,20 +1,10 @@
 'use client';
 
-import { Section, Typography } from '@/components/data-display';
+import { Section } from '@/components/data-display';
 
-import { Button } from '@/components/actions';
-import Link from 'next/link';
-import { ROUTE_NAMES } from '@/configs/route-name';
-import { SearchInput } from '@/components/data-entry';
-import { User } from '@/features/users/types';
-import { UserItem } from '@/features/users/components';
-import { LinkIcon, Users2Icon } from 'lucide-react';
-import { searchApi } from '@/features/search/api';
 import { useGetUsersRecChat } from '@/features/recommendation/hooks';
 import { useParams } from 'next/navigation';
-import { useSearch } from '@/hooks/use-search';
 import { useTranslation } from 'react-i18next';
-import { useSideChatStore } from '../../stores/side-chat.store';
 import { useCursorPaginationQuery } from '@/hooks';
 import { Room } from '../types';
 import { useMemo } from 'react';
@@ -22,6 +12,7 @@ import { roomApi } from '../api';
 import { RoomItem } from './room-item';
 import { InfiniteScroll } from '@/components/infinity-scroll';
 import CreateInstantCall from './call/create-instant-call';
+import { useGetPinnedRooms } from '../hooks/use-pin-room';
 
 export interface IndividualSideCreateProps {
   onBack?: () => void;
@@ -39,15 +30,12 @@ export const NewCallSide = (props: IndividualSideCreateProps) => {
     }
     return ['rooms', "all",];
   }, [spaceId]);
-
+  const { rooms: pinnedRooms } = useGetPinnedRooms();
   const {
     items: rooms,
     fetchNextPage,
     hasNextPage,
     isLoading,
-    removeItem,
-    updateItem,
-    addItem,
     refetch,
     isRefetching,
   } = useCursorPaginationQuery<Room>({
@@ -65,7 +53,7 @@ export const NewCallSide = (props: IndividualSideCreateProps) => {
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-md bg-card shadow-sm">
       <div className="flex flex-1 flex-col overflow-hidden">
-        {recData && recData.length > 0 && !data && (
+        {recData && recData.length > 0 && (
           <div className="flex w-full flex-1 flex-col overflow-y-auto px-2 pt-2">
             <Section label={t('COMMON.SUGGESTION')}>
               <InfiniteScroll
@@ -77,7 +65,7 @@ export const NewCallSide = (props: IndividualSideCreateProps) => {
                 isFetching={isLoading}
                 className="flex flex-col"
               >
-                {rooms.map((room, index) => {
+                {[...pinnedRooms || [], ...rooms].map((room, index) => {
                   return (
                     <RoomItem
                       key={room._id}

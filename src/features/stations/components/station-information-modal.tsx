@@ -23,7 +23,7 @@ export default function StationInformationModal({
         }
       }}
     >
-      <DialogContent>
+      <DialogContent className='overflow-hidden w-full'>
         <DialogTitle className="flex h-[48px] flex-row items-center justify-between py-4 pr-2 text-2xl font-semibold tracking-tight">
           {t('COMMON.STATION_INFORMATION')}
         </DialogTitle>
@@ -34,7 +34,7 @@ export default function StationInformationModal({
             size="3xl"
             className="border"
           />
-          <div className="flex h-full flex-col justify-between">
+          <div className="flex h-full flex-col justify-between whitespace-nowrap">
             <p className=" text-neutral-500">{t('COMMON.NAME')}:</p>
             <p className=" text-neutral-500">{t('COMMON.CREATED_BY')}:</p>
             <p className=" text-neutral-500">{t('COMMON.TIME.CREATED_ON')}:</p>
@@ -47,7 +47,7 @@ export default function StationInformationModal({
                 src={station.owner?.avatar}
                 size="xs"
               />
-              <span className="font-semibold text-neutral-800">
+              <span className="font-semibold text-neutral-800 truncate">
                 {station.owner?.name}
               </span>
             </div>
