@@ -80,7 +80,7 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
       label: 'Time',
     },
   ];
-  const current = watch(`formFields[${index}].type`);
+  const current = watch(`formFields[${index}].dataType`);
 
   const onTypeChange = (type: FormFieldDataTypes) => {
     console.log('type', type);
@@ -284,23 +284,32 @@ const RenderField = ({
   const previewContent =
     watch(`formFields[${index}].label`) || 'Your question here';
   return (
-    <div className="h-fit w-full rounded-xl border">
-      <AccordionItem key={field.id} value={field.id} id={'field' + field.id}>
-        <div
-          className={cn(
-            'flex  w-full flex-row items-center justify-between gap-2',
-            'rounded-t-xl  bg-primary-100 px-5 text-left text-base hover:no-underline dark:bg-neutral-800 md:text-lg  ',
-            'field' + field.id,
-          )}
+    <Draggable
+      key={field.id}
+      draggableId={field.id}
+      index={index}
+      // isDragDisabled={expand}
+    >
+      {(draggableProvider) => (
+        <li
+          ref={draggableProvider.innerRef}
+          {...draggableProvider.draggableProps}
+          {...draggableProvider.dragHandleProps}
+          className="h-fit w-full rounded-xl border"
         >
-          <Draggable key={field.id} draggableId={field.id} index={index}>
-            {(draggableProvider) => (
-              <div
-                ref={draggableProvider.innerRef}
-                {...draggableProvider.draggableProps}
-                {...draggableProvider.dragHandleProps}
-                className="flex flex-row items-center gap-2"
-              >
+          <AccordionItem
+            key={field.id}
+            value={field.id}
+            id={'field' + field.id}
+          >
+            <div
+              className={cn(
+                'flex  w-full flex-row items-center justify-between gap-2',
+                'rounded-t-xl  bg-primary-100 px-5 text-left text-base hover:no-underline dark:bg-neutral-800 md:text-lg  ',
+                'field' + field.id,
+              )}
+            >
+              <div className="flex flex-row items-center gap-2">
                 <GripVertical size={20} className="text-neutral-600" />
                 {cloneElement(typeIcons[type as FormFieldType] || <Type />, {
                   className: 'text-primary-500-main font-semibold size-6',
@@ -309,86 +318,88 @@ const RenderField = ({
                   {fieldOptions.find((option) => option.value === type)?.label}
                 </Typography>
               </div>
-            )}
-          </Draggable>
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex flex-row items-center gap-2 text-neutral-600">
-              <Typography>Required</Typography>
-              <Switch />
-            </div>
-            <CopyZoneClick text={name}>
-              <Button.Icon
-                disabled={!name}
-                variant="ghost"
-                color="primary"
-                size="xs"
-              >
-                <CopyIcon />
-              </Button.Icon>
-            </CopyZoneClick>
-            <Button.Icon variant="ghost" color="error" size="xs">
-              <Trash2 />
-            </Button.Icon>
-            <AccordionTrigger
-              className="flex flex-row items-center gap-2"
-              icon={
-                <ChevronDown
-                  size={16}
-                  className="transition-transform duration-300 group-data-[state=open]:rotate-180"
+              <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-2 text-neutral-600">
+                  <Typography>Required</Typography>
+                  <Switch />
+                </div>
+                <CopyZoneClick text={name}>
+                  <Button.Icon
+                    disabled={!name}
+                    variant="ghost"
+                    color="primary"
+                    size="xs"
+                  >
+                    <CopyIcon />
+                  </Button.Icon>
+                </CopyZoneClick>
+                <Button.Icon variant="ghost" color="error" size="xs">
+                  <Trash2 />
+                </Button.Icon>
+                <AccordionTrigger
+                  className="flex flex-row items-center gap-2"
+                  icon={
+                    <ChevronDown
+                      size={16}
+                      className="transition-transform duration-300 group-data-[state=open]:rotate-180"
+                    />
+                  }
                 />
-              }
-            />
-          </div>
-        </div>
-        <AccordionContent className="px-5 py-5 text-base">
-          <div className="flex flex-col gap-2">
-            <RHFInputField
-              name={`formFields[${index}].name`}
-              formLabel="Data-name"
-              formItemProps={{
-                className: 'w-full',
-              }}
-              inputProps={{
-                placeholder: 'Enter field name',
-                className: '',
-              }}
-            />
-            <RHFInputField
-              name={`formFields[${index}].label`}
-              formLabel="Label"
-              formItemProps={{
-                className: 'w-full',
-              }}
-              inputProps={{
-                placeholder: 'What is your question?',
-                className: '',
-              }}
-            />
-            <RHFInputField
-              name={`formFields[${index}].placeholder`}
-              formLabel="Helper Text"
-              formItemProps={{
-                className: 'w-full',
-              }}
-              inputProps={{
-                placeholder:
-                  'Appears below the Label to guide your Collaborators, just like this helper text!',
-                className: '',
-              }}
-            />
-          </div>
-          {type === 'checkbox' || type === 'radio' ? (
-            <FieldOptions field={field} index={index} />
-          ) : null}
-          {type === 'input' && <TypeSelection field={field} index={index} />}
-        </AccordionContent>
-      </AccordionItem>
-      {!expand && (
-        <div className="p-2 transition-all delay-200">
-          <pre>{previewContent}</pre>
-        </div>
+              </div>
+            </div>
+            <AccordionContent className="px-5 py-5 text-base">
+              <div className="flex flex-col gap-2">
+                <RHFInputField
+                  name={`formFields[${index}].name`}
+                  formLabel="Data-name"
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                  inputProps={{
+                    placeholder: 'Enter field name',
+                    className: '',
+                  }}
+                />
+                <RHFInputField
+                  name={`formFields[${index}].label`}
+                  formLabel="Label"
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                  inputProps={{
+                    placeholder: 'What is your question?',
+                    className: '',
+                  }}
+                />
+                <RHFInputField
+                  name={`formFields[${index}].placeholder`}
+                  formLabel="Helper Text"
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                  inputProps={{
+                    placeholder:
+                      'Appears below the Label to guide your Collaborators, just like this helper text!',
+                    className: '',
+                  }}
+                />
+              </div>
+              {type === 'checkbox' || type === 'radio' ? (
+                <FieldOptions field={field} index={index} />
+              ) : null}
+              {type === 'input' && (
+                <TypeSelection field={field} index={index} />
+              )}
+            </AccordionContent>
+          </AccordionItem>
+          {!expand && (
+            <div className="p-2 transition-all delay-200">
+              <pre>{previewContent}</pre>
+            </div>
+          )}
+        </li>
       )}
-    </div>
+    </Draggable>
   );
 };
 
