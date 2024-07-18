@@ -2,17 +2,25 @@
 
 import React, { cloneElement, useMemo } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/data-display';
 
 import { cn } from '@/utils/cn';
 import { Button, CopyZoneClick } from '@/components/actions';
 import {
   Calendar,
+  Check,
+  ChevronDown,
+  Circle,
   Clock,
   CopyCheck,
   CopyIcon,
-  Grip,
-  GripHorizontal,
   GripVertical,
+  ImageIcon,
   Plus,
   SquareCheck,
   Trash,
@@ -27,13 +35,14 @@ import {
   AccordionTrigger,
 } from '@/components/data-display/accordion';
 import { Typography } from '@/components/data-display';
-import { FormField } from './schema';
+import { FormField, FormFieldDataTypes, FormFieldType } from './schema';
 import { Switch } from '@/components/data-entry';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 const fieldOptions = [
   {
     label: 'Text Input',
-    value: 'text',
+    value: 'input',
   },
   {
     label: 'Multiple Choice',
@@ -43,22 +52,77 @@ const fieldOptions = [
     label: 'Single Choice',
     value: 'radio',
   },
-  {
-    label: 'Date',
-    value: 'date',
-  },
-  {
-    label: 'Time',
-    value: 'time',
-  },
 ];
-const typeIcons: { [key: string]: JSX.Element } = {
-  // TODO: Add icons for each type
-  text: <Type size={20} />,
+const typeIcons: Record<FormFieldType, React.ReactElement> = {
+  input: <Type size={20} />,
   checkbox: <SquareCheck size={20} />,
   radio: <CopyCheck size={20} />,
-  date: <Calendar size={20} />,
-  time: <Clock size={20} />,
+};
+
+const TypeSelection = ({ field, index }: { field: any; index: number }) => {
+  const { control, setValue, watch } = useFormContext();
+
+  const inputTypes: Array<{ type: FormFieldDataTypes; label: string }> = [
+    {
+      type: 'text',
+      label: 'Text',
+    },
+    {
+      type: 'long-text',
+      label: 'Long Text',
+    },
+    {
+      type: 'date',
+      label: 'Date',
+    },
+    {
+      type: 'time',
+      label: 'Time',
+    },
+  ];
+  const current = watch(`formFields[${index}].type`);
+
+  const onTypeChange = (type: FormFieldDataTypes) => {
+    console.log('type', type);
+    setValue(`formFields[${index}].dataType`, type);
+  };
+
+  return (
+    <div className="flex flex-col gap-3 pt-3">
+      <DropdownMenu>
+        <DropdownMenuTrigger className="w-full">
+          <Button
+            size={'md'}
+            color={'default'}
+            shape={'square'}
+            className="flex w-full flex-row items-center justify-between gap-1 font-normal"
+            endIcon={<ChevronDown className="h-4 w-4" />}
+          >
+            {inputTypes.find((type) => type.type === current)?.label ||
+              'Select input type'}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] dark:border-neutral-800  dark:bg-neutral-900 ">
+          {inputTypes.map((type) => {
+            return (
+              <DropdownMenuItem
+                key={type.type}
+                onClick={() => {
+                  onTypeChange(type.type);
+                }}
+              >
+                <div className="flex flex-row items-center gap-2">
+                  <Typography className="text-primary-500-main ">
+                    {type.label}
+                  </Typography>
+                </div>
+              </DropdownMenuItem>
+            );
+          })}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
 };
 
 const FieldOptions = ({ field, index }: { field: any; index: number }) => {
@@ -71,68 +135,127 @@ const FieldOptions = ({ field, index }: { field: any; index: number }) => {
       name: `formFields[${index}].options`,
     },
   );
+
   const hasOtherOption = useMemo(
     () => fields.some((option: any) => option?.value === 'Other'),
     [fields],
   );
 
-  return (
-    <div className="flex w-full flex-col gap-3 pt-3">
-      {fields.map((option: any, optionIndex) => (
-        <div
-          key={option.id}
-          className={cn(
-            'lex-row flex h-12 w-full items-center justify-between gap-2',
-            'field' + field.id,
-          )}
-        >
-          <GripVertical size={20} className="text-neutral-600" />
-          <RHFInputField
-            name={`formFields[${index}].options[${optionIndex}].value`}
-            formItemProps={{ className: 'w-full ' }}
-            inputProps={{
-              placeholder: 'Enter field name',
-              className: 'capitalize',
-              disabled: hasOtherOption && option?.value === 'Other',
-            }}
-          />
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+    swap(result.source.index, result.destination.index);
+  };
 
-          <Button.Icon
-            variant="ghost"
-            color="error"
-            size="xs"
-            onClick={() => remove(optionIndex)}
-          >
-            <Trash2 />
-          </Button.Icon>
-        </div>
-      ))}
-      <div className="flex flex-row gap-2">
-        <div className="invisible w-6" />
-        <Button
-          onClick={() => append({ value: '' })}
-          color={'secondary'}
-          shape={'square'}
-          size={'xs'}
-          startIcon={<Plus size={18} />}
-        >
-          Add Option
-        </Button>
-        <Button
-          onClick={() => append({ value: 'Other' })}
-          color={'secondary'}
-          shape={'square'}
-          size={'xs'}
-          startIcon={<Plus size={18} />}
-          className={cn(
-            'flex items-center gap-2 ',
-            hasOtherOption ? 'hidden' : 'visible',
+  return (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div className="flex w-full flex-col gap-3 pt-3">
+        <Droppable droppableId={`droppable-${field.id}`}>
+          {(droppableProvider) => (
+            <ul
+              ref={droppableProvider.innerRef}
+              className="flex w-full flex-col gap-3"
+              {...droppableProvider.droppableProps}
+            >
+              {fields.map((option: any, optionIndex) => {
+                const disabled =
+                  hasOtherOption && option?.['value'] === 'Other';
+                return (
+                  <Draggable
+                    key={option.id}
+                    draggableId={`${option.id}`}
+                    index={optionIndex}
+                  >
+                    {(draggableProvider) => (
+                      <li
+                        ref={draggableProvider.innerRef}
+                        {...draggableProvider.draggableProps}
+                        {...draggableProvider.dragHandleProps}
+                        className={cn(
+                          'flex w-full flex-row items-start justify-between gap-2',
+                          'field' + field.id,
+                        )}
+                      >
+                        <RHFInputField
+                          name={`formFields[${index}].options[${optionIndex}].value`}
+                          formItemProps={{ className: 'w-full' }}
+                          inputProps={{
+                            placeholder: 'Enter field name',
+                            className: cn(
+                              'capitalize',
+                              disabled && 'bg-neutral-50',
+                            ),
+                            disabled,
+                            leftElement: (
+                              <>
+                                <GripVertical
+                                  size={20}
+                                  className="text-neutral-600"
+                                />
+                                <Circle className="size-5 fill-neutral-100 stroke-none" />
+                              </>
+                            ),
+                            rightElement: (
+                              <>
+                                <Button.Icon
+                                  variant="ghost"
+                                  color="default"
+                                  size="xs"
+                                >
+                                  <ImageIcon />
+                                </Button.Icon>
+                                <Button.Icon
+                                  variant="ghost"
+                                  color="error"
+                                  size="xs"
+                                  onClick={() => remove(optionIndex)}
+                                >
+                                  <Trash2 />
+                                </Button.Icon>
+                              </>
+                            ),
+                            wrapperProps: {
+                              className: 'flex flex-row gap-2 items-center',
+                            },
+                          }}
+                        />
+                      </li>
+                    )}
+                  </Draggable>
+                );
+              })}
+              {droppableProvider.placeholder}
+            </ul>
           )}
-        >
-          Add &ldquo;Other&ldquo; Option
-        </Button>
+        </Droppable>
+        <div className="flex flex-row gap-2">
+          <div className="invisible w-6" />
+          <Button
+            onClick={() => append({ value: '' })}
+            color={'secondary'}
+            shape={'square'}
+            size={'xs'}
+            startIcon={<Plus size={18} />}
+          >
+            Add Option
+          </Button>
+          <Button
+            onClick={() => append({ value: 'Other' })}
+            color={'secondary'}
+            shape={'square'}
+            size={'xs'}
+            startIcon={<Plus size={18} />}
+            className={cn(
+              'flex items-center gap-2',
+              hasOtherOption ? 'hidden' : 'visible',
+            )}
+          >
+            Add &ldquo;Other&ldquo; Option
+          </Button>
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 
@@ -165,28 +288,29 @@ const RenderField = ({
       <AccordionItem key={field.id} value={field.id} id={'field' + field.id}>
         <div
           className={cn(
-            'flex h-12 w-full flex-row items-center justify-between gap-2',
+            'flex  w-full flex-row items-center justify-between gap-2',
             'rounded-t-xl  bg-primary-100 px-5 text-left text-base hover:no-underline dark:bg-neutral-800 md:text-lg  ',
             'field' + field.id,
           )}
         >
-          <div className="flex flex-row items-center gap-2">
-            <GripVertical size={20} className="text-neutral-600" />
-            {cloneElement(typeIcons[type], {
-              className: 'text-primary-500-main font-semibold size-6',
-            })}
-            <RHFInputField
-              name={`formFields[${index}].name`}
-              formItemProps={{
-                className: 'w-full ',
-              }}
-              inputProps={{
-                placeholder: 'Enter field name',
-                className:
-                  'outline-none  capitalize p-0 border-none !bg-transparent',
-              }}
-            />
-          </div>
+          <Draggable key={field.id} draggableId={field.id} index={index}>
+            {(draggableProvider) => (
+              <div
+                ref={draggableProvider.innerRef}
+                {...draggableProvider.draggableProps}
+                {...draggableProvider.dragHandleProps}
+                className="flex flex-row items-center gap-2"
+              >
+                <GripVertical size={20} className="text-neutral-600" />
+                {cloneElement(typeIcons[type as FormFieldType] || <Type />, {
+                  className: 'text-primary-500-main font-semibold size-6',
+                })}
+                <Typography className="text-primary-500-main ">
+                  {fieldOptions.find((option) => option.value === type)?.label}
+                </Typography>
+              </div>
+            )}
+          </Draggable>
           <div className="flex flex-row items-center gap-2">
             <div className="flex flex-row items-center gap-2 text-neutral-600">
               <Typography>Required</Typography>
@@ -205,11 +329,30 @@ const RenderField = ({
             <Button.Icon variant="ghost" color="error" size="xs">
               <Trash2 />
             </Button.Icon>
-            <AccordionTrigger className="flex flex-row items-center gap-2" />
+            <AccordionTrigger
+              className="flex flex-row items-center gap-2"
+              icon={
+                <ChevronDown
+                  size={16}
+                  className="transition-transform duration-300 group-data-[state=open]:rotate-180"
+                />
+              }
+            />
           </div>
         </div>
         <AccordionContent className="px-5 py-5 text-base">
           <div className="flex flex-col gap-2">
+            <RHFInputField
+              name={`formFields[${index}].name`}
+              formLabel="Data-name"
+              formItemProps={{
+                className: 'w-full',
+              }}
+              inputProps={{
+                placeholder: 'Enter field name',
+                className: '',
+              }}
+            />
             <RHFInputField
               name={`formFields[${index}].label`}
               formLabel="Label"
@@ -237,6 +380,7 @@ const RenderField = ({
           {type === 'checkbox' || type === 'radio' ? (
             <FieldOptions field={field} index={index} />
           ) : null}
+          {type === 'input' && <TypeSelection field={field} index={index} />}
         </AccordionContent>
       </AccordionItem>
       {!expand && (
@@ -261,27 +405,46 @@ function ArrayFields() {
   const onOpen = () => setOpen(true);
   const onClose = () => setOpen(false);
 
+  const handleDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+    swap(result.source.index, result.destination.index);
+  };
+
   return (
     <div className="flex h-auto w-full flex-col gap-2">
-      <Accordion
-        type="multiple"
-        className="flex flex-col gap-5"
-        onValueChange={({ ...props }) => {
-          console.log('props', props);
-          setAccordionStatus({ ...props });
-        }}
-        defaultChecked
-      >
-        {fields.map((field, index) => (
-          <RenderField
-            key={field.id}
-            field={field}
-            index={index}
-            expand={Object.values(accordionStatus).includes(field.id)}
-          />
-        ))}
-      </Accordion>
-
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId={`droppable-formFields`}>
+          {(droppableProvider) => (
+            <ul
+              ref={droppableProvider.innerRef}
+              className="flex w-full flex-col gap-3"
+              {...droppableProvider.droppableProps}
+            >
+              <Accordion
+                type="multiple"
+                className="flex flex-col gap-5"
+                onValueChange={({ ...props }) => {
+                  console.log('props', props);
+                  setAccordionStatus({ ...props });
+                }}
+                defaultChecked
+              >
+                {fields.map((field, index) => (
+                  <RenderField
+                    key={field.id}
+                    field={field}
+                    index={index}
+                    expand={Object.values(accordionStatus).includes(field.id)}
+                  />
+                ))}
+              </Accordion>
+              {droppableProvider.placeholder}
+            </ul>
+          )}
+        </Droppable>
+      </DragDropContext>
       <div
         className={cn('flex flex-row gap-3 p-2 transition-all duration-700')}
         onMouseLeave={onClose}
@@ -312,7 +475,7 @@ function ArrayFields() {
               color="default"
               onClick={() => {
                 append({
-                  name: `New ${option.label}`,
+                  name: `${option.label}`,
                   type: option.value,
                   required: false,
                   options: [],
@@ -322,7 +485,7 @@ function ArrayFields() {
               className="flex h-10 w-full flex-row justify-start gap-2"
               shape={'square'}
             >
-              {cloneElement(typeIcons[option.value], {
+              {cloneElement(typeIcons[option.value as keyof typeof typeIcons], {
                 className: ' size-5',
               })}
               {option.label}

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useFieldArray, useForm, useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
@@ -16,8 +16,6 @@ import StepWrapper from './step-wrapper';
 import { cn } from '@/utils/cn';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { CreateFormHeader } from './create-form-header';
-import { Button } from '@/components/actions';
-import { Plus, SquareCheck } from 'lucide-react';
 import ArrayFields from './array-fields';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
@@ -68,7 +66,7 @@ const CreateOrEditBusinessForm = ({
   return (
     <Tabs
       value={tabValue?.toString()}
-      className="w-full  p-4"
+      className="h-full w-full p-4"
       defaultValue={tabValue.toString()}
       onValueChange={(value) => {
         setTabValue(parseInt(value));

@@ -11,6 +11,7 @@ export interface InputProps
   suffix?: React.ReactNode;
   prefixEl?: React.ReactNode;
   leftElement?: React.ReactNode;
+  rightElement?: React.ReactNode;
   wrapperProps?: React.HTMLAttributes<HTMLDivElement>;
 }
 
@@ -21,6 +22,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       wrapperProps,
       suffix,
       leftElement,
+      rightElement,
       isError,
       type,
       required,
@@ -89,6 +91,8 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {suffix}
           </div>
         )}
+
+        {rightElement}
       </div>
     );
   },

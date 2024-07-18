@@ -1,23 +1,18 @@
 import { z } from 'zod';
 
-const formFieldTypeSchema = z.enum([
-  'text',
-  'checkbox',
-  'radio',
-  'date',
-  'time',
-]);
+const dataTypes = z.enum(['text', 'long-text', 'date', 'time']);
+const formFieldTypeSchema = z.enum(['input', 'checkbox', 'radio']);
 
 const formFieldSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1, { message: 'Data-Name is required' }),
+  dataType: dataTypes,
   type: formFieldTypeSchema,
-  label: z.string(),
+  label: z.string().min(1, { message: 'Label is required' }),
   required: z.boolean(),
   options: z
     .array(
       z.object({
-        // label: z.string().min(1, { message: 'Label is required' }),
-        value: z.string().min(1, { message: 'Value is required' }),
+        value: z.string().min(1, { message: 'Option content is required' }),
       }),
     )
     .optional(),
@@ -37,3 +32,4 @@ export const createBusinessFormSchema = z.object({
 export type CreateBusinessForm = z.infer<typeof createBusinessFormSchema>;
 export type FormField = z.infer<typeof formFieldSchema>;
 export type FormFieldType = z.infer<typeof formFieldTypeSchema>;
+export type FormFieldDataTypes = z.infer<typeof dataTypes>;
