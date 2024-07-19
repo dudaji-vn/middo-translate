@@ -92,65 +92,6 @@ export const makeFormsColumns = ({
       },
     },
     {
-      accessorKey: 'createdBy',
-      header: t('COMMON.CREATED_BY'),
-      cell(props) {
-        return (
-          <td className="flex gap-2" {...props}>
-            <Avatar
-              src={props.row?.original?.createdBy?.avatar || '/avatar.svg'}
-              alt={String(props.row?.original?.createdBy?.name)}
-              className="h-6 w-6 rounded-full"
-            />
-            <span>{props?.row?.original?.createdBy?.name}</span>
-          </td>
-        );
-      },
-    },
-    {
-      accessorKey: 'createdAt',
-      header: t('EXTENSION.FORM.CREATE_ON'),
-      sortDescFirst: true,
-      sortingFn: (rowA, rowB) => {
-        const statusA = rowA.original.createdAt;
-        const statusB = rowB.original.createdAt;
-
-        return (
-          new Date(statusA as string).getTime() -
-          new Date(statusB as string).getTime()
-        );
-      },
-      cell(props) {
-        const displayTime = moment(props?.row?.original?.createdAt).format(
-          'DD/MM/YYYY HH:mm A',
-        );
-        return (
-          <td className="flex gap-2" {...props}>
-            <span>{displayTime}</span>
-          </td>
-        );
-      },
-    },
-    {
-      accessorKey: 'lastEditedBy',
-      header: t('EXTENSION.FORM.LAST_EDITED'),
-      cell(props) {
-        const displayTime = moment(props?.row?.original?.updatedAt).format(
-          'DD/MM/YYYY HH:mm A',
-        );
-        return (
-          <td className="flex gap-2" {...props}>
-            <Avatar
-              src={props.row?.original?.lastEditedBy?.avatar || '/avatar.svg'}
-              alt={String(props.row?.original?.lastEditedBy?.name)}
-              className="h-6 w-6 rounded-full"
-            />
-            <span>{displayTime}</span>
-          </td>
-        );
-      },
-    },
-    {
       accessorKey: '_id',
       header(props) {
         const table = props.table;

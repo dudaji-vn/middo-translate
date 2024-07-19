@@ -12,7 +12,7 @@ const formFieldSchema = z.object({
   options: z
     .array(
       z.object({
-        value: z.string(),
+        value: z.string().min(1, { message: 'Option content is required' }),
       }),
     )
     .optional(),
@@ -23,6 +23,10 @@ const customizeFormSchema = z.object({
   background: z.string().optional(),
   layout: z.enum(['single', 'multiple']),
 });
+const checkDuplicateFieldNames = (fields: FormField[]) => {
+  const names = fields.map((field) => field.name);
+  return new Set(names).size === names.length;
+};
 
 export const createBusinessFormSchema = z.object({
   name: z
@@ -33,7 +37,22 @@ export const createBusinessFormSchema = z.object({
     .string()
     .max(100, 'Description is too long, max 100 characters')
     .optional(),
-  formFields: z.array(formFieldSchema),
+  formFields: z.array(formFieldSchema).superRefine((fields, ctx) => {
+    const pass = checkDuplicateFieldNames(fields);
+    if (!pass) {
+      const indexDuplicate = fields.findLastIndex((field, index) =>
+        fields.findIndex((f, i) => f.name === field.name && i !== index),
+      );
+      ctx.addIssue({
+        message: `Field name ${fields[indexDuplicate].name} is already used`,
+        code: z.ZodIssueCode.unrecognized_keys,
+        path: [indexDuplicate, 'name'],
+        keys: [String(indexDuplicate), 'name'],
+      });
+      return true;
+    }
+    return false;
+  }),
   thankyou: z
     .object({
       title: z.string(),
