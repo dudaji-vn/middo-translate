@@ -15,7 +15,7 @@ import SettingSpeaker from './components/setting-speaker';
 import VideoSetting from '@/features/call/interfaces/video-setting.interface';
 import { useCallback } from 'react';
 import { useMyVideoCallStore } from '@/features/call/store/me.store';
-import getUserStream from '@/features/call/utils/get-user-stream';
+import getUserStream, { ResponseUserMedia } from '@/features/call/utils/get-user-stream';
 import { useParticipantVideoCallStore } from '@/features/call/store/participant.store';
 import toast from 'react-hot-toast';
 import socket from '@/lib/socket-io';
@@ -54,18 +54,11 @@ export const ModalAudioVideoSetting = () => {
       cameraDeviceId: type === 'video' ? deviceId : video?.deviceId, 
       micDeviceId: type === 'audio' ? deviceId : audio?.deviceId
     })
-      .then((stream: MediaStream) => {
-        myVideoStream = stream;
+      .then(({stream, isTurnOnMic, isTurnOnCamera}: ResponseUserMedia) => {
+        myVideoStream = stream ? stream : myVideoStream;
         setTurnOnCamera(isTurnOnCamera);
         setTurnOnMic(isTurnOnMic);
-      })
-      .catch(() => {
-        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
-        setTurnOnCamera(false);
-        setTurnOnMic(false);
-      })
-      .finally(() => {
-        if (!isTurnOnMic && myVideoStream.getAudioTracks().length > 0) {
+        if (!isTurnOnMic && myVideoStream?.getAudioTracks() && myVideoStream?.getAudioTracks()?.length > 0) {
           myVideoStream.getAudioTracks().forEach((track) => {
             track.enabled = false;
           });
@@ -76,7 +69,11 @@ export const ModalAudioVideoSetting = () => {
         setTimeout(() => {
           setLoadingStream(false);
         }, 1000);
-      });
+      })
+      .catch(() => {
+        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
+      })
+      .finally(() => {});
   }, [audio?.deviceId, isTurnOnCamera, isTurnOnMic, myStream, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, t, video?.deviceId])
   
   return (
