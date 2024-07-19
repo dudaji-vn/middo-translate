@@ -9,34 +9,12 @@ import Image from 'next/image';
 
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/sections/options';
+import {
+  DEFAULT_THEME,
+  extensionsCustomThemeOptions,
+} from '../../../settings/_components/extension-creation/sections/options';
 import { cn } from '@/utils/cn';
-const formColors = [
-  {
-    name: 'Red',
-    hex: '#EF3B36',
-  },
-  {
-    hex: '#E11D59',
-    name: 'Pink',
-  },
-  {
-    name: 'Purple',
-    hex: '#8E23A3',
-  },
-  {
-    name: 'Deep Purple',
-    hex: '#5A33AA',
-  },
-  {
-    name: '#3649A8',
-    hex: 'Indigo',
-  },
-  {
-    name: 'Primary',
-    hex: DEFAULT_THEME,
-  },
-];
+const formColors = [...extensionsCustomThemeOptions];
 const CustomizeForm = () => {
   const { setValue, watch } = useFormContext();
   const selectedColor = watch('customize.theme');

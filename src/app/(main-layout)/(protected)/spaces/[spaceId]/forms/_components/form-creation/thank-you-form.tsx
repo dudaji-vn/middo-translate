@@ -1,6 +1,7 @@
 import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { Switch } from '@/components/data-entry';
+import RHFImageInput from '@/components/form/RHF/RHFImageInput/RHFImageInput';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { ImageIcon } from 'lucide-react';
 import React from 'react';
@@ -44,17 +45,32 @@ const ThankYouForm = () => {
           * This page will appear after the form has been successfully submitted
         </Typography>
       </div>
-      <div className="flex aspect-[4/3] max-h-[300px] w-full max-w-[400px] flex-col items-center justify-center gap-2 rounded-[12px] border border-dashed border-primary-500-main md:w-[30vw] ">
-        <Button.Icon color="primary" size="lg">
-          <ImageIcon />
-        </Button.Icon>
-        <Typography className="text-neutral-800">Add Image</Typography>
-        <Typography className="text-center font-light text-neutral-600">
-          Image size must be smaller than 25MB
-          <br />
-          with 4:3 aspect ratio
-        </Typography>
-      </div>
+      <RHFImageInput
+        nameField="thankyou.image"
+        onUploadDone={() => {}}
+        cropperProps={{
+          className: '',
+          aspectRatio: 4 / 3,
+          initialAspectRatio: 4 / 3,
+        }}
+        previewProps={{
+          className:
+            'aspect-[4/3] max-h-[300px] w-full max-w-[400px]  rounded-[12px]  md:w-[30vw] ',
+        }}
+      >
+        <div className="flex aspect-[4/3] max-h-[300px] w-full max-w-[400px] flex-col  items-center justify-center gap-2 rounded-[12px] border border-dashed border-primary-500-main p-2 md:w-[30vw] ">
+          <Button.Icon color="primary" size="lg">
+            <ImageIcon />
+          </Button.Icon>
+          <Typography className="text-neutral-800">Add Image</Typography>
+          <Typography className="text-center font-light text-neutral-600">
+            Image size must be smaller than 25MB
+            <br />
+            with 4:3 aspect ratio
+          </Typography>
+        </div>
+      </RHFImageInput>
+
       <div className="w-full">
         <RHFInputField
           name="thankyou.title"
