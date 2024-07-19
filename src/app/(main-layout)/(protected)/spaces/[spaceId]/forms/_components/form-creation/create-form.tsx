@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { cloneElement } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -21,10 +21,17 @@ import ThankYouForm from './thank-you-form';
 import { title } from 'process';
 import CustomizeForm from './customize-form';
 import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/sections/options';
+import { Check, FileText, Paintbrush, Paintbrush2 } from 'lucide-react';
+import { useAppStore } from '@/stores/app.store';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
 const tabLabels = ['Form', 'Thank You', 'Customize'];
+const tabIcons = {
+  0: <FileText />,
+  1: <Check />,
+  2: <Paintbrush2 />,
+};
 const CreateOrEditBusinessForm = ({
   open,
   currentForm,
@@ -36,6 +43,7 @@ const CreateOrEditBusinessForm = ({
 }) => {
   const spaceId = useParams()?.spaceId as string;
   const { t } = useTranslation('common');
+  const isMobile = useAppStore((state) => state.isMobile);
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditForm();
   const [tabValue, setTabValue] = React.useState<number>(0);
   const router = useRouter();
@@ -91,17 +99,26 @@ const CreateOrEditBusinessForm = ({
         <form id="form-create-form" onSubmit={handleSubmit(submit)}>
           <CreateFormHeader />
         </form>
-        <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-between gap-3 border-none max-md:gap-0 md:justify-start">
-          {[1, 2, 3].map((_, i) => (
-            <TabsTrigger
-              key={i}
-              value={i.toString()}
-              variant="button"
-              className="rounded-t-lg bg-white"
-            >
-              {tabLabels[i]}
-            </TabsTrigger>
-          ))}
+        <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
+          {[0, 1, 2].map((i) => {
+            const isSelected = tabValue === i;
+            return (
+              <TabsTrigger
+                key={i}
+                value={i.toString()}
+                variant="button"
+                className={cn('rounded-t-lg bg-white max-md:w-fit max-md:px-3')}
+              >
+                {isSelected
+                  ? isMobile
+                    ? cloneElement(tabIcons[i as keyof typeof tabIcons], {
+                        size: 24,
+                      })
+                    : tabLabels[i]
+                  : tabLabels[i]}
+              </TabsTrigger>
+            );
+          })}
         </TabsList>
         <section
           className={cn(

@@ -46,14 +46,16 @@ const CustomizeForm = () => {
   return (
     <div className="flex h-full w-full flex-col  gap-10">
       <div className="flex h-fit w-full cursor-pointer flex-col items-start justify-start gap-3">
-        <Typography className="font-bold text-neutral-800">Layout</Typography>
+        <FormLabel className="font-bold text-neutral-800  dark:text-neutral-50">
+          Layout
+        </FormLabel>
         <RadioGroup
-          className="flex w-full flex-row gap-4"
+          className="flex w-full flex-col gap-3 md:flex-row md:gap-4"
           value={watch('customize.layout')}
         >
           <div
             onClick={() => setValue('customize.layout', 'single')}
-            className="flex flex-1  cursor-pointer flex-row items-center justify-between gap-3 rounded-[12px] bg-primary-100 p-5"
+            className="flex flex-1  cursor-pointer flex-row items-center justify-between gap-3 rounded-[12px] bg-primary-100 p-4 md:p-5"
           >
             <div className="flex flex-row items-center justify-start gap-3">
               <Image
@@ -81,7 +83,7 @@ const CustomizeForm = () => {
 
           <div
             onClick={() => setValue('customize.layout', 'multiple')}
-            className="flex flex-1 cursor-pointer flex-row items-center  justify-between  gap-3 rounded-[12px] bg-primary-100 p-5"
+            className="flex flex-1 cursor-pointer flex-row items-center  justify-between  gap-3 rounded-[12px] bg-primary-100 p-4 md:p-5"
           >
             <div className="flex flex-row items-center justify-start gap-3">
               <Image
@@ -114,6 +116,7 @@ const CustomizeForm = () => {
         </FormLabel>
         <div className="flex w-fit flex-row">
           <RHFColorSelector
+            itemProps={{ className: 'max-md:[&_svg]:size-7' }}
             colorNameField="customize.theme"
             selectedColor={selectedColor}
             listColors={formColors.map((color) => color.hex)}
@@ -127,13 +130,17 @@ const CustomizeForm = () => {
         </FormLabel>
         <div className="grid w-full grid-cols-2  gap-3 md:grid-cols-5">
           {Array.from({ length: 10 }).map((_, index) => {
-            const src = `/forms/bg-form-${index + 1}.png`;
+            const src = `/forms/bg-form-${index + 1}.svg`;
             const isSelect = watch('customize.background') === src;
             return (
               <div
                 key={index}
                 className="relative flex aspect-[1.75] size-full cursor-pointer rounded-[12px]"
-                style={{ backgroundImage: `url(${src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+                style={{
+                  backgroundImage: `url(${src})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }}
                 onClick={() => setValue('customize.background', src)}
               >
                 <Check
