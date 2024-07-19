@@ -14,7 +14,7 @@ import ActionAddMembers from './actions/action-add-members';
 import ActionChat from './actions/action-chat';
 import InviteTooltip from './invite-tooltip';
 import DropdownActions from './actions/dropdown-actions';
-import getUserStream from '../../utils/get-user-stream';
+import getUserStream, { ResponseUserMedia } from '../../utils/get-user-stream';
 import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
 import { useVideoSettingStore } from '../../store/video-setting.store';
@@ -109,11 +109,11 @@ export default function VideoCallActions({
     }
     let myVideoStream: MediaStream = new MediaStream();
     getUserStream({isTurnOnCamera: video, isTurnOnMic: true, cameraDeviceId: videoSetting?.deviceId || undefined, micDeviceId: audioSetting?.deviceId || undefined})
-      .then((stream: MediaStream) => {
-        myVideoStream = stream;
+      .then(({stream, isTurnOnMic, isTurnOnCamera}: ResponseUserMedia) => {
+        setTurnOnMic(isTurnOnMic)
+        setTurnOnCamera(isTurnOnCamera)
         setLoadingVideo(false);
-        setTurnOnCamera(video);
-        setTurnOnMic(audio);
+        myVideoStream = stream ? stream : myVideoStream;
         if (!audio && myVideoStream.getAudioTracks().length > 0) {
           myVideoStream.getAudioTracks().forEach((track) => {
             track.enabled = false;
@@ -127,7 +127,7 @@ export default function VideoCallActions({
       })
       .catch(() => {
         customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
-        setLoadingVideo(false);
+        // setLoadingVideo(false);
       })
       .finally(() => {
       });

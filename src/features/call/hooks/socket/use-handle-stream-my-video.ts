@@ -8,7 +8,7 @@ import DEFAULT_USER_CALL_STATE from "../../constant/default-user-call-state";
 import toast from "react-hot-toast";
 import ParticipantInVideoCall from "../../interfaces/participant";
 import { createPeer } from "../../utils/peer-action.util";
-import getUserStream from "../../utils/get-user-stream";
+import getUserStream, { ResponseUserMedia } from "../../utils/get-user-stream";
 import { useTranslation } from "react-i18next";
 import { SOCKET_CONFIG } from "@/configs/socket";
 import { useVideoSettingStore } from "../../store/video-setting.store";
@@ -43,11 +43,11 @@ export default function useHandleStreamMyVideo() {
         setLoadingStream(true);
         // Start get streaming
         getUserStream({isTurnOnCamera: isTurnOnCamera, isTurnOnMic: isTurnOnMic, cameraDeviceId: video?.deviceId || undefined, micDeviceId: audio?.deviceId || undefined})
-        .then((stream: MediaStream) => {
-            myVideoStream = stream;
+        .then(({stream, isTurnOnMic, isTurnOnCamera}: ResponseUserMedia) => {
+            setTurnOnCamera(isTurnOnCamera);
+            setTurnOnMic(isTurnOnMic);
+            myVideoStream = stream ? stream : myVideoStream;
         }).catch(_ =>  {
-            setTurnOnCamera(false);
-            setTurnOnMic(false);
             customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         }).finally(() => {
             setMyStream(myVideoStream);

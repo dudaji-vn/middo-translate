@@ -25,7 +25,7 @@ export default function useHandleCallStatus() {
             status: isTurnOnMic,
             roomId: room._id
         });
-    }, [isTurnOnMic, room, user?._id, participants?.length])
+    }, [isTurnOnMic, room, user?._id])
 
 
     // Listen to Mic change

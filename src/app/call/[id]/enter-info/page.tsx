@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { useAppStore } from '@/stores/app.store';
 import Image from 'next/image';
-import getUserStream from '@/features/call/utils/get-user-stream';
+import getUserStream, { ResponseUserMedia } from '@/features/call/utils/get-user-stream';
 import customToast from '@/utils/custom-toast';
 import JoinCallForm from './_component/join-call-form';
 
@@ -34,21 +34,18 @@ export default function CallEnterInfo() {
             isTurnOnCamera: true,
             isTurnOnMic: true,
         })
-        .then((stream: MediaStream) => {
-            myVideoStream = stream;
-            setTurnOnMic(true);
-            setTurnOnCamera(true);
+        .then(({stream, isTurnOnMic, isTurnOnCamera}: ResponseUserMedia) => {
+            setTurnOnCamera(isTurnOnCamera);
+            setTurnOnMic(isTurnOnMic);
+            myVideoStream = stream ? stream : myVideoStream;
+            setMyStream(myVideoStream);
         })
         .catch((_) => {
-            setTurnOnCamera(false);
-            setTurnOnMic(false);
             customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
         })
-        .finally(() => {
-            setMyStream(myVideoStream);
-        });
+        .finally(() => {});
         return () => {
-            myVideoStream.getTracks().forEach((track) => {
+            myVideoStream?.getTracks().forEach((track) => {
                 track.stop();
             });
         }
