@@ -68,10 +68,10 @@ const Page = ({
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const forms: BusinessForm[] = data?.items || [];
+  const forms: BusinessForm[] = data || [];
   if (modal === 'create') {
     return (
-      <div className="flex h-screen flex-col  overflow-hidden background-business-forms ">
+      <div className="background-business-forms flex h-screen  flex-col overflow-hidden ">
         <CreateOrEditBusinessForm open={true} />
       </div>
     );
@@ -79,7 +79,7 @@ const Page = ({
   return (
     <>
       <FormsList
-        forms={forms}
+        forms={forms || []}
         onSearchChange={onSearchChange}
         search={search}
         isLoading={isLoading}

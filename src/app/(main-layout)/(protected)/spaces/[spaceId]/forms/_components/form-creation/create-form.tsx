@@ -79,6 +79,12 @@ const CreateOrEditBusinessForm = ({
     console.log('data submit:>>', data);
     const payload = {
       ...data,
+      formFields: data.formFields.map((field: any) => {
+        return {
+          ...field,
+          options: field.options?.map(({ value }: { value: string }) => value),
+        };
+      }),
       spaceId,
     };
     try {
@@ -87,11 +93,12 @@ const CreateOrEditBusinessForm = ({
     } catch (error) {
       // @ts-ignore
       const messages = error?.response?.data?.message;
-      if (messages) {
-        const combinedMessage = messages.join('\n');
+      if (messages?.length && typeof messages === 'object') {
+        const combinedMessage =
+          messages?.join('\n') || 'Error while creating form';
         toast.error(combinedMessage);
       } else {
-        toast.error('Error while creating form');
+        toast.error(messages || 'Error while creating form');
       }
     }
   };
