@@ -23,6 +23,7 @@ import CustomizeForm from './customize-form';
 import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/sections/options';
 import { Check, FileText, Paintbrush, Paintbrush2 } from 'lucide-react';
 import { useAppStore } from '@/stores/app.store';
+import { useBusinessNavigationData } from '@/hooks';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -41,7 +42,7 @@ const CreateOrEditBusinessForm = ({
   currentForm?: BusinessForm;
   viewOnly?: boolean;
 }) => {
-  const spaceId = useParams()?.spaceId as string;
+  const { spaceId } = useBusinessNavigationData();
   const { t } = useTranslation('common');
   const isMobile = useAppStore((state) => state.isMobile);
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditForm();
@@ -74,9 +75,10 @@ const CreateOrEditBusinessForm = ({
   } = form;
 
   const submit = async (data: any) => {
-    console.log('data', data);
+    console.log('data submit:>>', data);
     const payload = {
       ...data,
+      spaceId,
     };
     try {
       await mutateAsync(payload);

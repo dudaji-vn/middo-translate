@@ -7,24 +7,19 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  Label,
 } from '@/components/data-display';
 
 import { cn } from '@/utils/cn';
 import { Button, CopyZoneClick } from '@/components/actions';
 import {
-  Calendar,
-  Check,
   ChevronDown,
   Circle,
-  Clock,
   CopyCheck,
   CopyIcon,
   GripVertical,
   ImageIcon,
   Plus,
   SquareCheck,
-  Trash,
   Trash2,
   Type,
 } from 'lucide-react';
@@ -36,7 +31,7 @@ import {
   AccordionTrigger,
 } from '@/components/data-display/accordion';
 import { Typography } from '@/components/data-display';
-import { FormField, FormFieldDataTypes, FormFieldType } from './schema';
+import { FormFieldDataTypes, FormFieldType } from './schema';
 import { Switch } from '@/components/data-entry';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { isEqual } from 'lodash';
@@ -45,7 +40,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
-import { FormLabel } from '@/components/ui/form';
+import { FormControl, FormField, FormLabel } from '@/components/ui/form';
+import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
 
 const fieldOptions = [
   {
@@ -68,7 +64,7 @@ const typeIcons: Record<FormFieldType, React.ReactElement> = {
 };
 
 const TypeSelection = ({ field, index }: { field: any; index: number }) => {
-  const { setValue, watch } = useFormContext();
+  const { setValue, watch, control, formState } = useFormContext();
 
   const inputTypes: Array<{ type: FormFieldDataTypes; label: string }> = [
     {
@@ -96,39 +92,60 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
   };
 
   return (
-    <div className="flex flex-col gap-3 px-5 pt-3">
-      <DropdownMenu>
-        <DropdownMenuTrigger className="w-full">
-          <Button
-            size={'md'}
-            color={'default'}
-            shape={'square'}
-            className="flex w-full flex-row items-center justify-between gap-1 font-normal"
-            endIcon={<ChevronDown className="h-4 w-4" />}
-          >
-            {inputTypes.find((type) => type.type === current)?.label ||
-              'Select input type'}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] dark:border-neutral-800  dark:bg-neutral-900 ">
-          {inputTypes.map((type) => {
-            return (
-              <DropdownMenuItem
-                key={type.type}
-                onClick={() => {
-                  onTypeChange(type.type);
-                }}
-              >
-                <div className="flex flex-row items-center gap-2">
-                  <Typography className="font-semibold ">
-                    {type.label}
-                  </Typography>
-                </div>
-              </DropdownMenuItem>
-            );
-          })}
-        </DropdownMenuContent>
-      </DropdownMenu>
+    <div className="flex flex-col gap-3 px-5 ">
+      <FormField
+        name={`formFields[${index}].dataType`}
+        control={control}
+        render={({ field, fieldState: { invalid } }) => {
+          return (
+            <RHFFormItem formLabel={'Answer Type'}>
+              <FormControl>
+                <DropdownMenu
+                  {...{
+                    ...field,
+                    isError: invalid,
+                  }}
+                >
+                  <DropdownMenuTrigger className="w-full">
+                    <Button
+                      size={'md'}
+                      color={'default'}
+                      shape={'square'}
+                      className="flex w-full flex-row items-center justify-between gap-1 font-normal"
+                      endIcon={<ChevronDown className="h-4 w-4" />}
+                    >
+                      {inputTypes.find((type) => type.type === current)
+                        ?.label || 'Select input type'}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-[--radix-dropdown-menu-trigger-width] dark:border-neutral-800  dark:bg-neutral-900 ">
+                    {inputTypes.map((type) => {
+                      return (
+                        <DropdownMenuItem
+                          key={type.type}
+                          onClick={() => {
+                            onTypeChange(type.type);
+                          }}
+                        >
+                          <div className="flex flex-row items-center gap-2">
+                            <Typography className="font-semibold ">
+                              {type.label}
+                            </Typography>
+                          </div>
+                        </DropdownMenuItem>
+                      );
+                    })}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </FormControl>
+            </RHFFormItem>
+          );
+        }}
+      />
+
+      {/* <FormLabel className="inline-block text-[1rem] font-normal text-neutral-900 dark:text-neutral-50">
+        Answer Type
+      </FormLabel> */}
     </div>
   );
 };
@@ -286,10 +303,15 @@ const RenderField = ({
   expand?: boolean;
   onRemoveField?: () => void;
 }) => {
-  const { control, watch, setValue } = useFormContext();
+  const { control, watch, setValue, formState } = useFormContext();
   const { type, name } = field || {};
   const [dragable, setDragable] = React.useState(true);
-
+  const hasErrors = useMemo(() => {
+    console.log('hasErrors: ', formState.errors);
+    return Object.keys(formState.errors).some((key) =>
+      key.startsWith(`formFields[${index}]`),
+    );
+  }, [formState.errors, index]);
   const previewContent =
     watch(`formFields[${index}].label`) || 'Your question here';
   return (
@@ -357,6 +379,7 @@ const RenderField = ({
                 </Button.Icon>
                 <AccordionTrigger
                   className="flex flex-row items-center gap-2"
+                  disabled={hasErrors}
                   icon={
                     <ChevronDown
                       size={16}
@@ -418,8 +441,10 @@ const RenderField = ({
           </AccordionItem>
 
           {!expand && (
-            <div className="p-2 transition-all delay-200">
-              <pre>{previewContent}</pre>
+            <div className="p-2 px-3 transition-all delay-200">
+              <pre className=" text-base leading-[18px] tracking-tight text-neutral-800">
+                {previewContent}
+              </pre>
             </div>
           )}
         </li>
@@ -534,6 +559,7 @@ function ArrayFields() {
                     onAddField({
                       name: `${option.label}`,
                       type: option.value,
+                      dataType: 'text',
                       required: true,
                       options: [],
                     });
