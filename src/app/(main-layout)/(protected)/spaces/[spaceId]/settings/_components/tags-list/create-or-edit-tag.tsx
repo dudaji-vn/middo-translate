@@ -70,14 +70,14 @@ export const CreateOrEditTag = ({
     resolver: zodResolver(createOrEditTagSchema),
     defaultValues: initTag
       ? {
-        name: initTag.name,
-        color: initTag.color,
-        tagId: initTag._id,
-      }
+          name: initTag.name,
+          color: initTag.color,
+          tagId: initTag._id,
+        }
       : {
-        name: '',
-        color: DEFAULT_THEME,
-      },
+          name: '',
+          color: DEFAULT_THEME,
+        },
   });
   useEffect(() => {
     if (initTag && open) {
@@ -169,6 +169,7 @@ export const CreateOrEditTag = ({
                 />
               </div>
               <RHFColorSelector
+                defaultTheme={DEFAULT_THEME}
                 colorNameField="color"
                 selectedColor={tagColor}
               />
