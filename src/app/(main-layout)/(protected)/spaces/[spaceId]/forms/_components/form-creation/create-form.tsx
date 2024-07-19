@@ -24,6 +24,7 @@ import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/
 import { Check, FileText, Paintbrush, Paintbrush2 } from 'lucide-react';
 import { useAppStore } from '@/stores/app.store';
 import { useBusinessNavigationData } from '@/hooks';
+import toast from 'react-hot-toast';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -84,7 +85,14 @@ const CreateOrEditBusinessForm = ({
       await mutateAsync(payload);
       router.push(`/spaces/${spaceId}/forms`);
     } catch (error) {
-      console.error('Error while creating form', error);
+      // @ts-ignore
+      const messages = error?.response?.data?.message;
+      if (messages) {
+        const combinedMessage = messages.join('\n');
+        toast.error(combinedMessage);
+      } else {
+        toast.error('Error while creating form');
+      }
     }
   };
   const fields = watch('formFields');
