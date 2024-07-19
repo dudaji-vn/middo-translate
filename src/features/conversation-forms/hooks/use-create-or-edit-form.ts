@@ -11,8 +11,6 @@ export const useCreateOrEditForm = () => {
       customToast.success('Form saved successfully');
       queryClient.invalidateQueries([GET_CONVERSATION_FORMS_KEY]);
     },
-    onError: () => {
-      customToast.error('Failed to save forms');
-    },
+    onError: () => {},
   });
 };

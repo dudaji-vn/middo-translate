@@ -10,6 +10,7 @@ import { Button } from '@/components/actions';
 import { cn } from '@/utils/cn';
 import { ArrowLeft, Eye } from 'lucide-react';
 import { Typography } from '@/components/data-display';
+import toast from 'react-hot-toast';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -18,6 +19,7 @@ export const CreateFormHeader = () => {
   const { t } = useTranslation('common');
   const onPreviewClick = () => {
     // TODO: Implement preview
+    toast('Preview not implemented yet', { icon: '🚧', duration: 1000 });
   };
   return (
     <section
@@ -59,6 +61,7 @@ export const CreateFormHeader = () => {
           shape={'square'}
           color={'primary'}
           type="submit"
+          form="form-create-form"
         >
           {t('EXTENSION.FORM.ADD_FORM')}
         </Button>
