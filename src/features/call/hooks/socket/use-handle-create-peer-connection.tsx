@@ -14,16 +14,19 @@ import { User } from "@/features/users/types";
 import customToast from "@/utils/custom-toast";
 import { useBusinessNavigationData } from "@/hooks/use-business-navigation-data";
 import { useHelpDeskCallContext } from "@/features/help-desk/context/help-desk-call.context";
+import { useAuthStore } from "@/stores/auth.store";
 
 export default function useHandleCreatePeerConnection() {
     const {t} = useTranslation('common')
 
+    const user = useAuthStore(state => state.user);
     const setDoodle = useVideoCallStore(state => state.setDoodle);
     const setDoodleImage = useVideoCallStore(state => state.setDoodleImage);
     const setLayout = useVideoCallStore(state => state.setLayout);
     const isPinDoodle = useVideoCallStore(state => state.isPinDoodle);
     const setPinShareScreen = useVideoCallStore(state => state.setPinShareScreen);
-
+    const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
+    const room = useVideoCallStore(state => state.room);
     const participants = useParticipantVideoCallStore(state => state.participants);
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
     const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
@@ -38,7 +41,7 @@ export default function useHandleCreatePeerConnection() {
     const {businessData} = useHelpDeskCallContext();
 
     // SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT
-    const createPeerUserConnection = useCallback(({ users, doodleImage }: {users: { socketId: string; user: User }[], doodleImage: string}) => {
+    const createPeerUsersConnection = useCallback(({ users, doodleImage }: {users: { socketId: string; user: User }[], doodleImage: string}) => {
         if(!socket.id) return;
         if(users.length === 0) {
             setLoadingVideo(false);
@@ -96,6 +99,12 @@ export default function useHandleCreatePeerConnection() {
         };
         if (!payload.isShareScreen) {
             newUser.isTurnOnMic = payload.isTurnOnMic;
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, {
+                userId: user?._id,
+                status: isTurnOnMic,
+                roomId: room?._id,
+                directUserId: payload.user._id,
+            });
         }
 
         if (payload.isShareScreen) {
@@ -121,13 +130,13 @@ export default function useHandleCreatePeerConnection() {
         }
     // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[myStream, participants, addParticipant, updatePeerParticipant, updateParticipant, setLayout, isPinDoodle, setPinShareScreen])
+    },[myStream, participants, addParticipant, updatePeerParticipant, updateParticipant, setLayout, isPinDoodle, setPinShareScreen, user?._id, isTurnOnMic, room?._id])
 
     
     // useEffect when myStream change
     useEffect(() => {
         // Event receive list user
-        socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT, createPeerUserConnection);
+        socket.on(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT, createPeerUsersConnection);
         // Event when have new user join room or someone share screen (isShareScreen = true)
         socket.on(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED, addPeerUserConnection);
 
@@ -135,5 +144,5 @@ export default function useHandleCreatePeerConnection() {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.LIST_PARTICIPANT);
             socket.off(SOCKET_CONFIG.EVENTS.CALL.USER_JOINED);
         };
-    }, [addPeerUserConnection, createPeerUserConnection]);
+    }, [addPeerUserConnection, createPeerUsersConnection]);
 }
