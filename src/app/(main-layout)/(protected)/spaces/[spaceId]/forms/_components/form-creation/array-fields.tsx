@@ -7,6 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  Label,
 } from '@/components/data-display';
 
 import { cn } from '@/utils/cn';
@@ -44,6 +45,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/data-display/popover';
+import { FormLabel } from '@/components/ui/form';
 
 const fieldOptions = [
   {
@@ -71,7 +73,7 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
   const inputTypes: Array<{ type: FormFieldDataTypes; label: string }> = [
     {
       type: 'text',
-      label: 'Text',
+      label: 'Plain Text',
     },
     {
       type: 'long-text',
@@ -118,7 +120,7 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
                 }}
               >
                 <div className="flex flex-row items-center gap-2">
-                  <Typography className="text-primary-500-main ">
+                  <Typography className="font-semibold ">
                     {type.label}
                   </Typography>
                 </div>

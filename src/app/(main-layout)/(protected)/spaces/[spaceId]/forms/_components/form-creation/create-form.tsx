@@ -20,6 +20,7 @@ import ArrayFields from './array-fields';
 import ThankYouForm from './thank-you-form';
 import { title } from 'process';
 import CustomizeForm from './customize-form';
+import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/sections/options';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -39,10 +40,16 @@ const CreateOrEditBusinessForm = ({
   const [tabValue, setTabValue] = React.useState<number>(0);
   const router = useRouter();
 
+  const DEFAULT_FORM_BG = '/forms/bg-form-1.svg';
   const form = useForm<TFormFormValues>({
     mode: 'onChange',
     defaultValues: {
       name: currentForm?.name || 'Untitled Form',
+      customize: {
+        layout: 'single',
+        background: DEFAULT_FORM_BG,
+        theme: DEFAULT_THEME,
+      },
       thankyou: {
         title: 'Thank you',
         subtitle: 'for submitting our form',
@@ -84,7 +91,6 @@ const CreateOrEditBusinessForm = ({
         <form id="form-create-form" onSubmit={handleSubmit(submit)}>
           <CreateFormHeader />
         </form>
-
         <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-between gap-3 border-none max-md:gap-0 md:justify-start">
           {[1, 2, 3].map((_, i) => (
             <TabsTrigger
