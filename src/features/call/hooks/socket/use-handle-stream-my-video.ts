@@ -84,17 +84,12 @@ export default function useHandleStreamMyVideo() {
         participants.forEach((p: ParticipantInVideoCall) => {
             if(!p.peer || p.isShareScreen) return;
             // console.log('Add my stream to all participants===============================')
-            p.peer.destroy();
+            // p.peer.destroy();
             const newPeer = createPeer(myStream);
             updatePeerParticipant(newPeer, p.socketId)
             // p.peer.addStream(myStream);
         })
-        return () => {
-            if(!myStream) return;
-            myStream.getTracks().forEach((track) => {
-                track.stop();
-            });
-        }
+        return () => {}
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [myStream])
 
