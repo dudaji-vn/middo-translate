@@ -14,6 +14,7 @@ const formFieldSchema = z
     required: z.boolean().default(false),
     options: z.array(
       z.object({
+        media: z.any().optional(),
         value: z.string().min(1, { message: 'Option content is required' }),
       }),
     ),
