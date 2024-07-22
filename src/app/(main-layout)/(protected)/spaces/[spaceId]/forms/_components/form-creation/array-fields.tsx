@@ -22,6 +22,7 @@ import {
   SquareCheck,
   Trash2,
   Type,
+  X,
 } from 'lucide-react';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import {
@@ -42,6 +43,9 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
+import RHFImageInput from '@/components/form/RHF/RHFImageInput/RHFImageInput';
+import { MediaItem } from '@/features/chat/messages/components/message-editor/attachment-selection';
+import Image from 'next/image';
 
 const fieldOptions = [
   {
@@ -157,14 +161,14 @@ const FieldOptions = ({
   disableParentDrag: () => void;
   enableParentDrag: () => void;
 }) => {
-  const { control, formState } = useFormContext();
-  const { fields, append, remove, swap } = useFieldArray({
+  const { control, formState, watch } = useFormContext();
+  const { fields, append, remove, swap, update } = useFieldArray({
     control,
     name: `formFields[${index}].options`,
   });
 
   const hasOtherOption = useMemo(
-    () => fields.some((option: any) => option?.value === 'Other'),
+    () => fields.some((option: any) => option?.['value'] === 'Other'),
     [fields],
   );
 
@@ -193,6 +197,13 @@ const FieldOptions = ({
               {fields.map((option: any, optionIndex) => {
                 const disabled =
                   hasOtherOption && option?.['value'] === 'Other';
+                const alreadyHasImage = !!option?.['image'];
+                const canHaveImage =
+                  option?.['value'] !== 'Other' && !alreadyHasImage;
+                const media = watch(
+                  `formFields[${index}].options[${optionIndex}].media`,
+                );
+                console.log('media', media);
                 return (
                   <Draggable
                     key={option.id}
@@ -205,7 +216,7 @@ const FieldOptions = ({
                         {...draggableProvider.draggableProps}
                         {...draggableProvider.dragHandleProps}
                         className={cn(
-                          'flex w-full flex-row items-start  justify-between gap-2  px-5  py-2 ',
+                          'flex w-full flex-col items-start  justify-between gap-2  px-5  py-2 ',
                           'field' + field.id,
                         )}
                       >
@@ -213,7 +224,7 @@ const FieldOptions = ({
                           name={`formFields[${index}].options[${optionIndex}].value`}
                           formItemProps={{ className: 'w-full' }}
                           inputProps={{
-                            placeholder: 'Enter field name',
+                            placeholder: 'Enter option',
                             className: cn(
                               'capitalize',
                               disabled && 'bg-neutral-50',
@@ -230,13 +241,29 @@ const FieldOptions = ({
                             ),
                             rightElement: (
                               <>
-                                <Button.Icon
-                                  variant="ghost"
-                                  color="default"
-                                  size="xs"
-                                >
-                                  <ImageIcon />
-                                </Button.Icon>
+                                {canHaveImage && (
+                                  <RHFImageInput
+                                    nameField={`formFields[${index}].options[${optionIndex}].media`}
+                                    onUploadDone={() => {}}
+                                    cropperProps={{
+                                      className: '',
+                                      aspectRatio: 1,
+                                      initialAspectRatio: 1,
+                                    }}
+                                    previewProps={{
+                                      className: 'hidden',
+                                    }}
+                                  >
+                                    <Button.Icon
+                                      variant="ghost"
+                                      color="default"
+                                      size="xs"
+                                    >
+                                      <ImageIcon />
+                                    </Button.Icon>
+                                  </RHFImageInput>
+                                )}
+
                                 <Button.Icon
                                   variant="ghost"
                                   color="error"
@@ -252,6 +279,32 @@ const FieldOptions = ({
                             },
                           }}
                         />
+                        {media && (
+                          <div className="relative ml-14 flex aspect-square w-20 rounded-lg">
+                            <Image
+                              src={media}
+                              alt={`Option ${optionIndex + 1} image`}
+                              key={media}
+                              width={40}
+                              height={40}
+                              className="size-full rounded-lg"
+                            />
+                            <Button.Icon
+                              variant="default"
+                              color={'default'}
+                              size="ss"
+                              className="absolute right-1 top-1"
+                              onClick={() => {
+                                update(optionIndex, {
+                                  value: option.value,
+                                  media: null,
+                                });
+                              }}
+                            >
+                              <X />
+                            </Button.Icon>
+                          </div>
+                        )}
                       </li>
                     )}
                   </Draggable>
@@ -471,15 +524,15 @@ function ArrayFields() {
     'recently-added' | 'recently-removed' | string
   >();
 
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: 'formFields',
-    },
-  );
+  const { fields, append, remove, swap } = useFieldArray({
+    control,
+    name: 'formFields',
+  });
+
   const hasAnyError = Object.keys(errors).some((key) =>
     key.startsWith('formFields'),
   );
+
   const isAccordionOpen =
     fields.find((field) => field.id === accordionStatus) &&
     !!accordionStatus?.trim();
