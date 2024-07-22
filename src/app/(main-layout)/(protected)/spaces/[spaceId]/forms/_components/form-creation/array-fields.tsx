@@ -1,7 +1,7 @@
 'use client';
 
 import React, { cloneElement, useEffect, useMemo } from 'react';
-import { useFieldArray, useFormContext } from 'react-hook-form';
+import { FieldError, useFieldArray, useFormContext } from 'react-hook-form';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,13 +34,13 @@ import { Typography } from '@/components/data-display';
 import { FormFieldDataTypes, FormFieldType } from './schema';
 import { Switch } from '@/components/data-entry';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
-import { isEqual } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/data-display/popover';
-import { FormControl, FormField, FormLabel } from '@/components/ui/form';
+  FormControl,
+  FormField,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
 
 const fieldOptions = [
@@ -142,10 +142,6 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
           );
         }}
       />
-
-      {/* <FormLabel className="inline-block text-[1rem] font-normal text-neutral-900 dark:text-neutral-50">
-        Answer Type
-      </FormLabel> */}
     </div>
   );
 };
@@ -161,7 +157,7 @@ const FieldOptions = ({
   disableParentDrag: () => void;
   enableParentDrag: () => void;
 }) => {
-  const { control } = useFormContext();
+  const { control, formState } = useFormContext();
   const { fields, append, remove, swap } = useFieldArray({
     control,
     name: `formFields[${index}].options`,
@@ -178,6 +174,9 @@ const FieldOptions = ({
     }
     swap(result.source.index, result.destination.index);
   };
+
+  const optionsErrorMessage = (formState.errors?.formFields as any)?.[index]
+    ?.options?.message;
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -288,6 +287,13 @@ const FieldOptions = ({
           </Button>
         </div>
       </div>
+      <FormMessage
+        className={cn('text-normal pl-4 text-left font-normal text-red-500', {
+          hidden: !optionsErrorMessage,
+        })}
+      >
+        {String(optionsErrorMessage)}
+      </FormMessage>
     </DragDropContext>
   );
 };
@@ -454,19 +460,38 @@ const RenderField = ({
 };
 
 function ArrayFields() {
-  const { control, register } = useFormContext(); // retrieve all hook methods
-  const [open, setOpen] = React.useState(false);
+  const {
+    control,
+    register,
+    trigger,
+    formState: { errors },
+  } = useFormContext(); // retrieve all hook methods
+  const [openAddingField, setOpenAddingField] = React.useState(false);
   const [accordionStatus, setAccordionStatus] = React.useState<
     'recently-added' | 'recently-removed' | string
   >();
+
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
     {
       control,
       name: 'formFields',
     },
   );
-  const onOpen = () => setOpen(true);
-  const onClose = () => setOpen(false);
+  const hasAnyError = Object.keys(errors).some((key) =>
+    key.startsWith('formFields'),
+  );
+  const isAccordionOpen =
+    fields.find((field) => field.id === accordionStatus) &&
+    !!accordionStatus?.trim();
+  const onOpenAddingField = () => {
+    if (accordionStatus) {
+      return;
+    }
+    setOpenAddingField(true);
+  };
+  const onCloseAddingField = () => {
+    setOpenAddingField(false);
+  };
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) {
@@ -482,7 +507,30 @@ function ArrayFields() {
     if (fields.length > 0 && accordionStatus === 'recently-added') {
       setAccordionStatus(fields[fields.length - 1].id);
     }
-  }, [fields]);
+  }, [accordionStatus, fields]);
+
+  const handleAccordionChange = (props: string | undefined) => {
+    if (!props) {
+      const currentField = fields.indexOf(
+        // @ts-ignore
+        fields.find((field) => field?.id === accordionStatus),
+      );
+      // @ts-ignore
+      const currentErrors = errors?.formFields?.[currentField as number];
+      console.log('currentErrors', currentErrors);
+      if (!isEmpty(currentErrors)) {
+        setAccordionStatus(props);
+        return;
+      }
+      trigger(`formFields[${currentField}]`).then((isValid) => {
+        if (isValid) {
+          setAccordionStatus(props);
+        }
+      });
+      return;
+    }
+    setAccordionStatus(props);
+  };
 
   return (
     <div className="flex h-auto w-full flex-col gap-2">
@@ -498,9 +546,7 @@ function ArrayFields() {
                 type="single"
                 collapsible
                 className="flex flex-col gap-5 "
-                onValueChange={(props) => {
-                  setAccordionStatus(props);
-                }}
+                onValueChange={handleAccordionChange}
                 value={accordionStatus}
               >
                 {fields.map((field, index) => (
@@ -508,9 +554,13 @@ function ArrayFields() {
                     key={field.id}
                     field={field}
                     index={index}
-                    // expand={Object.values(accordionStatus).includes(field.id)}
                     expand={isEqual(accordionStatus, field.id)}
-                    onRemoveField={() => remove(index)}
+                    onRemoveField={() => {
+                      if (isEqual(accordionStatus, field.id)) {
+                        setAccordionStatus(undefined);
+                      }
+                      remove(index);
+                    }}
                   />
                 ))}
               </Accordion>
@@ -521,96 +571,60 @@ function ArrayFields() {
       </DragDropContext>
       <div
         className={cn('p-2transition-all flex flex-row gap-3 duration-700')}
-        onMouseLeave={onClose}
+        onMouseLeave={onCloseAddingField}
       >
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button.Icon color={'secondary'} size={'xs'} onMouseEnter={onOpen}>
-              <Plus
-                size={18}
-                className={cn(
-                  'transition-all duration-500',
-                  open ? 'rotate-180' : 'rotate-0',
-                )}
-              />
-            </Button.Icon>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            side="bottom"
-            sideOffset={-30}
+        <Button.Icon
+          disabled={isAccordionOpen || hasAnyError}
+          variant={'default'}
+          color={'secondary'}
+          size={'xs'}
+          onMouseEnter={onOpenAddingField}
+        >
+          <Plus
+            size={18}
             className={cn(
-              'size-fit border-none bg-transparent py-0 pl-12 shadow-none  !delay-0',
-              open ? '!duration-100' : '!duration-500',
+              'transition-all duration-500',
+              openAddingField ? 'rotate-180' : 'rotate-0',
+            )}
+          />
+        </Button.Icon>
+        <div onMouseLeave={onCloseAddingField} className="">
+          <div
+            className={cn(
+              'h-auto w-fit origin-top-left space-y-2  rounded-[12px] border border-dashed border-primary-500-main  bg-transparent p-2 shadow-[2px_4px_16px_2px_#1616161A] transition-all  duration-500',
+              openAddingField ? 'scale-100' : 'scale-0',
+              'absolute  bg-white',
             )}
           >
-            <div
-              className={cn(
-                'size-fit !origin-top-left space-y-2 rounded-[12px]   border border-dashed border-primary-500-main bg-white  p-2 shadow-[2px_4px_16px_2px_#1616161A]   duration-500',
-                open ? '!scale-100 duration-500' : '!scale-0',
-              )}
-            >
-              {fieldOptions.map((option) => (
-                <Button
-                  key={option.value}
-                  size={'xs'}
-                  color="default"
-                  onClick={() => {
-                    onAddField({
-                      name: `${option.label}`,
-                      type: option.value,
-                      dataType: 'text',
-                      required: true,
-                      options: [],
-                    });
-                    setOpen(false);
-                  }}
-                  className="flex h-10 w-full flex-row justify-start gap-2"
-                  shape={'square'}
-                >
-                  {cloneElement(
-                    typeIcons[option.value as keyof typeof typeIcons],
-                    {
-                      className: ' size-5',
-                    },
-                  )}
-                  {option.label}
-                </Button>
-              ))}
-            </div>
-          </PopoverContent>
-        </Popover>
-        {/* <div
-          onMouseLeave={onClose}
-          className={cn(
-            'h-auto w-fit origin-top-left space-y-2  rounded-[12px] border border-dashed border-primary-500-main  bg-transparent p-2 shadow-[2px_4px_16px_2px_#1616161A] transition-all  duration-500',
-            open ? 'scale-100' : 'scale-0',
-          )}
-        >
-          {fieldOptions.map((option) => (
-            <Button
-              key={option.value}
-              size={'xs'}
-              color="default"
-              onClick={() => {
-                onAddField({
-                  name: `${option.label}`,
-                  type: option.value,
-                  required: false,
-                  options: [],
-                });
-                setOpen(false);
-              }}
-              className="flex h-10 w-full flex-row justify-start gap-2"
-              shape={'square'}
-            >
-              {cloneElement(typeIcons[option.value as keyof typeof typeIcons], {
-                className: ' size-5',
-              })}
-              {option.label}
-            </Button>
-          ))}
-        </div> */}
+            {fieldOptions.map((option) => (
+              <Button
+                key={option.value}
+                size={'xs'}
+                color="default"
+                onClick={() => {
+                  onAddField({
+                    name: `${option.label}`,
+                    type: option.value,
+                    dataType: 'text',
+                    required: true,
+                    options: [],
+                  });
+                  setOpenAddingField(false);
+                }}
+                className="flex h-10 w-full flex-row justify-start gap-2"
+                shape={'square'}
+              >
+                {cloneElement(
+                  typeIcons[option.value as keyof typeof typeIcons],
+                  {
+                    className: ' size-5',
+                  },
+                )}
+                {option.label}
+              </Button>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

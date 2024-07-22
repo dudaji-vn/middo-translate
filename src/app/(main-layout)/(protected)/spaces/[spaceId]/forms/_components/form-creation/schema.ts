@@ -3,20 +3,36 @@ import { z } from 'zod';
 const dataTypes = z.enum(['text', 'long-text', 'date', 'time']);
 const formFieldTypeSchema = z.enum(['input', 'checkbox', 'radio']);
 
-const formFieldSchema = z.object({
-  name: z.string().min(1, { message: 'Data-Name is required' }),
-  dataType: dataTypes,
-  type: formFieldTypeSchema,
-  label: z.string().min(1, { message: 'Label is required' }),
-  required: z.boolean().default(false),
-  options: z
-    .array(
+const formFieldSchema = z
+  .object({
+    _id: z.string().optional(),
+    id: z.string().optional(),
+    name: z.string().min(1, { message: 'Data-Name is required' }),
+    dataType: dataTypes,
+    type: formFieldTypeSchema,
+    label: z.string().min(1, { message: 'Label is required' }),
+    required: z.boolean().default(false),
+    options: z.array(
       z.object({
         value: z.string().min(1, { message: 'Option content is required' }),
       }),
-    )
-    .optional(),
-});
+    ),
+  })
+  .refine(
+    (field) => {
+      if (
+        (field.type === 'checkbox' || field.type === 'radio') &&
+        field.options.length < 1
+      ) {
+        return false;
+      }
+      return true;
+    },
+    {
+      path: ['options'],
+      message: 'At least 1 options are required',
+    },
+  );
 
 const customizeFormSchema = z.object({
   theme: z.string().optional(),
