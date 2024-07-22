@@ -74,7 +74,7 @@ export default function VideoCallActions({
     if(isLoadingStream) return;
 
     // CASE: No change in camera
-    if (video && isTurnOnCamera && myStream.getVideoTracks().length > 0 && audio) {
+    if (video && isTurnOnCamera && myStream.getVideoTracks().length > 0) {
       console.log('video-call-actions.tsx - Line 48 :: No change in camera');
       myStream.getAudioTracks().forEach((track) => {
         track.enabled = audio || false;
