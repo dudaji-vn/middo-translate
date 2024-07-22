@@ -18,7 +18,7 @@ const DeleteFormModal = ({
   const { title, description, idsToDelete } = useMemo(() => {
     return {
       title: 'Delete selected forms',
-      description: `Are you sure you want to delete ${formIds.length} form${formIds.length > 1 ? 's' : ''}?`,
+      description: `Are you sure you want to delete selected form?`,
       idsToDelete: formIds,
     };
   }, [formIds]);

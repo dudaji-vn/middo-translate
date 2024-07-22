@@ -16,6 +16,7 @@ const formFieldSchema = z
       z.object({
         media: z.any().optional(),
         value: z.string().min(1, { message: 'Option content is required' }),
+        type: z.enum(['default', 'other']).optional(),
       }),
     ),
   })
@@ -52,7 +53,7 @@ export const createBusinessFormSchema = z.object({
     .min(1, 'Please enter a form name'),
   description: z
     .string()
-    .max(100, 'Description is too long, max 100 characters')
+    .max(50, 'Description is too long, max 50 characters')
     .optional(),
   formFields: z.array(formFieldSchema).superRefine((fields, ctx) => {
     const pass = checkDuplicateFieldNames(fields);

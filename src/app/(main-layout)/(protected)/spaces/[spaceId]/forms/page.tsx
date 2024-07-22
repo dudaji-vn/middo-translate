@@ -68,7 +68,7 @@ const Page = ({
   const onPageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const forms: BusinessForm[] = data || [];
+  const forms: BusinessForm[] = data?.items || [];
   if (modal === 'create') {
     return (
       <div className="background-business-forms flex h-screen  flex-col overflow-hidden ">

@@ -46,6 +46,8 @@ import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
 import RHFImageInput from '@/components/form/RHF/RHFImageInput/RHFImageInput';
 import { MediaItem } from '@/features/chat/messages/components/message-editor/attachment-selection';
 import Image from 'next/image';
+import { t } from 'i18next';
+import { type } from 'os';
 
 const fieldOptions = [
   {
@@ -168,7 +170,7 @@ const FieldOptions = ({
   });
 
   const hasOtherOption = useMemo(
-    () => fields.some((option: any) => option?.['value'] === 'Other'),
+    () => fields.some((option: any) => option?.['value'] === 'other'),
     [fields],
   );
 
@@ -196,10 +198,10 @@ const FieldOptions = ({
             >
               {fields.map((option: any, optionIndex) => {
                 const disabled =
-                  hasOtherOption && option?.['value'] === 'Other';
+                  hasOtherOption && option?.['value'] === 'other';
                 const alreadyHasImage = !!option?.['image'];
                 const canHaveImage =
-                  option?.['value'] !== 'Other' && !alreadyHasImage;
+                  option?.['value'] !== 'other' && !alreadyHasImage;
                 const media = watch(
                   `formFields[${index}].options[${optionIndex}].media`,
                 );
@@ -317,7 +319,7 @@ const FieldOptions = ({
         <div className="flex flex-row gap-2">
           <div className="invisible w-6" />
           <Button
-            onClick={() => append({ value: '' })}
+            onClick={() => append({ value: '', type: 'default' })}
             color={'secondary'}
             shape={'square'}
             size={'xs'}
@@ -326,7 +328,7 @@ const FieldOptions = ({
             Add Option
           </Button>
           <Button
-            onClick={() => append({ value: 'Other' })}
+            onClick={() => append({ value: 'other', type: 'other' })}
             color={'default'}
             shape={'square'}
             size={'xs'}

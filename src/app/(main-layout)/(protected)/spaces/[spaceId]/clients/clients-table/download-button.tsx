@@ -1,6 +1,7 @@
 'use client';
 
-import { Button } from '@/components/actions';
+import { Button, ButtonProps } from '@/components/actions';
+import { cn } from '@/utils/cn';
 import { exportToExcel } from '@/utils/export';
 import { FileDown } from 'lucide-react';
 import moment from 'moment';
@@ -10,10 +11,13 @@ import { useTranslation } from 'react-i18next';
 const DownloadButton = ({
   data,
   colInfo,
+  ...props
 }: {
   data: any;
   colInfo: Array<{ name: string; width: number }>;
-}) => {
+} & Omit<ButtonProps, 'endIcon'> & {
+    endIcon?: any;
+  }) => {
   const { t } = useTranslation('common');
   const exportDataToExcel = async () => {
     try {
@@ -34,8 +38,9 @@ const DownloadButton = ({
       size={'md'}
       shape={'square'}
       color={'secondary'}
-      className="h-fit w-full max-md:p-2"
       startIcon={<FileDown />}
+      {...props}
+      className={cn('h-fit w-full max-md:p-2', props.className)}
       // className="w-fit relative cursor-pointer z-20 flex flex-row items-center text-primary-500-main  gap-2 rounded-xl bg-primary-200 px-3 py-1 active:!bg-primary-200 active:!text-shading md:hover:bg-neutral-100"
     >
       <span>{t('EXTENSION.CLIENT.EXPORT_XLSX')}</span>
