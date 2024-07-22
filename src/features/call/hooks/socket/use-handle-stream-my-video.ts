@@ -78,7 +78,7 @@ export default function useHandleStreamMyVideo() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, room?._id, room?.roomId, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, user?._id]);
 
-    // Add my stream to all participants
+    // on my stream change
     useEffect(()=>{
         if(!myStream) return;
         participants.forEach((p: ParticipantInVideoCall) => {
