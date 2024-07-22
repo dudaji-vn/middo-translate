@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
                     <div
                       className={
                         header.column.getCanSort()
-                          ? 'flex cursor-pointer select-none flex-row items-center gap-2 text-neutral-400 dark:text-neutral-50'
+                          ? 'flex cursor-pointer select-none flex-row items-center gap-2 text-neutral-800 dark:text-neutral-50'
                           : ''
                       }
                       onClick={header.column.getToggleSortingHandler()}

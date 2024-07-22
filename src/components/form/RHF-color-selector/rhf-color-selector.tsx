@@ -54,7 +54,7 @@ const RHFColorSelector = ({
       <div
         {...gridContainerProps}
         className={cn(
-          'md:grid-cols-14 xl:grid-cols-16 2xl:grid-cols-20 grid  grid-flow-row grid-cols-4 sm:grid-cols-8 lg:grid-cols-8 ',
+          'md:grid-cols-14 xl:grid-cols-16 2xl:grid-cols-20 grid  grid-flow-row grid-cols-8 lg:grid-cols-8 ',
           gridContainerProps?.className,
         )}
       >

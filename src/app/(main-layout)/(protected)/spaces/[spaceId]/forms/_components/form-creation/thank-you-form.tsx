@@ -2,6 +2,7 @@ import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { Switch } from '@/components/data-entry';
 import RHFImageInput from '@/components/form/RHF/RHFImageInput/RHFImageInput';
+import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
 import { ImageIcon } from 'lucide-react';
 import React from 'react';
@@ -75,23 +76,23 @@ const ThankYouForm = () => {
         <RHFInputField
           name="thankyou.title"
           formItemProps={{
-            className: hasHeading ? 'w-full' : 'hidden',
+            className: hasHeading ? 'w-full px-5' : 'hidden',
           }}
           inputProps={{
             placeholder: 'Thank you',
             className:
-              'p-0 text-3xl text-center outline-none  border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
+              'p-0 text-3xl text-center  outline-none  border-none focus:ring-1 focus:ring-primary-500-main !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
           }}
         />
         <RHFInputField
           name="thankyou.subtitle"
           formItemProps={{
-            className: hasParagraph ? 'w-full' : 'hidden',
+            className: hasParagraph ? 'w-full px-5' : 'hidden',
           }}
           inputProps={{
             placeholder: 'for submitting our form',
             className:
-              'p-0 text-center outline-none border-none !bg-transparent text-neutral-800 dark:text-neutral-50',
+              'p-2 text-center  outline-none  border-none  !bg-transparent focus:ring-1 focus:ring-primary-500-main rounded-[12px] text-neutral-800 dark:text-neutral-50',
           }}
         />
       </div>

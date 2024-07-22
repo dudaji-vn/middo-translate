@@ -1,6 +1,10 @@
 'use client';
 
-import type { DetailedHTMLProps, ReactNode, TextareaHTMLAttributes } from 'react';
+import type {
+  DetailedHTMLProps,
+  ReactNode,
+  TextareaHTMLAttributes,
+} from 'react';
 
 import { useFormContext } from 'react-hook-form';
 import { RHFFormItem } from '../RHFFormItem';
@@ -11,14 +15,18 @@ export type TRHFTextAreaFieldProps = {
   name: string;
   description?: string | ReactNode;
   formLabel?: string | ReactNode;
-  textareaProps?: DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>;
+  textareaProps?: DetailedHTMLProps<
+    TextareaHTMLAttributes<HTMLTextAreaElement>,
+    HTMLTextAreaElement
+  >;
   formItemProps?: React.HTMLAttributes<HTMLDivElement>;
   formLabelProps?: React.HTMLAttributes<HTMLLabelElement>;
   formMessageProps?: React.HTMLAttributes<HTMLParagraphElement>;
   descriptionProps?: React.HTMLAttributes<HTMLParagraphElement>;
+  areaProps?: React.HTMLAttributes<HTMLDivElement>;
 };
 
-export default function RHFInputField({
+export default function RHFTextAreaField({
   name,
   description = '',
   formLabel = '',
@@ -27,6 +35,7 @@ export default function RHFInputField({
   formLabelProps = {},
   formMessageProps = {},
   descriptionProps = {},
+  areaProps,
   ...rest
 }: TRHFTextAreaFieldProps) {
   const { control } = useFormContext();
@@ -50,9 +59,11 @@ export default function RHFInputField({
           >
             <FormControl>
               <div
-                className={
-                  'flex flex-1 rounded-xl border border-neutral-100 bg-white dark:bg-neutral-900 dark:border-neutral-800 p-3'
-                }
+                {...areaProps}
+                className={cn(
+                  'flex flex-1 rounded-xl border border-neutral-100 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900',
+                  areaProps?.className,
+                )}
               >
                 <textarea
                   {...combinedInputProps}
