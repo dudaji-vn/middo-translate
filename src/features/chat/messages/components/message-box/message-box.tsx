@@ -20,7 +20,7 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useSetParams } from '@/hooks/use-set-params';
 import { cn } from '@/utils/cn';
-import { motion } from 'framer-motion';
+import { m, motion } from 'framer-motion';
 import { useMessageActions } from '../message-actions';
 import { MessageBoxSearch } from '../message-box-search';
 import { TimeDisplay } from '../time-display';
@@ -41,6 +41,10 @@ export const MessageBox = ({
   guestId?: string;
 }) => {
   const setIsShowSearch = useRoomSearchStore((s) => s.setIsShowSearch);
+
+  const [lastUnreadMessageId, setLastUnreadMessageId] = useState<string | null>(
+    null,
+  );
 
   const currentUserId = useAuthStore((s) => s.user?._id || guestId);
   const {
@@ -68,9 +72,20 @@ export const MessageBox = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room.participants.length]);
 
+  useEffect(() => {
+    if (lastUnreadMessageId || !currentUserId) return;
+    let id = null;
+    messages.forEach((message) => {
+      if (!message.readBy?.includes(currentUserId)) {
+        id = message._id;
+      }
+    });
+    setLastUnreadMessageId(id);
+  }, [currentUserId, lastUnreadMessageId, messages]);
+
   const messagesGroup = useMemo(() => {
-    return groupMessages(messages);
-  }, [messages]);
+    return groupMessages(messages, [lastUnreadMessageId || '']);
+  }, [messages, lastUnreadMessageId]);
 
   const usersReadMessageMap = useMemo(() => {
     return generateUsersReadMessageMap(
@@ -140,6 +155,15 @@ export const MessageBox = ({
               <div
                 key={group.lastMessage.clientTempId || group.lastMessage._id}
               >
+                {lastUnreadMessageId === group.lastMessage._id && (
+                  <div className="relative flex w-full items-center">
+                    <div className="h-[1px] flex-1 bg-primary"></div>
+                    <span className="p-3 text-sm font-semibold text-primary">
+                      New
+                    </span>
+                    <div className="h-[1px] flex-1 bg-primary "></div>
+                  </div>
+                )}
                 {isShowTimeGroup && (
                   <TimeDisplay time={group.lastMessage.createdAt} />
                 )}
@@ -253,23 +277,26 @@ export const MessageBox = ({
   );
 };
 
-const groupMessages = (messages: Message[]): MessageGroup[] => {
+const groupMessages = (
+  messages: Message[],
+  specificIdsToGroup: string[] = [],
+): MessageGroup[] => {
   return messages?.reduce((acc, message) => {
     if (acc.length === 0) {
       acc.push({ messages: [message], lastMessage: message });
       return acc;
     }
-
     const lastGroup = acc[acc.length - 1];
     const lastMessage = lastGroup.lastMessage;
-
-    if (shouldCreateNewGroup(message, lastMessage)) {
+    if (
+      specificIdsToGroup.includes(lastMessage._id) ||
+      shouldCreateNewGroup(message, lastMessage)
+    ) {
       acc.push({ messages: [message], lastMessage: message });
     } else {
       lastGroup.messages.push(message);
       lastGroup.lastMessage = message;
     }
-
     return acc;
   }, [] as MessageGroup[]);
 };
