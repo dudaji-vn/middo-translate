@@ -15,7 +15,7 @@ import {
   ESPaceRoles,
 } from '../../../settings/_components/space-setting/setting-items';
 import { getUserSpaceRole } from '../../../settings/_components/space-setting/role.util';
-import { makeSubmissionPreviewColumns } from '../column-def/forms-columns';
+import { makeSubmissionPreviewColumns } from '../column-def/form-submission-preview-columns';
 import { useParams } from 'next/dist/client/components/navigation';
 import FormsHeader, { FormsHeaderProps } from './form-header';
 import {
@@ -123,13 +123,9 @@ const Item = ({
 const FormsList = ({
   titleProps,
   headerProps,
-  tableProps,
   forms,
-  enableDeletion = true,
-  search,
   onSearchChange,
   isLoading,
-  tableWrapperProps,
 }: {
   titleProps?: React.HTMLProps<HTMLSpanElement>;
   headerProps?: Partial<FormsHeaderProps>;
@@ -138,22 +134,13 @@ const FormsList = ({
   search: string;
   onSearchChange: (value: string) => void;
   isLoading: boolean;
-  enableDeletion?: boolean;
-  tableWrapperProps?: React.HTMLProps<HTMLDivElement>;
 }) => {
-  const [rowSelection, setRowSelection] = React.useState({});
   const [modalState, setModalState] = useState<{
     modalType: 'edit' | 'delete' | 'view';
     initialData?: BusinessForm;
   } | null>(null);
 
-  const [sorting, setSorting] = React.useState<SortingState>([
-    { id: 'createdAt', desc: true },
-    { id: 'createdAt', desc: true },
-  ]);
-  const router = useRouter();
   const spaceId = useParams()?.spaceId as string;
-
   const { navigateTo } = usePlatformNavigation();
   const pathname = usePathname();
 
@@ -187,12 +174,8 @@ const FormsList = ({
   };
 
   const onCreateFormClick = () => {
-    router.push(`${ROUTE_NAMES.SPACES}/${spaceId}/forms?modal=create`);
+    navigateTo(`${pathname}`, new URLSearchParams({ modal: 'create' }));
   };
-
-  const isSomeRowCanDelete = useMemo(() => {
-    return forms?.some((s) => !s.isUsing);
-  }, [forms]);
 
   return (
     <>
@@ -215,21 +198,20 @@ const FormsList = ({
             'flex max-h-[calc(100dvh-300px)] w-full flex-col gap-3  overflow-x-auto overflow-y-scroll  rounded-md px-2 py-3 md:max-h-[calc(100dvh-200px)] ',
           )}
         >
-          {forms &&
-            forms.map((form) => {
-              return (
-                <Item
-                  key={form._id}
-                  {...form}
-                  onDelete={onDeleteClick}
-                  onEdit={onEdit}
-                  goToViewForm={() => onView(form._id)}
-                />
-              );
-            })}
+          {forms?.map((form) => {
+            return (
+              <Item
+                key={form._id}
+                {...form}
+                onDelete={onDeleteClick}
+                onEdit={onEdit}
+                goToViewForm={() => onView(form._id)}
+              />
+            );
+          })}
         </div>
         <DeleteFormModal
-          open={modalState?.modalType === 'delete' && !!rowSelection}
+          open={modalState?.modalType === 'delete' && !!modalState?.initialData}
           formIds={[String(modalState?.initialData?._id)]}
           onclose={() => setModalState(null)}
         />

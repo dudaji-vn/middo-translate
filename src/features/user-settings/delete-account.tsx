@@ -58,7 +58,7 @@ export const DeleteAccount = (props: DeleteAccountProps) => {
         onClick={setTrue}
         danger
         leftIcon={<Trash2Icon />}
-        className="gap-4 px-5 font-medium dark:bg-neutral-900 border-t dark:border-neutral-800"
+        className="gap-4 border-t px-5 font-medium dark:border-neutral-800 dark:bg-neutral-900"
       >
         {t('COMMON.DELETE_ACCOUNT')}
       </Item>
@@ -68,7 +68,7 @@ export const DeleteAccount = (props: DeleteAccountProps) => {
             <AlertDialogTitle>
               {t('MODAL.DELETE_ACCOUNT.TITLE')}
             </AlertDialogTitle>
-            <AlertDialogDescription className="mt-2 md:mt-0 dark:text-neutral-50">
+            <AlertDialogDescription className="mt-2 dark:text-neutral-50 md:mt-0">
               {t('MODAL.DELETE_ACCOUNT.DESCRIPTION')}
             </AlertDialogDescription>
             {step !== 0 && (
