@@ -8,6 +8,7 @@ import MessageNode from './message-node';
 import RootNode from './root-node';
 import ContainerNode from './container-node';
 import OptionNode from './option-node';
+import FormNode from './form-node';
 
 export type CustomNodeProps = {
   data: FlowNode['data'];
@@ -35,6 +36,7 @@ const nodeTypes = {
   root: RootNode,
   container: ContainerNode,
   option: OptionNode,
+  form: FormNode,
   // link: LinkNode
 };
 

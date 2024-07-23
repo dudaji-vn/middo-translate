@@ -36,7 +36,8 @@ export type FlowItemType =
   | 'root'
   | 'container'
   | 'option'
-  | 'link';
+  | 'link'
+  | 'form';
 
 export type FlowNode = Node<{
   readonly?: boolean;
