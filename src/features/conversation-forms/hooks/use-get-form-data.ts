@@ -1,8 +1,7 @@
 'use client';
 
-import { BusinessTabType } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
 import { axios } from '@/lib/axios';
-import { getBusinessForm } from '@/services/forms.service';
+import { BusinessForm } from '@/types/forms.type';
 import { useQuery } from '@tanstack/react-query';
 
 export const GET_BUSINESS_FORM_KEY = 'get-business-form-data';
@@ -10,19 +9,52 @@ export const GET_BUSINESS_FORM_KEY = 'get-business-form-data';
 export const useGetFormData = ({
   spaceId,
   formId,
+  currentPage,
+  search,
+  limit,
 }: {
   spaceId: string;
   formId: string;
+  currentPage?: number;
+  search?: string;
+  limit?: number;
 }) => {
-  return useQuery({
-    queryKey: [GET_BUSINESS_FORM_KEY, { spaceId, formId }],
-    queryFn: () => {
+  return useQuery<
+    BusinessForm & {
+      totalPage: number;
+      totalSubmissions: number;
+    }
+  >({
+    queryKey: [
+      GET_BUSINESS_FORM_KEY,
+      {
+        spaceId,
+        formId,
+        currentPage,
+        search,
+        limit,
+      },
+    ],
+    queryFn: async () => {
       try {
-        const data = getBusinessForm(spaceId, formId);
-        return data;
+        const response = await axios.get(
+          `/help-desk/spaces/${spaceId}/forms/${formId}`,
+          {
+            params: {
+              q: search,
+              limit,
+              currentPage: currentPage,
+              spaceId,
+            },
+          },
+        );
+        return response.data;
       } catch (error) {
         console.error('Error while fetching form data of:', formId, error);
       }
+      return {
+        data: {},
+      };
     },
     enabled: true,
   });

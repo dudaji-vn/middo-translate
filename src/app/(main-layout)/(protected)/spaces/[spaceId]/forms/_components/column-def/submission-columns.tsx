@@ -5,10 +5,9 @@ import { TFunction } from 'i18next';
 import { BusinessForm, FormSubmission } from '@/types/forms.type';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
-import { Avatar, Typography } from '@/components/data-display';
-import { access } from 'fs';
+import { Typography } from '@/components/data-display';
 
-export const makeSubmissionPreviewColumns = ({
+export const makeSubmissionColumns = ({
   t,
   formFields,
 }: {

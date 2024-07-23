@@ -25,7 +25,6 @@ export const deleteBusinessForms = (data: {
 export const getBusinessForm = (
   spaceId: string,
   formId: string,
-  userId: string,
 ) => {
   return get(`${baseUrl}${spaceId}/forms/${formId}`);
 };
