@@ -13,6 +13,5 @@ export const LIMIT_CLIENTS_TABLE = 'LIMIT_CLIENTS_TABLE';
 
 export const CHAT_FLOW_KEY = 'chat-flow';
 
-
 export const LIMIT_SCRIPTS_TABLE = 'LIMIT_SCRIPTS_TABLE';
 export const LIMIT_FORMS_TABLE = 'LIMIT_FORMS_TABLE';
