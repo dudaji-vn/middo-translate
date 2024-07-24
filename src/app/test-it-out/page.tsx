@@ -146,6 +146,9 @@ const TestItOut = ({
           setFakeMessages((prev) => [...prev, message]);
           break;
         }
+        case 'form':
+          console.log('form is here::> ', node);
+        // TODO: handle form trigger
         case 'button':
           break;
         default:
