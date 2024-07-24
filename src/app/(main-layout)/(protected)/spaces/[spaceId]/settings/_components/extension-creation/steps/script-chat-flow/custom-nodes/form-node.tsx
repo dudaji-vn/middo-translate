@@ -10,14 +10,12 @@ import { cn } from '@/utils/cn';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import { CustomNodeProps, FLOW_KEYS } from './node-types';
-import { useExtensionFormsStore } from '@/stores/forms.store';
 import FormNodeSelector from './form-node-selector';
 
 function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
   const { watch, setValue, control } = useFormContext();
   const nodes = watch(FLOW_KEYS.NODES);
   const edges = watch(FLOW_KEYS.EDGES);
-  const { formsInfo } = useExtensionFormsStore();
   const nodeIndex = nodes.findIndex((n: { id: string }) => n.id === node.id);
   const [open, setOpen] = useState(false);
   const hasAnyRightNode = edges.some(

@@ -67,7 +67,7 @@ export const createChatScriptSchema = z.object({
             .object({
               id: z.string(),
               type: z.string(),
-              form: z.string().optional(),
+              form: z.string().trim().optional(),
               parentNode: z.string().optional(),
               parentId: z.string().optional(),
               style: z.any().optional(),
@@ -112,8 +112,9 @@ export const createChatScriptSchema = z.object({
             .refine(
               (data) => {
                 if (data.type === 'form') {
-                  return !!data.form?.trim();
+                  return data.form?.trim();
                 }
+                return true;
               },
               {
                 message: 'Form is required',
