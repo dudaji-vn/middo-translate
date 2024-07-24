@@ -10,17 +10,7 @@ import { cn } from '@/utils/cn';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import { CustomNodeProps, FLOW_KEYS } from './node-types';
-import { FormControl, FormField } from '@/components/ui/form';
-import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/data-entry';
-import { isEmpty } from 'lodash';
-import { FormInformation, useExtensionFormsStore } from '@/stores/forms.store';
+import { useExtensionFormsStore } from '@/stores/forms.store';
 import FormNodeSelector from './form-node-selector';
 
 function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
