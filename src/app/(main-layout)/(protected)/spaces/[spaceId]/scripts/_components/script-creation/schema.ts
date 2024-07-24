@@ -82,24 +82,13 @@ export const createChatScriptSchema = z.object({
                 .string()
                 .trim()
                 .min(1, {
-                  message: 'Please enter content!',
+                  message: 'This content is required',
                 })
                 .max(200, {
                   message: 'Content is too long, max 200 characters',
                 }),
-              link: z
-                .string()
-                .trim()
-                .optional(),
-                // .refine(
-                //   (value: any) =>
-                //     !value ||
-                //     value?.trim() === '' ||
-                //     /^(http|https):\/\/.*/.test(value),
-                //   {
-                //     message: 'Please enter a valid link!',
-                //   },
-                // ),
+              link: z.string().trim().optional(),
+
               media: z
                 .array(
                   z.object({
