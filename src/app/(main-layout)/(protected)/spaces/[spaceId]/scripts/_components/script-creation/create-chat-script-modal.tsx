@@ -25,6 +25,8 @@ import { useCreateOrEditScript } from '@/features/conversation-scripts/hooks/use
 import { TChatScript } from '@/types/scripts.type';
 import { Typography } from '@/components/data-display';
 import { useTranslation } from 'react-i18next';
+import { useGetFormsNames } from '@/features/conversation-forms/hooks/use-get-forms-names';
+import { useExtensionFormsStore } from '@/stores/forms.store';
 
 export type TScriptFormValues = z.infer<typeof createChatScriptSchema>;
 
@@ -43,6 +45,10 @@ const CreateOrEditChatScriptModal = ({
 }) => {
   const spaceId = useParams()?.spaceId as string;
   const { t } = useTranslation('common');
+  const { setFormsInfo } = useExtensionFormsStore();
+  const { data: namesOfForms } = useGetFormsNames({
+    spaceId,
+  });
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditScript();
   const { isEditing, scriptId, currentEdges, currentNodes } = useMemo(() => {
     return {
@@ -101,6 +107,12 @@ const CreateOrEditChatScriptModal = ({
       console.error('Error while creating script', error);
     }
   };
+  useEffect(() => {
+    if (namesOfForms) {
+      setFormsInfo(namesOfForms);
+    }
+  }, [namesOfForms, setFormsInfo]);
+
   // console.log('rerender open', open);
   return (
     <>

@@ -175,6 +175,9 @@ const DesignScriptChatFlow = ({
   const onPreviewClick = async () => {
     checkingErrors();
     const valid = await trigger(FLOW_KEYS.CHAT_FLOW);
+    console.log('ERR', errors);
+    console.log('FLOW ERR', mappedFlowErrors);
+    console.log('trigger', trigger);
     if (!valid) {
       return;
     }

@@ -10,14 +10,32 @@ import { cn } from '@/utils/cn';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import { CustomNodeProps, FLOW_KEYS } from './node-types';
+import { FormControl, FormField } from '@/components/ui/form';
+import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/data-entry';
+import { isEmpty } from 'lodash';
+import { FormInformation, useExtensionFormsStore } from '@/stores/forms.store';
 
 function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
-  const { watch, setValue } = useFormContext();
+  const { watch, setValue, control } = useFormContext();
   const nodes = watch(FLOW_KEYS.NODES);
   const edges = watch(FLOW_KEYS.EDGES);
+  const { formsInfo } = useExtensionFormsStore();
   const nodeIndex = nodes.findIndex((n: { id: string }) => n.id === node.id);
   const [open, setOpen] = useState(false);
-  const onOpen = () => setOpen(true);
+  const hasAnyRightNode = edges.some(
+    (e: { source: string; target: string }) => e.source === node.id,
+  );
+
+  const onOpen = () => {
+    if (!hasAnyRightNode) setOpen(true);
+  };
   const onClose = () => setOpen(false);
 
   const currentNode = nodes[nodeIndex];
@@ -27,7 +45,7 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
       ...currentNode,
       type: 'option',
       data: {
-        content: 'new option',
+        content: 'form option',
         label: 'Actions',
       },
     };
@@ -41,9 +59,11 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
     const newNode: FlowNode = {
       id: `${node.id}-message-${new Date().getTime()}`,
       position: {
-        x: currentNode.position.x + 400,
+        x: currentNode.position.x + 200,
         y: currentNode.position.y + 100,
       },
+      parentNode: node.id,
+      parentId: node.id,
       type,
       data: {
         content: '',
@@ -58,8 +78,8 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
     console.log('newNode', newNode);
     console.log('newEdge', newEdge);
     // TODO: uncomment this
-    // setValue(FLOW_KEYS.NODES, [...nodes, newNode]);
-    // setValue(FLOW_KEYS.EDGES, [...watch(FLOW_KEYS.EDGES), newEdge]);
+    setValue(FLOW_KEYS.NODES, [...nodes, newNode]);
+    setValue(FLOW_KEYS.EDGES, [...watch(FLOW_KEYS.EDGES), newEdge]);
   };
 
   return (
@@ -72,6 +92,12 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
         type="target"
         position={Position.Left}
         isConnectable={isConnectable}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        isConnectable
+        className={cn(hasAnyRightNode ? 'visible' : 'invisible')}
       />
       <div className="flex flex-col gap-2 p-3">
         <div className="flex flex-row items-center justify-between">
@@ -86,15 +112,47 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
               disabled={data?.readonly}
               variant={'ghost'}
               onClick={convertFormToOption}
-              className="text-neutral-600 hover:text-error-500"
+              className={cn('text-neutral-600 hover:text-error-500')}
             >
               <Trash2 size={18} />
             </Button.Icon>
           </div>
         </div>
-        <div>THIS IS A FORM NODE</div>
+        <div>
+          <FormField
+            name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
+            control={control}
+            render={({ field, fieldState: { invalid } }) => {
+              return (
+                <RHFFormItem>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="w-full rounded-[12px]">
+                        <SelectValue placeholder="Select a form to display" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="z-[10001]">
+                      {formsInfo?.map((form: FormInformation) => (
+                        <SelectItem key={form._id} value={form._id}>
+                          {form.name}
+                        </SelectItem>
+                      ))}
+                      {isEmpty(formsInfo) && <span> There&apos;s no form</span>}
+                    </SelectContent>
+                  </Select>
+                </RHFFormItem>
+              );
+            }}
+          />
+        </div>
         <div
-          className={cn(' flex flex-row transition-all duration-700')}
+          className={cn(
+            ' flex flex-row transition-all',
+            hasAnyRightNode ? 'hidden' : 'visible',
+          )}
           onMouseLeave={onClose}
         >
           <Button
@@ -102,26 +160,28 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
             color={'secondary'}
             size={'xs'}
             shape={'square'}
-            disabled={data?.readonly}
-            className={cn('h-10 w-full min-w-fit')}
+            disabled={data?.readonly || hasAnyRightNode}
+            className={cn(
+              'h-10 w-full min-w-fit ',
+              // hasAnyRightNode ? 'hidden' : 'visible',
+            )}
             onMouseEnter={onOpen}
             startIcon={<Plus size={18} />}
           >
             Add trigger after submission
-            <Handle type="source" position={Position.Right} isConnectable />
           </Button>
           <div className="relative size-0">
             <div className="absolute flex flex-row">
               <span
                 className={cn(
-                  'h-5 origin-left border-b border-dashed  border-primary-500-main pl-6 transition-all duration-100',
-                  open ? 'scale-x-100' : 'scale-x-0 delay-300',
+                  'h-5 origin-left border-b border-dashed  border-primary-500-main pl-6 transition-all duration-75',
+                  open ? 'scale-x-100' : 'scale-x-0 delay-100',
                 )}
               ></span>
               <div
                 className={cn(
-                  'w-[180px] origin-[0_10%]  space-y-2  rounded-[12px] border border-dashed border-primary-500-main  bg-transparent p-2 shadow-[2px_4px_16px_2px_#1616161A] transition-all  duration-500',
-                  open ? 'scale-100 delay-100' : 'scale-0',
+                  'w-[180px] origin-[0_10%]  space-y-2  rounded-[12px] border border-dashed border-primary-500-main  bg-transparent p-2 shadow-[2px_4px_16px_2px_#1616161A] transition-all  duration-300',
+                  open ? 'scale-100 delay-75' : 'scale-0',
                 )}
               >
                 <Button

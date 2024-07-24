@@ -54,20 +54,6 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
     );
     setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newMessageNode]);
   };
-  // const convertOptionToLink = () => {
-  //   const currentNode = nodes.find((n: { id: string }) => n.id === node.id);
-  //   const newLinkNode: FlowNode = {
-  //     ...currentNode,
-  //     type: 'link',
-  //     data: {
-  //       content: '',
-  //     },
-  //   };
-  //   const nodesWithoutCurrent = nodes.filter(
-  //     (n: { id: string }) => n.id !== node.id,
-  //   );
-  //   setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newLinkNode]);
-  // };
   const convertOptionToForm = () => {
     const currentNode = nodes.find((n: { id: string }) => n.id === node.id);
     const newFormNode: FlowNode = {
