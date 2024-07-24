@@ -15,12 +15,9 @@ import { useAppStore } from '@/stores/app.store';
 import { Popover, PopoverTrigger } from '@/components/data-display/popover';
 import { PopoverContent } from '@radix-ui/react-popover';
 import Picker from '@emoji-mart/react';
-import { FLOW_KEYS } from './node-types';
 import { isEmpty, isEqual } from 'lodash';
-import { Spinner } from '@/components/feedback';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MediaType } from '@/types';
-import { useModalStore } from '@/stores/modal.store';
 
 const allowedMediaTypes: Partial<Record<MediaType, string>> = {
   image: 'image',

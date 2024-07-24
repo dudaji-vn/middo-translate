@@ -13,7 +13,7 @@ export const useGetBusinessForms = ({
   search?: string;
   limit?: number;
   currentPage?: number;
-  spaceId?: string;
+  spaceId: string;
 }) => {
   return useQuery({
     queryKey: [
