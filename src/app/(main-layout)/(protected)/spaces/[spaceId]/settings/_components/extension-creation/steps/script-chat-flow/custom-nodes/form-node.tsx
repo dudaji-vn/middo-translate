@@ -21,6 +21,7 @@ import {
 } from '@/components/data-entry';
 import { isEmpty } from 'lodash';
 import { FormInformation, useExtensionFormsStore } from '@/stores/forms.store';
+import FormNodeSelector from './form-node-selector';
 
 function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
   const { watch, setValue, control } = useFormContext();
@@ -119,33 +120,8 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
           </div>
         </div>
         <div>
-          <FormField
-            name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
-            control={control}
-            render={({ field, fieldState: { invalid } }) => {
-              return (
-                <RHFFormItem>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full rounded-[12px]">
-                        <SelectValue placeholder="Select a form to display" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="z-[10001]">
-                      {formsInfo?.map((form: FormInformation) => (
-                        <SelectItem key={form._id} value={form._id}>
-                          {form.name}
-                        </SelectItem>
-                      ))}
-                      {isEmpty(formsInfo) && <span> There&apos;s no form</span>}
-                    </SelectContent>
-                  </Select>
-                </RHFFormItem>
-              );
-            }}
+          <FormNodeSelector
+            nameField={`${FLOW_KEYS.NODES}.${nodeIndex}.form`}
           />
         </div>
         <div
