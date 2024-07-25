@@ -131,7 +131,7 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
                     return (
                       <FormItem
                         key={item.value}
-                        className="flex flex-col items-start space-x-3 space-y-0"
+                        className="flex flex-col items-start gap-1 space-x-3"
                       >
                         <div className="flex flex-row items-start space-x-3 space-y-0">
                           <FormControl>
@@ -153,7 +153,6 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
                             {item.value}
                           </FormLabel>
                         </div>
-
                         {item.media && (
                           <Image
                             src={item.media}

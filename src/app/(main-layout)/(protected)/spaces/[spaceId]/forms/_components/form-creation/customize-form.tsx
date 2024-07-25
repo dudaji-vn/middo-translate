@@ -115,16 +115,26 @@ const CustomizeForm = () => {
                 key={index}
                 className="relative flex aspect-[1.75] size-full cursor-pointer rounded-sm max-md:h-24 md:rounded-[12px]"
                 style={{
-                  backgroundImage: `url(${src})`,
+                  // backgroundImage: `url(${src})`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                 }}
                 onClick={() => setValue('customize.background', src)}
               >
+                <Image
+                  alt="form-background"
+                  src={src}
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="center"
+                  className="rounded-sm max-md:h-24 md:rounded-[12px]"
+                  placeholder={'blur'}
+                  blurDataURL={'/forms/bg-form-10.svg'}
+                />
                 <Check
                   stroke="white"
                   className={cn(
-                    `m-auto size-8 stroke-[4px]`,
+                    `m-auto size-8 stroke-[4px] z-10`,
                     isSelect ? 'block' : 'hidden',
                   )}
                 />
