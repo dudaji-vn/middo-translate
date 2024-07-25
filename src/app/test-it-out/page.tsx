@@ -5,7 +5,7 @@ import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { MessagesSquare, Minus } from 'lucide-react';
+import { MessagesSquare, Minus, X } from 'lucide-react';
 import Image from 'next/image';
 import { Triangle } from '@/components/icons';
 import { TimeDisplay } from '@/features/chat/messages/components/time-display';
@@ -25,6 +25,7 @@ import { DEFAULT_THEME } from '../(main-layout)/(protected)/spaces/[spaceId]/set
 import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
 import { MessageActions } from '@/features/chat/messages/components/message-actions';
 import MessageTriggerForm from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/trigger-form-button';
+import ExtensionForm from '../extension-form/_components/form-detail';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';
@@ -88,6 +89,10 @@ const TestItOut = ({
 }) => {
   const currentUser = useAuthStore((s) => s.user);
   const [shrinked, setShrinked] = React.useState(false);
+  const [formPreviewState, setFormPreview] = React.useState<{
+    id: string;
+    open: boolean;
+  }>();
   const [flow, setFlow] = React.useState<{
     nodes: FlowNode[];
     edges: Edge[];
@@ -231,7 +236,7 @@ const TestItOut = ({
 
   return (
     <>
-      <main className="container-height relative w-full  bg-primary-100 bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
+      <main className="container-height relative w-full bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
         <div className="absolute inset-0 bg-neutral-100 bg-opacity-25" />
         <div
           className={cn(
@@ -276,6 +281,12 @@ const TestItOut = ({
                         {...(isForm ? { formId: message.form } : {})}
                         debouncedTime={0}
                         key={index}
+                        openFormPreview={() => {
+                          setFormPreview({
+                            id: message.form || '',
+                            open: true,
+                          });
+                        }}
                         sender={currentUser}
                         content={message.content}
                       />
@@ -368,6 +379,28 @@ const TestItOut = ({
             </button>
           </div>
         </div>
+
+        {formPreviewState?.open && (
+          <div
+            className={cn(
+              'fixed left-0 top-0 z-50 h-screen w-screen',
+              'bg-white',
+            )}
+          >
+            <ExtensionForm formId={formPreviewState.id} />
+            <Button.Icon
+              onClick={() => {
+                setFormPreview(undefined);
+              }}
+              className="absolute right-1 top-0"
+              variant={'ghost'}
+              size={'sm'}
+              color={'default'}
+            >
+              <X />
+            </Button.Icon>
+          </div>
+        )}
       </main>
     </>
   );

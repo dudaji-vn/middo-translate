@@ -80,6 +80,7 @@ export const PreviewReceivedMessage = ({
   englishContent,
   onTranlatedChange,
   formId,
+  openFormPreview = () => {},
   ...props
 }: {
   space?: TSpace;
@@ -88,6 +89,7 @@ export const PreviewReceivedMessage = ({
   englishContent?: string;
   formId?: string;
   onTranlatedChange?: (translated: string) => void;
+  openFormPreview?: () => void;
   debouncedTime?: number;
   media?: Media[];
 } & React.HTMLAttributes<HTMLDivElement>) => {
@@ -124,7 +126,13 @@ export const PreviewReceivedMessage = ({
 
   const children = useMemo(() => {
     if (!!formId) {
-      return <MessageTriggerForm _id={formId} name={content} />;
+      return (
+        <MessageTriggerForm
+          _id={formId}
+          name={content}
+          onOpen={openFormPreview}
+        />
+      );
     } else {
       return (
         <NormalMessageContent
@@ -139,6 +147,7 @@ export const PreviewReceivedMessage = ({
   }, [
     formId,
     content,
+    openFormPreview,
     englishContent,
     translatedContent,
     isTranslating,
