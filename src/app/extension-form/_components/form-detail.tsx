@@ -319,7 +319,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
         {isDone ? (
           <ThankYou thankyou={thankyou} name={form.name} />
         ) : (
-          <div className="flex size-full flex-col rounded-xl bg-white pb-6">
+          <div className="flex size-full flex-col gap-5 rounded-xl bg-white">
             <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
               <FileText className="size-5" />
               <Typography className="text-md  font-semibold text-primary-500-main">
@@ -327,7 +327,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
               </Typography>
             </div>
             <Form {...formAnswer}>
-              <div className="flex w-full grow flex-col gap-3 overflow-y-auto p-10">
+              <div className="flex w-full grow flex-col gap-3 overflow-y-auto px-10">
                 {formFields.map((field, index) => {
                   return (
                     <RenderField
@@ -338,7 +338,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
                 })}
               </div>
             </Form>
-            <div className="flex flex-none items-center justify-center py-2">
+            <div className="flex flex-none items-center justify-center pb-5">
               <form onSubmit={formAnswer.handleSubmit(submit)}>
                 <Button
                   endIcon={<Send />}
