@@ -184,7 +184,7 @@ const Input = ({
 }: TFormField) => {
   return (
     <Wrapper>
-      <Typography className="">{label}</Typography>
+      <Typography className="font-semibold">{label}</Typography>
 
       {dataType === 'long-text' ? (
         <RHFTextAreaField
@@ -338,7 +338,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
                 })}
               </div>
             </Form>
-            <div className="flex flex-none items-center justify-center py-4">
+            <div className="flex flex-none items-center justify-center py-2">
               <form onSubmit={formAnswer.handleSubmit(submit)}>
                 <Button
                   endIcon={<Send />}

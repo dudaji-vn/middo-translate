@@ -289,6 +289,7 @@ const FieldOptions = ({
                               key={media}
                               width={40}
                               height={40}
+                              quality={100}
                               className="size-full rounded-lg"
                             />
                             <Button.Icon
