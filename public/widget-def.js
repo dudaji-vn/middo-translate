@@ -222,10 +222,8 @@
             <span class="dot"></span>
           </div>
       </div> 
-
-      <iframe id="entire-page-iframe" src="${chatSRC}" style=" position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999999 !important; border: none;">
-      asbkajbajkdbasjkdbkajsdbnjkasd
-    
+<iframe id="entire-page-iframe"src="${srcWithDomain}" class="ring-1 rounded-lg iframe_inset" 
+        style="box-shadow: 2px 4px 16px 2px #1616161A; border: none; position: fixed; background: white !important; margin: 0px; height: 100vh; width: 100vw; display: none; z-index: 999999999 !important;">
       </iframe>
     `;
 
