@@ -110,6 +110,7 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
         <div>
           <FormNodeSelector
             nameField={`${FLOW_KEYS.NODES}.${nodeIndex}.form`}
+            nodeIndex={nodeIndex}
           />
         </div>
         <div

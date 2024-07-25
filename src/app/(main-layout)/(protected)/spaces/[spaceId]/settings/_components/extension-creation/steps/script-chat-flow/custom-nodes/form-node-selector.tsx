@@ -14,13 +14,18 @@ import { FormInformation, useExtensionFormsStore } from '@/stores/forms.store';
 import { isEmpty } from 'lodash';
 import { useQueries, useQueryClient } from '@tanstack/react-query';
 import { GET_FORMS_INFO_KEY } from '@/features/conversation-forms/hooks/use-get-forms-names';
+import { FLOW_KEYS } from './node-types';
 
 interface FormNodeSelectorProps {
   nameField: string;
+  nodeIndex: number;
 }
 
-const FormNodeSelector: React.FC<FormNodeSelectorProps> = ({ nameField }) => {
-  const { control } = useFormContext();
+const FormNodeSelector: React.FC<FormNodeSelectorProps> = ({
+  nameField,
+  nodeIndex,
+}) => {
+  const { control, setValue } = useFormContext();
   const { formsInfo } = useExtensionFormsStore();
   const qrClient = useQueryClient();
   const [searchTerm, setSearchTerm] = useState('');
@@ -44,7 +49,18 @@ const FormNodeSelector: React.FC<FormNodeSelectorProps> = ({ nameField }) => {
       render={({ field, fieldState: { invalid } }) => {
         return (
           <RHFFormItem>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              onValueChange={(props) => {
+                field.onChange(props);
+                const formName =
+                  formsInfo?.find((form) => form._id === props)?.name || '';
+                setValue(
+                  `${FLOW_KEYS.NODES}.${nodeIndex}.data.content`,
+                  formName,
+                );
+              }}
+              defaultValue={field.value}
+            >
               <FormControl>
                 <SelectTrigger className="w-full rounded-[12px]">
                   <SelectValue placeholder="Select a form to display" />

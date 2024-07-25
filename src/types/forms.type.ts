@@ -13,7 +13,9 @@ export type FormField = {
   _id: string;
   name: string;
   label: string;
+  helpText: string;
   type: 'text' | 'number' | 'date' | 'select' | 'radio' | 'checkbox';
+  dataType: 'long text' | 'plain text' | 'string';
   required: boolean;
   options?: string[];
 };

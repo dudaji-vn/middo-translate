@@ -11,6 +11,7 @@ const formFieldSchema = z
     dataType: dataTypes,
     type: formFieldTypeSchema,
     label: z.string().min(1, { message: 'Label is required' }),
+    placeholder: z.string().optional(),
     required: z.boolean().default(false),
     options: z.array(
       z.object({

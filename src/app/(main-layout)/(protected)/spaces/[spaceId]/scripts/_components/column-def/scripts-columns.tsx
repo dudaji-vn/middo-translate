@@ -91,7 +91,7 @@ export const makeScriptsColumns = ({
       header: t('EXTENSION.SCRIPT.NAME'),
       cell(props) {
         return (
-          <td {...props} className=" flex gap-2">
+          <td {...props} className=" flex flex-row gap-2">
             <span className="line-clamp-2 max-w-80 text-ellipsis break-words">
               {props?.row?.original?.name}
             </span>

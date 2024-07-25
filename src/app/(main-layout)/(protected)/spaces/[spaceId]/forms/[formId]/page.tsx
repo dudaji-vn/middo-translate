@@ -1,6 +1,5 @@
 'use client';
 
-import { Skeleton } from '@/components/ui/skeleton';
 import { useGetFormData } from '@/features/conversation-forms/hooks/use-get-form-data';
 import React, { useState } from 'react';
 import {
@@ -18,6 +17,11 @@ import {
   setFormsTablePerpage,
 } from '@/utils/local-storage';
 import ClientSidePagination from '@/components/actions/pagination/client-side-pagination';
+import { Button } from '@/components/actions';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
+import { Typography } from '@/components/data-display';
+import { useTranslation } from 'react-i18next';
 
 const tabs = ['Submissions', 'Form'];
 const FormPage = ({
@@ -33,6 +37,8 @@ const FormPage = ({
   );
   const [limit, setLimit] = useState(getFormsTablePerpage());
   const [search, setSearch] = useState('');
+  const router = useRouter();
+  const { t } = useTranslation('common');
   const { data, isLoading } = useGetFormData({
     spaceId,
     formId,
@@ -78,6 +84,26 @@ const FormPage = ({
         setTabValue(parseInt(value));
       }}
     >
+      <section
+        className={cn(
+          ' flex w-full  flex-row items-center justify-start gap-2 py-2',
+        )}
+      >
+        <Button.Icon
+          onClick={() => {
+            router.back();
+          }}
+          variant={'ghost'}
+          size={'xs'}
+          color={'default'}
+          className="text-neutral-600"
+        >
+          <ArrowLeft className="" />
+        </Button.Icon>
+        <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50 max-sm:min-w-32">
+          Go back
+        </Typography>
+      </section>
       <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
         {tabs.map((_, i) => {
           const isSelected = tabValue === i;
@@ -101,7 +127,11 @@ const FormPage = ({
       >
         <div className="flex w-full flex-1 flex-col">
           <StepWrapper value="0" isLoading={isLoading}>
-            <Submissions {...(data as BusinessForm)} className="h-full grow" />
+            <Submissions
+              {...(data as BusinessForm)}
+              className="h-full grow"
+              allowRunForm
+            />
             <ClientSidePagination
               pagination={pagination}
               limitOptions={ROWS_PER_PAGE_OPTIONS}
