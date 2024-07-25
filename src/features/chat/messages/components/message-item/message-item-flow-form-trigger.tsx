@@ -27,7 +27,7 @@ export default function MessageItemFlowFormTrigger({
       announceToParent({
         type: 'open-form',
         payload: {
-          urlToForm: `${NEXT_PUBLIC_URL}/form?formId=${formId}&guestId=${guestId}`,
+          urlToForm: `${NEXT_PUBLIC_URL}/extension-form?formId=${formId}&guestId=${guestId}`,
         },
       });
     }
