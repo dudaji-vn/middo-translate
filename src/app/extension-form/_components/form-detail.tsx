@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
@@ -54,7 +54,14 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
   );
 };
 const SelectSingle = ({ name, label, options }: TFormField) => {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+  const currentValue = watch(`submission.${name}`);
+  const hasSpecialOption = useMemo(() => {
+    return (
+      options?.some((option) => option.type === 'other') &&
+      currentValue === 'other'
+    );
+  }, [options, currentValue]);
   return (
     <Wrapper>
       <Typography className="!font-semibold">{label}</Typography>
@@ -95,6 +102,21 @@ const SelectSingle = ({ name, label, options }: TFormField) => {
                           alt={`${option.value} image`}
                         />
                       )}
+                      {hasSpecialOption && option.type === 'other' && (
+                        <div className="w-full px-2">
+                          <RHFInputField
+                            name={`submission.${name}-other`}
+                            formItemProps={{
+                              className: 'w-full',
+                            }}
+                            inputProps={{
+                              placeholder: 'Other answer',
+                              className:
+                                'w-full border-neutral-50 bg-transparent focus:ring-[1px] focus:ring-primary-300',
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -112,6 +134,12 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
     control,
     name: `submission.${name}`,
   });
+  const hasSpecialOption = useMemo(() => {
+    return (
+      options?.some((option: any) => option.type === 'other') &&
+      fields.find((f: any) => f?.type?.toLowerCase() === 'other')
+    );
+  }, [options, fields]);
 
   return (
     <Wrapper>
@@ -128,6 +156,9 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
                   control={control}
                   name={`submission.${name}`}
                   render={({ field }) => {
+                    const selected = fields.find(
+                      (f: any) => f.value === item.value,
+                    );
                     return (
                       <FormItem
                         key={item.value}
@@ -136,35 +167,51 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
                         <div className="flex flex-row items-start space-x-3 space-y-0">
                           <FormControl>
                             <Checkbox
-                              checked={field.value?.includes(item.value)}
+                              checked={!!selected}
                               onCheckedChange={(checked) => {
                                 if (checked) {
-                                  append(item.value);
+                                  append(item);
                                 } else {
-                                  const index = fields.findIndex(
-                                    (f) => f.id === item.value,
+                                  remove(
+                                    fields.findIndex(
+                                      (f: any) => f.value === item.value,
+                                    ),
                                   );
-                                  remove(index);
                                 }
                               }}
                             />
                           </FormControl>
-                          <FormLabel className="font-normal">
+                          <FormLabel className="flex cursor-pointer flex-col gap-2 font-normal">
                             {item.value}
+                            {item.media && (
+                              <Image
+                                src={item.media}
+                                width={100}
+                                height={100}
+                                alt={`${item.value} image-select`}
+                              />
+                            )}
                           </FormLabel>
                         </div>
-                        {item.media && (
-                          <Image
-                            src={item.media}
-                            width={100}
-                            height={100}
-                            alt={`${item.value} image-select`}
-                          />
+                        {hasSpecialOption && item?.type === 'other' && (
+                          <div className="w-full pr-4">
+                            <RHFInputField
+                              name={`submission.${name}-other`}
+                              formItemProps={{
+                                className: 'w-full',
+                              }}
+                              inputProps={{
+                                placeholder: 'Other answer',
+                                className:
+                                  'w-full border-neutral-50  bg-transparent focus:ring-[1px] focus:ring-primary-300',
+                              }}
+                            />
+                          </div>
                         )}
                       </FormItem>
                     );
                   }}
-                />
+                ></FormField>
               ))}
             </RHFFormItem>
           );
