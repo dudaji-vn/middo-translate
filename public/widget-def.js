@@ -222,6 +222,10 @@
             <span class="dot"></span>
           </div>
       </div> 
+
+      <iframe id="entire-page-iframe" src="${chatSRC}" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999999 !important; border: none;">
+    
+      </iframe>
     `;
 
     document.head.insertAdjacentHTML('beforeend', styleTag);
@@ -229,6 +233,7 @@
 
     const floatingIcon = document.getElementById('floating-icon-btn');
     const widgetChatFrame = document.getElementById('widget-chat-frame');
+    const fullScreenFrame = document.getElementById('entire-page-iframe');
     floatingIcon.style.color = colorMap['rose'];
 
     const theTriangle = document.getElementById('widget_triangle');
@@ -280,6 +285,16 @@
             floatingIcon.style.color = colorMap[themeColor];
           }
           break;
+
+        case 'open-form': {
+          const { urlToForm } = payload;
+          fullScreenFrame.style.display = 'block';
+          fullScreenFrame.src = urlToForm;
+        }
+        case 'close-form': {
+          fullScreenFrame.style.display = 'none';
+          fullScreenFrame.src = '';
+        }
         default:
           break;
       }
