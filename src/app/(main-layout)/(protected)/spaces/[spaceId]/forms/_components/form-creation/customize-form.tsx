@@ -94,7 +94,7 @@ const CustomizeForm = () => {
         </FormLabel>
         <div className="flex w-fit flex-row">
           <RHFColorSelector
-            itemProps={{ className: 'max-md:[&_svg]:size-7' }}
+            itemProps={{ className: 'max-md:[&_svg]:size-6' }}
             colorNameField="customize.theme"
             selectedColor={selectedColor}
             listColors={formColors.map((color) => color.hex)}
@@ -106,14 +106,14 @@ const CustomizeForm = () => {
         <FormLabel className="font-bold text-neutral-800  dark:text-neutral-50">
           Background
         </FormLabel>
-        <div className="grid w-full grid-cols-2  gap-3 md:grid-cols-5">
+        <div className="grid w-full  grid-cols-5 gap-3">
           {Array.from({ length: 10 }).map((_, index) => {
             const src = `/forms/bg-form-${index + 1}.svg`;
             const isSelect = watch('customize.background') === src;
             return (
               <div
                 key={index}
-                className="relative flex aspect-[1.75] size-full cursor-pointer rounded-[12px]"
+                className="relative flex aspect-[1.75] size-full cursor-pointer rounded-sm max-md:h-24 md:rounded-[12px]"
                 style={{
                   backgroundImage: `url(${src})`,
                   backgroundSize: 'cover',

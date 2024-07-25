@@ -79,12 +79,6 @@ const CreateOrEditBusinessForm = ({
     console.log('data submit:>>', data);
     const payload = {
       ...data,
-      formFields: data.formFields.map((field: any) => {
-        return {
-          ...field,
-          options: field.options?.map(({ value }: { value: string }) => value),
-        };
-      }),
       spaceId,
     };
     try {
@@ -154,7 +148,7 @@ const CreateOrEditBusinessForm = ({
                   placeholder: 'please enter a form name',
                   required: true,
                   className:
-                    'text-left p-0 text-2xl outline-none border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
+                    'text-left p-0 focus:pl-5 text-2xl focus:ring-1 focus:ring-primary-500-main  bg-white outline-none border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
                 }}
               />
               <RHFInputField
@@ -164,7 +158,8 @@ const CreateOrEditBusinessForm = ({
                 }}
                 inputProps={{
                   placeholder: 'Form description (optional)',
-                  className: 'outline-none p-0 border-none !bg-transparent',
+                  className:
+                    'outline-none p-0 border-none !bg-transparent focus:pl-4 focus:ring-1 focus:ring-primary-500-main',
                 }}
               />
             </>

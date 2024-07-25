@@ -20,6 +20,7 @@ import NodeMessageToolbar from './node-message-toolbar';
 function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
   const { watch, setValue } = useFormContext();
   const nodes = watch(FLOW_KEYS.NODES);
+  const edges = watch(FLOW_KEYS.EDGES);
   const nodeIndex = nodes.findIndex((n: { id: string }) => n.id === node.id);
 
   const currentNode = nodes[nodeIndex];
@@ -38,11 +39,36 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
     );
     setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newMessageNode]);
   };
+  const deleteThisNode = () => {
+    const nodesWithoutCurrent = nodes.filter(
+      (n: { id: string }) => n.id !== node.id,
+    );
+    const updatedEdges = edges.filter(
+      (e: { source: string; target: string }) =>
+        e.source !== node.id && e.target !== node.id,
+    );
+    setValue(FLOW_KEYS.NODES, nodesWithoutCurrent);
+    setValue(FLOW_KEYS.EDGES, updatedEdges);
+  };
+  const handleTrashClick = () => {
+    const parent = nodes.find(
+      (n: { id: string }) => n.id === currentNode?.parentId,
+    );
+    switch (parent?.type) {
+      case 'container':
+      case 'root':
+      case 'message':
+        convertMessageToOption();
+        break;
+      default: // delete node
+        deleteThisNode();
+    }
+  };
 
   return (
     <div
       className={cn(
-        'left-[502px] top-[212px] h-auto w-[380px] gap-3 rounded-[12px] border  bg-white dark:bg-background dark:border dark:border-neutral-900 p-2 shadow-[2px_4px_16px_2px_#1616161A]',
+        'left-[502px] top-[212px] h-auto w-[380px] gap-3 rounded-[12px] border  bg-white p-2 shadow-[2px_4px_16px_2px_#1616161A] dark:border dark:border-neutral-900 dark:bg-background',
       )}
     >
       <Handle
@@ -62,7 +88,7 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
               size={'xs'}
               disabled={data?.readonly}
               variant={'ghost'}
-              onClick={convertMessageToOption}
+              onClick={handleTrashClick}
               className="text-neutral-600 hover:text-error-500"
             >
               <Trash2 size={18} />

@@ -7,7 +7,7 @@ import {
   AlertDialogContent,
   AlertDialogHeader,
 } from '@/components/feedback';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import DesignScriptChatFlow from '../../../settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -43,6 +43,7 @@ const CreateOrEditChatScriptModal = ({
 }) => {
   const spaceId = useParams()?.spaceId as string;
   const { t } = useTranslation('common');
+
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditScript();
   const { isEditing, scriptId, currentEdges, currentNodes } = useMemo(() => {
     return {

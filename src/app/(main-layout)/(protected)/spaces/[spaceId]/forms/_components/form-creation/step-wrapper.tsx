@@ -2,8 +2,9 @@ import { Button, ButtonProps } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { TabsContent } from '@/components/navigation';
 import { cn } from '@/utils/cn';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Rows } from 'lucide-react';
 import React from 'react';
+import RowsSkeletons from '../skeleton/rows-skeletons';
 
 const StepWrapper = ({
   className,
@@ -33,9 +34,12 @@ const StepWrapper = ({
   };
   footerProps?: React.ComponentPropsWithoutRef<'div'>;
 }) => {
+  if (isLoading) {
+    return <RowsSkeletons rows={10} />;
+  }
   return (
-    <TabsContent {...props} className={cn('mt-0', className)}>
-      <div className="flex size-full flex-col">{children}</div>
+    <TabsContent {...props} className={cn('mt-0 grow', className)}>
+      <div className="flex size-full h-full flex-col">{children}</div>
     </TabsContent>
   );
 };

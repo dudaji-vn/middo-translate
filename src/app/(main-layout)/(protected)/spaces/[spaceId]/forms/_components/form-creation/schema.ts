@@ -3,20 +3,38 @@ import { z } from 'zod';
 const dataTypes = z.enum(['text', 'long-text', 'date', 'time']);
 const formFieldTypeSchema = z.enum(['input', 'checkbox', 'radio']);
 
-const formFieldSchema = z.object({
-  name: z.string().min(1, { message: 'Data-Name is required' }),
-  dataType: dataTypes,
-  type: formFieldTypeSchema,
-  label: z.string().min(1, { message: 'Label is required' }),
-  required: z.boolean().default(false),
-  options: z
-    .array(
+const formFieldSchema = z
+  .object({
+    _id: z.string().optional(),
+    id: z.string().optional(),
+    name: z.string().min(1, { message: 'Data-Name is required' }),
+    dataType: dataTypes,
+    type: formFieldTypeSchema,
+    label: z.string().min(1, { message: 'Label is required' }),
+    required: z.boolean().default(false),
+    options: z.array(
       z.object({
+        media: z.any().optional(),
         value: z.string().min(1, { message: 'Option content is required' }),
+        type: z.enum(['default', 'other']).optional(),
       }),
-    )
-    .optional(),
-});
+    ),
+  })
+  .refine(
+    (field) => {
+      if (
+        (field.type === 'checkbox' || field.type === 'radio') &&
+        field.options.length < 1
+      ) {
+        return false;
+      }
+      return true;
+    },
+    {
+      path: ['options'],
+      message: 'At least 1 options are required',
+    },
+  );
 
 const customizeFormSchema = z.object({
   theme: z.string().optional(),
@@ -35,7 +53,7 @@ export const createBusinessFormSchema = z.object({
     .min(1, 'Please enter a form name'),
   description: z
     .string()
-    .max(100, 'Description is too long, max 100 characters')
+    .max(50, 'Description is too long, max 50 characters')
     .optional(),
   formFields: z.array(formFieldSchema).superRefine((fields, ctx) => {
     const pass = checkDuplicateFieldNames(fields);

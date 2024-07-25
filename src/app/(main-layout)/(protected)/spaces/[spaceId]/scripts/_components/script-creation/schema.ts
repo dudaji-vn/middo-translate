@@ -63,61 +63,64 @@ export const createChatScriptSchema = z.object({
     .object({
       nodes: z
         .array(
-          z.object({
-            id: z.string(),
-            type: z.string(),
-            parentNode: z.string().optional(),
-            parentId: z.string().optional(),
-            style: z.any().optional(),
-            className: z.string().optional(),
-            width: z.number().optional(),
-            height: z.number().optional(),
-            deletable: z.boolean().optional(),
-            draggable: z.boolean().optional(),
-            sourcePosition: z.string().optional(),
-            targetPosition: z.string().optional(),
-            data: z.object({
-              label: z.string().trim().optional(),
-              content: z
-                .string()
-                .trim()
-                .min(1, {
-                  message: 'Please enter content!',
-                })
-                .max(200, {
-                  message: 'Content is too long, max 200 characters',
-                }),
-              link: z
-                .string()
-                .trim()
-                .optional(),
-                // .refine(
-                //   (value: any) =>
-                //     !value ||
-                //     value?.trim() === '' ||
-                //     /^(http|https):\/\/.*/.test(value),
-                //   {
-                //     message: 'Please enter a valid link!',
-                //   },
-                // ),
-              media: z
-                .array(
-                  z.object({
-                    file: z.any(),
-                    localUrl: z.string().optional(),
-                    metadata: z.any(),
-                    type: z.string(),
-                    url: z.string(),
+          z
+            .object({
+              id: z.string(),
+              type: z.string(),
+              form: z.string().trim().optional(),
+              parentNode: z.string().optional(),
+              parentId: z.string().optional(),
+              style: z.any().optional(),
+              className: z.string().optional(),
+              width: z.number().optional(),
+              height: z.number().optional(),
+              deletable: z.boolean().optional(),
+              draggable: z.boolean().optional(),
+              sourcePosition: z.string().optional(),
+              targetPosition: z.string().optional(),
+              data: z.object({
+                label: z.string().trim().optional(),
+                content: z
+                  .string()
+                  .trim()
+                  .min(1, {
+                    message: 'This content is required',
+                  })
+                  .max(200, {
+                    message: 'Content is too long, max 200 characters',
                   }),
-                )
-                .optional(),
-            }),
+                link: z.string().trim().optional(),
 
-            position: z.object({
-              x: z.number(),
-              y: z.number(),
-            }),
-          }),
+                media: z
+                  .array(
+                    z.object({
+                      file: z.any(),
+                      localUrl: z.string().optional(),
+                      metadata: z.any(),
+                      type: z.string(),
+                      url: z.string(),
+                    }),
+                  )
+                  .optional(),
+              }),
+
+              position: z.object({
+                x: z.number(),
+                y: z.number(),
+              }),
+            })
+            .refine(
+              (data) => {
+                if (data.type === 'form') {
+                  return data.form?.trim();
+                }
+                return true;
+              },
+              {
+                message: 'Form is required',
+                path: ['form'],
+              },
+            ),
         )
         .min(2, 'Chat flow should have at least 2 nodes'),
       edges: z

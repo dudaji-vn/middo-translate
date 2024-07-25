@@ -5,7 +5,7 @@ import 'reactflow/dist/style.css';
 
 import { Handle, Position } from 'reactflow';
 import { Button } from '@/components/actions';
-import { Link, MessageSquare, Plus, Zap } from 'lucide-react';
+import { FileText, Link, MessageSquare, Plus, Zap } from 'lucide-react';
 import { cn } from '@/utils/cn';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
@@ -54,19 +54,19 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
     );
     setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newMessageNode]);
   };
-  const convertOptionToLink = () => {
+  const convertOptionToForm = () => {
     const currentNode = nodes.find((n: { id: string }) => n.id === node.id);
-    const newLinkNode: FlowNode = {
+    const newFormNode: FlowNode = {
       ...currentNode,
-      type: 'link',
+      type: 'form',
       data: {
-        content: '',
+        content: 'new form',
       },
     };
     const nodesWithoutCurrent = nodes.filter(
       (n: { id: string }) => n.id !== node.id,
     );
-    setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newLinkNode]);
+    setValue(FLOW_KEYS.NODES, [...nodesWithoutCurrent, newFormNode]);
   };
 
   return (
@@ -121,15 +121,16 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
           <MessageSquare size={18} />
           Message
         </Button>
-        {/* <Button
-                    size={'xs'}
-                    color='default'
-                    className='h-10 w-full flex flex-row gap-2 items-center justify-start'
-                    onClick={convertOptionToLink}
-                    shape={'square'}>
-                    <Link size={18} />
-                    Link
-        /Button> */}
+        <Button
+          size={'xs'}
+          color="default"
+          className="flex h-10 w-full flex-row items-center justify-start gap-2"
+          onClick={convertOptionToForm}
+          shape={'square'}
+        >
+          <FileText size={18} />
+          Form
+        </Button>
       </div>
     </div>
   );

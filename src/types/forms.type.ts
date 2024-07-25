@@ -16,7 +16,10 @@ export type FormField = {
   type: 'text' | 'number' | 'date' | 'select' | 'radio' | 'checkbox';
   required: boolean;
   options?: string[];
-  order: number;
+};
+export type FormSubmission = {
+  user: Partial<User>;
+  answer: Record<string, string>;
 };
 export type BusinessForm = BaseEntity & {
   spaceId?: string;
@@ -26,5 +29,7 @@ export type BusinessForm = BaseEntity & {
   createdBy: Partial<User>;
   color: string;
   backgroundColor: string;
+  submissions: FormSubmission[];
+  totalSubmissions: number;
   formFields: FormField[];
 };

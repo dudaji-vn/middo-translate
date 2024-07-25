@@ -41,9 +41,9 @@ export const UserBlockModal = (props: UserBlockModalProps) => {
         }
       }}
     >
-      <AlertDialogContent>
+      <AlertDialogContent className='block'>
         <AlertDialogHeader>
-          <AlertDialogTitle>
+          <AlertDialogTitle className='truncate'>
             {t('MODAL.BLOCK_USER.TITLE', {
               name: props.user.name,
             })}
