@@ -10,23 +10,12 @@ import { cn } from '@/utils/cn';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import { CustomNodeProps, FLOW_KEYS } from './node-types';
-import { FormControl, FormField } from '@/components/ui/form';
-import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/data-entry';
-import { isEmpty } from 'lodash';
-import { FormInformation, useExtensionFormsStore } from '@/stores/forms.store';
+import FormNodeSelector from './form-node-selector';
 
 function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
   const { watch, setValue, control } = useFormContext();
   const nodes = watch(FLOW_KEYS.NODES);
   const edges = watch(FLOW_KEYS.EDGES);
-  const { formsInfo } = useExtensionFormsStore();
   const nodeIndex = nodes.findIndex((n: { id: string }) => n.id === node.id);
   const [open, setOpen] = useState(false);
   const hasAnyRightNode = edges.some(
@@ -119,33 +108,8 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
           </div>
         </div>
         <div>
-          <FormField
-            name={`${FLOW_KEYS.NODES}.${nodeIndex}.data.content`}
-            control={control}
-            render={({ field, fieldState: { invalid } }) => {
-              return (
-                <RHFFormItem>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full rounded-[12px]">
-                        <SelectValue placeholder="Select a form to display" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="z-[10001]">
-                      {formsInfo?.map((form: FormInformation) => (
-                        <SelectItem key={form._id} value={form._id}>
-                          {form.name}
-                        </SelectItem>
-                      ))}
-                      {isEmpty(formsInfo) && <span> There&apos;s no form</span>}
-                    </SelectContent>
-                  </Select>
-                </RHFFormItem>
-              );
-            }}
+          <FormNodeSelector
+            nameField={`${FLOW_KEYS.NODES}.${nodeIndex}.form`}
           />
         </div>
         <div

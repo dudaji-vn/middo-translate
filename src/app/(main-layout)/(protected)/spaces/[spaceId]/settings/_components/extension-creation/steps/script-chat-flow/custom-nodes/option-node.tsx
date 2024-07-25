@@ -60,7 +60,7 @@ function OptionNode({ data, isConnectable, ...node }: CustomNodeProps) {
       ...currentNode,
       type: 'form',
       data: {
-        content: '',
+        content: 'new form',
       },
     };
     const nodesWithoutCurrent = nodes.filter(
