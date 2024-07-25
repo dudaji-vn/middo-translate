@@ -277,4 +277,11 @@ export const roomApi = {
     );
     return res.data;
   },
+
+  async countUnreadMessages(roomId: string) {
+    const res: Response<{ count: number }> = await axios.get(
+      `${basePath}/${roomId}/unread-messages/count`,
+    );
+    return res.data;
+  },
 };

@@ -1,12 +1,12 @@
+import { ROUTE_NAMES } from '@/configs/route-name';
 import { SOCKET_CONFIG } from '@/configs/socket';
+import { Room } from '@/features/chat/rooms/types';
 import socket from '@/lib/socket-io';
 import { useQueryClient } from '@tanstack/react-query';
-import { use, useEffect, useState } from 'react';
-import { Message } from '../../types';
 import { convert } from 'html-to-text';
 import { useRouter } from 'next/navigation';
-import { ROUTE_NAMES } from '@/configs/route-name';
-import { Room } from '@/features/chat/rooms/types';
+import { useEffect } from 'react';
+import { Message } from '../../types';
 
 export const useMessageSocket = ({
   room,
@@ -23,28 +23,8 @@ export const useMessageSocket = ({
   guestId: string;
   setNotification: (message: string) => void;
 }) => {
-  const [isCounting, setIsCounting] = useState(false);
-  const [newCount, setNewCount] = useState(0);
-  const [canCount, setCanCount] = useState(false);
   const router = useRouter();
   const queryClient = useQueryClient();
-  useEffect(() => {
-    setNewCount(0);
-    setCanCount(false);
-  }, [room._id]);
-
-  useEffect(() => {
-    if (isCounting) {
-      setIsCounting(false);
-      if (!canCount) return;
-      setNewCount((prev) => prev + 1);
-    }
-  }, [isCounting, canCount]);
-
-  useEffect(() => {
-    if (canCount) return;
-    setNewCount(0);
-  }, [canCount]);
 
   useEffect(() => {
     socket.on(
@@ -56,10 +36,8 @@ export const useMessageSocket = ({
         message: Message;
         clientTempId: string;
       }) => {
-        console.log(`socket.on(${SOCKET_CONFIG.EVENTS.MESSAGE.NEW})`, message);
         replaceItem(message, clientTempId);
         if (message.sender._id === userId) return;
-        setIsCounting(true);
 
         // In case of have someones remove you from group
         if (message.action === 'removeUser') {
@@ -100,5 +78,4 @@ export const useMessageSocket = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [replaceItem, room._id, updateItem, userId, guestId]);
-  return { newCount, canCount, setCanCount };
 };

@@ -25,8 +25,6 @@ interface MessagesBoxContextProps {
   updateMessage: (message: Message) => void;
   removeMessage: (messageId: string) => void;
   isFetching: boolean;
-  newCount: number;
-  setCanCount: (canCount: boolean) => void;
 }
 
 export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
@@ -77,7 +75,7 @@ export const MessagesBoxProvider = ({
     isAnonymous,
   });
 
-  const { newCount, setCanCount } = useMessageSocket({
+  useMessageSocket({
     room,
     userId: userId as string,
     guestId: guestId as string,
@@ -105,8 +103,6 @@ export const MessagesBoxProvider = ({
         updateMessage: updateItem,
         removeMessage: removeItem,
         isFetching,
-        newCount,
-        setCanCount,
       }}
     >
       {children}

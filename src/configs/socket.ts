@@ -9,6 +9,7 @@ export const SOCKET_CONFIG = {
       NEW: 'message.new',
       SEND: 'message.send',
       UPDATE: 'message.update',
+      UNREAD_UPDATE: 'message.unread_update',
       DELETE: 'message.delete',
       REPLY: {
         NEW: 'message.reply.new',

@@ -25,6 +25,10 @@ import { useMessageActions } from '../message-actions';
 import { MessageBoxSearch } from '../message-box-search';
 import { TimeDisplay } from '../time-display';
 import { useMessagesBox } from './messages-box.context';
+import { useQuery } from '@tanstack/react-query';
+import { roomApi } from '@/features/chat/rooms/api';
+import socket from '@/lib/socket-io';
+import { SOCKET_CONFIG } from '@/configs/socket';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 30; // 1 day
 export type MessageGroup = {
@@ -53,8 +57,6 @@ export const MessageBox = ({
     messages,
     isFetching,
     pinnedMessages,
-    newCount,
-    setCanCount,
   } = useMessagesBox();
   const { removeParam, searchParams } = useSetParams();
   const messageId = searchParams?.get('search_id');
@@ -99,18 +101,6 @@ export const MessageBox = ({
     setIsShowScrollToBottom(isScrolled);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isScrolled]);
-
-  useEffect(() => {
-    if (newCount > 0 && messageId) {
-      setIsShowScrollToBottom(true);
-      return;
-    }
-  }, [newCount, messageId]);
-
-  useEffect(() => {
-    setCanCount(isShowScrollToBottom);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isShowScrollToBottom]);
 
   const handleScrollToBottom = () => {
     scrollIntoView();
@@ -246,32 +236,10 @@ export const MessageBox = ({
         />
       )}
       {isShowScrollToBottom && (
-        <>
-          {newCount === 0 ? (
-            <motion.div layoutId="new-message-button">
-              <Button.Icon
-                size="xs"
-                color="secondary"
-                onClick={handleScrollToBottom}
-                className="absolute bottom-4 left-1/2 -translate-x-1/2"
-              >
-                <ArrowDownIcon className="text-primary" />
-              </Button.Icon>
-            </motion.div>
-          ) : (
-            <motion.div layoutId="new-message-button">
-              <Button
-                onClick={handleScrollToBottom}
-                startIcon={<ArrowDownIcon />}
-                size="xs"
-                color="secondary"
-                className="absolute bottom-4 left-1/2 -translate-x-1/2"
-              >
-                {newCount} New messages
-              </Button>
-            </motion.div>
-          )}
-        </>
+        <ScrollToButton
+          roomId={room._id}
+          handleScrollToBottom={handleScrollToBottom}
+        />
       )}
     </div>
   );
@@ -377,4 +345,55 @@ const getReadByUsers = (
       return user ? user : null;
     })
     .filter((user): user is User => !!user);
+};
+
+const ScrollToButton = ({
+  roomId,
+  handleScrollToBottom,
+}: {
+  roomId: string;
+  handleScrollToBottom: () => void;
+}) => {
+  const { data, refetch } = useQuery({
+    queryKey: ['count-unread-messages', { roomId }],
+    queryFn: () => roomApi.countUnreadMessages(roomId),
+  });
+  const newCount = data?.count ?? 0;
+
+  useEffect(() => {
+    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UNREAD_UPDATE, () => {
+      refetch();
+    });
+    return () => {
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UNREAD_UPDATE);
+    };
+  }, []);
+  return (
+    <>
+      {newCount === 0 ? (
+        <motion.div layoutId="new-message-button">
+          <Button.Icon
+            size="xs"
+            color="secondary"
+            onClick={handleScrollToBottom}
+            className="absolute bottom-4 left-1/2 -translate-x-1/2"
+          >
+            <ArrowDownIcon className="text-primary" />
+          </Button.Icon>
+        </motion.div>
+      ) : (
+        <motion.div layoutId="new-message-button">
+          <Button
+            onClick={handleScrollToBottom}
+            startIcon={<ArrowDownIcon />}
+            size="xs"
+            color="secondary"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2"
+          >
+            {newCount} New messages
+          </Button>
+        </motion.div>
+      )}
+    </>
+  );
 };
