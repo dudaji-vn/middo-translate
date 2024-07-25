@@ -86,9 +86,6 @@ export default function JoinCallForm() {
             key: ACCESS_TOKEN_NAME, 
             value: data.token, 
             time: 60 * 60 * 24,
-            config: {
-              path: '/api',
-            }
           },
         ]);
         const {user, call} = data
