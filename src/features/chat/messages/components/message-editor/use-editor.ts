@@ -11,7 +11,9 @@ import {
 } from './mention-suggestion-options';
 import { useEffect, useRef } from 'react';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
-import { useMessageActions } from '@/features/chat/messages/components/message-actions';
+
+import { convert } from 'html-to-text';
+import { useMessageActions } from '../message-actions';
 type UseEditorOptions = {
   enterToSubmit?: boolean;
   onClipboardEvent?: (e: ClipboardEvent) => void;
@@ -41,7 +43,10 @@ export const useEditor = ({
     {
       editorProps: {
         transformPastedHTML(html) {
-          return html.replace(/<a\b[^>]*>(.*?)<\/a>/gi, '$1');
+          if (html.includes(`<meta charset='utf-8'><a href=`)) {
+            return extractUrl(html);
+          }
+          return convert(html);
         },
 
         attributes: {
@@ -146,3 +151,9 @@ export const useEditor = ({
   }, [editor, placeholder]);
   return editor;
 };
+
+function extractUrl(html: string) {
+  const regex = /<a href="(.*?)"/;
+  const match = html.match(regex);
+  return match ? match[1] : html;
+}
