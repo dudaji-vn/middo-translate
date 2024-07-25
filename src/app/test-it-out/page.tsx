@@ -236,7 +236,7 @@ const TestItOut = ({
 
   return (
     <>
-      <main className="container-height relative w-full  bg-primary-100 bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
+      <main className="container-height relative w-full bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat">
         <div className="absolute inset-0 bg-neutral-100 bg-opacity-25" />
         <div
           className={cn(
@@ -381,20 +381,24 @@ const TestItOut = ({
         </div>
 
         {formPreviewState?.open && (
-          <div className="fixed left-0 top-0 z-50 h-screen w-screen">
+          <div
+            className={cn(
+              'fixed left-0 top-0 z-50 h-screen w-screen',
+              'bg-white',
+            )}
+          >
             <ExtensionForm formId={formPreviewState.id} />
-            <Button
+            <Button.Icon
               onClick={() => {
                 setFormPreview(undefined);
               }}
               className="absolute right-1 top-0"
-              startIcon={<X />}
               variant={'ghost'}
               size={'sm'}
               color={'default'}
             >
-              Close
-            </Button>
+              <X />
+            </Button.Icon>
           </div>
         )}
       </main>
