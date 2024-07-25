@@ -286,6 +286,8 @@
           const { urlToForm } = payload;
           console.log('open-form', urlToForm);
           const formIframe = document.createElement('iframe');
+          floatingButtonFrame.style.display = 'none';
+          theTriangle.style.display = 'none';
           formIframe.src = urlToForm;
           formIframe.style.position = 'fixed';
           formIframe.style.top = '0';
@@ -297,6 +299,8 @@
         }
         case 'close-form': {
           const formIframe = document.querySelector('iframe');
+          floatingButtonFrame.style.display = 'block';
+          theTriangle.style.display = 'block';
           if (formIframe) {
             formIframe.remove();
           }
