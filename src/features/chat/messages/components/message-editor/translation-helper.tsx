@@ -182,8 +182,6 @@ export const TranslationHelper = forwardRef<
       ref,
       () => ({
         getEnContent: () => {
-          console.log(enContent, 'hello');
-          console.log(data, 'data');
           return enContent || (!isLoading && !isFetching) ? data : null;
         },
         clearContent,

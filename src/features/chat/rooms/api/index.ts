@@ -36,7 +36,6 @@ export const roomApi = {
     },
   ) {
     const { filterOptions, ...restParams } = params;
-    console.log(restParams);
     const queryParams = {
       ...restParams,
       ...convertRoomsFilterOptionsToString(filterOptions),
@@ -281,6 +280,12 @@ export const roomApi = {
   async countUnreadMessages(roomId: string) {
     const res: Response<{ count: number }> = await axios.get(
       `${basePath}/${roomId}/unread-messages/count`,
+    );
+    return res.data;
+  },
+  async markAsRead(roomId: string) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/read-all-messages`,
     );
     return res.data;
   },

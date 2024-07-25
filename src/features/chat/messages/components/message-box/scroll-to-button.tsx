@@ -1,9 +1,9 @@
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { roomApi } from '@/features/chat/rooms/api';
 import socket from '@/lib/socket-io';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Button } from '@/components/actions';
 import { ArrowDownIcon } from 'lucide-react';
 
@@ -18,6 +18,12 @@ export const ScrollToButton = ({
     queryKey: ['count-unread-messages', { roomId }],
     queryFn: () => roomApi.countUnreadMessages(roomId),
   });
+  const { mutate } = useMutation({
+    mutationFn: () => roomApi.markAsRead(roomId),
+    onSuccess(data, variables, context) {
+      refetch();
+    },
+  });
   const newCount = data?.count ?? 0;
 
   useEffect(() => {
@@ -27,7 +33,14 @@ export const ScrollToButton = ({
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UNREAD_UPDATE);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const handleClick = () => {
+    if (newCount > 0) {
+      mutate();
+    }
+    handleScrollToBottom();
+  };
   return (
     <>
       {newCount === 0 ? (
@@ -44,7 +57,7 @@ export const ScrollToButton = ({
       ) : (
         <motion.div layoutId="new-message-button">
           <Button
-            onClick={handleScrollToBottom}
+            onClick={handleClick}
             startIcon={<ArrowDownIcon />}
             size="xs"
             color="secondary"
