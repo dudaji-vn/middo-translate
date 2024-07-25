@@ -129,15 +129,22 @@ const SelectSingle = ({ name, label, options }: TFormField) => {
   );
 };
 const SelectMultiple = ({ name, label, options }: TFormField) => {
-  const { formState, control, setValue } = useFormContext();
-  const { fields, append, remove, swap, update } = useFieldArray({
-    control,
-    name: `submission.${name}`,
-  });
+  const { formState, control, setValue, watch } = useFormContext();
+  const fieldName = `submission.${name}`;
+  // const { fields, append, remove, swap, update } = useFieldArray({
+  //   control,
+  //   name: `submission.${name}`,
+  // });
+
+  const fields = watch(fieldName) || [];
+
+  const append = (value: any) => {
+    setValue(fieldName, [...fields, value]);
+  };
   const hasSpecialOption = useMemo(() => {
     return (
       options?.some((option: any) => option.type === 'other') &&
-      fields.find((f: any) => f?.type?.toLowerCase() === 'other')
+      fields?.find((f: any) => f === 'other')
     );
   }, [options, fields]);
 
@@ -156,9 +163,7 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
                   control={control}
                   name={`submission.${name}`}
                   render={({ field }) => {
-                    const selected = fields.find(
-                      (f: any) => f.value === item.value,
-                    );
+                    const selected = fields.find((f: any) => f === item.value);
                     return (
                       <FormItem
                         key={item.value}
@@ -170,12 +175,11 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
                               checked={!!selected}
                               onCheckedChange={(checked) => {
                                 if (checked) {
-                                  append(item);
+                                  append(item.value);
                                 } else {
-                                  remove(
-                                    fields.findIndex(
-                                      (f: any) => f.value === item.value,
-                                    ),
+                                  setValue(
+                                    fieldName,
+                                    fields.filter((f: any) => f !== item.value),
                                   );
                                 }
                               }}
