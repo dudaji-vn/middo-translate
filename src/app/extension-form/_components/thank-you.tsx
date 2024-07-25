@@ -27,10 +27,13 @@ const ThankYou = (props: Partial<CreateBusinessForm>) => {
           </div>
         )}
         <div className="flex w-full  flex-col items-center  justify-center gap-2">
-          <Typography className="text-lg font-semibold text-primary-500-main">
+          <Typography
+            variant={'h1'}
+            className="font-semibold text-primary-500-main"
+          >
             {thankyou?.title}
           </Typography>
-          <Typography> {thankyou?.subtitle} </Typography>
+          <Typography>{thankyou?.subtitle}</Typography>
         </div>
       </div>
     </div>
