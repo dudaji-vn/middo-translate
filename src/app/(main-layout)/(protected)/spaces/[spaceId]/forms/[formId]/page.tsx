@@ -127,7 +127,11 @@ const FormPage = ({
       >
         <div className="flex w-full flex-1 flex-col">
           <StepWrapper value="0" isLoading={isLoading}>
-            <Submissions {...(data as BusinessForm)} className="h-full grow" />
+            <Submissions
+              {...(data as BusinessForm)}
+              className="h-full grow"
+              allowRunForm
+            />
             <ClientSidePagination
               pagination={pagination}
               limitOptions={ROWS_PER_PAGE_OPTIONS}

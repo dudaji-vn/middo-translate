@@ -10,6 +10,8 @@ import DownloadButton from '../../../../clients/clients-table/download-button';
 import { makeSubmissionColumns } from '../../../_components/column-def/submission-columns';
 import { cn } from '@/utils/cn';
 import { Eye, Trash2 } from 'lucide-react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 
 const Submissions = ({
   _id,
@@ -20,13 +22,16 @@ const Submissions = ({
   formFields,
   onDelete,
   viewDetailForm,
+  allowRunForm,
   ...props
 }: BusinessForm &
   React.HTMLAttributes<HTMLDivElement> & {
     onDelete?: (id: string) => void;
     viewDetailForm?: () => void;
+    allowRunForm?: boolean;
   }) => {
   const { t } = useTranslation('common');
+  const spaceId = useParams()?.spaceId || '';
   const submissionColumns = makeSubmissionColumns({
     t,
     formFields,
@@ -43,7 +48,7 @@ const Submissions = ({
       <div className="flex h-14 flex-none  flex-row items-center justify-between">
         <div>
           <div
-            className={cn('flex  items-center', {
+            className={cn('flex items-center gap-2', {
               'cursor-pointer': viewDetailForm,
             })}
             onClick={() => viewDetailForm && viewDetailForm()}
@@ -74,6 +79,21 @@ const Submissions = ({
           >
             View Detail
           </Button>
+          <Link
+            href={`/extension-form?spaceId=${spaceId}&formId=${_id}`}
+            className={allowRunForm ? 'min-w-fit py-1' : 'hidden'}
+            target="_blank"
+          >
+            <Button
+              size={'xs'}
+              variant={'ghost'}
+              color={'primary'}
+              startIcon={<Eye />}
+              shape={'square'}
+            >
+              Run Form
+            </Button>
+          </Link>
           <DownloadButton
             data={submissions}
             colInfo={[]}

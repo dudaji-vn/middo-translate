@@ -24,6 +24,7 @@ import { PreviewReceivedMessage } from '../(main-layout)/(protected)/spaces/[spa
 import { DEFAULT_THEME } from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
 import { MessageActions } from '@/features/chat/messages/components/message-actions';
+import MessageTriggerForm from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/trigger-form-button';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';
@@ -31,6 +32,7 @@ type FakeMessage = Message & {
   nodeType: FlowNode['type'];
   link?: string;
   media?: Media[];
+  form?: string;
 };
 const fakeSender: User = {
   _id: 'fake-sender',
@@ -71,7 +73,7 @@ const createFakeMessages = ({
     _id: new Date().getTime().toString(),
     nodeId: node?.id,
     nodeType: node?.type,
-    contentEnglish: '',
+    form: node?.form,
     link: node?.data?.link,
     fakeType,
   } as FakeMessage;
@@ -148,6 +150,12 @@ const TestItOut = ({
         }
         case 'form':
           console.log('form is here::> ', node);
+          const message = createFakeMessages({
+            data: { content: node.data?.content, media: node.data?.media },
+            fakeType: 'flow-sender',
+            node,
+          });
+          setFakeMessages((prev) => [...prev, message]);
         // TODO: handle form trigger
         case 'button':
           break;
@@ -260,10 +268,12 @@ const TestItOut = ({
                 <TimeDisplay time={new Date().toString()} />
                 {fakeMessages.map((message, index) => {
                   if (message.fakeType === 'flow-sender') {
+                    const isForm = message.nodeType === 'form';
                     return (
                       <PreviewReceivedMessage
                         space={space}
                         media={message.media}
+                        {...(isForm ? { formId: message.form } : {})}
                         debouncedTime={0}
                         key={index}
                         sender={currentUser}

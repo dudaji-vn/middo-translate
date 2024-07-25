@@ -46,6 +46,7 @@ export type FlowNode = Node<{
   media?: Media[];
   link?: string;
 }> & {
+  form?: string;
   type: FlowItemType;
 };
 
