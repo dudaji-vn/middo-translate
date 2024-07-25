@@ -20,7 +20,7 @@ import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
 import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useSetParams } from '@/hooks/use-set-params';
 import { cn } from '@/utils/cn';
-import { m, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useMessageActions } from '../message-actions';
 import { MessageBoxSearch } from '../message-box-search';
 import { TimeDisplay } from '../time-display';
