@@ -91,7 +91,7 @@ const Submissions = ({
               startIcon={<Eye />}
               shape={'square'}
             >
-              Run Form
+              Try Form
             </Button>
           </Link>
           <DownloadButton

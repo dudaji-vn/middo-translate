@@ -223,7 +223,8 @@
           </div>
       </div> 
 
-      <iframe id="entire-page-iframe" src="${chatSRC}" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999999 !important; border: none;">
+      <iframe id="entire-page-iframe" src="${chatSRC}" style=" position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999999 !important; border: none;">
+      asbkajbajkdbasjkdbkajsdbnjkasd
     
       </iframe>
     `;

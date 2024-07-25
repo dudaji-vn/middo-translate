@@ -286,7 +286,7 @@ const RenderField = ({ field }: { field: TFormField }) => {
   return null;
 };
 
-type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
+export type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
 const ExtensionForm = ({ formId }: { formId: string }) => {
   const currentUser = useAuthStore((s) => s.user);
   const { data: form, isLoading } = useGetFormHelpdesk({ formId });
