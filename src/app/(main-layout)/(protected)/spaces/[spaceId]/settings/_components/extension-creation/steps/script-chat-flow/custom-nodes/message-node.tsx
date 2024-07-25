@@ -55,13 +55,11 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
       (n: { id: string }) => n.id === currentNode?.parentId,
     );
     switch (parent?.type) {
-      case 'container':
-      case 'root':
-      case 'message':
-        convertMessageToOption();
+      case 'form':
+        deleteThisNode();
         break;
       default: // delete node
-        deleteThisNode();
+        convertMessageToOption();
     }
   };
 

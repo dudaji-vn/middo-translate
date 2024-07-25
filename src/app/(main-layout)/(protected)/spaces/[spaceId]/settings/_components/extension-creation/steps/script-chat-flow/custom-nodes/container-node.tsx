@@ -6,7 +6,7 @@ import 'reactflow/dist/style.css';
 
 import { Handle, Position } from 'reactflow';
 import { Button } from '@/components/actions';
-import { MessageSquare, Plus, Trash2 } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, Zap } from 'lucide-react';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import Ping from '../ping';
@@ -91,7 +91,7 @@ function ContainerNode(node: CustomNodeProps) {
 
   return (
     <div
-      className="relative h-[500px] w-[400px] rounded-2xl border bg-white dark:bg-background dark:border dark:border-neutral-900 overflow-hidden"
+      className="relative h-[500px] w-[400px] overflow-hidden rounded-2xl border bg-white dark:border dark:border-neutral-900 dark:bg-background"
       style={{ width, height }}
     >
       <Handle
@@ -102,8 +102,8 @@ function ContainerNode(node: CustomNodeProps) {
       <div className="flex flex-col gap-2 p-3 dark:bg-background">
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2 text-primary-500-main">
-            <MessageSquare size={18} />
-            <p>{data.label}</p>
+            <Zap size={18} />
+            <p>Actions</p>
           </div>
           <div className="flex flex-row items-center gap-2  text-primary-500-main">
             <Button.Icon

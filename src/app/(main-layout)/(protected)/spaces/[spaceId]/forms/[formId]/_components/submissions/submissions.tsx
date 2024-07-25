@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import DownloadButton from '../../../../clients/clients-table/download-button';
 import { makeSubmissionColumns } from '../../../_components/column-def/submission-columns';
 import { cn } from '@/utils/cn';
-import { Trash2 } from 'lucide-react';
+import { Eye, Trash2 } from 'lucide-react';
 
 const Submissions = ({
   _id,
@@ -62,7 +62,18 @@ const Submissions = ({
             {totalSubmissions || 0} submissions data
           </p>
         </div>
-        <div className="flex h-10 flex-row items-center gap-2">
+        <div className="flex h-12 flex-row items-center gap-2">
+          <Button
+            size={'xs'}
+            variant={'ghost'}
+            color={'primary'}
+            startIcon={<Eye />}
+            shape={'square'}
+            className={viewDetailForm ? 'min-w-fit py-1' : 'hidden'}
+            onClick={() => viewDetailForm && viewDetailForm()}
+          >
+            View Detail
+          </Button>
           <DownloadButton
             data={submissions}
             colInfo={[]}
