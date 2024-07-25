@@ -23,8 +23,11 @@ export const getVideoCall = (callSlug: string) => {
 export const getAnonymousCallInformation = (callId: string) => {
   return get(`/call/${callId}/anonymous`);
 }
-export const userJoinAnonymousCall = (data: {name: string,language: string, callId: string}) => {
+export const userJoinAnonymousCall = (data: {name: string,language: string, callId: string, avatar?:string}) => {
   return post('/call/user-join', { ...data });
+}
+export const loggedUserJoinAnonymousCall = (data: {callId: string}) => {
+  return post('/call/logged-user-join', { ...data });
 }
 export const getHelpDeskCallInformation = (roomId: string, userId: string) => {
   return get(`/call/?roomId=${roomId}&userId=${userId}`);

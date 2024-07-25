@@ -1,5 +1,6 @@
 'use client';
 
+import { useVideoCallStore } from '@/features/call/store/video-call.store';
 import { getAnonymousCallInformation } from '@/services/video-call.service';
 import { notFound, useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -15,7 +16,6 @@ export default function CallLayout({
   const [isValidUrl, setIsValidUrl] = useState(false);
   useEffect(() => {
     if (!callId) {
-      console.log('callId', callId);
       router.push('/404')
       return;
     };
@@ -24,18 +24,15 @@ export default function CallLayout({
         try {
           const res = await getAnonymousCallInformation(callId)
           if(!res.data) {
-            console.log('res.data', res.data);
             router.push('/404');
           } else {
             setIsValidUrl(true)
           }
         } catch (_) {
-          console.log('CATCH')
           router.push('/404');
         }
     }
     getCallById()
-
   }, [callId]);
   if(!isValidUrl) return null;
   return <>{children}</>;

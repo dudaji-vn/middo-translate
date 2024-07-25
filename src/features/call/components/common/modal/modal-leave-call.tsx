@@ -14,12 +14,12 @@ import { useElectron } from '@/hooks/use-electron';
 import { ELECTRON_EVENTS } from '@/configs/electron-events';
 import { useTranslation } from 'react-i18next';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth.store';
+import { signOutService } from '@/services/auth.service';
 
 export const ModalLeaveCall = () => {
   const {t} = useTranslation('common');
-  const user = useAuthStore(state=>state.user)
   const setModal = useVideoCallStore(state => state.setModal);
   const modal = useVideoCallStore(state => state.modal)
   const setRoom = useVideoCallStore(state => state.setRoom);
@@ -27,7 +27,8 @@ export const ModalLeaveCall = () => {
   const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
   const { isHelpDesk } = useBusinessNavigationData();
   const { isElectron, ipcRenderer } = useElectron();
-  const router = useRouter();
+  const pathName = usePathname();
+  const isAnonymousCallScreen = pathName?.includes('call');
   const handleLeave = async () => {
     setModal();
     participants.forEach((participant) => {
@@ -40,8 +41,8 @@ export const ModalLeaveCall = () => {
     if(isElectron) {
       ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
     }
-    if(user?.status == 'anonymous') {
-      router.push('/');
+    if(isAnonymousCallScreen) {
+      window.location.href = '/';
       return;
     }
     if(isHelpDesk) {
