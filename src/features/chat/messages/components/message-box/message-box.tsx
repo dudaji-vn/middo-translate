@@ -64,6 +64,8 @@ export const MessageBox = ({
   const { isOnBusinessChat } = useBusinessNavigationData();
   const { message: messageEditing, action } = useMessageActions();
 
+  const [isViewUnread, setIsViewUnread] = useState(false);
+
   const [participants, setParticipants] = useState(room.participants);
 
   useEffect(() => {
@@ -129,7 +131,11 @@ export const MessageBox = ({
                 key={group.lastMessage.clientTempId || group.lastMessage._id}
               >
                 {lastUnreadMessageId === group.lastMessage._id &&
-                  !isInitialLoading && <MessageBoxNewSection />}
+                  !isInitialLoading && (
+                    <MessageBoxNewSection
+                      onIntersected={() => setIsViewUnread(true)}
+                    />
+                  )}
                 {isShowTimeGroup && (
                   <TimeDisplay time={group.lastMessage.createdAt} />
                 )}
@@ -162,6 +168,9 @@ export const MessageBox = ({
                       };
                       return (
                         <MessageItem
+                          seenTrackerDisabled={
+                            !!lastUnreadMessageId && !isViewUnread
+                          }
                           isEditing={
                             message._id === messageEditing?._id &&
                             action === 'edit'
