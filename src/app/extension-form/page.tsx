@@ -30,6 +30,8 @@ import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
 import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
 import Image from 'next/image';
 import { Checkbox } from '@/components/form/checkbox';
+import ThankYou from './_components/thank-you';
+import toast from 'react-hot-toast';
 
 const submissionSchema = z.object({
   formId: z.string(),
@@ -245,19 +247,24 @@ const ExtensionForm = ({
 }) => {
   const currentUser = useAuthStore((s) => s.user);
   const { data: form } = useGetFormHelpdesk({ formId });
-  const [isStarted, setIsStarted] = React.useState(false);
+  const [isDone, setIsDone] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(0);
   const formAnswer = useForm<TSubmission>({
     mode: 'onChange',
-    defaultValues: {},
+    defaultValues: {
+      formId,
+    },
     resolver: zodResolver(submissionSchema),
   });
+  const {
+    formState: { errors },
+  } = formAnswer;
 
-  const handleStart = useCallback(() => {
-    setIsStarted(true);
+  const handleCloseForm = useCallback(() => {
+    setIsDone(true);
   }, []);
 
-  if (!currentUser || !form || !formId) return null;
+  if (!form || !formId) return null;
 
   const { formFields, customize, thankyou } = form as FormDetail;
   const themeName = customize?.theme
@@ -278,17 +285,26 @@ const ExtensionForm = ({
   };
 
   const submit = async (data: TSubmission) => {
-    console.log('data submit :>>', data);
     const payload = {
       formId,
       submission: data.submission,
     };
+    console.log('payload', payload);
+
+    const isPreviewMode = !!currentUser;
+    if (isPreviewMode) {
+      handleCloseForm();
+      toast.success('Form submitted successfully!');
+      return;
+    }
     try {
-      console.log('payload', payload);
+      // TODO: submit form answer
     } catch (error) {
       console.log('error', error);
     }
   };
+  console.log('formFieldsERR', errors);
+
   return (
     <>
       <main
@@ -298,38 +314,43 @@ const ExtensionForm = ({
         )}
         style={{ backgroundImage: bgSrc }}
       >
-        <div className="flex size-full flex-col rounded-xl bg-white pb-6">
-          <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
-            <FileText className="size-5" />
-            <Typography className="text-md  font-semibold text-primary-500-main">
-              {form.name}
-            </Typography>
-          </div>
-          <Form {...formAnswer}>
-            <div className="flex w-full grow flex-col gap-3 overflow-y-auto p-10">
-              {formFields.map((field, index) => {
-                return (
-                  <RenderField
-                    key={field._id}
-                    field={field as unknown as TFormField}
-                  />
-                );
-              })}
+        {isDone ? (
+          <ThankYou thankyou={thankyou} name={form.name} />
+        ) : (
+          <div className="flex size-full flex-col rounded-xl bg-white pb-6">
+            <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
+              <FileText className="size-5" />
+              <Typography className="text-md  font-semibold text-primary-500-main">
+                {form.name}
+              </Typography>
             </div>
-          </Form>
-          <div className="flex flex-none items-center justify-center py-4">
-            <Button
-              endIcon={<Send />}
-              onClick={formAnswer.handleSubmit(submit)}
-              color="primary"
-              variant="default"
-              type="submit"
-              shape={'square'}
-            >
-              {'Submit'}
-            </Button>
+            <Form {...formAnswer}>
+              <div className="flex w-full grow flex-col gap-3 overflow-y-auto p-10">
+                {formFields.map((field, index) => {
+                  return (
+                    <RenderField
+                      key={field._id}
+                      field={field as unknown as TFormField}
+                    />
+                  );
+                })}
+              </div>
+            </Form>
+            <div className="flex flex-none items-center justify-center py-4">
+              <form onSubmit={formAnswer.handleSubmit(submit)}>
+                <Button
+                  endIcon={<Send />}
+                  color="primary"
+                  variant="default"
+                  type="submit"
+                  shape={'square'}
+                >
+                  {'Submit'}
+                </Button>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
       </main>
     </>
   );
