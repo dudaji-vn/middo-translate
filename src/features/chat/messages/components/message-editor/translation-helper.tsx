@@ -12,6 +12,7 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import { useQuery } from '@tanstack/react-query';
 import { Editor, EditorContent } from '@tiptap/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { convert } from 'html-to-text';
 import { isEqual } from 'lodash';
 import { PenIcon } from 'lucide-react';
 import {
@@ -27,7 +28,6 @@ import { useTranslation } from 'react-i18next';
 import { useDebounceValue } from 'usehooks-ts';
 import { Checkbox } from '../../../../../components/form/checkbox';
 import { useEditor } from './use-editor';
-import { convert } from 'html-to-text';
 const DEBOUNCE_TIME = 500;
 export interface TranslationHelperProps {
   mentionSuggestionOptions: MentionSuggestion[];
@@ -140,8 +140,10 @@ export const TranslationHelper = forwardRef<
         onSend?.();
       }
     };
+
     const showHelper =
-      (!isRootEditorEmpty || rootEditor?.getText().trim().length !== 0) &&
+      rootEditor &&
+      (!isRootEditorEmpty || rootEditor.getText().trim().length !== 0) &&
       showTranslateOnType;
 
     const confirmButtonId = useId();
@@ -180,8 +182,6 @@ export const TranslationHelper = forwardRef<
       ref,
       () => ({
         getEnContent: () => {
-          console.log(enContent, 'hello');
-          console.log(data, 'data');
           return enContent || (!isLoading && !isFetching) ? data : null;
         },
         clearContent,

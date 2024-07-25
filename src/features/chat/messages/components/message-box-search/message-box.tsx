@@ -118,7 +118,7 @@ export const MessageBoxSearch = ({
         const activeMessage = document.querySelector('.active-message');
         if (activeMessage) {
           activeMessage.scrollIntoView({
-            behavior: 'smooth',
+            behavior: 'instant',
             block: 'center',
             inline: 'center',
           });

@@ -59,6 +59,7 @@ export interface MessageProps
   isDiscussion?: boolean;
   isLast?: boolean;
   keyword?: string;
+  seenTrackerDisabled?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -104,6 +105,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       isDraw = false,
       isEditing = false,
       isDiscussion = false,
+      seenTrackerDisabled = false,
       keyword,
       ...props
     },
@@ -135,7 +137,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           setActive,
         }}
       >
-        {!isDraw && <SeenTracker guestId={guestId} />}
+        {!isDraw && !seenTrackerDisabled && <SeenTracker guestId={guestId} />}
         {isSystemMessage ? (
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (

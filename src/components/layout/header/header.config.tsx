@@ -25,7 +25,7 @@ const items: NavItem[] = [
   },
   {
     name: 'HEADER.CONVERSATION',
-    href: ROUTE_NAMES.STATIONS,
+    href: ROUTE_NAMES.ONLINE_CONVERSATION,
     target: '_self',
     icon: <MessagesSquareIcon size={16} />,
   },
