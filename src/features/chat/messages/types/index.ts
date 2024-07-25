@@ -14,7 +14,7 @@ export type MessageType =
   | 'notification'
   | 'action'
   | 'forward'
-  | 'flow-actions';
+  | 'flow-actions' | 'flow-form';
 
 export type ActionTypes =
   | 'none'

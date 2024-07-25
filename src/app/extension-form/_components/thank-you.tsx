@@ -21,8 +21,8 @@ const ThankYou = (props: Partial<CreateBusinessForm>) => {
             <Image
               src={thankyou.image}
               alt="thankyou-image"
-              width={50}
-              height={50}
+              width={400}
+              height={300}
             />
           </div>
         )}

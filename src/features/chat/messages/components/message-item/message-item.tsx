@@ -36,6 +36,7 @@ import { MessageItemReactionBar } from './message-extension/message-item-reactio
 import { MessageItemParticipantJoinCall } from './message-extension/message-item-participant-join-call';
 import { Button } from '@/components/actions';
 import { useMessageActions } from '../message-actions';
+import MessageItemFlowFormTrigger from './message-item-flow-form-trigger';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -128,6 +129,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     } = useBoolean(false);
 
     const actionsFromScriptChat = message.actions;
+
+    const extensionFormId =
+      message?.type === 'flow-form' ? message.content : undefined;
     return (
       <MessageItemContext.Provider
         value={{
@@ -214,7 +218,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           mediaLength > 1 && 'rounded-none',
                         )}
                       >
-                        {message.content && (
+                        {extensionFormId && (
+                          <MessageItemFlowFormTrigger
+                              formId={extensionFormId}
+                              guestId={guestId}
+                          />
+                        )}
+                        {message.content && !extensionFormId && (
                           <Content
                             keyword={keyword}
                             showDetails={showDetail}

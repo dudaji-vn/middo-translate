@@ -223,9 +223,6 @@
           </div>
       </div> 
 
-      <iframe id="entire-page-iframe" src="${chatSRC}" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999999 !important; border: none;">
-    
-      </iframe>
     `;
 
     document.head.insertAdjacentHTML('beforeend', styleTag);
@@ -233,7 +230,6 @@
 
     const floatingIcon = document.getElementById('floating-icon-btn');
     const widgetChatFrame = document.getElementById('widget-chat-frame');
-    const fullScreenFrame = document.getElementById('entire-page-iframe');
     floatingIcon.style.color = colorMap['rose'];
 
     const theTriangle = document.getElementById('widget_triangle');
@@ -288,12 +284,26 @@
 
         case 'open-form': {
           const { urlToForm } = payload;
-          fullScreenFrame.style.display = 'block';
-          fullScreenFrame.src = urlToForm;
+          console.log('open-form', urlToForm);
+          const formIframe = document.createElement('iframe');
+          floatingButtonFrame.style.display = 'none';
+          theTriangle.style.display = 'none';
+          formIframe.src = urlToForm;
+          formIframe.style.position = 'fixed';
+          formIframe.style.top = '0';
+          formIframe.style.left = '0';
+          formIframe.style.width = '100vw';
+          formIframe.style.height = '100vh';
+          formIframe.style.border = 'none';
+          document.body.appendChild(formIframe);
         }
         case 'close-form': {
-          fullScreenFrame.style.display = 'none';
-          fullScreenFrame.src = '';
+          const formIframe = document.querySelector('iframe');
+          floatingButtonFrame.style.display = 'block';
+          theTriangle.style.display = 'block';
+          if (formIframe) {
+            formIframe.remove();
+          }
         }
         default:
           break;

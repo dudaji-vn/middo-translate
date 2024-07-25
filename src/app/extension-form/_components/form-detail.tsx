@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
@@ -54,7 +54,14 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
   );
 };
 const SelectSingle = ({ name, label, options }: TFormField) => {
-  const { control } = useFormContext();
+  const { control, watch } = useFormContext();
+  const currentValue = watch(`submission.${name}`);
+  const hasSpecialOption = useMemo(() => {
+    return (
+      options?.some((option) => option.type === 'other') &&
+      currentValue === 'other'
+    );
+  }, [options, currentValue]);
   return (
     <Wrapper>
       <Typography className="!font-semibold">{label}</Typography>
@@ -95,6 +102,21 @@ const SelectSingle = ({ name, label, options }: TFormField) => {
                           alt={`${option.value} image`}
                         />
                       )}
+                      {hasSpecialOption && option.type === 'other' && (
+                        <div className="w-full px-2">
+                          <RHFInputField
+                            name={`submission.${name}-other`}
+                            formItemProps={{
+                              className: 'w-full',
+                            }}
+                            inputProps={{
+                              placeholder: 'Other answer',
+                              className:
+                                'w-full border-neutral-50 bg-transparent focus:ring-[1px] focus:ring-primary-300',
+                            }}
+                          />
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -107,11 +129,24 @@ const SelectSingle = ({ name, label, options }: TFormField) => {
   );
 };
 const SelectMultiple = ({ name, label, options }: TFormField) => {
-  const { formState, control, setValue } = useFormContext();
-  const { fields, append, remove, swap, update } = useFieldArray({
-    control,
-    name: `submission.${name}`,
-  });
+  const { formState, control, setValue, watch } = useFormContext();
+  const fieldName = `submission.${name}`;
+  // const { fields, append, remove, swap, update } = useFieldArray({
+  //   control,
+  //   name: `submission.${name}`,
+  // });
+
+  const fields = watch(fieldName) || [];
+
+  const append = (value: any) => {
+    setValue(fieldName, [...fields, value]);
+  };
+  const hasSpecialOption = useMemo(() => {
+    return (
+      options?.some((option: any) => option.type === 'other') &&
+      fields?.find((f: any) => f === 'other')
+    );
+  }, [options, fields]);
 
   return (
     <Wrapper>
@@ -128,44 +163,59 @@ const SelectMultiple = ({ name, label, options }: TFormField) => {
                   control={control}
                   name={`submission.${name}`}
                   render={({ field }) => {
+                    const selected = fields.find((f: any) => f === item.value);
                     return (
                       <FormItem
                         key={item.value}
-                        className="flex flex-col items-start space-x-3 space-y-0"
+                        className="flex flex-col items-start gap-1 space-x-3"
                       >
                         <div className="flex flex-row items-start space-x-3 space-y-0">
                           <FormControl>
                             <Checkbox
-                              checked={field.value?.includes(item.value)}
+                              checked={!!selected}
                               onCheckedChange={(checked) => {
                                 if (checked) {
                                   append(item.value);
                                 } else {
-                                  const index = fields.findIndex(
-                                    (f) => f.id === item.value,
+                                  setValue(
+                                    fieldName,
+                                    fields.filter((f: any) => f !== item.value),
                                   );
-                                  remove(index);
                                 }
                               }}
                             />
                           </FormControl>
-                          <FormLabel className="font-normal">
+                          <FormLabel className="flex cursor-pointer flex-col gap-2 font-normal">
                             {item.value}
+                            {item.media && (
+                              <Image
+                                src={item.media}
+                                width={100}
+                                height={100}
+                                alt={`${item.value} image-select`}
+                              />
+                            )}
                           </FormLabel>
                         </div>
-
-                        {item.media && (
-                          <Image
-                            src={item.media}
-                            width={100}
-                            height={100}
-                            alt={`${item.value} image-select`}
-                          />
+                        {hasSpecialOption && item?.type === 'other' && (
+                          <div className="w-full pr-4">
+                            <RHFInputField
+                              name={`submission.${name}-other`}
+                              formItemProps={{
+                                className: 'w-full',
+                              }}
+                              inputProps={{
+                                placeholder: 'Other answer',
+                                className:
+                                  'w-full border-neutral-50  bg-transparent focus:ring-[1px] focus:ring-primary-300',
+                              }}
+                            />
+                          </div>
                         )}
                       </FormItem>
                     );
                   }}
-                />
+                ></FormField>
               ))}
             </RHFFormItem>
           );
@@ -185,7 +235,7 @@ const Input = ({
 }: TFormField) => {
   return (
     <Wrapper>
-      <Typography className="">{label}</Typography>
+      <Typography className="font-semibold">{label}</Typography>
 
       {dataType === 'long-text' ? (
         <RHFTextAreaField
@@ -236,7 +286,7 @@ const RenderField = ({ field }: { field: TFormField }) => {
   return null;
 };
 
-type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
+export type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
 const ExtensionForm = ({ formId }: { formId: string }) => {
   const currentUser = useAuthStore((s) => s.user);
   const { data: form, isLoading } = useGetFormHelpdesk({ formId });
@@ -320,7 +370,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
         {isDone ? (
           <ThankYou thankyou={thankyou} name={form.name} />
         ) : (
-          <div className="flex size-full flex-col rounded-xl bg-white pb-6">
+          <div className="flex size-full flex-col gap-5 rounded-xl bg-white">
             <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
               <FileText className="size-5" />
               <Typography className="text-md  font-semibold text-primary-500-main">
@@ -328,7 +378,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
               </Typography>
             </div>
             <Form {...formAnswer}>
-              <div className="flex w-full grow flex-col gap-3 overflow-y-auto p-10">
+              <div className="flex w-full grow flex-col gap-3 overflow-y-auto px-10">
                 {formFields.map((field, index) => {
                   return (
                     <RenderField
@@ -339,7 +389,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
                 })}
               </div>
             </Form>
-            <div className="flex flex-none items-center justify-center py-4">
+            <div className="flex flex-none items-center justify-center pb-5">
               <form onSubmit={formAnswer.handleSubmit(submit)}>
                 <Button
                   endIcon={<Send />}
