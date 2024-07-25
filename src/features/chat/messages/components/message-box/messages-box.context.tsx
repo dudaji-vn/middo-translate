@@ -25,6 +25,8 @@ interface MessagesBoxContextProps {
   updateMessage: (message: Message) => void;
   removeMessage: (messageId: string) => void;
   isFetching: boolean;
+  isFetched: boolean;
+  isInitialLoading: boolean;
 }
 
 export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
@@ -53,6 +55,8 @@ export const MessagesBoxProvider = ({
     updateItem,
     removeItem,
     replaceItem,
+    isFetched,
+    isInitialLoading,
   } = useCursorPaginationQuery<Message>({
     queryKey: key,
     queryFn: ({ pageParam }) => {
@@ -103,6 +107,8 @@ export const MessagesBoxProvider = ({
         updateMessage: updateItem,
         removeMessage: removeItem,
         isFetching,
+        isFetched,
+        isInitialLoading,
       }}
     >
       {children}

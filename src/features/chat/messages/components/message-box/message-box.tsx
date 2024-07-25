@@ -1,11 +1,8 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { Button } from '@/components/actions/button';
 import { InfiniteScroll } from '@/components/infinity-scroll';
-import { User } from '@/features/users/types';
-import { ArrowDownIcon } from 'lucide-react';
 import { Room } from '../../../rooms/types';
 import { Message } from '../../types';
 import { MessageItemGroup } from '../message-group';
@@ -14,21 +11,20 @@ import { MessageItem } from '../message-item';
 import { useAuthStore } from '@/stores/auth.store';
 import moment from 'moment';
 
-import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
-import { useScrollDistanceFromTop } from '@/hooks/use-scroll-distance-from-top';
-import { useScrollIntoView } from '@/hooks/use-scroll-into-view';
 import { useSetParams } from '@/hooks/use-set-params';
 import { cn } from '@/utils/cn';
-import { motion } from 'framer-motion';
 import { useMessageActions } from '../message-actions';
 import { MessageBoxSearch } from '../message-box-search';
 import { TimeDisplay } from '../time-display';
+import {
+  generateUsersReadMessageMap,
+  groupMessages,
+} from './message-box-utils';
 import { useMessagesBox } from './messages-box.context';
-import { useQuery } from '@tanstack/react-query';
-import { roomApi } from '@/features/chat/rooms/api';
-import socket from '@/lib/socket-io';
-import { SOCKET_CONFIG } from '@/configs/socket';
+import { ScrollToButton } from './scroll-to-button';
+import { useMessageBoxScroll } from './use-message-box-scroll';
+import { MessageBoxNewSection } from './message-box-new-section';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 30; // 1 day
 export type MessageGroup = {
@@ -44,8 +40,6 @@ export const MessageBox = ({
   isAnonymous?: boolean;
   guestId?: string;
 }) => {
-  const setIsShowSearch = useRoomSearchStore((s) => s.setIsShowSearch);
-
   const [lastUnreadMessageId, setLastUnreadMessageId] = useState<string | null>(
     null,
   );
@@ -55,17 +49,20 @@ export const MessageBox = ({
     hasNextPage,
     loadMoreMessages,
     messages,
-    isFetching,
     pinnedMessages,
+    isInitialLoading,
   } = useMessagesBox();
-  const { removeParam, searchParams } = useSetParams();
+  const { searchParams } = useSetParams();
+  const {
+    bottomRef,
+    handleScrollToBottom,
+    isShowScrollToBottom,
+    ref,
+    setIsShowScrollToBottom,
+  } = useMessageBoxScroll();
   const messageId = searchParams?.get('search_id');
-  const { ref, isScrolled } = useScrollDistanceFromTop(0, true);
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const { scrollIntoView } = useScrollIntoView(bottomRef);
   const { isOnBusinessChat } = useBusinessNavigationData();
   const { message: messageEditing, action } = useMessageActions();
-  const [isShowScrollToBottom, setIsShowScrollToBottom] = useState(false);
 
   const [participants, setParticipants] = useState(room.participants);
 
@@ -97,19 +94,6 @@ export const MessageBox = ({
     );
   }, [currentUserId, messagesGroup, participants]);
 
-  useEffect(() => {
-    setIsShowScrollToBottom(isScrolled);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isScrolled]);
-
-  const handleScrollToBottom = () => {
-    scrollIntoView();
-    if (messageId) {
-      removeParam('search_id');
-      setIsShowSearch(false);
-    }
-  };
-
   return (
     <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
       {!messageId && (
@@ -117,7 +101,6 @@ export const MessageBox = ({
           scrollDirection="to-top"
           hasMore={hasNextPage || false}
           onLoadMore={loadMoreMessages}
-          isFetching={isFetching}
           ref={ref}
           id="inbox-list"
           className="bg-primary/5 flex w-full flex-1 flex-col-reverse gap-2.5 overflow-x-hidden overflow-y-scroll px-2 md:px-3"
@@ -145,15 +128,8 @@ export const MessageBox = ({
               <div
                 key={group.lastMessage.clientTempId || group.lastMessage._id}
               >
-                {lastUnreadMessageId === group.lastMessage._id && (
-                  <div className="relative flex w-full items-center">
-                    <div className="h-[1px] flex-1 bg-primary"></div>
-                    <span className="p-3 text-sm font-semibold text-primary">
-                      New
-                    </span>
-                    <div className="h-[1px] flex-1 bg-primary "></div>
-                  </div>
-                )}
+                {lastUnreadMessageId === group.lastMessage._id &&
+                  !isInitialLoading && <MessageBoxNewSection />}
                 {isShowTimeGroup && (
                   <TimeDisplay time={group.lastMessage.createdAt} />
                 )}
@@ -242,158 +218,5 @@ export const MessageBox = ({
         />
       )}
     </div>
-  );
-};
-
-const groupMessages = (
-  messages: Message[],
-  specificIdsToGroup: string[] = [],
-): MessageGroup[] => {
-  return messages?.reduce((acc, message) => {
-    if (acc.length === 0) {
-      acc.push({ messages: [message], lastMessage: message });
-      return acc;
-    }
-    const lastGroup = acc[acc.length - 1];
-    const lastMessage = lastGroup.lastMessage;
-    if (
-      specificIdsToGroup.includes(lastMessage._id) ||
-      shouldCreateNewGroup(message, lastMessage)
-    ) {
-      acc.push({ messages: [message], lastMessage: message });
-    } else {
-      lastGroup.messages.push(message);
-      lastGroup.lastMessage = message;
-    }
-    return acc;
-  }, [] as MessageGroup[]);
-};
-
-const shouldCreateNewGroup = (
-  message: Message,
-  lastMessage: Message,
-): boolean => {
-  const isDifferentSender = lastMessage.sender._id !== message.sender._id;
-  const isNotificationOrAction =
-    message.type === 'action' || message.type === 'notification';
-  const timeDiff = moment(lastMessage.createdAt).diff(
-    moment(message.createdAt),
-    'minute',
-  );
-
-  const isHaveExtension = !!message?.reactions?.length || !!message?.hasChild;
-
-  return (
-    isNotificationOrAction ||
-    lastMessage.type === 'notification' ||
-    lastMessage.type === 'action' ||
-    isDifferentSender ||
-    timeDiff > MAX_TIME_DIFF ||
-    isHaveExtension
-  );
-};
-
-const generateUsersReadMessageMap = (
-  messagesGroup: MessageGroup[],
-  participants: User[],
-  currentUserId: string,
-) => {
-  let alreadyShow: string[] = [];
-  const usersReadMessageMap: { [key: string]: User[] } = {};
-
-  messagesGroup.forEach((group, index) => {
-    group.messages.forEach((message, messageIndex) => {
-      if (index === 0 && messageIndex === 0) {
-        alreadyShow = message.readBy ?? [];
-        usersReadMessageMap[message._id] = getReadByUsers(
-          message,
-          participants,
-          currentUserId,
-        );
-      } else {
-        message.readBy?.forEach((userId) => {
-          if (!alreadyShow.includes(userId)) {
-            const user = participants.find(
-              (u) => u._id === userId && u._id !== currentUserId,
-            );
-            if (user) {
-              alreadyShow.push(userId);
-              usersReadMessageMap[message._id] = [
-                ...(usersReadMessageMap[message._id] ?? []),
-                user,
-              ];
-            }
-          }
-        });
-      }
-    });
-  });
-
-  return usersReadMessageMap;
-};
-
-const getReadByUsers = (
-  message: Message,
-  participants: User[],
-  currentUserId: string,
-): User[] => {
-  return (message.readBy ?? [])
-    .map((userId) => {
-      const user = participants.find(
-        (u) => u._id === userId && u._id !== currentUserId,
-      );
-      return user ? user : null;
-    })
-    .filter((user): user is User => !!user);
-};
-
-const ScrollToButton = ({
-  roomId,
-  handleScrollToBottom,
-}: {
-  roomId: string;
-  handleScrollToBottom: () => void;
-}) => {
-  const { data, refetch } = useQuery({
-    queryKey: ['count-unread-messages', { roomId }],
-    queryFn: () => roomApi.countUnreadMessages(roomId),
-  });
-  const newCount = data?.count ?? 0;
-
-  useEffect(() => {
-    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UNREAD_UPDATE, () => {
-      refetch();
-    });
-    return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UNREAD_UPDATE);
-    };
-  }, []);
-  return (
-    <>
-      {newCount === 0 ? (
-        <motion.div layoutId="new-message-button">
-          <Button.Icon
-            size="xs"
-            color="secondary"
-            onClick={handleScrollToBottom}
-            className="absolute bottom-4 left-1/2 -translate-x-1/2"
-          >
-            <ArrowDownIcon className="text-primary" />
-          </Button.Icon>
-        </motion.div>
-      ) : (
-        <motion.div layoutId="new-message-button">
-          <Button
-            onClick={handleScrollToBottom}
-            startIcon={<ArrowDownIcon />}
-            size="xs"
-            color="secondary"
-            className="absolute bottom-4 left-1/2 -translate-x-1/2"
-          >
-            {newCount} New messages
-          </Button>
-        </motion.div>
-      )}
-    </>
   );
 };
