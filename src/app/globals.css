@@ -630,19 +630,23 @@ pre {
   );
 }
 
-ol li::marker {
+.tiptap ol li::marker {
   color: currentColor !important;
 }
 
-.chrome .prose ul {
+.chrome .tiptap .prose ul {
   padding-inline-start: 0.75em;
 }
 
-.chrome .prose ol {
+.chrome .tiptap .prose ol {
   padding-inline-start: 1em;
 }
 
-.prose ul li,
-.prose ol li {
+.prose .tiptap ul li,
+.prose .tiptap ol li {
   padding-inline-start: 0;
+}
+
+.prose strong {
+  color: currentColor;
 }
