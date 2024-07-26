@@ -297,6 +297,13 @@
           const { urlToForm } = payload;
           if (!urlToForm) return;
           const formIframe = document.getElementById('form-iframe');
+          const currentUrl = formIframe.src;
+          if (currentUrl === urlToForm) {
+            formIframe.style.zIndex = MAX_Z_INDEX + 1;
+            formIframe.style.display = 'block';
+            formIframe.style.animation = 'scale-to-100 0.5s ease forwards';
+            return;
+          }
           formIframe.src = urlToForm;
           formIframe.style.zIndex = MAX_Z_INDEX + 1;
           formIframe.style.display = 'block';

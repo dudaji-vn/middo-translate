@@ -118,10 +118,8 @@ const MessageNode = ({
       onSendBotMessage({
         ...createLocalMessage({
           sender: bot!,
-          content:
-            messageType === 'flow-form'
-              ? nextNode.form
-              : nextNode.data?.content,
+          content: nextNode.data?.content,
+          formId: nextNode.form,
           language: '',
         }),
         status: 'sent',

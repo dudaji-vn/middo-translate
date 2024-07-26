@@ -2,27 +2,14 @@
 
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
-import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
-import { RadioGroup, RadioGroupItem } from '@/components/data-entry';
 import { z } from 'zod';
 import { BaseEntity } from '@/types';
-import { Circle, FileText, Send, X } from 'lucide-react';
+import { FileText, Send, X } from 'lucide-react';
 import { Button } from '@/components/actions';
-import { useFieldArray, useForm, useFormContext } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form';
-import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
-import { RHFTextAreaField } from '@/components/form/RHF/RHFInputFields';
-import { RHFFormItem } from '@/components/form/RHF/RHFFormItem';
-import Image from 'next/image';
-import { Checkbox } from '@/components/form/checkbox';
+import { Form } from '@/components/ui/form';
 import toast from 'react-hot-toast';
 import {
   type FormField as TFormField,
@@ -33,251 +20,20 @@ import { extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/sp
 import { useGetFormHelpdesk } from '@/features/conversation-forms/hooks/use-get-form-helpdesk';
 import ClientsLoading from '@/app/(main-layout)/(protected)/spaces/[spaceId]/clients/loading';
 import {
-  addFormDraftData,
   removeFormDraftData,
   useHelpdeskFormDraft,
-  useHelpdeskStore,
 } from '@/stores/helpdesk.store';
 import { announceToParent } from '@/utils/iframe-util';
 import { submitFormAnswer } from '@/services/extension.service';
+import { Input, SelectMultiple, SelectSingle } from './form-fields';
+import { isEmpty } from 'lodash';
 
-const submissionSchema = z.object({
+const answerSchema = z.object({
   formId: z.string(),
-  submission: z
-    .object({})
-    .passthrough()
-    .refine((val) => {
-      console.log('answer val', val);
-      return true;
-    }),
+  answer: z.object({}).passthrough(),
 });
 
-type TSubmission = z.infer<typeof submissionSchema>;
-
-const Wrapper = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <div className="flex flex-col gap-2 rounded-[12px] bg-[#FAFAFA] p-3">
-      {children}
-    </div>
-  );
-};
-const SelectSingle = ({ name, label, options }: TFormField) => {
-  const { control, watch } = useFormContext();
-  const currentValue = watch(`submission.${name}`);
-  const hasSpecialOption = useMemo(() => {
-    return (
-      options?.some((option) => option.type === 'other') &&
-      currentValue === 'other'
-    );
-  }, [options, currentValue]);
-  return (
-    <Wrapper>
-      <Typography className="!font-semibold">{label}</Typography>
-      <FormField
-        name={`submission.${name}`}
-        control={control}
-        render={({ field, fieldState: { invalid } }) => {
-          return (
-            <RHFFormItem key={field.name}>
-              <RadioGroup
-                className="flex w-full flex-col gap-4"
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
-                {options?.map((option) => {
-                  return (
-                    <div key={option.value} className="flex flex-col gap-2">
-                      <div className="flex flex-row items-center gap-2">
-                        <RadioGroupItem
-                          value={option.value}
-                          id={option.value}
-                          className="flex flex-none flex-row border-neutral-200 ring-neutral-200 dark:border-neutral-800 dark:ring-neutral-900 "
-                        >
-                          <Circle
-                            className="absolute -inset-[1px] size-4 fill-primary"
-                            stroke="white"
-                          />
-                        </RadioGroupItem>
-                        <Typography className="grow text-sm  text-neutral-900">
-                          {option.value}
-                        </Typography>
-                      </div>
-                      {option.media && (
-                        <Image
-                          src={option.media}
-                          width={100}
-                          height={100}
-                          alt={`${option.value} image`}
-                        />
-                      )}
-                      {hasSpecialOption && option.type === 'other' && (
-                        <div className="w-full px-2">
-                          <RHFInputField
-                            name={`submission.${name}-other`}
-                            formItemProps={{
-                              className: 'w-full',
-                            }}
-                            inputProps={{
-                              placeholder: 'Other answer',
-                              className:
-                                'w-full border-neutral-50 bg-transparent focus:ring-[1px] focus:ring-primary-300',
-                            }}
-                          />
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </RadioGroup>
-            </RHFFormItem>
-          );
-        }}
-      />
-    </Wrapper>
-  );
-};
-const SelectMultiple = ({ name, label, options }: TFormField) => {
-  const { formState, control, setValue, watch } = useFormContext();
-  const fieldName = `submission.${name}`;
-  // const { fields, append, remove, swap, update } = useFieldArray({
-  //   control,
-  //   name: `submission.${name}`,
-  // });
-
-  const fields = watch(fieldName) || [];
-
-  const append = (value: any) => {
-    setValue(fieldName, [...fields, value]);
-  };
-  const hasSpecialOption = useMemo(() => {
-    return (
-      options?.some((option: any) => option.type === 'other') &&
-      fields?.find((f: any) => f === 'other')
-    );
-  }, [options, fields]);
-
-  return (
-    <Wrapper>
-      <Typography className="!font-semibold">{label}</Typography>
-      <FormField
-        name={`submission.${name}`}
-        control={control}
-        render={({ field, fieldState: { invalid } }) => {
-          return (
-            <RHFFormItem key={field.name}>
-              {options?.map((item) => (
-                <FormField
-                  key={item.value}
-                  control={control}
-                  name={`submission.${name}`}
-                  render={({ field }) => {
-                    const selected = fields.find((f: any) => f === item.value);
-                    return (
-                      <FormItem
-                        key={item.value}
-                        className="flex flex-col items-start gap-1 space-x-3"
-                      >
-                        <div className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={!!selected}
-                              onCheckedChange={(checked) => {
-                                if (checked) {
-                                  append(item.value);
-                                } else {
-                                  setValue(
-                                    fieldName,
-                                    fields.filter((f: any) => f !== item.value),
-                                  );
-                                }
-                              }}
-                            />
-                          </FormControl>
-                          <FormLabel className="flex cursor-pointer flex-col gap-2 font-normal">
-                            {item.value}
-                            {item.media && (
-                              <Image
-                                src={item.media}
-                                width={100}
-                                height={100}
-                                alt={`${item.value} image-select`}
-                              />
-                            )}
-                          </FormLabel>
-                        </div>
-                        {hasSpecialOption && item?.type === 'other' && (
-                          <div className="w-full pr-4">
-                            <RHFInputField
-                              name={`submission.${name}-other`}
-                              formItemProps={{
-                                className: 'w-full',
-                              }}
-                              inputProps={{
-                                placeholder: 'Other answer',
-                                className:
-                                  'w-full border-neutral-50  bg-transparent focus:ring-[1px] focus:ring-primary-300',
-                              }}
-                            />
-                          </div>
-                        )}
-                      </FormItem>
-                    );
-                  }}
-                ></FormField>
-              ))}
-            </RHFFormItem>
-          );
-        }}
-      />
-    </Wrapper>
-  );
-};
-
-const Input = ({
-  name,
-  label,
-  type,
-  required,
-  dataType,
-  placeholder,
-}: TFormField) => {
-  return (
-    <Wrapper>
-      <Typography className="font-semibold">{label}</Typography>
-
-      {dataType === 'long-text' ? (
-        <RHFTextAreaField
-          name={`submission.${name}`}
-          formItemProps={{
-            className: 'w-full border-none !bg-transparent p-0',
-          }}
-          areaProps={{
-            className: 'border-none h-28 !bg-transparent p-0',
-          }}
-          textareaProps={{
-            placeholder: placeholder || 'Your answer here',
-            className:
-              'w-full border-none !bg-transparent focus:ring-[1px] focus:ring-primary-300 p-3 rounded-[12px]',
-          }}
-        />
-      ) : (
-        <RHFInputField
-          name={`submission.${name}`}
-          formItemProps={{
-            className: 'w-full bg-transparent',
-          }}
-          inputProps={{
-            type,
-            required,
-            placeholder: placeholder || 'Your answer here',
-            className:
-              'w-full border-none bg-transparent focus:ring-[1px] focus:ring-primary-300',
-          }}
-        />
-      )}
-    </Wrapper>
-  );
-};
+type TSubmission = z.infer<typeof answerSchema>;
 
 const RenderField = ({ field }: { field: TFormField }) => {
   if (!field?.type) return null;
@@ -314,12 +70,38 @@ const ExtensionForm = ({
   const [currentPage, setCurrentPage] = React.useState(0);
 
   const temporaryData = useHelpdeskFormDraft(guestId || '');
+  const requiredFields = useMemo(() => {
+    return form?.formFields
+      .filter((f: any) => f.required)
+      .map((f: any) => f.name);
+  }, [form]);
+
   const formAnswer = useForm<TSubmission>({
-    mode: 'onChange',
+    mode: 'onBlur',
     defaultValues: {
       formId,
     },
-    resolver: zodResolver(submissionSchema),
+    resolver: zodResolver(
+      answerSchema.superRefine((data, ctx) => {
+        console.log('data validation', data);
+        const answer = data.answer;
+        if (!answer) {
+          return false;
+        }
+        const missingField = requiredFields.find(
+          (field: any) => !answer[field] || isEmpty(answer[field]),
+        );
+        if (!missingField) return true;
+        console.log('missingField', missingField);
+        ctx.addIssue({
+          message: `This answer is required!`,
+          code: z.ZodIssueCode.unrecognized_keys,
+          path: ['answer', missingField],
+          keys: ['answer', missingField],
+        });
+        return false;
+      }),
+    ),
   });
   const {
     formState: { errors },
@@ -332,20 +114,24 @@ const ExtensionForm = ({
   useEffect(() => {
     if (!previewMode) {
       if (temporaryData) {
-        console.log('temporaryData', temporaryData);
-        // formAnswer.reset(temporaryData);
+        formAnswer.reset(temporaryData);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewMode]);
 
   useEffect(() => {
     if (!isLoading && form && !previewMode) {
+      console.log('form', form);
       announceToParent({
         type: 'form-loaded',
         payload: {},
       });
+      if (form?.isSubmitted) {
+        goToThankyou();
+      }
     }
-  }, [guestId, form, isLoading, previewMode]);
+  }, [guestId, form, isLoading, previewMode, goToThankyou]);
 
   if (!formId) return null;
   if (isLoading)
@@ -380,10 +166,10 @@ const ExtensionForm = ({
   const submit = async (data: TSubmission) => {
     const payload = {
       answer: {
-        ...data.submission,
+        ...data.answer,
       },
     };
-
+    console.log('payloa:>>', payload);
     if (previewMode) {
       goToThankyou();
       toast.success('Form submitted successfully!');
@@ -406,7 +192,7 @@ const ExtensionForm = ({
 
   const onCloseForm = () => {
     if (!previewMode && guestId && !isDone) {
-      addFormDraftData(guestId, formAnswer.getValues());
+      // addFormDraftData(guestId, formAnswer.getValues());
     }
     if (isDone && guestId) {
       removeFormDraftData(guestId);
@@ -437,7 +223,10 @@ const ExtensionForm = ({
         {isDone ? (
           <ThankYou thankyou={thankyou} name={form.name} />
         ) : (
-          <div className="flex size-full flex-col gap-5 rounded-xl bg-white">
+          <form
+            onSubmit={formAnswer.handleSubmit(submit)}
+            className="flex size-full flex-col gap-5 rounded-xl bg-white"
+          >
             <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
               <FileText className="size-5" />
               <Typography className="text-md  font-semibold text-primary-500-main">
@@ -457,19 +246,17 @@ const ExtensionForm = ({
               </div>
             </Form>
             <div className="flex flex-none items-center justify-center pb-5">
-              <form onSubmit={formAnswer.handleSubmit(submit)}>
-                <Button
-                  endIcon={<Send />}
-                  color="primary"
-                  variant="default"
-                  type="submit"
-                  shape={'square'}
-                >
-                  {'Submit'}
-                </Button>
-              </form>
+              <Button
+                endIcon={<Send />}
+                color="primary"
+                variant="default"
+                type="submit"
+                shape={'square'}
+              >
+                {'Submit'}
+              </Button>
             </div>
-          </div>
+          </form>
         )}
       </main>
     </>

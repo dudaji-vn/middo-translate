@@ -14,7 +14,8 @@ export type MessageType =
   | 'notification'
   | 'action'
   | 'forward'
-  | 'flow-actions' | 'flow-form';
+  | 'flow-actions'
+  | 'flow-form';
 
 export type ActionTypes =
   | 'none'
@@ -53,6 +54,8 @@ export type Message = {
   targetUsers?: User[];
   media?: Media[];
   type: MessageType;
+  formId?: string;
+  form?: { _id: string; name: string };
   status: MessageStatus;
   language: string;
   reactions?: Reaction[];

@@ -285,7 +285,7 @@ export const MessageItemWrapper = ({
         }}
       >
         {props.children}
-        {message.status !== 'removed' && (
+        {message.status !== 'removed' && message.type !== 'flow-form' && (
           <MessageDetail
             isMe={isMe}
             message={message}

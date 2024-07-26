@@ -1,26 +1,22 @@
 'use client';
 
-import { FormDetail } from '@/app/extension-form/_components/form-detail';
 import { Button } from '@/components/actions';
 import { NEXT_PUBLIC_URL } from '@/configs/env.public';
-import { useGetFormHelpdesk } from '@/features/conversation-forms/hooks/use-get-form-helpdesk';
 import { announceToParent } from '@/utils/iframe-util';
 import { FileText } from 'lucide-react';
 import React from 'react';
 
 export default function MessageItemFlowFormTrigger({
-  formId,
+  form,
   guestId,
 }: {
-  formId: string;
+  form: {
+    _id: string;
+    name: string;
+  };
   guestId?: string;
 }) {
-  const { data: form, isLoading } = useGetFormHelpdesk({ formId });
-
-  if (isLoading || !form) {
-    return null;
-  }
-  const { name } = form as FormDetail;
+  const formId = form._id;
 
   const openIframeForm = () => {
     if (guestId) {
@@ -43,7 +39,7 @@ export default function MessageItemFlowFormTrigger({
           startIcon={<FileText />}
           onClick={openIframeForm}
         >
-          {name}
+          {form.name}
         </Button>
       </div>
     </div>

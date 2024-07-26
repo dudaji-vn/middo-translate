@@ -130,8 +130,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
 
     const actionsFromScriptChat = message.actions;
 
-    const extensionFormId =
-      message?.type === 'flow-form' ? message.content : undefined;
+    const extensionForm =
+      message?.type === 'flow-form' ? message.form : undefined;
     return (
       <MessageItemContext.Provider
         value={{
@@ -218,13 +218,13 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           mediaLength > 1 && 'rounded-none',
                         )}
                       >
-                        {extensionFormId && (
+                        {extensionForm && (
                           <MessageItemFlowFormTrigger
-                              formId={extensionFormId}
-                              guestId={guestId}
+                            form={extensionForm}
+                            guestId={guestId}
                           />
                         )}
-                        {message.content && !extensionFormId && (
+                        {message.content && !extensionForm && (
                           <Content
                             keyword={keyword}
                             showDetails={showDetail}

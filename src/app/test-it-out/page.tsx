@@ -387,7 +387,7 @@ const TestItOut = ({
               'bg-white',
             )}
           >
-            <ExtensionForm formId={formPreviewState.id} />
+            <ExtensionForm formId={formPreviewState.id} previewMode />
             <Button.Icon
               onClick={() => {
                 setFormPreview(undefined);
