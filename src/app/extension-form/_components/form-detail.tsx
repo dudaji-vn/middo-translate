@@ -331,6 +331,10 @@ const ExtensionForm = ({
 
   useEffect(() => {
     if (!previewMode) {
+      const isSubmitted = form.isSubmitted;
+      if (isSubmitted) {
+        goToThankyou();
+      }
       if (temporaryData) {
         console.log('temporaryData', temporaryData);
         // formAnswer.reset(temporaryData);

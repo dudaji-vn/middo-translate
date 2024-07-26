@@ -7,6 +7,7 @@ type CreateLocalMessageParams = {
   content?: string;
   media?: Media[];
   language?: string;
+  formId?: string;
 };
 
 export const createLocalMessage = ({
@@ -14,6 +15,7 @@ export const createLocalMessage = ({
   content = '',
   language = 'en',
   media = [],
+  formId,
 }: CreateLocalMessageParams): Message => {
   const clientTempId = Math.random().toString(36).substring(7);
   return {
@@ -22,6 +24,7 @@ export const createLocalMessage = ({
     content,
     status: 'pending',
     type: 'text',
+    formId,
     media,
     createdAt: new Date().toISOString(),
     language,
