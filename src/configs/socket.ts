@@ -32,6 +32,7 @@ export const SOCKET_CONFIG = {
       UPDATE: 'room.update',
       DELETE: 'room.delete',
       DELETE_CONTACT: 'room.delete_contact',
+      WAITING_UPDATE: 'room.waiting_update',
     },
     INBOX: {
       NEW: 'inbox.new',

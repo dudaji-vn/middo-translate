@@ -289,4 +289,10 @@ export const roomApi = {
     );
     return res.data;
   },
+  async countWaitingRooms() {
+    const res: Response<{ count: number }> = await axios.get(
+      `${basePath}/waiting/count`,
+    );
+    return res.data;
+  },
 };

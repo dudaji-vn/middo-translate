@@ -205,22 +205,26 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         </div>
       );
     }
+
     return (
       <div className={'relative w-full border-t p-2'}>
         {relationshipStatus === 'blocking' && <RoomBlockContent room={room} />}
-        {room.status === 'waiting_group' &&
-          relationshipStatus !== 'blocking' && (
-            <>
-              {isAdmin ? (
-                <RoomWaitingContent room={room} />
-              ) : (
-                <RoomActions>
-                  <RoomResponseContent room={room} />
-                </RoomActions>
-              )}
-            </>
-          )}
-        {room.status === 'waiting' && <RoomWaitingContent room={room} />}
+        {room.status === 'waiting' && relationshipStatus !== 'blocking' && (
+          <>
+            {isAdmin ? (
+              <RoomWaitingContent room={room} />
+            ) : (
+              <RoomActions>
+                <RoomResponseContent room={room} />
+              </RoomActions>
+            )}
+          </>
+        )}
+        {room.status === 'waiting_group' && (
+          <RoomActions>
+            <RoomResponseContent room={room} />
+          </RoomActions>
+        )}
 
         {isShowEditor && (
           <MessageEditor
