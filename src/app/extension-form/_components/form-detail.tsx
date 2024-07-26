@@ -164,12 +164,14 @@ const ExtensionForm = ({
   };
 
   const submit = async (data: TSubmission) => {
-    const payload = {
-      answer: {
-        ...data.answer,
+    const answer = formFields.reduce(
+      (acc, field) => {
+        acc[field.name] = data.answer[field.name];
+        return acc;
       },
-    };
-    console.log('payloa:>>', payload);
+      {} as TSubmission['answer'],
+    );
+
     if (previewMode) {
       goToThankyou();
       toast.success('Form submitted successfully!');
@@ -179,7 +181,9 @@ const ExtensionForm = ({
       return;
     }
     try {
-      const res = await submitFormAnswer(formId, guestId, payload);
+      const res = await submitFormAnswer(formId, guestId, {
+        answer,
+      });
       console.log('res', res);
       if (res.data) {
         toast.success('Form submitted successfully!');
