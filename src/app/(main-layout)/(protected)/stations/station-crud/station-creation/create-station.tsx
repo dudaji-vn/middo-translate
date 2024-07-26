@@ -29,6 +29,7 @@ import StepWrapper from '../../../spaces/[spaceId]/settings/_components/extensio
 const createStationSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(1, {
       message: 'STATION.ERRORS.NAME_REQUIRED',
     })
