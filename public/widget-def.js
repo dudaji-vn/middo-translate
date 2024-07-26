@@ -82,7 +82,7 @@
       }
       @keyframes scale-to-100-blur {
         0% { opacity: 0; transform: translateY(100%) scaleY(0.5);  }
-        100% { opacity: 0.85; transform: translateY(0) scaleY(1);  }
+        100% { opacity: 0.88; transform: translateY(0) scaleY(1);  }
       }
       #chat-widget {
         position: fixed; bottom: 10px; right: 20px; display: grid; z-index: 11111111 !important;
