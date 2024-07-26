@@ -107,7 +107,7 @@ const StartAConversation = ({
     const childrenActions = nodes.filter(
       (node) => node.parentNode === rootChild.id,
     );
-    const messType = rootChild.type === 'form' ? 'flow-form' : 'flow-action';
+    const messType = rootChild.type === 'form' ? 'flow-form' : 'flow-actions';
     const payload = {
       content: rootChild.data?.content,
       roomId,
