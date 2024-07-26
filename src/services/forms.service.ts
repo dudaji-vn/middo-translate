@@ -33,7 +33,7 @@ export const submitFormAnswer = (
     answer: Record<string, any>;
   },
 ) => {
-  return fetch(`${baseUrl}${formId}/${userId}`, {
+  return fetch(`/help-desk/forms/${formId}/${userId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
