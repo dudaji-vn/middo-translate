@@ -38,6 +38,7 @@ import {
   useHelpdeskFormDraft,
   useHelpdeskStore,
 } from '@/stores/helpdesk.store';
+import { announceToParent } from '@/utils/iframe-util';
 
 const submissionSchema = z.object({
   formId: z.string(),
@@ -331,6 +332,15 @@ const ExtensionForm = ({
       }
     }
   }, [previewMode]);
+
+  useEffect(() => {
+    if (!isLoading && form && !previewMode) {
+      announceToParent({
+        type: 'form-loaded',
+        payload: {},
+      });
+    }
+  }, [guestId, form, isLoading, previewMode]);
 
   if (!formId) return null;
   if (isLoading)

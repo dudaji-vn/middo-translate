@@ -80,6 +80,10 @@
         0% { opacity: 0; transform: translateY(100%) scaleY(0.5); }
         100% { opacity: 1; transform: translateY(0) scaleY(1); }
       }
+      @keyframes scale-to-100-blur {
+        0% { opacity: 0; transform: translateY(100%) scaleY(0.5);  }
+        100% { opacity: 0.85; transform: translateY(0) scaleY(1);  }
+      }
       #chat-widget {
         position: fixed; bottom: 10px; right: 20px; display: grid; z-index: 11111111 !important;
       }
@@ -289,23 +293,22 @@
           }
           break;
 
-        case 'open-form': {
+        case 'init-from-extension': {
           const { urlToForm } = payload;
-          console.log('open-form', urlToForm);
+          if (!urlToForm) return;
           const formIframe = document.getElementById('form-iframe');
           formIframe.src = urlToForm;
-          formIframe.style.display = 'block';
-          formIframe.style.animation = 'scale-to-100 0.75s ease forwards';
-          formIframe.style.opacity = 0.5;
           formIframe.style.zIndex = MAX_Z_INDEX + 1;
-          formIframe.addEventListener(
-            'load',
-            () => {
-              formIframe.opacity = 1;
-            },
-            { once: true },
-          );
-
+          formIframe.style.display = 'block';
+          formIframe.style.animation = 'scale-to-100-blur 0.9s ease forwards';
+          formIframe.style.animationTimingFunction =
+            'cubic-bezier(0.2, 0, 0.8, 1.3)';
+          break;
+        }
+        case 'form-loaded': {
+          const formIframe = document.getElementById('form-iframe');
+          formIframe.style.opacity = `1 !important`;
+          formIframe.style.removeProperty('animation');
           break;
         }
         case 'close-form': {
