@@ -114,7 +114,7 @@ const StartAConversation = ({
       type: messType,
       language: extensionData.language,
       mentions: [],
-      actions: rootChild.type === 'container' ? childrenActions : undefined,
+      actions: messType === 'flow-action' ? childrenActions : undefined,
       userId: owner?._id,
       form: rootChild?.form,
     };
