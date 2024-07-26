@@ -7,7 +7,7 @@ import { cn } from '@/utils/cn';
 import { RadioGroup, RadioGroupItem } from '@/components/data-entry';
 import { z } from 'zod';
 import { BaseEntity } from '@/types';
-import { Circle, FileText, Send } from 'lucide-react';
+import { Circle, FileText, Send, X } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { useFieldArray, useForm, useFormContext } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -287,7 +287,15 @@ const RenderField = ({ field }: { field: TFormField }) => {
 };
 
 export type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
-const ExtensionForm = ({ formId }: { formId: string }) => {
+const ExtensionForm = ({
+  formId,
+  onClose = () => {},
+  previewMode = false,
+}: {
+  formId: string;
+  onClose: () => void;
+  previewMode?: boolean;
+}) => {
   const currentUser = useAuthStore((s) => s.user);
   const { data: form, isLoading } = useGetFormHelpdesk({ formId });
   const [isDone, setIsDone] = React.useState(false);
@@ -303,7 +311,7 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
     formState: { errors },
   } = formAnswer;
 
-  const handleCloseForm = useCallback(() => {
+  const goToThankyou = useCallback(() => {
     setIsDone(true);
   }, []);
 
@@ -344,14 +352,14 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
     };
     console.log('payload', payload);
 
-    const isPreviewMode = !!currentUser;
-    if (isPreviewMode) {
-      handleCloseForm();
+    if (previewMode) {
+      goToThankyou();
       toast.success('Form submitted successfully!');
       return;
     }
     try {
       // TODO: submit form answer
+      goToThankyou();
     } catch (error) {
       console.log('error', error);
     }
@@ -367,6 +375,17 @@ const ExtensionForm = ({ formId }: { formId: string }) => {
         )}
         style={{ backgroundImage: bgSrc }}
       >
+        {!previewMode && (
+          <Button.Icon
+            onClick={onClose}
+            className="absolute right-1 top-1"
+            variant={'ghost'}
+            size={'sm'}
+            color={'default'}
+          >
+            <X />
+          </Button.Icon>
+        )}
         {isDone ? (
           <ThankYou thankyou={thankyou} name={form.name} />
         ) : (

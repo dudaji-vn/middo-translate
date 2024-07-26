@@ -2,6 +2,7 @@
 
 import React from 'react';
 import ExtensionForm from './_components/form-detail';
+import { announceToParent } from '@/utils/iframe-util';
 
 const page = ({
   searchParams,
@@ -9,9 +10,16 @@ const page = ({
   searchParams: {
     // spaceId: string;
     formId: string;
+    guestId: string;
   };
 }) => {
-  return <ExtensionForm {...searchParams} />;
+  const closeIframe = () => {
+    announceToParent({
+      type: 'close-form',
+      payload: {},
+    });
+  };
+  return <ExtensionForm {...searchParams} onClose={closeIframe} />;
 };
 
 export default page;
