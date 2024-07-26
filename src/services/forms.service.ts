@@ -22,9 +22,22 @@ export const deleteBusinessForms = (data: {
   });
 };
 
-export const getBusinessForm = (
-  spaceId: string,
-  formId: string,
-) => {
+export const getBusinessForm = (spaceId: string, formId: string) => {
   return get(`${baseUrl}${spaceId}/forms/${formId}`);
+};
+
+export const submitFormAnswer = (
+  formId: string,
+  userId: string,
+  data: {
+    answer: Record<string, any>;
+  },
+) => {
+  return fetch(`${baseUrl}${formId}/${userId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
 };

@@ -19,7 +19,6 @@ const page = ({
     });
   };
 
-  
   return <ExtensionForm {...searchParams} onClose={closeIframe} />;
 };
 

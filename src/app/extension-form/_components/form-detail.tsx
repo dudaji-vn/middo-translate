@@ -39,6 +39,7 @@ import {
   useHelpdeskStore,
 } from '@/stores/helpdesk.store';
 import { announceToParent } from '@/utils/iframe-util';
+import { submitFormAnswer } from '@/services/forms.service';
 
 const submissionSchema = z.object({
   formId: z.string(),
@@ -308,6 +309,7 @@ const ExtensionForm = ({
   const { data: form, isLoading } = useGetFormHelpdesk({ formId });
   const [isDone, setIsDone] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(0);
+
   const temporaryData = useHelpdeskFormDraft(guestId);
   const formAnswer = useForm<TSubmission>({
     mode: 'onChange',
@@ -373,15 +375,24 @@ const ExtensionForm = ({
   };
 
   const submit = async (data: TSubmission) => {
-    const payload = data;
+    const payload = {
+      answer: {
+        ...data.submission,
+      },
+    };
+
     if (previewMode) {
       goToThankyou();
       toast.success('Form submitted successfully!');
       return;
     }
     try {
-      // TODO: submit form answer
-      goToThankyou();
+      const res = await submitFormAnswer(formId, guestId, payload);
+      console.log('res', res);
+      if (res.ok) {
+        toast.success('Form submitted successfully!');
+        goToThankyou();
+      }
     } catch (error) {
       console.log('error', error);
     }
