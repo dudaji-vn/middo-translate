@@ -75,6 +75,7 @@ export const onMessageListener = (guestId?: string | null) =>
       messaging = getMessaging(app);
     }
     onMessage(messaging, async (payload) => {
+      console.log(messaging, payload);
       const notifyUrl = payload?.data?.url || '';
       const currentUrl = window.location.href;
       if (notifyUrl && currentUrl.includes(notifyUrl)) {
