@@ -180,7 +180,8 @@
       "USERNAME_MAX": "Username must be at most 15 characters!",
       "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
       "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view.",
-      "USER_NOT_FOUND": "User not found!"
+      "USER_NOT_FOUND": "User not found!",
+      "CANT_ADD_YOURSELF": "You can't add yourself!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",

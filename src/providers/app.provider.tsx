@@ -64,6 +64,15 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, user?._id, user?.defaultStation?._id]);
 
+  useEffect(() => {
+    const isChromeBrowser = window.navigator.userAgent.includes('Chrome');
+    if (isChromeBrowser) {
+      document.body.classList.add('chrome');
+    } else {
+      document.body.classList.add('not-chrome');
+    }
+  }, []);
+
   return (
     <ReactQueryProvider>
       <SocketProvider />

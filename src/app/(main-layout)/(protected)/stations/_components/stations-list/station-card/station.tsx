@@ -223,8 +223,8 @@ const Station = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-1 flex-col items-start space-y-1">
-          <CardTitle className="flex-1  break-words text-base  font-semibold leading-[18px] text-neutral-800  dark:text-neutral-50">
+        <div className="flex flex-1 flex-col items-start space-y-1 overflow-hidden">
+          <CardTitle className="truncate text-base font-semibold leading-[18px] text-neutral-800  dark:text-neutral-50">
             {name}
           </CardTitle>
           <span className="text-sm font-light leading-[18px] text-neutral-600 dark:text-neutral-100">{`${totalMembers} ${t('COMMON.MEMBER')}`}</span>

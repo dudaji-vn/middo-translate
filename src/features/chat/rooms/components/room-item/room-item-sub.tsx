@@ -305,7 +305,7 @@ const ItemSub = ({
 
   return (
     <div className="flex items-center">
-      <div className="flex w-full flex-row items-center justify-between gap-1 ">
+      <div className="flex w-full flex-1 flex-row items-center justify-between gap-1 overflow-hidden ">
         <Typography
           className={cn(
             'line-clamp-1 flex-1 break-all',

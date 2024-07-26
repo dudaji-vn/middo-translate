@@ -29,8 +29,9 @@ export const EnterToSubmit = Extension.create({
       },
       'Shift-Enter': () => {
         const editor = this.editor;
-        const bulletList = editor.isActive('bulletList');
-        if (bulletList) {
+        const isList =
+          editor.isActive('bulletList') || editor.isActive('orderedList');
+        if (isList) {
           editor.chain().focus().splitListItem('listItem').run();
           return true;
         } else {

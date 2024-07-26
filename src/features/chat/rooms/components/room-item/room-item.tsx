@@ -16,7 +16,6 @@ import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { ItemAvatar } from './room-item-avatar';
-import { RoomItemComingCall } from './room-item-coming-call';
 import { RoomItemHead } from './room-item-head';
 import { ItemSub } from './room-item-sub';
 import { RoomItemWrapper } from './room-item-wrapper';
@@ -239,7 +238,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           </RoomItemWrapper>
         </RoomItemContext.Provider>
       </Wrapper>
-      <RoomItemCall roomChatBox={room} isForgeShow={isForgeShowCallButton}/>
+      <RoomItemCall roomChatBox={room} isForgeShow={isForgeShowCallButton} />
     </div>
   );
 });

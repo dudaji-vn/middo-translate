@@ -179,7 +179,8 @@
       "USERNAME_MAX": "Tên người dùng phải có tối đa 15 ký tự!",
       "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!",
       "NOT_SUPPORT_PREVIEW": "Nội dung file quá lớn hoặc không được hỗ trợ để xem trước! <br /> Vui lòng tải xuống để xem.",
-      "USER_NOT_FOUND": "Người dùng không tồn tại!"
+      "USER_NOT_FOUND": "Người dùng không tồn tại!",
+      "CANT_ADD_YOURSELF": "Không thể thêm chính mình!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",
