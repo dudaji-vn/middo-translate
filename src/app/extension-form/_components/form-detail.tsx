@@ -332,16 +332,17 @@ const ExtensionForm = ({
         // formAnswer.reset(temporaryData);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewMode]);
 
   useEffect(() => {
     if (!isLoading && form && !previewMode) {
+      console.log('form', form);
       announceToParent({
         type: 'form-loaded',
         payload: {},
       });
-      if (!isLoading && form?.isSubmitted) {
+      if (form?.isSubmitted) {
         goToThankyou();
       }
     }
