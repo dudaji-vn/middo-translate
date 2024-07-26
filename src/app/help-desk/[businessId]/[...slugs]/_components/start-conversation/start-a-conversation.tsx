@@ -110,7 +110,7 @@ const StartAConversation = ({
     const messType = rootChild.type === 'form' ? 'flow-form' : 'flow-action';
     const payload = {
       content: rootChild.data?.content,
-      roomId: '',
+      roomId,
       type: messType,
       language: extensionData.language,
       mentions: [],
