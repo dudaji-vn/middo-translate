@@ -207,7 +207,7 @@
     chatWidget.id = 'chat-widget';
     const srcWithDomain = `${chatSRC}?domain=${domain}`;
     const srcButton = `${chatSRC}/widget-notification`;
-    const extensionFormSrc = `${domain}/extension-form`;
+    const extensionFormSrc = `${chatSRC}`;
     chatWidget.innerHTML = `
       <iframe id="widget-chat-frame" src="${srcWithDomain}" class="ring-1 rounded-lg iframe_inset" 
         style="box-shadow: 2px 4px 16px 2px #1616161A; border: none; position: fixed; background: white !important; margin: 0px; max-height: 100vh; max-width: 100vw; transform: translateY(0); z-index: 11111111 !important;">
