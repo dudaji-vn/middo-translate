@@ -107,15 +107,18 @@ const StartAConversation = ({
     const childrenActions = nodes.filter(
       (node) => node.parentNode === rootChild.id,
     );
+    const messType = rootChild.type === 'form' ? 'flow-form' : 'flow-action';
     const payload = {
       content: rootChild.data?.content,
-      roomId,
-      type: 'flow-actions',
+      roomId: '',
+      type: messType,
       language: extensionData.language,
       mentions: [],
-      actions: rootChild.type === 'message' ? undefined : childrenActions,
+      actions: rootChild.type === 'container' ? childrenActions : undefined,
       userId: owner?._id,
+      form: rootChild?.form,
     };
+
     await messageApi.sendAnonymousMessage({
       ...payload,
       senderType: 'bot',
