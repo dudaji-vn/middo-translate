@@ -25,7 +25,7 @@ export default function MessageItemFlowFormTrigger({
   const openIframeForm = () => {
     if (guestId) {
       announceToParent({
-        type: 'open-form',
+        type: 'init-from-extension',
         payload: {
           urlToForm: `${NEXT_PUBLIC_URL}/extension-form?formId=${formId}&guestId=${guestId}`,
         },

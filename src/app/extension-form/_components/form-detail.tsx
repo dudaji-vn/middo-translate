@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Typography } from '@/components/data-display';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
@@ -32,6 +32,14 @@ import ThankYou from './thank-you';
 import { extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { useGetFormHelpdesk } from '@/features/conversation-forms/hooks/use-get-form-helpdesk';
 import ClientsLoading from '@/app/(main-layout)/(protected)/spaces/[spaceId]/clients/loading';
+import {
+  addFormDraftData,
+  removeFormDraftData,
+  useHelpdeskFormDraft,
+  useHelpdeskStore,
+} from '@/stores/helpdesk.store';
+import { announceToParent } from '@/utils/iframe-util';
+import { submitFormAnswer } from '@/services/extension.service';
 
 const submissionSchema = z.object({
   formId: z.string(),
@@ -289,17 +297,23 @@ const RenderField = ({ field }: { field: TFormField }) => {
 export type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
 const ExtensionForm = ({
   formId,
+  guestId,
   onClose = () => {},
   previewMode = false,
 }: {
   formId: string;
-  onClose: () => void;
+  guestId?: string;
+  onClose?: () => void;
   previewMode?: boolean;
 }) => {
-  const currentUser = useAuthStore((s) => s.user);
-  const { data: form, isLoading } = useGetFormHelpdesk({ formId });
+  const { data: form, isLoading } = useGetFormHelpdesk({
+    formId,
+    userId: guestId,
+  });
   const [isDone, setIsDone] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(0);
+
+  const temporaryData = useHelpdeskFormDraft(guestId || '');
   const formAnswer = useForm<TSubmission>({
     mode: 'onChange',
     defaultValues: {
@@ -314,6 +328,24 @@ const ExtensionForm = ({
   const goToThankyou = useCallback(() => {
     setIsDone(true);
   }, []);
+
+  useEffect(() => {
+    if (!previewMode) {
+      if (temporaryData) {
+        console.log('temporaryData', temporaryData);
+        // formAnswer.reset(temporaryData);
+      }
+    }
+  }, [previewMode]);
+
+  useEffect(() => {
+    if (!isLoading && form && !previewMode) {
+      announceToParent({
+        type: 'form-loaded',
+        payload: {},
+      });
+    }
+  }, [guestId, form, isLoading, previewMode]);
 
   if (!formId) return null;
   if (isLoading)
@@ -347,24 +379,40 @@ const ExtensionForm = ({
 
   const submit = async (data: TSubmission) => {
     const payload = {
-      formId,
-      submission: data.submission,
+      answer: {
+        ...data.submission,
+      },
     };
-    console.log('payload', payload);
 
     if (previewMode) {
       goToThankyou();
       toast.success('Form submitted successfully!');
       return;
     }
+    if (!guestId) {
+      return;
+    }
     try {
-      // TODO: submit form answer
-      goToThankyou();
+      const res = await submitFormAnswer(formId, guestId, payload);
+      console.log('res', res);
+      if (res.data) {
+        toast.success('Form submitted successfully!');
+        goToThankyou();
+      }
     } catch (error) {
       console.log('error', error);
     }
   };
-  console.log('formFieldsERR', errors);
+
+  const onCloseForm = () => {
+    if (!previewMode && guestId && !isDone) {
+      addFormDraftData(guestId, formAnswer.getValues());
+    }
+    if (isDone && guestId) {
+      removeFormDraftData(guestId);
+    }
+    onClose();
+  };
 
   return (
     <>
@@ -377,7 +425,7 @@ const ExtensionForm = ({
       >
         {!previewMode && (
           <Button.Icon
-            onClick={onClose}
+            onClick={onCloseForm}
             className="absolute right-1 top-1"
             variant={'ghost'}
             size={'sm'}

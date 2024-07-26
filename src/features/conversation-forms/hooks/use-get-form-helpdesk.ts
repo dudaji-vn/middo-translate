@@ -9,9 +9,11 @@ export const GET_BUSINESS_FORM_HELPDESK_KEY = 'get-business-form-helpdesk';
 export const useGetFormHelpdesk = ({
   formId,
   language,
+  userId,
 }: {
   formId: string;
   language?: string;
+  userId?: string;
 }) => {
   return useQuery({
     queryKey: [
@@ -28,6 +30,7 @@ export const useGetFormHelpdesk = ({
           {
             params: {
               language,
+              userId,
             },
           },
         );
