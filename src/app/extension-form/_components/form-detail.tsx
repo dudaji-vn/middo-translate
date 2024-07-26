@@ -139,10 +139,6 @@ const SelectSingle = ({ name, label, options }: TFormField) => {
 const SelectMultiple = ({ name, label, options }: TFormField) => {
   const { formState, control, setValue, watch } = useFormContext();
   const fieldName = `submission.${name}`;
-  // const { fields, append, remove, swap, update } = useFieldArray({
-  //   control,
-  //   name: `submission.${name}`,
-  // });
 
   const fields = watch(fieldName) || [];
 
@@ -331,15 +327,12 @@ const ExtensionForm = ({
 
   useEffect(() => {
     if (!previewMode) {
-      const isSubmitted = form.isSubmitted;
-      if (isSubmitted) {
-        goToThankyou();
-      }
       if (temporaryData) {
         console.log('temporaryData', temporaryData);
         // formAnswer.reset(temporaryData);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewMode]);
 
   useEffect(() => {
@@ -348,8 +341,11 @@ const ExtensionForm = ({
         type: 'form-loaded',
         payload: {},
       });
+      if (!isLoading && form?.isSubmitted) {
+        goToThankyou();
+      }
     }
-  }, [guestId, form, isLoading, previewMode]);
+  }, [guestId, form, isLoading, previewMode, goToThankyou]);
 
   if (!formId) return null;
   if (isLoading)
