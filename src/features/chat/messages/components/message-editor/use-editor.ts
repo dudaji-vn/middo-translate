@@ -1,16 +1,16 @@
+import { useDraftStore } from '@/features/chat/stores/draft.store';
 import Emoji, { gitHubEmojis } from '@tiptap-pro/extension-emoji';
 import Link from '@tiptap/extension-link';
 import Mention from '@tiptap/extension-mention';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useEditor as useTiptapEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { useEffect, useRef } from 'react';
 import { EnterToSubmit } from './enter-to-submit';
 import {
   MentionSuggestion,
   mentionSuggestionOptions,
 } from './mention-suggestion-options';
-import { useEffect, useRef } from 'react';
-import { useDraftStore } from '@/features/chat/stores/draft.store';
 
 import { convert } from 'html-to-text';
 import { useMessageActions } from '../message-actions';
