@@ -39,7 +39,7 @@ import {
   useHelpdeskStore,
 } from '@/stores/helpdesk.store';
 import { announceToParent } from '@/utils/iframe-util';
-import { submitFormAnswer } from '@/services/forms.service';
+import { submitFormAnswer } from '@/services/extension.service';
 
 const submissionSchema = z.object({
   formId: z.string(),
@@ -302,15 +302,18 @@ const ExtensionForm = ({
   previewMode = false,
 }: {
   formId: string;
-  guestId: string;
-  onClose: () => void;
+  guestId?: string;
+  onClose?: () => void;
   previewMode?: boolean;
 }) => {
-  const { data: form, isLoading } = useGetFormHelpdesk({ formId });
+  const { data: form, isLoading } = useGetFormHelpdesk({
+    formId,
+    userId: guestId,
+  });
   const [isDone, setIsDone] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(0);
 
-  const temporaryData = useHelpdeskFormDraft(guestId);
+  const temporaryData = useHelpdeskFormDraft(guestId || '');
   const formAnswer = useForm<TSubmission>({
     mode: 'onChange',
     defaultValues: {
@@ -386,10 +389,13 @@ const ExtensionForm = ({
       toast.success('Form submitted successfully!');
       return;
     }
+    if (!guestId) {
+      return;
+    }
     try {
       const res = await submitFormAnswer(formId, guestId, payload);
       console.log('res', res);
-      if (res.ok) {
+      if (res.data) {
         toast.success('Form submitted successfully!');
         goToThankyou();
       }
@@ -402,7 +408,7 @@ const ExtensionForm = ({
     if (!previewMode && guestId && !isDone) {
       addFormDraftData(guestId, formAnswer.getValues());
     }
-    if (isDone) {
+    if (isDone && guestId) {
       removeFormDraftData(guestId);
     }
     onClose();

@@ -62,3 +62,13 @@ export const trackGuest = async ({
 export const endConversation = (data: { roomId: string; senderId: string }) => {
   return post('/messages/end-conversation', data);
 };
+
+export const submitFormAnswer = (
+  formId: string,
+  userId: string,
+  data: {
+    answer: Record<string, any>;
+  },
+) => {
+  return post(`/help-desk/forms/${formId}/${userId}`, data);
+};
