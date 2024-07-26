@@ -8,7 +8,6 @@ const page = ({
   searchParams,
 }: {
   searchParams: {
-    // spaceId: string;
     formId: string;
     guestId: string;
   };
@@ -19,6 +18,8 @@ const page = ({
       payload: {},
     });
   };
+
+  
   return <ExtensionForm {...searchParams} onClose={closeIframe} />;
 };
 
