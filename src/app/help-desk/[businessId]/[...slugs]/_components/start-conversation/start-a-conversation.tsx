@@ -114,9 +114,9 @@ const StartAConversation = ({
       type: messType,
       language: extensionData.language,
       mentions: [],
-      actions: messType === 'flow-action' ? childrenActions : undefined,
+      actions: messType === 'flow-actions' ? childrenActions : undefined,
       userId: owner?._id,
-      form: rootChild?.form,
+      formId: rootChild?.form,
     };
 
     await messageApi.sendAnonymousMessage({
