@@ -80,7 +80,7 @@
         100% { opacity: 1; transform: translateY(0) scaleY(1); }
       }
       #chat-widget {
-        position: fixed; bottom: 10px; right: 20px; display: grid; z-index: 999999999 !important;
+        position: fixed; bottom: 10px; right: 20px; display: grid; z-index: 99999999 !important;
       }
     
       #chat-messages {
@@ -137,7 +137,7 @@
       #widget_triangle.active {
         display: block; position: absolute; inset: auto 36px 88px auto;
         animation: appear 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
-        stroke: white; fill: white; z-index: 999999999;
+        stroke: white; fill: white; z-index: 99999999;
       }
       #chat-messages-ping {
         display: none;
@@ -153,7 +153,7 @@
                 border-radius: 0px;
                 width: 100vw;
                 height: 100vh;
-                z-index: 999999999 !important; background-color: rgba(0, 0, 0, 0.15);
+                z-index: 99999999 !important; background-color: rgba(0, 0, 0, 0.15);
                 transform-origin: 95% 100%;
                 animation: grow-to-full-screen 0.3s ease forwards;
         }
@@ -201,7 +201,7 @@
     const srcButton = `${chatSRC}/widget-notification`;
     chatWidget.innerHTML = `
       <iframe id="widget-chat-frame" src="${srcWithDomain}" class="ring-1 rounded-lg iframe_inset" 
-        style="box-shadow: 2px 4px 16px 2px #1616161A; border: none; position: fixed; background: white !important; margin: 0px; max-height: 100vh; max-width: 100vw; transform: translateY(0); z-index: 999999999 !important;">
+        style="box-shadow: 2px 4px 16px 2px #1616161A; border: none; position: fixed; background: white !important; margin: 0px; max-height: 100vh; max-width: 100vw; transform: translateY(0); z-index: 99999999 !important;">
       </iframe>
       <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff">
         <g><polygon points="245,456.701 490,33.299 0,33.299 "></polygon></g>
@@ -286,23 +286,24 @@
           const { urlToForm } = payload;
           console.log('open-form', urlToForm);
           const formIframe = document.createElement('iframe');
-          floatingButtonFrame.style.display = 'none';
-          theTriangle.style.display = 'none';
+          // set id to iframe
+          formIframe.id = 'form-iframe';
           formIframe.src = urlToForm;
           formIframe.style.position = 'fixed';
           formIframe.style.top = '0';
           formIframe.style.left = '0';
           formIframe.style.width = '100vw';
           formIframe.style.height = '100vh';
+          formIframe.style.backgroundColor = '#dadada22';
           formIframe.style.border = 'none';
-          document.body.appendChild(formIframe);
+          formIframe.style.zIndex = '999999999';
+          chatWidget.appendChild(formIframe);
+          break;
         }
         case 'close-form': {
-          const formIframe = document.querySelector('iframe');
-          floatingButtonFrame.style.display = 'block';
-          theTriangle.style.display = 'block';
+          const formIframe = document.getElementById('form-iframe');
           if (formIframe) {
-            formIframe.remove();
+            formIframe.style.display = 'none';
           }
         }
         default:
