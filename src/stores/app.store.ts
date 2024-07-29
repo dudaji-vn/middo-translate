@@ -31,6 +31,7 @@ export type AppActions = {
   setThemeSetting: (themeSetting: ThemeSetting) => void;
   setPingEmptyInbox: (pingEmptyInbox: boolean) => void;
   setSocketConnected: (socketConnected: boolean) => void;
+  toggleTheme: () => void;
 };
 
 export const useAppStore = create<AppState & AppActions>()(
@@ -58,8 +59,12 @@ export const useAppStore = create<AppState & AppActions>()(
       setTheme: (theme) => set(() => ({ theme })),
       setThemeSetting: (themeSetting) => set(() => ({ themeSetting })),
       setSocketConnected: (socketConnected) => set(() => ({ socketConnected })),
+      toggleTheme: () =>
+        set((state) => ({
+          themeSetting: state.themeSetting === 'dark' ? 'light' : 'dark',
+        })),
       ...restoredState('app-store'),
     }),
-    { name: 'app-store', },
-  )
+    { name: 'app-store' },
+  ),
 );
