@@ -32,7 +32,7 @@ const AlertDialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
     overlayProps?: React.ComponentPropsWithoutRef<typeof AlertDialogOverlay>;
   }
->(({ className,  ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <AlertDialogPortal>
     <AlertDialogOverlay {...props.overlayProps} />
     <AlertDialogPrimitive.Content
@@ -88,7 +88,7 @@ const AlertDialogDescription = React.forwardRef<
   <AlertDialogPrimitive.Description
     ref={ref}
     className={cn(
-      'justify-start text-start text-sm text-muted-foreground',
+      'justify-start text-start text-sm text-muted-foreground dark:text-neutral-400',
       className,
     )}
     {...props}
