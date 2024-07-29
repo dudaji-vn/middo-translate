@@ -1,6 +1,6 @@
 'use client';
 
-import React, { cloneElement } from 'react';
+import React, { cloneElement, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -24,6 +24,7 @@ import { Check, FileText, Paintbrush2 } from 'lucide-react';
 import { useAppStore } from '@/stores/app.store';
 import { useBusinessNavigationData } from '@/hooks';
 import toast from 'react-hot-toast';
+import { isEmpty, set } from 'lodash';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -36,13 +37,12 @@ const tabIcons = {
 const CreateOrEditBusinessForm = ({
   open,
   currentForm,
-  viewOnly,
 }: {
   open: boolean;
-  currentForm?: BusinessForm;
-  viewOnly?: boolean;
+  currentForm?: Partial<TFormFormValues> & { _id: string };
 }) => {
   const { spaceId } = useBusinessNavigationData();
+  const action = isEmpty(currentForm) ? 'create' : 'edit';
   const { t } = useTranslation('common');
   const isMobile = useAppStore((state) => state.isMobile);
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditForm();
@@ -69,16 +69,29 @@ const CreateOrEditBusinessForm = ({
     resolver: zodResolver(createBusinessFormSchema),
   });
   const {
+    reset,
+    setValue,
     watch,
     handleSubmit,
     formState: { isValid, isSubmitting, errors },
   } = form;
 
+  useEffect(() => {
+    if (action === 'edit' && currentForm) {
+      setValue('name', currentForm.name || '');
+      setValue('description', currentForm.description);
+      setValue('formFields', currentForm.formFields || []);
+      setValue('customize', currentForm.customize);
+      setValue('thankyou', currentForm.thankyou);
+    }
+  }, [action, currentForm]);
+
   const submit = async (data: any) => {
-    console.log('data submit:>>', data);
+    const formId = currentForm?._id;
     const payload = {
       ...data,
       spaceId,
+      formId,
     };
     try {
       await mutateAsync(payload);
@@ -96,6 +109,7 @@ const CreateOrEditBusinessForm = ({
     }
   };
   const fields = watch('formFields');
+
   return (
     <Form {...form}>
       <Tabs
@@ -107,7 +121,7 @@ const CreateOrEditBusinessForm = ({
         }}
       >
         <form id="form-create-form" onSubmit={handleSubmit(submit)}>
-          <DetailFormHeader action="create" />
+          <DetailFormHeader action={action} />
         </form>
         <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
           {[0, 1, 2].map((i) => {
@@ -132,7 +146,7 @@ const CreateOrEditBusinessForm = ({
         </TabsList>
         <section
           className={cn(
-            'flex flex-1 flex-col overflow-hidden p-5 md:p-10',
+            'flex flex-1 flex-col gap-2 overflow-hidden p-5 md:p-10',
             'mx-auto w-full  rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
           )}
         >

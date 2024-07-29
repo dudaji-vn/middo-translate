@@ -48,7 +48,7 @@ export const DetailFormHeader = ({
         </Button.Icon>
         <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50 max-sm:min-w-32">
           {action === 'create'
-            ? t('EXTENSION.FORM.CREATE_FORM')
+            ? t('EXTENSION.FORM.ADD_FORM')
             : action === 'view'
               ? t('EXTENSION.FORM.VIEW_FORM')
               : t('EXTENSION.FORM.EDIT_FORM')}
