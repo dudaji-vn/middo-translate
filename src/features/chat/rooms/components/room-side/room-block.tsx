@@ -13,6 +13,7 @@ export const RoomBlock = ({ room }: RoomBlockProps) => {
   const { onAction } = useRoomActions();
   const { t } = useTranslation('common');
   const { relationshipStatus } = useCheckRoomRelationship(room);
+  if (relationshipStatus === 'me') return null;
   if (relationshipStatus === 'blocking')
     return (
       <Item

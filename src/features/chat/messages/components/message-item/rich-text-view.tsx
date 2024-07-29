@@ -74,11 +74,21 @@ const processContent = (
   if (keyword) {
     const escapedKeyword = keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     const regex = new RegExp(`(${escapedKeyword})`, 'gi');
-    const highlightedContent = doc.body.innerHTML.replace(
-      regex,
-      '<span class="content-highlight">$1</span>',
-    );
-    doc.body.innerHTML = highlightedContent;
+
+    const highlightTextNodes = (node: any) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const span = document.createElement('span');
+        span.innerHTML = node.textContent.replace(
+          regex,
+          '<span class="content-highlight">$1</span>',
+        );
+        node.replaceWith(...Array.from(span.childNodes));
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        node.childNodes.forEach((child: any) => highlightTextNodes(child));
+      }
+    };
+
+    highlightTextNodes(doc.body);
   }
 
   return doc.body.innerHTML;

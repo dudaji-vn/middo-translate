@@ -12,6 +12,7 @@ import useClient from '@/hooks/use-client';
 import { RoomBlock } from '../room-block';
 import { Item } from '@/components/data-display';
 import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
+import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
 export interface RoomSideTabInfoProps {}
 
 export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
@@ -20,6 +21,7 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
   const { setIsShowSearch } = useRoomSearchStore();
   const isClient = useClient();
   const { room } = useChatBox();
+  const { relationshipStatus } = useCheckRoomRelationship(room);
 
   if (!isClient) return null;
 

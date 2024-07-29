@@ -143,7 +143,11 @@ export const RoomItemActionWrapper = forwardRef<
           case 'unarchive':
             return room.status === 'archived';
           case 'block':
-            return !room.isGroup && relationshipStatus !== 'blocking';
+            return (
+              !room.isGroup &&
+              relationshipStatus !== 'blocking' &&
+              relationshipStatus !== 'me'
+            );
           case 'unblock':
             return !room.isGroup && relationshipStatus === 'blocking';
           case 'reject':

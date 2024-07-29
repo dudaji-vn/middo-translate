@@ -30,7 +30,7 @@ const tabsTriggerVariants = cva('', {
         'border-b-1 relative inline-flex w-full items-center justify-center whitespace-nowrap rounded-none border-b border-transparent px-3 py-4 text-base md:text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:font-semibold data-[state=active]:text-foreground *:data-[state=active]:block md:hover:border-primary',
       unset: '',
       button:
-        'border-none  hover:bg-neutral-100 hover:text-neutral-700 relative inline-flex w-full items-center justify-center whitespace-nowrap  px-1 py-2  text-base md:text-sm font-medium ring-offset-background transition-all focus-visible:outline-none text-neutral-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none bg-primary-100 disabled:opacity-50 data-[state=active]:!text-white  bg-transparent  data-[state=active]:bg-primary  *:data-[state=active]:block rounded-t-[12px]',
+        'border-none  hover:bg-neutral-100 hover:text-neutral-700 relative inline-flex w-full items-center justify-center whitespace-nowrap  px-1 py-2  text-base md:text-sm font-medium ring-offset-background transition-all focus-visible:outline-none text-neutral-400 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:!text-white  bg-transparent data-[state=active]:bg-primary  *:data-[state=active]:block rounded-t-[12px]',
     },
   },
 });
