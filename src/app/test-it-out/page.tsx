@@ -25,7 +25,7 @@ import { DEFAULT_THEME } from '../(main-layout)/(protected)/spaces/[spaceId]/set
 import { useGetSpaceData } from '@/features/business-spaces/hooks/use-get-space-data';
 import { MessageActions } from '@/features/chat/messages/components/message-actions';
 import MessageTriggerForm from '../(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/trigger-form-button';
-import ExtensionForm from '../extension-form/_components/form-detail';
+import ExtensionForm from '../extension-form/_components/extension-form';
 
 type FakeMessage = Message & {
   fakeType: 'flow-sender' | 'flow-receiver' | 'flow-options';

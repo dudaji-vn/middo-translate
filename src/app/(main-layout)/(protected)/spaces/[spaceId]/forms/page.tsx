@@ -16,8 +16,7 @@ import {
 import {
   getFormsTablePerpage,
   setFormsTablePerpage,
-} from '@/utils/local-storage';
-import CreateOrEditBusinessForm from './_components/form-creation/create-form';
+} from '@/utils/local-storage';;
 import { isEmpty } from 'lodash';
 import EmptyForms from './_components/form-list/empty-forms/empty-forms';
 
@@ -69,13 +68,7 @@ const Page = ({
     setCurrentPage(page);
   };
   const forms: BusinessForm[] = data?.items || [];
-  if (modal === 'create') {
-    return (
-      <div className="background-business-forms flex h-screen  flex-col overflow-hidden ">
-        <CreateOrEditBusinessForm open />
-      </div>
-    );
-  }
+
   return (
     <>
       <FormsList

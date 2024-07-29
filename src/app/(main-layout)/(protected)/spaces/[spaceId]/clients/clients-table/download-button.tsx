@@ -40,7 +40,7 @@ const DownloadButton = ({
       color={'secondary'}
       startIcon={<FileDown />}
       {...props}
-      className={cn('h-fit w-full max-md:p-2', props.className)}
+      className={cn('h-fit w-full rounded-[12px] max-md:p-2', props.className)}
       // className="w-fit relative cursor-pointer z-20 flex flex-row items-center text-primary-500-main  gap-2 rounded-xl bg-primary-200 px-3 py-1 active:!bg-primary-200 active:!text-shading md:hover:bg-neutral-100"
     >
       <span>{t('EXTENSION.CLIENT.EXPORT_XLSX')}</span>

@@ -48,6 +48,8 @@ const checkDuplicateFieldNames = (fields: FormField[]) => {
 };
 
 export const createBusinessFormSchema = z.object({
+  formId: z.string().optional(),
+
   name: z
     .string()
     .max(30, 'Name is too long, max 30 characters')

@@ -18,10 +18,12 @@ import {
 } from '@/utils/local-storage';
 import ClientSidePagination from '@/components/actions/pagination/client-side-pagination';
 import { Button } from '@/components/actions';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { Typography } from '@/components/data-display';
 import { useTranslation } from 'react-i18next';
+import { DetailFormHeader } from '../_components/form-creation/detail-form-header';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 const tabs = ['Submissions', 'Form'];
 const FormPage = ({
@@ -37,7 +39,8 @@ const FormPage = ({
   );
   const [limit, setLimit] = useState(getFormsTablePerpage());
   const [search, setSearch] = useState('');
-  const router = useRouter();
+  const pathname = usePathname();
+  const { navigateTo } = usePlatformNavigation();
   const { t } = useTranslation('common');
   const { data, isLoading } = useGetFormData({
     spaceId,
@@ -84,26 +87,12 @@ const FormPage = ({
         setTabValue(parseInt(value));
       }}
     >
-      <section
-        className={cn(
-          ' flex w-full  flex-row items-center justify-start gap-2 py-2',
-        )}
-      >
-        <Button.Icon
-          onClick={() => {
-            router.back();
-          }}
-          variant={'ghost'}
-          size={'xs'}
-          color={'default'}
-          className="text-neutral-600"
-        >
-          <ArrowLeft className="" />
-        </Button.Icon>
-        <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50 max-sm:min-w-32">
-          Go back
-        </Typography>
-      </section>
+      <DetailFormHeader
+        action="view"
+        onOkClick={() => {
+          navigateTo(String(pathname), new URLSearchParams({ modal: 'edit' }));
+        }}
+      />
       <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
         {tabs.map((_, i) => {
           const isSelected = tabValue === i;
@@ -141,7 +130,7 @@ const FormPage = ({
             />
           </StepWrapper>
           <StepWrapper value="1" isLoading={isLoading}>
-            <FormDetail formFields={formFields} />
+            <FormDetail formFields={formFields} name={String(data?.name)} />
           </StepWrapper>
         </div>
       </section>

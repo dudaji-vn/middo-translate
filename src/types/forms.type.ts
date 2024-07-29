@@ -23,6 +23,7 @@ export type FormSubmission = {
   user: Partial<User>;
   answer: Record<string, string>;
 };
+
 export type BusinessForm = BaseEntity & {
   spaceId?: string;
   name: string;

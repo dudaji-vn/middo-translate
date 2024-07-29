@@ -62,8 +62,9 @@ const SelectSingle = ({ name, label, options }: TFormField) => {
         render={({ field, fieldState: { invalid } }) => {
           return (
             <RHFFormItem key={field.name}>
-              <FormControl>
+              <FormControl key={field.name}>
                 <RadioGroup
+                  key={field.name}
                   className="flex w-full flex-col gap-4"
                   onValueChange={field.onChange}
                   defaultValue={field.value}

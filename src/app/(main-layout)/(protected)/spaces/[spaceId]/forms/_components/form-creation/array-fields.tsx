@@ -48,6 +48,7 @@ import { MediaItem } from '@/features/chat/messages/components/message-editor/at
 import Image from 'next/image';
 import { t } from 'i18next';
 import { type } from 'os';
+import { RadioItem } from '@radix-ui/react-dropdown-menu';
 
 const fieldOptions = [
   {
@@ -65,11 +66,19 @@ const fieldOptions = [
 ];
 const typeIcons: Record<FormFieldType, React.ReactElement> = {
   input: <Type size={20} />,
-  checkbox: <SquareCheck size={20} />,
-  radio: <CopyCheck size={20} />,
+  checkbox: <CopyCheck size={20} />,
+  radio: <SquareCheck size={20} />,
 };
 
-const TypeSelection = ({ field, index }: { field: any; index: number }) => {
+const TypeSelection = ({
+  field,
+  index,
+  viewOnly = false,
+}: {
+  field: any;
+  index: number;
+  viewOnly?: boolean;
+}) => {
   const { setValue, watch, control, formState } = useFormContext();
 
   const inputTypes: Array<{ type: FormFieldDataTypes; label: string }> = [
@@ -96,6 +105,16 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
     console.log('type', type);
     setValue(`formFields[${index}].dataType`, type);
   };
+  if (viewOnly) {
+    return (
+      <div className="flex flex-col  gap-5 px-5">
+        <Typography className="capitalize">Answer Type</Typography>
+        <Typography className="px-5 capitalize text-neutral-400">
+          {inputTypes.find((type) => type.type === current)?.label}
+        </Typography>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-3 px-5 ">
@@ -112,7 +131,7 @@ const TypeSelection = ({ field, index }: { field: any; index: number }) => {
                     isError: invalid,
                   }}
                 >
-                  <DropdownMenuTrigger className="w-full">
+                  <DropdownMenuTrigger disabled={viewOnly} className="w-full">
                     <Button
                       size={'md'}
                       color={'default'}
@@ -157,11 +176,13 @@ const FieldOptions = ({
   index,
   disableParentDrag,
   enableParentDrag,
+  viewOnly = false,
 }: {
   field: any;
   index: number;
   disableParentDrag: () => void;
   enableParentDrag: () => void;
+  viewOnly?: boolean;
 }) => {
   const { control, formState, watch } = useFormContext();
   const { fields, append, remove, swap, update } = useFieldArray({
@@ -183,6 +204,52 @@ const FieldOptions = ({
 
   const optionsErrorMessage = (formState.errors?.formFields as any)?.[index]
     ?.options?.message;
+
+  if (viewOnly) {
+    return (
+      <div className="flex w-full flex-col">
+        <ul className="flex w-full flex-col py-2">
+          {fields.map((option: any, optionIndex) => {
+            const disabled = hasOtherOption && option?.['value'] === 'other';
+            const alreadyHasImage = !!option?.['image'];
+            const canHaveImage =
+              option?.['value'] !== 'other' && !alreadyHasImage;
+            const media = watch(
+              `formFields[${index}].options[${optionIndex}].media`,
+            );
+
+            return (
+              <li
+                key={option.id}
+                className={cn(
+                  'flex w-full flex-col items-start  justify-between gap-2  px-10  py-2 ',
+                  'field' + field.id,
+                )}
+              >
+                <div className="flex flex-row items-center gap-2">
+                  <Circle className="size-5 fill-neutral-100 stroke-none" />
+                  <Typography className="capitalize">{option.value}</Typography>
+                </div>
+                {media && (
+                  <div className="relative ml-14 flex aspect-square w-20 rounded-lg">
+                    <Image
+                      src={media}
+                      alt={`Option ${optionIndex + 1} image`}
+                      key={media}
+                      width={40}
+                      height={40}
+                      quality={100}
+                      className="size-full rounded-lg"
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
 
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -358,12 +425,14 @@ const RenderField = ({
   field,
   index,
   expand,
+  viewOnly = false,
   onRemoveField,
 }: {
   field: any;
   index: number;
   expand?: boolean;
   onRemoveField?: () => void;
+  viewOnly?: boolean;
 }) => {
   const { control, watch, setValue, formState } = useFormContext();
   const { type, name } = field || {};
@@ -381,7 +450,7 @@ const RenderField = ({
       key={field.id}
       draggableId={field.id}
       index={index}
-      isDragDisabled={!dragable}
+      isDragDisabled={!dragable || viewOnly}
     >
       {(draggableProvider) => (
         <li
@@ -416,12 +485,16 @@ const RenderField = ({
                   <Typography>Required</Typography>
                   <Switch
                     checked={watch(`formFields[${index}].required`)}
+                    disabled={viewOnly}
                     onCheckedChange={(value) => {
                       setValue(`formFields[${index}].required`, value);
                     }}
                   />
                 </div>
-                <CopyZoneClick text={name}>
+                <CopyZoneClick
+                  text={name}
+                  className={viewOnly ? 'hidden' : 'visible'}
+                >
                   <Button.Icon
                     disabled={!name}
                     variant="ghost"
@@ -436,6 +509,7 @@ const RenderField = ({
                   color="error"
                   size="xs"
                   onClick={onRemoveField}
+                  className={viewOnly ? 'hidden' : 'visible'}
                 >
                   <Trash2 />
                 </Button.Icon>
@@ -455,49 +529,60 @@ const RenderField = ({
               <div className="flex flex-col gap-2 px-5">
                 <RHFInputField
                   name={`formFields[${index}].name`}
-                  formLabel="Data-name"
                   formItemProps={{
                     className: 'w-full',
                   }}
                   inputProps={{
                     placeholder: 'Enter field name',
-                    className: '',
+                    disabled: viewOnly,
+                    className: viewOnly ? 'border-none' : '',
                   }}
+                  formLabel="Data-Name"
                 />
                 <RHFInputField
                   name={`formFields[${index}].label`}
-                  formLabel="Label"
                   formItemProps={{
                     className: 'w-full',
                   }}
                   inputProps={{
                     placeholder: 'What is your question?',
-                    className: '',
+                    disabled: viewOnly,
+                    className: viewOnly ? 'border-none' : '',
                   }}
+                  formLabel="Label"
                 />
                 <RHFInputField
                   name={`formFields[${index}].placeholder`}
-                  formLabel="Helper Text"
                   formItemProps={{
-                    className: 'w-full',
+                    className: cn('w-full', {
+                      hidden:
+                        viewOnly && !watch(`formFields[${index}].placeholder`),
+                    }),
                   }}
                   inputProps={{
                     placeholder:
                       'Appears below the Label to guide your Collaborators, just like this helper text!',
-                    className: '',
+                    disabled: viewOnly,
+                    className: viewOnly ? 'border-none' : '',
                   }}
+                  formLabel="Helper Text"
                 />
               </div>
               {type === 'checkbox' || type === 'radio' ? (
                 <FieldOptions
                   field={field}
                   index={index}
+                  viewOnly={viewOnly}
                   disableParentDrag={() => setDragable(false)}
                   enableParentDrag={() => setDragable(true)}
                 />
               ) : null}
               {type === 'input' && (
-                <TypeSelection field={field} index={index} />
+                <TypeSelection
+                  viewOnly={viewOnly}
+                  field={field}
+                  index={index}
+                />
               )}
             </AccordionContent>
           </AccordionItem>
@@ -515,7 +600,7 @@ const RenderField = ({
   );
 };
 
-function ArrayFields() {
+function ArrayFields({ viewOnly = false }: { viewOnly?: boolean }) {
   const {
     control,
     register,
@@ -589,7 +674,7 @@ function ArrayFields() {
   };
 
   return (
-    <div className="flex h-auto w-full flex-col gap-2">
+    <div className="flex  max-h-full w-full flex-col gap-2">
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId={`droppable-formFields`}>
           {(droppableProvider) => (
@@ -607,6 +692,7 @@ function ArrayFields() {
               >
                 {fields.map((field, index) => (
                   <RenderField
+                    viewOnly={viewOnly}
                     key={field.id}
                     field={field}
                     index={index}
@@ -626,7 +712,9 @@ function ArrayFields() {
         </Droppable>
       </DragDropContext>
       <div
-        className={cn('p-2transition-all flex flex-row gap-3 duration-700')}
+        className={cn('p-2transition-all flex flex-row gap-3 duration-700', {
+          hidden: viewOnly,
+        })}
         onMouseLeave={onCloseAddingField}
       >
         <Button.Icon

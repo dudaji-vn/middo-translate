@@ -14,13 +14,18 @@ import toast from 'react-hot-toast';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
-export const CreateFormHeader = () => {
+export const DetailFormHeader = ({
+  action,
+  onOkClick = () => {},
+  onPreviewClick = () => {},
+}: {
+  action: 'create' | 'edit' | 'view';
+  onOkClick?: () => void;
+  onPreviewClick?: () => void;
+}) => {
   const router = useRouter();
   const { t } = useTranslation('common');
-  const onPreviewClick = () => {
-    // TODO: Implement preview
-    toast('Preview not implemented yet', { icon: '🚧', duration: 1000 });
-  };
+
   return (
     <section
       className={cn(
@@ -40,7 +45,11 @@ export const CreateFormHeader = () => {
           <ArrowLeft className="" />
         </Button.Icon>
         <Typography className="min-w-max capitalize text-neutral-600 dark:text-neutral-50 max-sm:min-w-32">
-          {t('EXTENSION.FORM.ADD_FORM')}
+          {action === 'create'
+            ? t('EXTENSION.FORM.ADD_FORM')
+            : action === 'view'
+              ? t('EXTENSION.FORM.VIEW_FORM')
+              : t('EXTENSION.FORM.EDIT_FORM')}
         </Typography>
       </div>
       <div className="flex flex-row items-center gap-2">
@@ -62,8 +71,13 @@ export const CreateFormHeader = () => {
           color={'primary'}
           type="submit"
           form="form-create-form"
+          onClick={onOkClick}
         >
-          {t('EXTENSION.FORM.ADD_FORM')}
+          {action === 'create'
+            ? t('COMMON.CREATE')
+            : action === 'view'
+              ? t('EXTENSION.FORM.EDIT_FORM')
+              : t('COMMON.SAVE')}
         </Button>
       </div>
     </section>
