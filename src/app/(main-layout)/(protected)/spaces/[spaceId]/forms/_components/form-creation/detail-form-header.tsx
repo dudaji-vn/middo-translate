@@ -17,16 +17,14 @@ export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 export const DetailFormHeader = ({
   action,
   onOkClick = () => {},
+  onPreviewClick = () => {},
 }: {
   action: 'create' | 'edit' | 'view';
   onOkClick?: () => void;
+  onPreviewClick?: () => void;
 }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
-  const onPreviewClick = () => {
-    // TODO: Implement preview
-    toast('Preview not implemented yet', { icon: '🚧', duration: 1000 });
-  };
 
   return (
     <section

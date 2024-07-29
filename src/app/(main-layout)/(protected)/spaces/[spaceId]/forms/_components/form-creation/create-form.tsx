@@ -1,6 +1,6 @@
 'use client';
 
-import React, { cloneElement, useEffect } from 'react';
+import React, { cloneElement, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -20,11 +20,13 @@ import ArrayFields from './array-fields';
 import ThankYouForm from './thank-you-form';
 import CustomizeForm from './customize-form';
 import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/sections/options';
-import { Check, FileText, Paintbrush2 } from 'lucide-react';
+import { Check, FileText, Paintbrush2, X } from 'lucide-react';
 import { useAppStore } from '@/stores/app.store';
 import { useBusinessNavigationData } from '@/hooks';
 import toast from 'react-hot-toast';
 import { isEmpty, set } from 'lodash';
+import { Button } from '@/components/actions';
+import DraftFormPreview from '@/app/extension-form/_components/draft-form-preview';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
@@ -42,10 +44,12 @@ const CreateOrEditBusinessForm = ({
   currentForm?: Partial<TFormFormValues> & { _id: string };
 }) => {
   const { spaceId } = useBusinessNavigationData();
+  const [formOpenDraftPreview, setFormPreview] = React.useState<boolean>();
   const action = isEmpty(currentForm) ? 'create' : 'edit';
   const { t } = useTranslation('common');
   const isMobile = useAppStore((state) => state.isMobile);
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditForm();
+
   const [tabValue, setTabValue] = React.useState<number>(0);
   const router = useRouter();
 
@@ -71,6 +75,7 @@ const CreateOrEditBusinessForm = ({
   const {
     reset,
     setValue,
+    getValues,
     watch,
     handleSubmit,
     formState: { isValid, isSubmitting, errors },
@@ -109,88 +114,115 @@ const CreateOrEditBusinessForm = ({
     }
   };
   const fields = watch('formFields');
+  const previewForm = useCallback(() => {
+    setFormPreview(true);
+  }, [fields]);
 
   return (
-    <Form {...form}>
-      <Tabs
-        value={tabValue?.toString()}
-        className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
-        defaultValue={tabValue.toString()}
-        onValueChange={(value) => {
-          setTabValue(parseInt(value));
-        }}
-      >
-        <form id="form-create-form" onSubmit={handleSubmit(submit)}>
-          <DetailFormHeader action={action} />
-        </form>
-        <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
-          {[0, 1, 2].map((i) => {
-            const isSelected = tabValue === i;
-            return (
-              <TabsTrigger
-                key={i}
-                value={i.toString()}
-                variant="button"
-                className={cn('rounded-t-lg bg-white max-md:w-fit max-md:px-3')}
-              >
-                {isSelected
-                  ? isMobile
-                    ? cloneElement(tabIcons[i as keyof typeof tabIcons], {
-                        size: 24,
-                      })
-                    : tabLabels[i]
-                  : tabLabels[i]}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
-        <section
+    <>
+      <Form {...form}>
+        <Tabs
+          value={tabValue?.toString()}
+          className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
+          defaultValue={tabValue.toString()}
+          onValueChange={(value) => {
+            setTabValue(parseInt(value));
+          }}
+        >
+          <form id="form-create-form" onSubmit={handleSubmit(submit)}>
+            <DetailFormHeader action={action} onPreviewClick={previewForm} />
+          </form>
+          <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
+            {[0, 1, 2].map((i) => {
+              const isSelected = tabValue === i;
+              return (
+                <TabsTrigger
+                  key={i}
+                  value={i.toString()}
+                  variant="button"
+                  className={cn(
+                    'rounded-t-lg bg-white max-md:w-fit max-md:px-3',
+                  )}
+                >
+                  {isSelected
+                    ? isMobile
+                      ? cloneElement(tabIcons[i as keyof typeof tabIcons], {
+                          size: 24,
+                        })
+                      : tabLabels[i]
+                    : tabLabels[i]}
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+          <section
+            className={cn(
+              'flex flex-1 flex-col gap-2 overflow-hidden p-5 md:p-10',
+              'mx-auto w-full  rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
+            )}
+          >
+            {tabValue === 0 && (
+              <>
+                <RHFInputField
+                  name="name"
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                  inputProps={{
+                    placeholder: 'please enter a form name',
+                    required: true,
+                    className:
+                      'text-left p-0 focus:pl-5 text-2xl focus:ring-1 focus:ring-primary-500-main  bg-white outline-none border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
+                  }}
+                />
+                <RHFInputField
+                  name="description"
+                  formItemProps={{
+                    className: 'w-full',
+                  }}
+                  inputProps={{
+                    placeholder: 'Form description (optional)',
+                    className:
+                      'outline-none p-0 border-none !bg-transparent focus:pl-4 focus:ring-1 focus:ring-primary-500-main',
+                  }}
+                />
+              </>
+            )}
+            <div className="flex w-full flex-1 flex-col overflow-y-auto">
+              <StepWrapper value="0">
+                <ArrayFields />
+              </StepWrapper>
+              <StepWrapper value="1">
+                <ThankYouForm />
+              </StepWrapper>
+              <StepWrapper value="2">
+                <CustomizeForm />
+              </StepWrapper>
+            </div>
+          </section>
+        </Tabs>
+      </Form>
+      {formOpenDraftPreview && (
+        <div
           className={cn(
-            'flex flex-1 flex-col gap-2 overflow-hidden p-5 md:p-10',
-            'mx-auto w-full  rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
+            'fixed left-0 top-0 z-50 h-screen w-screen',
+            'bg-white',
           )}
         >
-          {tabValue === 0 && (
-            <>
-              <RHFInputField
-                name="name"
-                formItemProps={{
-                  className: 'w-full',
-                }}
-                inputProps={{
-                  placeholder: 'please enter a form name',
-                  required: true,
-                  className:
-                    'text-left p-0 focus:pl-5 text-2xl focus:ring-1 focus:ring-primary-500-main  bg-white outline-none border-none !bg-transparent font-semibold leading-7 text-neutral-800 dark:text-neutral-50',
-                }}
-              />
-              <RHFInputField
-                name="description"
-                formItemProps={{
-                  className: 'w-full',
-                }}
-                inputProps={{
-                  placeholder: 'Form description (optional)',
-                  className:
-                    'outline-none p-0 border-none !bg-transparent focus:pl-4 focus:ring-1 focus:ring-primary-500-main',
-                }}
-              />
-            </>
-          )}
-          <div className="flex w-full flex-1 flex-col overflow-y-auto">
-            <StepWrapper value="0">
-              <ArrayFields />
-            </StepWrapper>
-            <StepWrapper value="1">
-              <ThankYouForm />
-            </StepWrapper>
-            <StepWrapper value="2">
-              <CustomizeForm />
-            </StepWrapper>
-          </div>
-        </section>
-      </Tabs>
-    </Form>
+          <DraftFormPreview
+            form={{
+              customize: watch('customize'),
+              thankyou: watch('thankyou'),
+              formFields: watch('formFields'),
+              name: watch('name'),
+            }}
+            onClose={() => {
+              setFormPreview(undefined);
+            }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

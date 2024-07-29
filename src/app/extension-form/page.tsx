@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import ExtensionForm from './_components/form-detail';
+import ExtensionForm from './_components/extension-form';
 import { announceToParent } from '@/utils/iframe-util';
 import { useSearchParams } from 'next/navigation';
 
