@@ -108,7 +108,7 @@ const CustomizeForm = () => {
         </FormLabel>
         <div className="grid w-full  grid-cols-5 gap-3">
           {Array.from({ length: 10 }).map((_, index) => {
-            const src = `/forms/bg-form-${index + 1}.svg`;
+            const src = `/forms/bg-form-${index + 1}.jpg`;
             const isSelect = watch('customize.background') === src;
             return (
               <div
@@ -129,7 +129,7 @@ const CustomizeForm = () => {
                   objectPosition="center"
                   className="rounded-sm max-md:h-24 md:rounded-[12px]"
                   placeholder={'blur'}
-                  blurDataURL={'/forms/bg-form-10.svg'}
+                  blurDataURL={'/forms/bg-form-10.jpg'}
                 />
                 <Check
                   stroke="white"

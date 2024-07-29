@@ -50,7 +50,7 @@ const CreateOrEditBusinessForm = ({
   const [tabValue, setTabValue] = React.useState<number>(0);
   const router = useRouter();
 
-  const DEFAULT_FORM_BG = '/forms/bg-form-1.svg';
+  const DEFAULT_FORM_BG = '/forms/bg-form-1.jpg';
   const form = useForm<TFormFormValues>({
     mode: 'onChange',
     defaultValues: {
