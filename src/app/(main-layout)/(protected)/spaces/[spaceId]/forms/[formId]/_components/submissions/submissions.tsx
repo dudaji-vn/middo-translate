@@ -79,25 +79,11 @@ const Submissions = ({
           >
             View Detail
           </Button>
-          <Link
-            href={`/extension-form?spaceId=${spaceId}&formId=${_id}`}
-            className={allowRunForm ? 'min-w-fit py-1' : 'hidden'}
-            target="_blank"
-          >
-            <Button
-              size={'xs'}
-              variant={'ghost'}
-              color={'primary'}
-              startIcon={<Eye />}
-              shape={'square'}
-            >
-              Try Form
-            </Button>
-          </Link>
+
           <DownloadButton
             data={submissions}
             colInfo={[]}
-            className="rounded-[8px] py-1"
+            className="rounded-[8px] py-2"
             color={'default'}
           />
           {onDelete && (
