@@ -232,7 +232,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           onSend={handleSubmit}
         />
 
-        <div className="relative">
+        <div className="@container relative">
           <div className="mention-bar" />
           {isEditing && editor && (
             <EditControl
@@ -250,7 +250,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
               className="flex min-h-[82px] w-full flex-col rounded-2xl border border-primary p-1 shadow-sm"
             >
               <div className="flex items-center">
-                <div className="mr-3 flex-1 md:flex-none">
+                <div className="@xl:flex-none mr-3 flex-1">
                   <MessageEditorLanguageSelect editor={editor} />
                 </div>
                 {!isEditing && !isMediaDisabled && <AttachmentButton />}
@@ -260,7 +260,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
                 )}
               </div>
 
-              <div className="flex ">
+              <div className="flex">
                 <EditorContent
                   className="no-scrollbar max-h-[200px] min-h-[46] w-full overflow-y-auto p-2 dark:text-neutral-50"
                   editor={editor}

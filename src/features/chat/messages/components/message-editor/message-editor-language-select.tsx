@@ -98,7 +98,7 @@ export const MessageEditorLanguageSelect = ({
   return (
     <div className="w-full">
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger className="flex h-11 w-full items-center justify-start rounded-xl bg-neutral-50 px-3 hover:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-700 md:h-10 md:w-[240px]">
+        <PopoverTrigger className="@md:w-[240px] flex h-11 w-full items-center justify-start rounded-xl bg-neutral-50 px-3 hover:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-50 dark:hover:bg-neutral-700 md:h-10">
           {selectedOption?.value === 'auto' && (
             <>
               <Globe2Icon className="mr-2 inline-block size-5 text-primary " />
@@ -117,7 +117,7 @@ export const MessageEditorLanguageSelect = ({
                 ].toLowerCase()}
                 className="mr-2 inline-block h-5 w-5 overflow-hidden rounded-full"
               />
-              <span className=" flex-1 text-left">
+              <span className=" line-clamp-1 flex-1 text-left">
                 {t('LANGUAGE.' + selectedOption.title)}
               </span>
             </>
