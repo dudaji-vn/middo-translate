@@ -113,8 +113,6 @@ const RichTextView = ({
     setSanitizedHtml(sanitizedContent);
   }, [content, keyword, mentions, userId]);
 
-  console.log(sanitizedHtml);
-
   return (
     <div
       className={cn('editor-view rich-text-view tiptap prose', editorStyle)}

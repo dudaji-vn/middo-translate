@@ -46,7 +46,12 @@ export const useEditor = ({
           if (html.includes(`<meta charset='utf-8'><a href=`)) {
             return extractUrl(html);
           }
-          return convert(html);
+          return convert(html, {
+            selectors: [
+              { selector: 'a', options: { ignoreHref: true } },
+              { selector: 'img', options: { ignoreHref: true } },
+            ],
+          });
         },
 
         attributes: {
