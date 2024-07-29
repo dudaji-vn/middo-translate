@@ -6,6 +6,8 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { messageApi } from '../../../api';
 import { useClickReplyMessage } from '../../../hooks/use-click-reply-message';
+import { useCountUnreadChild } from '../../../hooks/use-count-unread-child';
+import Ping from '@/components/data-display/ping';
 
 export interface MessageItemReplyProps {
   messageId: string;
@@ -23,6 +25,8 @@ export const MessageItemReply = ({
     queryFn: () => messageApi.getReplies(messageId),
     enabled: !!messageId,
   });
+  const { data } = useCountUnreadChild(messageId);
+  const isNew = data?.count ? data.count > 0 : false;
   const { t } = useTranslation('common');
   const { onClickReplyMessage } = useClickReplyMessage();
   const uniqueUsers = useMemo(() => {
@@ -53,10 +57,20 @@ export const MessageItemReply = ({
     >
       {!isMe && (
         <div>
-          <div className="h-1/2 w-2 rounded-bl-sm border-b border-l border-neutral-200 dark:border-neutral-600" />
+          <div
+            className={cn(
+              'h-1/2 w-2 rounded-bl-sm border-b border-l border-neutral-100 dark:border-neutral-600',
+              isNew && '!border-primary',
+            )}
+          />
         </div>
       )}
-      <div className="flex h-fit w-fit items-center gap-1 rounded-xl border border-neutral-200 px-3 py-2 dark:border-neutral-600 md:rounded-lg md:px-2 md:py-1">
+      <div
+        className={cn(
+          'relative flex h-fit w-fit items-center gap-1 rounded-xl border border-neutral-100 px-3 py-2 dark:border-neutral-600 md:rounded-lg md:px-2 md:py-1',
+          isNew && '!border-primary',
+        )}
+      >
         {usersShown.map((user) => (
           <Avatar
             alt={user.name}
@@ -75,15 +89,26 @@ export const MessageItemReply = ({
           </div>
         )}
 
-        <span className="text-sm text-primary">
+        <span
+          className={cn(
+            'text-sm text-primary',
+            isNew ? 'font-semibold' : 'text-neutral-600',
+          )}
+        >
           {messages.length > 1
             ? t('CONVERSATION.REPLIES', { num: messages.length })
             : t('CONVERSATION.REPLY', { num: messages.length })}
         </span>
+        {isNew && <Ping size={8} className="ml-1" />}
       </div>
       {isMe && (
         <div>
-          <div className="h-1/2 w-2 rounded-br-sm border-b border-r border-neutral-100 dark:border-neutral-700" />
+          <div
+            className={cn(
+              'h-1/2 w-2 rounded-br-sm border-b border-r border-neutral-100 dark:border-neutral-700',
+              isNew && '!border-primary',
+            )}
+          />
         </div>
       )}
     </div>
