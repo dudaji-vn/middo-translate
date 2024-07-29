@@ -12,6 +12,8 @@ export interface MessageItemReplyProps {
   isMe?: boolean;
 }
 
+const MAX_USER_SHOWN = 5;
+
 export const MessageItemReply = ({
   messageId,
   isMe,
@@ -33,6 +35,8 @@ export const MessageItemReply = ({
     }, [] as User[]);
   }, [messages]);
 
+  const usersShown = uniqueUsers.slice(0, MAX_USER_SHOWN);
+
   if (!messages?.length) return null;
 
   return (
@@ -52,15 +56,24 @@ export const MessageItemReply = ({
           <div className="h-1/2 w-2 rounded-bl-sm border-b border-l border-neutral-200 dark:border-neutral-600" />
         </div>
       )}
-      <div className="flex h-fit w-fit items-center gap-1 rounded-lg border border-neutral-200 px-2 py-1 dark:border-neutral-600">
-        {uniqueUsers.map((user) => (
+      <div className="flex h-fit w-fit items-center gap-1 rounded-xl border border-neutral-200 px-3 py-2 dark:border-neutral-600 md:rounded-lg md:px-2 md:py-1">
+        {usersShown.map((user) => (
           <Avatar
             alt={user.name}
             key={user._id}
             src={user.avatar}
-            className="h-4 w-4"
+            className="h-6 w-6 md:h-4 md:w-4"
           />
         ))}
+        {/* remain count */}
+        {uniqueUsers.length > MAX_USER_SHOWN && (
+          <div
+            className=" flex h-6 w-6 items-center justify-center rounded-full bg-neutral-50 text-sm text-neutral-800 dark:bg-neutral-900 dark:text-neutral-50 md:h-4 md:w-4 md:text-xs
+          "
+          >
+            +{uniqueUsers.length - MAX_USER_SHOWN}
+          </div>
+        )}
 
         <span className="text-sm text-primary">
           {messages.length > 1
