@@ -74,7 +74,7 @@ const Submissions = ({
             color={'primary'}
             startIcon={<Eye />}
             shape={'square'}
-            className={viewDetailForm ? 'min-w-fit py-1' : 'hidden'}
+            className={viewDetailForm ? 'min-w-fit rounded-[12px]' : 'hidden'}
             onClick={() => viewDetailForm && viewDetailForm()}
           >
             View Detail
