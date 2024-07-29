@@ -33,22 +33,32 @@ const avatarVariants = cva('overflow-hidden shrink-0 relative aspect-square', {
 
 export interface AvatarProps
   extends ImageProps,
-    VariantProps<typeof avatarVariants> {}
+    VariantProps<typeof avatarVariants> {
+  disabledBorder?: boolean;
+}
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  ({ size, alt, shape, className, src, style, ...props }, ref) => {
+  (
+    { size, alt, shape, disabledBorder, className, src, style, ...props },
+    ref,
+  ) => {
     return (
       <div
         style={style}
         ref={ref}
-        className={cn(avatarVariants({ size, shape }), className)}
+        className={cn(
+          avatarVariants({ size, shape }),
+          'border-1 border border-neutral-50 dark:border-neutral-800',
+          className,
+          disabledBorder && 'border-none',
+        )}
       >
         <Image
           {...props}
           fill
           alt={alt}
           sizes="(max-width: 640px) 100px, 200px"
-          className="object-cover"
+          className=" object-cover "
           src={src || '/anonymous_avt.png'}
         />
       </div>

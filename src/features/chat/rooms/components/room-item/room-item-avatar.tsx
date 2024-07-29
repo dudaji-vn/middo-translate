@@ -88,9 +88,10 @@ export const ItemAvatar = ({
 
   return (
     <div className="relative">
-      <div className="relative aspect-square h-12 shrink-0 overflow-hidden rounded-full">
+      <div className="border-1 relative aspect-square h-12 shrink-0 overflow-hidden rounded-full border border-neutral-50 dark:border-neutral-800">
         {avatarsDisplay.map((avatar, index) => (
           <Avatar
+            disabledBorder
             shape="square"
             key={index}
             alt={avatar.alt}
