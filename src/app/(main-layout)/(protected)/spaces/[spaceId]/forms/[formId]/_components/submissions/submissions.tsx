@@ -89,6 +89,7 @@ const Submissions = ({
           {onDelete && (
             <Button.Icon
               size={'xs'}
+              disabled={isUsing}
               className="py-1"
               color={'error'}
               variant={'ghost'}
