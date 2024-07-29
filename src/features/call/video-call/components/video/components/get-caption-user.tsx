@@ -35,7 +35,6 @@ const GetCaptionUserMain = ({ name, avatar, language, stream }: GetCaptionUserPr
                 contentEn: contentEn,
                 language: language,
             };
-            console.log('🔴captionObj', captionObj);
             sendEvent(CUSTOM_EVENTS.CAPTION.SEND_CAPTION, captionObj);
         };
 

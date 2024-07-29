@@ -29,8 +29,8 @@ export const useTranslate = ({
   const [middleText, setMiddleText] = useState('');
   const { user } = useAuthStore();
   const debounceValue = useDebounce(text, 500);
-  const room = useVideoCallStore((state) => state.room);
-  const canNotListen = !!room;
+  const call = useVideoCallStore((state) => state.call);
+  const canNotListen = !!call;
 
   useEffect(() => {
     if (!translateOnType) return;

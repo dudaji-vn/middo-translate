@@ -11,7 +11,7 @@ export default function useHelpDeskCall()  {
     const participants = useParticipantVideoCallStore(state => state.participants);
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
     const removeWaitingHelpDeskParticipant = useParticipantVideoCallStore(state => state.removeWaitingHelpDeskParticipant);
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const {businessData} = useHelpDeskCallContext();
     
     // // Add waiting user if call from help desk
@@ -23,7 +23,7 @@ export default function useHelpDeskCall()  {
                 addParticipant({
                     user: {
                         _id: '',
-                        name: room?.name || '',
+                        name: call?.name || '',
                         username: '',
                         avatar: businessData.space?.avatar || '',
                         language: 'en',

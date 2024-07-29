@@ -1,19 +1,15 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/feedback';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { User } from '@/features/users/types';
-import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
-import { SelectedList } from '@/features/chat/rooms/components/selected-list';
 import { SearchList } from '@/features/chat/rooms/components/search-list';
 import { useVideoCallStore } from '../../../store/video-call.store';
-import { getRoomService } from '@/services/room.service';
 import { useParticipantVideoCallStore } from '../../../store/participant.store';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import socket from '@/lib/socket-io';
 import { SearchInput } from '@/components/data-entry';
 import { useTranslation } from 'react-i18next';
-import ParticipantInVideoCall from '@/features/call/interfaces/participant';
-import { getMembers, getSpaces } from '@/services/business-space.service';
+import { getMembers } from '@/services/business-space.service';
 import { useBusinessNavigationData } from '@/hooks';
 import { useBoolean } from 'usehooks-ts';
 import { Button } from '@/components/actions';
@@ -23,16 +19,16 @@ export const ModalForwardCall = () => {
     const {t} = useTranslation("common");
     const setModal = useVideoCallStore((state) => state.setModal);
     const modal = useVideoCallStore((state) => state.modal);
-    const setRoom = useVideoCallStore((state) => state.setRoom);
+    const setCall = useVideoCallStore((state) => state.setCall);
     const clearStateVideoCall = useVideoCallStore((state) => state.clearStateVideoCall);
-    const room = useVideoCallStore((state) => state.room);
+    const call = useVideoCallStore((state) => state.call);
     const participants = useParticipantVideoCallStore(state => state.participants)
     const [members, setMembers] = useState<User[]>([]);
     const [membersApi, setMembersApi] = useState<User[]>([]);
     const {spaceId} = useBusinessNavigationData()
     const {value: isOpenConfirm, toggle: toggleOpenConfirm} = useBoolean(false);
     useEffect(() => {
-        if (!room || !room.roomId) return;
+        if (!call || !call.roomId) return;
         if(!spaceId) return;
         const fetchMembersInGroup = async () => {
             try {
@@ -48,7 +44,7 @@ export const ModalForwardCall = () => {
             
         }
         fetchMembersInGroup();
-    }, [room, spaceId])
+    }, [call, spaceId])
     const [selectedUser, setSelectedUsers] = useState<User>();
     const user = useAuthStore((state) => state.user);
 
@@ -69,11 +65,11 @@ export const ModalForwardCall = () => {
         if(!selectedUser) return;
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
             users: [selectedUser],
-            call: room,
+            call: call,
             user,
             type: 'help_desk'
         })
-        setRoom();
+        setCall();
         clearStateVideoCall();
     };
     const handleChangeSearch = (e: React.FormEvent<HTMLInputElement>) => {

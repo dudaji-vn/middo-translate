@@ -12,11 +12,11 @@ const CreateInstantCall = ({
 
 }) => {
     const {t} = useTranslation('common')
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const [isLoading, setLoading] = useState<boolean>(false);
     const startVideoCall = useJoinCall(true);
     const createInstantCall = async () => {
-        if(room) {
+        if(call) {
             customToast.error(t('MESSAGE.ERROR.STOP_CALL_BEFORE_CREATE_INSTANT'))
             return;
         }

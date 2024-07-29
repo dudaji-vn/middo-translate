@@ -12,23 +12,23 @@ import { useEffect } from 'react';
 export default function Call() {
     const user = useAuthStore(state => state.user);
     const isLoaded = useAuthStore(state => state.isLoaded);
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const router = useRouter();
     const isFullScreen = useVideoCallStore(state=>state.isFullScreen)
     const setFullScreen = useVideoCallStore(state=>state.setFullScreen)
-    const setRoom = useVideoCallStore(state =>state.setRoom)
+    const setCall = useVideoCallStore(state =>state.setCall)
     const pathName = usePathname();
     const params = useParams();
     const callId = params?.id;
     useEffect(() => {
         const joinCall = async () => {
-            if (!user || room) return;
+            if (!user || call) return;
             const res = await loggedUserJoinAnonymousCall({
                 callId: typeof callId == 'string'? callId : ''
             });
             const data = res.data;
-            const {call} = data
-            setRoom(call)
+            const {call: c} = data
+            setCall(c)
             setFullScreen(true)
         };
         if(!isLoaded) return;
@@ -37,12 +37,12 @@ export default function Call() {
         } else {
             joinCall();
         }
-    }, [room, user, router, isLoaded, callId]);
+    }, [call, user, router, isLoaded, callId]);
 
     useEffect(()=>{
         if(!isFullScreen) setFullScreen(true)
     }, [isFullScreen])
-    if(!room || !user ) return null;
+    if(!call || !user ) return null;
 
     return ( 
         <VideoCall isShowFullScreenButton={false}/>

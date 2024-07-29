@@ -26,7 +26,7 @@ export default function useHandleCreatePeerConnection() {
     const isPinDoodle = useVideoCallStore(state => state.isPinDoodle);
     const setPinShareScreen = useVideoCallStore(state => state.setPinShareScreen);
     const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const participants = useParticipantVideoCallStore(state => state.participants);
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
     const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
@@ -102,7 +102,7 @@ export default function useHandleCreatePeerConnection() {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, {
                 userId: user?._id,
                 status: isTurnOnMic,
-                roomId: room?._id,
+                callId: call?._id,
                 directUserId: payload.user._id,
             });
         }
@@ -130,7 +130,7 @@ export default function useHandleCreatePeerConnection() {
         }
     // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[myStream, participants, addParticipant, updatePeerParticipant, updateParticipant, setLayout, isPinDoodle, setPinShareScreen, user?._id, isTurnOnMic, room?._id])
+    },[myStream, participants, addParticipant, updatePeerParticipant, updateParticipant, setLayout, isPinDoodle, setPinShareScreen, user?._id, isTurnOnMic, call?._id])
 
     
     // useEffect when myStream change

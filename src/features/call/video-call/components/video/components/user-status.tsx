@@ -34,16 +34,16 @@ export default function UserStatus({isForgeShow, participant}: UserStatusProps) 
 const WaitingStatus = ({notShow} : {notShow: boolean}) => {
   const {t} = useTranslation('common')
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  const room = useVideoCallStore(state => state.room);
+  const call = useVideoCallStore(state => state.call);
   const { playAudio, stopAudio } = usePlayAudio('/mp3/incoming.mp3')
   useEffect(()=> {
-    if(room?.type === CALL_TYPE.DIRECT) {
+    if(call?.type === CALL_TYPE.DIRECT) {
       playAudio()
     }
     return () => {
       stopAudio()
     }
-  }, [playAudio, room?.type, stopAudio])
+  }, [playAudio, call?.type, stopAudio])
 
   if(notShow) return null;
   

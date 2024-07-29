@@ -6,8 +6,9 @@ import CaptionInterface from '../interfaces/caption.interface';
 import { User } from '@/features/users/types';
 import { CallType } from '../constant/call-type';
 import { Station } from '@/features/stations/types/station.types';
+import { Room } from '@/features/chat/rooms/types';
 type ModalType = 'forward-call' | 'add-user' | 'video-setting' | 'leave-call' | 'stop-doodle' | 'choose-screen' | 'show-invitation'
-export interface IRoom {
+export interface Call {
   _id: string;
   name: string;
   roomId: string;
@@ -23,19 +24,13 @@ export interface IRoom {
 
 export interface IRequestCall {
   id: string;
-  call: IRoom & {
+  call: Call & {
     avatar?: string;
     participants?: User[];
   };
   user: User;
-  room: IRoom & {
-    avatar?: string;
-    participants?: User[];
-    space?: {
-      _id: string;
-      name: string;
-      avatar: string;
-    }
+  room: Omit<Room, 'station'> & {
+    station: Station;
   };
   message?: string;
   space?: {
@@ -46,7 +41,7 @@ export interface IRequestCall {
   type: 'direct' | 'group' | 'help_desk';
 }
 export type VideoCallState = {
-  room: IRoom | null | undefined;
+  call: Call | null | undefined;
   layout: string;
   isDoodle: boolean;
   isDrawing: boolean;
@@ -64,7 +59,7 @@ export type VideoCallState = {
   captions: CaptionInterface[];
   messageId: string;
   isShowInviteSection: boolean;
-  setRoom: (room?: IRoom) => void;
+  setCall: (call?: Call) => void;
   isAllowDrag: boolean;
   setAllowDrag: (allowDrag: boolean) => void;
   setLayout: (layout?: VideoCallLayout) => void;
@@ -88,7 +83,7 @@ export type VideoCallState = {
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
-  room: null,
+  call: null,
   layout: VIDEO_CALL_LAYOUTS.GALLERY_VIEW,
   usersRequestJoinRoom: [],
   isDoodle: false,
@@ -108,10 +103,10 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   captions: [],
   messageId: '',
   isShowInviteSection: true,
-  setRoom: (room?: IRoom) => {
-    set(() => ({ room }));
-  },
   isAllowDrag: false,
+  setCall: (call?: Call) => {
+    set(() => ({ call }));
+  },
   setAllowDrag: (allowDrag: boolean) => {
     set(() => ({ isAllowDrag: allowDrag }));
   },

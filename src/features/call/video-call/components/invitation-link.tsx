@@ -7,7 +7,7 @@ import { cn } from '@/utils/cn';
 
 export default function InvitationLink() {
   const { t } = useTranslation('common');
-  const room = useVideoCallStore((state) => state.room);
+  const call = useVideoCallStore((state) => state.call);
   const setShowInviteSection = useVideoCallStore(
     (state) => state.setShowInviteSection,
   );
@@ -28,10 +28,10 @@ export default function InvitationLink() {
         {t('CONVERSATION.COPY_INVITATION_LINK')}
       </p>
       <CopyZoneClick
-        text={`${NEXT_PUBLIC_URL}/call/${room?._id}`}
+        text={`${NEXT_PUBLIC_URL}/call/${call?._id}`}
         className="flex cursor-pointer items-center justify-center rounded-xl border border-neutral-100 bg-white p-3 dark:border-neutral-700 dark:bg-background"
       >
-        <span className="flex-1 truncate font-semibold text-primary">{`${NEXT_PUBLIC_URL}/call/${room?._id}`}</span>
+        <span className="flex-1 truncate font-semibold text-primary">{`${NEXT_PUBLIC_URL}/call/${call?._id}`}</span>
         <Button.Icon
           size={'xs'}
           shape={'default'}

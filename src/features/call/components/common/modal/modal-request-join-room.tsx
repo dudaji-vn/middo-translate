@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 export const RequestJoinRoomModal = () => {
     const {t} = useTranslation('common');
 
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const usersRequestJoinRoom = useParticipantVideoCallStore(state => state.usersRequestJoinRoom);
     const removeUsersRequestJoinRoom = useParticipantVideoCallStore(state => state.removeUsersRequestJoinRoom);
     
@@ -17,7 +17,7 @@ export const RequestJoinRoomModal = () => {
         removeUsersRequestJoinRoom(usersRequestJoinRoom[0].socketId);
     };
     const handleAccept = async () => {
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.ACCEPT_JOIN_ROOM, {socketId: usersRequestJoinRoom[0].socketId, roomInfo: room});
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.ACCEPT_JOIN_ROOM, {socketId: usersRequestJoinRoom[0].socketId, roomInfo: call});
         removeUsersRequestJoinRoom(usersRequestJoinRoom[0].socketId);
     };
 

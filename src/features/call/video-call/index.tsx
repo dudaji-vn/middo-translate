@@ -18,7 +18,7 @@ interface VideoCallProps {
   isShowFullScreenButton?: boolean
 }
 export default function VideoCall({isShowFullScreenButton = true}: VideoCallProps) {
-  const room = useVideoCallStore(state => state.room);
+  const call = useVideoCallStore(state => state.call);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const setFullScreen = useVideoCallStore(state => state.setFullScreen);
   const participants = useParticipantVideoCallStore(state => state.participants)
@@ -37,7 +37,7 @@ export default function VideoCall({isShowFullScreenButton = true}: VideoCallProp
       if(!userIds?.length) return;
       userIds.forEach(userId => {
         let participant = participants.find(p => p.user._id === userId)
-        if ((room?._id == roomId || room?.roomId == roomId) && participant) {
+        if ((call?._id == roomId || call?.roomId == roomId) && participant) {
           if (participant.status == StatusParticipant.WAITING) {
             updateStatusParticipant(userId, StatusParticipant.DECLINE)
           }
@@ -51,14 +51,14 @@ export default function VideoCall({isShowFullScreenButton = true}: VideoCallProp
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, declineCall)
     }
-  }, [participants, room?._id, room?.roomId, setRequestCall, updateStatusParticipant, user?._id]);
+  }, [participants, call?._id, call?.roomId, setRequestCall, updateStatusParticipant, user?._id]);
 
   useEffect(() => {
     if(isMobile) {
       setFullScreen(true)
     }
   }, [isMobile, setFullScreen])
-  if (!room) return null;
+  if (!call) return null;
   return (
     <CallDraggable
       className={cn(

@@ -9,7 +9,6 @@ import useGetVideoSize from '../doodle/hooks/use-get-video-size';
 import { DoodleShareScreen } from '../doodle/doodle-share-screen';
 import { useTranslation } from 'react-i18next';
 import VideoItemTalk from './components/video-item-talk';
-import { Maximize, Minimize } from 'lucide-react';
 import UserStatus from './components/user-status';
 import VideoItemText from './components/video-item-text';
 import ChangeToGalleryView from './components/change-to-gallery-view';

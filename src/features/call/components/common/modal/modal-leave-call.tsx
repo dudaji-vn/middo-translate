@@ -22,7 +22,7 @@ export const ModalLeaveCall = () => {
   const {t} = useTranslation('common');
   const setModal = useVideoCallStore(state => state.setModal);
   const modal = useVideoCallStore(state => state.modal)
-  const setRoom = useVideoCallStore(state => state.setRoom);
+  const setCall = useVideoCallStore(state => state.setCall);
   const participants = useParticipantVideoCallStore(state => state.participants);
   const removeParticipant = useParticipantVideoCallStore(state => state.removeParticipant);
   const { isHelpDesk } = useBusinessNavigationData();
@@ -37,7 +37,7 @@ export const ModalLeaveCall = () => {
       }
       removeParticipant(participant.socketId);
     });
-    setRoom();
+    setCall(undefined);
     if(isElectron) {
       ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
     }

@@ -25,7 +25,6 @@ const CaptionContent = () => {
   const captions = useVideoCallStore(state => state.captions);
   const addCaption = useVideoCallStore(state => state.addCaption);
   const clearCaption = useVideoCallStore(state => state.clearCaption);
-  console.log('🔴captions', captions);
   const captionListRef = useRef<HTMLDivElement>(null);
 
   const [isScroll, setScroll] = useState(false);

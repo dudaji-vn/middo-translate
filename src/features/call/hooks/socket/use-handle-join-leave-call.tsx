@@ -22,7 +22,7 @@ export default function useHandleJoinLeaveCall() {
     const peerShareScreen = useParticipantVideoCallStore(state => state.peerShareScreen);
     const removePeerShareScreen = useParticipantVideoCallStore(state => state.removePeerShareScreen);
     const addParticipant = useParticipantVideoCallStore(state => state.addParticipant);
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const setLayout = useVideoCallStore(state => state.setLayout);
     const myStream = useMyVideoCallStore(state => state.myStream);
     const user = useAuthStore(state => state.user);
@@ -104,7 +104,7 @@ export default function useHandleJoinLeaveCall() {
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.LEAVE);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [room?._id, room?.roomId, user?._id]);
+    }, [call?._id, call?.roomId, user?._id]);
 
     // Add user waiting for join
     useEffect(() => {
