@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 import { useTranslation } from 'react-i18next';
 import { createBusinessFormSchema } from './schema';
@@ -15,13 +15,12 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import StepWrapper from './step-wrapper';
 import { cn } from '@/utils/cn';
 import RHFInputField from '@/components/form/RHF/RHFInputFields/RHFInputField';
-import { CreateFormHeader } from './create-form-header';
+import { DetailFormHeader } from './detail-form-header';
 import ArrayFields from './array-fields';
 import ThankYouForm from './thank-you-form';
-import { title } from 'process';
 import CustomizeForm from './customize-form';
 import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/sections/options';
-import { Check, FileText, Paintbrush, Paintbrush2 } from 'lucide-react';
+import { Check, FileText, Paintbrush2 } from 'lucide-react';
 import { useAppStore } from '@/stores/app.store';
 import { useBusinessNavigationData } from '@/hooks';
 import toast from 'react-hot-toast';
@@ -108,7 +107,7 @@ const CreateOrEditBusinessForm = ({
         }}
       >
         <form id="form-create-form" onSubmit={handleSubmit(submit)}>
-          <CreateFormHeader />
+          <DetailFormHeader action="create" />
         </form>
         <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
           {[0, 1, 2].map((i) => {
