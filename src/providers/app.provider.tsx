@@ -30,6 +30,10 @@ import { EventListener } from './event-listener';
 import { ToastProvider } from './toast.provider';
 import { ThemeProvider } from './Theme.provider';
 import MediaLightBoxProvider from './media-light-box.provider';
+import { useKeyboardShortcut } from '@/hooks';
+import { SHORTCUTS } from '@/types/shortcuts';
+import { isEqual } from 'lodash';
+import { useAppStore } from '@/stores/app.store';
 
 init({ data });
 
@@ -38,6 +42,14 @@ export const AppProvider = (props: Props & React.PropsWithChildren) => {
   const isMobile = usePlatformStore((state) => state.platform) === 'mobile';
   const pathname = usePathname();
   const router = useRouter();
+
+  const toggleTheme = useAppStore((state) => state.toggleTheme);
+
+  useKeyboardShortcut([SHORTCUTS.TOGGLE_MODE], (_, matchedKeys) => {
+    if (isEqual(matchedKeys, SHORTCUTS.TOGGLE_MODE)) {
+      toggleTheme();
+    }
+  });
 
   useEffect(() => {
     if (user && isLoaded && pathname == ROUTE_NAMES.ROOT) {

@@ -139,7 +139,9 @@ export const SearchTabs = ({
                   <>{t(tab.label)}</>
                 ) : (
                   <>
-                    <div className="h-5"> {tab?.icon || t(tab.label)}</div>
+                    <div className="h-5 dark:text-neutral-100">
+                      {tab?.icon || t(tab.label)}
+                    </div>
                     {tab.value !== 'all' && (
                       <div className="absolute right-0 top-0 size-4 translate-x-1/2 translate-y-1/2 rounded-full bg-primary text-xs text-white">
                         {countData[tab.value] > 9 ? '+9' : countData[tab.value]}

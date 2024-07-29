@@ -13,7 +13,14 @@ export interface TurnOffNotificationProps {}
 
 export const TurnOffNotification = (props: TurnOffNotificationProps) => {
   const { t } = useTranslation('common');
-  const { isSubscribed, fcmToken, retrieveToken, turnOff, setFcmToken, retrieveTokenElectron } = useNotification();
+  const {
+    isSubscribed,
+    fcmToken,
+    retrieveToken,
+    turnOff,
+    setFcmToken,
+    retrieveTokenElectron,
+  } = useNotification();
   const platform = usePlatformStore((state) => state.platform);
   const { postMessage } = useReactNativePostMessage();
   const { isElectron, ipcRenderer, electron } = useElectron();
@@ -36,8 +43,8 @@ export const TurnOffNotification = (props: TurnOffNotificationProps) => {
         });
         return;
       }
-      if(isElectron) {
-        retrieveTokenElectron()
+      if (isElectron) {
+        retrieveTokenElectron();
       } else {
         retrieveToken();
       }
@@ -47,8 +54,8 @@ export const TurnOffNotification = (props: TurnOffNotificationProps) => {
   return (
     <Item
       leftIcon={<BellIcon />}
-      className="gap-5 pl-5 font-medium dark:bg-neutral-900 dark:text-neutral-50 pr-5 border-b dark:border-b-neutral-800"
-      right={<Switch checked={isSubscribed} onClick={handleToggle} />}
+      className="gap-5 border-b pl-5 pr-5 font-medium dark:border-b-neutral-800 dark:bg-neutral-900 dark:text-neutral-50"
+      right={<Switch checked={!isSubscribed} onClick={handleToggle} />}
     >
       {t('ACCOUNT_SETTING.NOTIFICATION')}{' '}
     </Item>
