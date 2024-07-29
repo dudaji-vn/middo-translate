@@ -200,4 +200,17 @@ export const messageApi = {
     );
     return res.data;
   },
+  async markAsReadAllChild(id: string) {
+    const res: Response<Message> = await axiosWithInterceptor.patch(
+      `${basePath}/${id}/reply/mark-all-as-read`,
+    );
+    return res.data;
+  },
+
+  async countUnreadChild(id: string) {
+    const res: Response<{ count: number }> = await axiosWithInterceptor.get(
+      `${basePath}/${id}/reply/unread-count`,
+    );
+    return res.data;
+  },
 };

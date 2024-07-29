@@ -7,6 +7,7 @@ import { convert } from 'html-to-text';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { Message } from '../../types';
+import { USE_COUNT_UNREAD_CHILD_KEY } from '../../hooks/use-count-unread-child';
 
 export const useMessageSocket = ({
   room,
@@ -65,6 +66,10 @@ export const useMessageSocket = ({
       queryClient.invalidateQueries(['message', message._id]);
       if (message.hasChild) {
         queryClient.invalidateQueries(['message-item-replies', message._id]);
+        queryClient.invalidateQueries([
+          USE_COUNT_UNREAD_CHILD_KEY,
+          message._id,
+        ]);
       }
     });
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
