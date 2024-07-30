@@ -81,6 +81,11 @@ export const MessagesBoxProvider = ({
     roomId: params?.id || room._id,
     isAnonymous,
   });
+  const updateRecentFormStatus = (messageId: string) => {
+    if (recentlySubmitedFormByMessageId === messageId) {
+      setRecentlySubmitedFormByMessageId('');
+    }
+  };
 
   useMessageSocket({
     room,
@@ -89,9 +94,7 @@ export const MessagesBoxProvider = ({
     replaceItem,
     updateItem,
     setNotification,
-    triggerNewFlowMessage: (id) => {
-      setRecentlySubmitedFormByMessageId(id);
-    },
+    triggerNewFlowMessage: updateRecentFormStatus,
   });
 
   useChangeTitle({
