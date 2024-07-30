@@ -17,7 +17,7 @@ export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 export const DetailFormHeader = ({
   action,
   onOkClick = () => {},
-  onPreviewClick = () => {},
+  onPreviewClick,
 }: {
   action: 'create' | 'edit' | 'view';
   onOkClick?: () => void;
@@ -53,17 +53,19 @@ export const DetailFormHeader = ({
         </Typography>
       </div>
       <div className="flex flex-row items-center gap-2">
-        <Button
-          onClick={onPreviewClick}
-          shape={'square'}
-          size={'xs'}
-          type="button"
-          color={'secondary'}
-          startIcon={<Eye />}
-        >
-          {t('COMMON.PREVIEW')}
-          &nbsp;
-        </Button>
+        {onPreviewClick && (
+          <Button
+            onClick={onPreviewClick}
+            shape={'square'}
+            size={'xs'}
+            type="button"
+            color={'secondary'}
+            startIcon={<Eye />}
+          >
+            {t('COMMON.PREVIEW')}
+            &nbsp;
+          </Button>
+        )}
         <Button
           variant={'default'}
           size={'xs'}
