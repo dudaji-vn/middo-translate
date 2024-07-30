@@ -27,6 +27,7 @@ import { announceToParent } from '@/utils/iframe-util';
 import { submitFormAnswer } from '@/services/extension.service';
 import { Input, SelectMultiple, SelectSingle } from './form-fields';
 import { isEmpty } from 'lodash';
+import { text } from 'stream/consumers';
 
 const answerSchema = z.object({
   formId: z.string(),
@@ -54,17 +55,23 @@ export type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
 const ExtensionForm = ({
   formId,
   guestId,
-  onClose = () => {},
+  onClose = (done: boolean) => {},
+  messageId,
   previewMode = false,
+  language,
 }: {
-  formId: string;
+  formId?: string;
   guestId?: string;
-  onClose?: () => void;
+  roomId?: string;
+  language?: string;
+  messageId?: string;
+  onClose?: (done: boolean) => void;
   previewMode?: boolean;
 }) => {
   const { data: form, isLoading } = useGetFormHelpdesk({
     formId,
     userId: guestId,
+    language,
   });
   const [isDone, setIsDone] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(0);
@@ -122,7 +129,6 @@ const ExtensionForm = ({
 
   useEffect(() => {
     if (!isLoading && form && !previewMode) {
-      console.log('form', form);
       announceToParent({
         type: 'form-loaded',
         payload: {},
@@ -167,6 +173,18 @@ const ExtensionForm = ({
     const answer = formFields.reduce(
       (acc, field) => {
         acc[field.name] = data.answer[field.name];
+        const otherAnswerOfField = data.answer[field.name + '-other'] as string;
+        if (otherAnswerOfField) {
+          if (field.type === 'checkbox' && !isEmpty(acc[field.name])) {
+            const replaceIndex = (acc[field.name] as string[]).findIndex(
+              (item: string) => item === 'other',
+            );
+            // @ts-ignore
+            acc[field.name][replaceIndex] = otherAnswerOfField;
+          } else if (field.type === 'radio') {
+            acc[field.name] = otherAnswerOfField;
+          }
+        }
         return acc;
       },
       {} as TSubmission['answer'],
@@ -183,6 +201,7 @@ const ExtensionForm = ({
     try {
       const res = await submitFormAnswer(formId, guestId, {
         answer,
+        messageId,
       });
       console.log('res', res);
       if (res.data) {
@@ -201,14 +220,14 @@ const ExtensionForm = ({
     if (isDone && guestId) {
       removeFormDraftData(guestId);
     }
-    onClose();
+    onClose(isDone);
   };
 
   return (
     <>
       <main
         className={cn(
-          'relative h-screen w-full   bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat p-10 md:p-[5vw]',
+          'relative h-screen w-full overflow-hidden  bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat p-10 md:p-[5vw]',
           themeName,
         )}
         style={{ backgroundImage: bgSrc }}

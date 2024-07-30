@@ -95,7 +95,7 @@ export const MessageBox = ({
       currentUserId as string,
     );
   }, [currentUserId, messagesGroup, participants]);
-
+  console.log('room ===> ', room);
   return (
     <div className={cn('relative flex h-full w-full flex-1 overflow-hidden')}>
       {!messageId && (

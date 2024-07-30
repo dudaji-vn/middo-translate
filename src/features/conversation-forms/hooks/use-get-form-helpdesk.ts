@@ -11,7 +11,7 @@ export const useGetFormHelpdesk = ({
   language,
   userId,
 }: {
-  formId: string;
+  formId?: string;
   language?: string;
   userId?: string;
 }) => {
@@ -23,6 +23,9 @@ export const useGetFormHelpdesk = ({
       },
     ],
     queryFn: async () => {
+      if (!formId) {
+        return {};
+      }
       try {
         const response = await axios.get(
           `help-desk/forms/${formId}`,

@@ -218,10 +218,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           mediaLength > 1 && 'rounded-none',
                         )}
                       >
-                        {extensionForm && (
+                        {!!extensionForm && (
                           <MessageItemFlowFormTrigger
-                            form={extensionForm}
                             guestId={guestId}
+                            message={message}
+                            form={extensionForm}
                           />
                         )}
                         {message.content && !extensionForm && (
@@ -327,7 +328,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   </span>
                 </span>
               )}
-              <MessageItemFlowActions actions={actionsFromScriptChat || []} />
+              {message.type !== 'flow-form' && !isEditing && !isDraw && (
+                <MessageItemFlowActions actions={actionsFromScriptChat || []} />
+              )}
             </div>
             {direction === 'top' && (
               <ReadByUsers

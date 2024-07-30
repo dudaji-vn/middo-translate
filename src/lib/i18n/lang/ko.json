@@ -799,7 +799,8 @@
         "NAME_REQUIRED": "공간 이름은 필수입니다",
         "NAME_MAX_LENGTH": "공간 이름은 30자 이내여야 합니다",
         "AVATAR_REQUIRED": "공간 아바타는 필수입니다",
-        "INVALID_EMAIL_MEMBER": "잘못된 이메일 멤버"
+        "INVALID_EMAIL_MEMBER": "유효하지 않은 이메일 멤버",
+        "INVALID_SPACE_NAME": "공간 이름이 잘못되었습니다. 문자, 숫자, 밑줄 및 공백만 허용됩니다."
       },
       "NO_MEMBER": "멤버 없음"
     },

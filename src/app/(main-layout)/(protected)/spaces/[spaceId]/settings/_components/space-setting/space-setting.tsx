@@ -57,6 +57,11 @@ const editSpaceSchema = z.object({
   }),
   name: z
     .string()
+    .trim()
+    .regex(/^[a-zA-Z0-9_ ]+$/, {
+      message:
+        'Name is invalid, only letters, numbers, underscores and spaces are allowed.',
+    })
     .min(1, {
       message: 'Space name is required.',
     })

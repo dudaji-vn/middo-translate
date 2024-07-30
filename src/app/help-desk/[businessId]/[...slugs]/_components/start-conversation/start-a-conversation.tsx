@@ -103,9 +103,9 @@ const StartAConversation = ({
     const rootEdges = getConnectedEdges([rootNode], edges)[0] || {};
     const rootChild = nodes.find((node) => node.id === rootEdges.target);
     if (!rootChild) return;
-
     const childrenActions = nodes.filter(
-      (node) => node.parentNode === rootChild.id,
+      (node) =>
+        node.parentNode === rootChild.id || node.parentId === rootChild.id,
     );
     const messType = rootChild.type === 'form' ? 'flow-form' : 'flow-actions';
     const payload = {
@@ -114,7 +114,7 @@ const StartAConversation = ({
       type: messType,
       language: extensionData.language,
       mentions: [],
-      actions: messType === 'flow-actions' ? childrenActions : undefined,
+      actions: childrenActions,
       userId: owner?._id,
       formId: rootChild?.form,
     };

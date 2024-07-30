@@ -1,6 +1,12 @@
 'use client';
 
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
 import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 import { Message, PinMessage } from '@/features/chat/messages/types';
@@ -27,6 +33,7 @@ interface MessagesBoxContextProps {
   isFetching: boolean;
   isFetched: boolean;
   isInitialLoading: boolean;
+  recentlySubmitedFormByMessageId: string;
 }
 
 export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
@@ -44,6 +51,8 @@ export const MessagesBoxProvider = ({
   guestId?: string;
 }>) => {
   const userId = useAuthStore((s) => s.user?._id);
+  const [recentlySubmitedFormByMessageId, setRecentlySubmitedFormByMessageId] =
+    useState<string>('');
   const [notification, setNotification] = useState<string>('');
   const key = ['messages', room._id];
   const {
@@ -78,6 +87,13 @@ export const MessagesBoxProvider = ({
     roomId: params?.id || room._id,
     isAnonymous,
   });
+  const updateRecentFormStatus = useCallback(
+    (messageId: string) => {
+      if (messageId !== recentlySubmitedFormByMessageId)
+        setRecentlySubmitedFormByMessageId(messageId);
+    },
+    [recentlySubmitedFormByMessageId],
+  );
 
   useMessageSocket({
     room,
@@ -86,6 +102,7 @@ export const MessagesBoxProvider = ({
     replaceItem,
     updateItem,
     setNotification,
+    triggerNewFlowMessage: updateRecentFormStatus,
   });
 
   useChangeTitle({
@@ -109,6 +126,7 @@ export const MessagesBoxProvider = ({
         isFetching,
         isFetched,
         isInitialLoading,
+        recentlySubmitedFormByMessageId: recentlySubmitedFormByMessageId,
       }}
     >
       {children}

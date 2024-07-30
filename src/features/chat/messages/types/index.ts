@@ -55,7 +55,7 @@ export type Message = {
   media?: Media[];
   type: MessageType;
   formId?: string;
-  form?: { _id: string; name: string };
+  form?: { _id: string; name: string; isSubmitted?: boolean };
   status: MessageStatus;
   language: string;
   reactions?: Reaction[];

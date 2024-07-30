@@ -31,6 +31,9 @@ const createSpaceSchema = z.object({
   name: z
     .string()
     .trim()
+    .regex(/^[a-zA-Z0-9_ ]+$/, {
+      message: 'EXTENSION.SPACE.ERRORS.INVALID_SPACE_NAME',
+    })
     .min(1, {
       message: 'EXTENSION.SPACE.ERRORS.NAME_REQUIRED',
     })

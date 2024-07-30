@@ -12,21 +12,33 @@ const Page = (
     searchParams: {
       formId: string;
       guestId: string;
+      language?: string;
+      messageId?: string;
     };
   },
 ) => {
   const searchParams = useSearchParams();
-  const formId = searchParams?.get('formId') || '';
-  const guestId = searchParams?.get('guestId') || '';
-  const closeIframe = () => {
+  const formId = searchParams?.get('formId') || undefined;
+  const guestId = searchParams?.get('guestId') || undefined;
+  const messageId = searchParams?.get('messageId') || undefined;
+  const language = searchParams?.get('language') || undefined;
+  const closeIframe = (done: boolean) => {
     announceToParent({
       type: 'close-form',
-      payload: {},
+      payload: {
+        done,
+      },
     });
   };
 
   return (
-    <ExtensionForm formId={formId} guestId={guestId} onClose={closeIframe} />
+    <ExtensionForm
+      formId={formId}
+      guestId={guestId}
+      onClose={closeIframe}
+      messageId={messageId}
+      language={language}
+    />
   );
 };
 
