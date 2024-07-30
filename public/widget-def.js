@@ -207,6 +207,7 @@
     chatWidget.id = 'chat-widget';
     const srcWithDomain = `${chatSRC}?domain=${domain}`;
     const srcButton = `${chatSRC}/widget-notification`;
+    console.log('srcButton', srcButton);
     const extensionFormSrc = `${chatSRC}`;
     chatWidget.innerHTML = `
       <iframe id="widget-chat-frame" src="${srcWithDomain}" class="ring-1 rounded-lg iframe_inset" 

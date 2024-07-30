@@ -1,1 +1,382 @@
-window.ChatWidget={init:function(n,e="default"){const t=91111119,i={default:"#3D88ED",halloween:"#ff5e00",rose:"#ff005e",violet:"#5e00ff",sky:"#00b3ff",forest:"#139e70",lemon:"#e3df00"},a=document.createElement("div"),o=`\n      <style>\n        :root {\n          --primary-color: ${i[e]};\n        }\n      .ping-container {\n        color: #3c3c3c;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        position: absolute;\n        top: 1.65rem;\n        right: 1.65rem;\n        \n      }\n\n        .dot {\n        position: relative;\n        width: fit-content;\n        background: var(--primary-color);\n        border-radius: 40px;\n        width: 1rem;\n        height: 1rem;\n      }\n\n      .heartbeat {\n        position: absolute;\n        width: fit-content;\n        background-color: var(--primary-color);\n        border-radius: 40px;\n        width: 1rem;\n        height: 1rem;\n        opacity: 0.75;\n        animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;\n      }\n     \n      @keyframes ping {\n        75%,\n        100% {\n          transform: scale(2);\n          opacity: 0;\n        }\n      }\n      @keyframes grow-to-full-screen {\n        0% { opacity: 0; transform: translateY(50%)}\n        100% { opacity: 1; transform: translateY(0)}\n      }\n      @keyframes rotate-load {\n        0% { transform: rotate(0deg); }\n        100% { transform: rotate(360deg); }\n      }\n      @keyframes appear {\n        0% { opacity: 0; transform: translateY(500px) scaleY(0.5); }\n        100% { opacity: 1; transform: translateY(0) scaleY(1); }\n      }\n      @keyframes shrink-chat {\n            0% { height: 500px,transform: translateY(100%) scaleY(0.5); }\n            100% { height: 256px !important; transform: translateY(0) scaleY(1); }\n      }\n      @keyframes scale-to-0 {\n        0% { transform: translateY(0) scaleY(1); opacity: 1; }\n        100% { transform: translateY(100%) scaleY(0); opacity: 0; }\n      }\n      @keyframes scale-to-100 {\n        0% { opacity: 0; transform: translateY(100%) scaleY(0.5); }\n        100% { opacity: 1; transform: translateY(0) scaleY(1); }\n      }\n      @keyframes scale-to-100-blur {\n        0% { opacity: 0; transform: translateY(100%) scaleY(0.5);  }\n        100% { opacity: 0.88; transform: translateY(0) scaleY(1);  }\n      }\n      #chat-widget {\n        position: fixed; bottom: 10px; right: 20px; display: grid; z-index: 11111111 !important;\n      }\n    \n      #chat-messages {\n        height: auto; padding: 10px; overflow-y: auto;\n      }\n      #floating-icon-btn {\n        box-sizing: border-box; margin-left: auto; margin-top: auto; display: inline-flex;\n        height: 64px; width: 64px; align-items: center; justify-content: center; border-radius: 9999px;\n        cursor: pointer; background-color: white; color: var(--primary-color); border-style: none;\n        box-shadow: 2px 2px 16px 2px rgba(22, 22, 22, 0.1);\n      }\n    \n      #loading-icon {\n        color: #f1f1f1;\n        animation: rotate-load 1s linear infinite;\n      }\n      .h-7 { height: 1.75rem; }\n      .w-7 { width: 1.75rem; }\n      .rounded-lg { border-radius: 20px; }\n      .ring-1 {\n        --tw-ring-color: rgb(17 24 39 / 0.05); --tw-ring-shadow: 0 0 #0000;\n        --tw-ring-offset-color: #fff; --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0\n        var(--tw-ring-offset-width) var(--tw-ring-offset-color);\n        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),\n        var(--tw-shadow, 0 0 #0000);\n      }\n      #widget-chat-frame {\n        display: none; width: 400px; height: 500px; transform-origin: 95% 100%;\n      }\n      #widget-chat-frame.active {\n        display: block; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);\n      }      \n\n      #widget-chat-frame.deactive {\n        display: block; animation: scale-to-0 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);\n      }\n  \n\n      #widget-chat-frame.hidden {\n        display: none;\n      }\n      #widget-chat-frame.active.shrink {\n        height: 256px !important; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);\n    \n      }\n      #widget-chat-frame.deactive.shrink {\n        height: 256px !important;\n      }\n     \n     \n      .iframe_inset {\n        inset: auto 15px 106px auto;\n      }\n      #widget_triangle {\n        display: none;\n      }\n      #widget_triangle.active {\n        display: block; position: absolute; inset: auto 36px 88px auto;\n        animation: appear 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);\n        stroke: white; fill: white; z-index: 11111111;\n      }\n      #chat-messages-ping {\n        display: none;\n        }\n      #chat-messages-ping.active {\n        display: flex;\n      }\n        #widget-chat-frame.fullscreen {\n                display: block;\n                position: fixed;\n                top: 0;\n                left: 0;\n                border-radius: 0px;\n                width: 100vw;\n                height: 100vh;\n                z-index: 11111111 !important; background-color: rgba(0, 0, 0, 0.15);\n                transform-origin: 95% 100%;\n                animation: grow-to-full-screen 0.3s ease forwards;\n        }\n        \n      @media (max-width: 768px) {\n\n        @keyframes grow-to-full-screen {\n            0% { height: 70vh; }\n            100% { height: 100vh; }\n        }\n      \n        .iframe_inset {\n          inset: auto 0px 108px 0px;\n        }\n        #widget-chat-frame {\n          transform-origin: 85% 100%; width: 100vw; height: 70vh;\n        }\n      }\n      </style>\n    `,r={icon_close:'\n        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6667" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8">\n          <line x1="24" x2="8" y1="8" y2="24"></line>\n          <line x1="8" x2="24" y1="8" y2="24"></line>\n        </svg>\n      ',icon_message:'\n        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6667" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square w-8 h-8">\n          <path d="M18.667 12a2.667 2.667 0 0 1-2.667 2.667H8l-5.333 5.333V5.333c0-1.467 1.2-2.667 2.667-2.667h10.667a2.667 2.667 0 0 1 2.667 2.667v7Z"></path>\n          <path d="M24 12h2.667a2.667 2.667 0 0 1 2.667 2.667v14.667L24 24h-8a2.667 2.667 0 0 1-2.667-2.667v-1.333"></path>\n        </svg>\n      ',loading:'\n        <svg id="loading-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6667" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle">\n          <path d="M28 16a12 12 0 1 1-8.292-11.413"/>\n        </svg>\n      '},s=window.location.host;a.id="chat-widget";const c=`${n}?domain=${s}`,d=`${n}/widget-notification`,l=`${n}`;a.innerHTML=`\n      <iframe id="widget-chat-frame" src="${c}" class="ring-1 rounded-lg iframe_inset" \n        style="box-shadow: 2px 4px 16px 2px #1616161A; border: none; position: fixed; background: white !important; margin: 0px; max-height: 100vh; max-width: 100vw; transform: translateY(0); z-index: 11111111 !important;">\n      </iframe>\n      <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff">\n        <g><polygon points="245,456.701 490,33.299 0,33.299 "></polygon></g>\n      </svg>\n      <div id="iframe-trigger-container" style="position: fixed; \n      bottom: 0; right: 0; width: 120px; height: 120px;">\n        <iframe id="floating-button-iframe" src="${d}" style="position: fixed; bottom: 0; right: 0; width: 120px; height: 120px;\n        border-radius: 50%;\n        border: none;"\n        ></iframe>\n        <button id="floating-icon-btn" style="position: absolute; bottom: 28px; right: 28px; width: 64px; height: 64px; opacity: 1; font-size: 32px;">\n          ${r.loading}\n         </button>\n          <div \n          id="chat-messages-ping"\n          class="ping-container">\n            <span class="heartbeat"></span>\n            <span class="dot"></span>\n          </div>\n      </div> \n      <iframe id="form-iframe" src="${l}" style="position: fixed; bottom: 0; right: 0; width: 100vw; height: 100vh;  border: none; display: none;">\n      </iframe>\n\n    `,document.head.insertAdjacentHTML("beforeend",o),document.body.appendChild(a);const m=document.getElementById("floating-icon-btn"),g=document.getElementById("widget-chat-frame");m.style.color=i.rose;const h=document.getElementById("widget_triangle");document.getElementById("floating-button-iframe").style.display="none";const f=document.getElementById("iframe-trigger-container");g.classList.add("shrink"),window.addEventListener("message",(n=>{document.getElementById("iframe-trigger-container");const e=document.getElementById("chat-messages-ping"),{type:a,payload:o}=n.data;switch(console.log("event.data -- ",a,n.data),a){case"open-chat-widget":case"close-chat-widget":break;case"ping":e.classList.add("active");break;case"no-ping":e.classList.remove("active");break;case"show-form":case"room-found":console.log("room-found or on-start"),g.classList.remove("shrink");break;case"hide-form":case"room-end":g.classList.add("shrink");break;case"media-show":g.classList.add("fullscreen"),h.style.zIndex=0;break;case"media-close":g.classList.contains("fullscreen")&&(g.classList.remove("fullscreen"),h.style.zIndex=t);break;case"update-primary-color":const{themeColor:n}=o;i[n]&&(m.style.color=i[n]);break;case"init-from-extension":{const{urlToForm:n}=o;if(!n)return;const e=document.getElementById("form-iframe");if(e.src===n)return e.style.zIndex=91111120,e.style.display="block",void(e.style.animation="scale-to-100 0.5s ease forwards");e.src=n,e.style.zIndex=91111120,e.style.display="block",e.style.animation="scale-to-100-blur 0.9s ease forwards",e.style.animationTimingFunction="cubic-bezier(0.2, 0, 0.8, 1.3)";break}case"form-loaded":{const n=document.getElementById("form-iframe");n.style.opacity="1 !important",n.style.removeProperty("animation");break}case"close-form":{const n=document.getElementById("form-iframe");n&&(n.style.animation="scale-to-0 0.75s ease forwards",n.style.zIndex=0,setTimeout((()=>{n.style.display="none"}),750))}}n.data})),f.addEventListener("click",(()=>{!0!==f.disabled&&(m.innerHTML!==r.icon_close?(m.innerHTML=r.icon_close,g.classList.remove("deactive"),g.classList.add("active"),h.classList.add("active")):(m.innerHTML=r.icon_message,g.classList.remove("active"),g.classList.add("deactive"),h.classList.remove("active")))})),f.disabled=!0,fetch(`${n}/check-host?host=${s}`,{mode:"no-cors",method:"GET",headers:{Accept:"Content-Type"}}).then((n=>{console.log("response",n),setTimeout((()=>{m.innerHTML=r.icon_message,f.disabled=!1,console.log("widgetChatFrame loaded")}),1800)})).catch((n=>{a.remove()})),g.addEventListener("load",(()=>{console.log("widgetChatFrame loaded")}))}};
+(function () {
+  function initChatInterface(chatSRC, primaryColor = 'default') {
+    const MAX_Z_INDEX = 91111119;
+    const INF = 99999999;
+    const colorMap = {
+      default: '#3D88ED',
+      halloween: '#ff5e00',
+      rose: '#ff005e',
+      violet: '#5e00ff',
+      sky: '#00b3ff',
+      forest: '#139e70',
+      lemon: '#e3df00',
+    };
+
+    const chatWidget = document.createElement('div');
+    const styleTag = `
+      <style>
+        :root {
+          --primary-color: ${colorMap[primaryColor]};
+        }
+      .ping-container {
+        color: #3c3c3c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 1.65rem;
+        right: 1.65rem;
+        
+      }
+
+        .dot {
+        position: relative;
+        width: fit-content;
+        background: var(--primary-color);
+        border-radius: 40px;
+        width: 1rem;
+        height: 1rem;
+      }
+
+      .heartbeat {
+        position: absolute;
+        width: fit-content;
+        background-color: var(--primary-color);
+        border-radius: 40px;
+        width: 1rem;
+        height: 1rem;
+        opacity: 0.75;
+        animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+      }
+     
+      @keyframes ping {
+        75%,
+        100% {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+      @keyframes grow-to-full-screen {
+        0% { opacity: 0; transform: translateY(50%)}
+        100% { opacity: 1; transform: translateY(0)}
+      }
+      @keyframes rotate-load {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      @keyframes appear {
+        0% { opacity: 0; transform: translateY(500px) scaleY(0.5); }
+        100% { opacity: 1; transform: translateY(0) scaleY(1); }
+      }
+      @keyframes shrink-chat {
+            0% { height: 500px,transform: translateY(100%) scaleY(0.5); }
+            100% { height: 256px !important; transform: translateY(0) scaleY(1); }
+      }
+      @keyframes scale-to-0 {
+        0% { transform: translateY(0) scaleY(1); opacity: 1; }
+        100% { transform: translateY(100%) scaleY(0); opacity: 0; }
+      }
+      @keyframes scale-to-100 {
+        0% { opacity: 0; transform: translateY(100%) scaleY(0.5); }
+        100% { opacity: 1; transform: translateY(0) scaleY(1); }
+      }
+      @keyframes scale-to-100-blur {
+        0% { opacity: 0; transform: translateY(100%) scaleY(0.5);  }
+        100% { opacity: 0.88; transform: translateY(0) scaleY(1);  }
+      }
+      #chat-widget {
+        position: fixed; bottom: 10px; right: 20px; display: grid; z-index: 11111111 !important;
+      }
+    
+      #chat-messages {
+        height: auto; padding: 10px; overflow-y: auto;
+      }
+      #floating-icon-btn {
+        box-sizing: border-box; margin-left: auto; margin-top: auto; display: inline-flex;
+        height: 64px; width: 64px; align-items: center; justify-content: center; border-radius: 9999px;
+        cursor: pointer; background-color: white; color: var(--primary-color); border-style: none;
+        box-shadow: 2px 2px 16px 2px rgba(22, 22, 22, 0.1);
+      }
+    
+      #loading-icon {
+        color: #f1f1f1;
+        animation: rotate-load 1s linear infinite;
+      }
+      .h-7 { height: 1.75rem; }
+      .w-7 { width: 1.75rem; }
+      .rounded-lg { border-radius: 20px; }
+      .ring-1 {
+        --tw-ring-color: rgb(17 24 39 / 0.05); --tw-ring-shadow: 0 0 #0000;
+        --tw-ring-offset-color: #fff; --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0
+        var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+        box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow),
+        var(--tw-shadow, 0 0 #0000);
+      }
+      #widget-chat-frame {
+        display: none; width: 400px; height: 500px; transform-origin: 95% 100%;
+      }
+      #widget-chat-frame.active {
+        display: block; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+      }      
+
+      #widget-chat-frame.deactive {
+        display: block; animation: scale-to-0 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+      }
+  
+
+      #widget-chat-frame.hidden {
+        display: none;
+      }
+      #widget-chat-frame.active.shrink {
+        height: 256px !important; animation: scale-to-100 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+    
+      }
+      #widget-chat-frame.deactive.shrink {
+        height: 256px !important;
+      }
+     
+     
+      .iframe_inset {
+        inset: auto 15px 106px auto;
+      }
+      #widget_triangle {
+        display: none;
+      }
+      #widget_triangle.active {
+        display: block; position: absolute; inset: auto 36px 88px auto;
+        animation: appear 0.5s ease forwards; animation-timing-function: cubic-bezier(0.2, 0, 0.8, 1.3);
+        stroke: white; fill: white; z-index: 11111111;
+      }
+      #chat-messages-ping {
+        display: none;
+        }
+      #chat-messages-ping.active {
+        display: flex;
+      }
+        #widget-chat-frame.fullscreen {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                border-radius: 0px;
+                width: 100vw;
+                height: 100vh;
+                z-index: 11111111 !important; background-color: rgba(0, 0, 0, 0.15);
+                transform-origin: 95% 100%;
+                animation: grow-to-full-screen 0.3s ease forwards;
+        }
+        
+      @media (max-width: 768px) {
+
+        @keyframes grow-to-full-screen {
+            0% { height: 70vh; }
+            100% { height: 100vh; }
+        }
+      
+        .iframe_inset {
+          inset: auto 0px 108px 0px;
+        }
+        #widget-chat-frame {
+          transform-origin: 85% 100%; width: 100vw; height: 70vh;
+        }
+      }
+      </style>
+    `;
+
+    const components = {
+      icon_close: `
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6667" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8">
+          <line x1="24" x2="8" y1="8" y2="24"></line>
+          <line x1="8" x2="24" y1="8" y2="24"></line>
+        </svg>
+      `,
+      icon_message: `
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6667" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square w-8 h-8">
+          <path d="M18.667 12a2.667 2.667 0 0 1-2.667 2.667H8l-5.333 5.333V5.333c0-1.467 1.2-2.667 2.667-2.667h10.667a2.667 2.667 0 0 1 2.667 2.667v7Z"></path>
+          <path d="M24 12h2.667a2.667 2.667 0 0 1 2.667 2.667v14.667L24 24h-8a2.667 2.667 0 0 1-2.667-2.667v-1.333"></path>
+        </svg>
+      `,
+      loading: `
+        <svg id="loading-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.6667" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-loader-circle">
+          <path d="M28 16a12 12 0 1 1-8.292-11.413"/>
+        </svg>
+      `,
+    };
+
+    const domain = window.location.host;
+    const appURL = chatSRC.split('/help-desk/')[0];
+    chatWidget.id = 'chat-widget';
+    const srcWithDomain = `${chatSRC}?domain=${domain}`;
+    const srcButton = `${chatSRC}/widget-notification`;
+    const extensionFormSrc = `${appURL}/extension-form`;
+    console.log('extensionFormSrc', extensionFormSrc);
+
+    chatWidget.innerHTML = `
+      <iframe id="widget-chat-frame" src="${srcWithDomain}" class="ring-1 rounded-lg iframe_inset" 
+        style="box-shadow: 2px 4px 16px 2px #1616161A; border: none; position: fixed; background: white !important; margin: 0px; max-height: 100vh; max-width: 100vw; transform: translateY(0); z-index: 11111111 !important;">
+      </iframe>
+      <svg fill="#000000" id="widget_triangle" height="12" width="12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 490 490" xml:space="preserve" stroke="#ffffff">
+        <g><polygon points="245,456.701 490,33.299 0,33.299 "></polygon></g>
+      </svg>
+      <div id="iframe-trigger-container" style="position: fixed; 
+      bottom: 0; right: 0; width: 120px; height: 120px;">
+        <iframe id="floating-button-iframe" src="${srcButton}" style="position: fixed; bottom: 0; right: 0; width: 120px; height: 120px;
+        border-radius: 50%;
+        border: none;"
+        ></iframe>
+        <button id="floating-icon-btn" style="position: absolute; bottom: 28px; right: 28px; width: 64px; height: 64px; opacity: 1; font-size: 32px;">
+          ${components.loading}
+         </button>
+          <div 
+          id="chat-messages-ping"
+          class="ping-container">
+            <span class="heartbeat"></span>
+            <span class="dot"></span>
+          </div>
+      </div> 
+      <iframe id="form-iframe" src="${extensionFormSrc}" style="position: fixed; bottom: 0; right: 0; width: 100vw; height: 100vh;  border: none; display: none; ">
+      </iframe>
+
+    `;
+
+    document.head.insertAdjacentHTML('beforeend', styleTag);
+    document.body.appendChild(chatWidget);
+
+    const floatingIcon = document.getElementById('floating-icon-btn');
+    const widgetChatFrame = document.getElementById('widget-chat-frame');
+    floatingIcon.style.color = colorMap['rose'];
+
+    const theTriangle = document.getElementById('widget_triangle');
+    const floatingButtonFrame = document.getElementById(
+      'floating-button-iframe',
+    );
+    floatingButtonFrame.style.display = 'none';
+    const divTrigger = document.getElementById('iframe-trigger-container');
+    widgetChatFrame.classList.add('shrink');
+    window.addEventListener('message', (event) => {
+      const trigger = document.getElementById('iframe-trigger-container');
+      const p = document.getElementById('chat-messages-ping');
+      const { type, payload } = event.data;
+
+      console.log('event.data -- ', type, event.data);
+      switch (type) {
+        case 'open-chat-widget':
+        case 'close-chat-widget':
+          // trigger.click();
+          break;
+        case 'ping':
+          p.classList.add('active');
+          break;
+        case 'no-ping':
+          p.classList.remove('active');
+          break;
+        case 'show-form':
+        case 'room-found':
+          console.log('room-found or on-start');
+          widgetChatFrame.classList.remove('shrink');
+          break;
+        case 'hide-form':
+        case 'room-end':
+          widgetChatFrame.classList.add('shrink');
+          break;
+        case 'media-show':
+          widgetChatFrame.classList.add('fullscreen');
+          theTriangle.style.zIndex = 0;
+          break;
+        case 'media-close':
+          if (widgetChatFrame.classList.contains('fullscreen')) {
+            widgetChatFrame.classList.remove('fullscreen');
+            theTriangle.style.zIndex = MAX_Z_INDEX;
+          }
+          break;
+        case 'update-primary-color':
+          const { themeColor } = payload;
+          if (colorMap[themeColor]) {
+            floatingIcon.style.color = colorMap[themeColor];
+          }
+          break;
+
+        case 'init-from-extension': {
+          const { urlToForm } = payload;
+          if (!urlToForm) return;
+          const formIframe = document.getElementById('form-iframe');
+          const currentUrl = formIframe.src;
+          if (currentUrl === urlToForm) {
+            formIframe.style.zIndex = MAX_Z_INDEX + 1;
+            formIframe.style.display = 'block';
+            formIframe.style.animation = 'scale-to-100 0.5s ease forwards';
+            return;
+          }
+          formIframe.src = urlToForm;
+          formIframe.style.zIndex = MAX_Z_INDEX + 1;
+          formIframe.style.display = 'block';
+          formIframe.style.animation = 'scale-to-100-blur 0.9s ease forwards';
+          formIframe.style.animationTimingFunction =
+            'cubic-bezier(0.2, 0, 0.8, 1.3)';
+          break;
+        }
+        case 'form-loaded': {
+          const formIframe = document.getElementById('form-iframe');
+          formIframe.style.opacity = `1 !important`;
+          formIframe.style.removeProperty('animation');
+          break;
+        }
+        case 'close-form': {
+          const formIframe = document.getElementById('form-iframe');
+          if (formIframe) {
+            formIframe.style.animation = 'scale-to-0 0.75s ease forwards';
+            formIframe.style.zIndex = 0;
+            setTimeout(() => {
+              formIframe.style.display = 'none';
+            }, 750);
+          }
+        }
+        default:
+          break;
+      }
+      if (event.data === 'toggle-chat-widget') {
+        // document.getElementById('floating-icon-btn').click();
+      }
+    });
+
+    divTrigger.addEventListener('click', () => {
+      if (divTrigger.disabled === true) return;
+      if (floatingIcon.innerHTML !== components.icon_close) {
+        floatingIcon.innerHTML = components.icon_close;
+        widgetChatFrame.classList.remove('deactive');
+        widgetChatFrame.classList.add('active');
+        theTriangle.classList.add('active');
+      } else {
+        floatingIcon.innerHTML = components.icon_message;
+        widgetChatFrame.classList.remove('active');
+        widgetChatFrame.classList.add('deactive');
+        theTriangle.classList.remove('active');
+      }
+    });
+
+    divTrigger.disabled = true;
+    fetch(`${chatSRC}/check-host?host=${domain}`, {
+      mode: 'no-cors',
+      method: 'GET',
+      headers: { Accept: 'Content-Type' },
+    })
+      .then((response) => {
+        console.log('response', response);
+        setTimeout(() => {
+          floatingIcon.innerHTML = components.icon_message;
+          divTrigger.disabled = false;
+          console.log('widgetChatFrame loaded');
+        }, 1800);
+      })
+      .catch((error) => {
+        chatWidget.remove();
+      });
+    widgetChatFrame.addEventListener('load', () => {
+      console.log('widgetChatFrame loaded');
+
+      // floatingButtonFrame.style.display = 'block';
+    });
+  }
+
+  window.ChatWidget = { init: initChatInterface };
+})();

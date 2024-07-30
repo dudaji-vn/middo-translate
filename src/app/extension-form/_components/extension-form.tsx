@@ -208,7 +208,7 @@ const ExtensionForm = ({
     <>
       <main
         className={cn(
-          'relative h-screen w-full   bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat p-10 md:p-[5vw]',
+          'relative h-screen w-full overflow-hidden  bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat p-10 md:p-[5vw]',
           themeName,
         )}
         style={{ backgroundImage: bgSrc }}
