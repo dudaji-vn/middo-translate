@@ -69,7 +69,11 @@ export default function ChatThread({ className }: { className?: string }) {
           </div>
         </div>
         <div className="flex flex-1 flex-col overflow-hidden">
-        <Tip hideTip={!isShowAlert} closeTip={()=>setShowAlert(false)} tipTitle={t('CONVERSATION.TITLE_DISCUSSION_CALL')} tipContent={t('CONVERSATION.CONTENT_DISCUSSION_CALL')} className='p-3' />
+        <Tip hideTip={!isShowAlert} 
+          closeTip={()=>setShowAlert(false)} 
+          tipTitle={call?.type == CALL_TYPE.ANONYMOUS ? t('CONVERSATION.TITLE_DISCUSSION_INSTANCE_CALL') : t('CONVERSATION.TITLE_DISCUSSION_CALL')} 
+          tipContent={call?.type == CALL_TYPE.ANONYMOUS ? t('CONVERSATION.CONTENT_DISCUSSION_INSTANCE_CALL') : t('CONVERSATION.CONTENT_DISCUSSION_CALL')}
+          className='p-3' />
           {call?.type == CALL_TYPE.ANONYMOUS && isShowInviteSection && <div className='p-3'>
             <InvitationLink />
           </div>}
