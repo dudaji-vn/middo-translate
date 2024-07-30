@@ -204,11 +204,13 @@
     };
 
     const domain = window.location.host;
+    const appURL = chatSRC.split('/help-desk/')[0];
     chatWidget.id = 'chat-widget';
     const srcWithDomain = `${chatSRC}?domain=${domain}`;
     const srcButton = `${chatSRC}/widget-notification`;
-    console.log('srcButton', srcButton);
-    const extensionFormSrc = `${chatSRC}`;
+    const extensionFormSrc = `${appURL}/test-it-out`;
+    console.log('extensionFormSrc', extensionFormSrc);
+
     chatWidget.innerHTML = `
       <iframe id="widget-chat-frame" src="${srcWithDomain}" class="ring-1 rounded-lg iframe_inset" 
         style="box-shadow: 2px 4px 16px 2px #1616161A; border: none; position: fixed; background: white !important; margin: 0px; max-height: 100vh; max-width: 100vw; transform: translateY(0); z-index: 11111111 !important;">
@@ -232,7 +234,7 @@
             <span class="dot"></span>
           </div>
       </div> 
-      <iframe id="form-iframe" src="${extensionFormSrc}" style="position: fixed; bottom: 0; right: 0; width: 100vw; height: 100vh;  border: none; display: none;">
+      <iframe id="form-iframe" src="${extensionFormSrc}" style="position: fixed; bottom: 0; right: 0; width: 100vw; height: 100vh;  border: none; display: none; ">
       </iframe>
 
     `;
