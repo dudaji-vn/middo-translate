@@ -101,7 +101,7 @@ const SelectSingle = ({ name, label, options }: TFormField) => {
                                 }}
                                 inputProps={{
                                   placeholder: 'Other answer',
-                                  required: currentValue === 'other',
+                                  required: true,
                                   className:
                                     'w-full border-neutral-50 bg-transparent focus:ring-[1px] focus:ring-primary-300',
                                 }}

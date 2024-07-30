@@ -5,7 +5,7 @@ import { Typography } from '@/components/data-display';
 import { cn } from '@/utils/cn';
 import { z } from 'zod';
 import { BaseEntity } from '@/types';
-import { FileText, Send, X } from 'lucide-react';
+import { ArrowLeft, ArrowRight, FileText, Send, X } from 'lucide-react';
 import { Button } from '@/components/actions';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,7 +27,6 @@ import { announceToParent } from '@/utils/iframe-util';
 import { submitFormAnswer } from '@/services/extension.service';
 import { Input, SelectMultiple, SelectSingle } from './form-fields';
 import { isEmpty } from 'lodash';
-import { text } from 'stream/consumers';
 
 const answerSchema = z.object({
   formId: z.string(),
@@ -36,8 +35,14 @@ const answerSchema = z.object({
 
 type TSubmission = z.infer<typeof answerSchema>;
 
-const RenderField = ({ field }: { field: TFormField }) => {
-  if (!field?.type) return null;
+const RenderField = ({
+  field,
+  hidden = false,
+}: {
+  field: TFormField;
+  hidden?: boolean;
+}) => {
+  if (!field?.type || hidden) return null;
 
   if (field.type === 'input') {
     return <Input {...field} />;
@@ -50,7 +55,12 @@ const RenderField = ({ field }: { field: TFormField }) => {
   }
   return null;
 };
-
+const baseData = {
+  hasNextPage: false,
+  hasPrevPage: false,
+  layout: 'multiple',
+  requiredFields: [],
+};
 export type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
 const ExtensionForm = ({
   formId,
@@ -77,11 +87,28 @@ const ExtensionForm = ({
   const [currentPage, setCurrentPage] = React.useState(0);
 
   const temporaryData = useHelpdeskFormDraft(guestId || '');
-  const requiredFields = useMemo(() => {
-    return form?.formFields
-      .filter((f: any) => f.required)
-      .map((f: any) => f.name);
-  }, [form]);
+
+  const { hasNextPage, hasPrevPage, requiredFields, layout } = useMemo(() => {
+    if (!form) {
+      return baseData;
+    }
+    const { formFields, customize } = form as FormDetail;
+    const layout = customize?.layout;
+
+    if (customize?.layout === 'multiple') {
+      return {
+        ...baseData,
+        requiredFields: formFields.filter((f: any) => f.required),
+      };
+    }
+    const currentField = formFields[currentPage];
+    return {
+      hasNextPage: currentPage < formFields.length - 1,
+      hasPrevPage: currentPage > 0,
+      layout,
+      requiredFields: currentField.required ? [currentField] : [],
+    };
+  }, [currentPage, form]);
 
   const formAnswer = useForm<TSubmission>({
     mode: 'onBlur',
@@ -96,17 +123,54 @@ const ExtensionForm = ({
           return false;
         }
         const missingField = requiredFields.find(
-          (field: any) => !answer[field] || isEmpty(answer[field]),
-        );
-        if (!missingField) return true;
-        console.log('missingField', missingField);
-        ctx.addIssue({
-          message: `This answer is required!`,
-          code: z.ZodIssueCode.unrecognized_keys,
-          path: ['answer', missingField],
-          keys: ['answer', missingField],
-        });
-        return false;
+          (field: { name: string; type: string }) =>
+            !answer[field.name] || isEmpty(answer[field.name]),
+        )?.name;
+        const missingInputOfOptionTypeOther = requiredFields.find(
+          (field: any) => {
+            const answerValue = answer[field.name];
+            const otherInputValue = answer[`${field.name}-other`];
+            switch (field.type) {
+              case 'radio':
+                return (
+                  field.options?.some(
+                    (option: any) => option.type === 'other',
+                  ) &&
+                  answerValue === 'other' &&
+                  !otherInputValue
+                );
+              case 'checkbox':
+                return (
+                  field.options?.some(
+                    (option: any) => option.type === 'other',
+                  ) &&
+                  ((answerValue || []) as any)?.includes('other') &&
+                  !otherInputValue
+                );
+              default:
+                return false;
+            }
+          },
+        )?.name;
+        if (missingField) {
+          ctx.addIssue({
+            message: `This answer is required!`,
+            code: z.ZodIssueCode.unrecognized_keys,
+            path: ['answer', missingField],
+            keys: ['answer', missingField],
+          });
+          return false;
+        }
+        if (missingInputOfOptionTypeOther) {
+          ctx.addIssue({
+            message: `Please add your answer for 'other' option!`,
+            code: z.ZodIssueCode.unrecognized_keys,
+            path: ['answer', missingInputOfOptionTypeOther],
+            keys: ['answer', missingInputOfOptionTypeOther],
+          });
+          return false;
+        }
+        return true;
       }),
     ),
   });
@@ -156,17 +220,22 @@ const ExtensionForm = ({
     ? extensionsCustomThemeOptions.find(
         (t) => t.hex === customize?.theme || t.name === customize.theme,
       )?.name
-    : 'Default';
+    : 'default';
   const bgSrc = `url(${customize?.background})`;
 
   const onPageChange = (page: number) => {
-    const showAll = customize?.layout === 'single';
+    const showAll = customize?.layout === 'multiple';
     const inCorrectPage =
       page === currentPage || page > formFields.length - 1 || page < 0;
     if (showAll || inCorrectPage) {
       return;
     }
-    setCurrentPage(page);
+    formAnswer.trigger().then((isValid) => {
+      if (isValid) {
+        setCurrentPage(page);
+      }
+    });
+    // setCurrentPage(page);
   };
 
   const submit = async (data: TSubmission) => {
@@ -222,7 +291,6 @@ const ExtensionForm = ({
     }
     onClose(isDone);
   };
-
   return (
     <>
       <main
@@ -259,25 +327,60 @@ const ExtensionForm = ({
             <Form {...formAnswer}>
               <div className="flex w-full grow flex-col gap-3 overflow-y-auto px-10">
                 {formFields.map((field, index) => {
+                  const isCurrentQuestion = index === currentPage;
+                  const props =
+                    layout === 'multiple' ? {} : { hidden: !isCurrentQuestion };
                   return (
                     <RenderField
                       key={field._id}
                       field={field as unknown as TFormField}
+                      {...props}
                     />
                   );
                 })}
               </div>
             </Form>
-            <div className="flex flex-none items-center justify-center pb-5">
+            <div className="flex flex-none items-center justify-between px-4 pb-5">
+              <Button
+                startIcon={<ArrowLeft />}
+                color="primary"
+                variant="ghost"
+                disabled={formAnswer.formState.isSubmitting || !hasPrevPage}
+                shape={'square'}
+                className={cn('', {
+                  invisible: !hasPrevPage,
+                })}
+                onClick={() => onPageChange(currentPage - 1)}
+              >
+                Prev
+              </Button>
               <Button
                 endIcon={<Send />}
                 color="primary"
                 variant="default"
+                loading={formAnswer.formState.isSubmitting}
                 type="submit"
                 shape={'square'}
+                className={cn('', {
+                  hidden: hasNextPage,
+                })}
               >
-                {'Submit'}
+                Submit
               </Button>
+              <Button
+                endIcon={<ArrowRight />}
+                color="primary"
+                variant="default"
+                disabled={formAnswer.formState.isSubmitting || !hasNextPage}
+                shape={'square'}
+                className={cn('', {
+                  hidden: !hasNextPage,
+                })}
+                onClick={() => onPageChange(currentPage + 1)}
+              >
+                Next
+              </Button>
+              <em />
             </div>
           </form>
         )}
