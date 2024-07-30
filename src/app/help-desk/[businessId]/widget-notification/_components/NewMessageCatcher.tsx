@@ -56,7 +56,7 @@ const NewMessageCatcher = ({
       (message: { readBy: string[]; _id: string }) => {
         console.log('Ping The update message', message);
         const { readBy } = message || { readBy: [] };
-        if (readBy.includes(currentUserId)) {
+        if (readBy?.includes(currentUserId)) {
           setShowPing(false);
         }
       },

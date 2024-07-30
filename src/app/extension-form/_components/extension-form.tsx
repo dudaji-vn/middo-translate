@@ -27,6 +27,7 @@ import { announceToParent } from '@/utils/iframe-util';
 import { submitFormAnswer } from '@/services/extension.service';
 import { Input, SelectMultiple, SelectSingle } from './form-fields';
 import { isEmpty } from 'lodash';
+import { text } from 'stream/consumers';
 
 const answerSchema = z.object({
   formId: z.string(),
@@ -57,10 +58,12 @@ const ExtensionForm = ({
   onClose = (done: boolean) => {},
   messageId,
   previewMode = false,
+  language,
 }: {
   formId?: string;
   guestId?: string;
   roomId?: string;
+  language?: string;
   messageId?: string;
   onClose?: (done: boolean) => void;
   previewMode?: boolean;
@@ -68,6 +71,7 @@ const ExtensionForm = ({
   const { data: form, isLoading } = useGetFormHelpdesk({
     formId,
     userId: guestId,
+    language,
   });
   const [isDone, setIsDone] = React.useState(false);
   const [currentPage, setCurrentPage] = React.useState(0);
@@ -170,8 +174,16 @@ const ExtensionForm = ({
       (acc, field) => {
         acc[field.name] = data.answer[field.name];
         const otherAnswerOfField = data.answer[field.name + '-other'] as string;
-        if (otherAnswerOfField && ['select', 'radio'].includes(field.type)) {
-          (acc[field.name] as unknown as string[]).push(otherAnswerOfField);
+        if (otherAnswerOfField) {
+          if (field.type === 'checkbox' && !isEmpty(acc[field.name])) {
+            const replaceIndex = (acc[field.name] as string[]).findIndex(
+              (item: string) => item === 'other',
+            );
+            // @ts-ignore
+            acc[field.name][replaceIndex] = otherAnswerOfField;
+          } else if (field.type === 'radio') {
+            acc[field.name] = otherAnswerOfField;
+          }
         }
         return acc;
       },

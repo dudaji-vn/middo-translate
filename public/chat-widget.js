@@ -296,7 +296,7 @@
           }
           break;
 
-        case 'init-from-extension': {
+        case 'init-form-extension': {
           const { urlToForm } = payload;
           if (!urlToForm) return;
           const formIframe = document.getElementById('form-iframe');

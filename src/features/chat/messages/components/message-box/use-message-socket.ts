@@ -63,6 +63,14 @@ export const useMessageSocket = ({
       },
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
+      console.log(
+        'HELLO- YOU HAVE SOME UPDATED MESSSAGEEE!!!!',
+        message,
+        'on Rôm',
+        room._id,
+      );
+      if (guestId)
+        queryClient.invalidateQueries(['messages', room._id]);
       queryClient.invalidateQueries(['message', message._id]);
       if (message.hasChild) {
         queryClient.invalidateQueries(['message-item-replies', message._id]);

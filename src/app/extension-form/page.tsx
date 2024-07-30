@@ -12,6 +12,8 @@ const Page = (
     searchParams: {
       formId: string;
       guestId: string;
+      language?: string;
+      messageId?: string;
     };
   },
 ) => {
@@ -19,6 +21,7 @@ const Page = (
   const formId = searchParams?.get('formId') || undefined;
   const guestId = searchParams?.get('guestId') || undefined;
   const messageId = searchParams?.get('messageId') || undefined;
+  const language = searchParams?.get('language') || undefined;
   const closeIframe = (done: boolean) => {
     announceToParent({
       type: 'close-form',
@@ -34,6 +37,7 @@ const Page = (
       guestId={guestId}
       onClose={closeIframe}
       messageId={messageId}
+      language={language}
     />
   );
 };

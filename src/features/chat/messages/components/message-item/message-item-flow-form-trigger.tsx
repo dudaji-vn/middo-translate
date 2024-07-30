@@ -22,17 +22,19 @@ export default function MessageItemFlowFormTrigger({
 }) {
   const formId = form._id;
   const isSubmitted = form.isSubmitted;
+  const language = message.language;
 
   const openIframeForm = () => {
     if (guestId) {
       announceToParent({
-        type: 'init-from-extension',
+        type: 'init-form-extension',
         payload: {
-          urlToForm: `${NEXT_PUBLIC_URL}/extension-form?formId=${formId}&guestId=${guestId}&messageId=${message._id}`,
+          urlToForm: `${NEXT_PUBLIC_URL}/extension-form?formId=${formId}&guestId=${guestId}&messageId=${message._id}&language=${language}`,
         },
       });
     }
   };
+  console.log('form---->', form);
   return (
     <div className="relative space-y-2 ">
       <div className="relative flex w-fit min-w-10 flex-row items-start overflow-hidden rounded-[20px]  bg-neutral-50 px-2 py-1  ">
