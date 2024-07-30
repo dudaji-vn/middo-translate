@@ -27,6 +27,7 @@ interface MessagesBoxContextProps {
   isFetching: boolean;
   isFetched: boolean;
   isInitialLoading: boolean;
+  recentlySubmitedFormByMessageId: string;
 }
 
 export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
@@ -44,6 +45,8 @@ export const MessagesBoxProvider = ({
   guestId?: string;
 }>) => {
   const userId = useAuthStore((s) => s.user?._id);
+  const [recentlySubmitedFormByMessageId, setRecentlySubmitedFormByMessageId] =
+    useState<string>('');
   const [notification, setNotification] = useState<string>('');
   const key = ['messages', room._id];
   const {
@@ -86,6 +89,9 @@ export const MessagesBoxProvider = ({
     replaceItem,
     updateItem,
     setNotification,
+    triggerNewFlowMessage: (id) => {
+      setRecentlySubmitedFormByMessageId(id);
+    },
   });
 
   useChangeTitle({
@@ -109,6 +115,7 @@ export const MessagesBoxProvider = ({
         isFetching,
         isFetched,
         isInitialLoading,
+        recentlySubmitedFormByMessageId: recentlySubmitedFormByMessageId,
       }}
     >
       {children}

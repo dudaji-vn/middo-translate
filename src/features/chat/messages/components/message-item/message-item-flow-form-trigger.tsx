@@ -197,6 +197,7 @@ export default function MessageItemFlowFormTrigger({
     return message.actions[0];
   }, [message.actions]);
   const { onTriggerNextMessage } = useFormTrigger({ messageNode: nextNode });
+  const { recentlySubmitedFormByMessageId } = useMessagesBox();
 
   const openIframeForm = () => {
     if (guestId) {
@@ -210,37 +211,16 @@ export default function MessageItemFlowFormTrigger({
   };
 
   useEffect(() => {
-    socket.on(
-      SOCKET_CONFIG.EVENTS.MESSAGE.NEW,
-      ({
-        clientTempId,
-        message,
-      }: {
-        message: Message;
-        clientTempId: string;
-      }) => {
-        console.log(`socket.on(${SOCKET_CONFIG.EVENTS.MESSAGE.NEW})`, message);
-      },
-    );
-    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
-      alert('update message');
-    });
-    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
-      alert('update message 2');
-    });
-
-    return () => {
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
-      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [message._id, guestId]);
-
-  useEffect(() => {
     if (isSubmitted) {
       // onTriggerNextMessage();
+      console.log(
+        'onTriggerNextMessage',
+        recentlySubmitedFormByMessageId,
+        '\n ==> and THIS MESSAGE ID',
+        message._id,
+      );
     }
-  }, [isSubmitted, onTriggerNextMessage]);
+  }, [isSubmitted, message._id, onTriggerNextMessage, recentlySubmitedFormByMessageId]);
 
   return (
     <div className="relative space-y-2 ">

@@ -16,7 +16,7 @@ export const useMessageSocket = ({
   replaceItem,
   updateItem,
   setNotification,
-  triggerNewFlowMessage = (room: Room) => {},
+  triggerNewFlowMessage = (_id: string) => {},
 }: {
   replaceItem: (message: Message, clientTempId: string) => void;
   room: Room;
@@ -24,7 +24,7 @@ export const useMessageSocket = ({
   userId: string;
   guestId: string;
   setNotification: (message: string) => void;
-  triggerNewFlowMessage?: (room: Room) => void;
+  triggerNewFlowMessage?: (_id: string) => void;
 }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -68,7 +68,7 @@ export const useMessageSocket = ({
       if (guestId) {
         console.log('--UPDATED-MESSAGE--', message);
         queryClient.invalidateQueries(['messages', room._id]);
-        triggerNewFlowMessage && triggerNewFlowMessage(room);
+        triggerNewFlowMessage && triggerNewFlowMessage(message._id);
       }
       queryClient.invalidateQueries(['message', message._id]);
       if (message.hasChild) {
