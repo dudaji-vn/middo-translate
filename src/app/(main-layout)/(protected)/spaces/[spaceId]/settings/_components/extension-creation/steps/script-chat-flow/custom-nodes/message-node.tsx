@@ -54,6 +54,8 @@ function MessageNode({ data, isConnectable, ...node }: CustomNodeProps) {
     const parent = nodes.find(
       (n: { id: string }) => n.id === currentNode?.parentId,
     );
+    console.log('parent', parent);
+    console.log('currentNode', currentNode);
     switch (parent?.type) {
       case 'form':
         deleteThisNode();
