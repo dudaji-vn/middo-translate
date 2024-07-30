@@ -818,7 +818,6 @@
         "AVATAR_REQUIRED": "Space avatar is required",
         "INVALID_EMAIL_MEMBER": "Invalid email member",
         "INVALID_SPACE_NAME": "Invalid space name, only accept letters, numbers, underscores, and spaces"
-      }
       },
       "NO_MEMBER": "No members"
     },
