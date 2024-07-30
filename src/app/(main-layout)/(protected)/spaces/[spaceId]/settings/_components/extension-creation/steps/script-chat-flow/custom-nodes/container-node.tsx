@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { Edge } from 'reactflow';
+import { Edge, getConnectedEdges } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import { Handle, Position } from 'reactflow';
@@ -86,6 +86,67 @@ function ContainerNode(node: CustomNodeProps) {
     };
     setValue(FLOW_KEYS.NODES, [...newNodes, updatedNode]);
   };
+  const removeAllChildrenOfContainer = (btns: FlowNode[]) => {
+    const newNodes = deepDeleteNodes(nodes, btns, edges);
+    const newEdge = edges.filter((e: { source: string; target: string }) => {
+      return !btns.some((btn: { id: string }) => e.source === btn.id);
+    });
+    // console.log('newNodes', newNodes);
+    // console.log('newEdges', newEdge);
+
+    setValue(FLOW_KEYS.NODES, newNodes);
+    setValue(FLOW_KEYS.EDGES, newEdge);
+    return {
+      newNodes,
+      newEdge,
+    };
+  };
+
+  const deleteCurrent = ({
+    newNodes,
+    newEdge,
+  }: {
+    newNodes: any[];
+    newEdge: Edge[];
+  }) => {
+    const nodesWithoutCurrent =
+      newNodes?.filter(
+        //@ts-ignore
+        (n: FlowNode) => n.id !== node.id,
+      ) || [];
+    const updatedEdges =
+      newEdge?.filter(
+        (e: { source: string; target: string }) =>
+          e.source !== node.id && e.target !== node.id,
+      ) || [];
+    setValue(FLOW_KEYS.NODES, nodesWithoutCurrent);
+    setValue(FLOW_KEYS.EDGES, updatedEdges);
+  };
+
+  const handleTrashClick = () => {
+    const parent = nodes.find(
+      (n: { id: string }) => n.id === currentNode?.parentId,
+    );
+    console.log('parent', parent);
+    console.log('currentNode', currentNode);
+    switch (parent?.type) {
+      case 'form': {
+        const currentChilds = nodes.filter(
+          (n: { parentNode: string }) => n.parentNode === node.id,
+        );
+        // console.log('currentChilds', currentChilds);
+        const { newNodes, newEdge } =
+          removeAllChildrenOfContainer(currentChilds);
+        deleteCurrent({
+          newNodes,
+          newEdge,
+        });
+        break;
+      }
+      default: // delete node
+        convertContainerToOption();
+    }
+  };
 
   const formFieldId = `${FLOW_KEYS.NODES}.${currentNodeIndex}.data.content`;
 
@@ -110,7 +171,7 @@ function ContainerNode(node: CustomNodeProps) {
               color={'error'}
               disabled={data?.readonly}
               size={'xs'}
-              onClick={convertContainerToOption}
+              onClick={handleTrashClick}
               className="text-neutral-600 hover:text-error-500"
               variant={'ghost'}
             >

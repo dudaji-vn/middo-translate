@@ -45,11 +45,12 @@ function FormNode({ data, isConnectable, ...node }: CustomNodeProps) {
   };
 
   const addNewNode = (type: 'message' | 'container') => {
+    console.log('CURR', currentNode);
     const newNode: FlowNode = {
       id: `${node.id}-message-${new Date().getTime()}`,
       position: {
-        x: currentNode.position.x + 200,
-        y: currentNode.position.y + 100,
+        x: currentNode.position.x,
+        y: currentNode.position.y,
       },
       parentNode: node.id,
       parentId: node.id,
