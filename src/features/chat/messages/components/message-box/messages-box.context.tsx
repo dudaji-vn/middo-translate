@@ -1,6 +1,12 @@
 'use client';
 
-import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
 import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 import { Message, PinMessage } from '@/features/chat/messages/types';
@@ -81,11 +87,13 @@ export const MessagesBoxProvider = ({
     roomId: params?.id || room._id,
     isAnonymous,
   });
-  const updateRecentFormStatus = (messageId: string) => {
-    if (recentlySubmitedFormByMessageId === messageId) {
-      setRecentlySubmitedFormByMessageId('');
-    }
-  };
+  const updateRecentFormStatus = useCallback(
+    (messageId: string) => {
+      if (messageId !== recentlySubmitedFormByMessageId)
+        setRecentlySubmitedFormByMessageId(messageId);
+    },
+    [recentlySubmitedFormByMessageId],
+  );
 
   useMessageSocket({
     room,
