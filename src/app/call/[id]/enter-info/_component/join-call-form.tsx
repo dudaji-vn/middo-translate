@@ -24,7 +24,7 @@ export default function JoinCallForm() {
   const [defaultLanguage, setDefaultLanguage] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const setData = useAuthStore(state => state.setData)
-  const setRoom = useVideoCallStore(state =>state.setRoom)
+  const setCall = useVideoCallStore(state =>state.setCall)
   const setFullScreen = useVideoCallStore(state => state.setFullScreen)
   const params = useParams();
   const callId = params?.id;
@@ -90,7 +90,7 @@ export default function JoinCallForm() {
         ]);
         const {user, call} = data
         setData({user})
-        setRoom(call)
+        setCall(call)
         setFullScreen(true)
         router.push(`/call/${callId}`)
     } catch (err: any) {

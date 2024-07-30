@@ -18,21 +18,21 @@ export const ModalAddUser = () => {
     const {t} = useTranslation("common");
     const setModal = useVideoCallStore((state) => state.setModal);
     const modal = useVideoCallStore((state) => state.modal);
-    const room = useVideoCallStore((state) => state.room);
+    const call = useVideoCallStore((state) => state.call);
     const participants = useParticipantVideoCallStore(state => state.participants)
     const [members, setMembers] = useState<User[]>([]);
     const [membersApi, setMembersApi] = useState<User[]>([]);
     
     useEffect(() => {
-        if (!room || !room.roomId) return;
+        if (!call || !call.roomId) return;
         const fetchMembersInGroup = async () => {
-            const res = await getRoomService(room.roomId)
+            const res = await getRoomService(call.roomId)
             const { data } = res;
             setMembers(data?.participants || [])
             setMembersApi(data?.participants || [])
         }
         fetchMembersInGroup();
-    }, [room])
+    }, [call])
     const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
     const user = useAuthStore((state) => state.user);
 
@@ -64,7 +64,7 @@ export const ModalAddUser = () => {
     const handleSubmit = () => { 
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, {
             users: selectedUsers,
-            call: room,
+            call: call,
             user,
             type: 'group'
         })

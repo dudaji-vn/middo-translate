@@ -15,7 +15,7 @@ interface VideoCallHeaderProps {
 export default function VideoCallHeader({isShowFullScreenButton}:VideoCallHeaderProps ) {
   const { t } = useTranslation('common');
   const ref = React.useRef<HTMLDivElement>(null);
-  const room = useVideoCallStore((state) => state.room);
+  const call = useVideoCallStore((state) => state.call);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const setFullScreen = useVideoCallStore((state) => state.setFullScreen);
   // const setAllowDrag = useVideoCallStore((state) => state.setAllowDrag);
@@ -48,7 +48,7 @@ export default function VideoCallHeader({isShowFullScreenButton}:VideoCallHeader
       ref={ref}
     >
       <Phone className="h-4 w-4 stroke-current" />
-      <span className="line-clamp-1 flex-1 font-semibold">{room?.name}</span>
+      <span className="line-clamp-1 flex-1 font-semibold">{call?.name}</span>
       {isShowFullScreenButton && 
       <Tooltip
         title={isFullScreen ? t('TOOL_TIP.MINIMIZE') : t('TOOL_TIP.MAXIMIZE')}

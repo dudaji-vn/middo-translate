@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 const ActionAddMembers = () => {
   const {t} = useTranslation('common')
 
-  const room = useVideoCallStore((state) => state.room);
+  const call = useVideoCallStore((state) => state.call);
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const setModal = useVideoCallStore((state) => state.setModal);
   const modal = useVideoCallStore((state) => state.modal);
@@ -22,7 +22,7 @@ const ActionAddMembers = () => {
     toggleModalAddUser()
   });
 
-  if(isFullScreen || room?.type !== CALL_TYPE.GROUP) return null
+  if(isFullScreen || call?.type !== CALL_TYPE.GROUP) return null
 
   return (
     <Tooltip

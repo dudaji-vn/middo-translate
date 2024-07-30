@@ -1,6 +1,6 @@
 import { joinAnonymousVideoCallRoom, joinHelpDeskVideoCallRoom, joinVideoCallRoom } from '@/services/video-call.service';
 import { useChatBox } from '../contexts';
-import { IRoom, useVideoCallStore } from '@/features/call/store/video-call.store';
+import { Call, useVideoCallStore } from '@/features/call/store/video-call.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { STATUS } from '@/features/call/constant/status';
 import toast from 'react-hot-toast';
@@ -23,7 +23,7 @@ import { NEXT_PUBLIC_URL } from '@/configs/env.public';
 import { VIDEO_CALL_LAYOUTS } from '@/features/call/constant/layout';
 
 interface CallResponse {
-  call: IRoom,
+  call: Call,
   room: Room;
   status: string,
   type: string
@@ -31,7 +31,7 @@ interface CallResponse {
 export const useJoinCall = (isAnonymous?: boolean) => {
   const { user } = useAuthStore();
   const { postMessage } = useReactNativePostMessage();
-  const { setRoom, room, setTempRoom, tmpRoom, setRequestCall } =
+  const { setCall, call, setTempRoom, tmpRoom, setRequestCall } =
     useVideoCallStore();
   const {isBusiness} = useBusinessNavigationData();
   const setLayout = useVideoCallStore((state) => state.setLayout);
@@ -65,19 +65,19 @@ export const useJoinCall = (isAnonymous?: boolean) => {
         },
       });
       if(!isAnonymous) {
-        if (room?.roomId == roomId) return;
-        if (room && !tmpRoom) {
+        if (call?.roomId == roomId) return;
+        if (call && !tmpRoom) {
           setTempRoom(roomId || '');
           return;
         }
       }
-      // if have userId, it's help desk call
+     
       let res;
-      if(isAnonymous) {
+      if(isAnonymous) { // Instance call
         res = await joinAnonymousVideoCallRoom();
-      } else if(userId) {
+      } else if(userId) {  // Help desk call
         res = await joinHelpDeskVideoCallRoom({ roomId: roomId || '', userId });
-      } else {
+      } else { // Normal call
         res = await joinVideoCallRoom({ roomId: roomId || '' });
       }
       const data: CallResponse = res?.data;
@@ -103,7 +103,7 @@ export const useJoinCall = (isAnonymous?: boolean) => {
         setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW)
       }
       setRequestCall();
-      setRoom(data?.call);
+      setCall(data?.call);
       if (
         data.type == JOIN_TYPE.NEW_CALL &&
         data.call.type === CALL_TYPE.DIRECT &&
@@ -133,8 +133,8 @@ export const useJoinCall = (isAnonymous?: boolean) => {
       addParticipant,
       setRequestCall,
       createRoomMeeting,
-      room,
-      setRoom,
+      call,
+      setCall,
       setTempRoom,
       t,
       tmpRoom,

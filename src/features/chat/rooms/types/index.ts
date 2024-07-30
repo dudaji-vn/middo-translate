@@ -2,6 +2,7 @@ import { BaseEntity } from '@/types';
 import { Message } from '@/features/chat/messages/types';
 import { User } from '@/features/users/types';
 import { TSpace } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces';
+import { Station } from '@/features/stations/types/station.types';
 
 export type InboxSides = 'default' | 'settings' | 'new-message' | 'new-group';
 

@@ -8,9 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const ReceiveVideoCallContent = () => {
   const requestCall = useVideoCallStore(state => state.requestCall);
-  const isMobile = useAppStore((state) => state.isMobile);
   const {t} = useTranslation('common')
-  console.log(requestCall)
   const generateContent = useMemo(() => {
     switch (requestCall?.type) {
       case 'direct':

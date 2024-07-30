@@ -11,17 +11,17 @@ const CallVideoModalContainer = () => {
   const clearStateVideoCall = useVideoCallStore(
     (state) => state.clearStateVideoCall,
   );
-  const room = useVideoCallStore((state) => state.room);
-  const setRoom = useVideoCallStore((state) => state.setRoom);
+  const call = useVideoCallStore((state) => state.call);
+  const setCall = useVideoCallStore((state) => state.setCall);
   useSocketVideoCall();
   const { isOnline } = useNetworkStatus();
-  if (!isOnline) {
-    if (room) {
-      setRoom();
-      clearStateVideoCall();
-    }
-    return;
+  if(call && !isOnline) {
+    setCall();
+    clearStateVideoCall()
   }
+
+  if(!isOnline) return null;
+
   return (
     <>
       <VideoCall />

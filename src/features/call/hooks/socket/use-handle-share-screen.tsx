@@ -19,7 +19,7 @@ import customToast from "@/utils/custom-toast";
 export default function useHandleShareScreen() {
     const {t} = useTranslation('common');
 
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const setLayout = useVideoCallStore(state => state.setLayout);
     const setModal = useVideoCallStore(state => state.setModal);
     const participants = useParticipantVideoCallStore(state => state.participants);
@@ -108,8 +108,8 @@ export default function useHandleShareScreen() {
 
     useEffect(() => {
         // Emit event to request get share screen
-        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, room?._id);
-    }, [room?._id])
+        socket.emit(SOCKET_CONFIG.EVENTS.CALL.REQUEST_GET_SHARE_SCREEN, call?._id);
+    }, [call?._id])
 
     const stopShareScreen = useCallback(() => {
         if (!socket.id) return;
@@ -166,7 +166,7 @@ export default function useHandleShareScreen() {
             addParticipant(shareScreen);
             setShareScreen(true);
             setShareScreenStream(stream);
-            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, room?._id);
+            socket.emit(SOCKET_CONFIG.EVENTS.CALL.SHARE_SCREEN, call?._id);
         } catch (err: unknown) {
             if (err instanceof Error && err.name !== 'NotAllowedError') {
                 customToast.error(t('MESSAGE.ERROR.DEVICE_NOT_SUPPORTED'));
@@ -174,7 +174,7 @@ export default function useHandleShareScreen() {
         }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [addParticipant, isShareScreen, room?._id, setModal, setShareScreen, setShareScreenStream, stopShareScreen, user?._id, isElectron])
+    }, [addParticipant, isShareScreen, call?._id, setModal, setShareScreen, setShareScreenStream, stopShareScreen, user?._id, isElectron])
 
     useEffect(() => {
         if(!shareScreenStream) return;

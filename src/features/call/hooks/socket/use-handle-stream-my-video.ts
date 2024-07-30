@@ -33,7 +33,7 @@ export default function useHandleStreamMyVideo() {
     const updatePeerParticipant = useParticipantVideoCallStore(state => state.updatePeerParticipant);
     const user = useAuthStore(state => state.user);
     const clearStateVideoCall = useVideoCallStore(state => state.clearStateVideoCall);
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
     const video = useVideoSettingStore(state => state.video);
     const audio = useVideoSettingStore(state => state.audio);
     const setLoadingStream = useMyVideoCallStore(state => state.setLoadingStream);
@@ -53,9 +53,9 @@ export default function useHandleStreamMyVideo() {
             setMyStream(myVideoStream);
             setStreamForParticipant(myVideoStream, socket.id || '', false)
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.JOIN, {
-                callId: room?._id,
+                callId: call?._id,
                 user,
-                roomId: room?.roomId,
+                roomId: call?.roomId,
             });
         });
 
@@ -76,7 +76,7 @@ export default function useHandleStreamMyVideo() {
         };
     // Remove t from dependencies => language change will not trigger this function
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, room?._id, room?.roomId, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, user?._id]);
+    }, [clearPeerShareScreen, clearStateVideoCall, resetParticipants, call?._id, call?.roomId, setLoadingVideo, setMyStream, setShareScreen, setShareScreenStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, user?._id]);
 
     // on my stream change
     useEffect(()=>{

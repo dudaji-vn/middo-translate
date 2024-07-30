@@ -421,6 +421,8 @@
     "CHANGE_GROUP_NAME": "Change group name",
     "TITLE_DISCUSSION_CALL": "Discussion is created automatically",
     "CONTENT_DISCUSSION_CALL": "All messages, files, and links sent in this discussion will be saved in the group chat. Members can access them even after the meeting ends.",
+    "TITLE_DISCUSSION_INSTANCE_CALL": "Discussion is created automatically",
+    "CONTENT_DISCUSSION_INSTANCE_CALL": "All messages, files, and links sent in this discussion will be saved in the group chat. Members can access them even after the meeting ends.",
     "GALLERY_VIEW": "Gallery view",
     "SCREEN_DOODLE": "Screen doodle",
     "SCREEN_CAPTURE": "Screen capture",

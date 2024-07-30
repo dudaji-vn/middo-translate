@@ -18,7 +18,7 @@ const GalleryLayout = () => {
   const participants = useParticipantVideoCallStore(state => state.participants);
   const isDoodle = useVideoCallStore(state => state.isDoodle);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  const room = useVideoCallStore(state => state.room);
+  const call = useVideoCallStore(state => state.call);
   const numberItem = useMemo(() => participants.length + (isDoodle ? 1 : 0), [isDoodle, participants.length]);
   const [numColumn, numRow] = useMemo(()=>{
     if(isMobile) {
@@ -62,7 +62,7 @@ const GalleryLayout = () => {
   }, [participants]);
 
   const [containerHeight, setContainerHeight] = useState(0);
-  const { members } = useGetMemberInRoom({roomId: room?.roomId});
+  const { members } = useGetMemberInRoom({roomId: call?.roomId});
 
 
   useEffect(() => {

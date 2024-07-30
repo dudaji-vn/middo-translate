@@ -31,35 +31,16 @@ export default function VideoItemText({
   if (!participant) return null;
   
   const getMicStatus = () => {
-    if (
-      participant.isShareScreen 
-    )
-      return;
-
-    if (participant.isMe) {
-      return (
-        <>
-          {isFullScreen && !(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) &&(
-            <span className="mx-2 h-[15px] w-[1px] bg-neutral-400"></span>
-          )}
-          <span>
-            {isTurnOnMic ? (
-              <Mic size={16} className="text-neutral-500 dark:text-neutral-50"></Mic>
-            ) : (
-              <MicOff size={16} className="text-error"></MicOff>
-            )}
-          </span>
-        </>
-      );
-    }
+    if (participant.isShareScreen) return null;
+    let isMicOn = participant.isMe ? isTurnOnMic : participant.isTurnOnMic;
     return (
       <>
-        {isFullScreen && !(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) && (
+        {isFullScreen && !(layout == VIDEO_CALL_LAYOUTS.FOCUS_VIEW && !isFocusItem) &&(
           <span className="mx-2 h-[15px] w-[1px] bg-neutral-400"></span>
         )}
         <span>
-          {participant.isTurnOnMic ? (
-            <Mic size={16} className="text-neutral-500"></Mic>
+          {isMicOn ? (
+            <Mic size={16} className="text-neutral-500 dark:text-neutral-50"></Mic>
           ) : (
             <MicOff size={16} className="text-error"></MicOff>
           )}

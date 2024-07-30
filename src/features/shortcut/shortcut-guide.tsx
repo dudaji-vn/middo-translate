@@ -120,9 +120,9 @@ type AccordionValue = 'Middo Translation' | 'Middo Conversation' | 'Middo Call';
 export default function ShortcutsGuide() {
   const isClient = useClient();
   const pathname = usePathname();
-  const { room } = useVideoCallStore();
+  const call = useVideoCallStore(state => state.call);
   const { t } = useTranslation('common');
-  const defaultValue: string = room
+  const defaultValue: string = call
     ? t('SHORTCUT.TABS.CALL')
     : pathname === ROUTE_NAMES.TRANSLATION
       ? t('SHORTCUT.TABS.TRANSLATION')

@@ -7,8 +7,8 @@ import { useVideoCallStore } from '../../store/video-call.store';
 export default function useSocketVideoCall() {
   const updateMeetingList = useChatStore((state) => state.updateMeetingList);
   const deleteMeeting = useChatStore((state) => state.deleteMeeting);
-  const room = useVideoCallStore((state) => state.room);
-  const setRoom = useVideoCallStore((state) => state.setRoom);
+  const call = useVideoCallStore((state) => state.call);
+  const setCall = useVideoCallStore((state) => state.setCall);
   const clearStateVideoCall = useVideoCallStore(state => state.clearStateVideoCall);
   const setMeetingList = useChatStore(state => state.setMeetingList);
   const requestCall = useVideoCallStore((state) => state.requestCall);
@@ -17,8 +17,8 @@ export default function useSocketVideoCall() {
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.MEETING.END, (roomId: string) => {
         deleteMeeting(roomId);
-        if (room?.roomId === roomId) {
-          setRoom();
+        if (call?.roomId === roomId) {
+          setCall(undefined);
           clearStateVideoCall();
         }
         if(requestCall?.id == roomId) {
@@ -36,5 +36,5 @@ export default function useSocketVideoCall() {
       socket.off(SOCKET_CONFIG.EVENTS.MEETING.LIST);
       socket.off(SOCKET_CONFIG.EVENTS.MEETING.UPDATE);
     }
-  }, [room, setRoom,requestCall, setRequestCall, clearStateVideoCall, deleteMeeting, updateMeetingList]);
+  }, [call, setCall,requestCall, setRequestCall, clearStateVideoCall, deleteMeeting, updateMeetingList]);
 }
