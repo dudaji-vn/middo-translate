@@ -221,10 +221,11 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           mediaLength > 1 && 'rounded-none',
                         )}
                       >
-                        {extensionForm && (
+                        {!!extensionForm && (
                           <MessageItemFlowFormTrigger
-                            form={extensionForm}
                             guestId={guestId}
+                              message={message}
+                              form={extensionForm}
                           />
                         )}
                         {message.content && !extensionForm && (

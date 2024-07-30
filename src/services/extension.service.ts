@@ -68,6 +68,7 @@ export const submitFormAnswer = (
   userId: string,
   data: {
     answer: Record<string, any>;
+    messageId?: string;
   },
 ) => {
   return post(`/help-desk/forms/${formId}/${userId}`, data);

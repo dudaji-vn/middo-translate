@@ -16,17 +16,25 @@ const Page = (
   },
 ) => {
   const searchParams = useSearchParams();
-  const formId = searchParams?.get('formId') || '';
-  const guestId = searchParams?.get('guestId') || '';
-  const closeIframe = () => {
+  const formId = searchParams?.get('formId') || undefined;
+  const guestId = searchParams?.get('guestId') || undefined;
+  const messageId = searchParams?.get('messageId') || undefined;
+  const closeIframe = (done: boolean) => {
     announceToParent({
       type: 'close-form',
-      payload: {},
+      payload: {
+        done,
+      },
     });
   };
 
   return (
-    <ExtensionForm formId={formId} guestId={guestId} onClose={closeIframe} />
+    <ExtensionForm
+      formId={formId}
+      guestId={guestId}
+      onClose={closeIframe}
+      messageId={messageId}
+    />
   );
 };
 

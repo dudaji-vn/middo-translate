@@ -54,12 +54,15 @@ export type FormDetail = z.infer<typeof createBusinessFormSchema> & BaseEntity;
 const ExtensionForm = ({
   formId,
   guestId,
-  onClose = () => {},
+  onClose = (done: boolean) => {},
+  messageId,
   previewMode = false,
 }: {
-  formId: string;
+  formId?: string;
   guestId?: string;
-  onClose?: () => void;
+  roomId?: string;
+  messageId?: string;
+  onClose?: (done: boolean) => void;
   previewMode?: boolean;
 }) => {
   const { data: form, isLoading } = useGetFormHelpdesk({
@@ -122,7 +125,6 @@ const ExtensionForm = ({
 
   useEffect(() => {
     if (!isLoading && form && !previewMode) {
-      console.log('form', form);
       announceToParent({
         type: 'form-loaded',
         payload: {},
@@ -167,6 +169,10 @@ const ExtensionForm = ({
     const answer = formFields.reduce(
       (acc, field) => {
         acc[field.name] = data.answer[field.name];
+        const otherAnswerOfField = data.answer[field.name + '-other'] as string;
+        if (otherAnswerOfField && ['select', 'radio'].includes(field.type)) {
+          (acc[field.name] as unknown as string[]).push(otherAnswerOfField);
+        }
         return acc;
       },
       {} as TSubmission['answer'],
@@ -183,6 +189,7 @@ const ExtensionForm = ({
     try {
       const res = await submitFormAnswer(formId, guestId, {
         answer,
+        messageId,
       });
       console.log('res', res);
       if (res.data) {
@@ -201,7 +208,7 @@ const ExtensionForm = ({
     if (isDone && guestId) {
       removeFormDraftData(guestId);
     }
-    onClose();
+    onClose(isDone);
   };
 
   return (

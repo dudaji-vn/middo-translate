@@ -208,7 +208,7 @@
     chatWidget.id = 'chat-widget';
     const srcWithDomain = `${chatSRC}?domain=${domain}`;
     const srcButton = `${chatSRC}/widget-notification`;
-    const extensionFormSrc = `${appURL}/extension-form`;
+    const extensionFormSrc = `${appURL}/test-it-out`;
     console.log('extensionFormSrc', extensionFormSrc);
 
     chatWidget.innerHTML = `
