@@ -9,6 +9,7 @@ import useHandleCreatePeerConnection from '../hooks/socket/use-handle-create-pee
 import usePeerEvent from '../hooks/socket/use-peer-event';
 import useHandleEventElectron from '../hooks/electron/use-handle-event-electron';
 import useHandleCallStatus from '../hooks/socket/use-handle-call-status';
+import useAudioRinging from '../hooks/side-effect/use-audio-ringing';
 
 interface VideoCallContextProps {
   handleShareScreen: () => void;
@@ -27,6 +28,7 @@ export const VideoCallProvider = ({ children }: PropsWithChildren) => {
   useHandleCreatePeerConnection();
   usePeerEvent();
   useHandleCallStatus();
+  useAudioRinging()
   // For electron
   useHandleEventElectron();
 
