@@ -218,7 +218,7 @@ export default function MessageItemFlowFormTrigger({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSubmitted]);
+  }, []);
 
   return (
     <div className="relative space-y-2 ">
