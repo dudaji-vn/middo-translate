@@ -328,7 +328,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   </span>
                 </span>
               )}
-              <MessageItemFlowActions actions={actionsFromScriptChat || []} />
+              {message.type !== 'flow-form' && !isEditing && !isDraw && (
+                <MessageItemFlowActions actions={actionsFromScriptChat || []} />
+              )}
             </div>
             {direction === 'top' && (
               <ReadByUsers
