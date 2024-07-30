@@ -143,6 +143,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       let content = editor?.getHTML() || '';
       let lang = languageCode === 'auto' ? detectedLanguage : languageCode;
       let english = translationHelperRef.current?.getEnContent();
+      console.log('english', english);
       let mentions: string[] = [];
       reset();
       focus();
@@ -232,7 +233,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           onSend={handleSubmit}
         />
 
-        <div className="@container relative">
+        <div className="relative @container">
           <div className="mention-bar" />
           {isEditing && editor && (
             <EditControl
@@ -250,7 +251,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
               className="flex min-h-[82px] w-full flex-col rounded-2xl border border-primary p-1 shadow-sm"
             >
               <div className="flex items-center">
-                <div className="@xl:flex-none mr-3 flex-1">
+                <div className="mr-3 flex-1 @xl:flex-none">
                   <MessageEditorLanguageSelect editor={editor} />
                 </div>
                 {!isEditing && !isMediaDisabled && <AttachmentButton />}
