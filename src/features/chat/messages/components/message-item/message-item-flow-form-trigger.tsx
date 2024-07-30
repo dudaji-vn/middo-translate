@@ -212,15 +212,17 @@ export default function MessageItemFlowFormTrigger({
 
   useEffect(() => {
     if (isSubmitted) {
-      // onTriggerNextMessage();
-      console.log(
-        'onTriggerNextMessage',
-        recentlySubmitedFormByMessageId,
-        '\n ==> and THIS MESSAGE ID',
-        message._id,
-      );
+      if (recentlySubmitedFormByMessageId === message._id) {
+        console.log('FLOW-CHAT: onTriggerNextMessage');
+        onTriggerNextMessage();
+      }
     }
-  }, [isSubmitted, message._id, onTriggerNextMessage, recentlySubmitedFormByMessageId]);
+  }, [
+    isSubmitted,
+    message._id,
+    onTriggerNextMessage,
+    recentlySubmitedFormByMessageId,
+  ]);
 
   return (
     <div className="relative space-y-2 ">
