@@ -156,7 +156,7 @@ const ExtensionForm = ({
     ? extensionsCustomThemeOptions.find(
         (t) => t.hex === customize?.theme || t.name === customize.theme,
       )?.name
-    : 'Default';
+    : 'default';
   const bgSrc = `url(${customize?.background})`;
 
   const onPageChange = (page: number) => {

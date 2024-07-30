@@ -19,6 +19,7 @@ import ThankYou from './thank-you';
 import { extensionsCustomThemeOptions } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/sections/options';
 import { Input, SelectMultiple, SelectSingle } from './form-fields';
 import { isEmpty } from 'lodash';
+import { BusinessForm } from '@/types/forms.type';
 
 const answerSchema = z.object({
   formId: z.string().optional(),
@@ -49,14 +50,14 @@ const DraftFormPreview = ({
 }: {
   form: {
     formFields: TFormField[];
-    thankyou: any;
-    customize: any;
+    thankyou: FormDetail['thankyou'];
+    customize: FormDetail['customize'];
     name: string;
   };
   onClose?: () => void;
 }) => {
   const [isDone, setIsDone] = React.useState(false);
-
+  console.log('form', form);
   const requiredFields = useMemo(() => {
     return form?.formFields
       .filter((f: any) => f.required)
@@ -104,7 +105,7 @@ const DraftFormPreview = ({
     ? extensionsCustomThemeOptions.find(
         (t) => t.hex === customize?.theme || t.name === customize.theme,
       )?.name
-    : 'Default';
+    : 'default';
   const bgSrc = `url(${customize?.background})`;
 
   const submit = () => {

@@ -53,15 +53,19 @@ const CreateOrEditBusinessForm = ({
   const [tabValue, setTabValue] = React.useState<number>(0);
   const router = useRouter();
 
-  const DEFAULT_FORM_BG = '/forms/bg-form-1.jpg';
+  const bgSrcRegex = /\/forms\/bg-form-\d+.jpg/;
+
+  const DEFAULT_FORM_BG = '/forms/bg-form-10.jpg';
   const form = useForm<TFormFormValues>({
     mode: 'onChange',
     defaultValues: {
       name: currentForm?.name || 'Untitled Form',
       customize: {
         layout: 'single',
-        background: DEFAULT_FORM_BG,
-        theme: DEFAULT_THEME,
+        background: bgSrcRegex.test(String(currentForm?.customize?.background))
+          ? currentForm?.customize?.background
+          : DEFAULT_FORM_BG,
+        theme: currentForm?.customize?.theme || 'default',
       },
       thankyou: {
         title: 'Thank you',
@@ -86,10 +90,20 @@ const CreateOrEditBusinessForm = ({
       setValue('name', currentForm.name || '');
       setValue('description', currentForm.description);
       setValue('formFields', currentForm.formFields || []);
-      setValue('customize', currentForm.customize);
+      setValue(
+        'customize.theme',
+        currentForm?.customize?.theme || DEFAULT_THEME,
+      );
+      setValue('customize.layout', currentForm?.customize?.layout || 'single');
+      setValue(
+        'customize.background',
+        bgSrcRegex.test(String(currentForm?.customize?.background))
+          ? currentForm?.customize?.background
+          : DEFAULT_FORM_BG,
+      );
       setValue('thankyou', currentForm.thankyou);
     }
-  }, [action, currentForm]);
+  }, [action, currentForm, setValue]);
 
   const submit = async (data: any) => {
     const formId = currentForm?._id;
