@@ -87,13 +87,9 @@ export const MessagesBoxProvider = ({
     roomId: params?.id || room._id,
     isAnonymous,
   });
-  const updateRecentFormStatus = useCallback(
-    (messageId: string) => {
-      if (messageId !== recentlySubmitedFormByMessageId)
-        setRecentlySubmitedFormByMessageId(messageId);
-    },
-    [recentlySubmitedFormByMessageId],
-  );
+  const updateRecentFormStatus = (messageId: string) => {
+      setRecentlySubmitedFormByMessageId(messageId);
+  };
 
   useMessageSocket({
     room,

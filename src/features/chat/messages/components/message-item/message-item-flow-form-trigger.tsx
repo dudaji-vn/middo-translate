@@ -212,13 +212,18 @@ export default function MessageItemFlowFormTrigger({
 
   useEffect(() => {
     if (isSubmitted) {
+      console.log(
+        'FLOW-CHAT: isSubmitted',
+        recentlySubmitedFormByMessageId,
+        message._id,
+      );
       if (recentlySubmitedFormByMessageId === message._id) {
         console.log('FLOW-CHAT: onTriggerNextMessage');
         onTriggerNextMessage();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [recentlySubmitedFormByMessageId, isSubmitted]);
 
   return (
     <div className="relative space-y-2 ">
