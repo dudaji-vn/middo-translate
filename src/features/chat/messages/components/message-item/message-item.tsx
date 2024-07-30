@@ -132,6 +132,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
 
     const extensionForm =
       message?.type === 'flow-form' ? message.form : undefined;
+    console.log('extensionForm', extensionForm);
+    console.log('message', message);
+    console.log('message.form', message.form);
     return (
       <MessageItemContext.Provider
         value={{
