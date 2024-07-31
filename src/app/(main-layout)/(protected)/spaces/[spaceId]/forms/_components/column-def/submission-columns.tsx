@@ -48,6 +48,17 @@ export const makeSubmissionColumns = ({
       },
     },
     {
+      accessorKey: 'user.language',
+      header: 'Language',
+      cell: (props: any) => {
+        return (
+          <td className="flex items-center gap-2" {...props}>
+            <Typography>{props?.row?.original?.user?.language}</Typography>
+          </td>
+        );
+      },
+    },
+    {
       accessorKey: 'createdAt',
       header: 'Submit at',
       cell: (props: any) => {
