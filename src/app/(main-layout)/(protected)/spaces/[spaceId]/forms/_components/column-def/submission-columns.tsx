@@ -6,6 +6,7 @@ import { BusinessForm, FormSubmission } from '@/types/forms.type';
 import { isArray, isEmpty } from 'lodash';
 import moment from 'moment';
 import { Typography } from '@/components/data-display';
+import { getLanguageByCode } from '@/utils/language-fn';
 
 export const makeSubmissionColumns = ({
   t,
@@ -68,17 +69,19 @@ export const makeSubmissionColumns = ({
         );
       },
     },
-    // {
-    //   accessorKey: 'user.language',
-    //   header: 'Language',
-    //   cell: (props: any) => {
-    //     return (
-    //       <td className="flex items-center gap-2" {...props}>
-    //         <Typography>{props?.row?.original?.user?.language}</Typography>
-    //       </td>
-    //     );
-    //   },
-    // },
+    {
+      accessorKey: 'user.language',
+      header: 'Language',
+      cell: (props: any) => {
+        const languageCode = props?.row?.original?.user?.language || 'en';
+        const language = getLanguageByCode(languageCode);
+        return (
+          <td className="flex items-center gap-2" {...props}>
+            <Typography>{language?.name}</Typography>
+          </td>
+        );
+      },
+    },
     {
       accessorKey: 'createdAt',
       header: 'Submit at',

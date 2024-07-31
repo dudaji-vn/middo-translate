@@ -38,7 +38,7 @@ const Submissions = ({
     t,
     formFields,
   });
-
+  console.log('HIHI:>>', submissions);
   return (
     <div
       {...props}
