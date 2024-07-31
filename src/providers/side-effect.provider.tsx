@@ -95,7 +95,8 @@ export const SideEffectProvider = () => {
   }, []);
 
   useEffect(() => {
-    navigator.serviceWorker.addEventListener('message', (event) => {
+    if (!navigator?.serviceWorker) return;
+    navigator?.serviceWorker?.addEventListener('message', (event) => {
       if (!event.data.action) {
         return;
       }
@@ -107,7 +108,7 @@ export const SideEffectProvider = () => {
       }
     });
     return () => {
-      navigator.serviceWorker.removeEventListener('message', () => {});
+      navigator?.serviceWorker?.removeEventListener('message', () => {});
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
