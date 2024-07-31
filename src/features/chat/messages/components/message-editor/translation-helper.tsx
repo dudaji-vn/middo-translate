@@ -182,7 +182,11 @@ export const TranslationHelper = forwardRef<
       ref,
       () => ({
         getEnContent: () => {
-          return enContent || (!isLoading && !isFetching) ? data : null;
+          return enContent || (!isLoading && !isFetching)
+            ? enContent
+              ? enContent
+              : data
+            : null;
         },
         clearContent,
         getSourceLang: () => {
