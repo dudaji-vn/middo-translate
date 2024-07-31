@@ -34,17 +34,7 @@ export default function UserStatus({isForgeShow, participant}: UserStatusProps) 
 const WaitingStatus = ({notShow} : {notShow: boolean}) => {
   const {t} = useTranslation('common')
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  const call = useVideoCallStore(state => state.call);
-  const { playAudio, stopAudio } = usePlayAudio('/mp3/incoming.mp3')
-  useEffect(()=> {
-    if(call?.type === CALL_TYPE.DIRECT) {
-      playAudio()
-    }
-    return () => {
-      stopAudio()
-    }
-  }, [playAudio, call?.type, stopAudio])
-
+  
   if(notShow) return null;
   
   return (
@@ -65,15 +55,8 @@ const WaitingStatus = ({notShow} : {notShow: boolean}) => {
 const WaitingHelpDeskStatus = ({notShow} : {notShow: boolean}) => {
   const {t} = useTranslation('common')
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  const { playAudio, stopAudio } = usePlayAudio('/mp3/incoming.mp3')
   const {setStatus} = useHelpDeskCallContext()
-  useEffect(()=> {
-    playAudio()
-    return () => {
-      stopAudio()
-    }
-  }, [playAudio, stopAudio])
-
+  
   useEffect(()=> {
     // Auto remove after 30s
     const timeout = setTimeout(()=> {
