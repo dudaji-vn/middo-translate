@@ -226,7 +226,11 @@ const DraftFormPreview = ({
           <X />
         </Button.Icon>
         {isDone ? (
-          <ThankYou thankyou={thankyou} name={form.name} />
+          <ThankYou
+            thankyou={thankyou}
+            name={form.name}
+            onclose={onCloseForm}
+          />
         ) : (
           <form
             onSubmit={formAnswer.handleSubmit(submit)}
