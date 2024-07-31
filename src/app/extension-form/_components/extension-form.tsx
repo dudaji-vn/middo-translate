@@ -245,11 +245,16 @@ const ExtensionForm = ({
         const otherAnswerOfField = data.answer[field.name + '-other'] as string;
         if (otherAnswerOfField) {
           if (field.type === 'checkbox' && !isEmpty(acc[field.name])) {
-            const replaceIndex = (acc[field.name] as string[]).findIndex(
-              (item: string) => item === 'other',
+            const otherOption = field.options?.find(
+              (option) => option.type === 'other',
             );
-            // @ts-ignore
-            acc[field.name][replaceIndex] = otherAnswerOfField;
+            const replaceIndex = (acc[field.name] as string[]).findIndex(
+              (item: string) => item === otherOption?.value,
+            );
+            if (replaceIndex !== -1) {
+              // @ts-ignore
+              acc[field.name][replaceIndex] = otherAnswerOfField;
+            }
           } else if (field.type === 'radio') {
             acc[field.name] = otherAnswerOfField;
           }
@@ -312,7 +317,11 @@ const ExtensionForm = ({
           </Button.Icon>
         )}
         {isDone ? (
-          <ThankYou thankyou={thankyou} name={form.name} />
+          <ThankYou
+            thankyou={thankyou}
+            name={form.name}
+            onclose={onCloseForm}
+          />
         ) : (
           <form
             onSubmit={formAnswer.handleSubmit(submit)}
@@ -380,7 +389,18 @@ const ExtensionForm = ({
               >
                 Next
               </Button>
-              <em />
+              <Button
+                color="primary"
+                variant="default"
+                disabled={formAnswer.formState.isSubmitting || !hasNextPage}
+                shape={'square'}
+                className={cn('', {
+                  invisible: !isDone,
+                })}
+                startIcon={<X />}
+              >
+                Close Form
+              </Button>
             </div>
           </form>
         )}
