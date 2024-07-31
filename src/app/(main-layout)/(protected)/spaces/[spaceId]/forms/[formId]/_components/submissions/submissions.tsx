@@ -16,6 +16,7 @@ import { useParams } from 'next/navigation';
 const Submissions = ({
   _id,
   name,
+  isPreview = false,
   submissions = [],
   isUsing,
   totalSubmissions,
@@ -29,6 +30,7 @@ const Submissions = ({
     onDelete?: (id: string) => void;
     viewDetailForm?: () => void;
     allowRunForm?: boolean;
+    isPreview?: boolean;
   }) => {
   const { t } = useTranslation('common');
   const spaceId = useParams()?.spaceId || '';
@@ -103,7 +105,7 @@ const Submissions = ({
       <div
         className={cn(
           'h-fit w-full grow overflow-y-auto',
-          totalSubmissions <= 3 ? 'h-fit' : 'h-0',
+          isPreview ? 'h-fit' : 'h-0',
         )}
       >
         <DataTable

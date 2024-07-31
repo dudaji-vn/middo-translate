@@ -297,7 +297,13 @@ const DraftFormPreview = ({
                 >
                   Next
                 </Button>
-                <em />
+                <Button
+                  endIcon={<Send />}
+                  shape={'square'}
+                  className={'invisible'}
+                >
+                  Submit
+                </Button>
               </div>
             </Form>
           </form>

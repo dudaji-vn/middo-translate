@@ -111,6 +111,7 @@ const FormsList = ({
               <Submissions
                 key={form._id}
                 {...form}
+                isPreview
                 onDelete={onDeleteClick}
                 viewDetailForm={() => onView(form._id)}
                 className="className rounded-[12px]  border border-neutral-50 p-3"

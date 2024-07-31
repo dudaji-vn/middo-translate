@@ -3,7 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { TFunction } from 'i18next';
 import { BusinessForm, FormSubmission } from '@/types/forms.type';
-import { isEmpty } from 'lodash';
+import { isArray, isEmpty } from 'lodash';
 import moment from 'moment';
 import { Typography } from '@/components/data-display';
 
@@ -22,6 +22,27 @@ export const makeSubmissionColumns = ({
     return {
       accessorKey: `answer.${name}`,
       header: name,
+      cell: (props: any) => {
+        const value = props?.row?.original?.answer?.[name];
+
+        const isArr = isArray(value);
+        let displayVale = '';
+        try {
+          displayVale =
+            typeof value === 'object'
+              ? isArr
+                ? value.join(', ')
+                : JSON.stringify(value)
+              : value;
+        } catch (error) {
+          console.log(error);
+        }
+        return (
+          <td className="flex items-center gap-2" {...props}>
+            <Typography>{displayVale}</Typography>
+          </td>
+        );
+      },
     };
   });
   return [
@@ -47,6 +68,17 @@ export const makeSubmissionColumns = ({
         );
       },
     },
+    // {
+    //   accessorKey: 'user.language',
+    //   header: 'Language',
+    //   cell: (props: any) => {
+    //     return (
+    //       <td className="flex items-center gap-2" {...props}>
+    //         <Typography>{props?.row?.original?.user?.language}</Typography>
+    //       </td>
+    //     );
+    //   },
+    // },
     {
       accessorKey: 'createdAt',
       header: 'Submit at',
