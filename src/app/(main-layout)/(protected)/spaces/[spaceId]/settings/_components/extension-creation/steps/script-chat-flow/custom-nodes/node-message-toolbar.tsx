@@ -10,17 +10,14 @@ import { useFormContext } from 'react-hook-form';
 import { useMediaUpload } from '@/components/media-upload';
 import { MessageEditorToolbarFile } from '@/features/chat/messages/components/message-editor/message-editor-toolbar-file';
 import { useTranslation } from 'react-i18next';
-import { AttachmentSelection } from '@/components/attachment-selection';
+import { AttachmentSelection } from '@/features/chat/messages/components/message-editor/attachment-selection';
 import { useAppStore } from '@/stores/app.store';
 import { Popover, PopoverTrigger } from '@/components/data-display/popover';
 import { PopoverContent } from '@radix-ui/react-popover';
 import Picker from '@emoji-mart/react';
-import { FLOW_KEYS } from './node-types';
 import { isEmpty, isEqual } from 'lodash';
-import { Spinner } from '@/components/feedback';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MediaType } from '@/types';
-import { useModalStore } from '@/stores/modal.store';
 
 const allowedMediaTypes: Partial<Record<MediaType, string>> = {
   image: 'image',

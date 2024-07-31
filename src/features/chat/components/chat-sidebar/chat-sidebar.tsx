@@ -12,6 +12,8 @@ import { useStationNavigationData } from '@/hooks';
 import StationNavigator from '@/app/(main-layout)/(protected)/stations/[stationId]/_components/station-navigator/station-navigator';
 import { Button } from '@/components/actions';
 import { Settings } from 'lucide-react';
+import SpaceNavigator from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/space-navigator/space-navigator';
+import { useAppStore } from '@/stores/app.store';
 
 interface ChatSidebarProps {
   children: ReactNode;
@@ -25,6 +27,7 @@ export const ChatSidebar = ({
   spaceData,
 }: ChatSidebarProps & PropsWithChildren) => {
   const { setBusinessExtension } = useBusinessExtensionStore();
+  const isMobile = useAppStore((state) => state.isMobile);
   const { isOnBusinessChat, isBusiness } = useBusinessNavigationData();
 
   useEffect(() => {
@@ -43,6 +46,7 @@ export const ChatSidebar = ({
         )}
       >
         {!isBusiness && <StationNavigator className="w-full" />}
+        {isBusiness && isMobile && <SpaceNavigator />}
         <ChatSidebarHeader />
         <ChatSidebarTabs>{children}</ChatSidebarTabs>
       </div>

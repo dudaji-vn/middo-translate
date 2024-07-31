@@ -7,7 +7,7 @@ import { getProfileService } from '@/services/auth.service';
 import { useAppStore } from '@/stores/app.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { LSK_VISITOR_ID } from '@/types/business.type';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useMediaQuery } from 'usehooks-ts';
 
@@ -15,6 +15,7 @@ export const SideEffectProvider = () => {
   const isMobile = useMediaQuery('(max-width: 768px)');
   const isTablet = useMediaQuery('(max-width: 1024px)');
   const setData = useAuthStore((state) => state.setData);
+  const router = useRouter();
   const { setMobile, setTablet } = useAppStore((state) => {
     return {
       setMobile: state.setMobile,
@@ -89,6 +90,24 @@ export const SideEffectProvider = () => {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      if (!event.data.action) {
+        return;
+      }
+      switch (event.data.action) {
+        case 'redirect-from-notificationclick':
+          router.push(event.data.url);
+          break;
+        // no default
+      }
+    });
+    return () => {
+      navigator.serviceWorker.removeEventListener('message', () => {});
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

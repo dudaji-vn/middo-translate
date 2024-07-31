@@ -1,5 +1,7 @@
 {
   "COMMON": {
+    "DESCRIBE_MIDDO_STATION": "모든 사용자를 연결하는 공공 공간",
+    "JOIN_CALL": "통화 참여",
     "COLOR": "색상",
     "INVITE": "초대",
     "APPLY": "적용",
@@ -26,6 +28,7 @@
     "DECLINE": "거부",
     "ACCEPT_CALL": "전화 받기",
     "DELETE": "삭제",
+    "COPY_AND_CLOSE": "복사 및 닫기",
     "ARCHIVE": "보관됨",
     "UNARCHIVE": "보관 취소",
     "COMPLETE": "완료됨",
@@ -110,6 +113,7 @@
     "INFORMATION": "정보",
     "DELETE_STATION": "Station 삭제",
     "LINK": "링크",
+    "DETECT_LANGUAGE": "언어 감지",
     "TIME": {
       "CREATED_ON": "생성일",
       "UPDATED_ON": "업데이트일",
@@ -159,6 +163,8 @@
       "NO_ACCESS_MEDIA": "카메라 또는 마이크에 접근할 수 없습니다!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "파일이 너무 크거나 지원되지 않습니다!",
       "UPDATE_ROOM": "방 정보를 업데이트할 수 없습니다!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "새로운 즉시 통화를 만들기 전에 통화를 중지하세요!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "즉시 통화를 만들 수 없습니다!",
       "JOIN_ROOM": "통화에 참여할 수 없습니다!",
       "NOT_SELECTED_LANGUAGE": "언어를 선택해주세요!",
       "NOT_CHOOSE_IMAGE": "이미지를 선택해주세요!",
@@ -172,7 +178,8 @@
       "USERNAME_MAX": "사용자 이름은 최대 15자까지만 허용됩니다!",
       "USERNAME_PATTERN": "사용자 이름은 문자, 숫자, 밑줄 및 하이픈만 포함할 수 있습니다!",
       "NOT_SUPPORT_PREVIEW": "파일이 너무 크거나 미리보기를 지원하지 않습니다! <br />보려면 다운로드하세요.",
-      "USER_NOT_FOUND": "사용자를 찾을 수 없습니다!"
+      "USER_NOT_FOUND": "사용자를 찾을 수 없습니다!",
+      "CANT_ADD_YOURSELF": "자신을 추가할 수 없습니다!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "프로필이 성공적으로 업데이트되었습니다!",
@@ -206,6 +213,9 @@
     "MIDDO_EXTENSION": "Middo 확장",
     "SIGN_OUT": "로그아웃",
     "SETTINGS": "설정"
+  },
+  "NEW_CALL": {
+    "TEXT_1": "통화에 참여하려면 아래 정보를 입력하세요"
   },
   "TRANSLATION": {
     "HISTORY": "역사",
@@ -346,6 +356,8 @@
     "TITLE": "대화",
     "PEOPLE": "사람",
     "NEW": "새 대화",
+    "NEW_CALL": "통화 시작",
+    "CREATE_INSTANT_CALL": "즉시 통화 시작",
     "SEARCH": "사람 또는 그룹 찾기",
     "PICK_MESSAGE": "채팅을 시작할 대화 선택",
     "PINNED_MESSAGES": "고정된 메시지",
@@ -389,6 +401,7 @@
     "MEMBERS": "구성원",
     "SHOW_ALL": "모두 보기",
     "HIDE": "숨기기",
+    "SHOW": "보이기",
     "CLOUD_SHARED": "미디어 및 파일",
     "MEDIA": "미디어",
     "FILE": "파일",
@@ -401,6 +414,8 @@
     "CHANGE_GROUP_NAME": "그룹 이름 변경",
     "TITLE_DISCUSSION_CALL": "토론은 자동으로 생성됩니다",
     "CONTENT_DISCUSSION_CALL": "이 토론에 보낸 모든 메시지, 파일 및 링크는 그룹 채팅에 저장됩니다. 회의가 끝난 후에도 회원들은 액세스할 수 있습니다.",
+    "TITLE_DISCUSSION_INSTANCE_CALL": "토론은 자동으로 생성됩니다",
+    "CONTENT_DISCUSSION_INSTANCE_CALL": "이 토론에 보낸 모든 메시지, 파일 및 링크는 그룹 채팅에 저장됩니다. 회의가 끝난 후에도 회원들은 액세스할 수 있습니다.",
     "GALLERY_VIEW": "갤러리 보기",
     "SCREEN_DOODLE": "화면 그리기",
     "SCREEN_CAPTURE": "화면 캡처 및 그리기",
@@ -459,10 +474,13 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. 번역 도구",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "대화 중 메시지의 정확도를 높일 수 있는 번역 도구입니다.",
     "VIDEO_AUDIO_SETTINGS": "비디오 및 오디오 설정",
+    "SHOW_INVITATION_LINK": "초대 링크 표시",
     "DOODLE": "그리기",
     "FOCUS_VIEW": "집중 보기",
     "EDIT_MESSAGE": "메시지 편집",
-    "OPEN_IN_BROWSER": "브라우저에서 열기"
+    "OPEN_IN_BROWSER": "브라우저에서 열기",
+    "INVITATION_LINK": "초대 링크",
+    "COPY_INVITATION_LINK": "아래 링크를 복사하여 다른 사람이 이 통화에 참여하도록 보내세요"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo가 권한이 필요합니다 ",
@@ -473,6 +491,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "새 대화",
+    "NEW_CALL": "통화 시작",
     "FILTER": "필터",
     "SETTINGS": "설정",
     "START_CALL": "통화 시작",
@@ -496,6 +515,10 @@
     "RESTRICT_MESSAGE": "이 기능을 활성화하면 알 수 없는 발신자는 문자 메시지만 보낼 수 있으며 해당 메시지는 '대기 중' 탭으로 이동됩니다."
   },
   "MODAL": {
+    "INVITATION_LINK": {
+      "TITLE": "초대 링크",
+      "DESCRIPTION": "아래 링크를 복사하여 다른 사람이 이 통화에 참여하도록 보내세요"
+    },
     "CREATE_STATION": {
       "HEADING": "정류장 만들기",
       "TITLE": "정류장에 <span class='text-primary-500-main'> 정보를 입력하세요 </span>",
@@ -776,7 +799,8 @@
         "NAME_REQUIRED": "공간 이름은 필수입니다",
         "NAME_MAX_LENGTH": "공간 이름은 30자 이내여야 합니다",
         "AVATAR_REQUIRED": "공간 아바타는 필수입니다",
-        "INVALID_EMAIL_MEMBER": "잘못된 이메일 멤버"
+        "INVALID_EMAIL_MEMBER": "유효하지 않은 이메일 멤버",
+        "INVALID_SPACE_NAME": "공간 이름이 잘못되었습니다. 문자, 숫자, 밑줄 및 공백만 허용됩니다."
       },
       "NO_MEMBER": "멤버 없음"
     },
@@ -798,6 +822,7 @@
     "CLIENTS": "고객",
     "STATISTICS": "통계",
     "SCRIPTS": "채팅 스크립트",
+    "FORMS": "양식",
     "SETTINGS": "설정",
     "REPORT": "보고서",
     "CLIENT_LIST": "고객 목록",
@@ -858,6 +883,23 @@
       "LAST_EDITED": "최근 편집",
       "ACTIONS": "조치",
       "ENTER_SCRIPT_NAME": "스크립트 이름 입력"
+    },
+    "FORM": {
+      "PAGE_TITLE": "대화 양식",
+      "SEARCH": "양식 검색",
+      "ADD_FORM": "새 양식 추가",
+      "EDIT_FORM": "양식 편집",
+      "DELETE_FORM": "양식 삭제",
+      "VIEW_FORM": "양식 보기",
+      "PREVIEW_FLOW": "흐름 미리보기",
+      "NO_FORM": "양식을 찾을 수 없습니다",
+      "NAME": "이름",
+      "DESCRIPTION": "설명",
+      "CREATE_BY": "작성자",
+      "CREATE_ON": "작성일",
+      "LAST_EDITED": "마지막 편집",
+      "ACTIONS": "작업",
+      "ENTER_FORM_NAME": "양식 이름 입력"
     },
     "CLIENT": {
       "PAGE_TITLE": "고객 관리",

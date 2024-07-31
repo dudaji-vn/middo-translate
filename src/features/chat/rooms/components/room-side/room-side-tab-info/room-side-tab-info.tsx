@@ -5,18 +5,23 @@ import { RoomInfo } from '../room-info';
 import { RoomLeave } from '../room-leave';
 import { RoomMember } from '../room-member';
 import { RoomSetting } from '../room-setting';
-import { ArrowLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon, SearchIcon } from 'lucide-react';
 import { useRoomSidebarTabs } from '../room-side-tabs/room-side-tabs.hook';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import useClient from '@/hooks/use-client';
 import { RoomBlock } from '../room-block';
+import { Item } from '@/components/data-display';
+import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
+import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
 export interface RoomSideTabInfoProps {}
 
 export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
   const { changeToDefault } = useRoomSidebarTabs();
   const { isBusiness } = useBusinessNavigationData();
+  const { setIsShowSearch } = useRoomSearchStore();
   const isClient = useClient();
   const { room } = useChatBox();
+  const { relationshipStatus } = useCheckRoomRelationship(room);
 
   if (!isClient) return null;
 
@@ -35,6 +40,13 @@ export const RoomSideTabInfo = ({}: RoomSideTabInfoProps) => {
       <div className="-mx-3 -mt-3 bg-[#fcfcfc] pb-2 pt-3 dark:bg-background">
         <RoomInfo room={room} isGuest={isBusiness} />
         <div className={isBusiness ? 'mb-8' : 'my-5'}>
+          <Item
+            onClick={() => setIsShowSearch(true)}
+            className="border-b"
+            leftIcon={<SearchIcon />}
+          >
+            Search messages
+          </Item>
           {!isBusiness && <RoomSetting room={room} />}
           {room.isGroup && (
             <RoomMember

@@ -1,7 +1,7 @@
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '@/components/message-editor';
+} from '@/features/chat/messages/components/message-editor/message-editor';
 import { useAuthStore } from '@/stores/auth.store';
 import { useSendImageMessage } from '../../messages/hooks/use-send-image-message';
 import { useSendMediaMessages } from '../../messages/hooks/use-send-media-messages';
@@ -12,9 +12,10 @@ import { useMessageActions } from '../../messages/components/message-actions';
 
 export interface DiscussionFormProps {
   scrollId: string;
+  isAnonymous?: boolean;
 }
 
-export const DiscussionForm = ({ scrollId }: DiscussionFormProps) => {
+export const DiscussionForm = ({ scrollId, isAnonymous }: DiscussionFormProps) => {
   const currentUser = useAuthStore((s) => s.user);
 
   const { message, addReply, updateReply } = useDiscussion();
@@ -24,18 +25,21 @@ export const DiscussionForm = ({ scrollId }: DiscussionFormProps) => {
     roomId,
     addMessage: addReply,
     parentId: message._id,
+    isAnonymous
   });
 
   const { sendMediaMessages } = useSendMediaMessages({
     roomId,
     addMessage: addReply,
     parentId: message._id,
+    isAnonymous
   });
 
   const { sendTextMessage } = useSendTextMessage({
     roomId,
     addMessage: addReply,
     parentId: message._id,
+    isAnonymous
   });
   const handleSubmit = async (data: MessageEditorSubmitData) => {
     const {

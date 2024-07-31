@@ -12,6 +12,7 @@ import {
   Archive,
   Circle,
   Contact,
+  FileText,
   GitFork,
   LineChartIcon,
   MessagesSquare,
@@ -25,6 +26,7 @@ import { getUserSpaceRole } from '../../settings/_components/space-setting/role.
 import { TSpace } from '../business-spaces';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
 import SpaceNavigator from '../space-navigator/space-navigator';
+import { EBusinessSidebarKeys } from '@/types/business.type';
 
 interface SidebarContent {
   title: string;
@@ -32,33 +34,38 @@ interface SidebarContent {
 }
 
 const sidebarContents: Array<{
-  title: string;
+  title: EBusinessSidebarKeys;
   icon: React.ReactNode;
   roles?: ESPaceRoles[];
 }> = [
   {
-    title: 'conversations',
+    title: EBusinessSidebarKeys.Conversations,
     icon: <MessagesSquare />,
   },
   {
-    title: 'archived',
+    title: EBusinessSidebarKeys.Archived,
     icon: <Archive />,
   },
   {
-    title: 'clients',
+    title: EBusinessSidebarKeys.Clients,
     icon: <Contact />,
   },
   {
-    title: 'statistics',
+    title: EBusinessSidebarKeys.Forms,
+    icon: <FileText />,
+    roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
+  },
+  {
+    title: EBusinessSidebarKeys.Statistic,
     icon: <LineChartIcon />,
   },
   {
-    title: 'scripts',
+    title: EBusinessSidebarKeys.Scripts,
     icon: <GitFork />,
     roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
   },
   {
-    title: 'settings',
+    title: EBusinessSidebarKeys.Settings,
     icon: <Settings />,
     roles: [ESPaceRoles.Admin, ESPaceRoles.Owner],
   },
@@ -100,9 +107,6 @@ const BusinessSidebarContent = ({
                 {
                   hidden: roles && !roles.includes(myRole),
                 },
-                {
-                  // 'max-md:hidden': title === 'settings',
-                },
                 isSelected
                   ? 'bg-primary-500-main hover:!bg-primary-500-main dark:bg-primary [&_svg]:stroke-white'
                   : 'hover:bg-primary-300',
@@ -128,7 +132,7 @@ const BusinessSidebarContent = ({
                   'relative scale-y-0 p-0',
                   shrink
                     ? 'w-fit  md:invisible md:w-0 '
-                    : 'min-w-[300px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
+                    : 'min-w-[268px] scale-y-100 capitalize transition-all delay-100 duration-100 ease-in-out',
                   isSelected
                     ? 'text-white '
                     : 'text-neutral-600 dark:text-neutral-50',
@@ -215,7 +219,7 @@ const BusinessSidebar = ({ space }: { space: TSpace }) => {
           )}
           onMouseLeave={shrinkSheet}
         >
-          <SpaceNavigator />
+          {!isMobile && <SpaceNavigator />}
           <div className="h-full  w-full">
             <BusinessSidebarContent
               shrink={!expand && !isMobile}

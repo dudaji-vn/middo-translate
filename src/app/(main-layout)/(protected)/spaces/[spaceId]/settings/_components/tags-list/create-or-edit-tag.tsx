@@ -169,7 +169,8 @@ export const CreateOrEditTag = ({
                 />
               </div>
               <RHFColorSelector
-                colorNameFiled="color"
+                defaultTheme={DEFAULT_THEME}
+                colorNameField="color"
                 selectedColor={tagColor}
               />
               <div className="flex w-full flex-row items-center justify-end gap-3">

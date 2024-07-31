@@ -1,5 +1,8 @@
 {
   "COMMON": {
+    "DESCRIBE_MIDDO_STATION": "Không gian công cộng để kết nối tất cả người dùng",
+    "ADD_WORK_STATION": "Thêm Trạm ",
+    "JOIN_CALL": "Tham gia cuộc gọi",
     "COLOR": "Màu",
     "INVITE": "Mời",
     "APPLY": "Áp dụng",
@@ -26,6 +29,7 @@
     "DECLINE": "Từ chối",
     "ACCEPT_CALL": "Nghe máy",
     "DELETE": "Xoá",
+    "COPY_AND_CLOSE": "Sao chép & Đóng",
     "ARCHIVE": "Lưu trữ",
     "UNARCHIVE": "Bỏ lưu trữ",
     "COMPLETED": "Hoàn thành",
@@ -110,6 +114,7 @@
     "INFORMATION": "Thông tin",
     "DELETE_STATION": "Xoá Station",
     "Link": "Liên kết",
+    "DETECT_LANGUAGE": "Phát hiện ngôn ngữ",
     "TIME": {
       "CREATED_ON": "Tạo vào",
       "UPDATED_ON": "Cập nhật vào",
@@ -159,6 +164,8 @@
       "NO_ACCESS_MEDIA": "Không thể truy cập vào máy ảnh hoặc microphone của bạn!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File quá lớn hoặc không được hỗ trợ!",
       "UPDATE_ROOM": "Không thể cập nhật thông tin phòng!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "Vui lòng dừng cuộc gọi trước khi tạo cuộc gọi mới!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "Không thể tạo cuộc gọi ngay!",
       "JOIN_ROOM": "Không thể tham gia cuộc gọi!",
       "NOT_SELECTED_LANGUAGE": "Vui lòng chọn ngôn ngữ!",
       "NOT_CHOOSE_IMAGE": "Vui lòng chọn ảnh!",
@@ -172,7 +179,8 @@
       "USERNAME_MAX": "Tên người dùng phải có tối đa 15 ký tự!",
       "USERNAME_PATTERN": "Tên người dùng chỉ chứa chữ cái, số và dấu gạch dưới!",
       "NOT_SUPPORT_PREVIEW": "Nội dung file quá lớn hoặc không được hỗ trợ để xem trước! <br /> Vui lòng tải xuống để xem.",
-      "USER_NOT_FOUND": "Người dùng không tồn tại!"
+      "USER_NOT_FOUND": "Người dùng không tồn tại!",
+      "CANT_ADD_YOURSELF": "Không thể thêm chính mình!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Hồ sơ của bạn đã được cập nhật thành công!",
@@ -206,6 +214,9 @@
     "MIDDO_EXTENSION": "Tiện ích Middo",
     "SIGN_OUT": "Đăng xuất",
     "SETTINGS": "Cài đặt"
+  },
+  "NEW_CALL": {
+    "TEXT_1": "Nhập thông tin dưới đây để tham gia cuộc gọi"
   },
   "TRANSLATION": {
     "HISTORY": "Lịch sử",
@@ -346,6 +357,8 @@
     "TITLE": "Hội thoại",
     "PEOPLE": "Người",
     "NEW": "Hội thoại mới",
+    "NEW_CALL": "Cuộc gọi mới",
+    "CREATE_INSTANT_CALL": "Tạo cuộc gọi ngay",
     "SEARCH": "Tìm kiếm người hoặc nhóm",
     "PICK_MESSAGE": "Chọn một hội thoại để bắt đầu trò chuyện",
     "PINNED_MESSAGES": "Tin nhắn đã ghim",
@@ -390,6 +403,7 @@
     "MEMBERS": "Thành viên",
     "SHOW_ALL": "Xem tất cả",
     "HIDE": "Ẩn",
+    "SHOW": "Hiện",
     "CLOUD_SHARED": "Phương tiện & Tệp",
     "MEDIA": "Media",
     "FILE": "Tệp tin",
@@ -402,6 +416,8 @@
     "CHANGE_GROUP_NAME": "Thay đổi tên nhóm",
     "TITLE_DISCUSSION_CALL": "Cuộc thảo luận được tạo tự động",
     "CONTENT_DISCUSSION_CALL": "Tất cả những tin nhắn, tệp và đường dẫn được gửi trong cuộc thảo luận này sẽ được lưu lại trong cuộc hội thoại của nhóm. Các thành viên có thể truy cập vào chúng ngay cả khi cuộc họp đã kết thúc",
+    "TITLE_DISCUSSION_INSTANCE_CALL": "Cuộc thảo luận được tạo tự động",
+    "CONTENT_DISCUSSION_INSTANCE_CALL": "Tất cả những tin nhắn, tệp và đường dẫn được gửi trong cuộc thảo luận này sẽ được lưu lại trong cuộc hội thoại của nhóm. Các thành viên có thể truy cập vào chúng ngay cả khi cuộc họp đã kết thúc",
     "GALLERY_VIEW": "Xem dạng lưới",
     "SCREEN_DOODLE": "Vẽ theo màn hình",
     "SCREEN_CAPTURE": "Chụp màn hình và vẽ",
@@ -460,10 +476,13 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Công cụ dịch",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Công cụ dịch có thể giúp bạn tăng độ chính xác của tin nhắn trong cuộc trò chuyện.",
     "VIDEO_AUDIO_SETTINGS": "Cài đặt video và âm thanh",
+    "SHOW_INVITATION_LINK": "Hiển thị liên kết mời",
     "DOODLE": "Vẽ",
     "FOCUS_VIEW": "Tập trung",
     "EDIT_MESSAGE": "Chỉnh sửa tin nhắn",
-    "OPEN_IN_BROWSER": "Mở trong trình duyệt"
+    "OPEN_IN_BROWSER": "Mở trong trình duyệt",
+    "INVITATION_LINK": "Liên kết mời",
+    "COPY_INVITATION_LINK": "Sao chép và gửi liên kết dưới đây cho người khác tham gia cuộc gọi này"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo cần quyền của bạn để ",
@@ -474,6 +493,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "Hội thoại mới",
+    "NEW_CALL": "Cuộc gọi mới",
     "FILTER": "Bộ lọc",
     "SETTINGS": "Cài đặt",
     "START_CALL": "Bắt đầu cuộc gọi",
@@ -497,6 +517,10 @@
     "RESTRICT_MESSAGE": "Khi bạn bật tính năng này, người gửi không xác định chỉ có thể gửi tin nhắn văn bản cho bạn và tin nhắn của họ sẽ được chuyển đến tab “Đang chờ”"
   },
   "MODAL": {
+    "INVITATION_LINK": {
+      "TITLE": "Liên kết mời",
+      "DESCRIPTION": "Sao chép và gửi liên kết dưới đây cho người khác tham gia cuộc gọi này"
+    },
     "CREATE_STATION": {
       "HEADING": "Tạo Trạm",
       "TITLE": "Cung cấp <span class='text-primary-500-main'> thông tin cho trạm của bạn </span>",
@@ -778,7 +802,8 @@
         "NAME_REQUIRED": "Tên không gian là bắt buộc",
         "NAME_MAX_LENGTH": "Tên không gian phải ít hơn 30 ký tự",
         "AVATAR_REQUIRED": "Ảnh đại diện không gian là bắt buộc",
-        "INVALID_EMAIL_MEMBER": "Thành viên email không hợp lệ"
+        "INVALID_EMAIL_MEMBER": "Thành viên email không hợp lệ",
+        "INVALID_SPACE_NAME": "Tên không gian không hợp lệ, chỉ chấp nhận chữ cái, số và dấu gạch dưới, khoảng trắng"
       },
       "NO_MEMBER": "Không có thành viên nào"
     },
@@ -800,6 +825,7 @@
     "CLIENTS": "Khách hàng",
     "STATISTICS": "Thống kê",
     "SCRIPTS": "Kịch bản trò chuyện",
+    "FORMS": "Biểu mẫu",
     "SETTINGS": "Cài đặt",
     "REPORT": "Thống kê",
     "CLIENT_LIST": "Danh sách khách hàng",
@@ -860,6 +886,23 @@
       "LAST_EDITED": "Chỉnh sửa lần cuối",
       "ACTIONS": "Hành động",
       "ENTER_SCRIPT_NAME": "Nhập tên kịch bản"
+    },
+    "FORM": {
+      "PAGE_TITLE": "Mẫu Hội thoại",
+      "SEARCH": "Tìm kiếm mẫu",
+      "ADD_FORM": "Thêm mẫu mới",
+      "EDIT_FORM": "Chỉnh sửa mẫu",
+      "DELETE_FORM": "Xóa mẫu",
+      "VIEW_FORM": "Xem mẫu",
+      "PREVIEW_FLOW": "Xem trước luồng",
+      "NO_FORM": "Không tìm thấy mẫu",
+      "NAME": "Tên",
+      "DESCRIPTION": "Mô tả",
+      "CREATE_BY": "Tạo bởi",
+      "CREATE_ON": "Tạo vào ngày",
+      "LAST_EDITED": "Chỉnh sửa lần cuối",
+      "ACTIONS": "Hành động",
+      "ENTER_FORM_NAME": "Nhập tên mẫu"
     },
     "CLIENT": {
       "PAGE_TITLE": "Quản lý khách hàng",

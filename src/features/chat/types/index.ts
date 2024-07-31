@@ -3,4 +3,5 @@ export type SidebarTabs =
   | 'search'
   | 'group'
   | 'individual'
-  | 'station_settings';
+  | 'station_settings'
+  | 'new_call';

@@ -9,6 +9,7 @@ export const SOCKET_CONFIG = {
       NEW: 'message.new',
       SEND: 'message.send',
       UPDATE: 'message.update',
+      UNREAD_UPDATE: 'message.unread_update',
       DELETE: 'message.delete',
       REPLY: {
         NEW: 'message.reply.new',
@@ -31,6 +32,7 @@ export const SOCKET_CONFIG = {
       UPDATE: 'room.update',
       DELETE: 'room.delete',
       DELETE_CONTACT: 'room.delete_contact',
+      WAITING_UPDATE: 'room.waiting_update',
     },
     INBOX: {
       NEW: 'inbox.new',

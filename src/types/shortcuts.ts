@@ -44,8 +44,12 @@ export enum SCCall {
   TOGGLE_LIVE_CAPTION = 'TOGGLE_LIVE_CAPTION',
 }
 
+export enum SCSetting {
+  TOGGLE_MODE = 'TOGGLE_MODE',
+}
+
 export const SHORTCUTS: Record<
-  SCConversation | SCTranslation | SCCall,
+  SCConversation | SCTranslation | SCCall | SCSetting,
   string[]
 > = {
   // Conversation  ===============================================
@@ -94,6 +98,8 @@ export const SHORTCUTS: Record<
   [SCCall.SWITCH_TO_GALLERY_VIEW]: ['ctrl', 'alt', '©'],
   [SCCall.START_STOP_SCREEN_DOODLE]: ['ctrl', 'alt', '÷'],
   [SCCall.TOGGLE_LIVE_CAPTION]: ['ctrl', 'alt', '¬'],
+  // Setting ===============================================
+  [SCSetting.TOGGLE_MODE]: ['ctrl_or_alt', 'm'],
 };
 
 export const MAPPED_MAC_KEYS: Record<string, string> = {

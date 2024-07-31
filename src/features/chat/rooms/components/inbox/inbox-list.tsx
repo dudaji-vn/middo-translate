@@ -1,12 +1,4 @@
-import {
-  Fragment,
-  forwardRef,
-  memo,
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-} from 'react';
+import { forwardRef, memo, useEffect, useMemo, useRef } from 'react';
 
 import { InfiniteScroll } from '@/components/infinity-scroll';
 import { SOCKET_CONFIG } from '@/configs/socket';
@@ -16,6 +8,7 @@ import {
   useGetPinnedRooms,
 } from '@/features/chat/rooms/hooks/use-pin-room';
 import { useChatStore } from '@/features/chat/stores';
+import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { User } from '@/features/users/types';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useCursorPaginationQuery } from '@/hooks/use-cursor-pagination-query';
@@ -27,23 +20,22 @@ import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import useStore from '@/stores/use-store';
 import { cn } from '@/utils/cn';
 import { useQueryClient } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
-import { Room } from '../../types';
-import { PinnedRoom } from '../pinned-room';
-import { RoomItem } from '../room-item';
-import { EmptyInbox } from './empty-inbox';
-import { InboxType } from './inbox';
-import ViewSpaceInboxFilter from './view-space-inbox-filter';
 import { isEmpty } from 'lodash';
+import { useParams } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import {
   ALPHABET_LIST,
   ALPHABET_SELECTOR,
   OTHER_CHARACTER,
 } from '../../configs/alphabet-list';
-import { useTranslation } from 'react-i18next';
-import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
+import { USE_IS_MUTED_ROOM_QUERY_KEY } from '../../hooks/use-is-muted-room';
+import { Room } from '../../types';
 import { SelectedFilterRoom } from '../filter/selected-filter-room';
-import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
+import { PinnedRoom } from '../pinned-room';
+import { RoomItem } from '../room-item';
+import { EmptyInbox } from './empty-inbox';
+import { InboxType } from './inbox';
+import ViewSpaceInboxFilter from './view-space-inbox-filter';
 
 interface InboxListProps {
   notifyToTab?: (tab: InboxType, ping?: boolean) => void;
@@ -142,6 +134,7 @@ const InboxList = forwardRef<HTMLDivElement, InboxListProps>(
     const updateRoom = (room: Partial<Room> & { _id: string }) => {
       refetch();
       queryClient.invalidateQueries(USE_GET_PINNED_ROOMS_KEY);
+      queryClient.invalidateQueries([USE_IS_MUTED_ROOM_QUERY_KEY, room._id]);
     };
 
     const deleteRoom = (roomId: string) => {

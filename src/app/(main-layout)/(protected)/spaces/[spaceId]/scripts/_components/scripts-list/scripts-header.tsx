@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { Menu, Plus } from 'lucide-react';
 import { Typography } from '@/components/data-display';
 import { useSidebarStore } from '@/stores/sidebar.store';
+import SpaceNavigator from '../../../_components/space-navigator/space-navigator';
+import { useAppStore } from '@/stores/app.store';
 export type ScriptsHeaderProps = {
   titleProps?: React.HTMLProps<HTMLSpanElement>;
   menuProps?: React.HTMLProps<HTMLDivElement>;
@@ -27,11 +29,13 @@ const ScriptsHeader = ({
 }: ScriptsHeaderProps) => {
   const { t } = useTranslation('common');
   const { setOpenSidebar, openSidebar } = useSidebarStore();
+  const isMobile = useAppStore((state) => state.isMobile);
   return (
     <div
       className="flex  flex-col justify-between gap-4 px-1 py-3 font-medium md:flex-row md:items-center md:px-10"
       {...props}
     >
+      {isMobile && <SpaceNavigator />}
       <div className="flex flex-row items-center justify-start" {...menuProps}>
         <Button.Icon
           onClick={() => setOpenSidebar(!openSidebar, true)}

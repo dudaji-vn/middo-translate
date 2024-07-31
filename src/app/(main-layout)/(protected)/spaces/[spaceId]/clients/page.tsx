@@ -16,9 +16,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import DownloadButton from './clients-table/download-button';
 import { SearchInput } from '@/components/data-entry';
-import ClientsPagination, {
-  ClientPagination,
-} from './clients-table/pagination/clients-pagination';
+
 import { useGetClients } from '@/features/statistics/hooks/use-get-clients';
 import { Typography } from '@/components/data-display';
 import { Menu } from 'lucide-react';
@@ -30,6 +28,9 @@ import {
   getCoreRowModel,
   getSortedRowModel,
 } from '@tanstack/react-table';
+import ClientSidePagination, {
+  TPagination,
+} from '@/components/actions/pagination/client-side-pagination';
 
 export type Client = Pick<User, '_id' | 'email' | 'name' | 'phoneNumber'> & {
   firstConnectDate: string;
@@ -79,7 +80,7 @@ const Page = ({
   const items = formatClientData(data?.items || []);
   const totalPage = data?.totalPage || 0;
 
-  const pagination: ClientPagination = {
+  const pagination: TPagination = {
     limit: limit,
     currentPage,
     totalPage: totalPage || 0,
@@ -181,7 +182,7 @@ const Page = ({
           }}
         />
       </div>
-      <ClientsPagination
+      <ClientSidePagination
         pagination={pagination}
         limitOptions={ROWS_PER_PAGE_OPTIONS}
         onPageChange={onPageChange}

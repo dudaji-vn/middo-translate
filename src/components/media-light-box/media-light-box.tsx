@@ -42,6 +42,9 @@ import {
   DrawerContent,
   DrawerOverlay,
 } from '../data-display/drawer';
+import { announceToParent } from '@/utils/iframe-util';
+import { useBusinessNavigationData } from '@/hooks';
+import { useMediaSettingStore } from '@/stores/media-setting.store';
 
 export interface Media {
   url: string;
@@ -76,10 +79,10 @@ function MediaLightBox(props: MediaLightBoxProps) {
   const setIndex = useMediaLightBoxStore((state) => state.setIndex);
   const setFiles = useMediaLightBoxStore((state) => state.setFiles);
   const fetchNextPage = useMediaLightBoxStore((state) => state.fetchNextPage);
+  const setFullScreenStore = useMediaSettingStore((state) => state.setFullScreenStore);
   const setFetchNextPage = useMediaLightBoxStore(
     (state) => state.setFetchNextPage,
   );
-
   const onDownload = () => {
     const file = files[current || 0];
     if (!file) return;
@@ -187,6 +190,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
           isFullScreenVideo: isVideoFullScreen,
         };
         if (isVideoFullScreen && index == current) {
+          setFullScreenStore(true);
           return createPortal(<VideoPlayer {...props} />, document.body);
         }
         return <VideoPlayer {...props} />;
@@ -292,7 +296,7 @@ function MediaLightBox(props: MediaLightBoxProps) {
       shouldScaleBackground={true}
       dismissible={isMobile ? allowClose : false}
     >
-      <DrawerContent className="z-50 h-full w-full border-none">
+      <DrawerContent className="z-50 h-full w-full border-none rounded-none hidden-drawer-bar">
         <div className="-mt-6 flex h-full w-full flex-col overflow-hidden bg-black/90 p-3">
           <div className="z-20 ml-auto flex w-fit gap-2 rounded-xl bg-black/40 p-2">
             <Button.Icon

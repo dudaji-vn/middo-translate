@@ -10,7 +10,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { ArrowLeftIcon, PaintbrushIcon, SearchIcon, XIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/utils/cn';
-import { useBusinessNavigationData } from '@/hooks';
+import { useBusinessNavigationData, useStationNavigationData } from '@/hooks';
 import { useAppStore } from '@/stores/app.store';
 import { SearchInput, SearchInputRef } from '@/components/data-entry';
 import { useSideChatStore } from '../../stores/side-chat.store';
@@ -88,7 +88,7 @@ export const SearchTab = forwardRef<HTMLDivElement, SearchTabProps>(
             </div>
           )}
           {searchValue ? (
-            <SearchTabs searchValue={searchValue} />
+            <SearchTabs onItemClicked={handleBack} searchValue={searchValue} />
           ) : (
             <SearchHistory />
           )}
@@ -101,10 +101,16 @@ SearchTab.displayName = 'SearchTab';
 
 const SearchHistory = () => {
   const setSearchValue = useSearchStore((state) => state.setSearchValue);
+  const { stationId } = useStationNavigationData();
+  const { spaceId } = useBusinessNavigationData();
   const { t } = useTranslation('common');
   const { data, refetch } = useQuery({
     queryKey: ['searchHistory'],
-    queryFn: searchApi.getKeywords,
+    queryFn: () =>
+      searchApi.getKeywords({
+        stationId,
+        spaceId: spaceId as string,
+      }),
   });
   const { mutate: clearAll } = useMutation({
     mutationFn: searchApi.clearKeywords,
@@ -121,14 +127,14 @@ const SearchHistory = () => {
   });
 
   return (
-    <div className="pt-3">
+    <div className="flex flex-1 flex-col overflow-hidden pt-3">
       <Section
         label={t('COMMON.SEARCH_HISTORY')}
         labelRight={
           <Button
             disabled={!data?.length}
             onClick={() => {
-              clearAll();
+              clearAll({ stationId, spaceId: spaceId as string });
             }}
             startIcon={<PaintbrushIcon />}
             variant={'ghost'}
@@ -140,24 +146,29 @@ const SearchHistory = () => {
           </Button>
         }
       >
-        <div>
-          {data?.map((item) => (
-            <SearchKeyword
-              onClick={setSearchValue.bind(null, item.keyword)}
-              onClear={
-                item.keyword
-                  ? () => {
-                      deleteOne(item.keyword);
-                    }
-                  : undefined
-              }
-              key={item.keyword}
-            >
-              {item.keyword}
-            </SearchKeyword>
-          ))}
-        </div>
+        <></>
       </Section>
+      <div className="flex-1 overflow-auto">
+        {data?.map((item) => (
+          <SearchKeyword
+            onClick={setSearchValue.bind(null, item.keyword)}
+            onClear={
+              item.keyword
+                ? () => {
+                    deleteOne({
+                      keyword: item.keyword,
+                      stationId,
+                      spaceId: spaceId as string,
+                    });
+                  }
+                : undefined
+            }
+            key={item.keyword}
+          >
+            {item.keyword}
+          </SearchKeyword>
+        ))}
+      </div>
     </div>
   );
 };

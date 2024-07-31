@@ -27,7 +27,6 @@ messaging.onBackgroundMessage((payload) => {
   };
   self.registration.showNotification(notificationTitle, notificationOptions);
   self.addEventListener('notificationclick', (event) => {
-    event.notification.close();
     event.waitUntil(
       clients
         .matchAll({ type: 'window', includeUncontrolled: true })
@@ -36,6 +35,10 @@ messaging.onBackgroundMessage((payload) => {
             const client = clientList[i];
             if ('focus' in client) {
               client.focus();
+              client.postMessage({
+                action: 'redirect-from-notificationclick',
+                url: event.notification.data.url,
+              });
               if (event.notification.data && event.notification.data.url) {
                 return client.navigate(event.notification.data.url); // Navigate to the URL after focusing
               }
@@ -51,5 +54,6 @@ messaging.onBackgroundMessage((payload) => {
           return null;
         }),
     );
+    event.notification.close();
   });
 });

@@ -16,7 +16,6 @@ import { useRoomSidebarTabs } from '@/features/chat/rooms/components/room-side/r
 import { SearchMessageBar } from '@/features/chat/rooms/components/search-message-bar';
 import { useChatBox } from '@/features/chat/rooms/contexts';
 import { Room } from '@/features/chat/rooms/types';
-import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
 import { useAppStore } from '@/stores/app.store';
 import { Allotment } from 'allotment';
 
@@ -37,7 +36,7 @@ const ChatRoomContent = () => {
             <ChatRoomMain room={room} />
           </Allotment.Pane>
           {currentSide && (
-            <Allotment.Pane minSize={250} maxSize={600} preferredSize={400}>
+            <Allotment.Pane minSize={280} maxSize={600} preferredSize={400}>
               <RoomSide />
             </Allotment.Pane>
           )}
@@ -48,18 +47,18 @@ const ChatRoomContent = () => {
 };
 
 export const ChatRoomMain = ({ room }: { room: Room }) => {
-  const { isShowSearch } = useRoomSearchStore();
-
   return (
     <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card md:rounded-none">
       <ChatBoxHeader />
       <PinnedBar />
-      {isShowSearch && <SearchMessageBar roomId={room._id} />}
+      <SearchMessageBar roomId={room._id} />
       <MediaUploadProvider>
         <MediaUploadDropzone>
           <MessagesBoxProvider room={room}>
             <MessageActions>
-              {room.status === 'waiting_group' && room.isGroup ? null : (
+              {room.status === 'waiting_group' && room.isGroup ? (
+                <div className="flex-1" />
+              ) : (
                 <>
                   <MessageBox room={room} />
                   <RoomTyping />

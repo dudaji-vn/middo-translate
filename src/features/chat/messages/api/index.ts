@@ -51,6 +51,13 @@ export const messageApi = {
     return res.data;
   },
 
+  async getOneAnonymous(id: string, userId: string) {
+    const res: Response<Message> = await axiosWithInterceptor.get(
+      `${basePath}/${id}/anonymous/${userId}`,
+    );
+    return res.data;
+  },
+
   async remove({ id, type }: { id: string; type: 'me' | 'all' }) {
     const res: Response<Message> = await axiosWithInterceptor.delete(
       `${basePath}/${id}`,
@@ -164,6 +171,13 @@ export const messageApi = {
     return res.data;
   },
 
+  async getRepliesAnonymous(id: string, userId: string) {
+    const res: Response<Message[]> = await axiosWithInterceptor.get(
+      `${basePath}/${id}/replies/anonymous/${userId}`,
+    );
+    return res.data;
+  },
+
   async pin(id: string) {
     const res: Response<Message> = await axiosWithInterceptor.post(
       `${basePath}/${id}/pin`,
@@ -183,6 +197,19 @@ export const messageApi = {
       {
         to,
       },
+    );
+    return res.data;
+  },
+  async markAsReadAllChild(id: string) {
+    const res: Response<Message> = await axiosWithInterceptor.patch(
+      `${basePath}/${id}/reply/mark-all-as-read`,
+    );
+    return res.data;
+  },
+
+  async countUnreadChild(id: string) {
+    const res: Response<{ count: number }> = await axiosWithInterceptor.get(
+      `${basePath}/${id}/reply/unread-count`,
     );
     return res.data;
   },

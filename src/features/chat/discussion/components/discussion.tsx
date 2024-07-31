@@ -11,6 +11,9 @@ import { DiscussionForm } from './discussion-form';
 import { DiscussionSocket } from './discussion-socket';
 import { MainMessage } from './main-message';
 import { RepliesBox } from './replies-box';
+import { useAuthStore } from '@/stores/auth.store';
+import { USE_COUNT_UNREAD_CHILD_KEY } from '../../messages/hooks/use-count-unread-child';
+import { deepCopy } from '@/utils/deep-copy';
 
 type Props = {
   messageId: string;
@@ -30,12 +33,12 @@ export const DiscussionContext = createContext<DiscussionContextProps>(
 const Discussion = ({ messageId }: Props) => {
   const messageBoxRef = useRef<HTMLDivElement>(null);
   const messageBoxId = useId();
-
   const { data } = useQuery({
     queryKey: ['message', messageId],
     queryFn: () => messageApi.getOne(messageId),
     enabled: !!messageId,
   });
+
   const repliesKey = ['message-replies', messageId];
   const queryClient = useQueryClient();
   const { data: messages } = useQuery({
@@ -82,6 +85,7 @@ const Discussion = ({ messageId }: Props) => {
           : m,
       ),
     );
+    queryClient.invalidateQueries([USE_COUNT_UNREAD_CHILD_KEY, messageId]);
   };
   if (!data) return null;
   return (
@@ -90,7 +94,7 @@ const Discussion = ({ messageId }: Props) => {
         <DiscussionContext.Provider
           value={{
             message: data,
-            replies: messages || [],
+            replies: deepCopy(messages || []).reverse(),
             addReply,
             replaceReply,
             updateReply,

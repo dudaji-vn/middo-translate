@@ -24,6 +24,7 @@ export async function POST(request: Request) {
         item?.time || A_MOTH
       );
       cookies().set(item.key, item.value, {
+        ...item.config,
         maxAge: typeof item?.time === 'number' ? item.time : A_MOTH,
       });
     }

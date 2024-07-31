@@ -8,13 +8,13 @@ export default function useHandleEventElectron() {
     const {isElectron, ipcRenderer} = useElectron();
     const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
     const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
-    const room = useVideoCallStore(state => state.room);
+    const call = useVideoCallStore(state => state.call);
 
     // Stop Share Screen when leave or switch call
     useEffect(() => {
         if(!isElectron || !ipcRenderer) return;
         ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
-    }, [ipcRenderer, isElectron, room?._id])
+    }, [ipcRenderer, isElectron, call?._id])
 
     // Event Toggle Camera or Mic
     useEffect(() => {

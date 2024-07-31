@@ -1,6 +1,6 @@
 import { Station } from '@/features/stations/types/station.types';
 import { BaseEntity } from '@/types';
-export type UserRelationshipStatus = 'none' | 'blocking' | 'blocked';
+export type UserRelationshipStatus = 'none' | 'blocking' | 'blocked' | 'me';
 type UserStatus =
   | 'pending'
   | 'active'

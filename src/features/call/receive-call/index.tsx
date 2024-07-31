@@ -22,17 +22,17 @@ const ReceiveVideoCall = () => {
   const setRequestCall = useVideoCallStore((state) => state.setRequestCall);
   const me = useAuthStore((state) => state.user);
   
-  const setRoom = useVideoCallStore((state) => state.setRoom);
-  const room = useVideoCallStore((state) => state.room);
+  const setCall = useVideoCallStore((state) => state.setCall);
+  const call = useVideoCallStore((state) => state.call);
   const { playAudio, stopAudio } = usePlayAudio('/mp3/ringing.mp3');
   const { isElectron, ipcRenderer } = useElectron();
-  const listenToCall = useCallback(({ call, user, type, message, room }: IRequestCall) => {
+  const listenToCall = useCallback(({ call: callRequest, user, type, message, room }: IRequestCall) => {
       if (user._id == me?._id) return;
       if (requestCall) return;
-      if(room && room.roomId === call.roomId) return;
+      if(call && call.roomId === callRequest.roomId) return;
       const data = { 
-        id: call?.roomId, 
-        call, 
+        id: callRequest?.roomId, 
+        call: callRequest, 
         user,
         type,
         message,
@@ -54,7 +54,7 @@ const ReceiveVideoCall = () => {
         ipcRenderer.send(ELECTRON_EVENTS.RECEIVE_CALL_INVITE, data);
       }
     },
-    [ipcRenderer, isElectron, me?._id, requestCall, room, setRequestCall],
+    [ipcRenderer, isElectron, me?._id, requestCall, call, setRequestCall],
   );
   const declineCall = useCallback(() => {
     socket.emit(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, {
@@ -66,7 +66,7 @@ const ReceiveVideoCall = () => {
 
   const acceptCall = useCallback(() => {
     setRequestCall();
-    setRoom(requestCall?.call);
+    setCall(requestCall?.call);
     setTimeout(() => {
       // Auto decline call to avoid hangup on another devices
       socket.emit(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, {
@@ -74,7 +74,7 @@ const ReceiveVideoCall = () => {
         userId: me?._id,
       });
     }, 3000);
-  }, [me?._id, requestCall?.call, setRequestCall, setRoom]);
+  }, [me?._id, requestCall?.call, setRequestCall, setCall]);
 
   useEffect(() => {
     socket.on(SOCKET_CONFIG.EVENTS.CALL.INVITE_TO_CALL, listenToCall);

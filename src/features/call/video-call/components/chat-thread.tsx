@@ -10,6 +10,9 @@ import { useVideoCallStore } from '../../store/video-call.store';
 import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import Tip from '@/components/data-display/tip/tip';
+import InvitationLink from './invitation-link';
+import { useAuthStore } from '@/stores/auth.store';
+import { CALL_TYPE } from '../../constant/call-type';
 
 export default function ChatThread({ className }: { className?: string }) {
 
@@ -18,23 +21,23 @@ export default function ChatThread({ className }: { className?: string }) {
   const isFullScreen = useVideoCallStore((state) => state.isFullScreen);
   const isShowChat = useVideoCallStore((state) => state.isShowChat);
   const setShowChat = useVideoCallStore((state) => state.setShowChat);
-  const room = useVideoCallStore((state) => state.room);
+  const call = useVideoCallStore((state) => state.call);
   const messageId = useVideoCallStore((state) => state.messageId);
   const setMessageId = useVideoCallStore((state) => state.setMessageId);
   const isMobile = useAppStore((state) => state.isMobile);
-  
   const [isShowAlert, setShowAlert] = useState(true);
+  const isShowInviteSection = useVideoCallStore(state => state.isShowInviteSection)
+
   useEffect(() => {
     if (messageId) return;
-    const callId = room?._id;
+    const callId = call?._id;
     if (!callId) return;
     const handleGetMessageId = async () => {
       const { data } = await getMessageIdFromCallIdService(callId);
       setMessageId(data);
     };
     handleGetMessageId();
-  }, [room, messageId, setMessageId]);
-
+  }, [call, messageId, setMessageId]);
   if (!messageId) return null;
   return (
     <aside
@@ -66,10 +69,17 @@ export default function ChatThread({ className }: { className?: string }) {
           </div>
         </div>
         <div className="flex flex-1 flex-col overflow-hidden">
-        <Tip hideTip={!isShowAlert} closeTip={()=>setShowAlert(false)} tipTitle={t('CONVERSATION.TITLE_DISCUSSION_CALL')} tipContent={t('CONVERSATION.CONTENT_DISCUSSION_CALL')} className='p-3' />
+        <Tip hideTip={!isShowAlert} 
+          closeTip={()=>setShowAlert(false)} 
+          tipTitle={call?.type == CALL_TYPE.ANONYMOUS ? t('CONVERSATION.TITLE_DISCUSSION_INSTANCE_CALL') : t('CONVERSATION.TITLE_DISCUSSION_CALL')} 
+          tipContent={call?.type == CALL_TYPE.ANONYMOUS ? t('CONVERSATION.CONTENT_DISCUSSION_INSTANCE_CALL') : t('CONVERSATION.CONTENT_DISCUSSION_CALL')}
+          className='p-3' />
+          {call?.type == CALL_TYPE.ANONYMOUS && isShowInviteSection && <div className='p-3'>
+            <InvitationLink />
+          </div>}
           <div className="flex-1 overflow-hidden">
             <div className="h-full">
-              <Discussion messageId={messageId} />
+              <Discussion messageId={messageId}/>
             </div>
           </div>
         </div>

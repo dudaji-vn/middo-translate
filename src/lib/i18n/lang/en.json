@@ -1,12 +1,14 @@
 {
   "COMMON": {
+    "DESCRIBE_MIDDO_STATION": "Public space to connect all users",
+    "JOIN_CALL": "Join Call",
     "COLOR": "Color",
     "INVITE": "Invite",
     "APPLY": "Apply",
     "PREVIEW": "Preview",
     "FAILED_TO": "Failed to {{action}}",
     "SUCCESS_TO": "Successfully {{action}}",
-    "NO_DATA": "No data",
+    "NO_DATA": "Empty data",
     "OFFLINE": "Offline",
     "ONLINE": "Online",
     "IN_USE": "In use",
@@ -26,6 +28,7 @@
     "DECLINE": "Decline",
     "ACCEPT_CALL": "Accept Call",
     "DELETE": "Delete",
+    "COPY_AND_CLOSE": "Copy & Close",
     "ARCHIVE": "Archive",
     "UNARCHIVE": "Unarchive",
     "COMPLETE": "Complete",
@@ -112,6 +115,7 @@
     "STATION_INFORMATION": "Station's information",
     "STATION_SETTINGS": "Station settings",
     "LINK": "Link",
+    "DETECT_LANGUAGE": "Detect language",
     "TIME": {
       "CREATED_ON": "Created on",
       "UPDATED_ON": "Updated on",
@@ -161,6 +165,8 @@
       "NO_ACCESS_MEDIA": "Unable to access your camera or microphone!",
       "FILE_TOO_LARGE_OR_NOT_SUPPORT": "File too large or not supported!",
       "UPDATE_ROOM": "Can not update room information!",
+      "STOP_CALL_BEFORE_CREATE_INSTANT": "Please stop your call before creating a new instant call!",
+      "CAN_NOT_CREATE_INSTANT_CALL": "Can not create instant call!",
       "JOIN_ROOM": "Unable to join call!",
       "NOT_SELECTED_LANGUAGE": "Please select a language!",
       "NOT_CHOOSE_IMAGE": "Please choose an image!",
@@ -174,7 +180,8 @@
       "USERNAME_MAX": "Username must be at most 15 characters!",
       "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
       "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view.",
-      "USER_NOT_FOUND": "User not found!"
+      "USER_NOT_FOUND": "User not found!",
+      "CANT_ADD_YOURSELF": "You can't add yourself!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -208,6 +215,9 @@
     "MIDDO_EXTENSION": "Middo Extension",
     "SIGN_OUT": "Sign Out",
     "SETTINGS": "Settings"
+  },
+  "NEW_CALL": {
+    "TEXT_1": "Enter the information below to join Call"
   },
   "TRANSLATION": {
     "HISTORY": "History",
@@ -352,6 +362,8 @@
     "TITLE": "Conversation",
     "PEOPLE": "People",
     "NEW": "New conversation",
+    "NEW_CALL": "New Call",
+    "CREATE_INSTANT_CALL": "Create an instant Call",
     "SEARCH": "Search for people or groups",
     "PICK_MESSAGE": "Pick a conversation to start chatting",
     "PINNED_MESSAGES": "Pinned messages",
@@ -395,6 +407,7 @@
     "MEMBERS": "Members",
     "SHOW_ALL": "Show all",
     "HIDE": "Hide",
+    "SHOW": "Show",
     "CLOUD_SHARED": "Media & Files",
     "MEDIA": "Media",
     "FILE": "File",
@@ -408,6 +421,8 @@
     "CHANGE_GROUP_NAME": "Change group name",
     "TITLE_DISCUSSION_CALL": "Discussion is created automatically",
     "CONTENT_DISCUSSION_CALL": "All messages, files, and links sent in this discussion will be saved in the group chat. Members can access them even after the meeting ends.",
+    "TITLE_DISCUSSION_INSTANCE_CALL": "Discussion is created automatically",
+    "CONTENT_DISCUSSION_INSTANCE_CALL": "All messages, files, and links sent in this discussion will be saved in the group chat. Members can access them even after the meeting ends.",
     "GALLERY_VIEW": "Gallery view",
     "SCREEN_DOODLE": "Screen doodle",
     "SCREEN_CAPTURE": "Screen capture",
@@ -467,10 +482,13 @@
     "EMPTY_WELCOME_ITEM_3_TITLE": "3. Translate tool",
     "EMPTY_WELCOME_ITEM_3_DESCRIPTION": "Translate tool can help you rise the accuracy of your message in conversation.",
     "VIDEO_AUDIO_SETTINGS": "Video and audio settings",
+    "SHOW_INVITATION_LINK": "Show invitation link",
     "DOODLE": "Doodle",
     "FOCUS_VIEW": "Focus view",
     "EDIT_MESSAGE": "Edit message",
-    "OPEN_IN_BROWSER": "Open in browser"
+    "OPEN_IN_BROWSER": "Open in browser",
+    "INVITATION_LINK": "Invitation link",
+    "COPY_INVITATION_LINK": "Copy & send the link below for others to join this Call"
   },
   "NOTIFICATION": {
     "MESSAGE": "Middo needs your permission to ",
@@ -481,6 +499,7 @@
   },
   "TOOL_TIP": {
     "NEW_CONVERSATION": "New Conversation",
+    "NEW_CALL": "New Call",
     "FILTER": "Filter",
     "SETTINGS": "Settings",
     "START_CALL": "Start Call",
@@ -504,6 +523,10 @@
     "RESTRICT_MESSAGE": "When you turn it on, unknown sender just only can send text message to you and their messages will be move to “Waiting” tab"
   },
   "MODAL": {
+    "INVITATION_LINK": {
+      "TITLE": "Invitation Link",
+      "DESCRIPTION": "Copy and send the link below for others to join this Call"
+    },
     "CREATE_STATION": {
       "HEADING": "Create Work Station",
       "TITLE": "Give <span class='text-primary-500-main'> your station </span> some information",
@@ -793,7 +816,8 @@
         "NAME_REQUIRED": "Space name is required",
         "NAME_MAX_LENGTH": "Space name must be less than 30 characters",
         "AVATAR_REQUIRED": "Space avatar is required",
-        "INVALID_EMAIL_MEMBER": "Invalid email member"
+        "INVALID_EMAIL_MEMBER": "Invalid email member",
+        "INVALID_SPACE_NAME": "Invalid space name, only accept letters, numbers, underscores, and spaces"
       },
       "NO_MEMBER": "No members"
     },
@@ -815,6 +839,7 @@
     "CLIENTS": "Clients",
     "STATISTICS": "Statistics",
     "SCRIPTS": "Conversation Scripts",
+    "FORMS": "Forms",
     "SETTINGS": "Settings",
     "REPORT": "Statistics",
     "CHART": {
@@ -874,6 +899,23 @@
       "LAST_EDITED": "Last edited",
       "ACTIONS": "Actions",
       "ENTER_SCRIPT_NAME": "Enter script name"
+    },
+    "FORM": {
+      "PAGE_TITLE": "Conversation Forms",
+      "SEARCH": "Search for forms",
+      "ADD_FORM": "Create new form",
+      "EDIT_FORM": "Edit form",
+      "DELETE_FORM": "Delete form",
+      "VIEW_FORM": "View form",
+      "PREVIEW_FLOW": "Preview flow",
+      "NO_FORM": "No forms found",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "CREATE_BY": "Create by",
+      "CREATE_ON": "Create on",
+      "LAST_EDITED": "Last edited",
+      "ACTIONS": "Actions",
+      "ENTER_FORM_NAME": "Enter form name"
     },
     "CLIENT": {
       "PAGE_TITLE": "Clients Management",

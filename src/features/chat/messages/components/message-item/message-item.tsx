@@ -36,6 +36,7 @@ import { MessageItemReactionBar } from './message-extension/message-item-reactio
 import { MessageItemParticipantJoinCall } from './message-extension/message-item-participant-join-call';
 import { Button } from '@/components/actions';
 import { useMessageActions } from '../message-actions';
+import MessageItemFlowFormTrigger from './message-item-flow-form-trigger';
 
 export interface MessageProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -58,6 +59,8 @@ export interface MessageProps
   isEditing?: boolean;
   isDiscussion?: boolean;
   isLast?: boolean;
+  keyword?: string;
+  seenTrackerDisabled?: boolean;
 }
 
 type MessageItemContextProps = {
@@ -103,6 +106,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
       isDraw = false,
       isEditing = false,
       isDiscussion = false,
+      seenTrackerDisabled = false,
+      keyword,
       ...props
     },
     ref,
@@ -124,6 +129,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     } = useBoolean(false);
 
     const actionsFromScriptChat = message.actions;
+
+    const extensionForm =
+      message?.type === 'flow-form' ? message.form : undefined;
     return (
       <MessageItemContext.Provider
         value={{
@@ -133,7 +141,7 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
           setActive,
         }}
       >
-        {!isDraw && <SeenTracker guestId={guestId} />}
+        {!isDraw && !seenTrackerDisabled && <SeenTracker guestId={guestId} />}
         {isSystemMessage ? (
           <MessageItemSystem message={message} isMe={isMe} />
         ) : (
@@ -210,8 +218,16 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                           mediaLength > 1 && 'rounded-none',
                         )}
                       >
-                        {message.content && (
+                        {!!extensionForm && (
+                          <MessageItemFlowFormTrigger
+                            guestId={guestId}
+                            message={message}
+                            form={extensionForm}
+                          />
+                        )}
+                        {message.content && !extensionForm && (
                           <Content
+                            keyword={keyword}
                             showDetails={showDetail}
                             position={isMe ? 'right' : 'left'}
                             message={message}
@@ -312,7 +328,9 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                   </span>
                 </span>
               )}
-              <MessageItemFlowActions actions={actionsFromScriptChat || []} />
+              {message.type !== 'flow-form' && !isEditing && !isDraw && (
+                <MessageItemFlowActions actions={actionsFromScriptChat || []} />
+              )}
             </div>
             {direction === 'top' && (
               <ReadByUsers

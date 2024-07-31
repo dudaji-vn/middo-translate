@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { Edge } from 'reactflow';
+import { Edge, getConnectedEdges } from 'reactflow';
 import 'reactflow/dist/style.css';
 
 import { Handle, Position } from 'reactflow';
 import { Button } from '@/components/actions';
-import { MessageSquare, Plus, Trash2 } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, Zap } from 'lucide-react';
 import { FlowNode } from '../design-script-chat-flow';
 import { useFormContext } from 'react-hook-form';
 import Ping from '../ping';
@@ -86,12 +86,73 @@ function ContainerNode(node: CustomNodeProps) {
     };
     setValue(FLOW_KEYS.NODES, [...newNodes, updatedNode]);
   };
+  const removeAllChildrenOfContainer = (btns: FlowNode[]) => {
+    const newNodes = deepDeleteNodes(nodes, btns, edges);
+    const newEdge = edges.filter((e: { source: string; target: string }) => {
+      return !btns.some((btn: { id: string }) => e.source === btn.id);
+    });
+    // console.log('newNodes', newNodes);
+    // console.log('newEdges', newEdge);
+
+    setValue(FLOW_KEYS.NODES, newNodes);
+    setValue(FLOW_KEYS.EDGES, newEdge);
+    return {
+      newNodes,
+      newEdge,
+    };
+  };
+
+  const deleteCurrent = ({
+    newNodes,
+    newEdge,
+  }: {
+    newNodes: any[];
+    newEdge: Edge[];
+  }) => {
+    const nodesWithoutCurrent =
+      newNodes?.filter(
+        //@ts-ignore
+        (n: FlowNode) => n.id !== node.id,
+      ) || [];
+    const updatedEdges =
+      newEdge?.filter(
+        (e: { source: string; target: string }) =>
+          e.source !== node.id && e.target !== node.id,
+      ) || [];
+    setValue(FLOW_KEYS.NODES, nodesWithoutCurrent);
+    setValue(FLOW_KEYS.EDGES, updatedEdges);
+  };
+
+  const handleTrashClick = () => {
+    const parent = nodes.find(
+      (n: { id: string }) => n.id === currentNode?.parentId,
+    );
+    console.log('parent', parent);
+    console.log('currentNode', currentNode);
+    switch (parent?.type) {
+      case 'form': {
+        const currentChilds = nodes.filter(
+          (n: { parentNode: string }) => n.parentNode === node.id,
+        );
+        // console.log('currentChilds', currentChilds);
+        const { newNodes, newEdge } =
+          removeAllChildrenOfContainer(currentChilds);
+        deleteCurrent({
+          newNodes,
+          newEdge,
+        });
+        break;
+      }
+      default: // delete node
+        convertContainerToOption();
+    }
+  };
 
   const formFieldId = `${FLOW_KEYS.NODES}.${currentNodeIndex}.data.content`;
 
   return (
     <div
-      className="relative h-[500px] w-[400px] rounded-2xl border bg-white dark:bg-background dark:border dark:border-neutral-900 overflow-hidden"
+      className="relative h-[500px] w-[400px] overflow-hidden rounded-2xl border bg-white dark:border dark:border-neutral-900 dark:bg-background"
       style={{ width, height }}
     >
       <Handle
@@ -102,15 +163,15 @@ function ContainerNode(node: CustomNodeProps) {
       <div className="flex flex-col gap-2 p-3 dark:bg-background">
         <div className="flex flex-row items-center justify-between">
           <div className="flex flex-row items-center gap-2 text-primary-500-main">
-            <MessageSquare size={18} />
-            <p>{data.label}</p>
+            <Zap size={18} />
+            <p>Actions</p>
           </div>
           <div className="flex flex-row items-center gap-2  text-primary-500-main">
             <Button.Icon
               color={'error'}
               disabled={data?.readonly}
               size={'xs'}
-              onClick={convertContainerToOption}
+              onClick={handleTrashClick}
               className="text-neutral-600 hover:text-error-500"
               variant={'ghost'}
             >

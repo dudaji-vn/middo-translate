@@ -7,6 +7,7 @@ import { SearchTab } from './chat-sidebar-tab-search';
 import { SidebarTabs } from '../../types';
 import { useSideChatStore } from '../../stores/side-chat.store';
 import { StationSettingTab } from './chat-sidebar-station-settings';
+import { NewCallTab } from './chat-sidebar-tab-new-call';
 export interface ChatSidebarTabsProps
   extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -28,6 +29,9 @@ const tabMap: Record<
   station_settings: {
     component: <StationSettingTab />,
   },
+  new_call: {
+    component: <NewCallTab />,
+  }
 };
 
 export const ChatSidebarTabs = forwardRef<HTMLDivElement, ChatSidebarTabsProps>(

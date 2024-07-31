@@ -12,9 +12,13 @@ import { useParticipantVideoCallStore } from '../store/participant.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { StatusParticipant } from '../interfaces/participant';
 import { useAppStore } from '@/stores/app.store';
+import useHelpDesk from '../hooks/use-help-desk';
 
-export default function VideoCall() {
-  const room = useVideoCallStore(state => state.room);
+interface VideoCallProps {
+  isShowFullScreenButton?: boolean
+}
+export default function VideoCall({isShowFullScreenButton = true}: VideoCallProps) {
+  const call = useVideoCallStore(state => state.call);
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const setFullScreen = useVideoCallStore(state => state.setFullScreen);
   const participants = useParticipantVideoCallStore(state => state.participants)
@@ -22,6 +26,8 @@ export default function VideoCall() {
   const setRequestCall = useVideoCallStore(state => state.setRequestCall)
   const updateStatusParticipant = useParticipantVideoCallStore(state => state.updateStatusParticipant)
   const isMobile = useAppStore(state => state.isMobile)
+  const { isHelpDeskCall } = useHelpDesk();
+
   useEffect(() => {
     const declineCall = (payload: {
       roomId: string,
@@ -31,7 +37,7 @@ export default function VideoCall() {
       if(!userIds?.length) return;
       userIds.forEach(userId => {
         let participant = participants.find(p => p.user._id === userId)
-        if ((room?._id == roomId || room?.roomId == roomId) && participant) {
+        if ((call?._id == roomId || call?.roomId == roomId) && participant) {
           if (participant.status == StatusParticipant.WAITING) {
             updateStatusParticipant(userId, StatusParticipant.DECLINE)
           }
@@ -45,14 +51,14 @@ export default function VideoCall() {
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.CALL.DECLINE_CALL, declineCall)
     }
-  }, [participants, room?._id, room?.roomId, setRequestCall, updateStatusParticipant, user?._id]);
+  }, [participants, call?._id, call?.roomId, setRequestCall, updateStatusParticipant, user?._id]);
 
   useEffect(() => {
     if(isMobile) {
       setFullScreen(true)
     }
   }, [isMobile, setFullScreen])
-  if (!room) return null;
+  if (!call) return null;
   return (
     <CallDraggable
       className={cn(
@@ -61,11 +67,20 @@ export default function VideoCall() {
       )}
     >
       <VideoCallProvider>
-        <VideoCallHeader />
+        <VideoCallHeader 
+          isShowFullScreenButton={isShowFullScreenButton}
+        />
         <div className="relative flex-1 overflow-hidden">
           <div className="flex h-full w-full flex-col">
             <VideoCallContent />
-            <VideoCallActions />
+            <VideoCallActions 
+              isShowChat={!isHelpDeskCall}
+              isShowDrawer={!isHelpDeskCall}
+              isShowDropdown={!isHelpDeskCall}
+              isShowVideoSetting={isHelpDeskCall}
+              isShowToggleCaption={isHelpDeskCall}
+              className={isHelpDeskCall ? 'md:gap-3' : ''}
+            />
           </div>
         </div>
       </VideoCallProvider>

@@ -78,20 +78,6 @@ export const IndividualSideCreate = (props: IndividualSideCreateProps) => {
                   </Link>
                 );
               })}
-              {recData?.map((user) => {
-                return (
-                  <Link key={user?._id} href={`/talk/${user?._id}`}>
-                    <UserItem user={user} />
-                  </Link>
-                );
-              })}
-              {recData?.map((user) => {
-                return (
-                  <Link key={user?._id} href={`/talk/${user?._id}`}>
-                    <UserItem user={user} />
-                  </Link>
-                );
-              })}
             </Section>
           </div>
         )}

@@ -30,8 +30,8 @@ interface HelpDeskCallProps {
 }
 
 const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
-  const setRoom = useVideoCallStore((state) => state.setRoom);
-  const room = useVideoCallStore((state) => state.room);
+  const setCall = useVideoCallStore((state) => state.setCall);
+  const call = useVideoCallStore((state) => state.call);
   const setFullScreen = useVideoCallStore((state) => state.setFullScreen);
   const setLayout = useVideoCallStore((state) => state.setLayout);
   const layout = useVideoCallStore((state) => state.layout);
@@ -51,9 +51,9 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
     const fetchCall = async () => {
       try {
         let res = await getHelpDeskCallInformation(businessId, userId);
-        const { call, status, user } = res.data;
+        const { call: callRes, status, user } = res.data;
         if (status === STATUS.MEETING_STARTED) {
-          setRoom(call);
+          setCall(callRes);
           setUserHelpDesk(user);
           setFullScreen(true);
           setLayout(VIDEO_CALL_LAYOUTS.P2P_VIEW);
@@ -65,7 +65,7 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
       }
     };
     fetchCall();
-  }, [params, setData, setFullScreen, setLayout, setRoom]);
+  }, [params, setData, setFullScreen, setLayout, setCall]);
 
   useEffect(() => {
     if(userHelpDesk && user?._id != userHelpDesk?._id) {
@@ -76,10 +76,10 @@ const HelpDeskCall = ({ params }: HelpDeskCallProps) => {
   }, [userHelpDesk]);
 
   useEffect(() => {
-    if(userHelpDesk && room) {
+    if(userHelpDesk && call) {
       setStatus('JOINED');
     }
-  }, [userHelpDesk, room, setStatus]);
+  }, [userHelpDesk, call, setStatus]);
 
   
   useEffect(() => {
@@ -127,7 +127,7 @@ const HelpDeskCallContent = () => {
   useHelpDeskCall();
   return (
     <>
-      <VideoCall />
+      <VideoCall isShowFullScreenButton={false}/>
       <CommonComponent />
     </>
   );

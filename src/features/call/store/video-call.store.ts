@@ -6,8 +6,9 @@ import CaptionInterface from '../interfaces/caption.interface';
 import { User } from '@/features/users/types';
 import { CallType } from '../constant/call-type';
 import { Station } from '@/features/stations/types/station.types';
-type ModalType = 'forward-call' | 'add-user' | 'video-setting' | 'leave-call' | 'stop-doodle' | 'choose-screen'
-export interface IRoom {
+import { Room } from '@/features/chat/rooms/types';
+type ModalType = 'forward-call' | 'add-user' | 'video-setting' | 'leave-call' | 'stop-doodle' | 'choose-screen' | 'show-invitation'
+export interface Call {
   _id: string;
   name: string;
   roomId: string;
@@ -23,19 +24,13 @@ export interface IRoom {
 
 export interface IRequestCall {
   id: string;
-  call: IRoom & {
+  call: Call & {
     avatar?: string;
     participants?: User[];
   };
   user: User;
-  room: IRoom & {
-    avatar?: string;
-    participants?: User[];
-    space?: {
-      _id: string;
-      name: string;
-      avatar: string;
-    }
+  room: Omit<Room, 'station'> & {
+    station: Station;
   };
   message?: string;
   space?: {
@@ -46,7 +41,7 @@ export interface IRequestCall {
   type: 'direct' | 'group' | 'help_desk';
 }
 export type VideoCallState = {
-  room: IRoom | null | undefined;
+  call: Call | null | undefined;
   layout: string;
   isDoodle: boolean;
   isDrawing: boolean;
@@ -63,7 +58,8 @@ export type VideoCallState = {
   requestCall?: IRequestCall;
   captions: CaptionInterface[];
   messageId: string;
-  setRoom: (room?: IRoom) => void;
+  isShowInviteSection: boolean;
+  setCall: (call?: Call) => void;
   isAllowDrag: boolean;
   setAllowDrag: (allowDrag: boolean) => void;
   setLayout: (layout?: VideoCallLayout) => void;
@@ -83,10 +79,11 @@ export type VideoCallState = {
   setMessageId: (messageId: string) => void;
   clearStateVideoCall: () => void;
   setModal: (modal?: ModalType) => void;
+  setShowInviteSection: (isShowInviteSection: boolean) => void;
 };
 
 export const useVideoCallStore = create<VideoCallState>()((set) => ({
-  room: null,
+  call: null,
   layout: VIDEO_CALL_LAYOUTS.GALLERY_VIEW,
   usersRequestJoinRoom: [],
   isDoodle: false,
@@ -105,10 +102,11 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   modal: undefined,
   captions: [],
   messageId: '',
-  setRoom: (room?: IRoom) => {
-    set(() => ({ room }));
-  },
+  isShowInviteSection: true,
   isAllowDrag: false,
+  setCall: (call?: Call) => {
+    set(() => ({ call }));
+  },
   setAllowDrag: (allowDrag: boolean) => {
     set(() => ({ isAllowDrag: allowDrag }));
   },
@@ -161,6 +159,9 @@ export const useVideoCallStore = create<VideoCallState>()((set) => ({
   },
   setModal: (modal?: ModalType) => {
     set(() => ({ modal }));
+  },
+  setShowInviteSection: (isShowInviteSection: boolean) => {
+    set(() => ({ isShowInviteSection }));
   },
   clearStateVideoCall: () => {
     set(() => ({

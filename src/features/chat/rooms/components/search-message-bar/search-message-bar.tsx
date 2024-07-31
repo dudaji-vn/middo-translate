@@ -20,7 +20,6 @@ import { useMutation } from '@tanstack/react-query';
 import { ChevronDown, ChevronUpIcon, SearchIcon } from 'lucide-react';
 import { forwardRef, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRoomId } from '../../hooks/use-roomId';
 export interface SearchMessageBarProps
   extends React.HTMLAttributes<HTMLDivElement> {
   roomId?: string;
@@ -30,14 +29,14 @@ export const SearchMessageBar = forwardRef<
   HTMLDivElement,
   SearchMessageBarProps
 >(({ roomId, ...props }, ref) => {
-  const { toggleIsShowSearch } = useRoomSearchStore();
-  const [currentValue, setCurrentValue] = useState('');
+  const { setIsShowSearch, isShowSearch } = useRoomSearchStore();
   const { t } = useTranslation('common');
   const [searchInput, setSearchInput] = useState('');
   const [open, setOpen] = useState(false);
   const [searchId, setSearchId] = useState('');
   const disabled = !searchInput || !roomId;
-  const { pushParam, removeParam } = useSetParams();
+  const { pushParam, removeParam, searchParams, removeParams } = useSetParams();
+  const currentValue = searchParams?.get('keyword') || '';
 
   const { data, mutate, isLoading } = useMutation({
     mutationFn: searchApi.messageInRoom,
@@ -45,8 +44,7 @@ export const SearchMessageBar = forwardRef<
 
   const handleSearch = () => {
     if (disabled) return;
-    mutate({ roomId, params: { q: searchInput } });
-    setCurrentValue(searchInput);
+    pushParam('keyword', searchInput);
   };
   const messages = useMemo(() => {
     const result = data || [];
@@ -63,6 +61,15 @@ export const SearchMessageBar = forwardRef<
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchId]);
+
+  useEffect(() => {
+    if (currentValue && roomId) {
+      setSearchInput(currentValue);
+      setIsShowSearch(true);
+      mutate({ roomId, params: { q: currentValue } });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentValue, roomId]);
 
   const { canMoveDown, canMoveUp } = useMemo(() => {
     if (messages.length === 0) return { canMoveUp: false, canMoveDown: false };
@@ -85,6 +92,11 @@ export const SearchMessageBar = forwardRef<
     const index = messages.findIndex((message) => message._id === searchId);
     setSearchId(messages[index - 1]?._id || '');
   };
+  const handleClose = () => {
+    removeParams(['keyword', 'search_id']);
+    setIsShowSearch(false);
+  };
+  if (!isShowSearch) return null;
 
   return (
     <div ref={ref} {...props} className={'flex flex-col gap-3 border-b p-3'}>
@@ -163,10 +175,7 @@ export const SearchMessageBar = forwardRef<
         </div>
         <Button
           color="default"
-          onClick={() => {
-            toggleIsShowSearch();
-            removeParam('search_id');
-          }}
+          onClick={handleClose}
           shape="square"
           variant="default"
           size="xs"

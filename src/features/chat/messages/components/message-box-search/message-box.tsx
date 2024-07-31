@@ -20,6 +20,7 @@ import { cn } from '@/utils/cn';
 import { useQuery } from '@tanstack/react-query';
 import { useMessageActions } from '../message-actions';
 import { TimeDisplay } from '../time-display';
+import { useSearchParams } from 'next/navigation';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 30; // 1 day
 export type MessageGroup = {
@@ -50,7 +51,8 @@ export const MessageBoxSearch = ({
         params: { limit: 20 },
       }),
   });
-
+  const searchParams = useSearchParams();
+  const keyword = searchParams?.get('keyword') || '';
   const { isFetching, items, hasNextPage, fetchNextPage } =
     useCursorPaginationQuery<Message>({
       queryKey: ['prev-search-in-room', messageId],
@@ -116,7 +118,7 @@ export const MessageBoxSearch = ({
         const activeMessage = document.querySelector('.active-message');
         if (activeMessage) {
           activeMessage.scrollIntoView({
-            behavior: 'smooth',
+            behavior: 'instant',
             block: 'center',
             inline: 'center',
           });
@@ -296,15 +298,15 @@ export const MessageBoxSearch = ({
                       ...message,
                       isPinned: !!pinnedBy,
                     };
+                    const isActive = message._id === messageId;
                     return (
                       <MessageItem
-                        className={cn(
-                          message._id === messageId && 'active-message',
-                        )}
+                        className={cn(isActive && 'active-message')}
                         isEditing={
                           message._id === messageEditing?._id &&
                           action === 'edit'
                         }
+                        keyword={isActive ? keyword : undefined}
                         // actionsDisabled={room.isHelpDesk}
                         reactionDisabled={room.isHelpDesk}
                         guestId={guestId}

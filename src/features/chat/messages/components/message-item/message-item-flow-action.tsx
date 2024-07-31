@@ -7,7 +7,7 @@ import React, { useMemo } from 'react';
 import { messageApi } from '../../api';
 import { useMessagesBox } from '../message-box';
 import { createLocalMessage } from '../../utils';
-import { Message } from '../../types';
+import { Message, MessageType } from '../../types';
 import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 
 export type MessageNode = Omit<FlowNode, 'position' | 'data'> & {
@@ -29,7 +29,6 @@ const MessageNode = ({
     content: originalContent,
     translations,
   } = messageNode.data || {};
-
   const [me, bot] = useMemo(() => {
     const me = room?.participants.find(
       // @ts-ignore
@@ -101,15 +100,31 @@ const MessageNode = ({
       const childrenActions = nodes.filter(
         (node) => node.parentNode === nextNode?.id,
       );
+      console.log('nextNodeType:>>', nextNode.type);
+      let messageType: MessageType = 'text';
+      switch (nextNode.type) {
+        case 'option':
+        case 'button':
+          messageType = 'flow-actions';
+          break;
+        case 'form':
+          messageType = 'flow-form';
+          break;
+        default:
+          messageType = 'text';
+          break;
+      }
+
       onSendBotMessage({
         ...createLocalMessage({
           sender: bot!,
           content: nextNode.data?.content,
+          formId: nextNode.form,
           language: '',
         }),
         status: 'sent',
         roomId: room?._id,
-        type: nextNode.type === 'option' ? 'flow-actions' : 'text',
+        type: messageType,
         mentions: [],
         actions: nextNode.type === 'message' ? undefined : childrenActions,
       });

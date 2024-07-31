@@ -4,7 +4,7 @@ import {
 } from '@/features/chat/messages/components/message-item/message-item-text.style';
 import { useEffect, useState } from 'react';
 
-import { RichTextView } from '@/components/rich-text-view';
+import { RichTextView } from '@/features/chat/messages/components/message-editor/rich-text-view';
 import { messageVariants } from '@/features/chat/messages/components/message-item/variants';
 import { Message } from '@/features/chat/messages/types';
 import { cn } from '@/utils/cn';

@@ -25,7 +25,7 @@ export const LanguageSelect = ({
   const id = useId();
   return (
     <div className="flex h-[42px] w-full flex-1 items-center gap-2">
-      <div className="flex h-full w-full max-w-full gap-2 overflow-hidden rounded-xl font-semibold lg:w-fit lg:max-w-[calc(100%-48px)] lg:bg-neutral-50 lg:p-1 dark:bg-neutral-900">
+      <div className="flex h-full w-full max-w-full gap-2 overflow-hidden rounded-xl font-semibold dark:bg-neutral-900 lg:w-fit lg:max-w-[calc(100%-48px)] lg:bg-neutral-50 lg:p-1">
         {languageCodes.map((code) => (
           <LanguageItem
             shrinkAble={shrinkAble}
@@ -51,7 +51,7 @@ export const LanguageSelect = ({
   );
 };
 
-const LanguageItem = ({
+export const LanguageItem = ({
   active,
   code,
   className,
@@ -74,14 +74,16 @@ const LanguageItem = ({
       onClick={onClick}
       className={cn(
         'relative flex h-full w-full items-center justify-between gap-2 rounded-xl px-2 py-3 lg:w-fit lg:justify-center lg:px-3',
-        active ? 'text-primary ' : 'hidden text-neutral-700 dark:text-neutral-50 lg:flex',
+        active
+          ? 'text-primary '
+          : 'hidden text-neutral-700 dark:text-neutral-50 lg:flex',
         className,
       )}
     >
       {active && (
         <motion.span
           layoutId={layoutId || 'bubble'}
-          className="absolute inset-0 z-10 rounded-xl border border-primary-200 dark:border-primary-900 bg-primary-100 dark:bg-neutral-950 lg:rounded-lg"
+          className="absolute inset-0 z-10 rounded-xl border border-primary-200 bg-primary-100 dark:border-primary-900 dark:bg-neutral-950 lg:rounded-lg"
           transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
           exit={{ boxShadow: 'none' }}
         />

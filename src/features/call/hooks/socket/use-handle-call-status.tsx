@@ -8,37 +8,36 @@ import { useParticipantVideoCallStore } from "../../store/participant.store";
 interface ICallStatus {
     userId: string;
     status: boolean;
-    roomId: string;
+    callId: string;
 }
 export default function useHandleCallStatus() {
     const user = useAuthStore((state) => state.user);
     const isTurnOnMic = useMyVideoCallStore((state) => state.isTurnOnMic);
-    const room = useVideoCallStore((state) => state.room);
+    const call = useVideoCallStore((state) => state.call);
     const changeMicStatusParticipant = useParticipantVideoCallStore((state) => state.changeMicStatusParticipant);
-    const participants = useParticipantVideoCallStore((state) => state.participants);
 
     // Send Mic Status change
     useEffect(() => {
-        if(!room) return;
+        if(!call) return;
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, {
             userId: user?._id,
             status: isTurnOnMic,
-            roomId: room._id
+            roomId: call._id
         });
-    }, [isTurnOnMic, room, user?._id, participants?.length])
+    }, [isTurnOnMic, call, user?._id])
 
 
     // Listen to Mic change
     useEffect(() => {
-        if(!room) return;
+        if(!call) return;
         socket.on(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, (data: ICallStatus) => {
-            const { userId, status, roomId } = data;
-            if(roomId !== room._id) return;
+            const { userId, status, callId } = data;
+            if(callId !== call._id) return;
             changeMicStatusParticipant(userId, status);
         });
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE);
         }
-    }, [changeMicStatusParticipant, room])
+    }, [changeMicStatusParticipant, call])
 
 }

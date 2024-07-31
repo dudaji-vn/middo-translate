@@ -6,7 +6,7 @@ import BlockChatBar from '@/components/block-chat-bar';
 import {
   MessageEditor,
   MessageEditorSubmitData,
-} from '@/components/message-editor';
+} from '@/features/chat/messages/components/message-editor/message-editor';
 import { SOCKET_CONFIG } from '@/configs/socket';
 import { CreateMessage } from '@/features/chat/messages/api';
 import { useMessageActions } from '@/features/chat/messages/components/message-actions';
@@ -143,6 +143,7 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         guest,
         room._id,
         room.participants,
+        room.station,
         room.status,
         sendImageMessage,
         sendMediaMessages,
@@ -204,22 +205,26 @@ export const ChatBoxFooter = forwardRef<HTMLDivElement, ChatBoxFooterProps>(
         </div>
       );
     }
+
     return (
       <div className={'relative w-full border-t p-2'}>
         {relationshipStatus === 'blocking' && <RoomBlockContent room={room} />}
-        {room.status === 'waiting_group' &&
-          relationshipStatus !== 'blocking' && (
-            <>
-              {isAdmin ? (
-                <RoomWaitingContent room={room} />
-              ) : (
-                <RoomActions>
-                  <RoomResponseContent room={room} />
-                </RoomActions>
-              )}
-            </>
-          )}
-        {room.status === 'waiting' && <RoomWaitingContent room={room} />}
+        {room.status === 'waiting' && relationshipStatus !== 'blocking' && (
+          <>
+            {isAdmin ? (
+              <RoomWaitingContent room={room} />
+            ) : (
+              <RoomActions>
+                <RoomResponseContent room={room} />
+              </RoomActions>
+            )}
+          </>
+        )}
+        {room.status === 'waiting_group' && (
+          <RoomActions>
+            <RoomResponseContent room={room} />
+          </RoomActions>
+        )}
 
         {isShowEditor && (
           <MessageEditor

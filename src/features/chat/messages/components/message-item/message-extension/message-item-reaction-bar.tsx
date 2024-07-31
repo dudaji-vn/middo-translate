@@ -12,6 +12,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  Typography,
 } from '@/components/data-display';
 
 import { Button } from '@/components/actions';
@@ -100,13 +101,13 @@ export const MessageItemReactionBar = ({
             </AlertDialogTitle>
           </AlertDialogHeader>
           <Tabs value={tabValue} className="w-full px-3">
-            <TabsList className="justify-start">
+            <TabsList className="items-end justify-start">
               <TabsTrigger
                 value="all"
                 onClick={() => setTabValue('all')}
                 className="w-16 !rounded-none"
               >
-                {t('COMMON.ALL')}
+                <Typography> {t('COMMON.ALL')}</Typography>
               </TabsTrigger>
               {keys.map((key) => {
                 const react = reactionsByEmoji[key][0];
@@ -119,7 +120,9 @@ export const MessageItemReactionBar = ({
                   >
                     <span className="text-xl"> {react.emoji}</span>
                     <div className="ml-1">
-                      <span>{reactionsByEmoji[react.emoji]?.length}</span>
+                      <Typography>
+                        {reactionsByEmoji[react.emoji]?.length}
+                      </Typography>
                     </div>
                   </TabsTrigger>
                 );
@@ -249,11 +252,11 @@ const ReactionItem = (props: {
           <span className="mx-[2px] inline-block text-xs">
             {reactions[0].emoji}
           </span>
+          <span className="mx-[2px] mr-1 text-xs text-neutral-600">
+            {reactions.length}
+          </span>
         </TooltipTrigger>
       </Tooltip>
-      <span className="mx-[2px] mr-1 text-xs text-neutral-600">
-        {reactions.length}
-      </span>
     </div>
   );
 };

@@ -11,8 +11,65 @@ import { cn } from '@/utils/cn';
 import React, { useEffect, useMemo } from 'react';
 import { useDebounce } from 'usehooks-ts';
 import { TSpace } from '../../../../_components/business-spaces';
+import { BusinessForm } from '@/types/forms.type';
+import { Button } from '@/components/actions';
+import { FileText } from 'lucide-react';
+import { isEmpty } from 'lodash';
+import Link from 'next/link';
+import MessageTriggerForm from './trigger-form-button';
 
 const DEBOUNCED_TRANSLATE_TIME = 800;
+
+const NormalMessageContent = ({
+  content,
+  englishContent,
+  translatedContent,
+  isTranslating,
+  isTyping,
+}: {
+  content: string;
+  englishContent: string;
+  translatedContent: string;
+  isTranslating: boolean;
+  isTyping: boolean;
+}) => {
+  return (
+    <div className="relative space-y-2">
+      <div className="relative w-fit min-w-10 overflow-hidden rounded-[20px] bg-neutral-50 px-2 py-1">
+        <div className="break-word-mt tiptap editor-view prose w-full max-w-none bg-neutral-50 px-3 py-2 text-start text-sm text-current focus:outline-none prose-strong:text-current">
+          {content}
+        </div>
+        <div className={'relative mt-2 min-w-10'}>
+          <TriangleSmall
+            fill={'#e6e6e6'}
+            position="top"
+            className="absolute left-4 top-0 -translate-y-full"
+          />
+          <div
+            className={cn(
+              'relative mb-1 mt-2 rounded-xl bg-neutral-100 p-1 px-3 text-neutral-600',
+            )}
+          >
+            <Text
+              value={englishContent || translatedContent}
+              className={cn(
+                'text-start text-sm font-light',
+                isTyping && ' pr-4',
+              )}
+            />
+            <Spinner
+              size="sm"
+              className={
+                isTranslating || isTyping ? 'absolute right-1 top-1 ' : 'hidden'
+              }
+              color="white"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const PreviewReceivedMessage = ({
   sender,
@@ -22,13 +79,17 @@ export const PreviewReceivedMessage = ({
   debouncedTime = DEBOUNCED_TRANSLATE_TIME,
   englishContent,
   onTranlatedChange,
+  formId,
+  openFormPreview = () => {},
   ...props
 }: {
   space?: TSpace;
   sender?: User | null;
   content?: string;
   englishContent?: string;
+  formId?: string;
   onTranlatedChange?: (translated: string) => void;
+  openFormPreview?: () => void;
   debouncedTime?: number;
   media?: Media[];
 } & React.HTMLAttributes<HTMLDivElement>) => {
@@ -63,6 +124,36 @@ export const PreviewReceivedMessage = ({
       });
   }, [debouncedContent]);
 
+  const children = useMemo(() => {
+    if (!!formId) {
+      return (
+        <MessageTriggerForm
+          _id={formId}
+          name={content}
+          onOpen={openFormPreview}
+        />
+      );
+    } else {
+      return (
+        <NormalMessageContent
+          content={content}
+          englishContent={englishContent || ''}
+          translatedContent={translatedContent}
+          isTranslating={isTranslating}
+          isTyping={isTyping}
+        />
+      );
+    }
+  }, [
+    formId,
+    content,
+    openFormPreview,
+    englishContent,
+    translatedContent,
+    isTranslating,
+    isTyping,
+  ]);
+
   return (
     <div
       {...props}
@@ -78,44 +169,7 @@ export const PreviewReceivedMessage = ({
             className="bg-primary-200 p-1"
           />
         </div>
-        <div className="max-h-[320px] overflow-y-auto">
-          <div className="relative space-y-2">
-            <div className="relative w-fit min-w-10 overflow-hidden rounded-[20px] bg-neutral-50 px-2 py-1">
-              <div className="break-word-mt tiptap editor-view prose w-full max-w-none bg-neutral-50 px-3 py-2 text-start text-sm text-current focus:outline-none prose-strong:text-current">
-                {content}
-              </div>
-              <div className={'relative mt-2 min-w-10'}>
-                <TriangleSmall
-                  fill={'#e6e6e6'}
-                  position="top"
-                  className="absolute left-4 top-0 -translate-y-full"
-                />
-                <div
-                  className={cn(
-                    'relative mb-1 mt-2 rounded-xl bg-neutral-100 p-1 px-3 text-neutral-600',
-                  )}
-                >
-                  <Text
-                    value={englishContent || translatedContent}
-                    className={cn(
-                      'text-start text-sm font-light',
-                      isTyping && ' pr-4',
-                    )}
-                  />
-                  <Spinner
-                    size="sm"
-                    className={
-                      isTranslating || isTyping
-                        ? 'absolute right-1 top-1 '
-                        : 'hidden'
-                    }
-                    color="white"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="max-h-[320px] overflow-y-auto">{children}</div>
       </div>
       {Number(media?.length) > 0 && (
         <div className="pl-6">

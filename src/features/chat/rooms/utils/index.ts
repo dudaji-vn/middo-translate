@@ -1,7 +1,6 @@
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Room, RoomStatus } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
-import usePlatformNavigation from '@/hooks/use-platform-navigation';
 import moment from 'moment';
 
 export function generateRoomDisplay({
@@ -64,7 +63,7 @@ export function generateRoomDisplay({
     subtitle: '@' + participant.username,
     avatar: participant.avatar,
     link: inCludeLink ? link : '',
-    status,
+    status: participant.status === 'deleted' ? 'cannot_message' : status,
   };
 }
 

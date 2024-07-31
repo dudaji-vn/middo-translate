@@ -11,10 +11,9 @@ import {
 } from '@/components/feedback';
 import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { User } from '@/features/users/types';
-import { AtSignIcon, Link, SearchIcon, UserPlus2Icon } from 'lucide-react';
+import { AtSignIcon, Link, UserPlus2Icon } from 'lucide-react';
 import {
   forwardRef,
-  use,
   useEffect,
   useImperativeHandle,
   useMemo,

@@ -1,12 +1,16 @@
+import { Button } from '@/components/actions';
 import { Section } from '@/components/data-display';
 import { Tabs, TabsList, TabsTrigger } from '@/components/navigation';
 import { ROUTE_NAMES } from '@/configs/route-name';
 import { Message } from '@/features/chat/messages/types';
 import { RoomItem } from '@/features/chat/rooms/components/room-item';
 import { Room } from '@/features/chat/rooms/types';
+import { generateRoomDisplay } from '@/features/chat/rooms/utils';
 import { UserItem } from '@/features/users/components';
 import { User } from '@/features/users/types';
+import { useBusinessNavigationData, useStationNavigationData } from '@/hooks';
 import { useQuerySearch } from '@/hooks/use-query-search';
+import { useAuthStore } from '@/stores/auth.store';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { convert } from 'html-to-text';
 import {
@@ -15,24 +19,17 @@ import {
   UserRound,
   UsersRound,
 } from 'lucide-react';
+import moment from 'moment';
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { searchApi } from '../api';
-import { SearchType } from '../types';
-import moment from 'moment';
-import { generateRoomDisplay } from '@/features/chat/rooms/utils';
-import { useAuthStore } from '@/stores/auth.store';
 import { useSearchDynamic } from '../hooks/use-search-dynamic';
-import {
-  useBusinessNavigationData,
-  useCursorPaginationQuery,
-  useStationNavigationData,
-} from '@/hooks';
-import { Button } from '@/components/actions';
+import { SearchType } from '../types';
 
 export interface SearchTabsProps {
   searchValue: string;
+  onItemClicked?: () => void;
   onTabChange?: (type: SearchType) => void;
 }
 
@@ -62,7 +59,11 @@ const tabs: Record<
   },
 };
 
-export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
+export const SearchTabs = ({
+  searchValue,
+  onTabChange,
+  onItemClicked,
+}: SearchTabsProps) => {
   const [type, setType] = useState<SearchType>('all');
   const { isBusiness, spaceId } = useBusinessNavigationData();
   const { stationId } = useStationNavigationData();
@@ -102,7 +103,12 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
     type?: SearchType;
     id?: string;
   }) => {
-    mutate({ keyword: searchValue });
+    mutate({
+      keyword: searchValue,
+      stationId: stationId,
+      spaceId: spaceId as string,
+    });
+    onItemClicked?.();
   };
   const filterTabs = useMemo(() => {
     if (isBusiness && spaceId) {
@@ -112,7 +118,7 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
       };
     }
     return tabs;
-  }, [isBusiness, spaceId, stationId]);
+  }, [isBusiness, spaceId]);
 
   return (
     <>
@@ -133,7 +139,9 @@ export const SearchTabs = ({ searchValue, onTabChange }: SearchTabsProps) => {
                   <>{t(tab.label)}</>
                 ) : (
                   <>
-                    <div className="h-5"> {tab?.icon || t(tab.label)}</div>
+                    <div className="h-5 dark:text-neutral-100">
+                      {tab?.icon || t(tab.label)}
+                    </div>
                     {tab.value !== 'all' && (
                       <div className="absolute right-0 top-0 size-4 translate-x-1/2 translate-y-1/2 rounded-full bg-primary text-xs text-white">
                         {countData[tab.value] > 9 ? '+9' : countData[tab.value]}
@@ -313,7 +321,11 @@ const AllResult = ({
       {data?.messages && data.messages.length > 0 && (
         <div className="mt-5">
           <Section label={'Message'}>
-            <MessagesList messages={data.messages} searchValue={searchValue} />
+            <MessagesList
+              messages={data.messages}
+              onItemClick={onItemClick}
+              searchValue={searchValue}
+            />
           </Section>
           {countData.message > LIMIT && (
             <div className="mt-1 px-3">
@@ -364,6 +376,7 @@ export const MessagesList = ({
           onClick={() => onItemClick?.({ type: 'message', id: message._id })}
           key={message?._id}
           message={message}
+          keyword={searchValue}
         />
       ))}
     </div>
@@ -373,27 +386,46 @@ export const MessagesList = ({
 const MessageItem = ({
   message,
   onClick,
+  keyword,
 }: {
   message: Message;
+  keyword: string;
   onClick?: () => void;
 }) => {
-  const userId = useAuthStore((state) => state.user?._id);
+  const { userId, language } = useAuthStore((state) => {
+    return {
+      language: state.user?.language,
+      userId: state.user?._id,
+    };
+  });
+
   const { spaceId } = useBusinessNavigationData();
+  const { stationId } = useStationNavigationData();
   const room = generateRoomDisplay({
     room: message.room!,
     currentUserId: userId!,
   });
   const lang = useAuthStore((state) => state.user?.language);
   const contentDisplay = useMemo(() => {
+    if (message.language === language) return message.content;
     const content = message.translations?.[lang || 'en'] || message.content;
     return convert(content, {
       selectors: [{ selector: 'a', options: { ignoreHref: true } }],
     });
-  }, [lang, message.content, message.translations]);
-  let link = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}?search_id=${message._id}`;
-  if (spaceId) {
-    link = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}?search_id=${message._id}`;
-  }
+  }, [lang, language, message.content, message.language, message.translations]);
+  const link = useMemo(() => {
+    let baseLink = `${ROUTE_NAMES.ONLINE_CONVERSATION}/${room._id}`;
+
+    if (spaceId) {
+      baseLink = `${ROUTE_NAMES.SPACES}/${spaceId}/conversations/${room._id}`;
+    }
+
+    if (stationId) {
+      baseLink = `${ROUTE_NAMES.STATIONS}/${stationId}/conversations/${room._id}`;
+    }
+
+    return `${baseLink}?search_id=${message._id}${keyword ? `&keyword=${keyword}` : ''}`;
+  }, [keyword, message._id, room._id, spaceId, stationId]);
   return (
     <Link key={message?._id} href={link} onClick={onClick}>
       <UserItem

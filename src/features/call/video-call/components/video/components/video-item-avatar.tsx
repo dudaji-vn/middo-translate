@@ -12,8 +12,6 @@ interface VideoItemAvatarProps {
     isTurnOnCamera?: boolean;
 }
 export default function VideoItemAvatar({participant, size = 'sm', isTurnOnCamera}: VideoItemAvatarProps) {
-  const {t} = useTranslation('common')
-
   const isFullScreen = useVideoCallStore(state => state.isFullScreen);
   const layout = useVideoCallStore(state => state.layout);
 

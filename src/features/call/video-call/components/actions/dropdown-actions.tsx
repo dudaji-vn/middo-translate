@@ -20,11 +20,12 @@ import { SHORTCUTS } from '@/types/shortcuts';
 import isEqual from 'lodash/isEqual';
 import { useTranslation } from 'react-i18next';
 import ActionVideoAudioSetting from './action-video-audio-setting';
+import ActionShowInvitation from './action-show-invitation';
 
 
 export default function DropdownActions() {
 
-  const room = useVideoCallStore((state) => state.room);
+  const call = useVideoCallStore((state) => state.call);
   const isDoodle = useVideoCallStore((state) => state.isDoodle);
   const isMeDoodle = useVideoCallStore((state) => state.isMeDoodle);
   const layout = useVideoCallStore((state) => state.layout);
@@ -105,12 +106,13 @@ export default function DropdownActions() {
       <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
         <ActionToggleLayout />
         <ActionDoodle disabled={isDoodleDisabled} onDoodle={onDoodle} />
-        {room?.type === CALL_TYPE.GROUP && (
+        {call?.type === CALL_TYPE.GROUP && (
           <DropdownMenuItem onClick={() => setModal('add-user')} className='dark:hover:bg-neutral-800'>
             <UserPlus2 />
             <span className="ml-2">{t('CONVERSATION.ADD_MEMBER')}</span>
           </DropdownMenuItem>
         )}
+        {call?.type == CALL_TYPE.ANONYMOUS && <ActionShowInvitation />}
         <ActionToggleCaption isInDropdown={true}/>
         <ActionVideoAudioSetting isInDropdown={true}/>
       </DropdownMenuContent>

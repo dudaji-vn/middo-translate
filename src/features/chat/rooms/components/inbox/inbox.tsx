@@ -10,7 +10,11 @@ import { useTranslation } from 'react-i18next';
 import { RoomActions } from '../room-actions';
 import InboxList from './inbox-list';
 
+import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
+import { SPK_FOCUS } from '@/configs/search-param-key';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
+import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
+import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
 import {
   ArchiveIcon,
   ContactRoundIcon,
@@ -21,13 +25,11 @@ import {
   SettingsIcon,
   UsersRoundIcon,
 } from 'lucide-react';
-import InboxContactList from './inbox-contact-list';
 import { useSearchParams } from 'next/navigation';
-import { SPK_FOCUS } from '@/configs/search-param-key';
-import Ping from '@/app/(main-layout)/(protected)/spaces/[spaceId]/_components/business-spaces/ping/ping';
-import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
-import { SettingTab } from '@/features/stations/components/setting-tab';
-import { useSpaceInboxFilterStore } from '@/stores/space-inbox-filter.store';
+import { useCountWaitingRooms } from '../../hooks/use-count-waiting-rooms';
+import InboxContactList from './inbox-contact-list';
+import socket from '@/lib/socket-io';
+import { SOCKET_CONFIG } from '@/configs/socket';
 export interface InboxProps {
   unreadCount?: number;
 }
@@ -108,6 +110,7 @@ const stationInboxTabs = [inboxTabMap.all, inboxTabMap.archived];
 export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
   const { isBusiness } = useBusinessNavigationData();
   const { isOnStation } = useStationNavigationData();
+  const { data, refetch } = useCountWaitingRooms();
   const searchParams = useSearchParams();
   const tabs = useMemo(() => {
     if (isBusiness) {
@@ -140,7 +143,6 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
   useEffect(() => {
     const focusType = searchParams?.get(SPK_FOCUS) as InboxType;
     if (focusType && tabs.map((tab) => tab.value).includes(focusType)) {
-      console.log('focusType', focusType);
       setType(focusType);
     }
   }, [searchParams, tabs]);
@@ -151,6 +153,23 @@ export const Inbox = ({ unreadCount, ...props }: InboxProps) => {
       [type]: ping,
     }));
   };
+
+  useEffect(() => {
+    setNotifications((prev) => ({
+      ...prev,
+      waiting: data?.count ? true : false,
+    }));
+  }, [data?.count]);
+  console.log(data?.count);
+  useEffect(() => {
+    socket.on(SOCKET_CONFIG.EVENTS.ROOM.WAITING_UPDATE, (data) => {
+      refetch();
+    });
+    return () => {
+      socket.off(SOCKET_CONFIG.EVENTS.ROOM.WAITING_UPDATE);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderList = () => {
     switch (type) {

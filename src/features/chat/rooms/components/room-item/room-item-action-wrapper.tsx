@@ -77,7 +77,7 @@ const WAITING_ALLOWED_ACTIONS: Action[] = [
 
 const CONTACT_ALLOWED_ACTIONS: Action[] = [
   'copy_username',
-  'block', 
+  'block',
   'delete-contact',
 ];
 
@@ -86,16 +86,15 @@ const checkAllowedActions = ({
   businessConversationType,
   action,
   currentStatus,
-  tab
+  tab,
 }: {
   isBusinessRoom: boolean;
   businessConversationType: string;
   action: Action;
   currentStatus: Room['status'];
-  tab?: InboxType
+  tab?: InboxType;
 }) => {
-  if(tab === 'contact') 
-    return CONTACT_ALLOWED_ACTIONS.includes(action);
+  if (tab === 'contact') return CONTACT_ALLOWED_ACTIONS.includes(action);
   if (currentStatus === 'waiting')
     return WAITING_ALLOWED_ACTIONS.includes(action);
   if (currentStatus === 'archived')
@@ -124,7 +123,7 @@ export const RoomItemActionWrapper = forwardRef<
           businessConversationType: String(businessConversationType),
           action: item.action,
           currentStatus: room.status,
-          tab: type
+          tab: type,
         });
         if (!isAllowed) return false;
 
@@ -144,7 +143,11 @@ export const RoomItemActionWrapper = forwardRef<
           case 'unarchive':
             return room.status === 'archived';
           case 'block':
-            return !room.isGroup && relationshipStatus !== 'blocking';
+            return (
+              !room.isGroup &&
+              relationshipStatus !== 'blocking' &&
+              relationshipStatus !== 'me'
+            );
           case 'unblock':
             return !room.isGroup && relationshipStatus === 'blocking';
           case 'reject':
@@ -162,7 +165,16 @@ export const RoomItemActionWrapper = forwardRef<
             isBusiness,
           }),
       }));
-  }, [actionItems, businessConversationType, isBusiness, isMuted, onAction, relationshipStatus, room, type]);
+  }, [
+    actionItems,
+    businessConversationType,
+    isBusiness,
+    isMuted,
+    onAction,
+    relationshipStatus,
+    room,
+    type,
+  ]);
 
   return (
     <Wrapper items={items} room={room} isMuted={isMuted}>
@@ -197,7 +209,7 @@ const MobileWrapper = ({
       >
         {items.map(({ renderItem, ...item }) => {
           if (renderItem) {
-            return renderItem({ item, room, setOpen: () => { } });
+            return renderItem({ item, room, setOpen: () => {} });
           }
           return (
             <LongPressMenu.Item
@@ -205,7 +217,7 @@ const MobileWrapper = ({
               startIcon={item.icon}
               color={item.color === 'error' ? 'error' : 'default'}
               onClick={item.onAction}
-              className='dark:hover:bg-neutral-900'
+              className="dark:hover:bg-neutral-900"
             >
               {t(item.label)}
             </LongPressMenu.Item>
@@ -231,7 +243,7 @@ const DesktopWrapper = ({
   }, []);
 
   return (
-    <div className="group relative flex-1">
+    <div className="group relative flex-1 overflow-hidden">
       {children}
       <div
         className={cn(
@@ -250,7 +262,7 @@ const DesktopWrapper = ({
               <MoreVertical />
             </Button.Icon>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className='dark:bg-neutral-900 dark:border-neutral-800'>
+          <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
             {items.map(({ renderItem, ...item }) => {
               if (renderItem) {
                 return renderItem({ item, room, setOpen: onOpenChange });

@@ -338,6 +338,9 @@
   .tiptap p.is-editor-empty:first-child::before {
     @apply dark:text-neutral-600;
   }
+  .hidden-drawer-bar > .bg-muted {
+    @apply opacity-0;
+  }
 }
 .video-intro::-webkit-media-controls-overlay-enclosure {
   display: none !important;
@@ -347,7 +350,7 @@
 }
 
 .mention {
-  @apply !whitespace-nowrap font-semibold text-primary no-underline;
+  @apply font-semibold text-primary no-underline;
 }
 
 .editor-view .mention {
@@ -367,14 +370,15 @@
 }
 
 .tiptap ul {
-  @apply my-0 pl-4;
+  @apply my-0;
 }
 .tiptap ul li {
   @apply pl-0;
 }
 
-.tiptap ul li p {
-  @apply pl-2;
+.chrome .tiptap ul li p,
+.chrome .tiptap ol li p {
+  @apply pl-1.5;
 }
 .editor-view .link {
   @apply font-normal text-current underline hover:opacity-90;
@@ -596,13 +600,18 @@ input::-ms-clear {
   @apply outline outline-2 outline-offset-2 outline-primary;
 }
 
-.active-message .highlight-content,
-.active-message .highlight-content a {
-  @apply bg-white font-semibold text-primary;
+.active-message .content-highlight,
+.active-message .content-highlight a {
+  @apply rounded bg-white font-semibold text-primary;
 }
 
 .message-editor .link {
   color: var(--primary);
+}
+
+.message-editor strong,
+.editor-view strong {
+  color: currentColor;
 }
 
 pre {
@@ -610,4 +619,34 @@ pre {
   white-space: pre-wrap;
   word-break: break-all;
   word-wrap: break-word;
+}
+.background-business-forms {
+  background: linear-gradient(
+    to bottom right,
+    #d0def1 30%,
+    #a4c2ea,
+    #72a5e999,
+    #3d88ed92
+  );
+}
+
+.tiptap ol li::marker {
+  color: currentColor !important;
+}
+
+.chrome .tiptap .prose ul {
+  padding-inline-start: 0.75em;
+}
+
+.chrome .tiptap .prose ol {
+  padding-inline-start: 1em;
+}
+
+.prose .tiptap ul li,
+.prose .tiptap ol li {
+  padding-inline-start: 0;
+}
+
+.prose strong {
+  color: currentColor;
 }

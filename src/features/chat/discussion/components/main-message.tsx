@@ -1,6 +1,6 @@
 import { Avatar } from '@/components/data-display';
 import { TriangleSmall } from '@/components/icons/triangle-small';
-import { RichTextView } from '@/components/rich-text-view';
+import { RichTextView } from '@/features/chat/messages/components/message-editor/rich-text-view';
 import { cn } from '@/utils/cn';
 import { convertToTimeReadable } from '@/utils/time';
 import { Clock9Icon, PhoneCallIcon, PhoneIcon } from 'lucide-react';

@@ -14,7 +14,7 @@ import ActionAddMembers from './actions/action-add-members';
 import ActionChat from './actions/action-chat';
 import InviteTooltip from './invite-tooltip';
 import DropdownActions from './actions/dropdown-actions';
-import getUserStream from '../../utils/get-user-stream';
+import getUserStream, { ResponseUserMedia } from '../../utils/get-user-stream';
 import ActionDraw from './actions/action-draw';
 import { useTranslation } from 'react-i18next';
 import { useVideoSettingStore } from '../../store/video-setting.store';
@@ -29,11 +29,29 @@ interface MediaStreamInterface {
   video?: boolean;
   audio?: boolean;
 }
-export default function VideoCallActions() {
+
+interface VideoCallActionsProps {
+  isShowEndCall?: boolean;
+  isShowShareScreen?: boolean;
+  isShowVideoSetting?: boolean;
+  isShowDropdown?: boolean;
+  isShowChat?: boolean;
+  isShowDrawer?: boolean;
+  isShowToggleCaption?: boolean;
+  className?: string;
+}
+export default function VideoCallActions({
+  isShowEndCall = true,
+  isShowShareScreen = true,
+  isShowVideoSetting = true,
+  isShowDropdown = true,
+  isShowChat = true,
+  isShowDrawer= true,
+  isShowToggleCaption = true,
+  className,
+}:VideoCallActionsProps) {
 
   const {t} = useTranslation('common')
-  const { isHelpDeskCall } = useHelpDesk();
-  const { user } = useAuthStore();
   const isTurnOnMic = useMyVideoCallStore(state => state.isTurnOnMic);
   const isTurnOnCamera = useMyVideoCallStore(state => state.isTurnOnCamera);
   const setTurnOnMic = useMyVideoCallStore(state => state.setTurnOnMic);
@@ -56,7 +74,7 @@ export default function VideoCallActions() {
     if(isLoadingStream) return;
 
     // CASE: No change in camera
-    if (video && isTurnOnCamera && myStream.getVideoTracks().length > 0 && audio) {
+    if (video && isTurnOnCamera && myStream.getVideoTracks().length > 0) {
       console.log('video-call-actions.tsx - Line 48 :: No change in camera');
       myStream.getAudioTracks().forEach((track) => {
         track.enabled = audio || false;
@@ -91,19 +109,11 @@ export default function VideoCallActions() {
     }
     let myVideoStream: MediaStream = new MediaStream();
     getUserStream({isTurnOnCamera: video, isTurnOnMic: true, cameraDeviceId: videoSetting?.deviceId || undefined, micDeviceId: audioSetting?.deviceId || undefined})
-      .then((stream: MediaStream) => {
-        myVideoStream = stream;
+      .then(({stream, isTurnOnMic, isTurnOnCamera}: ResponseUserMedia) => {
+        setTurnOnMic(isTurnOnMic)
+        setTurnOnCamera(isTurnOnCamera)
         setLoadingVideo(false);
-        setTurnOnCamera(video);
-        setTurnOnMic(audio);
-      })
-      .catch(() => {
-        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
-        setTurnOnCamera(false);
-        setTurnOnMic(false);
-        setLoadingVideo(false);
-      })
-      .finally(() => {
+        myVideoStream = stream ? stream : myVideoStream;
         if (!audio && myVideoStream.getAudioTracks().length > 0) {
           myVideoStream.getAudioTracks().forEach((track) => {
             track.enabled = false;
@@ -114,23 +124,29 @@ export default function VideoCallActions() {
         setTimeout(() => {
           setLoadingStream(false);
         }, 1000);
+      })
+      .catch(() => {
+        customToast.error(t('MESSAGE.ERROR.NO_ACCESS_MEDIA'));
+        // setLoadingVideo(false);
+      })
+      .finally(() => {
       });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [audioSetting?.deviceId, isLoadingStream, isTurnOnCamera, isTurnOnMic, myStream, participants, setLoadingStream, setLoadingVideo, setMyStream, setStreamForParticipant, setTurnOnCamera, setTurnOnMic, videoSetting?.deviceId]);
 
   return (
     <section className="relative z-20 flex items-center justify-between bg-primary-100 dark:bg-neutral-900 p-2">
-      <div className={cn('flex w-full md:justify-center justify-around md:gap-6', isHelpDeskCall && 'md:gap-3')}>
-        {!isHelpDeskCall && <DropdownActions />}
-        {!isHelpDeskCall && <ActionChat />}
-        {!isHelpDeskCall && <ActionDraw />}
-        {isHelpDeskCall && <ActionVideoAudioSetting />}
-        {isHelpDeskCall && <ActionToggleCaption />}
+      <div className={cn('flex w-full md:justify-center justify-around md:gap-6', className)}>
+        {isShowDropdown && <DropdownActions />}
+        {isShowChat && <ActionChat />}
+        {isShowDrawer && <ActionDraw />}
+        {isShowVideoSetting && <ActionVideoAudioSetting />}
+        {isShowToggleCaption && <ActionToggleCaption />}
         {/* <ActionAddMembers /> */}
-        <ActionShareScreen />
+        {isShowShareScreen && <ActionShareScreen />}
         <ActionToggleCamera handleChangeCameraOrMic={handleChangeCameraOrMic} />
         <ActionToggleMic handleChangeCameraOrMic={handleChangeCameraOrMic} />
-        <ActionLeaveCall />
+        {isShowEndCall && <ActionLeaveCall />}
       </div>
       <InviteTooltip />
     </section>

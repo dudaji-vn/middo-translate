@@ -16,7 +16,6 @@ import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { ItemAvatar } from './room-item-avatar';
-import { RoomItemComingCall } from './room-item-coming-call';
 import { RoomItemHead } from './room-item-head';
 import { ItemSub } from './room-item-sub';
 import { RoomItemWrapper } from './room-item-wrapper';
@@ -31,6 +30,7 @@ import { useSideChatStore } from '@/features/chat/stores/side-chat.store';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { useStationNavigationData } from '@/hooks/use-station-navigation-data';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import { RoomItemCall } from './room-item-call';
 
 export interface RoomItemProps {
   data: Room;
@@ -38,6 +38,8 @@ export interface RoomItemProps {
   currentRoomId?: Room['_id'];
   showMembersName?: boolean;
   showTime?: boolean;
+  isShowStatus?: boolean;
+  isForgeShowCallButton?: boolean;
   onClick?: () => void;
   isMuted?: boolean;
   disabledAction?: boolean;
@@ -67,6 +69,8 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     showMembersName,
     currentRoomId,
     showTime = true,
+    isShowStatus = true,
+    isForgeShowCallButton,
     onClick,
     disabledAction,
     rightElement,
@@ -112,12 +116,15 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
         code: countryCode,
       },
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    _data,
-    currentUserId,
-    disabledRedirect,
     businessConversationType,
     params?.spaceId,
+    _data,
+    stationId,
+    isOnStation,
+    currentUserId,
+    disabledRedirect,
   ]);
   const isHideRead = useSideChatStore(
     (state) => state.filters.includes('unread') && !isForceShow,
@@ -136,7 +143,6 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
     : RoomItemActionWrapper;
 
   if (isHideRead && isRead) return null;
-
   return (
     <div
       className={cn(
@@ -168,7 +174,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             ) : (
               <RoomItemVisitorAvatar isOnline={isOnline} isMuted={isMuted} />
             )}
-            <div className="w-full">
+            <div className="w-full flex-1 overflow-hidden">
               <RoomItemHead
                 isRead={isRead}
                 showTime={showTime}
@@ -219,12 +225,12 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
             </div>
 
             {rightElement}
-            {isMuted && type != 'contact' && (
+            {isShowStatus && isMuted && type != 'contact' && (
               <div className="flex items-center">
                 <BellOffIcon className="size-4 fill-error stroke-error text-neutral-600" />
               </div>
             )}
-            {room?.isPinned && type != 'contact' && (
+            {isShowStatus && room?.isPinned && type != 'contact' && (
               <div className="flex items-center">
                 <PinIcon className="size-4 rotate-45 fill-primary stroke-primary text-neutral-600" />
               </div>
@@ -232,10 +238,7 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
           </RoomItemWrapper>
         </RoomItemContext.Provider>
       </Wrapper>
-      <Tooltip
-        title={t('CONVERSATION.JOIN')}
-        triggerItem={<RoomItemComingCall roomChatBox={room} />}
-      />
+      <RoomItemCall roomChatBox={room} isForgeShow={isForgeShowCallButton} />
     </div>
   );
 });

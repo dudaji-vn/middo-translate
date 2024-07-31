@@ -36,7 +36,6 @@ export const roomApi = {
     },
   ) {
     const { filterOptions, ...restParams } = params;
-    console.log(restParams);
     const queryParams = {
       ...restParams,
       ...convertRoomsFilterOptionsToString(filterOptions),
@@ -274,6 +273,25 @@ export const roomApi = {
   async deleteContact(roomId: string) {
     const res: Response<Room> = await axios.patch(
       `${basePath}/${roomId}/delete-contact`,
+    );
+    return res.data;
+  },
+
+  async countUnreadMessages(roomId: string) {
+    const res: Response<{ count: number }> = await axios.get(
+      `${basePath}/${roomId}/unread-messages/count`,
+    );
+    return res.data;
+  },
+  async markAsRead(roomId: string) {
+    const res: Response<Room> = await axios.patch(
+      `${basePath}/${roomId}/read-all-messages`,
+    );
+    return res.data;
+  },
+  async countWaitingRooms() {
+    const res: Response<{ count: number }> = await axios.get(
+      `${basePath}/waiting/count`,
     );
     return res.data;
   },

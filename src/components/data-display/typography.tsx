@@ -12,12 +12,13 @@ const typographyTags = {
   h6: 'h6',
   muted: 'span',
   default: 'span',
+  pre: 'pre',
 } as { [key: string]: keyof JSX.IntrinsicElements };
 
 const typographyVariants = cva('text-text text-base', {
   variants: {
     variant: {
-      h1: 'scroll-m-20 text-7xl font-semibold tracking-tight leading-[5rem]',
+      h1: 'scroll-m-20 text-2xl font-semibold tracking-tight leading-[5rem]',
       h2: 'scroll-m-20 text-xl font-semibold tracking-tight leading-normal',
       h3: 'scroll-m-20 text-[2rem] font-semibold tracking-tight leading-9',
       h4: 'scroll-m-20 text-2xl font-semibold tracking-tight leading-7',
@@ -25,6 +26,7 @@ const typographyVariants = cva('text-text text-base', {
       h6: 'scroll-m-20 text-[18px] font-semibold tracking-tight',
       muted: 'text-text/70',
       default: 'text-base text-text',
+      pre: 'scroll-m-20 text-base tracking-tight',
     },
   },
   defaultVariants: {
@@ -32,7 +34,8 @@ const typographyVariants = cva('text-text text-base', {
   },
 });
 
-export interface TypographyProps extends VariantProps<typeof typographyVariants> {
+export interface TypographyProps
+  extends VariantProps<typeof typographyVariants> {
   asChild?: boolean;
   children?: React.ReactNode;
   className?: string;

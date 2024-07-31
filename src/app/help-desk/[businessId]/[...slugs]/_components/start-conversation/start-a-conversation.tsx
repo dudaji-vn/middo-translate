@@ -20,6 +20,7 @@ import {
   LSK_VISITOR_ROOM_ID,
 } from '@/types/business.type';
 import { cn } from '@/utils/cn';
+import { announceToParent } from '@/utils/iframe-util';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -65,7 +66,16 @@ const StartAConversation = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const showForm = () => {
+    announceToParent({
+      type: 'show-form',
+    });
     setOpen(true);
+  };
+  const hideForm = () => {
+    announceToParent({
+      type: 'hide-form',
+    });
+    setOpen(false);
   };
   const methods = useForm({
     mode: 'onChange',
@@ -93,19 +103,22 @@ const StartAConversation = ({
     const rootEdges = getConnectedEdges([rootNode], edges)[0] || {};
     const rootChild = nodes.find((node) => node.id === rootEdges.target);
     if (!rootChild) return;
-
     const childrenActions = nodes.filter(
-      (node) => node.parentNode === rootChild.id,
+      (node) =>
+        node.parentNode === rootChild.id || node.parentId === rootChild.id,
     );
+    const messType = rootChild.type === 'form' ? 'flow-form' : 'flow-actions';
     const payload = {
       content: rootChild.data?.content,
       roomId,
-      type: 'flow-actions',
+      type: messType,
       language: extensionData.language,
       mentions: [],
-      actions: rootChild.type === 'message' ? undefined : childrenActions,
+      actions: childrenActions,
       userId: owner?._id,
+      formId: rootChild?.form,
     };
+
     await messageApi.sendAnonymousMessage({
       ...payload,
       senderType: 'bot',
@@ -121,11 +134,16 @@ const StartAConversation = ({
     if (language?.code) setValue('language', language.code);
   };
   useEffect(() => {
+    announceToParent({
+      type: 'update-primary-color',
+      payload: { themeColor: theme.name },
+    });
     const visitorId = localStorage.getItem(LSK_VISITOR_ID);
     const visitorRoomId = localStorage.getItem(LSK_VISITOR_ROOM_ID);
     localStorage.setItem(LSK_VISITOR_DATA, JSON.stringify(visitorData));
     addDetectVisitorLanguage();
     if (visitorId && visitorRoomId) {
+      announceToParent({ type: 'room-found' });
       router.push(
         `/help-desk/${extensionData._id}/${visitorRoomId}/${visitorId}?themeColor=${theme.name}&originReferer=${fromDomain}`,
       );
@@ -145,6 +163,7 @@ const StartAConversation = ({
       }).then(async (res) => {
         const roomId = res.data.roomId;
         const user = res.data.user;
+        announceToParent({ type: 'room-found' });
         localStorage.setItem(LSK_VISITOR_ROOM_ID, roomId);
         localStorage.setItem(LSK_VISITOR_ID, user._id);
         await appendFirstMessageFromChatFlow(roomId);
@@ -173,16 +192,7 @@ const StartAConversation = ({
           </Typography>
         </div>
       ) : (
-        <div className="flex size-full flex-col justify-stretch gap-2">
-          <div className="flex-grow  pt-4">
-            <Image
-              src="/start-chat.png"
-              alt="start-a-chat"
-              className="m-auto"
-              width={240}
-              height={236}
-            />
-          </div>
+        <div className="flex size-full flex-col justify-stretch gap-2 pt-4">
           <div className="relative  flex aspect-square h-fit max-h-[100px] w-full  flex-none flex-row items-center  gap-2 overflow-hidden px-3">
             <Avatar
               variant={'outline'}
@@ -201,7 +211,12 @@ const StartAConversation = ({
           </div>
         </div>
       )}
-      <Sheet open={open} onOpenChange={setOpen}>
+      <Sheet
+        open={open}
+        onOpenChange={(open) => {
+          open ? showForm() : hideForm();
+        }}
+      >
         <SheetContent
           side="bottom"
           className={

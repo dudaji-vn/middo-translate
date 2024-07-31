@@ -8,10 +8,10 @@ import { useElectron } from '@/hooks/use-electron';
 import customToast from '@/utils/custom-toast';
 
 export const useNotification = () => {
-  const { isElectron } = useElectron();
   const [permission, setPermission] = useState<NotificationPermission | null>(
     null,
   );
+  const { isElectron, ipcRenderer, electron } = useElectron();
   const {
     isDenied,
     setDenied,
@@ -96,6 +96,39 @@ export const useNotification = () => {
     }
   };
 
+  const retrieveTokenElectron = async (): Promise<void> => {
+    try {
+      electron?.getFCMToken('getFCMToken', async (_: any, token: string) => {
+        if(!token) return;
+        await notificationApi.subscribe(token)
+        setIsSubscribed(true);
+        setIsUnsubscribed(false);
+        setFcmToken(token);
+      });
+    } catch (error) {
+      customToast.error(
+        'An error occurred while retrieving token, please try later.',
+      );
+    }
+  };
+
+  // Check token for Electron app
+  useEffect(()=>{
+    const handleCheckElectronToken = async (token: string) => {
+      const isSubscribed = await notificationApi.checkSubscription(token);
+        setIsSubscribed(isSubscribed);
+        if (isSubscribed) {
+          setFcmToken(token);
+        }
+    }
+    if(isElectron) {
+      electron?.getFCMToken('getFCMToken', async (_: any, token: string) => {
+          handleCheckElectronToken(token)
+      });
+    }
+  }, [isElectron])
+
+
   const turnOff = async () => {
     try {
       if (fcmToken) {
@@ -131,6 +164,7 @@ export const useNotification = () => {
     setIsSubscribed,
     isSubscribed,
     retrieveToken,
+    retrieveTokenElectron,
     turnOff,
   };
 };

@@ -3,6 +3,7 @@ import { ModalAddUser } from './modal-add-user';
 import { ModalAudioVideoSetting } from './modal-audio-video-setting';
 import { ModalChooseScreen } from './modal-choose-screen';
 import { ModalForwardCall } from './modal-forward-call';
+import { ModalInvitationLink } from './modal-invitation-link';
 import { ModalLeaveCall } from './modal-leave-call';
 import { ModalStopDoodle } from './modal-stop-doodle';
 
@@ -22,6 +23,8 @@ export const VideoCallCommonModal = () => {
         return <ModalChooseScreen />
     case 'forward-call':
         return <ModalForwardCall />
+    case 'show-invitation':
+        return <ModalInvitationLink />
     default:
         return null;
   }

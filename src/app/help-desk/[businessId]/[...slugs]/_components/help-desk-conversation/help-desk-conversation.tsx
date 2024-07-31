@@ -18,7 +18,7 @@ import {
 } from '@/components/media-upload';
 import { Room } from '@/features/chat/rooms/types';
 import { User } from '@/features/users/types';
-import { memo, useEffect } from 'react';
+import { memo, use, useEffect } from 'react';
 import useClient from '@/hooks/use-client';
 import { useBusinessExtensionStore } from '@/stores/extension.store';
 import { cn } from '@/utils/cn';
@@ -31,6 +31,9 @@ import { MessageActions } from '@/features/chat/messages/components/message-acti
 import { FlowNode } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/settings/_components/extension-creation/steps/script-chat-flow/design-script-chat-flow';
 import { useRoomSearchStore } from '@/features/chat/stores/room-search.store';
 import { SearchMessageBar } from '@/features/chat/rooms/components/search-message-bar';
+import { useMediaLightBoxStore } from '@/stores/media-light-box.store';
+import { announceToParent } from '@/utils/iframe-util';
+import { useBusinessNavigationData } from '@/hooks';
 
 const HelpDeskConversation = ({
   room,
@@ -54,6 +57,7 @@ const HelpDeskConversation = ({
     useBusinessExtensionStore();
   const isClient = useClient();
   const isMobile = useAppStore((state) => state.isMobile);
+
   const { currentSide } = useRoomSidebarTabs();
   useEffect(() => {
     if (room) {
@@ -63,6 +67,7 @@ const HelpDeskConversation = ({
       setChatFlow(chatFlow);
     }
   }, []);
+
   if (!isClient) return null;
 
   return (
@@ -115,6 +120,7 @@ const HelpDeskConversationContent = memo(
     roomSendingState: string;
   }) => {
     const { isShowSearch } = useRoomSearchStore();
+
     return (
       <div className="flex h-full flex-1 flex-col overflow-hidden rounded-lg bg-card">
         {!isAnonymousPage && (

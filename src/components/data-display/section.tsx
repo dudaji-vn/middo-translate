@@ -6,10 +6,21 @@ export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   labelClassName?: string;
   labelRight?: React.ReactNode;
+  childrenClassName?: string;
 }
 
 export const Section = forwardRef<HTMLDivElement, SectionProps>(
-  ({ label, children, labelClassName, labelRight, ...props }, ref) => {
+  (
+    {
+      label,
+      children,
+      labelClassName,
+      childrenClassName,
+      labelRight,
+      ...props
+    },
+    ref,
+  ) => {
     return (
       <div ref={ref} {...props}>
         <div className="flex items-center justify-between px-3 pb-2">
@@ -21,7 +32,7 @@ export const Section = forwardRef<HTMLDivElement, SectionProps>(
           </Typography>
           {labelRight}
         </div>
-        <div>{children}</div>
+        <div className={childrenClassName}>{children}</div>
       </div>
     );
   },

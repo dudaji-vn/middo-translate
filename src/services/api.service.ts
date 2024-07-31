@@ -4,7 +4,7 @@ export const get = (url: string) => {
     return axios.get(url);
 };
 
-export const post = (url: string, body: any) => {
+export const post = (url: string, body?: any) => {
     return axios.post(url, body);
 };
 

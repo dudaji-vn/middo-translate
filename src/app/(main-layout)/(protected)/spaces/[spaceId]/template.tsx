@@ -15,10 +15,17 @@ import { getRoomsFilterOptionsFromSpace } from '@/utils/get-rooms-filter-options
 import { useTranslation } from 'react-i18next';
 import customToast from '@/utils/custom-toast';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import SpaceNavigator from './_components/space-navigator/space-navigator';
+import { useExtensionFormsStore } from '@/stores/forms.store';
+import { useGetFormsNames } from '@/features/conversation-forms/hooks/use-get-forms-names';
 
 const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
   const spaceId = useParams()?.spaceId as string;
   const { data, isLoading } = useGetSpaceData({ spaceId });
+  const { setFormsInfo } = useExtensionFormsStore();
+  const { data: namesOfForms } = useGetFormsNames({
+    spaceId,
+  });
   const { setFilterOptions } = useSpaceInboxFilterStore();
 
   const { setSpace } = useAuthStore();
@@ -61,8 +68,14 @@ const SpaceTemplate = ({ children }: { children: React.ReactNode }) => {
     };
   }, [handleRedirectToHome, handleRefresh]);
 
+  useEffect(() => {
+    if (namesOfForms) {
+      setFormsInfo(namesOfForms);
+    }
+  }, [namesOfForms, setFormsInfo]);
+
   return (
-    <div className="container-height w-full overflow-y-hidden ">
+    <div className="h-full w-full overflow-y-hidden ">
       <div className="flex flex-row overflow-y-auto">
         <div
           className={cn('flex w-[74px] flex-col max-md:hidden', {
