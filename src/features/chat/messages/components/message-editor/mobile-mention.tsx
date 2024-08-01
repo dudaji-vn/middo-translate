@@ -72,7 +72,7 @@ export const MobileMention = ({
   return (
     <div className="relative mb-[18px] w-full">
       <div className="absolute left-0 top-0 w-full -translate-y-full overflow-hidden rounded-xl  border shadow-1">
-        <div className="no-scrollbar h-50 flex w-full flex-1 flex-col space-y-1 overflow-y-auto bg-white dark:bg-neutral-900">
+        <div className="no-scrollbar flex h-52 w-full flex-1 flex-col space-y-1 overflow-y-auto bg-white dark:bg-neutral-900">
           {filteredSuggestions.map((suggestion, index) => {
             return (
               <MentionItem
