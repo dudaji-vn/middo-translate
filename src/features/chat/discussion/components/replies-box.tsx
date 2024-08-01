@@ -16,7 +16,6 @@ import { MessageItem } from '../../messages/components/message-item';
 import { TimeDisplay } from '../../messages/components/time-display';
 import { roomApi } from '../../rooms/api';
 import { useDiscussion } from './discussion';
-import { useGetFirstUnreadMessageId } from '../../messages/components/message-box/use-get-first-unread-message-id';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 10; // 10 minutes
 
