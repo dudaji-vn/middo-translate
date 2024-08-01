@@ -22,7 +22,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { roomApi } from '../../../rooms/api';
 import { useHasFocus } from '../../../rooms/hooks/use-has-focus';
 import { MessageActions } from '../message-actions';
-import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
+import { anonymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 import { ROUTE_NAMES } from '@/configs/route-name';
 
 interface MessagesBoxContextProps {
@@ -69,7 +69,7 @@ export const MessagesBoxProvider = ({
     queryKey: key,
     queryFn: ({ pageParam }) => {
       if (isAnonymous) {
-        return anounymousMessagesAPI.getMessages(room._id, {
+        return anonymousMessagesAPI.getMessages(room._id, {
           cursor: pageParam,
           limit: 16,
           userId: guestId as string,
@@ -109,9 +109,12 @@ export const MessagesBoxProvider = ({
         if (message.sender._id === userId) return;
 
         // In case of have someones remove you from group
-        if(message.action === 'removeUser') {
+        if (message.action === 'removeUser') {
           // If you are in the room, and you had been deleted => redirect to online conversation
-          if(message.targetUsers?.find(user => user._id === userId) && message.room?._id == room._id) {
+          if (
+            message.targetUsers?.find((user) => user._id === userId) &&
+            message.room?._id == room._id
+          ) {
             router.push(ROUTE_NAMES.ONLINE_CONVERSATION);
             return;
           }
