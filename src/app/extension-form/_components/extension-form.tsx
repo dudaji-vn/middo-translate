@@ -39,6 +39,7 @@ type TActions = {
   submit: string;
   requireMessage: string;
   requireOptionMessage: string;
+  close: string;
 };
 type TSubmission = z.infer<typeof answerSchema>;
 
@@ -161,7 +162,8 @@ const ExtensionForm = ({
         )?.name;
         if (missingField) {
           ctx.addIssue({
-            message: `This answer is required!`,
+            message:
+              form?.actions?.requireMessage || `This answer is required!`,
             code: z.ZodIssueCode.unrecognized_keys,
             path: ['answer', missingField],
             keys: ['answer', missingField],
@@ -170,7 +172,9 @@ const ExtensionForm = ({
         }
         if (missingInputOfOptionTypeOther) {
           ctx.addIssue({
-            message: `Please add your answer for 'other' option!`,
+            message:
+              form?.actions?.requireOptionMessage ||
+              `Please add your answer for 'other' option!`,
             code: z.ZodIssueCode.unrecognized_keys,
             path: ['answer', missingInputOfOptionTypeOther],
             keys: ['answer', missingInputOfOptionTypeOther],
@@ -332,6 +336,7 @@ const ExtensionForm = ({
             thankyou={thankyou}
             name={form.name}
             onclose={onCloseForm}
+            btnName={actions.close}
           />
         ) : (
           <form

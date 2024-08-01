@@ -9,6 +9,7 @@ import React from 'react';
 const ThankYou = (
   props: Partial<CreateBusinessForm> & {
     onclose: () => void;
+    btnName?: string;
   },
 ) => {
   const { thankyou, name, onclose } = props;
@@ -48,7 +49,7 @@ const ThankYou = (
         onClick={onclose}
         className="mx-auto w-fit"
       >
-        Close Form
+        {props.btnName || 'Close Form'}
       </Button>
     </div>
   );
