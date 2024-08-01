@@ -2,7 +2,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/utils/cn';
 import { useQuery } from '@tanstack/react-query';
 import moment from 'moment';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMessageActions } from '../../messages/components/message-actions';
 import { MessageBoxNewSection } from '../../messages/components/message-box/message-box-new-section';
@@ -10,6 +10,7 @@ import {
   generateUsersReadMessageMap,
   groupMessages,
 } from '../../messages/components/message-box/message-box-utils';
+import { useGetFirstUnreadMessageId } from '../../messages/components/message-box/use-get-first-unread-message-id';
 import { MessageItemGroup } from '../../messages/components/message-group';
 import { MessageItem } from '../../messages/components/message-item';
 import { TimeDisplay } from '../../messages/components/time-display';

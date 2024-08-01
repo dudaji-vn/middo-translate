@@ -1,12 +1,18 @@
 import { CreateBusinessForm } from '@/app/(main-layout)/(protected)/spaces/[spaceId]/forms/_components/form-creation/schema';
+import { Button } from '@/components/actions';
 import { Typography } from '@/components/data-display';
 import { BusinessForm } from '@/types/forms.type';
-import { FileText } from 'lucide-react';
+import { FileText, X } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
 
-const ThankYou = (props: Partial<CreateBusinessForm>) => {
-  const { thankyou, name } = props;
+const ThankYou = (
+  props: Partial<CreateBusinessForm> & {
+    onclose: () => void;
+    btnName?: string;
+  },
+) => {
+  const { thankyou, name, onclose } = props;
   return (
     <div className="flex size-full flex-col rounded-xl bg-white pb-6">
       <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
@@ -36,6 +42,15 @@ const ThankYou = (props: Partial<CreateBusinessForm>) => {
           <Typography>{thankyou?.subtitle}</Typography>
         </div>
       </div>
+      <Button
+        color="primary"
+        variant="default"
+        shape={'square'}
+        onClick={onclose}
+        className="mx-auto w-fit"
+      >
+        {props.btnName || 'Close Form'}
+      </Button>
     </div>
   );
 };

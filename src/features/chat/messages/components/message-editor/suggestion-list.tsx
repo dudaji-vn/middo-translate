@@ -78,7 +78,7 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
         <div className="w-full overflow-hidden rounded-xl border bg-white py-1 shadow-1  dark:bg-neutral-900 ">
           <div className="flex max-h-60 w-full flex-col space-y-1 overflow-y-auto px-1">
             {props.items.map((item, index) => (
-              <Item
+              <MentionItem
                 key={item.id}
                 item={item}
                 index={index}
@@ -93,7 +93,7 @@ const SuggestionList = forwardRef<SuggestionListRef, SuggestionListProps>(
   },
 );
 
-const Item = ({
+export const MentionItem = ({
   item,
   index,
   isSelected,

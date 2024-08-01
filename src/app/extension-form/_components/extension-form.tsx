@@ -33,6 +33,14 @@ const answerSchema = z.object({
   answer: z.object({}).passthrough(),
 });
 
+type TActions = {
+  prev: string;
+  next: string;
+  submit: string;
+  requireMessage: string;
+  requireOptionMessage: string;
+  close: string;
+};
 type TSubmission = z.infer<typeof answerSchema>;
 
 const RenderField = ({
@@ -154,7 +162,8 @@ const ExtensionForm = ({
         )?.name;
         if (missingField) {
           ctx.addIssue({
-            message: `This answer is required!`,
+            message:
+              form?.actions?.requireMessage || `This answer is required!`,
             code: z.ZodIssueCode.unrecognized_keys,
             path: ['answer', missingField],
             keys: ['answer', missingField],
@@ -163,7 +172,9 @@ const ExtensionForm = ({
         }
         if (missingInputOfOptionTypeOther) {
           ctx.addIssue({
-            message: `Please add your answer for 'other' option!`,
+            message:
+              form?.actions?.requireOptionMessage ||
+              `Please add your answer for 'other' option!`,
             code: z.ZodIssueCode.unrecognized_keys,
             path: ['answer', missingInputOfOptionTypeOther],
             keys: ['answer', missingInputOfOptionTypeOther],
@@ -214,6 +225,7 @@ const ExtensionForm = ({
   if (!form) {
     return null;
   }
+  const actions = form.actions as TActions;
 
   const { formFields, customize, thankyou } = form as FormDetail;
   const themeName = customize?.theme
@@ -230,12 +242,13 @@ const ExtensionForm = ({
     if (showAll || inCorrectPage) {
       return;
     }
-    formAnswer.trigger().then((isValid) => {
-      if (isValid) {
-        setCurrentPage(page);
-      }
-    });
-    // setCurrentPage(page);
+    if (page > currentPage) {
+      formAnswer.trigger().then((isValid) => {
+        if (isValid) {
+          setCurrentPage(page);
+        }
+      });
+    } else setCurrentPage(page);
   };
 
   const submit = async (data: TSubmission) => {
@@ -245,11 +258,16 @@ const ExtensionForm = ({
         const otherAnswerOfField = data.answer[field.name + '-other'] as string;
         if (otherAnswerOfField) {
           if (field.type === 'checkbox' && !isEmpty(acc[field.name])) {
-            const replaceIndex = (acc[field.name] as string[]).findIndex(
-              (item: string) => item === 'other',
+            const otherOption = field.options?.find(
+              (option) => option.type === 'other',
             );
-            // @ts-ignore
-            acc[field.name][replaceIndex] = otherAnswerOfField;
+            const replaceIndex = (acc[field.name] as string[]).findIndex(
+              (item: string) => item === otherOption?.value,
+            );
+            if (replaceIndex !== -1) {
+              // @ts-ignore
+              acc[field.name][replaceIndex] = otherAnswerOfField;
+            }
           } else if (field.type === 'radio') {
             acc[field.name] = otherAnswerOfField;
           }
@@ -291,6 +309,8 @@ const ExtensionForm = ({
     }
     onClose(isDone);
   };
+
+  console.log('form', form);
   return (
     <>
       <main
@@ -312,7 +332,12 @@ const ExtensionForm = ({
           </Button.Icon>
         )}
         {isDone ? (
-          <ThankYou thankyou={thankyou} name={form.name} />
+          <ThankYou
+            thankyou={thankyou}
+            name={form.name}
+            onclose={onCloseForm}
+            btnName={actions.close}
+          />
         ) : (
           <form
             onSubmit={formAnswer.handleSubmit(submit)}
@@ -352,7 +377,7 @@ const ExtensionForm = ({
                 })}
                 onClick={() => onPageChange(currentPage - 1)}
               >
-                Prev
+                {actions.prev}
               </Button>
               <Button
                 endIcon={<Send />}
@@ -365,7 +390,7 @@ const ExtensionForm = ({
                   hidden: hasNextPage,
                 })}
               >
-                Submit
+                {actions.submit}
               </Button>
               <Button
                 endIcon={<ArrowRight />}
@@ -378,9 +403,20 @@ const ExtensionForm = ({
                 })}
                 onClick={() => onPageChange(currentPage + 1)}
               >
-                Next
+                {actions.next}
               </Button>
-              <em />
+              <Button
+                color="primary"
+                variant="default"
+                disabled={formAnswer.formState.isSubmitting || !hasNextPage}
+                shape={'square'}
+                className={cn('', {
+                  invisible: !isDone,
+                })}
+                startIcon={<X />}
+              >
+                {actions.close}
+              </Button>
             </div>
           </form>
         )}

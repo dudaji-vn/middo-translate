@@ -30,7 +30,6 @@ const Page = (
       },
     });
   };
-
   return (
     <ExtensionForm
       formId={formId}

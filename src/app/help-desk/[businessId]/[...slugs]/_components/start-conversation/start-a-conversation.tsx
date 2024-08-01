@@ -94,7 +94,10 @@ const StartAConversation = ({
     formState: { isSubmitting, errors },
   } = methods;
   const chatFlow = extensionData.chatFlow;
-  const appendFirstMessageFromChatFlow = async (roomId: Room['_id']) => {
+  const appendFirstMessageFromChatFlow = async (
+    roomId: Room['_id'],
+    language: string,
+  ) => {
     if (!chatFlow) return;
     const { nodes, edges } = chatFlow;
     const rootNode = nodes.find((node) => node.type === 'root');
@@ -112,7 +115,7 @@ const StartAConversation = ({
       content: rootChild.data?.content,
       roomId,
       type: messType,
-      language: extensionData.language,
+      language: language,
       mentions: [],
       actions: childrenActions,
       userId: owner?._id,
@@ -166,7 +169,8 @@ const StartAConversation = ({
         announceToParent({ type: 'room-found' });
         localStorage.setItem(LSK_VISITOR_ROOM_ID, roomId);
         localStorage.setItem(LSK_VISITOR_ID, user._id);
-        await appendFirstMessageFromChatFlow(roomId);
+        await appendFirstMessageFromChatFlow(roomId, values.language);
+
         router.push(
           `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}&originReferer=${fromDomain}`,
         );

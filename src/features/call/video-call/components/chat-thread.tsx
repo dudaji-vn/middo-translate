@@ -11,7 +11,6 @@ import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
 import { useTranslation } from 'react-i18next';
 import Tip from '@/components/data-display/tip/tip';
 import InvitationLink from './invitation-link';
-import { useAuthStore } from '@/stores/auth.store';
 import { CALL_TYPE } from '../../constant/call-type';
 
 export default function ChatThread({ className }: { className?: string }) {
@@ -42,7 +41,7 @@ export default function ChatThread({ className }: { className?: string }) {
   return (
     <aside
       className={twMerge(
-        'z-20 h-full w-full flex-1 overflow-y-hidden border-t bg-background md:w-[400px] md:max-w-[400px] md:overflow-auto md:border-t-0',
+        'z-20 h-full w-full flex-1 overflow-y-hidden border-t bg-background md:overflow-auto md:border-t-0',
         className,
         isMobile && 'fixed top-[52px] h-[calc(100dvh_-_104px)]',
         (!isFullScreen || !isShowChat) && 'hidden md:hidden',
