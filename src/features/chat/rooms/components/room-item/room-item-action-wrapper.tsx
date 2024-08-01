@@ -1,4 +1,3 @@
-import { Action, ActionItem, useRoomActions } from '../room-actions';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,29 +7,26 @@ import {
 import {
   Fragment,
   PropsWithChildren,
-  ReactNode,
   cloneElement,
   forwardRef,
-  useCallback,
   useMemo,
   useState,
 } from 'react';
+import { Action, ActionItem, useRoomActions } from '../room-actions';
 
 import { Button } from '@/components/actions';
 import { LongPressMenu } from '@/components/actions/long-press-menu';
-import { MoreVertical } from 'lucide-react';
-import { Room } from '../../types';
-import { cn } from '@/utils/cn';
 import { useAppStore } from '@/stores/app.store';
+import { cn } from '@/utils/cn';
+import { MoreVertical } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Room } from '../../types';
 
+import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
 import { useBusinessNavigationData } from '@/hooks/use-business-navigation-data';
 import { EBusinessConversationKeys } from '@/types/business.type';
 import { RoomItem } from '.';
-import { useCheckRoomRelationship } from '@/features/users/hooks/use-relationship';
-import { useRoomItem } from './room-item';
 import { InboxType } from '../inbox/inbox';
-import Link from 'next/link';
 export interface RoomItemActionWrapperProps
   extends React.HTMLAttributes<HTMLDivElement> {
   room: Room;
@@ -112,72 +108,8 @@ export const RoomItemActionWrapper = forwardRef<
 >(({ room, isMuted, children, type }, ref) => {
   const isMobile = useAppStore((state) => state.isMobile);
   const Wrapper = isMobile ? MobileWrapper : DesktopWrapper;
-  const { isBusiness, businessConversationType } = useBusinessNavigationData();
-  const { relationshipStatus } = useCheckRoomRelationship(room);
-  const { onAction, actionItems } = useRoomActions();
-  const items = useMemo(() => {
-    return actionItems
-      .filter((item) => {
-        const isAllowed = checkAllowedActions({
-          isBusinessRoom: Boolean(isBusiness),
-          businessConversationType: String(businessConversationType),
-          action: item.action,
-          currentStatus: room.status,
-          tab: type,
-        });
-        if (!isAllowed) return false;
-
-        switch (item.action) {
-          case 'notify':
-            return isMuted;
-          case 'unnotify':
-            return !isMuted;
-          case 'pin':
-            return !room.isPinned;
-          case 'unpin':
-            return room.isPinned;
-          case 'leave':
-            return room.isGroup;
-          case 'archive':
-            return room.status === 'active';
-          case 'unarchive':
-            return room.status === 'archived';
-          case 'block':
-            return (
-              !room.isGroup &&
-              relationshipStatus !== 'blocking' &&
-              relationshipStatus !== 'me'
-            );
-          case 'unblock':
-            return !room.isGroup && relationshipStatus === 'blocking';
-          case 'reject':
-            return room.isGroup;
-          default:
-            return isAllowed;
-        }
-      })
-      .map((item) => ({
-        ...item,
-        onAction: () =>
-          onAction({
-            action: item.action,
-            room,
-            isBusiness,
-          }),
-      }));
-  }, [
-    actionItems,
-    businessConversationType,
-    isBusiness,
-    isMuted,
-    onAction,
-    relationshipStatus,
-    room,
-    type,
-  ]);
-
   return (
-    <Wrapper items={items} room={room} isMuted={isMuted}>
+    <Wrapper room={room} isMuted={isMuted}>
       {children}
     </Wrapper>
   );
@@ -187,13 +119,9 @@ RoomItemActionWrapper.displayName = 'RoomItemActionWrapper';
 
 const MobileWrapper = ({
   children,
-  items,
   room,
-}: PropsWithChildren &
-  RoomItemActionWrapperProps & {
-    items: Item[];
-    room: Room;
-  }) => {
+  type,
+}: PropsWithChildren & RoomItemActionWrapperProps) => {
   const { t } = useTranslation('common');
   return (
     <LongPressMenu>
@@ -207,22 +135,7 @@ const MobileWrapper = ({
           </div>
         }
       >
-        {items.map(({ renderItem, ...item }) => {
-          if (renderItem) {
-            return renderItem({ item, room, setOpen: () => {} });
-          }
-          return (
-            <LongPressMenu.Item
-              key={item.action}
-              startIcon={item.icon}
-              color={item.color === 'error' ? 'error' : 'default'}
-              onClick={item.onAction}
-              className="dark:hover:bg-neutral-900"
-            >
-              {t(item.label)}
-            </LongPressMenu.Item>
-          );
-        })}
+        <MobileMenuItems room={room} type={type} />
       </LongPressMenu.Menu>
     </LongPressMenu>
   );
@@ -230,18 +143,10 @@ const MobileWrapper = ({
 
 const DesktopWrapper = ({
   children,
-  items,
   room,
-}: PropsWithChildren &
-  RoomItemActionWrapperProps & {
-    items: Item[];
-  }) => {
-  const { t } = useTranslation('common');
+  type,
+}: PropsWithChildren & RoomItemActionWrapperProps & {}) => {
   const [isOpen, setOpen] = useState(false);
-  const onOpenChange = useCallback((open: boolean) => {
-    setOpen(open);
-  }, []);
-
   return (
     <div className="group relative flex-1 overflow-hidden">
       {children}
@@ -263,27 +168,7 @@ const DesktopWrapper = ({
             </Button.Icon>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900">
-            {items.map(({ renderItem, ...item }) => {
-              if (renderItem) {
-                return renderItem({ item, room, setOpen: onOpenChange });
-              }
-              return (
-                <DropdownMenuItem
-                  className="flex items-center active:bg-primary-200 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
-                  key={item.action}
-                  disabled={item.disabled}
-                  onClick={item.onAction}
-                >
-                  {cloneElement(item.icon, {
-                    size: 16,
-                    className: cn('mr-2', item.color && `text-${item.color}`),
-                  })}
-                  <span className={cn(item.color && `text-${item.color}`)}>
-                    {t(item.label)}
-                  </span>
-                </DropdownMenuItem>
-              );
-            })}
+            <DesktopMenuItems room={room} setOpen={setOpen} type={type} />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -297,5 +182,187 @@ export const RoomItemActionWrapperDisabled = forwardRef<
 >(({ children }, ref) => {
   return <>{children}</>;
 });
+type MenuItemsProps = {
+  room: Room;
+  setOpen?: (open: boolean) => void;
+  type?: InboxType;
+  isMuted?: boolean;
+};
+const DesktopMenuItems = ({ room, setOpen, type, isMuted }: MenuItemsProps) => {
+  const { relationshipStatus } = useCheckRoomRelationship(room);
+  const { isBusiness, businessConversationType } = useBusinessNavigationData();
+  const { t } = useTranslation('common');
+
+  const { onAction, actionItems } = useRoomActions();
+  const items = useMemo(() => {
+    return generateActionItems({
+      room,
+      isMuted,
+      type,
+      isBusiness,
+      businessConversationType,
+      items: actionItems,
+      relationshipStatus,
+      onAction,
+    });
+  }, [
+    actionItems,
+    businessConversationType,
+    isBusiness,
+    isMuted,
+    onAction,
+    relationshipStatus,
+    room,
+    type,
+  ]);
+  return (
+    <Fragment>
+      {items.map(({ renderItem, ...item }) => {
+        if (renderItem) {
+          return renderItem({ item, room, setOpen: setOpen! });
+        }
+        return (
+          <DropdownMenuItem
+            className="flex items-center active:bg-primary-200 dark:hover:bg-neutral-800 dark:active:bg-neutral-700"
+            key={item.action}
+            disabled={item.disabled}
+            onClick={item.onAction}
+          >
+            {cloneElement(item.icon, {
+              size: 16,
+              className: cn('mr-2', item.color && `text-${item.color}`),
+            })}
+            <span className={cn(item.color && `text-${item.color}`)}>
+              {t(item.label)}
+            </span>
+          </DropdownMenuItem>
+        );
+      })}
+    </Fragment>
+  );
+};
+
+const MobileMenuItems = ({ room, isMuted, type }: MenuItemsProps) => {
+  const { relationshipStatus } = useCheckRoomRelationship(room);
+  const { isBusiness, businessConversationType } = useBusinessNavigationData();
+  const { t } = useTranslation('common');
+
+  const { onAction, actionItems } = useRoomActions();
+  const items = useMemo(() => {
+    return generateActionItems({
+      room,
+      isMuted,
+      type,
+      isBusiness,
+      businessConversationType,
+      items: actionItems,
+      relationshipStatus,
+      onAction,
+    });
+  }, [
+    actionItems,
+    businessConversationType,
+    isBusiness,
+    isMuted,
+    onAction,
+    relationshipStatus,
+    room,
+    type,
+  ]);
+  return (
+    <Fragment>
+      {items.map(({ renderItem, ...item }) => {
+        if (renderItem) {
+          return renderItem({ item, room, setOpen: () => {} });
+        }
+        return (
+          <LongPressMenu.Item
+            key={item.action}
+            startIcon={item.icon}
+            color={item.color === 'error' ? 'error' : 'default'}
+            onClick={item.onAction}
+            className="dark:hover:bg-neutral-900"
+          >
+            {t(item.label)}
+          </LongPressMenu.Item>
+        );
+      })}
+    </Fragment>
+  );
+};
 
 RoomItemActionWrapperDisabled.displayName = 'RoomItemActionWrapperDisabled';
+
+const generateActionItems = ({
+  room,
+  isMuted,
+  type,
+  isBusiness,
+  businessConversationType,
+  items,
+  relationshipStatus,
+  onAction,
+}: {
+  items: ActionItem[];
+  room: Room;
+  isMuted?: boolean;
+  type?: InboxType;
+  isBusiness?: boolean;
+  businessConversationType?: string | string[] | null | undefined;
+  relationshipStatus: string;
+  onAction: (args: {
+    action: Action;
+    room: Room;
+    isBusiness?: boolean;
+  }) => void;
+}) => {
+  return items
+    .filter((item) => {
+      const isAllowed = checkAllowedActions({
+        isBusinessRoom: Boolean(isBusiness),
+        businessConversationType: String(businessConversationType),
+        action: item.action,
+        currentStatus: room.status,
+        tab: type,
+      });
+      if (!isAllowed) return false;
+
+      switch (item.action) {
+        case 'notify':
+          return isMuted;
+        case 'unnotify':
+          return !isMuted;
+        case 'pin':
+          return !room.isPinned;
+        case 'unpin':
+          return room.isPinned;
+        case 'leave':
+          return room.isGroup;
+        case 'archive':
+          return room.status === 'active';
+        case 'unarchive':
+          return room.status === 'archived';
+        case 'block':
+          return (
+            !room.isGroup &&
+            relationshipStatus !== 'blocking' &&
+            relationshipStatus !== 'me'
+          );
+        case 'unblock':
+          return !room.isGroup && relationshipStatus === 'blocking';
+        case 'reject':
+          return room.isGroup;
+        default:
+          return isAllowed;
+      }
+    })
+    .map((item) => ({
+      ...item,
+      onAction: () =>
+        onAction({
+          action: item.action,
+          room,
+          isBusiness,
+        }),
+    }));
+};
