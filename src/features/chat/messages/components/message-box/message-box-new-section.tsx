@@ -1,5 +1,6 @@
 import { useScrollIntoView } from '@/hooks';
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useIntersectionObserver } from 'usehooks-ts';
 
 export interface MessageBoxNewSectionProps {
@@ -13,6 +14,7 @@ export const MessageBoxNewSection = ({
   const { isIntersecting, ref: intersectionRef } = useIntersectionObserver({
     threshold: 0.5,
   });
+  const { t } = useTranslation('common');
   const { scrollIntoView } = useScrollIntoView(ref);
   useEffect(() => {
     scrollIntoView();
@@ -34,7 +36,7 @@ export const MessageBoxNewSection = ({
         ref={intersectionRef}
         className="p-3 text-sm font-semibold text-primary"
       >
-        Unread messages
+        {t('COMMON.UNREAD')}
       </span>
       <div className="h-[1px] flex-1 bg-primary "></div>
     </div>

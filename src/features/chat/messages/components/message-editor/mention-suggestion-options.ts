@@ -33,19 +33,6 @@ export const mentionSuggestionOptions = (
   _items: MentionSuggestion[],
 ): MentionOptions['suggestion'] => {
   return {
-    // items: async ({ query }): Promise<MentionSuggestion[]> => {
-    //   return Promise.resolve(
-    //     _items
-    //       .map((item) => ({
-    //         label: item.label,
-    //         id: item.id,
-    //         image: item.image,
-    //       }))
-    //       .filter((item) =>
-    //         item.label.toLowerCase().includes(query.toLowerCase()),
-    //       ),
-    //   );
-    // },
     items: ({ query }): MentionSuggestion[] => {
       return _items
         .map((item) => ({
@@ -69,27 +56,18 @@ export const mentionSuggestionOptions = (
             editor: props.editor,
           });
 
-          if (isMobileDevice) {
-            popup = tippy(document.querySelectorAll('.mention-bar'), {
-              appendTo: () => document.body,
-              content: component.element,
-              showOnCreate: true,
-              interactive: true,
-              sticky: 'reference',
-              placement: 'bottom-start',
-            })[0];
-          } else {
-            popup = tippy('body', {
-              getReferenceClientRect: () =>
-                props.clientRect?.() ?? DOM_RECT_FALLBACK,
-              appendTo: () => document.body,
-              content: component.element,
-              showOnCreate: true,
-              interactive: true,
-              trigger: 'manual',
-              placement: 'top-start',
-            })[0];
-          }
+          if (isMobileDevice) return;
+
+          popup = tippy('body', {
+            getReferenceClientRect: () =>
+              props.clientRect?.() ?? DOM_RECT_FALLBACK,
+            appendTo: () => document.body,
+            content: component.element,
+            showOnCreate: true,
+            interactive: true,
+            trigger: 'manual',
+            placement: 'top-start',
+          })[0];
         },
 
         onUpdate(props) {
