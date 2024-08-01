@@ -29,6 +29,7 @@ import { isMobile as isMobileDevice } from 'react-device-detect';
 import { MessageEditorLanguageSelect } from './message-editor-language-select';
 import { useMessageActions } from '../message-actions';
 import { useMSEditorStore } from '@/features/chat/stores/editor-language.store';
+import { MobileMention } from './mobile-mention';
 
 export type MessageEditorSubmitData = {
   content: string;
@@ -218,6 +219,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       document.getElementById(`input-${editorId}`)?.focus();
       editor?.commands.focus('end');
     };
+
     return (
       <>
         <TranslationHelper
@@ -230,6 +232,11 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             editor?.commands.focus('end');
           }}
           onSend={handleSubmit}
+        />
+        <MobileMention
+          onSelect={focus}
+          editor={editor}
+          suggestions={mentionSuggestions}
         />
 
         <div className="relative @container">
