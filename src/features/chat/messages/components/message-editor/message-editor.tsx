@@ -233,11 +233,13 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           }}
           onSend={handleSubmit}
         />
-        <MobileMention
-          onSelect={focus}
-          editor={editor}
-          suggestions={mentionSuggestions}
-        />
+        {isMobileDevice && (
+          <MobileMention
+            onSelect={focus}
+            editor={editor}
+            suggestions={mentionSuggestions}
+          />
+        )}
 
         <div className="relative @container">
           <div className="mention-bar" />
