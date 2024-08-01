@@ -20,7 +20,7 @@ export const useBusinessNavigationData = () => {
   const pathname = usePathname();
   const isBusiness = pathname?.includes(EPageType.SPACES);
   const businessSlugs = params?.slugs || [];
-  const isHelpDesk = pathname?.includes(EPageType.HELP_DESK);
+  const isHelpDesk = pathname?.includes(EPageType.HELP_DESK) || pathname?.includes('/')
   const extensionId = params?.businessId;
   const isPreviewChatflowPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
   const isOnBusinessChat =
