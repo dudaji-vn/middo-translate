@@ -14,7 +14,6 @@ import { cn } from '@/utils/cn';
 import { BellOffIcon, Globe, PinIcon } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
-import { useIsMutedRoom } from '../../hooks/use-is-muted-room';
 import { ItemAvatar } from './room-item-avatar';
 import { RoomItemHead } from './room-item-head';
 import { ItemSub } from './room-item-sub';
@@ -129,14 +128,13 @@ const RoomItem = forwardRef<HTMLDivElement, RoomItemProps>((props, ref) => {
   const isHideRead = useSideChatStore(
     (state) => state.filters.includes('unread') && !isForceShow,
   );
+  const isMuted = room?.isMuted || false;
   const isRead = room?.lastMessage?.readBy?.includes(currentUserId) || false;
   const isActive =
     room.link === `/${ROUTE_NAMES.ONLINE_CONVERSATION}/${currentRoomId}` ||
     room.link ===
       `/${ROUTE_NAMES.SPACES}/${params?.spaceId}/${businessConversationType}/${currentRoomId}` ||
     _isActive;
-
-  const { isMuted } = useIsMutedRoom(room._id);
 
   const Wrapper = disabledAction
     ? RoomItemActionWrapperDisabled
