@@ -169,7 +169,8 @@ const StartAConversation = ({
         announceToParent({ type: 'room-found' });
         localStorage.setItem(LSK_VISITOR_ROOM_ID, roomId);
         localStorage.setItem(LSK_VISITOR_ID, user._id);
-        await appendFirstMessageFromChatFlow(roomId, res.data.user.language);
+        await appendFirstMessageFromChatFlow(roomId, values.language);
+
         router.push(
           `/help-desk/${extensionData._id}/${roomId}/${user._id}?themeColor=${theme.name}&originReferer=${fromDomain}`,
         );
