@@ -143,7 +143,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       let content = editor?.getHTML() || '';
       let lang = languageCode === 'auto' ? detectedLanguage : languageCode;
       let english = translationHelperRef.current?.getEnContent();
-      console.log('english', english);
       let mentions: string[] = [];
       reset();
       focus();

@@ -45,6 +45,7 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
     } = useSpeechRecognizer(
       SUPPORTED_VOICE_MAP[(lang || 'auto') as keyof typeof SUPPORTED_VOICE_MAP],
     );
+    const haveEditor = editor !== null;
     const setTextContent = useCallback(
       (text: string) => {
         editor?.commands.clearContent();
@@ -53,7 +54,8 @@ export const MicButton = forwardRef<MicButtonRef, MicButtonProps>(
           text: text,
         });
       },
-      [editor?.commands],
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [haveEditor],
     );
 
     const handleStartListening = () => {

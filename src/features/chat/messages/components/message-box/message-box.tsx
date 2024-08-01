@@ -25,6 +25,7 @@ import { useMessagesBox } from './messages-box.context';
 import { ScrollToButton } from './scroll-to-button';
 import { useMessageBoxScroll } from './use-message-box-scroll';
 import { MessageBoxNewSection } from './message-box-new-section';
+import { useGetFirstUnreadMessageId } from './use-get-first-unread-message-id';
 export const MAX_TIME_DIFF = 5; // 5 minutes
 export const MAX_TIME_GROUP_DIFF = 30; // 1 day
 export type MessageGroup = {
@@ -40,10 +41,6 @@ export const MessageBox = ({
   isAnonymous?: boolean;
   guestId?: string;
 }) => {
-  const [lastUnreadMessageId, setLastUnreadMessageId] = useState<string | null>(
-    null,
-  );
-
   const currentUserId = useAuthStore((s) => s.user?._id || guestId);
   const {
     hasNextPage,
@@ -68,25 +65,19 @@ export const MessageBox = ({
 
   const [participants, setParticipants] = useState(room.participants);
 
+  const { firstUnreadMessageId } = useGetFirstUnreadMessageId({
+    messages,
+    currentUserId,
+  });
+
   useEffect(() => {
     setParticipants(room.participants);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [room.participants.length]);
 
-  useEffect(() => {
-    if (lastUnreadMessageId || !currentUserId) return;
-    let id = null;
-    messages.forEach((message) => {
-      if (!message.readBy?.includes(currentUserId)) {
-        id = message._id;
-      }
-    });
-    setLastUnreadMessageId(id);
-  }, [currentUserId, lastUnreadMessageId, messages]);
-
   const messagesGroup = useMemo(() => {
-    return groupMessages(messages, [lastUnreadMessageId || '']);
-  }, [messages, lastUnreadMessageId]);
+    return groupMessages(messages, [firstUnreadMessageId || '']);
+  }, [messages, firstUnreadMessageId]);
 
   const usersReadMessageMap = useMemo(() => {
     return generateUsersReadMessageMap(
@@ -130,7 +121,7 @@ export const MessageBox = ({
               <div
                 key={group.lastMessage.clientTempId || group.lastMessage._id}
               >
-                {lastUnreadMessageId === group.lastMessage._id &&
+                {firstUnreadMessageId === group.lastMessage._id &&
                   !isInitialLoading && (
                     <MessageBoxNewSection
                       onIntersected={() => setIsViewUnread(true)}
@@ -169,7 +160,7 @@ export const MessageBox = ({
                       return (
                         <MessageItem
                           seenTrackerDisabled={
-                            !!lastUnreadMessageId && !isViewUnread
+                            !!firstUnreadMessageId && !isViewUnread
                           }
                           isEditing={
                             message._id === messageEditing?._id &&

@@ -20,7 +20,7 @@ export const EditSpaceModal = ({ space }: { space: Omit<TSpace, 'owner'> }) => {
     formState: { errors },
   } = formEditSpace;
 
-  const onSubmitEditSpaceName = async ({
+  const onSubmitteditSpaceName = async ({
     name,
   }: Partial<TEditSpaceFormValues>) => {
     if (!name) return;
@@ -59,7 +59,7 @@ export const EditSpaceModal = ({ space }: { space: Omit<TSpace, 'owner'> }) => {
           className: 'hidden',
         }}
       >
-        <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white [&_h3]:mt-4  [&_h3]:text-[1.25rem] dark:bg-background">
+        <div className=" max-h-[calc(85vh-48px)] max-w-screen-md  bg-white dark:bg-background  [&_h3]:mt-4 [&_h3]:text-[1.25rem]">
           <div className="flex w-full flex-col gap-3">
             <div className="flex w-full flex-row items-center gap-3 rounded-[12px]">
               <RHFInputField
@@ -88,7 +88,7 @@ export const EditSpaceModal = ({ space }: { space: Omit<TSpace, 'owner'> }) => {
                 shape={'square'}
                 size={'sm'}
                 onClick={() => {
-                  formEditSpace.handleSubmit(onSubmitEditSpaceName)();
+                  formEditSpace.handleSubmit(onSubmitteditSpaceName)();
                   setOpen(false);
                 }}
                 loading={formEditSpace.formState.isSubmitting}

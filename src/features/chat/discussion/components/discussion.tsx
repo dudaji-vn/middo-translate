@@ -11,7 +11,6 @@ import { DiscussionForm } from './discussion-form';
 import { DiscussionSocket } from './discussion-socket';
 import { MainMessage } from './main-message';
 import { RepliesBox } from './replies-box';
-import { useAuthStore } from '@/stores/auth.store';
 import { USE_COUNT_UNREAD_CHILD_KEY } from '../../messages/hooks/use-count-unread-child';
 import { deepCopy } from '@/utils/deep-copy';
 
