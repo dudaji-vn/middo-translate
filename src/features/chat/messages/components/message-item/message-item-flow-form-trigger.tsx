@@ -201,7 +201,7 @@ export default function MessageItemFlowFormTrigger({
     return message.actions[0];
   }, [message.actions]);
   const { onTriggerNextMessage } = useFormTrigger({ messageNode: nextNode });
-  const { recentlySubmitedFormByMessageId } = useMessagesBox();
+  const { recentlySubmittedFormByMessageId } = useMessagesBox();
 
   const translatedFormName =
     message.translations?.[String(language)] || form.name;
@@ -221,16 +221,16 @@ export default function MessageItemFlowFormTrigger({
     if (isSubmitted) {
       console.log(
         'FLOW-CHAT: isSubmitted',
-        recentlySubmitedFormByMessageId,
+        recentlySubmittedFormByMessageId,
         message._id,
       );
-      if (recentlySubmitedFormByMessageId === message._id) {
+      if (recentlySubmittedFormByMessageId === message._id) {
         console.log('FLOW-CHAT: onTriggerNextMessage');
         onTriggerNextMessage();
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [recentlySubmitedFormByMessageId, isSubmitted]);
+  }, [recentlySubmittedFormByMessageId, isSubmitted]);
 
   return (
     <div className="relative space-y-2 ">

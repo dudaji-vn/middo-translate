@@ -1,14 +1,8 @@
 'use client';
 
-import {
-  PropsWithChildren,
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from 'react';
+import { PropsWithChildren, createContext, useContext, useState } from 'react';
 
-import { anounymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
+import { anonymousMessagesAPI } from '@/features/chat/help-desk/api/anonymous-message.service';
 import { Message, PinMessage } from '@/features/chat/messages/types';
 import { useGetPinnedMessages } from '@/features/chat/rooms/hooks/use-get-pinned-messages';
 import { Room } from '@/features/chat/rooms/types';
@@ -33,7 +27,7 @@ interface MessagesBoxContextProps {
   isFetching: boolean;
   isFetched: boolean;
   isInitialLoading: boolean;
-  recentlySubmitedFormByMessageId: string;
+  recentlySubmittedFormByMessageId: string;
 }
 
 export const MessagesBoxContext = createContext<MessagesBoxContextProps>(
@@ -51,8 +45,10 @@ export const MessagesBoxProvider = ({
   guestId?: string;
 }>) => {
   const userId = useAuthStore((s) => s.user?._id);
-  const [recentlySubmitedFormByMessageId, setRecentlySubmitedFormByMessageId] =
-    useState<string>('');
+  const [
+    recentlySubmittedFormByMessageId,
+    setRecentlySubmittedFormByMessageId,
+  ] = useState<string>('');
   const [notification, setNotification] = useState<string>('');
   const key = ['messages', room._id];
   const {
@@ -70,7 +66,7 @@ export const MessagesBoxProvider = ({
     queryKey: key,
     queryFn: ({ pageParam }) => {
       if (isAnonymous) {
-        return anounymousMessagesAPI.getMessages(room._id, {
+        return anonymousMessagesAPI.getMessages(room._id, {
           cursor: pageParam,
           limit: 16,
           userId: guestId as string,
@@ -88,7 +84,7 @@ export const MessagesBoxProvider = ({
     isAnonymous,
   });
   const updateRecentFormStatus = (messageId: string) => {
-      setRecentlySubmitedFormByMessageId(messageId);
+    setRecentlySubmittedFormByMessageId(messageId);
   };
 
   useMessageSocket({
@@ -122,7 +118,7 @@ export const MessagesBoxProvider = ({
         isFetching,
         isFetched,
         isInitialLoading,
-        recentlySubmitedFormByMessageId: recentlySubmitedFormByMessageId,
+        recentlySubmittedFormByMessageId: recentlySubmittedFormByMessageId,
       }}
     >
       {children}
