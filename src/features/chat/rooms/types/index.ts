@@ -42,4 +42,5 @@ export type Room = {
   space?: TSpace;
   fromDomain?: string;
   station?: string;
+  isMuted?: boolean;
 } & BaseEntity;
