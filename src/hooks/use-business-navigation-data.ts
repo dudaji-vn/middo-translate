@@ -10,6 +10,7 @@ export enum EPageType {
   SPACES = 'spaces',
   HELP_DESK = 'help-desk',
   TEST_CHAT_FLOW = 'test-it-out',
+  FORM = 'extension-form',
 }
 const MAPPED_INBOX_STATUS = {
   [EBusinessConversationKeys.Conversations]: null,
@@ -20,7 +21,9 @@ export const useBusinessNavigationData = () => {
   const pathname = usePathname();
   const isBusiness = pathname?.includes(EPageType.SPACES);
   const businessSlugs = params?.slugs || [];
-  const isHelpDesk = pathname?.includes(EPageType.HELP_DESK) || pathname?.includes('/')
+  const isHelpDesk =
+    pathname?.includes(EPageType.HELP_DESK) ||
+    pathname?.includes(EPageType.FORM);
   const extensionId = params?.businessId;
   const isPreviewChatflowPage = pathname?.includes(EPageType.TEST_CHAT_FLOW);
   const isOnBusinessChat =
