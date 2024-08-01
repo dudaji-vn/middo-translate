@@ -377,7 +377,7 @@ const ExtensionForm = ({
                 })}
                 onClick={() => onPageChange(currentPage - 1)}
               >
-                Prev
+                {actions.prev}
               </Button>
               <Button
                 endIcon={<Send />}
@@ -415,7 +415,7 @@ const ExtensionForm = ({
                 })}
                 startIcon={<X />}
               >
-                {actions.submit}
+                {actions.close}
               </Button>
             </div>
           </form>
