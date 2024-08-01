@@ -193,15 +193,18 @@ export default function MessageItemFlowFormTrigger({
   const isSubmitted = form.isSubmitted;
   const { room } = useBusinessExtensionStore();
 
-  const language = room?.participants.find(
-    (p) => p.status === 'anonymous',
-  )?.language;
+  const language =
+    room?.participants.find((p) => p.status === 'anonymous')?.language ||
+    message.language;
   const nextNode = useMemo(() => {
     if (!message.actions) return null;
     return message.actions[0];
   }, [message.actions]);
   const { onTriggerNextMessage } = useFormTrigger({ messageNode: nextNode });
   const { recentlySubmitedFormByMessageId } = useMessagesBox();
+
+  const translatedFormName =
+    message.translations?.[String(language)] || form.name;
 
   const openIframeForm = () => {
     if (guestId) {
@@ -240,7 +243,7 @@ export default function MessageItemFlowFormTrigger({
           startIcon={isSubmitted ? <Check /> : <FileText />}
           onClick={openIframeForm}
         >
-          {form.name}
+          {translatedFormName}
         </Button>
       </div>
     </div>

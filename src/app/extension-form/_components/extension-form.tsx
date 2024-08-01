@@ -33,6 +33,13 @@ const answerSchema = z.object({
   answer: z.object({}).passthrough(),
 });
 
+type TActions = {
+  prev: string;
+  next: string;
+  submit: string;
+  requireMessage: string;
+  requireOptionMessage: string;
+};
 type TSubmission = z.infer<typeof answerSchema>;
 
 const RenderField = ({
@@ -214,6 +221,7 @@ const ExtensionForm = ({
   if (!form) {
     return null;
   }
+  const actions = form.actions as TActions;
 
   const { formFields, customize, thankyou } = form as FormDetail;
   const themeName = customize?.theme
@@ -230,12 +238,13 @@ const ExtensionForm = ({
     if (showAll || inCorrectPage) {
       return;
     }
-    formAnswer.trigger().then((isValid) => {
-      if (isValid) {
-        setCurrentPage(page);
-      }
-    });
-    // setCurrentPage(page);
+    if (page > currentPage) {
+      formAnswer.trigger().then((isValid) => {
+        if (isValid) {
+          setCurrentPage(page);
+        }
+      });
+    } else setCurrentPage(page);
   };
 
   const submit = async (data: TSubmission) => {
@@ -296,6 +305,8 @@ const ExtensionForm = ({
     }
     onClose(isDone);
   };
+
+  console.log('form', form);
   return (
     <>
       <main
@@ -374,7 +385,7 @@ const ExtensionForm = ({
                   hidden: hasNextPage,
                 })}
               >
-                Submit
+                {actions.submit}
               </Button>
               <Button
                 endIcon={<ArrowRight />}
@@ -387,7 +398,7 @@ const ExtensionForm = ({
                 })}
                 onClick={() => onPageChange(currentPage + 1)}
               >
-                Next
+                {actions.next}
               </Button>
               <Button
                 color="primary"
@@ -399,7 +410,7 @@ const ExtensionForm = ({
                 })}
                 startIcon={<X />}
               >
-                Close Form
+                {actions.submit}
               </Button>
             </div>
           </form>
