@@ -9,22 +9,15 @@ import { useTranslation } from 'react-i18next';
 import { listenEvent } from '../../utils/custom-event.util';
 import { CUSTOM_EVENTS } from '@/configs/custom-event';
 import { useAppStore } from '@/stores/app.store';
-
-export default function CaptionSection() {
-  const isFullScreen = useVideoCallStore(state => state.isFullScreen);
-  const isShowCaption = useVideoCallStore(state => state.isShowCaption);
-  if (!isFullScreen || !isShowCaption) return null;
-  return <CaptionContent />;
+interface CaptionSectionProps {
+  className?: string;
 }
-
-
-const CaptionContent = () => {
+export default function CaptionSection({className}: CaptionSectionProps) {
   const {t} = useTranslation('common')
   const theme = useAppStore(state => state.theme);
   const setShowCaption = useVideoCallStore(state => state.setShowCaption);
   const captions = useVideoCallStore(state => state.captions);
   const addCaption = useVideoCallStore(state => state.addCaption);
-  const clearCaption = useVideoCallStore(state => state.clearCaption);
   const captionListRef = useRef<HTMLDivElement>(null);
 
   const [isScroll, setScroll] = useState(false);
@@ -73,7 +66,7 @@ const CaptionContent = () => {
 
 
   return (
-    <section>
+    <section className={className}>
       <div className="flex items-center justify-center gap-2 bg-neutral-50 p-1 pl-3 text-primary dark:bg-neutral-950 dark:border-b dark:border-neutral-800 dark:border-t">
         <ScanText className="h-4 w-4" />
         <span className="flex-1">{t('CONVERSATION.CAPTION')}</span>

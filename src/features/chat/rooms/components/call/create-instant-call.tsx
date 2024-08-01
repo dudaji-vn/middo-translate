@@ -15,6 +15,7 @@ const CreateInstantCall = ({
     const call = useVideoCallStore(state => state.call);
     const [isLoading, setLoading] = useState<boolean>(false);
     const startVideoCall = useJoinCall(true);
+    const setFullScreen = useVideoCallStore(state => state.setFullScreen);
     const createInstantCall = async () => {
         if(call) {
             customToast.error(t('MESSAGE.ERROR.STOP_CALL_BEFORE_CREATE_INSTANT'))
@@ -24,6 +25,7 @@ const CreateInstantCall = ({
         try {
             setLoading(true);
             startVideoCall({});
+            setFullScreen(true)
         } catch (error) {
             customToast.error(t('MESSAGE.ERROR.CAN_NOT_CREATE_INSTANT_CALL'))
         } finally {
