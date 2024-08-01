@@ -41,12 +41,14 @@ export const ModalLeaveCall = () => {
     if(isElectron) {
       ipcRenderer.send(ELECTRON_EVENTS.STOP_SHARE_SCREEN);
     }
+    
+    if(isHelpDesk) {
+      window.close();
+      return;
+    }
     if(isAnonymousCallScreen) {
       window.location.href = '/';
       return;
-    }
-    if(isHelpDesk) {
-      window.close();
     }
   };
 
