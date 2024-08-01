@@ -14,7 +14,7 @@ export default function useSpeechRecognizer(language?: string) {
   const processorRef = useRef<any>();
   const audioContextRef = useRef<any>();
   const audioInputRef = useRef<any>();
-  
+
   const receiveAudioText = useCallback(
     (data: WordRecognized) => {
       // remove /n in data.text
@@ -23,13 +23,13 @@ export default function useSpeechRecognizer(language?: string) {
       if (isFinal) {
         setHistory((old) => [...old, transcript]);
       }
-      setInterimTranscript((history.join(' ') + transcript));
+      setInterimTranscript(history.join(' ') + transcript);
     },
     [history],
   );
 
   useEffect(() => {
-    if(!listening) return;
+    if (!listening) return;
     socket.on(
       SOCKET_CONFIG.EVENTS.SPEECH_TO_TEXT.RECEIVE_AUDIO_TEXT,
       receiveAudioText,
@@ -86,7 +86,7 @@ export default function useSpeechRecognizer(language?: string) {
       }
       processorRef.current?.disconnect();
       audioInputRef.current?.disconnect();
-      audioContextRef.current?.close();
+      audioContextRef?.current?.close();
     };
   }, [stream]);
 
@@ -136,10 +136,7 @@ export default function useSpeechRecognizer(language?: string) {
       receiveAudioText,
     );
     setFinalTranscript(history.join(' ') || interimTranscript);
-    
   }, [history, interimTranscript, receiveAudioText, stream]);
-
-  
 
   return {
     listening: listening,
