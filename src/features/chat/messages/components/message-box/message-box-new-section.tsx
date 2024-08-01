@@ -34,7 +34,7 @@ export const MessageBoxNewSection = ({
         ref={intersectionRef}
         className="p-3 text-sm font-semibold text-primary"
       >
-        New
+        Unread messages
       </span>
       <div className="h-[1px] flex-1 bg-primary "></div>
     </div>
