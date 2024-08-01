@@ -191,7 +191,11 @@ export default function MessageItemFlowFormTrigger({
 }) {
   const formId = form._id;
   const isSubmitted = form.isSubmitted;
-  const language = message.language;
+  const { room } = useBusinessExtensionStore();
+
+  const language = room?.participants.find(
+    (p) => p.status === 'anonymous',
+  )?.language;
   const nextNode = useMemo(() => {
     if (!message.actions) return null;
     return message.actions[0];
