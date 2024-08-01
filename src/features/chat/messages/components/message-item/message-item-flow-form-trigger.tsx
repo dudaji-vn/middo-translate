@@ -104,7 +104,7 @@ const useFormTrigger = ({
           sender: bot!,
           content: nextNode.data?.content,
           formId: nextNode.form,
-          language: '',
+          language: me?.language || '',
         }),
         status: 'sent',
         roomId: room?._id,
