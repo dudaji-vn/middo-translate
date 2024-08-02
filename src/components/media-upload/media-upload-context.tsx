@@ -45,7 +45,7 @@ export type UploadedFile = {
   type?: string;
 };
 export interface MediaUploadProps {}
-const MAX_FILE_SIZE = 25;
+const MAX_FILE_SIZE = 100;
 
 export const MediaUploadProvider = ({ children }: PropsWithChildren) => {
   const [files, setFiles] = useState<SelectedFile[]>([]);
