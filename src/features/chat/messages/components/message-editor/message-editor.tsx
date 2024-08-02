@@ -233,7 +233,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
           }}
           onSend={handleSubmit}
         />
-        {isMobileDevice && (
+        {isMobileDevice && editor && (
           <MobileMention
             onSelect={focus}
             editor={editor}
@@ -316,7 +316,6 @@ MessageEditor.displayName = 'MessageEditor';
 
 export const Autofocus = ({ editor }: { editor: Editor }) => {
   useEffect(() => {
-    console.log('render Autofocus');
     editor?.commands.focus('end');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
