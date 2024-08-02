@@ -6,14 +6,16 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { useEditor as useTiptapEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useEffect, useRef } from 'react';
-import { EnterToSubmit } from './enter-to-submit';
+import { EnterToSubmit } from './plugins/enter-to-submit';
 import {
   MentionSuggestion,
   mentionSuggestionOptions,
-} from './mention-suggestion-options';
+} from './plugins/mentions/mention-options';
 
 import { convert } from 'html-to-text';
 import { useMessageActions } from '../message-actions';
+import { CommandsExtension } from './plugins/commands';
+import { commandOptions } from './plugins/commands/command-options';
 type UseEditorOptions = {
   enterToSubmit?: boolean;
   onClipboardEvent?: (e: ClipboardEvent) => void;
@@ -130,8 +132,25 @@ export const useEditor = ({
           },
           suggestion: mentionSuggestionOptions(mentionSuggestions),
         }),
+        CommandsExtension.configure({
+          suggestion: commandOptions([
+            {
+              id: '1',
+              label: 'SumBot',
+              image: 'https://via.placeholder.com/150',
+              description: 'Sum your numbers together',
+            },
+            {
+              id: '2',
+              label: 'TranslateBot',
+              image: 'https://via.placeholder.com/150',
+              description: 'Translate your text to any language',
+            },
+          ]),
+        }),
       ],
       content: '',
+      shouldRerenderOnTransaction: false,
     },
     [mentionSuggestions?.length],
   );

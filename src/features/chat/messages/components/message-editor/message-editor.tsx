@@ -20,7 +20,7 @@ import { AttachmentSelection } from './attachment-selection';
 import { EmojiButton } from './emoji-button';
 import { useMediaUpload } from '../../../../../components/media-upload';
 import { MentionButton } from './mention-button';
-import { MentionSuggestion } from './mention-suggestion-options';
+import { MentionSuggestion } from './plugins/mentions/mention-options';
 import { MicButton, MicButtonRef } from './mic-button';
 import { SendButton } from './send-button';
 import { TranslationHelper, TranslationHelperRef } from './translation-helper';
@@ -29,7 +29,7 @@ import { isMobile as isMobileDevice } from 'react-device-detect';
 import { MessageEditorLanguageSelect } from './message-editor-language-select';
 import { useMessageActions } from '../message-actions';
 import { useMSEditorStore } from '@/features/chat/stores/editor-language.store';
-import { MobileMention } from './mobile-mention';
+import { MobileMention } from './plugins/mentions/mobile-mention';
 
 export type MessageEditorSubmitData = {
   content: string;
@@ -123,6 +123,8 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       id: roomId,
       editorId,
     });
+
+    console.log(editor?.state);
 
     const translationHelperRef = useRef<TranslationHelperRef>(null);
 
@@ -242,7 +244,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
         )}
 
         <div className="relative @container">
-          <div className="mention-bar" />
+          <div className="mention-bar w-full" />
           {isEditing && editor && (
             <EditControl
               onEditSubmit={onEditSubmit}
@@ -271,7 +273,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
 
               <div className="flex">
                 <EditorContent
-                  className="no-scrollbar max-h-[200px] min-h-[46] w-full overflow-y-auto p-2 dark:text-neutral-50"
+                  className="no-scrollbar max-h-[200px] min-h-[46] w-full overflow-y-auto p-2 dark:text-neutral-200"
                   editor={editor}
                 />
                 <div className="mt-auto">

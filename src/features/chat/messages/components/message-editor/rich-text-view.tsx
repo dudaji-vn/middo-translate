@@ -8,7 +8,7 @@ import { ROUTE_NAMES } from '@/configs/route-name';
 import Link from '@tiptap/extension-link';
 import { useEffect } from 'react';
 import { useAuthStore } from '@/stores/auth.store';
-import { MentionSuggestion } from './mention-suggestion-options';
+import { MentionSuggestion } from './plugins/mentions/mention-options';
 type RichTextViewProps = {
   content: string;
   editorStyle?: string;

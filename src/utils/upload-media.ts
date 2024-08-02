@@ -18,12 +18,14 @@ export type CloudinaryUploadResponse = {
   original_filename: string;
 };
 
+const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
+
+const CLOUDINARY_KEY = process.env.NEXT_PUBLIC_CLOUDINARY_KEY!;
+
 export const uploadMultiMedia = async (
   files: File[],
 ): Promise<CloudinaryUploadResponse[]> => {
   const { signature, timestamp } = await getSignature();
-  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
-  const cloudinaryKey = process.env.NEXT_PUBLIC_CLOUDINARY_KEY!;
 
   // use Promise.all to upload multiple files
   const uploadFiles = files.map((file) => {
@@ -31,8 +33,8 @@ export const uploadMultiMedia = async (
     formData.append('file', file);
     formData.append('signature', signature);
     formData.append('timestamp', timestamp);
-    formData.append('api_key', cloudinaryKey); // snake case is required by cloudinary
-    return fetch(url, {
+    formData.append('api_key', CLOUDINARY_KEY); // snake case is required by cloudinary
+    return fetch(UPLOAD_URL, {
       method: 'post',
       body: formData,
     });
@@ -49,13 +51,11 @@ export const uploadImage = async (
   let fileUpload = file;
   const { signature, timestamp } = await getSignature();
   const formData = new FormData();
-  const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/upload`;
-  const cloudinaryKey = process.env.NEXT_PUBLIC_CLOUDINARY_KEY!;
   formData.append('file', fileUpload);
   formData.append('signature', signature);
   formData.append('timestamp', timestamp);
-  formData.append('api_key', cloudinaryKey); // snake case is required by cloudinary
-  const response = await fetch(url, {
+  formData.append('api_key', CLOUDINARY_KEY); // snake case is required by cloudinary
+  const response = await fetch(UPLOAD_URL, {
     method: 'post',
     body: formData,
   });

@@ -1,7 +1,7 @@
 import { Editor } from '@tiptap/react';
 import { useMemo } from 'react';
-import { MentionSuggestion } from './mention-suggestion-options';
-import { MentionItem } from './suggestion-list';
+import { MentionSuggestion } from './mention-options';
+import { MentionItem } from './mention-list';
 
 type MobileMentionProps = {
   editor: Editor;

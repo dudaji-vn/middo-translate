@@ -6,8 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { MentionSuggestion } from './mention-suggestion-options';
-import { Avatar } from '../../../../../components/data-display';
+import type { MentionSuggestion } from './mention-options';
 
 import { cn } from '@/utils/cn';
 import { Users2Icon } from 'lucide-react';
@@ -20,6 +19,7 @@ export type SuggestionListRef = {
   >;
 };
 import { isMobile as isMobileDevice } from 'react-device-detect';
+import { Avatar } from '@/components/data-display';
 
 export type SuggestionListProps = SuggestionProps<MentionSuggestion>;
 

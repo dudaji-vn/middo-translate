@@ -1,12 +1,5 @@
 import { ReactRenderer } from '@tiptap/react';
 import tippy, { type Instance as TippyInstance } from 'tippy.js';
-import SuggestionList, { type SuggestionListRef } from './suggestion-list';
-
-export type MentionSuggestion = {
-  id: string;
-  image?: string;
-  label: string;
-};
 
 const DOM_RECT_FALLBACK: DOMRect = {
   bottom: 0,
@@ -23,22 +16,25 @@ const DOM_RECT_FALLBACK: DOMRect = {
 };
 import { isMobile as isMobileDevice } from 'react-device-detect';
 import { SuggestionOptions } from '@tiptap/suggestion';
+import { CommandSuggestion, SuggestionListRef } from './command.types';
+import { CommandSuggestionList } from './command-list';
 
 export type MentionOptions = {
   HTMLAttributes: Record<string, any>;
   suggestion: Omit<SuggestionOptions, 'editor'>;
 };
 
-export const mentionSuggestionOptions = (
-  _items: MentionSuggestion[],
+export const commandOptions = (
+  _items: CommandSuggestion[],
 ): MentionOptions['suggestion'] => {
   return {
-    items: ({ query }): MentionSuggestion[] => {
+    items: ({ query }): CommandSuggestion[] => {
       return _items
         .map((item) => ({
           label: item.label,
           id: item.id,
           image: item.image,
+          description: item?.description,
         }))
         .filter((item) =>
           item.label.toLowerCase().includes(query.toLowerCase()),
@@ -51,22 +47,26 @@ export const mentionSuggestionOptions = (
 
       return {
         onStart: (props) => {
-          component = new ReactRenderer(SuggestionList, {
+          component = new ReactRenderer(CommandSuggestionList, {
             props,
             editor: props.editor,
           });
 
           if (isMobileDevice) return;
 
-          popup = tippy('body', {
-            getReferenceClientRect: () =>
-              props.clientRect?.() ?? DOM_RECT_FALLBACK,
-            appendTo: () => document.body,
+          popup = tippy(document.querySelectorAll('.mention-bar'), {
+            appendTo: 'parent',
             content: component.element,
+            onShow({ popper, reference }) {
+              popper.style.width =
+                reference.getBoundingClientRect().width + 'px';
+            },
             showOnCreate: true,
             interactive: true,
             trigger: 'manual',
-            placement: 'top-start',
+            sticky: 'reference',
+            placement: 'bottom-start',
+            maxWidth: 'none',
           })[0];
         },
 

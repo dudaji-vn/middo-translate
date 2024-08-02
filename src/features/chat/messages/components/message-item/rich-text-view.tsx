@@ -4,7 +4,7 @@ import './styles/rich-text-view.styles.css';
 
 import DOMPurify from 'dompurify';
 import { memo, useEffect, useState } from 'react';
-import { MentionSuggestion } from '../message-editor/mention-suggestion-options';
+import { MentionSuggestion } from '../message-editor/plugins/mentions/mention-options';
 import { cn } from '@/utils/cn';
 import { useAuthStore } from '@/stores/auth.store';
 import { CookingPot } from 'lucide-react';
