@@ -19,10 +19,13 @@ import ParticipantInVideoCall from '@/features/call/interfaces/participant';
 interface FocusVideoItemProps {
   participant: ParticipantInVideoCall;
   isAllowChangeView?: boolean;
+  isLoadAudio?: boolean;
 }
-const FocusVideoItem = ({ participant, isAllowChangeView = true }: FocusVideoItemProps) => {
-  const {t} = useTranslation('common')
-  
+const FocusVideoItem = ({ 
+  participant, 
+  isAllowChangeView = true,
+  isLoadAudio = false
+}: FocusVideoItemProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const parentRef = useRef<HTMLElement>(null);
   const { isTurnOnCamera } = useLoadStream(participant, videoRef);
@@ -98,7 +101,7 @@ const FocusVideoItem = ({ participant, isAllowChangeView = true }: FocusVideoIte
           isTurnOnCamera ? '' : 'hidden',
         )}
         autoPlay
-        muted
+        muted={participant?.isMe || !isLoadAudio}
         playsInline
         controls={false}
       ></video>
