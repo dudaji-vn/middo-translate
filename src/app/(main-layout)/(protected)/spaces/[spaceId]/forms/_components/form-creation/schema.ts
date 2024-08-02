@@ -49,7 +49,6 @@ const checkDuplicateFieldNames = (fields: FormField[]) => {
 
 export const createBusinessFormSchema = z.object({
   formId: z.string().optional(),
-
   name: z
     .string()
     .max(30, 'Name is too long, max 30 characters')
@@ -58,26 +57,31 @@ export const createBusinessFormSchema = z.object({
     .string()
     .max(50, 'Description is too long, max 50 characters')
     .optional(),
-  formFields: z.array(formFieldSchema).superRefine((fields, ctx) => {
-    const pass = checkDuplicateFieldNames(fields);
-    if (!pass) {
-      const indexDuplicate = fields.findLastIndex((field, index) =>
-        fields.findIndex((f, i) => f.name === field.name && i !== index),
-      );
-      ctx.addIssue({
-        message: `Field name ${fields[indexDuplicate].name} is already used`,
-        code: z.ZodIssueCode.unrecognized_keys,
-        path: [indexDuplicate, 'name'],
-        keys: [String(indexDuplicate), 'name'],
-      });
-      return true;
-    }
-    return false;
-  }),
+  formFields: z
+    .array(formFieldSchema)
+    .min(1, {
+      message: 'At least 1 field is required',
+    })
+    .superRefine((fields, ctx) => {
+      const pass = checkDuplicateFieldNames(fields);
+      if (!pass) {
+        const indexDuplicate = fields.findLastIndex((field, index) =>
+          fields.findIndex((f, i) => f.name === field.name && i !== index),
+        );
+        ctx.addIssue({
+          message: `Field name ${fields[indexDuplicate].name} is already used`,
+          code: z.ZodIssueCode.unrecognized_keys,
+          path: [indexDuplicate, 'name'],
+          keys: [String(indexDuplicate), 'name'],
+        });
+        return true;
+      }
+      return false;
+    }),
   thankyou: z
     .object({
-      title: z.string(),
-      subtitle: z.string(),
+      title: z.string().optional(),
+      subtitle: z.string().optional(),
       image: z.string().optional(),
     })
     .optional(),

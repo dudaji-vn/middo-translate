@@ -17,6 +17,7 @@ import { SOCKET_CONFIG } from '@/configs/socket';
 import { useNetworkStatus } from '@/utils/use-network-status';
 import { useAppStore } from '@/stores/app.store';
 import { usePlatformStore } from '@/features/platform/stores';
+import usePlatformNavigation from '@/hooks/use-platform-navigation';
 
 export type MessageNode = Omit<FlowNode, 'position' | 'data'> & {
   data: FlowNode['data'] & { translations?: { [key: string]: string } };
@@ -178,6 +179,8 @@ const useFormTrigger = ({
 
 export default function MessageItemFlowFormTrigger({
   guestId,
+  spaceId,
+  isBusinessChat,
   message,
   form,
 }: {
@@ -188,11 +191,13 @@ export default function MessageItemFlowFormTrigger({
     name: string;
     isSubmitted?: boolean;
   };
+  spaceId?: string;
+  isBusinessChat?: boolean;
 }) {
   const formId = form._id;
   const isSubmitted = form.isSubmitted;
   const { room } = useBusinessExtensionStore();
-
+  const { navigateTo } = usePlatformNavigation();
   const language =
     room?.participants.find((p) => p.status === 'anonymous')?.language ||
     message.language;
@@ -207,6 +212,9 @@ export default function MessageItemFlowFormTrigger({
     message.translations?.[String(language)] || form.name;
 
   const openIframeForm = () => {
+    if (isBusinessChat && spaceId) {
+      navigateTo(`/spaces/${spaceId}/forms/${formId}`);
+    }
     if (guestId) {
       announceToParent({
         type: 'init-form-extension',
@@ -243,7 +251,7 @@ export default function MessageItemFlowFormTrigger({
           startIcon={isSubmitted ? <Check /> : <FileText />}
           onClick={openIframeForm}
         >
-          {translatedFormName}
+          {isBusinessChat ? translatedFormName : message.content}
         </Button>
       </div>
     </div>

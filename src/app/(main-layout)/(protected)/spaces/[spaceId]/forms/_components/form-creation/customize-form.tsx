@@ -18,6 +18,7 @@ const formColors = [...extensionsCustomThemeOptions];
 const CustomizeForm = () => {
   const { setValue, watch } = useFormContext();
   const selectedColor = watch('customize.theme');
+  const selectedLayout = watch('customize.layout');
   const onChange = (color: string) => {
     setValue('customize.theme', color);
   };
@@ -33,7 +34,12 @@ const CustomizeForm = () => {
         >
           <div
             onClick={() => setValue('customize.layout', 'single')}
-            className="flex flex-1  cursor-pointer flex-row items-center justify-between gap-3 rounded-[12px] bg-primary-100 p-4 md:p-5"
+            className={cn(
+              'flex flex-1  cursor-pointer flex-row items-center justify-between gap-3 rounded-[12px] bg-primary-100 p-4 md:p-5',
+              selectedLayout === 'single'
+                ? 'border border-primary-500-main'
+                : '',
+            )}
           >
             <div className="flex flex-row items-center justify-start gap-3">
               <Image
@@ -50,7 +56,6 @@ const CustomizeForm = () => {
               value="single"
               id="single"
               iconProps={{ className: 'size-full' }}
-              className=" border-neutral-200 ring-neutral-200 dark:border-neutral-800  dark:ring-neutral-900"
             >
               <Check
                 className="absolute right-[1px] top-[1px] h-[14px] w-3"
@@ -61,9 +66,16 @@ const CustomizeForm = () => {
 
           <div
             onClick={() => setValue('customize.layout', 'multiple')}
-            className="flex flex-1 cursor-pointer flex-row items-center  justify-between  gap-3 rounded-[12px] bg-primary-100 p-4 md:p-5"
+            className={cn(
+              'flex flex-1 cursor-pointer flex-row items-center  justify-between  gap-3 rounded-[12px] bg-primary-100 p-4 md:p-5',
+              selectedLayout === 'multiple'
+                ? 'border border-primary-500-main'
+                : '',
+            )}
           >
-            <div className="flex flex-row items-center justify-start gap-3">
+            <div
+              className={cn('flex flex-row items-center justify-start gap-3')}
+            >
               <Image
                 alt="form-layout-all-questions"
                 width={40}
@@ -71,14 +83,13 @@ const CustomizeForm = () => {
                 src="/form-layout-all-questions.svg"
               />
               <Label className="capitalize text-neutral-800">
-                List all questions on one page
+                All questions on one page
               </Label>
             </div>
             <RadioGroupItem
               value="multiple"
               id="multiple"
-              iconProps={{ className: 'h-full w-full' }}
-              className="border-neutral-200 ring-neutral-200 dark:border-neutral-800 dark:ring-neutral-900"
+              iconProps={{ className: 'size-full inset-0' }}
             >
               <Check
                 className="absolute right-[1px] top-[1px] h-[14px] w-3"
@@ -94,7 +105,7 @@ const CustomizeForm = () => {
         </FormLabel>
         <div className="flex w-fit flex-row">
           <RHFColorSelector
-            itemProps={{ className: 'max-md:[&_svg]:size-6' }}
+            itemProps={{ className: '' }}
             colorNameField="customize.theme"
             selectedColor={selectedColor}
             listColors={formColors.map((color) => color.hex)}
@@ -106,38 +117,37 @@ const CustomizeForm = () => {
         <FormLabel className="font-bold text-neutral-800  dark:text-neutral-50">
           Background
         </FormLabel>
-        <div className="grid w-full  grid-cols-5 gap-3">
+        <div className="grid w-full  grid-cols-5 gap-3 max-md:p-1">
           {Array.from({ length: 10 }).map((_, index) => {
             const src = `/forms/bg-form-${index + 1}.jpg`;
             const isSelect = watch('customize.background') === src;
             return (
               <div
                 key={index}
-                className="relative flex aspect-[1.75] size-full cursor-pointer rounded-sm max-md:h-24 md:rounded-[12px]"
-                style={{
-                  backgroundImage: `url(${src})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
+                className={cn(
+                  'aspect-[1.75] size-full cursor-pointer rounded-[16px]  max-md:h-24',
+                  isSelect
+                    ? 'border-primary-500-main max-md:scale-105 max-md:border max-md:p-1'
+                    : '',
+                )}
                 onClick={() => setValue('customize.background', src)}
               >
-                {/* <Image
-                  alt="form-background"
-                  src={src}
-                  layout="fill"
-                  objectFit="cover"
-                  objectPosition="center"
-                  className="rounded-sm max-md:h-24 md:rounded-[12px]"
-                  placeholder={'blur'}
-                  blurDataURL={'/forms/bg-form-10.jpg'}
-                /> */}
-                <Check
-                  stroke="white"
-                  className={cn(
-                    `m-auto size-8 stroke-[4px] z-10`,
-                    isSelect ? 'block' : 'hidden',
-                  )}
-                />
+                <div
+                  className="flex aspect-[1.75]  size-full cursor-pointer rounded-[12px]"
+                  style={{
+                    backgroundImage: `url(${src})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                  }}
+                >
+                  <Check
+                    stroke="white"
+                    className={cn(
+                      `z-10 m-auto size-8 stroke-[3px]`,
+                      isSelect ? 'block' : 'hidden',
+                    )}
+                  />
+                </div>
               </div>
             );
           })}
