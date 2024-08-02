@@ -116,7 +116,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
     const { t } = useTranslation('common');
     const isPending = message.status === 'pending';
     const mediaLength = message.media?.length || 0;
-    const { isOnHelpDeskChat } = useBusinessNavigationData();
+    const { isOnHelpDeskChat, isOnBusinessChat, spaceId } =
+      useBusinessNavigationData();
     const isSystemMessage = message.type === 'action';
     const { message: activeMessage, action, reset } = useMessageActions();
     const isActionActive = activeMessage?._id === message._id;
@@ -223,6 +224,8 @@ export const MessageItem = forwardRef<HTMLDivElement, MessageProps>(
                             guestId={guestId}
                             message={message}
                             form={extensionForm}
+                            spaceId={String(spaceId)}
+                            isBusinessChat={Boolean(isOnBusinessChat)}
                           />
                         )}
                         {message.content && !extensionForm && (

@@ -137,14 +137,18 @@ const CreateOrEditBusinessForm = ({
       <Form {...form}>
         <Tabs
           value={tabValue?.toString()}
-          className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
+          className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 pb-36 md:px-[5vw] md:pb-20"
           defaultValue={tabValue.toString()}
           onValueChange={(value) => {
             setTabValue(parseInt(value));
           }}
         >
           <form id="form-create-form" onSubmit={handleSubmit(submit)}>
-            <DetailFormHeader action={action} onPreviewClick={previewForm} />
+            <DetailFormHeader
+              disabled={!isValid || isSubmitting}
+              action={action}
+              onPreviewClick={previewForm}
+            />
           </form>
           <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
             {[0, 1, 2].map((i) => {
@@ -156,14 +160,15 @@ const CreateOrEditBusinessForm = ({
                   variant="button"
                   className={cn(
                     'rounded-t-lg bg-white max-md:w-fit max-md:px-3',
+                    isSelected && 'max-md:px-7',
                   )}
                 >
-                  {isSelected
-                    ? isMobile
-                      ? cloneElement(tabIcons[i as keyof typeof tabIcons], {
+                  {isMobile
+                    ? isSelected
+                      ? tabLabels[i]
+                      : cloneElement(tabIcons[i as keyof typeof tabIcons], {
                           size: 24,
                         })
-                      : tabLabels[i]
                     : tabLabels[i]}
                 </TabsTrigger>
               );
@@ -171,8 +176,7 @@ const CreateOrEditBusinessForm = ({
           </TabsList>
           <section
             className={cn(
-              'flex flex-1 flex-col gap-2 overflow-hidden p-5 md:p-10',
-              'mx-auto w-full  rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
+              'flex flex-1 flex-col gap-2 overflow-hidden  rounded-2xl border-none bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303] max-md:mx-3 md:w-full',
             )}
           >
             {tabValue === 0 && (
@@ -216,7 +220,7 @@ const CreateOrEditBusinessForm = ({
           </section>
         </Tabs>
       </Form>
-      {formOpenDraftPreview && (
+      {formOpenDraftPreview ? (
         <div
           className={cn(
             'fixed left-0 top-0 z-50 h-screen w-screen',
@@ -235,6 +239,26 @@ const CreateOrEditBusinessForm = ({
             }}
           />
         </div>
+      ) : (
+        <form
+          onSubmit={handleSubmit(submit)}
+          className={cn(
+            'fixed inset-x-0 bottom-0   z-[51] flex h-fit   w-screen justify-center bg-white p-4 md:hidden',
+          )}
+        >
+          <Button
+            variant={'default'}
+            size={'sm'}
+            shape={'square'}
+            color={'primary'}
+            disabled={!isValid || isSubmitting}
+            type="submit"
+            form="form-create-form"
+            className="w-full"
+          >
+            {action === 'create' ? t('COMMON.CREATE') : t('COMMON.SAVE')}
+          </Button>
+        </form>
       )}
     </>
   );

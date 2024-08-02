@@ -10,18 +10,19 @@ import { Button } from '@/components/actions';
 import { cn } from '@/utils/cn';
 import { ArrowLeft, Eye } from 'lucide-react';
 import { Typography } from '@/components/data-display';
-import toast from 'react-hot-toast';
 
 export type TFormFormValues = z.infer<typeof createBusinessFormSchema>;
 
 export const DetailFormHeader = ({
   action,
   onOkClick = () => {},
+  disabled = false,
   onPreviewClick,
 }: {
   action: 'create' | 'edit' | 'view';
   onOkClick?: () => void;
   onPreviewClick?: () => void;
+  disabled?: boolean;
 }) => {
   const router = useRouter();
   const { t } = useTranslation('common');
@@ -29,7 +30,7 @@ export const DetailFormHeader = ({
   return (
     <section
       className={cn(
-        ' flex w-full flex-row items-center justify-between gap-3   px-4 py-2 ',
+        ' flex w-full flex-row items-center justify-between gap-3  p-3 ',
       )}
     >
       <div className="flex flex-row items-center gap-2">
@@ -74,6 +75,8 @@ export const DetailFormHeader = ({
           type="submit"
           form="form-create-form"
           onClick={onOkClick}
+          disabled={disabled}
+          className={cn({ 'max-md:hidden': action !== 'view' })}
         >
           {action === 'create'
             ? t('COMMON.CREATE')

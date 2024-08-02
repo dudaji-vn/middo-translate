@@ -88,7 +88,7 @@ const DraftFormPreview = ({
       hasNextPage: currentPage < formFields.length - 1,
       hasPrevPage: currentPage > 0,
       layout,
-      requiredFields: currentField.required ? [currentField] : [],
+      requiredFields: currentField?.required ? [currentField] : [],
     };
   }, [currentPage, form]);
 

@@ -110,11 +110,14 @@ const ExtensionForm = ({
       };
     }
     const currentField = formFields[currentPage];
+    if (!currentField) {
+      return baseData;
+    }
     return {
       hasNextPage: currentPage < formFields.length - 1,
       hasPrevPage: currentPage > 0,
       layout,
-      requiredFields: currentField.required ? [currentField] : [],
+      requiredFields: currentField?.required ? [currentField] : [],
     };
   }, [currentPage, form]);
 

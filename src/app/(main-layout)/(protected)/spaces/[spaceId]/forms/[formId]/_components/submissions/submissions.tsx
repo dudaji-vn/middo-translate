@@ -9,9 +9,120 @@ import { useTranslation } from 'react-i18next';
 import DownloadButton from '../../../../clients/clients-table/download-button';
 import { makeSubmissionColumns } from '../../../_components/column-def/submission-columns';
 import { cn } from '@/utils/cn';
-import { Eye, Trash2 } from 'lucide-react';
-import Link from 'next/link';
+import { Download, Eye, FileDown, MoreVertical, Trash2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
+import { useAppStore } from '@/stores/app.store';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/data-display';
+import { useExportXLSX } from '@/hooks/use-xlsx';
+
+const MoreActions = ({
+  viewDetailForm,
+  onDelete,
+  isUsing,
+  _id,
+  submissions,
+  colsInfo,
+  ...props
+}: {
+  viewDetailForm?: () => void;
+  onDelete?: (id: string) => void;
+  isUsing?: boolean;
+  _id: string;
+  submissions: any[];
+  colsInfo?: Array<{
+    name: string;
+    width: number;
+  }>;
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const isMobile = useAppStore((state) => state.isMobile);
+  const { exportData } = useExportXLSX(colsInfo || []);
+
+  if (!isMobile) {
+    return (
+      <div className="flex h-12 flex-row items-center gap-2">
+        <Button
+          size={'xs'}
+          variant={'ghost'}
+          color={'primary'}
+          startIcon={<Eye />}
+          shape={'square'}
+          className={viewDetailForm ? 'min-w-fit rounded-[12px]' : 'hidden'}
+          onClick={() => viewDetailForm && viewDetailForm()}
+        >
+          View Detail
+        </Button>
+        <DownloadButton
+          data={submissions}
+          colInfo={colsInfo || []}
+          className="rounded-[8px] py-2"
+          color={'default'}
+        />
+        {onDelete && (
+          <Button.Icon
+            size={'xs'}
+            disabled={isUsing}
+            className="py-1"
+            color={'error'}
+            variant={'ghost'}
+            onClick={() => onDelete(_id)}
+          >
+            <Trash2 />
+          </Button.Icon>
+        )}
+      </div>
+    );
+  }
+  return (
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger
+        asChild
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <Button.Icon size="xs" variant="ghost" color="default">
+          <MoreVertical />
+        </Button.Icon>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        className="dark:border-neutral-800 dark:bg-neutral-900 [&_svg]:size-5"
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <DropdownMenuItem
+          className="flex flex-row items-center gap-2"
+          onClick={() => {
+            exportData(submissions);
+          }}
+        >
+          <FileDown />
+          Download XLSX
+        </DropdownMenuItem>
+        {onDelete && (
+          <DropdownMenuItem
+            onClick={() => {
+              onDelete(_id);
+              setOpen(false);
+            }}
+            className="flex flex-row items-center gap-2"
+          >
+            <Trash2 />
+            Delete
+          </DropdownMenuItem>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
 
 const Submissions = ({
   _id,
@@ -33,6 +144,7 @@ const Submissions = ({
     isPreview?: boolean;
   }) => {
   const { t } = useTranslation('common');
+  const isMobile = useAppStore((state) => state.isMobile);
   const spaceId = useParams()?.spaceId || '';
   const submissionColumns = makeSubmissionColumns({
     t,
@@ -69,38 +181,17 @@ const Submissions = ({
             {totalSubmissions || 0} submissions data
           </p>
         </div>
-        <div className="flex h-12 flex-row items-center gap-2">
-          <Button
-            size={'xs'}
-            variant={'ghost'}
-            color={'primary'}
-            startIcon={<Eye />}
-            shape={'square'}
-            className={viewDetailForm ? 'min-w-fit rounded-[12px]' : 'hidden'}
-            onClick={() => viewDetailForm && viewDetailForm()}
-          >
-            View Detail
-          </Button>
-
-          <DownloadButton
-            data={submissions}
-            colInfo={[]}
-            className="rounded-[8px] py-2"
-            color={'default'}
-          />
-          {onDelete && (
-            <Button.Icon
-              size={'xs'}
-              disabled={isUsing}
-              className="py-1"
-              color={'error'}
-              variant={'ghost'}
-              onClick={() => onDelete(_id)}
-            >
-              <Trash2 />
-            </Button.Icon>
-          )}
-        </div>
+        <MoreActions
+          viewDetailForm={viewDetailForm}
+          onDelete={onDelete}
+          isUsing={isUsing}
+          _id={_id}
+          submissions={submissions}
+          colsInfo={submissionColumns?.map((col) => ({
+            name: String(col?.id),
+            width: 20,
+          }))}
+        />
       </div>
       <div
         className={cn(
@@ -109,7 +200,7 @@ const Submissions = ({
         )}
       >
         <DataTable
-          dividerRow
+          dividerRow={!isMobile}
           tableHeadProps={{
             className:
               'bg-white  border-none dark:bg-background dark:text-neutral-50 text-neutral-900',
@@ -125,6 +216,21 @@ const Submissions = ({
           columns={submissionColumns}
           data={[...submissions]}
         />
+      </div>
+      <div className="">
+        <Button
+          size={'xs'}
+          variant={'default'}
+          color={'default'}
+          startIcon={<Eye />}
+          shape={'square'}
+          className={
+            viewDetailForm ? 'w-full rounded-[12px] md:hidden' : 'hidden'
+          }
+          onClick={() => viewDetailForm && viewDetailForm()}
+        >
+          View Form
+        </Button>
       </div>
     </div>
   );
