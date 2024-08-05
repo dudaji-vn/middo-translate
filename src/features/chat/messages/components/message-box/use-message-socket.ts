@@ -16,7 +16,7 @@ export const useMessageSocket = ({
   replaceItem,
   updateItem,
   setNotification,
-  triggerNewFlowMessage = (_id: string) => {},
+  updateRecentFormStatus = (_id: string) => {},
 }: {
   replaceItem: (message: Message, clientTempId: string) => void;
   room: Room;
@@ -24,7 +24,7 @@ export const useMessageSocket = ({
   userId: string;
   guestId: string;
   setNotification: (message: string) => void;
-  triggerNewFlowMessage?: (_id: string) => void;
+  updateRecentFormStatus?: (_id: string) => void;
 }) => {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -66,9 +66,7 @@ export const useMessageSocket = ({
     );
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
       if (guestId) {
-        console.log('--UPDATED-MESSAGE--', message);
         queryClient.invalidateQueries(['messages', room._id]);
-        triggerNewFlowMessage && triggerNewFlowMessage(message._id);
       }
       queryClient.invalidateQueries(['message', message._id]);
       if (message.hasChild) {
@@ -79,6 +77,14 @@ export const useMessageSocket = ({
         ]);
       }
     });
+    socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.FORM.UPDATE, (message: Message) => {
+      if (guestId) {
+        console.log('--UPDATED-MESSAGE--', message);
+        queryClient.invalidateQueries(['messages', room._id]);
+        updateRecentFormStatus && updateRecentFormStatus(message._id);
+      }
+      queryClient.invalidateQueries(['message', message._id]);
+    });
     socket.on(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE, (message: Message) => {
       updateItem(message);
       queryClient.invalidateQueries(['message', message._id]);
@@ -87,6 +93,7 @@ export const useMessageSocket = ({
     return () => {
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.NEW);
       socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.UPDATE);
+      socket.off(SOCKET_CONFIG.EVENTS.MESSAGE.FORM.UPDATE);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [replaceItem, room._id, updateItem, userId, guestId]);
