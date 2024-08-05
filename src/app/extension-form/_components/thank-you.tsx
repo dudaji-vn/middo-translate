@@ -14,8 +14,8 @@ const ThankYou = (
 ) => {
   const { thankyou, name, onclose } = props;
   return (
-    <div className="flex size-full flex-col rounded-xl bg-white pb-6">
-      <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
+    <div className="flex size-full flex-col bg-white pb-6 md:rounded-xl">
+      <div className="flex flex-none flex-row items-center gap-2 bg-neutral-50 p-3 text-primary-500-main md:rounded-t-xl">
         <FileText className="size-5" />
         <Typography className="text-md  font-semibold text-primary-500-main">
           {name}
@@ -23,7 +23,7 @@ const ThankYou = (
       </div>
       <div className="flex w-full grow flex-col items-center justify-center gap-3 overflow-y-auto   p-10">
         {thankyou?.image && (
-          <div className="flex aspect-[4/3] max-h-[300px] w-full max-w-[400px] flex-col  items-center justify-center gap-2 rounded-[12px] p-2 md:w-[30vw] ">
+          <div className="flex aspect-[4/3] max-h-[300px] w-full max-w-[400px] flex-col  items-center justify-center gap-2 p-2 md:w-[30vw] md:rounded-[12px] ">
             <Image
               src={thankyou.image}
               alt="thankyou-image"

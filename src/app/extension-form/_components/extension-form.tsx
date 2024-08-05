@@ -27,6 +27,7 @@ import { announceToParent } from '@/utils/iframe-util';
 import { submitFormAnswer } from '@/services/extension.service';
 import { Input, SelectMultiple, SelectSingle } from './form-fields';
 import { isEmpty } from 'lodash';
+import { useAppStore } from '@/stores/app.store';
 
 const answerSchema = z.object({
   formId: z.string(),
@@ -92,6 +93,7 @@ const ExtensionForm = ({
     language,
   });
   const [isDone, setIsDone] = React.useState(false);
+  const isMobile = useAppStore((state) => state.isMobile);
   const [currentPage, setCurrentPage] = React.useState(0);
 
   const temporaryData = useHelpdeskFormDraft(guestId || '');
@@ -320,6 +322,7 @@ const ExtensionForm = ({
         className={cn(
           'relative h-screen w-full overflow-hidden  bg-[url(/test-flow-bg.png)] bg-cover bg-no-repeat p-10 md:p-[5vw]',
           themeName,
+          isMobile ? 'fixed inset-0 p-0' : 'md:p-[5vw]',
         )}
         style={{ backgroundImage: bgSrc }}
       >
@@ -344,9 +347,9 @@ const ExtensionForm = ({
         ) : (
           <form
             onSubmit={formAnswer.handleSubmit(submit)}
-            className="flex size-full flex-col gap-5 rounded-xl bg-white"
+            className="flex size-full flex-col gap-5 bg-white md:rounded-xl"
           >
-            <div className="flex flex-none flex-row items-center gap-2 rounded-t-xl bg-neutral-50 p-3 text-primary-500-main">
+            <div className="flex flex-none flex-row items-center gap-2 bg-neutral-50 p-3 text-primary-500-main md:rounded-t-xl">
               <FileText className="size-5" />
               <Typography className="text-md  font-semibold text-primary-500-main">
                 {form.name}
@@ -414,7 +417,7 @@ const ExtensionForm = ({
                 disabled={formAnswer.formState.isSubmitting || !hasNextPage}
                 shape={'square'}
                 className={cn('', {
-                  invisible: !isDone,
+                  'max-md:hidden md:invisible': !isDone,
                 })}
                 startIcon={<X />}
               >
