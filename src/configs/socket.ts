@@ -11,6 +11,9 @@ export const SOCKET_CONFIG = {
       UPDATE: 'message.update',
       UNREAD_UPDATE: 'message.unread_update',
       DELETE: 'message.delete',
+      FORM: {
+        UPDATE: 'message.form.update',
+      },
       REPLY: {
         NEW: 'message.reply.new',
         JOIN: 'message.reply.join',

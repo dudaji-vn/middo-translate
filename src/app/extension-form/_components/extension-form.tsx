@@ -405,23 +405,11 @@ const ExtensionForm = ({
                 disabled={formAnswer.formState.isSubmitting || !hasNextPage}
                 shape={'square'}
                 className={cn('', {
-                  hidden: !hasNextPage,
+                  invisible: !hasNextPage,
                 })}
                 onClick={() => onPageChange(currentPage + 1)}
               >
                 {actions.next}
-              </Button>
-              <Button
-                color="primary"
-                variant="default"
-                disabled={formAnswer.formState.isSubmitting || !hasNextPage}
-                shape={'square'}
-                className={cn('', {
-                  'max-md:hidden md:invisible': !isDone,
-                })}
-                startIcon={<X />}
-              >
-                {actions.close}
               </Button>
             </div>
           </form>
