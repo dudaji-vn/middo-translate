@@ -6,7 +6,7 @@ import { useMyVideoCallStore } from "../../store/me.store";
 import { useVideoCallStore } from "../../store/video-call.store";
 import { useParticipantVideoCallStore } from "../../store/participant.store";
 interface ICallStatus {
-    userId: string;
+    socketId: string;
     status: boolean;
     callId: string;
 }
@@ -20,20 +20,19 @@ export default function useHandleCallStatus() {
     useEffect(() => {
         if(!call) return;
         socket.emit(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, {
-            userId: user?._id,
             status: isTurnOnMic,
-            roomId: call._id
+            callId: call._id
         });
-    }, [isTurnOnMic, call, user?._id])
+    }, [isTurnOnMic, call])
 
 
     // Listen to Mic change
     useEffect(() => {
         if(!call) return;
         socket.on(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, (data: ICallStatus) => {
-            const { userId, status, callId } = data;
+            const { socketId, status, callId } = data;
             if(callId !== call._id) return;
-            changeMicStatusParticipant(userId, status);
+            changeMicStatusParticipant(socketId, status);
         });
         return () => {
             socket.off(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE);
