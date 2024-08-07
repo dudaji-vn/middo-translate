@@ -58,7 +58,7 @@ const HeaderProfile = ({
                     alt={user?.name || 'Anonymous'}
                   />
 
-                  <div className="line-clamp-1 hidden max-w-[200px] items-center truncate md:flex">
+                  <div className="line-clamp-1 hidden max-[1120px]:max-w-[4vw] min-[1120px]:max-w-[150px] items-center truncate md:flex">
                     <div className="truncate text-sm font-medium">
                       {user?.name || 'Anonymous'}
                     </div>
