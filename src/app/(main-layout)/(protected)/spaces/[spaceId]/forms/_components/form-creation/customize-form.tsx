@@ -1,13 +1,11 @@
-import { Button } from '@/components/actions';
-import { Label, Typography } from '@/components/data-display';
-import Tooltip from '@/components/data-display/custom-tooltip/tooltip';
-import { RadioGroup, RadioGroupItem, Switch } from '@/components/data-entry';
+import { Label } from '@/components/data-display';
+import { RadioGroup, RadioGroupItem } from '@/components/data-entry';
 import RHFColorSelector from '@/components/form/RHF-color-selector/rhf-color-selector';
 import { FormLabel } from '@/components/ui/form';
-import { Check, CircleIcon, Plus, RectangleHorizontal } from 'lucide-react';
+import { Check } from 'lucide-react';
 import Image from 'next/image';
 
-import React from 'react';
+import React, {  } from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
   DEFAULT_THEME,
@@ -19,9 +17,7 @@ const CustomizeForm = () => {
   const { setValue, watch } = useFormContext();
   const selectedColor = watch('customize.theme');
   const selectedLayout = watch('customize.layout');
-  const onChange = (color: string) => {
-    setValue('customize.theme', color);
-  };
+
   return (
     <div className="flex h-full w-full flex-col  gap-10">
       <div className="flex h-fit w-full cursor-pointer flex-col items-start justify-start gap-3">
