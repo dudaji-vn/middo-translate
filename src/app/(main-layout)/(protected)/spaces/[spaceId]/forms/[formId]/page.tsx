@@ -1,7 +1,7 @@
 'use client';
 
 import { useGetFormData } from '@/features/conversation-forms/hooks/use-get-form-data';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   BusinessForm,
   DEFAULT_FORMS_PAGINATION,
@@ -17,15 +17,10 @@ import {
   setFormsTablePerpage,
 } from '@/utils/local-storage';
 import ClientSidePagination from '@/components/actions/pagination/client-side-pagination';
-import { Button } from '@/components/actions';
-import { usePathname, useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
-import { Typography } from '@/components/data-display';
+import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { DetailFormHeader } from '../_components/form-creation/detail-form-header';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
-import { useAppStore } from '@/stores/app.store';
-import COLORS from '@/features/call/constant/colors';
 import { extensionsCustomThemeOptions } from '../../settings/_components/extension-creation/sections/options';
 
 const tabs = ['Submissions', 'Form'];
@@ -58,6 +53,17 @@ const FormPage = ({
     totalPage: 0,
   };
   const [tabValue, setTabValue] = React.useState<number>(0);
+  const { overrideTheme, bgImageSrc } = useMemo(() => {
+    const overrideTheme =
+      extensionsCustomThemeOptions.find(
+        (theme) =>
+          theme.hex === data?.customize?.theme ||
+          theme.name === data?.customize?.theme,
+      )?.name || '';
+
+    const bgImageSrc = data?.customize?.background || '/forms/bg-form-1.jpg';
+    return { overrideTheme, bgImageSrc };
+  }, [data?.customize]);
 
   const pagination = {
     limit: limit,
@@ -80,19 +86,13 @@ const FormPage = ({
   if (!isLoading && (isEmpty(data) || !formFields || !submissions)) {
     return null;
   }
-  const bgImageSrc = data?.customize?.background || '/forms/bg-form-1.jpg';
-  const overiddenTheme =
-    extensionsCustomThemeOptions.find(
-      (theme) =>
-        theme.hex === data?.customize?.theme ||
-        theme.name === data?.customize?.theme,
-    )?.name || '';
+
   return (
     <Tabs
       value={tabValue?.toString()}
       className={cn(
         'flex h-full w-full flex-1 flex-col overflow-hidden p-4 pb-20 md:px-[5vw]',
-        overiddenTheme,
+        overrideTheme,
       )}
       defaultValue={tabValue.toString()}
       onValueChange={(value) => {
