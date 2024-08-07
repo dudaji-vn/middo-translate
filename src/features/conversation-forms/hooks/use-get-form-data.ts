@@ -48,6 +48,7 @@ export const useGetFormData = ({
             },
           },
         );
+        console.log('response FORM', response);
         return response.data;
       } catch (error) {
         console.error('Error while fetching form data of:', formId, error);

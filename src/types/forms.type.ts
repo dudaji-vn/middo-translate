@@ -33,6 +33,7 @@ export type BusinessForm = BaseEntity & {
   color: string;
   backgroundColor: string;
   submissions: FormSubmission[];
+  customize: any;
   totalSubmissions: number;
   formFields: FormField[];
 };

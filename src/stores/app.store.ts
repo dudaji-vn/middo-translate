@@ -5,6 +5,11 @@ import { restoredState } from '@/utils/restore';
 export type ThemeSetting = 'system' | 'light' | 'dark';
 export type Theme = Exclude<ThemeSetting, 'system'>;
 
+export type ThemeTrial = {
+  theme: string;
+  background: string;
+};
+
 export type AppState = {
   isMobile: boolean;
   isTablet: boolean;
@@ -32,6 +37,8 @@ export type AppActions = {
   setPingEmptyInbox: (pingEmptyInbox: boolean) => void;
   setSocketConnected: (socketConnected: boolean) => void;
   toggleTheme: () => void;
+  themeTrial: { theme: string; background: string } | null;
+  setThemeTrial: (themeTrial: { theme: string; background: string }) => void;
 };
 
 export const useAppStore = create<AppState & AppActions>()(
@@ -59,6 +66,8 @@ export const useAppStore = create<AppState & AppActions>()(
       setTheme: (theme) => set(() => ({ theme })),
       setThemeSetting: (themeSetting) => set(() => ({ themeSetting })),
       setSocketConnected: (socketConnected) => set(() => ({ socketConnected })),
+      themeTrial: null,
+      setThemeTrial: (themeTrial) => set(() => ({ themeTrial })),
       toggleTheme: () =>
         set((state) => ({
           themeSetting: state.themeSetting === 'dark' ? 'light' : 'dark',
