@@ -36,7 +36,10 @@ const StepWrapper = ({
   footerProps?: React.ComponentPropsWithoutRef<'div'>;
 }) => {
   return (
-    <TabsContent {...props} className={cn('bg-primary-100 px-4 dark:bg-[#030303]', className)}>
+    <TabsContent
+      {...props}
+      className={cn('bg-primary-100 px-4 dark:bg-[#030303]', className)}
+    >
       <Card
         {...cardProps}
         className={cn(
@@ -49,7 +52,7 @@ const StepWrapper = ({
       <div
         {...footerProps}
         className={cn(
-          'flex h-fit w-full flex-row items-center justify-between bg-transparent dark:bg-[#030303] py-4',
+          'flex h-fit w-full flex-row items-center justify-between bg-transparent py-4 dark:bg-[#030303]',
           footerProps?.className,
         )}
       >

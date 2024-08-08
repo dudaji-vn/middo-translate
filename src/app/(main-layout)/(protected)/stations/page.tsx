@@ -11,13 +11,13 @@ const StationStationPage = async (props: {
 }) => {
   const { searchParams } = props;
   const modal = searchParams.modal;
-
+  const isCreateStationModalOpen = Boolean(
+    modal === WorkStationModalType.CreateStation,
+  );
   return (
     <main className="h-full w-full">
-      <StationsList />
-      <CreateStation
-        open={Boolean(modal === WorkStationModalType.CreateStation)}
-      />
+      {!isCreateStationModalOpen && <StationsList />}
+      <CreateStation open={isCreateStationModalOpen} />
     </main>
   );
 };

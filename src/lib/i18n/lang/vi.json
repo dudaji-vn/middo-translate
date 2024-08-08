@@ -523,7 +523,7 @@
     },
     "CREATE_STATION": {
       "HEADING": "Tạo Trạm",
-      "TITLE": "Cung cấp <span class='text-primary-500-main'> thông tin cho trạm của bạn </span>",
+      "TITLE": "Cung cấp thông tin cho <span class='text-primary-500-main'>  trạm của bạn </span>",
       "DESCRIPTION": "Giúp đội ngũ của bạn dễ dàng nhận diện doanh nghiệp của bạn bằng cách đặt tên cho trạm này, thêm hình đại diện của trạm hoặc logo của công ty <span class='font-light'>(tùy chọn)</span>.",
       "PLACEHOLDERS": {
         "NAME": "Nhập tên trạm"
@@ -758,7 +758,7 @@
     "MY_STATION": "Trạm của tôi",
     "CREATE_STATION": "Tạo trạm mới",
     "DASHBOARD": "Bảng điều khiển",
-    "STATION_INFOR": "Thông tin trạm",
+    "STATION_INFO": "Thông tin trạm",
     "UPLOAD_IMAGE": "Tải lên ảnh đại diện trạm",
     "CREATE_BUTTON": "Tạo trạm và mời thành viên",
     "ERRORS": {

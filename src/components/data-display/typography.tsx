@@ -12,6 +12,7 @@ const typographyTags = {
   h6: 'h6',
   muted: 'span',
   default: 'span',
+  bodySmall: 'span',
   pre: 'pre',
 } as { [key: string]: keyof JSX.IntrinsicElements };
 
@@ -24,6 +25,7 @@ const typographyVariants = cva('text-text text-base', {
       h4: 'scroll-m-20 text-2xl font-semibold tracking-tight leading-7',
       h5: 'scroll-m-20 text-lg font-semibold tracking-tight',
       h6: 'scroll-m-20 text-[18px] font-semibold tracking-tight',
+      bodySmall: 'font-semibold text-sm',
       muted: 'text-text/70',
       default: 'text-base text-text',
       pre: 'scroll-m-20 text-base tracking-tight',

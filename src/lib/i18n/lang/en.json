@@ -539,6 +539,18 @@
         "NAME_MAX_LENGTH": "Station name cannot exceed 30 characters",
         "AVATAR_REQUIRED": "Station avatar is required"
       },
+      "CREATE_TEAM": {
+        "TITLE": "Create <span class='text-primary-500-main'>Station's team</span> for ease of organize <span class='font-light'>(optional)</span>.",
+        "DESCRIPTION": "Station's department help you organize your member easier",
+        "PLACEHOLDERS": {
+          "NAME": "Enter team name"
+        },
+        "ERRORS": {
+          "NAME_REQUIRED": "Team name is required",
+          "NAME_MAX_LENGTH": "Team name cannot exceed 30 characters",
+          "AVATAR_REQUIRED": "Team avatar is required"
+        }
+      },
       "INVITE_MEMBERS": {
         "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span> others to join your work station&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
         "DESCRIPTION": "Help your crews to recognize your Work Station easier by naming, adding avatar or company's logo. <span class='font-normal text-primary-500-main'>Upgrade plan.</span>",
@@ -772,7 +784,8 @@
     "MY_STATION": "My station",
     "CREATE_STATION": "Create new station",
     "DASHBOARD": "Dashboard",
-    "STATION_INFOR": "Station information",
+    "STATION_INFO": "Station information",
+    "STATION_TEAM": "Station's team",
     "UPLOAD_IMAGE": "Upload Station Avatar",
     "CREATE_BUTTON": "Create Station and invite members",
     "ERRORS": {

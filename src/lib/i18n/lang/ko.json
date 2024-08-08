@@ -521,7 +521,7 @@
     },
     "CREATE_STATION": {
       "HEADING": "정류장 만들기",
-      "TITLE": "정류장에 <span class='text-primary-500-main'> 정보를 입력하세요 </span>",
+      "TITLE": "당신의 <span class='text-primary-500-main'> 역 </span>에 정보를 제공하세요",
       "DESCRIPTION": "정류장 이름을 지정하고 정류장 아바타 또는 회사 로고 <span class='font-light'>(선택사항)</span>를 추가하여 승무원들이 귀사의 비즈니스를 쉽게 인식할 수 있도록 도와주세요.",
       "PLACEHOLDERS": {
         "NAME": "정류장 이름 입력"
@@ -756,7 +756,7 @@
     "MY_STATION": "내 스테이션",
     "CREATE_STATION": "새 스테이션 생성",
     "DASHBOARD": "대시보드",
-    "STATION_INFOR": "스테이션 정보",
+    "STATION_INFO": "스테이션 정보",
     "UPLOAD_IMAGE": "스테이션 아바타 업로드",
     "CREATE_BUTTON": "스테이션 생성 및 멤버 초대",
     "ERRORS": {

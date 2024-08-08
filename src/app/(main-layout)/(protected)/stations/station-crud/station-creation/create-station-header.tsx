@@ -13,25 +13,30 @@ import { useTranslation } from 'react-i18next';
 enum BusinessModalType {
   CreateStation = 'create-station',
 }
-const headerVariants = cva('w-full flex flex-row', {
+const headerVariants = cva('w-full flex', {
   variants: {
     navigation: {
       default: 'hidden',
-      'create-station': 'w-full py-2 flex flex-row gap-3',
+      'create-station': 'w-full py-2 flex gap-3',
     },
   },
 });
 
 export const createStationSteps = [
   {
-    title: 'STATION.STATION_INFOR',
+    title: 'STATION.STATION_INFO',
     value: 0,
     nameField: 'information',
     requiredFields: ['information.name', 'information.avatar'],
   },
   {
-    title: 'EXTENSION.MEMBER.INVITE_MEMBER',
+    title: 'STATION.STATION_TEAM',
     value: 1,
+    nameField: 'team',
+  },
+  {
+    title: 'EXTENSION.MEMBER.INVITE_MEMBER',
+    value: 2,
     nameField: 'members',
     requiredFields: ['members'],
   },
@@ -58,11 +63,11 @@ const CreateStationHeader = ({
   return (
     <section
       className={cn(
-        'createStationSteps-center flex w-full min-w-fit flex-row items-center justify-between  gap-3 bg-primary-100 px-4 dark:bg-background',
+        'createStationSteps-center flex w-full min-w-fit flex-col items-center justify-between gap-3  bg-primary-100 px-4 dark:bg-background md:flex-row',
         headerVariants({ navigation: modalType || 'default' }),
       )}
     >
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex w-full flex-row items-center justify-start gap-2 md:w-fit">
         <Button.Icon
           onClick={() => {
             router.back();
@@ -78,72 +83,73 @@ const CreateStationHeader = ({
           {t('MODAL.CREATE_STATION.HEADING')}
         </Typography>
       </div>
-      <TabsList className="relative max-w-[600px] justify-between gap-5 border-none md:mx-10 xl:mx-14">
-        <div className="absolute inset-0 !z-0 h-[50%] w-full border-b-[1px] border-dashed border-b-neutral-50"></div>
-        <div
-          style={{ width: `${stepPercentage}%` }}
-          className="absolute  left-0 top-0 !z-10 h-[50%] border-b-[2px] border-b-neutral-200 transition-all duration-1000"
-        />
-        {createStationSteps.map((item, index) => {
-          const isActive = step === index;
-          const isAfterCurrent = step < index;
-          const isError = errors[index] && index < step;
-          const isDone = step > index && !isError;
-          const stepContent = isDone ? (
-            <Check className="text-white" />
-          ) : (
-            index + 1
-          );
-          return (
-            <div key={index} className="z-20">
-              <Button
-                disabled={index > step + 1}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onStepChange(index);
-                }}
-                shape={'square'}
-                size={'xs'}
-                variant={'ghost'}
-                className={cn(
-                  'flex flex-row gap-3',
-                  isActive && '!bg-neutral-50 dark:!bg-neutral-800',
-                  isAfterCurrent &&
-                    '!bg-neutral-50 hover:bg-primary-100  dark:!bg-neutral-800',
-                  isDone &&
-                    '!active:bg-success-200 !bg-success-100 hover:bg-success-200',
-                  isError && '!bg-error-100',
-                )}
-              >
-                <div
+      <div className="flex flex-1 justify-center">
+        <TabsList className="relative w-fit justify-between gap-24 border-none md:mx-10 xl:mx-14">
+          <div className="absolute inset-0 !z-0 h-[50%] w-full border-b-[1px] border-dashed border-b-neutral-50"></div>
+          <div
+            style={{ width: `${stepPercentage}%` }}
+            className="absolute  left-0 top-0 !z-10 h-[50%] border-b-[2px] border-b-neutral-200 transition-all duration-1000"
+          />
+          {createStationSteps.map((item, index) => {
+            const isActive = step === index;
+            const isAfterCurrent = step < index;
+            const isError = errors[index] && index < step;
+            const isDone = step > index && !isError;
+            const stepContent = isDone ? (
+              <Check className="text-white" />
+            ) : (
+              index + 1
+            );
+            return (
+              <div key={index} className="z-20">
+                <Button
+                  disabled={index > step + 1}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onStepChange(index);
+                  }}
+                  shape={'square'}
+                  size={'xs'}
+                  variant={'ghost'}
                   className={cn(
-                    ' h-6 w-6 rounded-full ',
-                    isActive && 'bg-primary-500-main text-white',
-                    isAfterCurrent && 'bg-neutral-200 text-white',
+                    'flex flex-row gap-3',
+                    isActive && '!bg-neutral-50 dark:!bg-neutral-800',
+                    isAfterCurrent &&
+                      '!bg-neutral-50 hover:bg-primary-100  dark:!bg-neutral-800',
                     isDone &&
-                      '!active:bg-success-200 bg-success-700 text-white',
-                    isError && 'bg-error text-white',
+                      '!active:bg-success-200 !bg-success-100 hover:bg-success-200',
+                    isError && '!bg-error-100',
                   )}
                 >
-                  {stepContent}
-                </div>
-                <p
-                  className={cn(
-                    'font-light max-md:hidden',
-                    isActive && 'text-primary-500-main ',
-                    isAfterCurrent && 'text-neutral-200',
-                    isDone && 'text-success-700',
-                    isError && 'text-error-500',
-                  )}
-                >
-                  {t(item.title)}
-                </p>
-              </Button>
-            </div>
-          );
-        })}
-      </TabsList>
-      <em />
+                  <div
+                    className={cn(
+                      ' h-6 w-6 rounded-full ',
+                      isActive && 'bg-primary-500-main text-white',
+                      isAfterCurrent && 'bg-neutral-200 text-white',
+                      isDone &&
+                        '!active:bg-success-200 bg-success-700 text-white',
+                      isError && 'bg-error text-white',
+                    )}
+                  >
+                    {stepContent}
+                  </div>
+                  <p
+                    className={cn(
+                      'font-light ',
+                      isActive ? 'text-primary-500-main' : 'max-md:hidden',
+                      isAfterCurrent && 'text-neutral-200',
+                      isDone && 'text-success-700',
+                      isError && 'text-error-500',
+                    )}
+                  >
+                    {t(item.title)}
+                  </p>
+                </Button>
+              </div>
+            );
+          })}
+        </TabsList>
+      </div>
     </section>
   );
 };

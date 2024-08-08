@@ -31,6 +31,7 @@ import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
 import { isMobile as isMobileDevice } from 'react-device-detect';
 import { MobileMention } from './plugins/mentions/mobile-mention';
+import { BubbleMenu } from './plugins/bubble-menu';
 
 export type MessageEditorSubmitData = {
   content: string;
@@ -124,8 +125,6 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       id: roomId,
       editorId,
     });
-
-    console.log(editor?.state);
 
     const translationHelperRef = useRef<TranslationHelperRef>(null);
 
@@ -279,6 +278,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
                   className="no-scrollbar max-h-[200px] min-h-[46] w-full overflow-y-auto p-2 dark:text-neutral-200"
                   editor={editor}
                 />
+                {editor && <BubbleMenu editor={editor} />}
                 <div className="mt-auto">
                   <MicButton
                     onListeningChange={setIsListening}

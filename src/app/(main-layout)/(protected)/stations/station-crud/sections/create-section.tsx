@@ -10,7 +10,7 @@ import UploadStationImage from './upload-station-image';
 const CreateStationForm = () => {
   const { t } = useTranslation('common');
   return (
-    <section className="flex h-[calc(100vh-220px)] min-h-80 max-w-[800px]  flex-col items-center justify-center gap-8 max-md:px-4">
+    <section className="flex h-[calc(100vh-220px)] min-h-80 max-w-[800px] flex-col items-center  gap-8 px-3 py-10 max-md:px-4">
       <div className="flex w-full flex-col  gap-3">
         <Typography className="text-[32px] font-semibold leading-9 text-neutral-800 dark:text-neutral-50">
           <span

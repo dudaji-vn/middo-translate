@@ -25,6 +25,8 @@ import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-stations';
 import CreateStationHeader from './create-station-header';
 import { createStation } from '@/services/station.service';
 import StepWrapper from '../../../spaces/[spaceId]/settings/_components/extension-creation/steps/step-wrapper';
+import { ArrowRight } from 'lucide-react';
+import CreateTeams from '../sections/create-teams-section';
 
 const createStationSchema = z.object({
   name: z
@@ -36,9 +38,7 @@ const createStationSchema = z.object({
     .max(30, {
       message: 'STATION.ERRORS.NAME_MAX_LENGTH',
     }),
-  avatar: z.string().min(1, {
-    message: 'STATION.ERRORS.AVATAR_REQUIRED',
-  }),
+  avatar: z.string().optional(),
   backgroundImage: z.string().optional(),
   members: z
     .array(
@@ -117,21 +117,12 @@ export default function CreateStation({ open }: { open: boolean }) {
       customToast.error(err?.response?.data?.message);
     }
   };
-  const canNext = useMemo(() => {
-    if (
-      formCreateStation.watch('avatar') &&
-      formCreateStation.watch('name').trim()
-    ) {
-      return formCreateStation.trigger();
-    }
-    return false;
-  }, [formCreateStation.watch('name'), formCreateStation.watch('avatar')]);
 
   if (!isClient || !open) return null;
   return (
     <Tabs
       value={tabValue?.toString()}
-      className="w-full bg-primary-100 dark:bg-background"
+      className="flex h-full w-full flex-col bg-primary-100 dark:bg-background"
       defaultValue={tabValue.toString()}
       onValueChange={(value) => {
         setTabValue(parseInt(value));
@@ -145,27 +136,42 @@ export default function CreateStation({ open }: { open: boolean }) {
         />
         <StepWrapper
           value="0"
-          className="px-0"
+          className="h-full px-0"
+          canNext
+          onNextStep={() => handleStepChange(1)}
           cardProps={{
             className:
               'w-full shadow-none dark:bg-background flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none',
           }}
         >
           <CreateStationForm />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-4 dark:bg-background">
-            <Button
-              color={canNext ? 'primary' : 'disabled'}
-              shape={'square'}
-              size={'sm'}
-              onClick={() => handleStepChange(1)}
-            >
-              {t('PAGINATION.NEXT')}
-            </Button>
-          </div>
+        </StepWrapper>
+        <StepWrapper
+          canPrev
+          canNext
+          onNextStep={() => handleStepChange(2)}
+          onPrevStep={() => handleStepChange(0)}
+          className="flex-1 px-0"
+          value="1"
+          cardProps={{
+            className:
+              'w-full md:pt-10 pt-3 h-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
+          }}
+        >
+          <CreateTeams
+            station={{
+              name: formCreateStation.watch('name'),
+              avatar: formCreateStation.watch('avatar'),
+              members: formCreateStation.watch('members') || [],
+            }}
+            setMembers={(members: Member[]) =>
+              formCreateStation.setValue('members', members)
+            }
+          />
         </StepWrapper>
         <StepWrapper
           className="px-0"
-          value="1"
+          value="2"
           cardProps={{
             className:
               'w-full md:pt-10 pt-3  flex flex-col min-h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
