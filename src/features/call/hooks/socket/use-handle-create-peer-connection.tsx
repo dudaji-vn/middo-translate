@@ -100,7 +100,6 @@ export default function useHandleCreatePeerConnection() {
         if (!payload.isShareScreen) {
             newUser.isTurnOnMic = payload.isTurnOnMic;
             socket.emit(SOCKET_CONFIG.EVENTS.CALL.CALL_STATUS.MIC_CHANGE, {
-                userId: user?._id,
                 status: isTurnOnMic,
                 callId: call?._id,
                 directUserId: payload.user._id,

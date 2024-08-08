@@ -18,6 +18,7 @@ import {
   CopyIcon,
   GripVertical,
   ImageIcon,
+  MoreVertical,
   Plus,
   SquareCheck,
   Trash2,
@@ -49,6 +50,7 @@ import Image from 'next/image';
 import { t } from 'i18next';
 import { type } from 'os';
 import { RadioItem } from '@radix-ui/react-dropdown-menu';
+import { useAppStore } from '@/stores/app.store';
 
 const fieldOptions = [
   {
@@ -384,8 +386,8 @@ const FieldOptions = ({
             </ul>
           )}
         </Droppable>
-        <div className="flex flex-row gap-2">
-          <div className="invisible w-6" />
+        <div className="flex flex-col md:flex-row gap-2 max-md:px-6">
+          <div className="invisible md:w-6" />
           <Button
             onClick={() => append({ value: '', type: 'default' })}
             color={'secondary'}
@@ -418,6 +420,110 @@ const FieldOptions = ({
         {String(optionsErrorMessage)}
       </FormMessage>
     </DragDropContext>
+  );
+};
+const MoreActions = ({
+  viewOnly,
+  name,
+  index,
+  onRemoveField = () => {},
+  ...props
+}: {
+  viewOnly?: boolean;
+  name: string;
+  index: number;
+  onRemoveField?: () => void;
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const isMobile = useAppStore((state) => state.isMobile);
+
+  const { setValue, watch } = useFormContext();
+
+  if (!isMobile) {
+    return (
+      <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-2 text-neutral-600">
+          <Typography>Required</Typography>
+          <Switch
+            checked={watch(`formFields[${index}].required`)}
+            disabled={viewOnly}
+            onCheckedChange={(value) => {
+              setValue(`formFields[${index}].required`, value);
+            }}
+          />
+        </div>
+        <CopyZoneClick text={name} className={viewOnly ? 'hidden' : 'visible'}>
+          <Button.Icon
+            disabled={!name}
+            variant="ghost"
+            color="primary"
+            size="xs"
+          >
+            <CopyIcon />
+          </Button.Icon>
+        </CopyZoneClick>
+        <Button.Icon
+          variant="ghost"
+          color="error"
+          size="xs"
+          onClick={onRemoveField}
+          className={viewOnly ? 'hidden' : 'visible'}
+        >
+          <Trash2 />
+        </Button.Icon>
+      </div>
+    );
+  }
+  return (
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger
+        asChild
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
+      >
+        <Button.Icon size="xs" variant="ghost" color="default">
+          <MoreVertical />
+        </Button.Icon>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="dark:border-neutral-800 dark:bg-neutral-900 [&_svg]:size-5">
+        <DropdownMenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+          }}
+          className="flex flex-row items-center  justify-between    gap-3"
+        >
+          <Typography>Required</Typography>
+          <Switch
+            checked={watch(`formFields[${index}].required`)}
+            onCheckedChange={(value) => {
+              setValue(`formFields[${index}].required`, value);
+            }}
+          />
+        </DropdownMenuItem>
+        <CopyZoneClick text={name}>
+          <DropdownMenuItem
+            className={'flex flex-row items-center justify-between  gap-3 '}
+          >
+            <Typography>Copy</Typography>
+            <CopyIcon />
+          </DropdownMenuItem>
+        </CopyZoneClick>
+        <DropdownMenuItem
+          onClick={onRemoveField}
+          className={
+            viewOnly
+              ? 'hidden'
+              : 'flex flex-row items-center justify-between   gap-3'
+          }
+        >
+          <Typography>Remove</Typography>
+          <Trash2 size={20} className="text-error" />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
@@ -481,38 +587,11 @@ const RenderField = ({
                 </Typography>
               </div>
               <div className="flex flex-row items-center gap-2">
-                <div className="flex flex-row items-center gap-2 text-neutral-600">
-                  <Typography>Required</Typography>
-                  <Switch
-                    checked={watch(`formFields[${index}].required`)}
-                    disabled={viewOnly}
-                    onCheckedChange={(value) => {
-                      setValue(`formFields[${index}].required`, value);
-                    }}
-                  />
-                </div>
-                <CopyZoneClick
-                  text={name}
-                  className={viewOnly ? 'hidden' : 'visible'}
-                >
-                  <Button.Icon
-                    disabled={!name}
-                    variant="ghost"
-                    color="primary"
-                    size="xs"
-                  >
-                    <CopyIcon />
-                  </Button.Icon>
-                </CopyZoneClick>
-                <Button.Icon
-                  variant="ghost"
-                  color="error"
-                  size="xs"
-                  onClick={onRemoveField}
-                  className={viewOnly ? 'hidden' : 'visible'}
-                >
-                  <Trash2 />
-                </Button.Icon>
+                <MoreActions
+                  name={name}
+                  index={index}
+                  onRemoveField={onRemoveField}
+                />
                 <AccordionTrigger
                   className="flex flex-row items-center gap-2"
                   disabled={hasErrors}
@@ -617,9 +696,9 @@ function ArrayFields({ viewOnly = false }: { viewOnly?: boolean }) {
     name: 'formFields',
   });
 
-  const hasAnyError = Object.keys(errors).some((key) =>
-    key.startsWith('formFields'),
-  );
+  const hasAnyError =
+    fields?.length > 0 &&
+    Object.keys(errors).some((key) => key.startsWith('formFields'));
 
   const isAccordionOpen =
     fields.find((field) => field.id === accordionStatus) &&

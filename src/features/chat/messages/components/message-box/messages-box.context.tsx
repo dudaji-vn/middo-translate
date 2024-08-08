@@ -94,7 +94,7 @@ export const MessagesBoxProvider = ({
     replaceItem,
     updateItem,
     setNotification,
-    triggerNewFlowMessage: updateRecentFormStatus,
+    updateRecentFormStatus: updateRecentFormStatus,
   });
 
   useChangeTitle({
@@ -110,7 +110,7 @@ export const MessagesBoxProvider = ({
         messages: items,
         loadMoreMessages: fetchNextPage,
         hasNextPage: hasNextPage,
-        refetchMessages: () => {},
+        refetchMessages: () => { },
         addMessage: addItem,
         replaceMessage: replaceItem,
         updateMessage: updateItem,

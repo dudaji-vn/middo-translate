@@ -19,7 +19,10 @@ import { DetailFormHeader } from './detail-form-header';
 import ArrayFields from './array-fields';
 import ThankYouForm from './thank-you-form';
 import CustomizeForm from './customize-form';
-import { DEFAULT_THEME } from '../../../settings/_components/extension-creation/sections/options';
+import {
+  DEFAULT_THEME,
+  extensionsCustomThemeOptions,
+} from '../../../settings/_components/extension-creation/sections/options';
 import { Check, FileText, Paintbrush2, X } from 'lucide-react';
 import { useAppStore } from '@/stores/app.store';
 import { useBusinessNavigationData } from '@/hooks';
@@ -47,7 +50,8 @@ const CreateOrEditBusinessForm = ({
   const [formOpenDraftPreview, setFormPreview] = React.useState<boolean>();
   const action = isEmpty(currentForm) ? 'create' : 'edit';
   const { t } = useTranslation('common');
-  const isMobile = useAppStore((state) => state.isMobile);
+
+  const { isMobile, setThemeTrial } = useAppStore();
   const { mutateAsync, isLoading, isSuccess } = useCreateOrEditForm();
 
   const [tabValue, setTabValue] = React.useState<number>(0);
@@ -55,7 +59,7 @@ const CreateOrEditBusinessForm = ({
 
   const bgSrcRegex = /\/forms\/bg-form-\d+.jpg/;
 
-  const DEFAULT_FORM_BG = '/forms/bg-form-10.jpg';
+  const DEFAULT_FORM_BG = '/forms/bg-form-1.jpg';
   const form = useForm<TFormFormValues>({
     mode: 'onChange',
     defaultValues: {
@@ -84,6 +88,13 @@ const CreateOrEditBusinessForm = ({
     handleSubmit,
     formState: { isValid, isSubmitting, errors },
   } = form;
+
+  useEffect(() => {
+    setThemeTrial({
+      theme: watch('customize.theme') || 'default',
+      background: watch('customize.background') || DEFAULT_FORM_BG,
+    });
+  }, [setThemeTrial, watch]);
 
   useEffect(() => {
     if (action === 'edit' && currentForm) {
@@ -132,19 +143,39 @@ const CreateOrEditBusinessForm = ({
     setFormPreview(true);
   }, [fields]);
 
+  const overridenTheme = extensionsCustomThemeOptions.find(
+    (theme) =>
+      theme.hex === watch('customize.theme') ||
+      theme.name === watch('customize.theme'),
+  )?.name;
+
   return (
     <>
       <Form {...form}>
         <Tabs
           value={tabValue?.toString()}
-          className="flex w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
+          className={cn(
+            'flex w-full flex-1 flex-col overflow-hidden  pb-36 md:px-[5vw] md:pb-20',
+            overridenTheme,
+          )}
           defaultValue={tabValue.toString()}
           onValueChange={(value) => {
             setTabValue(parseInt(value));
           }}
+          style={{
+            backgroundImage: `url(${
+              getValues('customize.background') || '/forms/bg-form-1.jpg'
+            })`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
         >
           <form id="form-create-form" onSubmit={handleSubmit(submit)}>
-            <DetailFormHeader action={action} onPreviewClick={previewForm} />
+            <DetailFormHeader
+              disabled={!isValid || isSubmitting}
+              action={action}
+              onPreviewClick={previewForm}
+            />
           </form>
           <TabsList className="mx-auto flex max-h-full w-[400px] max-w-full flex-row  items-center justify-center gap-3 border-none  md:justify-between ">
             {[0, 1, 2].map((i) => {
@@ -156,14 +187,15 @@ const CreateOrEditBusinessForm = ({
                   variant="button"
                   className={cn(
                     'rounded-t-lg bg-white max-md:w-fit max-md:px-3',
+                    isSelected && 'max-md:px-7',
                   )}
                 >
-                  {isSelected
-                    ? isMobile
-                      ? cloneElement(tabIcons[i as keyof typeof tabIcons], {
+                  {isMobile
+                    ? isSelected
+                      ? tabLabels[i]
+                      : cloneElement(tabIcons[i as keyof typeof tabIcons], {
                           size: 24,
                         })
-                      : tabLabels[i]
                     : tabLabels[i]}
                 </TabsTrigger>
               );
@@ -171,8 +203,7 @@ const CreateOrEditBusinessForm = ({
           </TabsList>
           <section
             className={cn(
-              'flex flex-1 flex-col gap-2 overflow-hidden p-5 md:p-10',
-              'mx-auto w-full  rounded-2xl border-none bg-white shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303]',
+              'flex flex-1 flex-col gap-2 overflow-hidden  rounded-2xl border-none bg-white p-4 shadow-[2px_4px_16px_2px_rgba(22,22,22,0.1)] dark:bg-[#030303] max-md:mx-3 md:w-full',
             )}
           >
             {tabValue === 0 && (
@@ -216,7 +247,7 @@ const CreateOrEditBusinessForm = ({
           </section>
         </Tabs>
       </Form>
-      {formOpenDraftPreview && (
+      {formOpenDraftPreview ? (
         <div
           className={cn(
             'fixed left-0 top-0 z-50 h-screen w-screen',
@@ -235,6 +266,26 @@ const CreateOrEditBusinessForm = ({
             }}
           />
         </div>
+      ) : (
+        <form
+          onSubmit={handleSubmit(submit)}
+          className={cn(
+            'fixed inset-x-0 bottom-0   z-[51] flex h-fit   w-screen justify-center bg-white p-4 md:hidden',
+          )}
+        >
+          <Button
+            variant={'default'}
+            size={'sm'}
+            shape={'square'}
+            color={'primary'}
+            disabled={!isValid || isSubmitting}
+            type="submit"
+            form="form-create-form"
+            className="w-full"
+          >
+            {action === 'create' ? t('COMMON.CREATE') : t('COMMON.SAVE')}
+          </Button>
+        </form>
       )}
     </>
   );

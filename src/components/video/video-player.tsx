@@ -66,6 +66,8 @@ function VideoPlayer(props: VideoProps) {
   const actionMenuRef = useRef<HTMLDivElement>(null);
   const setFullScreenStore = useMediaSettingStore((state) => state.setFullScreenStore);
   const isFullScreenStore = useMediaSettingStore((state) => state.isFullScreenStore);
+  const videoPlaying = useMediaSettingStore((state) => state.videoPlaying);
+  const setVideoPlaying = useMediaSettingStore((state) => state.setVideoPlaying);
   const [isPlaying, setIsPlaying] = useState(false);
   const [videoDuration, setVideoDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
@@ -77,14 +79,20 @@ function VideoPlayer(props: VideoProps) {
     volume: state.volume,
     setVolume: state.setVolume,
   }));
-
-  const toggleVideoPlay = useCallback(() => {
-    if (isPlaying) {
+  const videoIdRef = useRef<number>(Math.floor(Math.random() * 100000))
+  
+  const toggleVideoPlay = useCallback((type?: 'play' | 'pause') => {
+    let isPlay = isPlaying;
+    if(type) {
+      isPlay = type !== 'play';
+    }
+    if (isPlay) {
       videoRef.current?.pause();
     } else {
       videoRef.current?.play();
+      setVideoPlaying(videoIdRef.current);
     }
-    setIsPlaying((prev) => !prev);
+    setIsPlaying(!isPlay);
   }, [isPlaying]);
 
   const download = () => {
@@ -94,6 +102,13 @@ function VideoPlayer(props: VideoProps) {
       mimeType: file.type,
     });
   };
+  // Prevent 2 video play in the same times
+  useEffect(() => {
+    if (videoPlaying && videoPlaying !== videoIdRef.current) {
+      setIsPlaying(false);
+      videoRef.current?.pause();
+    }
+  }, [videoPlaying]);
 
   // Add on end video event
   useEffect(() => {

@@ -204,7 +204,7 @@ function ButtonNode(node: CustomNodeProps) {
             size={'xs'}
             className="flex-flow flex h-10 gap-3 px-3"
             shape={'square'}
-            variant={'default'}
+            variant={'ghost'}
             disabled={data?.readonly}
             onClick={() => {
               setIsUpdating(false);

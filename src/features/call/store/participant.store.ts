@@ -11,7 +11,7 @@ export interface IPeerShareScreen {
     peer: Peer.Instance
 }
 export type VideoCallState = {
-    changeMicStatusParticipant: (userId: string, status: boolean) => void;
+    changeMicStatusParticipant: (socketId: string, status: boolean) => void;
     participants: ParticipantInVideoCall[];
     usersRequestJoinRoom: IUserRequestJoinRoom[];
     peerShareScreen: IPeerShareScreen[];
@@ -160,10 +160,10 @@ export const useParticipantVideoCallStore = create<VideoCallState>()((set) => ({
             }),
         }));
     },
-    changeMicStatusParticipant: (userId: string, isTurnOnMic: boolean) => {
+    changeMicStatusParticipant: (socketId: string, isTurnOnMic: boolean) => {
         set((state) => ({
             participants: state.participants.map((p) => {
-                if (p.user._id == userId) {
+                if (p.socketId == socketId) {
                     return {
                         ...p,
                         isTurnOnMic

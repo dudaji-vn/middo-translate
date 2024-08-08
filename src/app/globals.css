@@ -109,7 +109,7 @@
 
   .halloween {
     --primary: #ff5e00;
-    --primary-100: #ffd9b3;
+    --primary-100: #fffaf5;
     --primary-200: #ffc993;
     --primary-300: #ffb56b;
     --primary-400: #fca752;
@@ -122,7 +122,7 @@
 
   .rose {
     --primary: #ff005e;
-    --primary-100: #fea9be;
+    --primary-100: #ffeff3;
     --primary-200: #ff7f94;
     --primary-300: #ff6584;
     --primary-400: #fd7189ce;
@@ -135,7 +135,7 @@
 
   .violet {
     --primary: #5e00ff;
-    --primary-100: #d0b3ff;
+    --primary-100: #f6f1ff;
     --primary-200: #bc9aff;
     --primary-300: #a384ff;
     --primary-400: #a36dff;
@@ -148,7 +148,7 @@
 
   .sky {
     --primary: #00b3ff;
-    --primary-100: #cceeff;
+    --primary-100: #eaf8ff;
     --primary-200: #99ddff;
     --primary-300: #72d0ff;
     --primary-400: #5bc8ff;
@@ -161,7 +161,7 @@
 
   .forest {
     --primary: #139e70;
-    --primary-100: #c5e4d3;
+    --primary-100: #f3fff9;
     --primary-200: #9bd8b5;
     --primary-300: #71cc98;
     --primary-400: #47c07a;
@@ -173,16 +173,16 @@
   }
 
   .lemon {
-    --primary: #e3df00; /* More yellow */
-    --primary-100: #ffde00; /* More yellow */
-    --primary-200: #ffd100; /* More yellow */
-    --primary-300: #ffc300; /* More yellow */
-    --primary-400: #ffb600; /* More yellow */
-    --primary-500-main: #f5f500; /* More yellow */
-    --primary-600: #e69b00; /* More yellow */
-    --primary-700: #cc8f00; /* More yellow */
-    --primary-800: #b38300; /* More yellow */
-    --primary-900: #996800; /* Darker */
+    --primary: #dfe539;
+    --primary-100: #fefff3;
+    --primary-200: #e3e99a;
+    --primary-300: #d6de68;
+    --primary-400: #d4d136;
+    --primary-500-main: #cbd200;
+    --primary-600: #afbf03;
+    --primary-700: #9aaa09;
+    --primary-800: #979708;
+    --primary-900: #747102;
   }
 }
 
@@ -620,7 +620,7 @@ pre {
   word-break: break-all;
   word-wrap: break-word;
 }
-.background-business-forms {
+/* .background-business-forms {
   background: linear-gradient(
     to bottom right,
     #d0def1 30%,
@@ -628,7 +628,7 @@ pre {
     #72a5e999,
     #3d88ed92
   );
-}
+} */
 
 .tiptap ol li::marker {
   color: currentColor !important;

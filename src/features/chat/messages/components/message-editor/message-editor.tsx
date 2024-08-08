@@ -3,6 +3,7 @@ import { messageApi } from '@/features/chat/messages/api';
 import { Message } from '@/features/chat/messages/types';
 import { useChatStore } from '@/features/chat/stores';
 import { useDraftStore } from '@/features/chat/stores/draft.store';
+import { useMSEditorStore } from '@/features/chat/stores/editor-language.store';
 import { User } from '@/features/users/types';
 import { useKeyboardShortcut } from '@/hooks/use-keyboard-shortcuts';
 import { useAppStore } from '@/stores/app.store';
@@ -15,20 +16,20 @@ import { isEqual } from 'lodash';
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, ButtonProps } from '../../../../../components/actions';
+import { useMediaUpload } from '../../../../../components/media-upload';
+import { useMessageActions } from '../message-actions';
 import { AttachmentButton } from './attachment-button';
 import { AttachmentSelection } from './attachment-selection';
 import { EmojiButton } from './emoji-button';
-import { useMediaUpload } from '../../../../../components/media-upload';
 import { MentionButton } from './mention-button';
 import { MentionSuggestion } from './plugins/mentions/mention-options';
+import { MessageEditorLanguageSelect } from './message-editor-language-select';
 import { MicButton, MicButtonRef } from './mic-button';
+
 import { SendButton } from './send-button';
 import { TranslationHelper, TranslationHelperRef } from './translation-helper';
 import { useEditor } from './use-editor';
 import { isMobile as isMobileDevice } from 'react-device-detect';
-import { MessageEditorLanguageSelect } from './message-editor-language-select';
-import { useMessageActions } from '../message-actions';
-import { useMSEditorStore } from '@/features/chat/stores/editor-language.store';
 import { MobileMention } from './plugins/mentions/mobile-mention';
 
 export type MessageEditorSubmitData = {
@@ -222,8 +223,10 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
       editor?.commands.focus('end');
     };
 
+    const messageEditorRef = useRef<HTMLDivElement>(null);
+
     return (
-      <>
+      <div ref={messageEditorRef}>
         <TranslationHelper
           ref={translationHelperRef}
           mentionSuggestionOptions={mentionSuggestions}
@@ -310,7 +313,7 @@ export const MessageEditor = forwardRef<HTMLDivElement, MessageEditorProps>(
             <div className="absolute left-0 top-0 h-full w-full bg-white opacity-80 dark:bg-neutral-900 max-md:text-sm" />
           )}
         </div>
-      </>
+      </div>
     );
   },
 );

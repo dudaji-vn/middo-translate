@@ -7,6 +7,8 @@ export type MediaSettingState = {
   setVolume: (volume: number) => void;
   isFullScreenStore: boolean;
   setFullScreenStore: (isFullScreen: boolean) => void;
+  videoPlaying?: number;
+  setVideoPlaying: (videoId?: number) => void;
   clear: () => void;
 };
 
@@ -25,6 +27,8 @@ export const useMediaSettingStore = create<MediaSettingState>()(
       },
       isFullScreenStore: false,
       setFullScreenStore: (isFullScreenStore: boolean) => set({ isFullScreenStore }),
+      videoPlaying: undefined,
+      setVideoPlaying: (videoPlaying?: number) => set({ videoPlaying }),
       ...restoredState('media-setting'),
     }),
     {
@@ -32,7 +36,7 @@ export const useMediaSettingStore = create<MediaSettingState>()(
       partialize: (state) =>
         Object.fromEntries(
           Object.entries(state).filter(
-            ([key]) => !['isFullScreenStore'].includes(key)
+            ([key]) => !['isFullScreenStore', 'videoPlaying'].includes(key)
           )
       ),
     }

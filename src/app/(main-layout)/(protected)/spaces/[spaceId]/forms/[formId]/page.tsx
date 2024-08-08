@@ -24,6 +24,9 @@ import { Typography } from '@/components/data-display';
 import { useTranslation } from 'react-i18next';
 import { DetailFormHeader } from '../_components/form-creation/detail-form-header';
 import usePlatformNavigation from '@/hooks/use-platform-navigation';
+import { useAppStore } from '@/stores/app.store';
+import COLORS from '@/features/call/constant/colors';
+import { extensionsCustomThemeOptions } from '../../settings/_components/extension-creation/sections/options';
 
 const tabs = ['Submissions', 'Form'];
 const FormPage = ({
@@ -77,14 +80,28 @@ const FormPage = ({
   if (!isLoading && (isEmpty(data) || !formFields || !submissions)) {
     return null;
   }
-
+  const bgImageSrc = data?.customize?.background || '/forms/bg-form-1.jpg';
+  const overiddenTheme =
+    extensionsCustomThemeOptions.find(
+      (theme) =>
+        theme.hex === data?.customize?.theme ||
+        theme.name === data?.customize?.theme,
+    )?.name || '';
   return (
     <Tabs
       value={tabValue?.toString()}
-      className="flex h-full w-full flex-1 flex-col overflow-hidden bg-blue-100 p-4 pb-20 md:px-[5vw]"
+      className={cn(
+        'flex h-full w-full flex-1 flex-col overflow-hidden p-4 pb-20 md:px-[5vw]',
+        overiddenTheme,
+      )}
       defaultValue={tabValue.toString()}
       onValueChange={(value) => {
         setTabValue(parseInt(value));
+      }}
+      style={{
+        backgroundImage: `url(${bgImageSrc})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
       }}
     >
       <DetailFormHeader

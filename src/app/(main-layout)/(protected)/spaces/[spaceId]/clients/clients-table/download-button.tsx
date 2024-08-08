@@ -19,7 +19,7 @@ const DownloadButton = ({
     endIcon?: any;
   }) => {
   const { t } = useTranslation('common');
-  const exportDataToExcel = async () => {
+  const exportData = async () => {
     try {
       // Assuming you have 'exportToExcel' function available in the scope
       await exportToExcel({
@@ -34,7 +34,7 @@ const DownloadButton = ({
   };
   return (
     <Button
-      onClick={() => exportDataToExcel()}
+      onClick={() => exportData()}
       size={'md'}
       shape={'square'}
       color={'secondary'}

@@ -67,7 +67,10 @@ const RHFColorSelector = ({
               type="button"
               {...itemProps}
               className={cn(
-                'relative size-8 bg-transparent',
+                'relative size-8 max-md:size-9 bg-transparent max-md:p-0',
+                selectedColor === color
+                  ? 'border-primary-500-main max-md:border'
+                  : 'border-none',
                 itemProps?.className,
               )}
               onClick={() => {
@@ -103,7 +106,7 @@ const RHFColorSelector = ({
             }
           }}
           className={cn(
-            'relative size-8 border-[2px] border-white bg-transparent dark:border-neutral-800',
+            'relative size-8 border-[2px] border-white bg-transparent dark:border-neutral-800 max-md:size-9 max-md:p-0',
             itemProps?.className,
           )}
         >
