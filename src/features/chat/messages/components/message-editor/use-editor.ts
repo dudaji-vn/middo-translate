@@ -46,11 +46,9 @@ export const useEditor = ({
           if (html.includes(`<meta charset='utf-8'><a href=`)) {
             return extractUrl(html);
           }
+          html = removeBase64Images(html);
           return convert(html, {
-            selectors: [
-              { selector: 'a', options: { ignoreHref: true } },
-              { selector: 'img', options: { ignoreHref: true } },
-            ],
+            selectors: [{ selector: 'a', options: { ignoreHref: true } }],
           });
         },
 
@@ -88,6 +86,7 @@ export const useEditor = ({
           placeholder,
         }),
         Link.configure({
+          openOnClick: false,
           validate: (href) => /^https?:\/\//.test(href),
           protocols: [
             {
@@ -161,4 +160,9 @@ function extractUrl(html: string) {
   const regex = /<a href="(.*?)"/;
   const match = html.match(regex);
   return match ? match[1] : html;
+}
+
+function removeBase64Images(html: string): string {
+  const imgRegex = /<img[^>]+src="data:image\/[^"]+"[^>]*>/g;
+  return html.replace(imgRegex, '');
 }

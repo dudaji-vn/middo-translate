@@ -116,7 +116,7 @@ export const TranslationHelper = forwardRef<
       keepPreviousData: !isRootEditorEmpty,
     });
     const handleStartEdit = () => {
-      editor?.commands.setContent(enContent || data);
+      editor?.commands.setContent(enContentToUse);
       editor?.commands.focus('end');
       setIsEditing(true);
       onStartedEdit?.();
@@ -136,6 +136,7 @@ export const TranslationHelper = forwardRef<
       );
       onFinishedEdit?.();
       rootEditor?.commands.setContent(translated);
+      setTranslatedEnContent(translated);
       if (sendOnSave) {
         onSend?.();
       }
@@ -178,22 +179,21 @@ export const TranslationHelper = forwardRef<
       setTranslatedEnContent(null);
     };
 
+    const enContentToUse =
+      translatedEnContentDebounce === htmlDebounce ? enContent : data;
+
     useImperativeHandle(
       ref,
       () => ({
         getEnContent: () => {
-          return enContent || (!isLoading && !isFetching)
-            ? enContent
-              ? enContent
-              : data
-            : null;
+          return enContentToUse;
         },
         clearContent,
         getSourceLang: () => {
           return srcLang;
         },
       }),
-      [data, enContent, isFetching, isLoading, srcLang],
+      [enContentToUse, srcLang],
     );
     return (
       <AnimatePresence mode="wait">
@@ -268,7 +268,7 @@ export const TranslationHelper = forwardRef<
                         {data && !isLoading ? (
                           <RichTextView
                             mentionClassName="left"
-                            content={enContent || data}
+                            content={enContentToUse}
                           />
                         ) : (
                           <p className="italic text-neutral-300">
