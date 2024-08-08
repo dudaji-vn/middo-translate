@@ -86,6 +86,7 @@ export const useEditor = ({
           placeholder,
         }),
         Link.configure({
+          openOnClick: false,
           validate: (href) => /^https?:\/\//.test(href),
           protocols: [
             {
