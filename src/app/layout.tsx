@@ -12,7 +12,7 @@ import type { Metadata, Viewport } from 'next';
 import { Open_Sans } from 'next/font/google';
 
 const font = Open_Sans({ subsets: ['latin'] });
-
+import 'allotment/dist/style.css';
 export const metadata: Metadata = {
   metadataBase: new URL(NEXT_PUBLIC_URL),
   title: {

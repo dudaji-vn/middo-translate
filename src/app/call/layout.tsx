@@ -1,7 +1,6 @@
 'use client';
 
 import { VideoCallCommonModal } from "@/features/call/components/common/modal";
-
 export default function CallLayout({
   children,
 }: {
@@ -10,5 +9,5 @@ export default function CallLayout({
   return <>
     <VideoCallCommonModal />
     {children}
-  </>;
+    </>;
 }

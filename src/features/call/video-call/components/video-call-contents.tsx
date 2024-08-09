@@ -29,7 +29,7 @@ export default function VideoCallContent() {
   const propsRightPane = isAllowResizeLeftRight ? { minSize: 320, maxSize: 640, preferredSize: 700 } : {};
 
  // Top and bottom for video call content and caption
-  const isAllowResizeTopBottom = isFullScreen && !isMobile && isShowCaptionStore // Condition for resizing top and bottom
+  const isAllowResizeTopBottom = isFullScreen && !isMobile && !isHelpDeskCall && isShowCaptionStore // Condition for resizing top and bottom
   const WrapperTopBottom = isAllowResizeTopBottom ? Allotment : React.Fragment;
   const propsWrapperTopBottom = isAllowResizeTopBottom ? { defaultSizes: [800, 200], vertical: true } : {};
   const TopPane = isAllowResizeTopBottom ? Allotment.Pane : React.Fragment;
@@ -54,7 +54,11 @@ export default function VideoCallContent() {
             </WrapperTopBottom>
           </div>
         </LeftPane>
-        {!isHelpDeskCall && <RightPane {...propsRightPane}><ChatThread /></RightPane>}
+        {!isHelpDeskCall && 
+          <RightPane {...propsRightPane}>
+            <ChatThread />
+          </RightPane>
+        }
       </WrapperLeftRight>
     </main>
   );
