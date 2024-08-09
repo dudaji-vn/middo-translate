@@ -3,7 +3,6 @@ import CallVideoModalContainer from '@/features/call';
 import ElectronHandler from '@/features/electron/electron-handler';
 import ShortcutsGuide from '@/features/shortcut/shortcut-guide';
 // import GlobalError from '@/app/global-error';
-import 'allotment/dist/style.css';
 export default async function RootLayout({
   children,
 }: {
