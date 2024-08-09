@@ -5,28 +5,29 @@ import { Form } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import useClient from '@/hooks/use-client';
-import { Tabs } from '@/components/navigation';
-import { z } from 'zod';
 import { Button } from '@/components/actions';
+import { Tabs } from '@/components/navigation';
+import { ROUTE_NAMES } from '@/configs/route-name';
+import { usePlatformStore } from '@/features/platform/stores';
+import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-stations';
+import useClient from '@/hooks/use-client';
+import { createStation } from '@/services/station.service';
+import { useAuthStore } from '@/stores/auth.store';
+import customToast from '@/utils/custom-toast';
+import { useQueryClient } from '@tanstack/react-query';
 import { isEmpty } from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+import StepWrapper from '../../../spaces/[spaceId]/settings/_components/extension-creation/steps/step-wrapper';
 import CreateStationForm from '../sections/create-section';
+import CreateTeams from '../sections/create-teams-section';
 import InviteMembers from '../sections/invite-section';
 import { EStationRoles, Member } from '../sections/members-columns';
-import { useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import customToast from '@/utils/custom-toast';
-import { usePlatformStore } from '@/features/platform/stores';
-import { ROUTE_NAMES } from '@/configs/route-name';
-import { GET_STATIONS_KEY } from '@/features/stations/hooks/use-get-stations';
 import CreateStationHeader from './create-station-header';
-import { createStation } from '@/services/station.service';
-import StepWrapper from '../../../spaces/[spaceId]/settings/_components/extension-creation/steps/step-wrapper';
-import { ArrowRight } from 'lucide-react';
-import CreateTeams from '../sections/create-teams-section';
+import { ArrowLeft } from 'lucide-react';
 
 const createStationSchema = z.object({
   name: z
@@ -40,20 +41,20 @@ const createStationSchema = z.object({
     }),
   avatar: z.string().optional(),
   backgroundImage: z.string().optional(),
+  teams: z.array(z.object({ name: z.string() })).optional(),
   members: z
     .array(
       z.object({
-        email: z.string().email({
-          message: 'STATION.ERRORS.INVALID_EMAIL',
-        }),
+        usernameOrEmail: z.string().min(1),
         role: z.string().default(EStationRoles.Member),
+        teamName: z.string().optional(),
       }),
     )
     .optional(),
 });
 
+export const defaultTeams = ['Administrator'];
 type TCreateStationFormValues = z.infer<typeof createStationSchema>;
-
 export default function CreateStation({ open }: { open: boolean }) {
   const isClient = useClient();
   const [tabValue, setTabValue] = React.useState<number>(0);
@@ -62,13 +63,21 @@ export default function CreateStation({ open }: { open: boolean }) {
   const platform = usePlatformStore((state) => state.platform);
   const queryClient = useQueryClient();
   const { t } = useTranslation('common');
+  const currentUser = useAuthStore((state) => state.user);
   const formCreateStation = useForm<TCreateStationFormValues>({
     mode: 'onChange',
     defaultValues: {
       name: '',
       avatar: undefined,
       backgroundImage: '',
-      members: [],
+      members: [
+        {
+          usernameOrEmail: currentUser?.username!,
+          role: EStationRoles.Owner,
+          teamName: defaultTeams[0],
+        },
+      ],
+      teams: defaultTeams.map((team) => ({ name: team })),
     },
     resolver: zodResolver(createStationSchema),
   });
@@ -106,6 +115,7 @@ export default function CreateStation({ open }: { open: boolean }) {
         avatar: formCreateStation.watch('avatar'),
         backgroundImage: formCreateStation.watch('backgroundImage'),
         members: formCreateStation.watch('members'),
+        teams: formCreateStation.watch('teams'),
       });
       customToast.success('Station created successfully.');
       queryClient.invalidateQueries([
@@ -117,8 +127,8 @@ export default function CreateStation({ open }: { open: boolean }) {
       customToast.error(err?.response?.data?.message);
     }
   };
-
   if (!isClient || !open) return null;
+
   return (
     <Tabs
       value={tabValue?.toString()}
@@ -141,7 +151,7 @@ export default function CreateStation({ open }: { open: boolean }) {
           onNextStep={() => handleStepChange(1)}
           cardProps={{
             className:
-              'w-full shadow-none dark:bg-background flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none',
+              'w-full shadow-none dark:bg-background flex flex-col h-[calc(100vh-204px)] items-center gap-4 border-none rounded-none shadow-none',
           }}
         >
           <CreateStationForm />
@@ -155,7 +165,7 @@ export default function CreateStation({ open }: { open: boolean }) {
           value="1"
           cardProps={{
             className:
-              'w-full md:pt-10 pt-3 h-full flex flex-col h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
+              'w-full md:pt-10 pt-3 h-full flex flex-col h-[calc(100vh-204px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
           }}
         >
           <CreateTeams
@@ -163,18 +173,27 @@ export default function CreateStation({ open }: { open: boolean }) {
               name: formCreateStation.watch('name'),
               avatar: formCreateStation.watch('avatar'),
               members: formCreateStation.watch('members') || [],
+              teams:
+                formCreateStation.watch('teams')?.map((team) => team.name) ||
+                [],
             }}
-            setMembers={(members: Member[]) =>
-              formCreateStation.setValue('members', members)
+            onSetTeams={(teams) =>
+              formCreateStation.setValue(
+                'teams',
+                teams.map((team) => ({ name: team })),
+              )
             }
           />
         </StepWrapper>
         <StepWrapper
+          footerProps={{
+            className: 'hidden',
+          }}
           className="px-0"
           value="2"
           cardProps={{
             className:
-              'w-full md:pt-10 pt-3  flex flex-col min-h-[calc(100vh-200px)] items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
+              'w-full md:pt-10 pt-3 flex flex-col h-[calc(100vh-204px)] overflow-hidden items-center gap-4 border-none rounded-none shadow-none shadow-none dark:bg-background',
           }}
         >
           <InviteMembers
@@ -182,12 +201,25 @@ export default function CreateStation({ open }: { open: boolean }) {
               name: formCreateStation.watch('name'),
               avatar: formCreateStation.watch('avatar'),
               members: formCreateStation.watch('members') || [],
+              teams: formCreateStation.watch('teams') || [],
             }}
-            setMembers={(members: Member[]) =>
+            onMembersChange={(members: Member[]) =>
               formCreateStation.setValue('members', members)
             }
           />
-          <div className="flex h-fit w-full flex-col items-center bg-primary-100 py-6 dark:bg-background">
+        </StepWrapper>
+        {tabValue === 2 && (
+          <div className="flex h-fit w-full items-center justify-between bg-primary-100 py-4 dark:bg-background">
+            <Button
+              variant={'ghost'}
+              color={'default'}
+              shape={'square'}
+              size={'sm'}
+              startIcon={<ArrowLeft />}
+              onClick={() => handleStepChange(1)}
+            >
+              Previous
+            </Button>
             <form
               onSubmit={formCreateStation.handleSubmit(submitCreateStation)}
             >
@@ -202,8 +234,18 @@ export default function CreateStation({ open }: { open: boolean }) {
                 {t('STATION.CREATE_BUTTON')}
               </Button>
             </form>
+            <Button
+              variant={'ghost'}
+              color={'default'}
+              shape={'square'}
+              size={'sm'}
+              startIcon={<ArrowLeft />}
+              className="invisible"
+            >
+              Next
+            </Button>
           </div>
-        </StepWrapper>
+        )}
       </Form>
     </Tabs>
   );

@@ -23,4 +23,5 @@ export const ROUTE_NAMES = {
   SETTINGS: '/settings',
   WIDGET_NOTIFICATION: '/widget-notification',
   STATIONS: '/stations',
+  STATIONS_NEW: '/stations/new',
 };

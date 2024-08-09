@@ -25,7 +25,7 @@ function StationCreateButton({}: {} & React.HTMLAttributes<HTMLDivElement>) {
         'relative flex min-h-[112px] min-w-[280px] max-w-full cursor-pointer items-center justify-center  space-y-3 rounded-[12px] border border-dashed   border-primary-500-main p-3 transition-all duration-300 ease-in-out active:!bg-neutral-100 dark:active:!bg-neutral-800 md:hover:bg-neutral-50 dark:md:hover:bg-neutral-900',
       )}
       onClick={() => {
-        router.push(`${ROUTE_NAMES.STATIONS}?modal=create-station`);
+        router.push(ROUTE_NAMES.STATIONS_NEW);
       }}
     >
       <Typography className="m-auto flex flex-row gap-2 text-primary">

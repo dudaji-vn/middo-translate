@@ -17,7 +17,7 @@ const headerVariants = cva('w-full flex', {
   variants: {
     navigation: {
       default: 'hidden',
-      'create-station': 'w-full py-2 flex gap-3',
+      'create-station': 'w-full p-4 flex gap-3',
     },
   },
 });
@@ -63,8 +63,8 @@ const CreateStationHeader = ({
   return (
     <section
       className={cn(
-        'createStationSteps-center flex w-full min-w-fit flex-col items-center justify-between gap-3  bg-primary-100 px-4 dark:bg-background md:flex-row',
-        headerVariants({ navigation: modalType || 'default' }),
+        'createStationSteps-center flex w-full min-w-fit flex-col items-center justify-between gap-3 bg-primary-100 dark:bg-background md:flex-row',
+        headerVariants({ navigation: 'create-station' }),
       )}
     >
       <div className="flex w-full flex-row items-center justify-start gap-2 md:w-fit">

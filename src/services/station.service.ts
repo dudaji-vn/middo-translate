@@ -9,6 +9,7 @@ export const createStation = (data: {
   avatar?: string;
   backgroundImage?: string;
   members?: Member[];
+  teams?: { name: string }[];
 }) => {
   return post('/stations', data);
 };

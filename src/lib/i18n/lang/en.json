@@ -181,7 +181,8 @@
       "USERNAME_PATTERN": "Username must contain only letters, numbers, and underscores!",
       "NOT_SUPPORT_PREVIEW": "File too large or not supported for preview! <br /> Please download to view.",
       "USER_NOT_FOUND": "User not found!",
-      "CANT_ADD_YOURSELF": "You can't add yourself!"
+      "CANT_ADD_YOURSELF": "You can't add yourself!",
+      "USER_ALREADY_ADDED": "User already added!"
     },
     "SUCCESS": {
       "PROFILE_UPDATED": "Your profile has been successfully updated!",
@@ -552,8 +553,8 @@
         }
       },
       "INVITE_MEMBERS": {
-        "TITLE": "<span class='mr-2 text-primary-500-main'>Invite</span> others to join your work station&nbsp;<span class='text-[24px] font-normal'>(optional)</span>",
-        "DESCRIPTION": "Help your crews to recognize your Work Station easier by naming, adding avatar or company's logo. <span class='font-normal text-primary-500-main'>Upgrade plan.</span>",
+        "TITLE": "<span class='mr-2 text-primary-500-main'>Invite others</span> to join your station&nbsp;<span class='text-[24px] font-normal opacity-50'>(optional)</span>",
+        "DESCRIPTION": "You can skip this step and add member later in <span class='font-semibold'>Station's Settings</span>.",
         "ERRORS": {
           "EMAIL_REQUIRED": "Email is required",
           "EMAIL_INVALID": "Email is invalid"
@@ -803,7 +804,8 @@
     "MEMBER": {
       "YOU": "You",
       "EMAIL": "Email",
-      "ROLE": "Role"
+      "ROLE": "Role",
+      "EMAIL_OR_USERNAME": "Email/Username"
     },
     "NO_MEMBER": "No members",
     "INVITE_MEMBERS": "Invite members"

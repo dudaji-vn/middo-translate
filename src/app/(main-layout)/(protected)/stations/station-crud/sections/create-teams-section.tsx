@@ -4,10 +4,11 @@ import { Input } from '@/components/data-entry';
 import { DataTableProps } from '@/components/ui/data-table';
 import { cn } from '@/utils/cn';
 import { PenIcon, PlusIcon, Trash2Icon } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Member } from './members-columns';
 import toast from 'react-hot-toast';
+export const defaultTeams = ['Administrator'];
 
 export enum EStationMemberStatus {
   Invited = 'invited',
@@ -19,9 +20,10 @@ export type CreateTeamsProps = {
     name?: string;
     avatar?: string;
     members: Member[];
+    teams: string[];
   };
-  setMembers: (members: Member[]) => void;
-  onAddMember?: (member: Member) => void;
+  onSetTeams?: (teams: string[]) => void;
+  onAddTeam?: (team: string) => void;
   headerProps?: React.HTMLAttributes<HTMLDivElement>;
   stationPreviewProps?: React.HTMLAttributes<HTMLDivElement>;
   header?: React.ReactNode;
@@ -31,11 +33,10 @@ export type CreateTeamsProps = {
   blackList?: string[];
   hideOwner?: boolean;
 } & React.HTMLAttributes<HTMLDivElement>;
-const defaultTeams = ['Administrator'];
 const CreateTeams = ({
+  onSetTeams,
   station,
   blackList,
-  setMembers,
   stationPreviewProps,
   tableProps,
   header,
@@ -43,12 +44,11 @@ const CreateTeams = ({
   headerTitleProps,
   hideOwner = false,
   headerDescriptionProps,
-  onAddMember,
   ...props
 }: CreateTeamsProps) => {
   const { t } = useTranslation('common');
 
-  const [teams, setTeams] = React.useState<string[]>(defaultTeams);
+  const [teams, setTeams] = React.useState<string[]>(station?.teams);
   const [currentEditing, setCurrentEditing] = React.useState<string | null>(
     null,
   );
@@ -70,6 +70,11 @@ const CreateTeams = ({
     const newTeams = teams.filter((t) => t !== team);
     setTeams(newTeams);
   };
+
+  useEffect(() => {
+    onSetTeams?.(teams);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teams]);
 
   return (
     <section
@@ -120,11 +125,11 @@ const CreateTeams = ({
             {station?.name}
           </Typography>
           <Typography className="font-normal text-neutral-600 dark:text-neutral-50">
-            {station?.members?.length} members
+            {station?.teams?.length || 0} teams
           </Typography>
         </div>
       </div>
-      <div className="w-full flex-1 flex-col items-start justify-start overflow-y-scroll">
+      <div className="w-full flex-1 flex-col items-start justify-start overflow-y-auto">
         <Typography variant="bodySmall">Team list</Typography>
         <div className="mt-2 flex flex-col gap-2">
           {teams.map((team) => {

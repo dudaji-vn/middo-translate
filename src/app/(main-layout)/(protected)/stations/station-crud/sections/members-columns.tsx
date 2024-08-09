@@ -12,9 +12,10 @@ export enum EStationRoles {
 }
 export type Member = {
   _id?: string;
-  email: string;
+  usernameOrEmail: string;
   role: string;
   status?: 'joined' | 'invited' | 'deleted';
+  teamName?: string;
 };
 
 export const makeMembersColumns = ({
@@ -26,8 +27,8 @@ export const makeMembersColumns = ({
 }) =>
   [
     {
-      accessorKey: 'email',
-      header: t('STATION.MEMBER.EMAIL'),
+      accessorKey: 'usernameOrEmail',
+      header: t('STATION.MEMBER.EMAIL_OR_USERNAME'),
       cell(props) {
         return (
           <Typography className="text-gray-500 dark:text-neutral-50">

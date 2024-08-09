@@ -208,7 +208,7 @@ const StationNavigator = ({ ...props }: DropdownMenuTriggerProps) => {
             </Section>
           </div>
           <div className={cn('flex w-full flex-col gap-2 p-2')}>
-            <Link href={`${ROUTE_NAMES.STATIONS}?modal=create-station`}>
+            <Link href={ROUTE_NAMES.STATIONS_NEW}>
               <Button
                 className="w-full"
                 shape={'square'}

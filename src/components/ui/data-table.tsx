@@ -110,7 +110,7 @@ export function DataTable<TData, TValue>({
           <TableRow
             key={headerGroup.id}
             {...rowProps}
-            className={cn('border-none ', rowProps?.className)}
+            className={cn('border-none')}
           >
             {headerGroup.headers.map((header) => {
               return (
